@@ -195,6 +195,6 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $presetData = json_decode($preset->getPresetData(), true);
         $element = $presetData['elements'][0];
 
-        $this->assertRegexp('/media/', $element['data'][1]['value']);
+        $this->assertMatchesRegularExpression('/media/', $element['data'][1]['value']);
     }
 }

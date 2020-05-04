@@ -372,7 +372,7 @@ class OrderTest extends \Enlight_Components_Test_Controller_TestCase
         $orderArticleIds = array_map(static function ($detail) {
             return $detail['articleId'];
         }, $order['details']);
-        static::assertContains($articleId, $orderArticleIds);
+        static::assertTrue(in_array($articleId, $orderArticleIds));
     }
 
     /**

@@ -117,7 +117,7 @@ class PresetLoaderTest extends TestCase
 
         static::assertEquals($fieldId, $decodedData['elements'][0]['component']['fields'][0]['id']);
         static::assertEquals($fieldId, $decodedData['elements'][0]['data'][1]['fieldId']);
-        static::assertRegExp('/http/', $decodedData['elements'][0]['data'][1]['value']);
+        static::assertMatchesRegularExpression('/http/', $decodedData['elements'][0]['data'][1]['value']);
     }
 
     public function testShouldBeSuccessfulWithJsonEncodedDataValue()
@@ -141,6 +141,6 @@ class PresetLoaderTest extends TestCase
         static::assertEquals($componentId, $decodedData['elements'][0]['component']['id']);
 
         static::assertIsArray($decodedData['elements'][0]['data'][6]['value']);
-        static::assertRegExp('/http/', $decodedData['elements'][0]['data'][6]['value'][0]['path']);
+        static::assertMatchesRegularExpression('/http/', $decodedData['elements'][0]['data'][6]['value'][0]['path']);
     }
 }

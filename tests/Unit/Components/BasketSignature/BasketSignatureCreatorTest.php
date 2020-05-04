@@ -27,7 +27,7 @@ namespace Shopware\tests\Unit\Components\BasketSignature;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\BasketSignature\BasketSignatureGenerator;
 
-class BasketSignatureGeneratorTest extends TestCase
+class BasketSignatureCreatorTest extends TestCase
 {
     public function testSignatureCanBeCreatedForEmptyBasket()
     {

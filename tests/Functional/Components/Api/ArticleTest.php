@@ -2589,8 +2589,8 @@ class ArticleTest extends TestCase
         static::assertCount(2, $article->getSeoCategories());
 
         foreach ($article->getSeoCategories() as $category) {
-            static::assertContains($category->getCategory()->getId(), $ids);
-            static::assertContains($category->getShop()->getId(), [1, 2]);
+            static::assertTrue(in_array($category->getCategory()->getId(), $ids));
+            static::assertTrue(in_array($category->getShop()->getId(), [1, 2]));
         }
     }
 

@@ -65,14 +65,13 @@ class BacklogProcessorTest extends TestCase
      */
     private $eventManager;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function setUp(): void
     {
-        parent::__construct($name, $data, $dataName);
-
         $this->backlogProcessor = Shopware()->Container()->get('shopware_elastic_search.backlog_processor');
         $this->backlogReader = Shopware()->Container()->get('shopware_elastic_search.backlog_reader');
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->eventManager = Shopware()->Container()->get('events');
+        parent::setUp();
     }
 
     public function testBacklogProcessorAdds(): void

@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Plugins\Core\Debug;
 
-class Debug extends \Enlight_Components_Test_Plugin_TestCase
+class DebugTest extends \Enlight_Components_Test_Plugin_TestCase
 {
     /**
      * @ticket SW-5148

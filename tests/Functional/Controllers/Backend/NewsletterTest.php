@@ -48,11 +48,11 @@ class NewsletterTest extends \Enlight_Components_Test_Plugin_TestCase
         Shopware()->Config()->MailCampaignsPerCall = 1;
 
         $this->dispatch('/backend/newsletter/cron');
-        static::assertRegExp('#[0-9]+ Recipients fetched#', $this->Response()->getBody());
+        static::assertMatchesRegularExpression('#[0-9]+ Recipients fetched#', $this->Response()->getBody());
         $this->reset();
 
         $this->dispatch('/backend/newsletter/cron');
-        static::assertRegExp('#Wait [0-9]+ seconds ...#', $this->Response()->getBody());
+        static::assertMatchesRegularExpression('#Wait [0-9]+ seconds ...#', $this->Response()->getBody());
         $this->reset();
     }
 

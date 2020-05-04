@@ -162,7 +162,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             static::assertArrayHasKey('surchargestring', $paymentMean);
             static::assertArrayHasKey('active', $paymentMean);
             static::assertArrayHasKey('esdactive', $paymentMean);
-            static::assertContains($paymentMean['id'], [3, 5, 6]);
+            static::assertTrue(in_array((int) $paymentMean['id'], [3, 5, 6], true));
         }
     }
 

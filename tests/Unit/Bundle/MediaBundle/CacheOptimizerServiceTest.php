@@ -26,7 +26,6 @@ namespace Shopware\Tests\Unit\Bundle\MediaBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Shopware\Bundle\MediaBundle\CacheOptimizerService;
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
 use Shopware\Bundle\MediaBundle\OptimizerService;
@@ -61,9 +60,8 @@ class CacheOptimizerServiceTest extends TestCase
 
     public function testOptimizeDecoration()
     {
-        $decoratedService = $this->prophesize(OptimizerServiceInterface::class);
-        $decoratedService->optimize(Argument::is('file'))->shouldBeCalled();
-        $decoratedService = $decoratedService->reveal();
+        $decoratedService = $this->createMock(OptimizerServiceInterface::class);
+        $decoratedService->expects(static::once())->method('optimize');
 
         $cacheService = new CacheOptimizerService($decoratedService);
         $cacheService->optimize('file');
@@ -71,9 +69,8 @@ class CacheOptimizerServiceTest extends TestCase
 
     public function testGetOptimizersDecoration()
     {
-        $decoratedService = $this->prophesize(OptimizerServiceInterface::class);
-        $decoratedService->getOptimizers()->shouldBeCalled();
-        $decoratedService = $decoratedService->reveal();
+        $decoratedService = $this->createMock(OptimizerServiceInterface::class);
+        $decoratedService->expects(static::once())->method('getOptimizers');
 
         $cacheService = new CacheOptimizerService($decoratedService);
         $cacheService->getOptimizers();

@@ -120,60 +120,6 @@ class ConfigTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * Tests the document type key unique constraint
-     *
-     * @group pcovAdapterBrokenTest
-     * @runInSeparateProcess
-     */
-    public function testDocumentTypeKeyUniqueConstraint()
-    {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-
-        $firstTestDocumentType = [
-            'id' => 0,
-            'name' => 'Test document 1',
-            'key' => 'test_document',
-            'template' => 'index.tpl',
-            'numbers' => 'user',
-            'left' => 2,
-            'right' => 3,
-            'top' => 4,
-            'bottom' => 5,
-            'pageBreak' => 6,
-            'elements' => [],
-        ];
-
-        $this->Request()->setPost($firstTestDocumentType);
-        $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
-
-        static::assertEquals(true, json_decode($response->getBody(), true)['success']);
-
-        // Try to add another document type with the same document type
-        $secondTestDocumentType = [
-            'id' => 0,
-            'name' => 'Test document 2',
-            'key' => 'test_document',
-            'template' => 'index.tpl',
-            'numbers' => 'user',
-            'left' => 2,
-            'right' => 3,
-            'top' => 4,
-            'bottom' => 5,
-            'pageBreak' => 6,
-            'elements' => [],
-        ];
-
-        $this->Request()->setPost($secondTestDocumentType);
-        $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
-
-        static::assertEquals(false, json_decode($response->getBody(), true)['success']);
-
-        $this->resetContainer();
-
-        Shopware()->Db()->query('DELETE FROM `s_core_documents` WHERE `key`="test_document";');
-    }
-
-    /**
      * Tests whether the list of pdf documents includes its translations
      */
     public function testIfPDFDocumentsListIncludesTranslation()

@@ -128,7 +128,7 @@ class PresetDataSynchronizerTest extends TestCase
 
         static::assertArrayHasKey('elements', $presetData);
         static::assertArrayHasKey('data', $presetData['elements'][0]);
-        static::assertRegExp('/media/', $presetData['elements'][0]['data'][1]['value']);
+        static::assertMatchesRegularExpression('/media/', $presetData['elements'][0]['data'][1]['value']);
         static::assertNotEquals($this->imageData, $presetData['elements'][0]['data'][1]['value']);
     }
 
@@ -169,7 +169,7 @@ class PresetDataSynchronizerTest extends TestCase
         // double encoded value here
         $value = json_decode($presetData['elements'][0]['data'][6]['value'], true);
 
-        static::assertRegExp('/media/', $value[0]['path']);
+        static::assertMatchesRegularExpression('/media/', $value[0]['path']);
         static::assertNotEmpty($presetData['elements'][0]['data'][6]['value'][0]['mediaId']);
     }
 }

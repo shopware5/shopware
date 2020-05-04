@@ -28,7 +28,6 @@ use League\Flysystem\AdapterInterface;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\PluginInterface;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Shopware\Components\Filesystem\PrefixFilesystem;
 
 class PrefixFilesystemTest extends TestCase
@@ -56,7 +55,7 @@ class PrefixFilesystemTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The prefix must not be empty.');
 
-        $filesystem = $this->prophesize(FilesystemInterface::class)->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
         $prefix = '';
 
         new PrefixFilesystem($filesystem, $prefix);
@@ -101,7 +100,7 @@ class PrefixFilesystemTest extends TestCase
      */
     public function testPrefixNormalization($prefix, $expectedPrefix)
     {
-        $filesystem = $this->prophesize(FilesystemInterface::class)->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
 
         static::assertSame(
@@ -119,7 +118,7 @@ class PrefixFilesystemTest extends TestCase
      */
     public function testStripPrefix($prefix, $path, $expectedPath)
     {
-        $filesystem = $this->prophesize(FilesystemInterface::class)->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
 
         static::assertSame(
@@ -133,9 +132,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->has(Argument::is($prefix . $path))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('has');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->has($path);
@@ -146,9 +144,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->read(Argument::is($prefix . $path))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('read');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->read($path);
@@ -159,9 +156,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->readStream(Argument::is($prefix . $path))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('readStream');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->readStream($path);
@@ -213,11 +209,8 @@ class PrefixFilesystemTest extends TestCase
             ],
         ];
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->listContents(Argument::is($prefix), Argument::is(false))
-            ->willReturn($returnListContent)
-            ->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('listContents')->willReturn($returnListContent);
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $content = $prefixFilesystem->listContents('');
@@ -248,11 +241,8 @@ class PrefixFilesystemTest extends TestCase
             'type' => 'file',
         ];
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->getMetadata(Argument::is($prefix . $path))
-            ->willReturn($returnMetadata)
-            ->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('getMetadata')->willReturn($returnMetadata);
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $metadata = $prefixFilesystem->getMetadata($path);
@@ -265,9 +255,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->getSize(Argument::is($prefix . $path))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('getSize');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->getSize($path);
@@ -278,9 +267,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->getMimetype(Argument::is($prefix . $path))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('getMimetype');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->getMimetype($path);
@@ -291,9 +279,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->getTimestamp(Argument::is($prefix . $path))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('getTimestamp');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->getTimestamp($path);
@@ -304,9 +291,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->getVisibility(Argument::is($prefix . $path))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('getVisibility');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->getVisibility($path);
@@ -317,9 +303,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->write(Argument::is($prefix . $path), Argument::is('foobar'), Argument::is([]))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('write');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->write($path, 'foobar');
@@ -330,9 +315,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->writeStream(Argument::is($prefix . $path), Argument::is('foobar'), Argument::is([]))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('writeStream');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->writeStream($path, 'foobar');
@@ -343,9 +327,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->update(Argument::is($prefix . $path), Argument::is('foobar'), Argument::is([]))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('update');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->update($path, 'foobar');
@@ -356,9 +339,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->updateStream(Argument::is($prefix . $path), Argument::is('foobar'), Argument::is([]))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('updateStream');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->updateStream($path, 'foobar');
@@ -370,9 +352,8 @@ class PrefixFilesystemTest extends TestCase
         $path = 'test/file.txt';
         $newpath = 'test/renamed_file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->rename(Argument::is($prefix . $path), Argument::is($prefix . $newpath))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('rename');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->rename($path, $newpath);
@@ -384,9 +365,8 @@ class PrefixFilesystemTest extends TestCase
         $path = 'test/file.txt';
         $newpath = 'test/renamed_file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->copy(Argument::is($prefix . $path), Argument::is($prefix . $newpath))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('copy');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->copy($path, $newpath);
@@ -397,9 +377,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->delete(Argument::is($prefix . $path))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('delete');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->delete($path);
@@ -410,9 +389,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->deleteDir(Argument::is($prefix . $path))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('deleteDir');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->deleteDir($path);
@@ -423,9 +401,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->createDir(Argument::is($prefix . $path), Argument::is([]))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('createDir');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->createDir($path);
@@ -436,9 +413,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->setVisibility(Argument::is($prefix . $path), Argument::is(AdapterInterface::VISIBILITY_PUBLIC))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('setVisibility');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->setVisibility($path, AdapterInterface::VISIBILITY_PUBLIC);
@@ -449,9 +425,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->put(Argument::is($prefix . $path), Argument::is('content'), Argument::is([]))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('put');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->put($path, 'content');
@@ -462,9 +437,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->putStream(Argument::is($prefix . $path), Argument::is('content'), Argument::is([]))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('putStream');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->putStream($path, 'content');
@@ -475,9 +449,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->readAndDelete(Argument::is($prefix . $path))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('readAndDelete');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->readAndDelete($path);
@@ -488,9 +461,8 @@ class PrefixFilesystemTest extends TestCase
         $prefix = 'plugins/swag_simple_test/';
         $path = 'test/file.txt';
 
-        $filesystem = $this->prophesize(FilesystemInterface::class);
-        $filesystem->get(Argument::is($prefix . $path), Argument::is(null))->shouldBeCalled();
-        $filesystem = $filesystem->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
+        $filesystem->expects(static::once())->method('get');
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->get($path);
@@ -501,7 +473,7 @@ class PrefixFilesystemTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Filesystem plugins are not allowed in prefixed filesystems.');
 
-        $filesystem = $this->prophesize(FilesystemInterface::class)->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
         $prefix = 'plugins/swag_simple_test/';
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
@@ -513,7 +485,7 @@ class PrefixFilesystemTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Path traversal is not allowed.');
 
-        $filesystem = $this->prophesize(FilesystemInterface::class)->reveal();
+        $filesystem = $this->createMock(FilesystemInterface::class);
         $prefix = 'plugins/swag_simple_test/';
 
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
