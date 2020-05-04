@@ -410,7 +410,7 @@ class Article extends Resource implements BatchInterface
         $this->flush();
 
         if (!empty($translations)) {
-            $this->writeTranslations($product->getId(), $translations);
+            $this->writeTranslations($product->getId(), $translations, true);
         }
 
         return $product;
@@ -621,7 +621,7 @@ class Article extends Resource implements BatchInterface
      *
      * @throws ApiException\CustomValidationException
      */
-    public function writeTranslations($articleId, $translations)
+    public function writeTranslations($articleId, $translations, $merge = false)
     {
         $whitelist = $this->getAttributeProperties();
         array_push(
@@ -650,7 +650,7 @@ class Article extends Resource implements BatchInterface
             }
 
             $data = array_intersect_key($translation, array_flip($whitelist));
-            $this->translationComponent->write($shop->getId(), 'article', $articleId, $data);
+            $this->translationComponent->write($shop->getId(), 'article', $articleId, $data, $merge);
         }
     }
 
