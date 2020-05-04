@@ -84,6 +84,12 @@ class ShopRegistrationService implements ShopRegistrationServiceInterface
         /** @var \Shopware_Components_TemplateMail $templateMail */
         $templateMail = $this->container->get('templatemail');
         $templateMail->setShop($shop);
+
+        // Reset mail transport to have right configuration
+        if ($this->container->initialized('mailtransport')) {
+            $this->container->reset('mailtransport');
+            $this->container->load('mailtransport');
+        }
     }
 
     public function resetTemplate(Shop $shop): void
