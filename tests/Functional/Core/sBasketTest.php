@@ -2134,6 +2134,9 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testsAddNote()
     {
         $_COOKIE['sUniqueID'] = Random::getAlphanumericString(32);
+        
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand(), true);
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);    
 
         // Add one article to the basket with low amount
         $randomArticle = $this->db->fetchRow(
