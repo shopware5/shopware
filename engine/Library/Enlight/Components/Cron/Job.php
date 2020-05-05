@@ -324,7 +324,7 @@ class Enlight_Components_Cron_Job
     public function setStart($start = null)
     {
         if (!$start instanceof Zend_Date) {
-            $start = new Zend_Date($start);
+            $start = new Zend_Date($start, is_string($start) ? Zend_Date::ISO_8601 : null);
         }
         $this->start = $start;
 
@@ -344,14 +344,14 @@ class Enlight_Components_Cron_Job
     /**
      * Sets the date and time when the cronjob stopped its run.
      *
-     * @param null|Zend_Date $end
+     * @param string|null|Zend_Date $end
      *
      * @return Enlight_Components_Cron_Job
      */
     public function setEnd($end = null)
     {
         if ($end !== null && !$end instanceof Zend_Date) {
-            $end = new Zend_Date($end);
+            $end = new Zend_Date($end, is_string($end) ? Zend_Date::ISO_8601 : null);
         }
         $this->end = $end;
 
