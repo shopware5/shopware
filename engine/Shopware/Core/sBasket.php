@@ -1467,7 +1467,9 @@ SQL;
         $cookieData = $this->front->Request()->getCookie();
         $uniqueId = $this->front->Request()->getCookie('sUniqueID');
 
-        if (!empty($cookieData) && empty($uniqueId)) {
+        $cookiePreferences = json_decode($cookieData['cookiePreferences']);
+
+        if (!empty($cookieData) && ($cookiePreferences->groups->comfort->cookies->sUniqueID->active===true) &&  empty($uniqueId)) {
             $basePath = Shopware()->Shop()->getBasePath();
             if ($basePath === null || $basePath === '') {
                 $basePath = '/';
@@ -1478,11 +1480,13 @@ SQL;
                     'sUniqueID',
                     $uniqueId,
                     time() + (86400 * 360),
-                    $basePath,
-                    null,
-                    $this->front->Request()->isSecure()
+                    $basePath
                 )
             );
+        }
+        else
+        {
+            $uniqueId = $this->session->get('sessionId');
         }
 
         // Check if this product is already noted
@@ -1495,7 +1499,7 @@ SQL;
             $queryNewPrice = $this->db->insert(
                 's_order_notes',
                 [
-                    'sUniqueID' => empty($uniqueId) ? $this->session->get('sessionId') : $uniqueId,
+                    'sUniqueID' => $uniqueId,
                     'userID' => $this->session->get('sUserId') ?: '0',
                     'articlename' => $articleName,
                     'articleID' => $articleID,
@@ -1607,12 +1611,19 @@ SQL;
             return false;
         }
 
+        $uniqueId = $this->front->Request()->getCookie('sUniqueID');
+
+        if (empty($uniqueId))
+        {
+                $uniqueId = $this->session->get('sessionId');
+        }
+
         $delete = $this->db->query(
             'DELETE FROM s_order_notes
             WHERE (sUniqueID = ? OR (userID = ?  AND userID != 0))
             AND id=?',
             [
-                $this->front->Request()->getCookie('sUniqueID'),
+                $uniqueId,
                 $this->session->get('sUserId'),
                 $id,
             ]
