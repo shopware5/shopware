@@ -291,7 +291,7 @@ class sExport implements \Enlight_Hook
             $this->sSettings['categoryID'] = $this->shopData['category_id'];
         }
         if (empty($this->sSettings['customergroupID'])) {
-            $this->sSettings['customergroupID'] = $shop->getCustomerGroup()->getKey();
+            $this->sSettings['customergroupID'] = $shop->getCustomerGroup()->getId();
         } else {
             $this->sSettings['customergroupID'] = (int) $this->sSettings['customergroupID'];
         }
