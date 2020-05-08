@@ -9,35 +9,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Additions
 
 * Added "albumId" to the Article API resource. This way you can determine in which album a product image is saved when creating or updating a product via REST API
-
-### Changes
-
-* Changed Symfony library to version 3.4.39
-* Changed jQuery library to version 3.5.0
-* Changed `\Shopware_Controllers_Backend_AttributeData` to support translating attribute store values
-    * Example:
-        ```php
-      $crudService->update(
-          's_articles_attributes',
-          'my_column',
-          'combobox',
-          [
-              'displayInBackend' => true,
-              'arrayStore' => [
-                  ['key' => 1, 'value' => 'Value 1'],
-              ],
-          ]
-      );  
-        ```
-     * Translation
-     ```ini
-    [en_GB]
-    s_articles_attributes_my_column_options_store_1 = "Item 1 EN"
-    
-    [de_DE]
-    s_articles_attributes_my_column_options_store_1 = "Item 1 DE"
-    ``` 
-* Changed cookie consent manager to work correctly when accepting all cookies
 * Added `Shopware_CronJob_Error` and `Shopware_CronJob_Finished` events to support all crojobs
     * Example:
         ```php
@@ -67,7 +38,37 @@ This changelog references changes done in Shopware 5.6 patch versions.
             // Your code here
         }
         ```
+
+### Changes
+
+* Changed Symfony library to version 3.4.39
+* Changed jQuery library to version 3.5.0
+* Changed `\Shopware_Controllers_Backend_AttributeData` to support translating attribute store values
+    * Example:
+        ```php
+      $crudService->update(
+          's_articles_attributes',
+          'my_column',
+          'combobox',
+          [
+              'displayInBackend' => true,
+              'arrayStore' => [
+                  ['key' => 1, 'value' => 'Value 1'],
+              ],
+          ]
+      );  
+        ```
+     * Translation
+     ```ini
+    [en_GB]
+    s_articles_attributes_my_column_options_store_1 = "Item 1 EN"
+    
+    [de_DE]
+    s_articles_attributes_my_column_options_store_1 = "Item 1 DE"
+    ``` 
+* Changed cookie consent manager to work correctly when accepting all cookies
 * Renamed duplicated smarty block `frontend_listing_box_article_badges` in the files `frontend/listing/product-box/box-basic.tpl` and `frontend/listing/product-box/box-emotion.tpl`
+* Changed tinymce to fix issues with `readOnly` is not resetting
 
 ## 5.6.6
 

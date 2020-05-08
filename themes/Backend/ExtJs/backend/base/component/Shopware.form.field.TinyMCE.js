@@ -333,6 +333,9 @@ Ext.define('Shopware.form.field.TinyMCE',
         if (me.readOnly) {
             me.config.editor.readonly = true;
             me.config.editor.body_class = 'tinymce-readonly';
+        } else {
+            me.config.editor.readonly = false;
+            me.config.editor.body_class = '';
         }
 
         // Fire the "beforerendereditor" event
