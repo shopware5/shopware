@@ -291,7 +291,7 @@ class sExport implements \Enlight_Hook
             $this->sSettings['categoryID'] = $this->shopData['category_id'];
         }
         if (empty($this->sSettings['customergroupID'])) {
-            $this->sSettings['customergroupID'] = $shop->getCustomerGroup()->getKey();
+            $this->sSettings['customergroupID'] = (int) $shop->getCustomerGroup()->getId();
         } else {
             $this->sSettings['customergroupID'] = (int) $this->sSettings['customergroupID'];
         }
@@ -975,7 +975,7 @@ class sExport implements \Enlight_Hook
             LEFT JOIN s_core_pricegroups_discounts pd
             ON a.pricegroupActive=1
             AND a.pricegroupID=groupID
-            AND customergroupID = {$this->sSettings['customergroupID']}
+            AND customergroupID = {$this->db->quote($this->sSettings['customergroupID'])}
             AND discountstart=1
 
             LEFT JOIN s_articles_esd e ON e.articledetailsID=d.id
