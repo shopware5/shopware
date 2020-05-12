@@ -39,7 +39,10 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
      */
     snippets: {
         title: '{s name=account/title}Shopware ID{/s}',
-        descriptionMessage: '{s name=account/description_message}Please login with your existing Shopware ID or register your shop, to access the complete functional range of the PluginManager. <br>The Shopware ID is your username and will give you access to your Shopware account and our Community Store, the central marketplace for all shopware extensions.{/s}'
+        descriptionMessage: '{s name=account/description_message}Please login with your existing Shopware ID or register your shop, to access the complete functional range of the PluginManager. <br>The Shopware ID is your username and will give you access to your Shopware account and our Community Store, the central marketplace for all shopware extensions.{/s}',
+        registrationInfoTitle: '{s name=account/registration_info_title}Register{/s}',
+        registrationInfoMessage: '{s name=account/registration_info_message}You don\'t have a Shopware ID yet?{/s}',
+        registrationInfoButtonLabel: '{s name=account/registration_info_button_label}Register now{/s}'
     },
 
     cls: 'plugin-manager-login-window',
@@ -73,7 +76,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
             anchor: '100%',
             items: [
                 me.createLoginPanel(),
-                me.createRegisterPanel()
+                me.createRegistrationInfoPanel()
             ]
         };
     },
@@ -123,13 +126,51 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
         });
     },
 
-    createRegisterPanel: function () {
+    createRegistrationInfoPanel: function () {
         var me = this;
 
-        return Ext.create('Shopware.apps.PluginManager.view.account.Register', {
-            cls: 'plugin-manager-login-window plugin-manager-register-form',
-            callback: me.callback,
-            margin: '0 0 0 15'
+        var button = Ext.create('Ext.container.Container', {
+            cls: 'action-buttons',
+            layout: {
+                type: 'vbox',
+                align: 'left'
+            },
+            padding: '0 0 10 0',
+            items: [
+                Ext.create('PluginManager.container.Container', {
+                    html: me.snippets.registrationInfoButtonLabel,
+                    cls: 'plugin-manager-action-button primary',
+                    handler: function () {
+                        window.open('https://account.shopware.com/register', '_blank', 'noopener');
+                    }
+                })
+            ]
+        });
+
+        return Ext.create('Ext.container.Container', {
+            width: 380,
+            border: false,
+            cls: 'plugin-manager-login-window',
+            padding: '0 0 0 60',
+            items: [
+                {
+                    border: false,
+                    margin: '22 0 20 0',
+                    html: '<span class="section-title">' + me.snippets.registrationInfoTitle + '</span>'
+                },
+                {
+                    border: false,
+                    margin: '22 0 10 0',
+                    cls: 'description-text',
+                    style: {
+                        borderTop: 'unset',
+                        marginTop: 'unset',
+                        paddingTop: 'unset',
+                    },
+                    html: '<p>' + me.snippets.registrationInfoMessage + '</p>'
+                },
+                button
+            ]
         });
     }
 

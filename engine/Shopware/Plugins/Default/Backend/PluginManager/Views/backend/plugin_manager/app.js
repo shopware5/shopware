@@ -73,7 +73,6 @@ Ext.define('Shopware.apps.PluginManager', {
         'loading.Mask',
         'account.Login',
         'account.LoginWindow',
-        'account.Register',
         'account.Checkout',
         'account.Upload'
 
