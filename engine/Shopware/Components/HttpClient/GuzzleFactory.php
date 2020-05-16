@@ -34,13 +34,12 @@ class GuzzleFactory
      */
     public function createClient(array $guzzleConfig = [])
     {
-        $client = new Client($guzzleConfig);
-
         $certPath = __DIR__ . '/cacert.pem';
         if (is_file($certPath)) {
-            $client->setDefaultOption('verify', $certPath);
+            $guzzleConfig['verify'] = $certPath;
         }
 
-        return $client;
+
+        return new Client($guzzleConfig);
     }
 }

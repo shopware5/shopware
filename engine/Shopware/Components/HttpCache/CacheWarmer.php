@@ -106,9 +106,14 @@ class CacheWarmer
             $guzzleConfig['cookies'] = ['shop' => $shopId];
         }
 
+        $requestMethod = 'createRequest';
+        if (method_exists($this->guzzleClient, 'request')) {
+            $requestMethod = 'request';
+        }
+
         $requests = [];
         foreach ($urls as $url) {
-            $requests[] = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
+            $requests[] = $this->guzzleClient->$requestMethod('GET', $url, $guzzleConfig);
         }
 
         $events = $this->eventManager;
