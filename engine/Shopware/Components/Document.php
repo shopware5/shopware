@@ -201,7 +201,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                  LEFT JOIN s_core_shops m
                      ON m.id=s.main_id
                      OR (s.main_id IS NULL AND m.id=s.id)
-                 WHERE s_order.language = s.id
+                 WHERE s_order.subshopID = s.id
                  AND s_order.id = ?",
                 [$orderID]
             );
