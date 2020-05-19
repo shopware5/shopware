@@ -117,7 +117,7 @@ class sCategories implements \Enlight_Hook
         $this->baseUrl = $this->config->get('baseFile') . '?sViewport=cat&sCategory=';
         $this->blogBaseUrl = $this->config->get('baseFile') . '?sViewport=blog&sCategory=';
         $this->baseId = (int) Shopware()->Shop()->get('parentID');
-        $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
+        $this->customerGroupId = (int) (Shopware()->Modules()->System()->sUSERGROUPDATA['id'] ?? 0);
         $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->categoryService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface::class);
         $this->contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);

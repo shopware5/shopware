@@ -1,3 +1,4 @@
+@misc
 Feature: General functionality
 
     @configChange @maintenance

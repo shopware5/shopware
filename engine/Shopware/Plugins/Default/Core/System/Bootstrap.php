@@ -111,6 +111,9 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             $system->sUSERGROUP = $shop->getCustomerGroup()->getKey();
             $system->sUSERGROUPDATA = $shop->getCustomerGroup()->toArray();
             $config->defaultCustomerGroup = $system->sUSERGROUP;
+
+            $config['sCURRENCY'] = $system->sCurrency['currency'];
+            $config['sCURRENCYHTML'] = $system->sCurrency['symbol'];
         }
 
         if (Shopware()->Container()->initialized('session')) {
@@ -138,9 +141,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         $system->sPathArticleImg = $sPathBase . '/media/image/';
         $system->sPathBanner = $sPathBase . $config->banner . '/';
         $system->sPathStart = $sPathBase . $config->baseFile;
-
-        $config['sCURRENCY'] = $system->sCurrency['currency'];
-        $config['sCURRENCYHTML'] = $system->sCurrency['symbol'];
 
         return $system;
     }

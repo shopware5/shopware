@@ -1,4 +1,4 @@
-@search
+@search @misc
 Feature: Search things
 
     Background:

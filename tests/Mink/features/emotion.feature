@@ -1,4 +1,4 @@
-@emotion @javascript
+@emotion @javascript @misc
 Feature: Emotion
 
     Background:
@@ -56,11 +56,11 @@ Feature: Emotion
         And   I should see an article slider:
             | link                                                           | name                              | price   |
             | /genusswelten/edelbraende/9/special-finish-lagerkorn-x.o.-32   | Special Finish Lagerkorn X.O. 32% | 24,99 € |
-            | /genusswelten/2/muensterlaender-lagerkorn-32                   | Münsterländer Lagerkorn 32%       | 19,99 € |
+            | /genusswelten/edelbraende/2/muensterlaender-lagerkorn-32       | Münsterländer Lagerkorn 32%       | 19,99 € |
             | /genusswelten/edelbraende/6/cigar-special-40                   | Cigar Special 40%                 | 35,95 € |
-            | /genusswelten/tees-und-zubeh/13/pai-mu-tan-tee-weiss           | Pai Mu Tan Tee weiss              | 2,50 €  |
-            | /genusswelten/tees-und-zubeh/tees/14/silver-yin-zhen-tee-weiss | Silver Yin Zhen Tee weiss         | 3,80 €  |
-            | /genusswelten/tees-und-zubeh/tees/15/lung-ching-gruener-tee    | LUNG CHING grüner Tee             | 2,40 €  |
+            | /genusswelten/tees-und-zubehoer/tees/13/pai-mu-tan-tee-weiss   | Pai Mu Tan Tee weiss              | 2,50 €  |
+            | /genusswelten/tees-und-zubehoer/tees/14/silver-yin-zhen-tee-weiss | Silver Yin Zhen Tee weiss         | 3,80 €  |
+            | /genusswelten/tees-und-zubehoer/tees/15/lung-ching-gruener-tee    | LUNG CHING grüner Tee             | 2,40 €  |
 
     @banner @youtube @article @html
     Scenario: Check landing page "Stop The Water While Using Me"
@@ -77,24 +77,24 @@ Feature: Emotion
             | property | value                                                                |
             | name     | All Natural - Sesame Sage Bodylotion                                 |
             | price    | 21,40 €                                                              |
-            | link     | /sommerwelten/beauty-und-care/216/all-natural-sesame-sage-bodylotion |
+            | link     | /sommerwelten/beauty-care/216/all-natural-sesame-sage-bodylotion |
 
         And   the product box on position 2 should have the following properties:
             | property | value                                                                     |
             | name     | All Natural - Rosemary Grapefruit Shampoo                                 |
             | price    | 12,80 €                                                                   |
-            | link     | /sommerwelten/beauty-und-care/215/all-natural-rosemary-grapefruit-shampoo |
+            | link     | /sommerwelten/beauty-care/215/all-natural-rosemary-grapefruit-shampoo |
 
         And   the product box on position 3 should have the following properties:
             | property | value                                                          |
             | name     | All Natural - Lemon Honey Soap                                 |
             | price    | 11,40 €                                                        |
-            | link     | /sommerwelten/beauty-und-care/218/all-natural-lemon-honey-soap |
+            | link     | /sommerwelten/beauty-care/218/all-natural-lemon-honey-soap |
 
         And   the product box on position 4 should have the following properties:
             | property | value                                                                      |
             | name     | All Natural - Orange Wild Herbs Shower Gel                                 |
             | price    | 12,80 €                                                                    |
-            | link     | /sommerwelten/beauty-und-care/217/all-natural-orange-wild-herbs-shower-gel |
+            | link     | /sommerwelten/beauty-care/217/all-natural-orange-wild-herbs-shower-gel     |
 
         And   I should see "Aliquam erat volutpat. Nulla sollicitudin tincidunt lacus eget lobortis. Nam cursus mattis arcu, eget ornare sapien elementum ut. Vestibulum egestas urna sed quam adipiscing vel tempor erat cursus. Morbi imperdiet, nibh et hendrerit mollis, nisl leo vulputate sapien, non accumsan tortor magna in nisi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus tempor suscipit sem, quis blandit velit faucibus quis. Sed sagittis nisi id elit commodo sed vulputate tortor consectetur. Aliquam tristique egestas justo."

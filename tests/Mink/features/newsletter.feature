@@ -1,4 +1,4 @@
-@newsletter
+@newsletter @misc
 Feature: Newsletter
 
     Scenario: Subscribe to and unsubscribe from newsletter
