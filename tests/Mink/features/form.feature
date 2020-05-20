@@ -1,4 +1,4 @@
-@form
+@form @misc
 Feature: forms
 
     @captchaInactive

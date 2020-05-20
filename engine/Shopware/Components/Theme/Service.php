@@ -509,7 +509,7 @@ class Service
      * Helper function to check, convert and load the translation for
      * the passed value.
      */
-    private function convertSnippet(string $snippet, \Enlight_Components_Snippet_Namespace $namespace): string
+    private function convertSnippet(?string $snippet, \Enlight_Components_Snippet_Namespace $namespace): ?string
     {
         if (!$this->isSnippet($snippet)) {
             return $snippet;
@@ -524,7 +524,7 @@ class Service
     /**
      * Checks if the passed value match the snippet pattern
      */
-    private function isSnippet(string $value): bool
+    private function isSnippet(?string $value): bool
     {
         return (bool) (substr($value, -2) === '__'
             && strpos($value, '__') === 0);

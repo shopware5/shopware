@@ -161,7 +161,8 @@ Elasticsearch 7:
             alias: elasticsearch
             command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
 
-Mink:
+
+.mink_base:
     extends: .phpunit_base
     image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
     stage: E2E
@@ -173,10 +174,11 @@ Mink:
         reports:
             junit: build/artifacts/mink/*.xml
     script:
-        - curl -v localhost
+        - apk add --no-cache sudo
         - ./psh.phar init --SW_HOST="$(hostname -i)"
         - chown -R www-data:www-data .
-        - ./psh.phar mink --SW_HOST="$(hostname -i)"
+        - sudo -u www-data ./psh.phar mink --SW_HOST="$(hostname -i)"
+        - sudo -u www-data vendor/bin/behat -vv --config=tests/Mink/behat.yml --format=pretty --out=std --format=junit --out=build/artifacts/mink --tags ${MINK_TAG}
     services:
         -   name: selenium/standalone-chrome:3.8.1
             alias: selenium
@@ -185,6 +187,42 @@ Mink:
         -   name: mysql:8.0.19
             alias: mysql
             command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
+
+
+Mink Account:
+    extends: .mink_base
+    variables:
+        MINK_TAG: account
+
+Mink Checkout:
+    extends: .mink_base
+    variables:
+        MINK_TAG: checkout
+
+Mink Detail:
+    extends: .mink_base
+    variables:
+        MINK_TAG: detail
+
+Mink Listing:
+    extends: .mink_base
+    variables:
+        MINK_TAG: listing
+
+Mink Note:
+    extends: .mink_base
+    variables:
+        MINK_TAG: note
+
+Mink Sitemap:
+    extends: .mink_base
+    variables:
+        MINK_TAG: sitemap
+
+Mink Misc:
+    extends: .mink_base
+    variables:
+        MINK_TAG: misc
 
 RIPS security:
     stage: Security

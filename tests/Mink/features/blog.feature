@@ -1,4 +1,4 @@
-@blog
+@blog @misc
 Feature: Blog
 
     Background:
@@ -22,7 +22,7 @@ Feature: Blog
 
         Examples:
             | position | title                                               | count |
-            | 1        | Der Sommer wird bunt                                | 6     |
+            | 1        | Der Sommer wird bunt                                | 12    |
             | 2        | Sonnenschutz - so gehören Sie zur Crème de la Crème | 5     |
             | 3        | Ich packe meinen Koffer                             | 5     |
 

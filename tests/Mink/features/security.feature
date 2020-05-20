@@ -1,4 +1,4 @@
-@security
+@security @misc
 Feature: Security
 
   @csrf @javascript

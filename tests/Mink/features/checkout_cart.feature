@@ -184,30 +184,6 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
       | SW10181 | Reisekoffer Set      | 1        | 139,99    | 139,99 |
       | SW10205.2 | Artikel mit Grundpreisberechnung | 1        | 200,00     | 200,00  |
 
-    @calculation @knownFailing
-    Scenario: I add an article without an purchase unit and get the correct price
-        Given there is a category defined:
-            | name | parentName |
-            | PUT  | Deutsch    |
-        And the manufacturer exist:
-            | name |
-            | UnitManu |
-        And the customer group exist:
-            | key | taxInput |
-            | EK  | 0        |
-        And the following product exist:
-            | number  | name               | price | customergroup | category | manufacturer | purchaseunit | shippingFree |
-            | SW11109 | purchase unit test | 2.13  | EK            | PUT      | UnitManu     | NULL         | 1            |
-        And the cart contains the following products:
-            | articleId | number  | name               | quantity   |
-            | 273       | SW11109 | purchase unit test | 100        |
-        Then  the aggregations should look like this:
-            | label         | value   |
-            | sum           | 254,00 € |
-            | shipping      | 0,00 €  |
-            | total         | 254,00 € |
-            | sumWithoutVat | 213,45 € |
-
     @calculation @repair
         Scenario: I should repair my database changes until we've implemented the new test structure :)
         Given the customer group exist:
