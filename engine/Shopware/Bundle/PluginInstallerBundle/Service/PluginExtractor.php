@@ -62,7 +62,7 @@ class PluginExtractor
     public function __construct(
         $pluginDir,
         Filesystem $filesystem,
-        array $pluginDirectories = [],
+        array $pluginDirectories,
         ShopwareReleaseStruct $release,
         RequirementValidator $requirementValidator
     ) {

@@ -146,7 +146,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
 
         $whiteList = array_key_exists($route, $whiteList) ? $whiteList[$route] : [];
 
-        while (list($key, $val) = each($process)) {
+        foreach ($process as $key => $val) {
             foreach ($val as $k => $v) {
                 unset($process[$key][$k]);
                 $stripTags = in_array($k, $whiteList) ? false : $stripTagsConf;

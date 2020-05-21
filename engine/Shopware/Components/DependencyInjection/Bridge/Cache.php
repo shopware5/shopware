@@ -43,7 +43,7 @@ class Cache
      *
      * @return Zend_Cache_Core
      */
-    public function factory($backend, $frontendOptions = [], $backendOptions = [], ShopwareReleaseStruct $release)
+    public function factory($backend, $frontendOptions, $backendOptions, ShopwareReleaseStruct $release)
     {
         $backendOptions['release'] = $release;
 

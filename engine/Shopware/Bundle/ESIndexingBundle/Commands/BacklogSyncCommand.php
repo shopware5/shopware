@@ -43,7 +43,7 @@ class BacklogSyncCommand extends ShopwareCommand
      */
     private $mappings;
 
-    public function __construct(int $batchSize = 500, \Traversable $mappings)
+    public function __construct(int $batchSize, \Traversable $mappings)
     {
         $this->batchSize = $batchSize;
         $this->mappings = iterator_to_array($mappings, false);

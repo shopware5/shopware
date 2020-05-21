@@ -111,7 +111,7 @@ class CustomerStream extends Resource
      *
      * @return \Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult
      */
-    public function getOne($id = null, $offset = 0, $limit = null, $conditions, $sortings)
+    public function getOne($id, $offset, $limit, $conditions, $sortings)
     {
         $this->checkPrivilege('read');
 
