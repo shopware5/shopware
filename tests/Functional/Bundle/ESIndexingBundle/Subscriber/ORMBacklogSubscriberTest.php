@@ -54,13 +54,12 @@ class ORMBacklogSubscriberTest extends TestCase
      */
     private $modelManager;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function setUp(): void
     {
-        parent::__construct($name, $data, $dataName);
-
         $this->backlogSubscriber = Shopware()->Container()->get('shopware_elastic_search.orm_backlog_subscriber');
         $this->backlogReader = Shopware()->Container()->get('shopware_elastic_search.backlog_reader');
         $this->modelManager = Shopware()->Container()->get('models');
+        parent::setUp();
     }
 
     /**

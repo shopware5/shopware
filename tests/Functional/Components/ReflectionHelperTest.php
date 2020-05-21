@@ -51,7 +51,7 @@ class ReflectionHelperTest extends TestCase
     public function testOutOfFolderCreation()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/out of scope/m');
+        $this->expectExceptionMessageMatches('/out of scope/m');
         $this->helper->createInstanceFromNamedArguments(NullLogger::class, []);
     }
 

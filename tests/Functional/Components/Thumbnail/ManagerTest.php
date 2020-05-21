@@ -155,7 +155,7 @@ class ManagerTest extends TestCase
     public function testGenerationWithEmptyMedia()
     {
         $this->expectException('Exception');
-        $this->expectExceptionMessageRegExp('/File .* is not an image/');
+        $this->expectExceptionMessageMatches('/File .* is not an image/');
         $media = new \Shopware\Models\Media\Media();
 
         $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);

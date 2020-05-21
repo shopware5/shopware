@@ -22,12 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Models\Order\Document;
+namespace Shopware\Tests\Models\Order;
 
 use Shopware\Models\Order\Document\Document;
 use Shopware_Components_Document;
 
-class DocumentTest extends \Enlight_Components_Test_TestCase
+class OrderDocumentDocumentTest extends \Enlight_Components_Test_TestCase
 {
     public function testSetAttribute()
     {

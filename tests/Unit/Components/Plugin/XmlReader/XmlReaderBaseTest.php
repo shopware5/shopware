@@ -72,7 +72,7 @@ class XmlReaderBaseTest extends TestCase
     public function testReadInvalidFile(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('#Unable to parse file#');
+        $this->expectExceptionMessageMatches('#Unable to parse file#');
 
         $xmlReader = new XmlConfigReader();
         $xmlReader->read(__DIR__ . '/examples/base/config_invalid.xml');

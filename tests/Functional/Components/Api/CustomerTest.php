@@ -278,7 +278,7 @@ class CustomerTest extends TestCase
     public function testCreateWithInvalidDataShouldThrowValidationExceptionWithCorrectToStringMessage()
     {
         $this->expectException('Shopware\Components\Api\Exception\ValidationException');
-        $this->expectExceptionMessageRegExp('"salutation: The value you selected is not a valid choice."');
+        $this->expectExceptionMessageMatches('"salutation: The value you selected is not a valid choice."');
         $testData = [
             'active' => true,
             'firstname' => 'Max',

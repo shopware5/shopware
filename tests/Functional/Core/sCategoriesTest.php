@@ -44,7 +44,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         $ids = Shopware()->Db()->fetchCol("SELECT id from s_categories WHERE path LIKE '|" . Shopware()->Shop()->get('parentID') . "|'");
 
         foreach ($categoryTree as $key => $category) {
-            static::assertContains($key, $ids);
+            static::assertTrue(in_array((string) $key, $ids, true));
             static::assertArrayHasKey('subcategories', $category);
             static::assertCount(0, $category['subcategories']);
             static::assertArrayHasKey('id', $category);

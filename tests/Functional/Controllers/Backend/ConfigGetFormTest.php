@@ -302,7 +302,7 @@ class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
             Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
         }
 
-        static::assertRegExp(',^\s*application/json\s*(;.*)?$,u', $response->getHeader('Content-Type'));
+        static::assertMatchesRegularExpression(',^\s*application/json\s*(;.*)?$,u', $response->getHeader('Content-Type'));
 
         // Only accept 2xx success codes. Here, redirects may be a sign
         // that the login did not work.
