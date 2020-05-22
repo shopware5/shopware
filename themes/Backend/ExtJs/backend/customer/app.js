@@ -102,7 +102,6 @@ Ext.define('Shopware.apps.Customer', {
         'customer_stream.Listing',
         'customer_stream.Preview',
         'customer_stream.ConditionPanel',
-        'customer_stream.Assignment',
         'customer_stream.ConditionField',
         'customer_stream.conditions.AccountModeCondition',
         'customer_stream.conditions.AgeCondition',
