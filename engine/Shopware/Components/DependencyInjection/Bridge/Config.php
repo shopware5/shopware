@@ -39,8 +39,8 @@ class Config
      */
     public function factory(
         Zend_Cache_Core $cache,
-        Connection $db = null,
-        $config = [],
+        ?Connection $db,
+        $config,
         ShopwareReleaseStruct $release
     ) {
         if (!$db) {

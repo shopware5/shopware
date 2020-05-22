@@ -169,13 +169,12 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
      * @param string $errstr
      * @param string $errfile
      * @param int    $errline
-     * @param array  $errcontext
      *
      * @throws ErrorException
      *
      * @return bool
      */
-    public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
+    public function errorHandler($errno, $errstr, $errfile, $errline)
     {
         // Ignore suppressed errors/warnings
         if (error_reporting() === 0) {
@@ -231,7 +230,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         }
 
         if (self::$_origErrorHandler !== null) {
-            return call_user_func(self::$_origErrorHandler, $errno, $errstr, $errfile, $errline, $errcontext);
+            return call_user_func(self::$_origErrorHandler, $errno, $errstr, $errfile, $errline);
         }
 
         return true;
