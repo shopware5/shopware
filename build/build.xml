@@ -88,9 +88,10 @@
 
     <target name="update-composer-binary" depends="install-composer-binary">
         <exec executable="${script.php}">
-            <arg value="composer.phar" />
-            <arg value="self-update" />
-            <arg value="--no-interaction" />
+            <arg value="composer.phar"/>
+            <arg value="self-update"/>
+            <arg value="1"/>
+            <arg value="--no-interaction"/>
         </exec>
     </target>
 
