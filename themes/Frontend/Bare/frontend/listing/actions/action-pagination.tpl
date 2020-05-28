@@ -11,7 +11,7 @@
         {block name="frontend_listing_actions_paging_first"}
             {if $sPage > 1}
                 {s name="ListingLinkFirst" assign="snippetListingLinkFirst"}{/s}
-                <a href="{$baseUrl}?{$shortParameters.sPage}=1" title="{$snippetListingLinkFirst|escape}" class="paging--link paging--prev" data-action-link="true">
+                <a href="{$baseUrl}?{$shortParameters.sPage}=1" title="{$snippetListingLinkFirst|escape}" aria-label="{$snippetListingLinkFirst|escape}" class="paging--link paging--prev" data-action-link="true">
                     <i class="icon--arrow-left"></i>
                     <i class="icon--arrow-left"></i>
                 </a>
@@ -22,7 +22,7 @@
         {block name='frontend_listing_actions_paging_previous'}
             {if $sPage > 1}
                 {s name="ListingLinkPrevious" assign="snippetListingLinkPrevious"}{/s}
-                <a href="{$baseUrl}?{$shortParameters.sPage}={$sPage-1}" title="{$snippetListingLinkPrevious|escape}" class="paging--link paging--prev" data-action-link="true">
+                <a href="{$baseUrl}?{$shortParameters.sPage}={$sPage-1}" title="{$snippetListingLinkPrevious|escape}" aria-label="{$snippetListingLinkPrevious|escape}" class="paging--link paging--prev" data-action-link="true">
                     <i class="icon--arrow-left"></i>
                 </a>
             {/if}
@@ -31,7 +31,7 @@
         {* Pagination - current page *}
         {block name='frontend_listing_actions_paging_numbers'}
             {if $pages > 1}
-                <a title="{$sCategoryContent.name|escape}" class="paging--link is--active">{$sPage}</a>
+                <a title="{$sCategoryContent.name|escape}" aria-label="{$sCategoryContent.name|escape}" class="paging--link is--active">{$sPage}</a>
             {/if}
         {/block}
 
@@ -39,7 +39,7 @@
         {block name='frontend_listing_actions_paging_next'}
             {if $sPage < $pages}
                 {s name="ListingLinkNext" assign="snippetListingLinkNext"}{/s}
-                <a href="{$baseUrl}?{$shortParameters.sPage}={$sPage+1}" title="{$snippetListingLinkNext|escape}" class="paging--link paging--next" data-action-link="true">
+                <a href="{$baseUrl}?{$shortParameters.sPage}={$sPage+1}" title="{$snippetListingLinkNext|escape}" aria-label="{$snippetListingLinkNext|escape}" class="paging--link paging--next" data-action-link="true">
                     <i class="icon--arrow-right"></i>
                 </a>
             {/if}
@@ -49,7 +49,7 @@
         {block name="frontend_listing_actions_paging_last"}
             {if $sPage < $pages}
                 {s name="ListingLinkLast" assign="snippetListingLinkLast"}{/s}
-                <a href="{$baseUrl}?{$shortParameters.sPage}={$pages}" title="{$snippetListingLinkLast|escape}" class="paging--link paging--next" data-action-link="true">
+                <a href="{$baseUrl}?{$shortParameters.sPage}={$pages}" title="{$snippetListingLinkLast|escape}" aria-label="{$snippetListingLinkLast|escape}" class="paging--link paging--next" data-action-link="true">
                     <i class="icon--arrow-right"></i>
                     <i class="icon--arrow-right"></i>
                 </a>
