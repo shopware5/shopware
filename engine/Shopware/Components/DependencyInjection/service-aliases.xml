@@ -461,6 +461,7 @@
         <service id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CurrencyHydrator" alias="shopware_storefront.currency_hydrator_dbal" />
         <service id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\LocaleHydrator" alias="shopware_storefront.locale_hydrator_dbal" />
         <service id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PaymentHydrator" alias="shopware_storefront.payment_hydrator_dbal" />
+        <service id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryGateway" alias="shopware_storefront.category_gateway" />
         <service id="Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface" alias="shopware_storefront.shop_gateway_dbal" />
         <service id="Shopware\Bundle\StoreFrontBundle\Gateway\CurrencyGatewayInterface" alias="shopware_storefront.currency_gateway_dbal" />
         <service id="Shopware\Bundle\StoreFrontBundle\Service\LocationServiceInterface" alias="shopware_storefront.location_service" />

@@ -201,7 +201,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
-        $category = $this->container->get('\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryGateway::class')->get($categoryId, $context);
+        $category = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryGateway::class)->get($categoryId, $context);
 
         $productStream = $category->getProductStream();
 
