@@ -7,7 +7,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/shopware/shopware/badges/quality-score.png?b=5.5)](https://scrutinizer-ci.com/g/shopware/shopware/?branch=5.5)
 [![Latest Stable Version](https://poser.pugx.org/shopware/shopware/v/stable)](https://packagist.org/packages/shopware/shopware)
 [![Total Downloads](https://poser.pugx.org/shopware/shopware/downloads)](https://packagist.org/packages/shopware/shopware)
-[![Gitter](https://badges.gitter.im/shopware/shopware.svg)](https://gitter.im/shopware/shopware?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Slack](https://img.shields.io/badge/chat-on%20slack-%23ECB22E)](http://slack.shopware.com?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/shopware/shopware>
