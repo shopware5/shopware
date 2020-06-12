@@ -2189,6 +2189,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             return $allowedByDefault;
         }
 
+        if (!array_key_exists('allow_shipping', $countryTranslations[$countryId])) {
+            return $allowedByDefault;
+        }
+
         return $countryTranslations[$countryId]['allow_shipping'];
     }
 }
