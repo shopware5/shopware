@@ -459,6 +459,7 @@
                 img = $('<img>', {
                     'class': 'image--element',
                     'src': $el.attr('data-img-original'),
+                    'alt': $el.attr('data-alt'),
                     'data-extension': $mediaEl.hasClass('image--svg') ? 'svg' : ''
                 });
 
