@@ -114,9 +114,9 @@ class CookieCollector implements CookieCollectorInterface
 
         $cookieGroupCollection->add(new CookieGroupStruct(CookieGroupStruct::TECHNICAL, $snippetNamespace->get('technical/title'), $snippetNamespace->get('technical/description'), true));
         $cookieGroupCollection->add(new CookieGroupStruct(CookieGroupStruct::COMFORT, $snippetNamespace->get('comfort/title'), $snippetNamespace->get('comfort/description')));
-        $cookieGroupCollection->add(new CookieGroupStruct(CookieGroupStruct::PERSONALIZATION, $snippetNamespace->get('personalization/title')));
-        $cookieGroupCollection->add(new CookieGroupStruct(CookieGroupStruct::STATISTICS, $snippetNamespace->get('statistics/title')));
-        $cookieGroupCollection->add(new CookieGroupStruct(CookieGroupStruct::OTHERS, $snippetNamespace->get('others/title')));
+        $cookieGroupCollection->add(new CookieGroupStruct(CookieGroupStruct::PERSONALIZATION, $snippetNamespace->get('personalization/title'), $snippetNamespace->get('personalization/description') ?? ''));
+        $cookieGroupCollection->add(new CookieGroupStruct(CookieGroupStruct::STATISTICS, $snippetNamespace->get('statistics/title'), $snippetNamespace->get('statistics/description') ?? ''));
+        $cookieGroupCollection->add(new CookieGroupStruct(CookieGroupStruct::OTHERS, $snippetNamespace->get('others/title'), $snippetNamespace->get('others/description') ?? ''));
     }
 
     private function addDefaultCookies(CookieCollection $cookieCollection): void
