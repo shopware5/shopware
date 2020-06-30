@@ -414,10 +414,11 @@ abstract class Zend_Mail_Protocol_Abstract
         } while (strpos($more, '-') === 0); // The '-' message prefix indicates an information string instead of a response string.
 
         if ($errMsg !== '') {
+            $message = sprintf('errMsg: %s , cmd: %s', $errMsg, $cmd);
             /**
              * @see Zend_Mail_Protocol_Exception
              */
-            throw new Zend_Mail_Protocol_Exception($errMsg, $cmd);
+            throw new Zend_Mail_Protocol_Exception($message);
         }
 
         return $msg;
