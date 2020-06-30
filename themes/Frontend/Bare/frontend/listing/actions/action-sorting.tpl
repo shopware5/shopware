@@ -11,7 +11,7 @@
 
         {* Sorting label *}
         {block name='frontend_listing_actions_sort_label'}
-            <label class="sort--label action--label">{s name='ListingLabelSort'}{/s}</label>
+            <label for="{$shortParameters.sSort}" class="sort--label action--label">{s name='ListingLabelSort'}{/s}</label>
         {/block}
 
         {* Sorting field *}
@@ -19,7 +19,8 @@
             {$listingMode = {config name=listingMode}}
 
             <div class="sort--select select-field">
-                <select name="{$shortParameters.sSort}"
+                <select id="{$shortParameters.sSort}"
+                        name="{$shortParameters.sSort}"
                         class="sort--field action--field"
                         data-auto-submit="true"
                         {if $listingMode != 'full_page_reload'}data-loadingindicator="false"{/if}>
