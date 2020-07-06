@@ -1182,6 +1182,14 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
+     * @param int $languageId
+     */
+    public function setLanguageId($languageId)
+    {
+        $this->languageId = $languageId;
+    }
+    
+    /**
      * @return string
      */
     public function getLanguageId()
