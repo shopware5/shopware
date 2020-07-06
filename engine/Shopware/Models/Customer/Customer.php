@@ -1182,7 +1182,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param int $languageId
+     * @param string $languageId
      */
     public function setLanguageId($languageId)
     {
