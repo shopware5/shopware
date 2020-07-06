@@ -635,8 +635,8 @@
             }
 
             if (opts.arrowControls) {
-                me._on(me._$arrowLeft, 'click touchstart', $.proxy(me.onLeftArrowClick, me));
-                me._on(me._$arrowRight, 'click touchstart', $.proxy(me.onRightArrowClick, me));
+                me._on(me._$arrowLeft, 'click touchend', $.proxy(me.onLeftArrowClick, me));
+                me._on(me._$arrowRight, 'click touchend', $.proxy(me.onRightArrowClick, me));
             }
 
             if (opts.thumbnails) {
