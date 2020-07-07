@@ -3,6 +3,9 @@ RewriteEngine on
 
 #RewriteBase /shopware/
 
+# Fix for office 365 autodiscover feature to prevent CSRF errors
+RewriteRule ^autodiscover/autodiscover.xml$ - [F,L,NC]
+
 # HTTPS config for the backend
 #RewriteCond %{HTTPS} !=on
 #RewriteRule backend/(.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
