@@ -289,5 +289,8 @@ Ext.onReady(function() {
         valueText: "Wartość",
         dateFormat: "Y-m-d"
     });
-
+    Ext.define('Shopware.de.Notification', {
+        override: 'Shopware.Notification',
+        closeText: 'Zamknij'
+    });
 });
