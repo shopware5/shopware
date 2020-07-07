@@ -551,15 +551,14 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         $categoryProducts = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
-        $viewData = $this->View()->getAssign();
 
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
+            $viewData = $this->View()->getAssign();
             $this->Response()->headers->set('content-type', 'text/xml');
             $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
             $this->View()->loadTemplate('frontend/listing/' . $type . '.tpl');
+            $this->View()->assign($viewData);
         }
-
-        $this->View()->assign($viewData);
 
         /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
         $facetFilter = $this->get('shopware_product_stream.facet_filter');
