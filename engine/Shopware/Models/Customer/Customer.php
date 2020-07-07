@@ -1181,10 +1181,12 @@ class Customer extends LazyFetchModelEntity
         return $this->languageSubShop;
     }
 
-    /**
-     * @return string
-     */
-    public function getLanguageId()
+    public function setLanguageId(string $languageId): void
+    {
+        $this->languageId = $languageId;
+    }
+
+    public function getLanguageId(): string
     {
         return $this->languageId;
     }
