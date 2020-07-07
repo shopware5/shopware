@@ -38,6 +38,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
             // Your code here
         }
         ```
+* Added new method `\Shopware\Models\Customer\Customer::setLanguageId`
 
 ### Changes
 
