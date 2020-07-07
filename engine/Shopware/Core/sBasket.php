@@ -2958,7 +2958,7 @@ SQL;
                 $additionalInfo['purchasesteps'] = 1;
             }
 
-            if (($quantity / $additionalInfo['purchasesteps']) != (int) $quantity / $additionalInfo['purchasesteps']) {
+            if (($quantity / $additionalInfo['purchasesteps']) != (int) ($quantity / $additionalInfo['purchasesteps'])) {
                 $quantity = (int) ($quantity / $additionalInfo['purchasesteps']) * $additionalInfo['purchasesteps'];
             }
 
