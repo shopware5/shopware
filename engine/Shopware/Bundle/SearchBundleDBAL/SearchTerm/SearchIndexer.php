@@ -30,6 +30,13 @@ use Shopware\Components\MemoryLimit;
 class SearchIndexer implements SearchIndexerInterface
 {
     /**
+     * Percent of matches to delete search index keywords
+     *
+     * @var float
+     */
+    public const INDEX_DELETE_THRESHOLD = 0.9;
+
+    /**
      * @var Connection
      */
     private $connection;
@@ -116,8 +123,8 @@ class SearchIndexer implements SearchIndexerInterface
 
         $this->setNextUpdateTimestamp();
 
-        // Truncate search index table
-        $this->connection->executeUpdate('TRUNCATE TABLE `s_search_index`');
+        // Truncate search index table (using DELETE to avoid committing database transactions in tests)
+        $this->connection->executeUpdate('DELETE FROM `s_search_index`');
 
         // Get a list of all tables and columns in this tables that should be processed by search
         /**
@@ -252,37 +259,69 @@ class SearchIndexer implements SearchIndexerInterface
     private function cleanupIndex()
     {
         $tables = $this->getSearchTables();
+        $qb = $this->connection->createQueryBuilder();
+        $qb
+            ->select(['si.keywordID', 'si.fieldID', 'sk.keyword'])
+            ->addSelect('(SELECT tableId FROM s_search_fields WHERE s_search_fields.id = si.fieldID) AS tableId')
+            ->addSelect('COUNT(*) AS count_self')
+            ->from('s_search_index', 'si')
+            ->innerJoin('si', 's_search_keywords', 'sk', 'si.keywordID=sk.id')
+            ->groupBy('si.keywordID')
+            ->addGroupBy('si.fieldID')
+            ->setParameter('threshold', static::INDEX_DELETE_THRESHOLD);
 
-        $sql_join = '';
+        $selected = []; // To avoid identical selects
         foreach ($tables as $table) {
-            if (empty($table['foreign_key'])) {
-                continue;
+            if (!empty($table['foreign_key'])) {
+                $qb->leftJoin(
+                    'si',
+                    $table['reference_table'] ?: 's_articles',
+                    't' . $table['tableID'],
+                    sprintf(
+                        'si.elementID = t%d.%s AND si.fieldID IN (:fieldIDs%1$d)',
+                        $table['tableID'],
+                        $table['foreign_key']
+                    )
+                );
+                $qb->setParameter('fieldIDs' . $table['tableID'], $table['fieldIDs']);
             }
-            if (empty($table['referenz_table'])) {
-                $table['referenz_table'] = 's_articles';
+
+            if (!in_array($table['reference_table'] ?: $table['table'], $selected)) {
+                $qb->addSelect(
+                    sprintf(
+                        '(SELECT COUNT(*) * :threshold FROM %s) AS cnt_%1$s',
+                        $selected[] = ($table['reference_table'] ?: $table['table'])
+                    )
+                );
             }
-            $sql_join .= "
-                LEFT JOIN {$table['referenz_table']} t{$table['tableID']}
-                ON si.elementID=t{$table['tableID']}.{$table['foreign_key']}
-                AND si.fieldID IN ({$table['fieldIDs']})
-            ";
+
+            $qb->orHaving(
+                sprintf(
+                    'tableId = %d AND count_self > cnt_%s',
+                    $table['tableID'],
+                    $table['reference_table'] ?: $table['table']
+                )
+            );
         }
 
-        $sql = "
-            SELECT STRAIGHT_JOIN
-                   keywordID, fieldID, sk.keyword
-            FROM `s_search_index` si
+        // For any reason, $qb->execute()->fetchAll() misses some results (compare result with $collectToDelete).
+        // As a workaround, sql is fetched and enriched with parameters for now.
+        // Second issue is that Doctrine doesn't support STRAIGHT_JOIN until now.
 
-            INNER JOIN s_search_keywords sk
-            ON si.keywordID=sk.id
+        // Get mapped sql:
+        $mappedSql = str_replace(
+            array_map(
+                function ($param) {
+                    return ':' . $param;
+                },
+                array_keys($qb->getParameters())
+            ),
+            array_values($qb->getParameters()),
+            // Replace SELECT by SELECT STRAIGHT JOIN
+            substr_replace($qb->getSQL(), 'SELECT STRAIGHT_JOIN', 0, 6)
+        );
 
-            $sql_join
-
-            GROUP BY keywordID, fieldID
-            HAVING COUNT(*) > (SELECT COUNT(*)*0.9 FROM `s_articles`)
-        ";
-
-        $collectToDelete = $this->connection->fetchAll($sql);
+        $collectToDelete = $this->connection->fetchAll($mappedSql);
         foreach ($collectToDelete as $delete) {
             $sql = '
                 DELETE FROM s_search_index
@@ -318,7 +357,7 @@ class SearchIndexer implements SearchIndexerInterface
                 st.id AS tableID,
                 st.table,
                 st.where,
-                st.referenz_table, 
+                st.referenz_table as reference_table,
                 st.foreign_key,
                 GROUP_CONCAT(sf.id SEPARATOR ', ') AS fieldIDs,
                 GROUP_CONCAT(sf.field SEPARATOR ', ') AS `fields`,

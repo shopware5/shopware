@@ -68,6 +68,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `iFrame-Element` => `iframe`
     * `HTML5 Video-Element` => `html_video`
     * `Code Element` => `code_element`
+* Changed the search to not consider keywords which match 90% of all variants 
 
 ### Removals
 
