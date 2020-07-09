@@ -33,7 +33,7 @@ namespace Shopware\Tests\Mink\Element;
  */
 class BlogBox extends CartPosition
 {
-    /** @var array $selector */
+    /** @var array */
     protected $selector = ['css' => 'div.blog--box.panel'];
 
     /**
