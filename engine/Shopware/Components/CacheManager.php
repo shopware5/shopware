@@ -35,6 +35,7 @@ use Shopware\Components\Model\Configuration;
 use Shopware\Components\Theme\PathResolver;
 use Shopware_Components_Config;
 use SplFileInfo;
+use Symfony\Component\Filesystem\Filesystem;
 use Zend_Cache;
 use Zend_Cache_Backend_Apcu;
 use Zend_Cache_Backend_Redis;
@@ -569,25 +570,6 @@ class CacheManager
             return;
         }
 
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        /** @var SplFileInfo $path */
-        foreach ($iterator as $path) {
-            if ($path->getFilename() === '.gitkeep') {
-                continue;
-            }
-
-            if ($path->isDir()) {
-                rmdir((string) $path);
-            } else {
-                if (!$path->isFile()) {
-                    continue;
-                }
-                unlink((string) $path);
-            }
-        }
+        (new Filesystem())->remove($dir);
     }
 }
