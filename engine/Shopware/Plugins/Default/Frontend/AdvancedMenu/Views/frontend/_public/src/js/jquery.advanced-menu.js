@@ -274,6 +274,11 @@
 
             event.preventDefault();
 
+            if (me.hoverDelayTimeoutId) {
+                window.clearTimeout(me.hoverDelayTimeoutId);
+                delete me.hoverDelayTimeoutId;
+            }
+
             me.closeMenu();
 
             $.publish('plugin/swAdvancedMenu/onCloseWithButton', [ me ]);
