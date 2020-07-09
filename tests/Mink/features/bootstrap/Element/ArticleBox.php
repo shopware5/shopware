@@ -35,7 +35,7 @@ use Shopware\Tests\Mink\Helper;
  */
 class ArticleBox extends CartPosition
 {
-    /** @var array $selector */
+    /** @var array */
     protected $selector = ['css' => 'div.product--box.box--basic'];
 
     /**

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-/**
+/*
  * Order demo data
  */
 

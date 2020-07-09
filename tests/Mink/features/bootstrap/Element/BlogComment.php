@@ -36,7 +36,7 @@ use Shopware\Tests\Mink\Helper;
  */
 class BlogComment extends MultipleElement
 {
-    /** @var array $selector */
+    /** @var array */
     protected $selector = ['css' => 'ul.comments--list > li.list--entry'];
 
     /**
