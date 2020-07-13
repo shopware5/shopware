@@ -137,7 +137,8 @@ class SubscriptionService
         }
 
         try {
-            $response->headers->setCookie(new Cookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24));
+            $cookie = new Cookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24, '/', null, $request->isSecure());
+            $response->headers->setCookie($cookie);
 
             return $this->getPluginInformationFromApi();
         } catch (ShopSecretException $e) {

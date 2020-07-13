@@ -71,6 +71,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Renamed duplicated smarty block `frontend_listing_box_article_badges` in the files `frontend/listing/product-box/box-basic.tpl` and `frontend/listing/product-box/box-emotion.tpl`
 * Changed tinymce to fix issues with `readOnly` is not resetting
 * Changed `\Shopware\Components\CacheManager` to ensure cache clearing happens correctly
+* Changed cookies `lastCheckSubscriptionDate` and `SHOPWAREBACKEND` to be secure, when requested with https
 
 ## 5.6.6
 
