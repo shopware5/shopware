@@ -51,7 +51,7 @@ class Shopware extends Enlight_Application
 
         $this->container = $container;
         $this->appPath = __DIR__ . DIRECTORY_SEPARATOR;
-        $this->docPath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
+        $this->docPath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR;
 
         parent::__construct();
     }
@@ -366,7 +366,9 @@ function Shopware($newInstance = null)
         $instance = $newInstance;
 
         return $oldInstance;
-    } elseif (!isset($instance)) {
+    }
+
+    if (!isset($instance)) {
         throw new RuntimeException('Shopware Kernel not booted');
     }
 

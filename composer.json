@@ -82,7 +82,8 @@
         "league/flysystem-aws-s3-v3": "1.0.23",
         "superbalist/flysystem-google-storage": "6.0.0",
         "stecman/symfony-console-completion": "0.10.1",
-        "beberlei/doctrineextensions": "1.2.6"
+        "beberlei/doctrineextensions": "1.2.6",
+        "composer/package-versions-deprecated": "^1.8"
     },
     "suggest": {
         "ext-apcu": "*",
@@ -117,11 +118,11 @@
             "Zend": "engine/Library/",
             "JSMin": "engine/Library/minify/"
         },
+        "files": ["engine/Shopware/Shopware.php"],
         "classmap": [
-            "engine/Shopware/Core/",
+            "engine/Shopware/",
             "engine/Library/Smarty/"
         ],
-        "files": ["engine/Shopware/Application.php"],
         "exclude-from-classmap": [
             "engine/Shopware/Plugins/Community/",
             "engine/Shopware/Plugins/Local/",

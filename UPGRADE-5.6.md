@@ -2,6 +2,20 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
+## 5.6.8
+
+[View all changes from v5.6.7...v5.6.8](https://github.com/shopware/shopware/compare/v5.6.7...v5.6.8)
+
+### Additions
+
+* Added new method `\Shopware\Models\Customer\Customer::setLanguageId`
+
+### Changes
+
+* Changed `\Shopware\Components\CacheManager` to ensure cache clearing happens correctly
+* Changed cookies `lastCheckSubscriptionDate` and `SHOPWAREBACKEND` to be secure, when requested with https
+* Changed composer.json to be compatible with Composer 2
+
 ## 5.6.7
 
 [View all changes from v5.6.6...v5.6.7](https://github.com/shopware/shopware/compare/v5.6.6...v5.6.7)
@@ -38,7 +52,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
             // Your code here
         }
         ```
-* Added new method `\Shopware\Models\Customer\Customer::setLanguageId`
 
 ### Changes
 
@@ -70,8 +83,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed cookie consent manager to work correctly when accepting all cookies
 * Renamed duplicated smarty block `frontend_listing_box_article_badges` in the files `frontend/listing/product-box/box-basic.tpl` and `frontend/listing/product-box/box-emotion.tpl`
 * Changed tinymce to fix issues with `readOnly` is not resetting
-* Changed `\Shopware\Components\CacheManager` to ensure cache clearing happens correctly
-* Changed cookies `lastCheckSubscriptionDate` and `SHOPWAREBACKEND` to be secure, when requested with https
 
 ## 5.6.6
 

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Components;
+namespace Shopware\Tests\Functional\Components\Model;
 
 use Shopware\Components\Model\Generator;
 

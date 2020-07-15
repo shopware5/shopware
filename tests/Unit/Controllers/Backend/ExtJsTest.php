@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Controller\Backend;
+namespace Shopware\Tests\Unit\Controllers\Backend;
 
 use PHPUnit\Framework\TestCase;
 

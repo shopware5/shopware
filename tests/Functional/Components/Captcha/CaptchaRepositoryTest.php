@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Components;
+namespace Shopware\Tests\Functional\Components\Captcha;
 
 use Shopware\Components\Captcha\CaptchaRepository;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
