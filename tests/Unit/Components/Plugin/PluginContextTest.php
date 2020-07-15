@@ -31,7 +31,7 @@ use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Kernel;
 
-class InstallContextTest extends TestCase
+class PluginContextTest extends TestCase
 {
     public function testFrontendCaches()
     {

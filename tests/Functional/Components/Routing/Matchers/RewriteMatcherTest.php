@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Components\Api;
+namespace Shopware\Tests\Functional\Components\Routing\Matchers;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Routing\Context;
