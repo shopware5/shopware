@@ -26,6 +26,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\Cart\BasketHelperInterface;
+use Shopware\Components\Cart\CartOrderNumberProviderInterface;
 use Shopware\Components\Cart\Struct\CartItemStruct;
 use Shopware\Components\Cart\Struct\DiscountContext;
 use Shopware\Components\Random;
@@ -131,6 +132,11 @@ class sBasket implements \Enlight_Hook
     private $fieldHelper;
 
     /**
+     * @var CartOrderNumberProviderInterface
+     */
+    private $cartOrderNumberProvider;
+
+    /**
      * @throws \Exception
      */
     public function __construct(
@@ -173,6 +179,7 @@ class sBasket implements \Enlight_Hook
         $this->proportionalTaxCalculation = $this->config->get('proportionalTaxCalculation');
 
         $this->fieldHelper = Shopware()->Container()->get('shopware_storefront.field_helper_dbal');
+        $this->cartOrderNumberProvider = Shopware()->Container()->get(CartOrderNumberProviderInterface::class);
     }
 
     /**
@@ -412,8 +419,7 @@ class sBasket implements \Enlight_Hook
 
         $this->sSYSTEM->sUSERGROUPDATA['basketdiscount'] = $basketDiscount;
 
-        $discountNumber = $this->config->get('sDISCOUNTNUMBER');
-        $name = isset($discountNumber) ? $discountNumber : 'DISCOUNT';
+        $name = $this->cartOrderNumberProvider->get(CartOrderNumberProviderInterface::DISCOUNT);
 
         $discountName = -$basketDiscount . ' % ' . $this->snippetManager
                 ->getNamespace('backend/static/discounts_surcharges')
@@ -1061,16 +1067,16 @@ SQL;
      */
     public function sInsertSurcharge()
     {
-        $name = $this->config->get('sSURCHARGENUMBER', 'SURCHARGE');
+        $name = $this->cartOrderNumberProvider->get(CartOrderNumberProviderInterface::SURCHARGE);
 
         // Delete previous inserted discounts
-        $this->db->delete(
-            's_order_basket',
-            [
-                'sessionID = ?' => $this->session->get('sessionId'),
-                'ordernumber = ?' => $name,
-            ]
-        );
+        $this->connection->createQueryBuilder()
+            ->where('sessionID = :sessionId')
+            ->andWhere('ordernumber IN (:names)')
+            ->setParameter('names', $this->cartOrderNumberProvider->getAll(CartOrderNumberProviderInterface::SURCHARGE), Connection::PARAM_STR_ARRAY)
+            ->setParameter('sessionId', $this->session->get('sessionId'))
+            ->delete('s_order_basket')
+            ->execute();
 
         if (!$this->sCountBasket()) {
             return false;
@@ -1197,12 +1203,15 @@ SQL;
 
         // Depends on payment mean
         $percent = $paymentInfo['debit_percent'];
-        $name = $this->config->get('sPAYMENTSURCHARGENUMBER', 'PAYMENTSURCHARGE');
+        $name = $this->cartOrderNumberProvider->get(CartOrderNumberProviderInterface::PAYMENT_PERCENT);
 
-        $this->db->query(
-            'DELETE FROM s_order_basket WHERE sessionID = ? AND ordernumber = ?',
-            [$this->session->get('sessionId'), $name]
-        );
+        $this->connection->createQueryBuilder()
+            ->where('sessionID = :sessionId')
+            ->andWhere('ordernumber IN (:names)')
+            ->setParameter('names', $this->cartOrderNumberProvider->getAll(CartOrderNumberProviderInterface::PAYMENT_PERCENT), Connection::PARAM_STR_ARRAY)
+            ->setParameter('sessionId', $this->session->get('sessionId'))
+            ->delete('s_order_basket')
+            ->execute();
 
         if (!$this->sCountBasket()) {
             return false;

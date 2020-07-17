@@ -29,6 +29,7 @@ use Shopware\Bundle\AccountBundle\Service\OptInLoginServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\Captcha\CaptchaValidator;
+use Shopware\Components\Cart\CartOrderNumberProviderInterface;
 use Shopware\Components\Cart\CartPersistServiceInterface;
 use Shopware\Components\Cart\ConditionalLineItemServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
@@ -182,6 +183,11 @@ class sAdmin implements \Enlight_Hook
     private $conditionalLineItemService;
 
     /**
+     * @var CartOrderNumberProviderInterface
+     */
+    private $cartOrderNumberProvider;
+
+    /**
      * @var array
      */
     private $cache = [
@@ -231,6 +237,7 @@ class sAdmin implements \Enlight_Hook
         $this->connection = $connection ?: Shopware()->Container()->get('dbal_connection');
         $this->optInLoginService = $optInLoginService ?: Shopware()->Container()->get(OptInLoginService::class);
         $this->conditionalLineItemService = Shopware()->Container()->get(ConditionalLineItemServiceInterface::class);
+        $this->cartOrderNumberProvider = Shopware()->Container()->get(CartOrderNumberProviderInterface::class);
     }
 
     /**
@@ -3008,25 +3015,16 @@ class sAdmin implements \Enlight_Hook
             $discount_tax = empty($discount_tax) ? 0 : (float) str_replace(',', '.', $discount_tax);
         }
 
-        $surcharge_ordernumber = $this->config->get(
-            'sPAYMENTSURCHARGEABSOLUTENUMBER',
-            'PAYMENTSURCHARGEABSOLUTENUMBER'
-        );
-        $discount_basket_ordernumber = $this->config->get('sDISCOUNTNUMBER', 'DISCOUNT');
-        $discount_ordernumber = $this->config->get('sSHIPPINGDISCOUNTNUMBER', 'SHIPPINGDISCOUNT');
-        $percent_ordernumber = $this->config->get('sPAYMENTSURCHARGENUMBER', 'PAYMENTSURCHARGE');
-        $dispatch_surcharge_ordernumber = $this->config->get('shippingSurchargeNumber');
-
         $this->db->delete('s_order_basket', [
             'sessionID = ?' => $this->session->offsetGet('sessionId'),
             'modus IN (?)' => [3, 4],
-            'ordernumber IN (?)' => [
-                $surcharge_ordernumber,
-                $discount_ordernumber,
-                $percent_ordernumber,
-                $discount_basket_ordernumber,
-                $dispatch_surcharge_ordernumber,
-            ],
+            'ordernumber IN (?)' => array_merge(...[
+                $this->cartOrderNumberProvider->getAll(CartOrderNumberProviderInterface::PAYMENT_ABSOLUTE),
+                $this->cartOrderNumberProvider->getAll(CartOrderNumberProviderInterface::PAYMENT_PERCENT),
+                $this->cartOrderNumberProvider->getAll(CartOrderNumberProviderInterface::DISCOUNT),
+                $this->cartOrderNumberProvider->getAll(CartOrderNumberProviderInterface::SHIPPING_DISCOUNT),
+                $this->cartOrderNumberProvider->getAll(CartOrderNumberProviderInterface::SHIPPING_SURCHARGE),
+            ]),
         ]);
 
         $basket = $this->sGetDispatchBasket(empty($country['id']) ? null : $country['id']);
@@ -4022,7 +4020,7 @@ SQL;
 
     private function handleBasketDiscount(float $amount, float $currencyFactor, float $discount_tax): void
     {
-        $discount_basket_ordernumber = $this->config->get('sDISCOUNTNUMBER', 'DISCOUNT');
+        $discount_basket_ordernumber = $this->cartOrderNumberProvider->get(CartOrderNumberProviderInterface::DISCOUNT);
         $discount_basket_name = $this->snippetManager
             ->getNamespace('backend/static/discounts_surcharges')
             ->get('discount_name', 'Warenkorbrabatt');
@@ -4053,7 +4051,7 @@ SQL;
 
     private function handleDispatchDiscount(array $basket, float $discountTax): void
     {
-        $discount_ordernumber = $this->config->get('sSHIPPINGDISCOUNTNUMBER', 'SHIPPINGDISCOUNT');
+        $discount_ordernumber = $this->cartOrderNumberProvider->get(CartOrderNumberProviderInterface::SHIPPING_DISCOUNT);
         $discount_name = $this->snippetManager
             ->getNamespace('backend/static/discounts_surcharges')
             ->get('shipping_discount_name', 'Basket discount');
@@ -4076,7 +4074,7 @@ SQL;
 
     private function handleDispatchSurcharge(array $basket, float $discountTax): void
     {
-        $discount_ordernumber = $this->config->get('shippingSurchargeNumber');
+        $discount_ordernumber = $this->cartOrderNumberProvider->get(CartOrderNumberProviderInterface::SHIPPING_SURCHARGE);
         $discount_name = $this->snippetManager
             ->getNamespace('backend/static/discounts_surcharges')
             ->get('shipping_surcharge_name', 'Dispatch surcharge');
@@ -4111,11 +4109,8 @@ SQL;
      */
     private function handlePaymentMeanSurcharge($country, $payment, $currencyFactor, $dispatch, $discount_tax)
     {
-        $surcharge_ordernumber = $this->config->get(
-            'sPAYMENTSURCHARGEABSOLUTENUMBER',
-            'PAYMENTSURCHARGEABSOLUTENUMBER'
-        );
-        $percent_ordernumber = $this->config->get('sPAYMENTSURCHARGENUMBER', 'PAYMENTSURCHARGE');
+        $surcharge_ordernumber = $this->cartOrderNumberProvider->get(CartOrderNumberProviderInterface::PAYMENT_ABSOLUTE);
+        $percent_ordernumber = $this->cartOrderNumberProvider->get(CartOrderNumberProviderInterface::PAYMENT_PERCENT);
 
         // Country surcharge
         if (!empty($payment['country_surcharge'][$country['countryiso']])) {
