@@ -15,6 +15,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `\Shopware\Components\CacheManager` to ensure cache clearing happens correctly
 * Changed cookies `lastCheckSubscriptionDate` and `SHOPWAREBACKEND` to be secure, when requested with https
 * Changed composer.json to be compatible with Composer 2
+* Changed `\Shopware\Components\Theme\LessCompiler\Oyejorge` to set custom less functions after reset
 
 ## 5.6.7
 
