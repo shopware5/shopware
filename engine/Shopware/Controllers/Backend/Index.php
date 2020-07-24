@@ -249,6 +249,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
             ->andWhere('m.pluginId IS NULL OR p.active = 1')
             ->orderBy('m.parentId', 'ASC')
             ->addOrderBy('m.position', 'ASC')
+            ->addOrderBy('m.id', 'ASC')
             ->getQuery()
             ->getArrayResult();
 
