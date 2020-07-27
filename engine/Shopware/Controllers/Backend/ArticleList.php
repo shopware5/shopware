@@ -55,8 +55,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $this->addAclPermission('getOperatorsAction', 'doMultiEdit', 'Insufficient Permissions');
         $this->addAclPermission('getEditableColumnsAction', 'doMultiEdit', 'Insufficient Permissions');
         $this->addAclPermission('batchAction', 'doMultiEdit', 'Insufficient Permissions');
-        $this->addAclPermission('getGrammarAction', 'createFilters', 'Insufficient Permissions');
-        $this->addAclPermission('getValuesAction', 'createFilters', 'Insufficient Permissions');
+        $this->addAclPermission('getGrammarAction', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getValuesAction', 'read', 'Insufficient Permissions');
         $this->addAclPermission('saveFilterAction', 'editFilters', 'Insufficient Permissions');
         $this->addAclPermission('deleteFilterAction', 'deleteFilters', 'Insufficient Permissions');
         $this->addAclPermission('createQueueAction', 'doMultiEdit', 'Insufficient Permissions');
