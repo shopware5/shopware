@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed cookies `lastCheckSubscriptionDate` and `SHOPWAREBACKEND` to be secure, when requested with https
 * Changed composer.json to be compatible with Composer 2
 * Changed `\Shopware\Components\Theme\LessCompiler\Oyejorge` to set custom less functions after reset
+* Changed csrf protection javascript plugin to work with punnycode on Internet Explorer 11
 
 ## 5.6.7
 
