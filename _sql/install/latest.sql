@@ -108,7 +108,7 @@ DROP TABLE IF EXISTS `s_articles_avoid_customergroups`;
 CREATE TABLE `s_articles_avoid_customergroups` (
   `articleID` int(11) NOT NULL,
   `customergroupID` int(11) NOT NULL,
-  UNIQUE KEY `articleID` (`articleID`,`customergroupID`)
+  PRIMARY KEY `articleID` (`articleID`,`customergroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -1084,7 +1084,7 @@ DROP TABLE IF EXISTS `s_categories_avoid_customergroups`;
 CREATE TABLE `s_categories_avoid_customergroups` (
   `categoryID` int(11) NOT NULL,
   `customergroupID` int(11) NOT NULL,
-  UNIQUE KEY `articleID` (`categoryID`,`customergroupID`)
+  PRIMARY KEY `articleID` (`categoryID`,`customergroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -4028,7 +4028,7 @@ DROP TABLE IF EXISTS `s_customer_streams_mapping`;
 CREATE TABLE `s_customer_streams_mapping` (
   `stream_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
-  UNIQUE KEY `stream_id` (`stream_id`,`customer_id`)
+  PRIMARY KEY `stream_id` (`stream_id`,`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
