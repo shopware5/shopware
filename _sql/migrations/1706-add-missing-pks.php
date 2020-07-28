@@ -21,36 +21,29 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-namespace SwagTest\Migrations;
-
-use Doctrine\DBAL\Platforms\MySqlPlatform;
-use Doctrine\DBAL\Schema\Schema;
-use Shopware\Components\Migrations\AbstractPluginMigration;
-
-class Migration1 extends AbstractPluginMigration
+class Migrations_Migration1706 extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up($modus): void
+    public function up($modus)
     {
-        $this->addSql(implode(';', $this->getSchema()->toSql(new MySqlPlatform())));
-    }
-
-    public function down(bool $keepUserData): void
-    {
-        if ($keepUserData) {
-            return;
+        try {
+            $this->connection->exec('ALTER TABLE `s_articles_avoid_customergroups`
+        ADD PRIMARY KEY `articleID_customergroupID` (`articleID`, `customergroupID`);');
+        } catch (PDOException $e) {
+            // PK Exists
         }
 
-        $this->addSql(implode(';', $this->getSchema()->toDropSql(new MySqlPlatform())));
-    }
+        try {
+            $this->connection->exec('ALTER TABLE `s_categories_avoid_customergroups`
+        ADD PRIMARY KEY `categoryID_customergroupID` (`categoryID`, `customergroupID`);');
+        } catch (PDOException $e) {
+            // PK Exists
+        }
 
-    private function getSchema(): Schema
-    {
-        $schema = new Schema();
-        $migration = $schema->createTable('s_test_table');
-        $migration->addColumn('name', 'string', ['length' => 255]);
-        $migration->setPrimaryKey(['name']);
-
-        return $schema;
+        try {
+            $this->connection->exec('ALTER TABLE `s_customer_streams_mapping`
+        ADD PRIMARY KEY `stream_id_customer_id` (`stream_id`, `customer_id`);');
+        } catch (PDOException $e) {
+            // PK Exists
+        }
     }
 }
