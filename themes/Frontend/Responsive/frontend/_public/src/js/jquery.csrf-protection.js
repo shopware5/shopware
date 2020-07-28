@@ -45,7 +45,8 @@
          * List of domains, where the csrf token will be send
          */
         allowedDomains: [
-            window.location.protocol + '//' + window.location.hostname
+            window.location.protocol + '//' + window.location.hostname,
+            window.controller.home
         ],
 
         /**
