@@ -62,6 +62,11 @@ class DatabaseContentTypeSynchronizer implements DatabaseContentTypeSynchronizer
     private $cleanupService;
 
     /**
+     * @var TypeProvider
+     */
+    private $typeProvider;
+
+    /**
      * @param FieldInterface[] $fieldAlias
      * @param string[]         $pluginFolders
      */
@@ -71,7 +76,8 @@ class DatabaseContentTypeSynchronizer implements DatabaseContentTypeSynchronizer
         TypeBuilder $typeBuilder,
         Connection $connection,
         SynchronizerServiceInterface $synchronizerService,
-        ContentTypeCleanupServiceInterface $cleanupService
+        ContentTypeCleanupServiceInterface $cleanupService,
+        TypeProvider $typeProvider
     ) {
         $this->fieldAlias = $fieldAlias;
         $this->pluginFolders = $pluginFolders;
@@ -79,14 +85,18 @@ class DatabaseContentTypeSynchronizer implements DatabaseContentTypeSynchronizer
         $this->connection = $connection;
         $this->synchronizerService = $synchronizerService;
         $this->cleanupService = $cleanupService;
+        $this->typeProvider = $typeProvider;
     }
 
     public function sync(array $installedPlugins, bool $destructive = false): array
     {
+        // This gives us only a list of types provided by plugins
         $types = (new TypeReader())->getTypes($installedPlugins, $this->pluginFolders, $this->fieldAlias);
         $typeProvider = new TypeProvider($types, $this->typeBuilder);
+
         $types = $typeProvider->getTypes();
 
+        $this->addCustomUserTypes($typeProvider);
         $this->updateContentTypesTable($types);
         $this->cleanup($types);
 
@@ -141,6 +151,21 @@ class DatabaseContentTypeSynchronizer implements DatabaseContentTypeSynchronizer
             ]);
         } else {
             $this->connection->executeQuery('DELETE FROM s_content_types WHERE source IS NOT NULL');
+        }
+    }
+
+    /**
+     * This method adds content types from your user created to the sync provider
+     */
+    private function addCustomUserTypes(TypeProvider $syncTypeProvider): void
+    {
+        /** @var Type $type */
+        foreach ($this->typeProvider->getTypes() as $type) {
+            if ($type->getSource() !== null) {
+                continue;
+            }
+
+            $syncTypeProvider->addType($type->getName(), $type);
         }
     }
 }
