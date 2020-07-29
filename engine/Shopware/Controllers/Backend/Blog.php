@@ -56,7 +56,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     protected $categoryRepository;
 
     /**
-     * @var \Shopware\Models\Category\Repository
+     * @var \Shopware\Models\Article\Repository
      */
     protected $articleRepository;
 
@@ -83,7 +83,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      *
      * Helper Method to get access to the article repository.
      *
-     * @return Shopware\Models\Article\Repository
+     * @return \Shopware\Models\Article\Repository
      */
     public function getArticleRepository()
     {

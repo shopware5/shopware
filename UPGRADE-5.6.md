@@ -18,6 +18,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `\Shopware\Components\Theme\LessCompiler\Oyejorge` to set custom less functions after reset
 * Changed csrf protection javascript plugin to work with punnycode on Internet Explorer 11
 * Changed `\Shopware\Bundle\ContentTypeBundle\Services\DatabaseContentTypeSynchronizer` to consider also user created content types
+* Changed Symfony version to 3.4.43
 
 ## 5.6.7
 

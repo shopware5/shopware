@@ -48,7 +48,7 @@ abstract class PluginCommand extends ShopwareCommand
     }
 
     /**
-     * @param InstallContext[] ...$contexts
+     * @param InstallContext ...$contexts
      */
     protected function clearCachesIfRequested(InputInterface $input, OutputInterface $output, ...$contexts)
     {
@@ -63,7 +63,7 @@ abstract class PluginCommand extends ShopwareCommand
     }
 
     /**
-     * @param InstallContext[] ...$contexts
+     * @param InstallContext ...$contexts
      */
     protected function clearCaches(OutputInterface $output, ...$contexts)
     {
@@ -76,7 +76,7 @@ abstract class PluginCommand extends ShopwareCommand
     }
 
     /**
-     * @param InstallContext[] ...$contexts
+     * @param InstallContext ...$contexts
      *
      * @return string[]
      */

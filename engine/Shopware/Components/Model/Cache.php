@@ -121,6 +121,8 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
     protected function doFlush()
     {
         $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, $this->tags);
+
+        return true;
     }
 
     /**

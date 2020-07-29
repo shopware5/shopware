@@ -171,7 +171,7 @@ interface MediaServiceInterface
      *
      * @param string $path
      *
-     * @return bool
+     * @return void
      */
     public function migrateFile($path);
 

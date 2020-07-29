@@ -6,11 +6,12 @@ parameters:
     level: 5
     inferPrivatePropertyTypeFromConstructor: true
     reportUnmatchedIgnoredErrors: false
+    treatPhpDocTypesAsCertain: false
 
-    autoload_directories:
+    scanDirectories:
         - %currentWorkingDirectory%/var/cache
         - %currentWorkingDirectory%/engine/Library
-    autoload_files:
+    scanFiles:
         - %currentWorkingDirectory%/vendor/autoload.php
 
     paths:
@@ -62,7 +63,7 @@ parameters:
         - '#\([a-zA-Z\\_]+Repository\) does not accept Doctrine\\ORM\\EntityRepository#'
         - '#\([a-zA-Z\\_]+Repository\) does not accept Doctrine\\Common\\Persistence\\ObjectRepository#'
         - '#Array \(array<string, Shopware\\Components\\Model\\ModelRepository>\) does not accept Doctrine\\ORM\\EntityRepository#'
-        - '# should return Doctrine\\ORM\\EntityRepository|null but returns Doctrine\\Common\\Persistence\\ObjectRepository#'
+        - '# should return Doctrine\\ORM\\EntityRepository\|null but returns Doctrine\\Common\\Persistence\\ObjectRepository#'
         # Return values in Models
         - '# returns Shopware\\Components\\Model\\ModelEntity.#'
         - '#does not accept Shopware\\Components\\Api\\Resource\\Resource#'
@@ -85,22 +86,22 @@ parameters:
         - '#expects Shopware\\Components\\Form\\Container\\[a-zA-Z]+, Shopware\\Components\\Form\\Interfaces\\Container given#'
         - '#expects Doctrine\\ORM\\PersistentCollection, Doctrine\\Common\\Collections\\ArrayCollection&iterable<Shopware\\Models\\Shop\\TemplateConfig\\[a-zA-Z]+> given#'
         - '#Parameter \#1 \$em of method Doctrine\\ORM\\EntityRepository::__construct\(\) expects Doctrine\\ORM\\EntityManager, Doctrine\\ORM\\EntityManagerInterface given#'
-        - '#Parameter \#1 \$sort of method Doctrine\\ORM\\QueryBuilder::addOrderBy\(\) expects Doctrine\\ORM\\Query\\Expr\\OrderBy|string, array given#'
+        - '#Parameter \#1 \$sort of method Doctrine\\ORM\\QueryBuilder::addOrderBy\(\) expects Doctrine\\ORM\\Query\\Expr\\OrderBy\|string, array given#'
         - '#Parameter \#3 \$type of method Doctrine\\ORM\\QueryBuilder::setParameter\(\) expects string\|null, int given#'
         - '#Parameter \#3 \$type of method Doctrine\\DBAL\\Query\\QueryBuilder::setParameter\(\) expects string\|null, int given#'
         - '#Parameter \#1 \$reader of class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver constructor expects Doctrine\\Common\\Annotations\\AnnotationReader, Doctrine\\Common\\Annotations\\Reader given#'
         - '#Parameter \#1 \$request of method Shopware\\Bundle\\SearchBundle\\CriteriaRequestHandlerInterface::handleRequest\(\) expects Enlight_Controller_Request_RequestHttp, Enlight_Controller_Request_Request given#'
         # Container Issues
         - '#Parameter \#2 \$service of method Symfony\\Component\\DependencyInjection\\ContainerInterface::set\(\) expects object, array<Shopware\\Bundle\\SearchBundleDBAL\\[a-zA-Z]+Interface> given#'
+        - '#\$resource of method Shopware\\Components\\DependencyInjection\\Container::set#'
         # Wrong type in ElasticsearchDSL
-        - '#Parameter \#2 \$value of class ONGR\\ElasticsearchDSL\\Query\\TermQuery constructor expects string#'
         - '#Parameter \#2 \$value of class ONGR\\ElasticsearchDSL\\Query\\TermLevel\\TermQuery constructor expects string#'
         - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Query\\Compound\\BoolQuery::addParameter\(\) expects array\|stdClass\|string#'
         - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Aggregation\\AbstractAggregation::addParameter\(\) expects array\|stdClass\|string#'
         - '#should return Shopware\\Bundle\\ContentTypeBundle\\Services\\RepositoryInterface but returns object#'
-        # Missing array key
-        - "#Offset 'mediatype' does not exist on array#"
         # We manually check if the class exists before instantiating / using it
         - '#Instantiated class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller not found#'
         - '#Call to method saveConfiguration\(\) on an unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'
         - '#PHPDoc tag \@var for variable \$payPalInstaller contains unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'
+        # offsetSet should not return
+        - '#Method Shopware_Components_Config::offsetSet\(\) with return type void returns mixed but should not return anything#'
