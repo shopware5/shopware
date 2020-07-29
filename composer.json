@@ -78,6 +78,7 @@
         "stecman/symfony-console-completion": "0.10.1",
         "beberlei/doctrineextensions": "1.2.3",
         "laminas/laminas-escaper": "2.6.1",
+        "laminas/laminas-code": "3.4.1",
         "composer/package-versions-deprecated": "^1.8"
     },
     "replace": {
