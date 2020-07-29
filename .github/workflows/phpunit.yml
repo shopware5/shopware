@@ -32,7 +32,7 @@ jobs:
   mysql:
     strategy:
       matrix:
-        mysql: ['mysql:8.0.19', 'mariadb:10.1', 'mariadb:10.4']
+        mysql: ['mysql:8.0', 'mariadb:10.1', 'mariadb:10.4']
     runs-on: ubuntu-latest
 
     steps:

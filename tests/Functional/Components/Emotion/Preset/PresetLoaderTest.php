@@ -115,7 +115,12 @@ class PresetLoaderTest extends TestCase
         static::assertEquals($componentId, $decodedData['elements'][0]['componentId']);
         static::assertEquals($componentId, $decodedData['elements'][0]['component']['id']);
 
-        static::assertEquals($fieldId, $decodedData['elements'][0]['component']['fields'][0]['id']);
+        foreach ($decodedData['elements'][0]['component']['fields'] as $value) {
+            if ($value['name'] === 'file') {
+                static::assertSame((int) $fieldId, (int) $value['id']);
+            }
+        }
+
         static::assertEquals($fieldId, $decodedData['elements'][0]['data'][1]['fieldId']);
         static::assertRegExp('/http/', $decodedData['elements'][0]['data'][1]['value']);
     }
