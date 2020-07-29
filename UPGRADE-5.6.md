@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Additions
 
 * Added new method `\Shopware\Models\Customer\Customer::setLanguageId`
+* Added new option `disableScrollBarUpdate` to `swMenuScroller`
 
 ### Changes
 

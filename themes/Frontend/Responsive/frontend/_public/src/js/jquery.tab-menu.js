@@ -143,7 +143,8 @@
 
             if (me.opts.scrollable) {
                 me.$el.swMenuScroller({
-                    'listSelector': me.$tabContainer
+                    listSelector: me.$tabContainer,
+                    disableScrollBarUpdate: true
                 });
             }
 
