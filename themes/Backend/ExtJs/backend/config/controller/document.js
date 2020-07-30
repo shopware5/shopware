@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/config/controller/main}
+//{namespace name="backend/config/controller/main"}
 
 /**
  * Shopware Controller - Config backend module

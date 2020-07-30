@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/canceled_order/view/main}
+//{namespace name="backend/canceled_order/view/main"}
 
 /**
  * Shopware UI - Canceled baskets
@@ -37,7 +37,7 @@
 Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Main', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.canceled-order-tabs-baskets-main',
-    title: '{s name=canceledBaskets}Baskets{/s}',
+    title: '{s name="canceledBaskets"}Baskets{/s}',
     defaults: {
         bodyBorder: 0
     },
@@ -47,8 +47,8 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Main', {
 
     snippets: {
         date: {
-            from: '{s name=date/from}From{/s}',
-            to: '{s name=date/to}To{/s}'
+            from: '{s name="date/from"}From{/s}',
+            to: '{s name="date/to"}To{/s}'
         }
     },
 

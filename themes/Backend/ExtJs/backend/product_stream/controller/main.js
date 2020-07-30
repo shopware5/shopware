@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/controller/main"}
 Ext.define('Shopware.apps.ProductStream.controller.Main', {
     extend: 'Enlight.app.Controller',
@@ -71,8 +71,8 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
     },
 
     onDeleteItem: function(grid, record) {
-        var message = Ext.String.format('{s name=dialog_delete_stream_message}Do you really want to delete "[0]"?{/s}', record.get('name'));
-        Ext.MessageBox.confirm('{s name=dialog_delete_stream_title}Delete Prdoduct Stream{/s}', message, function (response) {
+        var message = Ext.String.format('{s name="dialog_delete_stream_message"}Do you really want to delete "[0]"?{/s}', record.get('name'));
+        Ext.MessageBox.confirm('{s name="dialog_delete_stream_title"}Delete Prdoduct Stream{/s}', message, function (response) {
             if (response !== 'yes') {
                 return false;
             }
@@ -124,8 +124,8 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
                     }
                 });
                 Shopware.Notification.createGrowlMessage(
-                        '{s name=stream_saved_title}Product stream{/s}',
-                        '{s name=stream_saved_description}Stream saved{/s}'
+                        '{s name="stream_saved_title"}Product stream{/s}',
+                        '{s name="stream_saved_description"}Stream saved{/s}'
                 );
             }
         });
@@ -171,8 +171,8 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
                     }
                 });
                 Shopware.Notification.createGrowlMessage(
-                        '{s name=stream_saved_title}Product stream{/s}',
-                        '{s name=stream_saved_description}Stream saved{/s}'
+                        '{s name="stream_saved_title"}Product stream{/s}',
+                        '{s name="stream_saved_description"}Stream saved{/s}'
                 );
             }
         });
@@ -255,15 +255,15 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
     onDuplicateItem: function(grid, record) {
         var showNotificationAndRefresh = function() {
             Shopware.Notification.createGrowlMessage(
-                    '{s name=stream_saved_title}Product stream{/s}',
-                    '{s name=stream_saved_description}Stream saved{/s}'
+                    '{s name="stream_saved_title"}Product stream{/s}',
+                    '{s name="stream_saved_description"}Stream saved{/s}'
             );
             grid.getStore().load();
         };
 
         Ext.MessageBox.prompt(
-            '{s name=stream_duplicate_title}Duplicate Product Stream{/s}',
-            '{s name=stream_duplicate_prompt}New name{/s}:',
+            '{s name="stream_duplicate_title"}Duplicate Product Stream{/s}',
+            '{s name="stream_duplicate_prompt"}New name{/s}:',
             function (result, value) {
                 if (result !== "ok" || !value) {
                     return;
@@ -309,7 +309,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
 
                     }
                 });
-            }, this, false, '{s name=stream_duplicate_copy}Copy of {/s}' + record.get('name'));
+            }, this, false, '{s name="stream_duplicate_copy"}Copy of {/s}' + record.get('name'));
     }
 });
 //{/block}

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order list main window.
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Order.view.batch.Window', {
     /**
      * @type { String }
      */
-    title:'{s name=window_title}Batch processing{/s}',
+    title:'{s name="window_title"}Batch processing{/s}',
 
     /**
      * Set layout for this component to hbox

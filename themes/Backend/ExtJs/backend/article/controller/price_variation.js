@@ -31,7 +31,7 @@
  * Shopware Controller - Price Variation
  * The price variation controller handles all events of the views in the price variation namespace.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/controller/price_variation"}
 Ext.define('Shopware.apps.Article.controller.PriceVariation', {
 
@@ -42,10 +42,10 @@ Ext.define('Shopware.apps.Article.controller.PriceVariation', {
     extend:'Ext.app.Controller',
 
     snippets: {
-        growlMessage: '{s name=growl_message}Article{/s}',
+        growlMessage: '{s name="growl_message"}Article{/s}',
         failure: {
-            title: '{s name=variant/failure/title}Failure{/s}',
-            onlyOneCanBeChecked: '{s name=media/failure/only_one_node}You can only activate one configurator option per configurator group.{/s}'
+            title: '{s name="variant/failure/title"}Failure{/s}',
+            onlyOneCanBeChecked: '{s name="media/failure/only_one_node"}You can only activate one configurator option per configurator group.{/s}'
         }
 
     },

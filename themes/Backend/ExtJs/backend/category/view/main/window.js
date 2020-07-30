@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/* {namespace name=backend/category/main} */
+/* {namespace name="backend/category/main"} */
 
 /**
  * Shopware UI - Category Main Window
@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
      * Title of this window
      * @string
      */
-    title: '{s name=window/main_title}Categories{/s}',
+    title: '{s name="window/main_title"}Categories{/s}',
 
     /**
      * XType for this component
@@ -168,13 +168,13 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
         var me = this;
 
         me.articleMappingContainer = Ext.create('Ext.panel.Panel', {
-            title:'{s name=tabs/article_mapping/title}Article-Mapping{/s}',
+            title:'{s name="tabs/article_mapping/title"}Article-Mapping{/s}',
             disabled: true,
             layout: 'fit'
         });
 
         me.categoryRestrictionContainer = Ext.create('Ext.panel.Panel', {
-            title:'{s name=tabs/restrict_category/title}Restrict Category{/s}',
+            title:'{s name="tabs/restrict_category/title"}Restrict Category{/s}',
             disabled: true,
             layout: 'fit'
         });
@@ -210,7 +210,7 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
             menu = ['->'];
         /* {if {acl_is_allowed privilege=update}} */
         menu.push({
-            text: '{s name=main/window/button/save}Save{/s}',
+            text: '{s name="main/window/button/save"}Save{/s}',
             action: 'saveDetail',
             disabled: true,
             cls:'primary',

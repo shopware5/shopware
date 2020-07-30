@@ -38,11 +38,11 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
      * @object
      */
     snippets: {
-        title: '{s name=account/title}Shopware ID{/s}',
-        descriptionMessage: '{s name=account/description_message}Please login with your existing Shopware ID or register your shop, to access the complete functional range of the PluginManager. <br>The Shopware ID is your username and will give you access to your Shopware account and our Community Store, the central marketplace for all shopware extensions.{/s}',
-        registrationInfoTitle: '{s name=account/registration_info_title}Register{/s}',
-        registrationInfoMessage: '{s name=account/registration_info_message}You don\'t have a Shopware ID yet?{/s}',
-        registrationInfoButtonLabel: '{s name=account/registration_info_button_label}Register now{/s}'
+        title: '{s name="account/title"}Shopware ID{/s}',
+        descriptionMessage: '{s name="account/description_message"}Please login with your existing Shopware ID or register your shop, to access the complete functional range of the PluginManager. <br>The Shopware ID is your username and will give you access to your Shopware account and our Community Store, the central marketplace for all shopware extensions.{/s}',
+        registrationInfoTitle: '{s name="account/registration_info_title"}Register{/s}',
+        registrationInfoMessage: '{s name="account/registration_info_message"}You don\'t have a Shopware ID yet?{/s}',
+        registrationInfoButtonLabel: '{s name="account/registration_info_button_label"}Register now{/s}'
     },
 
     cls: 'plugin-manager-login-window',

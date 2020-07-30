@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/* {namespace name=backend/category/main} */
+/* {namespace name="backend/category/main"} */
 
 /**
  * Shopware Controller - category management controller

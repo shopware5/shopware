@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/search_grid"}
 Ext.define('Shopware.apps.ProductStream.view.SearchGrid', {
     extend: 'Ext.form.FieldContainer',
@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.ProductStream.view.SearchGrid', {
             displayField: 'name',
             valueField: 'id',
             multiSelect: true,
-            fieldLabel: '{s name=search}Search{/s}',
+            fieldLabel: '{s name="search"}Search{/s}',
             pageSize: me.searchStore.pageSize,
             listeners: {
                 select: function (combo, records) {
@@ -93,12 +93,12 @@ Ext.define('Shopware.apps.ProductStream.view.SearchGrid', {
 
     createDisplayColumns: function() {
         return [{
-            header: '{s name=number}Number{/s}',
+            header: '{s name="number"}Number{/s}',
             sortable: true,
             dataIndex: 'number',
             width: 110
         }, {
-            header: '{s name=name}Name{/s}',
+            header: '{s name="name"}Name{/s}',
             sortable: true,
             dataIndex: 'name',
             flex: 1
@@ -118,7 +118,7 @@ Ext.define('Shopware.apps.ProductStream.view.SearchGrid', {
         var me = this;
         return [{
             iconCls: 'sprite-inbox',
-            tooltip: '{s name=openProduct}Open product{/s}',
+            tooltip: '{s name="openProduct"}Open product{/s}',
             handler: function(view, rowIndex, colIndex, item, opts, record) {
                 Shopware.app.Application.addSubApplication({
                     name: 'Shopware.apps.Article',
@@ -130,7 +130,7 @@ Ext.define('Shopware.apps.ProductStream.view.SearchGrid', {
             }
         }, {
             iconCls: 'sprite-minus-circle-frame',
-            tooltip: '{s name=removeProduct}Remove product from stream{/s}',
+            tooltip: '{s name="removeProduct"}Remove product from stream{/s}',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
                 me.removeRecord(record);
             }

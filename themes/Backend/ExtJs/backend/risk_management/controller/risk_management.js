@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/risk_management/main}
+//{namespace name="backend/risk_management/main"}
 
 /**
  * Shopware Controller - RiskManagement backend module
@@ -202,9 +202,9 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
                             rawData = record.getProxy().getReader().rawData;
                         if(operation.success){
                             me.onChangePayment(me.panel, me.panel.paymentFieldSet.items.items[0].getValue());
-                            Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/saveRuleSuccess}Rule successfully saved{/s}', '{s name=growlMessage_message/saveRuleSuccess}The rules were successfully saved.{/s}', '{s name=window_title}{/s}');
+                            Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/saveRuleSuccess"}Rule successfully saved{/s}', '{s name="growlMessage_message/saveRuleSuccess"}The rules were successfully saved.{/s}', '{s name="window_title"}{/s}');
                         }else{
-                            Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/saveRuleError}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
+                            Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/saveRuleError"}An error occurred{/s}', rawData.errorMsg, '{s name="window_title"}{/s}');
                         }
                     }
                 });
@@ -264,9 +264,9 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
                             rawData = record.getProxy().getReader().rawData;
                         if(operation.success){
                             me.onChangePayment(me.panel, me.panel.paymentFieldSet.items.items[0].getValue());
-                            Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/deleteRuleSuccess}Rules successfully deleted{/s}', '{s name=growlMessage_message/deleteRuleSuccess}The rule was successfully deleted.{/s}', '{s name=window_title}{/s}');
+                            Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/deleteRuleSuccess"}Rules successfully deleted{/s}', '{s name="growlMessage_message/deleteRuleSuccess"}The rule was successfully deleted.{/s}', '{s name="window_title"}{/s}');
                         } else{
-                            Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/deleteRuleError}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
+                            Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/deleteRuleError"}An error occurred{/s}', rawData.errorMsg, '{s name="window_title"}{/s}');
                         }
                     }
                 });
@@ -300,7 +300,7 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
             }));
             //"OR"-Container
             panel.riskFieldSet.add(Ext.create('Ext.container.Container',{
-                html: '<b>{s name=container_or}OR{/s}</b>',
+                html: '<b>{s name="container_or"}OR{/s}</b>',
                 width: 165,
                 style: {
                     height: '20px',

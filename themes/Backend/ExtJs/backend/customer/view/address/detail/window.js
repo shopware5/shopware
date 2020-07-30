@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/address}
+// {namespace name="backend/customer/view/address"}
 
 /**
  * Shopware UI - Customer address window backend module

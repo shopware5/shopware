@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/custom_search/translation}
+//{namespace name="backend/custom_search/translation"}
 
 //{block name="backend/config/view/custom_search/facet/classes/propertyfacet"}
 

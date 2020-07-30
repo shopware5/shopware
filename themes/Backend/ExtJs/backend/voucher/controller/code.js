@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/voucher/view/code}
+//{namespace name="backend/voucher/view/code"}
 
 /**
  * Shopware Controller - Code list backend module
@@ -56,8 +56,8 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
      * Contains all snippets for the controller
      */
     snippets: {
-        confirmCreateNewVoucherCodesTitle: '{s name=message/confirmCreateNewVoucherCodesTitle}Create new voucher codes{/s}',
-        confirmCreateNewVoucherCodes: '{s name=message/confirmCreateNewVoucherCodes}Creating new voucher codes will delete existing ones including all assigned information. Are you sure you want to create new voucher codes?{/s}'
+        confirmCreateNewVoucherCodesTitle: '{s name="message/confirmCreateNewVoucherCodesTitle"}Create new voucher codes{/s}',
+        confirmCreateNewVoucherCodes: '{s name="message/confirmCreateNewVoucherCodes"}Creating new voucher codes will delete existing ones including all assigned information. Are you sure you want to create new voucher codes?{/s}'
     },
 
     /**
@@ -144,7 +144,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
         me.getView('code.Progress').create();
         if (voucherId != 0) {
 
-            me.getProgressBar().updateText('{s name=progress/text/delete_old_voucher_codes}Deleting old voucher codes{/s}');
+            me.getProgressBar().updateText('{s name="progress/text/delete_old_voucher_codes"}Deleting old voucher codes{/s}');
             me.batchProcessing(voucherId, codePattern, numberOfUnits, numberOfUnits, true, 0);
         }
     },
@@ -195,9 +195,9 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                         var hours   = Math.floor(timeLeft / 3600);
                         var minutes = Math.floor((timeLeft - (hours * 3600)) / 60);
                         var seconds = timeLeft - (hours * 3600) - (minutes * 60);
-                        timeString =  + Math.round(minutes) + " {s name=progress/text/time_minutes_and}minute(s) and{/s} "+ Math.round(seconds) +" {s name=progress/text/time_seconds_remaining}second(s) remaining{/s}";
+                        timeString =  + Math.round(minutes) + " {s name="progress/text/time_minutes_and"}minute(s) and{/s} "+ Math.round(seconds) +" {s name="progress/text/time_seconds_remaining"}second(s) remaining{/s}";
                     }
-                    progressBar.updateProgress(status.generatedVoucherCodes / numberOfAllCodes, status.generatedVoucherCodes + " {s name=progress/text/out_of}out of{/s} " + numberOfAllCodes + " {s name=progress/text/voucher_code_created}voucher codes created{/s} " + timeString, true);
+                    progressBar.updateProgress(status.generatedVoucherCodes / numberOfAllCodes, status.generatedVoucherCodes + " {s name="progress/text/out_of"}out of{/s} " + numberOfAllCodes + " {s name="progress/text/voucher_code_created"}voucher codes created{/s} " + timeString, true);
 
                     if(numberOfCodesToGenerate > 0) {
                         me.batchProcessing(voucherId, codePattern, numberOfCodesToGenerate, numberOfAllCodes, false, overAllTimeToGenerate);
@@ -213,7 +213,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                 }
                 else {
                     me.getProgressBarWindow().hide();
-                    Shopware.Notification.createGrowlMessage('{s name=progress/text/voucher_validation_failure_title}Voucher codes could not be generated.{/s}', '{s name=progress/text/voucher_validation_failure}The Voucher codes could not be generated. Maybe the voucher code pattern is not complex enough{/s}');
+                    Shopware.Notification.createGrowlMessage('{s name="progress/text/voucher_validation_failure_title"}Voucher codes could not be generated.{/s}', '{s name="progress/text/voucher_validation_failure"}The Voucher codes could not be generated. Maybe the voucher code pattern is not complex enough{/s}');
                 }
             }
         });

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/user_manager/view/main}
+//{namespace name="backend/user_manager/view/main"}
 
 /**
  * Shopware UI - User Manager Main Controller

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+// {namespace name="backend/customer/view/main"}
 // {block name="backend/customer/controller/stream"}
 Ext.define('Shopware.apps.Customer.controller.Stream', {
 
@@ -667,7 +667,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             success: function(operation) {
                 var response = Ext.decode(operation.responseText);
                 Ext.defer(function () {
-                    me.getStreamView().indexingBar.updateProgress(0, '{s name=last_analyse}{/s}' + Ext.util.Format.date(response.last_index_time), true);
+                    me.getStreamView().indexingBar.updateProgress(0, '{s name="last_analyse"}{/s}' + Ext.util.Format.date(response.last_index_time), true);
                     me.getStreamView().indexingBar.addCls('empty');
                 }, 500);
             }
@@ -754,7 +754,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
         if (me.lastRecords.length > 0) {
             addButton.setDisabled(true);
-            addButton.setTooltip('{s name=unsaved_stream}{/s}');
+            addButton.setTooltip('{s name="unsaved_stream"}{/s}');
         } else {
             addButton.setDisabled(false);
             addButton.setTooltip('');
@@ -774,7 +774,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
     deleteStreamItem: function(record) {
         var me = this;
-        Ext.MessageBox.confirm('{s name="delete_confirm_title"}{/s}', '{s name=delete_confirm_text}{/s}', function (response) {
+        Ext.MessageBox.confirm('{s name="delete_confirm_title"}{/s}', '{s name="delete_confirm_text"}{/s}', function (response) {
             if (response !== 'yes') {
                 return false;
             }

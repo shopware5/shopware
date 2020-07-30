@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/supplier/controller/main}*/
+/*{namespace name="backend/supplier/controller/main"}*/
 
 /**
  * Shopware Controller - Supplier
@@ -68,15 +68,15 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
      * @object
      */
     messages: {
-        deleteDialogMessage : '{s name=dialog_text}Are you sure you want to delete this supplier ([0])?{/s}',
-        deleteDialogMessageMulti : '{s name=dialog_multi}Are you sure you want to delete these suppliers ([0])?{/s}',
-        deleteDialogForbidden : '{s name=delete_forbidden}Suppliers with assigned articles can not be deleted.{/s}',
-        noDescriptionFound :'{s name=details_no_description}No description saved{/s}',
-        deleteDialogSuccess :'{s name=dialog_multi_success}Supplier has been deleted successfully.{/s}',
-        saveDialogSuccess :'{s name=dialog_save_success}Supplier has been saved successfully.{/s}',
-        deleteDialogFailure :'{s name=dialog_multi_error}Some suppliers could not be removed.{/s}',
-        deleteDialogTitle : '{s name=delete_dialog_title}Delete selected supplier{/s}',
-        growlMessage: '{s name=window_title}{/s}'
+        deleteDialogMessage : '{s name="dialog_text"}Are you sure you want to delete this supplier ([0])?{/s}',
+        deleteDialogMessageMulti : '{s name="dialog_multi"}Are you sure you want to delete these suppliers ([0])?{/s}',
+        deleteDialogForbidden : '{s name="delete_forbidden"}Suppliers with assigned articles can not be deleted.{/s}',
+        noDescriptionFound :'{s name="details_no_description"}No description saved{/s}',
+        deleteDialogSuccess :'{s name="dialog_multi_success"}Supplier has been deleted successfully.{/s}',
+        saveDialogSuccess :'{s name="dialog_save_success"}Supplier has been saved successfully.{/s}',
+        deleteDialogFailure :'{s name="dialog_multi_error"}Some suppliers could not be removed.{/s}',
+        deleteDialogTitle : '{s name="delete_dialog_title"}Delete selected supplier{/s}',
+        growlMessage: '{s name="window_title"}{/s}'
     },
 
     /**

@@ -4,7 +4,7 @@
     <div class="product--box box--{$productBoxLayout}"
          data-page-index="{$pageIndex}"
          data-ordernumber="{$sArticle.ordernumber}"
-         {if !{config name=disableArticleNavigation}} data-category-id="{$sCategoryCurrent}"{/if}>
+         {if !{config name="disableArticleNavigation"}} data-category-id="{$sCategoryCurrent}"{/if}>
 
         {block name="frontend_listing_box_article_content"}
             <div class="box--content is--rounded">
@@ -24,7 +24,7 @@
 
                         {* Customer rating for the product *}
                         {block name='frontend_listing_box_article_rating'}
-                            {if !{config name=VoteDisable}}
+                            {if !{config name="VoteDisable"}}
                                 <div class="product--rating-container">
                                     {if $sArticle.sVoteAverage.average}
                                         {include file='frontend/_includes/rating.tpl' points=$sArticle.sVoteAverage.average type="aggregated" label=false microData=false}

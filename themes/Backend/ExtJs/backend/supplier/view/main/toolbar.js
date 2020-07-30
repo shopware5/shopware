@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/supplier/view/main}*/
+/*{namespace name="backend/supplier/view/main"}*/
 
 /**
  * Shopware View - Supplier
@@ -44,14 +44,14 @@ Ext.define('Shopware.apps.Supplier.view.main.Toolbar', {
         /*{if {acl_is_allowed privilege=create}}*/
         {
             iconCls : 'sprite-plus-circle-frame',
-            text : '{s name=add}Add{/s}',
+            text : '{s name="add"}Add{/s}',
             action : 'addSupplier'
         },
         /*{/if}*/
         /*{if {acl_is_allowed privilege=delete}}*/
         {
             iconCls : 'sprite-minus-circle-frame',
-            text : '{s name=delete}Delete selected suppliers{/s}',
+            text : '{s name="delete"}Delete selected suppliers{/s}',
             disabled : true,
             action : 'deleteSupplier'
         },
@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Toolbar', {
             width: 170,
             cls: 'searchfield',
             enableKeyEvents : true,
-            emptyText : '{s name=search_empty}Search...{/s}'
+            emptyText : '{s name="search_empty"}Search...{/s}'
         }, {
             xtype: 'tbspacer',
             width: 6

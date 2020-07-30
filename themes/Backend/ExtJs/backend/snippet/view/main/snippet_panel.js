@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/snippet/view/main}
+//{namespace name="backend/snippet/view/main"}
 
 /**
  * todo@all: Documentation

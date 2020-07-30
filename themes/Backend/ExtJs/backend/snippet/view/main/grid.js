@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/snippet/view/main}
+//{namespace name="backend/snippet/view/main"}
 
 /**
  * todo@all: Documentation
@@ -47,18 +47,18 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
      * @object
      */
     snippets: {
-        tooltipTranslateSnippet:   '{s name=tooltip_translate_snippet}Translate this snippet{/s}',
-        tooltipDeleteSnippet: '{s name=tooltip_delete_snippet}Delete this snippet{/s}',
+        tooltipTranslateSnippet:   '{s name="tooltip_translate_snippet"}Translate this snippet{/s}',
+        tooltipDeleteSnippet: '{s name="tooltip_delete_snippet"}Delete this snippet{/s}',
 
-        columnNamespace: '{s name=column_namespace}Namespace{/s}',
-        columnName:      '{s name=column_name}Name{/s}',
-        columnValue:     '{s name=column_value}Value{/s}',
+        columnNamespace: '{s name="column_namespace"}Namespace{/s}',
+        columnName:      '{s name="column_name"}Name{/s}',
+        columnValue:     '{s name="column_value"}Value{/s}',
 
-        buttonFilterEmpty:  '{s name=button_filter_empty}Show only empty snippets{/s}',
-        buttonEditSelected: '{s name=button_edit_selected}Edit selected snippets{/s}',
-        buttonAddSnippet:   '{s name=button_add_snippet}Add snippet{/s}',
+        buttonFilterEmpty:  '{s name="button_filter_empty"}Show only empty snippets{/s}',
+        buttonEditSelected: '{s name="button_edit_selected"}Edit selected snippets{/s}',
+        buttonAddSnippet:   '{s name="button_add_snippet"}Add snippet{/s}',
 
-        emptyTextSearch:   '{s name=empty_text_search}search...{/s}'
+        emptyTextSearch:   '{s name="empty_text_search"}search...{/s}'
     },
 
     /**

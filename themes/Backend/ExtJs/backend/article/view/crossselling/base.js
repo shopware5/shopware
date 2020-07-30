@@ -30,7 +30,7 @@
 /**
  * Shopware UI - Article crosselling page
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/crossseling/base"}
 Ext.define('Shopware.apps.Article.view.crossselling.Base', {
 
@@ -70,11 +70,11 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
      * @object
      */
     systemTexts: {
-        'productSearch':'{s name=detail/sidebar/similar/article_search}Article{/s}',
-        'crossField': '{s name=detail/sidebar/similar/assignment_field}Assignment{/s}',
-        'crossBox': '{s name=detail/sidebar/similar/assignment_box}Assign each other{/s}',
-        'delete': '{s name=detail/sidebar/similar/delete}Remove entry{/s}',
-        'name': '{s name=detail/sidebar/similar/name}Article name{/s}'
+        'productSearch':'{s name="detail/sidebar/similar/article_search"}Article{/s}',
+        'crossField': '{s name="detail/sidebar/similar/assignment_field"}Assignment{/s}',
+        'crossBox': '{s name="detail/sidebar/similar/assignment_box"}Assign each other{/s}',
+        'delete': '{s name="detail/sidebar/similar/delete"}Remove entry{/s}',
+        'name': '{s name="detail/sidebar/similar/name"}Article name{/s}'
     },
 
     /**

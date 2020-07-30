@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/partner/view/partner}
+//{namespace name="backend/partner/view/partner"}
 
 /**
  * Shopware UI - partner statistic chart window.
@@ -73,8 +73,8 @@ Ext.define('Shopware.apps.Partner.view.statistic.Chart', {
      * @object
      */
     snippets:{
-        yAxis:'{s name=chart/y_axis}Net Turnover{/s}',
-        xAxis:'{s name=chart/x_axis}Month{/s}'
+        yAxis:'{s name="chart/y_axis"}Net Turnover{/s}',
+        xAxis:'{s name="chart/x_axis"}Month{/s}'
     },
 
     /**

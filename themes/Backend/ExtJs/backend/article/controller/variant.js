@@ -31,7 +31,7 @@
  * Shopware Controller - Variant
  * The variant controller handles all events of the views in the variant namespace.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/controller/variant"}
 Ext.define('Shopware.apps.Article.controller.Variant', {
 
@@ -56,65 +56,65 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
     ],
 
     snippets: {
-        growlMessage: '{s name=growl_message}Article{/s}',
-        generateNumberProcess: '{s name=generate_numbers_text}Generate numbers [0] of [1]{/s}',
-        generateNumbersDone: '{s name=generate_numbers_done}Numbers generated{/s}',
+        growlMessage: '{s name="growl_message"}Article{/s}',
+        generateNumberProcess: '{s name="generate_numbers_text"}Generate numbers [0] of [1]{/s}',
+        generateNumbersDone: '{s name="generate_numbers_done"}Numbers generated{/s}',
 
         success: {
-            title: '{s name=variant/success/title}Success{/s}',
-            groupSave: '{s name=variant/success/group_saved}The configurator group [0] saved.{/s}',
-            optionSave: '{s name=variant/success/option_saved}The configurator option [0] saved{/s}',
-            variantSave: '{s name=variant/success/variant_save}The article variant [0] saved{/s}',
-            setSave: '{s name=variant/success/set_saved}The configurator set [0] saved{/s}',
-            setLoad: '{s name=variant/success/set_loaded}The configurator set [0] loaded{/s}',
-            dependencySave: '{s name=variant/success/dependency_saved}The configurator dependency saved{/s}',
-            groupRemove: '{s name=variant/success/group_removed}The configurator group [0] removed{/s}',
-            optionRemove: '{s name=variant/success/option_removed}The configurator option [0] removed{/s}',
-            dependencyRemove: '{s name=variant/success/dependency_removed}The configurator dependency [0] removed{/s}',
-            variantRemove: '{s name=variant/success/variant_removed}The article variant [0] removed{/s}',
-            variantsRemove: '{s name=variant/success/variants_removed}The article variants removed{/s}'
+            title: '{s name="variant/success/title"}Success{/s}',
+            groupSave: '{s name="variant/success/group_saved"}The configurator group [0] saved.{/s}',
+            optionSave: '{s name="variant/success/option_saved"}The configurator option [0] saved{/s}',
+            variantSave: '{s name="variant/success/variant_save"}The article variant [0] saved{/s}',
+            setSave: '{s name="variant/success/set_saved"}The configurator set [0] saved{/s}',
+            setLoad: '{s name="variant/success/set_loaded"}The configurator set [0] loaded{/s}',
+            dependencySave: '{s name="variant/success/dependency_saved"}The configurator dependency saved{/s}',
+            groupRemove: '{s name="variant/success/group_removed"}The configurator group [0] removed{/s}',
+            optionRemove: '{s name="variant/success/option_removed"}The configurator option [0] removed{/s}',
+            dependencyRemove: '{s name="variant/success/dependency_removed"}The configurator dependency [0] removed{/s}',
+            variantRemove: '{s name="variant/success/variant_removed"}The article variant [0] removed{/s}',
+            variantsRemove: '{s name="variant/success/variants_removed"}The article variants removed{/s}'
         },
         failure: {
-            title: '{s name=variant/failure/title}Failure{/s}',
-            noIdViolation: '{s name=variant/failure/no_id_violation}No id passed to the php controller action{/s}',
-            boundedArticlesViolation: '{s name=variant/failure/bounded_articles_violation}The following articles bounded on the configurator [0]:{/s}',
-            unknownViolation: '{s name=variant/failure/unknown_violation}An unknown exception occurred:{/s}',
-            noMoreInformation: '{s name=variant/failure/no_more_information}No more information available.{/s}',
-            groupSave: '{s name=variant/failure/group_saved}An error occurred while saving the configurator group [0]:{/s}',
-            optionSave: '{s name=variant/failure/option_saved}An error occurred while saving the configurator option [0]:{/s}',
-            variantSave: '{s name=variant/failure/variant_saved}An error occurred while saving the article variant [0]:{/s}',
-            setSave: '{s name=variant/failure/set_saved}An error occurred while saving the configurator set [0]:{/s}',
-            setLoad: '{s name=variant/failure/set_loaded}An error occurred while loading the configurator set [0]:{/s}',
-            dependencySave: '{s name=variant/failure/dependency_saved}An error occurred while saving the configurator dependency:{/s}',
-            groupRemove: '{s name=variant/failure/group_removed}An error occurred while removing the configurator group [0]:{/s}',
-            groupBounded: '{s name=variant/failure/group_bounded}You are trying to delete an active, used configurator group. This group is used by the following articles:{/s}',
-            optionRemove: '{s name=variant/failure/option_removed}An error occurred while removing the configurator option [0]:{/s}',
-            optionBounded: '{s name=variant/failure/option_bounded}You are trying to delete an active, used configurator option. This option is used by the following articles:{/s}',
-            dependencyRemove: '{s name=variant/failure/dependency_removed}An error occurred while removing the configurator dependency:{/s}',
-            articleNotFoundViolation: "{s name=variant/failure/article_not_found_violation}The article and first variant couldn't be determined. Please reload the detail page.{/s}",
-            variantRemove: '{s name=variant/failure/variant_removed}An error occurred while removing the article variant [0]:{/s}',
-            variantsRemove: '{s name=variant/failure/variants_removed}The article variants removed{/s}',
-            fieldsViolation: '{s name=variant/failure/fields_violation}The following fields are not valid:{/s}',
-            generateNumbers: '{s name=variant/failure/generate_number}An error occurred while regenerate the order number:{/s}'
+            title: '{s name="variant/failure/title"}Failure{/s}',
+            noIdViolation: '{s name="variant/failure/no_id_violation"}No id passed to the php controller action{/s}',
+            boundedArticlesViolation: '{s name="variant/failure/bounded_articles_violation"}The following articles bounded on the configurator [0]:{/s}',
+            unknownViolation: '{s name="variant/failure/unknown_violation"}An unknown exception occurred:{/s}',
+            noMoreInformation: '{s name="variant/failure/no_more_information"}No more information available.{/s}',
+            groupSave: '{s name="variant/failure/group_saved"}An error occurred while saving the configurator group [0]:{/s}',
+            optionSave: '{s name="variant/failure/option_saved"}An error occurred while saving the configurator option [0]:{/s}',
+            variantSave: '{s name="variant/failure/variant_saved"}An error occurred while saving the article variant [0]:{/s}',
+            setSave: '{s name="variant/failure/set_saved"}An error occurred while saving the configurator set [0]:{/s}',
+            setLoad: '{s name="variant/failure/set_loaded"}An error occurred while loading the configurator set [0]:{/s}',
+            dependencySave: '{s name="variant/failure/dependency_saved"}An error occurred while saving the configurator dependency:{/s}',
+            groupRemove: '{s name="variant/failure/group_removed"}An error occurred while removing the configurator group [0]:{/s}',
+            groupBounded: '{s name="variant/failure/group_bounded"}You are trying to delete an active, used configurator group. This group is used by the following articles:{/s}',
+            optionRemove: '{s name="variant/failure/option_removed"}An error occurred while removing the configurator option [0]:{/s}',
+            optionBounded: '{s name="variant/failure/option_bounded"}You are trying to delete an active, used configurator option. This option is used by the following articles:{/s}',
+            dependencyRemove: '{s name="variant/failure/dependency_removed"}An error occurred while removing the configurator dependency:{/s}',
+            articleNotFoundViolation: "{s name="variant/failure/article_not_found_violation"}The article and first variant couldn't be determined. Please reload the detail page.{/s}",
+            variantRemove: '{s name="variant/failure/variant_removed"}An error occurred while removing the article variant [0]:{/s}',
+            variantsRemove: '{s name="variant/failure/variants_removed"}The article variants removed{/s}',
+            fieldsViolation: '{s name="variant/failure/fields_violation"}The following fields are not valid:{/s}',
+            generateNumbers: '{s name="variant/failure/generate_number"}An error occurred while regenerate the order number:{/s}'
         },
         messages: {
-            tableConfigurator: '{s name=variant/message/notice}A table configurator can only have two active groups!{/s}',
-            warningTitle: '{s name=variant/message/option/warning_title}Warning{/s}',
-            optionExists: '{s name=variant/message/option/option_exists}There is already an option named [0]{/s}',
-            noValidForm: '{s name=variant/message/option/no_valid_form}The base data form panel is invalid, please check the values of the this tab.{/s}',
-            articleNotSaved: "{s name=variant/message/option/article_not_saved}The article wasn't saved, please check the different tab panels for valid data.{/s}",
-            saveArticleBefore: '{s name=variant/message/option/save_article_before_generate}If you generate article variants all current changes will be reverted, do you want to save the article first?{/s}',
-            loadSetWarning: "{s name=variant/message/load_set_warning}The article already contains generated variants. If you load the selected set, please note that all generated variants will be deleted. Are you sure you want to continue the loading of the variant set?{/s}",
-            groupRemove: '{s name=variant/message/remove_group}Are you sure, you want to delete the selected configurator group: [0]?{/s}',
-            dependencyRemove: '{s name=variant/message/dependency_removed}Are you sure, you want to delete the selected configurator dependency?{/s}',
-            optionRemove: '{s name=variant/message/remove_option}Are you sure you want to delete the selected configurator option: [0]?{/s}',
-            generateVariants: '{s name=variant/message/generate_variants}The article already contains generated variants. Please note that all generated variants will be overwritten. Are you sure you want to continue the variant generation?{/s}',
-            variantsRemove: '{s name=variant/message/variants_removed}Are you sure, you want to delete all selected article variants?{/s}',
-            variantRemove: '{s name=variant/message/variant_removed}Are you sure, you want to delete the article variant: [0]?{/s}'
+            tableConfigurator: '{s name="variant/message/notice"}A table configurator can only have two active groups!{/s}',
+            warningTitle: '{s name="variant/message/option/warning_title"}Warning{/s}',
+            optionExists: '{s name="variant/message/option/option_exists"}There is already an option named [0]{/s}',
+            noValidForm: '{s name="variant/message/option/no_valid_form"}The base data form panel is invalid, please check the values of the this tab.{/s}',
+            articleNotSaved: "{s name="variant/message/option/article_not_saved"}The article wasn't saved, please check the different tab panels for valid data.{/s}",
+            saveArticleBefore: '{s name="variant/message/option/save_article_before_generate"}If you generate article variants all current changes will be reverted, do you want to save the article first?{/s}',
+            loadSetWarning: "{s name="variant/message/load_set_warning"}The article already contains generated variants. If you load the selected set, please note that all generated variants will be deleted. Are you sure you want to continue the loading of the variant set?{/s}",
+            groupRemove: '{s name="variant/message/remove_group"}Are you sure, you want to delete the selected configurator group: [0]?{/s}',
+            dependencyRemove: '{s name="variant/message/dependency_removed"}Are you sure, you want to delete the selected configurator dependency?{/s}',
+            optionRemove: '{s name="variant/message/remove_option"}Are you sure you want to delete the selected configurator option: [0]?{/s}',
+            generateVariants: '{s name="variant/message/generate_variants"}The article already contains generated variants. Please note that all generated variants will be overwritten. Are you sure you want to continue the variant generation?{/s}',
+            variantsRemove: '{s name="variant/message/variants_removed"}Are you sure, you want to delete all selected article variants?{/s}',
+            variantRemove: '{s name="variant/message/variant_removed"}Are you sure, you want to delete the article variant: [0]?{/s}'
         },
         labels: {
-            title: '{s name=variant/configurator/option_panel/title}Manage attribute options{/s}',
-            titleLoaded: '{s name=variant/configurator/option_panel/title_loaded}Manage attribute options of group:{/s}'
+            title: '{s name="variant/configurator/option_panel/title"}Manage attribute options{/s}',
+            titleLoaded: '{s name="variant/configurator/option_panel/title_loaded"}Manage attribute options of group:{/s}'
         }
 
     },

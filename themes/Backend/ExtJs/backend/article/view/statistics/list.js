@@ -30,7 +30,7 @@
 /**
  * Shopware UI - Article esd page
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/statistics/list"}
 Ext.define('Shopware.apps.Article.view.statistics.List', {
 
@@ -62,16 +62,16 @@ Ext.define('Shopware.apps.Article.view.statistics.List', {
      * @object
      */
     snippets: {
-        title: '{s name=statistic/title}Overview{/s}',
+        title: '{s name="statistic/title"}Overview{/s}',
         columns:{
-            date: '{s name=statistic/list/column/date}Date{/s}',
-            revenue: '{s name=statistic/list/column/revenue}Revenue{/s}',
-            orders: '{s name=statistic/list/column/orders}Orders{/s}'
+            date: '{s name="statistic/list/column/date"}Date{/s}',
+            revenue: '{s name="statistic/list/column/revenue"}Revenue{/s}',
+            orders: '{s name="statistic/list/column/orders"}Orders{/s}'
         },
         toolbar:{
-            from:'{s name=statistic/list/toolbar/from}From{/s}',
-            to:'{s name=statistic/list/toolbar/to}To{/s}',
-            filter:'{s name=statistic/list/toolbar/filter}Filter{/s}'
+            from:'{s name="statistic/list/toolbar/from"}From{/s}',
+            to:'{s name="statistic/list/toolbar/to"}To{/s}',
+            filter:'{s name="statistic/list/toolbar/filter"}Filter{/s}'
         }
     },
 

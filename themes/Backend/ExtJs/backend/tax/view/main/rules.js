@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/tax/view/main}
+//{namespace name="backend/tax/view/main"}
 
 /**
  * Shopware Backend - View for state-grid
@@ -177,14 +177,14 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
         this.columns = [
 
         {
-            header: '{s name=ruleslist/colname}Name{/s}',
+            header: '{s name="ruleslist/colname"}Name{/s}',
             dataIndex: 'name',
             width: 200,
             field: 'textfield'
         },
         {
             xtype: 'booleancolumn',
-            header: '{s name=ruleslist/colactive}Enabled{/s}',
+            header: '{s name="ruleslist/colactive"}Enabled{/s}',
             dataIndex: 'active',
             flex: 1,
             editor: {
@@ -194,28 +194,28 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
             }
         },
         {
-            header: '{s name=ruleslist/colarea}Area{/s}',
+            header: '{s name="ruleslist/colarea"}Area{/s}',
             dataIndex: 'areaId',
             flex: 1,
             editor: this.areaCombo,
             renderer: this.areaRenderer
         },
         {
-            header: '{s name=ruleslist/colcountry}Country{/s}',
+            header: '{s name="ruleslist/colcountry"}Country{/s}',
             dataIndex: 'countryId',
             flex: 1,
             editor: this.countryCombo,
             renderer: this.countryRenderer
         },
         {
-           header: '{s name=ruleslist/colstate}State{/s}',
+           header: '{s name="ruleslist/colstate"}State{/s}',
            dataIndex: 'stateId',
            flex: 1,
            editor: this.stateCombo,
            renderer: this.stateRenderer
         },
         {
-           header: '{s name=ruleslist/coltax}Tax{/s}',
+           header: '{s name="ruleslist/coltax"}Tax{/s}',
            dataIndex: 'tax',
            flex: 1,
            xtype: 'numbercolumn', format:'00.00',
@@ -231,7 +231,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
             items: [{
                 iconCls: 'sprite-minus-circle',
                 cls: 'delete',
-                tooltip: '{s name=ruleslist/colactiondelete}Delete this rule{/s}',
+                tooltip: '{s name="ruleslist/colactiondelete"}Delete this rule{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('deleteRule', view, rowIndex, colIndex, item);
                 }
@@ -246,7 +246,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
             ui: 'shopware-ui',
             items: [{
                 iconCls: 'sprite-plus-circle',
-                text: '{s name=ruleslist/addrule}Add tax rule{/s}',
+                text: '{s name="ruleslist/addrule"}Add tax rule{/s}',
                 action: 'addRule'
             }, notice
             ]

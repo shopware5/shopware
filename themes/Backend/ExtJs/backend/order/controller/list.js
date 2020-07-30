@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware Controller - Order list backend module
@@ -50,36 +50,36 @@ Ext.define('Shopware.apps.Order.controller.List', {
      * @object
      */
     snippets: {
-        successTitle: '{s name=message/save/success_title}Successful{/s}',
-        failureTitle: '{s name=message/save/error_title}Error{/s}',
-        customerDoesNotExistAnymore: '{s name=customer_does_not_exist_anymore}{/s}',
+        successTitle: '{s name="message/save/success_title"}Successful{/s}',
+        failureTitle: '{s name="message/save/error_title"}Error{/s}',
+        customerDoesNotExistAnymore: '{s name="customer_does_not_exist_anymore"}{/s}',
         overwriteOrder: {
-            title: '{s name=overwriteOrder/title}Overwrite most recent changes{/s}',
-            message: '{s name=overwriteOrder/message}The order has been changed by another user in the meantime. To prevent overwriting these changes, saving the order was aborted. To show these changes, please close the order and re-open it.<br /><br /><b>Do you want to overwrite the latest changes?</b>{/s}',
+            title: '{s name="overwriteOrder/title"}Overwrite most recent changes{/s}',
+            message: '{s name="overwriteOrder/message"}The order has been changed by another user in the meantime. To prevent overwriting these changes, saving the order was aborted. To show these changes, please close the order and re-open it.<br /><br /><b>Do you want to overwrite the latest changes?</b>{/s}',
         },
-        warningTitle:'{s name=message/save/warning_title}Warning{/s}',
+        warningTitle:'{s name="message/save/warning_title"}Warning{/s}',
         changeStatus: {
-            successMessage: '{s name=message/status/success}The status has been changed successfully{/s}',
-            failureMessage: '{s name=message/status/failure}An error has occurred while changing the status.{/s}'
+            successMessage: '{s name="message/status/success"}The status has been changed successfully{/s}',
+            failureMessage: '{s name="message/status/failure"}An error has occurred while changing the status.{/s}'
         },
         deleteOrder: {
-            title: '{s name=delete_order/title}Delete selected order{/s}',
-            message: '{s name=delete_order/message}Are you sure you want to delete the selected order: {/s}',
-            successTitle: '{s name=delete_order/success_message}Successful{/s}',
-            successMessage: '{s name=delete_order/success_title}Order has been removed{/s}',
-            failureTitle: '{s name=delete_order/error_title}Failure{/s}',
-            failureMessage: '{s name=delete_order/error_message}An error has occurred while deleting:{/s}'
+            title: '{s name="delete_order/title"}Delete selected order{/s}',
+            message: '{s name="delete_order/message"}Are you sure you want to delete the selected order: {/s}',
+            successTitle: '{s name="delete_order/success_message"}Successful{/s}',
+            successMessage: '{s name="delete_order/success_title"}Order has been removed{/s}',
+            failureTitle: '{s name="delete_order/error_title"}Failure{/s}',
+            failureMessage: '{s name="delete_order/error_message"}An error has occurred while deleting:{/s}'
         },
         deletePosition: {
-            title: '{s name=delete_position/title}Delete selected order position{/s}',
-            message: '{s name=delete_position/message}Are you sure you want to delete the selected order: {/s}',
-            successTitle: '{s name=delete_position/success_message}Successful{/s}',
-            successMessage: '{s name=delete_position/success_title}Order position has been removed{/s}',
-            failureTitle: '{s name=delete_position/error_title}Error{/s}',
-            failureMessage: '{s name=delete_position/error_message}An error has occurred while deleting:{/s}'
+            title: '{s name="delete_position/title"}Delete selected order position{/s}',
+            message: '{s name="delete_position/message"}Are you sure you want to delete the selected order: {/s}',
+            successTitle: '{s name="delete_position/success_message"}Successful{/s}',
+            successMessage: '{s name="delete_position/success_title"}Order position has been removed{/s}',
+            failureTitle: '{s name="delete_position/error_title"}Error{/s}',
+            failureMessage: '{s name="delete_position/error_message"}An error has occurred while deleting:{/s}'
         },
 
-        growlMessage: '{s name=growlMessage}Order{/s}'
+        growlMessage: '{s name="growlMessage"}Order{/s}'
 
     },
 

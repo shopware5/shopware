@@ -1,5 +1,5 @@
 
-//{namespace name=backend/base/color_components}
+//{namespace name="backend/base/color_components"}
 
 //{block name="backend/base/color_selection"}
 

@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 //{block name="backend/performance/view/main/multi_request_dialog"}
 Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
@@ -106,9 +106,9 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
      * @object
      */
     snippets: {
-        cancel:'{s name=progress/cancel}Cancel process{/s}',
-        start:'{s name=progress/start}Start process{/s}',
-        close:'{s name=progress/close}Close window{/s}'
+        cancel:'{s name="progress/cancel"}Cancel process{/s}',
+        start:'{s name="progress/start"}Start process{/s}',
+        close:'{s name="progress/close"}Close window{/s}'
     },
 
     batchSize: 200,
@@ -150,8 +150,8 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
         var me = this;
 
         me.combo = Ext.create('Ext.form.ComboBox', {
-            fieldLabel: '{s name=multi_request/batch/label}Batch size{/s}',
-            helpText: '{s name=multi_request/batch/help}How many records should be processed per request? Default: 5000{/s}',
+            fieldLabel: '{s name="multi_request/batch/label"}Batch size{/s}',
+            helpText: '{s name="multi_request/batch/help"}How many records should be processed per request? Default: 5000{/s}',
             name: 'batchSize',
             forceSelection: true,
             margin: '0 0 10 0',

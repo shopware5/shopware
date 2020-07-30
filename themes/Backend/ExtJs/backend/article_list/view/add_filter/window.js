@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/view/add_filter/window"}
 Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
     /**
@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
      * Title of the window.
      * @string
      */
-    title: '{s name=addFilter/windowTitle}Add/Edit Filter{/s}',
+    title: '{s name="addFilter/windowTitle"}Add/Edit Filter{/s}',
 
     resizable: true,
 
@@ -168,12 +168,12 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
 
         return {
             xtype: 'fieldset',
-            title: '{s name=addFilter/saveTitle}Save{/s}',
+            title: '{s name="addFilter/saveTitle"}Save{/s}',
             margin: 5,
             items: [
                 {
                     xtype: 'label',
-                    text: '{s name=addFilter/labelDesc}In order to save the filter above, enter a name and optionally a description{/s}',
+                    text: '{s name="addFilter/labelDesc"}In order to save the filter above, enter a name and optionally a description{/s}',
                     style: {
                         display: 'block'
                     },
@@ -182,14 +182,14 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
                 {
                     xtype: 'textfield',
                     name: 'name',
-                    fieldLabel: '{s name=addFilter/saveName}Filter name{/s}',
+                    fieldLabel: '{s name="addFilter/saveName"}Filter name{/s}',
                     anchor: '100%',
                     allowBlank: false
                 },
                 {
                     xtype: 'textarea',
                     name: 'description',
-                    fieldLabel: '{s name=addFilter/saveDescription}Your description{/s}',
+                    fieldLabel: '{s name="addFilter/saveDescription"}Your description{/s}',
                     anchor: '100%'
                 }
             ]
@@ -208,7 +208,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
 
 
         var cancelButton = Ext.create('Ext.button.Button', {
-            text: '{s name=cancel}Cancel{/s}',
+            text: '{s name="cancel"}Cancel{/s}',
             scope: me,
             cls: 'secondary',
             handler:function () {
@@ -224,7 +224,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
         var saveButton = Ext.create('Ext.button.Button', {
             action: 'saveAdvanced',
             cls: 'primary',
-            text: '{s name=addFilter/saveButton}Save{/s}'
+            text: '{s name="addFilter/saveButton"}Save{/s}'
         });
 
         buttons.push(saveButton);
@@ -242,9 +242,9 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
             items: [{
                 xtype: 'query-field',
                 internalTitle: 'extended',
-                title: '{s name=addFilter/advancedTitle}Advanced{/s}',
+                title: '{s name="addFilter/advancedTitle"}Advanced{/s}',
                 tabConfig: {
-                    tooltip: '{s name=addFilter/advancedTooltip}In advanced mode, you can define and combine your conditions very free{/s}'
+                    tooltip: '{s name="addFilter/advancedTooltip"}In advanced mode, you can define and combine your conditions very free{/s}'
                 }
             },{
                 xtype: 'multi-edit-add-filter-grid',
@@ -252,10 +252,10 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
                 filterableColumns: me.filterableColumns,
                 columnStore: me.columnStore,
                 operatorStore: me.operatorStore,
-                title: '{s name=addFilter/simpleTitle}Simple{/s}',
+                title: '{s name="addFilter/simpleTitle"}Simple{/s}',
                 border: false,
                 tabConfig: {
-                    tooltip: '{s name=addFilter/simpleTooltip}In simple mode, all conditions are conjuncted with AND{/s}'
+                    tooltip: '{s name="addFilter/simpleTooltip"}In simple mode, all conditions are conjuncted with AND{/s}'
                 }
             }],
             listeners: {

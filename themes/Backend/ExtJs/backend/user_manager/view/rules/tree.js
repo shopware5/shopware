@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/user_manager/view/main}
+//{namespace name="backend/user_manager/view/main"}
 
 /**
  * Shopware Backend - User Manager rule tree
@@ -67,22 +67,22 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
      */
     snippets: {
         columns: {
-            name: '{s name=rules/column/name}Resource / Privilege{/s}',
-            action: '{s name=rules/column/action_header}Action{/s}',
-            delete: '{s name=rules/column/action_delete}Delete item{/s}'
+            name: '{s name="rules/column/name"}Resource / Privilege{/s}',
+            action: '{s name="rules/column/action_header"}Action{/s}',
+            delete: '{s name="rules/column/action_delete"}Delete item{/s}'
         },
         role: {
-            label: '{s name=rules/role_label}Role{/s}',
-            empty: '{s name=rules/role_empty}Select role to proceed{/s}'
+            label: '{s name="rules/role_label"}Role{/s}',
+            empty: '{s name="rules/role_empty"}Select role to proceed{/s}'
         },
-        addResource: '{s name=rules/add_resource}Add resource{/s}',
-        addPrivilege: '{s name=rules/add_privilege}Add privilege{/s}',
-        saveRole: '{s name=rules/save_role}Save{/s}',
-        search: '{s name=rules/search}Search...{/s}',
-        notSelectedTitle: '{s name=rules/not_selected_title}Error{/s}',
-        notSelectedMessage: '{s name=rules/not_selected_message}No resource selected!{/s}',
+        addResource: '{s name="rules/add_resource"}Add resource{/s}',
+        addPrivilege: '{s name="rules/add_privilege"}Add privilege{/s}',
+        saveRole: '{s name="rules/save_role"}Save{/s}',
+        search: '{s name="rules/search"}Search...{/s}',
+        notSelectedTitle: '{s name="rules/not_selected_title"}Error{/s}',
+        notSelectedMessage: '{s name="rules/not_selected_message"}No resource selected!{/s}',
 
-        growlMessage: '{s name=growlMessage}User Management{/s}'
+        growlMessage: '{s name="growlMessage"}User Management{/s}'
     },
 
     viewConfig: {
@@ -388,7 +388,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
             items: [{
                 iconCls:'sprite-minus-circle-frame',
                 action:'deleteNode',
-                tooltip: '{s name=rules/column/action_delete}{/s}',
+                tooltip: '{s name="rules/column/action_delete"}{/s}',
                 /**
                  * Remove button handler to fire the deletePrivilege or deleteResource event which is handled
                  * in the rules controller.

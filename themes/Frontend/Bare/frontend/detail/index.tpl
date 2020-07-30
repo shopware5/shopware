@@ -8,7 +8,7 @@
 {* Modify the breadcrumb *}
 {block name='frontend_index_breadcrumb_inner'}
     {block name="frontend_detail_breadcrumb_overview"}
-        {if !{config name=disableArticleNavigation}}
+        {if !{config name="disableArticleNavigation"}}
             {$breadCrumbBackLink = $sBreadcrumb[count($sBreadcrumb) - 1]['link']}
             <a class="breadcrumb--button breadcrumb--link" href="{if $breadCrumbBackLink}{$breadCrumbBackLink}{else}#{/if}" title="{s name="DetailNavIndex" namespace="frontend/detail/navigation"}{/s}">
                 <i class="icon--arrow-left"></i>
@@ -23,7 +23,7 @@
     {$smarty.block.parent}
     {* Product navigation - Previous and next arrow button *}
     {block name="frontend_detail_index_navigation"}
-        {if !{config name=disableArticleNavigation}}
+        {if !{config name="disableArticleNavigation"}}
             <nav class="product--navigation">
                 {include file="frontend/detail/navigation.tpl"}
             </nav>

@@ -45,7 +45,7 @@
                             <span class="address--street">{$address.street|escapeHtml}</span><br />
                             {if $address.additionalAddressLine1}<span class="address--additional-one">{$address.additionalAddressLine1|escapeHtml}</span><br />{/if}
                             {if $address.additionalAddressLine2}<span class="address--additional-two">{$address.additionalAddressLine2|escapeHtml}</span><br />{/if}
-                            {if {config name=showZipBeforeCity}}
+                            {if {config name="showZipBeforeCity"}}
                                 <span class="address--zipcode">{$address.zipcode|escapeHtml}</span> <span class="address--city">{$address.city|escapeHtml}</span>
                             {else}
                                 <span class="address--city">{$address.city|escapeHtml}</span> <span class="address--zipcode">{$address.zipcode|escapeHtml}</span>

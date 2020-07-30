@@ -38,7 +38,7 @@
 
         {* Topseller *}
         {block name="frontend_listing_index_topseller"}
-            {if !$hasEmotion && {config name=topSellerActive}}
+            {if !$hasEmotion && {config name="topSellerActive"}}
                 {action module=widgets controller=listing action=top_seller sCategory=$sCategoryContent.id}
             {/if}
         {/block}

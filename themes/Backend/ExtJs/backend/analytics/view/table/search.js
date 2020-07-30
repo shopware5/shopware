@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/search"}
 Ext.define('Shopware.apps.Analytics.view.table.Search', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
@@ -53,19 +53,19 @@ Ext.define('Shopware.apps.Analytics.view.table.Search', {
         return [
             {
                 dataIndex: 'searchterm',
-                text: '{s name=table/search/term}Search term{/s}'
+                text: '{s name="table/search/term"}Search term{/s}'
             },
             {
                 dataIndex: 'countRequests',
-                text: '{s name=table/search/requests}Requests{/s}'
+                text: '{s name="table/search/requests"}Requests{/s}'
             },
             {
                 dataIndex: 'countResults',
-                text: '{s name=table/search/results}Results{/s}'
+                text: '{s name="table/search/results"}Results{/s}'
             },
             {
                 dataIndex: 'shop',
-                text: '{s name=table/search/shop}Shop(s){/s}'
+                text: '{s name="table/search/shop"}Shop(s){/s}'
             }
         ];
     }

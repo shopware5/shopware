@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/systeminfo/controller}
+//{namespace name="backend/systeminfo/controller"}
 
 /**
  * Shopware Controller - Systeminfo list backend module

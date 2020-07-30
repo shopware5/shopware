@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/partner/view/partner}
+//{namespace name="backend/partner/view/partner"}
 
 /**
  * Shopware Controller - Partner backend module
@@ -62,14 +62,14 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
      */
     snippets: {
         //save changes
-        onSaveChangesSuccess: '{s name=message/on_save_changes_success}Changes saved successfully.{/s}',
-        onSaveChangesError: '{s name=message/on_save_changes_error}There was an error while saving your changes.{/s}',
-        confirmDeleteSingleItem: '{s name=message/confirm_delete_single_item}Delete this item{/s}',
-        confirmDeleteSingle: '{s name=message/confirm_delete_single}Are you sure you want to delete this item? ([0]){/s}',
-        deleteSingleItemSuccess : '{s name=tree/delete_success}Item has been deleted{/s}',
-        deleteSingleItemFailure : '{s name=tree/delete_failure}Item could not be deleted{/s}',
-        mappedToCustomer: '{s name=message/mappedToCustomer}Linked to:{/s}',
-        growlMessage: '{s name=window/main_title}Affiliate program{/s}'
+        onSaveChangesSuccess: '{s name="message/on_save_changes_success"}Changes saved successfully.{/s}',
+        onSaveChangesError: '{s name="message/on_save_changes_error"}There was an error while saving your changes.{/s}',
+        confirmDeleteSingleItem: '{s name="message/confirm_delete_single_item"}Delete this item{/s}',
+        confirmDeleteSingle: '{s name="message/confirm_delete_single"}Are you sure you want to delete this item? ([0]){/s}',
+        deleteSingleItemSuccess : '{s name="tree/delete_success"}Item has been deleted{/s}',
+        deleteSingleItemFailure : '{s name="tree/delete_failure"}Item could not be deleted{/s}',
+        mappedToCustomer: '{s name="message/mappedToCustomer"}Linked to:{/s}',
+        growlMessage: '{s name="window/main_title"}Affiliate program{/s}'
     },
 
     /**
@@ -274,7 +274,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
                             );
                             supportTextEl.update(template.apply([mappingText]));
                         } else {
-                            supportTextEl.update("{s name=detail_general/supportText/noCustomerMapped}No customer account has been linked{/s}");
+                            supportTextEl.update("{s name="detail_general/supportText/noCustomerMapped"}No customer account has been linked{/s}");
                         }
                     }
                 }

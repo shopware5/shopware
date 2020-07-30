@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/premium/main}
+//{namespace name="backend/premium/main"}
 
 /**
  * todo@all: Documentation
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Premium.store.Subshops', {
         load: function(store) {
             var defaultSubShop = Ext.create('Shopware.apps.Premium.model.Subshop',{
                 id : 0,
-                name : '{s name=premium/subShop/comboBox_general}Universally valid{/s}'
+                name : '{s name="premium/subShop/comboBox_general"}Universally valid{/s}'
             });
 
             store.insert(0,defaultSubShop);

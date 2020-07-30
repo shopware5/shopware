@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/first_run_wizard/main}
+//{namespace name="backend/first_run_wizard/main"}
 //{block name="backend/first_run_wizard/view/main/localization_installer"}
 
 Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
@@ -109,23 +109,23 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
      * @object
      */
     snippets: {
-        title: '{s name=localization_installer/content/title}Choose language{/s}',
-        message: '{s name=localization_installer/content/message}During the installation you chose [language] as the preferred language.{/s}',
-        button: '{s name=localization_installer/content/button}Install and continue in [language] ([country]).{/s}',
-        continue: '{s name=localization_installer/continue}Continue in English{/s}',
+        title: '{s name="localization_installer/content/title"}Choose language{/s}',
+        message: '{s name="localization_installer/content/message"}During the installation you chose [language] as the preferred language.{/s}',
+        button: '{s name="localization_installer/content/button"}Install and continue in [language] ([country]).{/s}',
+        continue: '{s name="localization_installer/continue"}Continue in English{/s}',
         locales: {
-            'bg_BG': { 'language': '{s name=localization_installer/content/bg_BG/language}Bulgarian{/s}', 'country': '{s name=localization_installer/content/bg_BG/country}Bulgaria{/s}' },
-            'cz_CZ': { 'language': '{s name=localization_installer/content/cz_CZ/language}Czech{/s}', 'country': '{s name=localization_installer/content/cz_CZ/country}Czech Republic{/s}' },
-            'de_DE': { 'language': '{s name=localization_installer/content/de_DE/language}German{/s}', 'country': '{s name=localization_installer/content/de_DE/country}Germany{/s}' },
-            'es_ES': { 'language': '{s name=localization_installer/content/es_ES/language}Spanish{/s}', 'country': '{s name=localization_installer/content/es_ES/country}Spain{/s}' },
-            'fi_FI': { 'language': '{s name=localization_installer/content/fi_FI/language}Finish{/s}', 'country': '{s name=localization_installer/content/fi_FI/country}Finland{/s}' },
-            'fr_FR': { 'language': '{s name=localization_installer/content/fr_FR/language}French{/s}', 'country': '{s name=localization_installer/content/fr_FR/country}France{/s}' },
-            'it_IT': { 'language': '{s name=localization_installer/content/it_IT/language}Italian{/s}', 'country': '{s name=localization_installer/content/it_IT/country}Italy{/s}' },
-            'nl_NL': { 'language': '{s name=localization_installer/content/nl_NL/language}Dutch{/s}', 'country': '{s name=localization_installer/content/nl_NL/country}Netherlands{/s}' },
-            'pt_PT': { 'language': '{s name=localization_installer/content/pt_PT/language}Portuguese{/s}', 'country': '{s name=localization_installer/content/pt_PT/country}Portugal{/s}' },
-            'pl_Pl': { 'language': '{s name=localization_installer/content/pl_Pl/language}Polish{/s}', 'country': '{s name=localization_installer/content/pl_Pl/country}Poland{/s}' },
-            'tk_TK': { 'language': '{s name=localization_installer/content/tk_TK/language}Turkish{/s}', 'country': '{s name=localization_installer/content/tk_TK/country}Turkey{/s}' },
-            'ru_RU': { 'language': '{s name=localization_installer/content/ru_RU/language}Russian{/s}', 'country': '{s name=localization_installer/content/ru_RU/country}Russia{/s}' }
+            'bg_BG': { 'language': '{s name="localization_installer/content/bg_BG/language"}Bulgarian{/s}', 'country': '{s name="localization_installer/content/bg_BG/country"}Bulgaria{/s}' },
+            'cz_CZ': { 'language': '{s name="localization_installer/content/cz_CZ/language"}Czech{/s}', 'country': '{s name="localization_installer/content/cz_CZ/country"}Czech Republic{/s}' },
+            'de_DE': { 'language': '{s name="localization_installer/content/de_DE/language"}German{/s}', 'country': '{s name="localization_installer/content/de_DE/country"}Germany{/s}' },
+            'es_ES': { 'language': '{s name="localization_installer/content/es_ES/language"}Spanish{/s}', 'country': '{s name="localization_installer/content/es_ES/country"}Spain{/s}' },
+            'fi_FI': { 'language': '{s name="localization_installer/content/fi_FI/language"}Finish{/s}', 'country': '{s name="localization_installer/content/fi_FI/country"}Finland{/s}' },
+            'fr_FR': { 'language': '{s name="localization_installer/content/fr_FR/language"}French{/s}', 'country': '{s name="localization_installer/content/fr_FR/country"}France{/s}' },
+            'it_IT': { 'language': '{s name="localization_installer/content/it_IT/language"}Italian{/s}', 'country': '{s name="localization_installer/content/it_IT/country"}Italy{/s}' },
+            'nl_NL': { 'language': '{s name="localization_installer/content/nl_NL/language"}Dutch{/s}', 'country': '{s name="localization_installer/content/nl_NL/country"}Netherlands{/s}' },
+            'pt_PT': { 'language': '{s name="localization_installer/content/pt_PT/language"}Portuguese{/s}', 'country': '{s name="localization_installer/content/pt_PT/country"}Portugal{/s}' },
+            'pl_Pl': { 'language': '{s name="localization_installer/content/pl_Pl/language"}Polish{/s}', 'country': '{s name="localization_installer/content/pl_Pl/country"}Poland{/s}' },
+            'tk_TK': { 'language': '{s name="localization_installer/content/tk_TK/language"}Turkish{/s}', 'country': '{s name="localization_installer/content/tk_TK/country"}Turkey{/s}' },
+            'ru_RU': { 'language': '{s name="localization_installer/content/ru_RU/language"}Russian{/s}', 'country': '{s name="localization_installer/content/ru_RU/country"}Russia{/s}' }
         }
     },
 
@@ -149,7 +149,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationInstaller', {
         locales = Ext.Object.getKeys(me.snippets.locales);
 
         if (!Ext.Array.contains(locales, installerLocale)) {
-            installerLocale = '{s namespace="backend/base/index" name=script/ext/locale}{/s}';
+            installerLocale = '{s namespace="backend/base/index" name="script/ext/locale"}{/s}';
         }
         if (!Ext.Array.contains(locales, installerLocale)) {
             throw new Error('Locale unknown');

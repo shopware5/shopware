@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-/* {namespace name=backend/category/main} */
+/* {namespace name="backend/category/main"} */
 
 //{block name="backend/category/view/main"}
 Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
@@ -104,14 +104,14 @@ Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
     /**
      * @string
      */
-    title:  '{s name=batch/title}Move category{/s}',
+    title:  '{s name="batch/title"}Move category{/s}',
 
     /**
      * Contains all snippets for the component
      * @object
      */
     snippets: {
-        close:  '{s name=batch/close}Close window{/s}'
+        close:  '{s name="batch/close"}Close window{/s}'
     },
 
     /**

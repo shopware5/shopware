@@ -26,7 +26,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 //{block name="backend/order/controller/document"}
 Ext.define('Shopware.apps.Order.controller.Document', {
     extend: 'Ext.app.Controller',
@@ -93,8 +93,8 @@ Ext.define('Shopware.apps.Order.controller.Document', {
      */
     onDeleteDocument: function(grid, record) {
         Ext.MessageBox.confirm(
-            '{s name=document/delete/confirmation/title}Delete order document{/s}',
-            '{s name=document/delete/confirmation/message}A deleted order document cannot be restored. Do you really want to delete the document?{/s}',
+            '{s name="document/delete/confirmation/title"}Delete order document{/s}',
+            '{s name="document/delete/confirmation/message"}A deleted order document cannot be restored. Do you really want to delete the document?{/s}',
             function (clickedButton) {
                 if (clickedButton === 'no' || clickedButton === 'cancel') {
                     return;
@@ -112,14 +112,14 @@ Ext.define('Shopware.apps.Order.controller.Document', {
                         response = Ext.JSON.decode(response.responseText);
                         if (!response.success) {
                             Shopware.Notification.createGrowlMessage(
-                                '{s name=document/attachemnt/error}Error{/s}',
+                                '{s name="document/attachemnt/error"}Error{/s}',
                                 response.errorMessage
                             );
                         }
                     },
                     failure: function(response) {
                         Shopware.Notification.createGrowlMessage(
-                            '{s name=document/attachemnt/error}Error{/s}',
+                            '{s name="document/attachemnt/error"}Error{/s}',
                             response.status + '<br />' + response.statusText
                         );
                     }

@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.ArticleList.view.QueryField', {
 
         return [{
             xtype: 'fieldset',
-            title: '{s name=addFilter/queryTitle}Your query{/s}',
+            title: '{s name="addFilter/queryTitle"}Your query{/s}',
             defaults : {
                 margin: '0 0 10 0'
             },
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.ArticleList.view.QueryField', {
             {
                 xtype: 'label',
                 name: 'status-label',
-                text: '{s name=queryField/enterQuery}Enter your Query here:{/s}'
+                text: '{s name="queryField/enterQuery"}Enter your Query here:{/s}'
             }]
         }];
 
@@ -101,10 +101,10 @@ Ext.define('Shopware.apps.ArticleList.view.QueryField', {
                 me.getCombo(),
                 {
                     xtype: 'button',
-                    text: '{s name=addFilter/run}Execute{/s}',
+                    text: '{s name="addFilter/run"}Execute{/s}',
                     name: 'run-button',
                     iconCls: 'sprite-magnifier--arrow',
-                    tooltip: '{s name=runFilter}Immediatly show matching articles{/s}',
+                    tooltip: '{s name="runFilter"}Immediatly show matching articles{/s}',
                     disabled: true,
                     handler: function () {
                         me.fireEvent('filter');

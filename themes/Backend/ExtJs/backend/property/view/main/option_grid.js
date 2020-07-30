@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/property/view/main}
+//{namespace name="backend/property/view/main"}
 //{block name="backend/property/view/main/option_grid"}
 Ext.define('Shopware.apps.Property.view.main.OptionGrid', {
     extend: 'Ext.grid.Panel',
@@ -35,15 +35,15 @@ Ext.define('Shopware.apps.Property.view.main.OptionGrid', {
     addBtn: null,
     sortableColumns: false,
 
-    title: '{s name=option/grid_title}Options{/s}',
+    title: '{s name="option/grid_title"}Options{/s}',
     /**
      * Contains all snippets for the controller
      * @object
      */
     snippets: {
-        columnOption:        '{s name=option/column_option}Option{/s}',
-        buttonAddOption:     '{s name=option/button_add_option}Add option{/s}',
-        tooltipDeleteOption: '{s name=option/tooltip_delete_option}Delete this option{/s}'
+        columnOption:        '{s name="option/column_option"}Option{/s}',
+        buttonAddOption:     '{s name="option/button_add_option"}Add option{/s}',
+        tooltipDeleteOption: '{s name="option/tooltip_delete_option"}Delete this option{/s}'
     },
 
     /**

@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/form/number"}
 Ext.define('Shopware.apps.Config.view.form.Number', {
@@ -51,12 +51,12 @@ Ext.define('Shopware.apps.Config.view.form.Number', {
         return [{
             xtype: 'gridcolumn',
             dataIndex: 'description',
-            text: '{s name=number/table/description_text}Description{/s}',
+            text: '{s name="number/table/description_text"}Description{/s}',
             flex: 1
         }, {
             xtype: 'gridcolumn',
             dataIndex: 'number',
-            text: '{s name=number/table/value_text}Value{/s}',
+            text: '{s name="number/table/value_text"}Value{/s}',
             flex: 1
         }, me.getActionColumn()];
     },
@@ -65,17 +65,17 @@ Ext.define('Shopware.apps.Config.view.form.Number', {
         var me = this;
         return [{
             name: 'name',
-            fieldLabel: '{s name=number/detail/name_text}Name{/s}',
+            fieldLabel: '{s name="number/detail/name_text"}Name{/s}',
             allowBlank: false
         }, {
             name: 'description',
-            fieldLabel: '{s name=number/detail/description_text}Description{/s}',
+            fieldLabel: '{s name="number/detail/description_text"}Description{/s}',
             allowBlank: false
         },{
             xtype: 'numberfield',
             name: 'number',
             decimalPrecision: 0,
-            fieldLabel: '{s name=number/detail/number_text}Number{/s}',
+            fieldLabel: '{s name="number/detail/number_text"}Number{/s}',
             allowBlank: false
         }];
     }

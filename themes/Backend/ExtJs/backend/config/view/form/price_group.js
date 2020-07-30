@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/form/price_group"}
 Ext.define('Shopware.apps.Config.view.form.PriceGroup', {
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Config.view.form.PriceGroup', {
         return [{
             xtype: 'gridcolumn',
             dataIndex: 'name',
-            text: '{s name=price_group/table/name_text}Name{/s}',
+            text: '{s name="price_group/table/name_text"}Name{/s}',
             flex: 1
         }, me.getActionColumn()];
     },
@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Config.view.form.PriceGroup', {
         var me = this;
         return [{
             name: 'name',
-            fieldLabel: '{s name=price_group/detail/name_label}Name{/s}',
+            fieldLabel: '{s name="price_group/detail/name_label"}Name{/s}',
             allowBlank: false
         }, {
             xtype: 'config-pricegroup-discount'

@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/theme/main}
+//{namespace name="backend/theme/main"}
 
 //{block name="backend/theme/view/list/extensions/info"}
 
@@ -44,11 +44,11 @@ Ext.define('Shopware.apps.Theme.view.list.extensions.Info', {
             model: 'Shopware.apps.Theme.model.Theme',
             fields: {
                 screen: '{literal}<div class="screen"><img src="{screen}" alt="{name}" /></div>{/literal}',
-                name: '<div class="info-item"> <p class="label">{s name=name}Name{/s}:</p> <p class="value">{literal}{name}{/literal}</p> </div>',
-                author: '<div class="info-item"> <p class="label">{s name=author}Author{/s}:</p> <p class="value">{literal}{author}{/literal}</p> </div>',
-                license: '<div class="info-item"> <p class="label">{s name=license}License{/s}:</p> <p class="value">{literal}{license}{/literal}</p> </div>',
-                path: '<div class="info-item"> <p class="label">{s name=path}Path{/s}:</p> <p class="value" style="word-wrap:break-word;">{literal}{path}{/literal}</p> </div>',
-                description: '<div class="info-item"> <p class="label">{s name=description}Description{/s}:</p> <p class="value">{literal}{description}{/literal}</p> </div>'
+                name: '<div class="info-item"> <p class="label">{s name="name"}Name{/s}:</p> <p class="value">{literal}{name}{/literal}</p> </div>',
+                author: '<div class="info-item"> <p class="label">{s name="author"}Author{/s}:</p> <p class="value">{literal}{author}{/literal}</p> </div>',
+                license: '<div class="info-item"> <p class="label">{s name="license"}License{/s}:</p> <p class="value">{literal}{license}{/literal}</p> </div>',
+                path: '<div class="info-item"> <p class="label">{s name="path"}Path{/s}:</p> <p class="value" style="word-wrap:break-word;">{literal}{path}{/literal}</p> </div>',
+                description: '<div class="info-item"> <p class="label">{s name="description"}Description{/s}:</p> <p class="value">{literal}{description}{/literal}</p> </div>'
             }
         };
     },
@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.Theme.view.list.extensions.Info', {
         var me = this;
 
         me.assignButton = Ext.create('Ext.button.Button', {
-            text: '{s name=assign}Select theme{/s}',
+            text: '{s name="assign"}Select theme{/s}',
             cls: 'small primary',
             disabled: true,
             handler: function() {
@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.Theme.view.list.extensions.Info', {
         var me = this;
 
         me.previewButton = Ext.create('Ext.button.Button', {
-            text: '{s name=preview}Preview theme{/s}',
+            text: '{s name="preview"}Preview theme{/s}',
             disabled: true,
             cls: 'small',
             handler: function() {
@@ -132,7 +132,7 @@ Ext.define('Shopware.apps.Theme.view.list.extensions.Info', {
         var me = this;
 
         me.configureButton = Ext.create('Ext.button.Button', {
-            text: '{s name=configure}Configure theme{/s}',
+            text: '{s name="configure"}Configure theme{/s}',
             disabled: true,
             cls: 'small',
             handler: function() {

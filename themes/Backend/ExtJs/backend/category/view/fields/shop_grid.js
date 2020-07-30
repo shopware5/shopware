@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/* {namespace name=backend/category/main} */
+/* {namespace name="backend/category/main"} */
 
 //{block name="backend/category/view/fields/shop_grid"}
 Ext.define('Shopware.apps.Category.view.fields.ShopGrid', {

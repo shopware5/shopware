@@ -9,12 +9,12 @@
     {/if}
 
     <meta property="og:type" content="product" />
-    <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
+    <meta property="og:site_name" content="{{config name="sShopname"}|escapeHtml}" />
     <meta property="og:title" content="{$manufacturer->getName()|escapeHtml}" />
     <meta property="og:description" content="{$description|escapeHtml}" />
 
     <meta name="twitter:card" content="product" />
-    <meta name="twitter:site" content="{{config name=sShopname}|escapeHtml}" />
+    <meta name="twitter:site" content="{{config name="sShopname"}|escapeHtml}" />
     <meta name="twitter:title" content="{$manufacturer->getName()|escapeHtml}" />
     <meta name="twitter:description" content="{$description|escapeHtml}" />
 

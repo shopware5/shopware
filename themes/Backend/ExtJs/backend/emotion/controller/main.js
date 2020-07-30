@@ -32,7 +32,7 @@
  *
  * This file contains the business logic for the Emotion module.
  */
-//{namespace name=backend/emotion/view/main}
+//{namespace name="backend/emotion/view/main"}
 //{block name="backend/emotion/controller/main"}
 Ext.define('Shopware.apps.Emotion.controller.Main', {
 

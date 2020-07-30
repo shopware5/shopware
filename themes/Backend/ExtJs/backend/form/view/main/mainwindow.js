@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/form/view/main}
+//{namespace name="backend/form/view/main"}
 
 /**
  * todo@all: Documentation
@@ -36,7 +36,7 @@
 Ext.define('Shopware.apps.Form.view.main.Mainwindow', {
     extend: 'Enlight.app.Window',
     alias : 'widget.form-main-mainwindow',
-    title : '{s name=title}Forms{/s}',
+    title : '{s name="title"}Forms{/s}',
     layout: 'border',
     width: 800,
     height: '90%',

@@ -29,12 +29,12 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/week"}
 Ext.define('Shopware.apps.Analytics.view.table.Week', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-week',
-    shopColumnText: "{s name=general/turnover}Turnover{/s}: [0]",
+    shopColumnText: "{s name="general/turnover"}Turnover{/s}: [0]",
 
     initComponent: function () {
         var me = this;
@@ -65,13 +65,13 @@ Ext.define('Shopware.apps.Analytics.view.table.Week', {
             {
                 xtype: 'datecolumn',
                 dataIndex: 'date',
-                text: '{s name=table/week/week}Week{/s}',
-                format: '{s name=table/week/week_format}\\\\C\\\\W{/s} W, Y'
+                text: '{s name="table/week/week"}Week{/s}',
+                format: '{s name="table/week/week_format"}\\\\C\\\\W{/s} W, Y'
             },
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=general/turnover}Turnover{/s}',
+                text: '{s name="general/turnover"}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ]

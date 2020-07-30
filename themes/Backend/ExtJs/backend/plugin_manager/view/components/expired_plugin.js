@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/plugin_manager/translation}
+//{namespace name="backend/plugin_manager/translation"}
 
 //{block name="backend/plugin_manager/view/components/expired_plugin"}
 Ext.define('Shopware.apps.PluginManager.view.components.ExpiredPlugin', {
@@ -257,7 +257,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.ExpiredPlugin', {
             });
         }
     },
-    
+
     createUninstallButton: function() {
         var me = this;
 

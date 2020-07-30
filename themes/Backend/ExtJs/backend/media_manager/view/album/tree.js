@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/media_manager/view/main}
+//{namespace name="backend/media_manager/view/main"}
 
 /**
  * Shopware UI - Media Manager Album Tree

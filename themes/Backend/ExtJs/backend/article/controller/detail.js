@@ -31,7 +31,7 @@
  * Shopware Controller - Detail
  * The detail controller handles all events of the detail page main form element and the sidebar.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/controller/detail"}
 Ext.define('Shopware.apps.Article.controller.Detail', {
 
@@ -62,35 +62,35 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
     snippets: {
         disableVariantForbidden: {
-            title: '{s name=disable_variant_forbidden/title}Disable variants{/s}',
-            message: '{s name=disable_variant_forbidden/message}To disable variant support you must delete all non-main variants first{/s}',
-            error: '{s name=disable_variant_forbidden/error}An error occurred while disabling variant support{/s}'
+            title: '{s name="disable_variant_forbidden/title"}Disable variants{/s}',
+            message: '{s name="disable_variant_forbidden/message"}To disable variant support you must delete all non-main variants first{/s}',
+            error: '{s name="disable_variant_forbidden/error"}An error occurred while disabling variant support{/s}'
         },
-        growlMessage: '{s name=growl_message}Article{/s}',
-        existTitle: '{s name=sidebar/accessory/already_assigned_title}Already exists{/s}',
+        growlMessage: '{s name="growl_message"}Article{/s}',
+        existTitle: '{s name="sidebar/accessory/already_assigned_title"}Already exists{/s}',
         similar: {
-            exist: '{s name=sidebar/similar/already_assigned_message}The article [0] has been assigned as similar article!{/s}'
+            exist: '{s name="sidebar/similar/already_assigned_message"}The article [0] has been assigned as similar article!{/s}'
         },
         accessory: {
-            exist: '{s name=sidebar/accessory/already_assigned_message}The article [0] has been already assigned as accessory article!{/s}'
+            exist: '{s name="sidebar/accessory/already_assigned_message"}The article [0] has been already assigned as accessory article!{/s}'
         },
-        removeArticle: '{s name=article_remove/message}Are you sure you want to delete the article?{/s}',
+        removeArticle: '{s name="article_remove/message"}Are you sure you want to delete the article?{/s}',
         alreadyExist: {
-            title: '{s name=category/already_exist/title}Failed{/s}',
-            message: '{s name=category/already_exist/message}Category: [0] has already been assigned{/s}'
+            title: '{s name="category/already_exist/title"}Failed{/s}',
+            message: '{s name="category/already_exist/message"}Category: [0] has already been assigned{/s}'
         },
         saved: {
-            title: '{s name=article_saved/title}Successful{/s}',
-            message: '{s name=article_saved/message}Article [0] has been saved successfully{/s}',
-            noPriceGiven: '{s name=article_saved/no_price_given}Please insert a price for the first customer group.{/s}',
-            fieldsViolation: '{s name=article_saved/field_errors}The following fields are not valid: {/s}',
-            errorMessage: '{s name=article_saved/error_message}An error has occurred while saving the article:{/s}',
-            errorTitle: '{s name=article_saved/error_title}Error{/s}',
-            removeMessage: '{s name=article_removed/message}Article has been removed{/s}'
+            title: '{s name="article_saved/title"}Successful{/s}',
+            message: '{s name="article_saved/message"}Article [0] has been saved successfully{/s}',
+            noPriceGiven: '{s name="article_saved/no_price_given"}Please insert a price for the first customer group.{/s}',
+            fieldsViolation: '{s name="article_saved/field_errors"}The following fields are not valid: {/s}',
+            errorMessage: '{s name="article_saved/error_message"}An error has occurred while saving the article:{/s}',
+            errorTitle: '{s name="article_saved/error_title"}Error{/s}',
+            removeMessage: '{s name="article_removed/message"}Article has been removed{/s}'
         },
         overwriteArticle: {
-            title: '{s name=overwriteArticle/title}Overwrite most recent changes{/s}',
-            message: '{s name=overwriteArticle/message}Do you really want to overwrite the latest changes?{/s}',
+            title: '{s name="overwriteArticle/title"}Overwrite most recent changes{/s}',
+            message: '{s name="overwriteArticle/message"}Do you really want to overwrite the latest changes?{/s}',
         },
     },
 

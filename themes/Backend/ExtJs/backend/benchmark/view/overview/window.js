@@ -21,7 +21,7 @@ Ext.define('Shopware.apps.Benchmark.view.overview.Window', {
                 padding: '0 0 0 5px',
                 itemId: 'disableBenchmarkTeaser',
                 width: 150,
-                boxLabel: '{s name=window/do_not_show_again}{/s}'
+                boxLabel: '{s name="window/do_not_show_again"}{/s}'
             });
 
             me.dockedItems = [{

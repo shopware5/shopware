@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/snippet/view/main}
+//{namespace name="backend/snippet/view/main"}
 
 /**
  * todo@all: Documentation
@@ -50,13 +50,13 @@ Ext.define('Shopware.apps.Snippet.view.main.CreateForm', {
      * @object
      */
     snippets: {
-        titleCreateWindow: '{s name=window/create}Create new snippet{/s}',
-        buttonSave:     '{s name=button_save}Save{/s}',
-        labelLocale:    '{s name=label_locale}Locale{/s}',
-        labelShop:      '{s name=label_shop}Shop{/s}',
-        labelNamespace: '{s name=label_namespace}Namespace{/s}',
-        labelName:      '{s name=label_name}Name{/s}',
-        labelValue:     '{s name=label_value}Value{/s}'
+        titleCreateWindow: '{s name="window/create"}Create new snippet{/s}',
+        buttonSave:     '{s name="button_save"}Save{/s}',
+        labelLocale:    '{s name="label_locale"}Locale{/s}',
+        labelShop:      '{s name="label_shop"}Shop{/s}',
+        labelNamespace: '{s name="label_namespace"}Namespace{/s}',
+        labelName:      '{s name="label_name"}Name{/s}',
+        labelValue:     '{s name="label_value"}Value{/s}'
     },
 
     /**

@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/view/main/sidebar"}
 Ext.define('Shopware.apps.ArticleList.view.main.Sidebar', {
     extend: 'Ext.panel.Panel',
@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Sidebar', {
 
     layout: 'accordion',
 
-    title: '{s name=categoriesAndFilters}Categories & Filters{/s}',
+    title: '{s name="categoriesAndFilters"}Categories & Filters{/s}',
 
 
     initComponent: function () {
@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Sidebar', {
             // Wrap the filter grid into a panel so that the
             // accordion elements a formatted properly
             { xtype: 'panel',
-                title: '{s name=filter}Filter{/s}',
+                title: '{s name="filter"}Filter{/s}',
                 layout: 'fit',
                 items: [
                     {

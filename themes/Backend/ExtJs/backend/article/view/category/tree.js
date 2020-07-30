@@ -32,7 +32,7 @@
  * The tree component contains a tree panel element which list all defined categories of the shop.
  * The tree nodes have an action column, if the category is a leaf category (no child categories)
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/category/tree"}
 Ext.define('Shopware.apps.Article.view.category.Tree', {
     /**
@@ -55,8 +55,8 @@ Ext.define('Shopware.apps.Article.view.category.Tree', {
      * @object
      */
     snippets:{
-        title: '{s name=category/tree/title}Category{/s}',
-        tooltip: '{s name=category/tree/tooltip}Add category{/s}'
+        title: '{s name="category/tree/title"}Category{/s}',
+        tooltip: '{s name="category/tree/tooltip"}Add category{/s}'
     },
 
     /**
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Article.view.category.Tree', {
         plugins: {
             ptype: 'treeviewdragdrop',
             ddGroup: 'Category',
-            dragText : '{s name=category/tree/drag_text}[0] selected node [1]{/s}',
+            dragText : '{s name="category/tree/drag_text"}[0] selected node [1]{/s}',
             enableDrop: true,
             copy: true
         }

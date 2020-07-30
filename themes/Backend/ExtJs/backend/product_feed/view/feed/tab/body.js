@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/product_feed/view/feed}
+//{namespace name="backend/product_feed/view/feed"}
 
 /**
  * Shopware UI - Tab View.
@@ -38,7 +38,7 @@
 Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Body', {
     extend:'Ext.container.Container',
     alias:'widget.product_feed-feed-tab-body',
-    title:'{s name=tab/title/body}Body{/s}',
+    title:'{s name="tab/title/body"}Body{/s}',
     border: 0,
     padding: 10,
     cls: 'shopware-toolbar',

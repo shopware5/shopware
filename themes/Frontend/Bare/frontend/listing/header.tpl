@@ -15,12 +15,12 @@
     {$description = $description|truncate:$SeoDescriptionMaxLength:'…'}
 
     <meta property="og:type" content="product.group" />
-    <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
+    <meta property="og:site_name" content="{{config name="sShopname"}|escapeHtml}" />
     <meta property="og:title" content="{$sCategoryContent.name|escapeHtml}" />
     <meta property="og:description" content="{$description|escapeHtml}" />
 
     <meta name="twitter:card" content="product" />
-    <meta name="twitter:site" content="{{config name=sShopname}|escapeHtml}" />
+    <meta name="twitter:site" content="{{config name="sShopname"}|escapeHtml}" />
     <meta name="twitter:title" content="{$sCategoryContent.name|escapeHtml}" />
     <meta name="twitter:description" content="{$description|escapeHtml}" />
 
@@ -51,7 +51,7 @@
         <link rel="canonical" href="{url params = $sCategoryContent.canonicalParams}"/>
     {/if}
 
-    {if {config name=seoIndexPaginationLinks}}
+    {if {config name="seoIndexPaginationLinks"}}
         {if empty($sPage)}
             {$sPage = 0}
         {/if}
@@ -73,9 +73,9 @@
 {* Title *}
 {block name='frontend_index_header_title'}{strip}
     {if $sCategoryContent.metaTitle}
-        {$sCategoryContent.metaTitle|escapeHtml} | {{config name=sShopname}|escapeHtml}
+        {$sCategoryContent.metaTitle|escapeHtml} | {{config name="sShopname"}|escapeHtml}
     {elseif $sCategoryContent.title}
-        {$sCategoryContent.title|escapeHtml} | {{config name=sShopname}|escapeHtml}
+        {$sCategoryContent.title|escapeHtml} | {{config name="sShopname"}|escapeHtml}
     {else}
         {$smarty.block.parent}
     {/if}

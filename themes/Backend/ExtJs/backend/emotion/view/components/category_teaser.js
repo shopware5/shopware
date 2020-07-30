@@ -27,18 +27,18 @@
  * @author shopware AG
  */
 //{block name="backend/emotion/view/components/category_teaser"}
-//{namespace name=backend/emotion/view/components/category_teaser}
+//{namespace name="backend/emotion/view/components/category_teaser"}
 Ext.define('Shopware.apps.Emotion.view.components.CategoryTeaser', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-category-teaser',
 
     snippets: {
         blog_category: {
-            fieldLabel: '{s name=blog_category}Blog category{/s}',
-            supportText: '{s name=blog_category_support}The selected category is a blog Category{/s}'
+            fieldLabel: '{s name="blog_category"}Blog category{/s}',
+            supportText: '{s name="blog_category_support"}The selected category is a blog Category{/s}'
         },
-        image: '{s name=image}Image{/s}',
-        category_selection: '{s name=category_selection}Select category{/s}'
+        image: '{s name="image"}Image{/s}',
+        category_selection: '{s name="category_selection"}Select category{/s}'
     },
 
     /**

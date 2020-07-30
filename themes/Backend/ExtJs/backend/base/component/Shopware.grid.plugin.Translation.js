@@ -41,7 +41,7 @@
  *
  * @example Ext.create('Shopware.grid.plugin.Translation');
  */
-//{namespace name=backend/base/grid_translation}
+//{namespace name="backend/base/grid_translation"}
 //{block name="backend/base/grid_translation"}
 Ext.define('Shopware.grid.plugin.Translation', {
     /** @lends Ext.AbstractPlugin# */
@@ -123,7 +123,7 @@ Ext.define('Shopware.grid.plugin.Translation', {
     actionColumnItemGetClassCallback: Ext.emptyFn,
 
     snippets: {
-        tooltip: '{s name=translate_tooltip}Translate{/s}'
+        tooltip: '{s name="translate_tooltip"}Translate{/s}'
     },
 
     /**

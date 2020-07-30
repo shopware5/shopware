@@ -34,16 +34,16 @@
  * Shopware\Models\Order\DetailStatus doctrine model.
  */
 
-//{namespace name=backend/static/position_status}
+//{namespace name="backend/static/position_status"}
 //{block name="backend/base/model/position_status"}
 Ext.define('Shopware.apps.Base.model.PositionStatus', {
 
     snippets: {
         //{block name="backend/base/model/position_status/snippets"}{/block}
-        state0: '{s name=open}Open{/s}',
-        state1: '{s name=in_process}In progress{/s}',
-        state2: '{s name=cancelled}Cancelled{/s}',
-        state3: '{s name=completed}Completed{/s}'
+        state0: '{s name="open"}Open{/s}',
+        state1: '{s name="in_process"}In progress{/s}',
+        state2: '{s name="cancelled"}Cancelled{/s}',
+        state3: '{s name="completed"}Completed{/s}'
     },
 
     /**

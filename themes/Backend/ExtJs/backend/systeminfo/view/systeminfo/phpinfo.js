@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/systeminfo/view}
+//{namespace name="backend/systeminfo/view"}
 
 /**
  * Shopware UI - View for PHPInfo

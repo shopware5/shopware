@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/tax/view/main}
+//{namespace name="backend/tax/view/main"}
 
 /**
  * Shopware UI - Customer list main window.
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Tax.view.main.Window', {
      * Set window title which is displayed in the window header
      * @string
      */
-    title:'{s name=window_title}Tax{/s}',
+    title:'{s name="window_title"}Tax{/s}',
 
     /**
      * Initializes the component and builds up the main interface

@@ -28,7 +28,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/category/sorting}
+//{namespace name="backend/category/sorting"}
 //{block name="backend/category/controller/manual_sort"}
 Ext.define('Shopware.apps.Category.controller.ManualSorting', {
     extend: 'Enlight.app.Controller',

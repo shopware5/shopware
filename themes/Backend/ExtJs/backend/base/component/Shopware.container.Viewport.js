@@ -42,7 +42,7 @@
  * ToDo - add stateEvents
  */
 
-//{namespace name=base/login/view/main}
+//{namespace name="base/login/view/main"}
 Ext.define('Shopware.container.Viewport',
 /** @lends Ext.container.Container# */
 {

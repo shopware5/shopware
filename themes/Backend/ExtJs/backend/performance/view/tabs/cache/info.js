@@ -21,14 +21,14 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 //{block name="backend/performance/view/tabs/cache/info"}
 Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.performance-tabs-cache-info',
 
-    title: '{s name=info/title}Cache-Directory information{/s}',
+    title: '{s name="info/title"}Cache-Directory information{/s}',
 
     layout: 'fit',
     autoScroll: true,
@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
 
         me.buttons = [
             Ext.create('Ext.Button', {
-                text: '{s name=fieldset/buttons/refresh}Refresh{/s}',
+                text: '{s name="fieldset/buttons/refresh"}Refresh{/s}',
                 cls: 'secondary',
                 scope: me,
                 handler:function () {
@@ -72,34 +72,34 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
         var me = this;
 
         return [{
-            header: '{s name=info/columns/name}Name{/s}',
+            header: '{s name="info/columns/name"}Name{/s}',
             dataIndex: 'name',
             flex: 5
         }, {
-            header: '{s name=info/columns/backend}Backend{/s}',
+            header: '{s name="info/columns/backend"}Backend{/s}',
             dataIndex: 'backend',
             flex: 3
         }, {
-            header: '{s name=info/columns/directory}Directory{/s}',
+            header: '{s name="info/columns/directory"}Directory{/s}',
             dataIndex: 'dir',
             flex: 4
         }, {
-            header: '{s name=info/columns/files}Files{/s}',
+            header: '{s name="info/columns/files"}Files{/s}',
             dataIndex: 'files',
             align: 'right',
             flex: 2
         }, {
-            header: '{s name=info/columns/size}Size{/s}',
+            header: '{s name="info/columns/size"}Size{/s}',
             dataIndex: 'size',
             align: 'right',
             flex: 2
         }, {
-            header: '{s name=info/columns/freeSpace}Free memory{/s}',
+            header: '{s name="info/columns/freeSpace"}Free memory{/s}',
             dataIndex: 'freeSpace',
             align: 'right',
             flex: 2
         }, {
-            header: '{s name=info/columns/message}Message{/s}',
+            header: '{s name="info/columns/message"}Message{/s}',
             dataIndex: 'message',
             width: 60,
             renderer: me.messageRenderer

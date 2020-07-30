@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/media_manager/view/main}
+//{namespace name="backend/media_manager/view/main"}
 //{block name="backend/media_manager/view/main/batchMove"}
 Ext.define('Shopware.apps.MediaManager.view.batchMove.BatchMove', {
     extend: 'Enlight.app.SubWindow',

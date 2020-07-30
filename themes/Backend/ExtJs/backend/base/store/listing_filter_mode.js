@@ -28,7 +28,7 @@
  */
 
 
-//{namespace name=backend/base/listing_filter_mode}
+//{namespace name="backend/base/listing_filter_mode"}
 
 Ext.define('Shopware.apps.Base.store.ListingFilterMode', {
     extend: 'Ext.data.Store',
@@ -54,22 +54,22 @@ Ext.define('Shopware.apps.Base.store.ListingFilterMode', {
 
     fullPageReload: {
         key: 'full_page_reload',
-        label: '{s name=listing_mode_reload_label}{/s}',
-        description: '{s name=listing_mode_reload_description}{/s}',
+        label: '{s name="listing_mode_reload_label"}{/s}',
+        description: '{s name="listing_mode_reload_description"}{/s}',
         image: '{link file="backend/_resources/images/listing_mode/full_page_reload.jpg"}'
     },
 
     reloadProductsMode: {
         key: 'product_ajax_reload',
-        label: '{s name=listing_mode_product_reload_label}{/s}',
-        description: '{s name=listing_mode_product_reload_description}{/s}',
+        label: '{s name="listing_mode_product_reload_label"}{/s}',
+        description: '{s name="listing_mode_product_reload_description"}{/s}',
         image: '{link file="backend/_resources/images/listing_mode/product_ajax_reload.jpg"}'
     },
 
     reloadFiltersMode: {
         key: 'filter_ajax_reload',
-        label: '{s name=listing_mode_filter_reload_label}{/s}',
-        description: '{s name=listing_mode_filter_reload_description}{/s}',
+        label: '{s name="listing_mode_filter_reload_label"}{/s}',
+        description: '{s name="listing_mode_filter_reload_description"}{/s}',
         image: '{link file="backend/_resources/images/listing_mode/filter_ajax_reload.jpg"}'
     },
 

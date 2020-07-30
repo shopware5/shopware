@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-// {namespace name=backend/first_run_wizard/main}
+// {namespace name="backend/first_run_wizard/main"}
 // {block name="backend/first_run_wizard/view/main/localization"}
 
 Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
@@ -50,17 +50,17 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
 
     snippets: {
         content: {
-            welcomeTitle: '{s name=home/content/title}Welcome to Shopware{/s}',
-            welcomeMessage: '{s name=home/content/message}Welcome to your Shopware shop. The First Run Wizard will accompany you in your first steps with Shopware and give you valuable tips about the configuration options.{/s}',
-            title: '{s name=localization/content/title}Localization{/s}',
-            message: '{s name=localization/content/message}Take your business abroad using localizations plugins. Start by selecting the language you want to add to your shop. You will receive a list of recommended plugins for your shop, that will add translations and other useful features to your Shopware installation.{/s}',
-            noPlugins: '{s name=localization/content/noPlugins}No plugins found{/s}'
+            welcomeTitle: '{s name="home/content/title"}Welcome to Shopware{/s}',
+            welcomeMessage: '{s name="home/content/message"}Welcome to your Shopware shop. The First Run Wizard will accompany you in your first steps with Shopware and give you valuable tips about the configuration options.{/s}',
+            title: '{s name="localization/content/title"}Localization{/s}',
+            message: '{s name="localization/content/message"}Take your business abroad using localizations plugins. Start by selecting the language you want to add to your shop. You will receive a list of recommended plugins for your shop, that will add translations and other useful features to your Shopware installation.{/s}',
+            noPlugins: '{s name="localization/content/noPlugins"}No plugins found{/s}'
         },
         buttons: {
-            retry: '{s name=home/buttons/retry}Retry{/s}'
+            retry: '{s name="home/buttons/retry"}Retry{/s}'
         },
         isNotConnected: {
-            text: '{s name=home/is_not_connected/text}Could not connect to the Shopware Community Store{/s}',
+            text: '{s name="home/is_not_connected/text"}Could not connect to the Shopware Community Store{/s}',
             icon: 'cross-circle'
         }
     },
@@ -113,7 +113,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
             html: '<p>' + me.snippets.content.message + '</p>'
         });
 
-        me.defaultLocale = '{s namespace="backend/base/index" name=script/ext/locale}{/s}';
+        me.defaultLocale = '{s namespace="backend/base/index" name="script/ext/locale"}{/s}';
 
         me.loadingIndicatorContainer = me.createLoadingIndicator();
         me.loadingResultContainer = me.createLoadingResultContainer();
@@ -245,7 +245,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
         });
 
         me.loadingIndicator.wait({
-            text: '{s name=home/content/checking_connection}Checking Shopware server connection{/s}',
+            text: '{s name="home/content/checking_connection"}Checking Shopware server connection{/s}',
             scope: this
         });
 
@@ -263,7 +263,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
             installedLocale = Ext.util.Cookies.get('installed-locale');
 
         Ext.each(records, function(record) {
-            if (record.get('locale') === '{s namespace="backend/base/index" name=script/ext/locale}{/s}' ||
+            if (record.get('locale') === '{s namespace="backend/base/index" name="script/ext/locale"}{/s}' ||
                 record.get('locale') === installedLocale) {
                 me.defaultLocale = record.get('locale');
             }

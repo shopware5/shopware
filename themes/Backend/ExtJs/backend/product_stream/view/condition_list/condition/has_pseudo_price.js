@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/condition/has_pseudo_price"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.HasPseudoPrice', {
     extend: 'ProductStream.filter.AbstractCondition',
@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.HasPseudoP
     },
 
     getLabel: function() {
-        return '{s name=has_pseudo_price_condition}Has pseudo price condition{/s}';
+        return '{s name="has_pseudo_price_condition"}Has pseudo price condition{/s}';
     },
 
     isSingleton: function() {
@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.HasPseudoP
             },
             items: [{
                 xtype: 'displayfield',
-                value: '{s name=has_pseudo_price/display_text}Only products having pseudo price will be displayed{/s}',
+                value: '{s name="has_pseudo_price/display_text"}Only products having pseudo price will be displayed{/s}',
             }, {
                 xtype: 'numberfield',
                 name: 'condition.' + this.getName(),

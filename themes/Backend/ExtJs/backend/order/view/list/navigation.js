@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order list navigation
@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.Order.view.list.Navigation', {
      * @object
      */
     snippets: {
-        title:'{s name=navigation_title}Navigation options{/s}'
+        title:'{s name="navigation_title"}Navigation options{/s}'
     },
 
     /**

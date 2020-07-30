@@ -27,7 +27,7 @@
  * @author      shopware AG
  */
 
-//{namespace name=backend/emotion/presets/presets}
+//{namespace name="backend/emotion/presets/presets"}
 
 /**
  * Emotion Presets Window
@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Window', {
         var me = this;
 
         return [{
-            text: '{s name=use_preset}{/s}',
+            text: '{s name="use_preset"}{/s}',
             cls: 'primary',
             handler: function () {
                 me.fireEvent('emotionpresetselect');

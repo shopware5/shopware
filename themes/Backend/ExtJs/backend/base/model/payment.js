@@ -33,7 +33,7 @@
  * The payment model represents a data row of the s_core_paymentmeans or the
  * Shopware\Models\Payment\Payment doctrine model.
  */
-//{namespace name=backend/static/payment}
+//{namespace name="backend/static/payment"}
 //{block name="backend/base/model/payment"}
 Ext.define('Shopware.apps.Base.model.Payment', {
 

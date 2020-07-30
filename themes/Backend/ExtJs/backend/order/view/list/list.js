@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order list backend module
@@ -74,32 +74,32 @@ Ext.define('Shopware.apps.Order.view.list.List', {
      */
     snippets:{
         columns: {
-            number:'{s name=column/number}Order number{/s}',
-            invoiceAmount:'{s name=column/amount}Amount{/s}',
-            orderTime:'{s name=column/order_time}Order time{/s}',
-            transactionId:'{s name=column/transaction}Transaction{/s}',
-            dispatchName:'{s name=column/dispatch_name}Shipping{/s}',
-            shopName:'{s name=column/shop}Shop{/s}',
-            customer:'{s name=column/customer}Customer{/s}',
-            customerEmail:'{s name=column/customer_email}E-Mail{/s}',
-            paymentName:'{s name=column/payment_name}Payment{/s}',
-            orderStatus:'{s name=column/order_status}Order Status{/s}',
-            paymentStatus:'{s name=column/payment_status}Payment Status{/s}',
-            openCustomer: '{s name=column/open_customer}Open customer{/s}',
-            deleteOrder: '{s name=column/delete_order}Delete order{/s}',
-            detail: '{s name=column/detail}Show details{/s}'
+            number:'{s name="column/number"}Order number{/s}',
+            invoiceAmount:'{s name="column/amount"}Amount{/s}',
+            orderTime:'{s name="column/order_time"}Order time{/s}',
+            transactionId:'{s name="column/transaction"}Transaction{/s}',
+            dispatchName:'{s name="column/dispatch_name"}Shipping{/s}',
+            shopName:'{s name="column/shop"}Shop{/s}',
+            customer:'{s name="column/customer"}Customer{/s}',
+            customerEmail:'{s name="column/customer_email"}E-Mail{/s}',
+            paymentName:'{s name="column/payment_name"}Payment{/s}',
+            orderStatus:'{s name="column/order_status"}Order Status{/s}',
+            paymentStatus:'{s name="column/payment_status"}Payment Status{/s}',
+            openCustomer: '{s name="column/open_customer"}Open customer{/s}',
+            deleteOrder: '{s name="column/delete_order"}Delete order{/s}',
+            detail: '{s name="column/detail"}Show details{/s}'
         },
-        externalComment: '{s name=external_comment}External comment{/s}',
-        customerComment: '{s name=customer_comment}Customer comment{/s}',
-        internalComment: '{s name=internal_comment}Internal comment{/s}',
+        externalComment: '{s name="external_comment"}External comment{/s}',
+        customerComment: '{s name="customer_comment"}Customer comment{/s}',
+        internalComment: '{s name="internal_comment"}Internal comment{/s}',
         toolbar: {
-            search: '{s name=toolbar/search}Search...{/s}',
-            action: '{s name=toolbar/action}Perform action{/s}',
-            states: '{s name=toolbar/states}Order status{/s}',
-            batch: '{s name=toolbar/batch}Batch processing{/s}'
+            search: '{s name="toolbar/search"}Search...{/s}',
+            action: '{s name="toolbar/action"}Perform action{/s}',
+            states: '{s name="toolbar/states"}Order status{/s}',
+            batch: '{s name="toolbar/batch"}Batch processing{/s}'
         },
         paging: {
-            pageSize: '{s name=paging_bar/page_size}Number of orders{/s}'
+            pageSize: '{s name="paging_bar/page_size"}Number of orders{/s}'
         }
     },
 

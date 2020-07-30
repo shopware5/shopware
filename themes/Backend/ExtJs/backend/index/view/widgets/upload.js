@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/view/widgets}
+//{namespace name="backend/index/view/widgets"}
 
 /**
  * Shopware UI - Upload Widget
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Upload', {
             checkType: false,
             checkAmount: false,
             enablePreviewImage: false,
-            dropZoneText: '{s name=upload/drop_zone_text}Upload files via <strong>Drag+Drop</strong>{/s}'
+            dropZoneText: '{s name="upload/drop_zone_text"}Upload files via <strong>Drag+Drop</strong>{/s}'
         });
 
         return mediaDropZone;

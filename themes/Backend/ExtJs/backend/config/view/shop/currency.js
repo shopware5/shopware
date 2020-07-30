@@ -25,25 +25,25 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/shop/currency"}
 Ext.define('Shopware.apps.Config.view.shop.Currency', {
     extend: 'Shopware.apps.Config.view.base.Property',
     alias: 'widget.config-shop-currency',
 
-    title: '{s name=shop/currency/title}Select currencies{/s}',
+    title: '{s name="shop/currency/title"}Select currencies{/s}',
     name: 'currencies',
 
     getColumns: function() {
         var me = this;
 
         return [{
-            header: '{s name=shop/currency/iso_header}Currency{/s}',
+            header: '{s name="shop/currency/iso_header"}Currency{/s}',
             dataIndex: 'currency',
             flex: 1
         }, {
-            header: '{s name=shop/currency/name_header}Name{/s}',
+            header: '{s name="shop/currency/name_header"}Name{/s}',
             dataIndex: 'name',
             flex: 1
         }, me.getActionColumn()];

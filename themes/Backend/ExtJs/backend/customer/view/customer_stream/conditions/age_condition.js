@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+// {namespace name="backend/customer/view/main"}
 // {block name="backend/customer/view/customer_stream/conditions/age_condition"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.AgeCondition', {
 
@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.AgeCondition'
     createOperatorField: function () {
         var me = this;
         me.operatorSelection = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: '{s name=operator}{/s}',
+            fieldLabel: '{s name="operator"}{/s}',
             store: me.createOperatorStore(),
             displayField: 'name',
             valueField: 'value',
@@ -87,12 +87,12 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.AgeCondition'
         return Ext.create('Ext.data.Store', {
             fields: [ 'name', 'value' ],
             data: [
-                { name: '{s name=equals}{/s}', value: '=' },
-                { name: '{s name=less_than}{/s}', value: '<' },
-                { name: '{s name=less_than_equals}{/s}', value: '<=' },
-                { name: '{s name=between}{/s}', value: 'BETWEEN' },
-                { name: '{s name=greater_than}{/s}', value: '>' },
-                { name: '{s name=greater_than_equals}{/s}', value: '>=' }
+                { name: '{s name="equals"}{/s}', value: '=' },
+                { name: '{s name="less_than"}{/s}', value: '<' },
+                { name: '{s name="less_than_equals"}{/s}', value: '<=' },
+                { name: '{s name="between"}{/s}', value: 'BETWEEN' },
+                { name: '{s name="greater_than"}{/s}', value: '>' },
+                { name: '{s name="greater_than_equals"}{/s}', value: '>=' }
             ]
         });
     },
@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.AgeCondition'
     createValueField: function () {
         var me = this;
         me.valueField =  Ext.create('Ext.form.field.Number', {
-            fieldLabel: '{s name=attribute/value}{/s}',
+            fieldLabel: '{s name="attribute/value"}{/s}',
             allowBlank: false,
             name: 'value'
         });

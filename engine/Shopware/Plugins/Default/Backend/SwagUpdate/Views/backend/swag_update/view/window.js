@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-// {namespace name=backend/swag_update/main}
+// {namespace name="backend/swag_update/main"}
 // {block name="backend/swag_update/view/window"}
 Ext.define('Shopware.apps.SwagUpdate.view.Window', {
 

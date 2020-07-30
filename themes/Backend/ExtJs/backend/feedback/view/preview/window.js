@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/feedback/view/preview}
+//{namespace name="backend/feedback/view/preview"}
 
 /**
  * Shopware UI - Feedback preview Window
@@ -32,7 +32,7 @@
 //{block name="backend/feedback/view/preview/window"}
 Ext.define('Shopware.apps.Feedback.view.preview.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window/title}{/s}',
+    title: '{s name="window/title"}{/s}',
     alias: 'widget.feedback-preview-window',
     border: false,
     layout: {
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Feedback.view.preview.Window', {
             flex: 1,
             autoScroll: true,
             style: 'background-color: #ffffff;',
-            html: Ext.String.format('{s name=window/info_text}{/s}', '{$SHOPWARE_VERSION}'),
+            html: Ext.String.format('{s name="window/info_text"}{/s}', '{$SHOPWARE_VERSION}'),
             styleHtmlContent: true
         });
 
@@ -82,12 +82,12 @@ Ext.define('Shopware.apps.Feedback.view.preview.Window', {
             padding: '0 0 0 5px',
             itemId: 'disablePreviewFeedback',
             width: 150,
-            boxLabel: '{s name=window/do_not_show_again}{/s}'
+            boxLabel: '{s name="window/do_not_show_again"}{/s}'
         });
 
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
-            text: '{s name=window/cancel}{/s}',
+            text: '{s name="window/cancel"}{/s}',
             handler: function() {
                 me.close();
             }
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Feedback.view.preview.Window', {
 
         me.issueTrackerButton = Ext.create('Ext.button.Button', {
             cls: 'primary',
-            text: '{s name=window/open_issuetracker}{/s}',
+            text: '{s name="window/open_issuetracker"}{/s}',
             handler: function() {
                 me.fireEvent('feedback-show-issue-tracker', me);
             }

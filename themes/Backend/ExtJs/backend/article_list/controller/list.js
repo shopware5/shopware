@@ -24,7 +24,7 @@
 /**
  * The list controller handles the main filter and product list
  */
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/controller/list"}
 Ext.define('Shopware.apps.ArticleList.controller.List', {
 

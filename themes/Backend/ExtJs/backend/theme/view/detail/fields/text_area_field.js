@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/theme/main}
+//{namespace name="backend/theme/main"}
 
 //{block name="backend/theme/view/detail/fields/text_area"}
 

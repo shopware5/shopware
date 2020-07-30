@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/controller/categories_tree}*/
+/*{namespace name="backend/shipping/controller/categories_tree"}*/
 
 /**
  * Shopware Controller - Shipping

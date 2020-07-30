@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{block name="backend/emotion/view/components/article_slider"}
-//{namespace name=backend/emotion/view/components/article_slider}
+//{namespace name="backend/emotion/view/components/article_slider"}
 Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-article-slider',
@@ -37,16 +37,16 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
      * @object
      */
     snippets: {
-        'article_administration': '{s name=article_administration}Article administration{/s}',
+        'article_administration': '{s name="article_administration"}Article administration{/s}',
 
-        article_slider_max_number: '{s name=article_slider_max_number}Maximum number of articles{/s}',
-        article_slider_title: '{s name=article_slider_title}Title{/s}',
-        article_slider_arrows: '{s name=article_slider_arrows}Display arrows{/s}',
-        article_slider_scrollspeed: '{s name=article_slider_scrollspeed}Scroll speed{/s}',
-        article_slider_category: '{s name=article_slider_category}Filter by category{/s}',
+        article_slider_max_number: '{s name="article_slider_max_number"}Maximum number of articles{/s}',
+        article_slider_title: '{s name="article_slider_title"}Title{/s}',
+        article_slider_arrows: '{s name="article_slider_arrows"}Display arrows{/s}',
+        article_slider_scrollspeed: '{s name="article_slider_scrollspeed"}Scroll speed{/s}',
+        article_slider_category: '{s name="article_slider_category"}Filter by category{/s}',
 
-        article_slider_rotation: '{s name=article_slider_rotation}Rotate automatically{/s}',
-        article_slider_rotatespeed: '{s name=article_slider_rotatespeed}Rotation speed{/s}',
+        article_slider_rotation: '{s name="article_slider_rotation"}Rotate automatically{/s}',
+        article_slider_rotatespeed: '{s name="article_slider_rotatespeed"}Rotation speed{/s}',
 
         no_border: {
             fieldLabel: '{s name="noBorder/label" namespace="backend/emotion/view/components/article"}{/s}',

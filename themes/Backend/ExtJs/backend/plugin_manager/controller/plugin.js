@@ -47,21 +47,21 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         'licencePluginActivate': '{s name="licence_plugin_activate"}The Shopware License Manager plugin is needed to install this plugin, but is currently not active on your system. <br><br>Do you want to activate the Shopware License Manager plugin?<strong>{/s}',
 
         domainRegistration: {
-            successTitle: '{s name=domainRegistration/successTitle}Domain registration{/s}',
-            successMessage: '{s name=domainRegistration/successMessage}Domain registration successful{/s}',
-            waitTitle: '{s name=domainRegistration/waitTitle}Registering domain{/s}',
-            waitMessage: '{s name=domainRegistration/waitMessage}This process might take a few seconds{/s}',
-            validationFailed: "{s name=domainRegistration/validationFailed}<p>You have successfully logged in using your Shopware ID, but the domain validation process failed.<br><p>Please click <a href='https://docs.shopware.com/en/shopware-5-en/first-steps/shopware-account#link-your-shop' title='Shopware Account documentation' target='_blank'>here</a> to use manual domain validation.</p>{/s}"
+            successTitle: '{s name="domainRegistration/successTitle"}Domain registration{/s}',
+            successMessage: '{s name="domainRegistration/successMessage"}Domain registration successful{/s}',
+            waitTitle: '{s name="domainRegistration/waitTitle"}Registering domain{/s}',
+            waitMessage: '{s name="domainRegistration/waitMessage"}This process might take a few seconds{/s}',
+            validationFailed: '{s name="domainRegistration/validationFailed"}{/s}'
         },
 
         login: {
-            successTitle: '{s name=login/successTitle}Shopware ID{/s}',
-            successMessage: '{s name=login/successMessage}Login successful{/s}',
-            waitTitle: '{s name=login/waitTitle}Logging in...{/s}',
-            waitMessage: '{s name=login/waitMessage}This process might take a few seconds{/s}'
+            successTitle: '{s name="login/successTitle"}Shopware ID{/s}',
+            successMessage: '{s name="login/successMessage"}Login successful{/s}',
+            waitTitle: '{s name="login/waitTitle"}Logging in...{/s}',
+            waitMessage: '{s name="login/waitMessage"}This process might take a few seconds{/s}'
         },
 
-        growlMessage: '{s name=growlMessage}Plugin Manager{/s}'
+        growlMessage: '{s name="growlMessage"}Plugin Manager{/s}'
     },
 
     init: function() {
@@ -148,7 +148,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
         me.authenticateForUpdate(plugin, function() {
             me.startPluginDownload(plugin, function() {
-                me.displayLoadingMask(plugin, '{s name=execute_update}Plugin is being updated{/s}', false);
+                me.displayLoadingMask(plugin, '{s name="execute_update"}Plugin is being updated{/s}', false);
                 localListing.getStore().load({
                     callback: function(records, operation, success) {
                         me.executePluginUpdate(plugin, function() {

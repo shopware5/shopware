@@ -30,7 +30,7 @@
  * @package tax
  * @subpackage Controller/Main
  */
-//{namespace name=backend/tax/view/main}
+//{namespace name="backend/tax/view/main"}
 //{block name="backend/tax/controller/main"}
 Ext.define('Shopware.apps.Tax.controller.Main', {
 
@@ -97,9 +97,9 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
                success: function(response){
                    // Update tree-node text
                    this.getNavigationTree().store.load();
-                   Shopware.Msg.createGrowlMessage('','{s name=groupList/renameSuccessfully}Group has been created{/s}', '{s name=window_title}{/s}');},
+                   Shopware.Msg.createGrowlMessage('','{s name="groupList/renameSuccessfully"}Group has been created{/s}', '{s name="window_title"}{/s}');},
                failure: function(){
-                   Shopware.Msg.createGrowlMessage('', '{s name=groupList/renameError}Error while creating group{/s}', '{s name=window_title}{/s}');
+                   Shopware.Msg.createGrowlMessage('', '{s name="groupList/renameError"}Error while creating group{/s}', '{s name="window_title"}{/s}');
                },
                scope:this
            });
@@ -110,15 +110,15 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
         var tree = me.getNavigationTree();
         var record = tree.getSelectionModel().getSelection()[0];
 
-        message = Ext.String.format('{s name=tree/messageDeleteGroup}Do you really want to delete the tax group [0]?{/s}', record.data.text);
-        Ext.MessageBox.confirm('{s name=tree/titleDeleteGroup}Delete tax group{/s}', message, function (response){
+        message = Ext.String.format('{s name="tree/messageDeleteGroup"}Do you really want to delete the tax group [0]?{/s}', record.data.text);
+        Ext.MessageBox.confirm('{s name="tree/titleDeleteGroup"}Delete tax group{/s}', message, function (response){
          if (response !== 'yes')  return false;
          record.destroy({
              success : function () {
-                 Shopware.Msg.createGrowlMessage('','{s name=tree/deletedSuccessfully}Tax group was deleted{/s}', '{s name=window_title}{/s}')
+                 Shopware.Msg.createGrowlMessage('','{s name="tree/deletedSuccessfully"}Tax group was deleted{/s}', '{s name="window_title"}{/s}')
              },
              failure : function () {
-                 Shopware.Msg.createGrowlMessage('', '{s name=tree/deletedError}Error while deleting tax group{/s}', '{s name=window_title}{/s}');
+                 Shopware.Msg.createGrowlMessage('', '{s name="tree/deletedError"}Error while deleting tax group{/s}', '{s name="window_title"}{/s}');
              }
          });
         });
@@ -129,16 +129,16 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
         message,
         record = rulesStore.getAt(rowIndex);
 
-        message = Ext.String.format('{s name=ruleslist/messageDeleteRule}Do you really want to delete the rule [0]?{/s}', record.data.name);
-        Ext.MessageBox.confirm('{s name=ruleslist/titleDeleteRuleDelete}Delete rule{/s}', message, function (response){
+        message = Ext.String.format('{s name="ruleslist/messageDeleteRule"}Do you really want to delete the rule [0]?{/s}', record.data.name);
+        Ext.MessageBox.confirm('{s name="ruleslist/titleDeleteRuleDelete"}Delete rule{/s}', message, function (response){
          if (response !== 'yes')  return false;
          record.destroy({
              success : function () {
                  rulesStore.load();
-                 Shopware.Msg.createGrowlMessage('','{s name=ruleslist/deletedSuccessfully}Rule was deleted{/s}', '{s name=window_title}{/s}');
+                 Shopware.Msg.createGrowlMessage('','{s name="ruleslist/deletedSuccessfully"}Rule was deleted{/s}', '{s name="window_title"}{/s}');
              },
              failure : function () {
-                 Shopware.Msg.createGrowlMessage('', '{s name=ruleslist/deletedError}An error has occured while deleting rule{/s}', '{s name=window_title}{/s}');
+                 Shopware.Msg.createGrowlMessage('', '{s name="ruleslist/deletedError"}An error has occured while deleting rule{/s}', '{s name="window_title"}{/s}');
              }
          });
         });
@@ -171,9 +171,9 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
                 success: function(response){
                     // Update tree-node text
                     this.getNavigationTree().getRootNode().findChild('id',record.data.id,true).set('text',value);
-                    Shopware.Msg.createGrowlMessage('','{s name=groupList/renameSuccessfully}Group was renamed{/s}', '{s name=window_title}{/s}');},
+                    Shopware.Msg.createGrowlMessage('','{s name="groupList/renameSuccessfully"}Group was renamed{/s}', '{s name="window_title"}{/s}');},
                 failure: function(){
-                    Shopware.Msg.createGrowlMessage('', '{s name=groupList/renameError}Error while renaming group{/s}', '{s name=window_title}{/s}');
+                    Shopware.Msg.createGrowlMessage('', '{s name="groupList/renameError"}Error while renaming group{/s}', '{s name="window_title"}{/s}');
                 },
                 scope:this
             });

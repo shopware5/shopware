@@ -40,18 +40,18 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
 
     snippets: {
         saveNewsletter: {
-            successTitle: '{s name=saveNewsletter/successTitle}Successfully saved{/s}',
-            successMessage: '{s name=saveNewsletter/successMessage}Successfully saved the newsletter{/s}',
-            errorTitle: '{s name=saveNewsletter/errorTitle}Error{/s}',
-            errorMessage: '{s name=saveNewsletter/errorMessage}An error occured while saving the newsletter{/s}'
+            successTitle: '{s name="saveNewsletter/successTitle"}Successfully saved{/s}',
+            successMessage: '{s name="saveNewsletter/successMessage"}Successfully saved the newsletter{/s}',
+            errorTitle: '{s name="saveNewsletter/errorTitle"}Error{/s}',
+            errorMessage: '{s name="saveNewsletter/errorMessage"}An error occured while saving the newsletter{/s}'
         },
         testNewsletter: {
-            successTitle: '{s name=testNewsletter/successTitle}Successfully sended{/s}',
-            successMessage: '{s name=testNewsletter/successMessage}Successfully mailed the newsletter{/s}',
-            errorTitle: '{s name=testNewsletter/errorTitle}Error{/s}',
-            errorMessage: '{s name=testNewsletter/errorMessage}An error occured while sending the newsletter{/s}'
+            successTitle: '{s name="testNewsletter/successTitle"}Successfully sended{/s}',
+            successMessage: '{s name="testNewsletter/successMessage"}Successfully mailed the newsletter{/s}',
+            errorTitle: '{s name="testNewsletter/errorTitle"}Error{/s}',
+            errorMessage: '{s name="testNewsletter/errorMessage"}An error occured while sending the newsletter{/s}'
         },
-        growl: '{s name=title}Newsletter Manager{/s}'
+        growl: '{s name="title"}Newsletter Manager{/s}'
     },
 
     refs: [
@@ -127,8 +127,8 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         // we use a msgbox here
         if (!form.isValid()) {
             Ext.Msg.show({
-                title: '{s name=fillForm/title}Required fields missing{/s}',
-                msg: '{s name=fillForm/msg}You need to set all required field in the settings first{/s}',
+                title: '{s name="fillForm/title"}Required fields missing{/s}',
+                msg: '{s name="fillForm/msg"}You need to set all required field in the settings first{/s}',
                 buttons: Ext.Msg.OK
             });
             return;
@@ -391,7 +391,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                         var url = location.href.substr(0, pos) + '/backend/Newsletter/view?id=' + rawData.data.id;
 
                         new Ext.Window({
-                            title: '{s name=preview}Preview: {/s} ' + newsletter.get('subject'),
+                            title: '{s name="preview"}Preview: {/s} ' + newsletter.get('subject'),
                             width: 940,
                             height: 600,
                             layout: 'fit',

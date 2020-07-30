@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/theme/main}
+//{namespace name="backend/theme/main"}
 
 //{block name="backend/theme/view/detail/fields/color_picker"}
 

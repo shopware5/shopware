@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-// {namespace name=backend/first_run_wizard/main}
+// {namespace name="backend/first_run_wizard/main"}
 // {block name="backend/first_run_wizard/controller/pay_pal"}
 
 Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
@@ -48,12 +48,12 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
     ],
 
     snippets: {
-        downloadFailed: '{s name=pay_pal/errors/download}{/s}',
-        installFailed: '{s name=pay_pal/errors/install}{/s}',
-        unknownFailed: '{s name=pay_pal/errors/unknown}{/s}',
-        configurationFailed: '{s name=pay_pal/errors/configuration}{/s}',
-        activateFailed: '{s name=pay_pal/errors/activate}{/s}',
-        formInvalid: '{s name=pay_pal/errors/configuration_invalid}{/s}',
+        downloadFailed: '{s name="pay_pal/errors/download"}{/s}',
+        installFailed: '{s name="pay_pal/errors/install"}{/s}',
+        unknownFailed: '{s name="pay_pal/errors/unknown"}{/s}',
+        configurationFailed: '{s name="pay_pal/errors/configuration"}{/s}',
+        activateFailed: '{s name="pay_pal/errors/activate"}{/s}',
+        formInvalid: '{s name="pay_pal/errors/configuration_invalid"}{/s}',
     },
 
     init: function () {

@@ -27,7 +27,7 @@
   * This components provides an HTML5 file upload with
   * a preview image and a progress bar.
   */
- // {namespace name=backend/component/file_upload}
+ // {namespace name="backend/component/file_upload"}
 Ext.define('Ext.util.FileUpload', {
     extend: 'Ext.container.Container',
     alternateClassName: [ 'Ext.FileUpload', 'Shopware.app.FileUpload' ],
@@ -142,8 +142,8 @@ Ext.define('Ext.util.FileUpload', {
      */
     fileInputConfig: {
         name: 'images[]',
-        fieldLabel: '{s name=file_upload/choose_image}Choose image(s){/s}',
-        buttonText: '{s name=file_upload/select_image}Select image(s){/s}',
+        fieldLabel: '{s name="file_upload/choose_image"}Choose image(s){/s}',
+        buttonText: '{s name="file_upload/select_image"}Select image(s){/s}',
         labelStyle: 'font-weight: 700',
         labelWidth: 125,
         allowBlank: true,
@@ -186,7 +186,7 @@ Ext.define('Ext.util.FileUpload', {
      *
      * @string
      */
-    dropZoneText: '{s name=file_upload/drag_info}or drag and drop files here{/s}',
+    dropZoneText: '{s name="file_upload/drag_info"}or drag and drop files here{/s}',
 
     /**
      * Class name for the rendered drop item
@@ -281,17 +281,17 @@ Ext.define('Ext.util.FileUpload', {
      * @object
      */
     snippets: {
-        uploadReady: '{s name=file_upload/upload_ready_info}files uploaded{/s}',
-        filesFrom: '{s name=file_upload/progress_bar_text}from{/s}',
-        messageText: '{s name=file_upload/upload_ready_message}[0] files uploaded{/s}',
-        messageTitle: '{s name=file_upload/upload_ready_title}Media manager{/s}',
-        legacyMessage: '{s name=file_upload/legacy_message}Your browser doesn\'t support the necessary feature to support drag &drop uploads.{/s}',
-        maxUploadSizeTitle: '{s name=file_upload/max_upload_size_title}The file exceeds the file size limit{/s}',
-        maxUploadSizeText: '{s name=file_upload/max_upload_size_text}The selected file exceeds the configured maximum file size for uploads. Please select another file to upload.{/s}',
-        extensionNotAllowedTitle: '{s name=file_upload/extension_not_allowed_title}File extension not allowed{/s}',
-        extensionNotAllowedText: '{s name=file_upload/extension_not_allowed_title}The selected file extension is not allowed. Please select another file to upload.{/s}',
-        blackListTitle: '{s name=file_upload/black_list_title}Blacklist{/s}',
-        blackListMessage: "{s name=file_upload/black_list_message}File extension [0] isn't allowed{/s}"
+        uploadReady: '{s name="file_upload/upload_ready_info"}files uploaded{/s}',
+        filesFrom: '{s name="file_upload/progress_bar_text"}from{/s}',
+        messageText: '{s name="file_upload/upload_ready_message"}[0] files uploaded{/s}',
+        messageTitle: '{s name="file_upload/upload_ready_title"}Media manager{/s}',
+        legacyMessage: '{s name="file_upload/legacy_message"}Your browser doesn\'t support the necessary feature to support drag &drop uploads.{/s}',
+        maxUploadSizeTitle: '{s name="file_upload/max_upload_size_title"}The file exceeds the file size limit{/s}',
+        maxUploadSizeText: '{s name="file_upload/max_upload_size_text"}The selected file exceeds the configured maximum file size for uploads. Please select another file to upload.{/s}',
+        extensionNotAllowedTitle: '{s name="file_upload/extension_not_allowed_title"}File extension not allowed{/s}',
+        extensionNotAllowedText: '{s name="file_upload/extension_not_allowed_title"}The selected file extension is not allowed. Please select another file to upload.{/s}',
+        blackListTitle: '{s name="file_upload/black_list_title"}Blacklist{/s}',
+        blackListMessage: "{s name="file_upload/black_list_message"}File extension [0] isn't allowed{/s}"
 
     },
     /**

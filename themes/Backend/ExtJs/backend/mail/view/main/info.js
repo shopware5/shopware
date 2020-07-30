@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/mail/view/info}
+//{namespace name="backend/mail/view/info"}
 
 /**
  * todo@all: Documentation
@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Mail.view.main.Info', {
     extend: 'Ext.panel.Panel',
     collapsed: true,
     collapsible: true,
-    title: '{s name=title}Information on variables{/s}',
+    title: '{s name="title"}Information on variables{/s}',
     autoScroll:true,
     width: 260,
     alias: 'widget.mail-main-info',

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/banner/controller/main}*/
+/*{namespace name="backend/banner/controller/main"}*/
 
 /**
  * Shopware UI - Banner Controller Main
@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
      * @private
      * @string
      */
-    deleteDialogMessage: '{s name=delete_dialog_message}There have been [0] banners selected for deletion. Are you sure you want to delete those banners?{/s}',
+    deleteDialogMessage: '{s name="delete_dialog_message"}There have been [0] banners selected for deletion. Are you sure you want to delete those banners?{/s}',
     /**
      * Holder property for the main panel
      *
@@ -166,7 +166,7 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
                     var data = response.data;
                     attributeForm.saveAttribute(data.id);
 
-                    Shopware.Msg.createGrowlMessage('', '{s name=saved_success}Banner has been saved.{/s}', '{s name=main_title}{/s}');
+                    Shopware.Msg.createGrowlMessage('', '{s name="saved_success"}Banner has been saved.{/s}', '{s name="main_title"}{/s}');
                     win.close();
                     store.load({
                         params: { categoryId : record.get('categoryId') }
@@ -221,7 +221,7 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
             store           = me.subApplication.bannerStore,
             noOfElements    = selection.length;
 
-        Ext.MessageBox.confirm('{s name=delete_dialog_title}Delete selected banners.{/s}',
+        Ext.MessageBox.confirm('{s name="delete_dialog_title"}Delete selected banners.{/s}',
             Ext.String.format(this.deleteDialogMessage, noOfElements),
             function (response) {
                 if ('yes' !== response) {
@@ -230,11 +230,11 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
                 if (selection.length > 0) {
                     store.remove(selection);
                     try {
-                        Shopware.Msg.createGrowlMessage('', '{s name=delete_success}Banner has been deleted.{/s}', '{s name=main_title}{/s}');
+                        Shopware.Msg.createGrowlMessage('', '{s name="delete_success"}Banner has been deleted.{/s}', '{s name="main_title"}{/s}');
                         store.save();
                         store.load();
                     } catch (e) {
-                        Shopware.Msg.createGrowlMessage('', '{s name=delete_error}Not every banner could be deleted:{/s} ' + e.message, '{s name=main_title}{/s}');
+                        Shopware.Msg.createGrowlMessage('', '{s name="delete_error"}Not every banner could be deleted:{/s} ' + e.message, '{s name="main_title"}{/s}');
                     }
                 }
         });

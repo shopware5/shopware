@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/theme/main}
+//{namespace name="backend/theme/main"}
 
 //{block name="backend/theme/view/create/theme"}
 
@@ -45,29 +45,29 @@ Ext.define('Shopware.apps.Theme.view.create.Theme', {
         return {
             fieldSets: [
                 {
-                    title: '{s name=theme_data}Theme data{/s}',
+                    title: '{s name="theme_data"}Theme data{/s}',
                     padding: 10,
                     layout: 'fit',
                     fields: {
                         parentId: me.createExtendCombo,
                         template: {
-                            fieldLabel: '{s name=name}Name{/s}',
+                            fieldLabel: '{s name="name"}Name{/s}',
                             allowBlank: false,
                             vtype: 'alpha',
-                            supportText: '{s name=name_support}Source code name{/s}'
+                            supportText: '{s name="name_support"}Source code name{/s}'
                         },
                         name: {
                             allowBlank: false,
-                            fieldLabel: '{s name=short_description}Short description{/s}',
-                            supportText: '{s name=short_description_support}Readable name, displayed in listing{/s}'
+                            fieldLabel: '{s name="short_description"}Short description{/s}',
+                            supportText: '{s name="short_description_support"}Readable name, displayed in listing{/s}'
                         },
                         description: {
-                            fieldLabel: '{s name=long_description}Long description{/s}',
+                            fieldLabel: '{s name="long_description"}Long description{/s}',
                             xtype: 'textarea',
                             height: 120
                         },
-                        author: '{s name=author}Author{/s}',
-                        license: '{s name=license}License{/s}'
+                        author: '{s name="author"}Author{/s}',
+                        license: '{s name="license"}License{/s}'
                     }
                 }
             ]
@@ -93,8 +93,8 @@ Ext.define('Shopware.apps.Theme.view.create.Theme', {
             anchor: '100%',
             valueField: 'id',
             allowBlank: false,
-            fieldLabel: '{s name=extension_of}Extension of{/s}',
-            supportText: '{s name=extension_of_support}Select a theme as a building block{/s}'
+            fieldLabel: '{s name="extension_of"}Extension of{/s}',
+            supportText: '{s name="extension_of_support"}Select a theme as a building block{/s}'
         });
 
         return me.extendCombo;

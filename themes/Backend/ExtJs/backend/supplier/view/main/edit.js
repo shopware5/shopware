@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/supplier/view/edit}*/
+/*{namespace name="backend/supplier/view/edit"}*/
 
 /**
  * Shopware View - Supplier
@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
     extend : 'Enlight.app.Window',
     alias : 'widget.supplier-main-edit',
     layout : 'fit',
-    title : '{s name=title}Supplier - edit{/s}',
+    title : '{s name="title"}Supplier - edit{/s}',
     width : '80%',
     height : '90%',
     stateful : true,
@@ -90,13 +90,13 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
         var me = this;
         return  ['->',
             {
-                text :  '{s name=cancel}Cancel{/s}',
+                text :  '{s name="cancel"}Cancel{/s}',
                 cls: 'secondary',
                 scope : me,
                 handler : me.destroy
             },
             {
-                text : '{s name=save}Save{/s}',
+                text : '{s name="save"}Save{/s}',
                 action : 'saveSupplier',
                 scale : 'large',
                 cls : 'primary',
@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
             cls: 'small secondary',
             name    : 'deleteLogo',
             scope   : me,
-            text    : '{s name=delete_logo}Delete Logo{/s}',
+            text    : '{s name="delete_logo"}Delete Logo{/s}',
             action  : 'deleteLogo',
             scale   : 'small',
             style   : 'float: right; margin: 0 35px 10px 0'
@@ -166,7 +166,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
                 Ext.create('Ext.form.FieldSet', {
                     alias:'widget.supplier-base-field-set',
                     cls: Ext.baseCSSPrefix + 'supplier-base-field-set',
-                    title : '{s name=panel_base}Basic information{/s}',
+                    title : '{s name="panel_base"}Basic information{/s}',
                     layout: 'form',
                     items : [
                         {
@@ -215,22 +215,22 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
                         labelWidth  : 155,
                         anchor      : '100%'
                     },
-                    title : '{s name=panel_seo}SEO information{/s}',
+                    title : '{s name="panel_seo"}SEO information{/s}',
                     items : [
                         {
                             xtype       : 'textfield',
                             name        : 'metaDescription',
                             translatable: true,
-                            fieldLabel  : '{s name=seo_meta_description}Description{/s}',
-                            supportText : '{s name=seo_meta_description_support}Description meta tag{/s}',
+                            fieldLabel  : '{s name="seo_meta_description"}Description{/s}',
+                            supportText : '{s name="seo_meta_description_support"}Description meta tag{/s}',
                             allowBlank  : true
                         },
                         {
                             xtype       : 'textfield',
                             name        : 'metaKeywords',
                             translatable: true,
-                            fieldLabel  : '{s name=seo_meta_keywords}Keywords{/s}',
-                            supportText : '{s name=seo_meta_keywords_support}Keywords meta tag{/s}',
+                            fieldLabel  : '{s name="seo_meta_keywords"}Keywords{/s}',
+                            supportText : '{s name="seo_meta_keywords_support"}Keywords meta tag{/s}',
                             allowBlank  : true
                         }
                     ]
@@ -257,7 +257,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
         return Ext.create('Shopware.form.field.TinyMCE', {
             name : 'description',
             translatable: true,
-            fieldLabel : '{s name=description}Description{/s}',
+            fieldLabel : '{s name="description"}Description{/s}',
             labelWidth  : 155
         });
     },
@@ -286,24 +286,24 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
                 name : 'name',
                 allowBlank  : false,
                 anchor : '95%',
-                fieldLabel  : '{s name=name}Supplier name{/s}',
-                supportText : '{s name=name_support}Name of the supplier e.g. Shopware AG{/s}'
+                fieldLabel  : '{s name="name"}Supplier name{/s}',
+                supportText : '{s name="name_support"}Name of the supplier e.g. Shopware AG{/s}'
             },
             {
                 xtype       : 'textfield',
                 name        : 'metaTitle',
                 translatable : true,
                 anchor : '95%',
-                fieldLabel  : '{s name=seo_meta_title}Page title{/s}',
-                supportText : '{s name=seo_meta_title_support}Page title in the supplier page{/s}'
+                fieldLabel  : '{s name="seo_meta_title"}Page title{/s}',
+                supportText : '{s name="seo_meta_title_support"}Page title in the supplier page{/s}'
             },
             {
                 xtype : 'textfield',
                 vtype : 'url',
                 name : 'link',
                 anchor : '95%',
-                fieldLabel  : '{s name=link}URL{/s}',
-                supportText : '{s name=link_support}Link to suppliers website{/s}'
+                fieldLabel  : '{s name="link"}URL{/s}',
+                supportText : '{s name="link_support"}Link to suppliers website{/s}'
             }
         ];
     },
@@ -315,9 +315,9 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
     getDropZone : function()
     {
         return Ext.create('Shopware.MediaManager.MediaSelection', {
-            fieldLabel      : '{s name=form_logo}Logo{/s}',
+            fieldLabel      : '{s name="form_logo"}Logo{/s}',
             name            : 'media-manager-selection',
-            supportText     : '{s name=logo_support}Supplier logo selection via Media Manager. The selection is limited to one media.{/s}',
+            supportText     : '{s name="logo_support"}Supplier logo selection via Media Manager. The selection is limited to one media.{/s}',
             multiSelect     : false,
             albumId: -12, // Default supplier albumId
             labelWidth  : 155

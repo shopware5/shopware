@@ -20,12 +20,12 @@
 
 {block name='frontend_index_header_meta_tags_opengraph'}
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
+    <meta property="og:site_name" content="{{config name="sShopname"}|escapeHtml}" />
     <meta property="og:title" content="{$sMetaTitle|escapeHtml}" />
     <meta property="og:description" content="{$sMetaDescription|strip_tags|trim|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
 
     <meta name="twitter:card" content="website" />
-    <meta name="twitter:site" content="{{config name=sShopname}|escapeHtml}" />
+    <meta name="twitter:site" content="{{config name="sShopname"}|escapeHtml}" />
     <meta name="twitter:title" content="{$sMetaTitle|escapeHtml}" />
     <meta name="twitter:description" content="{$sMetaDescription|strip_tags|trim|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
 

@@ -1,4 +1,4 @@
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 /**
  * todo@all: Documentation
  */
@@ -16,7 +16,7 @@ Ext.define('Shopware.apps.Config.view.priceGroup.Discount', {
         var me = this;
 
         return [{
-            header: '{s name=price_group/table/start_header}Item quantity{/s}',
+            header: '{s name="price_group/table/start_header"}Item quantity{/s}',
             dataIndex: 'start',
             align: 'right',
             flex: 1,
@@ -28,7 +28,7 @@ Ext.define('Shopware.apps.Config.view.priceGroup.Discount', {
             }
         }, {
             xtype: 'numbercolumn',
-            header: '{s name=price_group/table/basket_header}Discount (%){/s}',
+            header: '{s name="price_group/table/basket_header"}Discount (%){/s}',
             dataIndex: 'discount',
             align: 'right',
             flex: 1,
@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Config.view.priceGroup.Discount', {
             editable: false,
             name: 'customerGroupId',
             store: 'base.CustomerGroup',
-            emptyText: '{s name=price_group/table/customer_group_empty_text}Please select...{/s}',
+            emptyText: '{s name="price_group/table/customer_group_empty_text"}Please select...{/s}',
             listeners: {
                 enable: function() {
                     // Preselect first item

@@ -29,13 +29,13 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/visitors"}
 Ext.define('Shopware.apps.Analytics.view.table.Visitors', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-visitors',
-    shopColumnVisits: "{s name=table/visits/visits}V: [0]{/s}",
-    shopColumnImpressions: "{s name=table/visits/impressions}I: [0]{/s}",
+    shopColumnVisits: "{s name="table/visits/visits"}V: [0]{/s}",
+    shopColumnImpressions: "{s name="table/visits/impressions"}I: [0]{/s}",
     initComponent: function () {
         var me = this;
 
@@ -62,39 +62,39 @@ Ext.define('Shopware.apps.Analytics.view.table.Visitors', {
                 xtype: 'datecolumn',
                 dataIndex: 'datum',
                 align: 'left',
-                text: '{s name=table/visitors/date}Date{/s}'
+                text: '{s name="table/visitors/date"}Date{/s}'
             },
             {
                 dataIndex: 'desktopVisits',
-                text: '{s name=table/visitors/desktop_visits}Desktop visits{/s}'
+                text: '{s name="table/visitors/desktop_visits"}Desktop visits{/s}'
             },
             {
                 dataIndex: 'tabletVisits',
-                text: '{s name=table/visitors/tablet_visits}Tablet visits{/s}'
+                text: '{s name="table/visitors/tablet_visits"}Tablet visits{/s}'
             },
             {
                 dataIndex: 'mobileVisits',
-                text: '{s name=table/visitors/mobile_visits}Mobile visits{/s}'
+                text: '{s name="table/visitors/mobile_visits"}Mobile visits{/s}'
             },
             {
                 dataIndex: 'totalVisits',
-                text: '{s name=table/visitors/totalVisits}Total visits{/s}'
+                text: '{s name="table/visitors/totalVisits"}Total visits{/s}'
             },
             {
                 dataIndex: 'desktopImpressions',
-                text: '{s name=table/visitors/desktop_impressions}Desktop impressions{/s}'
+                text: '{s name="table/visitors/desktop_impressions"}Desktop impressions{/s}'
             },
             {
                 dataIndex: 'tabletImpressions',
-                text: '{s name=table/visitors/tablet_impressions}Tablet impressions{/s}'
+                text: '{s name="table/visitors/tablet_impressions"}Tablet impressions{/s}'
             },
             {
                 dataIndex: 'mobileImpressions',
-                text: '{s name=table/visitors/mobile_impressions}Mobile impressions{/s}'
+                text: '{s name="table/visitors/mobile_impressions"}Mobile impressions{/s}'
             },
             {
                 dataIndex: 'totalImpressions',
-                text: '{s name=table/visitors/totalImpressions}Total impressions{/s}'
+                text: '{s name="table/visitors/totalImpressions"}Total impressions{/s}'
             }
         ];
     }

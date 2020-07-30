@@ -24,7 +24,7 @@
 /**
  *
  */
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/controller/main"}
 Ext.define('Shopware.apps.ArticleList.controller.Main', {
 
@@ -141,7 +141,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
                 if (response.responseText) {
                     me.showError(response.responseText);
                 } else {
-                    me.showError('{s name=unknownError}An unknown error occurred, please check your server logs{/s}');
+                    me.showError('{s name="unknownError"}An unknown error occurred, please check your server logs{/s}');
                 }
             }
         });
@@ -267,7 +267,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         me.subApplication.articleStore = me.getStore('Shopware.apps.ArticleList.store.Detail');
         grid.reconfigure(me.subApplication.articleStore);
         toolbar.bindStore(me.subApplication.articleStore);
-        toolbar.down('combo').setValue(me.subApplication.articleStore.pageSize + ' {s name=pagingCombo/products}products{/s}');
+        toolbar.down('combo').setValue(me.subApplication.articleStore.pageSize + ' {s name="pagingCombo/products"}products{/s}');
 
         // Bind filter store (shown in the navigation)
         me.subApplication.filterStore = me.getStore('Shopware.apps.ArticleList.store.Filter').load();
@@ -281,7 +281,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
      */
     showError: function (message) {
         Shopware.Notification.createStickyGrowlMessage({
-            title: '{s name=error}Error{/s}',
+            title: '{s name="error"}Error{/s}',
             text: message,
             log: true
         },

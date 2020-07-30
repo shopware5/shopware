@@ -18,7 +18,7 @@
                         <input type="hidden" name="register[personal][sValidation]" value="{$form_data.sValidation|escape}" />
                     {else}
                         <div class="register--customertype">
-                            {if {config name=showCompanySelectField} == 0}
+                            {if {config name="showCompanySelectField"} == 0}
                                 <div class="select-field">
                                     <select id="register_personal_customer_type"
                                             name="register[personal][customer_type]"
@@ -39,7 +39,7 @@
                                         </option>
                                     </select>
                                 </div>
-                            {elseif {config name=showCompanySelectField} == 2}
+                            {elseif {config name="showCompanySelectField"} == 2}
                                 {* Register as a business customer*}
                                 <div class="select-field is--hidden">
                                     <select id="register_personal_customer_type" name="register[personal][customer_type]">
@@ -134,8 +134,8 @@
                                value="0"
                                name="register[personal][accountmode]"
                                class="register--checkbox chkbox"/>
-                        {if ($showNoAccount || $form_data.accountmode) && !$sEsd && !$form_data.sValidation && ({config name=NoAccountDisable} == 1 || {config name=NoAccountDisable} == 2)}
-                            {$accountModeChecked = {config name=NoAccountDisable} == 1}
+                        {if ($showNoAccount || $form_data.accountmode) && !$sEsd && !$form_data.sValidation && ({config name="NoAccountDisable"} == 1 || {config name="NoAccountDisable"} == 2)}
+                            {$accountModeChecked = {config name="NoAccountDisable"} == 1}
                             {if isset($form_data.accountmode)}
                                 {$accountModeChecked = $form_data.accountmode}
                             {/if}
@@ -165,7 +165,7 @@
                                    class="register--field email is--required{if isset($error_flags.email)} has--error{/if}" />
                         </div>
 
-                        {if {config name=doubleEmailValidation}}
+                        {if {config name="doubleEmailValidation"}}
                             <div class="register--emailconfirm">
                                 <input autocomplete="section-personal email"
                                        name="register[personal][emailConfirmation]"
@@ -199,7 +199,7 @@
 
                         {* Password confirmation *}
                         {block name='frontend_register_personal_fieldset_input_password_confirm'}
-                            {if {config name=doublePasswordValidation}}
+                            {if {config name="doublePasswordValidation"}}
                                 <div class="register--passwordconfirm">
                                     <input name="register[personal][passwordConfirmation]"
                                            type="password"
@@ -215,7 +215,7 @@
                         {* Password description *}
                         {block name='frontend_register_personal_fieldset_password_description'}
                             <div class="register--password-description">
-                                {s name='RegisterInfoPassword'}{/s} {config name=MinPassword} {s name='RegisterInfoPasswordCharacters'}{/s}<br />{s name='RegisterInfoPassword2'}{/s}
+                                {s name='RegisterInfoPassword'}{/s} {config name="MinPassword"} {s name='RegisterInfoPasswordCharacters'}{/s}<br />{s name='RegisterInfoPassword2'}{/s}
                             </div>
                         {/block}
                     </div>
@@ -223,37 +223,37 @@
 
                 {* Phone *}
                 {block name='frontend_register_personal_fieldset_input_phone'}
-                    {if {config name=showPhoneNumberField}}
+                    {if {config name="showPhoneNumberField"}}
                         <div class="register--phone">
                             <input autocomplete="section-personal tel"
                                    name="register[personal][phone]"
-                                   type="tel"{if {config name=requirePhoneField}} required="required" aria-required="true"{/if}
-                                   placeholder="{s name='RegisterPlaceholderPhone'}{/s}{if {config name=requirePhoneField}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
+                                   type="tel"{if {config name="requirePhoneField"}} required="required" aria-required="true"{/if}
+                                   placeholder="{s name='RegisterPlaceholderPhone'}{/s}{if {config name="requirePhoneField"}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                    id="phone"
                                    value="{$form_data.phone|escape}"
-                                   class="register--field{if {config name=requirePhoneField}} is--required{/if}{if isset($error_flags.phone) && {config name=requirePhoneField}} has--error{/if}" />
+                                   class="register--field{if {config name="requirePhoneField"}} is--required{/if}{if isset($error_flags.phone) && {config name="requirePhoneField"}} has--error{/if}" />
                         </div>
                     {/if}
                 {/block}
 
                 {* Birthday *}
-                {if {config name=showBirthdayField} && !$update}
+                {if {config name="showBirthdayField"} && !$update}
                     {block name='frontend_register_personal_fieldset_birthday'}
                         <div class="register--birthdate">
-                            <label for="register_personal_birthdate" class="birthday--label">{s name='RegisterPlaceholderBirthday'}{/s}{if {config name=requireBirthdayField}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}</label>
-                            {if {config name=birthdaySingleField}}
+                            <label for="register_personal_birthdate" class="birthday--label">{s name='RegisterPlaceholderBirthday'}{/s}{if {config name="requireBirthdayField"}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}</label>
+                            {if {config name="birthdaySingleField"}}
                                 <input type="text" name="register[personal][birthday]"
-                                    {if {config name=requireBirthdayField} && $form_data.birthday} disabled="disabled"{/if}
+                                    {if {config name="requireBirthdayField"} && $form_data.birthday} disabled="disabled"{/if}
                                        data-datepicker="true"
-                                       class="datepicker text profile--field {if {config name=requireBirthdayField}}is--required{/if}{if isset($error_flags.birthday) && {config name=requireBirthdayField}} has--error{/if}"
+                                       class="datepicker text profile--field {if {config name="requireBirthdayField"}}is--required{/if}{if isset($error_flags.birthday) && {config name="requireBirthdayField"}} has--error{/if}"
                                        data-defaultDate="{$form_data.birthday}"
                                        data-minDate="{date('Y')-120}-1-1"
                                        data-maxDate="today"
                                        placeholder="{s name='RegisterBirthdayDatepickerFormat' namespace="frontend/register/personal_fieldset"}{/s}">
                             {else}
                                 <div class="register--birthday field--select select-field">
-                                    <select id="register_personal_birthdate" name="register[personal][birthday][day]"{if {config name=requireBirthdayField}} required="required" aria-required="true"{/if} class="{if {config name=requireBirthdayField}}is--required{/if}{if isset($error_flags.birthday) && {config name=requireBirthdayField}} has--error{/if}">
-                                        <option{if {config name=requireBirthdayField} && $form_data.birthday.day} disabled="disabled"{/if} value="">{s name='RegisterBirthdaySelectDay' namespace="frontend/register/personal_fieldset"}{/s}</option>
+                                    <select id="register_personal_birthdate" name="register[personal][birthday][day]"{if {config name="requireBirthdayField"}} required="required" aria-required="true"{/if} class="{if {config name="requireBirthdayField"}}is--required{/if}{if isset($error_flags.birthday) && {config name="requireBirthdayField"}} has--error{/if}">
+                                        <option{if {config name="requireBirthdayField"} && $form_data.birthday.day} disabled="disabled"{/if} value="">{s name='RegisterBirthdaySelectDay' namespace="frontend/register/personal_fieldset"}{/s}</option>
 
                                         {for $day = 1 to 31}
                                             <option value="{$day}" {if $day == $form_data.birthday.day}selected{/if}>{$day}</option>
@@ -262,8 +262,8 @@
                                 </div>
 
                                 <div class="register--birthmonth field--select select-field">
-                                    <select name="register[personal][birthday][month]"{if {config name=requireBirthdayField}} required="required" aria-required="true"{/if} class="{if {config name=requireBirthdayField}}is--required{/if}{if isset($error_flags.birthmonth) && {config name=requireBirthdayField}} has--error{/if}">
-                                        <option{if {config name=requireBirthdayField} && $form_data.birthday.month} disabled="disabled"{/if} value="">{s name='RegisterBirthdaySelectMonth' namespace="frontend/register/personal_fieldset"}{/s}</option>
+                                    <select name="register[personal][birthday][month]"{if {config name="requireBirthdayField"}} required="required" aria-required="true"{/if} class="{if {config name="requireBirthdayField"}}is--required{/if}{if isset($error_flags.birthmonth) && {config name="requireBirthdayField"}} has--error{/if}">
+                                        <option{if {config name="requireBirthdayField"} && $form_data.birthday.month} disabled="disabled"{/if} value="">{s name='RegisterBirthdaySelectMonth' namespace="frontend/register/personal_fieldset"}{/s}</option>
 
                                         {for $month = 1 to 12}
                                             <option value="{$month}" {if $month == $form_data.birthday.month}selected{/if}>{$month}</option>
@@ -272,8 +272,8 @@
                                 </div>
 
                                 <div class="register--birthyear field--select select-field">
-                                    <select name="register[personal][birthday][year]"{if {config name=requireBirthdayField}} required="required" aria-required="true"{/if} class="{if {config name=requireBirthdayField}}is--required{/if}{if isset($error_flags.birthyear) && {config name=requireBirthdayField}} has--error{/if}">
-                                        <option{if {config name=requireBirthdayField} && $form_data.birthday.year} disabled="disabled"{/if} value="">{s name='RegisterBirthdaySelectYear' namespace="frontend/register/personal_fieldset"}{/s}</option>
+                                    <select name="register[personal][birthday][year]"{if {config name="requireBirthdayField"}} required="required" aria-required="true"{/if} class="{if {config name="requireBirthdayField"}}is--required{/if}{if isset($error_flags.birthyear) && {config name="requireBirthdayField"}} has--error{/if}">
+                                        <option{if {config name="requireBirthdayField"} && $form_data.birthday.year} disabled="disabled"{/if} value="">{s name='RegisterBirthdaySelectYear' namespace="frontend/register/personal_fieldset"}{/s}</option>
 
                                         {for $year = date("Y") to date("Y")-120 step=-1}
                                             <option value="{$year}" {if $year == $form_data.birthday.year}selected{/if}>{$year}</option>

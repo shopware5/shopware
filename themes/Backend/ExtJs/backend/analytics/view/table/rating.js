@@ -29,12 +29,12 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/rating"}
 Ext.define('Shopware.apps.Analytics.view.table.Rating', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-rating',
-    shopColumnName: '{s name=nav/rating_overview}Rating{/s}',
+    shopColumnName: '{s name="nav/rating_overview"}Rating{/s}',
 
     initComponent: function () {
         var me = this;

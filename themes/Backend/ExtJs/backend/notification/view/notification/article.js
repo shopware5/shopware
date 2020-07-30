@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/notification/view/main}
+//{namespace name="backend/notification/view/main"}
 
 /**
  * Shopware UI - notification article list .
@@ -89,17 +89,17 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
 
         var columnsData = [
             {
-                header: '{s name=list/article/column/name}Article{/s}',
+                header: '{s name="list/article/column/name"}Article{/s}',
                 dataIndex: 'name',
                 flex: 1
             },
             {
-                header: '{s name=list/article/column/number}Article order number{/s}',
+                header: '{s name="list/article/column/number"}Article order number{/s}',
                 dataIndex: 'number',
                 flex: 1
             },
             {
-                header: '{s name=list/article/column/registered}Registered{/s}',
+                header: '{s name="list/article/column/registered"}Registered{/s}',
                 dataIndex: 'registered',
                 summaryType: 'sum',
                 summaryRenderer: function(value, summaryData, dataIndex) {
@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
                 flex: 1
             },
             {
-                header: '{s name=list/article/column/not_notified}Not notified customers{/s}',
+                header: '{s name="list/article/column/not_notified"}Not notified customers{/s}',
                 dataIndex: 'notNotified',
                 summaryType: 'sum',
                 summaryRenderer: function(value, summaryData, dataIndex) {
@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
                             cls:'searchfield',
                             enableKeyEvents:true,
                             checkChangeBuffer:500,
-                            emptyText:'{s name=list/field/search_article}Search...{/s}'
+                            emptyText:'{s name="list/field/search_article"}Search...{/s}'
                         },
                         { xtype:'tbspacer', width:6 }
                     ]
@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
         actionColumnData.push({
             iconCls:'sprite-users',
             cls:'users',
-            tooltip:'{s name=list/action_column/users}Show notification customers{/s}',
+            tooltip:'{s name="list/action_column/users"}Show notification customers{/s}',
             handler:function (view, rowIndex, colIndex, item) {
                 me.fireEvent('showCustomers', view, rowIndex, colIndex, item);
             }
@@ -218,7 +218,7 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
             //get the total summary out of the store to get the totals data not only the page summary
             var summaryValue = (dataIndex === 'registered') ? rawData.totalRegistered : rawData.totalNotNotified;
 
-        return '<b> {s name=list/summary/label/total}Total:{/s} ' + summaryValue + '</b>';
+        return '<b> {s name="list/summary/label/total"}Total:{/s} ' + summaryValue + '</b>';
     }
 });
 //{/block}

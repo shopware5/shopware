@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/first_run_wizard/main}
+//{namespace name="backend/first_run_wizard/main"}
 //{block name="backend/first_run_wizard/view/main/localization_switcher"}
 
 Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
@@ -109,9 +109,9 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
      * @object
      */
     snippets: {
-        title: '{s name=localization_switcher/content/title}Choose language{/s}',
-        message: '{s name=localization_switcher/content/message}If you installed a translation plugin, you can now reload the backend in that language.{/s}',
-        continue:'{s name=localization_switcher/continue}Continue in English{/s}'
+        title: '{s name="localization_switcher/content/title"}Choose language{/s}',
+        message: '{s name="localization_switcher/content/message"}If you installed a translation plugin, you can now reload the backend in that language.{/s}',
+        continue:'{s name="localization_switcher/continue"}Continue in English{/s}'
     },
 
     batchSize: 200,

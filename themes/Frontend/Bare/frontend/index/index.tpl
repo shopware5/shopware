@@ -104,7 +104,7 @@
 
                         {* Cookie consent manager*}
                         {block name='frontend_index_cookie_consent_manager'}
-                            {if {config name=cookie_note_mode} == 1 && {config name=show_cookie_note}}
+                            {if {config name="cookie_note_mode"} == 1 && {config name="show_cookie_note"}}
                                 {include file='frontend/index/cookie_consent.tpl'}
                             {/if}
                         {/block}
@@ -194,7 +194,7 @@
             'baseUrl' => $Shop->getBaseUrl(),
             'shopId' => $Shop->getId(),
             'noPicture' => {link file="frontend/_public/src/img/no-picture.jpg"},
-            'productLimit' => {"{config name=lastarticlestoshow}"|floor},
+            'productLimit' => {"{config name="lastarticlestoshow"}"|floor},
             'currentArticle' => ""
         ]}
 
@@ -265,7 +265,7 @@
 
     {block name="frontend_index_header_javascript_jquery"}
         {* Add the partner statistics widget, if configured *}
-        {if !{config name=disableShopwareStatistics} }
+        {if !{config name="disableShopwareStatistics"} }
             {include file='widgets/index/statistic_include.tpl'}
         {/if}
 

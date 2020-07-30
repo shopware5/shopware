@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/view/menu}
+//{namespace name="backend/index/view/menu"}
 
 /**
  * Shopware Menu

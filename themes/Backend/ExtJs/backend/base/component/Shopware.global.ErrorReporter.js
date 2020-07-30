@@ -61,10 +61,10 @@ Ext.define('Shopware.global.ErrorReporter', {
          * @type Object
          */
         general: {
-            title: '{s name=general/title}Shopware Error Reporter{/s}',
-            error_title: '{s name=general/error_title}Error information{/s}',
-            browser_title: '{s name=general/browser_title}Browser information{/s}',
-            cancel: '{s name=general/cancel}Cancel{/s}'
+            title: '{s name="general/title"}Shopware Error Reporter{/s}',
+            error_title: '{s name="general/error_title"}Error information{/s}',
+            browser_title: '{s name="general/browser_title"}Browser information{/s}',
+            cancel: '{s name="general/cancel"}Cancel{/s}'
         },
 
         /**
@@ -73,17 +73,17 @@ Ext.define('Shopware.global.ErrorReporter', {
          * @type Object
          */
         xhr: {
-            module: '{s name=xhr/module}Module{/s}',
-            request_path: '{s name=xhr/request_path}Request path{/s}',
-            http_error: '{s name=xhr/http_error}HTTP error message{/s}',
-            http_status: '{s name=xhr/http_status}HTTP status code{/s}',
-            error_desc: '{s name=xhr/error_desc}Error description{/s}',
-            module_files: '{s name=xhr/module_files}Module files{/s}',
-            class_name: '{s name=xhr/class_name}Class name{/s}',
-            path: '{s name=xhr/path}Path{/s}',
-            type: '{s name=xhr/type}Type{/s}',
-            unknown_type: '{s name=xhr/unknown_type}Unknown type{/s}',
-            reload_module: '{s name=xhr/reload_module}Reload module{/s}'
+            module: '{s name="xhr/module"}Module{/s}',
+            request_path: '{s name="xhr/request_path"}Request path{/s}',
+            http_error: '{s name="xhr/http_error"}HTTP error message{/s}',
+            http_status: '{s name="xhr/http_status"}HTTP status code{/s}',
+            error_desc: '{s name="xhr/error_desc"}Error description{/s}',
+            module_files: '{s name="xhr/module_files"}Module files{/s}',
+            class_name: '{s name="xhr/class_name"}Class name{/s}',
+            path: '{s name="xhr/path"}Path{/s}',
+            type: '{s name="xhr/type"}Type{/s}',
+            unknown_type: '{s name="xhr/unknown_type"}Unknown type{/s}',
+            reload_module: '{s name="xhr/reload_module"}Reload module{/s}'
         },
 
         /**
@@ -92,9 +92,9 @@ Ext.define('Shopware.global.ErrorReporter', {
          * @type Object
          */
         eval: {
-            reload_admin: '{s name=eval/reload_admin}Reload administration{/s}',
-            error_type: '{s name=eval/error_type}Error type{/s}',
-            error_msg: '{s name=eval/error_msg}Error message{/s}'
+            reload_admin: '{s name="eval/reload_admin"}Reload administration{/s}',
+            error_type: '{s name="eval/error_type"}Error type{/s}',
+            error_msg: '{s name="eval/error_msg"}Error message{/s}'
         },
 
         /**
@@ -103,20 +103,20 @@ Ext.define('Shopware.global.ErrorReporter', {
          * @type Object
          */
         browser: {
-            os: '{s name=browser/os}Operating system{/s}',
-            browser_engine: '{s name=browser/browser_engine}Browser engine{/s}',
-            window_size: '{s name=browser/window_size}Window size{/s}',
-            java_enabled: '{s name=browser/java_enabled}Java enabled{/s}',
-            cookies_enabled: '{s name=browser/cookie_enabled}Cookies enabled{/s}',
-            lang: '{s name=browser/lang}Language{/s}',
-            plugins: '{s name=browser/plugins}Browser plugins{/s}',
-            plugin_name: '{s name=browser/plugin_name}Plugin name{/s}',
-            plugin_path: '{s name=browser/plugin_path}Plugin path{/s}'
+            os: '{s name="browser/os"}Operating system{/s}',
+            browser_engine: '{s name="browser/browser_engine"}Browser engine{/s}',
+            window_size: '{s name="browser/window_size"}Window size{/s}',
+            java_enabled: '{s name="browser/java_enabled"}Java enabled{/s}',
+            cookies_enabled: '{s name="browser/cookie_enabled"}Cookies enabled{/s}',
+            lang: '{s name="browser/lang"}Language{/s}',
+            plugins: '{s name="browser/plugins"}Browser plugins{/s}',
+            plugin_name: '{s name="browser/plugin_name"}Plugin name{/s}',
+            plugin_path: '{s name="browser/plugin_path"}Plugin path{/s}'
         },
 
         response: {
-            name: '{s name=response/name}{/s}',
-            errorOverview: '{s name=response/errorOverview}{/s}'
+            name: '{s name="response/name"}{/s}',
+            errorOverview: '{s name="response/errorOverview"}{/s}'
         }
     },
 

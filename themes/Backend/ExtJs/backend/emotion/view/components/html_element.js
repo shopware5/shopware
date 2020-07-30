@@ -28,21 +28,21 @@
  */
 
 //{block name="backend/emotion/view/components/html_element"}
-//{namespace name=backend/emotion/view/components/html_element}
+//{namespace name="backend/emotion/view/components/html_element"}
 Ext.define('Shopware.apps.Emotion.view.components.HtmlElement', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-html-element',
 
     snippets: {
         text: {
-            fieldLabel: '{s name=text/label}Text{/s}',
-            supportText: '{s name=text/support}Do not add styling{/s}'
+            fieldLabel: '{s name="text/label"}Text{/s}',
+            supportText: '{s name="text/support"}Do not add styling{/s}'
 
         },
-        cms_title: '{s name=cms_title}Title{/s}',
+        cms_title: '{s name="cms_title"}Title{/s}',
         needsNoStyling: {
-            fieldLabel: '{s name=needsNoStyling/label}Do not add styling{/s}',
-            supportText: '{s name=needsNoStyling/support}If selected, no other layout styling is applied.{/s}'
+            fieldLabel: '{s name="needsNoStyling/label"}Do not add styling{/s}',
+            supportText: '{s name="needsNoStyling/support"}If selected, no other layout styling is applied.{/s}'
         }
     }
 });

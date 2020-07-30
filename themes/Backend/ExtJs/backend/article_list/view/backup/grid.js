@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/view/backup/grid"}
 Ext.define('Shopware.apps.ArticleList.view.Backup.Grid', {
     extend: 'Ext.grid.Panel',
@@ -102,14 +102,14 @@ Ext.define('Shopware.apps.ArticleList.view.Backup.Grid', {
             items: [
                 {
                     iconCls: 'sprite-arrow-circle-225-left',
-                    tooltip: '{s name=restoreBackup}Restore{/s}',
+                    tooltip: '{s name="restoreBackup"}Restore{/s}',
                     handler: function (view, rowIndex, colIndex, item, e) {
                         me.fireEvent('restoreBackup', rowIndex);
                     }
                 },
                 {
                     iconCls: 'sprite-minus-circle-frame',
-                    tooltip: '{s name=deleteBackup}Delete backup{/s}',
+                    tooltip: '{s name="deleteBackup"}Delete backup{/s}',
                     handler: function (view, rowIndex, colIndex, item, e) {
                         me.fireEvent('deleteBackup', rowIndex);
                     }

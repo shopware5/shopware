@@ -33,7 +33,7 @@
  * This file contains the layout of the navigation tree.
  */
 
-//{namespace name=backend/site/site}
+//{namespace name="backend/site/site"}
 
 //{block name="backend/site/view/site/tree"}
 Ext.define('Shopware.apps.Site.view.site.Tree', {
@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Site.view.site.Tree', {
         var buttons = [];
         /*{if {acl_is_allowed privilege=createGroup}}*/
         buttons.push(Ext.create("Ext.button.Button",{
-            text: '{s name=treeCreateGroupButton}Add group{/s}',
+            text: '{s name="treeCreateGroupButton"}Add group{/s}',
             iconCls: 'sprite-blue-folder--plus',
             cls: 'small secondary',
             action: 'onCreateGroup'
@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Site.view.site.Tree', {
         /*{if {acl_is_allowed privilege=deleteGroup}}*/
         buttons.push('->');
         buttons.push(Ext.create("Ext.button.Button",{
-            text: '{s name=treeDeleteGroupButton}Delete group{/s}',
+            text: '{s name="treeDeleteGroupButton"}Delete group{/s}',
             action: 'onDeleteGroup',
             cls: 'small secondary',
             iconCls: 'sprite-blue-folder--minus',

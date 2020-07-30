@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      * Title of the Edit Window
      * @string
      */
-    title : '{s name=dispatch_costs_edit_title}Shipping costs{/s}',
+    title : '{s name="dispatch_costs_edit_title"}Shipping costs{/s}',
 
     /**
      * Use stateful
@@ -104,21 +104,21 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      * @object
      */
     dispatchCalculationData : [
-        [0, '{s name=dispatch_calculation_data_weight}Weight{/s}'],
-        [1, '{s name=dispatch_calculation_data_price}Price{/s}'],
-        [2, '{s name=dispatch_calculation_data_count}Number of articles{/s}'],
-        [3, '{s name=dispatch_calculation_data_own}Own calculation{/s}']
+        [0, '{s name="dispatch_calculation_data_weight"}Weight{/s}'],
+        [1, '{s name="dispatch_calculation_data_price"}Price{/s}'],
+        [2, '{s name="dispatch_calculation_data_count"}Number of articles{/s}'],
+        [3, '{s name="dispatch_calculation_data_own"}Own calculation{/s}']
     ],
      /**
      * Translation Object
      * @object
      */
     dispatchTypeData : [
-        [0, '{s name=dispatch_type_data_default}Default shipping type{/s}'],
-        [1, '{s name=dispatch_type_data_alternative}Alternate shipping type{/s}'],
-        [2, '{s name=dispatch_type_data_charge}Surcharge type{/s}'],
-        [4, '{s name=dispatch_type_data_charge_as_position}Surcharge type as position{/s}'],
-        [3, '{s name=dispatch_calculation_data_discount}Reduction type{/s}'],
+        [0, '{s name="dispatch_type_data_default"}Default shipping type{/s}'],
+        [1, '{s name="dispatch_type_data_alternative"}Alternate shipping type{/s}'],
+        [2, '{s name="dispatch_type_data_charge"}Surcharge type{/s}'],
+        [4, '{s name="dispatch_type_data_charge_as_position"}Surcharge type as position{/s}'],
+        [3, '{s name="dispatch_calculation_data_discount"}Reduction type{/s}'],
     ],
 
     /**
@@ -126,10 +126,10 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      * @object
      */
     dispatchSurchargeCalculationData : [
-        [0, '{s name=dispatch_surcharge_data_always}Always charge{/s}'],
-        [1, '{s name=dispatch_surcharge_data_weight}Exclude articles free of shipping costs{/s}'],
-        [2, '{s name=dispatch_surcharge_data_never}Never{/s}'],
-        [3, '{s name=dispatch_surcharge_data_basket_item}Display as own basket item{/s}']
+        [0, '{s name="dispatch_surcharge_data_always"}Always charge{/s}'],
+        [1, '{s name="dispatch_surcharge_data_weight"}Exclude articles free of shipping costs{/s}'],
+        [2, '{s name="dispatch_surcharge_data_never"}Never{/s}'],
+        [3, '{s name="dispatch_surcharge_data_basket_item"}Display as own basket item{/s}']
     ],
 
     /**
@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
         var me = this;
 
         var fieldSet = Ext.create('Ext.form.FieldSet', {
-            title: '{s name=dispatch_main_form_title}Configuration{/s}',
+            title: '{s name="dispatch_main_form_title"}Configuration{/s}',
             height: 300,
             layout: 'column',
             bodyPadding: 10,
@@ -330,12 +330,12 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
         var me = this;
 
         return ['->', {
-            text:'{s name=default_cancel}Cancel{/s}',
+            text:'{s name="default_cancel"}Cancel{/s}',
             scope: me,
             cls: 'secondary',
             handler: me.destroy
         }, {
-            text:'{s name=default_save}Save{/s}',
+            text:'{s name="default_save"}Save{/s}',
             action:'saveDispatch',
             cls:'primary'
         }];

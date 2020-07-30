@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/controller/main}
+//{namespace name="backend/index/controller/main"}
 
 /**
  * Ext.app.Application
@@ -32,7 +32,7 @@
 //{block name="extjs/overrides/application"}
 Ext.override(Ext.app.Application, {
 
-    loadingMessage: '{s name=application/loading}Loading [0] ...{/s}',
+    loadingMessage: '{s name="application/loading"}Loading [0] ...{/s}',
 
 	/**
 	 * Adds a new controller to the application

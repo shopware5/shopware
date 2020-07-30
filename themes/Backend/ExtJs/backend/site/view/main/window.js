@@ -33,7 +33,7 @@
  * This file contains the layout for the main window.
  */
 
-//{namespace name=backend/site/site}
+//{namespace name="backend/site/site"}
 
 //{block name="backend/site/view/main/window"}
 Ext.define('Shopware.apps.Site.view.main.Window', {
@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Site.view.main.Window', {
         var me = this;
 
         // Set the title
-        me.title = '{s name=mainWindowTitle}Sites{/s}';
+        me.title = '{s name="mainWindowTitle"}Sites{/s}';
 
         // Get all items for this window
         me.items = me.getItems();
@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.Site.view.main.Window', {
 
         /*{if {acl_is_allowed privilege=createSite}}*/
         buttons.push(Ext.create("Ext.button.Button",{
-            text: '{s name=mainWindowCreateSiteButton}New site{/s}',
+            text: '{s name="mainWindowCreateSiteButton"}New site{/s}',
             action: 'onCreateSite',
             iconCls: 'sprite-blue-document--plus'
         }));
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Site.view.main.Window', {
 
         /*{if {acl_is_allowed privilege=deleteSite}}*/
         buttons.push(Ext.create("Ext.button.Button",{
-            text: '{s name=mainWindowDeleteSiteButton}Delete site{/s}',
+            text: '{s name="mainWindowDeleteSiteButton"}Delete site{/s}',
             action: 'onDeleteSite',
             iconCls: 'sprite-blue-document--minus',
             disabled: true

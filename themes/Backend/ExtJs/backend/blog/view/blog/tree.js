@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/* {namespace name=backend/blog/view/blog} */
+/* {namespace name="backend/blog/view/blog"} */
 
 /**
  * Shopware UI - Category management main window.

@@ -32,7 +32,7 @@
  * The category list component contains the grid panel for the category listing which display all already assigned categories.
  * Each row have an action column to remove the category.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/category/seo"}
 Ext.define('Shopware.apps.Article.view.category.Seo', {
     extend:'Ext.grid.Panel',
@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Article.view.category.Seo', {
 
     cls: Ext.baseCSSPrefix + 'category-seo-list',
 
-    title: '{s name=seo_category/list/title}Seo categories of the product{/s}',
+    title: '{s name="seo_category/list/title"}Seo categories of the product{/s}',
 
     initComponent: function() {
         var me = this;
@@ -92,13 +92,13 @@ Ext.define('Shopware.apps.Article.view.category.Seo', {
         var me = this;
 
         return [{
-            header: '{s name=seo_category/list/shop}Shop{/s}',
+            header: '{s name="seo_category/list/shop"}Shop{/s}',
             dataIndex: 'shopId',
             editor: me.createShopEditor(),
             renderer: me.shopRenderer,
             flex: 1
         }, {
-            header: '{s name=seo_category/list/category}Category{/s}',
+            header: '{s name="seo_category/list/category"}Category{/s}',
             dataIndex: 'categoryId',
             editor: me.createCategoryEditor(),
             renderer: me.categoryRenderer,
@@ -201,7 +201,7 @@ Ext.define('Shopware.apps.Article.view.category.Seo', {
         var me = this;
 
         me.addButton = Ext.create('Ext.button.Button', {
-            text: '{s name=seo_category/list/create}Add{/s}',
+            text: '{s name="seo_category/list/create"}Add{/s}',
             iconCls: 'sprite-plus-circle-frame',
             handler: function() {
                 if (me.store.getCount() >= me.shopStore.getCount()) {

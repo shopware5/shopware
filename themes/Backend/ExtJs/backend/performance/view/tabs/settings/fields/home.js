@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Check fieldSet
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Home', {
     /**
      * Description of the fieldSet
      */
-    caption: '{s name=tabs/settings/home/title}Home{/s}',
+    caption: '{s name="tabs/settings/home/title"}Home{/s}',
 
     layout: {
         type: 'vbox',
@@ -72,13 +72,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Home', {
 
     getItems: function() {
         var me = this,
-            warning = '{s name=fieldset/main/warning}Zu jedem Menüpunkt erhalten Sie korrespondierende Informationen in unserem Wiki. Bevor Sie Einstellungen modifizieren, sollten Sie also die Hinweise in unserer Dokumentation beachten!{/s}',
-            info = '{s name=fieldset/main/information}In diesem Bereich können Sie verschiedene Einstellungen vornehmen, die die Performance Ihrer Shopware-Installation betreffen.<br><br>Bitte beachten Sie auch unseren allgemeinen Performance-Guide unter <a target=link href=_blank>Performance Tipps Shopware 5</a>{/s}';
+            warning = '{s name="fieldset/main/warning"}Zu jedem Menüpunkt erhalten Sie korrespondierende Informationen in unserem Wiki. Bevor Sie Einstellungen modifizieren, sollten Sie also die Hinweise in unserer Dokumentation beachten!{/s}',
+            info = '{s name="fieldset/main/information"}In diesem Bereich können Sie verschiedene Einstellungen vornehmen, die die Performance Ihrer Shopware-Installation betreffen.<br><br>Bitte beachten Sie auch unseren allgemeinen Performance-Guide unter <a target=link href=_blank>Performance Tipps Shopware 5</a>{/s}';
 
         return [
             {
                 xtype: 'fieldset',
-                title: '{s name=fieldset/main/headline}Performance Einstellungen{/s}',
+                title: '{s name="fieldset/main/headline"}Performance Einstellungen{/s}',
                 items: [
                     {
                         xtype: 'container',
@@ -110,12 +110,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Home', {
 
         return [
             {
-                header: '{s name=fieldset/check/name}Name{/s}',
+                header: '{s name="fieldset/check/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1
             },
             {
-                header: '{s name=fieldset/check/value}Value{/s}',
+                header: '{s name="fieldset/check/value"}Value{/s}',
                 dataIndex: 'valid',
                 flex: 1,
                 renderer: me.validRenderer

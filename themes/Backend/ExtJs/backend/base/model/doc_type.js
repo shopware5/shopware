@@ -32,7 +32,7 @@
  * The document type represents a row the s_core_documents table. It
  * contains all data about a supported document type.
  */
-//{namespace name=backend/static/doc_type}
+//{namespace name="backend/static/doc_type"}
 //{block name="backend/base/model/type"}
 Ext.define('Shopware.apps.Base.model.DocType', {
     /**

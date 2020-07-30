@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/user_manager/view/main}
+//{namespace name="backend/user_manager/view/main"}
 
 /**
  * Shopware Backend - User list
@@ -165,7 +165,7 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
             cls: 'searchfield',
             enableKeyEvents:true,
             checkChangeBuffer: 500,
-            emptyText:'{s name=list_users/field/search}{/s}'
+            emptyText:'{s name="list_users/field/search"}{/s}'
         });
 
         // Row grouping

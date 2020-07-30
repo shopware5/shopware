@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/emotion/list/toolbar}
+//{namespace name="backend/emotion/list/toolbar"}
 
 /**
  * Shopware UI - Emotion Toolbar
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
         var me = this;
 
         me.searchField = Ext.create('Ext.form.field.Text', {
-            emptyText: '{s name=toolbar/search_emotion}{/s}',
+            emptyText: '{s name="toolbar/search_emotion"}{/s}',
             cls: 'searchfield',
             width: 200,
             enableKeyEvents:true,
@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
             buttonConfig : {
                 iconCls: 'sprite-import'
             },
-            buttonText: '{s name=toolbar/import_emotion}{/s}',
+            buttonText: '{s name="toolbar/import_emotion"}{/s}',
             cls: Ext.baseCSSPrefix + 'emotion-toolbar-import-btn',
             margin: 0,
             listeners: {
@@ -81,11 +81,11 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
         me.items = [
             /*{if {acl_is_allowed privilege=create}}*/
         {
-            text: '{s name=toolbar/add_emotion}{/s}',
+            text: '{s name="toolbar/add_emotion"}{/s}',
             iconCls: 'sprite-plus-circle',
             action: 'emotion-list-toolbar-add'
         }, {
-            text: '{s name=toolbar/add_emotion_from_preset}{/s}',
+            text: '{s name="toolbar/add_emotion_from_preset"}{/s}',
             iconCls: 'sprite-emotion-presets',
             action: 'emotion-list-toolbar-add-preset'
         }, {
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
         /*{/if}*/
         /*{if {acl_is_allowed privilege=delete}}*/
         {
-            text: '{s name=toolbar/delete_selected_emotion}{/s}',
+            text: '{s name="toolbar/delete_selected_emotion"}{/s}',
             iconCls: 'sprite-minus-circle',
             action: 'emotion-list-toolbar-delete',
             disabled: true,

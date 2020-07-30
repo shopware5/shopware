@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/form/shop"}
 Ext.define('Shopware.apps.Config.view.form.Shop', {
@@ -51,17 +51,17 @@ Ext.define('Shopware.apps.Config.view.form.Shop', {
         var me = this;
         return [{
             dataIndex: 'name',
-            text: '{s name=shop/table/name_text}Name{/s}',
+            text: '{s name="shop/table/name_text"}Name{/s}',
             flex: 1
         }, {
             dataIndex: 'host',
-            text: '{s name=shop/table/host_text}Host{/s}',
-            helpText: '{s name=shop/table/host_help}{/s}',
+            text: '{s name="shop/table/host_text"}Host{/s}',
+            helpText: '{s name="shop/table/host_help"}{/s}',
             flex: 1
         }, {
             dataIndex: 'baseUrl',
-            text: '{s name=shop/table/path_text}Path{/s}',
-            helpText: '{s name=shop/table/path_help}{/s}',
+            text: '{s name="shop/table/path_text"}Path{/s}',
+            helpText: '{s name="shop/table/path_help"}{/s}',
             flex: 1
         }, me.getActionColumn()];
     }

@@ -22,7 +22,7 @@
  */
 
 //{block name="backend/emotion/view/components/html_code"}
-//{namespace name=backend/emotion/view/components/html_code}
+//{namespace name="backend/emotion/view/components/html_code"}
 Ext.define('Shopware.apps.Emotion.view.components.HtmlCode', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-html-code',

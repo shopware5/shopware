@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/* {namespace name=backend/category/main} */
+/* {namespace name="backend/category/main"} */
 
 /**
  * Shopware Controller - category tree manager controller
@@ -64,21 +64,21 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      * @Object
      */
     snippets : {
-        confirmMoveCategory : '{s name=tree/move_confirmation}Are you sure you want to move this category?{/s}',
-        moveCategorySuccess : '{s name=tree/move_success}Category has been moved.{/s}',
-        moveCategoryFailure : '{s name=tree/move_failure}Category could not be moved.{/s}',
-        confirmDeleteCategoryTitle   : '{s name=tree/delete_confirmation_title}Are you sure you want to delete the category?{/s}',
-        confirmDeleteCategory : '{s name=tree/delete_confirmation}Are you sure you want to delete category: [0] and all its subcategories?{/s}',
-        confirmDeleteCategoryHeadline: '{s name=tree/delete_confirmation_headline}Delete this Category?{/s}',
-        deleteSingleItemSuccess : '{s name=tree/delete_success}Category has been deleted.{/s}',
-        deleteSingleItemFailure : '{s name=tree/delete_failure}Category could not be deleted.{/s}',
-        duplicateItemSuccess : '{s name=tree/duplicate_success}Category has been duplicated.{/s}',
-        duplicateItemFailure : '{s name=tree/duplicate_failure}Category could not be duplicated.{/s}',
-        onSaveChangesSuccess    : '{s name=settings/save_success}Changes have been saved successfully.{/s}',
-        onSaveChangesError      : '{s name=settings/save_error}An error has occurred while saving the changes.{/s}',
-        emptySubcategoryField   : '{s name=tree/empty_subcategory}Required field.{/s}',
-        subCategoryNameRequired : '{s name=tree/sub_category_name_required}A name is required in order to create a sub category.{/s}',
-        growlMessage            : '{s name=window/main_title}{/s}'
+        confirmMoveCategory : '{s name="tree/move_confirmation"}Are you sure you want to move this category?{/s}',
+        moveCategorySuccess : '{s name="tree/move_success"}Category has been moved.{/s}',
+        moveCategoryFailure : '{s name="tree/move_failure"}Category could not be moved.{/s}',
+        confirmDeleteCategoryTitle   : '{s name="tree/delete_confirmation_title"}Are you sure you want to delete the category?{/s}',
+        confirmDeleteCategory : '{s name="tree/delete_confirmation"}Are you sure you want to delete category: [0] and all its subcategories?{/s}',
+        confirmDeleteCategoryHeadline: '{s name="tree/delete_confirmation_headline"}Delete this Category?{/s}',
+        deleteSingleItemSuccess : '{s name="tree/delete_success"}Category has been deleted.{/s}',
+        deleteSingleItemFailure : '{s name="tree/delete_failure"}Category could not be deleted.{/s}',
+        duplicateItemSuccess : '{s name="tree/duplicate_success"}Category has been duplicated.{/s}',
+        duplicateItemFailure : '{s name="tree/duplicate_failure"}Category could not be duplicated.{/s}',
+        onSaveChangesSuccess    : '{s name="settings/save_success"}Changes have been saved successfully.{/s}',
+        onSaveChangesError      : '{s name="settings/save_error"}An error has occurred while saving the changes.{/s}',
+        emptySubcategoryField   : '{s name="tree/empty_subcategory"}Required field.{/s}',
+        subCategoryNameRequired : '{s name="tree/sub_category_name_required"}A name is required in order to create a sub category.{/s}',
+        growlMessage            : '{s name="window/main_title"}{/s}'
     },
 
     productMappingRendered: false,
@@ -209,7 +209,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      */
     onOpenNameDialog:function () {
         var me = this;
-        Ext.Msg.prompt('{s name=view/add_dialog_headline}Enter category name{/s}', '{s name=view/add_dialog_label}Category name{/s}', function (btn, text) {
+        Ext.Msg.prompt('{s name="view/add_dialog_headline"}Enter category name{/s}', '{s name="view/add_dialog_label"}Category name{/s}', function (btn, text) {
             if (btn == 'ok') {
                 if(text == "") {
                     //you can not save categories with empty names try it again

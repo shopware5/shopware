@@ -26,7 +26,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Sitemap fieldset
@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
     /**
      * Description of the fieldSet
      */
-    caption: '{s name=tabs/settings/sitemap/title}Sitemap{/s}',
+    caption: '{s name="tabs/settings/sitemap/title"}Sitemap{/s}',
 
     /**
      * Component event method which is fired when the component
@@ -74,14 +74,14 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
             {
                 xtype: 'fieldset',
                 defaults: this.defaults,
-                title: '{s name=fieldset/information}Information{/s}',
+                title: '{s name="fieldset/information"}Information{/s}',
                 items: [
-                    this.createDescriptionContainer("{s name=fieldset/sitemap/info}{/s}")
+                    this.createDescriptionContainer("{s name="fieldset/sitemap/info"}{/s}")
                 ]
             }, {
                 xtype: 'fieldset',
                 defaults: this.defaults,
-                title: '{s name=fieldset/configuration}Configuration{/s}',
+                title: '{s name="fieldset/configuration"}Configuration{/s}',
                 items: [
                     this.getRefreshButton(),
                     this.getRefreshStrategyField(),
@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
         return {
             xtype: 'performance-multi-request-button',
             event: 'sitemap',
-            title: '{s name=fieldset/sitemap/refresh}{/s}'
+            title: '{s name="fieldset/sitemap/refresh"}{/s}'
         };
     },
 
@@ -112,8 +112,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
      */
     getRefreshStrategyField: function() {
         return {
-            fieldLabel: '{s name=fieldset/refreshStrategy}Refresh strategy{/s}',
-            helpText: '{s name=fieldset/refreshStrategy/help}How do you want to refresh this information?<br><br>' +
+            fieldLabel: '{s name="fieldset/refreshStrategy"}Refresh strategy{/s}',
+            helpText: '{s name="fieldset/refreshStrategy/help"}How do you want to refresh this information?<br><br>' +
             '<b>Manually</b>: Refresh by clicking the *build Index* button<br>' +
             '<b>CronJob</b>: Refresh with a CronJob (recommended)<br>' +
             '<b>Live</b>: Refresh in live operation (not recommended for large shops){/s}',
@@ -128,9 +128,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
                     { name: 'name', type: 'string' }
                 ],
                 data: [
-                    { id: 1, name: '{s name=fieldset/refreshStrategy/manual}Manually{/s}' },
-                    { id: 2, name: '{s name=fieldset/refreshStrategy/cronJob}CronJob{/s}' },
-                    { id: 3, name: '{s name=fieldset/refreshStrategy/live}Live{/s}' }
+                    { id: 1, name: '{s name="fieldset/refreshStrategy/manual"}Manually{/s}' },
+                    { id: 2, name: '{s name="fieldset/refreshStrategy/cronJob"}CronJob{/s}' },
+                    { id: 3, name: '{s name="fieldset/refreshStrategy/live"}Live{/s}' }
                 ]
             })
         };
@@ -143,7 +143,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
      */
     getRefreshTimeField: function () {
         return {
-            fieldLabel: '{s name=fieldset/search/cache_time}Cache time{/s}',
+            fieldLabel: '{s name="fieldset/search/cache_time"}Cache time{/s}',
             name: 'sitemap[sitemapRefreshTime]',
             xtype: 'textfield',
             minValue: 3600
@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
      */
     getLastUpdateField: function () {
         return {
-            fieldLabel:  '{s name=fieldset/search/last_update}Last index update{/s}',
+            fieldLabel:  '{s name="fieldset/search/last_update"}Last index update{/s}',
             name: 'sitemap[sitemapLastRefresh]',
             xtype: 'displayfield',
             renderer: function(value) {

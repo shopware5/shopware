@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/premium/main}
+//{namespace name="backend/premium/main"}
 
 /**
  * Shopware UI - Premium view list
@@ -160,7 +160,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
             iconCls: 'sprite-minus-circle',
             action: 'delete',
             cls: 'delete',
-            tooltip: '{s name=column/actioncolumn/delete}Delete article{/s}',
+            tooltip: '{s name="column/actioncolumn/delete"}Delete article{/s}',
             handler:function (view, rowIndex, colIndex, item) {
                 me.fireEvent('deleteColumn', view, rowIndex,  item, colIndex);
             }
@@ -171,7 +171,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
         buttons.push(Ext.create('Ext.button.Button', {
             iconCls: 'sprite-pencil',
             cls: 'editBtn',
-            tooltip: '{s name=column/actioncolumn/edit}Edit article{/s}',
+            tooltip: '{s name="column/actioncolumn/edit"}Edit article{/s}',
             handler:function (view, rowIndex, colIndex, item) {
                 me.fireEvent('editColumn', view, item, rowIndex, colIndex);
             }
@@ -180,22 +180,22 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
 
         var columns = [
             {
-                header: '{s name=column/name}Name{/s}',
+                header: '{s name="column/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1,
                 //Renderer to format the column
                 renderer: this.nameColumn
             },{
-                header: '{s name=column/export_ordernumber}Export order number{/s}',
+                header: '{s name="column/export_ordernumber"}Export order number{/s}',
                 dataIndex: 'orderNumberExport',
                 flex: 1
             }, {
-                header: '{s name=column/subshop}Subshop{/s}',
+                header: '{s name="column/subshop"}Subshop{/s}',
                 dataIndex: 'subShopName',
                 flex: 1,
                 renderer: this.renderSubShop
             },{
-                header: '{s name=column/startprice}Minimum order value{/s}',
+                header: '{s name="column/startprice"}Minimum order value{/s}',
                 dataIndex: 'startPrice',
                 flex: 1
             }, {
@@ -212,7 +212,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
         if(value){
             return value;
         }else if(record.data.shopId == 0){
-            return "{s name=premium/subShop/comboBox_general}Universally valid{/s}";
+            return "{s name="premium/subShop/comboBox_general"}Universally valid{/s}";
         }
     },
 
@@ -227,7 +227,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
             action : 'searchPremiumArticle',
             width : 170,
             enableKeyEvents : true,
-            emptyText : '{s name=toolbar/search}Search...{/s}',
+            emptyText : '{s name="toolbar/search"}Search...{/s}',
             listeners: {
                 buffer: 500,
                 keyup: function() {
@@ -245,14 +245,14 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
         /*{if {acl_is_allowed privilege=create}}*/
             items.push(Ext.create('Ext.button.Button',{
                 iconCls: 'sprite-plus-circle',
-                text: '{s name=toolbar/add}Add{/s}',
+                text: '{s name="toolbar/add"}Add{/s}',
                 action: 'add'
             }));
         /*{/if}*/
         /*{if {acl_is_allowed privilege=delete}}*/
         items.push(Ext.create('Ext.button.Button',{
             iconCls: 'sprite-minus-circle',
-            text: '{s name=toolbar/delete}Delete selected articles{/s}',
+            text: '{s name="toolbar/delete"}Delete selected articles{/s}',
             disabled: true,
             action: 'deleteMultipleArticles'
         }));

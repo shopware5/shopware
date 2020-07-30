@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/view/batch_process/window"}
 Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
     /**
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
      *
      * @string
      */
-    titleTemplate: '{s name=batchProcess/windowTitle}Batch Process{/s}',
+    titleTemplate: '{s name="batchProcess/windowTitle"}Batch Process{/s}',
 
     /**
      * @boolean
@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
             buttons = [ '->' ];
 
         var cancelButton = Ext.create('Ext.button.Button', {
-            text: '{s name=close}Close{/s}',
+            text: '{s name="close"}Close{/s}',
             scope: me,
             cls: 'secondary',
             handler:function () {
@@ -159,13 +159,13 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
         var addToQueue = Ext.create('Ext.button.Button', {
             action: 'addToQueue',
             cls: 'secondary',
-            text: '{s name=batchProcess/addToQueue}Add to queue{/s}'
+            text: '{s name="batchProcess/addToQueue"}Add to queue{/s}'
         });
 
         var addToQueueAndRun = Ext.create('Ext.button.Button', {
             action: 'addToQueueAndRun',
             cls: 'primary',
-            text: '{s name=batchProcess/addToQueueAndRun}Add to queue and run{/s}'
+            text: '{s name="batchProcess/addToQueueAndRun"}Add to queue and run{/s}'
         });
         buttons.push(addToQueueAndRun);
 

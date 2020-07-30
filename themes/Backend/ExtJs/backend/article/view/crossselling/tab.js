@@ -30,7 +30,7 @@
 /**
  * Shopware UI - Article crosselling page
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/crossselling/tab"}
 Ext.define('Shopware.apps.Article.view.crossselling.Tab', {
 
@@ -80,16 +80,16 @@ Ext.define('Shopware.apps.Article.view.crossselling.Tab', {
      */
     snippets: {
         similar: {
-            title: '{s name=detail/sidebar/similar/title}Similar articles{/s}',
-            notice: '{s name=detail/sidebar/similar/notice}At this point you have the option of linking other articles with the current article. The linked articles are automatically displayed on the article detail page.{/s}',
-            gridTitle: '{s name=detail/sidebar/similar/grid_title}Assigned similar articles{/s}',
-            add: '{s name=detail/sidebar/similar/button}Add article{/s}'
+            title: '{s name="detail/sidebar/similar/title"}Similar articles{/s}',
+            notice: '{s name="detail/sidebar/similar/notice"}At this point you have the option of linking other articles with the current article. The linked articles are automatically displayed on the article detail page.{/s}',
+            gridTitle: '{s name="detail/sidebar/similar/grid_title"}Assigned similar articles{/s}',
+            add: '{s name="detail/sidebar/similar/button"}Add article{/s}'
         },
         accessory: {
-            title: '{s name=detail/sidebar/accessory/title}Accessory articles{/s}',
-            notice: '{s name=detail/sidebar/accessory/notice}At this point you have the option of linking other articles with the current article. The linked articles are automatically displayed on the article detail page.{/s}',
-            gridTitle: '{s name=detail/sidebar/accessory/grid_title}Assigned accessory articles{/s}',
-            add: '{s name=detail/sidebar/accessory/button}Add item{/s}'
+            title: '{s name="detail/sidebar/accessory/title"}Accessory articles{/s}',
+            notice: '{s name="detail/sidebar/accessory/notice"}At this point you have the option of linking other articles with the current article. The linked articles are automatically displayed on the article detail page.{/s}',
+            gridTitle: '{s name="detail/sidebar/accessory/grid_title"}Assigned accessory articles{/s}',
+            add: '{s name="detail/sidebar/accessory/button"}Add item{/s}'
         }
     },
 

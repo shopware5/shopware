@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/chart/supplier"}
 Ext.define('Shopware.apps.Analytics.view.chart.Supplier', {
     extend: 'Shopware.apps.Analytics.view.main.Chart',
@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Supplier', {
                 field: 'turnover',
                 showInLegend: true,
                 label: {
-                    title: '{s name=chart/supplier/title}Supplier{/s}',
+                    title: '{s name="chart/supplier/title"}Supplier{/s}',
                     field: 'name',
                     display: 'rotate',
                     contrast: true,

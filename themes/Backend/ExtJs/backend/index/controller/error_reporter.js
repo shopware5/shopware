@@ -30,7 +30,7 @@
  * The user of the controller has the ability
  * to log the errors and open them up in a grid panel.
  */
-//{namespace name=backend/index/controller/main}
+//{namespace name="backend/index/controller/main"}
 //{block name="backend/index/controller/error_reporter"}
 Ext.define('Shopware.apps.Index.controller.ErrorReporter', {
     extend: 'Ext.app.Controller',

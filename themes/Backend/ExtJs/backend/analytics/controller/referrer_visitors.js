@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/controller/referrer_visitors"}
 Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
 

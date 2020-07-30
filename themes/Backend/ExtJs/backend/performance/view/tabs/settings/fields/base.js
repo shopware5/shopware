@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Default fieldSet which is extended by all other fieldSets in this module

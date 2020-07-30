@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/voucher/view/code}
+//{namespace name="backend/voucher/view/code"}
 
 /**
  * Shopware UI - Voucher list main window.
@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Voucher.view.code.Progress', {
         me.items = [
             me.createProgressBar()
         ];
-        me.title = "{s name=detail_codes/progress/title}Generating individual voucher codes{/s}";
+        me.title = "{s name="detail_codes/progress/title"}Generating individual voucher codes{/s}";
         me.callParent(arguments);
     },
 

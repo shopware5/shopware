@@ -22,7 +22,7 @@
  *
  */
 
-//{namespace name=backend/media_manager/view/replace}
+//{namespace name="backend/media_manager/view/replace"}
 //{block name="backend/media_manager/view/replace/window"}
 Ext.define('Shopware.apps.MediaManager.view.replace.Grid', {
     extend: 'Ext.panel.Panel',

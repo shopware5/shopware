@@ -31,16 +31,16 @@
  * @package     MediaManager
  * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
  */
-//{namespace name=backend/media_manager/view/main}
+//{namespace name="backend/media_manager/view/main"}
 //{block name="backend/media_manager/controller/thumbnail"}
 Ext.define('Shopware.apps.MediaManager.controller.Thumbnail', {
 
     extend: 'Ext.app.Controller',
 
     snippets: {
-        errorTitle: '{s name=error/title}Error{/s}',
-        errorMessage: '{s name=thumbnail/batch/error_message}An error has occurred while generating the item thumbnails:{/s}',
-        finished: '{s name=thumbnail/batch/finished}Finished{/s}'
+        errorTitle: '{s name="error/title"}Error{/s}',
+        errorMessage: '{s name="thumbnail/batch/error_message"}An error has occurred while generating the item thumbnails:{/s}',
+        finished: '{s name="thumbnail/batch/finished"}Finished{/s}'
     },
 
     refs: [
@@ -244,8 +244,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Thumbnail', {
             },
             failure: function (response) {
                 Shopware.Msg.createStickyGrowlMessage({
-                    title: '{s name=thumbnail/batch/timeOutTitle}An error occured{/s}',
-                    text: "{s name=thumbnail/batch/timeOut}The server could not handle the request. Please choose a smaller batch size.{/s}"
+                    title: '{s name="thumbnail/batch/timeOutTitle"}An error occured{/s}',
+                    text: "{s name="thumbnail/batch/timeOut"}The server could not handle the request. Please choose a smaller batch size.{/s}"
                 });
 
                 me.onProcessFinish(win);

@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 //{block name="backend/performance/view/tabs/cache/form"}
 Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
@@ -29,13 +29,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
     extend: 'Ext.form.Panel',
     alias: 'widget.performance-tabs-cache-form',
 
-    title: '{s name=form/title}What areas are supposed to be cleared?{/s}',
+    title: '{s name="form/title"}What areas are supposed to be cleared?{/s}',
 
     autoScroll: true,
     bodyPadding: 10,
 
     url: '{url controller=Cache action=clearCache}',
-    waitMsg: '{s name=form/wait_message}Cache is clearing ...{/s}',
+    waitMsg: '{s name="form/wait_message"}Cache is clearing ...{/s}',
     waitMsgTarget: true,
     submitEmptyText: false,
 
@@ -88,23 +88,23 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
                 items: [
                     {
                         name: 'cache[config]',
-                        boxLabel: '{s name=form/items/config}Shopware configuration{/s}',
-                        supportText: '{s name=form/items/config/support}Cache for settings and snippets etc.{/s}'
+                        boxLabel: '{s name="form/items/config"}Shopware configuration{/s}',
+                        supportText: '{s name="form/items/config/support"}Cache for settings and snippets etc.{/s}'
                     },
                     {
                         name: 'cache[template]',
-                        boxLabel: '{s name=form/items/frontend/template}Template cache{/s}',
-                        supportText: '{s name=form/items/frontend/template/support}Cache for compiled template files{/s}'
+                        boxLabel: '{s name="form/items/frontend/template"}Template cache{/s}',
+                        supportText: '{s name="form/items/frontend/template/support"}Cache for compiled template files{/s}'
                     },
                     {
                         name: 'cache[theme]',
-                        boxLabel: '{s name=form/items/frontend/theme}Theme cache{/s}',
-                        supportText: '{s name=form/items/frontend/theme/support}Cache for compiled theme files{/s}'
+                        boxLabel: '{s name="form/items/frontend/theme"}Theme cache{/s}',
+                        supportText: '{s name="form/items/frontend/theme/support"}Cache for compiled theme files{/s}'
                     },
                     {
                         name: 'cache[http]',
-                        boxLabel: '{s name=form/items/backend}Http-Proxy-Cache{/s}',
-                        supportText: '{s name=form/items/backend/support}Cache for the Http-Reverse-Proxy, if active{/s}'
+                        boxLabel: '{s name="form/items/backend"}Http-Proxy-Cache{/s}',
+                        supportText: '{s name="form/items/backend/support"}Cache for the Http-Reverse-Proxy, if active{/s}'
                     }
                 ] },
             { xtype: 'container',
@@ -121,18 +121,18 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
                 items: [
                     {
                         name: 'cache[proxy]',
-                        boxLabel: '{s name=form/items/proxy}Doctrine Annotations and Proxies{/s}',
-                        supportText: '{s name=form/items/proxy/support}Cache for proxy objects{/s}'
+                        boxLabel: '{s name="form/items/proxy"}Doctrine Annotations and Proxies{/s}',
+                        supportText: '{s name="form/items/proxy/support"}Cache for proxy objects{/s}'
                     },
                     {
                         name: 'cache[search]',
-                        boxLabel: '{s name=form/items/search}Cache search function{/s}',
-                        supportText: '{s name=form/items/search/support}Cache for search results and index{/s}'
+                        boxLabel: '{s name="form/items/search"}Cache search function{/s}',
+                        supportText: '{s name="form/items/search/support"}Cache for search results and index{/s}'
                     },
                     {
                         name: 'cache[router]',
-                        boxLabel: '{s name=form/items/router}Index SEO-URLs{/s}',
-                        supportText: '{s name=form/items/router/support}Cache for SEO-Routes and index{/s}'
+                        boxLabel: '{s name="form/items/router"}Index SEO-URLs{/s}',
+                        supportText: '{s name="form/items/router/support"}Cache for SEO-Routes and index{/s}'
                     }
                 ]}
         ];

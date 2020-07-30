@@ -27,7 +27,7 @@
  * @author      shopware AG
  */
 
-//{namespace name=backend/emotion/view/detail}
+//{namespace name="backend/emotion/view/detail"}
 //{block name="backend/emotion/controller/detail"}
 Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
@@ -52,22 +52,22 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         { ref: 'listingView', selector: 'presets-list' },
         { ref: 'presetWindow', selector: 'emotion-presets-window' }
     ],
-    
+
     snippets: {
-        successTitle: '{s name=save/success/title}{/s}',
-        errorTitle: '{s name=save/error/title}{/s}',
-        warningTitle: '{s name=save/warning/title}{/s}',
-        saveWarningMessage: '{s name=save/warning/message}{/s}',
-        saveSuccessMessage: '{s name=save/success/message}{/s}',
-        saveErrorMessage: '{s name=save/error/message}{/s}',
-        onSaveChangesNotValid: '{s name=save/error/not_valid}{/s}',
-        removeSuccessMessage: '{s name=remove/success/message}{/s}',
-        removeErrorMessage: '{s name=remove/error/message}{/s}',
-        growlMessage: '{s name=growlMessage}{/s}',
-        confirmMessage: '{s name=confirmMessage}{/s}',
-        saveComponentAlert: '{s name=error/not_all_required_fields_filled}{/s}',
-        duplicateErrorMsg: '{s name=duplicate/error_msg}{/s}',
-        duplicateSuccessMsg: '{s name=duplicate/success_msg}{/s}',
+        successTitle: '{s name="save/success/title"}{/s}',
+        errorTitle: '{s name="save/error/title"}{/s}',
+        warningTitle: '{s name="save/warning/title"}{/s}',
+        saveWarningMessage: '{s name="save/warning/message"}{/s}',
+        saveSuccessMessage: '{s name="save/success/message"}{/s}',
+        saveErrorMessage: '{s name="save/error/message"}{/s}',
+        onSaveChangesNotValid: '{s name="save/error/not_valid"}{/s}',
+        removeSuccessMessage: '{s name="remove/success/message"}{/s}',
+        removeErrorMessage: '{s name="remove/error/message"}{/s}',
+        growlMessage: '{s name="growlMessage"}{/s}',
+        confirmMessage: '{s name="confirmMessage"}{/s}',
+        saveComponentAlert: '{s name="error/not_all_required_fields_filled"}{/s}',
+        duplicateErrorMsg: '{s name="duplicate/error_msg"}{/s}',
+        duplicateSuccessMsg: '{s name="duplicate/success_msg"}{/s}',
         removeColTitle: '{s name="settings/grid/removeColTitel"}{/s}',
         removeColMsg: '{s name="settings/grid/removeColMsg"}{/s}',
         emotionNotFoundMsg: '{s name="save/error/emotion_not_found"}{/s}',
@@ -211,13 +211,13 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 }
             },
             failure: function(form, action) {
-                var msg =  '{s name=emotion/emotion_import_failure_message}{/s}';
+                var msg =  '{s name="emotion/emotion_import_failure_message"}{/s}';
                 if (action.result.message) {
                     msg = action.result.message;
                 }
 
                 return Shopware.Notification.createGrowlMessage(
-                    '{s name=emotion/emotion_import_failure}{/s}',
+                    '{s name="emotion/emotion_import_failure"}{/s}',
                     msg
                 );
             }
@@ -242,7 +242,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                     me.getMainWindow().setLoading(false);
 
                     Shopware.Notification.createGrowlMessage(
-                        '{s name=emotion/emotion_import_failure}{/s}',
+                        '{s name="emotion/emotion_import_failure"}{/s}',
                         result.message
                     );
 
@@ -267,7 +267,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             });
 
         me.importAssets(preset, function(success) {
-            me.progressbarWindow.down('progressbar').updateText('{s name=preset/assets_import_success}{/s}');
+            me.progressbarWindow.down('progressbar').updateText('{s name="preset/assets_import_success"}{/s}');
 
             if (!success) {
                 if (me.progressbarWindow) {
@@ -276,8 +276,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 me.cleanupImport(preset.get('id'), path);
 
                 return Shopware.Notification.createGrowlMessage(
-                    '{s name=preset/assets_import_failure}{/s}',
-                    '{s name=preset/assets_import_failure_message}{/s}'
+                    '{s name="preset/assets_import_failure"}{/s}',
+                    '{s name="preset/assets_import_failure_message"}{/s}'
                 );
             }
 
@@ -511,7 +511,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             layout = me.getLayoutForm(),
             win = me.getDetailWindow(),
             activeTab = win.sidebar.items.indexOf(win.sidebar.getActiveTab());
-        
+
         if (Ext.isObject(preview)) {
             preview = false;
         }
@@ -625,10 +625,10 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         if (!form.getForm().isValid()) {
             return Shopware.Notification.createGrowlMessage(
                 win.title,
-                '{s name=error/not_all_required_fields_filled_preset}{/s}'
+                '{s name="error/not_all_required_fields_filled_preset"}{/s}'
             );
         }
-        win.setLoading('{s name=preset/saving_as_preset}{/s}');
+        win.setLoading('{s name="preset/saving_as_preset"}{/s}');
 
         values = form.getForm().getValues();
         values.preview = values.thumbnail;
@@ -672,8 +672,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                             }
                             win.close();
                             Shopware.Notification.createGrowlMessage(
-                                '{s name=preset/save_success}{/s}',
-                                '{s name=preset/save_success_msg}{/s}'
+                                '{s name="preset/save_success"}{/s}',
+                                '{s name="preset/save_success_msg"}{/s}'
                             );
                         }
                     });
@@ -809,7 +809,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         }
 
         return Ext.Msg.confirm(
-           '{s name=preset/required_plugins_title}{/s}',
+           '{s name="preset/required_plugins_title"}{/s}',
             Ext.String.format('{s name="preset/required_plugins_confirmation"}{/s}', pluginInfo.join('<br>')),
             function(btn) {
                if (btn === 'yes') {
@@ -859,14 +859,14 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 me.getMainWindow().setLoading(true);
                 me.importAssets(preset, function(success) {
                     me.getMainWindow().setLoading(false);
-                    me.progressbarWindow.down('progressbar').updateText('{s name=preset/assets_import_success}{/s}');
+                    me.progressbarWindow.down('progressbar').updateText('{s name="preset/assets_import_success"}{/s}');
                     if (!success) {
                         if (me.progressbarWindow) {
                             me.progressbarWindow.destroy();
                         }
                         return Shopware.Notification.createGrowlMessage(
-                            '{s name=preset/assets_import_failure}{/s}',
-                            '{s name=preset/assets_import_failure_message}{/s}'
+                            '{s name="preset/assets_import_failure"}{/s}',
+                            '{s name="preset/assets_import_failure_message"}{/s}'
                         );
                     }
 
@@ -924,8 +924,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
                 if (!result.success) {
                     Shopware.Notification.createGrowlMessage(
-                        '{s name=preset/assets_import_element_failure}{/s}',
-                        Ext.String.format('{s name=preset/assets_import_element_failure_message}{/s}', elements[index]['componentId'])
+                        '{s name="preset/assets_import_element_failure"}{/s}',
+                        Ext.String.format('{s name="preset/assets_import_element_failure_message"}{/s}', elements[index]['componentId'])
                     );
                 }
 
@@ -959,21 +959,21 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     updateProgressBar: function(progress, totalCount) {
         var me = this;
 
-        me.progressbarWindow.down('progressbar').updateProgress(progress / totalCount, Ext.String.format('{s name=preset/assets_import_progress}{/s}', progress, totalCount));
+        me.progressbarWindow.down('progressbar').updateProgress(progress / totalCount, Ext.String.format('{s name="preset/assets_import_progress"}{/s}', progress, totalCount));
     },
 
     createProgressBar: function() {
         var me = this;
 
         me.progressbarWindow = Ext.create('Ext.Window', {
-            title: '{s name=preset/assets_import_title}{/s}',
+            title: '{s name="preset/assets_import_title"}{/s}',
             autoShow: true,
             height: 150,
             width: 350,
             bodyPadding: 20,
             items: [{
                 xtype: 'progressbar',
-                text: '{s name=preset/assets_import_text}{/s}'
+                text: '{s name="preset/assets_import_text"}{/s}'
             }]
         });
     },
@@ -997,8 +997,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         var me = this;
 
         Ext.MessageBox.confirm(
-            '{s name=preset/delete_preset}{/s}',
-            '{s name=preset/delete_preset_confirmation}{/s}',
+            '{s name="preset/delete_preset"}{/s}',
+            '{s name="preset/delete_preset_confirmation"}{/s}',
             function (response) {
                 if (response !== 'yes') {
                     return;
@@ -1012,7 +1012,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                     callback: function(record, operation) {
                         store.load();
                         var result = record.proxy.getReader().rawData,
-                            failureMsg = '{s name=preset/delete_failure_msg}{/s}';
+                            failureMsg = '{s name="preset/delete_failure_msg"}{/s}';
 
                         if (result.message) {
                             failureMsg = Ext.String.format('[0]<br>[1]', failureMsg, result.message);
@@ -1020,13 +1020,13 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
                         if (!result.success) {
                             return Shopware.Notification.createGrowlMessage(
-                                '{s name=preset/delete_failure}{/s}',
+                                '{s name="preset/delete_failure"}{/s}',
                                 failureMsg
                             );
                         }
                         Shopware.Notification.createGrowlMessage(
-                            '{s name=preset/delete_success}{/s}',
-                            '{s name=preset/delete_success_msg}{/s}'
+                            '{s name="preset/delete_success"}{/s}',
+                            '{s name="preset/delete_success_msg"}{/s}'
                         );
                     }
                 });

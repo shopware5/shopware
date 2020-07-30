@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/config/view/main}
+//{namespace name="backend/config/view/main"}
 
 /**
  * todo@all: Documentation
@@ -38,8 +38,8 @@ Ext.define('Shopware.apps.Config.view.main.Window', {
     alias: 'widget.config-main-window',
     layout: 'border',
 
-    title: '{s name=window/title}Basic settings{/s}',
-    titleTemplate: '{s name=window/title_template}Basic settings - [label]{/s}',
+    title: '{s name="window/title"}Basic settings{/s}',
+    titleTemplate: '{s name="window/title_template"}Basic settings - [label]{/s}',
 
     cls: Ext.baseCSSPrefix + 'template-main-window',
     hideNavigation: false,

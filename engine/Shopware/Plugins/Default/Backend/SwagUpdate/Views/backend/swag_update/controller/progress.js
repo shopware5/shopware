@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-// {namespace name=backend/swag_update/main}
+// {namespace name="backend/swag_update/main"}
 // {block name="backend/swag_update/controller/progress"}
 Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
     extend: 'Enlight.app.Controller',
@@ -53,9 +53,9 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
                 url: '{url controller="SwagUpdate" action="download"}',
                 formatFnct: function(offset, total) {
                     if (total > 0) {
-                        return '{s name=progress/downloading}Downloading{/s} ' + (offset / total * 100).toFixed(0) + '%';
+                        return '{s name="progress/downloading"}Downloading{/s} ' + (offset / total * 100).toFixed(0) + '%';
                     } else {
-                        return '{s name=progress/downloading}Downloading{/s} 0%';
+                        return '{s name="progress/downloading"}Downloading{/s} 0%';
                     }
                 }
             },
@@ -63,9 +63,9 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
                 url: '{url controller="SwagUpdate" action="unpack"}',
                 formatFnct: function(offset, total) {
                     if (total > 0) {
-                        return '{s name=progress/unpacking}Unpacking{/s} ' + (offset / total * 100).toFixed(0) + '%';
+                        return '{s name="progress/unpacking"}Unpacking{/s} ' + (offset / total * 100).toFixed(0) + '%';
                     } else {
-                        return '{s name=progress/unpacking}Unpacking{/s} 0%';
+                        return '{s name="progress/unpacking"}Unpacking{/s} 0%';
                     }
                 }
             }
@@ -129,7 +129,7 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
                         );
                         me.runRequest(0, win, config, configs);
                     } else {
-                        win.progressBar.updateProgress(1, '{s name=progress/finish}Finished{/s}');
+                        win.progressBar.updateProgress(1, '{s name="progress/finish"}Finished{/s}');
                         me.onProcessFinish(win);
                     }
                 }
@@ -141,13 +141,13 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
                     json = JSON.parse(response.responseText);
 
                     Shopware.Msg.createStickyGrowlMessage({
-                        title: '{s name=progress/timeOutTitle}An error occured{/s}',
+                        title: '{s name="progress/timeOutTitle"}An error occured{/s}',
                         text: json.message
                     });
                 } catch (err) {
                     Shopware.Msg.createStickyGrowlMessage({
-                        title: '{s name=progress/timeOutTitle}An error occured{/s}',
-                        text: '{s name=progress/timeOut}The server could not handle the request. Please choose a smaller batch size.{/s}'
+                        title: '{s name="progress/timeOutTitle"}An error occured{/s}',
+                        text: '{s name="progress/timeOut"}The server could not handle the request. Please choose a smaller batch size.{/s}'
                     });
                 }
 

@@ -16,7 +16,7 @@
 
         {* Sorting field *}
         {block name='frontend_listing_actions_sort_field'}
-            {$listingMode = {config name=listingMode}}
+            {$listingMode = {config name="listingMode"}}
 
             <div class="sort--select select-field">
                 <select id="{$shortParameters.sSort}"

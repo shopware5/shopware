@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/form/controller/fields}
+//{namespace name="backend/form/controller/fields"}
 
 /**
  * todo@all: Documentation
@@ -106,9 +106,9 @@ Ext.define('Shopware.apps.Form.controller.Fields', {
         var store  = grid.getStore(),
             record = store.getAt(rowIndex);
 
-        var message = Ext.String.format('{s name=dialog_delete_field_message}Are you sure you want to delete the selected field ([0])?{/s}', record.get('name'));
+        var message = Ext.String.format('{s name="dialog_delete_field_message"}Are you sure you want to delete the selected field ([0])?{/s}', record.get('name'));
 
-        Ext.MessageBox.confirm('{s name=dialog_delete_field_title}Delete field{/s}', message, function (response) {
+        Ext.MessageBox.confirm('{s name="dialog_delete_field_title"}Delete field{/s}', message, function (response) {
             if (response !== 'yes') {
                 return false;
             }

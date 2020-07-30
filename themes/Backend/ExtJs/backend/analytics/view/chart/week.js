@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/chart/week"}
 Ext.define('Shopware.apps.Analytics.view.chart.Week', {
     extend: 'Shopware.apps.Analytics.view.main.Chart',
@@ -46,8 +46,8 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                 type: 'Time',
                 position: 'bottom',
                 fields: ['date'],
-                title: '{s name=chart/week/titleBottom}Date{/s}',
-                dateFormat: '{s name=chart/week/week_format}\\\\C\\\\W{/s} W, Y',
+                title: '{s name="chart/week/titleBottom"}Date{/s}',
+                dateFormat: '{s name="chart/week/week_format"}\\\\C\\\\W{/s} W, Y',
                 minorTickSteps: 6,
                 step: [Ext.Date.HOUR, 7 * 24],
                 label: {
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                                 (me.subApp.currencyAtEnd == 1)
                             );
                             this.setTitle(
-                                Ext.Date.format(storeItem.get('date'), '{s name=chart/week/week_format}\\\\C\\\\W{/s} W, Y') + '<br><br>&nbsp;' +
+                                Ext.Date.format(storeItem.get('date'), '{s name="chart/week/week_format"}\\\\C\\\\W{/s} W, Y') + '<br><br>&nbsp;' +
                                 value
                             );
                         }
@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                     yField: 'turnover',
                     fill: true,
                     smooth: true,
-                    title: '{s name=general/turnover}Turnover{/s}',
+                    title: '{s name="general/turnover"}Turnover{/s}',
                     tips: {
                         trackMouse: true,
                         width: 180,
@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                                 (me.subApp.currencyAtEnd == 1)
                             );
                             this.setTitle(
-                                Ext.Date.format(storeItem.get('date'), '{s name=chart/week/week_format}\\\\C\\\\W{/s} W, Y') + '<br><br>&nbsp;' +
+                                Ext.Date.format(storeItem.get('date'), '{s name="chart/week/week_format"}\\\\C\\\\W{/s} W, Y') + '<br><br>&nbsp;' +
                                 value
                             )
 
@@ -143,7 +143,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
             grid: true,
             position: 'left',
             fields: me.getAxesFields('turnover'),
-            title: '{s name=general/turnover}Turnover{/s}'
+            title: '{s name="general/turnover"}Turnover{/s}'
         });
         me.callParent(arguments);
 

@@ -27,12 +27,12 @@
  * @author     shopware AG
  */
 
-//{namespace name=backend/emotion/view/main}
+//{namespace name="backend/emotion/view/main"}
 
 //{block name="backend/emotion/view/main/window"}
 Ext.define('Shopware.apps.Emotion.view.main.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window/title}Emotion{/s}',
+    title: '{s name="window/title"}Emotion{/s}',
     alias: 'widget.emotion-main-window',
     border: false,
     autoShow: true,
@@ -49,23 +49,23 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
      */
     snippets: {
         tab: {
-            overview: '{s name=window/tab/overview}Overview{/s}',
-            custom_templates: '{s name=window/tab/custom_templates}Templates management{/s}'
+            overview: '{s name="window/tab/overview"}Overview{/s}',
+            custom_templates: '{s name="window/tab/custom_templates"}Templates management{/s}'
         },
         tree: {
-            title: '{s name=list/tree/title}Categories{/s}'
+            title: '{s name="list/tree/title"}Categories{/s}'
         },
         filter: {
-            title: '{s name=list/filter/title}Filter{/s}',
-            noFilter: '{s name=list/no_filter}No filter{/s}',
-            onlyDesktop: '<div class="sprite-imac" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_desktop}Only desktop devices{/s}',
-            onlyTabletLandscape: '<div class="sprite-ipad--landscape" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_tablet_landscape}Only tablet landscape devices{/s}',
-            onlyTabletPortrait: '<div class="sprite-ipad--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_tablet}Only tablet devices{/s}',
-            onlyMobileLandscape: '<div class="sprite-iphone--landscape" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_mobile_landscape}Only mobile landscape devices{/s}',
-            onlyMobilePortrait: '<div class="sprite-iphone--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_mobile}Only mobile devices{/s}',
-            onlyActive: '<div class="sprite-ui-check-box" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_active}Only active worlds{/s}',
-            onlyLandingpage: '{s name=list/only_landingpage}Only landingpages{/s}',
-            onlyWorld: '{s name=list/only_world}Only shopping worlds{/s}'
+            title: '{s name="list/filter/title"}Filter{/s}',
+            noFilter: '{s name="list/no_filter"}No filter{/s}',
+            onlyDesktop: '<div class="sprite-imac" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="list/only_desktop"}Only desktop devices{/s}',
+            onlyTabletLandscape: '<div class="sprite-ipad--landscape" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="list/only_tablet_landscape"}Only tablet landscape devices{/s}',
+            onlyTabletPortrait: '<div class="sprite-ipad--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="list/only_tablet"}Only tablet devices{/s}',
+            onlyMobileLandscape: '<div class="sprite-iphone--landscape" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="list/only_mobile_landscape"}Only mobile landscape devices{/s}',
+            onlyMobilePortrait: '<div class="sprite-iphone--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="list/only_mobile"}Only mobile devices{/s}',
+            onlyActive: '<div class="sprite-ui-check-box" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="list/only_active"}Only active worlds{/s}',
+            onlyLandingpage: '{s name="list/only_landingpage"}Only landingpages{/s}',
+            onlyWorld: '{s name="list/only_world"}Only shopping worlds{/s}'
         }
     },
 

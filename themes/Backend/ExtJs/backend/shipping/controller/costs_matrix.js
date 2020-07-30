@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/controller/costs_matrix}*/
+/*{namespace name="backend/shipping/controller/costs_matrix"}*/
 
 /**
  * todo@all: Documentation
@@ -161,7 +161,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
         if('to' == field) {
             // If the entered value is smaller than the value in the from field
             if((options.value <= fromValue) ) {
-                var errorText = '{s name=dialog_text}Value must higher than ([0]){/s}';
+                var errorText = '{s name="dialog_text"}Value must higher than ([0]){/s}';
                 toField.setRawValue(fieldOriginal);
                 rec.set('to', 0);
                 toField.setValue(0);
@@ -212,8 +212,8 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
         var me = this,
         store = record.store;
 
-        Ext.MessageBox.confirm('{s name=delete_dialog_title}Delete selected Costs Entry?{/s}',
-            '{s name=delete_dialog_body}Do you really want delete this entry?{/s}',
+        Ext.MessageBox.confirm('{s name="delete_dialog_title"}Delete selected Costs Entry?{/s}',
+            '{s name="delete_dialog_body"}Do you really want delete this entry?{/s}',
             function (response) {
                 if (response !== 'yes') {
                     return false;
@@ -227,10 +227,10 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                     costsMatrixModel.destroy({
                         success : function () {
                             store.load();
-                            Shopware.Msg.createGrowlMessage('','{s name=dialog_success}Costs entry has been deleted successfully{/s}', '{s name=title}{/s}')
+                            Shopware.Msg.createGrowlMessage('','{s name="dialog_success"}Costs entry has been deleted successfully{/s}', '{s name="title"}{/s}')
                         },
                         failure : function () {
-                            Shopware.Msg.createGrowlMessage('', '{s name=dialog_error}An error occurred while deleting the costs entry{/s}', '{s name=title}{/s}');
+                            Shopware.Msg.createGrowlMessage('', '{s name="dialog_error"}An error occurred while deleting the costs entry{/s}', '{s name="title"}{/s}');
                         }
                     });
                 }

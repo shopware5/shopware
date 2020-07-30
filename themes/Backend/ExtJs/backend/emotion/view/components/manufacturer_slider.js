@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{block name="backend/emotion/view/components/manufacturer_slider"}
-//{namespace name=backend/emotion/view/components/manufacturer_slider}
+//{namespace name="backend/emotion/view/components/manufacturer_slider"}
 Ext.define('Shopware.apps.Emotion.view.components.ManufacturerSlider', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-manufacturer-slider',
@@ -37,17 +37,17 @@ Ext.define('Shopware.apps.Emotion.view.components.ManufacturerSlider', {
      * @object
      */
     snippets: {
-        'select_manufacturer': '{s name=select_manufacturer}Select manufacturer(s){/s}',
-        'manufacturer_administration': '{s name=manufacturer_administration}Manufacturer administration{/s}',
-        'name': '{s name=name}Name{/s}',
-        'actions': '{s name=actions}Action(s){/s}',
+        'select_manufacturer': '{s name="select_manufacturer"}Select manufacturer(s){/s}',
+        'manufacturer_administration': '{s name="manufacturer_administration"}Manufacturer administration{/s}',
+        'name': '{s name="name"}Name{/s}',
+        'actions': '{s name="actions"}Action(s){/s}',
 
-        manufacturer_slider_title: '{s name=manufacturer_slider_title}Title{/s}',
-        manufacturer_slider_arrows: '{s name=manufacturer_slider_arrows}Display arrows{/s}',
-        manufacturer_slider_scrollspeed: '{s name=manufacturer_slider_scrollspeed}Scroll speed{/s}',
-        manufacturer_slider_rotation: '{s name=manufacturer_slider_rotation}Rotate automatically{/s}',
-        manufacturer_slider_rotatespeed: '{s name=manufacturer_slider_rotatespeed}Rotation speed{/s}',
-        manufacturer_category: '{s name=manufacturer_category}Select category{/s}',
+        manufacturer_slider_title: '{s name="manufacturer_slider_title"}Title{/s}',
+        manufacturer_slider_arrows: '{s name="manufacturer_slider_arrows"}Display arrows{/s}',
+        manufacturer_slider_scrollspeed: '{s name="manufacturer_slider_scrollspeed"}Scroll speed{/s}',
+        manufacturer_slider_rotation: '{s name="manufacturer_slider_rotation"}Rotate automatically{/s}',
+        manufacturer_slider_rotatespeed: '{s name="manufacturer_slider_rotatespeed"}Rotation speed{/s}',
+        manufacturer_category: '{s name="manufacturer_category"}Select category{/s}',
 
         no_border: {
             fieldLabel: '{s name="noBorder/label" namespace="backend/emotion/view/components/article"}{/s}',

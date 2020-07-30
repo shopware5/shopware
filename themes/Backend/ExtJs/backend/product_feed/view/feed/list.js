@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/product_feed/view/feed}
+//{namespace name="backend/product_feed/view/feed"}
 
 /**
  * Shopware UI - Product Feed list main window.
@@ -129,29 +129,29 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
 
         var columnsData = [
             {
-                header:'{s name=list/column/title}Title{/s}',
+                header:'{s name="list/column/title"}Title{/s}',
                 dataIndex:'name',
                 flex:1
             },
             {
-                header: '{s name=list/column/active}Active{/s}',
+                header: '{s name="list/column/active"}Active{/s}',
                 dataIndex: 'active',
                 width: 50,
                 renderer:me.activeColumnRenderer
             },
             {
-                header:'{s name=list/column/file_name}File name{/s}',
+                header:'{s name="list/column/file_name"}File name{/s}',
                 dataIndex:'fileName',
                 renderer:me.fileNameRenderer,
                 flex:1
             },
             {
-                header:'{s name=list/column/count_articles}Number of articles{/s}',
+                header:'{s name="list/column/count_articles"}Number of articles{/s}',
                 dataIndex:'countArticles',
                 flex:1
             },
             {
-                header:'{s name=list/column/last_export}Last export{/s}',
+                header:'{s name="list/column/last_export"}Last export{/s}',
                 dataIndex:'lastExport',
                 flex:1,
                 renderer :  me.onDateRenderer
@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
             actionColumnData.push({
                 iconCls:'sprite-pencil',
                 cls:'editBtn',
-                tooltip:'{s name=list/action_column/edit}Edit this product feed{/s}',
+                tooltip:'{s name="list/action_column/edit"}Edit this product feed{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('editColumn', view, rowIndex, colIndex, item);
                 }
@@ -196,7 +196,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
                iconCls:'sprite-minus-circle-frame',
                action:'delete',
                cls:'delete',
-               tooltip:'{s name=list/action_column/delete}Delete this feed{/s}',
+               tooltip:'{s name="list/action_column/delete"}Delete this feed{/s}',
                handler:function (view, rowIndex, colIndex, item) {
                    me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
                }
@@ -207,7 +207,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
             actionColumnData.push({
                 iconCls:'sprite-blue-document-copy',
                 cls:'duplicate',
-                tooltip:'{s name=list/action_column/duplicate}Duplicate this feed{/s}',
+                tooltip:'{s name="list/action_column/duplicate"}Duplicate this feed{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('duplicateColumn', view, rowIndex, colIndex, item);
                 }
@@ -219,7 +219,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
             actionColumnData.push({
                 iconCls:'sprite-lightning',
                 cls:'arrow-lightning',
-                tooltip:'{s name=list/action_column/execute}Execute feed{/s}',
+                tooltip:'{s name="list/action_column/execute"}Execute feed{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('executeFeed', view, rowIndex, colIndex, item);
                 }
@@ -241,7 +241,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
                     /*{if {acl_is_allowed privilege=create}}*/
                     {
                         iconCls:'sprite-plus-circle',
-                        text:'{s name=list/button/add}Add{/s}',
+                        text:'{s name="list/button/add"}Add{/s}',
                         action:'add'
                     }
                     /*{/if}*/

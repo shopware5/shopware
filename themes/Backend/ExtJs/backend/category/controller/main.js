@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/* {namespace name=backend/category/main} */
+/* {namespace name="backend/category/main"} */
 
 /**
  * Shopware Controller - category management controller
@@ -71,9 +71,9 @@ Ext.define('Shopware.apps.Category.controller.Main', {
      * @Object
      */
     snippets : {
-        onSaveChangesSuccess    : '{s name=settings/save_success}Changes have been saved successfully.{/s}',
-        onSaveChangesError      : '{s name=settings/save_error}An error has occurred while saving the changes.{/s}',
-        growlMessage            : '{s name=window/main_title}{/s}'
+        onSaveChangesSuccess    : '{s name="settings/save_success"}Changes have been saved successfully.{/s}',
+        onSaveChangesError      : '{s name="settings/save_error"}An error has occurred while saving the changes.{/s}',
+        growlMessage            : '{s name="window/main_title"}{/s}'
     },
 
     /**

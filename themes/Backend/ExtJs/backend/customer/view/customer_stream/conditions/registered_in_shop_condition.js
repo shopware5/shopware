@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+// {namespace name="backend/customer/view/main"}
 // {block name="backend/customer/view/customer_stream/conditions/registered_in_shop_condition"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.RegisteredInShopCondition', {
 

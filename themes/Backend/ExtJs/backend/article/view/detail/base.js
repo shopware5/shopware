@@ -32,7 +32,7 @@
  * The base component contains the configuration elements for the article head data, like the article name,
  * article order number, etc.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/detail/base"}
 Ext.define('Shopware.apps.Article.view.detail.Base', {
     /**
@@ -64,24 +64,24 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
      * @object
      */
     snippets:{
-        titleEdit: '{s name=detail/base/title_edit}Head data - last edit [0]{/s}',
-        titleNew: '{s name=detail/base/title_new}Head data{/s}',
-        empty: '{s name=empty}Please select...{/s}',
-        name: '{s name=detail/base/description}Article description{/s}',
-        supplier: '{s name=detail/base/supplier}Supplier{/s}',
-        number: '{s name=detail/base/number}Article number{/s}',
-        active: '{s name=detail/base/active}Active{/s}',
+        titleEdit: '{s name="detail/base/title_edit"}Head data - last edit [0]{/s}',
+        titleNew: '{s name="detail/base/title_new"}Head data{/s}',
+        empty: '{s name="empty"}Please select...{/s}',
+        name: '{s name="detail/base/description"}Article description{/s}',
+        supplier: '{s name="detail/base/supplier"}Supplier{/s}',
+        number: '{s name="detail/base/number"}Article number{/s}',
+        active: '{s name="detail/base/active"}Active{/s}',
         configurator: {
-            fieldLabel: '{s name=detail/base/configurator_field}Configurator{/s}'
+            fieldLabel: '{s name="detail/base/configurator_field"}Configurator{/s}'
         },
-        tax: '{s name=detail/base/tax}Tax{/s}',
-        template: '{s name=detail/base/template}Template{/s}',
-        priceGroupActive: '{s name=detail/base/price_group_active}Active price group{/s}',
-        priceGroup: '{s name=detail/base/price_group_select}Select price group{/s}',
-        purchasePrice: '{s name=detail/base/purchase_price}Purchase price{/s}',
-        numberValidation: '{s name=detail/base/number_validation}The inserted article number already exists!{/s}',
-        mainDetailAdditionalText: '{s name=detail/base/main_detail_additional_text}Varianten-Zusatztext{/s}',
-        regexNumberValidation: '{s name=detail/base/regex_number_validation}The inserted article number contains illegal characters!{/s}'
+        tax: '{s name="detail/base/tax"}Tax{/s}',
+        template: '{s name="detail/base/template"}Template{/s}',
+        priceGroupActive: '{s name="detail/base/price_group_active"}Active price group{/s}',
+        priceGroup: '{s name="detail/base/price_group_select"}Select price group{/s}',
+        purchasePrice: '{s name="detail/base/purchase_price"}Purchase price{/s}',
+        numberValidation: '{s name="detail/base/number_validation"}The inserted article number already exists!{/s}',
+        mainDetailAdditionalText: '{s name="detail/base/main_detail_additional_text"}Varianten-Zusatztext{/s}',
+        regexNumberValidation: '{s name="detail/base/regex_number_validation"}The inserted article number contains illegal characters!{/s}'
     },
 
     /**

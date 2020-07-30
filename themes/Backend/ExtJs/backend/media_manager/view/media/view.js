@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/media_manager/view/main}
+//{namespace name="backend/media_manager/view/main"}
 
 /**
  * Shopware UI - Media Manager Media View
@@ -54,35 +54,35 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     displayTypeBtn: null,
     selectedLayout: 'grid',
     snippets: {
-        noMediaFound: '{s name=noMediaFound}No Media found{/s}',
-        uploadDataDragDrop: '{s name=uploadDataDragDrop}Upload your Data via <strong>Drag & Drop</strong> here{/s}',
-        noAdditionalInfo: '{s name=noAdditionalInfo}No additional informations found{/s}',
-        moreInfoTitle:'{s name=moreInfoTitle}More information{/s}',
-        previewSize: '{s name=previewSizeFieldLabel}Preview size{/s}',
+        noMediaFound: '{s name="noMediaFound"}No Media found{/s}',
+        uploadDataDragDrop: '{s name="uploadDataDragDrop"}Upload your Data via <strong>Drag & Drop</strong> here{/s}',
+        noAdditionalInfo: '{s name="noAdditionalInfo"}No additional informations found{/s}',
+        moreInfoTitle:'{s name="moreInfoTitle"}More information{/s}',
+        previewSize: '{s name="previewSizeFieldLabel"}Preview size{/s}',
         mediaInfo: {
-            name: '{s name=mediaInfo/name}Name:{/s}',
-            uploadedon: '{s name=mediaInfo/uploadedOn}Uploaded on:{/s}',
-            type: '{s name=mediaInfo/type}Type:{/s}',
-            resolution: '{s name=mediaInfo/resolution}Resolution:{/s}',
-            adress: '{s name=mediaInfo/adress}Adress:{/s}',
-            thumbnails: '{s name=mediaInfo/thumbnails}Thumbnails:{/s}',
-            mediaLink: '{s name=mediaInfo/mediaLink}Link to media{/s}'
+            name: '{s name="mediaInfo/name"}Name:{/s}',
+            uploadedon: '{s name="mediaInfo/uploadedOn"}Uploaded on:{/s}',
+            type: '{s name="mediaInfo/type"}Type:{/s}',
+            resolution: '{s name="mediaInfo/resolution"}Resolution:{/s}',
+            adress: '{s name="mediaInfo/adress"}Adress:{/s}',
+            thumbnails: '{s name="mediaInfo/thumbnails"}Thumbnails:{/s}',
+            mediaLink: '{s name="mediaInfo/mediaLink"}Link to media{/s}'
         },
         formatTypes: {
-            video: '{s name=formatTypes/video}-video{/s}',
-            music: '{s name=formatTypes/music}-music{/s}',
-            archive: '{s name=formatTypes/archive}-archive{/s}',
-            pdf: '{s name=formatTypes/pdf}PDF-document{/s}',
-            graphic: '{s name=formatTypes/graphic}-graphic{/s}',
-            vector: '{s name=formatTypes/vector}-vector{/s}',
-            unknown: '{s name=formatTypes/unknown}unknown file{/s}'
+            video: '{s name="formatTypes/video"}-video{/s}',
+            music: '{s name="formatTypes/music"}-music{/s}',
+            archive: '{s name="formatTypes/archive"}-archive{/s}',
+            pdf: '{s name="formatTypes/pdf"}PDF-document{/s}',
+            graphic: '{s name="formatTypes/graphic"}-graphic{/s}',
+            vector: '{s name="formatTypes/vector"}-vector{/s}',
+            unknown: '{s name="formatTypes/unknown"}unknown file{/s}'
         },
         fieldsText:{
-            searchField: '{s name=fieldsText/searchField}Search media...{/s}',
-            deleteButton: '{s name=fieldsText/deleteButton}delete marked file(s){/s}',
-            addButton: '{s name=fieldsText/addButton}add more files{/s}',
-            itemsPerSite: '{s name=fieldsText/itemsPerSite}items per site{/s}',
-            itemCount: '{s name=fieldsText/itemCount}items{/s}'
+            searchField: '{s name="fieldsText/searchField"}Search media...{/s}',
+            deleteButton: '{s name="fieldsText/deleteButton"}delete marked file(s){/s}',
+            addButton: '{s name="fieldsText/addButton"}add more files{/s}',
+            itemsPerSite: '{s name="fieldsText/itemsPerSite"}items per site{/s}',
+            itemCount: '{s name="fieldsText/itemCount"}items{/s}'
         }
     },
 
@@ -611,18 +611,18 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
 
         me.displayTypeBtn = Ext.create('Ext.button.Cycle',{
             showText: true,
-            prependText: '{s name=toolbar/view}Display as{/s} ',
+            prependText: '{s name="toolbar/view"}Display as{/s} ',
             action: 'mediamanager-media-view-layout',
             handler: function(btn) {
                 btn.fireEvent('layout-button-click', btn, btn.getActiveItem());
             },
             menu: {
                 items: [{
-                    text: '{s name=toolbar/view_chart}Grid{/s}',
+                    text: '{s name="toolbar/view_chart"}Grid{/s}',
                     layout: 'grid',
                     iconCls: 'sprite-application-icon-large'
                 },{
-                    text: '{s name=toolbar/view_table}Table{/s}',
+                    text: '{s name="toolbar/view_table"}Table{/s}',
                     layout: 'table',
                     checked: true,
                     iconCls: 'sprite-application-table'

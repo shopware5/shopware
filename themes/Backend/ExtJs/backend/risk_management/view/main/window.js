@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/risk_management/main}
+//{namespace name="backend/risk_management/main"}
 
 /**
  * Shopware UI - riskManagement Window View
@@ -38,7 +38,7 @@
 //{block name="backend/risk_management/view/main/window"}
 Ext.define('Shopware.apps.RiskManagement.view.main.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window_title}Risk management{/s}',
+    title: '{s name="window_title"}Risk management{/s}',
     cls: Ext.baseCSSPrefix + 'risk_management-window',
     alias: 'widget.risk_management-main-window',
     border: 0,

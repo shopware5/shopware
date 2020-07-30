@@ -13,14 +13,14 @@
 {* Meta opengraph tags *}
 {block name='frontend_index_header_meta_tags_opengraph'}
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
-    <meta property="og:title" content="{{config name=sShopname}|escapeHtml}" />
+    <meta property="og:site_name" content="{{config name="sShopname"}|escapeHtml}" />
+    <meta property="og:title" content="{{config name="sShopname"}|escapeHtml}" />
     <meta property="og:description" content="{s name='NewsletterMetaDescriptionStandard'}{/s}" />
     <meta property="og:image" content="{link file=$theme.desktopLogo fullPath}" />
 
     <meta name="twitter:card" content="website" />
-    <meta name="twitter:site" content="{{config name=sShopname}|escapeHtml}" />
-    <meta name="twitter:title" content="{{config name=sShopname}|escapeHtml}" />
+    <meta name="twitter:site" content="{{config name="sShopname"}|escapeHtml}" />
+    <meta name="twitter:title" content="{{config name="sShopname"}|escapeHtml}" />
     <meta name="twitter:description" content="{s name='NewsletterMetaDescriptionStandard'}{/s}" />
     <meta name="twitter:image" content="{link file=$theme.desktopLogo fullPath}" />
 {/block}
@@ -105,7 +105,7 @@
 
                             {* Additional fields *}
                             {block name="frontend_newsletter_form_additionalfields"}
-                                {if {config name=NewsletterExtendedFields}}
+                                {if {config name="NewsletterExtendedFields"}}
                                     <div class="newsletter--additional-form">
 
                                         {getSalutations variable="salutations"}
@@ -146,7 +146,7 @@
                                         {* Zip + City *}
                                         {block name="frontend_newsletter_form_input_zip_and_city"}
                                             <div class="newsletter--zip-city">
-                                                {if {config name=showZipBeforeCity}}
+                                                {if {config name="showZipBeforeCity"}}
                                                     <input name="zipcode" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderZipcode"}{/s}" value="{$smarty.post.zipcode|escape}" class="input--field input--field-zipcode input--spacer{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
                                                     <input name="city" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderCityname"}{/s}" value="{$smarty.post.city|escape}" size="25" class="input--field input--field-city{if $sStatus.sErrorFlag.city} has--error{/if}"/>
                                                 {else}
@@ -170,8 +170,8 @@
 
                             {* Captcha *}
                             {block name="frontend_newsletter_form_captcha"}
-                                {if !({config name=noCaptchaAfterLogin} && $sUserLoggedIn)}
-                                    {$newsletterCaptchaName = {config name=newsletterCaptcha}}
+                                {if !({config name="noCaptchaAfterLogin"} && $sUserLoggedIn)}
+                                    {$newsletterCaptchaName = {config name="newsletterCaptcha"}}
                                     <div class="newsletter--captcha-form">
                                         {if $newsletterCaptchaName === 'legacy'}
                                             <div class="newsletter--captcha">
@@ -206,7 +206,7 @@
 
                             {* Data protection information *}
                             {block name="frontend_newsletter_form_privacy"}
-                                {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
+                                {if {config name="ACTDPRTEXT"} || {config name="ACTDPRCHECK"}}
                                     {include file="frontend/_includes/privacy.tpl"}
                                 {/if}
                             {/block}

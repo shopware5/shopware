@@ -29,14 +29,14 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/theme/main}
+//{namespace name="backend/theme/main"}
 
 //{block name="backend/theme/view/create/window"}
 
 Ext.define('Shopware.apps.Theme.view.create.Window', {
     extend: 'Shopware.window.Detail',
     alias: 'widget.theme-create-window',
-    title : '{s name=create_window}Create new theme{/s}',
+    title : '{s name="create_window"}Create new theme{/s}',
     height: 500,
     width: 560
 });

@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/chart/customers"}
 Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
     extend: 'Shopware.apps.Analytics.view.main.Chart',
@@ -45,11 +45,11 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
             grid: true,
             position: 'left',
             fields: ['newCustomersPercent', 'oldCustomersPercent'],
-            title: '{s name=chart/customers/percent/title}Percent{/s}'
+            title: '{s name="chart/customers/percent/title"}Percent{/s}'
         },
         {
             type: 'Category',
-            title: '{s name=chart/customers/days/title}Days{/s}',
+            title: '{s name="chart/customers/days/title"}Days{/s}',
             position: 'bottom',
             fields: ['week'],
             label: {

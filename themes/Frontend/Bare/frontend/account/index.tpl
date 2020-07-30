@@ -34,7 +34,7 @@
         {/block}
 
         {* Optin successful *}
-        {if $smarty.get.optinconfirmed && {config name=optinregister}}
+        {if $smarty.get.optinconfirmed && {config name="optinregister"}}
             {s name="AccountOptinConfirmed" assign="snippetAccountOptinConfirmed"}{/s}
             {include file="frontend/_includes/messages.tpl" type="success" content=$snippetAccountOptinConfirmed}
         {/if}
@@ -165,7 +165,7 @@
                                     <span class="address--street">{$sUserData.billingaddress.street|escapeHtml}</span><br />
                                     {if $sUserData.billingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.billingaddress.additional_address_line1|escapeHtml}</span><br />{/if}
                                     {if $sUserData.billingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.billingaddress.additional_address_line2|escapeHtml}</span><br />{/if}
-                                    {if {config name=showZipBeforeCity}}
+                                    {if {config name="showZipBeforeCity"}}
                                         <span class="address--zipcode">{$sUserData.billingaddress.zipcode|escapeHtml}</span> <span class="address--city">{$sUserData.billingaddress.city|escapeHtml}</span>
                                     {else}
                                         <span class="address--city">{$sUserData.billingaddress.city|escapeHtml}</span> <span class="address--zipcode">{$sUserData.billingaddress.zipcode|escapeHtml}</span>
@@ -228,7 +228,7 @@
                                             <span class="address--street">{$sUserData.shippingaddress.street|escapeHtml}</span><br />
                                             {if $sUserData.shippingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.shippingaddress.additional_address_line1|escapeHtml}</span><br />{/if}
                                             {if $sUserData.shippingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.shippingaddress.additional_address_line2|escapeHtml}</span><br />{/if}
-                                            {if {config name=showZipBeforeCity}}
+                                            {if {config name="showZipBeforeCity"}}
                                                 <span class="address--zipcode">{$sUserData.shippingaddress.zipcode|escapeHtml}</span> <span class="address--city">{$sUserData.shippingaddress.city|escapeHtml}</span>
                                             {else}
                                                 <span class="address--city">{$sUserData.shippingaddress.city|escapeHtml}</span> <span class="address--zipcode">{$sUserData.shippingaddress.zipcode|escapeHtml}</span>

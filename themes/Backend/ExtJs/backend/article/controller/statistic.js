@@ -30,7 +30,7 @@
 /**
  * Shopware Controller - Article backend module
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/controller/statistic"}
 Ext.define('Shopware.apps.Article.controller.Statistic', {
     /**

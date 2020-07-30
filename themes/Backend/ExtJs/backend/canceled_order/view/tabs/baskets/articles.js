@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/canceled_order/view/main}
+//{namespace name="backend/canceled_order/view/main"}
 
 /**
  * Shopware UI - Articles view
@@ -38,16 +38,16 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Articles', {
     extend: 'Ext.grid.Panel',
     border: false,
     alias: 'widget.canceled-order-tabs-baskets-articles',
-    title: '{s name=baskets/Articles}Articles{/s}',
+    title: '{s name="baskets/Articles"}Articles{/s}',
 
     snippets : {
         columns : {
-            ordernumber: '{s name=columns/orderNumber}Ordernumber{/s}',
-            article: '{s name=columns/article}Article{/s}',
-            number: '{s name=columns/number}Number{/s}'
+            ordernumber: '{s name="columns/orderNumber"}Ordernumber{/s}',
+            article: '{s name="columns/article"}Article{/s}',
+            number: '{s name="columns/number"}Number{/s}'
         },
         tooltip : {
-            edit: '{s name=article/edit}Edit{/s}'
+            edit: '{s name="article/edit"}Edit{/s}'
         }
     },
 

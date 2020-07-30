@@ -24,7 +24,7 @@
         <div class="inner_container">
             <p>{s name="LoginInfoNew"}{/s}</p>
             <form method="post" name="new_customer" class="new_customer_form" action="{url controller='register'}">
-                {if !{config name=NoAccountDisable}}
+                {if !{config name="NoAccountDisable"}}
                     <div class="checkbox">
                         <p>
                             <input type="checkbox" class="chk_noaccount" name="skipLogin" value="1" />

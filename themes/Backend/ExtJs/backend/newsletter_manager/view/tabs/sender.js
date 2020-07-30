@@ -37,16 +37,16 @@
 Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.newsletter-manager-tabs-sender',
-    title: '{s name=sender}Sender{/s}',
+    title: '{s name="sender"}Sender{/s}',
     region: 'center',
 
     border: false,
 
     snippets : {
         columns : {
-            mail: '{s name=columns/mailAddress}Mail address{/s}',
-            senderName: '{s name=columns/senderName}Sender\'s name{/s}',
-            actions: '{s name=columns/actions}Actions{/s}'
+            mail: '{s name="columns/mailAddress"}Mail address{/s}',
+            senderName: '{s name="columns/senderName"}Sender\'s name{/s}',
+            actions: '{s name="columns/actions"}Actions{/s}'
         }
     },
 
@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
             {
                 iconCls:'sprite-minus-circle-frame',
                 action:'delete',
-                tooltip:'{s name=action/delete}Delete{/s}',
+                tooltip:'{s name="action/delete"}Delete{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('deleteSender', [record]);
                 }
@@ -162,7 +162,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
             {
                 iconCls:'sprite-pencil',
                 action:'view',
-                tooltip:'{s name=action/edit}Edit mail{/s}',
+                tooltip:'{s name="action/edit"}Edit mail{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('editSender', record);
                 }
@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
         var me = this;
 
         me.deleteSenderButton = Ext.create('Ext.button.Button', {
-            text: '{s name=deleteSelected}Delete selected{/s}',
+            text: '{s name="deleteSelected"}Delete selected{/s}',
             disabled: true,
             iconCls: 'sprite-minus-circle',
             handler: function() {
@@ -204,7 +204,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
                 {
                     xtype: 'button',
                     iconCls: 'sprite-plus-circle',
-                    text: '{s name=createNewSender}Create new sender{/s}',
+                    text: '{s name="createNewSender"}Create new sender{/s}',
                     handler: function () {
                         me.fireEvent('createNewSender');
                     }

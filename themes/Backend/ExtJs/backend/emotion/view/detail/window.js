@@ -27,7 +27,7 @@
  * @author      shopware AG
  */
 
-//{namespace name=backend/emotion/view/detail}
+//{namespace name="backend/emotion/view/detail"}
 
 /**
  * Emotion Detail Window

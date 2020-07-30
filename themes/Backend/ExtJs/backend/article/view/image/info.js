@@ -34,7 +34,7 @@
  * Additional it contains a tree panel for the assigned article components like variants or similar.
  * All events of the component handled in the media controller.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/image/info"}
 Ext.define('Shopware.apps.Article.view.image.Info', {
     /**
@@ -75,8 +75,8 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
      * @object
      */
     snippets:{
-        title: '{s name=image/info/title}Image options{/s}',
-        imageTitle: '{s name=image/info/image_title}Title{/s}',
+        title: '{s name="image/info/title"}Image options{/s}',
+        imageTitle: '{s name="image/info/image_title"}Title{/s}',
     },
 
     plugins: [{

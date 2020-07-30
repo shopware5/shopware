@@ -31,13 +31,13 @@
  * Shopware UI - Site group dialog View
  */
 
-//{namespace name=backend/site/site}
+//{namespace name="backend/site/site"}
 
 //{block name="backend/site/view/site/group_dialog"}
 Ext.define('Shopware.apps.Site.view.site.GroupDialog', {
     extend: 'Enlight.app.Window',
     alias: 'widget.site-group-dialog',
-    title: '{s name=createGroupWindowTitle}New group{/s}',
+    title: '{s name="createGroupWindowTitle"}New group{/s}',
     width: 400,
     height: 200,
     modal: true,
@@ -51,12 +51,12 @@ Ext.define('Shopware.apps.Site.view.site.GroupDialog', {
         items: ['->', {
             xtype: 'button',
             cls: 'secondary',
-            text: '{s name=createGroupWindowCancelButton}Cancel{/s}',
+            text: '{s name="createGroupWindowCancelButton"}Cancel{/s}',
             action: 'onCreateGroupWindowClose'
         }, {
             xtype: 'button',
             cls: 'primary',
-            text: '{s name=createGroupWindowSubmitButton}Create{/s}',
+            text: '{s name="createGroupWindowSubmitButton"}Create{/s}',
             action: 'onCreateGroupSubmit'
         }]
     }],
@@ -69,10 +69,10 @@ Ext.define('Shopware.apps.Site.view.site.GroupDialog', {
             xtype: 'textfield'
         },
         items: [{
-            fieldLabel: '{s name=createGroupWindowDescription}Description{/s}',
+            fieldLabel: '{s name="createGroupWindowDescription"}Description{/s}',
             name:  'description'
         }, {
-            fieldLabel: '{s name=createGroupWindowTemplateVar}Template variable{/s}',
+            fieldLabel: '{s name="createGroupWindowTemplateVar"}Template variable{/s}',
             name: 'templateVar'
         }]
     }]

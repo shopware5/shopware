@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/blog/view/blog}
+//{namespace name="backend/blog/view/blog"}
 
 /**
  * Shopware UI - Blog comments grid.
@@ -121,29 +121,29 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
 
         return [
             {
-                header: '{s name=detail/main/comments/column/status}Status{/s}',
+                header: '{s name="detail/main/comments/column/status"}Status{/s}',
                 dataIndex: 'active',
                 renderer: me.activeColumnRenderer,
                 flex: 1
             },
             {
-                header: '{s name=detail/main/comments/column/date}Date{/s}',
+                header: '{s name="detail/main/comments/column/date"}Date{/s}',
                 dataIndex: 'creationDate',
                 renderer: me.dateRenderer,
                 flex: 3
             },
             {
-                header: '{s name=detail/main/comments/column/author}Author{/s}',
+                header: '{s name="detail/main/comments/column/author"}Author{/s}',
                 dataIndex: 'name',
                 flex: 3
             },
             {
-                header: '{s name=detail/main/comments/column/headline}Headline{/s}',
+                header: '{s name="detail/main/comments/column/headline"}Headline{/s}',
                 dataIndex: 'headline',
                 flex: 3
             },
             {
-                header: '{s name=detail/main/comments/column/shop}Shop{/s}',
+                header: '{s name="detail/main/comments/column/shop"}Shop{/s}',
                 dataIndex: 'shopId',
                 flex: 3,
                 renderer: me.shopRenderer,
@@ -174,7 +174,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
         actionColumnData.push({
             iconCls:'sprite-plus-circle',
             cls:'addBtn',
-            tooltip:'{s name=detail/main/comments/action_column/add}Accept comment{/s}',
+            tooltip:'{s name="detail/main/comments/action_column/add"}Accept comment{/s}',
             getClass: function(value, metadata, record) {
                 if (record.get('active')) {
                     return 'x-hidden';
@@ -189,7 +189,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
             iconCls:'sprite-minus-circle-frame',
             action:'delete',
             cls:'delete',
-            tooltip:'{s name=detail/main/comments/action_column/delete}Deleted comment{/s}',
+            tooltip:'{s name="detail/main/comments/action_column/delete"}Deleted comment{/s}',
             handler:function (view, rowIndex, colIndex, item) {
                 me.fireEvent('deleteBlogComment', view, rowIndex, colIndex, item);
             }

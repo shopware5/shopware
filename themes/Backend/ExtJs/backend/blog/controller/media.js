@@ -32,7 +32,7 @@
  *
  * Media controller of the blog module. Handles all action around the media part of sub-application
  */
-//{namespace name=backend/blog/view/blog}
+//{namespace name="backend/blog/view/blog"}
 //{block name="backend/blog/controller/media"}
 Ext.define('Shopware.apps.Blog.controller.Media', {
     /**

@@ -21,10 +21,10 @@
         <div class="table--aggregation">
             {* Add product using a voucher *}
             {block name='frontend_checkout_cart_footer_add_voucher'}
-                {if {config name=showVoucherModeForCart} != 0}
+                {if {config name="showVoucherModeForCart"} != 0}
                     <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}"
                           class="table--add-voucher add-voucher--form">
-                        {if {config name=showVoucherModeForCart} == 1}
+                        {if {config name="showVoucherModeForCart"} == 1}
                             {block name='frontend_checkout_cart_footer_add_voucher_trigger'}
                                 <input type="checkbox" id="add-voucher--trigger" class="add-voucher--checkbox">
                             {/block}
@@ -35,7 +35,7 @@
                             {/block}
                         {/if}
 
-                        <div class="add-voucher--panel {if {config name=showVoucherModeForCart} == 1}is--hidden {/if}block-group">
+                        <div class="add-voucher--panel {if {config name="showVoucherModeForCart"} == 1}is--hidden {/if}block-group">
                             {block name='frontend_checkout_cart_footer_add_voucher_field'}
                                 {s name="CheckoutFooterAddVoucherLabelInline" assign="snippetCheckoutFooterAddVoucherLabelInline"}{/s}
                                 <input type="text" class="add-voucher--field is--medium block" name="sVoucher"
@@ -54,10 +54,10 @@
             {/block}
 
             {* Shipping costs pre-calculation *}
-            {if $sBasket.content && !$sUserLoggedIn && !$sUserData.additional.user.id && {config name=basketShowCalculation} != 0}
+            {if $sBasket.content && !$sUserLoggedIn && !$sUserData.additional.user.id && {config name="basketShowCalculation"} != 0}
 
                 {block name='frontend_checkout_shipping_costs_country_trigger'}
-                    {if {config name=basketShowCalculation} == 1}
+                    {if {config name="basketShowCalculation"} == 1}
                         <a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">
                             {s name='CheckoutFooterEstimatedShippingCosts'}{/s}
                             <i class="icon--arrow-right"></i>
@@ -66,10 +66,10 @@
                 {/block}
 
                 {block name='frontend_checkout_shipping_costs_country_include'}
-                    {if {config name=basketShowCalculation} == 2}
+                    {if {config name="basketShowCalculation"} == 2}
                         <span class="is--bold">{s name='CheckoutFooterEstimatedShippingCosts'}{/s}</span>
                     {/if}
-                    {include file="frontend/checkout/shipping_costs.tpl" calculateShippingCosts=$calculateShippingCosts == true || {config name=basketShowCalculation} == 2}
+                    {include file="frontend/checkout/shipping_costs.tpl" calculateShippingCosts=$calculateShippingCosts == true || {config name="basketShowCalculation"} == 2}
                 {/block}
             {/if}
         </div>

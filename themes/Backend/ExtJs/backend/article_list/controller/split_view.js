@@ -24,7 +24,7 @@
 /**
  * The list controller handles the split view mode
  */
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/controller/split_view"}
 Ext.define('Shopware.apps.ArticleList.controller.SplitView', {
 
@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.ArticleList.controller.SplitView', {
 
         // Is a split view already been up and running...
         if(me.splitViewMode) {
-            Ext.MessageBox.alert('{s name=splitview_title}Split-View{/s}', '{s name=split_view_already_active}The split view mode has already been activated. Please close the product mask window and start a new instance of the split view.{/s}');
+            Ext.MessageBox.alert('{s name="splitview_title"}Split-View{/s}', '{s name="split_view_already_active"}The split view mode has already been activated. Please close the product mask window and start a new instance of the split view.{/s}');
             return false;
         }
 
@@ -119,7 +119,7 @@ Ext.define('Shopware.apps.ArticleList.controller.SplitView', {
             me.splitViewMode = true;
         }
 
-        Shopware.Notification.createGrowlMessage('{s name=splitview_title}Split-View{/s}', '{s name=splitview_text}The split view mode has been activated.{/s}');
+        Shopware.Notification.createGrowlMessage('{s name="splitview_title"}Split-View{/s}', '{s name="splitview_text"}The split view mode has been activated.{/s}');
 
         // Save the position and the size of the product list
         me.defaultState = Ext.Object.merge(me.defaultState, mainWindow.getSize());

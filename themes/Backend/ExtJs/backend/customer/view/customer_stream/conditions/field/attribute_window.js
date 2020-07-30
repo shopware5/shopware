@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+// {namespace name="backend/customer/view/main"}
 
 // {block name="backend/customer/view/customer_stream/conditions/field/attribute_window"}
 
@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
     modal: true,
     width: 600,
     height: 145,
-    title: '{s name=attribute/input_text}{/s}',
+    title: '{s name="attribute/input_text"}{/s}',
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
         me.attributeCombo = Ext.create('Ext.form.field.ComboBox', {
             name: 'attribute',
             labelWidth: 180,
-            fieldLabel: '{s name=select_attribute}{/s}',
+            fieldLabel: '{s name="select_attribute"}{/s}',
             pageSize: 20,
             store: store,
             valueField: 'columnName',
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
             dock: 'bottom',
             items: ['->', {
                 xtype: 'button',
-                text: '{s name=apply}{/s}',
+                text: '{s name="apply"}{/s}',
                 cls: 'primary',
                 handler: function() {
                     if (me.attributeCombo.getValue()) {

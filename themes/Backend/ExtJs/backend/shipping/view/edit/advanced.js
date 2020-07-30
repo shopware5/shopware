@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/view/edit/advanced}*/
+/*{namespace name="backend/shipping/view/edit/advanced"}*/
 
 /**
  * Shopware UI - Shipping Costs
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
      * Title as shown in the tab from the panel
      * @string
      */
-    title : '{s name=country_selection_tab_title}Lock categories{/s}',
+    title : '{s name="country_selection_tab_title"}Lock categories{/s}',
     /**
      * Display the the contents of this tab immediately
      * @boolean
@@ -131,18 +131,18 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
             {
                 xtype       : 'checkbox',
                 name        : 'bindLastStock',
-                fieldLabel  : '{s name=bind_laststock_label}Sale products only{/s}',
+                fieldLabel  : '{s name="bind_laststock_label"}Sale products only{/s}',
                 inputValue  : 1,
                 uncheckedValue : 0
             }, {
                 xtype       : 'combobox',
                 name        : 'bindShippingFree',
-                fieldLabel  : '{s name=bind_shippingfree_label}Support articles free of shipping costs{/s}',
+                fieldLabel  : '{s name="bind_shippingfree_label"}Support articles free of shipping costs{/s}',
                 store : Ext.create('Ext.data.Store',{
                     fields: ['id', 'name'],
-                    data : [{ id:0 , name: '{s name=bind_shippingfree_data_support}Support{/s}' },
-                            { id:1 , name: '{s name=bind_shippingfree_data_not_support_lock}do not support and lock shipping type{/s}' },
-                            { id:2 , name: '{s name=bind_shippingfree_data_support_calc_costs}Support but add shipping costs nevertheless.{/s}' }]
+                    data : [{ id:0 , name: '{s name="bind_shippingfree_data_support"}Support{/s}' },
+                            { id:1 , name: '{s name="bind_shippingfree_data_not_support_lock"}do not support and lock shipping type{/s}' },
+                            { id:2 , name: '{s name="bind_shippingfree_data_support_calc_costs"}Support but add shipping costs nevertheless.{/s}' }]
                 }),
                 valueField:'id',
                 displayField:'name',
@@ -157,18 +157,18 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
             }, {
                 xtype       : 'combobox',
                 name        : 'bindInStock',
-                fieldLabel  : '{s name=bind_instock_label}Stock larger than{/s}',
+                fieldLabel  : '{s name="bind_instock_label"}Stock larger than{/s}',
                 store : Ext.create('Ext.data.Store',{
                     fields: ['id', 'name'],
                     data : [
-                            { id: 0, name: '{s name=bind_instock_data_no_selection}No selection{/s}' },
-                            { id: 1, name: '{s name=bind_instock_data_order_quantity}Order quantity{/s}' },
-                            { id: 2, name: '{s name=bind_instock_data_order_quantity_minimum}Order quantity + minimum stock{/s}' }]
+                            { id: 0, name: '{s name="bind_instock_data_no_selection"}No selection{/s}' },
+                            { id: 1, name: '{s name="bind_instock_data_order_quantity"}Order quantity{/s}' },
+                            { id: 2, name: '{s name="bind_instock_data_order_quantity_minimum"}Order quantity + minimum stock{/s}' }]
                 }),
                 valueField:'id',
                 displayField:'name',
                 mode: 'local',
-                emptyText:'{s name=bind_instock_data_no_selection}No selection{/s}',
+                emptyText:'{s name="bind_instock_data_no_selection"}No selection{/s}',
                 value: 0,
                 selectOnFocus:true,
                 allowBlank: true,
@@ -205,7 +205,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 /*{if {acl_is_allowed privilege=sql_rule}}*/
                     hidden: false,
                 /*{/if}*/
-                fieldLabel  : '{s name=bind_sql_label}Own terms{/s}',
+                fieldLabel  : '{s name="bind_sql_label"}Own terms{/s}',
                 mode: 'sql',
                 height: 80,
             }, {
@@ -215,7 +215,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 /*{if {acl_is_allowed privilege=sql_rule}}*/
                     hidden: false,
                 /*{/if}*/
-                fieldLabel  : '{s name=bind_calculation_sql_label}Own calculations{/s}',
+                fieldLabel  : '{s name="bind_calculation_sql_label"}Own calculations{/s}',
                 mode: 'sql',
                 height: 80,
             }
@@ -235,7 +235,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                     xtype:'timefield',
                     name:'bindTimeFrom',
                     submitFormat:'H:i',
-                    fieldLabel:'{s name=bind_time_from_label}Time{/s}',
+                    fieldLabel:'{s name="bind_time_from_label"}Time{/s}',
                     labelStyle:'font-weight: 700; text-align: left;',
                     labelWidth:155,
                     minWidth:80,
@@ -246,7 +246,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                     xtype:'timefield',
                     name:'bindTimeTo',
                     submitFormat:'H:i',
-                    fieldLabel:'{s name=bind_time_to_label}till{/s}',
+                    fieldLabel:'{s name="bind_time_to_label"}till{/s}',
                     labelWidth:20,
                     labelPad:0,
                     labelSeparator:'',
@@ -268,7 +268,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
             items:[{
                 xtype:'numberfield',
                 name        : 'bindWeightFrom',
-                fieldLabel  : '{s name=bind_weight_from_label}Weight from{/s}',
+                fieldLabel  : '{s name="bind_weight_from_label"}Weight from{/s}',
                 labelStyle:'font-weight: 700; text-align: left;',
                 decimalPrecision: 3,
                 submitLocaleSeparator: false,
@@ -280,7 +280,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
             }, {
                 xtype:'numberfield',
                 name:'bindWeightTo',
-                fieldLabel  : '{s name=bind_weight_to_label}to{/s}',
+                fieldLabel  : '{s name="bind_weight_to_label"}to{/s}',
                 labelStyle : 'font-weight: 700; text-align: left;',
                 decimalPrecision: 3,
                 labelWidth:20,
@@ -307,7 +307,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 allowDecimals: true,
                 minValue: 0,
                 name: 'bindPriceFrom',
-                fieldLabel: '{s name=bind_price_from_label}Price from{/s}',
+                fieldLabel: '{s name="bind_price_from_label"}Price from{/s}',
                 labelStyle: 'font-weight: 700; text-align: left;',
                 labelWidth: 155,
                 minWidth: 80,
@@ -319,7 +319,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 name: 'bindPriceTo',
                 decimalPrecision: 2,
                 submitLocaleSeparator: false,
-                fieldLabel: '{s name=bind_price_to_label}Price to{/s}',
+                fieldLabel: '{s name="bind_price_to_label"}Price to{/s}',
                 labelWidth: 20,
                 labelPad: 0,
                 labelSeparator: ' ',
@@ -339,7 +339,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
 
         dayNames.push(sunday);
         //add default value
-        dayStore.push([0,'{s name=bind_weekday_from_none_value}no selection{/s}']);
+        dayStore.push([0,'{s name="bind_weekday_from_none_value"}no selection{/s}']);
         Ext.each(dayNames, function(name) {
             counter++;
             dayStore.push([counter, name]);
@@ -354,7 +354,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
             items:[{
                     xtype       : 'combobox',
                     name        : 'bindWeekdayFrom',
-                    fieldLabel  : '{s name=bind_weekday_from_label}Weekdays to{/s}',
+                    fieldLabel  : '{s name="bind_weekday_from_label"}Weekdays to{/s}',
                     labelStyle : 'font-weight: 700; text-align: left;',
                     labelWidth  : 155,
                     minWidth       : 80,
@@ -370,7 +370,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 {
                     xtype       : 'combobox',
                     name        : 'bindWeekdayTo',
-                    fieldLabel  : '{s name=bind_weekday_to_label}to{/s}',
+                    fieldLabel  : '{s name="bind_weekday_to_label"}to{/s}',
                     labelWidth  : 20,
                     store: new Ext.data.ArrayStore({
                             fields: ['id','name'],
@@ -399,7 +399,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
         return {
             xtype: 'boxselect',
             name: 'holidays',
-            fieldLabel  : '{s name=bind_holidays_label}Lock holidays{/s}',
+            fieldLabel  : '{s name="bind_holidays_label"}Lock holidays{/s}',
             store       : me.availableHolidays,
             queryMode: 'remote',
             displayField: 'name',

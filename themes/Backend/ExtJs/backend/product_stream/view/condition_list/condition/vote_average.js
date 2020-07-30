@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/condition/vote_average"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.VoteAverage', {
     extend: 'ProductStream.filter.AbstractCondition',
@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.VoteAverag
     },
 
     getLabel: function() {
-        return '{s name=vote_average_condition}Vote average condition{/s}';
+        return '{s name="vote_average_condition"}Vote average condition{/s}';
     },
 
     isSingleton: function() {

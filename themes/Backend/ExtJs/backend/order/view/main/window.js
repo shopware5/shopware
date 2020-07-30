@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order list main window.
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Order.view.main.Window', {
      * Set window title which is displayed in the window header
      * @string
      */
-    title:'{s name=window_title}Order list{/s}',
+    title:'{s name="window_title"}Order list{/s}',
 
 
     /**
@@ -134,7 +134,7 @@ Ext.define('Shopware.apps.Order.view.main.Window', {
                     collapsed: true,
                     collapsible: true,
                     flex: 1,
-                    title:'{s name=position_grid_title}Order positions{/s}',
+                    title:'{s name="position_grid_title"}Order positions{/s}',
                     region: 'south',
                     statusStore: me.statusStore,
                     taxStore: me.taxStore

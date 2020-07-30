@@ -59,9 +59,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.SenderDialog', {
         var me = this;
 
         if(me.record == null) {
-            me.title = '{s name=title/newSender}Create new sender{/s}'
+            me.title = '{s name="title/newSender"}Create new sender{/s}'
         }else{
-            me.title = '{s name=title/editSender}Edit sender{/s}'
+            me.title = '{s name="title/editSender"}Edit sender{/s}'
         }
 
         me.items = me.createForm();
@@ -106,13 +106,13 @@ Ext.define('Shopware.apps.NewsletterManager.view.SenderDialog', {
 
             // Reset and Submit buttons
             buttons: [{
-                text: '{s name=cancel}Cancel{/s}',
+                text: '{s name="cancel"}Cancel{/s}',
                 handler: function() {
                     this.up('form').getForm().reset();
                     me.destroy();
                 }
             }, {
-                text: '{s name=submit}Submit{/s}',
+                text: '{s name="submit"}Submit{/s}',
                 formBind: true, //only enabled once the form is valid
                 disabled: true,
                 handler: function() {

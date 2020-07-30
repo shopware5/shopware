@@ -81,12 +81,12 @@ Ext.define('Shopware.form.PluginPanel',
     formNotLoadedErrorText: "The form store couldn't be loaded successfully.",
 
     snippets: {
-        resetButton: '{s name=form/reset_text}Reset{/s}',
-        saveButton: '{s name=form/save_text}Save{/s}',
-        description: '{s name=form/description_title}Description{/s}',
-        onSaveFormTitle: '{s name=form/message/save_form_title}Save form{/s}',
-        saveFormSuccess: '{s name=form/message/save_form_success}Form „[name]“ has been saved.{/s}',
-        saveFormError: '{s name=form/message/save_form_error}Form „[name]“ could not be saved.{/s}'
+        resetButton: '{s name="form/reset_text"}Reset{/s}',
+        saveButton: '{s name="form/save_text"}Save{/s}',
+        description: '{s name="form/description_title"}Description{/s}',
+        onSaveFormTitle: '{s name="form/message/save_form_title"}Save form{/s}',
+        saveFormSuccess: '{s name="form/message/save_form_success"}Form „[name]“ has been saved.{/s}',
+        saveFormError: '{s name="form/message/save_form_error"}Form „[name]“ could not be saved.{/s}'
     },
 
     /**

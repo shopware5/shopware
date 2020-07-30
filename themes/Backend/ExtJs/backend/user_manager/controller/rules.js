@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/user_manager/view/main}
+//{namespace name="backend/user_manager/view/main"}
 
 /**
  * Shopware Backend - User Manager rule controller
@@ -61,27 +61,27 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
      * @object
      */
     snippets: {
-        successTitle:'{s name=message/resource/delete_success_message}Successful{/s}',
-        errorTitle:'{s name=message/privilege/save_error_title}Error{/s}',
-        errorMessage:'{s name=message/privilege/save_error_message}An error has occurred while saving:{/s}',
+        successTitle:'{s name="message/resource/delete_success_message"}Successful{/s}',
+        errorTitle:'{s name="message/privilege/save_error_title"}Error{/s}',
+        errorMessage:'{s name="message/privilege/save_error_message"}An error has occurred while saving:{/s}',
 
         resourceDelete: {
-            successMessage:'{s name=message/resource/delete_success_title}Resource has been removed{/s}'
+            successMessage:'{s name="message/resource/delete_success_title"}Resource has been removed{/s}'
         },
         privilegeDelete: {
-            successMessage:'{s name=message/privilege/delete_success_title}Privilege has been removed{/s}'
+            successMessage:'{s name="message/privilege/delete_success_title"}Privilege has been removed{/s}'
         },
         resourceSave: {
-            successMessage:'{s name=message/resource/save_success_title}Resource has been saved{/s}'
+            successMessage:'{s name="message/resource/save_success_title"}Resource has been saved{/s}'
         },
         privilegeSave: {
-            successMessage:'{s name=message/privilege/save_success_title}Privilege has been saved{/s}'
+            successMessage:'{s name="message/privilege/save_success_title"}Privilege has been saved{/s}'
         },
         roleSave: {
-            successMessage:'{s name=message/role/save_success_title}Role privileges have been saved{/s}'
+            successMessage:'{s name="message/role/save_success_title"}Role privileges have been saved{/s}'
         },
 
-        growlMessage: '{s name=growlMessage}User Management{/s}'
+        growlMessage: '{s name="growlMessage"}User Management{/s}'
     },
 
     /**
@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
         rootNode.eachChild(function(ch) {
           if(ch.get('id') === record.get('resourceId')){
               if(ch.findChild('name', record.get('name')) !== null) {
-                  Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, '{s name=privilege/alreadyExistingMessage}A privilege with this name is already existing{/s}', me.snippets.growlMessage);
+                  Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, '{s name="privilege/alreadyExistingMessage"}A privilege with this name is already existing{/s}', me.snippets.growlMessage);
                   window.destroy();
                   found = true;
                   return false;
@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
 
         // Prevent the user from creating multiple resources with the same name
         if(rootNode.findChild('name', record.get('name')) !== null) {
-            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, '{s name=resource/alreadyExistingMessage}A resource with this name is already existing{/s}', me.snippets.growlMessage);
+            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, '{s name="resource/alreadyExistingMessage"}A resource with this name is already existing{/s}', me.snippets.growlMessage);
             window.destroy();
             return;
         }

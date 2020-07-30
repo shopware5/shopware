@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/* {namespace name=backend/category/sorting} */
+/* {namespace name="backend/category/sorting"} */
 
 //{block name="backend/category/view/sorting/tab"}
 Ext.define('Shopware.apps.Category.view.sorting.Tab', {
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Category.view.sorting.Tab', {
 
         this.displayTypeBtn = Ext.create('Ext.button.Cycle', {
             showText: true,
-            prependText: '{s name=display_as}Display as{/s} ',
+            prependText: '{s name="display_as"}Display as{/s} ',
             action: 'mediamanager-media-view-layout',
             handler: function (btn) {
                 me.fireEvent('layout-button-click', me, btn.getActiveItem());
@@ -64,11 +64,11 @@ Ext.define('Shopware.apps.Category.view.sorting.Tab', {
             menu: {
                 items: [
                     {
-                        text: '{s name=table}Table{/s}',
+                        text: '{s name="table"}Table{/s}',
                         layout: 'table',
                         iconCls: 'sprite-application-table'
                     }, {
-                        text: '{s name=grid}Grid{/s}',
+                        text: '{s name="grid"}Grid{/s}',
                         layout: 'grid',
                         checked: true,
                         iconCls: 'sprite-application-icon-large'

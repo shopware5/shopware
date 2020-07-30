@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/view/widgets}
+//{namespace name="backend/index/view/widgets"}
 
 /**
  * Shopware UI - Visitors Widget
@@ -32,7 +32,7 @@
 Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
     extend: 'Shopware.apps.Index.view.widgets.Base',
     alias: 'widget.swag-visitors-customers-widget',
-    title: '{s name=visitors/title}Visitors online (Sample Data){/s}',
+    title: '{s name="visitors/title"}Visitors online (Sample Data){/s}',
     layout: 'column',
 
     /**
@@ -42,19 +42,19 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
     snippets: {
         date: {
             // Sunday needs to be first as getDay() is defined that way
-            sunday: '{s name=visitors/date/sunday}Sunday{/s}',
-            monday: '{s name=visitors/date/monday}Monday{/s}',
-            tuesday: '{s name=visitors/date/tuesday}Tuesday{/s}',
-            wednesday: '{s name=visitors/date/wednesday}Wednesday{/s}',
-            thursday: '{s name=visitors/date/thursday}Thursday{/s}',
-            friday: '{s name=visitors/date/friday}Friday{/s}',
-            saturday: '{s name=visitors/date/saturday}Saturday{/s}'
+            sunday: '{s name="visitors/date/sunday"}Sunday{/s}',
+            monday: '{s name="visitors/date/monday"}Monday{/s}',
+            tuesday: '{s name="visitors/date/tuesday"}Tuesday{/s}',
+            wednesday: '{s name="visitors/date/wednesday"}Wednesday{/s}',
+            thursday: '{s name="visitors/date/thursday"}Thursday{/s}',
+            friday: '{s name="visitors/date/friday"}Friday{/s}',
+            saturday: '{s name="visitors/date/saturday"}Saturday{/s}'
         },
-        visitors_online: '{s name=visitors/visitors_online}Visitors online{/s}',
-        visitors_online_total: '{s name=visitors/visitors_online_total}Visitors online in total{/s}',
+        visitors_online: '{s name="visitors/visitors_online"}Visitors online{/s}',
+        visitors_online_total: '{s name="visitors/visitors_online_total"}Visitors online in total{/s}',
         headers: {
-            customers_online: '{s name=visitors/headers/customers_online}Customers online{/s}',
-            basket_amount: '{s name=visitors/headers/basket_amount}Basket amount{/s}'
+            customers_online: '{s name="visitors/headers/customers_online"}Customers online{/s}',
+            basket_amount: '{s name="visitors/headers/basket_amount"}Basket amount{/s}'
         }
     },
 

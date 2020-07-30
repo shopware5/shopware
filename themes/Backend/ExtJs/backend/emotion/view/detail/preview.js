@@ -27,7 +27,7 @@
  * @author      shopware AG
  */
 
-//{namespace name=backend/emotion/view/detail}
+//{namespace name="backend/emotion/view/detail"}
 //{block name="backend/emotion/view/detail/preview"}
 Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
 

@@ -35,7 +35,7 @@
  * adds the images to the listing.
  * All events of the component handled in the media controller.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/image/drop_zone"}
 Ext.define('Shopware.apps.Article.view.image.DropZone', {
     /**
@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Article.view.image.DropZone', {
     },
 
     snippets: {
-        dropZone: '{s name=image/upload/drop_zone}Upload images via drag&drop{/s}'
+        dropZone: '{s name="image/upload/drop_zone"}Upload images via drag&drop{/s}'
     },
 
     /**

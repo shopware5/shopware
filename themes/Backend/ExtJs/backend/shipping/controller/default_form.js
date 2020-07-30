@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/controller/default_form}*/
+/*{namespace name="backend/shipping/controller/default_form"}*/
 
 /**
  * todo@all: Documentation
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
      * Translations
      */
     messages: {
-        warning : '{s name=dialog_reset_cost_matrix}Be aware that the current costs matrix will be erased, if the dispatch type is changed.<br>Do you want stil want change the dispatch type?{/s}'
+        warning : '{s name="dialog_reset_cost_matrix"}Be aware that the current costs matrix will be erased, if the dispatch type is changed.<br>Do you want stil want change the dispatch type?{/s}'
     },
 
     /**
@@ -143,7 +143,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
                     me.onCostsMatrixSave(button, rawData.data.id);
                 }
                 me.getStore('Dispatch').load();
-                Shopware.Notification.createGrowlMessage('','{s name=growl_save_success}The settings have been saved successfully.{/s}', '{s name=title}{/s}');
+                Shopware.Notification.createGrowlMessage('','{s name="growl_save_success"}The settings have been saved successfully.{/s}', '{s name="title"}{/s}');
              }
         });
     },
@@ -197,7 +197,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
             costsMatrixGrid = me.getCostsGrid(),
             costsMatrixStore = costsMatrixGrid.getStore();
 
-        Ext.MessageBox.confirm('{s name=dialog_reset_cost_matrix_title}Warning{/s}',
+        Ext.MessageBox.confirm('{s name="dialog_reset_cost_matrix_title"}Warning{/s}',
             me.messages.warning,
             function(response)
             {

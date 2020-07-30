@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/user_manager/view/main}
+//{namespace name="backend/user_manager/view/main"}
 
 /**
  * Shopware - User-Manager user detail mask
@@ -49,10 +49,10 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
      */
     snippets:{
         form:{
-            errorTitle: '{s name=message/password/form/error_title}Error saving the form{/s}',
-            errorMessage: '{s name=message/password/form/error_message}The field -[0]- is not valid{/s}'
+            errorTitle: '{s name="message/password/form/error_title"}Error saving the form{/s}',
+            errorMessage: '{s name="message/password/form/error_message"}The field -[0]- is not valid{/s}'
         },
-        growlMessage:'{s name=message/growlMessage}User manager{/s}',
+        growlMessage:'{s name="message/growlMessage"}User manager{/s}',
         unlock: {
             successTitle: '{s name="create_user/unlock/success_title"}Success{/s}',
             successText: '{s name="create_user/unlock/success_text"}Successfully unlocked the user.{/s}',
@@ -164,7 +164,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
                     formPnl.up('window').destroy();
 
                     Shopware.Notification.createGrowlMessage(
-                            '{s name=user/Success}Successful{/s}',
+                            '{s name="user/Success"}Successful{/s}',
                             Ext.String.format('{s name="user/editSuccessful"}User \'[0]\' was updated{/s}', formPnl.getForm().getValues().name),
                             '{s name="user/userManager"}User Manager{/s}'
                     );
@@ -253,10 +253,10 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
                 record.destroy({
                     success : function () {
                         userStore.load();
-                        Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name="user/deletedSuccessfully"}User has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
+                        Shopware.Notification.createGrowlMessage('{s name="user/Success"}Successful{/s}', '{s name="user/deletedSuccessfully"}User has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
                     },
                     failure : function () {
-                        Shopware.Notification.createGrowlMessage('{s name=user/Error}Error{/s}', '{s name="user/deletedError"}An error has occurred while deleting the user{/s}', '{s name="user/userManager"}User Manager{/s}');
+                        Shopware.Notification.createGrowlMessage('{s name="user/Error"}Error{/s}', '{s name="user/deletedError"}An error has occurred while deleting the user{/s}', '{s name="user/userManager"}User Manager{/s}');
                     }
                 });
             });
@@ -279,7 +279,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
                 Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
                     me.deleteMultipleRecords(records, function () {
                         userStore.load();
-                        Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name="user/multipleDeletedSuccessfully"}Users has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
+                        Shopware.Notification.createGrowlMessage('{s name="user/Success"}Successful{/s}', '{s name="user/multipleDeletedSuccessfully"}Users has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
                     });
                 });
             });

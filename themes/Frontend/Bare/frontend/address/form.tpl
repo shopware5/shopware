@@ -70,11 +70,11 @@
                         <div class="address--vatid">
                             <input name="{$inputPrefix}[vatId]"
                                    type="text"
-                                   placeholder="{s name='RegisterLabelTaxId' namespace="frontend/register/billing_fieldset"}{/s}{if {config name=vatcheckrequired}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
+                                   placeholder="{s name='RegisterLabelTaxId' namespace="frontend/register/billing_fieldset"}{/s}{if {config name="vatcheckrequired"}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                    id="register_billing_vatid"
                                    value="{$formData.vatId|escape}"
-                                   {if {config name=vatcheckrequired}} required="required" aria-required="true"{/if}
-                                   class="address--field{if $error_flags.vatId} has--error{/if}{if {config name=vatcheckrequired}} is--required{/if}"/>
+                                   {if {config name="vatcheckrequired"}} required="required" aria-required="true"{/if}
+                                   class="address--field{if $error_flags.vatId} has--error{/if}{if {config name="vatcheckrequired"}} is--required{/if}"/>
                         </div>
                     {/block}
                 </div>
@@ -163,32 +163,32 @@
 
                 {* Additional Address Line 1 *}
                 {block name='frontend_address_form_input_addition_address_line1'}
-                    {if {config name=showAdditionAddressLine1}}
+                    {if {config name="showAdditionAddressLine1"}}
                         <div class="address--additional-line1">
                             <input autocomplete="section-billing billing address-line2"
                                    name="{$inputPrefix}[additionalAddressLine1]"
                                    type="text"
-                                   {if {config name=requireAdditionAddressLine1}} required="required" aria-required="true"{/if}
-                                   placeholder="{s name='RegisterLabelAdditionalAddressLine1'  namespace="frontend/register/shipping_fieldset"}{/s}{if {config name=requireAdditionAddressLine1}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
+                                   {if {config name="requireAdditionAddressLine1"}} required="required" aria-required="true"{/if}
+                                   placeholder="{s name='RegisterLabelAdditionalAddressLine1'  namespace="frontend/register/shipping_fieldset"}{/s}{if {config name="requireAdditionAddressLine1"}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                    id="additionalAddressLine1"
                                    value="{$formData.additionalAddressLine1|escape}"
-                                   class="address--field{if {config name=requireAdditionAddressLine1}} is--required{/if}{if $error_flags.additionalAddressLine1 && {config name=requireAdditionAddressLine1}} has--error{/if}"/>
+                                   class="address--field{if {config name="requireAdditionAddressLine1"}} is--required{/if}{if $error_flags.additionalAddressLine1 && {config name="requireAdditionAddressLine1"}} has--error{/if}"/>
                         </div>
                     {/if}
                 {/block}
 
                 {* Additional Address Line 2 *}
                 {block name='frontend_address_form_input_addition_address_line2'}
-                    {if {config name=showAdditionAddressLine2}}
+                    {if {config name="showAdditionAddressLine2"}}
                         <div class="address--additional-field2">
                             <input autocomplete="section-billing billing address-line3"
                                    name="{$inputPrefix}[additionalAddressLine2]"
                                    type="text"
-                                   {if {config name=requireAdditionAddressLine2}} required="required" aria-required="true"{/if}
-                                   placeholder="{s name='RegisterLabelAdditionalAddressLine2'  namespace="frontend/register/shipping_fieldset"}{/s}{if {config name=requireAdditionAddressLine2}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
+                                   {if {config name="requireAdditionAddressLine2"}} required="required" aria-required="true"{/if}
+                                   placeholder="{s name='RegisterLabelAdditionalAddressLine2'  namespace="frontend/register/shipping_fieldset"}{/s}{if {config name="requireAdditionAddressLine2"}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                    id="additionalAddressLine2"
                                    value="{$formData.additionalAddressLine2|escape}"
-                                   class="address--field{if {config name=requireAdditionAddressLine2}} is--required{/if}{if $error_flags.additionalAddressLine2 && {config name=requireAdditionAddressLine2}} has--error{/if}"/>
+                                   class="address--field{if {config name="requireAdditionAddressLine2"}} is--required{/if}{if $error_flags.additionalAddressLine2 && {config name="requireAdditionAddressLine2"}} has--error{/if}"/>
                         </div>
                     {/if}
                 {/block}
@@ -196,7 +196,7 @@
                 {* Zip + City *}
                 {block name='frontend_address_form_input_zip_and_city'}
                     <div class="address--zip-city">
-                        {if {config name=showZipBeforeCity}}
+                        {if {config name="showZipBeforeCity"}}
                             <input autocomplete="section-billing billing postal-code"
                                    name="{$inputPrefix}[zipcode]"
                                    type="text"
@@ -296,15 +296,15 @@
 
                 {* Phone *}
                 {block name='frontend_address_form_input_phone'}
-                    {if {config name=showPhoneNumberField}}
+                    {if {config name="showPhoneNumberField"}}
                         <div class="address--phone">
                             <input autocomplete="section-personal tel" name="{$inputPrefix}[phone]"
                                    type="tel"
-                                   {if {config name=requirePhoneField}} required="required" aria-required="true"{/if}
-                                   placeholder="{s name='RegisterPlaceholderPhone' namespace="frontend/register/personal_fieldset"}{/s}{if {config name=requirePhoneField}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
+                                   {if {config name="requirePhoneField"}} required="required" aria-required="true"{/if}
+                                   placeholder="{s name='RegisterPlaceholderPhone' namespace="frontend/register/personal_fieldset"}{/s}{if {config name="requirePhoneField"}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                    id="phone"
                                    value="{$formData.phone|escape}"
-                                   class="address--field{if {config name=requirePhoneField}} is--required{/if}{if $error_flags.phone && {config name=requirePhoneField}} has--error{/if}"/>
+                                   class="address--field{if {config name="requirePhoneField"}} is--required{/if}{if $error_flags.phone && {config name="requirePhoneField"}} has--error{/if}"/>
                         </div>
                     {/if}
                 {/block}

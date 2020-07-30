@@ -31,7 +31,7 @@
  * Shopware UI - Blog detail page - Sidebar
  * The assigned_articles component contains the configuration elements for the assgined blog articles relations.
  */
-//{namespace name=backend/blog/view/blog}
+//{namespace name="backend/blog/view/blog"}
 //{block name="backend/blog/view/detail/sidebar/seo"}
 Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
     /**
@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
     initComponent:function () {
         var me = this;
         me.registerEvents();
-        me.title = '{s name=detail/sidebar/seo/title}Search Engine Optimization{/s}';
+        me.title = '{s name="detail/sidebar/seo/title"}Search Engine Optimization{/s}';
         me.items = me.createElements();
         me.callParent(arguments);
     },
@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
 
         return Ext.create('Ext.container.Container', {
             style: 'font-style: italic; color: #999; font-size: x-small; margin: 0 0 8px 0;',
-            html: '{s name=detail/sidebar/seo/notice}At this point you have the option to perform an on-page optimization of your blog entry, which helps you increasing its relevance within search engines. <br /> <br /> All entries made here will be output in the HTML source code.{/s}'
+            html: '{s name="detail/sidebar/seo/notice"}At this point you have the option to perform an on-page optimization of your blog entry, which helps you increasing its relevance within search engines. <br /> <br /> All entries made here will be output in the HTML source code.{/s}'
         });
     },
 
@@ -132,7 +132,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
         return Ext.create('Ext.form.FieldSet', {
             layout: 'anchor',
             padding: 10,
-            title:'{s name=detail/sidebar/seo/field_set/on_page/title}On-Page Optimization{/s}',
+            title:'{s name="detail/sidebar/seo/field_set/on_page/title"}On-Page Optimization{/s}',
             defaults: {
                 xtype:'textfield',
                 anchor: '100%'
@@ -148,8 +148,8 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
     createFormItems: function() {
         var me = this;
         me.metaDescription = Ext.create('Ext.form.field.TextArea', {
-            fieldLabel: '{s name=detail/sidebar/seo/field/description}Description{/s}',
-            translationLabel: 'SEO-{s name=detail/sidebar/seo/field/description}Description{/s}',
+            fieldLabel: '{s name="detail/sidebar/seo/field/description"}Description{/s}',
+            translationLabel: 'SEO-{s name="detail/sidebar/seo/field/description"}Description{/s}',
             enableKeyEvents: true,
             supportText: ' ',
             name: 'metaDescription',
@@ -163,8 +163,8 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
         });
 
         me.metaTitle = Ext.create('Ext.form.field.Text', {
-            fieldLabel: '{s name=detail/sidebar/seo/field/title}Title{/s}',
-            translationLabel: 'SEO-{s name=detail/sidebar/seo/field/title}Title{/s}',
+            fieldLabel: '{s name="detail/sidebar/seo/field/title"}Title{/s}',
+            translationLabel: 'SEO-{s name="detail/sidebar/seo/field/title"}Title{/s}',
             name: 'metaTitle',
             translatable: true,
             anchor: '100%'
@@ -174,8 +174,8 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
             me.metaTitle,
             {
                 xtype: 'textareafield',
-                fieldLabel: '{s name=detail/sidebar/seo/field/keywords}Keywords{/s}',
-                translationLabel: 'SEO-{s name=detail/sidebar/seo/field/keywords}Keywords{/s}',
+                fieldLabel: '{s name="detail/sidebar/seo/field/keywords"}Keywords{/s}',
+                translationLabel: 'SEO-{s name="detail/sidebar/seo/field/keywords"}Keywords{/s}',
                 name: 'metaKeyWords',
                 translatable: true
             },
@@ -191,13 +191,13 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
         var me = this;
         return {
             xtype:'googlepreview',
-            fieldSetTitle: '{s name=detail/sidebar/seo/field_set/preview/title}Preview{/s}',
+            fieldSetTitle: '{s name="detail/sidebar/seo/field_set/preview/title"}Preview{/s}',
             viewData: me.detailRecord,
             titleField: me.metaTitle,
             fallBackTitleField: me.mainTitleField,
             descriptionField: me.metaDescription,
-            supportText: '{s name=detail/sidebar/seo/field_set/preview/supportText}This preview displayed can differ from the version shown in the search engine.{/s}',
-            refreshButtonText: '{s name=detail/sidebar/seo/field_set/preview/generate}Generate Preview{/s}'
+            supportText: '{s name="detail/sidebar/seo/field_set/preview/supportText"}This preview displayed can differ from the version shown in the search engine.{/s}',
+            refreshButtonText: '{s name="detail/sidebar/seo/field_set/preview/generate"}Generate Preview{/s}'
         };
     }
 });

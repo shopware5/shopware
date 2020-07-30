@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/blog/view/blog}
+//{namespace name="backend/blog/view/blog"}
 
 /**
  * Shopware UI - Blog list main window.
@@ -82,14 +82,14 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Comments', {
         /* {if {acl_is_allowed privilege=comments}} */
                 {
                     iconCls:'sprite-plus-circle',
-                    text:'{s name=detail/main/comments/button/add}Accept selected comments{/s}',
+                    text:'{s name="detail/main/comments/button/add"}Accept selected comments{/s}',
                     disabled:true,
                     action:'acceptSelectedComments'
                 },
                 {
 
                     iconCls:'sprite-minus-circle-frame',
-                    text:'{s name=detail/main/comments/button/delete}Delete selected comments{/s}',
+                    text:'{s name="detail/main/comments/button/delete"}Delete selected comments{/s}',
                     disabled:true,
                     action:'deleteSelectedComments'
                 },
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Comments', {
                     cls:'searchfield',
                     enableKeyEvents:true,
                     checkChangeBuffer:500,
-                    emptyText:'{s name=detail/main/comments/field/search}Search...{/s}'
+                    emptyText:'{s name="detail/main/comments/field/search"}Search...{/s}'
                 },
                 { xtype:'tbspacer', width:6 }
             ]

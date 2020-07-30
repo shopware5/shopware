@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+// {namespace name="backend/customer/view/main"}
 // {block name="backend/customer/view/customer_stream/condition_field"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionField', {
     extend: 'Ext.form.FieldContainer',

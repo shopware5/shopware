@@ -24,7 +24,7 @@
 /**
  * The backup controller handles the backup
  */
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/controller/backup"}
 Ext.define('Shopware.apps.ArticleList.controller.Backup', {
 
@@ -78,8 +78,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
             record = store.getAt(rowIdx);
 
         Ext.MessageBox.confirm(
-            '{s name=backup/deleteConfirm}Delete the selected backup?{/s}',
-            Ext.String.format('{s name=backup/deleteConfirmMessage}You are about to delete the selected backup from [0]. Do you want to proceed?{/s}', record.get('date')),
+            '{s name="backup/deleteConfirm"}Delete the selected backup?{/s}',
+            Ext.String.format('{s name="backup/deleteConfirmMessage"}You are about to delete the selected backup from [0]. Do you want to proceed?{/s}', record.get('date')),
             function (response) {
                 if ( response !== 'yes' ) {
                     return;
@@ -91,11 +91,11 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
                     },
                     success: function() {
                         store.reload();
-                        Shopware.Notification.createGrowlMessage('{s name=successTitle}Success{/s}', Ext.String.format('{s name=successDeleteMessage}Successfully deleted [0]{/s}', ''));
+                        Shopware.Notification.createGrowlMessage('{s name="successTitle"}Success{/s}', Ext.String.format('{s name="successDeleteMessage"}Successfully deleted [0]{/s}', ''));
                     },
                     failure: function() {
                         store.reload();
-                        Shopware.Notification.createGrowlMessage('{s name=errorTitle}Error{/s}', '{s name=errorDeleteMessage}Could not delete the backup folder - make sure, it is empty{/s}');
+                        Shopware.Notification.createGrowlMessage('{s name="errorTitle"}Error{/s}', '{s name="errorDeleteMessage"}Could not delete the backup folder - make sure, it is empty{/s}');
                     }
                 });
 
@@ -124,7 +124,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
         var me = this;
 
         Shopware.Notification.createStickyGrowlMessage({
-            title: '{s name=error}Error{/s}',
+            title: '{s name="error"}Error{/s}',
             text: message,
             log: true
         },
@@ -139,8 +139,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
         var me = this;
 
         Ext.MessageBox.confirm(
-            '{s name=backup/addConfirm}Revert these changes?{/s}',
-            '{s name=backup/addConfirm/Message}You are about to revert the selected changes. Do you want to proceed?{/s}',
+            '{s name="backup/addConfirm"}Revert these changes?{/s}',
+            '{s name="backup/addConfirm/Message"}You are about to revert the selected changes. Do you want to proceed?{/s}',
             function (response) {
                 if ( response !== 'yes' ) {
                     return;
@@ -174,8 +174,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
         var me = this;
 
         me.progressWindow = Ext.MessageBox.show({
-            title        : '{s name=restoringTitle}Restoring the backup{/s}',
-            msg          : "{s name=restoringMessage}Currently restoring the selected backup.{/s}",
+            title        : '{s name="restoringTitle"}Restoring the backup{/s}',
+            msg          : "{s name="restoringMessage"}Currently restoring the selected backup.{/s}",
             width        : 500,
             progress     : true,
             closable     : false,
@@ -199,7 +199,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
 
         me.progressWindow.progressBar.reset();
         me.progressWindow.progressBar.animate = true;
-        me.progressWindow.progressBar.updateProgress(0, '{s name=startingRevert}Begin restoring the selected file…{/s}');
+        me.progressWindow.progressBar.updateProgress(0, '{s name="startingRevert"}Begin restoring the selected file…{/s}');
     },
 
     /**
@@ -226,7 +226,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
             },
             success: function (response, request) {
                 if (!response.responseText) {
-                    me.showError('{s name=unknownError}An unknown error occurred, please check your server logs{/s}');
+                    me.showError('{s name="unknownError"}An unknown error occurred, please check your server logs{/s}');
                     return;
                 }
 
@@ -240,14 +240,14 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
                     me.showError(result.message);
                 }else{
                     if (result.data.offset < result.data.totalCount) {
-                        progressText =  Ext.String.format("{s name=backup/alreadyRestored}[0] out of [1] deltas restored{/s}", result.data.offset, result.data.totalCount);
+                        progressText =  Ext.String.format("{s name="backup/alreadyRestored"}[0] out of [1] deltas restored{/s}", result.data.offset, result.data.totalCount);
                         me.progressWindow.progressBar.updateProgress(result.data.offset/result.data.totalCount, progressText);
 
                         me.runRestore(config, result.data.offset);
                     }else{
                         Shopware.Notification.createStickyGrowlMessage({
-                                title: '{s name=restoredBackup}Backup restored{/s}',
-                                text: Ext.String.format('{s name=createdRestoreMessage}The following changes have been undone:<br>[0]{/s}', config.operationString),
+                                title: '{s name="restoredBackup"}Backup restored{/s}',
+                                text: Ext.String.format('{s name="createdRestoreMessage"}The following changes have been undone:<br>[0]{/s}', config.operationString),
                                 log: true
                             },
                             'ArticleList'
@@ -267,7 +267,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
                 if(response.responseText) {
                     me.showError(response.responseText);
                 } else {
-                    me.showError('{s name=unknownError}An unknown error occurred, please check your server logs{/s}');
+                    me.showError('{s name="unknownError"}An unknown error occurred, please check your server logs{/s}');
                 }
             }
         });

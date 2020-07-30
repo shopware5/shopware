@@ -29,12 +29,12 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/month"}
 Ext.define('Shopware.apps.Analytics.view.table.Month', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-month',
-    shopColumnText: "{s name=general/turnover}Turnover{/s}: [0]",
+    shopColumnText: "{s name="general/turnover"}Turnover{/s}: [0]",
 
     initComponent: function () {
         var me = this;
@@ -62,13 +62,13 @@ Ext.define('Shopware.apps.Analytics.view.table.Month', {
             {
                 xtype: 'datecolumn',
                 dataIndex: 'date',
-                text: '{s name=table/month/month}Month{/s}',
+                text: '{s name="table/month/month"}Month{/s}',
                 format: 'F, Y'
             },
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=general/turnover}Turnover{/s}',
+                text: '{s name="general/turnover"}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];

@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/theme/main}
+//{namespace name="backend/theme/main"}
 
 //{block name="backend/theme/view/list/window"}
 
@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
     alias: 'widget.theme-list-window',
     height: '80%',
     width: '75%',
-    title : '{s name=listing}Theme manager{/s}',
+    title : '{s name="listing"}Theme manager{/s}',
     minWidth: 600,
 
 
@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
 
         me.shopCombo = Ext.create('Ext.form.field.ComboBox', {
             name: 'shop',
-            fieldLabel: '{s name=shop_combo}Template-Auswahl für Shop{/s}',
+            fieldLabel: '{s name="shop_combo"}Template-Auswahl für Shop{/s}',
             editable: false,
             labelWidth: 175,
             labelStyle: 'margin-top: 2px',
@@ -132,7 +132,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         var me = this;
 
         me.addButton = Ext.create('Ext.button.Button', {
-            text: '{s name=create}Create theme{/s}',
+            text: '{s name="create"}Create theme{/s}',
             iconCls: 'sprite-application--plus',
             handler: function() {
                 me.fireEvent('create-theme', me);
@@ -146,7 +146,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         var me = this;
 
         me.refreshButton = Ext.create('Ext.button.Button', {
-            text: '{s name=refresh}Refresh list{/s}',
+            text: '{s name="refresh"}Refresh list{/s}',
             iconCls: 'sprite-arrow-circle-135',
             handler: function() {
                 me.fireEvent('refresh-list', me);
@@ -160,7 +160,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         var me = this;
 
         me.settingsButton = Ext.create('Ext.button.Button', {
-            text: '{s name=settings}Settings{/s}',
+            text: '{s name="settings"}Settings{/s}',
             iconCls: 'sprite-gear',
             handler: function() {
                 me.fireEvent('open-settings', me);
@@ -176,7 +176,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         me.searchField = Ext.create('Ext.form.field.Text', {
             cls: 'searchfield',
             width: 170,
-            emptyText: '{s name=search}Search ...{/s}',
+            emptyText: '{s name="search"}Search ...{/s}',
             enableKeyEvents: true,
             checkChangeBuffer: 500,
             listeners: {

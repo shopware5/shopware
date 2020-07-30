@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/emotion/view/detail}
+//{namespace name="backend/emotion/view/detail"}
 Ext.define('Shopware.apps.Emotion.view.components.Base', {
     extend: 'Ext.form.Panel',
     bodyBorder: 0,
@@ -47,14 +47,14 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
 
         // Holder fieldset which contains the element settings
         me.elementFieldset = Ext.create('Ext.form.FieldSet', {
-            title: '{s name=base/fieldset_title}Element settings{/s}',
+            title: '{s name="base/fieldset_title"}Element settings{/s}',
             defaults: me.defaults,
             items: me.createFormElements()
         });
 
         // Holder fieldset which contains the global element settings
         me.globalSettingsFieldset = Ext.create('Ext.form.FieldSet', {
-            title: '{s name=base/global_fieldset_title}Global element settings{/s}',
+            title: '{s name="base/global_fieldset_title"}Global element settings{/s}',
             defaults: me.defaults,
             items: me.createGlobalFormElements()
         });
@@ -249,8 +249,8 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         var me = this, record = me.getSettings('record');
 
         me.cssClassField = Ext.create('Ext.form.field.Text', {
-            fieldLabel: '{s name=base/css_class}CSS class{/s}',
-            supportText: '{s name=base/support_text}Multiple classes can be added by separating them with a whitespace.{/s}',
+            fieldLabel: '{s name="base/css_class"}CSS class{/s}',
+            supportText: '{s name="base/support_text"}Multiple classes can be added by separating them with a whitespace.{/s}',
             name: 'cssClass',
             cls: 'css-field',
             anchor: '100%',
@@ -263,15 +263,15 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 }
 
                 if(!value.match(/^[A-Za-z0-9-_ ]+$/)) {
-                    return '{s name=base/validator_special_character_error}The input value can not contain any special characters.{/s}';
+                    return '{s name="base/validator_special_character_error"}The input value can not contain any special characters.{/s}';
                 }
 
                 if(value.match(/\s([-_ 0-9])/)) {
-                    return '{s name=base/validator_first_character_error}Class names can not start with a number, whitespace, underscore or hyphen.{/s}';
+                    return '{s name="base/validator_first_character_error"}Class names can not start with a number, whitespace, underscore or hyphen.{/s}';
                 }
 
                 if(value.match(/^[-_ 0-9]/)) {
-                    return '{s name=base/validator_first_character_error}Class names can not start with a number, whitespace, underscore or hyphen.{/s}';
+                    return '{s name="base/validator_first_character_error"}Class names can not start with a number, whitespace, underscore or hyphen.{/s}';
                 }
 
                 return true;
@@ -291,7 +291,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         var me = this, component = me.getSettings('component', true);
 
         return Ext.create('Ext.form.FieldSet', {
-            title: '{s name=base/element_description}Element description{/s}',
+            title: '{s name="base/element_description"}Element description{/s}',
             items: [{
                 xtype: 'container',
                 html: component.description

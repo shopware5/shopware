@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/media_manager/view/main}
+//{namespace name="backend/media_manager/view/main"}
 
 /**
  * Shopware UI - Media Manager Media View
@@ -56,22 +56,22 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
      */
     snippets: {
         column: {
-            'preview': '{s name=grid/column/preview}Preview{/s}',
-            'created': '{s name=grid/column/created}Upload date{/s}',
-            'name': '{s name=grid/column/name}File name{/s}',
-            'width': '{s name=grid/column/width}Image width{/s}',
-            'height': '{s name=grid/column/height}Image height{/s}',
-            'type': '{s name=grid/column/type}File type{/s}',
-            'fileSize': '{s name=grid/column/fileSize}File size{/s}'
+            'preview': '{s name="grid/column/preview"}Preview{/s}',
+            'created': '{s name="grid/column/created"}Upload date{/s}',
+            'name': '{s name="grid/column/name"}File name{/s}',
+            'width': '{s name="grid/column/width"}Image width{/s}',
+            'height': '{s name="grid/column/height"}Image height{/s}',
+            'type': '{s name="grid/column/type"}File type{/s}',
+            'fileSize': '{s name="grid/column/fileSize"}File size{/s}'
         },
         types: {
-            'video': '{s name=grid/types/video}Video{/s}',
-            'music': '{s name=grid/types/music}Music{/s}',
-            'archive': '{s name=grid/types/archive}Archive{/s}',
-            'pdf': '{s name=grid/types/pdf}PDF{/s}',
-            'image': '{s name=grid/types/image}Image{/s}',
-            'vector': '{s name=grid/types/vector}Vector{/s}',
-            'unknown': '{s name=grid/types/unknown}Unknown{/s}'
+            'video': '{s name="grid/types/video"}Video{/s}',
+            'music': '{s name="grid/types/music"}Music{/s}',
+            'archive': '{s name="grid/types/archive"}Archive{/s}',
+            'pdf': '{s name="grid/types/pdf"}PDF{/s}',
+            'image': '{s name="grid/types/image"}Image{/s}',
+            'vector': '{s name="grid/types/vector"}Vector{/s}',
+            'unknown': '{s name="grid/types/unknown"}Unknown{/s}'
         }
     },
 

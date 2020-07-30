@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/detail}
+// {namespace name="backend/customer/view/detail"}
 
 /**
  * Shopware UI - Customer detail page additional panel
@@ -67,18 +67,18 @@ Ext.define('Shopware.apps.Customer.view.detail.Additional', {
      * @object
      */
     snippets: {
-        registeredSince: '{s name=additional/registered_since}Registered since:{/s}',
-        lastLogin: '{s name=additional/last_login}Last login:{/s}',
-        language: '{s name=additional/language}Language:{/s}',
-        shop: '{s name=additional/shop}Shop:{/s}',
-        orders: '{s name=additional/orders_since_registration}Orders since registration:{/s}',
-        sales: '{s name=additional/sales}Turnover:{/s}',
-        paymentDefaults: '{s name=additional/payment_defaults}Payment defaults:{/s}',
-        emptyText: '{s name=additional/empty}No additional information found{/s}',
-        performOrderBtn: '{s name=additional/do_order}Perform order{/s}',
-        quickOrder: '{s name=additional/quick_order}For this customer, no account has been created (quick order){/s}',
-        title: '{s name=additional/title}Further information{/s}',
-        createAccountBtn: '{s name=additional/create_account}Create account{/s}'
+        registeredSince: '{s name="additional/registered_since"}Registered since:{/s}',
+        lastLogin: '{s name="additional/last_login"}Last login:{/s}',
+        language: '{s name="additional/language"}Language:{/s}',
+        shop: '{s name="additional/shop"}Shop:{/s}',
+        orders: '{s name="additional/orders_since_registration"}Orders since registration:{/s}',
+        sales: '{s name="additional/sales"}Turnover:{/s}',
+        paymentDefaults: '{s name="additional/payment_defaults"}Payment defaults:{/s}',
+        emptyText: '{s name="additional/empty"}No additional information found{/s}',
+        performOrderBtn: '{s name="additional/do_order"}Perform order{/s}',
+        quickOrder: '{s name="additional/quick_order"}For this customer, no account has been created (quick order){/s}',
+        title: '{s name="additional/title"}Further information{/s}',
+        createAccountBtn: '{s name="additional/create_account"}Create account{/s}'
     },
 
     /**

@@ -33,7 +33,7 @@
  * If the user drops one or more categories on the drop zone, an event will be fired which
  * handled in the category controller.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/category/drop_zone"}
 Ext.define('Shopware.apps.Article.view.category.DropZone', {
     /**
@@ -72,8 +72,8 @@ Ext.define('Shopware.apps.Article.view.category.DropZone', {
      * @object
      */
     snippets:{
-        title: '{s name=category/drop_zone/title}Allocation by drag&drop{/s}',
-        text: '{s name=category/drop_zone/text}Assign this category via drag&drop{/s}'
+        title: '{s name="category/drop_zone/title"}Allocation by drag&drop{/s}',
+        text: '{s name="category/drop_zone/text"}Assign this category via drag&drop{/s}'
     },
 
     /**

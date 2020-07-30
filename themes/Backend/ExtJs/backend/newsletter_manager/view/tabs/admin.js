@@ -37,7 +37,7 @@
 Ext.define('Shopware.apps.NewsletterManager.view.tabs.Admin', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.newsletter-manager-tabs-admin',
-    title: '{s name=admin}Administration{/s}',
+    title: '{s name="admin"}Administration{/s}',
     layout: 'fit',
     bodyBorder: 0,
     border: false,

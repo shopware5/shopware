@@ -32,7 +32,7 @@
  * The category list component contains the grid panel for the category listing which display all already assigned categories.
  * Each row have an action column to remove the category.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/category/list"}
 Ext.define('Shopware.apps.Article.view.category.List', {
     /**
@@ -58,12 +58,12 @@ Ext.define('Shopware.apps.Article.view.category.List', {
      * @object
      */
     snippets:{
-        title: '{s name=category/list/title}Assigned categories{/s}',
-        name: '{s name=category/list/name_column}Category name{/s}',
-        delete: '{s name=category/list/delete_tooltip}Remove entry{/s}',
+        title: '{s name="category/list/title"}Assigned categories{/s}',
+        name: '{s name="category/list/name_column"}Category name{/s}',
+        delete: '{s name="category/list/delete_tooltip"}Remove entry{/s}',
         toolbar: {
-            delete: '{s name=category/list/toolbar/delete_button}Remove all selected entries{/s}',
-            search: '{s name=search}Search...{/s}'
+            delete: '{s name="category/list/toolbar/delete_button"}Remove all selected entries{/s}',
+            search: '{s name="search"}Search...{/s}'
         }
     },
 

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/order}
+// {namespace name="backend/customer/view/order"}
 
 /**
  * Shopware Controller - Customer list backend module

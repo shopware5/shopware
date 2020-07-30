@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/feedback/view/main}
+//{namespace name="backend/feedback/view/main"}
 
 /**
  * Shopware UI - Feedback Main Controller

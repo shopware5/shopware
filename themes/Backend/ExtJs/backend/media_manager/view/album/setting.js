@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/media_manager/view/main}
+//{namespace name="backend/media_manager/view/main"}
 
 /**
  * Shopware UI - Media Manager Album Settings
@@ -310,7 +310,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
         });
 
         me.thumbnailGenerate = Ext.create('Ext.button.Button', {
-            text: '{s name=settings/generateThumbBtn}Generate thumbnails{/s}',
+            text: '{s name="settings/generateThumbBtn"}Generate thumbnails{/s}',
             margin: '0 0 0 6',
             scale: 'small',
             action: 'mediamanager-album-setting-generate-thumbnail',

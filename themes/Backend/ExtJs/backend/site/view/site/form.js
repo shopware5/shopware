@@ -33,7 +33,7 @@
  * This file contains the layout of the modules detail form.
  */
 
-//{namespace name=backend/site/site}
+//{namespace name="backend/site/site"}
 
 //{block name="backend/site/view/site/form"}
 Ext.define('Shopware.apps.Site.view.site.Form', {
@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
             items = [];
 
         me.saveButton = Ext.create('Ext.button.Button',{
-            text: '{s name=formLinkFieldSaveButtonText}Save{/s}',
+            text: '{s name="formLinkFieldSaveButtonText"}Save{/s}',
             action: 'onSaveSite',
             cls:'primary'
         });
@@ -99,21 +99,21 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
         return [
             {
                 xtype: 'fieldset',
-                title: '{s name=formDetailFormEditContentCaption}Content{/s}',
+                title: '{s name="formDetailFormEditContentCaption"}Content{/s}',
                 items: me.getContentField(),
                 padding: 20,
                 defaults: { labelWidth: 155 }
             },
             {
                 xtype: 'fieldset',
-                title: '{s name=formDetailFormLinksCaption}Link{/s}',
+                title: '{s name="formDetailFormLinksCaption"}Link{/s}',
                 items: me.getLinkField(),
                 padding: 20,
                 defaults: { labelWidth: 155 }
             },
             {
                 xtype: 'fieldset',
-                title: '{s name=formDetailFormOptionalSettingsCaption}Settings{/s}',
+                title: '{s name="formDetailFormOptionalSettingsCaption"}Settings{/s}',
                 collapsible: true,
                 collapsed: true,
                 items: me.getOptionsField(),
@@ -136,9 +136,9 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 xtype: 'hidden'
             },
             {
-                fieldLabel: '{s name=formContentFieldDescriptionLabel}Description{/s}',
+                fieldLabel: '{s name="formContentFieldDescriptionLabel"}Description{/s}',
                 xtype: 'textfield',
-                emptyText: '{s name=formContentFieldDescriptionEmptyText}Page name{/s}',
+                emptyText: '{s name="formContentFieldDescriptionEmptyText"}Page name{/s}',
                 name: 'description',
                 allowBlank: false,
                 anchor:'100%',
@@ -146,7 +146,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 translationName: 'description'
             },
             {
-                fieldLabel: '{s name=formContentFieldActiveLabel}Active{/s}',
+                fieldLabel: '{s name="formContentFieldActiveLabel"}Active{/s}',
                 xtype: 'checkbox',
                 inputValue: true,
                 uncheckedValue: false,
@@ -154,7 +154,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 anchor:'100%'
             },
             {
-                fieldLabel: '{s name=formContentFieldHtmlEditorLabel}Content{/s}',
+                fieldLabel: '{s name="formContentFieldHtmlEditorLabel"}Content{/s}',
                 xtype: 'tinymce',
                 name: 'html',
                 anchor:'100%',
@@ -175,7 +175,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
 
         return [
             {
-                fieldLabel: '{s name=formLinkFieldAddressLabel}Link-Address{/s}',
+                fieldLabel: '{s name="formLinkFieldAddressLabel"}Link-Address{/s}',
                 xtype: 'textfield',
                 name: 'link',
                 anchor:'100%',
@@ -183,7 +183,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 translationName: 'link'
             },
             {
-                fieldLabel: '{s name=formLinkFieldTargetLabel}Link-Target{/s}',
+                fieldLabel: '{s name="formLinkFieldTargetLabel"}Link-Target{/s}',
                 xtype: 'combo',
                 mode:'local',
                 name: 'target',
@@ -204,56 +204,56 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
 
         return [
             {
-               fieldLabel: '{s name=formSettingsFieldPositionLabel}Position{/s}',
+               fieldLabel: '{s name="formSettingsFieldPositionLabel"}Position{/s}',
                xtype: 'textfield',
                name: 'position',
                anchor:'100%'
             },
             {
-               fieldLabel: '{s name=formSettingsFieldEmbedCodeLabel}Embed-Code{/s}',
+               fieldLabel: '{s name="formSettingsFieldEmbedCodeLabel"}Embed-Code{/s}',
                xtype: 'textfield',
                name: 'embedCode',
                readOnly: true,
                anchor:'100%'
             },
             {
-                fieldLabel: '{s name=formSettingsFieldTplVariableLabel_1}Tpl. Variable 1{/s}',
+                fieldLabel: '{s name="formSettingsFieldTplVariableLabel_1"}Tpl. Variable 1{/s}',
                 xtype: 'textfield',
                 name: 'tpl1variable',
                 anchor:'100%'
             },
             {
-                fieldLabel: '{s name=formSettingsFieldTplPathLabel_1}Tpl. Path 1{/s}',
+                fieldLabel: '{s name="formSettingsFieldTplPathLabel_1"}Tpl. Path 1{/s}',
                 xtype: 'textfield',
                 name: 'tpl1path',
                 anchor:'100%'
             },
             {
-               fieldLabel: '{s name=formSettingsFieldTplVariableLabel_2}Tpl. Variable 2{/s}',
+               fieldLabel: '{s name="formSettingsFieldTplVariableLabel_2"}Tpl. Variable 2{/s}',
                xtype: 'textfield',
                name: 'tpl2variable',
                anchor:'100%'
             },
             {
-               fieldLabel: '{s name=formSettingsFieldTplPathLabel_2}Tpl. Path 2{/s}',
+               fieldLabel: '{s name="formSettingsFieldTplPathLabel_2"}Tpl. Path 2{/s}',
                xtype: 'textfield',
                name: 'tpl2path',
                anchor:'100%'
             },
             {
-                fieldLabel: '{s name=formSettingsFieldTplVariableLabel_3}Tpl. Variable 3{/s}',
+                fieldLabel: '{s name="formSettingsFieldTplVariableLabel_3"}Tpl. Variable 3{/s}',
                 xtype: 'textfield',
                 name: 'tpl3variable',
                 anchor:'100%'
             },
             {
-                fieldLabel: '{s name=formSettingsFieldTplPathLabel_3}Tpl. Path 3{/s}',
+                fieldLabel: '{s name="formSettingsFieldTplPathLabel_3"}Tpl. Path 3{/s}',
                 xtype: 'textfield',
                 name: 'tpl3path',
                 anchor:'100%'
             },
             {
-                fieldLabel: '{s name=formSettingsFieldSEOTitle}SEO Title{/s}',
+                fieldLabel: '{s name="formSettingsFieldSEOTitle"}SEO Title{/s}',
                 xtype: 'textfield',
                 name: 'pageTitle',
                 anchor:'100%',
@@ -261,7 +261,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 translationName: 'page_title'
             },
             {
-                fieldLabel: '{s name=formSettingsFieldMetaKeywords}Meta-Keywords{/s}',
+                fieldLabel: '{s name="formSettingsFieldMetaKeywords"}Meta-Keywords{/s}',
                 xtype: 'textfield',
                 name: 'metaKeywords',
                 anchor:'100%',
@@ -269,7 +269,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 translationName: 'meta_keywords'
             },
             {
-                fieldLabel: '{s name=formSettingsFieldMetaDescription}Meta-Description{/s}',
+                fieldLabel: '{s name="formSettingsFieldMetaDescription"}Meta-Description{/s}',
                 xtype: 'textfield',
                 name: 'metaDescription',
                 anchor:'100%',
@@ -286,8 +286,8 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
             name: 'grouping',
             margin: '0 0 0 160',
             xtype:'ddselector',
-            fromTitle: '{s name=site/ddselector/fromTitle}Groups{/s}',
-            toTitle: '{s name=site/ddselector/toTitle}Assigned groups{/s}',
+            fromTitle: '{s name="site/ddselector/fromTitle"}Groups{/s}',
+            toTitle: '{s name="site/ddselector/toTitle"}Assigned groups{/s}',
             dataIndex: 'groupName',
             fromStore: me.groupStore,
             buttons:[ 'add','remove' ],
@@ -314,8 +314,8 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
         var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory');
         return Ext.create('Shopware.form.field.ShopGrid', {
             name: 'shopIds',
-            fieldLabel: '{s name=site/shop_selector/label}Limit to shop(s){/s}',
-            helpText: '{s name=site/shop_selector/helper}If set, limits shop page visibility to the configured shops. If this shop page links to another page, that page might still be accessible.{/s}',
+            fieldLabel: '{s name="site/shop_selector/label"}Limit to shop(s){/s}',
+            helpText: '{s name="site/shop_selector/helper"}If set, limits shop page visibility to the configured shops. If this shop page links to another page, that page might still be accessible.{/s}',
             allowSorting: false,
             height: 130,
             anchor:  '100%',

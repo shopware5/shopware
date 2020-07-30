@@ -1,4 +1,4 @@
-{namespace name=backend/search/index}
+{namespace name="backend/search/index"}
 
 {block name="backend/search/index/result_total"}
     <div class="row customers">

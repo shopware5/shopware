@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/emotion/presets/presets}
+//{namespace name="backend/emotion/presets/presets"}
 
 /**
  * Shopware Application
@@ -67,11 +67,11 @@ Ext.define('Shopware.apps.Emotion.view.presets.Info', {
             '<tpl for=".">',
                 '<div class="item">',
                     '{literal}<div class="screen"><img src="{previewUrl}" alt="{label}" /></div>{/literal}',
-                    '<div class="info-item"> <p class="label">{s name=name}{/s}:</p> <p class="value">{literal}{label}{/literal}</p></div>',
-                    '<div class="info-item"> <p class="label">{s name=description}{/s}:</p> <p class="value">{literal}{description}{/literal}</p></div>',
+                    '<div class="info-item"> <p class="label">{s name="name"}{/s}:</p> <p class="value">{literal}{label}{/literal}</p></div>',
+                    '<div class="info-item"> <p class="label">{s name="description"}{/s}:</p> <p class="value">{literal}{description}{/literal}</p></div>',
                     '<tpl if="this.hasRequiredPlugins(values.requiredPlugins)">',
                         '<div class="info-item">',
-                            '<p class="label" style="margin-bottom: 5px;">{s name=required_plugins}{/s}:</p>',
+                            '<p class="label" style="margin-bottom: 5px;">{s name="required_plugins"}{/s}:</p>',
                             '<ul>',
                                 '<tpl for="requiredPlugins">',
                                     '<li class="required-plugin" style="cursor: pointer; margin-left: 10px; margin-bottom: 5px;" id="{literal}{name}{/literal}" data-in-store="{literal}{in_store}{/literal}">' +

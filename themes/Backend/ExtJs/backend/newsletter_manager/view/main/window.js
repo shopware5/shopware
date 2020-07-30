@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.main.Window', {
     height: '90%',
     stateful: true,
     stateId: 'shopware-newsletter-manager-main-window',
-    title: '{s name=title}Newsletter Manager{/s}',
+    title: '{s name="title"}Newsletter Manager{/s}',
 
     /**
      * Init the component, add noticeContainer and Tabs

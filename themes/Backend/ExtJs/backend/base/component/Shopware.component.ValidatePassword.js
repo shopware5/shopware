@@ -56,7 +56,7 @@ Ext.define('Shopware.component.ValidatePassword', {
      */
     onPasswordValidation: function(successCallback, abortCallback, isRetryAttempt) {
         var passwordPrompt = new Ext.window.MessageBox(),
-            displayText = '{s name=window/enterPassword}Please enter your password{/s}:',
+            displayText = '{s name="window/enterPassword"}Please enter your password{/s}:',
             onFailure = function() {
                 Shopware.app.Application.fireEvent('Shopware.ValidatePassword', successCallback, abortCallback, true);
             };
@@ -65,14 +65,14 @@ Ext.define('Shopware.component.ValidatePassword', {
         abortCallback = !Ext.isFunction(abortCallback) ? Ext.emptyFn : abortCallback;
 
         if (isRetryAttempt === true) {
-            displayText = '{s name=window/passwordInvalid}Your password is invalid.{/s} <br/><br/>' + displayText;
+            displayText = '{s name="window/passwordInvalid"}Your password is invalid.{/s} <br/><br/>' + displayText;
         }
 
         passwordPrompt.afterRender = Ext.MessageBox.afterRender;
         passwordPrompt.textField.inputType = 'password';
 
         passwordPrompt.prompt(
-            '{s name=window/title}Password Validation{/s}',
+            '{s name="window/title"}Password Validation{/s}',
             displayText,
             function (result, value) {
                 if (result !== 'ok' || !value) {

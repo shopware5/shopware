@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/partner/view/partner}
+//{namespace name="backend/partner/view/partner"}
 
 /**
  * Shopware UI - partner main window.
@@ -37,7 +37,7 @@
 //{block name="backend/partner/view/main/window"}
 Ext.define('Shopware.apps.Partner.view.main.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window/main_title}Affiliate program{/s}',
+    title: '{s name="window/main_title"}Affiliate program{/s}',
     alias: 'widget.partner-main-window',
     border: false,
     autoShow: true,

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/payment/payment}
+//{namespace name="backend/payment/payment"}
 
 /**
  * Shopware UI - The general-formpanel to edit general payment-information
@@ -60,8 +60,8 @@ Ext.define('Shopware.apps.Payment.view.payment.FormPanel', {
     }],
 
     snippets: {
-        fieldsetTitleFormatEmpty: '{s name=formpanel_title_empty}{/s}',
-        fieldsetTitleFormat: '{s name=formpanel_title}{/s}'
+        fieldsetTitleFormatEmpty: '{s name="formpanel_title_empty"}{/s}',
+        fieldsetTitleFormat: '{s name="formpanel_title"}{/s}'
     },
 
     /**
@@ -90,73 +90,73 @@ Ext.define('Shopware.apps.Payment.view.payment.FormPanel', {
     getItems: function(){
         var items = [{
             xtype: 'textfield',
-            fieldLabel: '{s name=formpanel_description_label}Description{/s}',
+            fieldLabel: '{s name="formpanel_description_label"}Description{/s}',
             name: 'description',
             translatable: true
         },{
             xtype: 'textfield',
-            fieldLabel: '{s name=formpanel_name_label}Name{/s}',
+            fieldLabel: '{s name="formpanel_name_label"}Name{/s}',
             name: 'name'
         },{
             xtype: 'textfield',
-            fieldLabel: '{s name=formpanel_template_label}Template{/s}',
+            fieldLabel: '{s name="formpanel_template_label"}Template{/s}',
             name: 'template'
         },{
             xtype: 'textfield',
-            fieldLabel: '{s name=formpanel_class_label}Class{/s}',
+            fieldLabel: '{s name="formpanel_class_label"}Class{/s}',
             name: 'class'
         },{
             xtype: 'textfield',
-            fieldLabel: '{s name=formpanel_table_label}General surcharge{/s}',
+            fieldLabel: '{s name="formpanel_table_label"}General surcharge{/s}',
             name: 'table'
         },{
             xtype: 'textarea',
-            fieldLabel: '{s name=formpanel_additional-description_label}Additional description{/s}',
+            fieldLabel: '{s name="formpanel_additional-description_label"}Additional description{/s}',
             name: 'additionalDescription',
             translatable: true
         },{
             xtype: 'textfield',
-            fieldLabel: '{s name=formpanel_surcharge_label}Surcharge in %{/s}',
+            fieldLabel: '{s name="formpanel_surcharge_label"}Surcharge in %{/s}',
             name: 'debitPercent'
         },{
             xtype: 'textfield',
-            fieldLabel: '{s name=formpanel_generalSurcharge_label}General Surcharge{/s}',
+            fieldLabel: '{s name="formpanel_generalSurcharge_label"}General Surcharge{/s}',
             name: 'surcharge',
-            supportText: '{s name=payment/surcharge/supportText}Use \',\' or \'.\' for decimal numbers{/s}'
+            supportText: '{s name="payment/surcharge/supportText"}Use \',\' or \'.\' for decimal numbers{/s}'
         },{
             xtype: 'textfield',
-            fieldLabel: '{s name=formpanel_position_surcharge}Position{/s}',
+            fieldLabel: '{s name="formpanel_position_surcharge"}Position{/s}',
             name: 'position'
         },{
             xtype: 'checkbox',
-            fieldLabel: '{s name=formpanel_active_label}Active{/s}',
+            fieldLabel: '{s name="formpanel_active_label"}Active{/s}',
             inputValue: 1,
             uncheckedValue: 0,
             name: 'active'
         },{
             xtype: 'checkbox',
-            fieldLabel: '{s name=formpanel_esdActive_label}Active for ESD products{/s}',
+            fieldLabel: '{s name="formpanel_esdActive_label"}Active for ESD products{/s}',
             inputValue: 1,
             uncheckedValue: 0,
             name: 'esdActive'
         },{
             xtype: 'checkbox',
-            fieldLabel: '{s name=formpanel_mobileInactive_label}Disable for smartphones{/s}',
+            fieldLabel: '{s name="formpanel_mobileInactive_label"}Disable for smartphones{/s}',
             inputValue: 1,
             uncheckedValue: 0,
             name: 'mobileInactive'
         },{
             xtype: 'textfield',
-            fieldLabel: '{s name=formpanel_urlIFrame_label}URL for iFrame{/s}',
+            fieldLabel: '{s name="formpanel_urlIFrame_label"}URL for iFrame{/s}',
             name: 'embedIFrame'
         },{
             xtype: 'textfield',
-            fieldLabel: '{s name=formpanel_action_label}Action{/s}',
+            fieldLabel: '{s name="formpanel_action_label"}Action{/s}',
             name: 'action',
             disabled: true
         },{
             xtype: 'textfield',
-            fieldLabel: '{s name=formpanel_pluginID_label}PluginID{/s}',
+            fieldLabel: '{s name="formpanel_pluginID_label"}PluginID{/s}',
             name: 'pluginId',
             disabled: true
         }];

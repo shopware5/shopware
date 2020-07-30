@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/view/edit/default}*/
+/*{namespace name="backend/shipping/view/edit/default"}*/
 
 /**
  * Shopware UI - Shipping Costs
@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormLeft', {
      * Title of the left hand side form box
      * @string
      */
-    title : '{s name=left_title}Config{/s}',
+    title : '{s name="left_title"}Config{/s}',
     /**
      * Alias for the left hand side form box
      * @string
@@ -109,36 +109,36 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormLeft', {
         var me = this;
         return [
             {
-                fieldLabel: '{s name=left_name}Name{/s}',
+                fieldLabel: '{s name="left_name"}Name{/s}',
                 name: 'name',
                 dataIndex : 'name',
                 allowBlank: false,
                 translatable: true // Indicates that this field is translatable
             },
             {
-                fieldLabel: '{s name=left_description}Description{/s}',
-                emptyText   : '{s name=left_empty_text_description}Description{/s}',
+                fieldLabel: '{s name="left_description"}Description{/s}',
+                emptyText   : '{s name="left_empty_text_description"}Description{/s}',
                 name: 'description',
                 xtype:'textarea',
                 height: 50,
                 translatable: true // Indicates that this field is translatable
             },
             {
-                fieldLabel: '{s name=left_tracking_url}Tracking URL{/s}',
+                fieldLabel: '{s name="left_tracking_url"}Tracking URL{/s}',
                 translatable: true,
                 name: 'statusLink'
             },
             {
-                fieldLabel: '{s name=left_comment_tracking}Comment{/s}',
+                fieldLabel: '{s name="left_comment_tracking"}Comment{/s}',
                 name: 'comment'
             },
             {
-                fieldLabel: '{s name=left_sorting}Sorting{/s}',
+                fieldLabel: '{s name="left_sorting"}Sorting{/s}',
                 name: 'position',
                 xtype: 'numberfield'
             },
             {
-                fieldLabel: '{s name=left_active}Active{/s}',
+                fieldLabel: '{s name="left_active"}Active{/s}',
                 name: 'active',
                 xtype: 'checkbox',
                 inputValue  : 1,

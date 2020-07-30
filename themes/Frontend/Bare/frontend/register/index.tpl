@@ -7,7 +7,7 @@
 
 {* Title *}
 {block name='frontend_index_header_title'}
-    {s name="RegisterTitle"}{/s} | {{config name=shopName}|escapeHtml}
+    {s name="RegisterTitle"}{/s} | {{config name="shopName"}|escapeHtml}
 {/block}
 
 {* Back to the shop button *}
@@ -87,7 +87,7 @@
         <div class="register--message content block">
             <div class="register--headline">
                 {block name='frontend_register_index_form_optin_success'}
-                    {if $smarty.get.optinsuccess && ({config name=optinregister} || {config name=optinaccountless})}
+                    {if $smarty.get.optinsuccess && ({config name="optinregister"} || {config name="optinaccountless"})}
                         {if $isAccountless}
                             {s name="RegisterInfoSuccessOptinAccountless" assign="snippetRegisterInfoSuccessOptinAccountless"}{/s}
                             {include file="frontend/_includes/messages.tpl" type="success" content=$snippetRegisterInfoSuccessOptinAccountless}
@@ -135,7 +135,7 @@
 
                     {* Invalid hash while option verification process *}
                     {block name='frontend_register_index_form_optin_invalid_hash'}
-                        {if $smarty.get.optinhashinvalid && ({config name=optinregister} || {config name=optinaccountless})}
+                        {if $smarty.get.optinhashinvalid && ({config name="optinregister"} || {config name="optinaccountless"})}
                             {s name="RegisterInfoInvalidHash" assign="snippetRegisterInfoInvalidHash"}{/s}
                             {include file="frontend/_includes/messages.tpl" type="error" content=$snippetRegisterInfoInvalidHash}
                         {/if}
@@ -175,7 +175,7 @@
 
                     {* Captcha *}
                     {block name='frontend_register_index_form_captcha'}
-                        {$captchaName = {config name=registerCaptcha}}
+                        {$captchaName = {config name="registerCaptcha"}}
                         {$captchaHasError = $errors.captcha}
                         {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
                     {/block}
@@ -183,7 +183,7 @@
                     {* Data protection information *}
                     {if !$update}
                         {block name="frontend_register_index_form_privacy"}
-                            {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
+                            {if {config name="ACTDPRTEXT"} || {config name="ACTDPRCHECK"}}
                                 {block name="frontend_register_index_form_privacy_title"}
                                     <h2 class="panel--title is--underline">
                                         {s name="PrivacyTitle" namespace="frontend/index/privacy"}{/s}
@@ -192,7 +192,7 @@
                                 <div class="panel--body is--wide">
                                     {block name="frontend_register_index_form_privacy_content"}
                                         <div class="register--password-description">
-                                            {if {config name=ACTDPRCHECK}}
+                                            {if {config name="ACTDPRCHECK"}}
                                                 {* Privacy checkbox *}
                                                 {block name="frontend_register_index_form_privacy_content_checkbox"}
                                                     <input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} required="required" aria-required="true" value="1" class="is--required" />

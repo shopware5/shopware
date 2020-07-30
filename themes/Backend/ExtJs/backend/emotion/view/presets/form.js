@@ -28,7 +28,7 @@
  * @package   Shopware
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-//{namespace name=backend/emotion/presets/presets}
+//{namespace name="backend/emotion/presets/presets"}
 //{block name="backend/emotion/presets/form"}
 Ext.define('Shopware.apps.Emotion.view.presets.Form', {
     extend: 'Enlight.app.Window',
@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
     width: 510,
 
     modal: true,
-    title: '{s name=form_window/title}{/s}',
+    title: '{s name="form_window/title"}{/s}',
 
     initComponent: function() {
         var me = this;
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
 
         me.displayField = Ext.create('Ext.form.field.Display', {
             fieldStyle: 'font-style: italic; font-size: 11px; color: #999999',
-            value: '{s name=form_window/info_text}{/s}'
+            value: '{s name="form_window/info_text"}{/s}'
         });
 
         me.radiogroup = Ext.create('Ext.form.RadioGroup', {
@@ -84,8 +84,8 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
             vertical: true,
             margin: '10 0 0 0',
             items: [
-                { boxLabel: '{s name=form_window/boxlabel_new}{/s}', name: 'save', checked: true, inputValue: 1, itemId: 'create' },
-                { boxLabel: '{s name=form_window/boxlabel_override}{/s}', name: 'save', inputValue: 2, itemId: 'update' }
+                { boxLabel: '{s name="form_window/boxlabel_new"}{/s}', name: 'save', checked: true, inputValue: 1, itemId: 'create' },
+                { boxLabel: '{s name="form_window/boxlabel_override"}{/s}', name: 'save', inputValue: 2, itemId: 'update' }
             ],
             listeners: {
                 change: function(field, newValue) {
@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
             itemId: 'presetselection',
             hidden: true,
             disabled: true,
-            fieldLabel: '{s name=form_window/select_preset}{/s}',
+            fieldLabel: '{s name="form_window/select_preset"}{/s}',
             allowBlank: false,
             valueField: 'id',
             displayField: 'label',
@@ -152,12 +152,12 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
             {
                 xtype: 'textfield',
                 allowBlank: false,
-                fieldLabel: '{s name=form_window/name}{/s}',
+                fieldLabel: '{s name="form_window/name"}{/s}',
                 name: 'name'
             },
             {
                 xtype: 'textarea',
-                fieldLabel: '{s name=form_window/description}{/s}',
+                fieldLabel: '{s name="form_window/description"}{/s}',
                 name: 'description'
             },
             me.mediafield
@@ -168,7 +168,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
         return Ext.create('Shopware.form.field.Media', {
             valueField: 'virtualPath',
             name: 'thumbnail',
-            fieldLabel: '{s name=form_window/preview_image}{/s}',
+            fieldLabel: '{s name="form_window/preview_image"}{/s}',
             requestMediaData: function(value) {
                 var me = this, params = {};
 

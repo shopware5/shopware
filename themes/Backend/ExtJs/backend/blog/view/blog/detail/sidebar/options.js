@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/blog/view/blog}
+//{namespace name="backend/blog/view/blog"}
 /**
  * Shopware UI - Blog detail sidebar options window.
  *
@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
     bodyPadding: 10,
     autoScroll: true,
     collapsed: false,
-    title: '{s name=detail/sidebar/options/title}Additional options{/s}',
+    title: '{s name="detail/sidebar/options/title"}Additional options{/s}',
     layout: {
         type: 'border'
     },
@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
 
         me.registerEvents();
         me.propertiesPanel = Ext.create('Ext.panel.Panel', {
-            title:'{s name=detail/sidebar/options/panel/properties}Blog article properties{/s}',
+            title:'{s name="detail/sidebar/options/panel/properties"}Blog article properties{/s}',
             margin: '0 0 10 0',
             layout: {
                 type: 'anchor'
@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
         });
 
         me.imagePanel = Ext.create('Ext.panel.Panel', {
-            title: '{s name=detail/sidebar/options/panel/image}Image configuration{/s}',
+            title: '{s name="detail/sidebar/options/panel/image"}Image configuration{/s}',
             layout: {
                 align: 'stretch',
                 type: 'vbox'
@@ -152,16 +152,16 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
                 xtype: 'combo',
                 name: 'template',
                 queryMode: 'remote',
-                fieldLabel: '{s name=detail/sidebar/options/field/template}Template{/s}',
+                fieldLabel: '{s name="detail/sidebar/options/field/template"}Template{/s}',
                 store: me.templateStore.load(),
                 valueField: 'id',
                 submitValue : true,
-                emptyText: '{s name=detail/sidebar/options/field/template/empty_text}Standard{/s}',
+                emptyText: '{s name="detail/sidebar/options/field/template/empty_text"}Standard{/s}',
                 displayField: 'name'
             },
             {
                 xtype:'datefield',
-                fieldLabel:'{s name=detail/sidebar/options/field/displayDate}Display date{/s}',
+                fieldLabel:'{s name="detail/sidebar/options/field/displayDate"}Display date{/s}',
                 allowBlank:false,
                 submitFormat: 'd.m.Y',
                 required:true,
@@ -169,7 +169,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
             },
             {
                 xtype:'timefield',
-                fieldLabel:'{s name=detail/sidebar/options/field/displayTime}Display time{/s}',
+                fieldLabel:'{s name="detail/sidebar/options/field/displayTime"}Display time{/s}',
                 allowBlank:false,
                 submitFormat: 'H:i',
                 required:true,
@@ -178,7 +178,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
             {
                 xtype:'combobox',
                 name:'categoryId',
-                fieldLabel:'{s name=detail/sidebar/options/field/category}Category{/s}',
+                fieldLabel:'{s name="detail/sidebar/options/field/category"}Category{/s}',
                 store: me.categoryPathStore.load(),
                 valueField:'id',
                 editable:false,
@@ -190,7 +190,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
             {
                 xtype:'boxselect',
                 name:'tags',
-                fieldLabel:'{s name=detail/sidebar/options/field/tags}Tags{/s}',
+                fieldLabel:'{s name="detail/sidebar/options/field/tags"}Tags{/s}',
                 store:[],
                 queryMode:'local',
                 forceSelection: false,
@@ -213,7 +213,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
         me.mediaStore = me.detailRecord.getMedia();
         // Media selection field
         me.mediaSelection = Ext.create('Shopware.MediaManager.MediaSelection', {
-            buttonText: '{s name=detail/sidebar/options/button/select_image}Select images{/s}',
+            buttonText: '{s name="detail/sidebar/options/button/select_image"}Select images{/s}',
             name: 'media-manager-selection',
             multiSelect: true,
             flex:1,
@@ -250,7 +250,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
                         '<div class="thumb">',
                             '<div class="inner-thumb"><img src="{path}" style="height: 70px; width: 90px;" />' +
                                 '<tpl if="preview===true">',
-                                    '<div class="preview"><span>{/literal}{s name=detail/sidebar/options/preview}Preview{/s}{literal}</span></div>' +
+                                    '<div class="preview"><span>{/literal}{s name="detail/sidebar/options/preview"}Preview{/s}{literal}</span></div>' +
                                 '</tpl>',
                             '</div>',
                         '</div>',
@@ -301,7 +301,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
         // The preview button, marks the selected image in the listing as preview.
         // The event will be handled in the media controller
         me.previewButton = Ext.create('Ext.button.Button', {
-            text: '{s name=detail/sidebar/options/button/preview_image}Mark as preview{/s}',
+            text: '{s name="detail/sidebar/options/button/preview_image"}Mark as preview{/s}',
             action: 'previewImage',
             disabled: true,
             iconCls: 'sprite-camera-lens',
@@ -312,7 +312,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
 
         // The remove button, removes the selected item from the image listing.
         me.removeButton = Ext.create('Ext.button.Button', {
-            text:'{s name=detail/sidebar/options/button/delete_image}Remove selected images{/s}',
+            text:'{s name="detail/sidebar/options/button/delete_image"}Remove selected images{/s}',
             action: 'removeImage',
             disabled: true,
             iconCls:'sprite-minus-circle-frame',

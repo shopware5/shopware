@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/view/widgets}
+//{namespace name="backend/index/view/widgets"}
 
 /**
  * Shopware UI - Sales Widget
@@ -32,7 +32,7 @@
 Ext.define('Shopware.apps.Index.view.widgets.Orders', {
     extend: 'Shopware.apps.Index.view.widgets.Base',
     alias: 'widget.swag-last-orders-widget',
-    title: '{s name=orders/title}Last orders{/s}',
+    title: '{s name="orders/title"}Last orders{/s}',
     layout: 'fit',
 
     /**
@@ -41,10 +41,10 @@ Ext.define('Shopware.apps.Index.view.widgets.Orders', {
      */
     snippets: {
         headers: {
-            date: '{s name=orders/headers/date}Date{/s}',
-            number: '{s name=orders/headers/number}Nr.{/s}',
-            customer: '{s name=orders/headers/customer}Customer{/s}',
-            amount: '{s name=orders/headers/amount}Amount{/s}'
+            date: '{s name="orders/headers/date"}Date{/s}',
+            number: '{s name="orders/headers/number"}Nr.{/s}',
+            customer: '{s name="orders/headers/customer"}Customer{/s}',
+            amount: '{s name="orders/headers/amount"}Amount{/s}'
         }
     },
 

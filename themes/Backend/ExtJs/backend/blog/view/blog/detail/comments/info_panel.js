@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/blog/view/blog}
+//{namespace name="backend/blog/view/blog"}
 /**
  * Shopware UI - Blog view infopanel
  *
@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.InfoPanel', {
     style:'background: #FFFFFF !important',
     split: true,
     bodyPadding: 10,
-    title: '{s name=blog/detail/comments/info_panel/title}More information{/s}',
+    title: '{s name="blog/detail/comments/info_panel/title"}More information{/s}',
     width: 300,
     collapsible: true,
     autoScroll: true,
@@ -83,33 +83,33 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.InfoPanel', {
                 '<div class="info-view">',
                     '<div class="base-info">',
                         '<p style="margin-top: 10px;">',
-                            '<b>{s name=blog/detail/comments/info_panel/headline}Headline: {/s}</b>',
+                            '<b>{s name="blog/detail/comments/info_panel/headline"}Headline: {/s}</b>',
                             '<span>{literal}{headline}{/literal}</span>',
                         '</p>',
                         '<p style="margin-top: 10px;">',
-                            '<b>{s name=blog/detail/comments/info_panel/author}Author: {/s}</b>',
+                            '<b>{s name="blog/detail/comments/info_panel/author"}Author: {/s}</b>',
                             '<span>{literal}{name}{/literal}</span>',
                         '</p>',
                         '<p style="margin-top: 10px;">',
-                            '<b>{s name=blog/detail/comments/info_panel/email}Email: {/s}</b>',
+                            '<b>{s name="blog/detail/comments/info_panel/email"}Email: {/s}</b>',
                             '<span>{literal}{eMail}{/literal}</span>',
                         '</p>',
                         '<p style="margin-top: 10px;">',
-                            '<b>{s name=blog/detail/comments/info_panel/creation_date}Creation Date: {/s}</b>',
+                            '<b>{s name="blog/detail/comments/info_panel/creation_date"}Creation Date: {/s}</b>',
                             '<span>{literal}{[this.formatDate(values.creationDate)]}{/literal}</span>',
                         '</p>',
                         '<p style="margin-top: 10px;">',
-                            '<b>{s name=blog/detail/comments/info_panel/status}Status: {/s}</b>',
-                            '<tpl if="active==1"><span style="color: green"><b>{s name=blog/detail/comments/info_panel/statusAccepted}Accepted{/s}</b></span></tpl>',
-                            '<tpl if="active==0"><span style="color: red"><b>{s name=blog/detail/comments/info_panel/statusNotAccepted}Not accepted yet{/s}</b></span></tpl>',
+                            '<b>{s name="blog/detail/comments/info_panel/status"}Status: {/s}</b>',
+                            '<tpl if="active==1"><span style="color: green"><b>{s name="blog/detail/comments/info_panel/statusAccepted"}Accepted{/s}</b></span></tpl>',
+                            '<tpl if="active==0"><span style="color: red"><b>{s name="blog/detail/comments/info_panel/statusNotAccepted"}Not accepted yet{/s}</b></span></tpl>',
                         '</p>',
                         '<p style="margin-top: 10px;">',
-                            '<b>{s name=blog/detail/comments/info_panel/points}Points: {/s}</b>',
+                            '<b>{s name="blog/detail/comments/info_panel/points"}Points: {/s}</b>',
                             //function to create a star-rating
                             '<span>{literal}{[this.formatPoints(values.points)]}{/literal}</span>',
                         '</p>',
                         '<p style="margin-top: 10px;">',
-                            '<b>{s name=blog/detail/comments/info_panel/comment}Comment: {/s}</b>',
+                            '<b>{s name="blog/detail/comments/info_panel/comment"}Comment: {/s}</b>',
                             '<br />',
                             '<span>{literal}{content}{/literal}</span>',
                         '</p>',

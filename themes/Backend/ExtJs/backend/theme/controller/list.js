@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/theme/main}
+//{namespace name="backend/theme/main"}
 
 //{block name="backend/theme/controller/list"}
 
@@ -140,7 +140,7 @@ Ext.define('Shopware.apps.Theme.controller.List', {
             me.previewWindow.close();
             me.previewWindow = null;
 
-            me.getInfoPanel().previewButton.setText('{s name=preview}Preview theme{/s}');
+            me.getInfoPanel().previewButton.setText('{s name="preview"}Preview theme{/s}');
             me.removePreviewFlag();
         }
 
@@ -189,7 +189,7 @@ Ext.define('Shopware.apps.Theme.controller.List', {
             me.previewWindow.close();
             me.previewWindow = null;
 
-            me.getInfoPanel().previewButton.setText('{s name=preview}Preview theme{/s}');
+            me.getInfoPanel().previewButton.setText('{s name="preview"}Preview theme{/s}');
             me.removePreviewFlag();
 
             Ext.Ajax.request({
@@ -203,7 +203,7 @@ Ext.define('Shopware.apps.Theme.controller.List', {
         } else {
             url += '?themeId=' + theme.get('id') + '&shopId=' + shop.get('id');
 
-            me.getInfoPanel().previewButton.setText('{s name=stop_preview}Stop preview{/s}');
+            me.getInfoPanel().previewButton.setText('{s name="stop_preview"}Stop preview{/s}');
             theme.set('preview', true);
             me.previewWindow = window.open(url);
         }

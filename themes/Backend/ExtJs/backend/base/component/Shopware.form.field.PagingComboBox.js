@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/base/paging_combo_box}
+//{namespace name="backend/base/paging_combo_box"}
 
 /**
  * Shopware UI - Paging Combo Box

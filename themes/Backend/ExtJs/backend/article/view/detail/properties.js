@@ -34,7 +34,7 @@
  * On top of the grid, a combo box displayed where the user can select a property group.
  * After the selection of a property group, the group options will be displayed in the grid.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/detail/properties"}
 Ext.define('Shopware.apps.Article.view.detail.Properties', {
 
@@ -73,16 +73,16 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
      * @object
      */
     snippets:{
-        title:'{s name=detail/properties/title}Properties{/s}',
-        notice:'{s name=detail/properties/notice}To configure an article property, please select a suitable property group via the selection box. Hereafter, a grid with all property values will be displayed. To change the values as well, you can click on the second grid column and modify the value via combo box (multiple selection possible).{/s}',
-        property:'{s name=detail/properties/property}Select property{/s}',
-        name:'{s name=detail/properties/name_column}Property{/s}',
-        value:'{s name=detail/properties/value_column}Values{/s}',
-        empty:'{s name=empty}Please select...{/s}',
-        comboset_label: '{s name=detail/properties/comboset_label}Choose set{/s}',
-        combogroup_label: '{s name=detail/properties/combogroup_label}Assign properties{/s}',
-        button_text: '{s name=detail/properties/button_text}Create{/s}',
-        description: '{s name=detail/properties/description}You have the ability to use the keyboard shortcuts Tab and Shift-Tab to navigate between the fields and CTRL+ENTER to add the selected options.{/s}'
+        title:'{s name="detail/properties/title"}Properties{/s}',
+        notice:'{s name="detail/properties/notice"}To configure an article property, please select a suitable property group via the selection box. Hereafter, a grid with all property values will be displayed. To change the values as well, you can click on the second grid column and modify the value via combo box (multiple selection possible).{/s}',
+        property:'{s name="detail/properties/property"}Select property{/s}',
+        name:'{s name="detail/properties/name_column"}Property{/s}',
+        value:'{s name="detail/properties/value_column"}Values{/s}',
+        empty:'{s name="empty"}Please select...{/s}',
+        comboset_label: '{s name="detail/properties/comboset_label"}Choose set{/s}',
+        combogroup_label: '{s name="detail/properties/combogroup_label"}Assign properties{/s}',
+        button_text: '{s name="detail/properties/button_text"}Create{/s}',
+        description: '{s name="detail/properties/description"}You have the ability to use the keyboard shortcuts Tab and Shift-Tab to navigate between the fields and CTRL+ENTER to add the selected options.{/s}'
     },
     /**
      * Contains the field set defaults.

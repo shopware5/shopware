@@ -25,7 +25,7 @@
  * shopware AG (c) 2013. All rights reserved.
  */
 
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/view/main/navigation_grid"}
 Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
     extend: 'Ext.grid.Panel',
@@ -39,13 +39,13 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
     border: 0,
 
     snippets: {
-        search: '{s name=search}Search{/s}'
+        search: '{s name="search"}Search{/s}'
     },
 
     initComponent: function () {
         var me = this;
 
-        me.toolTipTemplate = "{s name=navigation/filter/tooltip}<b>Description:</b><br>[0]{/s}"; //<br><br><b>Abfrage:</b><br>[1]
+        me.toolTipTemplate = "{s name="navigation/filter/tooltip"}<b>Description:</b><br>[0]{/s}"; //<br><br><b>Abfrage:</b><br>[1]
 
         me.columns = me.getColumns();
 
@@ -134,7 +134,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
             items: [
                 {
                     iconCls: 'sprite-star-empty',
-                    tooltip: '{s name=makeFavorite}Mark as favorite{/s}',
+                    tooltip: '{s name="makeFavorite"}Mark as favorite{/s}',
                     /*{if {acl_is_allowed privilege=editFilters}}*/
                     handler: function (view, rowIndex, colIndex, item) {
                         me.fireEvent('toggleFavorite', rowIndex);
@@ -148,7 +148,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
                 },
                 {
                     iconCls: 'sprite-star',
-                    tooltip: '{s name=undoFavorite}Unmark as favorite{/s}',
+                    tooltip: '{s name="undoFavorite"}Unmark as favorite{/s}',
                     /*{if {acl_is_allowed privilege=editFilters}}*/
                     handler: function (view, rowIndex, colIndex, item) {
                         me.fireEvent('toggleFavorite', rowIndex);
@@ -183,7 +183,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
                     /*{if {acl_is_allowed privilege=editFilters}}*/
                     iconCls: 'sprite-pencil',
                     action: 'editFilter',
-                    tooltip: '{s name=editFilter}Edit filter{/s}',
+                    tooltip: '{s name="editFilter"}Edit filter{/s}',
                     handler: function (view, rowIndex, colIndex, item) {
                         me.fireEvent('editFilter', rowIndex);
                     }
@@ -193,7 +193,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
                     /*{if {acl_is_allowed privilege=deleteFilters}}*/
                     iconCls: 'sprite-minus-circle-frame',
                     action: 'deleteFilter',
-                    tooltip: '{s name=deleteFilter}Delete filter{/s}',
+                    tooltip: '{s name="deleteFilter"}Delete filter{/s}',
                     handler: function (view, rowIndex, colIndex, item, e) {
                         me.fireEvent('deleteFilter', rowIndex);
                     }
@@ -214,7 +214,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
         /*{if {acl_is_allowed privilege=createFilters}}*/
         buttons.push({
             xtype: 'button',
-            text: '{s name=addFilter}Add filter{/s}',
+            text: '{s name="addFilter"}Add filter{/s}',
             name: 'add',
             action: 'addFilter',
             cls: 'small secondary',

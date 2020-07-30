@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/document}
+//{namespace name="backend/config/view/document"}
 
 //{block name="backend/config/view/form/document"}
 Ext.define('Shopware.apps.Config.view.form.Document', {
@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
             xtype: 'gridcolumn',
             // Show the translated name saved in description instead of the (probably German) name
             dataIndex: 'description',
-            text: '{s name=document/table/name_text}Name{/s}',
+            text: '{s name="document/table/name_text"}Name{/s}',
             flex: 1,
             getSortParam: function () {
                 return 'name';
@@ -95,16 +95,16 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
             },
             items:[{
                 name: 'id',
-                fieldLabel: '{s name=document/detail/id_label}ID{/s}',
+                fieldLabel: '{s name="document/detail/id_label"}ID{/s}',
                 hidden: true
             },{
                 name: 'name',
-                fieldLabel: '{s name=document/detail/name_label}Name{/s}',
+                fieldLabel: '{s name="document/detail/name_label"}Name{/s}',
                 allowBlank: false,
                 translatable: true
             },{
                 name: 'key',
-                fieldLabel: '{s name=document/detail/key_label}Technical name{/s}',
+                fieldLabel: '{s name="document/detail/key_label"}Technical name{/s}',
                 allowBlank: false,
                 validator: function(key){
                     var keysOfOtherElements = [],
@@ -118,13 +118,13 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
                     });
 
                     if (key === '') {
-                        return '{s name=document/detail/no_key}Please specify a unique technical name.{/s}';
+                        return '{s name="document/detail/no_key"}Please specify a unique technical name.{/s}';
                     }
 
                     if (keysOfOtherElements.indexOf(key) === -1) {
                         return true;
                     } else {
-                        return '{s name=document/detail/key_exists}The current key already exists. Please specify a unique technical name.{/s}';
+                        return '{s name="document/detail/key_exists"}The current key already exists. Please specify a unique technical name.{/s}';
                     }
                 }
             },{
@@ -133,34 +133,34 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
                 valueField: 'name',
                 displayField: 'description',
                 store: 'Shopware.apps.Config.store.form.Number',
-                fieldLabel: '{s name=document/detail/numbers_label}Numbers{/s}'
+                fieldLabel: '{s name="document/detail/numbers_label"}Numbers{/s}'
             },{
                 name: 'template',
-                fieldLabel: '{s name=document/detail/template_label}Template{/s}'
+                fieldLabel: '{s name="document/detail/template_label"}Template{/s}'
             },{
                 name: 'left',
                 xtype: 'config-element-number',
-                fieldLabel: '{s name=document/detail/left_label}Spacing left (mm){/s}'
+                fieldLabel: '{s name="document/detail/left_label"}Spacing left (mm){/s}'
             },{
                 name: 'right',
                 xtype: 'config-element-number',
-                fieldLabel: '{s name=document/detail/right_label}Spacing right (mm){/s}'
+                fieldLabel: '{s name="document/detail/right_label"}Spacing right (mm){/s}'
             },{
                 name: 'top',
                 xtype: 'config-element-number',
-                fieldLabel: '{s name=document/detail/top_label}Spacing top (mm){/s}'
+                fieldLabel: '{s name="document/detail/top_label"}Spacing top (mm){/s}'
             },{
                 name: 'bottom',
                 xtype: 'config-element-number',
-                fieldLabel: '{s name=document/detail/bottom_label}Spacing bottom (mm){/s}'
+                fieldLabel: '{s name="document/detail/bottom_label"}Spacing bottom (mm){/s}'
             },{
                 name: 'pageBreak',
                 xtype: 'config-element-number',
-                fieldLabel: '{s name=document/detail/pagebreak_label}Articles per page{/s}'
+                fieldLabel: '{s name="document/detail/pagebreak_label"}Articles per page{/s}'
             },{
                 xtype: 'config-element-boolean',
                 name: 'booleanPageBreak',
-                fieldLabel: '{s name=document/detail/booleanpagebreak_label}Pagination{/s}',
+                fieldLabel: '{s name="document/detail/booleanpagebreak_label"}Pagination{/s}',
                 style: {
                     marginTop: '20px'
                 }
@@ -169,7 +169,7 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
                 layout: 'hbox',
                 items: [{
                     xtype: 'config-element-button',
-                    text: '{s name=document/detail/preview_button}Preview{/s}',
+                    text: '{s name="document/detail/preview_button"}Preview{/s}',
                     width: 150,
                     iconCls: 'sprite-document-pdf',
                     handler: function(){
@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
                         marginLeft: '10px'
                     },
                     iconCls: 'sprite-document-template',
-                    text: '{s name=document/detail/preview_structure}View structure{/s}',
+                    text: '{s name="document/detail/preview_structure"}View structure{/s}',
                     handler: function(){
                         Ext.create('Ext.window.Window',{
                             title: 'Structure',
@@ -203,7 +203,7 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
             }]
         },{
             xtype: 'fieldset',
-            title: '{s name=document/detail/elements_label}Elements{/s}',
+            title: '{s name="document/detail/elements_label"}Elements{/s}',
             name: 'elementFieldSet',
             defaults: {
                 anchor: '100%',
@@ -212,7 +212,7 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
             },
             items:[{
                 xtype: 'config-element-button',
-                text: '{s name=document/detail/applyconfig_label}Use the element-config for all forms{/s}',
+                text: '{s name="document/detail/applyconfig_label"}Use the element-config for all forms{/s}',
                 width: '100%',
                 style :{
                     'margin-bottom': '10px'
@@ -223,8 +223,8 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
                         id = values['id'];
 
                     Ext.MessageBox.confirm(
-                        '{s name=document/detail/applyconfig_label}Use the element-config for all forms{/s}',
-                        '{s name=document/detail/applyconfig_config_confirm_message}Are you sure you want to take over the properties for all types of documents?{/s}',
+                        '{s name="document/detail/applyconfig_label"}Use the element-config for all forms{/s}',
+                        '{s name="document/detail/applyconfig_config_confirm_message"}Are you sure you want to take over the properties for all types of documents?{/s}',
                         function (response) {
                             if (response !== 'yes') {
                                 return false;
@@ -248,224 +248,224 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
                 name: 'elements'
             },{
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_label_body}Body-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_label_body"}Body-Content{/s}',
                 labelWidth: 100,
                 name: 'Body_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_label_logo}Logo-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_label_logo"}Logo-Content{/s}',
                 labelWidth: 100,
                 name: 'Logo_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_label_header_recipient}Header-Recipient-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_label_header_recipient"}Header-Recipient-Content{/s}',
                 labelWidth: 100,
                 name: 'Header_Recipient_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_label_header}Header-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_label_header"}Header-Content{/s}',
                 labelWidth: 100,
                 name: 'Header_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_label_header_sender}Header-Sender-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_label_header_sender"}Header-Sender-Content{/s}',
                 labelWidth: 100,
                 name: 'Header_Sender_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_label_header_box_left}Header-Box-Left-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_label_header_box_left"}Header-Box-Left-Content{/s}',
                 labelWidth: 100,
                 name: 'Header_Box_Left_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_label_header_box_right}Header-Box-Right-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_label_header_box_right"}Header-Box-Right-Content{/s}',
                 labelWidth: 100,
                 name: 'Header_Box_Right_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_label_header_box_bottom}Header-Box-Bottom-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_label_header_box_bottom"}Header-Box-Bottom-Content{/s}',
                 labelWidth: 100,
                 name: 'Header_Box_Bottom_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_content_label}Content-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_content_label"}Content-Content{/s}',
                 labelWidth: 100,
                 name: 'Content_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_td_label}Td-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_td_label"}Td-Content{/s}',
                 labelWidth: 100,
                 name: 'Td_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_td_name_label}Td-Name-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_td_name_label"}Td-Name-Content{/s}',
                 labelWidth: 100,
                 name: 'Td_Name_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_td_line_label}Td-Line-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_td_line_label"}Td-Line-Content{/s}',
                 labelWidth: 100,
                 name: 'Td_Line_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_td_head_label}Td-Head-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_td_head_label"}Td-Head-Content{/s}',
                 labelWidth: 100,
                 name: 'Td_Head_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_footer_label}Footer-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_footer_label"}Footer-Content{/s}',
                 labelWidth: 100,
                 name: 'Footer_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_content_amount_label}Content-Amount-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_content_amount_label"}Content-Amount-Content{/s}',
                 labelWidth: 100,
                 name: 'Content_Amount_Value',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'tinymce',
-                fieldLabel: '{s name=document/detail/content_content_info_label}Content-Info-Content{/s}',
+                fieldLabel: '{s name="document/detail/content_content_info_label"}Content-Info-Content{/s}',
                 labelWidth: 100,
                 name: 'Content_Info_Value',
                 hidden: true,
                 translatable: true
             },{
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_body_label}Body-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_body_label"}Body-Style{/s}',
                 labelWidth: 100,
                 name: 'Body_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_logo_label}Logo-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_logo_label"}Logo-Style{/s}',
                 labelWidth: 100,
                 name: 'Logo_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_header_recipient_label}Header-Recipient-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_header_recipient_label"}Header-Recipient-Style{/s}',
                 labelWidth: 100,
                 name: 'Header_Recipient_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_header_label}Header-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_header_label"}Header-Style{/s}',
                 labelWidth: 100,
                 name: 'Header_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_header_sender_label}Header-Sender-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_header_sender_label"}Header-Sender-Style{/s}',
                 labelWidth: 100,
                 name: 'Header_Sender_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_header_box_left_label}Header-Box-Left-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_header_box_left_label"}Header-Box-Left-Style{/s}',
                 labelWidth: 100,
                 name: 'Header_Box_Left_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_header_box_right_label}Header-Box-Right-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_header_box_right_label"}Header-Box-Right-Style{/s}',
                 labelWidth: 100,
                 name: 'Header_Box_Right_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_header_box_bottom_label}Header-Box-Bottom-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_header_box_bottom_label"}Header-Box-Bottom-Style{/s}',
                 labelWidth: 100,
                 name: 'Header_Box_Bottom_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_content_label}Content-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_content_label"}Content-Style{/s}',
                 labelWidth: 100,
                 name: 'Content_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_td_label}Td-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_td_label"}Td-Style{/s}',
                 labelWidth: 100,
                 name: 'Td_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_td_name_label}Td-Name-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_td_name_label"}Td-Name-Style{/s}',
                 labelWidth: 100,
                 name: 'Td_Name_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_td_line_label}Td-Line-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_td_line_label"}Td-Line-Style{/s}',
                 labelWidth: 100,
                 name: 'Td_Line_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_td_head_label}Td-Head-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_td_head_label"}Td-Head-Style{/s}',
                 labelWidth: 100,
                 name: 'Td_Head_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_footer_label}Footer-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_footer_label"}Footer-Style{/s}',
                 labelWidth: 100,
                 name: 'Footer_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_content_amount_label}Content-Amount-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_content_amount_label"}Content-Amount-Style{/s}',
                 labelWidth: 100,
                 name: 'Content_Amount_Style',
                 hidden: true,
                 translatable: true
             }, {
                 xtype: 'textarea',
-                fieldLabel: '{s name=document/detail/style_content_info_label}Content-Info-Style{/s}',
+                fieldLabel: '{s name="document/detail/style_content_info_label"}Content-Info-Style{/s}',
                 labelWidth: 100,
                 name: 'Content_Info_Style',
                 hidden: true,

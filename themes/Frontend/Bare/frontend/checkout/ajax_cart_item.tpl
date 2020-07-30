@@ -129,9 +129,9 @@
         {/if}
 
         {block name='frontend_checkout_ajax_cart_essential_features'}
-            {if {config name=alwaysShowMainFeatures}}
+            {if {config name="alwaysShowMainFeatures"}}
                 <div class="product--essential-features">
-                    {include file="string:{config name=mainfeatures}"}
+                    {include file="string:{config name="mainfeatures"}"}
                 </div>
             {/if}
         {/block}

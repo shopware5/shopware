@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/custom_search/translation}
+//{namespace name="backend/custom_search/translation"}
 
 //{block name="backend/category/view/tabs/custom_listing"}
 
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
             inputValue: true,
             uncheckedValue: false,
             dataIndex: 'hideFilter',
-            fieldLabel: '{s namespace=backend/category/main name=view/settings_default_settings_no_filter_label}{/s}'
+            fieldLabel: '{s namespace=backend/category/main name="view/settings_default_settings_no_filter_label"}{/s}'
         });
         return me.hideFilterItem;
     },

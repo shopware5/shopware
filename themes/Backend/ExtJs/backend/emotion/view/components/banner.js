@@ -26,15 +26,15 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/emotion/view/components/banner}
+//{namespace name="backend/emotion/view/components/banner"}
 Ext.define('Shopware.apps.Emotion.view.components.Banner', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-banner',
 
     snippets: {
-        file: '{s name=file}Image{/s}',
-        link: '{s name=link}Link{/s}',
-        title: '{s name=title}Title{/s}'
+        file: '{s name="file"}Image{/s}',
+        link: '{s name="link"}Link{/s}',
+        title: '{s name="title"}Title{/s}'
     },
 
     basePath: '',
@@ -144,7 +144,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
         me.svgNotice = Shopware.Notification.createBlockMessage('{s name="svgNotice"}{/s}', 'notice');
 
         return Ext.create('Ext.form.FieldSet', {
-            title: '{s name=preview}Preview image{/s}',
+            title: '{s name="preview"}Preview image{/s}',
             items: [
                 me.svgNotice,
                 me.mappingButton,
@@ -216,7 +216,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
     createMappingButton: function() {
        var me = this,
            button = Ext.create('Ext.button.Button', {
-               text: '{s name=mapping}Create image mapping{/s}',
+               text: '{s name="mapping"}Create image mapping{/s}',
                iconCls: 'sprite-layer-select',
                cls: 'small secondary',
                handler: function() {

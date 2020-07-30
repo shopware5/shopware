@@ -37,29 +37,29 @@
 Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.newsletter-manager-tabs-overview',
-    title: '{s name=overview}Overview{/s}',
+    title: '{s name="overview"}Overview{/s}',
     region: 'center',
 
     border: false,
 
     snippets : {
         columns : {
-            date: '{s name=columns/date}Date{/s}',
-            subject: '{s name=columns/subject}Subject{/s}',
-            state: '{s name=columns/state}State{/s}',
-            recipients: '{s name=columns/recipients}# Recipients{/s}',
-            read: '{s name=columns/read}# read{/s}',
-            clicked: '{s name=columns/clicked}# clicked{/s}',
-            revenue: '{s name=columns/revenue}Revenue{/s}',
-            actions: '{s name=columns/actions}Actions{/s}',
-            timedDelivery: '{s name=columns/timed_delivery}Timed delivery{/s}',
-            active: '{s name=columns/active}Released for cronjob{/s}'
+            date: '{s name="columns/date"}Date{/s}',
+            subject: '{s name="columns/subject"}Subject{/s}',
+            state: '{s name="columns/state"}State{/s}',
+            recipients: '{s name="columns/recipients"}# Recipients{/s}',
+            read: '{s name="columns/read"}# read{/s}',
+            clicked: '{s name="columns/clicked"}# clicked{/s}',
+            revenue: '{s name="columns/revenue"}Revenue{/s}',
+            actions: '{s name="columns/actions"}Actions{/s}',
+            timedDelivery: '{s name="columns/timed_delivery"}Timed delivery{/s}',
+            active: '{s name="columns/active"}Released for cronjob{/s}'
         },
         error: {
-            active_title: '{s name=error/active_title}Error - can\'t toggle to released{/s}',
-            active_text: '{s name=error/active_text}A delivered newsletter can\'t be unreleased.{/s}',
-            privilege_title: '{s name=error/privilege_title}Missing rights{/s}',
-            privilege_text: '{s name=error/privilege_text}You need write rules to change this field.{/s}'
+            active_title: '{s name="error/active_title"}Error - can\'t toggle to released{/s}',
+            active_text: '{s name="error/active_text"}A delivered newsletter can\'t be unreleased.{/s}',
+            privilege_title: '{s name="error/privilege_title"}Missing rights{/s}',
+            privilege_text: '{s name="error/privilege_text"}You need write rules to change this field.{/s}'
         }
     },
 
@@ -160,7 +160,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
 
                     if(status == 1){
                         if (currentDate < timedDelivery) {
-                            return '{s name=state/willBeSent}Will be send{/s}'
+                            return '{s name="state/willBeSent"}Will be send{/s}'
                         }
 
                         var done = addresses,
@@ -177,13 +177,13 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                                 percentage = 100;
                             }
                         }
-                        return Ext.String.format('{s name=state/percentage}{literal}{0}{/literal}% mails sent{/s}', percentage.toFixed(0));
+                        return Ext.String.format('{s name="state/percentage"}{literal}{0}{/literal}% mails sent{/s}', percentage.toFixed(0));
                     }
                     if(status == 2){
-                        return '{s name=state/sendingDone}All mails sent{/s}'
+                        return '{s name="state/sendingDone"}All mails sent{/s}'
                     }
 
-                    return '{s name=state/notSending}Not sending{/s}';
+                    return '{s name="state/notSending"}Not sending{/s}';
 
                 }
             },
@@ -241,8 +241,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
 
                             if (record.get('status') == 1) {
                                 Ext.Msg.show({
-                                    title:'{s name=cancel_sending/title}Cancel sending{/s}',
-                                    msg: '{s name=cancel_sending/msg}Do you want to cancel the sending of the newsletter?{/s}',
+                                    title:'{s name="cancel_sending/title"}Cancel sending{/s}',
+                                    msg: '{s name="cancel_sending/msg"}Do you want to cancel the sending of the newsletter?{/s}',
                                     buttons: Ext.Msg.YESNO,
                                     icon: Ext.Msg.QUESTION,
                                     fn: function(response) {
@@ -272,7 +272,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                     value = record.get('timedDelivery');
 
                     if (!value) {
-                        return '{s name=grid/send_immediately}Immediately{/s}';
+                        return '{s name="grid/send_immediately"}Immediately{/s}';
                     }
                     return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
                 }
@@ -299,7 +299,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
             {
                 iconCls:'sprite-mail--pencil',
                 action:'view',
-                tooltip:'{s name=action/edit}Edit newsletter{/s}',
+                tooltip:'{s name="action/edit"}Edit newsletter{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('editNewsletter', record);
                 }
@@ -309,7 +309,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
             {
                 iconCls:'sprite-minus-circle-frame',
                 action:'delete',
-                tooltip:'{s name=action/deleteNewsletter}Delete newsletter{/s}',
+                tooltip:'{s name="action/deleteNewsletter"}Delete newsletter{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('deleteNewsletter', record);
                 }
@@ -319,7 +319,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
 //            {
 //                iconCls:'sprite-documents',
 //                action:'duplicate',
-//                tooltip:'{s name=action/duplicateNewsletter}Duplicate newsletter{/s}',
+//                tooltip:'{s name="action/duplicateNewsletter"}Duplicate newsletter{/s}',
 //                handler: function (view, rowIndex, colIndex, item, opts, record) {
 //                    me.fireEvent('duplicateNewsletter', record);
 //                }
@@ -328,7 +328,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
             {
                 iconCls:'sprite-mail-send',
                 action:'view',
-                tooltip:'{s name=action/sendNewsletter}Send the newsletter{/s}',
+                tooltip:'{s name="action/sendNewsletter"}Send the newsletter{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('startSendingNewsletter', record);
                 },
@@ -369,7 +369,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                 /*{if {acl_is_allowed privilege=write}}*/
                 {
                     xtype: 'button',
-                    text: '{s name=createNewNewsletter}Create new newsletter{/s}',
+                    text: '{s name="createNewNewsletter"}Create new newsletter{/s}',
                     iconCls: 'sprite-plus-circle',
                     handler: function() {
                         me.fireEvent('createNewNewsletter');
@@ -381,7 +381,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                 {
                     xtype    : 'textfield',
                     name     : 'searchfield',
-                    emptyText: '{s name=searchfield}Search{/s}',
+                    emptyText: '{s name="searchfield"}Search{/s}',
                     cls: 'searchfield',
                     checkChangeBuffer: 700,
                     listeners: {

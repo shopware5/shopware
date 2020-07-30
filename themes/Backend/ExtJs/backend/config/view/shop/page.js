@@ -25,25 +25,25 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/shop/page"}
 Ext.define('Shopware.apps.Config.view.shop.Page', {
     extend: 'Shopware.apps.Config.view.base.Property',
     alias: 'widget.config-shop-page',
 
-    title: '{s name=shop/page/title}Select pages{/s}',
+    title: '{s name="shop/page/title"}Select pages{/s}',
     name: 'pages',
 
     getColumns: function() {
         var me = this;
 
         return [{
-            header: '{s name=shop/page/name_header}Name{/s}',
+            header: '{s name="shop/page/name_header"}Name{/s}',
             dataIndex: 'name',
             flex: 1
         }, {
-            header: '{s name=shop/page/key_header}Template key{/s}',
+            header: '{s name="shop/page/key_header"}Template key{/s}',
             dataIndex: 'key',
             flex: 1
         }, me.getActionColumn()];

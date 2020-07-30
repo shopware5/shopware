@@ -27,14 +27,14 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/property/view/main}
+//{namespace name="backend/property/view/main"}
 //{block name="backend/Property/view/main/group_grid"}
 Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.property-main-groupGrid',
     addBtn: null,
 
-    title: '{s name=group/grid_title}All Groups{/s}',
+    title: '{s name="group/grid_title"}All Groups{/s}',
     sortableColumns: false,
 
     /**
@@ -42,12 +42,12 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
      * @object
      */
     snippets: {
-        columnName:          '{s name=group/column_name}Name{/s}',
-        columnFilterable:    '{s name=group/column_filterable}Filterable{/s}',
-        tooltipDeleteGroup: '{s name=group/tooltip_delete_value}Delete group{/s}',
-        buttonAddGroup:     '{s name=group/button_add_group}Add group{/s}',
-        search:             '{s name=group/empty_text_search}Search...{/s}',
-        dragText:            '{s name=group/drag_text}Drag and drop to reorganize{/s}'
+        columnName:          '{s name="group/column_name"}Name{/s}',
+        columnFilterable:    '{s name="group/column_filterable"}Filterable{/s}',
+        tooltipDeleteGroup: '{s name="group/tooltip_delete_value"}Delete group{/s}',
+        buttonAddGroup:     '{s name="group/button_add_group"}Add group{/s}',
+        search:             '{s name="group/empty_text_search"}Search...{/s}',
+        dragText:            '{s name="group/drag_text"}Drag and drop to reorganize{/s}'
     },
 
     /**

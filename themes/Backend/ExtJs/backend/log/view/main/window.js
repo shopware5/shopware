@@ -21,12 +21,12 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/log/main}
+//{namespace name="backend/log/main"}
 
 //{block name="backend/log/view/main/window"}
 Ext.define('Shopware.apps.Log.view.main.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window_title}Log{/s}',
+    title: '{s name="window_title"}Log{/s}',
     cls: Ext.baseCSSPrefix + 'log-window',
     alias: 'widget.log-main-window',
     border: false,
@@ -47,14 +47,14 @@ Ext.define('Shopware.apps.Log.view.main.Window', {
         var me = this, items = [];
 
         items.push({
-            title: '{s name=tabs/backend}Backend log{/s}',
+            title: '{s name="tabs/backend"}Backend log{/s}',
             xtype: 'log-main-list',
             store: me.logStore
         });
 
         /*{if {acl_is_allowed privilege=system}}*/
         items.push({
-            title: '{s name=tabs/system}System log{/s}',
+            title: '{s name="tabs/system"}System log{/s}',
             xtype: 'log-system-list',
             store: me.systemLogsStore,
             logFilesStore: me.logFilesStore

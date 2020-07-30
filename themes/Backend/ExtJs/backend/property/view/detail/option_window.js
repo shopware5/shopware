@@ -1,5 +1,5 @@
 
-//{namespace name=backend/property/view/main}
+//{namespace name="backend/property/view/main"}
 //{block name="backend/property/view/detail/option_window"}
 
 Ext.define('Shopware.apps.Property.view.detail.OptionWindow', {
@@ -12,7 +12,7 @@ Ext.define('Shopware.apps.Property.view.detail.OptionWindow', {
 
     fields: [{
         xtype: 'textfield',
-        fieldLabel: '{s name=option/column_option}Option{/s}',
+        fieldLabel: '{s name="option/column_option"}Option{/s}',
         translatable: true,
         name: 'value',
         translationName: 'optionValue',
@@ -20,7 +20,7 @@ Ext.define('Shopware.apps.Property.view.detail.OptionWindow', {
     }, {
         xtype: 'shopware-media-field',
         labelWidth: 155,
-        fieldLabel: '{s name=option/media_field}{/s}',
+        fieldLabel: '{s name="option/media_field"}{/s}',
         name: 'mediaId'
     }]
 });

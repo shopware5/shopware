@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/emotion/view/components/category_selection}
+//{namespace name="backend/emotion/view/components/category_selection"}
 Ext.define('Shopware.apps.Emotion.view.components.fields.CategorySelection', {
     extend: 'Shopware.form.field.PagingComboBox',
     alias: 'widget.emotion-components-fields-category-selection',
@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.CategorySelection', {
      */
     snippets: {
         fields: {
-            please_select: '{s name=fields/please_select}Please select...{/s}'
+            please_select: '{s name="fields/please_select"}Please select...{/s}'
         }
     },
 

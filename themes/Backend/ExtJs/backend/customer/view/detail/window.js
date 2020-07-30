@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/detail}
+// {namespace name="backend/customer/view/detail"}
 
 /**
  * Shopware UI - Customer list detail page
@@ -90,22 +90,22 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      * @object
      */
     snippets: {
-        titleCreate: '{s name=window/create_title}Customer administration - Create a customer{/s}',
-        titleEdit: '{s name=window/edit_title}Customer account:{/s}',
-        cancel: '{s name=window/cancel}Cancel{/s}',
-        save: '{s name=window/save}Save{/s}',
-        dataTab: '{s name=window/data_tab}Data{/s}',
-        orderTab: '{s name=window/order_tab}Orders{/s}',
-        addressTab: '{s name=window/address_tab}Addresses{/s}',
-        from: '{s name=window/from_date}From{/s}',
-        to: '{s name=window/to_date}To{/s}',
-        field_title: '{s name=base/field_title}Title{/s}',
+        titleCreate: '{s name="window/create_title"}Customer administration - Create a customer{/s}',
+        titleEdit: '{s name="window/edit_title"}Customer account:{/s}',
+        cancel: '{s name="window/cancel"}Cancel{/s}',
+        save: '{s name="window/save"}Save{/s}',
+        dataTab: '{s name="window/data_tab"}Data{/s}',
+        orderTab: '{s name="window/order_tab"}Orders{/s}',
+        addressTab: '{s name="window/address_tab"}Addresses{/s}',
+        from: '{s name="window/from_date"}From{/s}',
+        to: '{s name="window/to_date"}To{/s}',
+        field_title: '{s name="base/field_title"}Title{/s}',
         salutation: {
-            label: '{s name=base/salutation}Salutation{/s}'
+            label: '{s name="base/salutation"}Salutation{/s}'
         },
-        firstname: '{s name=base/firstname}Firstname{/s}',
-        lastname: '{s name=base/lastname}Lastname{/s}',
-        birthday: '{s name=base/birthday}Birthday{/s}'
+        firstname: '{s name="base/firstname"}Firstname{/s}',
+        lastname: '{s name="base/lastname"}Lastname{/s}',
+        birthday: '{s name="base/birthday"}Birthday{/s}'
     },
 
     /**

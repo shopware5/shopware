@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/snippet/view/main}
+//{namespace name="backend/snippet/view/main"}
 
 /**
  * todo@all: Documentation
@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Snippet.view.main.EditForm', {
      * @object
      */
     snippets: {
-        titleEditWindow: '{s name=title_edit_window}Edit Snippets{/s}'
+        titleEditWindow: '{s name="title_edit_window"}Edit Snippets{/s}'
     },
 
     /**

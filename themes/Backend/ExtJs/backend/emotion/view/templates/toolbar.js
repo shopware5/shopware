@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/emotion/templates/list}
+//{namespace name="backend/emotion/templates/list"}
 
 /**
  * Shopware UI - Emotion Toolbar
@@ -46,9 +46,9 @@ Ext.define('Shopware.apps.Emotion.view.templates.Toolbar', {
      * @Object
      */
     snippets: {
-        addBtn: '{s name=grids/btn/add}Add new template{/s}',
-        delBtn: '{s name=grids/btn/del}Delete selected template(s){/s}',
-        searchField: '{s name=toolbar/search_grids}Search template...{/s}'
+        addBtn: '{s name="grids/btn/add"}Add new template{/s}',
+        delBtn: '{s name="grids/btn/del"}Delete selected template(s){/s}',
+        searchField: '{s name="toolbar/search_grids"}Search template...{/s}'
     },
 
     /**

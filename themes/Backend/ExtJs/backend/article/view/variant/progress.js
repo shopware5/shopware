@@ -38,7 +38,7 @@
  * @package Article
  * @subpackage Variants
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/variant/progress"}
 Ext.define('Shopware.apps.Article.view.variant.Progress', {
     /**
@@ -120,17 +120,17 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
      * @object
      */
     snippets: {
-        growlMessage: '{s name=growl_message}Article{/s}',
-        title:'{s name=progress/title}Variant generation{/s}',
-        process: '{s name=progress/message}[0] of [1] variants created...{/s}',
-        errorMessage: '{s name=progress/error_message}An error has occurred while generate the article variants:{/s}',
-        errorTitle: '{s name=progress/error_title}Error{/s}',
-        generationType: '{s name=progress/generate_type}Merging{/s}',
+        growlMessage: '{s name="growl_message"}Article{/s}',
+        title:'{s name="progress/title"}Variant generation{/s}',
+        process: '{s name="progress/message"}[0] of [1] variants created...{/s}',
+        errorMessage: '{s name="progress/error_message"}An error has occurred while generate the article variants:{/s}',
+        errorTitle: '{s name="progress/error_title"}Error{/s}',
+        generationType: '{s name="progress/generate_type"}Merging{/s}',
         types: {
-            overrideType: '{s name=progress/override_type}Override{/s}',
-            mergeType: '{s name=progress/merge_type}Merge{/s}'
+            overrideType: '{s name="progress/override_type"}Override{/s}',
+            mergeType: '{s name="progress/merge_type"}Merge{/s}'
         },
-        notice: '{s name=progress/notice}The current selection of groups and options will create [0] possible variants. <br><br>This process will take about [1] minutes depending on your system resources. <br>Do you want to continue?{/s}'
+        notice: '{s name="progress/notice"}The current selection of groups and options will create [0] possible variants. <br><br>This process will take about [1] minutes depending on your system resources. <br>Do you want to continue?{/s}'
     },
 
     bodyPadding: 10,
@@ -193,7 +193,7 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
         });
 
         me.cancelButton = Ext.create('Ext.button.Button', {
-            text: '{s name=progress/cancel}{/s}',
+            text: '{s name="progress/cancel"}{/s}',
             anchor: '50%',
             cls: 'secondary',
             margin: '0 10 0 0',
@@ -210,7 +210,7 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
         });
 
         me.startButton = Ext.create('Ext.button.Button', {
-            text: '{s name=progress/start}{/s}',
+            text: '{s name="progress/start"}{/s}',
             anchor: '50%',
             cls: 'primary',
             handler: function() {

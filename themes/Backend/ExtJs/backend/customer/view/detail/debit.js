@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/detail}
+// {namespace name="backend/customer/view/detail"}
 
 /**
  * Shopware UI - Customer detail page
@@ -57,16 +57,16 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
      * @object
      */
     snippets: {
-        title: '{s name=debit/title}Payment data{/s}',
+        title: '{s name="debit/title"}Payment data{/s}',
         payment: {
-            label: '{s name=debit/current_payment}Current payment method{/s}',
-            helpTitle: '{s name=debit/payment_help_title}Payment method{/s}',
-            helpText: '{s name=debit/payment_help_text}If you change the payment on this menu item, the payment kind of the customer will not be considered by the risk management.{/s}'
+            label: '{s name="debit/current_payment"}Current payment method{/s}',
+            helpTitle: '{s name="debit/payment_help_title"}Payment method{/s}',
+            helpText: '{s name="debit/payment_help_text"}If you change the payment on this menu item, the payment kind of the customer will not be considered by the risk management.{/s}'
         },
-        account: '{s name=debit/account}Account{/s}',
-        accountHolder: '{s name=debit/account_holder}Account holder{/s}',
-        bankName: '{s name=debit/bank_name}Bank name{/s}',
-        bankCode: '{s name=debit/bank_code}Bank code{/s}'
+        account: '{s name="debit/account"}Account{/s}',
+        accountHolder: '{s name="debit/account_holder"}Account holder{/s}',
+        bankName: '{s name="debit/bank_name"}Bank name{/s}',
+        bankCode: '{s name="debit/bank_code"}Bank code{/s}'
     },
 
     /**

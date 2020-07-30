@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/overview/view/main}
+//{namespace name="backend/overview/view/main"}
 
 /**
  * todo@all: Documentation
@@ -86,12 +86,12 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
 
         var columns = [{
             xtype: 'datecolumn',
-            header: '{s name=column_date}Date{/s}',
+            header: '{s name="column_date"}Date{/s}',
             dataIndex: 'date',
             flex: 1
         }, {
             xtype: 'numbercolumn',
-            header: '{s name=column_amount}Turnover{/s}',
+            header: '{s name="column_amount"}Turnover{/s}',
             dataIndex: 'amount',
             align: 'right',
             flex: 1,
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
             summaryRenderer: me.summaryRenderer,
             renderer: me.trendRenderer
         }, {
-            header: '{s name=column_countOrders}Orders{/s}',
+            header: '{s name="column_countOrders"}Orders{/s}',
             dataIndex: 'countOrders',
             align: 'right',
             flex: 1,
@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
             renderer: me.trendRenderer
         }, {
             xtype: 'numbercolumn',
-            header: '&#216; {s name=column_averageOrders}Order value{/s}',
+            header: '&#216; {s name="column_averageOrders"}Order value{/s}',
             dataIndex: 'averageOrders',
             align: 'right',
             flex: 1,
@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
             renderer: me.trendRenderer
         }, {
             xtype: 'numbercolumn',
-            header: '&#216; {s name=column_averageUsers}Visits/orders{/s}',
+            header: '&#216; {s name="column_averageUsers"}Visits/orders{/s}',
             dataIndex: 'averageUsers',
             align: 'right',
             flex: 1,
@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
             summaryRenderer: me.summaryRenderer,
             renderer: me.trendRenderer
         }, {
-            header: '{s name=column_countUsers}New users{/s}',
+            header: '{s name="column_countUsers"}New users{/s}',
             dataIndex: 'countUsers',
             align: 'right',
             flex: 1,
@@ -133,7 +133,7 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
             summaryRenderer: me.summaryRenderer,
             renderer: me.trendRenderer
         }, {
-            header: '{s name=column_countCustomers}New customers{/s}',
+            header: '{s name="column_countCustomers"}New customers{/s}',
             dataIndex: 'countCustomers',
             align: 'right',
             flex: 1,
@@ -141,7 +141,7 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
             summaryRenderer: me.summaryRenderer,
             renderer: me.trendRenderer
         }, {
-            header: '{s name=column_visits}Visits{/s}',
+            header: '{s name="column_visits"}Visits{/s}',
             dataIndex: 'visits',
             flex: 1,
             align: 'right',
@@ -149,7 +149,7 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
             summaryRenderer: me.summaryRenderer,
             renderer: me.trendRenderer
         }, {
-            header: '{s name=column_hits}Page impressions{/s}',
+            header: '{s name="column_hits"}Page impressions{/s}',
             dataIndex: 'hits',
             flex: 1,
             align: 'right',
@@ -222,7 +222,7 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
             today    = new Date();
 
         var fromDate = Ext.create('Ext.form.field.Date', {
-            fieldLabel: '{s name=fieldLabel_from}From{/s}',
+            fieldLabel: '{s name="fieldLabel_from"}From{/s}',
             name: 'from_date',
             labelWidth: 50,
             width: 150,
@@ -231,7 +231,7 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
         });
 
         var toDate = Ext.create('Ext.form.field.Date', {
-            fieldLabel: '{s name=fieldLabel_to}To{/s}',
+            fieldLabel: '{s name="fieldLabel_to"}To{/s}',
             name: 'to_date',
             labelWidth: 50,
             width: 150,
@@ -240,7 +240,7 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
         });
 
         var filterButton = Ext.create('Ext.button.Button', {
-            text: '{s name=buttonText_filter}Filter{/s}',
+            text: '{s name="buttonText_filter"}Filter{/s}',
             iconCls: 'sprite-filter',
             scope : this,
             handler: function() {

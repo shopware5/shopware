@@ -1,10 +1,10 @@
-{namespace name=backend/base/index}
+{namespace name="backend/base/index"}
 <head>
 
 {* Meta-Tags *}
 {block name='backend/base/header/meta_tags'}
 <meta charset="UTF-8" />
-<meta name="robots" content="{s name=meta/robots}noindex,nofollow{/s}" />
+<meta name="robots" content="{s name="meta/robots"}noindex,nofollow{/s}" />
 {* Force the IE9 to always use the latest (e.g. bleeding egde) document and compability mode *}
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 {/block}
@@ -28,7 +28,7 @@
     {else}
         <script type="text/javascript" src="{link file='ExtJs/ext-all.js'}?{$SHOPWARE_REVISION}"></script>
     {/if}
-    <script type="text/javascript" src="{link file="ExtJs/locale/ext-lang-{s name=script/ext/lang}en_GB{/s}.js"}?{$SHOPWARE_REVISION}"></script>
+    <script type="text/javascript" src="{link file="ExtJs/locale/ext-lang-{s name="script/ext/lang"}en_GB{/s}.js"}?{$SHOPWARE_REVISION}"></script>
     <script type="text/javascript" src="{link file='TinyMce/tiny_mce.js'}?{$SHOPWARE_REVISION}"></script>
     <script type="text/javascript" src="{link file='backend/_resources/ace_editor/ace.js'}?{$SHOPWARE_REVISION}"></script>
     <script type="text/javascript" src="{link file='backend/_resources/ace_editor/ext-language_tools.js'}?{$SHOPWARE_REVISION}"></script>
@@ -36,9 +36,9 @@
     {* We need to put the language in there, due to the caching of the bootstrap.js *}
     <script type="text/javascript">
         {* Ext.editorLang is no longer used and is deprecated *}
-        Ext.editorLang = '{s name=script/ext/lang}{/s}';
+        Ext.editorLang = '{s name="script/ext/lang"}{/s}';
         Ext.shopwareRevision = '{$SHOPWARE_REVISION}';
-        Ext.userLanguage = '{s name=script/ext/lang}{/s}';
+        Ext.userLanguage = '{s name="script/ext/lang"}{/s}';
     </script>
 
     {if $user}

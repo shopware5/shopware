@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/view/edit/payment_means}*/
+/*{namespace name="backend/shipping/view/edit/payment_means"}*/
 
 /**
  * Shopware UI - Shipping Costs
@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.PaymentMeans', {
     /**
      * Title as shown in the tab from the panel
      */
-    title:'{s name=means_of_payment}Means of Payment{/s}',
+    title:'{s name="means_of_payment"}Means of Payment{/s}',
     /**
      * Display the the contents of this tab immediately
      */
@@ -137,14 +137,14 @@ Ext.define('Shopware.apps.Shipping.view.edit.PaymentMeans', {
                  *
                  * @string
                  */
-                fromTitle:'{s name=tab/paymentmeans/from_title}Available{/s}',
+                fromTitle:'{s name="tab/paymentmeans/from_title"}Available{/s}',
 
                 /**
                  * toTitle which holds Title on the Right Side
                  *
                  * @string
                  */
-                toTitle:'{s name=tab/paymentmeans/to_title}Selected{/s}',
+                toTitle:'{s name="tab/paymentmeans/to_title"}Selected{/s}',
                 dataIndex:'description',
                 selectedItems:me.usedPaymentStore,
                 fromFieldDockedItems:[]

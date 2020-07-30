@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order detail page
@@ -70,54 +70,54 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
      */
     snippets: {
         convert: {
-            title: '{s name=overview/convert/title}Canceled Order{/s}',
-            message: '{s name=overview/convert/message}This is a canceled order. You are able to convert this into a regular order.{/s}',
-            button: '{s name=overview/convert/button}Convert this order now{/s}'
+            title: '{s name="overview/convert/title"}Canceled Order{/s}',
+            message: '{s name="overview/convert/message"}This is a canceled order. You are able to convert this into a regular order.{/s}',
+            button: '{s name="overview/convert/button"}Convert this order now{/s}'
         },
         billing: {
-            title: '{s name=overview/billing/title}Billing{/s}',
-            button: '{s name=overview/billing/button}Show customer details{/s}'
+            title: '{s name="overview/billing/title"}Billing{/s}',
+            button: '{s name="overview/billing/button"}Show customer details{/s}'
         },
         shipping: {
-            title: '{s name=overview/shipping/title}Shipping{/s}',
-            button: '{s name=overview/shipping/button}Show customer details{/s}',
-            different: '{s name=overview/shipping/different}The shipping and billing addresses do not match!{/s}'
+            title: '{s name="overview/shipping/title"}Shipping{/s}',
+            button: '{s name="overview/shipping/button"}Show customer details{/s}',
+            different: '{s name="overview/shipping/different"}The shipping and billing addresses do not match!{/s}'
         },
         payment: {
-            title: '{s name=overview/payment/title}Payment{/s}',
-            button: '{s name=overview/payment/button}Show customer details{/s}'
+            title: '{s name="overview/payment/title"}Payment{/s}',
+            button: '{s name="overview/payment/button"}Show customer details{/s}'
         },
         edit: {
-            title: '{s name=overview/edit/title}Edit order{/s}',
-            save: '{s name=overview/edit/save}Save{/s}',
-            cancel: '{s name=overview/edit/cancel}Cancel{/s}',
-            clearedDate: '{s name=overview/edit/cleared_date}Paid on{/s}',
-            trackingCode: '{s name=overview/edit/tracking_code}Tracking code{/s}',
-            shippingCost: '{s name=overview/edit/shipping_cost}Shipping costs ([0]){/s}',
-            shippingCostNet: '{s name=overview/edit/shipping_cost_net}Shipping costs net ([0]){/s}',
-            shippingTaxRate: '{s name=overview/edit/shipping_tax_rate}Shipping tax rate{/s}',
-            orderState: '{s name=overview/edit/order_status}Order status{/s}',
-            paymentState: '{s name=overview/edit/payment_status}Payment status{/s}'
+            title: '{s name="overview/edit/title"}Edit order{/s}',
+            save: '{s name="overview/edit/save"}Save{/s}',
+            cancel: '{s name="overview/edit/cancel"}Cancel{/s}',
+            clearedDate: '{s name="overview/edit/cleared_date"}Paid on{/s}',
+            trackingCode: '{s name="overview/edit/tracking_code"}Tracking code{/s}',
+            shippingCost: '{s name="overview/edit/shipping_cost"}Shipping costs ([0]){/s}',
+            shippingCostNet: '{s name="overview/edit/shipping_cost_net"}Shipping costs net ([0]){/s}',
+            shippingTaxRate: '{s name="overview/edit/shipping_tax_rate"}Shipping tax rate{/s}',
+            orderState: '{s name="overview/edit/order_status"}Order status{/s}',
+            paymentState: '{s name="overview/edit/payment_status"}Payment status{/s}'
         },
         details: {
-            title: '{s name=overview/details/title}Order details{/s}',
-            shop: '{s name=overview/details/shop}Shop{/s}',
-            language: '{s name=overview/details/language}Language{/s}',
-            orderTime: '{s name=overview/details/orderTime}Order time{/s}',
-            number: '{s name=overview/details/number}Order number{/s}',
-            currency: '{s name=overview/details/currency}Currency{/s}',
-            amount: '{s name=overview/details/amount}Total amount{/s}',
-            amountEuro: '{s name=overview/details/amount_euro}Total amount (in Euro){/s}',
-            dispatch: '{s name=overview/details/dispatch}Chosen shipping type{/s}',
-            remoteAddress: '{s name=overview/details/remote_address}IP address{/s}',
-            customerEmail: '{s name=overview/details/customer_email}E-Mail{/s}',
-            referer: '{s name=overview/details/referer}Referer{/s}',
-            deviceType: '{s name=overview/details/device_type}Device type{/s}',
-            partnerId: '{s name=overview/details/partner_id}Partner ID{/s}',
-            changed: '{s name=overview/details/changed}Last changed{/s}'
+            title: '{s name="overview/details/title"}Order details{/s}',
+            shop: '{s name="overview/details/shop"}Shop{/s}',
+            language: '{s name="overview/details/language"}Language{/s}',
+            orderTime: '{s name="overview/details/orderTime"}Order time{/s}',
+            number: '{s name="overview/details/number"}Order number{/s}',
+            currency: '{s name="overview/details/currency"}Currency{/s}',
+            amount: '{s name="overview/details/amount"}Total amount{/s}',
+            amountEuro: '{s name="overview/details/amount_euro"}Total amount (in Euro){/s}',
+            dispatch: '{s name="overview/details/dispatch"}Chosen shipping type{/s}',
+            remoteAddress: '{s name="overview/details/remote_address"}IP address{/s}',
+            customerEmail: '{s name="overview/details/customer_email"}E-Mail{/s}',
+            referer: '{s name="overview/details/referer"}Referer{/s}',
+            deviceType: '{s name="overview/details/device_type"}Device type{/s}',
+            partnerId: '{s name="overview/details/partner_id"}Partner ID{/s}',
+            changed: '{s name="overview/details/changed"}Last changed{/s}'
         },
-        customerDeleted: '{s name=overview/details/customer_deleted_text}Caution: The assigned customer has been deleted.{/s}',
-        openCustomer: '{s name=overview/details/open_customer}Open customer{/s}'
+        customerDeleted: '{s name="overview/details/customer_deleted_text"}Caution: The assigned customer has been deleted.{/s}',
+        openCustomer: '{s name="overview/details/open_customer"}Open customer{/s}'
     },
 
     /**

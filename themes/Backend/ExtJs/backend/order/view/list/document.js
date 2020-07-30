@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order list backend module
@@ -67,10 +67,10 @@ Ext.define('Shopware.apps.Order.view.list.Document', {
      */
     snippets: {
         columns: {
-            name: '{s name=column/name}Name{/s}',
-            date: '{s name=column/date}Date{/s}',
-            amount: '{s name=column/amount}Amount{/s}',
-            downloadDocument: '{s name=column/download}Download{/s}'
+            name: '{s name="column/name"}Name{/s}',
+            date: '{s name="column/date"}Date{/s}',
+            amount: '{s name="column/amount"}Amount{/s}',
+            downloadDocument: '{s name="column/download"}Download{/s}'
         }
     },
 

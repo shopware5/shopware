@@ -29,13 +29,13 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/main/window"}
 Ext.define('Shopware.apps.Analytics.view.main.Window', {
     extend: 'Enlight.app.Window',
     cls: Ext.baseCSSPrefix + 'analytics',
     layout: 'border',
-    title: '{s name=title}Statistics{/s}',
+    title: '{s name="title"}Statistics{/s}',
     width: '90%',
     height: '90%',
     stateId: 'shopware-statistics-main-window',

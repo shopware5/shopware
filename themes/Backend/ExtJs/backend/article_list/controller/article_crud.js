@@ -24,7 +24,7 @@
 /**
  * This controller takes care of all CRUD actions for products
  */
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/controller/article_crud"}
 Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
 
@@ -44,12 +44,12 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
      * @object
      */
     snippets: {
-        growlMessage: '{s name=growl_message}Article{/s}',
+        growlMessage: '{s name="growl_message"}Article{/s}',
         messages: {
-            successTitle: '{s name=messages/success}Success{/s}',
-            deleteSuccess: '{s name=messages/delete_success}The selected articles have been removed{/s}',
-            deleteArticleTitle: '{s name=messages/delete_article_title}Delete selected Article(s)?{/s}',
-            deleteArticle: '{s name=messages/delete_article}Are you sure you want to delete the selected Article(s)?{/s}'
+            successTitle: '{s name="messages/success"}Success{/s}',
+            deleteSuccess: '{s name="messages/delete_success"}The selected articles have been removed{/s}',
+            deleteArticleTitle: '{s name="messages/delete_article_title"}Delete selected Article(s)?{/s}',
+            deleteArticle: '{s name="messages/delete_article"}Are you sure you want to delete the selected Article(s)?{/s}'
         }
     },
 
@@ -160,8 +160,8 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
             success: function(record, operation) {
                 if (operation.success) {
                     Shopware.Notification.createGrowlMessage(
-                            '{s name=successTitle}Success{/s}',
-                            Ext.String.format('{s name=successMessage}Saved [0]{/s}', record.get('Article_name')),
+                            '{s name="successTitle"}Success{/s}',
+                            Ext.String.format('{s name="successMessage"}Saved [0]{/s}', record.get('Article_name')),
                             'ArticleList',
                             'growl',
                             true
@@ -184,8 +184,8 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
             },
             failure: function(record, operation) {
                 Shopware.Notification.createStickyGrowlMessage({
-                    title: '{s name=error}Error{/s}',
-                    text: '{s name=unknownError}An unknown error occurred, please check your server logs{/s}',
+                    title: '{s name="error"}Error{/s}',
+                    text: '{s name="unknownError"}An unknown error occurred, please check your server logs{/s}',
                     log: true
                 },
                 'ArticleList');

@@ -27,7 +27,7 @@
  * @author      shopware AG
  */
 
-//{namespace name=backend/emotion/view/main}
+//{namespace name="backend/emotion/view/main"}
 /**
  * Emotion Translation Mapping Window
  */
@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Emotion.view.translation.Window', {
         emotionTranslations: null
     },
 
-    title: '{s name=emotion/translation/window_title}{/s}',
+    title: '{s name="emotion/translation/window_title"}{/s}',
     height: '50%',
     width: '50%',
 
@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Emotion.view.translation.Window', {
             dock: 'bottom',
             ui: 'shopware-ui',
             items: ['->', {
-                text: '{s name=emotion/translation/use_mapping}{/s}',
+                text: '{s name="emotion/translation/use_mapping"}{/s}',
                 cls: 'primary',
                 handler: function() {
                     var translations = me.appendMapping();
@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Emotion.view.translation.Window', {
         me.infoView = Ext.create('Ext.Container', {
             padding: 20,
             flex: 1,
-            html: '<p><i>' + '{s name=emotion/translation/info_text}{/s}' + '</i></p>'
+            html: '<p><i>' + '{s name="emotion/translation/info_text"}{/s}' + '</i></p>'
         });
 
         me.mappingGrid = Ext.create('Ext.grid.Panel', {
@@ -122,15 +122,15 @@ Ext.define('Shopware.apps.Emotion.view.translation.Window', {
             ],
             columns: {
                 items: [{
-                    header: '{s name=emotion/translation/locale}{/s}',
+                    header: '{s name="emotion/translation/locale"}{/s}',
                     dataIndex: 'locale',
                     flex: 1
                 }, {
-                    header: '{s name=emotion/translation/original_mapping}{/s}',
+                    header: '{s name="emotion/translation/original_mapping"}{/s}',
                     dataIndex: 'shop',
                     flex: 2
                 }, {
-                    header: '{s name=emotion/translation/assigned_mapping}{/s}',
+                    header: '{s name="emotion/translation/assigned_mapping"}{/s}',
                     dataIndex: 'mappedShopId',
                     flex: 2,
                     editor: {
@@ -153,7 +153,7 @@ Ext.define('Shopware.apps.Emotion.view.translation.Window', {
                         if (Ext.isEmpty(value)) {
                             meta.style = 'opacity: 0.5; font-weight: italic;';
 
-                            return '{s name=emotion/translation/no_import_info}{/s}';
+                            return '{s name="emotion/translation/no_import_info"}{/s}';
                         }
 
                         return record.get('mappedShop');
@@ -265,8 +265,8 @@ Ext.define('Shopware.apps.Emotion.view.translation.Window', {
 
                 if (!result.success) {
                     Shopware.Notification.createGrowlMessage(
-                        '{s name=emotion/translation/import_error_title}{/s}',
-                        '{s name=emotion/translation/import_error_msg}{/s}'
+                        '{s name="emotion/translation/import_error_title"}{/s}',
+                        '{s name="emotion/translation/import_error_msg"}{/s}'
                     );
                 }
                 me.close();

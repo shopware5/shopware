@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/translation/view/main}
+//{namespace name="backend/translation/view/main"}
 
 /**
  * Shopware UI - Translation Manager Services Window
@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Translation.view.main.Services',
 /** @lends Ext.window.Window# */
 {
     extend: 'Ext.window.Window',
-    title: '{s name=services_title}Translation services{/s}',
+    title: '{s name="services_title"}Translation services{/s}',
     alias: 'widget.translation-main-services-window',
     width: 400,
     height: 275,
@@ -81,16 +81,16 @@ Ext.define('Shopware.apps.Translation.view.main.Services',
 
         return [{
             xtype: 'displayfield',
-            fieldLabel: '{s name=service_name}Service{/s}',
+            fieldLabel: '{s name="service_name"}Service{/s}',
             fieldStyle: 'font-weight: bold',
             value: me.serviceName
         }, {
             xtype: 'displayfield',
-            fieldLabel: '{s name=source_language}Original language{/s}',
+            fieldLabel: '{s name="source_language"}Original language{/s}',
             value: me.activeLanguage.get('text')
         }, {
             xtype: 'combobox',
-            fieldLabel: '{s name=select_field}Select field{/s}',
+            fieldLabel: '{s name="select_field"}Select field{/s}',
             queryMode: 'local',
             displayField: 'displayField',
             valueField: 'valueField',
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Translation.view.main.Services',
             name: 'translationField'
         }, {
             xtype: 'combobox',
-            fieldLabel: '{s name=translate_to}Translate into{/s}',
+            fieldLabel: '{s name="translate_to"}Translate into{/s}',
             displayField: 'name',
             valueField: 'id',
             triggerAction: 'all',
@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.Translation.view.main.Services',
         }, {
             xtype: 'container',
             style: 'font-style: italic; color: #999', // todo@stp - remove styling in sw4 phase "decline"
-            html: '{s name=note_external_services}Please note that external translation services open in a new browser window when you press the start translation button.{/s}'
+            html: '{s name="note_external_services"}Please note that external translation services open in a new browser window when you press the start translation button.{/s}'
         }];
     },
 
@@ -125,13 +125,13 @@ Ext.define('Shopware.apps.Translation.view.main.Services',
         var me = this;
 
         return [{
-            text: '{s name=button/cancel}Cancel{/s}',
+            text: '{s name="button/cancel"}Cancel{/s}',
             cls: 'secondary',
             handler: function() {
                 me.destroy();
             }
         },{
-            text: '{s name=button/start_translation}Start translation{/s}',
+            text: '{s name="button/start_translation"}Start translation{/s}',
             cls: 'primary',
             action: 'translation-main-services-window-translate'
         }]

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/address}
+// {namespace name="backend/customer/view/address"}
 
 /**
  * Shopware UI - Customer address list backend module
@@ -150,7 +150,7 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
             }
         };
 
-        /* {if {config name=showphonenumberfield}} */
+        /* {if {config name="showphonenumberfield"}} */
         columns['phone'] = {
             header: me.snippets.header.phone,
             flex: 1

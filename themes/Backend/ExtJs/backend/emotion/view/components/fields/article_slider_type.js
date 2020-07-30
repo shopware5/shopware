@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/emotion/view/components/article_slider_type}
+//{namespace name="backend/emotion/view/components/article_slider_type"}
 Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderType', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.emotion-components-fields-article-slider-type',
@@ -33,18 +33,18 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderType', {
      */
     snippets: {
         fields: {
-            'article_slider_type': '{s name=article_slider_type/fields/article_slider_type}{/s}',
-            'empty_text': '{s name=article_slider_type/fields/empty_text}{/s}'
+            'article_slider_type': '{s name="article_slider_type/fields/article_slider_type"}{/s}',
+            'empty_text': '{s name="article_slider_type/fields/empty_text"}{/s}'
         },
         store: {
-            'selected_article': '{s name=article_slider_type/store/selected_article}{/s}',
-            'selected_variant': '{s name=article_slider_type/store/selected_variant}{/s}',
-            'newcomer': '{s name=article_slider_type/store/newcomer}{/s}',
-            'topseller': '{s name=article_slider_type/store/topseller}{/s}',
-            'price_asc': '{s name=article_slider_type/store/price_asc}{/s}',
-            'price_desc': '{s name=article_slider_type/store/price_desc}{/s}',
-            'product_stream': '{s name=article_slider_type/store/product_stream}{/s}',
-            'random_product': '{s name=article_slider_type/store/random_product}{/s}'
+            'selected_article': '{s name="article_slider_type/store/selected_article"}{/s}',
+            'selected_variant': '{s name="article_slider_type/store/selected_variant"}{/s}',
+            'newcomer': '{s name="article_slider_type/store/newcomer"}{/s}',
+            'topseller': '{s name="article_slider_type/store/topseller"}{/s}',
+            'price_asc': '{s name="article_slider_type/store/price_asc"}{/s}',
+            'price_desc': '{s name="article_slider_type/store/price_desc"}{/s}',
+            'product_stream': '{s name="article_slider_type/store/product_stream"}{/s}',
+            'random_product': '{s name="article_slider_type/store/random_product"}{/s}'
         }
     },
 

@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/view/main/grid"}
 Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
     extend: 'Ext.grid.Panel',
@@ -42,82 +42,82 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
     detailActiveColumn: null,
 
     snippets: {
-        'Article_id': '{s name=columns/product/Article_id}Article_id{/s}',
-        'Article_mainDetailId': '{s name=columns/product/Article_mainDetailId}Article_mainDetailId{/s}',
-        'Article_supplierId': '{s name=columns/product/Article_supplierId}Article_supplierId{/s}',
-        'Article_taxId': '{s name=columns/product/Article_taxId}Article_taxId{/s}',
-        'Article_priceGroupId': '{s name=columns/product/Article_priceGroupId}Article_priceGroupId{/s}',
-        'Article_filterGroupId': '{s name=columns/product/Article_filterGroupId}Article_filterGroupId{/s}',
-        'Article_configuratorSetId': '{s name=columns/product/Article_configuratorSetId}Article_configuratorSetId{/s}',
-        'Article_name': '{s name=columns/product/Article_name}Article_name{/s}',
-        'Article_description': '{s name=columns/product/Article_description}Article_description{/s}',
-        'Article_descriptionLong': '{s name=columns/product/Article_descriptionLong}Article_descriptionLong{/s}',
-        'Article_added': '{s name=columns/product/Article_added}Article_added{/s}',
-        'Article_active': '{s name=columns/product/Article_active}Article_active{/s}',
-        'Article_pseudoSales': '{s name=columns/product/Article_pseudoSales}Article_pseudoSales{/s}',
-        'Article_highlight': '{s name=columns/product/Article_highlight}Article_highlight{/s}',
-        'Article_keywords': '{s name=columns/product/Article_keywords}Article_keywords{/s}',
-        'Article_changed': '{s name=columns/product/Article_changed}Article_changed{/s}',
-        'Article_priceGroupActive': '{s name=columns/product/Article_priceGroupActive}Article_priceGroupActive{/s}',
-        'Article_lastStock': '{s name=columns/product/Article_lastStock}Article_lastStock{/s}',
-        'Article_crossBundleLook': '{s name=columns/product/Article_crossBundleLook}Article_crossBundleLook{/s}',
-        'Article_notification': '{s name=columns/product/Article_notification}Article_notification{/s}',
-        'Article_template': '{s name=columns/product/Article_template}Article_template{/s}',
-        'Article_mode': '{s name=columns/product/Article_mode}Article_mode{/s}',
-        'Article_availableFrom': '{s name=columns/product/Article_availableFrom}Article_availableFrom{/s}',
-        'Article_availableTo': '{s name=columns/product/Article_availableTo}Article_availableTo{/s}',
-        'Detail_id': '{s name=columns/product/Detail_id}Detail_id{/s}',
-        'Detail_articleId': '{s name=columns/product/Detail_articleId}Detail_articleId{/s}',
-        'Detail_unitId': '{s name=columns/product/Detail_unitId}Detail_unitId{/s}',
-        'Detail_number': '{s name=columns/product/Detail_number}Detail_number{/s}',
-        'Detail_supplierNumber': '{s name=columns/product/Detail_supplierNumber}Detail_supplierNumber{/s}',
-        'Detail_kind': '{s name=columns/product/Detail_kind}Detail_kind{/s}',
-        'Detail_additionalText': '{s name=columns/product/Detail_additionalText}Detail_additionalText{/s}',
-        'Detail_active': '{s name=columns/product/Detail_active}Detail_active{/s}',
-        'Detail_inStock': '{s name=columns/product/Detail_inStock}Detail_inStock{/s}',
-        'Detail_stockMin': '{s name=columns/product/Detail_stockMin}Detail_stockMin{/s}',
-        'Detail_weight': '{s name=columns/product/Detail_weight}Detail_weight{/s}',
-        'Detail_width': '{s name=columns/product/Detail_width}Detail_width{/s}',
-        'Detail_len': '{s name=columns/product/Detail_len}Detail_len{/s}',
-        'Detail_height': '{s name=columns/product/Detail_height}Detail_height{/s}',
-        'Detail_ean': '{s name=columns/product/Detail_ean}Detail_ean{/s}',
-        'Detail_position': '{s name=columns/product/Detail_position}Detail_position{/s}',
-        'Detail_minPurchase': '{s name=columns/product/Detail_minPurchase}Detail_minPurchase{/s}',
-        'Detail_purchaseSteps': '{s name=columns/product/Detail_purchaseSteps}Detail_purchaseSteps{/s}',
-        'Detail_maxPurchase': '{s name=columns/product/Detail_maxPurchase}Detail_maxPurchase{/s}',
-        'Detail_purchaseUnit': '{s name=columns/product/Detail_purchaseUnit}Detail_purchaseUnit{/s}',
-        'Detail_referenceUnit': '{s name=columns/product/Detail_referenceUnit}Detail_referenceUnit{/s}',
-        'Detail_packUnit': '{s name=columns/product/Detail_packUnit}Detail_packUnit{/s}',
-        'Detail_shippingFree': '{s name=columns/product/Detail_shippingFree}Detail_shippingFree{/s}',
-        'Detail_releaseDate': '{s name=columns/product/Detail_releaseDate}Detail_releaseDate{/s}',
-        'Detail_shippingTime': '{s name=columns/product/Detail_shippingTime}Detail_shippingTime{/s}',
-        'Attribute_id': '{s name=columns/product/Attribute_id}Attribute_id{/s}',
-        'Attribute_articleId': '{s name=columns/product/Attribute_articleId}Attribute_articleId{/s}',
-        'Attribute_articleDetailId': '{s name=columns/product/Attribute_articleDetailId}Attribute_articleDetailId{/s}',
-        'Attribute_attr1': '{s name=columns/product/Attribute_attr1}Attribute_attr1{/s}',
-        'Attribute_attr2': '{s name=columns/product/Attribute_attr2}Attribute_attr2{/s}',
-        'Attribute_attr3': '{s name=columns/product/Attribute_attr3}Attribute_attr3{/s}',
-        'Attribute_attr4': '{s name=columns/product/Attribute_attr4}Attribute_attr4{/s}',
-        'Attribute_attr5': '{s name=columns/product/Attribute_attr5}Attribute_attr5{/s}',
-        'Attribute_attr6': '{s name=columns/product/Attribute_attr6}Attribute_attr6{/s}',
-        'Attribute_attr7': '{s name=columns/product/Attribute_attr7}Attribute_attr7{/s}',
-        'Attribute_attr8': '{s name=columns/product/Attribute_attr8}Attribute_attr8{/s}',
-        'Attribute_attr9': '{s name=columns/product/Attribute_attr9}Attribute_attr9{/s}',
-        'Attribute_attr10': '{s name=columns/product/Attribute_attr10}Attribute_attr10{/s}',
-        'Attribute_attr11': '{s name=columns/product/Attribute_attr11}Attribute_attr11{/s}',
-        'Attribute_attr12': '{s name=columns/product/Attribute_attr12}Attribute_attr12{/s}',
-        'Attribute_attr13': '{s name=columns/product/Attribute_attr13}Attribute_attr13{/s}',
-        'Attribute_attr14': '{s name=columns/product/Attribute_attr14}Attribute_attr14{/s}',
-        'Attribute_attr15': '{s name=columns/product/Attribute_attr15}Attribute_attr15{/s}',
-        'Attribute_attr16': '{s name=columns/product/Attribute_attr16}Attribute_attr16{/s}',
-        'Attribute_attr17': '{s name=columns/product/Attribute_attr17}Attribute_attr17{/s}',
-        'Attribute_attr18': '{s name=columns/product/Attribute_attr18}Attribute_attr18{/s}',
-        'Attribute_attr19': '{s name=columns/product/Attribute_attr19}Attribute_attr19{/s}',
-        'Attribute_attr20': '{s name=columns/product/Attribute_attr20}Attribute_attr20{/s}',
-        'Price_price': '{s name=columns/product/Price_price}Price_price{/s}',
-        'Price_netPrice': '{s name=columns/product/Price_netPrice}Price_netPrice{/s}',
-        'Supplier_name': '{s name=columns/product/Supplier_name}Supplier{/s}',
-        'Tax_name': '{s name=columns/product/Tax_name}Tax{/s}'
+        'Article_id': '{s name="columns/product/Article_id"}Article_id{/s}',
+        'Article_mainDetailId': '{s name="columns/product/Article_mainDetailId"}Article_mainDetailId{/s}',
+        'Article_supplierId': '{s name="columns/product/Article_supplierId"}Article_supplierId{/s}',
+        'Article_taxId': '{s name="columns/product/Article_taxId"}Article_taxId{/s}',
+        'Article_priceGroupId': '{s name="columns/product/Article_priceGroupId"}Article_priceGroupId{/s}',
+        'Article_filterGroupId': '{s name="columns/product/Article_filterGroupId"}Article_filterGroupId{/s}',
+        'Article_configuratorSetId': '{s name="columns/product/Article_configuratorSetId"}Article_configuratorSetId{/s}',
+        'Article_name': '{s name="columns/product/Article_name"}Article_name{/s}',
+        'Article_description': '{s name="columns/product/Article_description"}Article_description{/s}',
+        'Article_descriptionLong': '{s name="columns/product/Article_descriptionLong"}Article_descriptionLong{/s}',
+        'Article_added': '{s name="columns/product/Article_added"}Article_added{/s}',
+        'Article_active': '{s name="columns/product/Article_active"}Article_active{/s}',
+        'Article_pseudoSales': '{s name="columns/product/Article_pseudoSales"}Article_pseudoSales{/s}',
+        'Article_highlight': '{s name="columns/product/Article_highlight"}Article_highlight{/s}',
+        'Article_keywords': '{s name="columns/product/Article_keywords"}Article_keywords{/s}',
+        'Article_changed': '{s name="columns/product/Article_changed"}Article_changed{/s}',
+        'Article_priceGroupActive': '{s name="columns/product/Article_priceGroupActive"}Article_priceGroupActive{/s}',
+        'Article_lastStock': '{s name="columns/product/Article_lastStock"}Article_lastStock{/s}',
+        'Article_crossBundleLook': '{s name="columns/product/Article_crossBundleLook"}Article_crossBundleLook{/s}',
+        'Article_notification': '{s name="columns/product/Article_notification"}Article_notification{/s}',
+        'Article_template': '{s name="columns/product/Article_template"}Article_template{/s}',
+        'Article_mode': '{s name="columns/product/Article_mode"}Article_mode{/s}',
+        'Article_availableFrom': '{s name="columns/product/Article_availableFrom"}Article_availableFrom{/s}',
+        'Article_availableTo': '{s name="columns/product/Article_availableTo"}Article_availableTo{/s}',
+        'Detail_id': '{s name="columns/product/Detail_id"}Detail_id{/s}',
+        'Detail_articleId': '{s name="columns/product/Detail_articleId"}Detail_articleId{/s}',
+        'Detail_unitId': '{s name="columns/product/Detail_unitId"}Detail_unitId{/s}',
+        'Detail_number': '{s name="columns/product/Detail_number"}Detail_number{/s}',
+        'Detail_supplierNumber': '{s name="columns/product/Detail_supplierNumber"}Detail_supplierNumber{/s}',
+        'Detail_kind': '{s name="columns/product/Detail_kind"}Detail_kind{/s}',
+        'Detail_additionalText': '{s name="columns/product/Detail_additionalText"}Detail_additionalText{/s}',
+        'Detail_active': '{s name="columns/product/Detail_active"}Detail_active{/s}',
+        'Detail_inStock': '{s name="columns/product/Detail_inStock"}Detail_inStock{/s}',
+        'Detail_stockMin': '{s name="columns/product/Detail_stockMin"}Detail_stockMin{/s}',
+        'Detail_weight': '{s name="columns/product/Detail_weight"}Detail_weight{/s}',
+        'Detail_width': '{s name="columns/product/Detail_width"}Detail_width{/s}',
+        'Detail_len': '{s name="columns/product/Detail_len"}Detail_len{/s}',
+        'Detail_height': '{s name="columns/product/Detail_height"}Detail_height{/s}',
+        'Detail_ean': '{s name="columns/product/Detail_ean"}Detail_ean{/s}',
+        'Detail_position': '{s name="columns/product/Detail_position"}Detail_position{/s}',
+        'Detail_minPurchase': '{s name="columns/product/Detail_minPurchase"}Detail_minPurchase{/s}',
+        'Detail_purchaseSteps': '{s name="columns/product/Detail_purchaseSteps"}Detail_purchaseSteps{/s}',
+        'Detail_maxPurchase': '{s name="columns/product/Detail_maxPurchase"}Detail_maxPurchase{/s}',
+        'Detail_purchaseUnit': '{s name="columns/product/Detail_purchaseUnit"}Detail_purchaseUnit{/s}',
+        'Detail_referenceUnit': '{s name="columns/product/Detail_referenceUnit"}Detail_referenceUnit{/s}',
+        'Detail_packUnit': '{s name="columns/product/Detail_packUnit"}Detail_packUnit{/s}',
+        'Detail_shippingFree': '{s name="columns/product/Detail_shippingFree"}Detail_shippingFree{/s}',
+        'Detail_releaseDate': '{s name="columns/product/Detail_releaseDate"}Detail_releaseDate{/s}',
+        'Detail_shippingTime': '{s name="columns/product/Detail_shippingTime"}Detail_shippingTime{/s}',
+        'Attribute_id': '{s name="columns/product/Attribute_id"}Attribute_id{/s}',
+        'Attribute_articleId': '{s name="columns/product/Attribute_articleId"}Attribute_articleId{/s}',
+        'Attribute_articleDetailId': '{s name="columns/product/Attribute_articleDetailId"}Attribute_articleDetailId{/s}',
+        'Attribute_attr1': '{s name="columns/product/Attribute_attr1"}Attribute_attr1{/s}',
+        'Attribute_attr2': '{s name="columns/product/Attribute_attr2"}Attribute_attr2{/s}',
+        'Attribute_attr3': '{s name="columns/product/Attribute_attr3"}Attribute_attr3{/s}',
+        'Attribute_attr4': '{s name="columns/product/Attribute_attr4"}Attribute_attr4{/s}',
+        'Attribute_attr5': '{s name="columns/product/Attribute_attr5"}Attribute_attr5{/s}',
+        'Attribute_attr6': '{s name="columns/product/Attribute_attr6"}Attribute_attr6{/s}',
+        'Attribute_attr7': '{s name="columns/product/Attribute_attr7"}Attribute_attr7{/s}',
+        'Attribute_attr8': '{s name="columns/product/Attribute_attr8"}Attribute_attr8{/s}',
+        'Attribute_attr9': '{s name="columns/product/Attribute_attr9"}Attribute_attr9{/s}',
+        'Attribute_attr10': '{s name="columns/product/Attribute_attr10"}Attribute_attr10{/s}',
+        'Attribute_attr11': '{s name="columns/product/Attribute_attr11"}Attribute_attr11{/s}',
+        'Attribute_attr12': '{s name="columns/product/Attribute_attr12"}Attribute_attr12{/s}',
+        'Attribute_attr13': '{s name="columns/product/Attribute_attr13"}Attribute_attr13{/s}',
+        'Attribute_attr14': '{s name="columns/product/Attribute_attr14"}Attribute_attr14{/s}',
+        'Attribute_attr15': '{s name="columns/product/Attribute_attr15"}Attribute_attr15{/s}',
+        'Attribute_attr16': '{s name="columns/product/Attribute_attr16"}Attribute_attr16{/s}',
+        'Attribute_attr17': '{s name="columns/product/Attribute_attr17"}Attribute_attr17{/s}',
+        'Attribute_attr18': '{s name="columns/product/Attribute_attr18"}Attribute_attr18{/s}',
+        'Attribute_attr19': '{s name="columns/product/Attribute_attr19"}Attribute_attr19{/s}',
+        'Attribute_attr20': '{s name="columns/product/Attribute_attr20"}Attribute_attr20{/s}',
+        'Price_price': '{s name="columns/product/Price_price"}Price_price{/s}',
+        'Price_netPrice': '{s name="columns/product/Price_netPrice"}Price_netPrice{/s}',
+        'Supplier_name': '{s name="columns/product/Supplier_name"}Supplier{/s}',
+        'Tax_name': '{s name="columns/product/Tax_name"}Tax{/s}'
     },
 
     /**
@@ -330,7 +330,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         }
 
         columns.push({
-            header: '{s name=list/column_info}Info{/s}',
+            header: '{s name="list/column_info"}Info{/s}',
             width: 90,
             renderer: me.infoColumnRenderer
         });
@@ -416,17 +416,17 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         var style = 'style="width: 25px; height: 25px; display: inline-block; margin-right: 3px;"';
 
         if (!record.get('imageSrc')) {
-            title = '{s name=list/tooltip_noimage}Article has no image{/s}';
+            title = '{s name="list/tooltip_noimage"}Article has no image{/s}';
             result = result + '<div  title="' + title + '" class="sprite-image--exclamation" ' + style + '>&nbsp;</div>';
         }
 
         if (record.get('hasConfigurator')) {
-            title = '{s name=list/tooltip_hasconfigurator}Article has configurator{/s}';
+            title = '{s name="list/tooltip_hasconfigurator"}Article has configurator{/s}';
             result = result + '<div  title="' + title + '" class="sprite-images-stack" ' + style + '>&nbsp;</div>';
         }
 
         if (!record.get('hasCategories')) {
-            title = '{s name=list/tooltip_categories}Article is not assigned to any category{/s}';
+            title = '{s name="list/tooltip_categories"}Article is not assigned to any category{/s}';
             result = result + '<div title="' + title + '" class="sprite-blue-folder--exclamation" ' + style + '>&nbsp;</div>';
         }
 
@@ -633,7 +633,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
         me.splitViewModeBtn = Ext.create('Ext.button.Button', {
             iconCls: 'sprite-ui-split-panel',
-            text: '{s name=enableSplitView}Activate split view{/s}',
+            text: '{s name="enableSplitView"}Activate split view{/s}',
             disabled: true,
             enableToggle: true,
             handler: function () {
@@ -649,7 +649,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         /*{if {acl_is_allowed resource=article privilege=save}}*/
         buttons.push(
                 Ext.create('Ext.button.Button', {
-                    text: '{s name=addProduct}Add{/s}',
+                    text: '{s name="addProduct"}Add{/s}',
                     iconCls: 'sprite-plus-circle-frame',
                     handler: function () {
                         Shopware.app.Application.addSubApplication({
@@ -664,7 +664,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         // Creates the delete button to remove all selected esds in one request.
         me.deleteButton = Ext.create('Ext.button.Button', {
             iconCls: 'sprite-minus-circle-frame',
-            text: '{s name=deleteProduct}Delete{/s}',
+            text: '{s name="deleteProduct"}Delete{/s}',
             disabled: true,
             handler: function () {
                 var selectionModel = me.getSelectionModel(),
@@ -690,7 +690,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             cls: 'searchfield',
             enableKeyEvents: true,
             checkChangeBuffer: 500,
-            emptyText: '{s name=list/emptytext_search}Search ...{/s}',
+            emptyText: '{s name="list/emptytext_search"}Search ...{/s}',
             listeners: {
                 'change': function (field, value) {
                     var store = me.store,
@@ -714,7 +714,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      */
     getPagingbar: function () {
         var me = this,
-                productSnippet = '{s name=pagingCombo/products}products{/s}';
+                productSnippet = '{s name="pagingCombo/products"}products{/s}';
 
         var pageSize = Ext.create('Ext.form.field.ComboBox', {
             labelWidth: 120,

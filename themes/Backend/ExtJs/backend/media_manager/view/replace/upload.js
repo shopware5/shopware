@@ -22,7 +22,7 @@
  *
  */
 
-//{namespace name=backend/media_manager/view/replace}
+//{namespace name="backend/media_manager/view/replace"}
 //{block name="backend/media_manager/view/replace/row"}
 Ext.define('Shopware.apps.MediaManager.view.replace.Upload', {
     extend: 'Ext.container.Container',

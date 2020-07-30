@@ -22,12 +22,12 @@
     {$description = $description|truncate:$SeoDescriptionMaxLength:'…'}
 
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
+    <meta property="og:site_name" content="{{config name="sShopname"}|escapeHtml}" />
     <meta property="og:title" content="{$contentTypeTitle|escapeHtml}" />
     <meta property="og:description" content="{$description|escapeHtml}" />
 
     <meta name="twitter:card" content="website" />
-    <meta name="twitter:site" content="{{config name=sShopname}|escapeHtml}" />
+    <meta name="twitter:site" content="{{config name="sShopname"}|escapeHtml}" />
     <meta name="twitter:title" content="{$contentTypeTitle|escapeHtml}" />
     <meta name="twitter:description" content="{$description|escapeHtml}" />
 
@@ -74,7 +74,7 @@
         {/if}
     {/if}
 
-    {if {config name=seoIndexPaginationLinks}}
+    {if {config name="seoIndexPaginationLinks"}}
         {* Previous rel tag *}
         {if $sPage > 1}
             <link rel="prev" href="{url controller=$Controller action=index p=$sPage-1}">

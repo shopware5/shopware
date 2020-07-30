@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/canceled_order/view/main}
+//{namespace name="backend/canceled_order/view/main"}
 
 /**
  * Shopware UI - Main window of this app
@@ -47,8 +47,8 @@ Ext.define('Shopware.apps.CanceledOrder.view.main.Window', {
      * Contains the snippets for this component
      */
     snippets: {
-        title: '{s name=window/title}Canceled Orders{/s}',
-        trustedShop: '{s name=trustedShopMessageNew}Due to the trusted shop certification you may only use the features &quot;Ask for reason&quot; and &quot;Send coupon&quot; if you have the customers agreement.{/s}'
+        title: '{s name="window/title"}Canceled Orders{/s}',
+        trustedShop: '{s name="trustedShopMessageNew"}Due to the trusted shop certification you may only use the features &quot;Ask for reason&quot; and &quot;Send coupon&quot; if you have the customers agreement.{/s}'
     },
 
     /**

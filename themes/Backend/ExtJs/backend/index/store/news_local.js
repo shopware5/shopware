@@ -28,7 +28,7 @@ Ext.define('Shopware.apps.Index.store.NewsLocal', {
     autoLoad: true,
     proxy: {
         type: 'localstorage',
-        id: 'widget-settings-shopware-news-cache-{s namespace=backend/base/index name=script/ext/lang}en_GB{/s}'
+        id: 'widget-settings-shopware-news-cache-{s namespace=backend/base/index name="script/ext/lang"}en_GB{/s}'
     }
 });
 //{/block}

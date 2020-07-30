@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/view/edit/categories_tree}*/
+/*{namespace name="backend/shipping/view/edit/categories_tree"}*/
 
 /**
  * Shopware UI - Shipping Costs
@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.CategoriesTree', {
      * Title as shown in the tab from the panel
      * @string
      */
-    title : '{s name=category_selection_tab_title}Lock this category.{/s}',
+    title : '{s name="category_selection_tab_title"}Lock this category.{/s}',
     /**
      * Display the the contents of this tab immediately
      * @boolean

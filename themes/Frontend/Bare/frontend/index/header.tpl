@@ -18,31 +18,31 @@
     {* Meta opengraph tags *}
     {block name='frontend_index_header_meta_tags_opengraph'}
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
-        <meta property="og:title" content="{{config name=sShopname}|escapeHtml}" />
+        <meta property="og:site_name" content="{{config name="sShopname"}|escapeHtml}" />
+        <meta property="og:title" content="{{config name="sShopname"}|escapeHtml}" />
         {s name="IndexMetaDescriptionStandard" assign="snippetIndexMetaDescriptionStandard"}{/s}
         <meta property="og:description" content="{block name='frontend_index_header_meta_description_og'}{$snippetIndexMetaDescriptionStandard|truncate:$SeoDescriptionMaxLength:'…'}{/block}" />
         <meta property="og:image" content="{link file=$theme.desktopLogo fullPath}" />
 
         <meta name="twitter:card" content="website" />
-        <meta name="twitter:site" content="{{config name=sShopname}|escapeHtml}" />
-        <meta name="twitter:title" content="{{config name=sShopname}|escapeHtml}" />
+        <meta name="twitter:site" content="{{config name="sShopname"}|escapeHtml}" />
+        <meta name="twitter:title" content="{{config name="sShopname"}|escapeHtml}" />
         {s name="IndexMetaDescriptionStandard" assign="snippetIndexMetaDescriptionStandard"}{/s}
         <meta name="twitter:description" content="{block name='frontend_index_header_meta_description_twitter'}{$snippetIndexMetaDescriptionStandard|truncate:$SeoDescriptionMaxLength:'…'}{/block}" />
         <meta name="twitter:image" content="{link file=$theme.desktopLogo fullPath}" />
     {/block}
 
     {block name='frontend_index_header_meta_tags_schema_webpage'}
-        <meta itemprop="copyrightHolder" content="{{config name=sShopname}|escapeHtml}" />
+        <meta itemprop="copyrightHolder" content="{{config name="sShopname"}|escapeHtml}" />
         <meta itemprop="copyrightYear" content="{s name='IndexMetaCopyrightYear'}{/s}" />
-        <meta itemprop="isFamilyFriendly" content="{if {config name=metaIsFamilyFriendly}}True{else}False{/if}" />
+        <meta itemprop="isFamilyFriendly" content="{if {config name="metaIsFamilyFriendly"}}True{else}False{/if}" />
         <meta itemprop="image" content="{link file=$theme.desktopLogo}" />
     {/block}
 
     {block name='frontend_index_header_meta_tags_mobile'}
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-title" content="{if $theme.appleWebAppTitle != ""}{$theme.appleWebAppTitle|escapeHtml}{else}{{config name=sShopname}|escapeHtml}{/if}">
+        <meta name="apple-mobile-web-app-title" content="{if $theme.appleWebAppTitle != ""}{$theme.appleWebAppTitle|escapeHtml}{else}{{config name="sShopname"}|escapeHtml}{/if}">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="default">
     {/block}
@@ -63,7 +63,7 @@
 {* Internet Explorer 9 specific meta tags *}
 {block name='frontend_index_header_meta_tags_ie9'}
     <meta name="msapplication-navbutton-color" content="{$theme['brand-primary']}" />{* Navbutton color *}
-    <meta name="application-name" content="{{config name=shopName}|escapeHtml}" />{* Pinned name *}
+    <meta name="application-name" content="{{config name="shopName"}|escapeHtml}" />{* Pinned name *}
     <meta name="msapplication-starturl" content="{url controller='index'}" />{* Start url to launch from the shortcut *}
     <meta name="msapplication-window" content="width=1024;height=768" />{* Size of the window to launch *}
     <meta name="msapplication-TileImage" content="{link file=$theme.win8TileImage}"> {* Image of the Windows 8 tile *}
@@ -83,7 +83,7 @@
 
 {* Page title *}
 <title itemprop="name">{block name='frontend_index_header_title'}{strip}
-{if $sBreadcrumb}{foreach from=$sBreadcrumb|array_reverse item=breadcrumb}{$breadcrumb.name} | {/foreach}{/if}{{config name=sShopname}|escapeHtml}
+{if $sBreadcrumb}{foreach from=$sBreadcrumb|array_reverse item=breadcrumb}{$breadcrumb.name} | {/foreach}{/if}{{config name="sShopname"}|escapeHtml}
 {/strip}{/block}</title>
 
 {* Stylesheets *}

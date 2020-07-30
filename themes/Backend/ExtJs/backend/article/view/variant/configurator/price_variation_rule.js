@@ -30,7 +30,7 @@
 /**
  * Shopware UI - Article Image Mapping window.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/variant/configurator/price_variation_rule"}
 Ext.define('Shopware.apps.Article.view.variant.configurator.PriceVariationRule', {
     /**
@@ -100,10 +100,10 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.PriceVariationRule',
      * @object
      */
     snippets: {
-        title: '{s name=price/variation/rule/title}Create new price variation rule{/s}',
-        cancel: '{s name=cancel_button}Cancel{/s}',
-        save: '{s name=general/save_button}Save{/s}',
-        notice: '{s name=price/variation/rule/notice}To create a new price variation, please select the associated configurator options. <br><br>You can only select one option per group. <br><br>After saving you will no longer be able modify this variation\'s configurator options.{/s}'
+        title: '{s name="price/variation/rule/title"}Create new price variation rule{/s}',
+        cancel: '{s name="cancel_button"}Cancel{/s}',
+        save: '{s name="general/save_button"}Save{/s}',
+        notice: '{s name="price/variation/rule/notice"}To create a new price variation, please select the associated configurator options. <br><br>You can only select one option per group. <br><br>After saving you will no longer be able modify this variation\'s configurator options.{/s}'
     },
 
     /**

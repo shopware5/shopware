@@ -32,7 +32,7 @@
  */
 
 //{block name="backend/emotion/model/component"}
-//{namespace name=backend/emotion/view/detail}
+//{namespace name="backend/emotion/view/detail"}
 Ext.define('Shopware.apps.Emotion.model.Component', {
     /**
      * Extends the standard Ext Model

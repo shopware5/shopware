@@ -35,7 +35,7 @@
  * @package Article
  * @subpackage Detail
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/variant/configurator/set"}
 Ext.define('Shopware.apps.Article.view.variant.configurator.Sets', {
     /**
@@ -98,15 +98,15 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Sets', {
      * @object
      */
     snippets: {
-        saveTitle: '{s name=variant/configurator/sets/save_title}Save configurator set{/s}',
-        loadTitle: '{s name=variant/configurator/sets/load_title}Load configurator set{/s}',
-        save: '{s name=variant/configurator/sets/save}Save{/s}',
-        load: '{s name=variant/configurator/sets/load}Load{/s}',
-        sets: '{s name=variant/configurator/sets/set_combo}Configurator set{/s}',
-        empty:'{s name=empty}Please select...{/s}',
-        cancel: '{s name=variant/configurator/sets/cancel}Cancel{/s}',
-        publicField: '{s name=variant/configurator/sets/public_field}Mark the set as public{/s}',
-        setName: '{s name=variant/configurator/set/set_name}Name of the configurator set{/s}'
+        saveTitle: '{s name="variant/configurator/sets/save_title"}Save configurator set{/s}',
+        loadTitle: '{s name="variant/configurator/sets/load_title"}Load configurator set{/s}',
+        save: '{s name="variant/configurator/sets/save"}Save{/s}',
+        load: '{s name="variant/configurator/sets/load"}Load{/s}',
+        sets: '{s name="variant/configurator/sets/set_combo"}Configurator set{/s}',
+        empty:'{s name="empty"}Please select...{/s}',
+        cancel: '{s name="variant/configurator/sets/cancel"}Cancel{/s}',
+        publicField: '{s name="variant/configurator/sets/public_field"}Mark the set as public{/s}',
+        setName: '{s name="variant/configurator/set/set_name"}Name of the configurator set{/s}'
     },
 
     /**

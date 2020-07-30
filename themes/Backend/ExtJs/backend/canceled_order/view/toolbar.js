@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/canceled_order/view/main}
+//{namespace name="backend/canceled_order/view/main"}
 
 /**
  * Shopware UI - Basic toolbar with search and from-to widgets
@@ -41,12 +41,12 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
 
     snippets: {
         date: {
-            from: '{s name=date/from}From{/s}',
-            to: '{s name=date/to}To{/s}'
+            from: '{s name="date/from"}From{/s}',
+            to: '{s name="date/to"}To{/s}'
         },
         filter: {
-            button: '{s name=filter/button}Filter{/s}',
-            tooltip: '{s name=filter/tooltip}Filter by selected dates{/s}'
+            button: '{s name="filter/button"}Filter{/s}',
+            tooltip: '{s name="filter/tooltip"}Filter by selected dates{/s}'
         }
     },
 
@@ -141,7 +141,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
             width: 170,
             cls: 'searchfield',
             enableKeyEvents : true,
-            emptyText : '{s name=search_empty}Search...{/s}',
+            emptyText : '{s name="search_empty"}Search...{/s}',
             checkChangeBuffer: 700,
             listeners: {
                 scope: me,

@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/condition/is_new"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.IsNew', {
     extend: 'ProductStream.filter.AbstractCondition',
@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.IsNew', {
     },
 
     getLabel: function() {
-        return '{s name=is_new_condition}Is new{/s}';
+        return '{s name="is_new_condition"}Is new{/s}';
     },
 
     isSingleton: function() {
@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.IsNew', {
             },
             items: [{
                 xtype: 'displayfield',
-                value: '{s name=is_new/display_text}Only new products will be displayed{/s}',
+                value: '{s name="is_new/display_text"}Only new products will be displayed{/s}',
             }, {
                 xtype: 'numberfield',
                 name: 'condition.' + this.getName(),

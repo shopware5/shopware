@@ -6,8 +6,8 @@ Ext.define('Shopware.apps.Order.view.detail.PaymentMethods', {
     initComponent: function () {
         var me = this;
 
-        me.snippets.sepaIban = '{s namespace="backend/order/main" name=sepa/iban}IBAN{/s}';
-        me.snippets.sepaBic = '{s namespace="backend/order/main" name=sepa/bic}BIC{/s}';
+        me.snippets.sepaIban = '{s namespace="backend/order/main" name="sepa/iban"}IBAN{/s}';
+        me.snippets.sepaBic = '{s namespace="backend/order/main" name="sepa/bic"}BIC{/s}';
 
         me.callParent(arguments);
 

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/canceled_order/store/voucher}
+//{namespace name="backend/canceled_order/store/voucher"}
 
 
 /**

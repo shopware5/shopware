@@ -47,9 +47,9 @@ Ext.define('Shopware.form.field.VoucherGrid', {
 
     modeRenderer: function(value) {
         if (value != 1) {
-            return "{s namespace=backend/voucher/view/voucher name=list/render_value/mode/general}General{/s}";
+            return "{s namespace=backend/voucher/view/voucher name="list/render_value/mode/general"}General{/s}";
         }
-        return "{s namespace=backend/voucher/view/voucher name=list/render_value/mode/individual}Individual{/s}";
+        return "{s namespace=backend/voucher/view/voucher name="list/render_value/mode/individual"}Individual{/s}";
     },
 
     valueRenderer: function(value, meta, record) {

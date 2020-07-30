@@ -28,7 +28,7 @@
  * @package   Shopware
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-//{namespace name=backend/emotion/presets/presets}
+//{namespace name="backend/emotion/presets/presets"}
 //{block name="backend/emotion/presets/list"}
 Ext.define('Shopware.apps.Emotion.view.presets.List', {
     alias: 'widget.presets-list',
@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                 xtype: 'button',
                 itemId: 'deletebutton',
                 iconCls: 'sprite-minus-circle',
-                text: '{s name=presetlist/delete_preset}{/s}',
+                text: '{s name="presetlist/delete_preset"}{/s}',
                 disabled: true,
                 handler: function() {
                     me.fireEvent('deletepreset', me.store, me.selectedPreset);
@@ -167,7 +167,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
             '->', {
                 xtype: 'textfield',
                 cls: 'searchfield',
-                emptyText: '{s name=search}Search...{/s}',
+                emptyText: '{s name="search"}Search...{/s}',
                 width: 170,
                 enableKeyEvents: true,
                 listeners: {
@@ -244,9 +244,9 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                     }
 
                     Ext.Object.each(sortedPresets, function(key, value) {
-                        var name = '{s name=installed_shopping_world_presets}{/s}';
+                        var name = '{s name="installed_shopping_world_presets"}{/s}';
                         if (key === 'custom') {
-                            name = '{s name=created_shopping_world_presets}{/s}'
+                            name = '{s name="created_shopping_world_presets"}{/s}'
                         }
 
                         if (value.length > 0) {
@@ -272,12 +272,12 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                            '</div>';
                 },
                 getTeaserComponent: function(group, name) {
-                    var header = '{s name=no_presets_installed}{/s}',
-                        message = Ext.String.format('[0] <br><a href="#">[1]</a>', '{s name=no_presets_installed_message}{/s}', '{s name=discover_now}{/s}');
+                    var header = '{s name="no_presets_installed"}{/s}',
+                        message = Ext.String.format('[0] <br><a href="#">[1]</a>', '{s name="no_presets_installed_message"}{/s}', '{s name="discover_now"}{/s}');
 
                     if (group === 'custom') {
-                        header = '{s name=no_presets_created}{/s}';
-                        message = '{s name=no_presets_created_message}{/s}';
+                        header = '{s name="no_presets_created"}{/s}';
+                        message = '{s name="no_presets_created_message"}{/s}';
                     }
 
                     return '<div class="preset--outer-container">' +
@@ -303,7 +303,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
 
                         if (preset.premium) {
                             itemTpl += '<div class="thumbnail premium" data-preset-id="' + preset.id + '">';
-                            itemTpl += '<div class="hint premium"><span>{s name=premium_hint}{/s}</span></div>';
+                            itemTpl += '<div class="hint premium"><span>{s name="premium_hint"}{/s}</span></div>';
                         } else {
                             itemTpl += '<div class="thumbnail" data-preset-id="' + preset.id + '">';
                         }

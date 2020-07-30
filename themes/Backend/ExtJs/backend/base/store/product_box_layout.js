@@ -30,7 +30,7 @@
 /**
  * Shopware Store - Global Stores and Models
  */
-//{namespace name=backend/base/product_box_layout}
+//{namespace name="backend/base/product_box_layout"}
 //{block name="backend/base/store/product_box_layout"}
 Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
     extend: 'Ext.data.Store',
@@ -53,24 +53,24 @@ Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
 
     snippets: {
         displayExtendLayout: {
-            label: '{s name=settings_box_layout_parent_title}Parent setting{/s}',
-            description: '{s name=settings_box_layout_parent_description}The layout of the product box will be set by the value of the parent category.{/s}'
+            label: '{s name="settings_box_layout_parent_title"}Parent setting{/s}',
+            description: '{s name="settings_box_layout_parent_description"}The layout of the product box will be set by the value of the parent category.{/s}'
         },
         displayBasicLayout: {
-            label: '{s name=settings_box_layout_basic_title}Detailed information{/s}',
-            description: '{s name=settings_box_layout_basic_description}The layout of the product box will show very detailed information.{/s}'
+            label: '{s name="settings_box_layout_basic_title"}Detailed information{/s}',
+            description: '{s name="settings_box_layout_basic_description"}The layout of the product box will show very detailed information.{/s}'
         },
         displayMinimalLayout: {
-            label: '{s name=settings_box_layout_minimal_title}Only important information{/s}',
-            description: '{s name=settings_box_layout_minimal_description}The layout of the product box will only show the most important information.{/s}'
+            label: '{s name="settings_box_layout_minimal_title"}Only important information{/s}',
+            description: '{s name="settings_box_layout_minimal_description"}The layout of the product box will only show the most important information.{/s}'
         },
         displayImageLayout: {
-            label: '{s name=settings_box_layout_image_title}Big image{/s}',
-            description: '{s name=settings_box_layout_image_description}The layout of the product box is based on a big image of the product.{/s}'
+            label: '{s name="settings_box_layout_image_title"}Big image{/s}',
+            description: '{s name="settings_box_layout_image_description"}The layout of the product box is based on a big image of the product.{/s}'
         },
         displayListLayout: {
-            label: '{s name=settings_box_layout_list_title}Product list{/s}',
-            description: '{s name=settings_box_layout_list_description}The layout of the product box shows a small image and only one product in a row.{/s}'
+            label: '{s name="settings_box_layout_list_title"}Product list{/s}',
+            description: '{s name="settings_box_layout_list_description"}The layout of the product box shows a small image and only one product in a row.{/s}'
         }
     },
 

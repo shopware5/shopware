@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/first_run_wizard/main}
+//{namespace name="backend/first_run_wizard/main"}
 //{block name="backend/first_run_wizard/controller/config"}
 
 Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
@@ -42,15 +42,15 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
 
     snippets: {
         configFormValidation: {
-            successTitle: '{s name=config/configFormValidation/successTitle}Shop configuration{/s}',
-            successMessage: '{s name=config/configFormValidation/successMessage}Configuration saved{/s}',
-            errorTitle: '{s name=config/configFormValidation/errorTitle}Error saving your shop configuration{/s}',
-            errorFormValidationMessage: '{s name=config/configFormValidation/errorFormValidationMessage}The field [0] is not valid{/s}',
-            errorServerMessage: '{s name=config/configFormValidation/errorServerMessage}The following error was detected: [0]{/s}'
+            successTitle: '{s name="config/configFormValidation/successTitle"}Shop configuration{/s}',
+            successMessage: '{s name="config/configFormValidation/successMessage"}Configuration saved{/s}',
+            errorTitle: '{s name="config/configFormValidation/errorTitle"}Error saving your shop configuration{/s}',
+            errorFormValidationMessage: '{s name="config/configFormValidation/errorFormValidationMessage"}The field [0] is not valid{/s}',
+            errorServerMessage: '{s name="config/configFormValidation/errorServerMessage"}The following error was detected: [0]{/s}'
         },
-        waitTitle: '{s name=config/waitTitle}Saving configuration settings{/s}',
-        waitMessage: '{s name=config/waitMessage}This process might take a few seconds{/s}',
-        growlMessage:'{s name=config/growlMessage}First run wizard{/s}'
+        waitTitle: '{s name="config/waitTitle"}Saving configuration settings{/s}',
+        waitMessage: '{s name="config/waitMessage"}This process might take a few seconds{/s}',
+        growlMessage:'{s name="config/growlMessage"}First run wizard{/s}'
     },
 
     init: function () {

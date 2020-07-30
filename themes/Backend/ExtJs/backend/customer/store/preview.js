@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+// {namespace name="backend/customer/view/main"}
 // {block name="backend/customer/store/preview"}
 Ext.define('Shopware.apps.Customer.store.Preview', {
     extend: 'Ext.data.Store',

@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-// {namespace name=backend/first_run_wizard/main}
+// {namespace name="backend/first_run_wizard/main"}
 
 // {block name="backend/first_run_wizard/view/main/window"}
 
@@ -67,16 +67,16 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
     currentStep: 0,
 
     snippets: {
-        title: '{s name=window/title}Shopware First Run Wizard{/s}',
+        title: '{s name="window/title"}Shopware First Run Wizard{/s}',
         close: {
-            title: '{s name=window/close/title}Close wizard?{/s}',
-            message: '{s name=window/close/message}Are you sure you want to close the configuration wizard? You will not be able to access it later, and must configure Shopware manually.{/s}'
+            title: '{s name="window/close/title"}Close wizard?{/s}',
+            message: '{s name="window/close/message"}Are you sure you want to close the configuration wizard? You will not be able to access it later, and must configure Shopware manually.{/s}'
         },
         buttons: {
-            back: '{s name=window/buttons/back}Back{/s}',
-            next: '{s name=window/buttons/next}Next{/s}',
-            skip: '{s name=window/buttons/skip}Skip{/s}',
-            finish: '{s name=window/buttons/finish}Finish{/s}'
+            back: '{s name="window/buttons/back"}Back{/s}',
+            next: '{s name="window/buttons/next"}Next{/s}',
+            skip: '{s name="window/buttons/skip"}Skip{/s}',
+            finish: '{s name="window/buttons/finish"}Finish{/s}'
         }
     },
 
@@ -188,12 +188,12 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
         this.navigationStore = Ext.create('Ext.data.Store', {
             fields: ['name', 'needsConnection'],
             data: [
-                { id: this.navigationIndex.localization, name: '{s name=localization/content/title}Localization{/s}', needsConnection: false },
-                { id: this.navigationIndex.demo_data, name: '{s name=demo_data/content/title}Demo Data{/s}', needsConnection: true },
-                { id: this.navigationIndex.paypal, name: '{s name=pay_pal/content/title}PayPal{/s}', needsConnection: true },
-                { id: this.navigationIndex.recommendation, name: '{s name=recommendation/content/title}Recommendations{/s}', needsConnection: true },
-                { id: this.navigationIndex.config, name: '{s name=config/content/title}Configuration{/s}', needsConnection: false },
-                { id: this.navigationIndex.finish, name: '{s name=finish/content/title}Finished{/s}', needsConnection: false }
+                { id: this.navigationIndex.localization, name: '{s name="localization/content/title"}Localization{/s}', needsConnection: false },
+                { id: this.navigationIndex.demo_data, name: '{s name="demo_data/content/title"}Demo Data{/s}', needsConnection: true },
+                { id: this.navigationIndex.paypal, name: '{s name="pay_pal/content/title"}PayPal{/s}', needsConnection: true },
+                { id: this.navigationIndex.recommendation, name: '{s name="recommendation/content/title"}Recommendations{/s}', needsConnection: true },
+                { id: this.navigationIndex.config, name: '{s name="config/content/title"}Configuration{/s}', needsConnection: false },
+                { id: this.navigationIndex.finish, name: '{s name="finish/content/title"}Finished{/s}', needsConnection: false }
             ]
         });
 

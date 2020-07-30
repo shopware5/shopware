@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/form/country_area"}
 Ext.define('Shopware.apps.Config.view.form.CountryArea', {
@@ -54,13 +54,13 @@ Ext.define('Shopware.apps.Config.view.form.CountryArea', {
         var me = this;
         return [{
             dataIndex: 'name',
-            text: '{s name=country_area/table/name_text}Name{/s}',
+            text: '{s name="country_area/table/name_text"}Name{/s}',
             renderer: function(v) { return v && (v.charAt(0).toUpperCase() + v.substr(1)); },
             flex: 1
         }, {
             xtype: 'booleancolumn',
             dataIndex: 'active',
-            text: '{s name=country_area/table/active_text}Active{/s}',
+            text: '{s name="country_area/table/active_text"}Active{/s}',
             flex: 1
         }, me.getActionColumn()];
     },
@@ -69,13 +69,13 @@ Ext.define('Shopware.apps.Config.view.form.CountryArea', {
         var me = this;
         return [{
             name: 'name',
-            fieldLabel: '{s name=country_area/detail/name_label}Name{/s}',
+            fieldLabel: '{s name="country_area/detail/name_label"}Name{/s}',
             translatable: true,
             allowBlank: false
         },{
             xtype: 'config-element-boolean',
             name: 'active',
-            fieldLabel: '{s name=country_area/detail/active_label}Active{/s}'
+            fieldLabel: '{s name="country_area/detail/active_label"}Active{/s}'
         }];
     }
 });

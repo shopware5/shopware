@@ -59,7 +59,7 @@ Ext.define('Shopware.MediaManager.MediaSelection',
      * The button text to display on the media selection button.
      * @string
      */
-    buttonText: '{s name=backend/base/component/media_selection/button_text}Select own files{/s}',
+    buttonText: '{s name="backend/base/component/media_selection/button_text"}Select own files{/s}',
 
     /**
      * Icon class which will be rendered on the "open media manager" button

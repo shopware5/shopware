@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/risk_management/main}
+//{namespace name="backend/risk_management/main"}
 
 /**
  * Shopware UI - RiskManagement view container
@@ -198,7 +198,7 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
             field1,
             {
                 xtype: 'container',
-                html: '<b>{s name=container_and}AND{/s}</b>',
+                html: '<b>{s name="container_and"}AND{/s}</b>',
                 columnWidth: 0.1,
                 style: {
                     height: '20px',
@@ -220,7 +220,7 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
                 xtype: 'button',
                 iconCls: 'sprite-minus-circle',
                 columnWidth: 0.09,
-                text: '{s name=container/deleteButton}Delete{/s}',
+                text: '{s name="container/deleteButton"}Delete{/s}',
                 action: 'delete',
                 rowIndex: (me.values && me.values.id) ? me.values.id : ''
             });
@@ -231,7 +231,7 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
                 xtype: 'button',
                 cls: 'primary',
                 columnWidth: 0.22,
-                text: '{s name=container/saveButton}Save{/s}',
+                text: '{s name="container/saveButton"}Save{/s}',
                 action: 'saveRules'
             });
             /*{/if}*/

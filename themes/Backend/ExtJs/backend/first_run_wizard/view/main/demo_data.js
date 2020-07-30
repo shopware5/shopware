@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/first_run_wizard/main}
+//{namespace name="backend/first_run_wizard/main"}
 //{block name="backend/first_run_wizard/view/main/demo_data"}
 
 Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
@@ -50,13 +50,13 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
 
     snippets: {
         content: {
-            title: '{s name=demo_data/content/title}Demo Data{/s}',
-            message: '{s name=demo_data/content/message}Want to see Shopware in action right away? Install a demo data set. With it, you will be able to explore all the features that will make your Shopware shop an online success. Please note that demo data sets are for testing purposes only, and should not be installed in or modified for a production environment.{/s}',
-            noPlugins: '{s name=demo_data/content/noPlugins}No plugins found{/s}'
+            title: '{s name="demo_data/content/title"}Demo Data{/s}',
+            message: '{s name="demo_data/content/message"}Want to see Shopware in action right away? Install a demo data set. With it, you will be able to explore all the features that will make your Shopware shop an online success. Please note that demo data sets are for testing purposes only, and should not be installed in or modified for a production environment.{/s}',
+            noPlugins: '{s name="demo_data/content/noPlugins"}No plugins found{/s}'
         },
         disclaimer: {
-            title: '{s name=demo_data/disclaimer/title}{/s}',
-            text: '{s name=demo_data/disclaimer/text}{/s}'
+            title: '{s name="demo_data/disclaimer/title"}{/s}',
+            text: '{s name="demo_data/disclaimer/text"}{/s}'
         }
     },
 

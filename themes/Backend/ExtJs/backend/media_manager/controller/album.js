@@ -32,7 +32,7 @@
  *
  * this file handles the album administration.
  */
-//{namespace name=backend/media_manager/view/main}
+//{namespace name="backend/media_manager/view/main"}
 //{block name="backend/media_manager/controller/album"}
 Ext.define('Shopware.apps.MediaManager.controller.Album', {
 
@@ -379,7 +379,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
     onEmptyTrash: function () {
         var me = this;
 
-        Ext.Msg.confirm('{s name=recycle/title}Empty recycle bin?{/s}', '{s name=recycle/message}All items in the recycle bin will be deleted and can not be recovered. Dou you want to continue?{/s}', function (btn) {
+        Ext.Msg.confirm('{s name="recycle/title"}Empty recycle bin?{/s}', '{s name="recycle/message"}All items in the recycle bin will be deleted and can not be recovered. Dou you want to continue?{/s}', function (btn) {
             if (btn !== 'yes') {
                 return false;
             }
@@ -441,7 +441,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
         model.save({
             callback: function () {
                 if (thumbChanged) {
-                    Ext.Msg.confirm('{s name=settings/newSizesTitle}Generate new thumbnails?{/s}', '{s name=settings/generateNewSizes}New thumbnail sizes have been defined. Would you like to generate them now?{/s}', function (btn) {
+                    Ext.Msg.confirm('{s name="settings/newSizesTitle"}Generate new thumbnails?{/s}', '{s name="settings/generateNewSizes"}New thumbnail sizes have been defined. Would you like to generate them now?{/s}', function (btn) {
                         if (btn !== 'yes') {
                             return false;
                         }
@@ -507,7 +507,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             thumbChanged = me.handleAlbumModelData(model, window);
 
         if (thumbChanged) {
-            Ext.Msg.confirm('{s name=settings/saveNowTitle}Save album?{/s}', '{s name=settings/saveBeforeGeneration}The album must first be saved. Save album now?{/s}', function (btn) {
+            Ext.Msg.confirm('{s name="settings/saveNowTitle"}Save album?{/s}', '{s name="settings/saveBeforeGeneration"}The album must first be saved. Save album now?{/s}', function (btn) {
                 if (btn !== 'yes') {
                     return false;
                 }

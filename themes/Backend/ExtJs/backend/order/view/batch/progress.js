@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order list main window.
@@ -131,9 +131,9 @@ Ext.define('Shopware.apps.Order.view.batch.Progress', {
      * @object
      */
     snippets: {
-        title:'{s name=window_title}Document creation{/s}',
-        cancel:'{s name=cancel}Cancel process{/s}',
-        close:'{s name=close}Close window{/s}'
+        title:'{s name="window_title"}Document creation{/s}',
+        cancel:'{s name="cancel"}Cancel process{/s}',
+        close:'{s name="close"}Close window{/s}'
     },
 
     /**

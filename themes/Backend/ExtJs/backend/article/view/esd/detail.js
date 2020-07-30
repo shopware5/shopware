@@ -30,7 +30,7 @@
 /**
  * Shopware UI - Article esd page
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/esd/panel"}
 Ext.define('Shopware.apps.Article.view.esd.Detail', {
 
@@ -69,32 +69,32 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
      */
     snippets:{
         esdInfo:{
-            title: '{s name=esd/detail/esdinfo/title}ESD-Version{/s}',
-            article: '{s name=esd/detail/esdinfo/artcile}Article:{/s}',
-            serialAdministration: '{s name=esd/detail/esdinfo/serial_administration}Serial administration:{/s}',
-            enableSerialAdministration: '{s name=esd/detail/esdinfo/enable_serial_administration}Enables the administration of serials{/s}'
+            title: '{s name="esd/detail/esdinfo/title"}ESD-Version{/s}',
+            article: '{s name="esd/detail/esdinfo/artcile"}Article:{/s}',
+            serialAdministration: '{s name="esd/detail/esdinfo/serial_administration"}Serial administration:{/s}',
+            enableSerialAdministration: '{s name="esd/detail/esdinfo/enable_serial_administration"}Enables the administration of serials{/s}'
         },
 
         fileInfo:{
-            title: '{s name=esd/detail/fileinfo/title}File-Info{/s}',
-            downloadFile: '{s name=esd/detail/fileinfo/download_file}Download file{/s}',
-            noFile: '{s name=esd/detail/fileinfo/no_file}No file choosen{/s}'
+            title: '{s name="esd/detail/fileinfo/title"}File-Info{/s}',
+            downloadFile: '{s name="esd/detail/fileinfo/download_file"}Download file{/s}',
+            noFile: '{s name="esd/detail/fileinfo/no_file"}No file choosen{/s}'
         },
 
         fileUpload:{
-            title: '{s name=esd/detail/fileupload/title}File-Upload{/s}',
-            selection: '{s name=esd/detail/fileupload/selection}Selection{/s}',
-            selectFile: '{s name=esd/detail/fileupload/download_file}Select file{/s}',
-            dropZoneText: '{s name=esd/detail/fileupload/drop_zone_text}Upload file via Drag and Drop{/s}',
-            buttonOverwrite: '{s name=esd/detail/fileupload/buttonOverwrite}Overwrite{/s}',
-            buttonRename: '{s name=esd/detail/fileupload/buttonRename}Rename{/s}',
-            buttonCancel: '{s name=esd/detail/fileupload/buttonCancel}Cancel{/s}',
-            renameMessage: '{s name=esd/detail/fileupload/reanameMessage}You file has been renamed to [0]{/s}'
+            title: '{s name="esd/detail/fileupload/title"}File-Upload{/s}',
+            selection: '{s name="esd/detail/fileupload/selection"}Selection{/s}',
+            selectFile: '{s name="esd/detail/fileupload/download_file"}Select file{/s}',
+            dropZoneText: '{s name="esd/detail/fileupload/drop_zone_text"}Upload file via Drag and Drop{/s}',
+            buttonOverwrite: '{s name="esd/detail/fileupload/buttonOverwrite"}Overwrite{/s}',
+            buttonRename: '{s name="esd/detail/fileupload/buttonRename"}Rename{/s}',
+            buttonCancel: '{s name="esd/detail/fileupload/buttonCancel"}Cancel{/s}',
+            renameMessage: '{s name="esd/detail/fileupload/reanameMessage"}You file has been renamed to [0]{/s}'
     },
 
         fileChoose:{
-            title: '{s name=esd/detail/filechoose/title}Choose File{/s}',
-            pleaseChoose: '{s name=esd/detail/fileupload/please_choose}Please choose...{/s}'
+            title: '{s name="esd/detail/filechoose/title"}Choose File{/s}',
+            pleaseChoose: '{s name="esd/detail/fileupload/please_choose"}Please choose...{/s}'
         }
     },
 
@@ -320,7 +320,7 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
                         return;
                     }
 
-                    Ext.MessageBox.confirm(me.getMessageBoxConfig('{s name=esd/detail/fileexists/title}File already exists{/s}', '{s name=esd/detail/fileexists/message}Do you want to overwrite the existing file?{/s}', confirmationCallback));
+                    Ext.MessageBox.confirm(me.getMessageBoxConfig('{s name="esd/detail/fileexists/title"}File already exists{/s}', '{s name="esd/detail/fileexists/message"}Do you want to overwrite the existing file?{/s}', confirmationCallback));
                 },
                 fileUploaded: function (target, response) {
                     if (!response.hasOwnProperty('newName')) {
@@ -328,7 +328,7 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
                     }
 
 
-                    Ext.Msg.alert('{s name=esd/detail/rename/title}Upload{/s}', Ext.String.format(me.snippets.fileUpload.renameMessage, response.newName));
+                    Ext.Msg.alert('{s name="esd/detail/rename/title"}Upload{/s}', Ext.String.format(me.snippets.fileUpload.renameMessage, response.newName));
                 }
             }
         });

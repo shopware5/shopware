@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/payment/payment}
+//{namespace name="backend/payment/payment"}
 
 /**
  * Shopware UI - Grid for Country-Selection
@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Payment.view.payment.CountryList', {
      */
     getColumns: function(){
         var columns = [{
-            header: '{s name=column_countrySelection_name}Name{/s}',
+            header: '{s name="column_countrySelection_name"}Name{/s}',
             flex: 2,
             dataIndex: 'name',
             getSortParam: function () {

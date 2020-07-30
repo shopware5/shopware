@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/emotion/list/grid}
+//{namespace name="backend/emotion/list/grid"}
 
 /**
  * Shopware UI - Emotion List Grid
@@ -85,13 +85,13 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                     formatName: function(values) {
                         var groupValue = values.groupValue;
                         if (Ext.isEmpty(groupValue) || groupValue === "-5") {
-                            return '{s name=grid/grouping/emotions_in_subcategories}Shopping worlds is subcategories{/s}';
+                            return '{s name="grid/grouping/emotions_in_subcategories"}Shopping worlds is subcategories{/s}';
                         }
                         if (groupValue === "-10") {
-                            return '{s name=grid/grouping/emotions_in_category}Shopping worlds in category{/s}' + ": " + me.categoryTree.getSelectionModel().getSelection()[0].get('name');
+                            return '{s name="grid/grouping/emotions_in_category"}Shopping worlds in category{/s}' + ": " + me.categoryTree.getSelectionModel().getSelection()[0].get('name');
                         }
                         if (groupValue === "-15") {
-                            return '{s name=grid/grouping/emotions_in_categories}Shopping worlds in categories{/s}';
+                            return '{s name="grid/grouping/emotions_in_categories"}Shopping worlds in categories{/s}';
                         }
                         return values.children[0].get('emotionGroup');
                     }
@@ -155,7 +155,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         var me = this;
 
         return [{
-            header: '{s name=grid/column/name}Name{/s}',
+            header: '{s name="grid/column/name"}Name{/s}',
             dataIndex: 'name',
             flex: 2,
             renderer: me.nameColumn,
@@ -164,7 +164,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             sortable: false,
             groupable: false
         }, {
-            header: '{s name=grid/column/type}Type{/s}',
+            header: '{s name="grid/column/type"}Type{/s}',
             width: 120,
             tdCls: 'emotion-type-column',
             renderer: me.typeColumn,
@@ -173,7 +173,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             sortable: false,
             groupable: false
         }, {
-            header: '{s name=grid/column/categories}Categories{/s}',
+            header: '{s name="grid/column/categories"}Categories{/s}',
             dataIndex: 'categoriesNames',
             flex: 2,
             renderer: me.categoriesColumn,
@@ -191,7 +191,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             sortable: false,
             groupable: false
         }, {
-            header: '{s name=grid/column/devices}Devices{/s}',
+            header: '{s name="grid/column/devices"}Devices{/s}',
             dataIndex: 'device',
             width: 115,
             tdCls: 'emotion-device-column',
@@ -201,13 +201,13 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             sortable: false,
             groupable: false
         },{
-            header: '{s name=list/visibility_in_categories}{/s}',
+            header: '{s name="list/visibility_in_categories"}{/s}',
             dataIndex: 'listingVisibility',
             width: 115,
             renderer: me.listingVisibilityRenderer
         }, {
             xtype: 'datecolumn',
-            header: '{s name=grid/column/date}Last edited{/s}',
+            header: '{s name="grid/column/date"}Last edited{/s}',
             dataIndex: 'modified',
             width: 110,
             renderer: me.modifiedColumn,
@@ -216,7 +216,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             sortable: false,
             groupable: false
         }, {
-            header: '{s name=grid/column/active}Active{/s}',
+            header: '{s name="grid/column/active"}Active{/s}',
             dataIndex: 'active',
             width: 50,
             renderer: me.statusColumn,
@@ -230,7 +230,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 uncheckedValue: false
             }
         }, {
-            header: '{s name=grid/column/position}Position{/s}',
+            header: '{s name="grid/column/position"}Position{/s}',
             dataIndex: 'position',
             width: 60,
             align: 'center',
@@ -246,7 +246,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             }
         }, {
             xtype: 'actioncolumn',
-            header: '{s name=grid/column/action}Actions{/s}',
+            header: '{s name="grid/column/action"}Actions{/s}',
             width: 105,
             border: 0,
             menuDisabled: true,
@@ -257,7 +257,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 /*{if {acl_is_allowed privilege=delete}}*/
                 {
                     iconCls: 'sprite-minus-circle',
-                    tooltip:'{s name=list/action_column/delete}Delete shopping world{/s}',
+                    tooltip:'{s name="list/action_column/delete"}Delete shopping world{/s}',
                     handler: function (view, rowIndex, colIndex, item, opts, record) {
                         me.fireEvent('deleteemotion', record);
                     }
@@ -266,7 +266,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 /*{if {acl_is_allowed privilege=update}}*/
                 {
                     iconCls: 'sprite-pencil',
-                    tooltip:'{s name=list/action_column/edit}Edit shopping world{/s}',
+                    tooltip:'{s name="list/action_column/edit"}Edit shopping world{/s}',
                     handler: function(view, rowIndex, colIndex) {
                         me.fireEvent('editemotion', me, view, rowIndex, colIndex);
                     }
@@ -274,7 +274,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 /*{/if}*/
                 {
                     iconCls: 'sprite-globe--arrow',
-                    tooltip:'{s name=list/action_column/preview}Preview shopping world{/s}',
+                    tooltip:'{s name="list/action_column/preview"}Preview shopping world{/s}',
                     handler: function(view, rowIndex) {
                         var listStore = view.getStore(),
                             emotionId = listStore.getAt(rowIndex).get('id');
@@ -284,7 +284,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 },
                 {
                     iconCls: 'sprite-drive-download',
-                    tooltip:'{s name=list/action_column/export}Export shopping world{/s}',
+                    tooltip:'{s name="list/action_column/export"}Export shopping world{/s}',
                     handler: function(view, rowIndex) {
                         var listStore = view.getStore(),
                             emotionId = listStore.getAt(rowIndex).get('id');
@@ -395,15 +395,15 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             return false;
         }
 
-        var type = '{s name=grid/renderer/emotion}Emotion{/s}';
+        var type = '{s name="grid/renderer/emotion"}Emotion{/s}';
 
         // Type detection
         if(record.get('isLandingPage')) {
-            type = '{s name=grid/renderer/landingpage}Landingpage{/s}'
+            type = '{s name="grid/renderer/landingpage"}Landingpage{/s}'
         }
 
         if (record.get('parentId') == null && record.get('isLandingPage')) {
-            type = '<strong>{s name=grid/renderer/landingpage_master}Master landing page{/s}</strong>'
+            type = '<strong>{s name="grid/renderer/landingpage_master"}Master landing page{/s}</strong>'
         }
 
         return type;
@@ -447,11 +447,11 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             iconStyling = 'width:16px; height:16px; display:inline-block; margin-right:5px;';
 
         var snippets = {
-                desktop: '{s name=grid/renderer/desktop}For desktop{/s}',
-                tabletLandscape: '{s name=grid/renderer/tabletLandscape}For tablet landscape{/s}',
-                tablet: '{s name=grid/renderer/tablet}For tablet{/s}',
-                mobileLandscape: '{s name=grid/renderer/mobileLandscape}For mobile landscape{/s}',
-                mobile: '{s name=grid/renderer/mobile}For mobile{/s}'
+                desktop: '{s name="grid/renderer/desktop"}For desktop{/s}',
+                tabletLandscape: '{s name="grid/renderer/tabletLandscape"}For tablet landscape{/s}',
+                tablet: '{s name="grid/renderer/tablet"}For tablet{/s}',
+                mobileLandscape: '{s name="grid/renderer/mobileLandscape"}For mobile landscape{/s}',
+                mobile: '{s name="grid/renderer/mobile"}For mobile{/s}'
         };
 
         // Device detection
@@ -492,7 +492,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
      */
     statusColumn: function(value, metaData, record) {
         var cls = 'sprite-ui-check-box';
-        metaData.tdAttr = 'data-qtip="{s name=grid/renderer/editable_tooltip}Doubleclick to edit{/s}"';
+        metaData.tdAttr = 'data-qtip="{s name="grid/renderer/editable_tooltip"}Doubleclick to edit{/s}"';
         if (!value) {
             cls = 'sprite-cross-small';
         }
@@ -506,7 +506,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
      * @param [string] record   - The whole data model
      */
     positionColumn: function(value, metaData, record) {
-        metaData.tdAttr = 'data-qtip="{s name=grid/renderer/editable_tooltip}Doubleclick to edit{/s}"';
+        metaData.tdAttr = 'data-qtip="{s name="grid/renderer/editable_tooltip"}Doubleclick to edit{/s}"';
 
         return value;
     },

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/controller/main}*/
+/*{namespace name="backend/shipping/controller/main"}*/
 
 /**
  * Shopware Controller - Shipping
@@ -69,12 +69,12 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
      * @object
      */
     messages: {
-        deleteDialogMessageMulti : '{s name=delete_dialog_multi}Are you sure you want to delete those dispatchs ([0]){/s}?',
-        deleteDialogMessageSingle : '{s name=delete_dialog_single}Are you sure you want to delete this dispatchs ([0]){/s}?',
-        deleteDialogSuccess :'{s name=dialog_multi_success}Dispatches successfully deleted.{/s}',
-        saveDialogSuccess :'{s name=dialog_save_success}Dispatch successfully saved.{/s}',
-        deleteDialogFailure :'{s name=dialog_multi_error}Some dispatches couldn\'t removed.{/s}',
-        deleteDialogTitle : '{s name=delete_dialog_title}Delete selected dispatch{/s}'
+        deleteDialogMessageMulti : '{s name="delete_dialog_multi"}Are you sure you want to delete those dispatchs ([0]){/s}?',
+        deleteDialogMessageSingle : '{s name="delete_dialog_single"}Are you sure you want to delete this dispatchs ([0]){/s}?',
+        deleteDialogSuccess :'{s name="dialog_multi_success"}Dispatches successfully deleted.{/s}',
+        saveDialogSuccess :'{s name="dialog_save_success"}Dispatch successfully saved.{/s}',
+        deleteDialogFailure :'{s name="dialog_multi_error"}Some dispatches couldn\'t removed.{/s}',
+        deleteDialogTitle : '{s name="delete_dialog_title"}Delete selected dispatch{/s}'
     },
 
     /**
@@ -150,9 +150,9 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
             store.remove(record);
             store.sync({
                 callback: function() {
-                    Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogSuccess, '{s name=title}{/s}');
+                    Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogSuccess, '{s name="title"}{/s}');
                     Ext.Error.handle = function() {
-                        Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure + e.message, '{s name=title}{/s}');
+                        Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure + e.message, '{s name="title"}{/s}');
                     }
                     store.load();
                 }
@@ -191,11 +191,11 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
                     store.remove(selection);
                     store.sync({
                         callback: function() {
-                            Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogSuccess, '{s name=title}{/s}');
+                            Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogSuccess, '{s name="title"}{/s}');
                             store.load();
                         },
                         failure: function() {
-                            Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure + e.message, '{s name=title}{/s}');
+                            Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure + e.message, '{s name="title"}{/s}');
                         }
                     });
                 }

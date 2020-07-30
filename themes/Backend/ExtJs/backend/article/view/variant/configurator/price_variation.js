@@ -30,7 +30,7 @@
 /**
  * Shopware UI - Price variation main window.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/variant/configurator/price_variation"}
 Ext.define('Shopware.apps.Article.view.variant.configurator.PriceVariation', {
     /**
@@ -100,20 +100,20 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.PriceVariation', {
      * @object
      */
     snippets: {
-        title: '{s name=price/variation/title}Price variation{/s}',
-        close: '{s name=general/close_button}Close{/s}',
-        options: '{s name=price/variation/options}Options{/s}',
-        isGross: '{s name=price/variation/is_gross}Mode{/s}',
-        net: '{s name=price/variation/mode_net}Net{/s}',
-        gross: '{s name=price/variation/mode_gross}Gross{/s}',
-        variation: '{s name=price/variation/variation}Variation{/s}',
+        title: '{s name="price/variation/title"}Price variation{/s}',
+        close: '{s name="general/close_button"}Close{/s}',
+        options: '{s name="price/variation/options"}Options{/s}',
+        isGross: '{s name="price/variation/is_gross"}Mode{/s}',
+        net: '{s name="price/variation/mode_net"}Net{/s}',
+        gross: '{s name="price/variation/mode_gross"}Gross{/s}',
+        variation: '{s name="price/variation/variation"}Variation{/s}',
         success: {
-            title: '{s name=variant/success/title}Success{/s}',
-            variationRemove: '{s name=variant/success/variation_removed}The configurator price variation was removed{/s}'
+            title: '{s name="variant/success/title"}Success{/s}',
+            variationRemove: '{s name="variant/success/variation_removed"}The configurator price variation was removed{/s}'
         },
         failure: {
-            title: '{s name=variant/failure/title}Failure{/s}',
-            variationRemove: '{s name=variant/failure/variation_removed}An error occurred while removing the configurator price variation:{/s}'
+            title: '{s name="variant/failure/title"}Failure{/s}',
+            variationRemove: '{s name="variant/failure/variation_removed"}An error occurred while removing the configurator price variation:{/s}'
         }
     },
 
@@ -313,7 +313,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.PriceVariation', {
 
         me.addButton = Ext.create('Ext.button.Button', {
             iconCls:'sprite-plus-circle-frame',
-            text: '{s name=price/variation/add_button}Add variation{/s}',
+            text: '{s name="price/variation/add_button"}Add variation{/s}',
             handler: function() {
                 me.fireEvent('displayNewPriceVariationWindow', me);
             }
@@ -321,7 +321,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.PriceVariation', {
 
         me.deleteButton = Ext.create('Ext.button.Button', {
             iconCls:'sprite-minus-circle-frame',
-            text: '{s name=price/variation/delete_button}Delete all selected{/s}',
+            text: '{s name="price/variation/delete_button"}Delete all selected{/s}',
             disabled: true,
             handler: function() {
                 var selectionModel = me.mappingGrid.getSelectionModel(),

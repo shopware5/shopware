@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/main}
+//{namespace name="backend/config/view/main"}
 
 //{block name="backend/config/view/base/property"}
 Ext.define('Shopware.apps.Config.view.base.Property', {
@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Config.view.base.Property', {
     margin: '10 0 0 0',
     border: false,
     viewConfig: {
-        emptyText: '{s name=property_table/empty_text}No entries{/s}'
+        emptyText: '{s name="property_table/empty_text"}No entries{/s}'
     },
 
     initComponent: function() {
@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Config.view.base.Property', {
             items: [{
               iconCls: 'sprite-minus-circle-frame',
               action: 'delete',
-              tooltip: '{s name=property_table/delete_tooltip}Delete entry{/s}',
+              tooltip: '{s name="property_table/delete_tooltip"}Delete entry{/s}',
               handler: function (view, rowIndex, colIndex, item, opts, record) {
                   me.fireEvent('delete', view, record, rowIndex);
               }
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Config.view.base.Property', {
         var me = this;
         return [{
             iconCls:'sprite-plus-circle-frame',
-            text:'{s name=property_table/add_text}Add entry{/s}',
+            text:'{s name="property_table/add_text"}Add entry{/s}',
             action:'add'
         }];
     }

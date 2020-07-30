@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.BottomToolbar', {
         var me = this;
 
         me.saveButton = Ext.create('Ext.button.Button', {
-            text: '{s name=save}Save{/s}',
+            text: '{s name="save"}Save{/s}',
             cls: 'primary',
             handler: function() {
                 me.fireEvent('saveMail');
@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.BottomToolbar', {
                 {
                     xtype: 'button',
                     cls: 'secondary',
-                    text: '{s name=backToOverview}Back to overview{/s}',
+                    text: '{s name="backToOverview"}Back to overview{/s}',
                     handler: function() {
                         me.fireEvent('backToOverview');
                     }

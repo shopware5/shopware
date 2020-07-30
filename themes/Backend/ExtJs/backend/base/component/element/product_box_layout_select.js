@@ -19,13 +19,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-//{namespace name=backend/base/product_box_layout}
+//{namespace name="backend/base/product_box_layout"}
 
 Ext.define('Shopware.apps.Base.view.element.ProductBoxLayoutSelect', {
     extend: 'Ext.form.field.ComboBox',
 
-    fieldLabel: '{s name=settings_default_settings_box_layout_label}Product layout{/s}',
-    helpText: '{s name=settings_default_settings_box_layout_help}Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.{/s}',
+    fieldLabel: '{s name="settings_default_settings_box_layout_label"}Product layout{/s}',
+    helpText: '{s name="settings_default_settings_box_layout_help"}Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.{/s}',
     labelWidth: 180,
 
     queryMode: 'local',

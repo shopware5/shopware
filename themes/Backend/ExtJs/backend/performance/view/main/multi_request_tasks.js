@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 //{block name="backend/performance/view/main/multi_request_tasks"}
 Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
@@ -76,86 +76,86 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
 
     seo: {
         article: {
-            initialText: '{s name=listing/articles}Product URLs{/s}',
-            progressText: '{s name=progress/articles}[0] of [1] product urls{/s}',
+            initialText: '{s name="listing/articles"}Product URLs{/s}',
+            progressText: '{s name="progress/articles"}[0] of [1] product urls{/s}',
             requestUrl: '{url controller="Seo" action="seoArticle"}'
         },
         category: {
-            initialText: '{s name=listing/category}Category URLs{/s}',
-            progressText: '{s name=progress/category}[0] of [1] category urls{/s}',
+            initialText: '{s name="listing/category"}Category URLs{/s}',
+            progressText: '{s name="progress/category"}[0] of [1] category urls{/s}',
             requestUrl: '{url controller="Seo" action="seoCategory"}'
         },
         emotion: {
-            initialText: '{s name=listing/emotion}Emotion URLs{/s}',
-            progressText: '{s name=progress/emotion}[0] of [1] emotion urls{/s}',
+            initialText: '{s name="listing/emotion"}Emotion URLs{/s}',
+            progressText: '{s name="progress/emotion"}[0] of [1] emotion urls{/s}',
             requestUrl: '{url controller="Seo" action="seoEmotion"}'
         },
         blog: {
-            initialText: '{s name=listing/blog}Blog URLs{/s}',
-            progressText: '{s name=progress/blog}[0] of [1] blog urls{/s}',
+            initialText: '{s name="listing/blog"}Blog URLs{/s}',
+            progressText: '{s name="progress/blog"}[0] of [1] blog urls{/s}',
             requestUrl: '{url controller="Seo" action="seoBlog"}'
         },
         static: {
-            initialText: '{s name=listing/static}Static URLs{/s}',
-            progressText: '{s name=progress/static}[0] of [1] static urls{/s}',
+            initialText: '{s name="listing/static"}Static URLs{/s}',
+            progressText: '{s name="progress/static"}[0] of [1] static urls{/s}',
             requestUrl: '{url controller="Seo" action="seoStatic"}'
         },
         content: {
-            initialText: '{s name=listing/content}Content URLs{/s}',
-            progressText: '{s name=progress/content}[0] of [1] content urls{/s}',
+            initialText: '{s name="listing/content"}Content URLs{/s}',
+            progressText: '{s name="progress/content"}[0] of [1] content urls{/s}',
             requestUrl: '{url controller="Seo" action="seoContent"}'
         },
         supplier: {
-            initialText: '{s name=listing/supplier}Supplier URLs{/s}',
-            progressText: '{s name=progress/supplier}[0] of [1] supplier urls{/s}',
+            initialText: '{s name="listing/supplier"}Supplier URLs{/s}',
+            progressText: '{s name="progress/supplier"}[0] of [1] supplier urls{/s}',
             requestUrl: '{url controller="Seo" action="seoSupplier"}'
         },
         contentType: {
-            initialText: '{s name=listing/contentTypes}{/s}',
-            progressText: '{s name=progress/contentTypes}{/s}',
+            initialText: '{s name="listing/contentTypes"}{/s}',
+            progressText: '{s name="progress/contentTypes"}{/s}',
             requestUrl: '{url controller="Seo" action="seoContentType"}'
         }
     },
 
     httpCache: {
         category: {
-            providerLabel: '{s name=progress/categoryLabel}Categories{/s}',
+            providerLabel: '{s name="progress/categoryLabel"}Categories{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=category}',
         },
         emotion: {
-            providerLabel: '{s name=progress/emotionLabel}Shopping Worlds{/s}',
+            providerLabel: '{s name="progress/emotionLabel"}Shopping Worlds{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=emotion}',
         },
         blog: {
-            providerLabel: '{s name=progress/blogLabel}Blogs{/s}',
+            providerLabel: '{s name="progress/blogLabel"}Blogs{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=blog}',
         },
         manufacturer: {
-            providerLabel: '{s name=progress/manufacturerLabel}Suppliers{/s}',
+            providerLabel: '{s name="progress/manufacturerLabel"}Suppliers{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=manufacturer}',
         },
         static: {
-            providerLabel: '{s name=progress/staticLabel}Static Pages{/s}',
+            providerLabel: '{s name="progress/staticLabel"}Static Pages{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=static}',
         },
         product: {
-            providerLabel: '{s name=progress/productLabel}Products{/s}',
+            providerLabel: '{s name="progress/productLabel"}Products{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=product}',
         },
         variantswitch: {
-            providerLabel: '{s name=progress/variantSwitchLabel}Variant switch{/s}',
+            providerLabel: '{s name="progress/variantSwitchLabel"}Variant switch{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=variantswitch}',
         },
         productwithnumber: {
-            providerLabel: '{s name=progress/productWithNumberLabel}Products with product number{/s}',
+            providerLabel: '{s name="progress/productWithNumberLabel"}Products with product number{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=productwithnumber}',
         },
         productwithcategory: {
-            providerLabel: '{s name=progress/productWithCategoryLabel}Products with category parameter{/s}',
+            providerLabel: '{s name="progress/productWithCategoryLabel"}Products with category parameter{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=productwithcategory}',
         },
         form: {
-            providerLabel: '{s name=progress/formsLabel}Contact forms{/s}',
+            providerLabel: '{s name="progress/formsLabel"}Contact forms{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=form}',
         }
     },
@@ -165,9 +165,9 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
      * @object
      */
     snippets: {
-        cancel: '{s name=progress/cancel}Cancel process{/s}',
-        start: '{s name=progress/start}Start process{/s}',
-        close: '{s name=progress/close}Close window{/s}'
+        cancel: '{s name="progress/cancel"}Cancel process{/s}',
+        start: '{s name="progress/start"}Start process{/s}',
+        close: '{s name="progress/close"}Close window{/s}'
     },
 
     /**
@@ -286,7 +286,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     createHttpCacheWarmerItems: function() {
         var me = this;
 
-        me.progressBar = me.createProgressBar('httpCache', '{s name=progress/initialProgressbar}{/s}');
+        me.progressBar = me.createProgressBar('httpCache', '{s name="progress/initialProgressbar"}{/s}');
 
         return [
             {
@@ -402,7 +402,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     createSettingsInfoText: function() {
         return {
             xtype: 'container',
-            html: '<span class="x-form-item-label" style="margin-top: 0;margin-bottom: 10px;">{s name=listing/optionsLabel}{/s}</span>',
+            html: '<span class="x-form-item-label" style="margin-top: 0;margin-bottom: 10px;">{s name="listing/optionsLabel"}{/s}</span>',
             columnWidth: 1,
             flex: 0.5
         };
@@ -486,8 +486,8 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         var me = this;
 
         me.concurrencySizeCombo = Ext.create('Ext.form.ComboBox', {
-            fieldLabel: '{s name=multi_request/concurrency/label}Concurrency{/s}',
-            helpText: '{s name=multi_request/concurrency/help}How many URLs should be requested in parallel? Default: 2{/s}',
+            fieldLabel: '{s name="multi_request/concurrency/label"}Concurrency{/s}',
+            helpText: '{s name="multi_request/concurrency/help"}How many URLs should be requested in parallel? Default: 2{/s}',
             name: 'concurrencySize',
             margin: '0 0 10 0',
             allowBlank: false,
@@ -497,7 +497,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             validator: function (value) {
                 if (value > me.batchSizeCombo.getValue()) {
                     me.startButton.disable();
-                    return '{s name=multi_request/concurrency/field_error}The Concurrency field can not have a greater value than the Batch size field{/s}';
+                    return '{s name="multi_request/concurrency/field_error"}The Concurrency field can not have a greater value than the Batch size field{/s}';
                 }
                 me.batchSizeCombo.clearInvalid();
 
@@ -533,8 +533,8 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         var me = this;
 
         me.batchSizeCombo = Ext.create('Ext.form.ComboBox', {
-            fieldLabel: '{s name=multi_request/batch/label}Batch size{/s}',
-            helpText: '{s name=multi_request/batch/help}How many records should be processed per request? Default: 5000{/s}',
+            fieldLabel: '{s name="multi_request/batch/label"}Batch size{/s}',
+            helpText: '{s name="multi_request/batch/help"}How many records should be processed per request? Default: 5000{/s}',
             name: 'batchSize',
             margin: '0 0 10 0',
             allowBlank: false,
@@ -544,7 +544,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             validator: function (value) {
                 if (value < me.concurrencySizeCombo.getValue()) {
                     me.startButton.disable();
-                    return '{s name=multi_request/concurrency/field_error}The Concurrency field can not have a greater value than the Batch size field{/s}';
+                    return '{s name="multi_request/concurrency/field_error"}The Concurrency field can not have a greater value than the Batch size field{/s}';
                 }
                 me.concurrencySizeCombo.clearInvalid();
 
@@ -613,7 +613,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                 if (me.currentType === 'seo') {
                     me.fireEvent('startSeoIndex', me);
                 } else if (me.currentType === 'httpCacheWarmer') {
-                    Ext.Msg.confirm('{s name=progress/confirmCacheClearTitle}{/s}', '{s name=progress/confirmCacheClearText}{/s}', function (response) {
+                    Ext.Msg.confirm('{s name="progress/confirmCacheClearTitle"}{/s}', '{s name="progress/confirmCacheClearText"}{/s}', function (response) {
                         if (response === 'yes') { // Clear cache and start
                             me.clearHttpCacheAndStart();
                         } else if(response === 'no') { // Just start

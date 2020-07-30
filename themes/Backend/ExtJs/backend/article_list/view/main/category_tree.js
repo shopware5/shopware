@@ -21,13 +21,13 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/view/main/category_tree"}
 Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.multi-edit-category-tree',
     layout: 'fit',
-    title: '{s name=categories}Categories{/s}',
+    title: '{s name="categories"}Categories{/s}',
 
     initComponent: function () {
         var me = this;
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
             items: [
                 {
                     xtype: 'checkbox',
-                    boxLabel: '{s name=list/Variants}Show variants{/s}',
+                    boxLabel: '{s name="list/Variants"}Show variants{/s}',
                     name: 'displayVariants',
                     uncheckedValue: false,
                     inputValue: true,
@@ -124,7 +124,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
             flex: 1,
             store: me.categoryStore,
             root: {
-                text: '{s name=categories}Categories{/s}',
+                text: '{s name="categories"}Categories{/s}',
                 expanded: true
             },
             listeners: {

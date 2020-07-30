@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/main}
+//{namespace name="backend/config/view/main"}
 
 //{block name="backend/config/view/base/search"}
 Ext.define('Shopware.apps.Config.view.base.Search', {
@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Config.view.base.Search', {
     name:'searchfield',
     cls:'searchfield',
     width:100,
-    emptyText:'{s name=search/empty_text}Search...{/s}',
+    emptyText:'{s name="search/empty_text"}Search...{/s}',
     enableKeyEvents:true,
     checkChangeBuffer:500
 });

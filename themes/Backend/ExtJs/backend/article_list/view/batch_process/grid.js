@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/view/batch_process/grid"}
 Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
     extend: 'Ext.grid.Panel',
@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
 
         buttons.push(
             Ext.create('Ext.button.Button', {
-                text: '{s name=add}Add{/s}',
+                text: '{s name="add"}Add{/s}',
                 action: 'addRow',
                 name: 'addRow',
                 iconCls:'sprite-plus-circle-frame',
@@ -174,7 +174,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
                 {
                     iconCls: 'sprite-minus-circle-frame',
                     action: 'deleteFilter',
-                    tooltip: '{s name=deleteFilter}Delete filter{/s}',
+                    tooltip: '{s name="deleteFilter"}Delete filter{/s}',
                     handler: function (view, rowIndex, colIndex, item, e) {
                         me.fireEvent('deleteRow', rowIndex);
                     }

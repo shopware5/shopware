@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Button which triggers the multi request dialog

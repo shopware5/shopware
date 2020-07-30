@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/emotion/view/components/content_type}
+//{namespace name="backend/emotion/view/components/content_type"}
 //{block name="backend/emotion/store/content_type_mode"}
 Ext.define('Shopware.apps.Emotion.store.ContentTypeMode', {
     extend: 'Ext.data.Store',

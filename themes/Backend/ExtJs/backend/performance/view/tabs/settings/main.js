@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 //{block name="backend/performance/view/tabs/settings/main"}
 Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
     alias: 'widget.performance-tabs-settings-main',
 
     // Title of the panel shown in the tab
-    title: '{s name=tabs/settings/title}Settings{/s}',
+    title: '{s name="tabs/settings/title"}Settings{/s}',
 
     // Define the layout of the panel to be a border layout
     layout: 'border',
@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
      */
     getButtons: function() {
         return ['->', {
-            text: '{s name=settings/buttons/save}Save{/s}',
+            text: '{s name="settings/buttons/save"}Save{/s}',
             action: 'save-settings',
             cls: 'primary'
         }];

@@ -15,21 +15,21 @@ Ext.define('Shopware.apps.MailLog.view.list.MailLog', {
         return {
             columns: {
                 subject: {
-                    header: '{s name=listing_column_header_subject}{/s}',
+                    header: '{s name="listing_column_header_subject"}{/s}',
                     flex: 2
                 },
                 sentAt: {
-                    header: '{s name=listing_column_header_date}{/s}',
+                    header: '{s name="listing_column_header_date"}{/s}',
                     flex: 1,
                     renderer: me.dateColumnRenderer
                 },
                 sender: {
-                    header: '{s name=listing_column_header_sender}{/s}',
+                    header: '{s name="listing_column_header_sender"}{/s}',
                     flex: 1,
                     renderer: me.contactColumnRenderer
                 },
                 recipients: {
-                    header: '{s name=listing_column_header_recipients}{/s}',
+                    header: '{s name="listing_column_header_recipients"}{/s}',
                     flex: 2,
                     renderer: me.contactColumnRenderer
                 }
@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.MailLog.view.list.MailLog', {
         /*{if {acl_is_allowed privilege=resend}}*/
         items.unshift({
             action: 'resendMail',
-            tooltip: '{s name=listing_column_action_resend}{/s}',
+            tooltip: '{s name="listing_column_action_resend"}{/s}',
             width: 30,
             iconCls: 'sprite-mail-send',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.MailLog.view.list.MailLog', {
         /*{if {acl_is_allowed resource=order privilege=read}}*/
         items.unshift({
             action: 'openOrder',
-            tooltip: '{s name=listing_column_action_open_order}{/s}',
+            tooltip: '{s name="listing_column_action_open_order"}{/s}',
             width: 30,
             iconCls: 'sprite-sticky-notes-pin',
             handler: function (view, rowIndex, colIndex, item, opts, record) {

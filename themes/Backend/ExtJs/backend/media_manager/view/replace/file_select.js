@@ -22,7 +22,7 @@
  *
  */
 
-//{namespace name=backend/media_manager/view/replace}
+//{namespace name="backend/media_manager/view/replace"}
 //{block name="backend/media_manager/view/replace/FileSelect"}
 Ext.define('Shopware.apps.MediaManager.view.replace.FileSelect', {
     extend: 'Ext.form.field.File',

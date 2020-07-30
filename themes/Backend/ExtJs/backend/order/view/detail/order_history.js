@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order list backend module
@@ -68,12 +68,12 @@ Ext.define('Shopware.apps.Order.view.detail.OrderHistory', {
      */
     snippets:{
         columns: {
-            user: '{s name=column/user}User{/s}',
-            changeDate: '{s name=column/change_date}Change date{/s}',
-            previousOrderStatus: '{s name=column/previous_order_status}Previous order status{/s}',
-            orderStatus: '{s name=column/order_status}Current order status{/s}',
-            previousPaymentStatus: '{s name=column/previous_payment_status}Previous payment status{/s}',
-            paymentStatus: '{s name=column/payment_status}Current payment status{/s}'
+            user: '{s name="column/user"}User{/s}',
+            changeDate: '{s name="column/change_date"}Change date{/s}',
+            previousOrderStatus: '{s name="column/previous_order_status"}Previous order status{/s}',
+            orderStatus: '{s name="column/order_status"}Current order status{/s}',
+            previousPaymentStatus: '{s name="column/previous_payment_status"}Previous payment status{/s}',
+            paymentStatus: '{s name="column/payment_status"}Current payment status{/s}'
         }
     },
 

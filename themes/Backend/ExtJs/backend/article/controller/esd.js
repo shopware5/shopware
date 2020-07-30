@@ -30,7 +30,7 @@
 /**
  * Shopware Controller - Article backend module
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/controller/esd"}
 Ext.define('Shopware.apps.Article.controller.Esd', {
     /**
@@ -60,30 +60,30 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
      * @object
      */
     snippets: {
-        growlMessage: '{s name=growl_message}Article{/s}',
-        addSerialsTitle: '{s name=esd/add_serials_title}Add Serials{/s}',
+        growlMessage: '{s name="growl_message"}Article{/s}',
+        addSerialsTitle: '{s name="esd/add_serials_title"}Add Serials{/s}',
         error: {
-            title: '{s name=esd/error/title}Error{/s}',
-            noFolder: '{s name=esd/error/no_folder}The ESD folder could not be found.{/s}'
+            title: '{s name="esd/error/title"}Error{/s}',
+            noFolder: '{s name="esd/error/no_folder"}The ESD folder could not be found.{/s}'
         },
         success: {
-            title: '{s name=esd/success/title}Success{/s}',
-            esdSaved: '{s name=esd/success/esd_saved}The ESD has been saved.{/s}',
-            esdCreated: '{s name=esd/success/esd_created}The ESD has been created.{/s}',
-            esdRemoved: '{s name=esd/success/esd_removed}The selected ESDs have been removed{/s}',
-            serialsAdded: '{s name=esd/success/serials_added}Serialnumbers have been added{/s}',
-            unusedSerialsRemoved: '{s name=esd/success/unused_serials_removed}All unused serialnumbers have been removed{/s}',
-            serialRemoved: '{s name=esd/success/serial_removed}The selected serialnumbers have been removed{/s}'
+            title: '{s name="esd/success/title"}Success{/s}',
+            esdSaved: '{s name="esd/success/esd_saved"}The ESD has been saved.{/s}',
+            esdCreated: '{s name="esd/success/esd_created"}The ESD has been created.{/s}',
+            esdRemoved: '{s name="esd/success/esd_removed"}The selected ESDs have been removed{/s}',
+            serialsAdded: '{s name="esd/success/serials_added"}Serialnumbers have been added{/s}',
+            unusedSerialsRemoved: '{s name="esd/success/unused_serials_removed"}All unused serialnumbers have been removed{/s}',
+            serialRemoved: '{s name="esd/success/serial_removed"}The selected serialnumbers have been removed{/s}'
         },
         messages: {
-            esdRemove: '{s name=esd/message/remove_esd}Are you sure you want to delete the selected ESD(s)?{/s}',
-            serialsRemoveUnused: '{s name=esd/message/remove_unused_serials}Are you sure you want to delete all unused serialnumbers?{/s}',
-            serialRemove: '{s name=esd/message/remove_serial}Are you sure you want to delete the selected serialnumber(s)?{/s}',
-            addSerials: '{s name=esd/message/add_serials}Add new Serials (separated by newlines){/s}'
+            esdRemove: '{s name="esd/message/remove_esd"}Are you sure you want to delete the selected ESD(s)?{/s}',
+            serialsRemoveUnused: '{s name="esd/message/remove_unused_serials"}Are you sure you want to delete all unused serialnumbers?{/s}',
+            serialRemove: '{s name="esd/message/remove_serial"}Are you sure you want to delete the selected serialnumber(s)?{/s}',
+            addSerials: '{s name="esd/message/add_serials"}Add new Serials (separated by newlines){/s}'
         },
         buttons: {
-            addSerials: '{s name=esd/buttons/add_serials}Add serials{/s}',
-            cancel: '{s name=esd/message/cancel}Cancel{/s}'
+            addSerials: '{s name="esd/buttons/add_serials"}Add serials{/s}',
+            cancel: '{s name="esd/message/cancel"}Cancel{/s}'
         }
     },
 

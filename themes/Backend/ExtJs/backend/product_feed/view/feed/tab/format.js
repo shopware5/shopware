@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/product_feed/view/feed}
+//{namespace name="backend/product_feed/view/feed"}
 
 /**
  * Shopware UI - Tab View.
@@ -38,7 +38,7 @@
 Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Format', {
     extend:'Ext.container.Container',
     alias:'widget.product_feed-feed-tab-format',
-    title:'{s name=tab/title/format}Format{/s}',
+    title:'{s name="tab/title/format"}Format{/s}',
     border: 0,
     padding: 10,
     cls: 'shopware-toolbar',
@@ -54,10 +54,10 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Format', {
         [2, 'UTF-8']
     ],
     fileFormat:[
-        [1, '{s name=detail_format/field/file_format_csv}CSV{/s}'],
-        [2, '{s name=detail_format/field/file_format_txt_tab}TXT with tab delimiter{/s}'],
-        [3, '{s name=detail_format/field/file_format_XML}XML{/s}'],
-        [4, '{s name=detail_format/field/file_format_txt_pipe}TXT with pipe delimiter{/s}']
+        [1, '{s name="detail_format/field/file_format_csv"}CSV{/s}'],
+        [2, '{s name="detail_format/field/file_format_txt_tab"}TXT with tab delimiter{/s}'],
+        [3, '{s name="detail_format/field/file_format_XML"}XML{/s}'],
+        [4, '{s name="detail_format/field/file_format_txt_pipe"}TXT with pipe delimiter{/s}']
     ],
     /**
      * Initialize the Shopware.apps.ProductFeed.view.feed.detail and defines the necessary
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Format', {
         return [
             {
                 name:'encodingId',
-                fieldLabel:'{s name=detail_format/field/encoding}Encoding{/s}',
+                fieldLabel:'{s name="detail_format/field/encoding"}Encoding{/s}',
                 store:new Ext.data.SimpleStore({
                     fields:['id', 'text'], data:me.encoding
                 }),
@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Format', {
             },
             {
                 name:'formatId',
-                fieldLabel:'{s name=detail_format/field/file_format}File format{/s}',
+                fieldLabel:'{s name="detail_format/field/file_format"}File format{/s}',
                 store:new Ext.data.SimpleStore({
                     fields:['id', 'text'], data:me.fileFormat
                 }),

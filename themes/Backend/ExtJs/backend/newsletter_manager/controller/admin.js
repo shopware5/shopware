@@ -44,36 +44,36 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
 
     snippets: {
         saveRecipient: {
-            successTitle: '{s name=saveRecipient/successTitle}Successfully saved{/s}',
-            successMessage: '{s name=saveRecipient/successMessage}Successfully saved the recipient{/s}',
-            errorTitle: '{s name=saveRecipient/errorTitle}Error{/s}',
-            errorMessage: '{s name=saveRecipient/errorMessage}An error occured while saving the recipient{/s}'
+            successTitle: '{s name="saveRecipient/successTitle"}Successfully saved{/s}',
+            successMessage: '{s name="saveRecipient/successMessage"}Successfully saved the recipient{/s}',
+            errorTitle: '{s name="saveRecipient/errorTitle"}Error{/s}',
+            errorMessage: '{s name="saveRecipient/errorMessage"}An error occured while saving the recipient{/s}'
         },
         saveSender: {
-            successTitle: '{s name=createSender/successTitle}Successfully saved{/s}',
-            successMessage: '{s name=createSender/successMessage}Successfully saved the sender{/s}',
-            errorTitle: '{s name=createSender/errorTitle}Error{/s}',
-            errorMessage: '{s name=createSender/errorMessage}An error occured while saving the sender{/s}'
+            successTitle: '{s name="createSender/successTitle"}Successfully saved{/s}',
+            successMessage: '{s name="createSender/successMessage"}Successfully saved the sender{/s}',
+            errorTitle: '{s name="createSender/errorTitle"}Error{/s}',
+            errorMessage: '{s name="createSender/errorMessage"}An error occured while saving the sender{/s}'
         },
         saveNewsletterGroup: {
-            successTitle: '{s name=saveNewsletterGroup/successTitle}Successfully saved{/s}',
-            successMessage: '{s name=saveNewsletterGroup/successMessage}Successfully saved the newsletter group{/s}',
-            errorTitle: '{s name=saveNewsletterGroup/errorTitle}Error{/s}',
-            errorMessage: '{s name=saveNewsletterGroup/errorMessage}An error occured while saving the newsletter group{/s}'
+            successTitle: '{s name="saveNewsletterGroup/successTitle"}Successfully saved{/s}',
+            successMessage: '{s name="saveNewsletterGroup/successMessage"}Successfully saved the newsletter group{/s}',
+            errorTitle: '{s name="saveNewsletterGroup/errorTitle"}Error{/s}',
+            errorMessage: '{s name="saveNewsletterGroup/errorMessage"}An error occured while saving the newsletter group{/s}'
         },
         deleteSender: {
-            successTitle: '{s name=deleteSender/successTitle}Successfully deleted{/s}',
-            successMessage: '{s name=deleteSender/successMessage}Successfully deleted sender{/s}',
-            errorTitle: '{s name=deleteSender/errorTitle}Error{/s}',
-            errorMessage: '{s name=deleteSender/errorMessage}An error occured while deleting the sender{/s}'
+            successTitle: '{s name="deleteSender/successTitle"}Successfully deleted{/s}',
+            successMessage: '{s name="deleteSender/successMessage"}Successfully deleted sender{/s}',
+            errorTitle: '{s name="deleteSender/errorTitle"}Error{/s}',
+            errorMessage: '{s name="deleteSender/errorMessage"}An error occured while deleting the sender{/s}'
         },
         deleteRecipient: {
-            successTitle: '{s name=deleteRecipient/successTitle}Successfully deleted{/s}',
-            successMessage: '{s name=deleteRecipient/successMessage}Successfully deleted recipient(s){/s}',
-            errorTitle: '{s name=deleteRecipient/errorTitle}Error{/s}',
-            errorMessage: '{s name=deleteRecipient/errorMessage}An error occured while deleting the recipient(s){/s}'
+            successTitle: '{s name="deleteRecipient/successTitle"}Successfully deleted{/s}',
+            successMessage: '{s name="deleteRecipient/successMessage"}Successfully deleted recipient(s){/s}',
+            errorTitle: '{s name="deleteRecipient/errorTitle"}Error{/s}',
+            errorMessage: '{s name="deleteRecipient/errorMessage"}An error occured while deleting the recipient(s){/s}'
         },
-    growl: '{s name=title}Newsletter Manager{/s}'
+    growl: '{s name="title"}Newsletter Manager{/s}'
     },
 
     /**
@@ -177,7 +177,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
         if(!records.length > 0) {
             return;
         }
-        Ext.MessageBox.confirm('{s name=deleteRecipientGroupTitle}Delete recipient group(s){/s}', '{s name=deleteRecipientGroupMessage}Do you really want to delete the selected recipient group(s)?{/s}', function (response) {
+        Ext.MessageBox.confirm('{s name="deleteRecipientGroupTitle"}Delete recipient group(s){/s}', '{s name="deleteRecipientGroupMessage"}Do you really want to delete the selected recipient group(s)?{/s}', function (response) {
             if ( response !== 'yes' ) {
                 return;
             }
@@ -196,12 +196,12 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
         var me = this,
             found, record;
 
-        Ext.MessageBox.prompt('{s name=newGroup}Create new newsletter group{/s}', '{s name=enterNameOfGroup}Please enter the name of the new group{/s}', function(btn, newGroupName) {
+        Ext.MessageBox.prompt('{s name="newGroup"}Create new newsletter group{/s}', '{s name="enterNameOfGroup"}Please enter the name of the new group{/s}', function(btn, newGroupName) {
             if(btn == 'ok' && newGroupName != '') {
                 // Make sure that there is no group with this name
                 found = store.find('name', newGroupName, caseSensitive=false);
                 if(found != -1){
-                    Shopware.Notification.createGrowlMessage('{s name=alreadyExisting}Already existing{/s}', '{s name=groupAlreadyExisting}A group with this name is already existing{/s}', me.snippets.growl);
+                    Shopware.Notification.createGrowlMessage('{s name="alreadyExisting"}Already existing{/s}', '{s name="groupAlreadyExisting"}A group with this name is already existing{/s}', me.snippets.growl);
                     return;
                 }
 
@@ -294,7 +294,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
             return;
         }
 
-        Ext.MessageBox.confirm('{s name=deleteRecipientTitle}Delete recipient(s){/s}', '{s name=deleteRecipientMessage}Do you really want to delete the selected recipient(s)?{/s}', function (response) {
+        Ext.MessageBox.confirm('{s name="deleteRecipientTitle"}Delete recipient(s){/s}', '{s name="deleteRecipientMessage"}Do you really want to delete the selected recipient(s)?{/s}', function (response) {
             if ( response !== 'yes' ) {
                 return;
             }
@@ -399,7 +399,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
             return;
         }
 
-        Ext.MessageBox.confirm('{s name=deleteSenderTitle}Delete sender{/s}', '{s name=deleteSenderMessage}Do you really want to delete the selected senders?{/s}', function (response) {
+        Ext.MessageBox.confirm('{s name="deleteSenderTitle"}Delete sender{/s}', '{s name="deleteSenderMessage"}Do you really want to delete the selected senders?{/s}', function (response) {
             if ( response !== 'yes' ) {
                 return;
             }

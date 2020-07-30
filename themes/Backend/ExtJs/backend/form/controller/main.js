@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/form/controller/main}
+//{namespace name="backend/form/controller/main"}
 
 /**
  * todo@all: Documentation
@@ -158,9 +158,9 @@ Ext.define('Shopware.apps.Form.controller.Main', {
         var store  = grid.getStore(),
             record = store.getAt(rowIndex);
 
-        var message = Ext.String.format('{s name=dialog_copy_form_message}Are you sure you want to duplicate the selected form ([0])?{/s}', record.get('name'));
+        var message = Ext.String.format('{s name="dialog_copy_form_message"}Are you sure you want to duplicate the selected form ([0])?{/s}', record.get('name'));
 
-        Ext.MessageBox.confirm('{s name=dialog_copy_form_title}Duplicate form{/s}', message, function (response) {
+        Ext.MessageBox.confirm('{s name="dialog_copy_form_title"}Duplicate form{/s}', message, function (response) {
             if (response !== 'yes') {
                 return false;
             }
@@ -185,9 +185,9 @@ Ext.define('Shopware.apps.Form.controller.Main', {
         var store  = grid.getStore(),
             record = store.getAt(rowIndex);
 
-        var message = Ext.String.format('{s name=dialog_delete_form_message}Are you sure you want to delete the selected form ([0])?{/s}', record.get('name'));
+        var message = Ext.String.format('{s name="dialog_delete_form_message"}Are you sure you want to delete the selected form ([0])?{/s}', record.get('name'));
 
-        Ext.MessageBox.confirm('{s name=dialog_delete_form_title}Delete form{/s}', message, function (response) {
+        Ext.MessageBox.confirm('{s name="dialog_delete_form_title"}Delete form{/s}', message, function (response) {
             if (response !== 'yes') {
                 return false;
             }
@@ -300,9 +300,9 @@ Ext.define('Shopware.apps.Form.controller.Main', {
             selected = sm.selected.items,
             store = grid.getStore();
 
-        var message = Ext.String.format('{s name=dialog_delete_forms_message}Are you sure you want to delete the selected forms?{/s}');
+        var message = Ext.String.format('{s name="dialog_delete_forms_message"}Are you sure you want to delete the selected forms?{/s}');
 
-        Ext.MessageBox.confirm('{s name=dialog_delete_forms_title}Delete forms{/s}', message, function (response) {
+        Ext.MessageBox.confirm('{s name="dialog_delete_forms_title"}Delete forms{/s}', message, function (response) {
             if (response !== 'yes') {
                 return false;
             }

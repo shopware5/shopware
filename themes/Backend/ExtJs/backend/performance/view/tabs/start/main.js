@@ -21,13 +21,13 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 //{block name="backend/performance/view/tabs/start"}
 Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.performance-tabs-start-main',
-    title: '{s name=tabs/start/title}{/s}',
+    title: '{s name="tabs/start/title"}{/s}',
     cls: 'performance-view-start',
     bodyCls: 'performance-view-start-body',
 
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
         var me = this;
 
         return ['->', {
-            text: '{s name=form/buttons/clear_all}{/s}',
+            text: '{s name="form/buttons/clear_all"}{/s}',
             action: 'clear-all',
             cls: 'primary'
         }];
@@ -92,11 +92,11 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
         var me = this;
 
         var clearText = '';
-        clearText += '{s name=tabs/start/info_text_clear_all}{/s}:<br/>';
+        clearText += '{s name="tabs/start/info_text_clear_all"}{/s}:<br/>';
         clearText += '<ul>';
-        clearText += '<li>{s name=tabs/start/info_text_clear_all_line1}{/s}</li>';
-        clearText += '<li>{s name=tabs/start/info_text_clear_all_line3}{/s}</li>';
-        clearText += '<li>{s name=tabs/start/info_text_clear_all_line4}{/s}</li>';
+        clearText += '<li>{s name="tabs/start/info_text_clear_all_line1"}{/s}</li>';
+        clearText += '<li>{s name="tabs/start/info_text_clear_all_line3"}{/s}</li>';
+        clearText += '<li>{s name="tabs/start/info_text_clear_all_line4"}{/s}</li>';
         clearText += '</ul>';
 
         me.radioGroup = me.createRadioGroup();
@@ -122,10 +122,10 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
         return Ext.create('Ext.form.RadioGroup', {
             columns : 1,
             items   : [
-                { name: 'productiveMode', inputValue: true, boxLabel: '<b>{s name=tabs/start/production_mode_title}{/s}</b>'/*{if !{acl_is_allowed privilege=update}}*/, disabled: true/*{/if}*/ },
-                { xtype: 'component', cls:'component-first', html: '{s name=tabs/start/production_mode_description}{/s}'},
-                { name: 'productiveMode', inputValue: false, boxLabel: '<b>{s name=tabs/start/development_mode_title}{/s}</b>'/*{if !{acl_is_allowed privilege=update}}*/, disabled: true/*{/if}*/ },
-                { xtype: 'component', html: '{s name=tabs/start/development_mode_description}{/s}' }
+                { name: 'productiveMode', inputValue: true, boxLabel: '<b>{s name="tabs/start/production_mode_title"}{/s}</b>'/*{if !{acl_is_allowed privilege=update}}*/, disabled: true/*{/if}*/ },
+                { xtype: 'component', cls:'component-first', html: '{s name="tabs/start/production_mode_description"}{/s}'},
+                { name: 'productiveMode', inputValue: false, boxLabel: '<b>{s name="tabs/start/development_mode_title"}{/s}</b>'/*{if !{acl_is_allowed privilege=update}}*/, disabled: true/*{/if}*/ },
+                { xtype: 'component', html: '{s name="tabs/start/development_mode_description"}{/s}' }
             ],
             listeners: {
                 change: function (elem, newValue, oldValue) {

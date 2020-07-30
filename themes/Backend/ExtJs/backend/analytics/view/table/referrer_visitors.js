@@ -29,12 +29,12 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/referrer_visitors"}
 Ext.define('Shopware.apps.Analytics.view.table.ReferrerVisitors', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-referrer_visitors',
-    shopColumnName: '{s name=nav/visitor_source}Visitor access source{/s}',
+    shopColumnName: '{s name="nav/visitor_source"}Visitor access source{/s}',
 
     initComponent: function () {
         var me = this;
@@ -75,21 +75,21 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerVisitors', {
         return [
             {
                 dataIndex: 'count',
-                text: '{s name=table/referrer_visitors/count}Count{/s}'
+                text: '{s name="table/referrer_visitors/count"}Count{/s}'
             },
             {
                 dataIndex: 'referrer',
                 flex: 2,
-                text: '{s name=table/referrer_visitors/referrer}Referrer{/s}'
+                text: '{s name="table/referrer_visitors/referrer"}Referrer{/s}'
             },
             {
                 xtype: 'actioncolumn',
-                text: '{s name=table/referrer_visitors/options}Optionen{/s}',
+                text: '{s name="table/referrer_visitors/options"}Optionen{/s}',
                 items: [
                     {
                         action: 'viewSearchTerms',
                         iconCls: 'sprite-magnifier',
-                        tooltip: '{s name=table/referrer_visitors/search_terms_tip}Display search terms of this referrer{/s}',
+                        tooltip: '{s name="table/referrer_visitors/search_terms_tip"}Display search terms of this referrer{/s}',
                         handler: function (grid, rowIndex, colIndex) {
                             me.fireEvent('viewSearchTerms', grid, rowIndex, colIndex);
                         }
@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerVisitors', {
                     {
                         action: 'viewSearchUrl',
                         iconCls: 'sprite-application',
-                        tooltip: '{s name=table/referrer_visitors/search_links_tip}Display search links{/s}',
+                        tooltip: '{s name="table/referrer_visitors/search_links_tip"}Display search links{/s}',
                         handler: function (grid, rowIndex, colIndex) {
                             me.fireEvent('viewSearchUrl', grid, rowIndex, colIndex);
                         }

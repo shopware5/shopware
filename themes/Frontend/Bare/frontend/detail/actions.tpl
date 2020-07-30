@@ -23,7 +23,7 @@
 {/block}
 
 {block name='frontend_detail_actions_review'}
-    {if !{config name=VoteDisable}}
+    {if !{config name="VoteDisable"}}
         {s name="DetailLinkReview" assign="snippetDetailLinkReview"}{/s}
         <a href="#content--product-reviews" data-show-tab="true" class="action--link link--publish-comment" rel="nofollow" title="{$snippetDetailLinkReview|escape}">
             <i class="icon--star"></i> {s name="DetailLinkReviewShort"}{/s}
@@ -32,7 +32,7 @@
 {/block}
 
 {block name='frontend_detail_actions_voucher'}
-    {if {config name=showTellAFriend}}
+    {if {config name="showTellAFriend"}}
         {s name="DetailLinkVoucher" assign="snippetDetailLinkVoucher"}{/s}
         <a href="{$sArticle.linkTellAFriend}" rel="nofollow" title="{$snippetDetailLinkVoucher|escape}" class="action--link link--tell-a-friend">
             <i class="icon--comment"></i> {s name="DetailLinkVoucherShort"}{/s}

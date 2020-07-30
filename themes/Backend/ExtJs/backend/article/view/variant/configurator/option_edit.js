@@ -35,7 +35,7 @@
  * @package Article
  * @subpackage Detail
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/variant/configurator/option_edit"}
 Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
     /**
@@ -77,10 +77,10 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
      * @object
      */
     snippets: {
-        title: '{s name=variant/configurator/option_edit/save_title}Edit option:{/s}',
-        save: '{s name=variant/configurator/sets/save}Save{/s}',
-        cancel: '{s name=variant/configurator/sets/cancel}Cancel{/s}',
-        nameField: '{s name=variant/configurator/option_edit/name_field}Option name{/s}'
+        title: '{s name="variant/configurator/option_edit/save_title"}Edit option:{/s}',
+        save: '{s name="variant/configurator/sets/save"}Save{/s}',
+        cancel: '{s name="variant/configurator/sets/cancel"}Cancel{/s}',
+        nameField: '{s name="variant/configurator/option_edit/name_field"}Option name{/s}'
     },
 
     attributeTable: 's_article_configurator_options_attributes',

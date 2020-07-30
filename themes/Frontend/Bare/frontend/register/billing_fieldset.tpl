@@ -41,12 +41,12 @@
                 {block name='frontend_register_billing_fieldset_input_vatId'}
                     <div class="register--vatId">
                         <input name="register[billing][vatId]"
-                               type="text" {if {config name=vatCheckRequired}} required="required" aria-required="true"{/if}
-                               placeholder="{s name='RegisterLabelTaxId'}{/s}{if {config name=vatcheckrequired}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
+                               type="text" {if {config name="vatCheckRequired"}} required="required" aria-required="true"{/if}
+                               placeholder="{s name='RegisterLabelTaxId'}{/s}{if {config name="vatcheckrequired"}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                id="register_billing_vatid"
                                value="{$form_data.vatId|escape}"
-                                {if {config name=vatcheckrequired}} required="required" aria-required="true"{/if}
-                               class="register--field{if isset($error_flags.vatId)} has--error{/if}{if {config name=vatcheckrequired}} is--required{/if}"/>
+                                {if {config name="vatcheckrequired"}} required="required" aria-required="true"{/if}
+                               class="register--field{if isset($error_flags.vatId)} has--error{/if}{if {config name="vatcheckrequired"}} is--required{/if}"/>
                     </div>
                 {/block}
 
@@ -82,30 +82,30 @@
 
                 {* Additional Address Line 1 *}
                 {block name='frontend_register_billing_fieldset_input_addition_address_line1'}
-                    {if {config name=showAdditionAddressLine1}}
+                    {if {config name="showAdditionAddressLine1"}}
                         <div class="register--additional-line1">
                             <input autocomplete="section-billing billing address-line2"
                                    name="register[billing][additionalAddressLine1]"
-                                   type="text"{if {config name=requireAdditionAddressLine1}} required="required" aria-required="true"{/if}
-                                   placeholder="{s name='RegisterLabelAdditionalAddressLine1'}{/s}{if {config name=requireAdditionAddressLine1}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
+                                   type="text"{if {config name="requireAdditionAddressLine1"}} required="required" aria-required="true"{/if}
+                                   placeholder="{s name='RegisterLabelAdditionalAddressLine1'}{/s}{if {config name="requireAdditionAddressLine1"}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                    id="additionalAddressLine1"
                                    value="{$form_data.additionalAddressLine1|escape}"
-                                   class="register--field{if {config name=requireAdditionAddressLine1}} is--required{/if}{if isset($error_flags.additionalAddressLine1) && {config name=requireAdditionAddressLine1}} has--error{/if}" />
+                                   class="register--field{if {config name="requireAdditionAddressLine1"}} is--required{/if}{if isset($error_flags.additionalAddressLine1) && {config name="requireAdditionAddressLine1"}} has--error{/if}" />
                         </div>
                     {/if}
                 {/block}
 
                 {* Additional Address Line 2 *}
                 {block name='frontend_register_billing_fieldset_input_addition_address_line2'}
-                    {if {config name=showAdditionAddressLine2}}
+                    {if {config name="showAdditionAddressLine2"}}
                         <div class="register--additional-field2">
                             <input autocomplete="section-billing billing address-line3"
                                    name="register[billing][additionalAddressLine2]"
-                                   type="text"{if {config name=requireAdditionAddressLine2}} required="required" aria-required="true"{/if}
-                                   placeholder="{s name='RegisterLabelAdditionalAddressLine2'}{/s}{if {config name=requireAdditionAddressLine2}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
+                                   type="text"{if {config name="requireAdditionAddressLine2"}} required="required" aria-required="true"{/if}
+                                   placeholder="{s name='RegisterLabelAdditionalAddressLine2'}{/s}{if {config name="requireAdditionAddressLine2"}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                    id="additionalAddressLine2"
                                    value="{$form_data.additionalAddressLine2|escape}"
-                                   class="register--field{if {config name=requireAdditionAddressLine2}} is--required{/if}{if isset($error_flags.additionalAddressLine2) && {config name=requireAdditionAddressLine2}} has--error{/if}" />
+                                   class="register--field{if {config name="requireAdditionAddressLine2"}} is--required{/if}{if isset($error_flags.additionalAddressLine2) && {config name="requireAdditionAddressLine2"}} has--error{/if}" />
                         </div>
                     {/if}
                 {/block}
@@ -113,7 +113,7 @@
                 {* Zip + City *}
                 {block name='frontend_register_billing_fieldset_input_zip_and_city'}
                     <div class="register--zip-city">
-                        {if {config name=showZipBeforeCity}}
+                        {if {config name="showZipBeforeCity"}}
                             <input autocomplete="section-billing billing postal-code"
                                    name="register[billing][zipcode]"
                                    type="text"

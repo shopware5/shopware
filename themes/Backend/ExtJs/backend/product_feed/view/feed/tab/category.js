@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/product_feed/view/feed}
+//{namespace name="backend/product_feed/view/feed"}
 
 /**
  * Shopware UI - ProductFeed detail main window.
@@ -38,7 +38,7 @@
 Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Category', {
     extend:'Ext.container.Container',
     alias:'widget.product_feed-feed-tab-category',
-    title:'{s name=tab/title/category}Blocked categories{/s}',
+    title:'{s name="tab/title/category"}Blocked categories{/s}',
     padding: 10,
     cls: 'shopware-toolbar',
     layout: 'anchor',

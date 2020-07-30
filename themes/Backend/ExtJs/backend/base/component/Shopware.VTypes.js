@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/base/vtype}
+//{namespace name="backend/base/vtype"}
 /**
  * todo@all: Documentation
  */
@@ -38,7 +38,7 @@ Ext.apply(Ext.form.VTypes, {
         }
         return true;
     },
-    passwordText: '{s name=password_match}The inserted passwords are not equal{/s}'
+    passwordText: '{s name="password_match"}The inserted passwords are not equal{/s}'
 });
 
 Ext.apply(Ext.form.field.VTypes, {

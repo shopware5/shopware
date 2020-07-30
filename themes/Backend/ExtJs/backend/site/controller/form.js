@@ -33,7 +33,7 @@
  * This file handles creation and saving of the detail form.
  */
 
-//{namespace name=backend/site/site}
+//{namespace name="backend/site/site"}
 
 //{block name="backend/site/controller/form"}
 Ext.define('Shopware.apps.Site.controller.Form', {
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Site.controller.Form', {
 
         //return if no description or grouping is set
         if (values.description == "" || toStore.first() == null) {
-            Shopware.Notification.createGrowlMessage('','{s name=onSaveGroupAndDescriptionNeeded}You need to select a title and a group{/s}','{s name=mainWindowTitle}{/s}');
+            Shopware.Notification.createGrowlMessage('','{s name="onSaveGroupAndDescriptionNeeded"}You need to select a title and a group{/s}','{s name="mainWindowTitle"}{/s}');
             return;
         }
         var grouping;
@@ -141,14 +141,14 @@ Ext.define('Shopware.apps.Site.controller.Form', {
                 Shopware.app.Application.fireEvent('site-save-successfully', me, record, form);
 
                 form.loadRecord(record);
-                Shopware.Notification.createGrowlMessage('','{s name=onSaveSiteSuccess}The site has been saved successfully.{/s}', '{s name=mainWindowTitle}{/s}');
+                Shopware.Notification.createGrowlMessage('','{s name="onSaveSiteSuccess"}The site has been saved successfully.{/s}', '{s name="mainWindowTitle"}{/s}');
                 me.getStore('Nodes').load();
             },
             failure: function(response) {
                 //get the responseObject
                 var responseObject = Ext.decode(response.data),
                     errorMsg = responseObject.message;
-                Shopware.Notification.createGrowlMessage('','{s name=onSaveSiteError}An error has occurred while trying to save the site: {/s}' + errorMsg,'{s name=mainWindowTitle}{/s}');
+                Shopware.Notification.createGrowlMessage('','{s name="onSaveSiteError"}An error has occurred while trying to save the site: {/s}' + errorMsg,'{s name="mainWindowTitle"}{/s}');
             }
         });
     }

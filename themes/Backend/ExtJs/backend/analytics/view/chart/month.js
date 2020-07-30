@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/chart/month"}
 Ext.define('Shopware.apps.Analytics.view.chart.Month', {
     extend: 'Shopware.apps.Analytics.view.main.Chart',
@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
                 type: 'Time',
                 position: 'bottom',
                 fields: ['normal'],
-                title: '{s name=chart/month/titleBottom}Month{/s}',
+                title: '{s name="chart/month/titleBottom"}Month{/s}',
                 step:[ Ext.Date.MONTH, 1 ],
                 label: {
                     renderer:function (value) {
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
                     {
                         xField: 'normal',
                         yField: 'turnover',
-                        title: '{s name=general/turnover}Turnover{/s}'
+                        title: '{s name="general/turnover"}Turnover{/s}'
                     },
                     {
                         width: 180,
@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
             grid: true,
             position: 'left',
             fields: me.getAxesFields('turnover'),
-            title: '{s name=general/turnover}Turnover{/s}'
+            title: '{s name="general/turnover"}Turnover{/s}'
         });
 
         me.callParent(arguments);

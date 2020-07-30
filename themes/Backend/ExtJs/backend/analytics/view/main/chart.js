@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/main/chart"}
 Ext.define('Shopware.apps.Analytics.view.main.Chart', {
     extend: 'Ext.chart.Chart',
@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
                 },
                 {
                     xtype: 'numbercolumn',
-                    text: '{s name=general/turnover}Turnover{/s}',
+                    text: '{s name="general/turnover"}Turnover{/s}',
                     dataIndex: 'data',
                     align: 'right',
                     flex: 1
@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
         }
 
         if (!defaultTitle) {
-            defaultTitle = '{s name=general/turnover}Turnover{/s}';
+            defaultTitle = '{s name="general/turnover"}Turnover{/s}';
         }
 
         me.shopStore.each(function (shop) {
@@ -137,7 +137,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
 
         // Add total sum to table
         dataTable[dataTable.length] = {
-            name: '{s name=general/turnover}Turnover{/s}',
+            name: '{s name="general/turnover"}Turnover{/s}',
             data: storeItem.get('turnover')
         };
 

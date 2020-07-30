@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-// {namespace name=backend/swag_update/main}
+// {namespace name="backend/swag_update/main"}
 // {block name="backend/swag_update/controller/main"}
 
 Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
@@ -218,7 +218,7 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
     onStartEvent: function(win) {
         var me = this;
 
-        win.setLoading('{s name=check_file_permission/message}Preparing...{/s}');
+        win.setLoading('{s name="check_file_permission/message"}Preparing...{/s}');
 
         Ext.Ajax.request({
             url: '{url controller=SwagUpdate action=isUpdateAllowed}',

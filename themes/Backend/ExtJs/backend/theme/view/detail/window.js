@@ -29,14 +29,14 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/theme/main}
+//{namespace name="backend/theme/main"}
 
 //{block name="backend/theme/view/detail/window"}
 
 Ext.define('Shopware.apps.Theme.view.detail.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.theme-detail-window',
-    title : '{s name=detail_window}Theme details{/s}',
+    title : '{s name="detail_window"}Theme details{/s}',
     height: 600,
     width: 1080,
     layout: {
@@ -136,7 +136,7 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
             name: 'cancel-button',
-            text: '{s name=config_sets}Config sets{/s}',
+            text: '{s name="config_sets"}Config sets{/s}',
             handler: function () {
                 me.fireEvent('load-config-sets', me, me.theme);
             }
@@ -159,7 +159,7 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
             name: 'cancel-button',
-            text: '{s name=cancel}Cancel{/s}',
+            text: '{s name="cancel"}Cancel{/s}',
             handler: function () {
                 me.destroy();
             }
@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
         me.saveButton = Ext.create('Ext.button.Button', {
             cls: 'primary',
             name: 'detail-save-button',
-            text: '{s name=save}Save{/s}',
+            text: '{s name="save"}Save{/s}',
             handler: function () {
                 me.fireEvent(
                     'saveConfig',

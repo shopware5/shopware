@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/first_run_wizard/main}
+//{namespace name="backend/first_run_wizard/main"}
 //{block name="backend/first_run_wizard/view/main/pay_pal"}
 
 Ext.define('Shopware.apps.FirstRunWizard.view.main.PayPal', {
@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.PayPal', {
                 {
                     xtype: 'button',
                     cls: 'primary',
-                    text: '{s name=pay_pal/start/button}{/s}',
+                    text: '{s name="pay_pal/start/button"}{/s}',
                     style: {
                         marginTop: '10px',
                         marginLeft: 0,
@@ -160,30 +160,30 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.PayPal', {
                 {
                     xtype: 'textfield',
                     name: 'clientId',
-                    fieldLabel: '{s name=pay_pal/configuration/client_id/label}{/s}',
+                    fieldLabel: '{s name="pay_pal/configuration/client_id/label"}{/s}',
                     allowBlank: false,
                 }, {
                     xtype: 'textfield',
                     name: 'clientSecret',
-                    fieldLabel: '{s name=pay_pal/configuration/client_secret/label}{/s}',
+                    fieldLabel: '{s name="pay_pal/configuration/client_secret/label"}{/s}',
                     allowBlank: false,
                 }, {
                     xtype: 'checkbox',
                     name: 'sandbox',
-                    fieldLabel: '{s name=pay_pal/configuration/sand_box/label}{/s}',
+                    fieldLabel: '{s name="pay_pal/configuration/sand_box/label"}{/s}',
                     inputValue: true,
                     uncheckedValue: false
                 }, {
                     xtype: 'checkbox',
                     name: 'payPalPlus',
-                    fieldLabel: '{s name=pay_pal/configuration/plus/label}{/s}',
+                    fieldLabel: '{s name="pay_pal/configuration/plus/label"}{/s}',
                     inputValue: true,
                     uncheckedValue: false,
-                    helpTitle: '{s name=pay_pal/configuration/plus/label}{/s}',
-                    helpText: '{s name=pay_pal/configuration/plus/help_text}{/s}',
+                    helpTitle: '{s name="pay_pal/configuration/plus/label"}{/s}',
+                    helpText: '{s name="pay_pal/configuration/plus/help_text"}{/s}',
                 }, {
                     xtype: 'button',
-                    text: '{s name=pay_pal/configuration/save/text}{/s}',
+                    text: '{s name="pay_pal/configuration/save/text"}{/s}',
                     cls: 'primary',
                     style: {
                         marginTop: '10px',

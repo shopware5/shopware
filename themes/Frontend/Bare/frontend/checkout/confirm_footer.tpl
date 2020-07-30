@@ -2,14 +2,14 @@
 
 {block name='frontend_checkout_cart_footer_field_labels_taxes'}
     {$smarty.block.parent}
-    {if {config name=countrynotice} && $sCountry.notice && {include file="string:{$sCountry.notice}"} !== ""}
+    {if {config name="countrynotice"} && $sCountry.notice && {include file="string:{$sCountry.notice}"} !== ""}
         <li class="list--entry table-footer--country-notice">
             {* Include country specific notice message *}
             <p>{include file='string:{$sCountry.notice}'}</p>
         </li>
     {/if}
 
-    {if !$sUserData.additional.charge_vat && {config name=nettonotice}}
+    {if !$sUserData.additional.charge_vat && {config name="nettonotice"}}
         <li class="list--entry table-footer--netto-notice">
         {include file="frontend/_includes/messages.tpl" type="warning" content="*{s name='CheckoutFinishTaxInformation'}{/s}"}
         </li>
@@ -19,10 +19,10 @@
 {block name='frontend_checkout_cart_footer_add_product'}{/block}
 
 {block name='frontend_checkout_cart_footer_add_voucher'}
-    {if {config name=showVoucherModeForCheckout} != 0}
+    {if {config name="showVoucherModeForCheckout"} != 0}
         <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}"
                           class="table--add-voucher add-voucher--form">
-            {if {config name=showVoucherModeForCheckout} == 1}
+            {if {config name="showVoucherModeForCheckout"} == 1}
                 {block name='frontend_checkout_cart_footer_add_voucher_trigger'}
                     <input type="checkbox" id="add-voucher--trigger" class="add-voucher--checkbox">
                 {/block}
@@ -33,7 +33,7 @@
                 {/block}
             {/if}
 
-            <div class="add-voucher--panel {if {config name=showVoucherModeForCheckout} == 1}is--hidden {/if}block-group">
+            <div class="add-voucher--panel {if {config name="showVoucherModeForCheckout"} == 1}is--hidden {/if}block-group">
                 {block name='frontend_checkout_cart_footer_add_voucher_field'}
     {s name="CheckoutFooterAddVoucherLabelInline" namespace="frontend/checkout/cart_footer" assign="snippetCheckoutFooterAddVoucherLabelInline"}{/s}
 <input type="text" class="add-voucher--field is--medium block" name="sVoucher"

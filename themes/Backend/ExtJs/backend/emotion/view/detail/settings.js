@@ -27,7 +27,7 @@
  * @author      shopware AG
  */
 
-//{namespace name=backend/emotion/view/detail}
+//{namespace name="backend/emotion/view/detail"}
 //{block name="backend/emotion/view/detail/settings"}
 Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         },
         fields: {
             nameLabel: '{s name="settings/emotion_name_field"}{/s}',
-            namePlaceholder: '{s name=settings/emotion_name_empty}{/s}',
+            namePlaceholder: '{s name="settings/emotion_name_empty"}{/s}',
             activeLabel: '{s name="settings/active"}{/s}',
             landingPageLabel: '{s name="settings/landingpage_checkbox"}{/s}',
             categoryPlaceholder: '{s name="settings/select_categories_field"}{/s}',
@@ -73,15 +73,15 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
             positionLabel: '{s name="settings/fieldset/position_number"}{/s}',
             positionHelpText: '{s name="settings/fieldset/position_number_help"}{/s}',
-            landingPageTitleLabel: '{s name=settings/seo_title}{/s}',
-            landingPageKeywordsLabel: '{s name=settings/seo_keywords}{/s}',
-            landingPageDescLabel: '{s name=settings/seo_description}{/s}',
-            landingPageParentLabel: '{s name=settings/master_landingpage}{/s}',
-            timeStartDateLabel: '{s name=settings/time_control/start_date}{/s}',
-            timeEndDateLabel: '{s name=settings/time_control/end_date}{/s}',
-            timeStartTimeLabel: '{s name=settings/time_control/start_time}{/s}',
-            timeEndTimeLabel: '{s name=settings/time_control/end_time}{/s}',
-            timeResetBtnLabel: '{s name=settings/time_control/reset}{/s}',
+            landingPageTitleLabel: '{s name="settings/seo_title"}{/s}',
+            landingPageKeywordsLabel: '{s name="settings/seo_keywords"}{/s}',
+            landingPageDescLabel: '{s name="settings/seo_description"}{/s}',
+            landingPageParentLabel: '{s name="settings/master_landingpage"}{/s}',
+            timeStartDateLabel: '{s name="settings/time_control/start_date"}{/s}',
+            timeEndDateLabel: '{s name="settings/time_control/end_date"}{/s}',
+            timeStartTimeLabel: '{s name="settings/time_control/start_time"}{/s}',
+            timeEndTimeLabel: '{s name="settings/time_control/end_time"}{/s}',
+            timeResetBtnLabel: '{s name="settings/time_control/reset"}{/s}',
             shopSelectionLabel: '{s name="settings/shop_selection"}{/s}',
             deviceDesktopLabel: '{s name="settings/device/desktop"}{/s}',
             deviceTabletLandscapeLabel: '{s name="settings/device/tabletLandscape"}{/s}',

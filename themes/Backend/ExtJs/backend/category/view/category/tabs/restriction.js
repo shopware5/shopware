@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/* {namespace name=backend/category/main} */
+/* {namespace name="backend/category/main"} */
 
 /**
  * Shopware UI - Category Restriction
@@ -89,8 +89,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.restriction', {
      * @object
      */
     snippets: {
-        availableCustomerGroups:'{s name=view/settings_block_category_available_customer_groups}Available customer groups{/s}',
-        chosenCustomerGroups:'{s name=view/settings_block_category_chosen_customer_groups}Block category for{/s}'
+        availableCustomerGroups:'{s name="view/settings_block_category_available_customer_groups"}Available customer groups{/s}',
+        chosenCustomerGroups:'{s name="view/settings_block_category_chosen_customer_groups"}Block category for{/s}'
     },
 
     /**
@@ -119,8 +119,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.restriction', {
             selectedItems: me.record.getCustomerGroups(),
             showPagingToolbar: true,
             buttonsText:{
-                add:"{s name=tabs/restriction/button_add}Add{/s}",
-                remove:"{s name=tabs/restriction/button_remove}Remove{/s}"
+                add:"{s name="tabs/restriction/button_add"}Add{/s}",
+                remove:"{s name="tabs/restriction/button_remove"}Remove{/s}"
             }
         });
         return [me.ddSelector];

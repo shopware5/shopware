@@ -50,8 +50,8 @@ Ext.define('Shopware.apps.MailLog.controller.Main', {
 
         if (!record.isValid()) {
             Shopware.Notification.createGrowlMessage(
-                '{s name=resend_mail_invalid_title}{/s}',
-                '{s name=resend_mail_invalid_text}{/s}'
+                '{s name="resend_mail_invalid_title"}{/s}',
+                '{s name="resend_mail_invalid_text"}{/s}'
             );
 
             return;
@@ -68,8 +68,8 @@ Ext.define('Shopware.apps.MailLog.controller.Main', {
             },
             success: function (response, opts) {
                 Shopware.Notification.createGrowlMessage(
-                    '{s name=resend_mail_success_title}{/s}',
-                    '{s name=resend_mail_success_text}{/s}'
+                    '{s name="resend_mail_success_title"}{/s}',
+                    '{s name="resend_mail_success_text"}{/s}'
                 );
 
                 window.destroy();
@@ -79,8 +79,8 @@ Ext.define('Shopware.apps.MailLog.controller.Main', {
                 window.resendButton.enable();
 
                 Shopware.Notification.createGrowlMessage(
-                    '{s name=resend_mail_error_title}{/s}',
-                    '{s name=resend_mail_error_text}{/s}'
+                    '{s name="resend_mail_error_title"}{/s}',
+                    '{s name="resend_mail_error_text"}{/s}'
                 );
             }
         });

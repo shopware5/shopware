@@ -2,7 +2,7 @@
 
 {* Title *}
 {block name='frontend_index_header_title'}
-    {s name="CartTitle"}{/s} | {{config name=shopName}|escapeHtml}
+    {s name="CartTitle"}{/s} | {{config name="shopName"}|escapeHtml}
 {/block}
 
 {* Hide breadcrumb *}
@@ -27,7 +27,7 @@
 
             {* Product table *}
             {block name='frontend_checkout_cart_table'}
-                <div class="product--table{if {config name=BasketShippingInfo}} has--dispatch-info{/if}">
+                <div class="product--table{if {config name="BasketShippingInfo"}} has--dispatch-info{/if}">
 
                     {* Deliveryfree dispatch notification *}
                     {block name='frontend_checkout_cart_deliveryfree'}
@@ -55,7 +55,7 @@
                                     {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches) && !$sInvalidCartItems}
                                         {block name="frontend_checkout_actions_checkout"}
                                             {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions" assign="snippetCheckoutActionsLinkProceedShort"}{/s}
-                                            <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}"
+                                            <a href="{if {config name="always_select_payment"}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}"
                                                title="{$snippetCheckoutActionsLinkProceedShort|escape}"
                                                class="btn btn--checkout-proceed is--primary right is--icon-right is--large">
                                                 {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s}
@@ -126,7 +126,7 @@
                                     {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches) && !$sInvalidCartItems}
                                         {block name="frontend_checkout_actions_confirm_bottom_checkout"}
                                             {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions" assign="snippetCheckoutActionsLinkProceedShort"}{/s}
-                                            <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}"
+                                            <a href="{if {config name="always_select_payment"}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}"
                                                title="{$snippetCheckoutActionsLinkProceedShort|escape}"
                                                class="btn btn--checkout-proceed is--primary right is--icon-right is--large">
                                                 {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s}

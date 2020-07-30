@@ -2,7 +2,7 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name='frontend_listing_actions_filter'}
-    {$listingMode = {config name=listingMode}}
+    {$listingMode = {config name="listingMode"}}
 
     <div class="action--filter-options off-canvas{if $facets|count <= 0} is--hidden{/if}{if $listingMode != 'full_page_reload'} is--ajax-reload{/if}">
 

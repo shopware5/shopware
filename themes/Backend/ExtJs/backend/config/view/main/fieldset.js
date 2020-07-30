@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/main}
+//{namespace name="backend/config/view/main"}
 
 //{block name="backend/config/view/main/form"}
 Ext.define('Shopware.apps.Config.view.main.Fieldset', {

@@ -24,7 +24,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/plugin_manager/translation}
+//{namespace name="backend/plugin_manager/translation"}
 
 Ext.define('Shopware.window.ExpiredPluginWarning', {
     extend: 'Enlight.app.Window',

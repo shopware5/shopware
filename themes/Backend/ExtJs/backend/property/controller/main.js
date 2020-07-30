@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/property/view/main}
+//{namespace name="backend/property/view/main"}
 
 /**
  * todo@all: Documentation
@@ -68,46 +68,46 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      */
     snippets: {
         // Delete option
-        deleteOptionConfirmTitle:   '{s name=message/delete_option_confirm_title}Delete selected option{/s}',
-        deleteOptionConfirmMessage: '{s name=message/delete_option_confirm_message}Are you sure you want to delete the selected option?{/s}',
+        deleteOptionConfirmTitle:   '{s name="message/delete_option_confirm_title"}Delete selected option{/s}',
+        deleteOptionConfirmMessage: '{s name="message/delete_option_confirm_message"}Are you sure you want to delete the selected option?{/s}',
 
-        deleteOptionSuccessTitle: '{s name=message/delete_option_success_message}Successfully{/s}',
-        deleteOptionSuccessMessage: '{s name=message/delete_option_success_title}Option has been removed{/s}',
+        deleteOptionSuccessTitle: '{s name="message/delete_option_success_message"}Successfully{/s}',
+        deleteOptionSuccessMessage: '{s name="message/delete_option_success_title"}Option has been removed{/s}',
 
-        deleteOptionErrorTitle: '{s name=message/delete_option_error_title}Error{/s}',
-        deleteOptionErrorMessage: '{s name=message/delete_option_error_message}An error has occurred.{/s}',
+        deleteOptionErrorTitle: '{s name="message/delete_option_error_title"}Error{/s}',
+        deleteOptionErrorMessage: '{s name="message/delete_option_error_message"}An error has occurred.{/s}',
 
         // Delete group
-        deleteGroupConfirmTitle:   '{s name=message/delete_group_confirm_title}Delete selected Group{/s}',
-        deleteGroupConfirmMessage: '{s name=message/delete_group_confirm_message}Are you sure you want to delete the selected group?{/s}',
+        deleteGroupConfirmTitle:   '{s name="message/delete_group_confirm_title"}Delete selected Group{/s}',
+        deleteGroupConfirmMessage: '{s name="message/delete_group_confirm_message"}Are you sure you want to delete the selected group?{/s}',
 
-        deleteGroupSuccessTitle: '{s name=message/delete_group_success_message}Successfully{/s}',
-        deleteGroupSuccessMessage: '{s name=message/delete_group_success_title}Group has been removed{/s}',
+        deleteGroupSuccessTitle: '{s name="message/delete_group_success_message"}Successfully{/s}',
+        deleteGroupSuccessMessage: '{s name="message/delete_group_success_title"}Group has been removed{/s}',
 
-        deleteGroupErrorTitle: '{s name=message/delete_group_error_title}Error{/s}',
-        deleteGroupErrorMessage: '{s name=message/delete_group_error_message}An error has occurred.{/s}',
+        deleteGroupErrorTitle: '{s name="message/delete_group_error_title"}Error{/s}',
+        deleteGroupErrorMessage: '{s name="message/delete_group_error_message"}An error has occurred.{/s}',
 
         // Delete set
-        deleteSetConfirmTitle:   '{s name=message/delete_group_confirm_title}Delete selected Group{/s}',
-        deleteSetConfirmMessage: '{s name=message/delete_group_confirm_message}Are you sure you want to delete the selected group?{/s}',
+        deleteSetConfirmTitle:   '{s name="message/delete_group_confirm_title"}Delete selected Group{/s}',
+        deleteSetConfirmMessage: '{s name="message/delete_group_confirm_message"}Are you sure you want to delete the selected group?{/s}',
 
-        deleteSetSuccessTitle: '{s name=message/delete_group_success_message}Successfully{/s}',
-        deleteSetSuccessMessage: '{s name=message/delete_group_success_title}Group has been removed{/s}',
+        deleteSetSuccessTitle: '{s name="message/delete_group_success_message"}Successfully{/s}',
+        deleteSetSuccessMessage: '{s name="message/delete_group_success_title"}Group has been removed{/s}',
 
-        deleteSetErrorTitle: '{s name=message/delete_group_error_title}Error{/s}',
-        deleteSetErrorMessage: '{s name=message/delete_group_error_message}An error has occurred.{/s}',
+        deleteSetErrorTitle: '{s name="message/delete_group_error_title"}Error{/s}',
+        deleteSetErrorMessage: '{s name="message/delete_group_error_message"}An error has occurred.{/s}',
 
 
         // set assigned
-        groupAlreadyAssigned: '{s name=message/group_already_assigned}The group was already assigned.{/s}',
-        groupSuccessfulAssigned: '{s name=message/group_successful_assigned}Group successful assigned.{/s}',
-        groupSuccessfulSorted: '{s name=message/group_successful_sorted}The group position has been successfully saved.{/s}',
-        optionSuccessfulSorted: '{s name=message/option_successful_sorted}The option position has been successfully saved.{/s}',
-        successfulRemovedAssignment: '{s name=message/group_assignment_successful_removed}The group has been successfully removed.{/s}',
-        successfulSavedSet: '{s name=message/set_successful_saved}The set has been successfully saved.{/s}',
+        groupAlreadyAssigned: '{s name="message/group_already_assigned"}The group was already assigned.{/s}',
+        groupSuccessfulAssigned: '{s name="message/group_successful_assigned"}Group successful assigned.{/s}',
+        groupSuccessfulSorted: '{s name="message/group_successful_sorted"}The group position has been successfully saved.{/s}',
+        optionSuccessfulSorted: '{s name="message/option_successful_sorted"}The option position has been successfully saved.{/s}',
+        successfulRemovedAssignment: '{s name="message/group_assignment_successful_removed"}The group has been successfully removed.{/s}',
+        successfulSavedSet: '{s name="message/set_successful_saved"}The set has been successfully saved.{/s}',
 
-        successfulTitle: '{s name=message/successful_title}Successful{/s}',
-        growlMessage: '{s name=title}{/s}'
+        successfulTitle: '{s name="message/successful_title"}Successful{/s}',
+        growlMessage: '{s name="title"}{/s}'
     },
 
     /**

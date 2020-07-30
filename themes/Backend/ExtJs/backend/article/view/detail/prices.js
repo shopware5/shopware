@@ -34,7 +34,7 @@
  * Within the different tabs a grid displayed to define the article prices for each customer group.
  * The component events handled in the detail controller.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/detail/prices"}
 Ext.define('Shopware.apps.Article.view.detail.Prices', {
     /**
@@ -62,20 +62,20 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
      * @object
      */
     snippets:{
-        title:'{s name=detail/prices/title}Prices{/s}',
-        any:'{s name=detail/prices/any}Arbitrary{/s}',
+        title:'{s name="detail/prices/title"}Prices{/s}',
+        any:'{s name="detail/prices/any"}Arbitrary{/s}',
         grid: {
-            titleGross:'{s name=detail/price/title_gross}[0] Gross{/s}',
-            titleNet:'{s name=detail/price/title_net}[0] Net{/s}',
+            titleGross:'{s name="detail/price/title_gross"}[0] Gross{/s}',
+            titleNet:'{s name="detail/price/title_net"}[0] Net{/s}',
             columns: {
-                from: '{s name=detail/price/from}From{/s}',
-                to: '{s name=detail/price/to}To{/s}',
-                percent: '{s name=detail/price/percent}Percent discount{/s}',
-                price: '{s name=detail/price/price}Price{/s}',
-                pseudoPrice: '{s name=detail/price/pseudo_price}Pseudo price{/s}',
-                percentPseudo: '{s name=detail/price/percent_pseudo_price}Savings vs. pseudo price{/s}'
+                from: '{s name="detail/price/from"}From{/s}',
+                to: '{s name="detail/price/to"}To{/s}',
+                percent: '{s name="detail/price/percent"}Percent discount{/s}',
+                price: '{s name="detail/price/price"}Price{/s}',
+                pseudoPrice: '{s name="detail/price/pseudo_price"}Pseudo price{/s}',
+                percentPseudo: '{s name="detail/price/percent_pseudo_price"}Savings vs. pseudo price{/s}'
             },
-            any:'{s name=detail/price/any}Arbitrary{/s}'
+            any:'{s name="detail/price/any"}Arbitrary{/s}'
         }
     },
 

@@ -30,7 +30,7 @@
 /**
  * Shopware UI - Article esd page
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/esd/list"}
 Ext.define('Shopware.apps.Article.view.esd.List', {
 
@@ -58,20 +58,20 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
      */
     snippets:{
         columns:{
-            name:'{s name=esd/list/column/name}Articlename{/s}',
-            downloads:'{s name=esd/list/column/downloads}Downloads{/s}',
-            addedDate:'{s name=esd/list/column/addedDate}Added{/s}',
-            serials:'{s name=esd/list/column/serials}Serials{/s}',
-            file:'{s name=esd/list/column/file}File exists{/s}',
+            name:'{s name="esd/list/column/name"}Articlename{/s}',
+            downloads:'{s name="esd/list/column/downloads"}Downloads{/s}',
+            addedDate:'{s name="esd/list/column/addedDate"}Added{/s}',
+            serials:'{s name="esd/list/column/serials"}Serials{/s}',
+            file:'{s name="esd/list/column/file"}File exists{/s}',
 
-            remove: '{s name=esd/list/column/remove}Remove ESD{/s}',
-            edit: '{s name=esd/list/column/edit}Edit ESD{/s}'
+            remove: '{s name="esd/list/column/remove"}Remove ESD{/s}',
+            edit: '{s name="esd/list/column/edit"}Edit ESD{/s}'
         },
         toolbar:{
-            add:'{s name=esd/list/toolbar/button_add}Add as new ESD-Article{/s}',
-            remove:'{s name=esd/list/toolbar/button_delete}Delete selected ESD-Articles{/s}',
-            search:'{s name=esd/list/toolbar/search_empty_text}Search...{/s}',
-            choose:'{s name=esd/list/toolbar/choose}Choose Variant{/s}'
+            add:'{s name="esd/list/toolbar/button_add"}Add as new ESD-Article{/s}',
+            remove:'{s name="esd/list/toolbar/button_delete"}Delete selected ESD-Articles{/s}',
+            search:'{s name="esd/list/toolbar/search_empty_text"}Search...{/s}',
+            choose:'{s name="esd/list/toolbar/choose"}Choose Variant{/s}'
         }
     },
 

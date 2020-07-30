@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/snippet/view/main}
+//{namespace name="backend/snippet/view/main"}
 
 /**
  * todo@all: Documentation
@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Snippet.view.main.TranslateWindow', {
      * @object
      */
     snippets: {
-        titleTranslateWindow: '{s name=title_translate_window}Translate snippet{/s}'
+        titleTranslateWindow: '{s name="title_translate_window"}Translate snippet{/s}'
     },
 
     /**

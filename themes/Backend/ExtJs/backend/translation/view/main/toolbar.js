@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/translation/view/main}
+//{namespace name="backend/translation/view/main"}
 
 /**
  * Shopware UI - Translation Manager Main Toolbar
@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Translation.view.main.Toolbar', {
      */
     createToolbarItems: function() {
         return [{
-            text: '{s name=button/google}Google translator{/s}',
+            text: '{s name="button/google"}Google translator{/s}',
             action: 'translation-main-toolbar-google',
             iconCls: 'sprite-google'
         }];

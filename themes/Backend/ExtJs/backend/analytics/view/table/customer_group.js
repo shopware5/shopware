@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/customer_group"}
 Ext.define('Shopware.apps.Analytics.view.table.CustomerGroup', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
@@ -49,12 +49,12 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerGroup', {
 
         me.initShopColumns([
             {
-                text: '{s name=general/turnover}Turnover{/s}: [0]',
+                text: '{s name="general/turnover"}Turnover{/s}: [0]',
                 dataIndex: 'turnover',
                 renderer: me.currencyRenderer
             },
             {
-                text: '{s name=table/customer_group/count}Number of orders{/s}: [0]',
+                text: '{s name="table/customer_group/count"}Number of orders{/s}: [0]',
                 dataIndex: 'orderCount'
             }
         ]);
@@ -68,19 +68,19 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerGroup', {
         return [
             {
                 dataIndex: 'customerGroup',
-                text: '{s name=table/customer_group/group}Customer group{/s}'
+                text: '{s name="table/customer_group/group"}Customer group{/s}'
             },
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=general/turnover}Turnover{/s}',
+                text: '{s name="general/turnover"}Turnover{/s}',
                 renderer: me.currencyRenderer
             },
             {
                 xtype: 'numbercolumn',
                 format: '0',
                 dataIndex: 'orderCount',
-                text: '{s name=table/customer_group/count}Number of orders{/s}'
+                text: '{s name="table/customer_group/count"}Number of orders{/s}'
             }
         ];
     },

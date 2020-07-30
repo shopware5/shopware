@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Categories fieldSet
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
     /**
      * Description of the fieldSet
      */
-    caption: '{s name=tabs/settings/various/title}Various{/s}',
+    caption: '{s name="tabs/settings/various/title"}Various{/s}',
 
     /**
      * Component event method which is fired when the component
@@ -71,56 +71,56 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
         return [
             {
                 xtype: 'fieldset',
-                title: '{s name=fieldset/information}Information{/s}',
+                title: '{s name="fieldset/information"}Information{/s}',
                 defaults: me.defaults,
                 items: [
-                    me.createDescriptionContainer("{s name=fieldset/categories/info}Here you can adjust various settings which impact the performance of item listings.{/s}")]
+                    me.createDescriptionContainer("{s name="fieldset/categories/info"}Here you can adjust various settings which impact the performance of item listings.{/s}")]
             },
             {
                 xtype: 'fieldset',
-                title: '{s name=fieldset/configuration}Configuration{/s}',
+                title: '{s name="fieldset/configuration"}Configuration{/s}',
                 defaults: me.defaults,
                 items: [
                     {
-                        fieldLabel: '{s name=fieldset/various/disableStats}{/s}',
-                        helpText: '{s name=fieldset/various/disableStats/help}{/s}',
+                        fieldLabel: '{s name="fieldset/various/disableStats"}{/s}',
+                        helpText: '{s name="fieldset/various/disableStats/help"}{/s}',
                         name: 'various[disableShopwareStatistics]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/various/lastArticles}{/s}',
+                        fieldLabel: '{s name="fieldset/various/lastArticles"}{/s}',
                         name: 'various[LastArticles:lastarticles_show]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/various/numLastArticles}{/s}',
+                        fieldLabel: '{s name="fieldset/various/numLastArticles"}{/s}',
                         name: 'various[LastArticles:lastarticlestoshow]',
                         xtype: 'numberfield',
                         minValue: 1
                     },
                     {
-                        fieldLabel: '{s name=fieldset/various/disableArticleNavigation}{/s}',
-                        helpText: '{s name=fieldset/various/disableArticleNavigation/help}{/s}',
+                        fieldLabel: '{s name="fieldset/various/disableArticleNavigation"}{/s}',
+                        helpText: '{s name="fieldset/various/disableArticleNavigation/help"}{/s}',
                         name: 'various[disableArticleNavigation]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/various/http2Push}{/s}',
-                        helpText: '{s name=fieldset/various/http2Push/help}{/s}',
+                        fieldLabel: '{s name="fieldset/various/http2Push"}{/s}',
+                        helpText: '{s name="fieldset/various/http2Push/help"}{/s}',
                         name: 'various[http2Push]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/various/minifyHtml}{/s}',
-                        helpText: '{s name=fieldset/various/minifyHtml/help}{/s}',
+                        fieldLabel: '{s name="fieldset/various/minifyHtml"}{/s}',
+                        helpText: '{s name="fieldset/various/minifyHtml/help"}{/s}',
                         name: 'various[minifyHtml]',
                         xtype: 'checkbox',
                         uncheckedValue: false,

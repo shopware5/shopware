@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/chart/daytime"}
 Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
     extend: 'Shopware.apps.Analytics.view.main.Chart',
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
                 type: 'Time',
                 position: 'bottom',
                 fields: ['date'],
-                title: '{s name=chart/daytime/titleBottom}Time{/s}',
+                title: '{s name="chart/daytime/titleBottom"}Time{/s}',
                 step: [Ext.Date.HOUR, 1],
                 dateFormat: timeFormat
             }
@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
                     {
                         xField: 'date',
                         yField: 'turnover',
-                        title: '{s name=general/turnover}Turnover{/s}'
+                        title: '{s name="general/turnover"}Turnover{/s}'
                     },
                     {
                         width: 150,
@@ -104,7 +104,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
             minimum: 0,
             position: 'left',
             fields: me.getAxesFields('turnover'),
-            title: '{s name=general/turnover}Turnover{/s}'
+            title: '{s name="general/turnover"}Turnover{/s}'
         });
 
         me.callParent(arguments);

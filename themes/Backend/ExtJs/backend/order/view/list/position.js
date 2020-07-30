@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order list backend module
@@ -76,16 +76,16 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
      * @object
      */
     snippets: {
-        articleNumber: '{s name=column/article_number}Article number{/s}',
-        articleName: '{s name=column/article_name}Article name{/s}',
-        quantity: '{s name=column/quantity}Quantity{/s}',
-        status: '{s name=column/status}Status{/s}',
-        total: '{s name=column/total}Total{/s}',
-        tax: '{s name=column/tax}Tax{/s}',
-        inStock: '{s name=column/in_stock}Stock{/s}',
-        price: '{s name=column/price}Price{/s}',
-        openArticle: '{s name=column/open_article}Show article{/s}',
-        deletePosition: '{s name=column/delete_position}Delete order position{/s}'
+        articleNumber: '{s name="column/article_number"}Article number{/s}',
+        articleName: '{s name="column/article_name"}Article name{/s}',
+        quantity: '{s name="column/quantity"}Quantity{/s}',
+        status: '{s name="column/status"}Status{/s}',
+        total: '{s name="column/total"}Total{/s}',
+        tax: '{s name="column/tax"}Tax{/s}',
+        inStock: '{s name="column/in_stock"}Stock{/s}',
+        price: '{s name="column/price"}Price{/s}',
+        openArticle: '{s name="column/open_article"}Show article{/s}',
+        deletePosition: '{s name="column/delete_position"}Delete order position{/s}'
     },
 
     viewConfig: {
