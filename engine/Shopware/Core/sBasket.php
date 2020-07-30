@@ -2198,6 +2198,7 @@ SQL;
     private function convertListProductToNote(ListProduct $product, array $note)
     {
         $structConverter = Shopware()->Container()->get('legacy_struct_converter');
+        /** @var array $promotion */
         $promotion = $structConverter->convertListProductStruct($product);
 
         $promotion['id'] = $note['id'];
@@ -2206,6 +2207,7 @@ SQL;
         if ($product->hasConfigurator() && $product->getAdditional()) {
             $promotion['articlename'] .= ' ' . $product->getAdditional();
         }
+
         $promotion['linkDelete'] = $this->config->get('sBASEFILE') . '?sViewport=note&sDelete=' . $note['id'];
 
         return $promotion;
