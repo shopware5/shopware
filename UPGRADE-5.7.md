@@ -86,6 +86,19 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `Zend_Session_Validator_Abstract`
     * `Zend_Session_Validator_HttpUserAgent`
     * `Zend_Session_Validator_Interface`
+    * `Shopware\Components\Log\Handler\ChromePhpHandler`
+    * `Shopware\Components\Log\Handler\FirePHPHandler`
+    * `\Shopware_Plugins_Core_Debug_Bootstrap`
+    * `\Shopware\Plugin\Debug\Components\CollectorInterface`
+    * `\Shopware\Plugin\Debug\Components\ControllerCollector`
+    * `\Shopware\Plugin\Debug\Components\DatabaseCollector`
+    * `\Shopware\Plugin\Debug\Components\DbalCollector`
+    * `\Shopware\Plugin\Debug\Components\ErrorCollector`
+    * `\Shopware\Plugin\Debug\Components\EventCollector`
+    * `\Shopware\Plugin\Debug\Components\ExceptionCollector`
+    * `\Shopware\Plugin\Debug\Components\TemplateCollector`
+    * `\Shopware\Plugin\Debug\Components\TemplateVarCollector`
+    * `\Shopware\Plugin\Debug\Components\Utils`
 * Removed referenced value from magic getter in session
 * Removed the assignment of all request parameters to the view in `Shopware_Controllers_Widgets_Listing::productsAction`
 * Removed duplicate ExtJs classes and added alias to new class:
@@ -115,6 +128,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `symfony/polyfill-php70`
     * `symfony/polyfill-php71`
     * `symfony/polyfill-php72`
+* Removed plugin `Debug`
 
 ### Deprecations
 
