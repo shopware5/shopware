@@ -641,6 +641,7 @@ class Shipping extends ModelEntity
         $this->setAdditionalAddressLine1((string) $address->getAdditionalAddressLine1());
         $this->setAdditionalAddressLine2((string) $address->getAdditionalAddressLine2());
         $this->setCountry($address->getCountry());
+        $this->setPhone($address->getPhone());
         $this->setTitle($address->getTitle());
         if ($address->getState()) {
             $this->setState($address->getState());
