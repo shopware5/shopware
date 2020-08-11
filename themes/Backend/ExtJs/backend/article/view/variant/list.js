@@ -216,7 +216,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                    oldValue = e.record.get('inStock');
                }
 
-                if(e.field === 'details.number' &&  (!newValue || !newValue.match(new RegExp({$orderNumberRegex})))) {
+                if(e.field === 'details.number' &&  (!newValue || !newValue.match(new RegExp('{$orderNumberRegex}')))) {
                     Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.ordernumberNotMatch, me.snippets.growlMessage);
                     e.record.set('number', oldValue);
                     e.record.set('details.number', oldValue);

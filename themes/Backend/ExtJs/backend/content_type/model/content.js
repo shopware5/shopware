@@ -39,6 +39,6 @@ Ext.define('Shopware.apps.{$controllerName}.model.Content', {
     /**
      * @var array
      */
-    fields: {$modelFields|json_encode}
+    fields: JSON.parse('{$modelFields|json_encode}')
 });
 // {/block}
