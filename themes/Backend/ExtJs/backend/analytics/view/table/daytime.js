@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-daytime',
-    shopColumnSales: "{s name="general/turnover"}Turnover{/s}: [0]",
+    shopColumnSales: '{s name="general/turnover"}Turnover{/s}: [0]',
 
     initComponent: function () {
         var me = this;

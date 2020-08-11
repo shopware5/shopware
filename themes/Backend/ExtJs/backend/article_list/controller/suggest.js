@@ -367,11 +367,11 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
 
         // Rename the first token
         if (error.lastValidToken == 0) {
-            context = error.context ? ' ' + error.context : "{s name="expectedErrorMessage/begin"} at Begin{/s}";
+            context = error.context ? ' ' + error.context : '{s name="expectedErrorMessage/begin"} at Begin{/s}';
         } else {
-            context = error.context ? ' ' + error.context : Ext.String.format("{s name="expectedErrorMessage/after"} after [0]{/s}", error.lastValidToken);
+            context = error.context ? ' ' + error.context : Ext.String.format('{s name="expectedErrorMessage/after"} after [0]{/s}', error.lastValidToken);
         }
-        return Ext.String.format("{s name="expectedErrorMessage"}Expected [0] got [1] instead{/s}", error.expectation.message + context, error.currentToken);
+        return Ext.String.format('{s name="expectedErrorMessage"}Expected [0] got [1] instead{/s}', error.expectation.message + context, error.currentToken);
     },
 
     /**
@@ -388,8 +388,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
 
         if (!error || error == false) {
             Ext.get(combo.inputEl).setStyle('background', '#C7F5AA');
-            label.setText("{s name="addFilter/noErrorDetected"}No error detected{/s}");
-            simpleLabel.setText("{s name="addFilter/noErrorDetected"}No error detected{/s}");
+            label.setText('{s name="addFilter/noErrorDetected"}No error detected{/s}');
+            simpleLabel.setText('{s name="addFilter/noErrorDetected"}No error detected{/s}');
             runButton.enable();
             simpleRunButton.enable();
         } else {

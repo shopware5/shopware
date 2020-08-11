@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
                 defaults: me.defaults,
                 title: '{s name="fieldset/information"}{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name="fieldset/filter/info"}{/s}")
+                    me.createDescriptionContainer('{s name="fieldset/filter/info"}{/s}')
                 ]
             },
             {

@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
                 defaults: me.defaults,
                 title: '{s name="fieldset/information"}Information{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name="fieldset/search/info"}Der Such-Index in Shopware wird zeitversetzt aufgebaut. Sie können diesen Prozess an dieser Stelle manuell auslösen und zusätzlich konfigurieren, ob der Such-Index in Echtzeit oder via Cronjob aktualisiert werden soll.{/s}")
+                    me.createDescriptionContainer('{s name="fieldset/search/info"}Der Such-Index in Shopware wird zeitversetzt aufgebaut. Sie können diesen Prozess an dieser Stelle manuell auslösen und zusätzlich konfigurieren, ob der Such-Index in Echtzeit oder via Cronjob aktualisiert werden soll.{/s}')
                 ]},
             {
                 xtype: 'fieldset',

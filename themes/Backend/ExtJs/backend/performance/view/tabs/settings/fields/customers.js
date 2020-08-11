@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                 defaults: me.defaults,
                 title: '{s name="fieldset/information"}Information{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name="fieldset/customers/info"}Konfigurieren Sie hier in welchen Abständen die Daten für die in Shopware integrierten Recommendation-Funktionen neu erzeugt werden sollen.{/s}")
+                    me.createDescriptionContainer('{s name="fieldset/customers/info"}Konfigurieren Sie hier in welchen Abständen die Daten für die in Shopware integrierten Recommendation-Funktionen neu erzeugt werden sollen.{/s}')
                 ]
             },
             {

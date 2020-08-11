@@ -175,7 +175,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
 
         me.progressWindow = Ext.MessageBox.show({
             title        : '{s name="restoringTitle"}Restoring the backup{/s}',
-            msg          : "{s name="restoringMessage"}Currently restoring the selected backup.{/s}",
+            msg          : '{s name="restoringMessage"}Currently restoring the selected backup.{/s}',
             width        : 500,
             progress     : true,
             closable     : false,
@@ -240,7 +240,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
                     me.showError(result.message);
                 }else{
                     if (result.data.offset < result.data.totalCount) {
-                        progressText =  Ext.String.format("{s name="backup/alreadyRestored"}[0] out of [1] deltas restored{/s}", result.data.offset, result.data.totalCount);
+                        progressText =  Ext.String.format('{s name="backup/alreadyRestored"}[0] out of [1] deltas restored{/s}', result.data.offset, result.data.totalCount);
                         me.progressWindow.progressBar.updateProgress(result.data.offset/result.data.totalCount, progressText);
 
                         me.runRestore(config, result.data.offset);

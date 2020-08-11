@@ -317,7 +317,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
             labelWidth: 75,
             flex: 1,
             allowBlank: false,
-            supportText: "{s name="create_user/generate_api_key_support_text"}To use the REST API possibly a server configuration is necessary.{/s}",
+            supportText: '{s name="create_user/generate_api_key_support_text"}To use the REST API possibly a server configuration is necessary.{/s}',
             readOnly: true,
             fieldLabel: '{s name="create_user/api_key"}API-Key{/s}'
         });

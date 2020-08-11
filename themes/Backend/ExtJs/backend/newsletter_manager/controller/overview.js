@@ -179,7 +179,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
             shopStore: me.subApplication.shopStore,
             customerStreamStore: me.subApplication.customerStreamStore,
             dispatchStore:  me.getStore('MailDispatch'),
-            title: Ext.String.format("{s name="newsletterWindowEditTitle"}Editing newsletter '{literal}{0}{/literal}{/s}'", record.get('subject')),
+            title: Ext.String.format('{s name="newsletterWindowEditTitle"}{/s}', record.get('subject')),
             record: record
         });
 

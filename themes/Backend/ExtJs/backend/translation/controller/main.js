@@ -312,7 +312,7 @@ Ext.define('Shopware.apps.Translation.controller.Main',
                 Shopware.Notification.createGrowlMessage('{s name="messages/success_title"}Successful{/s}', '{s name="messages/success_message"}Translations have been saved successfully.{/s}', '{s name="window_title"}Translation{/s}');
             },
             failure: function() {
-                Shopware.Notification.createGrowlMessage('{s name="messages/failure_title"}Error{/s}', "{s name="messages/failure_message"}Translations could not be saved.{/s}", '{s name="window_title"}Translation{/s}');
+                Shopware.Notification.createGrowlMessage('{s name="messages/failure_title"}Error{/s}', '{s name="messages/failure_message"}Translations could not be saved.{/s}', '{s name="window_title"}Translation{/s}');
             }
         });
     },

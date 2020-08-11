@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
                 defaults: this.defaults,
                 title: '{s name="fieldset/information"}Information{/s}',
                 items: [
-                    this.createDescriptionContainer("{s name="fieldset/sitemap/info"}{/s}")
+                    this.createDescriptionContainer('{s name="fieldset/sitemap/info"}{/s}')
                 ]
             }, {
                 xtype: 'fieldset',

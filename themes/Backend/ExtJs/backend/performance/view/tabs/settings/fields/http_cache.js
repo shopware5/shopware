@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
                 defaults: me.defaults,
                 title: '{s name="fieldset/information"}Information{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name="fieldset/cache/info"}{/s}")
+                    me.createDescriptionContainer('{s name="fieldset/cache/info"}{/s}')
                 ]},
             {
                 xtype: 'fieldset',
@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
                         showEvent: 'showMultiRequestTasks',
                         title: '{s name="button/title/http_cache/warmUp"}Warm up http cache{/s}'
                     },
-                    me.createDescriptionContainer("{s name="fieldset/cache_warmer/info"}{/s}")
+                    me.createDescriptionContainer('{s name="fieldset/cache_warmer/info"}{/s}')
                 ]},
             {
                 xtype: 'fieldset',

@@ -98,8 +98,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      * @object
      */
     buttonsText: {
-        add: "{s name="tabs/article_mapping/button_add"}Add{/s}",
-        remove: "{s name="tabs/article_mapping/button_remove"}Remove{/s}"
+        add: '{s name="tabs/article_mapping/button_add"}Add{/s}',
+        remove: '{s name="tabs/article_mapping/button_remove"}Remove{/s}'
     },
 
 

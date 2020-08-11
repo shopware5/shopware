@@ -245,7 +245,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Thumbnail', {
             failure: function (response) {
                 Shopware.Msg.createStickyGrowlMessage({
                     title: '{s name="thumbnail/batch/timeOutTitle"}An error occured{/s}',
-                    text: "{s name="thumbnail/batch/timeOut"}The server could not handle the request. Please choose a smaller batch size.{/s}"
+                    text: '{s name="thumbnail/batch/timeOut"}The server could not handle the request. Please choose a smaller batch size.{/s}'
                 });
 
                 me.onProcessFinish(win);

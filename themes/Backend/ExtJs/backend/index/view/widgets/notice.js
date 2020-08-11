@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Notice', {
         },
         failure_msg: {
             title: '{s name="notice/success_msg/title"}Notice widget{/s}',
-            text: "{s name="notice/failure_msg/text"}Your notice couldn't be saved successfully.{/s}"
+            text: '{s name="notice/failure_msg/text"}{/s}'
         }
     },
 

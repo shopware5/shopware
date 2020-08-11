@@ -274,7 +274,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
                             );
                             supportTextEl.update(template.apply([mappingText]));
                         } else {
-                            supportTextEl.update("{s name="detail_general/supportText/noCustomerMapped"}No customer account has been linked{/s}");
+                            supportTextEl.update('{s name="detail_general/supportText/noCustomerMapped"}No customer account has been linked{/s}');
                         }
                     }
                 }

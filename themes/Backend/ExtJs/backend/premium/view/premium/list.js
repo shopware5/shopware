@@ -212,7 +212,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
         if(value){
             return value;
         }else if(record.data.shopId == 0){
-            return "{s name="premium/subShop/comboBox_general"}Universally valid{/s}";
+            return '{s name="premium/subShop/comboBox_general"}Universally valid{/s}';
         }
     },
 

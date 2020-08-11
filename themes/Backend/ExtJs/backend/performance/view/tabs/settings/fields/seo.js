@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
                 defaults: me.defaults,
                 title: '{s name="fieldset/information"}Information{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name="fieldset/seo/info"}Die SEO-Urls werden in bestimmten Abständen in Shopware aktualisiert. Sie können die Aktualisierung manuell starten oder aber zwischen der Aktualisierung im Live-Betrieb und der Aktualisierung via Cronjob wählen. <br><br>Sofern Sie viel Traffic haben, empfiehlt sich die Generierung der SEO-Routen über einen Cronjob durchführen zu lassen.{/s}")
+                    me.createDescriptionContainer('{s name="fieldset/seo/info"}{/s}')
                 ]
             },
             {

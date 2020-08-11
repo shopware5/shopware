@@ -216,7 +216,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
             minWidth: 250,
             width: 400,
             labelStyle: ' font-weight: 700;',
-            supportText: "{s name="detail_general/supportText/noCustomerMapped"}No customer account has been linked{/s}",
+            supportText: '{s name="detail_general/supportText/noCustomerMapped"}No customer account has been linked{/s}',
             helpText: '{s name="detail_general/field/customerMapping/help"}Link a customer account to enable a partner to have a look at the frontend statistics in the account section. You can link an account by entering a customer email or a customer number.{/s}',
             listeners: {
                 change: function(field, newValue, oldValue, eOpts) {

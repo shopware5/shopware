@@ -119,8 +119,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.restriction', {
             selectedItems: me.record.getCustomerGroups(),
             showPagingToolbar: true,
             buttonsText:{
-                add:"{s name="tabs/restriction/button_add"}Add{/s}",
-                remove:"{s name="tabs/restriction/button_remove"}Remove{/s}"
+                add: '{s name="tabs/restriction/button_add"}Add{/s}',
+                remove: '{s name="tabs/restriction/button_remove"}Remove{/s}'
             }
         });
         return [me.ddSelector];

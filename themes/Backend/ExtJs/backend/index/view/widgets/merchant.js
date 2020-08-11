@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
         },
         failure_msg: {
             title: '{s name="merchant/success_msg/title"}Merchant widget{/s}',
-            text: "{s name="merchant/failure_msg/text"}Selected merchant couldn't be unlocked successfully.{/s}"
+            text: '{s name="merchant/failure_msg/text"}{/s}'
         },
         tooltips: {
             customer: '{s name="merchant/tooltips/customer"}Open customer{/s}',

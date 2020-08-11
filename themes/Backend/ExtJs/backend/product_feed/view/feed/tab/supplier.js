@@ -68,8 +68,8 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Supplier', {
             selectedItems: me.record.getSuppliers(),
             fromFieldDockedItems: [ me.getToolbar() ],
             buttonsText: {
-                add: "{s name="tab/supplier/button_add"}Add{/s}",
-                remove: "{s name="tab/supplier/button_remove"}Remove{/s}"
+                add: '{s name="tab/supplier/button_add"}Add{/s}',
+                remove: '{s name="tab/supplier/button_remove"}Remove{/s}'
             }
         }];
     },

@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                 defaults: me.defaults,
                 title: '{s name="fieldset/information"}Information{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name="fieldset/categories/info"}Hier können Sie Einstellungen vornehmen, die die Performance der Produkt-Listings betreffen.{/s}")]
+                    me.createDescriptionContainer('{s name="fieldset/categories/info"}Hier können Sie Einstellungen vornehmen, die die Performance der Produkt-Listings betreffen.{/s}')]
             },
             {
                 xtype: 'fieldset',

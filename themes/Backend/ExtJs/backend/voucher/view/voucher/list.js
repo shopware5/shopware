@@ -318,9 +318,9 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
      */
     modeRenderer:function (value) {
         if(value!=1){
-            return "{s name="list/render_value/mode/general"}General{/s}";
+            return '{s name="list/render_value/mode/general"}General{/s}';
         }
-        return "{s name="list/render_value/mode/individual"}Individual{/s}";
+        return '{s name="list/render_value/mode/individual"}Individual{/s}';
     },
     /**
      * Value Renderer Method

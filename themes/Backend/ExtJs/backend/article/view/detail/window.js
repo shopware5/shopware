@@ -173,7 +173,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 back: '{s name="esd/back_button"}Back to overview{/s}'
             }
         },
-        variantTabTooltip: "{s name="variant_tab/tooltip"}Functionality isn't available in the split view mode.{/s}"
+        variantTabTooltip: '{s name="variant_tab/tooltip"}{/s}'
     },
 
     /**

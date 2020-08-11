@@ -286,8 +286,8 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
         example.push('{s name="exampleFieldSet/example/streetName"}e.g. \'delivery\', disables the payment for every address, which contains \'delivery\'{/s}');
         example.push('12345');
         example.push('{s name="exampleFieldSet/example/lastName"}Smith{/s}');
-        example.push("{s name="exampleFieldSet/example/subShopId"}'English' if there was defined such a shop in the basic settings{/s}");
-        example.push("{s name="exampleFieldSet/example/subShopId"}'English' if there was defined such a shop in the basic settings{/s}");
+        example.push('{s name="exampleFieldSet/example/subShopId"}{/s}');
+        example.push('{s name="exampleFieldSet/example/subShopId"}{/s}');
         example.push('{s name="exampleFieldSet/example/shippingAddressDifferBillingAddress"}Shipping-Address != Billing-Address{/s}');
         example.push('{s name="exampleFieldSet/example/currencyIso"}EUR{/s}');
         example.push('{s name="exampleFieldSet/example/currencyIso"}USD{/s}');

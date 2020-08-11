@@ -255,9 +255,10 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
      */
     cashedRenderer:function (value) {
         if(value==1){
-             return "{s name="list/render_value/cashed/yes"}Yes{/s}";
+             return '{s name="list/render_value/cashed/yes"}Yes{/s}';
          }
-         return "{s name="list/render_value/cashed/no"}No{/s}";
+
+         return '{s name="list/render_value/cashed/no"}No{/s}';
      }
 });
 //{/block}

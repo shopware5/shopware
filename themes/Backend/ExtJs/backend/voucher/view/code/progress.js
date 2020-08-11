@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Voucher.view.code.Progress', {
         me.items = [
             me.createProgressBar()
         ];
-        me.title = "{s name="detail_codes/progress/title"}Generating individual voucher codes{/s}";
+        me.title = '{s name="detail_codes/progress/title"}Generating individual voucher codes{/s}';
         me.callParent(arguments);
     },
 

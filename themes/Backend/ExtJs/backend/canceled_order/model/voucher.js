@@ -60,9 +60,9 @@ Ext.define('Shopware.apps.CanceledOrder.model.Voucher', {
                     return value;
                 }
                 if (record.get('percental') == 1) {
-                    return Ext.String.format("{s name="sendVoucherWorthPercent"}Send voucher worth [0]% vouchername: [1]{/s}", value, record.get('description'));
+                    return Ext.String.format('{s name="sendVoucherWorthPercent"}Send voucher worth [0]% vouchername: [1]{/s}', value, record.get('description'));
                 } else {
-                    return Ext.String.format("{s name="sendVoucherWorth"}Send voucher worth [0] vouchername: [1]{/s}", value, record.get('description'));
+                    return Ext.String.format('{s name="sendVoucherWorth"}Send voucher worth [0] vouchername: [1]{/s}', value, record.get('description'));
                 }
             }
         }

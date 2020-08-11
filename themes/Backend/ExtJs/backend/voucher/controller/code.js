@@ -195,9 +195,9 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                         var hours   = Math.floor(timeLeft / 3600);
                         var minutes = Math.floor((timeLeft - (hours * 3600)) / 60);
                         var seconds = timeLeft - (hours * 3600) - (minutes * 60);
-                        timeString =  + Math.round(minutes) + " {s name="progress/text/time_minutes_and"}minute(s) and{/s} "+ Math.round(seconds) +" {s name="progress/text/time_seconds_remaining"}second(s) remaining{/s}";
+                        timeString =  + Math.round(minutes) + ' {s name="progress/text/time_minutes_and"}minute(s) and{/s} "+ Math.round(seconds) +" {s name="progress/text/time_seconds_remaining"}second(s) remaining{/s}';
                     }
-                    progressBar.updateProgress(status.generatedVoucherCodes / numberOfAllCodes, status.generatedVoucherCodes + " {s name="progress/text/out_of"}out of{/s} " + numberOfAllCodes + " {s name="progress/text/voucher_code_created"}voucher codes created{/s} " + timeString, true);
+                    progressBar.updateProgress(status.generatedVoucherCodes / numberOfAllCodes, status.generatedVoucherCodes + ' {s name="progress/text/out_of"}out of{/s} ' + numberOfAllCodes + ' {s name="progress/text/voucher_code_created"}voucher codes created{/s} ' + timeString, true);
 
                     if(numberOfCodesToGenerate > 0) {
                         me.batchProcessing(voucherId, codePattern, numberOfCodesToGenerate, numberOfAllCodes, false, overAllTimeToGenerate);

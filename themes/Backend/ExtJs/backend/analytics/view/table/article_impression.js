@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-article_impression',
-    shopColumnName: "{s name="table/article_impression/shop"}Impressions{/s}: [0]",
+    shopColumnName: '{s name="table/article_impression/shop"}Impressions{/s}: [0]',
     initComponent: function () {
         var me = this;
 

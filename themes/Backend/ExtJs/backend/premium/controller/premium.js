@@ -118,7 +118,7 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;
                 if(operation.success){
-                    Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/createPremiumSuccess"}The article was successfully created{/s}', "{s name="growlMessage_message/createPremiumSuccess"}The article was successfully saved{/s}", '{s name="window_title"}{/s}');
+                    Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/createPremiumSuccess"}The article was successfully created{/s}', '{s name="growlMessage_message/createPremiumSuccess"}The article was successfully saved{/s}', '{s name="window_title"}{/s}');
                 }else{
                     Shopware.Notification.createGrowlMessage('{s name="growlMessage/error"}An error has occurred{/s}', rawData.errorMsg, '{s name="window_title"}{/s}');
                 }
@@ -159,7 +159,7 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
                     var rawData = batch.proxy.getReader().rawData;
                     if (rawData.success) {
                         me.subApplication.premiumStore.load();
-                        Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/deleteMultipleSuccess"}Articles deleted{/s}', "{s name="growlMessage_message/deleteMultipleSuccess"}The articles were successfully deleted{/s}", '{s name="window_title"}{/s}');
+                        Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/deleteMultipleSuccess"}Articles deleted{/s}', '{s name="growlMessage_message/deleteMultipleSuccess"}The articles were successfully deleted{/s}', '{s name="window_title"}{/s}');
                     }else{
                         Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/deleteMultipleError"}An error occurred{/s}', rawData.errorMsg, '{s name="window_title"}{/s}');
                     }

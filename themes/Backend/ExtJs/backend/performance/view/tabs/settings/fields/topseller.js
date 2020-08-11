@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
                 defaults: me.defaults,
                 title: '{s name="fieldset/information"}Information{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name="fieldset/topseller/info"}Das Anzeigen der Topseller ist besonders performancelastig, da hierzu eine Vielzahl von Daten ausgewertet werden müssen. Sie sollten in großen Shop-Umngebungen daher den Topseller-Index via Cronjob aktualisieren lassen.{/s}")
+                    me.createDescriptionContainer('{s name="fieldset/topseller/info"}Das Anzeigen der Topseller ist besonders performancelastig, da hierzu eine Vielzahl von Daten ausgewertet werden müssen. Sie sollten in großen Shop-Umngebungen daher den Topseller-Index via Cronjob aktualisieren lassen.{/s}')
                 ]
             },
             {

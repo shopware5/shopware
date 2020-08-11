@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
     initComponent: function () {
         var me = this;
 
-        me.toolTipTemplate = "{s name="navigation/filter/tooltip"}<b>Description:</b><br>[0]{/s}"; //<br><br><b>Abfrage:</b><br>[1]
+        me.toolTipTemplate = '{s name="navigation/filter/tooltip"}<b>Description:</b><br>[0]{/s}';
 
         me.columns = me.getColumns();
 

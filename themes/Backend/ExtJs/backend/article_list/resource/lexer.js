@@ -285,14 +285,14 @@ Ext.define('Lexer', {
             if (token == ',' || token == '(') {
                 return {
                     success: false,
-                    expectation: { message: "{s name="lexer/value"}value{/s}", rule: me.grammar.values },
+                    expectation: { message: '{s name="lexer/value"}value{/s}', rule: me.grammar.values },
                     context: '{s name="lexer/inList"}in list{/s}',
                     currentToken: '{s name="lexer/end"}END{/s}'
                 };
             }
             if (tokenType == 'values') {
                 return {
-                    expectation: { message: "{s name="lexer/commaOrBrace"}, OR ){/s}", rule: ',|)' },
+                    expectation: { message: '{s name="lexer/commaOrBrace"}, OR ){/s}', rule: ',|)' },
                     context: '{s name="lexer/afterValueInList"}after value in list{/s}',
                     currentToken: '{s name="lexer/end"}END{/s}',
                     success: false

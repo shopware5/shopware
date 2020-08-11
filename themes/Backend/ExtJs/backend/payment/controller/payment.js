@@ -104,7 +104,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
                         rawData = record.getProxy().getReader().rawData;
 
                     if(operation.success){
-                        Shopware.Notification.createGrowlMessage('{s name="delete_growlMessage_subject"}Delete payment{/s}', "{s name="delete_growlMessage_content"}The payment has been successfully deleted.{/s}", '{s name="payment_title"}{/s}');
+                        Shopware.Notification.createGrowlMessage('{s name="delete_growlMessage_subject"}Delete payment{/s}', '{s name="delete_growlMessage_content"}The payment has been successfully deleted.{/s}', '{s name="payment_title"}{/s}');
                     }else{
                         Shopware.Notification.createGrowlMessage('{s name="delete_growlMessage_subject"}Delete payment{/s}', rawData.errorMsg.errorInfo[2], '{s name="payment_title"}{/s}');
                     }
@@ -277,7 +277,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
 
                     //tabPanel, newTab, oldTab, formPanel
                     me.onChangeTab(tabPanel, tabPanel.getActiveTab(), '', generalForm);
-                    Shopware.Notification.createGrowlMessage('{s name="update_growl_message_subject"}Update payment{/s}', "{s name="update_growl_message_content"}The payment was successfully updated.{/s}", '{s name="payment_title"}{/s}');
+                    Shopware.Notification.createGrowlMessage('{s name="update_growl_message_subject"}Update payment{/s}', '{s name="update_growl_message_content"}The payment was successfully updated.{/s}', '{s name="payment_title"}{/s}');
                 } else {
                     Shopware.Notification.createGrowlMessage('{s name="update_growl_message_subject"}Update payment{/s}', rawData.errorMsg, '{s name="payment_title"}{/s}');
                 }

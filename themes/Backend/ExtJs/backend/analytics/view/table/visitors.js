@@ -34,8 +34,8 @@
 Ext.define('Shopware.apps.Analytics.view.table.Visitors', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-visitors',
-    shopColumnVisits: "{s name="table/visits/visits"}V: [0]{/s}",
-    shopColumnImpressions: "{s name="table/visits/impressions"}I: [0]{/s}",
+    shopColumnVisits: '{s name="table/visits/visits"}V: [0]{/s}',
+    shopColumnImpressions: '{s name="table/visits/impressions"}I: [0]{/s}',
     initComponent: function () {
         var me = this;
 

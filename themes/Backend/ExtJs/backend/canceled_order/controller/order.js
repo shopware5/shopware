@@ -208,17 +208,17 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
             info = detailView.infoLabel;
 
         if(comment == "") {
-            info.setText("{s name="yourOptions"}You can ask your customer for a reason or send him a voucher{/s}");
+            info.setText('{s name="yourOptions"}You can ask your customer for a reason or send him a voucher{/s}');
             combo.show();
             button.show();
         }else if(comment == "Frage gesendet") {
-            info.setText("{s name="reasonMailAlreadySent"}A 'Ask for reason' mail was already sent to this customer{/s}");
+            info.setText('{s name="reasonMailAlreadySent"}{/s}');
             button.hide();
             combo.show();
         }else {
             button.hide();
             combo.hide();
-            info.setText("{s name="voucherAlreadySent"}A voucher was already sent to this customer{/s}");
+            info.setText('{s name="voucherAlreadySent"}A voucher was already sent to this customer{/s}');
         }
         Ext.apply(store.getProxy().extraParams, {
             id: record.get('id')

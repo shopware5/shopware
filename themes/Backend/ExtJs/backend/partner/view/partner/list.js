@@ -167,9 +167,9 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
      */
     activeRenderer : function(value) {
         if(value) {
-            return "<span style='font-weight: 700; color:green;'>{s name="list/active_value/yes"}Yes{/s}</span>";
+            return '<span style="font-weight: 700; color:green;">{s name="list/active_value/yes"}Yes{/s}</span>';
         }
-        return "<span style='font-weight: 700; color:red;'>{s name="list/active_value/no"}No{/s}</span>";
+        return '<span style="font-weight: 700; color:red;">{s name="list/active_value/no"}No{/s}</span>';
     },
 
     /**
