@@ -76,17 +76,6 @@ Thumbs.db
 # tooling
 .php_cs
 .php_cs.cache
-phpstan.phar
-/dev-ops/docker/_volumes
-/docker-compose.override.yml
-/.psh.yml
-/.psh.yaml
-/dev-ops/docker/containers/app/Dockerfile
-/dev-ops/docker/containers/elasticsearch/Dockerfile
-/dev-ops/docker/containers/mysql/Dockerfile
-/dev-ops/docker/containers/mysql/dev.cnf
-/.psh.yaml.override
-/.psh.yml.override
 /.env
 /.make.*
 
@@ -96,6 +85,7 @@ phpstan.phar
 !/build/logs/mink/.gitkeep
 /tests/nightwatch/node_modules
 /tests/.phpunit.result.cache
+/php-cs-fixer.xml
 
 # scripts
 !/build/composer-post-install-cmd.sh
