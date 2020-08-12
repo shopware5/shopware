@@ -1,4 +1,4 @@
-@checkout @customergroups
+@checkout @customergroups @checkout1
 Feature: Checkout articles (scenario origin is account without articles in basket)
 
     Background: I can login as a user with correct credentials

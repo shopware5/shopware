@@ -1,4 +1,4 @@
-@checkout
+@checkout @checkout1
 Feature: Check that cart value is not negative
 
     Background:

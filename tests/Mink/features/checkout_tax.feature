@@ -1,4 +1,4 @@
-@checkout
+@checkout @checkout2
 Feature: Check that cart value for tax is calculated correctly
 
   Background:

@@ -1,4 +1,4 @@
-@checkout @checkoutadressmanagement
+@checkout @checkoutadressmanagement @checkout2
 Feature: Checkout address management
 
   Background:

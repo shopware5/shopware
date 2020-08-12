@@ -197,7 +197,12 @@ Mink Account:
 Mink Checkout:
     extends: .mink_base
     variables:
-        MINK_TAG: checkout
+        MINK_TAG: checkout1
+
+Mink Checkout 2:
+    extends: .mink_base
+    variables:
+        MINK_TAG: checkout2
 
 Mink Detail:
     extends: .mink_base
