@@ -1,4 +1,4 @@
-@checkout @voucher
+@checkout @voucher @checkout2
 Feature: Checkout articles with voucher
 
     @registration

@@ -1,4 +1,4 @@
-@checkout
+@checkout @checkout1
 Feature: Checkout articles (scenario origin is cart with one product in it)
 
     Background:

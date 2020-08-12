@@ -1,4 +1,4 @@
-@checkout
+@checkout @checkout1
 Feature: Checkout articles
 
     Background:

@@ -1,4 +1,4 @@
-@checkout
+@checkout @checkout2
 Feature: Checkout articles (scenario origin is checkout confirm page logged in as default private customer)
 
     Background:
