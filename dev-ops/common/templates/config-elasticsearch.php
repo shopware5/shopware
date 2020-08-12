@@ -24,11 +24,11 @@
 
 return [
     'db' => [
-        'username' => '__DB_USER__',
-        'password' => '__DB_PASSWORD__',
-        'dbname' => '__DB_NAME__',
-        'host' => '__DB_HOST__',
-        'port' => '__DB_PORT__',
+        'username' => '%db.user%',
+        'password' => '%db.password%',
+        'dbname' => '%db.database%',
+        'host' => '%db.host%',
+        'port' => '%db.port%',
     ],
 
     'csrfProtection' => [

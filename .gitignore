@@ -87,6 +87,8 @@ phpstan.phar
 /dev-ops/docker/containers/mysql/dev.cnf
 /.psh.yaml.override
 /.psh.yml.override
+/.env
+/.make.*
 
 # tests / ci
 /build/**
