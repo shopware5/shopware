@@ -181,7 +181,7 @@ class sExport implements \Enlight_Hook
     /**
      * @param int|string $customerGroup
      *
-     * @return bool
+     * @return bool|array
      */
     public function sGetCustomergroup($customerGroup)
     {
@@ -312,6 +312,11 @@ class sExport implements \Enlight_Hook
         $currency = $repository->find($this->sCurrency['id']);
         $shop->setCurrency($currency);
         Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
+
+        if ($this->sCustomergroup !== false) {
+            Shopware()->Container()->get('session')->offsetSet('sUserGroup', $this->sCustomergroup['groupkey']);
+        }
+
         $this->contextService->initializeContext();
 
         $this->shop = $shop;
@@ -1291,7 +1296,7 @@ class sExport implements \Enlight_Hook
         $cache[$payment]['country_surcharge'] = [];
         if (!empty($cache[$payment]['surchargestring'])) {
             foreach (explode(';', $cache[$payment]['surchargestring']) as $countrySurcharge) {
-                list($key, $value) = explode(':', $countrySurcharge);
+                [$key, $value] = explode(':', $countrySurcharge);
                 $value = (float) str_replace(',', '.', $value);
                 if (!empty($value)) {
                     $cache[$payment]['country_surcharge'][$key] = $value;
@@ -1303,10 +1308,10 @@ class sExport implements \Enlight_Hook
     }
 
     /**
-     * @deprecated in 5.6, will be removed in 5.7 without replacement
-     *
      * @param int|string|null $dispatch
      * @param int|string|null $country
+     *
+     * @deprecated in 5.6, will be removed in 5.7 without replacement
      */
     public function sGetDispatch($dispatch = null, $country = null)
     {
