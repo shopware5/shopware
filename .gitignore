@@ -12,6 +12,7 @@ Thumbs.db
 
 # PhpStorm-Project
 /.idea/
+/.vscode/
 
 # Composer
 /composer.phar

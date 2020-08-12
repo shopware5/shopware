@@ -101,6 +101,8 @@ class SitemapWriter implements SitemapWriterInterface
      * Closes open file handles and moves sitemaps to their target location.
      *
      * @throws UnknownFileException
+     *
+     * @return void
      */
     public function closeFiles()
     {

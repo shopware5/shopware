@@ -540,7 +540,7 @@ class Repository extends ModelRepository
      * @param array[]  $filters
      * @param array[]  $sortings
      *
-     * @return array[]
+     * @return array<string, mixed>
      */
     public function search($offset = null, $limit = null, $filters = [], $sortings = [])
     {

@@ -66,8 +66,8 @@ class UniqueIdGenerator implements UniqueIdGeneratorInterface
     {
         $sql = <<<'sql'
 SELECT s_core_config_values.value FROM s_core_config_values
-INNER JOIN s_core_config_elements 
-    ON s_core_config_values.element_id = s_core_config_elements.id 
+INNER JOIN s_core_config_elements
+    ON s_core_config_values.element_id = s_core_config_elements.id
     AND s_core_config_elements.name LIKE 'trackingUniqueId'
 WHERE s_core_config_values.shop_id = 1
 sql;
@@ -85,15 +85,24 @@ sql;
      */
     private function storeUniqueIdInDb($uniqueId)
     {
+        $uniqueRowId = $this->connection->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE \'trackingUniqueId\' LIMIT 1');
+
+        if ($uniqueRowId === false) {
+            $this->connection->executeUpdate('INSERT INTO s_core_config_elements (form_id, name, value, label, description, type, required, position, scope)
+VALUES (\'0\', \'trackingUniqueId\', \'s:0:"";\', \'Unique identifier\', \'\', \'text\', \'0\', \'0\', \'1\')');
+            $uniqueRowId = $this->connection->lastInsertId();
+        }
+
         $sql = <<<'sql'
 INSERT INTO s_core_config_values (element_id, shop_id, value) VALUES (
-(SELECT id FROM s_core_config_elements WHERE name LIKE 'trackingUniqueId' LIMIT 1), 1, :value
+:uniqueRowId, 1, :value
 )
 sql;
 
         $this->connection->executeUpdate(
             $sql,
             [
+                'uniqueRowId' => $uniqueRowId,
                 'value' => serialize($uniqueId),
             ]
         );

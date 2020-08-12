@@ -917,7 +917,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     /**
      * Helper Method to get access to the customer repository.
      *
-     * @return Repository
+     * @return \Shopware\Models\Customer\Repository
      */
     private function getCustomerRepository()
     {

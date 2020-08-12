@@ -1,4 +1,4 @@
-(function ($, window, undefined) {
+(function ($, window, location, undefined) {
     'use strict';
 
     $.getCookiePreference = function(cookieName) {
@@ -143,7 +143,15 @@
              * @property requiredClass
              * @type {string}
              */
-            requiredClass: 'cookie-consent--required'
+            requiredClass: 'cookie-consent--required',
+
+            /**
+             * The selector to find the button, which opens the category off-canvas menu.
+             *
+             * @property offCanvasCategoryMenuSelector
+             * @type {string}
+             */
+            offCanvasCategoryMenuSelector: '.entry--menu-left .entry--link[data-offcanvas="true"]'
         },
 
         /**
@@ -363,6 +371,9 @@
             $.overlay.close();
 
             $.publish('plugin/swCookieConsentManager/onSave', [this]);
+
+            // Necessary for the partner cookie to be set properly
+            location.reload();
         },
 
         onGroupToggleChanged: function (event) {
@@ -397,6 +408,8 @@
                 return;
             }
 
+            this.closePreviousOffCanvasMenu();
+
             this.assignCookieData();
 
             this.$el.removeClass('block-transition');
@@ -428,9 +441,19 @@
 
         getBasePath: function () {
             return window.csrfConfig.basePath || '/';
+        },
+
+        closePreviousOffCanvasMenu: function () {
+            var offCanvasMenuPlugin = $(this.opts.offCanvasCategoryMenuSelector).data('plugin_swOffcanvasMenu');
+
+            if (!offCanvasMenuPlugin) {
+                return;
+            }
+
+            offCanvasMenuPlugin.closeMenu();
         }
     });
-})(jQuery, window);
+})(jQuery, window, location);
 
 function openCookieConsentManager () {
     var plugin = $('*[data-cookie-consent-manager="true"]').data('plugin_swCookieConsentManager');

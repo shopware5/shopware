@@ -314,6 +314,11 @@ Ext.define('Shopware.ModuleManager', {
             subModule,
             component;
 
+        // Some browser extensions are using post message
+        if (!Ext.isDefined(event.data)) {
+            return;
+        }
+
         // Check if our prefix is at the beginning of the string
         if (event.data.indexOf(me.prefix) !== 0) {
             return;

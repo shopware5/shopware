@@ -14,7 +14,7 @@
             <div class="box--content">
 
                 {* Product badges *}
-                {block name='frontend_listing_box_article_badges'}
+                {block name='frontend_listing_box_article_badges_container'}
                     {if !$imageOnly}
                         {include file="frontend/listing/product-box/product-badges.tpl"}
                     {/if}

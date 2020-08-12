@@ -37,13 +37,6 @@ class Oyejorge implements LessCompiler
     public function __construct(\Less_Parser $compiler)
     {
         $this->compiler = $compiler;
-        $this->compiler->registerFunction('swhash', function (Less_Tree_Quoted $filename) {
-            $absPath = $filename->currentFileInfo['currentDirectory'] . $filename->value;
-            $shopwareRevision = $this->compiler->findValueOf('shopware-revision');
-            $filename->value = md5($shopwareRevision . md5_file($absPath));
-
-            return $filename;
-        });
     }
 
     /**
@@ -53,6 +46,13 @@ class Oyejorge implements LessCompiler
     public function setConfiguration(array $configuration)
     {
         $this->compiler->SetOptions($configuration);
+        $this->compiler->registerFunction('swhash', function (Less_Tree_Quoted $filename) {
+            $absPath = $filename->currentFileInfo['currentDirectory'] . $filename->value;
+            $shopwareRevision = $this->compiler->findValueOf('shopware-revision');
+            $filename->value = md5($shopwareRevision . md5_file($absPath));
+
+            return $filename;
+        });
     }
 
     /**
