@@ -110,7 +110,7 @@ class CookieSubscriberTest extends TestCase
 
     protected function containerGetMock($key)
     {
-        if ($key === 'config') {
+        if ($key === \Shopware_Components_Config::class) {
             return new Enlight_Collection_ArrayCollection([
                 'useSltCookie' => true,
             ]);
@@ -120,7 +120,7 @@ class CookieSubscriberTest extends TestCase
             return $this->getFrontControllerMock($this->response, $this->request);
         }
 
-        if ($key === 'shopware_storefront.context_service') {
+        if ($key === \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class) {
             return $this->getContextServiceMock();
         }
 
