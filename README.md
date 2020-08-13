@@ -70,10 +70,10 @@ In case you wish to contribute to Shopware, fork the `5.6` branch rather than cl
 Depending on your server configuration, it might be necessary to set whole write permissions (777) to the files and folders above.
 You can also start testing with lower permissions due to security reasons (644 for example) as long as your php process can write to those files.
 
-3.) A [psh](https://github.com/shopwareLabs/psh) Buildfile is used to set up the configuration and database connection:
+3.) A [Makefile](https://www.gnu.org/software/make/manual/make.html) is used to set up the configuration and database connection:
 
-* Optonal: Copy `.psh.yaml.dist` to `.psh.yaml` and modify variables if needed
-* ``./psh.phar init``
+* Copy `.env.dist` to `.env` and modify variables if needed
+* ``make init``
 
 4.) Download the test images and extract them:
 

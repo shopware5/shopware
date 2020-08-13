@@ -6,6 +6,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Breaks
 
+* Replaced `psh` and `ant` with an `Makefile`. See updated README.md for installation workflow.
 * Changed min PHP version to 7.3
 * Added new required methods `saveCustomUrls` and `saveExcludedUrls` to interface `Shopware\Bundle\SitemapBundle\ConfigHandler\ConfigHandlerInterface`
 * Changed Symfony version to 4.4

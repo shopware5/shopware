@@ -19,7 +19,7 @@
     </target>
 
     <target name="build-continuous" depends="unit-shopware-continuous"/>
-    <target name="build-unit" depends="build-composer-install, build-cache-dir, build-config, build-database, build-snippets-deploy, build-theme-initialize,build-create-admin-account, build-install-lock-file, build-disable-firstrunwizard, install-git-hooks" />
+    <target name="build-unit" depends="build-composer-install, build-cache-dir, build-database, build-snippets-deploy, build-theme-initialize,build-create-admin-account, build-install-lock-file, build-disable-firstrunwizard, install-git-hooks" />
     <target name="test-unit" depends="unit-shopware"/>
 
     <target name="write-properties" description="Write build-variables to file">
@@ -202,18 +202,6 @@
         <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:cache:clear"/>
         </exec>
-    </target>
-
-    <target name="build-config">
-        <copy file="${basedir}/config.php.dist" toFile="${basedir}/config.php" overwrite="true">
-            <filterset begintoken="%" endtoken="%">
-                <filter token="db.database" value="${db.name}"/>
-                <filter token="db.host"     value="${db.host}"/>
-                <filter token="db.user"     value="${db.user}"/>
-                <filter token="db.password" value="${db.password}"/>
-                <filter token="db.port"     value="${db.port}"/>
-            </filterset>
-        </copy>
     </target>
 
     <target name="build-log-dir">
