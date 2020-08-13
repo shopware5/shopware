@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Login.controller.Main', {
                 var lockedUntil, message;
                 if(action.result.lockedUntil) {
                     action.result.lockedUntil = new Date(action.result.lockedUntil);
-                    message = "{s name=\"failure/locked_message\"}{/s}";
+                    message = '{"failure/locked_message"|snippet|escape}';
                     message = new Ext.Template(message);
                     message = message.applyTemplate(action.result);
                 } else {

@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             successMessage: '{s name="domainRegistration/successMessage"}Domain registration successful{/s}',
             waitTitle: '{s name="domainRegistration/waitTitle"}Registering domain{/s}',
             waitMessage: '{s name="domainRegistration/waitMessage"}This process might take a few seconds{/s}',
-            validationFailed: '{s name="domainRegistration/validationFailed"}{/s}'
+            validationFailed: '{"domainRegistration/validationFailed"|snippet|escape}'
         },
 
         login: {

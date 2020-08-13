@@ -35,7 +35,7 @@ namespace Shopware\Components\DependencyInjection;
  */
 class SimpleFactory
 {
-    public function factory($class)
+    public static function factory($class)
     {
         return $class;
     }

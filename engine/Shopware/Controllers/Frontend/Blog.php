@@ -289,7 +289,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogArticleData = $blogArticleQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $translation = $this->get(\Shopware_Components_Translation::class)->readWithFallback($shop->getId(), $shop->getFallback() ? $shop->getFallback()->getId() : null, 'blog', $blogArticleId);
-        $blogArticleData = array_merge($blogArticleData, $translation);
+        $blogArticleData = array_merge($blogArticleData ?? [], $translation ?? []);
 
         // Redirect if the blog item is not available
         if (empty($blogArticleData) || empty($blogArticleData['active'])) {

@@ -602,7 +602,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $limit = max(1, $limit);
 
         $customerStreams = '1=2';
-        $ids = array_keys($mailing['groups'][2]);
+        $ids = array_keys($mailing['groups'][2] ?? []);
         if (!empty($ids)) {
             $ids = array_map(function ($id) {
                 return (int) $id;
@@ -621,7 +621,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
 
             LEFT JOIN s_user su
             ON sc.email=su.email
-            
+
             LEFT JOIN s_customer_streams_mapping mapping
               ON mapping.customer_id = su.id
 

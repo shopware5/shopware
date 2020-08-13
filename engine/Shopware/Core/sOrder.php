@@ -1974,12 +1974,16 @@ EOT;
     /**
      * Helper function to recursively apply html_entity_decode() to the given data.
      *
-     * @param array|string $data
+     * @param array|string|null $data
      *
-     * @return array|string
+     * @return array|string|null
      */
     private function htmlEntityDecodeRecursive($data)
     {
+        if ($data === null) {
+            return null;
+        }
+
         $func = function ($item) use (&$func) {
             return is_array($item) ? array_map($func, $item) : call_user_func('html_entity_decode', $item);
         };

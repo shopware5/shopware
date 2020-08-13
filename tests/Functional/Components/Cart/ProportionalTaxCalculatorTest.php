@@ -204,7 +204,6 @@ class ProportionalTaxCalculatorTest extends \Enlight_Components_Test_TestCase
             [new Price('0.0', '0.0', '10', '0.0')],
             [new Price('5,5', '4,0', 11, '1,1')],
             [new Price('0.51954864', '0.41954864', 13, '0.1')],
-            [new Price('Foo', 'Bar', 'PHP', 'UNIT')],
         ];
     }
 }

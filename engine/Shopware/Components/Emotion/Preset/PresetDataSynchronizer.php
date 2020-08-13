@@ -230,6 +230,10 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
         $assets = $syncData->get('assets');
 
         foreach ($assets as $key => &$path) {
+            if (is_array($path)) {
+                continue;
+            }
+
             if (strpos($path, '/custom/') === 0) {
                 $path = 'file://' . $this->rootDir . $path;
             }
