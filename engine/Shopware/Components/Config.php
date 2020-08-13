@@ -114,7 +114,7 @@ class Shopware_Components_Config implements ArrayAccess
      */
     public function __set($name, $value)
     {
-        return $this->offsetSet($name, $value);
+        $this->offsetSet($name, $value);
     }
 
     /**

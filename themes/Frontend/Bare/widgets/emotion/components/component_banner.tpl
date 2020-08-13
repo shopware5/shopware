@@ -38,8 +38,10 @@
                                 {$retinaSrcSet = "{if $retinaSrcSet}{$retinaSrcSet}, {/if}{$image.retinaSource} {$image.maxWidth}w"}
                             {/if}
                         {/foreach}
-                    {else}
+                    {elseif $Data.source}
                         {$baseSource = $Data.source}
+                    {elseif $Data.file}
+                        {$baseSource = $Data.file}
                     {/if}
 
                     {if $Data.title}

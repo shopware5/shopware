@@ -161,6 +161,11 @@ class CrudService implements CrudServiceInterface
         $items = [];
         foreach ($columns as $column) {
             $name = strtolower($column->getName());
+            $default = $column->getDefault();
+
+            if ($default === 'NULL') {
+                $default = null;
+            }
 
             $item = new ConfigurationStruct();
             $item->setTableName($table);
@@ -169,7 +174,7 @@ class CrudService implements CrudServiceInterface
             $item->setCore($this->tableMapping->isCoreColumn($table, $column->getName()));
             $item->setColumnType($this->typeMapping->dbalToUnified($column->getType()));
             $item->setElasticSearchType($this->typeMapping->unifiedToElasticSearch($item->getColumnType()));
-            $item->setDefaultValue($column->getDefault());
+            $item->setDefaultValue($default);
 
             if (isset($configuration[$name])) {
                 $config = $configuration[$name];
@@ -189,7 +194,7 @@ class CrudService implements CrudServiceInterface
                 $item->setEntity($config['entity']);
                 $item->setArrayStore($config['arrayStore']);
                 $item->setElasticSearchType($this->typeMapping->unifiedToElasticSearch($config['columnType']));
-                $item->setDefaultValue($config['defaultValue']);
+                $item->setDefaultValue($config['defaultValue'] === 'NULL' ? null : $config['defaultValue']);
             }
             $items[] = $item;
         }

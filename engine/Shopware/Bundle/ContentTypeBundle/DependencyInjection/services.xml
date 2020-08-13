@@ -51,6 +51,7 @@
             <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\SynchronizerService"/>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\ContentTypeCleanupServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\TypeProvider"/>
         </service>
 
         <service id="Shopware\Bundle\ContentTypeBundle\Services\TypeProvider">

@@ -63,7 +63,7 @@ class UniqueIdGeneratorTest extends TestCase
             ->setMethods(['fetchColumn', 'executeUpdate'])
             ->getMock();
 
-        $connectionMock->expects(static::exactly(1))
+        $connectionMock->expects(static::exactly(2))
             ->method('fetchColumn')
             ->willReturn(null);
 

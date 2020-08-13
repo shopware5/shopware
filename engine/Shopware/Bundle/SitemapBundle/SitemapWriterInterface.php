@@ -36,7 +36,7 @@ interface SitemapWriterInterface
     public function writeFile(Shop $shop, array $urls = []);
 
     /**
-     * @return bool
+     * @return void
      */
     public function closeFiles();
 }

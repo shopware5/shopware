@@ -27,6 +27,7 @@ use Shopware\Bundle\OrderBundle\Service\OrderListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\Cart\BasketHelperInterface;
+use Shopware\Components\Cart\CartOrderNumberProviderInterface;
 use Shopware\Components\Cart\Struct\CartItemStruct;
 use Shopware\Components\Cart\Struct\DiscountContext;
 use Shopware\Components\Random;
@@ -137,6 +138,11 @@ class sBasket implements \Enlight_Hook
     private $orderListProductService;
 
     /**
+     * @var CartOrderNumberProviderInterface
+     */
+    private $cartOrderNumberProvider;
+
+    /**
      * @throws \Exception
      */
     public function __construct(
@@ -178,6 +184,7 @@ class sBasket implements \Enlight_Hook
 
         $this->proportionalTaxCalculation = $this->config->get('proportionalTaxCalculation');
         $this->fieldHelper = Shopware()->Container()->get('shopware_storefront.field_helper_dbal');
+        $this->cartOrderNumberProvider = Shopware()->Container()->get(CartOrderNumberProviderInterface::class);
         $this->orderListProductService = Shopware()->Container()->get(OrderListProductServiceInterface::class);
     }
 
@@ -418,8 +425,7 @@ class sBasket implements \Enlight_Hook
 
         $this->sSYSTEM->sUSERGROUPDATA['basketdiscount'] = $basketDiscount;
 
-        $discountNumber = $this->config->get('sDISCOUNTNUMBER');
-        $name = isset($discountNumber) ? $discountNumber : 'DISCOUNT';
+        $name = $this->cartOrderNumberProvider->get(CartOrderNumberProviderInterface::DISCOUNT);
 
         $discountName = -$basketDiscount . ' % ' . $this->snippetManager
                 ->getNamespace('backend/static/discounts_surcharges')
@@ -1067,16 +1073,16 @@ SQL;
      */
     public function sInsertSurcharge()
     {
-        $name = $this->config->get('sSURCHARGENUMBER', 'SURCHARGE');
+        $name = $this->cartOrderNumberProvider->get(CartOrderNumberProviderInterface::SURCHARGE);
 
         // Delete previous inserted discounts
-        $this->db->delete(
-            's_order_basket',
-            [
-                'sessionID = ?' => $this->session->get('sessionId'),
-                'ordernumber = ?' => $name,
-            ]
-        );
+        $this->connection->createQueryBuilder()
+            ->where('sessionID = :sessionId')
+            ->andWhere('ordernumber IN (:names)')
+            ->setParameter('names', $this->cartOrderNumberProvider->getAll(CartOrderNumberProviderInterface::SURCHARGE), Connection::PARAM_STR_ARRAY)
+            ->setParameter('sessionId', $this->session->get('sessionId'))
+            ->delete('s_order_basket')
+            ->execute();
 
         if (!$this->sCountBasket()) {
             return false;
@@ -1203,12 +1209,15 @@ SQL;
 
         // Depends on payment mean
         $percent = $paymentInfo['debit_percent'];
-        $name = $this->config->get('sPAYMENTSURCHARGENUMBER', 'PAYMENTSURCHARGE');
+        $name = $this->cartOrderNumberProvider->get(CartOrderNumberProviderInterface::PAYMENT_PERCENT);
 
-        $this->db->query(
-            'DELETE FROM s_order_basket WHERE sessionID = ? AND ordernumber = ?',
-            [$this->session->get('sessionId'), $name]
-        );
+        $this->connection->createQueryBuilder()
+            ->where('sessionID = :sessionId')
+            ->andWhere('ordernumber IN (:names)')
+            ->setParameter('names', $this->cartOrderNumberProvider->getAll(CartOrderNumberProviderInterface::PAYMENT_PERCENT), Connection::PARAM_STR_ARRAY)
+            ->setParameter('sessionId', $this->session->get('sessionId'))
+            ->delete('s_order_basket')
+            ->execute();
 
         if (!$this->sCountBasket()) {
             return false;
@@ -2195,6 +2204,7 @@ SQL;
     private function convertListProductToNote(ListProduct $product, array $note)
     {
         $structConverter = Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class);
+        /** @var array $promotion */
         $promotion = $structConverter->convertListProductStruct($product);
 
         $promotion['id'] = $note['id'];
@@ -2203,6 +2213,7 @@ SQL;
         if ($product->hasConfigurator() && $product->getAdditional()) {
             $promotion['articlename'] .= ' ' . $product->getAdditional();
         }
+
         $promotion['linkDelete'] = $this->config->get('sBASEFILE') . '?sViewport=note&sDelete=' . $note['id'];
 
         return $promotion;
@@ -2909,7 +2920,7 @@ SQL;
                 $additionalInfo['purchasesteps'] = 1;
             }
 
-            if (($quantity / $additionalInfo['purchasesteps']) != (int) $quantity / $additionalInfo['purchasesteps']) {
+            if (($quantity / $additionalInfo['purchasesteps']) != (int) ($quantity / $additionalInfo['purchasesteps'])) {
                 $quantity = (int) ($quantity / $additionalInfo['purchasesteps']) * $additionalInfo['purchasesteps'];
             }
 

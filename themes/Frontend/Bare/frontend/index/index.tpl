@@ -166,6 +166,7 @@
 
     {block name="frontend_index_header_javascript"}
         {$controllerData = [
+            'home' => {url controller="index" fullPath},
             'vat_check_enabled' => {config name='vatcheckendabled'},
             'vat_check_required' => {config name='vatcheckrequired'},
             'register' => {url controller="register"},

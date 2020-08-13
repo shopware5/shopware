@@ -42,5 +42,9 @@
         <service id="shopware_controllers_widgets_recommendation" class="Shopware_Controllers_Widgets_Recommendation">
             <tag name="shopware.controller" module="widgets" controller="recommendation"/>
         </service>
+
+        <service id="shopware_controllers_widgets_blog" class="Shopware\Controllers\Widgets\Blog">
+            <tag name="shopware.controller" module="widgets" controller="blog"/>
+        </service>
     </services>
 </container>

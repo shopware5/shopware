@@ -46,13 +46,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         'licencePluginDownloadActivate': '{s name="licence_plugin_install_and_activate"}The Shopware License Manager plugin is needed to install this plugin, but is currently not installed on your system. <br><br><strong>Do you want to install the Shopware License Manager plugin?<strong>{/s}',
         'licencePluginActivate': '{s name="licence_plugin_activate"}The Shopware License Manager plugin is needed to install this plugin, but is currently not active on your system. <br><br>Do you want to activate the Shopware License Manager plugin?<strong>{/s}',
 
-        newRegistrationForm: {
-            successTitle: '{s name=newRegistrationForm/successTitle}Shopware ID registration{/s}',
-            successMessage: '{s name=newRegistrationForm/successMessage}Your Shopware ID has been successfully registered{/s}',
-            waitTitle: '{s name=newRegistrationForm/waitTitle}Registering your Shopware ID{/s}',
-            waitMessage: '{s name=newRegistrationForm/waitMessage}This process might take a few seconds{/s}'
-        },
-
         domainRegistration: {
             successTitle: '{s name=domainRegistration/successTitle}Domain registration{/s}',
             successMessage: '{s name=domainRegistration/successMessage}Domain registration successful{/s}',
@@ -109,7 +102,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             'check-store-login': me.checkLogin,
             'open-login': me.openLogin,
             'destroy-login': me.destroyLogin,
-            'store-register': me.register,
             'clear-all-cache': me.clearAllCache,
             scope: me
         };
@@ -449,57 +441,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 me.displayErrorMessage(response, callback);
             }
         );
-    },
-
-    register: function(registerData, callback) {
-        var me = this;
-
-        me.submitShopwareIdRequest(
-            registerData,
-            '{url controller="firstRunWizard" action="registerNewId"}',
-            callback
-        );
-    },
-
-    submitShopwareIdRequest: function(params, url, callback) {
-        var me = this;
-
-        me.splashScreen = Ext.Msg.wait(
-            me.snippets.newRegistrationForm.waitMessage,
-            me.snippets.newRegistrationForm.waitTitle
-        );
-
-        Ext.Ajax.request({
-            url: url,
-            method: 'POST',
-            params: params,
-            callback: function(options, success, response) {
-                var result = Ext.JSON.decode(response.responseText, true);
-
-                if (!result || result.success == false) {
-                    response = Ext.decode(response.responseText);
-                    me.displayErrorMessage(response);
-
-                    me.splashScreen.close();
-                } else if (result.success) {
-                    Shopware.Notification.createGrowlMessage(
-                        me.snippets.newRegistrationForm.successTitle,
-                        me.snippets.newRegistrationForm.successMessage,
-                        me.snippets.growlMessage
-                    );
-
-                    Ext.create('Shopware.notification.SubscriptionWarning').checkSecret();
-
-                    if (params.registerDomain !== false) {
-                        me.submitShopwareDomainRequest(params, callback);
-                    }
-
-                    response.shopwareId = params.shopwareID;
-                    me.fireRefreshAccountData(response);
-                    callback(response);
-                }
-            }
-        });
     },
 
     submitShopwareDomainRequest: function(params, callback) {

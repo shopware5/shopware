@@ -192,7 +192,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
     /**
      * @param int[] $categoryIds
      *
-     * @return string[] indexed by id
+     * @return array<string, string[]> indexed by id
      */
     private function getCategoryMapping(array $categoryIds)
     {

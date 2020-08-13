@@ -133,7 +133,14 @@
              *
              * @type {Number}
              */
-            arrowOffset: 25
+            arrowOffset: 25,
+
+            /**
+             * Disables updating scrollbar offset
+             *
+             * @type {Boolean}
+             */
+            disableScrollBarUpdate: false
         },
 
         /**
@@ -246,6 +253,10 @@
                 $list = me.$list,
                 offset;
 
+            if (this.opts.disableScrollBarUpdate) {
+                return;
+            }
+            
             offset = me.scrollBarOffset = Math.min(Math.abs($list[0].scrollHeight - $list.height()) * -1, me.scrollBarOffset);
 
             $list.css({

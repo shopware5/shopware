@@ -105,10 +105,16 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         $proxy = $this->getProxyClassName($class);
 
         if (!is_readable($proxyFile)) {
-            if (!is_writable($this->proxyDir)) {
-                throw new \Exception(sprintf('The directory "%s" is not writable.', $this->proxyDir));
+            if (!file_exists($this->proxyDir)) {
+                if (!mkdir($concurrentDirectory = $this->proxyDir) && !is_dir($concurrentDirectory)) {
+                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+                }
             }
-            $content = $this->generateProxyClass($class);
+            if (!is_writable($this->proxyDir)) {
+                throw new \RuntimeException(sprintf('The directory "%s" is not writable.', $this->proxyDir));
+            }
+
+                $content = $this->generateProxyClass($class);
             $this->writeProxyClass($proxyFile, $content);
         } elseif (!method_exists($proxy, 'executeParent')) {
             @unlink($proxyFile);

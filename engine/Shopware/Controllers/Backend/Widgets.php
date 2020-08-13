@@ -203,6 +203,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $startDate->setTime(0, 0, 0)->sub(new DateInterval('P7D'));
 
         // Get turnovers
+        /** @var array $fetchAmount */
         $fetchAmount = Shopware()->Container()->get('db')->fetchRow(
             'SELECT
                 (
@@ -439,6 +440,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         LIMIT 20
         ';
 
+        /** @var array $result */
         $result = Shopware()->Container()->get('db')->fetchAll($sql);
         foreach ($result as &$order) {
             $order['customer'] = htmlentities(
@@ -562,6 +564,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             AND validation != '0'
         ORDER BY s_user.firstlogin DESC";
 
+        /** @var array $fetchUsersToUnlock */
         $fetchUsersToUnlock = Shopware()->Container()->get('db')->fetchAll($sql);
 
         foreach ($fetchUsersToUnlock as &$user) {
