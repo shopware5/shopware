@@ -75,23 +75,8 @@
             </call>
         </service>
 
-        <!-- ChromePHP handler-->
-        <service id="monolog.handler.chromephp" class="Shopware\Components\Log\Handler\ChromePhpHandler">
-            <tag name="shopware.event_listener" method="onRouteStartUp" event="Enlight_Controller_Front_RouteStartup" />
-        </service>
-
-        <!-- FirePHP handler-->
-        <service id="monolog.formatter.wildfire" class="Shopware\Components\Log\Formatter\WildfireFormatter" />
-        <service id="monolog.handler.firephp" class="Shopware\Components\Log\Handler\FirePHPHandler">
-            <call method="setFormatter">
-                <argument type="service" id="monolog.formatter.wildfire" />
-            </call>
-            <tag name="shopware.event_listener" method="onRouteStartUp" event="Enlight_Controller_Front_RouteStartup" />
-        </service>
-
-        <!--Debug logger used for chrome/firefox logging -->
-        <service id="debuglogger" class="Shopware\Components\Logger">
-            <argument>debug</argument>
+        <service id="debuglogger" alias="corelogger">
+            <deprecated>The "%alias_id%" service id is deprecated since 5.7.0, use "corelogger" instead. Will be removed with 5.8.0</deprecated>
         </service>
 
         <service id="shopware.log.fileparser" class="Shopware\Components\Log\Parser\LogfileParser"/>

@@ -254,9 +254,6 @@
         <service id="Monolog\Processor\UidProcessor" alias="monolog.processor.uid" />
         <service id="Monolog\Formatter\NormalizerFormatter" alias="monolog.formatter.normalizer" />
         <service id="Monolog\Handler\FingersCrossedHandler" alias="monolog.handler.fingers_crossed" />
-        <service id="Shopware\Components\Log\Handler\ChromePhpHandler" alias="monolog.handler.chromephp" />
-        <service id="Shopware\Components\Log\Formatter\WildfireFormatter" alias="monolog.formatter.wildfire" />
-        <service id="Shopware\Components\Log\Handler\FirePHPHandler" alias="monolog.handler.firephp" />
         <service id="Shopware\Components\Log\Parser\LogfileParser" alias="shopware.log.fileparser" />
         <service id="Shopware\Commands\AdminCreateCommand" alias="shopware.commands.admin_create_command" />
         <service id="Shopware\Commands\CacheClearCommand" alias="shopware.commands.cache_clear_command" />

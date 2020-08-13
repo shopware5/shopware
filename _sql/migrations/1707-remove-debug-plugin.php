@@ -21,27 +21,15 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-namespace Shopware\Tests\Plugins\Core\Debug;
-
-class DebugTest extends \Enlight_Components_Test_Plugin_TestCase
+class Migrations_Migration1707 extends Shopware\Components\Migrations\AbstractMigration
 {
-    /**
-     * @ticket SW-5148
-     */
-    public function testStartDispatch()
+    public function up($modus)
     {
-        $front = Shopware()->Front();
-        $request = new \Enlight_Controller_Request_RequestTestCase();
-        $request->setClientIp('127.0.0.1');
-        $front->setRequest($request);
+        $this->addSql('SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = "Debug" AND source = "Default" AND namespace = "Core" LIMIT 1)');
+        $this->addSql('SET @formId = (SELECT id FROM s_core_config_forms WHERE plugin_id = @pluginId LIMIT 1)');
 
-        $eventArgs = $this->createEventArgs()->set('subject', $front);
-
-        $plugin = Shopware()->Plugins()->Core()->Debug();
-        $plugin->Config()->AllowIP = '127.0.0.1';
-        $plugin->onStartDispatch($eventArgs);
-
-        static::assertInstanceOf('Shopware_Plugins_Core_Debug_Bootstrap', $plugin);
+        $this->addSql('DELETE FROM s_core_config_elements WHERE form_id = @formId AND @formId IS NOT NULL');
+        $this->addSql('DELETE FROM s_core_config_forms WHERE id = @formId AND @formId IS NOT NULL');
+        $this->addSql('DELETE FROM s_core_plugins WHERE id = @pluginId');
     }
 }
