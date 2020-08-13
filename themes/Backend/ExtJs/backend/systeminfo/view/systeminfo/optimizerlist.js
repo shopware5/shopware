@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/systeminfo/view}
+//{namespace name="backend/systeminfo/view"}
 //{block name="backend/systeminfo/view/systeminfo/optimizerlist"}
 Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Optimizerlist', {
 
@@ -87,15 +87,15 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Optimizerlist', {
 
         return [
             {
-                header: '{s name=optimizer_grid/column/name}Name{/s}',
+                header: '{s name="optimizer_grid/column/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1
             },{
-                header: '{s name=optimizer_grid/column/mimetype}Mime-Type{/s}',
+                header: '{s name="optimizer_grid/column/mimetype"}Mime-Type{/s}',
                 dataIndex: 'mimeTypes',
                 flex: 1
             },{
-                header: '{s name=optimizer_grid/column/runnable}Runnable{/s}',
+                header: '{s name="optimizer_grid/column/runnable"}Runnable{/s}',
                 dataIndex: 'runnable',
                 flex: 1,
                 renderer: me.renderStatus

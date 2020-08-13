@@ -18,7 +18,7 @@
 
         {* Per page field *}
         {block name='frontend_listing_actions_items_per_page_field'}
-            {$listingMode = {config name=listingMode}}
+            {$listingMode = {config name="listingMode"}}
 
             <div class="per-page--select select-field">
                 <select id="{$shortParameters.sPerPage}"

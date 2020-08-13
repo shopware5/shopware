@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/base/article_search}
+//{namespace name="backend/base/article_search"}
 
 /**
  * Shopware UI - Article Live Suggest Search
@@ -179,13 +179,13 @@ Ext.define('Shopware.form.field.ArticleSearch',
      * Text for the confirm button in the multi select toolbar.
      * @string
      */
-    confirmButtonText: '{s name=save_assigned_articles}Save assigned articles{/s}',
+    confirmButtonText: '{s name="save_assigned_articles"}Save assigned articles{/s}',
 
     /**
      * Text for the confirm button in the multi select toolbar.
      * @string
      */
-    cancelButtonText: '{s name=reset_articles}Reset articles{/s}',
+    cancelButtonText: '{s name="reset_articles"}Reset articles{/s}',
 
     /**
      * Separator for the returned values
@@ -233,13 +233,13 @@ Ext.define('Shopware.form.field.ArticleSearch',
      * @cfg { string } emptyText
      * Empty text for the search field
      */
-    emptyText: '{s name=search_default_text}Search...{/s}',
+    emptyText: '{s name="search_default_text"}Search...{/s}',
 
     snippets: {
-        assignedArticles: '{s name=assigned_articles}Assigned articles{/s}',
-        articleName: '{s name=article_name}Article name{/s}',
-        orderNumber: '{s name=ordernumber}Order number{/s}',
-        dropDownTitle: '{s name=search_result/article}Article{/s}'
+        assignedArticles: '{s name="assigned_articles"}Assigned articles{/s}',
+        articleName: '{s name="article_name"}Article name{/s}',
+        orderNumber: '{s name="ordernumber"}Order number{/s}',
+        dropDownTitle: '{s name="search_result/article"}Article{/s}'
     },
 
     /**

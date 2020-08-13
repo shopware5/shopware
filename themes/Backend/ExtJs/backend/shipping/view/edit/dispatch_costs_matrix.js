@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/view/edit/costs_matrix}*/
+/*{namespace name="backend/shipping/view/edit/costs_matrix"}*/
 
 /**
  * Shopware UI - Shipping Costs
@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
      * Title of the tab
      * @string
      */
-    title : '{s name=title}Shipping costs{/s}',
+    title : '{s name="title"}Shipping costs{/s}',
     /**
      * Border width
      * @integer
@@ -126,7 +126,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
         var me = this;
         return [
             {
-                header      : '{s name=from}From{/s}',
+                header      : '{s name="from"}From{/s}',
                 dataIndex   : 'from',
                 name        : 'from',
                 flex: 1,
@@ -138,7 +138,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
                 }
             },
             {
-                header      : '{s name=to}To{/s}',
+                header      : '{s name="to"}To{/s}',
                 dataIndex   : 'to',
                 flex: 2,
                 sortable : false,
@@ -150,7 +150,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
                 }
             },
             {
-                header      : '{s name=deliver_costs}Shipping costs{/s}',
+                header      : '{s name="deliver_costs"}Shipping costs{/s}',
                 dataIndex   : 'value',
                 flex: 2,
                 sortable : false,
@@ -162,7 +162,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
             },
             {
                 format      : '0.00',
-                header      : '{s name=factor}Factor(%){/s}',
+                header      : '{s name="factor"}Factor(%){/s}',
                 dataIndex   : 'factor',
                 flex: 2,
                 sortable : false,
@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
                     iconCls : 'sprite-minus-circle-frame',
                     action  : 'deleteCostsMatrixEntry',
                     //cls     : 'dispatchDelete',
-                    tooltip : '{s name=grid_delete_tooltip}Delete these shipping costs.{/s}',
+                    tooltip : '{s name="grid_delete_tooltip"}Delete these shipping costs.{/s}',
                     renderer: me.onActionRender,
                     getClass: function(value, metadata, record) {
                         if (record.data.to > 0)  {
@@ -214,7 +214,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
 //                'class'   : 'sprite-minus-circle-frame x-action-col-icon delete ',
 //                cls     : 'delete',
 //                style   : 'margin-left: 10px',
-//                tooltip : '{s name=delete}Delete this entry.{/s}',
+//                tooltip : '{s name="delete"}Delete this entry.{/s}',
 //                // actionColum
 //                onclick : "Ext.getCmp('shipping-view-edit-costs-matrix').onDeleteClick(" + row + ");"
 //            });
@@ -228,7 +228,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
      */
     onToRender : function(value) {
         if (value == 0) {
-            return '{s name=unlimited}unlimited{/s}';
+            return '{s name="unlimited"}unlimited{/s}';
         }
         return value;
     },

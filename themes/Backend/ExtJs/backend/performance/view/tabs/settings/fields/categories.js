@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Categories fieldSet
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
     /**
      * Description of the fieldSet
      */
-    caption: '{s name=tabs/settings/categories/title}Categories{/s}',
+    caption: '{s name="tabs/settings/categories/title"}Categories{/s}',
 
     /**
      * Component event method which is fired when the component
@@ -72,21 +72,21 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/information}Information{/s}',
+                title: '{s name="fieldset/information"}Information{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name=fieldset/categories/info}Hier können Sie Einstellungen vornehmen, die die Performance der Produkt-Listings betreffen.{/s}")]
+                    me.createDescriptionContainer('{s name="fieldset/categories/info"}Hier können Sie Einstellungen vornehmen, die die Performance der Produkt-Listings betreffen.{/s}')]
             },
             {
                 xtype: 'fieldset',
-                title: '{s name=fieldset/configuration}Configuration{/s}',
+                title: '{s name="fieldset/configuration"}Configuration{/s}',
                 items: [
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'category',
-                        title: '{s name=fieldset/categories/repair}Rebuild category tree{/s}'
+                        title: '{s name="fieldset/categories/repair"}Rebuild category tree{/s}'
                     },
                     {
-                        fieldLabel: '{s name=fieldset/categories/text/moveBatchModeEnabled}Move categories in batch-mode{/s}',
+                        fieldLabel: '{s name="fieldset/categories/text/moveBatchModeEnabled"}Move categories in batch-mode{/s}',
                         helpText: '',
                         name: 'categories[moveBatchModeEnabled]',
                         xtype: 'checkbox',
@@ -98,11 +98,11 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
             }, {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/listings}Listings{/s}',
+                title: '{s name="fieldset/listings"}Listings{/s}',
                 items: [{
                     name: 'categories[articlesperpage]',
-                    fieldLabel: '{s name=fieldset/categories/text/perPage}Articles per page{/s}',
-                    helpText: '{s name=fieldset/categories/help/perPage}How many articles should be shown per page?{/s}',
+                    fieldLabel: '{s name="fieldset/categories/text/perPage"}Articles per page{/s}',
+                    helpText: '{s name="fieldset/categories/help/perPage"}How many articles should be shown per page?{/s}',
                     xtype: 'numberfield',
                     minValue: 1
                 }]

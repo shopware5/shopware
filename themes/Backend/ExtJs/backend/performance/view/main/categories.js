@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 //{block name="backend/performance/view/main/categories"}
 Ext.define('Shopware.apps.Performance.view.main.Categories', {
@@ -106,10 +106,10 @@ Ext.define('Shopware.apps.Performance.view.main.Categories', {
      * @object
      */
     snippets: {
-        title:'{s name=progress/title}Fix category tree{/s}',
-        cancel:'{s name=progress/cancel}Cancel process{/s}',
-        start:'{s name=progress/start}Start process{/s}',
-        close:'{s name=progress/close}Close window{/s}'
+        title:'{s name="progress/title"}Fix category tree{/s}',
+        cancel:'{s name="progress/cancel"}Cancel process{/s}',
+        start:'{s name="progress/start"}Start process{/s}',
+        close:'{s name="progress/close"}Close window{/s}'
     },
 
     /**

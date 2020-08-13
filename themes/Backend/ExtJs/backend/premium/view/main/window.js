@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/premium/main}
+//{namespace name="backend/premium/main"}
 
 /**
  * todo@all: Documentation
@@ -35,7 +35,7 @@
 //{block name="backend/premium/view/main/window"}
 Ext.define('Shopware.apps.Premium.view.main.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window_title}Premium articles{/s}',
+    title: '{s name="window_title"}Premium articles{/s}',
     cls: Ext.baseCSSPrefix + 'premium-window',
     alias: 'widget.premium-main-window',
     border: false,

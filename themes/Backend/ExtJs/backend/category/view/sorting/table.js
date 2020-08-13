@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/* {namespace name=backend/category/sorting} */
+/* {namespace name="backend/category/sorting"} */
 
 //{block name="backend/category/view/sorting/table"}
 Ext.define('Shopware.apps.Category.view.sorting.Table', {
@@ -191,7 +191,7 @@ Ext.define('Shopware.apps.Category.view.sorting.Table', {
             store: comboStore,
             valueField: 'value',
             displayField: 'display',
-            fieldLabel: '{s name="items_per_page" name=backend/customer/view/main}{/s}',
+            fieldLabel: '{s name="items_per_page" name="backend/customer/view/main"}{/s}',
             labelStyle: 'margin-top: 2px',
             width: 220,
             labelWidth: 110,

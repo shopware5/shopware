@@ -28,7 +28,7 @@
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/chart/device_types"}
 Ext.define('Shopware.apps.Analytics.view.chart.DeviceTypes', {
     extend: 'Shopware.apps.Analytics.view.main.Chart',
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.DeviceTypes', {
                 type: 'Numeric',
                 position: 'bottom',
                 fields: me.getAxesFields('turnover'),
-                title: '{s name=general/turnover}Turnover{/s}',
+                title: '{s name="general/turnover"}Turnover{/s}',
                 grid: true,
                 minimum: 0
             },
@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.DeviceTypes', {
                 type: 'Category',
                 position: 'left',
                 fields: ['deviceTypeHuman'],
-                title: '{s name=chart/device_types/title}Device type{/s}'
+                title: '{s name="chart/device_types/title"}Device type{/s}'
             }
         ];
 
@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.DeviceTypes', {
                 gutter: 80,
                 xField: 'name',
                 yField: me.getAxesFields('turnover'),
-                title: me.getAxesTitles('{s name=general/turnover}Turnover{/s}'),
+                title: me.getAxesTitles('{s name="general/turnover"}Turnover{/s}'),
                 stacked: true,
                 label: {
                     display: 'insideEnd',

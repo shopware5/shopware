@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order detail page
@@ -77,25 +77,25 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
      * @object
      */
     snippets: {
-        title: '{s name=shipping/title}Alternative shipping address{/s}',
-        titleField: '{s name=address/title_field}Title{/s}',
-        firstName: '{s name=address/first_name}First name{/s}',
-        lastName: '{s name=address/last_name}Last name{/s}',
-        street: '{s name=address/street}street{/s}',
-        zipCode: '{s name=address/zip_code}Zip code{/s}',
-        city: '{s name=address/city}City{/s}',
-        additionalAddressLine1: '{s name=address/additionalAddressLine1}Additional address line 1{/s}',
-        additionalAddressLine2: '{s name=address/additionalAddressLine2}Additional address line 2{/s}',
+        title: '{s name="shipping/title"}Alternative shipping address{/s}',
+        titleField: '{s name="address/title_field"}Title{/s}',
+        firstName: '{s name="address/first_name"}First name{/s}',
+        lastName: '{s name="address/last_name"}Last name{/s}',
+        street: '{s name="address/street"}street{/s}',
+        zipCode: '{s name="address/zip_code"}Zip code{/s}',
+        city: '{s name="address/city"}City{/s}',
+        additionalAddressLine1: '{s name="address/additionalAddressLine1"}Additional address line 1{/s}',
+        additionalAddressLine2: '{s name="address/additionalAddressLine2"}Additional address line 2{/s}',
         salutation: {
-            label: '{s name=address/salutation}Salutation{/s}'
+            label: '{s name="address/salutation"}Salutation{/s}'
         },
-        country: '{s name=address/country}Country{/s}',
-        phone: '{s name=address/phone}Phone{/s}',
-        state: '{s name=address/state}State{/s}',
-        company: '{s name=address/company}Company{/s}',
-        department: '{s name=address/department}Department{/s}',
-        copyBilling: '{s name=shipping/copy_billing}For usability purposes, click here to use the billing address as shipping address.{/s}',
-        copyButton: '{s name=shipping/copy_button}Copy data{/s}'
+        country: '{s name="address/country"}Country{/s}',
+        phone: '{s name="address/phone"}Phone{/s}',
+        state: '{s name="address/state"}State{/s}',
+        company: '{s name="address/company"}Company{/s}',
+        department: '{s name="address/department"}Department{/s}',
+        copyBilling: '{s name="shipping/copy_billing"}For usability purposes, click here to use the billing address as shipping address.{/s}',
+        copyButton: '{s name="shipping/copy_button"}Copy data{/s}'
     },
 
     /**

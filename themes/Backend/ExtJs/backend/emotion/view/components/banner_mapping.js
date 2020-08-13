@@ -21,12 +21,12 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/emotion/view/detail}
+//{namespace name="backend/emotion/view/detail"}
 //{block name="backend_emotion_view_components_banner_mapping"}
 Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
     extend: 'Enlight.app.Window',
     footerButton: false,
-    title: '{s name=banner_mapping/window_title}Create banner-mapping{/s}',
+    title: '{s name="banner_mapping/window_title"}Create banner-mapping{/s}',
     autoShow: true,
     layout: 'border',
     alias: 'widget.emotion-components-banner-mapping',
@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         me.rowEdit = me.createMappingRowEditor();
 
         me.mappingGrid = Ext.create('Ext.grid.Panel', {
-            title: '{s name=banner_mapping/title_grid}Mapping{/s}',
+            title: '{s name="banner_mapping/title_grid"}Mapping{/s}',
             selType: 'rowmodel',
             region: 'south',
             height: 200,
@@ -290,8 +290,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             store: Ext.create('Ext.data.Store', {
                 fields: [ 'value', 'display' ],
                 data: [
-                    { value: 'interal', display: '{s name=banner_mapping/column/location/interal}Internal link{/s}' },
-                    { value: 'external', display: '{s name=banner_mapping/column/location/external}External link{/s}' }
+                    { value: 'interal', display: '{s name="banner_mapping/column/location/interal"}Internal link{/s}' },
+                    { value: 'external', display: '{s name="banner_mapping/column/location/external"}External link{/s}' }
                 ]
             }),
             displayField: 'display',
@@ -300,24 +300,24 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
 
         me.columns = [{
             dataIndex: 'link',
-            header: '{s name=banner_mapping/column/link}Link{/s}',
+            header: '{s name="banner_mapping/column/link"}Link{/s}',
             flex: 2,
             editor: me.articleSearch
         }, {
             dataIndex: 'linkLocation',
-            header: '{s name=banner_mapping/column/link_type}Link type{/s}',
+            header: '{s name="banner_mapping/column/link_type"}Link type{/s}',
             flex: 1,
             editor: me.linkComboBox,
             renderer: function(value) {
 
                 if (value === 'external') {
-                    return '{s name=banner_mapping/column/location/external}External link{/s}';
+                    return '{s name="banner_mapping/column/location/external"}External link{/s}';
                 }
-                return '{s name=banner_mapping/column/location/interal}Internal link{/s}';
+                return '{s name="banner_mapping/column/location/interal"}Internal link{/s}';
             }
         }, {
             dataIndex: 'x',
-            header: '{s name=banner_mapping/column/x_position}X-Position{/s}',
+            header: '{s name="banner_mapping/column/x_position"}X-Position{/s}',
             width: 80,
             renderer: me.pixelRenderer,
             editor: {
@@ -326,7 +326,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             }
         }, {
             dataIndex: 'y',
-            header: '{s name=banner_mapping/column/y_position}Y-Position{/s}',
+            header: '{s name="banner_mapping/column/y_position"}Y-Position{/s}',
             width: 80,
             renderer: me.pixelRenderer,
             editor: {
@@ -335,7 +335,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             }
         }, {
             dataIndex: 'width',
-            header: '{s name=banner_mapping/column/width}Width{/s}',
+            header: '{s name="banner_mapping/column/width"}Width{/s}',
             width: 80,
             renderer: me.pixelRenderer,
             editor: {
@@ -344,7 +344,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             }
         }, {
             dataIndex: 'height',
-            header: '{s name=banner_mapping/column/height}Height{/s}',
+            header: '{s name="banner_mapping/column/height"}Height{/s}',
             width: 80,
             renderer: me.pixelRenderer,
             editor: {
@@ -353,7 +353,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             }
         }, {
             dataIndex: 'title',
-            header: '{s name=banner_mapping/column/title}Title{/s}',
+            header: '{s name="banner_mapping/column/title"}Title{/s}',
             flex: 1,
             editor: {
                 xtype: 'textfield',
@@ -362,7 +362,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         }, {
             dataIndex: 'as_tooltip',
             align: 'center',
-            header: '{s name=banner_mapping/column/as_tooltip}Show title as tooltip{/s}',
+            header: '{s name="banner_mapping/column/as_tooltip"}Show title as tooltip{/s}',
             flex: 1,
             renderer: me.checkboxRenderer,
             editor: {
@@ -374,10 +374,10 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         }, {
             xtype: 'actioncolumn',
             width: 50,
-            header: '{s name=banner_mapping/column/actions}Actions{/s}',
+            header: '{s name="banner_mapping/column/actions"}Actions{/s}',
             items: [{
                 iconCls: 'sprite-minus-circle',
-                tooltip: '{s name=banner_mapping/column/actions_info}Delete mapping{/s}',
+                tooltip: '{s name="banner_mapping/column/actions_info"}Delete mapping{/s}',
                 handler: function(grid, rowIndex) {
                     var cmp = me.resizeCollection.getAt(rowIndex);
 
@@ -431,7 +431,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             region: 'north',
             items: [{
                 xtype: 'button',
-                text: '{s name=banner_mapping/mapping_add}Add a new Mapping{/s}',
+                text: '{s name="banner_mapping/mapping_add"}Add a new Mapping{/s}',
                 iconCls: 'sprite-plus-circle',
                 handler: function() {
                     me.createMappingResizer()
@@ -446,7 +446,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         return ['->', {
             xtype: 'button',
             cls: 'secondary',
-            text: '{s name=banner_mapping/cancel}Cancel{/s}',
+            text: '{s name="banner_mapping/cancel"}Cancel{/s}',
             action: 'emotion-detail-settings-window-cancel',
             handler: function(button) {
                 var win = button.up('window');
@@ -455,7 +455,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         }, {
             xtype: 'button',
             cls: 'primary',
-            text: '{s name=banner_mapping/save}Save{/s}',
+            text: '{s name="banner_mapping/save"}Save{/s}',
             action: 'emotion-detail-settings-window-save',
             handler: function() {
                 me.fireEvent('saveBannerMapping', me, me.mappingStore, me.element);

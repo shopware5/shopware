@@ -26,11 +26,11 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/preview_grid"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
     extend: 'Ext.grid.Panel',
-    title: '{s name=preview}Preview{/s}',
+    title: '{s name="preview"}Preview{/s}',
     alias: 'widget.product-stream-preview-grid',
 
     initComponent: function() {
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
             valueField: 'id',
             store: me.currencyStore,
             value: 1,
-            fieldLabel: '{s name=currency}Currency{/s}',
+            fieldLabel: '{s name="currency"}Currency{/s}',
             forceSelection: true,
             name: 'currency',
             labelWidth: 100
@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
             store: me.customerGroupStore,
             value: 'EK',
             name: 'customerGroup',
-            fieldLabel: '{s name=customer_group}Customer group{/s}',
+            fieldLabel: '{s name="customer_group"}Customer group{/s}',
             forceSelection: true,
             labelWidth: 100
         });
@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
             name: 'shop',
             forceSelection: true,
             value: 1,
-            fieldLabel: '{s name=shop}Shop{/s}',
+            fieldLabel: '{s name="shop"}Shop{/s}',
             labelWidth: 100
         });
 
@@ -115,19 +115,19 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
 
     createDisplayColumns: function() {
         return [{
-            header: '{s name=number}Number{/s}',
+            header: '{s name="number"}Number{/s}',
             width: 110,
             dataIndex: 'number'
         }, {
-            header: '{s name=name}Name{/s}',
+            header: '{s name="name"}Name{/s}',
             flex: 1,
             dataIndex: 'name'
         }, {
-            header: '{s name=stock}Stock{/s}',
+            header: '{s name="stock"}Stock{/s}',
             width: 60,
             dataIndex: 'stock'
         }, {
-            header: '{s name=price}Price{/s}',
+            header: '{s name="price"}Price{/s}',
             dataIndex: 'cheapestPrice',
             renderer: this.priceRenderer
         }];
@@ -145,7 +145,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
     createActionItems: function() {
         return [{
             iconCls: 'sprite-inbox',
-            tooltip: '{s name=openProduct}Open product{/s}',
+            tooltip: '{s name="openProduct"}Open product{/s}',
             handler: function(view, rowIndex, colIndex, item, opts, record) {
                 Shopware.app.Application.addSubApplication({
                     name: 'Shopware.apps.Article',

@@ -32,7 +32,7 @@
  * The link component contains the configuration elements for the article links
  * and article downloads.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/resources/links"}
 Ext.define('Shopware.apps.Article.view.resources.Links', {
     /**
@@ -56,15 +56,15 @@ Ext.define('Shopware.apps.Article.view.resources.Links', {
      * @object
      */
     snippets:{
-        title: '{s name=resources/links/field_set}Links{/s}',
-        notice: '{s name=resources/links/notice}Optionally, add additional references (e.g. to the supplier).{/s}',
-        name: '{s name=resources/links/name}Name{/s}',
-        link: '{s name=resources/links/link}Link{/s}',
-        button: '{s name=resources/links/button}Add link{/s}',
+        title: '{s name="resources/links/field_set"}Links{/s}',
+        notice: '{s name="resources/links/notice"}Optionally, add additional references (e.g. to the supplier).{/s}',
+        name: '{s name="resources/links/name"}Name{/s}',
+        link: '{s name="resources/links/link"}Link{/s}',
+        button: '{s name="resources/links/button"}Add link{/s}',
         grid: {
-            title: '{s name=resources/links/grid/title}Created links{/s}',
-            delete: '{s name=resources/links/grid/delete}Remove link{/s}',
-            external: '{s name=resources/links/grid/external}External{/s}'
+            title: '{s name="resources/links/grid/title"}Created links{/s}',
+            delete: '{s name="resources/links/grid/delete"}Remove link{/s}',
+            external: '{s name="resources/links/grid/external"}External{/s}'
         }
     },
 

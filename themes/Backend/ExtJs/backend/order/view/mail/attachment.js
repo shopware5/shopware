@@ -24,13 +24,13 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/order/main}
+// {namespace name="backend/order/main"}
 //{block name="backend/order/view/mail/attachment"}
 Ext.define('Shopware.apps.Order.view.mail.Attachment', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.order-mail-attachment',
     height: 350,
-    title: '{s name=attachment/panel/title}{/s}',
+    title: '{s name="attachment/panel/title"}{/s}',
 
     /**
      * Constructor parameters
@@ -100,12 +100,12 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
 
         return [
             {
-                text: '{s name=attachment/panel/column/date}{/s}',
+                text: '{s name="attachment/panel/column/date"}{/s}',
                 dataIndex: 'date',
                 flex: 1,
                 renderer: me.dateColumnRenderer
             }, {
-                text: '{s name=attachment/panel/column/name}{/s}',
+                text: '{s name="attachment/panel/column/name"}{/s}',
                 dataIndex: 'typeId',
                 flex: 2,
                 renderer: me.nameColumnRenderer
@@ -193,9 +193,9 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
      */
     groupingHeaderRenderer: function(active) {
         if (active === true || active === 'true') {
-            return '{s name=attachment/panel/grouping/prefix/attached}{/s}';
+            return '{s name="attachment/panel/grouping/prefix/attached"}{/s}';
         } else {
-            return '{s name=attachment/panel/grouping/prefix/not/attached}{/s}';
+            return '{s name="attachment/panel/grouping/prefix/not/attached"}{/s}';
         }
     },
 
@@ -242,7 +242,7 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
         var me = this;
 
         me.documentTypeSelection = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: '{s name=attachment/panel/document/type/field/label}{/s}',
+            fieldLabel: '{s name="attachment/panel/document/type/field/label"}{/s}',
             store: me.documentTypeStore,
             displayField: 'name',
             valueField: 'id',
@@ -268,7 +268,7 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
         var me = this;
 
         return Ext.create('Ext.button.Split', {
-            text: '{s name=attachment/panel/split/button/create/and/add}{/s}',
+            text: '{s name="attachment/panel/split/button/create/and/add"}{/s}',
             handler: function () {
                 me.fireEvent(
                     'create-and-add-document',
@@ -281,7 +281,7 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
             },
             menu: [
                 {
-                    text: '{s name=attachment/panel/split/button/add}{/s}',
+                    text: '{s name="attachment/panel/split/button/add"}{/s}',
                     handler: function() {
                         me.fireEvent(
                             'create-and-add-document',
@@ -293,7 +293,7 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
                         );
                     }
                 }, {
-                    text: '{s name=attachment/panel/split/button/create/and/add}{/s}',
+                    text: '{s name="attachment/panel/split/button/create/and/add"}{/s}',
                     handler: function() {
                         me.fireEvent(
                             'create-and-add-document',

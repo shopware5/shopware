@@ -28,7 +28,7 @@
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/chart/country"}
 Ext.define('Shopware.apps.Analytics.view.chart.Country', {
     extend: 'Shopware.apps.Analytics.view.main.Chart',
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Country', {
                 type: 'Numeric',
                 position: 'bottom',
                 fields: me.getAxesFields('turnover'),
-                title: '{s name=general/turnover}Turnover{/s}',
+                title: '{s name="general/turnover"}Turnover{/s}',
                 grid: true,
                 minimum: 0
             },
@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Country', {
                 type: 'Category',
                 position: 'left',
                 fields: ['name'],
-                title: '{s name=chart/country/title}Country{/s}'
+                title: '{s name="chart/country/title"}Country{/s}'
             }
         ];
 
@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Country', {
                 gutter: 80,
                 xField: 'name',
                 yField: me.getAxesFields('turnover'),
-                title: me.getAxesTitles('{s name=general/turnover}Turnover{/s}'),
+                title: me.getAxesTitles('{s name="general/turnover"}Turnover{/s}'),
                 stacked: true,
                 label: {
                     display: 'insideEnd',

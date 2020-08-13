@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Basic grid with cellediting plugin
@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
                 textField,
                 {
                     iconCls:'sprite-plus-circle-frame',
-                    text:'{s name=grid/addEntry}Add entry{/s}',
+                    text:'{s name="grid/addEntry"}Add entry{/s}',
                     cls: 'secondary small',
                     action:'add-entry',
                     handler: function() {

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/form/view/main}
+//{namespace name="backend/form/view/main"}
 
 /**
  * todo@all: Documentation
@@ -36,7 +36,7 @@
 Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.form-main-fieldgrid',
-    title : '{s name=title_fields}Fields{/s}',
+    title : '{s name="title_fields"}Fields{/s}',
     autoScroll: true,
     selType: 'rowmodel',
     sortableColumns: false,
@@ -46,13 +46,13 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
      * @object
      */
     messages: {
-         tooltipValue: '{s name=tooltip_value}For selections, checkboxes or radios use a semicolon to separate the values{/s}',
-         tooltipName: '{s name=tooltip_name}To enter two inputs, use a semicolon to separate the names{/s}',
-         tooltipSmartyEnabled: '{s name=tooltip_smarty}Smarty code is allowed{/s}',
-         tooltipDragDrop: '{s name=tooltip_dragdrop}You can move rows via Drag & Drop{/s}',
-         hintDragDrop: '{s name=hint_dragdrop}You can move rows via Drag & Drop{/s}',
-         saveBtnText: '{s name=rowedit_save}Save{/s}',
-         cancelBtnText: '{s name=rowedit_cancel}Cancel{/s}'
+         tooltipValue: '{s name="tooltip_value"}For selections, checkboxes or radios use a semicolon to separate the values{/s}',
+         tooltipName: '{s name="tooltip_name"}To enter two inputs, use a semicolon to separate the names{/s}',
+         tooltipSmartyEnabled: '{s name="tooltip_smarty"}Smarty code is allowed{/s}',
+         tooltipDragDrop: '{s name="tooltip_dragdrop"}You can move rows via Drag & Drop{/s}',
+         hintDragDrop: '{s name="hint_dragdrop"}You can move rows via Drag & Drop{/s}',
+         saveBtnText: '{s name="rowedit_save"}Save{/s}',
+         cancelBtnText: '{s name="rowedit_cancel"}Cancel{/s}'
     },
 
     /**
@@ -132,7 +132,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
         },
         /*{/if}*/
         {
-            header: '{s name=column_name}Name{/s}',
+            header: '{s name="column_name"}Name{/s}',
             dataIndex: 'name',
             tooltip: me.messages.tooltipName,
             flex: 1,
@@ -142,12 +142,12 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 allowBlank: false
             },
             translationEditor: {
-                fieldLabel: '{s name=column_name}Name{/s}',
+                fieldLabel: '{s name="column_name"}Name{/s}',
                 name: 'name',
                 xtype: 'textfield'
             }
         }, {
-            header: '{s name=column_label}Label{/s}',
+            header: '{s name="column_label"}Label{/s}',
             dataIndex: 'label',
             flex: 1,
             hideable: false,
@@ -156,12 +156,12 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 allowBlank: false
             },
             translationEditor: {
-                fieldLabel: '{s name=column_label}Label{/s}',
+                fieldLabel: '{s name="column_label"}Label{/s}',
                 name: 'label',
                 xtype: 'textfield'
             }
         }, {
-            header: '{s name=column_typ}Typ{/s}',
+            header: '{s name="column_typ"}Typ{/s}',
             dataIndex: 'typ',
             flex: 1,
             hideable: false,
@@ -176,7 +176,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 store: me.getTypComboStore()
             },
             translationEditor: {
-                fieldLabel: '{s name=column_typ}Typ{/s}',
+                fieldLabel: '{s name="column_typ"}Typ{/s}',
                 name: 'typ',
                 xtype: 'combo',
                 mode: 'local',
@@ -186,7 +186,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 store: me.getTypComboStore()
             }
         }, {
-            header: '{s name=column_class}Class{/s}',
+            header: '{s name="column_class"}Class{/s}',
             dataIndex: 'class',
             flex: 1,
             hideable: false,
@@ -201,7 +201,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 store: me.getClassComboStore()
             },
             translationEditor: {
-                fieldLabel: '{s name=column_class}Class{/s}',
+                fieldLabel: '{s name="column_class"}Class{/s}',
                 name: 'class',
                 xtype: 'combo',
                 mode: 'local',
@@ -211,7 +211,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 store: me.getClassComboStore()
             }
         }, {
-            header: '{s name=column_value}Value{/s}',
+            header: '{s name="column_value"}Value{/s}',
             dataIndex: 'value',
             tooltip: me.messages.tooltipValue,
             flex: 1,
@@ -221,11 +221,11 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             },
             translationEditor: {
                 name: 'value',
-                fieldLabel: '{s name=column_value}Value{/s}',
+                fieldLabel: '{s name="column_value"}Value{/s}',
                 xtype:'textfield'
             }
         }, {
-            header: '{s name=column_note}Note{/s}',
+            header: '{s name="column_note"}Note{/s}',
             dataIndex: 'note',
             tooltip: me.messages.tooltipSmartyEnabled,
             flex: 1,
@@ -235,11 +235,11 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             },
             translationEditor: {
                 name: 'note',
-                fieldLabel: '{s name=column_note}Note{/s}',
+                fieldLabel: '{s name="column_note"}Note{/s}',
                 xtype:'textfield'
             }
         }, {
-            header: '{s name=column_errormsg}Error Message{/s}',
+            header: '{s name="column_errormsg"}Error Message{/s}',
             tooltip: me.messages.tooltipSmartyEnabled,
             dataIndex: 'errorMsg',
             flex: 1,
@@ -248,13 +248,13 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 xtype:'textfield'
             },
             translationEditor: {
-                fieldLabel: '{s name=column_errormsg}Error Message{/s}',
+                fieldLabel: '{s name="column_errormsg"}Error Message{/s}',
                 name: 'error_msg',
                 xtype:'textfield',
             }
         }, {
             xtype: 'booleancolumn',
-            header: '{s name=column_required}Required{/s}',
+            header: '{s name="column_required"}Required{/s}',
             dataIndex: 'required',
             flex: 1,
             hideable: false,
@@ -264,7 +264,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 uncheckedValue: false
             },
             translationEditor: {
-                fieldLabel: '{s name=column_required}Required{/s}',
+                fieldLabel: '{s name="column_required"}Required{/s}',
                 name: 'required',
                 xtype: 'checkbox',
                 inputValue: true,
@@ -285,7 +285,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 iconCls: 'sprite-minus-circle-frame',
                 action: 'delete',
                 cls: 'delete',
-                tooltip: '{s name=tooltip_delete_field}Delete this field{/s}'
+                tooltip: '{s name="tooltip_delete_field"}Delete this field{/s}'
             }]
         }
         /*{/if}*/
@@ -345,7 +345,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             /*{if {acl_is_allowed privilege=createupdate}}*/
             {
                 iconCls: 'sprite-plus-circle-frame',
-                text: '{s name=toolbar_add_field}Add Field{/s}',
+                text: '{s name="toolbar_add_field"}Add Field{/s}',
                 action: 'add'
             },
             /*{/if}*/

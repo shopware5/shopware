@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/theme/main}
+//{namespace name="backend/theme/main"}
 
 //{block name="backend/theme/view/list/theme"}
 
@@ -59,11 +59,11 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
             requestURL: '{url controller="Theme" action="upload"}',
             enablePreviewImage: false,
             showInput: false,
-            dropZoneText: '{s name=drop_zone}Upload single theme using drag+drop (zip){/s}'
+            dropZoneText: '{s name="drop_zone"}Upload single theme using drag+drop (zip){/s}'
         });
 
-        me.dropZone.snippets.messageTitle = '{s name=upload_title}Theme Manager{/s}';
-        me.dropZone.snippets.messageText = '{s name=upload_message}Theme uploaded successfully{/s}';
+        me.dropZone.snippets.messageTitle = '{s name="upload_title"}Theme Manager{/s}';
+        me.dropZone.snippets.messageText = '{s name="upload_message"}Theme uploaded successfully{/s}';
 
         return me.dropZone;
     },
@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
                 getRow: function (name, values) {
                     var me = this,
                         snippets = {
-                            'shopware5': '{s name=designed_for_shopware5}Designed for Shopware 5{/s}'
+                            'shopware5': '{s name="designed_for_shopware5"}Designed for Shopware 5{/s}'
                         };
 
                     if(values.length <= 0) {
@@ -139,10 +139,10 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
 
                         if(theme.enabled) {
                             itemTpl += '<div class="thumbnail enabled">';
-                            itemTpl += '<div class="hint enabled"><span>{s name=enabled}Enabled{/s}</span></div>';
+                            itemTpl += '<div class="hint enabled"><span>{s name="enabled"}Enabled{/s}</span></div>';
                         } else if(theme.preview) {
                             itemTpl += '<div class="thumbnail previewed">';
-                            itemTpl += '<div class="hint preview"><span>{s name=preview_hint}Preview{/s}</span></div>';
+                            itemTpl += '<div class="hint preview"><span>{s name="preview_hint"}Preview{/s}</span></div>';
                         } else {
                             itemTpl += '<div class="thumbnail">'
                         }

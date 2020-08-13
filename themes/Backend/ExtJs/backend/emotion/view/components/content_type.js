@@ -22,7 +22,7 @@
  */
 
 //{block name="backend/emotion/view/components/content_type"}
-//{namespace name=backend/emotion/view/components/content_type}
+//{namespace name="backend/emotion/view/components/content_type"}
 Ext.define('Shopware.apps.Emotion.view.components.ContentType', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-content-type',

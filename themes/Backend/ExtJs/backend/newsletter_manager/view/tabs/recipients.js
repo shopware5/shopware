@@ -37,19 +37,19 @@
 Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.newsletter-manager-tabs-recipients',
-    title: '{s name=recipients}Recipients{/s}',
+    title: '{s name="recipients"}Recipients{/s}',
     region: 'center',
 
     border: false,
 
     snippets : {
         columns : {
-            mail: '{s name=columns/mailAddress}Mail address{/s}',
-            group: '{s name=columns/group}Group{/s}',
-            actions: '{s name=columns/actions}Actions{/s}',
-            lastNewsletter: '{s name=columns/lastNewsletter}Last newsletter{/s}',
-            doubleOptInDate: '{s name=columns/doubleOptInDate}Register date{/s}',
-            doubleOptInConfirmed: '{s name=columns/doubleOptInConfirmed}Opt-In confirmed{/s}'
+            mail: '{s name="columns/mailAddress"}Mail address{/s}',
+            group: '{s name="columns/group"}Group{/s}',
+            actions: '{s name="columns/actions"}Actions{/s}',
+            lastNewsletter: '{s name="columns/lastNewsletter"}Last newsletter{/s}',
+            doubleOptInDate: '{s name="columns/doubleOptInDate"}Register date{/s}',
+            doubleOptInConfirmed: '{s name="columns/doubleOptInConfirmed"}Opt-In confirmed{/s}'
         }
     },
 
@@ -298,7 +298,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
 
         // Recipient is a customer
         if(customer !== null && customer.first() instanceof Ext.data.Model) {
-            return "<strong>" + customer.first().get('groupKey') + '{s name=customerGroup} (Customer group){/s}</strong>' ;
+            return "<strong>" + customer.first().get('groupKey') + '{s name="customerGroup"} (Customer group){/s}</strong>' ;
         }
 
         //  Non-Customer recipient
@@ -333,7 +333,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
             {
                 iconCls:'sprite-user--plus',
                 action:'view',
-                tooltip:'{s name=action/showCustomer}Show customer{/s}',
+                tooltip:'{s name="action/showCustomer"}Show customer{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('showCustomer', record);
                 },
@@ -358,7 +358,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
         var me = this;
 
         me.deleteRecipientButton = Ext.create('Ext.button.Button', {
-            text: '{s name=deleteSelected}Delete selected{/s}',
+            text: '{s name="deleteSelected"}Delete selected{/s}',
             iconCls: 'sprite-minus-circle',
             disabled: true,
             handler: function() {
@@ -381,7 +381,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
                 /*{if {acl_is_allowed privilege=write}}*/
                 {
                     xtype: 'button',
-                    text: '{s name=addRecipient}Add recipient{/s}',
+                    text: '{s name="addRecipient"}Add recipient{/s}',
                     iconCls: 'sprite-plus-circle',
                     handler: function() {
                         me.fireEvent('addRecipient');
@@ -393,7 +393,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
                 {
                     xtype    : 'textfield',
                     name     : 'searchfield',
-                    emptyText: '{s name=searchfield}Search{/s}',
+                    emptyText: '{s name="searchfield"}Search{/s}',
                     cls: 'searchfield',
                     checkChangeBuffer: 700,
                     listeners: {

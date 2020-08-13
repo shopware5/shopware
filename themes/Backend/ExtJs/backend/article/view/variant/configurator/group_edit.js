@@ -35,7 +35,7 @@
  * @package Article
  * @subpackage Detail
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/variant/configurator/group_edit"}
 Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
     /**
@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
     footerButton: false,
     modal: true,
     stateful: true,
-    autoScroll: true, 
+    autoScroll: true,
     layout: 'fit',
     stateId:'shopware-article-group-window',
 
@@ -79,13 +79,13 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
      * @object
      */
     snippets: {
-        title: '{s name=variant/configurator/group_edit/save_title}Edit group:{/s}',
-        save: '{s name=variant/configurator/sets/save}Save{/s}',
-        cancel: '{s name=variant/configurator/sets/cancel}Cancel{/s}',
-        nameField: '{s name=variant/configurator/group_edit/name_field}Group name{/s}',
+        title: '{s name="variant/configurator/group_edit/save_title"}Edit group:{/s}',
+        save: '{s name="variant/configurator/sets/save"}Save{/s}',
+        cancel: '{s name="variant/configurator/sets/cancel"}Cancel{/s}',
+        nameField: '{s name="variant/configurator/group_edit/name_field"}Group name{/s}',
         description: {
-            label: '{s name=variant/configurator/group_edit/description_label}Description{/s}',
-            support:  '{s name=variant/configurator/group_edit/description_support}Displayed in store front as group description{/s}'
+            label: '{s name="variant/configurator/group_edit/description_label"}Description{/s}',
+            support:  '{s name="variant/configurator/group_edit/description_support"}Displayed in store front as group description{/s}'
         }
     },
 

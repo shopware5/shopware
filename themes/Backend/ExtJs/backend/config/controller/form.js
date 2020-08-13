@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/config/controller/main}
+//{namespace name="backend/config/controller/main"}
 
 /**
  * Shopware Controller - Config backend module
@@ -162,13 +162,13 @@ Ext.define('Shopware.apps.Config.controller.Form', {
     ],
 
     messages: {
-        deleteEntryTitle: '{s name=form/message/delete_entry_title}Delete entry „[label]“{/s}',
-        deleteEntryMessage: '{s name=form/message/delete_entry_message}Do you really want to delete the entry?{/s}',
-        deleteEntrySuccess: '{s name=form/message/delete_entry_success}Entry „[label]“ was deleted.{/s}',
-        deleteEntryError: '{s name=form/message/delete_entry_error}Entry „[label]“ could not be deleted.{/s}',
-        saveEntryTitle: '{s name=form/message/save_entry_title}Save entry{/s}',
-        saveEntrySuccess: '{s name=form/message/save_entry_success}Entry „[label]“ has been saved.{/s}',
-        saveEntryError: '{s name=form/message/save_entry_error}Entry „[label]“ could not be saved.{/s}'
+        deleteEntryTitle: '{s name="form/message/delete_entry_title"}Delete entry „[label]“{/s}',
+        deleteEntryMessage: '{s name="form/message/delete_entry_message"}Do you really want to delete the entry?{/s}',
+        deleteEntrySuccess: '{s name="form/message/delete_entry_success"}Entry „[label]“ was deleted.{/s}',
+        deleteEntryError: '{s name="form/message/delete_entry_error"}Entry „[label]“ could not be deleted.{/s}',
+        saveEntryTitle: '{s name="form/message/save_entry_title"}Save entry{/s}',
+        saveEntrySuccess: '{s name="form/message/save_entry_success"}Entry „[label]“ has been saved.{/s}',
+        saveEntryError: '{s name="form/message/save_entry_error"}Entry „[label]“ could not be saved.{/s}'
     },
 
     /**

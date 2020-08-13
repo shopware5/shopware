@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order detail page
@@ -69,15 +69,15 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
      * @object
      */
     snippets: {
-        title: '{s name=detail/window_title}Details{/s}',
-        notice: '{s name=detail/notice}Adjustments in this form, have only effect on the current order{/s}',
+        title: '{s name="detail/window_title"}Details{/s}',
+        notice: '{s name="detail/notice"}Adjustments in this form, have only effect on the current order{/s}',
         shop: {
-            title: '{s name=detail/shop/title}Shop configuration{/s}',
-            label: '{s name=detail/shop/label}Shop{/s}'
+            title: '{s name="detail/shop/title"}Shop configuration{/s}',
+            label: '{s name="detail/shop/label"}Shop{/s}'
         },
-        cancel: '{s name=detail/cancel}Cancel{/s}',
-        reset: '{s name=detail/reset}Reset{/s}',
-        save: '{s name=detail/save}Save{/s}'
+        cancel: '{s name="detail/cancel"}Cancel{/s}',
+        reset: '{s name="detail/reset"}Reset{/s}',
+        save: '{s name="detail/save"}Save{/s}'
     },
 
     /**

@@ -42,8 +42,8 @@ Ext.define('Shopware.apps.NewsletterManager.store.MailDispatch', {
     autoLoad: true,
 
     data : [
-        { id:'1', name:'{s name=htmlPlaintext}HTML + Plaintext{/s}' },
-        { id:'2', name:'{s name=plaintext}Plaintext{/s}' }
+        { id:'1', name:'{s name="htmlPlaintext"}HTML + Plaintext{/s}' },
+        { id:'2', name:'{s name="plaintext"}Plaintext{/s}' }
     ]
 
 

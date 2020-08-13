@@ -6,9 +6,9 @@ Ext.define('Shopware.apps.Customer.view.detail.PaymentMethods', {
     initComponent: function () {
         var me = this;
 
-        me.snippets.sepaIban = '{s namespace="backend/customer/view/detail" name=sepa/iban}IBAN{/s}';
-        me.snippets.sepaBic = '{s namespace="backend/customer/view/detail" name=sepa/bic}BIC{/s}';
-        me.snippets.sepaUseBillingData = '{s namespace="backend/customer/view/detail" name=sepa/use_billing_data}Use billing data{/s}';
+        me.snippets.sepaIban = '{s namespace="backend/customer/view/detail" name="sepa/iban"}IBAN{/s}';
+        me.snippets.sepaBic = '{s namespace="backend/customer/view/detail" name="sepa/bic"}BIC{/s}';
+        me.snippets.sepaUseBillingData = '{s namespace="backend/customer/view/detail" name="sepa/use_billing_data"}Use billing data{/s}';
 
         me.callParent(arguments);
 

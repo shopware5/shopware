@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/product_feed/view/feed}
+//{namespace name="backend/product_feed/view/feed"}
 
 /**
  * Shopware UI - product feed main window.
@@ -37,7 +37,7 @@
 //{block name="backend/product_feed/view/main/window"}
 Ext.define('Shopware.apps.ProductFeed.view.main.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window/main_title}Product feeds{/s}',
+    title: '{s name="window/main_title"}Product feeds{/s}',
     alias: 'widget.product_feed-main-window',
     border: false,
     autoShow: true,

@@ -28,7 +28,7 @@
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/chart/visitors"}
 Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
     extend: 'Shopware.apps.Analytics.view.main.Chart',
@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 type: 'Time',
                 position: 'bottom',
                 fields: ['datum'],
-                title: '{s name=chart/visitors/titleBottom}Month{/s}',
+                title: '{s name="chart/visitors/titleBottom"}Month{/s}',
                 step: [ Ext.Date.DAY, 1 ],
                 dateFormat: Ext.util.Format.dateFormat,
                 label: {
@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                     },
                     {
                         xtype: 'numbercolumn',
-                        text: '{s name=visitors/chart/tip/impressions}Impressions{/s}',
+                        text: '{s name="visitors/chart/tip/impressions"}Impressions{/s}',
                         dataIndex: 'data',
                         align: 'right',
                         flex: 1
@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                     },
                     {
                         xtype: 'numbercolumn',
-                        text: '{s name=visitors/chart/tip/visits}Visits{/s}',
+                        text: '{s name="visitors/chart/tip/visits"}Visits{/s}',
                         dataIndex: 'data',
                         align: 'right',
                         flex: 1
@@ -123,7 +123,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 },
                 renderer: function (storeItem) {
                     this.setTitle(
-                        '{s name=chart/visitors/legend_desktop_impression}Desktop impressions{/s} ' +
+                        '{s name="chart/visitors/legend_desktop_impression"}Desktop impressions{/s} ' +
                             Ext.util.Format.date(storeItem.get('datum'))
                     );
                     me.getSubShopData(storeItem, 'desktopImpressions');
@@ -139,7 +139,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 },
                 renderer: function (storeItem) {
                     this.setTitle(
-                        '{s name=chart/visitors/legend_tablet_impression}Tablet impressions{/s} ' +
+                        '{s name="chart/visitors/legend_tablet_impression"}Tablet impressions{/s} ' +
                             Ext.util.Format.date(storeItem.get('datum'))
                     );
                     me.getSubShopData(storeItem, 'tabletImpressions');
@@ -155,7 +155,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 },
                 renderer: function (storeItem) {
                     this.setTitle(
-                        '{s name=chart/visitors/legend_mobile_impression}Mobile impressions{/s} ' +
+                        '{s name="chart/visitors/legend_mobile_impression"}Mobile impressions{/s} ' +
                             Ext.util.Format.date(storeItem.get('datum'))
                     );
                     me.getSubShopData(storeItem, 'mobileImpressions');
@@ -171,7 +171,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 },
                 renderer: function (storeItem) {
                     this.setTitle(
-                        '{s name=chart/visitors/legend_impression}Total impressions{/s} ' +
+                        '{s name="chart/visitors/legend_impression"}Total impressions{/s} ' +
                             Ext.util.Format.date(storeItem.get('datum'))
                     );
                     me.getSubShopData(storeItem, 'totalImpressions');
@@ -188,7 +188,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 },
                 renderer: function (storeItem) {
                     this.setTitle(
-                        '{s name=chart/visitors/legend_desktop_visit}Desktop visits{/s} ' +
+                        '{s name="chart/visitors/legend_desktop_visit"}Desktop visits{/s} ' +
                             Ext.util.Format.date(storeItem.get('datum'))
                     );
                     me.getSubShopData(storeItem, 'desktopVisits');
@@ -204,7 +204,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 },
                 renderer: function (storeItem) {
                     this.setTitle(
-                        '{s name=chart/visitors/legend_tablet_visit}Tablet visits{/s} ' +
+                        '{s name="chart/visitors/legend_tablet_visit"}Tablet visits{/s} ' +
                             Ext.util.Format.date(storeItem.get('datum'))
                     );
                     me.getSubShopData(storeItem, 'tabletVisits');
@@ -220,7 +220,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 },
                 renderer: function (storeItem) {
                     this.setTitle(
-                        '{s name=chart/visitors/legend_mobile_visit}Mobile visits{/s} ' +
+                        '{s name="chart/visitors/legend_mobile_visit"}Mobile visits{/s} ' +
                             Ext.util.Format.date(storeItem.get('datum'))
                     );
                     me.getSubShopData(storeItem, 'mobileVisits');
@@ -236,7 +236,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 },
                 renderer: function (storeItem) {
                     this.setTitle(
-                        '{s name=chart/visitors/legend_visits}Total visits{/s} ' +
+                        '{s name="chart/visitors/legend_visits"}Total visits{/s} ' +
                             Ext.util.Format.date(storeItem.get('datum'))
                     );
                     me.getSubShopData(storeItem, 'totalVisits');
@@ -333,7 +333,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'desktopImpressions',
-                    title: '{s name=chart/visitors/legend_desktop_impression}Desktop impressions{/s}',
+                    title: '{s name="chart/visitors/legend_desktop_impression"}Desktop impressions{/s}',
                     markerConfig: {
                         type: 'cross',
                         fill: '#00CC66',
@@ -350,7 +350,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'tabletImpressions',
-                    title: '{s name=chart/visitors/legend_tablet_impression}Tablet impressions{/s}',
+                    title: '{s name="chart/visitors/legend_tablet_impression"}Tablet impressions{/s}',
                     markerConfig: {
                         type: 'cross',
                         fill: '#9955FF',
@@ -367,7 +367,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'mobileImpressions',
-                    title: '{s name=chart/visitors/legend_mobile_impression}Mobile impressions{/s}',
+                    title: '{s name="chart/visitors/legend_mobile_impression"}Mobile impressions{/s}',
                     markerConfig: {
                         type: 'cross',
                         fill: '#FF6600',
@@ -384,7 +384,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'totalImpressions',
-                    title: '{s name=chart/visitors/legend_impression}Total impressions{/s}',
+                    title: '{s name="chart/visitors/legend_impression"}Total impressions{/s}',
                     markerConfig: {
                         type: 'cross',
                         fill: '#0099FF',
@@ -401,7 +401,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'desktopVisits',
-                    title: '{s name=chart/visitors/legend_desktop_visits}Desktop visits{/s}',
+                    title: '{s name="chart/visitors/legend_desktop_visits"}Desktop visits{/s}',
                     markerConfig: {
                         type: 'circle',
                         fill: '#00CC66',
@@ -418,7 +418,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'tabletVisits',
-                    title: '{s name=chart/visitors/legend_tablet_visits}Tablet visits{/s}',
+                    title: '{s name="chart/visitors/legend_tablet_visits"}Tablet visits{/s}',
                     markerConfig: {
                         type: 'circle',
                         fill: '#9955FF',
@@ -435,7 +435,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'mobileVisits',
-                    title: '{s name=chart/visitors/legend_mobile_visits}Mobile visits{/s}',
+                    title: '{s name="chart/visitors/legend_mobile_visits"}Mobile visits{/s}',
                     markerConfig: {
                         type: 'circle',
                         fill: '#FF6600',
@@ -452,7 +452,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'totalVisits',
-                    title: '{s name=chart/visitors/legend_visits}Total visits{/s}',
+                    title: '{s name="chart/visitors/legend_visits"}Total visits{/s}',
                     markerConfig: {
                         type: 'circle',
                         fill: '#0099FF',
@@ -475,7 +475,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 'desktopImpressions', 'tabletImpressions', 'mobileImpressions', 'totalImpressions',
                 'desktopVisits', 'tabletVisits', 'mobileVisits', 'totalVisits'
             ],
-            title: '{s name=chart/visitors/count}Count{/s}'
+            title: '{s name="chart/visitors/count"}Count{/s}'
         });
 
         me.callParent(arguments);

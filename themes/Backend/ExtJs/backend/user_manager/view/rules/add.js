@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/user_manager/view/main}
+//{namespace name="backend/user_manager/view/main"}
 
 /**
  * Shopware Backend - User Manager add window
@@ -70,17 +70,17 @@ Ext.define('Shopware.apps.UserManager.view.rules.Add', {
      */
     snippets: {
         resource: {
-            title: '{s name=add/resource/title}Create new resource{/s}',
-            label: '{s name=add/resource/title}Resource name{/s}',
-            empty: '{s name=add/resource/title}Please insert a resource name{/s}'
+            title: '{s name="add/resource/title"}Create new resource{/s}',
+            label: '{s name="add/resource/title"}Resource name{/s}',
+            empty: '{s name="add/resource/title"}Please insert a resource name{/s}'
         },
         privilege: {
-            title: '{s name=add/privilege/title}Create new privilege{/s}',
-            empty: '{s name=add/privilege/title}Privilege name{/s}',
-            label: '{s name=add/privilege/title}Please insert a privilege name{/s}'
+            title: '{s name="add/privilege/title"}Create new privilege{/s}',
+            empty: '{s name="add/privilege/title"}Privilege name{/s}',
+            label: '{s name="add/privilege/title"}Please insert a privilege name{/s}'
         },
-        cancel: '{s name=add/cancel}Cancel{/s}',
-        accept: '{s name=add/save}Save{/s}'
+        cancel: '{s name="add/cancel"}Cancel{/s}',
+        accept: '{s name="add/save"}Save{/s}'
     },
 
     /**

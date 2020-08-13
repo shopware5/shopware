@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/view/main/window"}
 Ext.define('Shopware.apps.ArticleList.view.main.Window', {
     /**
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
      * Title of the window.
      * @string
      */
-    base_title: '{s name=main_window_title}Product overview{/s}',
+    base_title: '{s name="main_window_title"}Product overview{/s}',
 
     resizable: true,
 

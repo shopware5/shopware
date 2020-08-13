@@ -32,7 +32,7 @@
  * The configurator component contains all elements to generate variants automatically.
  * The user can define groups and options and generate over a cross joining logic multiple variants.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/variant/configurator"}
 Ext.define('Shopware.apps.Article.view.variant.Configurator', {
     /**
@@ -56,51 +56,51 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
      */
     snippets:{
         toolbar: {
-            saveSet: '{s name=variant/configurator/save_set}Save set{/s}',
-            template: '{s name=variant/configurator/template}Define configurator template{/s}',
-            loadSet: '{s name=variant/configurator/load_set}Load set{/s}',
-            dependency: '{s name=variant/configurator/dependency}Set dependency{/s}',
-            variation: '{s name=variant/configurator/variation}Define price variation{/s}',
-            type: '{s name=variant/settings/type/label}Configurator type{/s}',
-            empty: '{s name=variant/settings/combo_empty}Please choose...{/s}'
+            saveSet: '{s name="variant/configurator/save_set"}Save set{/s}',
+            template: '{s name="variant/configurator/template"}Define configurator template{/s}',
+            loadSet: '{s name="variant/configurator/load_set"}Load set{/s}',
+            dependency: '{s name="variant/configurator/dependency"}Set dependency{/s}',
+            variation: '{s name="variant/configurator/variation"}Define price variation{/s}',
+            type: '{s name="variant/settings/type/label"}Configurator type{/s}',
+            empty: '{s name="variant/settings/combo_empty"}Please choose...{/s}'
         },
         groups: {
-            title: '{s name=variant/configurator/group/title}Manage attribute groups{/s}',
-            create: '{s name=variant/configurator/group/create}Create{/s}',
-            createAndActivate: '{s name=variant/configurator/group/create_and_activate}Create & Activate{/s}',
+            title: '{s name="variant/configurator/group/title"}Manage attribute groups{/s}',
+            create: '{s name="variant/configurator/group/create"}Create{/s}',
+            createAndActivate: '{s name="variant/configurator/group/create_and_activate"}Create & Activate{/s}',
             groupName: {
-                label: '{s name=variant/configurator/group/name_label}Create group{/s}',
-                empty: '{s name=variant/configurator/group/name_empty}Color{/s}'
+                label: '{s name="variant/configurator/group/name_label"}Create group{/s}',
+                empty: '{s name="variant/configurator/group/name_empty"}Color{/s}'
             },
-            activeGroups: '{s name=variant/configurator/group/active_groups_header}Active groups{/s}',
-            inactiveGroups: '{s name=variant/configurator/group/inactive_groups_header}Inactive groups{/s}',
-            selected: '{s name=variant/configurator/group/group_header_selected}selected{/s}',
-            remove: '{s name=variant/configurator/group/remove_column}Delete group{/s}',
-            edit: '{s name=variant/configurator/group/edit_column}Edit group{/s}',
-            name: '{s name=variant/configurator/group/name_column}Group name{/s}',
-            description: '{s name=variant/configurator/group/description_column}Group description{/s}',
-            active: '{s name=variant/configurator/group/active_column}Activated{/s}',
+            activeGroups: '{s name="variant/configurator/group/active_groups_header"}Active groups{/s}',
+            inactiveGroups: '{s name="variant/configurator/group/inactive_groups_header"}Inactive groups{/s}',
+            selected: '{s name="variant/configurator/group/group_header_selected"}selected{/s}',
+            remove: '{s name="variant/configurator/group/remove_column"}Delete group{/s}',
+            edit: '{s name="variant/configurator/group/edit_column"}Edit group{/s}',
+            name: '{s name="variant/configurator/group/name_column"}Group name{/s}',
+            description: '{s name="variant/configurator/group/description_column"}Group description{/s}',
+            active: '{s name="variant/configurator/group/active_column"}Activated{/s}',
             options: {
-                header: '{s name=variant/configurator/group/options_column_header}Option count{/s}'
+                header: '{s name="variant/configurator/group/options_column_header"}Option count{/s}'
             }
         },
         options: {
-            title: '{s name=variant/configurator/option/title}Manage attribute options{/s}',
-            titleLoaded: '{s name=variant/configurator/option/title}Manage attribute options of group:{/s}',
+            title: '{s name="variant/configurator/option/title"}Manage attribute options{/s}',
+            titleLoaded: '{s name="variant/configurator/option/title"}Manage attribute options of group:{/s}',
             optionName: {
-                label: '{s name=variant/configurator/option/name_label}Create option{/s}',
-                empty: '{s name=variant/configurator/option/name_empty}Yellow{/s}'
+                label: '{s name="variant/configurator/option/name_label"}Create option{/s}',
+                empty: '{s name="variant/configurator/option/name_empty"}Yellow{/s}'
             },
-            edit: '{s name=variant/configurator/option/edit_column}Edit option{/s}',
-            remove: '{s name=variant/configurator/option/remove_column}Delete option{/s}',
-            name: '{s name=variant/configurator/option/name_column}Option name{/s}',
-            activeOptions: '{s name=variant/configurator/option/active_options_header}Active options{/s}',
-            inactiveOptions: '{s name=variant/configurator/option/inactive_options_header}Inactive options{/s}'
+            edit: '{s name="variant/configurator/option/edit_column"}Edit option{/s}',
+            remove: '{s name="variant/configurator/option/remove_column"}Delete option{/s}',
+            name: '{s name="variant/configurator/option/name_column"}Option name{/s}',
+            activeOptions: '{s name="variant/configurator/option/active_options_header"}Active options{/s}',
+            inactiveOptions: '{s name="variant/configurator/option/inactive_options_header"}Inactive options{/s}'
         },
         types: {
-            standard:'{s name=variant/configurator/types/standard}Standard{/s}',
-            selection:'{s name=variant/configurator/types/selection}Selection{/s}',
-            picture:'{s name=variant/configurator/types/picture}Picture{/s}'
+            standard:'{s name="variant/configurator/types/standard"}Standard{/s}',
+            selection:'{s name="variant/configurator/types/selection"}Selection{/s}',
+            picture:'{s name="variant/configurator/types/picture"}Picture{/s}'
         }
     },
 
@@ -920,7 +920,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
     optionCountColumnRenderer: function(value, metaData, record) {
         var me = this,
             counter = 0,
-            info = ' ' + '{s name=variant/configurator/group/options_column_info}Options assigned{/s}';
+            info = ' ' + '{s name="variant/configurator/group/options_column_info"}Options assigned{/s}';
 
         if (!record) {
             return 0 + info;

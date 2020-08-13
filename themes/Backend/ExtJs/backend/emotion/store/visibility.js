@@ -30,7 +30,7 @@
 /**
  * Shopware Store - Emotion Module
  */
-//{namespace name=backend/emotion/view/detail}
+//{namespace name="backend/emotion/view/detail"}
 //{block name="backend/emotion/store/visibility"}
 Ext.define('Shopware.apps.Emotion.store.Visibility', {
     extend: 'Ext.data.Store',

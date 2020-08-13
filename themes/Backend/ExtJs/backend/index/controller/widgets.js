@@ -27,7 +27,7 @@
  * This controller handles the widget window, its widgets, settings and events.
  */
 
-//{namespace name=backend/index/controller/widgets}
+//{namespace name="backend/index/controller/widgets"}
 //{block name="backend/index/controller/widgets"}
 
 Ext.define('Shopware.apps.Index.controller.Widgets', {
@@ -78,8 +78,8 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         },
 
         titles: {
-            allow_merchant: '{s name=titles/allow_merchant}Unlock merchant{/s}',
-            decline_merchant: '{s name=titles/decline_merchant}Decline merchant{/s}'
+            allow_merchant: '{s name="titles/allow_merchant"}Unlock merchant{/s}',
+            decline_merchant: '{s name="titles/decline_merchant"}Decline merchant{/s}'
         }
     },
 

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/log/main}
+//{namespace name="backend/log/main"}
 
 /**
  * Shopware UI - Log view list
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Log.view.log.List', {
                 {
                     xtype: 'button',
                     iconCls: 'sprite-minus-circle',
-                    text: '{s name=toolbar/deleteMarkedEntries}Delete marked entries{/s}',
+                    text: '{s name="toolbar/deleteMarkedEntries"}Delete marked entries{/s}',
                     disabled: true,
                     action: 'deleteMultipleLogs'
                 },
@@ -113,7 +113,7 @@ Ext.define('Shopware.apps.Log.view.log.List', {
                     xtype: 'textfield',
                     cls : 'searchfield',
                     width : 170,
-                    emptyText : '{s name=toolbar/search}Search...{/s}',
+                    emptyText : '{s name="toolbar/search"}Search...{/s}',
                     enableKeyEvents : true,
                     checkChangeBuffer: 500,
                     listeners: {
@@ -154,32 +154,32 @@ Ext.define('Shopware.apps.Log.view.log.List', {
         var me = this;
 
         var columns = [{
-            header: '{s name=grid/column_date}Date{/s}',
+            header: '{s name="grid/column_date"}Date{/s}',
             dataIndex: 'date',
             flex: 1,
             xtype: 'datecolumn',
             renderer: me.renderDate
         },{
-            header: '{s name=grid/column_user}User{/s}',
+            header: '{s name="grid/column_user"}User{/s}',
             dataIndex: 'user',
             flex: 1
         }, {
-            header: '{s name=grid/column_module}Module{/s}',
+            header: '{s name="grid/column_module"}Module{/s}',
             dataIndex: 'key',
             flex: 1
         }, {
-            header: '{s name=grid/column_text}Text{/s}',
+            header: '{s name="grid/column_text"}Text{/s}',
             dataIndex: 'text',
             flex: 1
         }, {
-            header: '{s name=grid/actioncolumn}Options{/s}',
+            header: '{s name="grid/actioncolumn"}Options{/s}',
             xtype: 'actioncolumn',
             items: [
                 /*{if {acl_is_allowed privilege=delete}}*/
                 {
                     iconCls:'sprite-minus-circle',
                     action:'deleteColumn',
-                    tooltip: '{s name=grid/actioncolumn/buttonTooltip}Delete log{/s}',
+                    tooltip: '{s name="grid/actioncolumn/buttonTooltip"}Delete log{/s}',
                     handler:function (view, rowIndex) {
                         me.fireEvent('deleteColumn', rowIndex);
                     }

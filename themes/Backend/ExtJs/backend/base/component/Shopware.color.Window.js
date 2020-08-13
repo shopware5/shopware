@@ -1,5 +1,5 @@
 
-//{namespace name=backend/base/color_components}
+//{namespace name="backend/base/color_components"}
 
 //{block name="backend/base/color_window"}
 
@@ -104,7 +104,7 @@ Ext.define('Shopware.color.Window', {
         var me = this;
 
         me.cancelButton = Ext.create('Ext.button.Button', {
-            text: '{s name=color_window_cancel}Cancel{/s}',
+            text: '{s name="color_window_cancel"}Cancel{/s}',
             cls: 'small',
             handler: function () {
                 me.destroy();
@@ -118,7 +118,7 @@ Ext.define('Shopware.color.Window', {
         var me = this;
 
         me.applyButton = Ext.create('Ext.button.Button', {
-            text:  '{s name=color_window_apply}Apply{/s}',
+            text:  '{s name="color_window_apply"}Apply{/s}',
             cls: 'primary small',
             handler: function () {
                 me.fireEvent('apply-color', me, me.selectedColorField.getValue());

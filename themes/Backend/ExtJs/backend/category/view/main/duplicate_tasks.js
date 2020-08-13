@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-/* {namespace name=backend/category/main} */
+/* {namespace name="backend/category/main"} */
 
 //{block name="backend/category/view/duplicate/main"}
 Ext.define('Shopware.apps.Category.view.main.DuplicateTasks', {
@@ -104,14 +104,14 @@ Ext.define('Shopware.apps.Category.view.main.DuplicateTasks', {
     /**
      * @string
      */
-    title:  '{s name=batch/duplicate/title}Duplicate category tree{/s}',
+    title:  '{s name="batch/duplicate/title"}Duplicate category tree{/s}',
 
     /**
      * Contains all snippets for the component
      * @object
      */
     snippets: {
-        close:  '{s name=batch/cancel}Cancel{/s}'
+        close:  '{s name="batch/cancel"}Cancel{/s}'
     },
 
     /**

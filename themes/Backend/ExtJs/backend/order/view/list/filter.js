@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order list filter panel
@@ -64,27 +64,27 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
      * @object
      */
     snippets:{
-        title:'{s name=filter/title}Filter options{/s}',
-        from: '{s name=filter/from}From{/s}',
-        to: '{s name=filter/to}To{/s}',
-        orderState: '{s name=filter/orderState}Order status{/s}',
-        paymentState: '{s name=filter/paymentState}Payment status{/s}',
-        paymentName: '{s name=filter/paymentName}Payment method{/s}',
-        dispatchName: '{s name=filter/dispatchName}Shipping type{/s}',
-        customerGroup: '{s name=filter/customerGroup}Customer group{/s}',
-        shop: '{s name=filter/shop}Shop{/s}',
-        perform: '{s name=filter/perform}Perform filters{/s}',
-        reset: '{s name=filter/reset}Reset filters{/s}',
-        empty: '{s name=filter/empty}Display all{/s}',
-        article: '{s name=filter/article}Article{/s}',
-        partner: '{s name=filter/partner}Partner{/s}',
-        shipping: '{s name=filter/shipping}Shipping country{/s}',
-        billing: '{s name=filter/billing}Billing country{/s}',
-        supplier: '{s name=filter/supplier}Supplier{/s}',
+        title:'{s name="filter/title"}Filter options{/s}',
+        from: '{s name="filter/from"}From{/s}',
+        to: '{s name="filter/to"}To{/s}',
+        orderState: '{s name="filter/orderState"}Order status{/s}',
+        paymentState: '{s name="filter/paymentState"}Payment status{/s}',
+        paymentName: '{s name="filter/paymentName"}Payment method{/s}',
+        dispatchName: '{s name="filter/dispatchName"}Shipping type{/s}',
+        customerGroup: '{s name="filter/customerGroup"}Customer group{/s}',
+        shop: '{s name="filter/shop"}Shop{/s}',
+        perform: '{s name="filter/perform"}Perform filters{/s}',
+        reset: '{s name="filter/reset"}Reset filters{/s}',
+        empty: '{s name="filter/empty"}Display all{/s}',
+        article: '{s name="filter/article"}Article{/s}',
+        partner: '{s name="filter/partner"}Partner{/s}',
+        shipping: '{s name="filter/shipping"}Shipping country{/s}',
+        billing: '{s name="filter/billing"}Billing country{/s}',
+        supplier: '{s name="filter/supplier"}Supplier{/s}',
         document: {
-            title: '{s name=document/title}Documents{/s}',
-            date: '{s name=document/date}Date{/s}',
-            name:  '{s name=document/name}Name{/s}'
+            title: '{s name="document/title"}Documents{/s}',
+            date: '{s name="document/date"}Date{/s}',
+            name:  '{s name="document/name"}Name{/s}'
         }
     },
 

@@ -27,7 +27,7 @@
  * but we need a third state as a fallback to the default shop value
  */
 
-//{namespace name=backend/base/component/main}
+//{namespace name="backend/base/component/main"}
 
 //{block name="backend/base/component/element/boolean_select"}
 Ext.define('Shopware.apps.Base.view.element.BooleanSelect', {

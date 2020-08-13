@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-/* {namespace name=backend/category/main} */
+/* {namespace name="backend/category/main"} */
 
 //{block name="backend/category/view/duplicate/settings"}
 Ext.define('Shopware.apps.Category.view.main.DuplicateSettings', {
@@ -33,11 +33,11 @@ Ext.define('Shopware.apps.Category.view.main.DuplicateSettings', {
     modal: true,
 
     snippets: {
-        title: '{s name=settings/duplicate/title}Duplicate settings{/s}',
-        emptyText: '{s name=settings/duplicate/emptyText}Please select...{/s}',
-        categoryName: '{s name=settings/duplicate/categoryName}Select the destination category{/s}',
-        association: '{s name=settings/duplicate/association}Copy item associations{/s}',
-        button: '{s name=settings/duplicate/button}Duplicate{/s}'
+        title: '{s name="settings/duplicate/title"}Duplicate settings{/s}',
+        emptyText: '{s name="settings/duplicate/emptyText"}Please select...{/s}',
+        categoryName: '{s name="settings/duplicate/categoryName"}Select the destination category{/s}',
+        association: '{s name="settings/duplicate/association"}Copy item associations{/s}',
+        button: '{s name="settings/duplicate/button"}Duplicate{/s}'
     },
 
     initComponent: function() {

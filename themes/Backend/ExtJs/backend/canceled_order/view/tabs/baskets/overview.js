@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/canceled_order/view/main}
+//{namespace name="backend/canceled_order/view/main"}
 
 /**
  * Shopware UI - Canceled baskets
@@ -38,17 +38,17 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Overview', {
     extend: 'Ext.grid.Panel',
     border: false,
     alias: 'widget.canceled-order-tabs-baskets-overview',
-    title: '{s name=baskets/Overview}Overview{/s}',
+    title: '{s name="baskets/Overview"}Overview{/s}',
 
     snippets : {
         columns : {
-            time: '{s name=columns/date}Date{/s}',
-            price: '{s name=columns/amount}Total amount{/s}',
-            average: '{s name=columns/averageItemValue}Ø Price per unit{/s}',
-            number: '{s name=columns/number}Number of Baskets{/s}'
+            time: '{s name="columns/date"}Date{/s}',
+            price: '{s name="columns/amount"}Total amount{/s}',
+            average: '{s name="columns/averageItemValue"}Ø Price per unit{/s}',
+            number: '{s name="columns/number"}Number of Baskets{/s}'
         },
-        days: '{s name=days}Days{/s}',
-        day: '{s name=day}Day{/s}'
+        days: '{s name="days"}Days{/s}',
+        day: '{s name="day"}Day{/s}'
     },
 
     /**

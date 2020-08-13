@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/snippet/view/main}
+//{namespace name="backend/snippet/view/main"}
 
 /**
  * todo@all: Documentation
@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Snippet.view.main.Navigation', {
      * @object
      */
     snippets: {
-        buttonDeleteNamespace: '{s name=button/delete_namespace}Delte namespace{/s}'
+        buttonDeleteNamespace: '{s name="button/delete_namespace"}Delte namespace{/s}'
     },
 
     /**

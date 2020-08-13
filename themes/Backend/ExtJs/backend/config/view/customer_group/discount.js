@@ -25,22 +25,22 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/customer_group}
+//{namespace name="backend/config/view/customer_group"}
 
 //{block name="backend/config/view/customer_group/discount"}
 Ext.define('Shopware.apps.Config.view.customerGroup.Discount', {
     extend: 'Shopware.apps.Config.view.base.Property',
     alias: 'widget.config-customergroup-discount',
 
-    title: '{s name=discount/title}Basket discount{/s}',
+    title: '{s name="discount/title"}Basket discount{/s}',
     name: 'discounts',
 
     sortableColumns: false,
 
     snippets:{
         discount:{
-            basketValue: '{s name=discount/basket_value}Basket value{/s}',
-            basketDiscount: '{s name=discount/basket_discount}Basket discount{/s}'
+            basketValue: '{s name="discount/basket_value"}Basket value{/s}',
+            basketDiscount: '{s name="discount/basket_discount"}Basket discount{/s}'
         }
     },
 

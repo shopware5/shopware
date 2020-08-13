@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/view/edit/default}*/
+/*{namespace name="backend/shipping/view/edit/default"}*/
 
 /**
  * Shopware UI - Shipping Costs
@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
      * Title of the right form
      * @string
      */
-    title       : '{s name=right_title}Config{/s}',
+    title       : '{s name="right_title"}Config{/s}',
     /**
      * Alias
      * @string
@@ -233,36 +233,36 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
         return [
             {
                 name        : 'multiShopId',
-                emptyText   : '{s name=right_empty_text_shop}All Shops{/s}',
-                fieldLabel  : '{s name=right_shop}Shop{/s}',
+                emptyText   : '{s name="right_empty_text_shop"}All Shops{/s}',
+                fieldLabel  : '{s name="right_shop"}Shop{/s}',
                 store       :  me.shopStore,
                 valueField  : 'id',
                 displayField: 'name',
                 editable    : true,
                 allowBlank  : true,
                 queryMode : 'local',
-                emptyText:'{s name=right_empty_text_shop}All Shops{/s}',
+                emptyText:'{s name="right_empty_text_shop"}All Shops{/s}',
             }, {
                 name        : 'customerGroupId',
-                emptyText   : '{s name=right_empty_text_customer_group}All groups{/s}',
-                fieldLabel  : '{s name=right_customer_group}Customer Group{/s}',
+                emptyText   : '{s name="right_empty_text_customer_group"}All groups{/s}',
+                fieldLabel  : '{s name="right_customer_group"}Customer Group{/s}',
                 store       :  me.customerGroupStore,
                 valueField  : 'id',
                 displayField: 'name',
                 editable    : true,
                 allowBlank  : true,
                 queryMode : 'local',
-                emptyText: '{s name=right_empty_text_customer_group}All groups{/s}',
+                emptyText: '{s name="right_empty_text_customer_group"}All groups{/s}',
             },
             me.getCalculationField(),
             {
                 xtype: 'numberfield',
-                fieldLabel: '{s name=right_shipping_free}Shipping free from{/s}',
+                fieldLabel: '{s name="right_shipping_free"}Shipping free from{/s}',
                 name: 'shippingFree',
                 decimalPrecision : 2,
                 allowNegative: false,
                 minValue: 0,
-                emptyText: '{s name=right_shipping_free_emptyText}Never{/s}',
+                emptyText: '{s name="right_shipping_free_emptyText"}Never{/s}',
                 allowDecimals: true,
                 listeners: {
                     blur: function(field, obv) {
@@ -275,8 +275,8 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
             me.getSurchargeField(),
             {
                 name        : 'taxCalculation',
-                emptyText   : '{s name=right_empty_tax}Highest tax{/s}',
-                fieldLabel  : '{s name=right_tax}Tax{/s}',
+                emptyText   : '{s name="right_empty_tax"}Highest tax{/s}',
+                fieldLabel  : '{s name="right_tax"}Tax{/s}',
                 store       : me.taxStore,
                 valueField  : 'id',
                 displayField: 'name',
@@ -285,10 +285,10 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
                 style       : 'width: 100%',
                 selectOnFocus   : false,
                 triggerAction   : 'all',
-                helpText: '{s name=right_empty_tax_help}{/s}',
+                helpText: '{s name="right_empty_tax_help"}{/s}',
                 listeners: {
                     change: function(field, value) {
-                        field.setValue((!value || value === 0) ? '{s name=right_empty_tax}Highest tax{/s}' : value);
+                        field.setValue((!value || value === 0) ? '{s name="right_empty_tax"}Highest tax{/s}' : value);
                     }
                 }
             }
@@ -302,9 +302,9 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
         me.typeField = {
             name        : 'type',
             hiddenName  : 'type',
-            emptyText   : '{s name=right_choose}Choose...{/s}',
+            emptyText   : '{s name="right_choose"}Choose...{/s}',
             value       : 0,
-            fieldLabel  : '{s name=right_dispatch_type}Dispatch type{/s}',
+            fieldLabel  : '{s name="right_dispatch_type"}Dispatch type{/s}',
             valueField  : 'type',
             editable    : false,
             store       : new Ext.data.SimpleStore({
@@ -339,8 +339,8 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
         defaultConfig = {
             name        : 'calculation',
             hiddenName   : 'calculation',
-            emptyText   : '{s name=right_choose}Choose...{/s}',
-            fieldLabel  : '{s name=right_dispatch_calculation}Calculate dispatch costs based on{/s}',
+            emptyText   : '{s name="right_choose"}Choose...{/s}',
+            fieldLabel  : '{s name="right_dispatch_calculation"}Calculate dispatch costs based on{/s}',
             valueField  : 'calculation',
             editable    : false,
             store       : new Ext.data.SimpleStore({
@@ -377,8 +377,8 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
         defaultConfig = {
                 name        : 'surchargeCalculation',
                 hiddenName  : 'surchargeCalculation',
-                emptyText   : '{s name=right_choose}Choose...{/s}',
-                fieldLabel  : '{s name=right_surcharge}Surcharge type{/s}',
+                emptyText   : '{s name="right_choose"}Choose...{/s}',
+                fieldLabel  : '{s name="right_surcharge"}Surcharge type{/s}',
                 valueField  : 'surchargeCalculation',
                 editable    : false,
                 store       : new Ext.data.SimpleStore({

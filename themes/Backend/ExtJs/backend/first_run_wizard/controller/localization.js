@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-// {namespace name=backend/first_run_wizard/main}
+// {namespace name="backend/first_run_wizard/main"}
 // {block name="backend/first_run_wizard/controller/localization"}
 
 Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
@@ -43,18 +43,18 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
 
     snippets: {
         isConnected: {
-            text: '{s name=home/is_connected/text}Connection to Shopware server available{/s}',
+            text: '{s name="home/is_connected/text"}Connection to Shopware server available{/s}',
             icon: 'tick-circle'
         },
         isNotConnected: {
-            text: '{s name=home/is_not_connected/text}Could not connect to Shopware server{/s}',
+            text: '{s name="home/is_not_connected/text"}Could not connect to Shopware server{/s}',
             icon: 'cross-circle'
         },
         switchLocaleError: {
-            errorTitle: '{s name=switch_locale_error/errorTitle}Language switch{/s}',
-            errorServerMessage: '{s name=switch_locale_error/errorServerMessage}The following error was detected: [0]{/s}'
+            errorTitle: '{s name="switch_locale_error/errorTitle"}Language switch{/s}',
+            errorServerMessage: '{s name="switch_locale_error/errorServerMessage"}The following error was detected: [0]{/s}'
         },
-        growlMessage: '{s name=growlMessage}First run wizard{/s}'
+        growlMessage: '{s name="growlMessage"}First run wizard{/s}'
     },
 
     /**
@@ -226,7 +226,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
         var me = this,
             installerLocale = Ext.util.Cookies.get('installed-locale');
 
-        if (installerLocale && installerLocale !== '{s namespace="backend/base/index" name=script/ext/locale}{/s}') {
+        if (installerLocale && installerLocale !== '{s namespace="backend/base/index" name="script/ext/locale"}{/s}') {
             try {
                 me.localizationInstallerWindow = me.getView('main.LocalizationInstaller').create({
                     installerLocale: installerLocale,

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/premium/main}
+//{namespace name="backend/premium/main"}
 
 /**
  * todo@all: Documentation
@@ -118,9 +118,9 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;
                 if(operation.success){
-                    Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/createPremiumSuccess}The article was successfully created{/s}', "{s name=growlMessage_message/createPremiumSuccess}The article was successfully saved{/s}", '{s name=window_title}{/s}');
+                    Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/createPremiumSuccess"}The article was successfully created{/s}', '{s name="growlMessage_message/createPremiumSuccess"}The article was successfully saved{/s}', '{s name="window_title"}{/s}');
                 }else{
-                    Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error has occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
+                    Shopware.Notification.createGrowlMessage('{s name="growlMessage/error"}An error has occurred{/s}', rawData.errorMsg, '{s name="window_title"}{/s}');
                 }
                 store.load();
             }
@@ -141,10 +141,10 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
                 store = grid.getStore(),
                 selection = selModel.getSelection(),
                 me = this,
-                message = Ext.String.format('{s name=messagebox_multipleDelete/message}You have marked [0] articles. Are you sure you want to delete them?{/s}', selection.length);
+                message = Ext.String.format('{s name="messagebox_multipleDelete/message"}You have marked [0] articles. Are you sure you want to delete them?{/s}', selection.length);
 
         //Create a message-box, which has to be confirmed by the user
-        Ext.MessageBox.confirm('{s name=messagebox_multipleDelete/title}Delete articles{/s}', message, function (response){
+        Ext.MessageBox.confirm('{s name="messagebox_multipleDelete/title"}Delete articles{/s}', message, function (response){
             //If the user doesn't want to delete the articles
             if (response !== 'yes')
             {
@@ -159,9 +159,9 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
                     var rawData = batch.proxy.getReader().rawData;
                     if (rawData.success) {
                         me.subApplication.premiumStore.load();
-                        Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/deleteMultipleSuccess}Articles deleted{/s}', "{s name=growlMessage_message/deleteMultipleSuccess}The articles were successfully deleted{/s}", '{s name=window_title}{/s}');
+                        Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/deleteMultipleSuccess"}Articles deleted{/s}', '{s name="growlMessage_message/deleteMultipleSuccess"}The articles were successfully deleted{/s}', '{s name="window_title"}{/s}');
                     }else{
-                        Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/deleteMultipleError}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
+                        Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/deleteMultipleError"}An error occurred{/s}', rawData.errorMsg, '{s name="window_title"}{/s}');
                     }
                 }
             })
@@ -179,10 +179,10 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
     onDeleteSingleArticle: function(view, rowIndex){
         var store = this.subApplication.premiumStore,
             values = store.data.items[rowIndex].data,
-            message = Ext.String.format('{s name=messagebox_singleDelete/message}Are you sure you want to delete <b> [0] </b> ?{/s}', values.name);
+            message = Ext.String.format('{s name="messagebox_singleDelete/message"}Are you sure you want to delete <b> [0] </b> ?{/s}', values.name);
 
         //Create a message-box, which has to be confirmed by the user
-        Ext.MessageBox.confirm('{s name=messagebox_singleDelete/title}Delete article{/s}', message, function (response){
+        Ext.MessageBox.confirm('{s name="messagebox_singleDelete/title"}Delete article{/s}', message, function (response){
             //If the user doesn't want to delete the article
             if(response != 'yes')
             {

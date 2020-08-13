@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/shop/detail"}
 Ext.define('Shopware.apps.Config.view.shop.Detail', {
@@ -39,8 +39,8 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         return me.shopTypeStore = Ext.create('Ext.data.Store', {
             fields: [ 'type', 'label' ],
             data: [
-                { 'type': 'lang', 'label': '{s name=shop/detail/language_shop_label}Language shop{/s}' },
-                { 'type': 'sub', 'label': '{s name=shop/detail/sub_shop_label}Sub shop{/s}' }
+                { 'type': 'lang', 'label': '{s name="shop/detail/language_shop_label"}Language shop{/s}' },
+                { 'type': 'sub', 'label': '{s name="shop/detail/sub_shop_label"}Sub shop{/s}' }
             ]
         });
     },
@@ -78,8 +78,8 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         return {
             xtype: 'base-element-select',
             name: 'typeSwitch',
-            fieldLabel: '{s name=shop/detail/shop_type_label}Shop type{/s}',
-            helpText: '{s name=shop/detail/shop_type_help}A sub shop is available via an extra url, a language shop holds the translation for a sub shop or the default shop{/s}',
+            fieldLabel: '{s name="shop/detail/shop_type_label"}Shop type{/s}',
+            helpText: '{s name="shop/detail/shop_type_help"}A sub shop is available via an extra url, a language shop holds the translation for a sub shop or the default shop{/s}',
             store: me.createTypeStore(),
             valueField : 'type',
             displayField : 'label',
@@ -134,8 +134,8 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             name: 'mainId',
             isLangField: true,
             isLangRequired: true,
-            fieldLabel: '{s name=shop/detail/main_shop_label}Main shop{/s}',
-            helpText: '{s name=shop/detail/main_shop_help}{/s}',
+            fieldLabel: '{s name="shop/detail/main_shop_label"}Main shop{/s}',
+            helpText: '{s name="shop/detail/main_shop_help"}{/s}',
             store: 'base.Shop'
         };
     },
@@ -145,7 +145,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         return {
             xtype: 'base-element-boolean',
             name: 'default',
-            fieldLabel: '{s name=shop/detail/default_label}Default{/s}',
+            fieldLabel: '{s name="shop/detail/default_label"}Default{/s}',
             isMainField: true,
             readOnly: true,
             handler: function(button, value) {
@@ -164,7 +164,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         me.categorySelect = Ext.create('Shopware.apps.Base.view.element.SelectTree', {
             name: 'categoryId',
             allowBlank: false,
-            fieldLabel: '{s name=shop/detail/category_label}Category{/s}',
+            fieldLabel: '{s name="shop/detail/category_label"}Category{/s}',
             store: 'base.CategoryTree',
             anchor: '100%',
             labelWidth: 120
@@ -176,58 +176,58 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         me.getMainField(),
         {
             name: 'name',
-            fieldLabel: '{s name=shop/detail/name_label}Name{/s}',
+            fieldLabel: '{s name="shop/detail/name_label"}Name{/s}',
             allowBlank: false
         },{
             name: 'title',
-            fieldLabel: '{s name=shop/detail/title_label}Title{/s}',
-            helpText: '{s name=shop/detail/title_help}For the output in the shop frontend.{/s}'
+            fieldLabel: '{s name="shop/detail/title_label"}Title{/s}',
+            helpText: '{s name="shop/detail/title_help"}For the output in the shop frontend.{/s}'
         },{
             xtype: 'config-element-number',
             name: 'position',
-            fieldLabel: '{s name=shop/detail/position_label}Position{/s}',
-            helpText: '{s name=shop/detail/position_help}Position in the shop selection.{/s}'
+            fieldLabel: '{s name="shop/detail/position_label"}Position{/s}',
+            helpText: '{s name="shop/detail/position_help"}Position in the shop selection.{/s}'
         },{
             name: 'host',
-            emptyText: '{s name=shop/detail/host_empty_text}example.com{/s}',
-            fieldLabel: '{s name=shop/detail/host_label}Host{/s}',
-            helpText: '{s name=shop/detail/host_help}{/s}',
+            emptyText: '{s name="shop/detail/host_empty_text"}example.com{/s}',
+            fieldLabel: '{s name="shop/detail/host_label"}Host{/s}',
+            helpText: '{s name="shop/detail/host_help"}{/s}',
             isMainRequired: true,
             isMainField: true,
             hidden: true
         },{
             name: 'baseUrl',
-            emptyText: '{s name=shop/detail/url_empty_text}/shop/en{/s}',
-            fieldLabel: '{s name=shop/detail/url_label}Base url{/s}'
+            emptyText: '{s name="shop/detail/url_empty_text"}/shop/en{/s}',
+            fieldLabel: '{s name="shop/detail/url_label"}Base url{/s}'
         },{
             name: 'basePath',
-            emptyText: '{s name=shop/detail/path_empty_text}/shop{/s}',
-            fieldLabel: '{s name=shop/detail/path_label}Base path{/s}',
+            emptyText: '{s name="shop/detail/path_empty_text"}/shop{/s}',
+            fieldLabel: '{s name="shop/detail/path_label"}Base path{/s}',
             isMainField: true,
             hidden: true
         },{
             xtype: 'config-element-boolean',
             name: 'secure',
-            fieldLabel: '{s name=shop/detail/secure_label}SSL support{/s}',
+            fieldLabel: '{s name="shop/detail/secure_label"}SSL support{/s}',
             isMainField: true,
             hidden: true
         },{
             xtype: 'config-element-textarea',
             name: 'hosts',
-            fieldLabel: '{s name=shop/detail/hosts_label}Host aliases{/s}',
+            fieldLabel: '{s name="shop/detail/hosts_label"}Host aliases{/s}',
             isMainField: true,
             hidden: true
         },{
             xtype: 'config-element-select',
             name: 'currencyId',
             allowBlank: false,
-            fieldLabel: '{s name=shop/detail/currency_label}Currency{/s}',
+            fieldLabel: '{s name="shop/detail/currency_label"}Currency{/s}',
             store: 'base.Currency'
         },{
             xtype: 'config-element-select',
             name: 'localeId',
             allowBlank: false,
-            fieldLabel: '{s name=shop/detail/locale_label}Locale{/s}',
+            fieldLabel: '{s name="shop/detail/locale_label"}Locale{/s}',
             store: Ext.create('Shopware.apps.Base.store.Locale', {
                 remoteFilter: false
             }),
@@ -238,7 +238,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         {
             xtype: 'config-element-select',
             name: 'templateId',
-            fieldLabel: '{s name=shop/detail/template_label}Template{/s}',
+            fieldLabel: '{s name="shop/detail/template_label"}Template{/s}',
             store: 'base.Template',
             isMainRequired: true,
             isMainField: true,
@@ -246,7 +246,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         },{
             xtype: 'config-element-select',
             name: 'documentTemplateId',
-            fieldLabel: '{s name=shop/detail/document_template_label}Document template{/s}',
+            fieldLabel: '{s name="shop/detail/document_template_label"}Document template{/s}',
             store: 'base.Template',
             isMainRequired: true,
             isMainField: true,
@@ -255,25 +255,25 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             xtype: 'config-element-select',
             name: 'customerGroupId',
             allowBlank: false,
-            fieldLabel: '{s name=shop/detail/customer_group_label}Customer group{/s}',
+            fieldLabel: '{s name="shop/detail/customer_group_label"}Customer group{/s}',
             store: 'base.CustomerGroup'
         },{
             xtype: 'config-element-select',
             name: 'fallbackId',
-            fieldLabel: '{s name=shop/detail/fallback_label}Translation fallback{/s}',
-            helpText: '{s name=shop/detail/fallback_help}Fallback for translations.{/s}',
+            fieldLabel: '{s name="shop/detail/fallback_label"}Translation fallback{/s}',
+            helpText: '{s name="shop/detail/fallback_help"}Fallback for translations.{/s}',
             store: 'base.Translation'
         },{
             xtype: 'config-element-boolean',
             name: 'customerScope',
-            fieldLabel: '{s name=shop/detail/customer_scope_label}Customer scope{/s}',
-            helpText: '{s name=shop/detail/customer_scope_help}Limit the customer registry for the current shop.{/s}',
+            fieldLabel: '{s name="shop/detail/customer_scope_label"}Customer scope{/s}',
+            helpText: '{s name="shop/detail/customer_scope_help"}Limit the customer registry for the current shop.{/s}',
             isMainField: true,
             hidden: true
         },{
             xtype: 'config-element-boolean',
             name: 'active',
-            fieldLabel: '{s name=shop/detail/active_label}Active{/s}'
+            fieldLabel: '{s name="shop/detail/active_label"}Active{/s}'
         },
         me.getDefaultField(),
         {

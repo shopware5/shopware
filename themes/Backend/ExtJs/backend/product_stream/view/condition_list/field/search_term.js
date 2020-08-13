@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/field/search_term"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.SearchTerm', {
 
@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.SearchTerm', {
 
         me.term = Ext.create('Ext.form.field.Text', {
             labelWidth: 150,
-            fieldLabel: '{s name=term}Term{/s}',
+            fieldLabel: '{s name="term"}Term{/s}',
             allowBlank: false,
             padding: '0 0 0 10',
             flex: 1

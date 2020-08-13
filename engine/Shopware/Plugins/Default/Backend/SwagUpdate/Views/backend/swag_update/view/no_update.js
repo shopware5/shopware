@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/swag_update/main}
+//{namespace name="backend/swag_update/main"}
 //{block name="backend/swag_update/view/no_update"}
 Ext.define('Shopware.apps.SwagUpdate.view.NoUpdate', {
 
@@ -29,7 +29,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.NoUpdate', {
 
     alias: 'widget.update-no-update',
 
-    title: '{s name=window_title}Software Update{/s}',
+    title: '{s name="window_title"}Software Update{/s}',
 
     layout: 'fit',
 

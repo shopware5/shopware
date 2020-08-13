@@ -32,7 +32,7 @@
  * The settings component contains the settings elements for the article, like delivery time, supplier number,
  * the article stock, etc.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/detail/settings"}
 Ext.define('Shopware.apps.Article.view.detail.Settings', {
     /**
@@ -68,42 +68,42 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
      * @object
      */
     snippets:{
-        title:'{s name=detail/settings/title}Settings{/s}',
-        supplierNumber:'{s name=detail/settings/supplier_number}Supplier number{/s}',
+        title:'{s name="detail/settings/title"}Settings{/s}',
+        supplierNumber:'{s name="detail/settings/supplier_number"}Supplier number{/s}',
         avoidCustomerGroups: {
-            label: '{s name=detail/settings/avoid_customer_groups_label}Avoid customer groups{/s}',
-            support: '{s name=detail/settings/avoid_customer_groups_support}Here you have the opportunity to deactivate the article for different customer groups.{/s}'
+            label: '{s name="detail/settings/avoid_customer_groups_label"}Avoid customer groups{/s}',
+            support: '{s name="detail/settings/avoid_customer_groups_support"}Here you have the opportunity to deactivate the article for different customer groups.{/s}'
         },
         emailNotification: {
-            field: '{s name=detail/settings/email_notification_field}Email notification{/s}',
-            box: '{s name=detail/settings/email_notification_box}Show notification feature{/s}'
+            field: '{s name="detail/settings/email_notification_field"}Email notification{/s}',
+            box: '{s name="detail/settings/email_notification_box"}Show notification feature{/s}'
         },
-        deliveryTime: '{s name=detail/settings/delivery_time}Delivery time (days){/s}',
-        stock: '{s name=detail/settings/stock}Stock{/s}',
-        minStock: '{s name=detail/settings/min_stock}Minimum storage inventory{/s}',
-        releaseDate: '{s name=detail/settings/release_date}Release date{/s}',
-        createdAt: '{s name=detail/settings/created_at}Date of creation{/s}',
-        pseudoSales: '{s name=detail/settings/pseudo_sales}Pseudo sales{/s}',
-        weight: '{s name=detail/settings/weight_bw}Weight (bw){/s}',
+        deliveryTime: '{s name="detail/settings/delivery_time"}Delivery time (days){/s}',
+        stock: '{s name="detail/settings/stock"}Stock{/s}',
+        minStock: '{s name="detail/settings/min_stock"}Minimum storage inventory{/s}',
+        releaseDate: '{s name="detail/settings/release_date"}Release date{/s}',
+        createdAt: '{s name="detail/settings/created_at"}Date of creation{/s}',
+        pseudoSales: '{s name="detail/settings/pseudo_sales"}Pseudo sales{/s}',
+        weight: '{s name="detail/settings/weight_bw"}Weight (bw){/s}',
         shippingFree: {
-            field: '{s name=detail/settings/shipping_free_field}Free shipping{/s}',
-            box: '{s name=detail/settings/shipping_free_box}Select article as free shipping{/s}'
+            field: '{s name="detail/settings/shipping_free_field"}Free shipping{/s}',
+            box: '{s name="detail/settings/shipping_free_box"}Select article as free shipping{/s}'
         },
         highlight: {
-            field: '{s name=detail/settings/highlight_field}Highlight article{/s}',
-            box: '{s name=detail/settings/highlight_box}Highlight article in shop{/s}'
+            field: '{s name="detail/settings/highlight_field"}Highlight article{/s}',
+            box: '{s name="detail/settings/highlight_box"}Highlight article in shop{/s}'
         },
         onSale: {
-            field: '{s name=detail/settings/on_sale_field}On sale{/s}',
-            box: '{s name=detail/settings/on_sale_box}If instock <= 0, the article is not available{/s}'
+            field: '{s name="detail/settings/on_sale_field"}On sale{/s}',
+            box: '{s name="detail/settings/on_sale_box"}If instock <= 0, the article is not available{/s}'
         },
-        minimumOrder: '{s name=detail/settings/minimum_order}Minimum order{/s}',
-        graduation: '{s name=detail/settings/graduation}Graduation{/s}',
-        maximumOrder: '{s name=detail/settings/maximum_order}Maximum order{/s}',
-        ean: '{s name=detail/settings/ean}EAN{/s}',
-        width: '{s name=detail/settings/width}Width{/s}',
-        height: '{s name=detail/settings/height}Height{/s}',
-        len: '{s name=detail/settings/length}Length{/s}'
+        minimumOrder: '{s name="detail/settings/minimum_order"}Minimum order{/s}',
+        graduation: '{s name="detail/settings/graduation"}Graduation{/s}',
+        maximumOrder: '{s name="detail/settings/maximum_order"}Maximum order{/s}',
+        ean: '{s name="detail/settings/ean"}EAN{/s}',
+        width: '{s name="detail/settings/width"}Width{/s}',
+        height: '{s name="detail/settings/height"}Height{/s}',
+        len: '{s name="detail/settings/length"}Length{/s}'
     },
 
     /**

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/systeminfo/view}
+//{namespace name="backend/systeminfo/view"}
 
 /**
  * Shopware UI - General window systeminfo
@@ -37,7 +37,7 @@
 //{block name="backend/systeminfo/view/main/window"}
 Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window_title}System-Information{/s}',
+    title: '{s name="window_title"}System-Information{/s}',
     cls: Ext.baseCSSPrefix + 'systeminfo-window',
     alias: 'widget.systeminfo-main-window',
     autoShow: true,
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
                 {
                     xtype: 'container',
                     overflowY: 'scroll',
-                    title: '{s name=window/tabpanel/config_tab/title}Server-Configs{/s}',
+                    title: '{s name="window/tabpanel/config_tab/title"}Server-Configs{/s}',
                     items: [{
                         xtype: 'systeminfo-main-timezone'
                     },{
@@ -81,28 +81,28 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
                 },{
                     xtype: 'container',
                     overflowY: 'scroll',
-                    title: '{s name=window/tabpanel/path_tab/title}Shopware-Paths{/s}',
+                    title: '{s name="window/tabpanel/path_tab/title"}Shopware-Paths{/s}',
                     items:[{
                         xtype: 'systeminfo-main-pathlist'
                     }]
                 },{
                     xtype: 'container',
                     overflowY: 'scroll',
-                    title: '{s name=window/tabpanel/file_tab/title}Shopware-Files{/s}',
+                    title: '{s name="window/tabpanel/file_tab/title"}Shopware-Files{/s}',
                     items:[{
                         xtype: 'systeminfo-main-filelist'
                     }]
                 },{
                     xtype: 'container',
                     overflowY: 'scroll',
-                    title: '{s name=window/tabpanel/version_tab/title}Version-info{/s}',
+                    title: '{s name="window/tabpanel/version_tab/title"}Version-info{/s}',
                     items:[{
                         xtype: 'systeminfo-main-versionlist'
                     }]
                 },{
                     xtype: 'container',
                     layout: 'fit',
-                    title: '{s name=window/tabpanel/optimizer_tab/title}Optimizer{/s}',
+                    title: '{s name="window/tabpanel/optimizer_tab/title"}Optimizer{/s}',
                     items:[{
                         xtype: 'systeminfo-main-optimizerlist'
                     }]
@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
                     xtype: 'container',
                     layout: 'fit',
                     overflowY: 'hidden',
-                    title: '{s name=window/tabpanel/info_tab/title}PHP-Info{/s}',
+                    title: '{s name="window/tabpanel/info_tab/title"}PHP-Info{/s}',
                     items:[{
                         xtype: 'systeminfo-main-phpinfo'
                     }]

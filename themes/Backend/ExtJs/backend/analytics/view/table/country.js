@@ -28,12 +28,12 @@
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/country"}
 Ext.define('Shopware.apps.Analytics.view.table.Country', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-country',
-    shopColumnText: "{s name=general/turnover}Turnover{/s}: [0]",
+    shopColumnText: '{s name="general/turnover"}Turnover{/s}: [0]',
 
     initComponent: function () {
         var me = this;
@@ -60,12 +60,12 @@ Ext.define('Shopware.apps.Analytics.view.table.Country', {
         return [
             {
                 dataIndex: 'name',
-                text: '{s name=table/country/country}Country{/s}'
+                text: '{s name="table/country/country"}Country{/s}'
             },
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=general/turnover}Turnover{/s}',
+                text: '{s name="general/turnover"}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];

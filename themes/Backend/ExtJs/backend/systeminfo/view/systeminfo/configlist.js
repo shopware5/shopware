@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/systeminfo/view}
+//{namespace name="backend/systeminfo/view"}
 
 /**
  * Shopware UI - Grid for the shopware-configs
@@ -76,10 +76,10 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Configlist', {
         this.columns = this.getColumns();
 
         var translations = [];
-        translations['config'] = '{s name=systeminfo/groupingFeature_config}Settings{/s}';
-        translations['core'] = '{s name=systeminfo/groupingFeature_core}General{/s}';
-        translations['extension'] = '{s name=systeminfo/groupingFeature_extension}Extensions{/s}';
-        translations['other'] = '{s name=systeminfo/groupingFeature_other}Other{/s}';
+        translations['config'] = '{s name="systeminfo/groupingFeature_config"}Settings{/s}';
+        translations['core'] = '{s name="systeminfo/groupingFeature_core"}General{/s}';
+        translations['extension'] = '{s name="systeminfo/groupingFeature_extension"}Extensions{/s}';
+        translations['other'] = '{s name="systeminfo/groupingFeature_other"}Other{/s}';
 
 //        Row grouping
         this.groupingFeature = Ext.create('Ext.grid.feature.Grouping', {
@@ -105,22 +105,22 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Configlist', {
 
         var columns = [
             {
-                header: '{s name=config_grid/column/name}Name{/s}',
+                header: '{s name="config_grid/column/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1
             },{
-                header: '{s name=config_grid/column/required}Required{/s}',
+                header: '{s name="config_grid/column/required"}Required{/s}',
                 dataIndex: 'required',
                 align: 'right',
                 flex: 1
             },{
-                header: '{s name=config_grid/column/version}Version{/s}',
+                header: '{s name="config_grid/column/version"}Version{/s}',
                 dataIndex: 'version',
                 align: 'right',
                 flex: 1,
                 renderer: me.renderVersion
             },{
-                header: '{s name=config_grid/column/status}Status{/s}',
+                header: '{s name="config_grid/column/status"}Status{/s}',
                 dataIndex: 'status',
                 flex: 1,
                 renderer: me.renderStatus

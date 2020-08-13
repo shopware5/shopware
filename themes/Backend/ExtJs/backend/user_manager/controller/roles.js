@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/user_manager/view/main}
+//{namespace name="backend/user_manager/view/main"}
 
 /**
  * Shopware UI - User Manager roles controller
@@ -77,18 +77,18 @@ Ext.define('Shopware.apps.UserManager.controller.Roles', {
         message,
         record = roleStore.getAt(rowIndex);
 
-        message = Ext.String.format('{s name=roles_list/messageDeleteRole}Are you sure you want to delete the role [0]?{/s}', record.data.name);
-        Ext.MessageBox.confirm('{s name=roles_list/titleDeleteRole}Delete role{/s}', message, function (response){
+        message = Ext.String.format('{s name="roles_list/messageDeleteRole"}Are you sure you want to delete the role [0]?{/s}', record.data.name);
+        Ext.MessageBox.confirm('{s name="roles_list/titleDeleteRole"}Delete role{/s}', message, function (response){
             if (response !== 'yes')  return false;
 
             Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
                 record.destroy({
                     success: function () {
                         roleStore.load();
-                        Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name=roles_list/deletedSuccesfully}Role has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
+                        Shopware.Notification.createGrowlMessage('{s name="user/Success"}Successful{/s}', '{s name="roles_list/deletedSuccesfully"}Role has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
                     },
                     failure: function () {
-                        Shopware.Notification.createGrowlMessage('{s name=user/Error}Error{/s}', '{s name=roles_list/deletedError}An error has occured while deleting role{/s}', '{s name="user/userManager"}User Manager{/s}');
+                        Shopware.Notification.createGrowlMessage('{s name="user/Error"}Error{/s}', '{s name="roles_list/deletedError"}An error has occured while deleting role{/s}', '{s name="user/userManager"}User Manager{/s}');
                     }
                 });
             });

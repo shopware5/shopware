@@ -6,7 +6,7 @@
     <tr>
         <td width="100%">
             <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;">
-                {foreach from=$sCampaignContainer.data item=sArticle name=artikelListe}
+                {foreach from=$sCampaignContainer.data item=sArticle name="artikelListe"}
                     {if $sArticle@index%3==0}<tr>{/if}
 
                     <!-- beginning article -->

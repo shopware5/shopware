@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/product_feed/view/feed}
+//{namespace name="backend/product_feed/view/feed"}
 
 /**
  * Shopware UI - ProductFeed main window.
@@ -37,7 +37,7 @@
 //{block name="backend/product_feed/view/feed/window"}
 Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window/detail_title}Feed - Configuration{/s}',
+    title: '{s name="window/detail_title"}Feed - Configuration{/s}',
     alias: 'widget.product_feed-feed-window',
     border: false,
     autoShow: true,
@@ -161,7 +161,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
         var me = this;
         return ['->',
             {
-                text:'{s name=detail_general/button/cancel}Cancel{/s}',
+                text:'{s name="detail_general/button/cancel"}Cancel{/s}',
                 scope:me,
                 cls: 'secondary',
                 handler:function () {
@@ -169,13 +169,13 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
                 }
             },
             {
-                text:'{s name=detail_general/button/save}Save{/s}',
+                text:'{s name="detail_general/button/save"}Save{/s}',
                 action:'update',
                 disabled:true,
                 cls:'primary'
             },
             {
-                text:'{s name=detail_general/button/save_and_close}Save and Close{/s}',
+                text:'{s name="detail_general/button/save_and_close"}Save and Close{/s}',
                 action:'save',
                 disabled:true,
                 cls:'primary'

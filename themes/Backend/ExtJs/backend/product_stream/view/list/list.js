@@ -26,22 +26,22 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/list/list"}
 Ext.define('Shopware.apps.ProductStream.view.list.List', {
     extend: 'Shopware.grid.Panel',
     alias: 'widget.product-stream-listing-grid',
     region: 'center',
 
-    addButtonText: '{s name=add_condition_stream}Add condition stream{/s}',
+    addButtonText: '{s name="add_condition_stream"}Add condition stream{/s}',
 
     configure: function () {
         return {
             deleteButton: false,
             detailWindow: 'Shopware.apps.ProductStream.view.condition_list.Window',
             columns: {
-                name: { header: '{s name=name}Name{/s}' },
-                description: { header: '{s name=description}Description{/s}' }
+                name: { header: '{s name="name"}Name{/s}' },
+                description: { header: '{s name="description"}Description{/s}' }
             }
         };
     },
@@ -63,9 +63,9 @@ Ext.define('Shopware.apps.ProductStream.view.list.List', {
                 {
                     formatName: function(type) {
                         if (type == 2) {
-                            return '{s name=selection_streams}Selection streams{/s}';
+                            return '{s name="selection_streams"}Selection streams{/s}';
                         } else {
-                            return '{s name=condition_streams}Condition streams{/s}';
+                            return '{s name="condition_streams"}Condition streams{/s}';
                         }
                     }
                 }
@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.ProductStream.view.list.List', {
         items = Ext.Array.insert(items, 1, [{
             xtype: 'button',
             iconCls: 'sprite-plus-circle-frame',
-            text: '{s name=add_selection_stream}Add selection stream{/s}',
+            text: '{s name="add_selection_stream"}Add selection stream{/s}',
             handler: function () {
                 var record = Ext.create('Shopware.apps.ProductStream.model.Stream');
                 record.set('type', 2);

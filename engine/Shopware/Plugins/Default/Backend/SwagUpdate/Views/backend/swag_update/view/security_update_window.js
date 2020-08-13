@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-// {namespace name=backend/swag_update/main}
+// {namespace name="backend/swag_update/main"}
 // {block name="backend/swag_update/view/security_update_window"}
 Ext.define('Shopware.apps.SwagUpdate.view.SecurityUpdateWindow', {
     extend: 'Shopware.window.ExpiredPluginWarning',

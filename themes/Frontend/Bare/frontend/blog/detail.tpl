@@ -20,7 +20,7 @@
                     <meta itemprop="mainEntityOfPage" content="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}">
 
                     <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
-                        <meta itemprop="name" content="{{config name=sShopname}|escapeHtml}">
+                        <meta itemprop="name" content="{{config name="sShopname"}|escapeHtml}">
                         <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
                             <meta itemprop="url" content="{link file=$theme.desktopLogo fullPath}">
                         </div>

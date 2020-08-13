@@ -26,12 +26,12 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/common/settings"}
 Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.product-stream-settings',
-    title: '{s name=settings}Settings{/s}',
+    title: '{s name="settings"}Settings{/s}',
     height: 170,
     bodyPadding: 10,
     cls: 'shopware-form',
@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
         });
 
         me.sortingCombo = Ext.create('Shopware.form.field.SingleSelection', {
-            fieldLabel: '{s name=sorting}Sorting{/s}',
+            fieldLabel: '{s name="sorting"}Sorting{/s}',
             name: 'sortingId',
             allowBlank: false,
             forceSelection: true,
@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
             name: 'name',
             anchor: '100%',
             allowBlank: false,
-            fieldLabel: '{s name=name}Name{/s}',
+            fieldLabel: '{s name="name"}Name{/s}',
             translatable: true,
         });
 
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
             name: 'description',
             anchor: '100%',
             rows: 3,
-            fieldLabel: '{s name=description}Description{/s}',
+            fieldLabel: '{s name="description"}Description{/s}',
             translatable: true,
         });
 

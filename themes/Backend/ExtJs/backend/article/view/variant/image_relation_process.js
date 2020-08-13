@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/variant/image_relation_process"}
 Ext.define('Shopware.apps.Article.view.variant.ImageRelationProcess', {
     extend: 'Enlight.app.Window',

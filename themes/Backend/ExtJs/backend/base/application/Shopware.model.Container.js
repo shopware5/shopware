@@ -1,5 +1,5 @@
 
-//{namespace name=backend/application/main}
+//{namespace name="backend/application/main"}
 
 //{block name="backend/application/Shopware.model.Container"}
 
@@ -743,7 +743,7 @@ Ext.define('Shopware.model.Container', {
         if (!me.fireEvent(me.eventAlias + '-before-association-component-created', me, component, type, model, store)) {
             return component;
         }
-        
+
         component = Ext.create(componentType, {
             record: model,
             store: store,

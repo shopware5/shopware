@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/systeminfo/view}
+//{namespace name="backend/systeminfo/view"}
 
 /**
  * Shopware UI - Grid for encoder
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Timezone', {
                     me.destroy();
                 } else {
                     snippet = Ext.String.format(
-                        '{s name=time/difference_detected}Difference between database time and php time is [0] minutes{/s}',
+                        '{s name="time/difference_detected"}Difference between database time and php time is [0] minutes{/s}',
                         decodedResponse.offset
                     );
                     block.items.items[0].update({

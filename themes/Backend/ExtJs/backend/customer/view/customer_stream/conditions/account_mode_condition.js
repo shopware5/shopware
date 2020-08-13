@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+// {namespace name="backend/customer/view/main"}
 // {block name="backend/customer/view/customer_stream/conditions/account_mode_condition"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.AccountModeCondition', {
 
@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.AccountModeCo
     createAccountModeField: function () {
         var me = this;
         me.accountModeSelection = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: '{s name=column/accountMode}{/s}',
+            fieldLabel: '{s name="column/accountMode"}{/s}',
             store: me.createAccountModeStore(),
             displayField: 'name',
             valueField: 'value',
@@ -74,8 +74,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.AccountModeCo
         return Ext.create('Ext.data.Store', {
             fields: [ 'name', 'value' ],
             data: [
-                { name: '{s name=accountModeNormal}{/s}', value: '0' },
-                { name: '{s name=accountModeGuest}{/s}', value: '1' }
+                { name: '{s name="accountModeNormal"}{/s}', value: '0' },
+                { name: '{s name="accountModeGuest"}{/s}', value: '1' }
             ]
         });
     }

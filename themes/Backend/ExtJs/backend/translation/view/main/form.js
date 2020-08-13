@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/translation/view/main}
+//{namespace name="backend/translation/view/main"}
 
 /**
  * Shopware UI - Translation Manager Main Form
@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Translation.view.main.Form',
     extend: 'Ext.form.Panel',
     alias: 'widget.translation-main-form',
     bodyPadding: 10,
-    title: '{s name=form_title}Translatable fields{/s}',
+    title: '{s name="form_title"}Translatable fields{/s}',
     layout: 'anchor',
     cls: Ext.baseCSSPrefix + 'translation-manager-form',
 

@@ -30,7 +30,7 @@
 /**
  * Shopware UI - Article ESD serials page
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/esd/serials"}
 Ext.define('Shopware.apps.Article.view.esd.Serials', {
 
@@ -63,21 +63,21 @@ Ext.define('Shopware.apps.Article.view.esd.Serials', {
      * @object
      */
     snippets:{
-        title:'{s name=esd/serials/title}Serialnumber Administration{/s}',
+        title:'{s name="esd/serials/title"}Serialnumber Administration{/s}',
         columns:{
-            serial:'{s name=esd/serials/column/serial}Serialnumber{/s}',
-            assignedCustomer:'{s name=esd/serials/column/assigned_customer}Assigned Customer{/s}',
-            assignedDate:'{s name=esd/serialsals/column/assigned_date}Assigned at{/s}',
+            serial:'{s name="esd/serials/column/serial"}Serialnumber{/s}',
+            assignedCustomer:'{s name="esd/serials/column/assigned_customer"}Assigned Customer{/s}',
+            assignedDate:'{s name="esd/serialsals/column/assigned_date"}Assigned at{/s}',
 
-            remove: '{s name=esd/serials/column/remove}Delete serial{/s}',
-            openCustomer: '{s name=esd/serials/column/open_customer}Open Customer{/s}',
-            guest: '{s name=esd/serials/column/guest}Guest{/s}'
+            remove: '{s name="esd/serials/column/remove"}Delete serial{/s}',
+            openCustomer: '{s name="esd/serials/column/open_customer"}Open Customer{/s}',
+            guest: '{s name="esd/serials/column/guest"}Guest{/s}'
         },
         toolbar:{
-            add:'{s name=esd/serials/toolbar/button_add}Add Serials{/s}',
-            remove:'{s name=esd/serials/toolbar/button_delete}Delete selected{/s}',
-            search:'{s name=esd/serials/toolbar/search_empty_text}Search...{/s}',
-            removeUnused: '{s name=esd/serials/toolbar/button_delete_unused}Delete not assigned Serials{/s}'
+            add:'{s name="esd/serials/toolbar/button_add"}Add Serials{/s}',
+            remove:'{s name="esd/serials/toolbar/button_delete"}Delete selected{/s}',
+            search:'{s name="esd/serials/toolbar/search_empty_text"}Search...{/s}',
+            removeUnused: '{s name="esd/serials/toolbar/button_delete_unused"}Delete not assigned Serials{/s}'
         }
     },
 

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/form/view/main}
+//{namespace name="backend/form/view/main"}
 
 /**
  * todo@all: Documentation
@@ -38,9 +38,9 @@ Ext.define('Shopware.apps.Form.view.main.Editwindow', {
     alias : 'widget.form-main-editwindow',
 
     /*{if {acl_is_allowed privilege=createupdate}}*/
-    title : '{s name=title_edit}Forms - Edit{/s}',
+    title : '{s name="title_edit"}Forms - Edit{/s}',
     /*{else}*/
-    title : '{s name=title_details}Form details{/s}',
+    title : '{s name="title_details"}Form details{/s}',
     /*{/if}*/
 
     layout: 'fit',

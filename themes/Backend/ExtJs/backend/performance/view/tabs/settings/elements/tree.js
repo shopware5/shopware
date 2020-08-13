@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/* {namespace name=backend/performance/main} */
+/* {namespace name="backend/performance/main"} */
 
 //{block name="backend/performance/view/tabs/settings/elements/tree"}
 Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.Tree', {

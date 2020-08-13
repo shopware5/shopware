@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Supplier.view.Main', {
     stateful : true,
     stateId : 'suppliersList',
     border : 0,
-    title : '{s name=window_title}Supplier management{/s}',
+    title : '{s name="window_title"}Supplier management{/s}',
 
     initComponent: function() {
         var me = this;

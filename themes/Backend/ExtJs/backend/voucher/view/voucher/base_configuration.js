@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/voucher/view/voucher}
+// {namespace name="backend/voucher/view/voucher"}
 
 /**
  * Shopware UI - Voucher detail main window.
@@ -39,19 +39,19 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
     extend: 'Ext.form.Panel',
     cls: 'shopware-form',
     alias: 'widget.voucher-voucher-base_configuration',
-    title: '{s name=detail_general/win_title/configuration}Configuration{/s}',
+    title: '{s name="detail_general/win_title/configuration"}Configuration{/s}',
     autoShow: true,
     autoScroll: true,
     bodyPadding: 10,
 
     // Text for the ModusCombobox
     modusData: [
-        [ 0, '{s name=detail_general/mode_combo_box/general}General{/s}' ],
-        [ 1, '{s name=detail_general/mode_combo_box/individual}Individual{/s}' ]
+        [ 0, '{s name="detail_general/mode_combo_box/general"}General{/s}' ],
+        [ 1, '{s name="detail_general/mode_combo_box/individual"}Individual{/s}' ]
     ],
     discountModeData: [
-        [ 0, '{s name=detail_general/discount_combo_box/absolute}Absolute{/s}' ],
-        [ 1, '{s name=detail_general/discount_combo_box/percental}Percental{/s}' ]
+        [ 0, '{s name="detail_general/discount_combo_box/absolute"}Absolute{/s}' ],
+        [ 1, '{s name="detail_general/discount_combo_box/percental"}Percental{/s}' ]
     ],
     voucherID: 0,
 
@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
             me.description = me.record.data.description;
         }
         me.generalFieldset = Ext.create('Ext.form.FieldSet', {
-            title: '{s name=detail_general/field_set/configuration}Voucher configuration{/s}',
+            title: '{s name="detail_general/field_set/configuration"}Voucher configuration{/s}',
             layout: 'column',
             defaults: {
                 columnWidth: 0.5,
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
         });
 
         me.restrictionFieldset = Ext.create('Ext.form.FieldSet', {
-            title: '{s name=detail_general/field_set/limit}Limit voucher{/s}',
+            title: '{s name="detail_general/field_set/limit"}Limit voucher{/s}',
             layout: 'column',
             defaults: {
                 columnWidth: 0.5,
@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
         var me = this;
         return [
             {
-                fieldLabel: '{s name=detail_general/field/description}Description{/s}',
+                fieldLabel: '{s name="detail_general/field/description"}Description{/s}',
                 name: 'description',
                 allowBlank: false,
                 required: true,
@@ -190,7 +190,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
             {
                 xtype: 'combobox',
                 name: 'modus',
-                fieldLabel: '{s name=detail_general/field/mode}Voucher code mode{/s}',
+                fieldLabel: '{s name="detail_general/field/mode"}Voucher code mode{/s}',
                 store: new Ext.data.SimpleStore({
                     fields: [ 'id', 'text', 'tip' ], data: this.modusData
                 }),
@@ -198,10 +198,10 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 displayField: 'text',
                 mode: 'local',
                 editable: false,
-                helpText: '{s name=detail_general/field/mode/help}<b>Mode - General</b><br />A general voucher with one voucher code will be created<br /><br /><b>Mode - Individual</b><br />Creates as many individual voucher codes as entered in field: [Number of units]. Each customer gets an individual voucher code.{/s}'
+                helpText: '{s name="detail_general/field/mode/help"}<b>Mode - General</b><br />A general voucher with one voucher code will be created<br /><br /><b>Mode - Individual</b><br />Creates as many individual voucher codes as entered in field: [Number of units]. Each customer gets an individual voucher code.{/s}'
             },
             {
-                fieldLabel: '{s name=detail_general/field/number_of_units}Number of units{/s}',
+                fieldLabel: '{s name="detail_general/field/number_of_units"}Number of units{/s}',
                 name: 'numberOfUnits',
                 xtype: 'numberfield',
                 allowDecimals: false,
@@ -213,18 +213,18 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
             },
             {
                 xtype: 'numberfield',
-                fieldLabel: '{s name=detail_general/field/minimum_charge}Minimum charge{/s}',
+                fieldLabel: '{s name="detail_general/field/minimum_charge"}Minimum charge{/s}',
                 name: 'minimumCharge',
                 allowBlank: false,
                 hideTrigger: true,
                 keyNavEnabled: false,
                 mouseWheelEnabled: false,
-                helpText: '{s name=detail_general/field/minimum_charge/help}The minimum basket value for this voucher{/s}',
+                helpText: '{s name="detail_general/field/minimum_charge/help"}The minimum basket value for this voucher{/s}',
                 validator: function (value) {
                     var form = me.getForm();
                     if (form.getFieldValues().percental != 1) {
                         if (value < form.getFieldValues().value) {
-                            return '{s name=detail_general/field/minimum_charge/error/minimum_charge_bigger_than_value}The minimum charge has to be bigger then the voucher value{/s}';
+                            return '{s name="detail_general/field/minimum_charge/error/minimum_charge_bigger_than_value"}The minimum charge has to be bigger then the voucher value{/s}';
                         }
                     }
                     return true;
@@ -233,7 +233,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
             {
                 xtype: 'combobox',
                 name: 'percental',
-                fieldLabel: '{s name=detail_general/field/discharge}Discharge{/s}',
+                fieldLabel: '{s name="detail_general/field/discharge"}Discharge{/s}',
                 store: new Ext.data.SimpleStore({
                     fields: [ 'id', 'text' ], data: this.discountModeData
                 }),
@@ -241,15 +241,15 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 displayField: 'text',
                 mode: 'local',
                 editable: false,
-                helpText: '{s name=detail_general/field/percental/help}The value of the voucher will be reduced perceptually or absolutely{/s}'
+                helpText: '{s name="detail_general/field/percental/help"}The value of the voucher will be reduced perceptually or absolutely{/s}'
             },
             {
                 xtype: 'checkbox',
-                fieldLabel: '{s name=detail_general/field/shipping_free}Free of shipping costs{/s}',
+                fieldLabel: '{s name="detail_general/field/shipping_free"}Free of shipping costs{/s}',
                 inputValue: 1,
                 uncheckedValue: 0,
                 name: 'shippingFree',
-                helpText: '{s name=detail_general/field/shipping_free/help}The order will be free of shipping costs{/s}'
+                helpText: '{s name="detail_general/field/shipping_free/help"}The order will be free of shipping costs{/s}'
             }
         ];
     },
@@ -265,8 +265,8 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 name: 'id'
             },
             {
-                fieldLabel: '{s name=detail_general/field/order_number}Order number{/s}',
-                supportText: '{s name=detail_general/field/order_code/help}This is the order number of the voucher{/s}',
+                fieldLabel: '{s name="detail_general/field/order_number"}Order number{/s}',
+                supportText: '{s name="detail_general/field/order_code/help"}This is the order number of the voucher{/s}',
                 name: 'orderCode',
                 allowBlank: false,
                 required: true,
@@ -275,27 +275,27 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 vtype: 'remote',
                 validationUrl: '{url controller="voucher" action="validateOrderCode"}',
                 validationRequestParam: me.voucherID,
-                validationErrorMsg: '{s name=detail_general/error_message/used_order_number}This order number is already in use{/s}',
+                validationErrorMsg: '{s name="detail_general/error_message/used_order_number"}This order number is already in use{/s}',
                 validateOnChange: true,
                 validateOnBlur: false
             },
             {
-                fieldLabel: '{s name=detail_general/field/code}Code{/s}',
+                fieldLabel: '{s name="detail_general/field/code"}Code{/s}',
                 name: 'voucherCode',
                 allowBlank: false,
                 required: true,
                 enableKeyEvents: true,
                 checkChangeBuffer: 500,
-                helpText: '{s name=detail_general/field/voucher_code/help}The voucher code of generally valid vouchers{/s}',
+                helpText: '{s name="detail_general/field/voucher_code/help"}The voucher code of generally valid vouchers{/s}',
                 vtype: 'remote',
                 validationUrl: '{url controller="voucher" action="validateVoucherCode"}',
                 validationRequestParam: me.voucherID,
-                validationErrorMsg: '{s name=detail_general/error_message/used_voucher_code}The voucher code is already in use{/s}',
+                validationErrorMsg: '{s name="detail_general/error_message/used_voucher_code"}The voucher code is already in use{/s}',
                 validateOnChange: true,
                 validateOnBlur: false
             },
             {
-                fieldLabel: '{s name=detail_general/field/value}Value{/s}',
+                fieldLabel: '{s name="detail_general/field/value"}Value{/s}',
                 name: 'value',
                 xtype: 'numberfield',
                 allowBlank: false,
@@ -303,20 +303,20 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 keyNavEnabled: false,
                 mouseWheelEnabled: false,
                 required: true,
-                helpText: '{s name=detail_general/field/value/help}This is the percentual or absolute value that will be deducted based on the [Discharge] field.{/s}',
+                helpText: '{s name="detail_general/field/value/help"}This is the percentual or absolute value that will be deducted based on the [Discharge] field.{/s}',
                 validator: function (value) {
                     var form = me.getForm();
                     var validationValue = value.replace(Ext.util.Format.decimalSeparator, '.');
 
                     if (form.getFieldValues().percental == 1) {
-                        return (validationValue <= 100 && validationValue > 0) ? true : '{s name=detail_general/field/value/error/percental}The value has to be in the range of 1 to 100%{/s}';
+                        return (validationValue <= 100 && validationValue > 0) ? true : '{s name="detail_general/field/value/error/percental"}The value has to be in the range of 1 to 100%{/s}';
                     } else {
-                        return (validationValue >= 0) ? true : '{s name=detail_general/field/value/error/bigger_zero}The Value has to be >= 0{/s}';
+                        return (validationValue >= 0) ? true : '{s name="detail_general/field/value/error/bigger_zero"}The Value has to be >= 0{/s}';
                     }
                 }
             },
             {
-                fieldLabel: '{s name=detail_general/field/redeemable_per_customer}Number of redeemable vouchers per customer{/s}',
+                fieldLabel: '{s name="detail_general/field/redeemable_per_customer"}Number of redeemable vouchers per customer{/s}',
                 name: 'numOrder',
                 xtype: 'numberfield',
                 allowDecimals: false,
@@ -328,11 +328,11 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
             {
                 xtype: 'combobox',
                 name: 'taxConfig',
-                fieldLabel: '{s name=detail_general/field/tax_configuration}Tax configuration{/s}',
+                fieldLabel: '{s name="detail_general/field/tax_configuration"}Tax configuration{/s}',
                 store: me.taxStore,
                 valueField: 'id',
                 displayField: 'name',
-                helpText: '{s name=detail_general/field/tax_config/help}<b>Standard</b><br />Standard tax configuration of the basket.<br /><br /><b>auto-detection</b><br />Automatically detects the highest tax rate of the basket<br /><br /><b>tax-free</b><br />No tax will be calculated{/s}'
+                helpText: '{s name="detail_general/field/tax_config/help"}<b>Standard</b><br />Standard tax configuration of the basket.<br /><br /><b>auto-detection</b><br />Automatically detects the highest tax rate of the basket<br /><br /><b>tax-free</b><br />No tax will be calculated{/s}'
             }
         ];
     },
@@ -347,7 +347,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
         return [
             {
                 xtype: 'datefield',
-                fieldLabel: '{s name=detail_general/field/valid_from}From{/s}',
+                fieldLabel: '{s name="detail_general/field/valid_from"}From{/s}',
                 name: 'validFrom',
                 submitFormat: 'd.m.Y',
                 id: 'valid_from_date',
@@ -356,7 +356,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
             },
             {
                 xtype: 'datefield',
-                fieldLabel: '{s name=detail_general/field/valid_to}Till{/s}',
+                fieldLabel: '{s name="detail_general/field/valid_to"}Till{/s}',
                 name: 'validTo',
                 submitFormat: 'd.m.Y',
                 id: 'valid_to_date',
@@ -368,17 +368,17 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 separator: ';',
                 store: articleStore,
                 searchStore: articleStore,
-                fieldLabel: '{s name=detail_general/field/restrict_on_articles}Restrict to articles{/s}',
+                fieldLabel: '{s name="detail_general/field/restrict_on_articles"}Restrict to articles{/s}',
                 name: 'restrictArticles'
             },
             {
                 xtype: 'checkbox',
                 inputValue: 1,
                 uncheckedValue: 0,
-                fieldLabel: '{s name=detail_general/field/discount_on_defined_articles_or_supplier}Define discount{/s}',
-                boxLabel: '{s name=detail_general/box_label/discount_on_defined_articles_or_supplier}Discount on defined articles/supplier{/s}',
+                fieldLabel: '{s name="detail_general/field/discount_on_defined_articles_or_supplier"}Define discount{/s}',
+                boxLabel: '{s name="detail_general/box_label/discount_on_defined_articles_or_supplier"}Discount on defined articles/supplier{/s}',
                 name: 'strict',
-                helpText: '{s name=detail_general/field/discount_on_defined_articles_or_supplier/help}This voucher is only valid for the items defined above.{/s}'
+                helpText: '{s name="detail_general/field/discount_on_defined_articles_or_supplier/help"}This voucher is only valid for the items defined above.{/s}'
             }
         ];
     },
@@ -393,7 +393,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
             {
                 xtype: 'shopware-form-field-single-selection',
                 name: 'customerGroup',
-                fieldLabel: '{s name=detail_general/field/restrict_on_customer_group}Restrict to customer group{/s}',
+                fieldLabel: '{s name="detail_general/field/restrict_on_customer_group"}Restrict to customer group{/s}',
                 store: factory.createEntitySearchStore('Shopware\\Models\\Customer\\Group'),
                 valueField: 'id',
                 displayField: 'name'
@@ -401,7 +401,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
             {
                 xtype: 'shopware-form-field-single-selection',
                 name: 'shopId',
-                fieldLabel: '{s name=detail_general/field/restrict_on_shop}Restrict to subshop{/s}',
+                fieldLabel: '{s name="detail_general/field/restrict_on_shop"}Restrict to subshop{/s}',
                 store: factory.createEntitySearchStore('Shopware\\Models\\Shop\\Shop'),
                 valueField: 'id',
                 displayField: 'name'
@@ -409,7 +409,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
             {
                 xtype: 'shopware-form-field-single-selection',
                 name: 'bindToSupplier',
-                fieldLabel: '{s name=detail_general/field/restrict_on_supplier}Restrict to supplier{/s}',
+                fieldLabel: '{s name="detail_general/field/restrict_on_supplier"}Restrict to supplier{/s}',
                 store: factory.createEntitySearchStore('Shopware\\Models\\Article\\Supplier'),
                 minChars: 0,
                 valueField: 'id',
@@ -434,7 +434,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
         var me = this;
         return ['->',
             {
-                text: '{s name=detail_general/button/cancel}Cancel{/s}',
+                text: '{s name="detail_general/button/cancel"}Cancel{/s}',
                 cls: 'secondary',
                 scope: me,
                 handler: function () {
@@ -442,7 +442,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 }
             },
             {
-                text: '{s name=detail_general/button/save}Save{/s}',
+                text: '{s name="detail_general/button/save"}Save{/s}',
                 action: 'save',
                 cls: 'primary'
             }

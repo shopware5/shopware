@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/main}
+//{namespace name="backend/config/view/main"}
 
 //{block name="backend/config/view/base/detail"}
 Ext.define('Shopware.apps.Config.view.base.Detail', {
@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Config.view.base.Detail', {
     border: false,
     width: 450,
 
-    title: '{s name=detail/title}Details{/s}',
+    title: '{s name="detail/title"}Details{/s}',
 
     autoScroll: true,
     bodyPadding: '10 10 50 10',
@@ -104,13 +104,13 @@ Ext.define('Shopware.apps.Config.view.base.Detail', {
     getButtons: function() {
         var me = this;
         return [{
-            text: '{s name=detail/reset_text}Reset{/s}',
+            text: '{s name="detail/reset_text"}Reset{/s}',
             cls: 'secondary',
             action: 'reset'
         },{
-            text: '{s name=detail/save_text}Save{/s}',
+            text: '{s name="detail/save_text"}Save{/s}',
             cls: 'primary',
-            tooltip:'{s name=detail/save_tooltip}Save (CTRL + S){/s}',
+            tooltip:'{s name="detail/save_tooltip"}Save (CTRL + S){/s}',
             action: 'save'
         }];
     },

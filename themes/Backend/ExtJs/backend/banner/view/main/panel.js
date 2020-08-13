@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/banner/view/main}*/
+/*{namespace name="backend/banner/view/main"}*/
 
 /**
  * Shopware UI - Banner View Main Panel
@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
                 /*{if {acl_is_allowed privilege=create}}*/
                 {
                     iconCls : 'sprite-plus-circle',
-                    text : '{s name=view/main_add}Add{/s}',
+                    text : '{s name="view/main_add"}Add{/s}',
                     action : 'addBanner',
                     disabled : true
                 },
@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
                 /*{if {acl_is_allowed privilege=delete}}*/
                 {
                     iconCls : 'sprite-minus-circle',
-                    text : '{s name=view/main_delete}Delete{/s}',
+                    text : '{s name="view/main_delete"}Delete{/s}',
                     disabled : true,
                     action : 'deleteBanner'
                 },
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
                 /*{if {acl_is_allowed privilege=update}}*/
                 {
                     iconCls : 'sprite-pencil',
-                    text : '{s name=view/main_edit}Edit{/s}',
+                    text : '{s name="view/main_edit"}Edit{/s}',
                     disabled : true,
                     action : 'editBanner'
                 }
@@ -170,7 +170,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
      */
     getCategoryTree : function() {
         return Ext.create('Ext.tree.Panel', {
-            title: '{s name=view/tree_title}Catergories{/s}',
+            title: '{s name="view/tree_title"}Catergories{/s}',
             collapsible: true,
             store: this.categoryStore,
             region: 'west',

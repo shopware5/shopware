@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/product_feed/view/feed}
+//{namespace name="backend/product_feed/view/feed"}
 
 /**
  * Shopware UI - Tab View.
@@ -38,7 +38,7 @@
 Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Article', {
     extend:'Ext.container.Container',
     alias:'widget.product_feed-feed-tab-article',
-    title:'{s name=tab/title/article}Article Filter{/s}',
+    title:'{s name="tab/title/article"}Article Filter{/s}',
     border: 0,
     padding: 10,
     cls: 'shopware-toolbar',
@@ -61,16 +61,16 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Article', {
         var me = this;
         return [{
             xtype:'ddselector',
-            fromTitle: '{s name=tab/title/article_available}Articles available{/s}',
-            toTitle: '{s name=tab/title/article_chosen}Blocked articles{/s}',
+            fromTitle: '{s name="tab/title/article_available"}Articles available{/s}',
+            toTitle: '{s name="tab/title/article_chosen"}Blocked articles{/s}',
             fromStore:me.articleStore,
             buttons:[ 'add','remove' ],
             gridHeight: 270,
             selectedItems: me.record.getArticles(),
             fromFieldDockedItems: [ me.getToolbar() ],
             buttonsText: {
-                add: "{s name=tab/article/button_add}Add{/s}",
-                remove: "{s name=tab/article/button_remove}Remove{/s}"
+                add: '{s name="tab/article/button_add"}Add{/s}',
+                remove: '{s name="tab/article/button_remove"}Remove{/s}'
             }
         }];
     },
@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Article', {
                             cls:'searchfield',
                             enableKeyEvents:true,
                             checkChangeBuffer:500,
-                            emptyText:'{s name=tab/article/search}Search...{/s}'
+                            emptyText:'{s name="tab/article/search"}Search...{/s}'
                         },
                         { xtype:'tbspacer', width:6 }
                     ]

@@ -27,12 +27,12 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/property/view/main}
+//{namespace name="backend/property/view/main"}
 //{block name="backend/property/view/main/window"}
 Ext.define('Shopware.apps.Property.view.main.Window', {
     extend: 'Enlight.app.Window',
     alias : 'widget.property-main-window',
-    title : '{s name=title}Article properties{/s}',
+    title : '{s name="title"}Article properties{/s}',
     width: '70%',
     height: '50%',
     minHeight: 400,

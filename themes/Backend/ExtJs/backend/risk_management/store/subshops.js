@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/risk_management/main}
+//{namespace name="backend/risk_management/main"}
 
 /**
  * todo@all: Documentation

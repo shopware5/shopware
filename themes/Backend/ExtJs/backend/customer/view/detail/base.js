@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/detail}
+// {namespace name="backend/customer/view/detail"}
 
 /**
  * Shopware UI - Customer detail page
@@ -66,33 +66,33 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
      * @object
      */
     snippets: {
-        title: '{s name=base/title}Base data{/s}',
+        title: '{s name="base/title"}Base data{/s}',
         email: {
-            message: '{s name=base/validate_email_message}Email address is already in use{/s}',
-            label: '{s name=base/email}Email{/s}'
+            message: '{s name="base/validate_email_message"}Email address is already in use{/s}',
+            label: '{s name="base/email"}Email{/s}'
         },
         confirm: {
-            label: '{s name=base/password_confirm}Confirm password{/s}',
-            support: '{s name=base/confirm_support}Please confirm the password you have entered{/s}',
-            helpTitle: '{s name=base/confirm_help_title}Password confirmation{/s}',
-            helpText: '{s name=base/confirm_help_text}For security reasons, please enter the password again.{/s}'
+            label: '{s name="base/password_confirm"}Confirm password{/s}',
+            support: '{s name="base/confirm_support"}Please confirm the password you have entered{/s}',
+            helpTitle: '{s name="base/confirm_help_title"}Password confirmation{/s}',
+            helpText: '{s name="base/confirm_help_text"}For security reasons, please enter the password again.{/s}'
         },
         active: {
-            box: '{s name=base/active_box_label}Mark the account as active{/s}',
-            field: '{s name=base/active_field_label}Active{/s}'
+            box: '{s name="base/active_box_label"}Mark the account as active{/s}',
+            field: '{s name="base/active_field_label"}Active{/s}'
         },
         password: {
-            label: '{s name=base/password}Password{/s}',
-            support: '{s name=base/password_support}To automatically create the password, use the button on the right side.{/s}',
-            button: '{s name=base/password_generate}Generate password{/s}',
-            message: '{s name=base/password_error}The passwords do not match.{/s}'
+            label: '{s name="base/password"}Password{/s}',
+            support: '{s name="base/password_support"}To automatically create the password, use the button on the right side.{/s}',
+            button: '{s name="base/password_generate"}Generate password{/s}',
+            message: '{s name="base/password_error"}The passwords do not match.{/s}'
         },
-        group: '{s name=base/customer_group}Customer group{/s}',
-        shop: '{s name=base/shop}Shop{/s}',
+        group: '{s name="base/customer_group"}Customer group{/s}',
+        shop: '{s name="base/shop"}Shop{/s}',
         number: {
-            label: '{s name=base/customer_number}Customer number{/s}',
-            helpTitle: '{s name=base/customer_number_help_title}Customer number generation{/s}',
-            helpText: '{s name=base/customer_number_help_text}If the parameter sShopwareManagedCustomerNumbers is set to 1 in the shopware configuration, the customer number will be set automatically when the customer is saved and the field is not editable.{/s}'
+            label: '{s name="base/customer_number"}Customer number{/s}',
+            helpTitle: '{s name="base/customer_number_help_title"}Customer number generation{/s}',
+            helpText: '{s name="base/customer_number_help_text"}If the parameter sShopwareManagedCustomerNumbers is set to 1 in the shopware configuration, the customer number will be set automatically when the customer is saved and the field is not editable.{/s}'
         }
     },
 
@@ -298,7 +298,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             me.customerGroupCombo,
             me.shopStoreCombo,
             {
-                /* {if {config name=shopwareManagedCustomerNumbers}==1} */
+                /* {if {config name="shopwareManagedCustomerNumbers"}==1} */
                 xtype: 'displayfield',
                 /* {/if} */
                 name: 'number',

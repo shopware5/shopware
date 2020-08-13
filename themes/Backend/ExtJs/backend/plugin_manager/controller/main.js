@@ -28,7 +28,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/plugin_manager/translation}
+// {namespace name="backend/plugin_manager/translation"}
 // {block name="backend/plugin_manager/controller/main"}
 Ext.define('Shopware.apps.PluginManager.controller.Main', {
     extend: 'Ext.app.Controller',

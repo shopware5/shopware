@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/translation/view/main}
+//{namespace name="backend/translation/view/main"}
 
 /**
  * Shopware UI - Translation Manager Main Navigation
@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Translation.view.main.Navigation',
     rootVisible: false,
     singleExpand: false,
     useArrows: true,
-    title: '{s name=navigation_title}Available language(s){/s}',
+    title: '{s name="navigation_title"}Available language(s){/s}',
     width: 200,
 
     /**

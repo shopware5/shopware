@@ -32,7 +32,7 @@
  * The multi request dialog controller takes care of actual requests
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 //{block name="backend/performance/controller/multi_request"}
 Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
 
@@ -43,14 +43,14 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
      * @object
      */
     snippets: {
-        process: '{s name=request/process}[0] out of [1] items processed{/s}',
+        process: '{s name="request/process"}[0] out of [1] items processed{/s}',
         done: {
-            message: '{s name=request/done_message}Operation finished{/s}',
-            title: '{s name=request/done_title}Successful{/s}'
+            message: '{s name="request/done_message"}Operation finished{/s}',
+            title: '{s name="request/done_title"}Successful{/s}'
         },
         error: {
-            message: '{s name=request/error_message}Request failed{/s}',
-            title: '{s name=request/error_title}Error{/s}'
+            message: '{s name="request/error_message"}Request failed{/s}',
+            title: '{s name="request/error_title"}Error{/s}'
         }
     },
 
@@ -61,56 +61,56 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
 
     requestConfig: {
         topseller: {
-            title: '{s name=multi_request/topseller}Build index for TopSeller{/s}',
+            title: '{s name="multi_request/topseller"}Build index for TopSeller{/s}',
             totalCountUrl: '{url controller="TopSeller" action="getTopSellerCount"}',
             requestUrl: '{url controller="TopSeller" action="initTopSeller"}',
             batchSize: 100
         },
 
         search: {
-            title: '{s name=multi_request/search}Build index for frontend search{/s}',
+            title: '{s name="multi_request/search"}Build index for frontend search{/s}',
             requestUrl: '{url controller="SearchIndex" action="build"}',
             batchSize: 100
         },
 
         seo: {
             initUrl: '{url controller="Seo" action="initSeo"}',
-            title: '{s name=multi_request/sei}Build index for SEO{/s}',
+            title: '{s name="multi_request/sei"}Build index for SEO{/s}',
             snippetResource: 'seo',
             totalCountUrl: '{url controller="Seo" action="getCount"}',
             batchSize: 100
         },
 
         similarShown: {
-            title: '{s name=multi_request/viewed}Build index for: Customers also viewed{/s}',
+            title: '{s name="multi_request/viewed"}Build index for: Customers also viewed{/s}',
             totalCountUrl: '{url controller="SimilarShown" action="getSimilarShownCount"}',
             requestUrl: '{url controller="SimilarShown" action="initSimilarShown"}',
             batchSize: 100
         },
 
         alsoBought: {
-            title: '{s name=multi_request/bought}Build index for: Customers also bought{/s}',
+            title: '{s name="multi_request/bought"}Build index for: Customers also bought{/s}',
             totalCountUrl: '{url controller="AlsoBought" action="getAlsoBoughtCount"}',
             requestUrl: '{url controller="AlsoBought" action="initAlsoBought"}',
             batchSize: 100
         },
 
         category: {
-            title: '{s name=multi_request/categories}Repair categories{/s}',
+            title: '{s name="multi_request/categories"}Repair categories{/s}',
             totalCountUrl: '{url controller="Performance" action="prepareTree"}',
             requestUrl: '{url controller="Performance" action="fixCategories"}',
             batchSize: 100
         },
 
         httpCacheWarmer: {
-            title: '{s name=multi_request/http_cache_warmer/windowTitle}Warm up cache{/s}',
+            title: '{s name="multi_request/http_cache_warmer/windowTitle"}Warm up cache{/s}',
             snippetResource: 'httpCacheWarmer',
             totalCountUrl: '{url controller="Performance" action="getHttpURLs"}',
             batchSize: 10
         },
 
         sitemap: {
-            title: '{s name=multi_request/sitemap}Build cache for sitemap{/s}',
+            title: '{s name="multi_request/sitemap"}Build cache for sitemap{/s}',
             requestUrl: '{url controller="Performance" action="buildSitemapCache"}',
             batchSize: 1
         },

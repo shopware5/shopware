@@ -1,10 +1,10 @@
 {if $sUserLoggedIn || $showSidebar}
-    <div class="account--menu is--rounded{if {config name=useSltCookie} || $sOneTimeAccount} is--personalized{/if}">
+    <div class="account--menu is--rounded{if {config name="useSltCookie"} || $sOneTimeAccount} is--personalized{/if}">
         {block name="frontend_account_menu"}
             {if !$sOneTimeAccount}
                 {* Sidebar navigation headline *}
                 {block name="frontend_account_menu_title"}
-                    {if {config name=useSltCookie} && $userInfo}
+                    {if {config name="useSltCookie"} && $userInfo}
                         <span class="navigation--headline">
                             {block name="frontend_account_menu_greeting"}
                                 {s name="AccountGreetingBefore"}{/s}
@@ -29,7 +29,7 @@
                                 {* Link to the account overview page *}
                                 {block name="frontend_account_menu_link_overview"}
                                     {block name="frontend_account_menu_link_overview_SltCookie"}
-                                        {if {config name=useSltCookie} && !$userInfo && $inHeader}
+                                        {if {config name="useSltCookie"} && !$userInfo && $inHeader}
                                             <li class="navigation--entry">
                                                 <span class="navigation--signin">
                                                     <a href="{url module='frontend' controller='account'}#hide-registration"
@@ -111,7 +111,7 @@
 
                                 {* Link to the user downloads *}
                                 {block name="frontend_account_menu_link_downloads"}
-                                    {if {config name=showEsd}}
+                                    {if {config name="showEsd"}}
                                         <li class="navigation--entry">
                                             <a href="{url module='frontend' controller='account' action='downloads'}" title="{s name="AccountLinkDownloads"}{/s}" class="navigation--link{if $sAction == 'downloads'} is--active{/if}" rel="nofollow">
                                                 {s name="AccountLinkDownloads"}{/s}
@@ -138,7 +138,7 @@
 
                                 {* Logout action *}
                                 {block name="frontend_account_menu_link_logout"}
-                                    {if {config name=useSltCookie} && $userInfo}
+                                    {if {config name="useSltCookie"} && $userInfo}
                                         <li class="navigation--entry">
                                             {block name="frontend_account_menu_logout_personalized_link"}
                                                 <a href="{url controller='account' action='logout'}" title="{s name="AccountLogout"}{/s}"

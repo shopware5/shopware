@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/property/view/main}
+//{namespace name="backend/property/view/main"}
 //{block name="backend/Property/view/main/set_assign_grid"}
 Ext.define('Shopware.apps.Property.view.main.SetAssignGrid', {
     extend: 'Ext.grid.Panel',
@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Property.view.main.SetAssignGrid', {
     addBtn: null,
 
     internalName: 'setAssignGrid',
-    title: '{s name=set/assign/grid_title}Group Assignment{/s}',
+    title: '{s name="set/assign/grid_title"}Group Assignment{/s}',
     sortableColumns: false,
 
     /**
@@ -43,9 +43,9 @@ Ext.define('Shopware.apps.Property.view.main.SetAssignGrid', {
      * @object
      */
     snippets: {
-        columnName:          '{s name=set/assign/column_name}Name{/s}',
-        tooltipDeleteAssignment: '{s name=set/assign/tooltip_delete_value}Delete assignment{/s}',
-        dragText:            '{s name=set/assign/drag_text}Drag and drop to reorganize{/s}'
+        columnName:          '{s name="set/assign/column_name"}Name{/s}',
+        tooltipDeleteAssignment: '{s name="set/assign/tooltip_delete_value"}Delete assignment{/s}',
+        dragText:            '{s name="set/assign/drag_text"}Drag and drop to reorganize{/s}'
     },
 
     /**

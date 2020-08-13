@@ -27,7 +27,7 @@
  * @author      shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+// {namespace name="backend/customer/view/main"}
 
 // {block name="backend/base/attribute/field/Shopware.form.field.CustomerStreamGrid"}
 

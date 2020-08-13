@@ -28,7 +28,7 @@
  * the basic backend structure.
  */
 
-//{namespace name=backend/index/controller/main}
+//{namespace name="backend/index/controller/main"}
 //{block name="backend/index/controller/main"}
 Ext.define('Shopware.apps.Index.controller.Main', {
     extend: 'Ext.app.Controller',
@@ -155,7 +155,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 ctrl: true,
                 alt: true,
                 fn: function() {
-                    msg.createGrowlMessage('{s name=title/key_pressed}{/s}', '{s name=content/article_open}{/s}');
+                    msg.createGrowlMessage('{s name="title/key_pressed"}{/s}', '{s name="content/article_open"}{/s}');
                     openNewModule('Shopware.apps.Article', {
                         params: {
                             articleId: null
@@ -172,7 +172,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 ctrl: true,
                 alt: true,
                 fn: function(){
-                    msg.createGrowlMessage('{s name=title/key_pressed}{/s}', '{s name=content/article_overview_open}Article overview module will be opened.{/s}');
+                    msg.createGrowlMessage('{s name="title/key_pressed"}{/s}', '{s name="content/article_overview_open"}Article overview module will be opened.{/s}');
                     openNewModule('Shopware.apps.ArticleList');
                 }
             },
@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 ctrl: true,
                 alt: true,
                 fn: function() {
-                    msg.createGrowlMessage('{s name=title/key_pressed}{/s}', '{s name=content/order_open}{/s}');
+                    msg.createGrowlMessage('{s name="title/key_pressed"}{/s}', '{s name="content/order_open"}{/s}');
                     openNewModule('Shopware.apps.Order');
                 }
             },
@@ -198,7 +198,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 ctrl: true,
                 alt: true,
                 fn: function(){
-                    msg.createGrowlMessage('{s name=title/key_pressed}{/s}', '{s name=content/customer_open}{/s}');
+                    msg.createGrowlMessage('{s name="title/key_pressed"}{/s}', '{s name="content/customer_open"}{/s}');
                     openNewModule('Shopware.apps.Customer');
                 }
             },
@@ -221,7 +221,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 ctrl: true,
                 alt: true,
                 fn: function() {
-                    msg.createGrowlMessage('{s name=title/key_pressed}{/s}', '{s name=content/plugin_open}{/s}');
+                    msg.createGrowlMessage('{s name="title/key_pressed"}{/s}', '{s name="content/plugin_open"}{/s}');
                     openNewModule('Shopware.apps.PluginManager');
                 }
             },
@@ -304,10 +304,10 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                         // If we received new BI statistics, we print a growl message
                         if (res.bi) {
                             Shopware.Notification.createStickyGrowlMessage({
-                                title: '{s name=title/new_benchmark}{/s}',
-                                text: '{s name=content/new_benchmark}{/s}',
+                                title: '{s name="title/new_benchmark"}{/s}',
+                                text: '{s name="content/new_benchmark"}{/s}',
                                 btnDetail: {
-                                    text: '{s name=open}{/s}',
+                                    text: '{s name="open"}{/s}',
                                     callback: function () {
                                         Shopware.app.Application.addSubApplication({
                                             name: 'Shopware.apps.Benchmark',
@@ -423,24 +423,24 @@ createKeyNavOverlay = function() {
             fields: [ 'name', 'key', 'alt', 'ctrl' ],
             data: [
                 /*{if {acl_is_allowed privilege=read resource=article}}*/
-                { name: '{s name=title/article}Article{/s}', key: 'n', alt: true , ctrl: true },
+                { name: '{s name="title/article"}Article{/s}', key: 'n', alt: true , ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=read resource=articlelist}}*/
-                { name: '{s name=title/article_overview}Article overview{/s}', key: 'o', alt: true , ctrl: true },
+                { name: '{s name="title/article_overview"}Article overview{/s}', key: 'o', alt: true , ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=read resource=order}}*/
-                { name: '{s name=title/order}Order{/s}', key: 'b', alt: true , ctrl: true },
+                { name: '{s name="title/order"}Order{/s}', key: 'b', alt: true , ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=read resource=customer}}*/
-                { name: '{s name=title/customer}Customer{/s}', key: 'k', alt: true , ctrl: true },
+                { name: '{s name="title/customer"}Customer{/s}', key: 'k', alt: true , ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=read resource=pluginmanager}}*/
-                { name: '{s name=title/plugin_manager}Plugin manager{/s}', key: 'p', alt: true , ctrl: true },
+                { name: '{s name="title/plugin_manager"}Plugin manager{/s}', key: 'p', alt: true , ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=clear resource=performance}}*/
-                { name: '{s name=title/cache_template}Clear template cache{/s}', key: 't', alt: true , ctrl: true },
-                { name: '{s name=title/cache_config}Clear config cache{/s}', key: 'x', alt: true , ctrl: true },
-                { name: '{s name=title/cache_frontend}Clear shop cache{/s}', key: 'f', alt: true , ctrl: true }
+                { name: '{s name="title/cache_template"}Clear template cache{/s}', key: 't', alt: true , ctrl: true },
+                { name: '{s name="title/cache_config"}Clear config cache{/s}', key: 'x', alt: true , ctrl: true },
+                { name: '{s name="title/cache_frontend"}Clear shop cache{/s}', key: 'f', alt: true , ctrl: true }
                 /*{/if}*/
             ]
         }),
@@ -468,7 +468,7 @@ createKeyNavOverlay = function() {
                 '</div>',
             '</tpl>{/literal}'
         ),
-        emptyTpl = '<span class="no-shortcuts">{s name=shortcuts/no_shortcuts_acl}Due to your permissions, there are no shortcuts available{/s}</span>',
+        emptyTpl = '<span class="no-shortcuts">{s name="shortcuts/no_shortcuts_acl"}Due to your permissions, there are no shortcuts available{/s}</span>',
         itemCount = store.totalCount,
         dataView = Ext.create('Ext.view.View', {
             store: store,
@@ -478,7 +478,7 @@ createKeyNavOverlay = function() {
     var win = Ext.create('Ext.window.Window', {
         modal: true,
         layout: 'fit',
-        title: '{s name=title/keyboard_shortcuts}Keyboard shortcuts{/s}',
+        title: '{s name="title/keyboard_shortcuts"}Keyboard shortcuts{/s}',
         width: 500,
         height: 400,
         bodyPadding: 20,
@@ -569,7 +569,7 @@ createShopwareVersionMessage = function() {
             xtype: 'container',
             region: 'south',
             cls: Ext.baseCSSPrefix + 'about-shopware-footer',
-            html: '<a  href="https://www.shopware.com" target="_blank">{s name=about/footer}Copyright &copy; shopware AG. All rights reserved.{/s}</a>'
+            html: '<a  href="https://www.shopware.com" target="_blank">{s name="about/footer"}Copyright &copy; shopware AG. All rights reserved.{/s}</a>'
         }, {
             xtype: 'container',
             region: 'center',

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/canceled_order/view/main}
+//{namespace name="backend/canceled_order/view/main"}
 
 /**
  * Shopware UI - Statistics
@@ -37,7 +37,7 @@
 Ext.define('Shopware.apps.CanceledOrder.view.tabs.Statistics', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.canceled-order-tabs-statistics',
-    title: '{s name=statistics}Statistics{/s}',
+    title: '{s name="statistics"}Statistics{/s}',
 
     layout: {
         type: 'vbox',
@@ -47,12 +47,12 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.Statistics', {
 
     snippets: {
         date: {
-            from: '{s name=date/from}From{/s}',
-            to: '{s name=date/to}To{/s}'
+            from: '{s name="date/from"}From{/s}',
+            to: '{s name="date/to"}To{/s}'
         },
         columns: {
-            payment: '{s name=columns/payment}Payment{/s}',
-            totalAmount: '{s name=columns/numberOfPayments}Number{/s}'
+            payment: '{s name="columns/payment"}Payment{/s}',
+            totalAmount: '{s name="columns/numberOfPayments"}Number{/s}'
         }
     },
 

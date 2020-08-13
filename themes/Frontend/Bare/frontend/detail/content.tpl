@@ -1,5 +1,5 @@
 {block name='frontend_index_content_inner'}
-    <div class="content product--details" itemscope itemtype="https://schema.org/Product"{if !{config name=disableArticleNavigation}} data-product-navigation="{url module="widgets" controller="listing" action="productNavigation"}" data-category-id="{$sArticle.categoryID}" data-main-ordernumber="{$sArticle.mainVariantNumber}"{/if} data-ajax-wishlist="true" data-compare-ajax="true"{if $theme.ajaxVariantSwitch} data-ajax-variants-container="true"{/if}>
+    <div class="content product--details" itemscope itemtype="https://schema.org/Product"{if !{config name="disableArticleNavigation"}} data-product-navigation="{url module="widgets" controller="listing" action="productNavigation"}" data-category-id="{$sArticle.categoryID}" data-main-ordernumber="{$sArticle.mainVariantNumber}"{/if} data-ajax-wishlist="true" data-compare-ajax="true"{if $theme.ajaxVariantSwitch} data-ajax-variants-container="true"{/if}>
 
         {* The configurator selection is checked at this early point
            to use it in different included files in the detail template. *}
@@ -26,7 +26,7 @@
         <div class="product--detail-upper block-group">
             {* Product image *}
             {block name='frontend_detail_index_image_container'}
-                <div class="product--image-container image-slider{if $sArticle.image && {config name=sUSEZOOMPLUS}} product--image-zoom{/if}"
+                <div class="product--image-container image-slider{if $sArticle.image && {config name="sUSEZOOMPLUS"}} product--image-zoom{/if}"
                     {if $sArticle.image}
                     data-image-slider="true"
                     data-image-gallery="true"
@@ -59,8 +59,8 @@
         {* Crossselling tab panel *}
         {block name="frontend_detail_index_tabs_cross_selling"}
 
-            {$showAlsoViewed = {config name=similarViewedShow}}
-            {$showAlsoBought = {config name=alsoBoughtShow}}
+            {$showAlsoViewed = {config name="similarViewedShow"}}
+            {$showAlsoBought = {config name="alsoBoughtShow"}}
             <div class="tab-menu--cross-selling"{if $sArticle.relatedProductStreams} data-scrollable="true"{/if}>
 
                 {* Tab navigation *}

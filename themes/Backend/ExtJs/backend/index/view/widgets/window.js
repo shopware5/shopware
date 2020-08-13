@@ -28,7 +28,7 @@
  * It also provides the possibility to easely add and remove widgets over the toolbar.
  */
 
-//{namespace name=backend/index/view/widgets}
+//{namespace name="backend/index/view/widgets"}
 //{block name="backend/index/view/widgets/window"}
 
 Ext.define('Shopware.apps.Index.view.widgets.Window', {

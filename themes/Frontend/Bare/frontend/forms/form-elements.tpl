@@ -35,14 +35,14 @@
                 {* Captcha *}
                 {block name='frontend_forms_form_elements_form_captcha'}
                     <div class="forms--captcha">
-                        {if {config name=captchaMethod} === 'legacy'}
+                        {if {config name="captchaMethod"} === 'legacy'}
                             <div class="captcha--placeholder"{if $sSupport.sErrors.e.sCaptcha} data-hasError="true"{/if} data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
                             <strong class="captcha--notice">{s name='SupportLabelCaptcha'}{/s}</strong>
                             <div class="captcha--code">
                                 <input type="text" required="required" aria-required="true" name="sCaptcha"{if $sSupport.sErrors.e.sCaptcha} class="has--error"{/if} />
                             </div>
                         {else}
-                            {$captchaName = {config name=captchaMethod}}
+                            {$captchaName = {config name="captchaMethod"}}
                             {$captchaHasError = $sSupport.sErrors.e || $sSupport.sErrors.v}
                             {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
                         {/if}
@@ -56,7 +56,7 @@
 
                 {* Data protection information *}
                 {block name='frontend_forms_form_elements_form_privacy'}
-                    {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
+                    {if {config name="ACTDPRTEXT"} || {config name="ACTDPRCHECK"}}
                         {include file="frontend/_includes/privacy.tpl"}
                     {/if}
                 {/block}

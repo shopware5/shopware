@@ -1,5 +1,5 @@
 
-//{namespace name=backend/property/view/main}
+//{namespace name="backend/property/view/main"}
 
 Ext.define('Shopware.apps.Property.view.detail.DetailWindow', {
     extend: 'Enlight.app.Window',

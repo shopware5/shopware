@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/snippet/controller/main}
+//{namespace name="backend/snippet/controller/main"}
 
 /**
  * todo@all: Documentation
@@ -60,34 +60,34 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
      * @object
      */
     snippets: {
-        singleDeleteTitle: '{s name=message/delete_single_title}Delete selected snippet{/s}',
-        singleDeleteMessage: '{s name=message/delete_single_message}Are you sure, you want to delete the selected snippet: {/s}',
+        singleDeleteTitle: '{s name="message/delete_single_title"}Delete selected snippet{/s}',
+        singleDeleteMessage: '{s name="message/delete_single_message"}Are you sure, you want to delete the selected snippet: {/s}',
 
-        deleteNamespaceTitle: '{s name=message/delete_namespace_title}Delete selected namespace{/s}',
-        deleteNamespaceMessage: '{s name=message/delete_namespace_message}Are you sure, you want to delete the selected Namespace?{/s}',
+        deleteNamespaceTitle: '{s name="message/delete_namespace_title"}Delete selected namespace{/s}',
+        deleteNamespaceMessage: '{s name="message/delete_namespace_message"}Are you sure, you want to delete the selected Namespace?{/s}',
 
-        deleteNamespaceSuccessTitle: '{s name=message/delete_namespace_success_message}Successfully{/s}',
-        deleteNamespaceSuccessMessage: '{s name=message/delete_namespace_success_title}Namespace has been removed{/s}',
+        deleteNamespaceSuccessTitle: '{s name="message/delete_namespace_success_message"}Successfully{/s}',
+        deleteNamespaceSuccessMessage: '{s name="message/delete_namespace_success_title"}Namespace has been removed{/s}',
 
-        deleteSuccessTitle: '{s name=message/delete_success_message}Successfully{/s}',
-        deleteSuccessMessage: '{s name=message/delete_success_title}Snippet has been removed{/s}',
+        deleteSuccessTitle: '{s name="message/delete_success_message"}Successfully{/s}',
+        deleteSuccessMessage: '{s name="message/delete_success_title"}Snippet has been removed{/s}',
 
-        deleteErrorTitle: '{s name=message/delete_error_title}Failure{/s}',
-        deleteErrorMessage: '{s name=message/delete_error_message}During deleting an error has occurred.{/s}',
+        deleteErrorTitle: '{s name="message/delete_error_title"}Failure{/s}',
+        deleteErrorMessage: '{s name="message/delete_error_message"}During deleting an error has occurred.{/s}',
 
-        saveSuccessTitle: '{s name=message/save_success_message}Successfully{/s}',
-        saveSuccessMessage: '{s name=message/save_success_title}Snippets have been saved{/s}',
+        saveSuccessTitle: '{s name="message/save_success_message"}Successfully{/s}',
+        saveSuccessMessage: '{s name="message/save_success_title"}Snippets have been saved{/s}',
 
-        saveErrorTitle: '{s name=message/save_error_title}Failure{/s}',
-        saveErrorMessage: '{s name=message/save_error_message}During saving an error has occurred.{/s}',
+        saveErrorTitle: '{s name="message/save_error_title"}Failure{/s}',
+        saveErrorMessage: '{s name="message/save_error_message"}During saving an error has occurred.{/s}',
 
-        createSuccessTitle: '{s name=message/save_success_message}Successfully{/s}',
-        createSuccessMessage: '{s name=message/save_success_title}Snippet has been created{/s}',
+        createSuccessTitle: '{s name="message/save_success_message"}Successfully{/s}',
+        createSuccessMessage: '{s name="message/save_success_title"}Snippet has been created{/s}',
 
-        createErrorTitle: '{s name=message/save_error_title}Failure{/s}',
-        createErrorMessage: '{s name=message/save_error_message}During saving an error has occurred.{/s}',
+        createErrorTitle: '{s name="message/save_error_title"}Failure{/s}',
+        createErrorMessage: '{s name="message/save_error_message"}During saving an error has occurred.{/s}',
 
-        growlMessage: '{s name=title}Snippet{/s}'
+        growlMessage: '{s name="title"}Snippet{/s}'
     },
 
     /**

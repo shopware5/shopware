@@ -35,7 +35,7 @@
  * @package Article
  * @subpackage Detail
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/variant/configurator/mapping"}
 Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
     /**
@@ -91,17 +91,17 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
      * @object
      */
     snippets: {
-        title: '{s name=variant/configurator/mapping/title}Take over master data{/s}',
-        notice: '{s name=variant/configurator/mapping/notice}In this area you have the option to transfer selectable article information to the selected variant articles. If there is no selected variant article, the selected article information will be applied to all variant articles.{/s}',
-        attribute: '{s name=variant/configurator/mapping/attribute}Apply attribute configuration{/s}',
-        prices: '{s name=variant/configurator/mapping/prices}Apply price configuration{/s}',
-        basePrice: '{s name=variant/configurator/mapping/basePrice}Apply base price configuration{/s}',
-        purchasePrice: '{s name=variant/configurator/mapping/purchasePrice}Apply pruchase price configuration{/s}',
-        settings: '{s name=variant/configurator/mapping/settings}Apply settings configuration{/s}',
-        stock: '{s name=variant/configurator/mapping/stock}Apply stock{/s}',
-        translations: '{s name=variant/configurator/mapping/translations}Apply translations{/s}',
-        save: '{s name=variant/configurator/mapping/save}Save{/s}',
-        cancel: '{s name=variant/configurator/mapping/cancel}Cancel{/s}'
+        title: '{s name="variant/configurator/mapping/title"}Take over master data{/s}',
+        notice: '{s name="variant/configurator/mapping/notice"}In this area you have the option to transfer selectable article information to the selected variant articles. If there is no selected variant article, the selected article information will be applied to all variant articles.{/s}',
+        attribute: '{s name="variant/configurator/mapping/attribute"}Apply attribute configuration{/s}',
+        prices: '{s name="variant/configurator/mapping/prices"}Apply price configuration{/s}',
+        basePrice: '{s name="variant/configurator/mapping/basePrice"}Apply base price configuration{/s}',
+        purchasePrice: '{s name="variant/configurator/mapping/purchasePrice"}Apply pruchase price configuration{/s}',
+        settings: '{s name="variant/configurator/mapping/settings"}Apply settings configuration{/s}',
+        stock: '{s name="variant/configurator/mapping/stock"}Apply stock{/s}',
+        translations: '{s name="variant/configurator/mapping/translations"}Apply translations{/s}',
+        save: '{s name="variant/configurator/mapping/save"}Save{/s}',
+        cancel: '{s name="variant/configurator/mapping/cancel"}Cancel{/s}'
     },
 
     /**

@@ -30,7 +30,7 @@
                     {/if}
                 {else}
                     {$type = "success"}
-                    {if {config name=OptInVote} && !{$smarty.get.sConfirmation} && !{$userLoggedIn}}
+                    {if {config name="OptInVote"} && !{$smarty.get.sConfirmation} && !{$userLoggedIn}}
                         {s name="BlogInfoSuccessOptin" assign="snippet"}{/s}
                     {else}
                         {s name="BlogInfoSuccess" assign="snippet"}{/s}
@@ -64,8 +64,8 @@
                         {s name="BlogLabelMail" assign="snippetBlogLabelMail"}{/s}
                         {s name="RequiredField" namespace="frontend/register/index" assign="snippetRequiredField"}{/s}
                         <input name="eMail" type="email"
-                            placeholder="{$snippetBlogLabelMail}{if {config name=OptInVote}}{$snippetRequiredField}{/if}"
-                            {if {config name=OptInVote}}required="required" aria-required="true"{/if}
+                            placeholder="{$snippetBlogLabelMail}{if {config name="OptInVote"}}{$snippetRequiredField}{/if}"
+                            {if {config name="OptInVote"}}required="required" aria-required="true"{/if}
                             value="{$sFormData.eMail|escape}"
                             class="input--field{if $sErrorFlag.eMail} has--error{/if}" />
                     </div>
@@ -115,7 +115,7 @@
 
                 {* Captcha *}
                 {block name='frontend_blog_comments_input_captcha'}
-                    {if {config name=captchaMethod} === 'legacy'}
+                    {if {config name="captchaMethod"} === 'legacy'}
                         <div class="blog--comments-captcha">
 
                             {block name='frontend_blog_comments_input_captcha_placeholder'}
@@ -133,7 +133,7 @@
                             {/block}
                         </div>
                     {else}
-                        {$captchaName = {config name=captchaMethod}}
+                        {$captchaName = {config name="captchaMethod"}}
                         {$captchaHasError = isset($sErrorFlag) && count($sErrorFlag) > 0}
                         {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
                     {/if}
@@ -145,7 +145,7 @@
 
                 {* Data protection information *}
                 {block name='frontend_blog_comments_input_privacy'}
-                    {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
+                    {if {config name="ACTDPRTEXT"} || {config name="ACTDPRCHECK"}}
                         {include file="frontend/_includes/privacy.tpl"}
                     {/if}
                 {/block}

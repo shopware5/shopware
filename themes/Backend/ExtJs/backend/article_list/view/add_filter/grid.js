@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/view/add_filter/grid"}
 Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
     extend: 'Ext.grid.Panel',
@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
 
         buttons.push(
             Ext.create('Ext.button.Button', {
-                text: '{s name=add}Add{/s}',
+                text: '{s name="add"}Add{/s}',
                 action: 'addSimpleFilter',
                 name: 'addSimpleFilter',
                 iconCls:'sprite-plus-circle-frame',
@@ -126,10 +126,10 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
 
         buttons.push({
             xtype: 'button',
-            text: '{s name=addFilter/run}Execute{/s}',
+            text: '{s name="addFilter/run"}Execute{/s}',
             name: 'run-button-simple',
             iconCls: 'sprite-magnifier--arrow',
-            tooltip: '{s name=runFilter}Immediately show matching articles{/s}',
+            tooltip: '{s name="runFilter"}Immediately show matching articles{/s}',
             disabled: true,
             handler: function () {
                 me.fireEvent('filter');
@@ -217,7 +217,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
                 {
                     iconCls: 'sprite-minus-circle-frame',
                     action: 'deleteFilter',
-                    tooltip: '{s name=deleteFilter}Delete filter{/s}',
+                    tooltip: '{s name="deleteFilter"}Delete filter{/s}',
                     handler: function (view, rowIndex, colIndex, item, e) {
                         me.fireEvent('deleteRow', rowIndex);
                     }

@@ -28,21 +28,21 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 //{block name="backend/performance/controller/main"}
 Ext.define('Shopware.apps.Performance.controller.Direct', {
 
     extend: 'Enlight.app.Controller',
 
-    infoTitle: '{s name=direct/message_title}Shop cache{/s}',
+    infoTitle: '{s name="direct/message_title"}Shop cache{/s}',
 
     infoMessages: {
-        'Template': '{s name=direct/messages/template}Template cache has been cleared{/s}',
-        'Config': '{s name=direct/messages/config}Shop cache has been cleared{/s}',
-        'Frontend': '{s name=direct/messages/frontend}Article+category cache has been cleared{/s}',
-        'Proxy': '{s name=direct/messages/proxy}Proxy/Model cache has been cleared{/s}',
-        'NoPermission': '{s name=direct/messages/no_permission}You do not have the permission to clear the shop cache{/s}'
+        'Template': '{s name="direct/messages/template"}Template cache has been cleared{/s}',
+        'Config': '{s name="direct/messages/config"}Shop cache has been cleared{/s}',
+        'Frontend': '{s name="direct/messages/frontend"}Article+category cache has been cleared{/s}',
+        'Proxy': '{s name="direct/messages/proxy"}Proxy/Model cache has been cleared{/s}',
+        'NoPermission': '{s name="direct/messages/no_permission"}You do not have the permission to clear the shop cache{/s}'
     },
 
     /**

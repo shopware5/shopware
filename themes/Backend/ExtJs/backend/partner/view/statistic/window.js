@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/partner/view/partner}
+//{namespace name="backend/partner/view/partner"}
 
 /**
  * Shopware UI - Partner statistic main window.
@@ -37,7 +37,7 @@
 //{block name="backend/partner/view/statistic/window"}
 Ext.define('Shopware.apps.Partner.view.statistic.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window/statistic_title}Partner statistics{/s}',
+    title: '{s name="window/statistic_title"}Partner statistics{/s}',
     alias: 'widget.partner-statistic-window',
     border: false,
     autoShow: true,
@@ -128,14 +128,14 @@ Ext.define('Shopware.apps.Partner.view.statistic.Window', {
         me.fromDateField = Ext.create('Ext.form.field.Date', {
             labelWidth:45,
             name:'fromDate',
-            fieldLabel:'{s name=statistic/window/date/from}From{/s}',
+            fieldLabel:'{s name="statistic/window/date/from"}From{/s}',
             value:new Date(today.getFullYear() - 1, today.getMonth() , today.getDate())
         });
 
         me.toDateField = Ext.create('Ext.form.field.Date', {
             labelWidth:30,
             name:'toDate',
-            fieldLabel:'{s name=statistic/window/date/to}To{/s}',
+            fieldLabel:'{s name="statistic/window/date/to"}To{/s}',
             value:today
         });
 
@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.Window', {
                 { xtype:'tbspacer', width:10 },
                 {
                     iconCls:'sprite-drive-download',
-                    text:'{s name=statistic/button/download_csv}Download statistics{/s}',
+                    text:'{s name="statistic/button/download_csv"}Download statistics{/s}',
                     action:'downloadStatistic'
                 }
             ]

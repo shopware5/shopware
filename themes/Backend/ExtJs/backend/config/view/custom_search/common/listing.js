@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/custom_search/common}
+//{namespace name="backend/custom_search/common"}
 
 //{block name="backend/config/view/custom_search/common/listing"}
 

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware Controller - Order backend module
@@ -60,21 +60,21 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @object
      */
     snippets: {
-        process: '{s name=progress_bar}{/s}',
+        process: '{s name="progress_bar"}{/s}',
         done: {
-            message: '{s name=done_message}{/s}',
-            title: '{s name=done_title}{/s}'
+            message: '{s name="done_message"}{/s}',
+            title: '{s name="done_title"}{/s}'
         },
         cancel: {
-            brokenOrderMessage: '{s name=broken_order_message}{/s}',
-            message: '{s name=cancel_message}{/s}',
-            title: '{s name=cancel_title}{/s}'
+            brokenOrderMessage: '{s name="broken_order_message"}{/s}',
+            message: '{s name="cancel_message"}{/s}',
+            title: '{s name="cancel_title"}{/s}'
         },
-        orderErrorTitle: '{s name=batch/order_error/title}Error at order [0]{/s}',
-        errorTitle: '{s name=batch/error/title}Error{/s}',
-        growlMessage: '{s name=growlMessage}{/s}',
-        formInvalid: '{s name=settings/form_invalid}Please correct the information in the form{/s}',
-        noEmailsWillBeSent: '{s name=batch/no_emails_will_be_sent}Due to your current configuration no emails will be sent.{/s}'
+        orderErrorTitle: '{s name="batch/order_error/title"}Error at order [0]{/s}',
+        errorTitle: '{s name="batch/error/title"}Error{/s}',
+        growlMessage: '{s name="growlMessage"}{/s}',
+        formInvalid: '{s name="settings/form_invalid"}Please correct the information in the form{/s}',
+        noEmailsWillBeSent: '{s name="batch/no_emails_will_be_sent"}Due to your current configuration no emails will be sent.{/s}'
     },
 
     /**
@@ -414,17 +414,17 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             (document.get('numbers') === 'doc_3' && me.mode == 0)) {
 
             message = Ext.String.format(
-                '{s name=document/attachment/invoice/number/hint}{/s} [0] [1] [2]',
+                '{s name="document/attachment/invoice/number/hint"}{/s} [0] [1] [2]',
                 orders[index].get('number'),
                 '<br />',
-                '{s name=document/attachment/invoice/number/text}{/s}'
+                '{s name="document/attachment/invoice/number/text"}{/s}'
             );
 
             // A little delay is required to open the messageBox in the top layer,
             // otherwise the window is behind a modal window.
             Ext.defer(function () {
                 Ext.Msg.prompt(
-                    '{s name=document/attachment/invoice/number}{/s}', message,
+                    '{s name="document/attachment/invoice/number"}{/s}', message,
                     function (clickedButtonName, inputText) {
                         if (clickedButtonName !== 'ok' || !inputText) {
                             return;

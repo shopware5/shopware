@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/condition/width"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Width', {
     extend: 'ProductStream.filter.AbstractCondition',
@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Width', {
     },
 
     getLabel: function() {
-        return '{s name=width_condition}{/s}';
+        return '{s name="width_condition"}{/s}';
     },
 
     isSingleton: function() {

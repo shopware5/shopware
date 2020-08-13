@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/supplier"}
 Ext.define('Shopware.apps.Analytics.view.table.Supplier', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
@@ -55,12 +55,12 @@ Ext.define('Shopware.apps.Analytics.view.table.Supplier', {
         return [
             {
                 dataIndex: 'name',
-                text: '{s name=table/supplier/supplier}Supplier{/s}'
+                text: '{s name="table/supplier/supplier"}Supplier{/s}'
             },
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=general/turnover}Turnover{/s}',
+                text: '{s name="general/turnover"}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];

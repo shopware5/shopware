@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/article_sales"}
 Ext.define('Shopware.apps.Analytics.view.table.ArticleSales', {
     extend: 'Shopware.apps.Analytics.view.main.Table',

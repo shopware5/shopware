@@ -26,7 +26,7 @@
  *
  * The filter model represents a single filter
  */
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/model/filter"}
 Ext.define('Shopware.apps.ArticleList.model.Filter', {
     /**
@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.ArticleList.model.Filter', {
             name : 'groupName',
             type: 'string',
             convert : function(value, record) {
-                return record.get('isFavorite') ? '{s name=group_favorite}Favorite{/s}' : '{s name=group_filter}Filter{/s}';
+                return record.get('isFavorite') ? '{s name="group_favorite"}Favorite{/s}' : '{s name="group_filter"}Filter{/s}';
             }
         }
     ],

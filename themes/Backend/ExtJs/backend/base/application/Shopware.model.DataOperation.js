@@ -1,5 +1,5 @@
 
-//{namespace name=backend/application/main}
+//{namespace name="backend/application/main"}
 //{block name="backend/application/Shopware.model.DataOperation"}
 
 Ext.define('Shopware.model.DataOperation', {

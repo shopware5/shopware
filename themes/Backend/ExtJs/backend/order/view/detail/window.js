@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order list main window.
@@ -88,13 +88,13 @@ Ext.define('Shopware.apps.Order.view.detail.Window', {
      * Contains all snippets for this component
      */
     snippets: {
-        title: '{s name=tab/title}Order details:{/s}',
-        overview: '{s name=tab/overview}Overview{/s}',
-        details: '{s name=tab/details}Details{/s}',
-        communication: '{s name=tab/communication}Communication{/s}',
-        document: '{s name=tab/document}Documents{/s}',
-        position: '{s name=tab/position}Positions{/s}',
-        history: '{s name=tab/history}Status history{/s}'
+        title: '{s name="tab/title"}Order details:{/s}',
+        overview: '{s name="tab/overview"}Overview{/s}',
+        details: '{s name="tab/details"}Details{/s}',
+        communication: '{s name="tab/communication"}Communication{/s}',
+        document: '{s name="tab/document"}Documents{/s}',
+        position: '{s name="tab/position"}Positions{/s}',
+        history: '{s name="tab/history"}Status history{/s}'
     },
 
     /**

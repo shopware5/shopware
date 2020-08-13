@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 
 //{block name="backend/article/view/variant/number_progress"}
 Ext.define('Shopware.apps.Article.view.variant.NumberProgress', {
@@ -106,12 +106,12 @@ Ext.define('Shopware.apps.Article.view.variant.NumberProgress', {
      * @object
      */
     snippets: {
-        cancel:'{s name=progress/cancel}Cancel process{/s}',
-        start:'{s name=progress/start}Start process{/s}',
-        close:'{s name=progress/close}Close window{/s}'
+        cancel:'{s name="progress/cancel"}Cancel process{/s}',
+        start:'{s name="progress/start"}Start process{/s}',
+        close:'{s name="progress/close"}Close window{/s}'
     },
 
-    title: '{s name=progress_window/title}Generate order numbers{/s}',
+    title: '{s name="progress_window/title"}Generate order numbers{/s}',
 
     batchSize: 200,
     totalCount: 1,
@@ -153,8 +153,8 @@ Ext.define('Shopware.apps.Article.view.variant.NumberProgress', {
         var me = this;
 
         me.combo = Ext.create('Ext.form.ComboBox', {
-            fieldLabel: '{s name=multi_request/batch/label}Batch size{/s}',
-            helpText: '{s name=multi_request/batch/help}How many records should be processed per request? Default: 200{/s}',
+            fieldLabel: '{s name="multi_request/batch/label"}Batch size{/s}',
+            helpText: '{s name="multi_request/batch/help"}How many records should be processed per request? Default: 200{/s}',
             name: 'batchSize',
             forceSelection: true,
             margin: '0 0 10 0',

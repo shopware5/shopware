@@ -29,12 +29,12 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/daytime"}
 Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-daytime',
-    shopColumnSales: "{s name=general/turnover}Turnover{/s}: [0]",
+    shopColumnSales: '{s name="general/turnover"}Turnover{/s}: [0]',
 
     initComponent: function () {
         var me = this;
@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
             {
                 xtype: 'datecolumn',
                 dataIndex: 'date',
-                text: '{s name=table/daytime/time}Time{/s}',
+                text: '{s name="table/daytime/time"}Time{/s}',
                 format: timeFormat,
                 renderer: function(value) {
                     if (value == null) {
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=general/turnover}Turnover{/s}',
+                text: '{s name="general/turnover"}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];

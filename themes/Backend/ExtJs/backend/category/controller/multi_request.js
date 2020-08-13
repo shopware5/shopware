@@ -32,7 +32,7 @@
  * The multi request dialog controller takes care of actual requests
  */
 
-//{namespace name=backend/category/main}
+//{namespace name="backend/category/main"}
 //{block name="backend/category/controller/multi_request"}
 Ext.define('Shopware.apps.Category.controller.MultiRequest', {
     extend: 'Enlight.app.Controller',
@@ -43,8 +43,8 @@ Ext.define('Shopware.apps.Category.controller.MultiRequest', {
      */
     snippets: {
         done: {
-            message: '{s name=batch/done_message}Operation finished{/s}',
-            title: '{s name=batch/done_title}Successful{/s}'
+            message: '{s name="batch/done_message"}Operation finished{/s}',
+            title: '{s name="batch/done_title"}Successful{/s}'
         }
     },
 
@@ -74,15 +74,15 @@ Ext.define('Shopware.apps.Category.controller.MultiRequest', {
         me.categoryId = categoryId;
 
         window.rebuildCategoryProgress.updateProgress(
-            0, '{s name=batch/progress/init/rebuildCategoryPath}Rebuild category path{/s}'
+            0, '{s name="batch/progress/init/rebuildCategoryPath"}Rebuild category path{/s}'
         );
 
         window.removeOldAssignmentsProgress.updateProgress(
-            0, '{s name=batch/progress/init/removeOldAssignments}Remove old assignments{/s}'
+            0, '{s name="batch/progress/init/removeOldAssignments"}Remove old assignments{/s}'
         );
 
         window.rebuildAssignmentsProgress.updateProgress(
-            0, '{s name=batch/progress/init/rebuildAssignments}Rebuild assignments{/s}'
+            0, '{s name="batch/progress/init/rebuildAssignments"}Rebuild assignments{/s}'
         );
 
         me.startBatchMove(window);
@@ -98,21 +98,21 @@ Ext.define('Shopware.apps.Category.controller.MultiRequest', {
             progress: window.rebuildCategoryProgress,
             requestUrl: '{url controller="Category" action="rebuildCategoryPath"}',
             initUrl:    '{url controller="Category" action="getRebuildCategoryPathCount"}',
-            snippet:    '{s name=batch/progress/rebuildCategoryPath}Rebuild category path [0] of [1]{/s}'
+            snippet:    '{s name="batch/progress/rebuildCategoryPath"}Rebuild category path [0] of [1]{/s}'
         });
 
         configs.push({
             progress: window.removeOldAssignmentsProgress,
             requestUrl: '{url controller="Category" action="removeOldAssignments"}',
             initUrl:    '{url controller="Category" action="getRemoveOldAssignmentsCount"}',
-            snippet:    '{s name=batch/progress/removeOldAssignments}Remove old assignments [0] of [1]{/s}'
+            snippet:    '{s name="batch/progress/removeOldAssignments"}Remove old assignments [0] of [1]{/s}'
         });
 
         configs.push({
             progress: window.rebuildAssignmentsProgress,
             requestUrl: '{url controller="Category" action="rebuildAssignments"}',
             initUrl:    '{url controller="Category" action="getRebuildAssignmentsCount"}',
-            snippet:    '{s name=batch/progress/rebuildAssignments}Rebuild assignments [0] of [1]{/s}'
+            snippet:    '{s name="batch/progress/rebuildAssignments"}Rebuild assignments [0] of [1]{/s}'
         });
 
         var currentConfig = configs.shift();

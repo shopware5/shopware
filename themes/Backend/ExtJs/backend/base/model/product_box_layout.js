@@ -31,7 +31,7 @@
  * Shopware Model - Global Stores and Models
  *
  */
-//{namespace name=backend/base/product_box_layout}
+//{namespace name="backend/base/product_box_layout"}
 //{block name="backend/base/model/product_box_layout"}
 Ext.define('Shopware.apps.Base.model.ProductBoxLayout', {
 

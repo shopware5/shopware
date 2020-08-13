@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/overview/view/main}
+//{namespace name="backend/overview/view/main"}
 
 /**
  * todo@all: Documentation
@@ -36,7 +36,7 @@
 Ext.define('Shopware.apps.Overview.view.main.Window', {
     extend: 'Enlight.app.Window',
     alias : 'widget.overview-main-window',
-    title : '{s name=title}Overview{/s}',
+    title : '{s name="title"}Overview{/s}',
     layout: 'fit',
     width: 800,
     height: '90%',

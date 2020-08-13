@@ -30,7 +30,7 @@
 /**
  * Shopware UI - Article Image assign variants progress window.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/image/progress"}
 Ext.define('Shopware.apps.Article.view.image.Progress', {
     extend: 'Shopware.window.Progress',

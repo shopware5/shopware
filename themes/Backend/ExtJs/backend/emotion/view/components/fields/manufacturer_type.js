@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/emotion/view/components/manufacturer_type}
+//{namespace name="backend/emotion/view/components/manufacturer_type"}
 Ext.define('Shopware.apps.Emotion.view.components.fields.ManufacturerType', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.emotion-components-fields-manufacturer-type',
@@ -38,12 +38,12 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ManufacturerType', {
      */
     snippets: {
         fields: {
-            'manufacturer_type': '{s name=manufacturer_type/fields/manufacturer_type}Manufacturer type{/s}',
-            'empty_text': '{s name=manufacturer_type/fields/empty_text}Please select...{/s}'
+            'manufacturer_type': '{s name="manufacturer_type/fields/manufacturer_type"}Manufacturer type{/s}',
+            'empty_text': '{s name="manufacturer_type/fields/empty_text"}Please select...{/s}'
         },
         store: {
-            'manufacturers_by_cat': '{s name=manufacturer_type/store/manufacturer_by_cat}Manufacturer by category{/s}',
-            'selected_manufacturers': '{s name=manufacturer_type/store/selected_manufacturers}Selected manufacturers{/s}'
+            'manufacturers_by_cat': '{s name="manufacturer_type/store/manufacturer_by_cat"}Manufacturer by category{/s}',
+            'selected_manufacturers': '{s name="manufacturer_type/store/selected_manufacturers"}Selected manufacturers{/s}'
         }
     },
 

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/voucher/view/voucher}
+//{namespace name="backend/voucher/view/voucher"}
 
 /**
  * Shopware UI - Voucher list main window.
@@ -133,13 +133,13 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
 
         var columnsData = [
             {
-                header:'{s name=list/column/description}Description{/s}',
+                header:'{s name="list/column/description"}Description{/s}',
                 dataIndex:'description',
                 flex:1,
                 renderer:this.nameRenderer
             },
             {
-                header:'{s name=list/column/code}Code{/s}',
+                header:'{s name="list/column/code"}Code{/s}',
                 dataIndex:'voucherCode',
                 flex:1,
                 editor:{
@@ -150,32 +150,32 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
                 renderer:this.codeRenderer
             },
             {
-                header:'{s name=list/column/mode}Voucher mode{/s}',
+                header:'{s name="list/column/mode"}Voucher mode{/s}',
                 dataIndex:'modus',
                 renderer:this.modeRenderer,
                 flex:1
             },
             {
-                header:'{s name=list/column/redeemed}Redeemed total{/s}',
+                header:'{s name="list/column/redeemed"}Redeemed total{/s}',
                 dataIndex:'checkedIn',
                 flex:1,
                 renderer:this.checkedInRenderer
             },
             {
-                header:'{s name=list/column/value}Value{/s}',
+                header:'{s name="list/column/value"}Value{/s}',
                 dataIndex:'value',
                 renderer:this.valueRenderer,
                 flex:1
             },
             {
                 xtype:'datecolumn',
-                header:'{s name=list/column/valid_from}Valid from{/s}',
+                header:'{s name="list/column/valid_from"}Valid from{/s}',
                 dataIndex:'validFrom',
                 flex:1
             },
             {
                 xtype:'datecolumn',
-                header:'{s name=list/column/valid_to}Valid till{/s}',
+                header:'{s name="list/column/valid_to"}Valid till{/s}',
                 dataIndex:'validTo',
                 flex:1
             },
@@ -200,7 +200,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
             actionColumnData.push({
                 iconCls:'sprite-pencil',
                 cls:'editBtn',
-                tooltip:'{s name=list/action_column/edit}Edit this voucher{/s}',
+                tooltip:'{s name="list/action_column/edit"}Edit this voucher{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('editColumn', view, rowIndex, colIndex, item);
                 }
@@ -212,7 +212,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
                iconCls:'sprite-minus-circle-frame',
                action:'delete',
                cls:'delete',
-               tooltip:'{s name=list/action_column/delete}Delete this voucher{/s}',
+               tooltip:'{s name="list/action_column/delete"}Delete this voucher{/s}',
                handler:function (view, rowIndex, colIndex, item) {
                    me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
                }
@@ -223,7 +223,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
             actionColumnData.push({
                 iconCls:'sprite-blue-document-copy',
                 cls:'duplicate',
-                tooltip:'{s name=list/action_column/duplicate}Duplicate this voucher{/s}',
+                tooltip:'{s name="list/action_column/duplicate"}Duplicate this voucher{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('duplicateColumn', view, rowIndex, colIndex, item);
                 }
@@ -246,7 +246,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
                     /*{if {acl_is_allowed privilege=create}}*/
                     {
                         iconCls:'sprite-plus-circle',
-                        text:'{s name=list/button/add}Add{/s}',
+                        text:'{s name="list/button/add"}Add{/s}',
                         action:'add'
                     },
                     /*{/if}*/
@@ -254,7 +254,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
                     {
 
                         iconCls:'sprite-minus-circle-frame',
-                        text:'{s name=list/button/delete}Delete selected voucher{/s}',
+                        text:'{s name="list/button/delete"}Delete selected voucher{/s}',
                         disabled:true,
                         action:'deleteVoucher'
 
@@ -269,7 +269,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
                         cls: 'searchfield',
                         enableKeyEvents:true,
                         checkChangeBuffer: 500,
-                        emptyText:'{s name=list/field/search}Search...{/s}'
+                        emptyText:'{s name="list/field/search"}Search...{/s}'
                     },
                     { xtype:'tbspacer', width:6 }
                 ]
@@ -318,9 +318,9 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
      */
     modeRenderer:function (value) {
         if(value!=1){
-            return "{s name=list/render_value/mode/general}General{/s}";
+            return '{s name="list/render_value/mode/general"}General{/s}';
         }
-        return "{s name=list/render_value/mode/individual}Individual{/s}";
+        return '{s name="list/render_value/mode/individual"}Individual{/s}';
     },
     /**
      * Value Renderer Method

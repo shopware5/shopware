@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/view/widgets}
+//{namespace name="backend/index/view/widgets"}
 
 /**
  * Shopware UI - Sales Widget
@@ -32,7 +32,7 @@
 Ext.define('Shopware.apps.Index.view.widgets.Sales', {
     extend: 'Shopware.apps.Index.view.widgets.Base',
     alias: 'widget.swag-sales-widget',
-    title: '{s name=sales/title}Turnover today / yesterday (Sample Data){/s}',
+    title: '{s name="sales/title"}Turnover today / yesterday (Sample Data){/s}',
     layout: {
         type: 'vbox',
         align: 'stretch',
@@ -44,9 +44,9 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
      * @object
      */
     snippets: {
-        conversation_rate: '{s name=sales/conversation_rate}Conversation rate{/s}',
+        conversation_rate: '{s name="sales/conversation_rate"}Conversation rate{/s}',
         headers: {
-            turnover: '{s name=sales/headers/turnover}Turnover{/s}',
+            turnover: '{s name="sales/headers/turnover"}Turnover{/s}',
             orders: '{s name="sales/headers/orders"}Orders{/s}',
             new_customers: '{s name="sales/headers/new_customers"}New Customers{/s}',
             visitors: '{s name="sales/headers/visitors"}Visitors{/s}'

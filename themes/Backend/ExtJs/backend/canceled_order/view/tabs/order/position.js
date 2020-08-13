@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/canceled_order/view/main}
+//{namespace name="backend/canceled_order/view/main"}
 
 /**
  * Shopware UI - Position view for the order tab, allows the user to see the order positions
@@ -29,7 +29,7 @@
 //{block name="backend/canceled_order/view/tabs/order/position"}
 Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Position', {
     extend: 'Ext.grid.Panel',
-    title: '{s name=position/title}Order positions{/s}',
+    title: '{s name="position/title"}Order positions{/s}',
     region: 'south',
     height: 300,
     collapsed: false,
@@ -38,12 +38,12 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Position', {
 
     snippets : {
         columns : {
-            articleNumber: '{s name=columns/position/number}Articlenumber{/s}',
-            articleName: '{s name=columns/position/name}Articlename{/s}',
-            articleQuantity: '{s name=columns/position/quantity}Quantity{/s}',
-            articlePrice: '{s name=columns/position/price}Price{/s}',
-            totalAmount: '{s name=columns/position/total_amount}Total Amount{/s}',
-            openArticle: '{s name=column/position/open_article}Show article{/s}'
+            articleNumber: '{s name="columns/position/number"}Articlenumber{/s}',
+            articleName: '{s name="columns/position/name"}Articlename{/s}',
+            articleQuantity: '{s name="columns/position/quantity"}Quantity{/s}',
+            articlePrice: '{s name="columns/position/price"}Price{/s}',
+            totalAmount: '{s name="columns/position/total_amount"}Total Amount{/s}',
+            openArticle: '{s name="column/position/open_article"}Show article{/s}'
 
         }
     },

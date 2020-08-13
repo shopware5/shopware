@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/view/backup/window"}
 Ext.define('Shopware.apps.ArticleList.view.Backup.Window', {
     /**
@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.ArticleList.view.Backup.Window', {
      * Title of the window.
      * @string
      */
-    title: '{s name=backup/windowTitle}Revert changes{/s}',
+    title: '{s name="backup/windowTitle"}Revert changes{/s}',
 
     resizable: true,
 
@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.ArticleList.view.Backup.Window', {
             margin: '0 10 10 10',
             items: [{
                 xtype: 'label',
-                html: '{s name=backup/description}A revert is not a full database backup. Only those fields modified during the batch edit will be reverted.{/s}'
+                html: '{s name="backup/description"}A revert is not a full database backup. Only those fields modified during the batch edit will be reverted.{/s}'
             }]
         };
     },
@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.ArticleList.view.Backup.Window', {
      */
     getNotificationBox: function() {
         var me = this,
-            notification = Shopware.Notification.createBlockMessage('{s name=backup/notice}This functionality is not a replacement for backups{/s}', 'error');
+            notification = Shopware.Notification.createBlockMessage('{s name="backup/notice"}This functionality is not a replacement for backups{/s}', 'error');
 
         notification.margin = '10 5';
 

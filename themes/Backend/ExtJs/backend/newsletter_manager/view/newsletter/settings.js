@@ -37,7 +37,7 @@
 Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
     extend: 'Ext.form.Panel',
     alias: 'widget.newsletter-manager-newsletter-settings',
-    title: '{s name=title/Settings}Settings{/s}',
+    title: '{s name="title/Settings"}Settings{/s}',
     autoScroll: true,
 
     cls: 'shopware-form',
@@ -90,13 +90,13 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 defaults: {
                     anchor: '100%'
                 },
-                title: '{s name=campaignSettings}Newsletter settings{/s}',
+                title: '{s name="campaignSettings"}Newsletter settings{/s}',
                 items: me.getCampaignFieldset(),
                 flex: 1
             },
             {
                 xtype: 'fieldset',
-                title: '{s name=selectNewsletterRecipients}Select newsletter recipients{/s}',
+                title: '{s name="selectNewsletterRecipients"}Select newsletter recipients{/s}',
                 items: me.getRecipientsFieldset(),
                 flex: 1,
                 defaults: { anchor: '100%' },
@@ -149,7 +149,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
         me.customerGroupStore.each(function(record) {
             count = me.getNumberOfCustomersInGroup(record.get('id'), true);
             checkBox = Ext.create('Ext.form.field.Checkbox', {
-                boxLabel: record.get('name') + Ext.String.format('{s name=receiverCount} ({literal}{0}{/literal} receiver(s)){/s}', count),
+                boxLabel: record.get('name') + Ext.String.format('{s name="receiverCount"} ({literal}{0}{/literal} receiver(s)){/s}', count),
                 name: record.get('name'),
                 count: count,
                 record: record
@@ -166,7 +166,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
         me.newsletterGroupStore.each(function(record) {
             count = me.getNumberOfCustomersInGroup(record.get('id'), false);
             checkBox = Ext.create('Ext.form.field.Checkbox', {
-                boxLabel: record.get('name') + Ext.String.format('{s name=receiverCount} ({literal}{0}{/literal} receiver){/s}', count),
+                boxLabel: record.get('name') + Ext.String.format('{s name="receiverCount"} ({literal}{0}{/literal} receiver){/s}', count),
                 name: record.get('name'),
                 count: count,
                 record: record
@@ -201,7 +201,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
         return [
             {
                 xtype: 'checkboxgroup',
-                fieldLabel: '{s name=customerGroups}Customer groups{/s}',
+                fieldLabel: '{s name="customerGroups"}Customer groups{/s}',
                 items: me.customerGroups,
                 labelWidth: 170,
                 columns: 2,
@@ -210,7 +210,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
             },
             {
                 xtype: 'checkboxgroup',
-                fieldLabel: '{s name=ownNewsletterGroups}Own recipient groups{/s}',
+                fieldLabel: '{s name="ownNewsletterGroups"}Own recipient groups{/s}',
                 labelWidth: 170,
                 items: me.newsletterGroups,
                 columns: 2,
@@ -230,13 +230,13 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
         return [
             {
                 xtype: 'textfield',
-                fieldLabel: '{s name=subject}Subject:{/s}',
+                fieldLabel: '{s name="subject"}Subject:{/s}',
                 name: 'subject',
                 allowBlank: false
             },
             {
                 xtype: 'combobox',
-                fieldLabel: '{s name=sender}Sender:{/s}',
+                fieldLabel: '{s name="sender"}Sender:{/s}',
                 allowBlank: false,
                 valueField: 'id',
                 displayField: 'name',
@@ -247,7 +247,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
             },
             {
                 xtype: 'combobox',
-                fieldLabel: '{s name=customerGroupLabel}Customer group:{/s}',
+                fieldLabel: '{s name="customerGroupLabel"}Customer group:{/s}',
                 allowBlank: false,
                 valueField: 'key',
                 displayField: 'name',
@@ -258,7 +258,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
             },
             {
                 xtype: 'combobox',
-                fieldLabel: '{s name=languageSelection}Select Language:{/s}',
+                fieldLabel: '{s name="languageSelection"}Select Language:{/s}',
                 allowBlank: false,
                 store: me.shopStore,
                 valueField: 'id',
@@ -278,7 +278,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
             },
             {
                 xtype: 'combobox',
-                fieldLabel: '{s name=dispatch}Dispatch:{/s}',
+                fieldLabel: '{s name="dispatch"}Dispatch:{/s}',
                 allowBlank: false,
                 store: me.dispatchStore,
                 valueField: 'id',
@@ -289,7 +289,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
             },
             {
                 xtype: 'checkbox',
-                fieldLabel: '{s name=publish}Published:{/s}',
+                fieldLabel: '{s name="publish"}Published:{/s}',
                 name: 'publish',
                 checked: me.record.get('publish'),
                 inputValue: 1,
@@ -302,12 +302,12 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
             },
             {
                 xtype: 'checkbox',
-                fieldLabel: '{s name=ready_for_sending}Release for sending:{/s}',
+                fieldLabel: '{s name="ready_for_sending"}Release for sending:{/s}',
                 name: 'released',
                 inputValue: 1,
                 uncheckedValue: 0,
-                helpTitle: '{s name=active/help_title}Release a newsletter{/s}',
-                helpText: '{s name=active/help_text}These option releases the newsletter for the cronjob. If you don\'t use a cronjob you can ignore this option.{/s}',
+                helpTitle: '{s name="active/help_title"}Release a newsletter{/s}',
+                helpText: '{s name="active/help_text"}These option releases the newsletter for the cronjob. If you don\'t use a cronjob you can ignore this option.{/s}',
                 listeners: {
                     change: function(field, newValue, oldValue) {
                         me.fireEvent('changeActive', me.record, newValue);
@@ -315,8 +315,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                     render: function (field) {
                         if (me.record.get('status') == 2) {
                             field.setDisabled(true);
-                            field.helpTitle = '{s name=active/error/help_title}Error{/s}';
-                            field.helpText = '{s name=error/active_text}A delivered newsletter can\'t change the released option.{/s}';
+                            field.helpTitle = '{s name="active/error/help_title"}Error{/s}';
+                            field.helpText = '{s name="error/active_text"}A delivered newsletter can\'t change the released option.{/s}';
                         } else if (me.record.get('status') > 0) {
                             field.setValue(1);
                         } else {
@@ -338,8 +338,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
             allowBlank: true,
             name: 'timedDeliveryTime',
             value: Ext.Date.parse('6pm', 'ga'),
-            helpTitle: '{s name=send_at/support/title}Configure time of delivery{/s}',
-            helpText: '{s name=send_at/support/text}With this setting you can define when you want to send the newsletter. The execution of the newsletter can be for example via a cron job. This setting is optional.{/s}',
+            helpTitle: '{s name="send_at/support/title"}Configure time of delivery{/s}',
+            helpText: '{s name="send_at/support/text"}With this setting you can define when you want to send the newsletter. The execution of the newsletter can be for example via a cron job. This setting is optional.{/s}',
             listeners: {
                 change: function(field, newValue, oldValue) {
                     me.fireEvent('changeDeliveryTime', me.record, newValue, oldValue);
@@ -352,11 +352,11 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 var timedDelivery = Ext.getCmp('timedDeliveryDate');
 
                 if (!me.timedDeliveryDateField.getValue() && value) {
-                    me.timedDeliveryDateField.markInvalid('{s name=send_at/error/no_date}You must configure the date.{/s}');
+                    me.timedDeliveryDateField.markInvalid('{s name="send_at/error/no_date"}You must configure the date.{/s}');
                 }
 
                 if (value && !timedDelivery.getValue()) {
-                    return '{s name=send_at/error/no_date}You must configure the date.{/s}';
+                    return '{s name="send_at/error/no_date"}You must configure the date.{/s}';
                 }
 
                 return true;
@@ -364,7 +364,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
         });
 
         me.timedDeliveryDateField = Ext.create('Ext.form.field.Date', {
-            fieldLabel: '{s name=send_at}Send at:{/s}',
+            fieldLabel: '{s name="send_at"}Send at:{/s}',
             allowBlank: true,
             name: 'timedDeliveryDate',
             id: 'timedDeliveryDate',

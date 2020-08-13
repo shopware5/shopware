@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/chart/customer_age"}
 Ext.define('Shopware.apps.Analytics.view.chart.CustomerAge', {
     extend: 'Shopware.apps.Analytics.view.main.Chart',
@@ -48,13 +48,13 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerAge', {
                 grid: true,
                 position: 'bottom',
                 fields: ['age'],
-                title: '{s name=chart/customer_age/age/title}Age{/s}'
+                title: '{s name="chart/customer_age/age/title"}Age{/s}'
             },
             {
                 type: 'Numeric',
                 position: 'left',
                 fields: me.getAxesFields('percent'),
-                title: '{s name=chart/customer_age/percent/title}Percentage{/s}'
+                title: '{s name="chart/customer_age/percent/title"}Percentage{/s}'
             }
         ];
 
@@ -81,8 +81,8 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerAge', {
                             renderer: function (storeItem) {
                                 this.setTitle(
                                     shop.get('name') + '<br><br>&nbsp;' +
-                                    '{s name=chart/customer_age/age/title}Age{/s}: ' + storeItem.get('age') + '<br>&nbsp;' +
-                                    '{s name=chart/customer_age/percent/title}Percentage{/s}: ' + storeItem.get('percent' + shopId) + ' %'
+                                    '{s name="chart/customer_age/age/title"}Age{/s}: ' + storeItem.get('age') + '<br>&nbsp;' +
+                                    '{s name="chart/customer_age/percent/title"}Percentage{/s}: ' + storeItem.get('percent' + shopId) + ' %'
                                 );
                             }
                         }
@@ -95,15 +95,15 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerAge', {
                     {
                         xField: 'age',
                         yField: 'percent',
-                        title: '{s name=chart/customer_age/percent/title}Percentage{/s}'
+                        title: '{s name="chart/customer_age/percent/title"}Percentage{/s}'
                     },
                     {
                         width: 180,
                         height: 45,
                         renderer: function (storeItem) {
                             this.setTitle(
-                                '{s name=chart/customer_age/age/title}Age{/s}: ' + storeItem.get('age') + '<br><br>&nbsp;' +
-                                '{s name=chart/customer_age/percent/title}Percentage{/s}: ' + storeItem.get('percent') + ' %'
+                                '{s name="chart/customer_age/age/title"}Age{/s}: ' + storeItem.get('age') + '<br><br>&nbsp;' +
+                                '{s name="chart/customer_age/percent/title"}Percentage{/s}: ' + storeItem.get('percent') + ' %'
                             );
                         }
                     }

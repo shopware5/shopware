@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/config/view/variant_filter}
+//{namespace name="backend/config/view/variant_filter"}
 
 //{block name="backend/config/view/variant_filter/expand_groups_grid"}
 Ext.define('Shopware.apps.Config.view.variantFilter.ExpandGroupsGrid', {

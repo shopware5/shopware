@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/config/view/core_license}
+//{namespace name="backend/config/view/core_license"}
 
 /**
  * Shopware UI - Core-license management
@@ -65,11 +65,11 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
      * Kept in seperate object to easier prevent interference with smarty compiler.
      */
     infoLabels: {
-        heading: '{s name=info/heading}Add or change and validate your shopware license.{/s}',
-        license: '{s name=info/license}License{/s}',
-        error: '{s name=errors/common/heading}Error{/s}',
-        registeredTo: '{s name=info/registeredTo}Registered to{/s}',
-        createdAt: '{s name=info/createdAt}Created at{/s}'
+        heading: '{s name="info/heading"}Add or change and validate your shopware license.{/s}',
+        license: '{s name="info/license"}License{/s}',
+        error: '{s name="errors/common/heading"}Error{/s}',
+        registeredTo: '{s name="info/registeredTo"}Registered to{/s}',
+        createdAt: '{s name="info/createdAt"}Created at{/s}'
     },
 
     /**
@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
      * Used to keep the date format translatable for
      * different countries.
      */
-    dateFormat: '{s name=date_format}m/d/Y{/s}',
+    dateFormat: '{s name="date_format"}m/d/Y{/s}',
 
     constructor: function(config) {
         var me = this;
@@ -194,14 +194,14 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
                     {
                         xtype: 'button',
                         cls: 'small',
-                        text: '{s name=buttons/uninstallLicenseLabel}Uninstall{/s}',
+                        text: '{s name="buttons/uninstallLicenseLabel"}Uninstall{/s}',
                         name: 'license-delete-button',
                         handler: Ext.bind(me.handleUninstallButtonClick, me)
                     },
                     {
                         xtype: 'button',
                         cls: 'small primary',
-                        text: '{s name=buttons/addLicenseLabel}Save{/s}',
+                        text: '{s name="buttons/addLicenseLabel"}Save{/s}',
                         name: 'license-set-button',
                         handler: Ext.bind(me.setNewLicense, me)
                     }
@@ -224,8 +224,8 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
         }
 
         Ext.MessageBox.confirm(
-            '{s name=mesagebox/uninstall/title}Uninstallation confirmation{/s}',
-            '{s name=mesagebox/uninstall/body}Are you sure you want to remove your license information from this shopware installation?{/s}',
+            '{s name="mesagebox/uninstall/title"}Uninstallation confirmation{/s}',
+            '{s name="mesagebox/uninstall/body"}Are you sure you want to remove your license information from this shopware installation?{/s}',
             function (response) {
                 if (response !== 'yes') {
                     return;
@@ -253,14 +253,14 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
                 jsonData = Ext.decode(result.responseText);
 
                 licensePresent = licenseData.host && licenseData.host.length > 0;
-                
+
                 if (jsonData.success) {
                     me.savedLicenseData = me.emptyLicenseData;
                     me.switchEditionIcon('ce');
                     me.licenseField.setValue('');
                     if (licensePresent) {
                         me.licenseStatus.update({
-                            license: '{s name=info/license/unlicensed}Not licensed{/s}',
+                            license: '{s name="info/license/unlicensed"}Not licensed{/s}',
                             licenseDate: '',
                             host: '',
                             display: 'initial'
@@ -269,9 +269,9 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
                     me.blockMessage.hide();
                 } else {
                     Shopware.Notification.createGrowlMessage(
-                        '{s name=errors/common/heading}Error{/s}',
-                        '{s name=errors/common/common}An unknown error occured.{/s}',
-                        '{s name=errors/common/title}Core License{/s}'
+                        '{s name="errors/common/heading"}Error{/s}',
+                        '{s name="errors/common/common"}An unknown error occured.{/s}',
+                        '{s name="errors/common/title"}Core License{/s}'
                     );
                 }
             }
@@ -290,9 +290,9 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
 
         if(!license){
             Shopware.Notification.createGrowlMessage(
-                '{s name=errors/common/heading}Error{/s}',
-                '{s name=errors/license/common}License key could not be validated{/s}',
-                '{s name=errors/common/title}Core License{/s}'
+                '{s name="errors/common/heading"}Error{/s}',
+                '{s name="errors/license/common"}License key could not be validated{/s}',
+                '{s name="errors/common/title"}Core License{/s}'
             );
             me.licenseField.setDisabled(false);
             return;
@@ -326,9 +326,9 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
                     me.showLicenseData(jsonData);
                 } else {
                     Shopware.Notification.createGrowlMessage(
-                        '{s name=errors/common/heading}Error{/s}',
+                        '{s name="errors/common/heading"}Error{/s}',
                         me.getErrorMessage(jsonData.errorType),
-                        '{s name=errors/common/title}Core License{/s}'
+                        '{s name="errors/common/title"}Core License{/s}'
                     );
                 }
             }
@@ -353,7 +353,7 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
                 display: 'initial'
             });
             me.licenseField.setValue(jsonData.licenseData.license);
-            me.setBlockMessage('{s name=errors/license/host}License key is not valid for domain{/s}', 'error');
+            me.setBlockMessage('{s name="errors/license/host"}License key is not valid for domain{/s}', 'error');
             me.blockMessage.show();
             return;
         }
@@ -379,7 +379,7 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
             display: 'initial'
         });
 
-        me.setBlockMessage('{s name=message/validLicense}Your license was successfully validated{/s}', 'success');
+        me.setBlockMessage('{s name="message/validLicense"}Your license was successfully validated{/s}', 'success');
         me.blockMessage.show();
 
         me.switchEditionIcon(jsonData.licenseData.edition);
@@ -433,7 +433,7 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
     /**
      * Translates an error string from the backend controller to a more
      * human readable and translatable error message.
-     * 
+     *
      * @string errorType
      * @returns string
      */
@@ -443,13 +443,13 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
 
         switch (errorType) {
             case 'LicenseProductKeyException':
-                message = '{s name=errors/license/product_key}License key does not match a commercial shopware edition{/s}';
+                message = '{s name="errors/license/product_key"}License key does not match a commercial shopware edition{/s}';
                 break;
             case 'LicenseHostException':
-                message = '{s name=errors/license/host}License key is not valid for domain{/s}';
+                message = '{s name="errors/license/host"}License key is not valid for domain{/s}';
                 break;
             default:
-                message = '{s name=errors/license/common}License key could not be validated{/s}';
+                message = '{s name="errors/license/common"}License key could not be validated{/s}';
         }
 
         return message;

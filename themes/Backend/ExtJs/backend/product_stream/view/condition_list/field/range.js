@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/field/range"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Range', {
 
@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Range', {
         var me = this;
 
         me.fromField = Ext.create('Ext.form.field.Number', {
-            fieldLabel: '{s name=from}from{/s}',
+            fieldLabel: '{s name="from"}from{/s}',
             minValue: 0,
             labelWidth: 30,
             decimalPrecision: me.decimalPrecision,
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Range', {
 
         me.toField = Ext.create('Ext.form.field.Number', {
             labelWidth: 30,
-            fieldLabel: '{s name=to}to{/s}',
+            fieldLabel: '{s name="to"}to{/s}',
             minValue: 0,
             padding: '0 0 0 10',
             decimalPrecision: me.decimalPrecision,
@@ -130,7 +130,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Range', {
 
         if (!valid) {
             Shopware.Notification.createGrowlMessage(
-                '{s name=validation_title}Validation{/s}',
+                '{s name="validation_title"}Validation{/s}',
                 this.getErrorMessage()
             );
         }

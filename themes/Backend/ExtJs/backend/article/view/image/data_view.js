@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/image/data_view"}
 Ext.define('Shopware.apps.Article.view.image.DataView', {
     extend: 'Ext.view.View',

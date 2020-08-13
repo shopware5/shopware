@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/view/edit/country}*/
+/*{namespace name="backend/shipping/view/edit/country"}*/
 
 /**
  * Shopware UI - Shipping Costs
@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Country', {
     /**
      * Title as shown in the tab from the panel
      */
-    title: '{s name=country_selection_tab_title}Lock categories{/s}',
+    title: '{s name="country_selection_tab_title"}Lock categories{/s}',
 
     /**
      * Display the the contents of this tab immediately
@@ -157,14 +157,14 @@ Ext.define('Shopware.apps.Shipping.view.edit.Country', {
                  *
                  * @string
                  */
-                fromTitle: '{s name=tab/country/from_title}Available{/s}',
+                fromTitle: '{s name="tab/country/from_title"}Available{/s}',
 
                 /**
                  * toTitle which holds Title on the Right Side
                  *
                  * @string
                  */
-                toTitle: '{s name=tab/country/to_title}Selected{/s}'
+                toTitle: '{s name="tab/country/to_title"}Selected{/s}'
             }
         ];
     }

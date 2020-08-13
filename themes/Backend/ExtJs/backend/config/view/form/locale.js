@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/form/locale"}
 Ext.define('Shopware.apps.Config.view.form.Locale', {
@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Config.view.form.Locale', {
         return [{
             xtype: 'gridcolumn',
             dataIndex: 'language',
-            text: '{s name=locale/table/name_text}Name{/s}',
+            text: '{s name="locale/table/name_text"}Name{/s}',
             flex: 1,
             renderer: function (v,p,record){
                 return record.data.language + ' (' + record.data.territory + ')';
@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Config.view.form.Locale', {
         }, {
             xtype: 'gridcolumn',
             dataIndex: 'locale',
-            text: '{s name=locale/table/iso_text}ISO{/s}',
+            text: '{s name="locale/table/iso_text"}ISO{/s}',
             flex: 1
         }, me.getActionColumn()];
     },
@@ -68,15 +68,15 @@ Ext.define('Shopware.apps.Config.view.form.Locale', {
         var me = this;
         return [{
             name: 'language',
-            fieldLabel: '{s name=locale/detail/language_text}Language{/s}',
+            fieldLabel: '{s name="locale/detail/language_text"}Language{/s}',
             allowBlank: false
         },{
             name: 'territory',
-            fieldLabel: '{s name=locale/detail/territory_text}Territory{/s}',
+            fieldLabel: '{s name="locale/detail/territory_text"}Territory{/s}',
             allowBlank: false
         },{
             name: 'locale',
-            fieldLabel: '{s name=locale/detail/iso_text}ISO{/s}',
+            fieldLabel: '{s name="locale/detail/iso_text"}ISO{/s}',
             minLength: 4,
             maxLength: 6
         }];

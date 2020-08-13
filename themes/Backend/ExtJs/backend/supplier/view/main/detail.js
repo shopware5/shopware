@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/supplier/view/main}*/
+/*{namespace name="backend/supplier/view/main"}*/
 
 /**
  * Shopware UI - Supplier Details
@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Detail', {
                     // Check if we're having a link here
                     '<tpl if="link">',
                         '<p class="action">',
-                            '{/literal}{s name=moreinfo}More information at{/s}{literal} <a href="{link}" title="{name}">{link}</a>',
+                            '{/literal}{s name="moreinfo"}More information at{/s}{literal} <a href="{link}" title="{name}">{link}</a>',
                         '</p>',
                     '</tpl>',
                 '</div>',

@@ -21,17 +21,17 @@
  * our trademarks remain entirely with us.
  */
 //{block name="backend/emotion/view/components/article"}
-//{namespace name=backend/emotion/view/components/article}
+//{namespace name="backend/emotion/view/components/article"}
 Ext.define('Shopware.apps.Emotion.view.components.Article', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-article',
 
     snippets: {
-        article: '{s name=article}{/s}',
-        variant: '{s name=variant}{/s}',
+        article: '{s name="article"}{/s}',
+        variant: '{s name="variant"}{/s}',
         productImageOnly: {
-            fieldLabel: '{s name=productImageOnly/label}{/s}',
-            supportText: '{s name=productImageOnly/support}{/s}'
+            fieldLabel: '{s name="productImageOnly/label"}{/s}',
+            supportText: '{s name="productImageOnly/support"}{/s}'
         },
         no_border: {
             fieldLabel: '{s name="noBorder/label"}{/s}',

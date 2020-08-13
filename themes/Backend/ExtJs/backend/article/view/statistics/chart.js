@@ -30,7 +30,7 @@
 /**
  * Shopware UI - Article esd page
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/esd/chart"}
 Ext.define('Shopware.apps.Article.view.statistics.Chart', {
 
@@ -57,8 +57,8 @@ Ext.define('Shopware.apps.Article.view.statistics.Chart', {
      * @object
      */
     snippets: {
-        revenue: '{s name=statistic/list/revenue}Revenue:{/s}',
-        orders: '{s name=statistic/list/orders}Orders:{/s}'
+        revenue: '{s name="statistic/list/revenue"}Revenue:{/s}',
+        orders: '{s name="statistic/list/orders"}Orders:{/s}'
     },
 
     insetPadding: 20,

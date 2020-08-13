@@ -34,7 +34,7 @@
  * is used in multiple locations across the backend
  */
 
-//{namespace name=backend/index/view/theme_cache}
+//{namespace name="backend/index/view/theme_cache"}
 Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
 
     /**
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
      * Window title
      * @string
      */
-    title: '{s name=window/title}Theme cache warm up{/s}',
+    title: '{s name="window/title"}Theme cache warm up{/s}',
 
     /**
      * Define window width
@@ -118,14 +118,14 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
      * @object
      */
     snippets: {
-        cancel: '{s name=button/cancel}Cancel process{/s}',
-        start: '{s name=button/start}Start process{/s}',
-        close: '{s name=button/close}Close window{/s}',
-        progressBar: '{s name=progress/progress_bar_text}0 shop(s) found{/s}',
-        singleProgressBar: '{s name=progress/progress_bar_single_text}Warm up cache for [0]{/s}',
-        loading: '{s name=progress/progress_bar_loading}Loading...{/s}',
-        infoTitle: '{s name=fieldset/information/title}Information{/s}',
-        infoDetail: '{s name=fieldset/information/detail}This will warm up the cache for your shop themes. This process will take a few seconds per shop{/s}'
+        cancel: '{s name="button/cancel"}Cancel process{/s}',
+        start: '{s name="button/start"}Start process{/s}',
+        close: '{s name="button/close"}Close window{/s}',
+        progressBar: '{s name="progress/progress_bar_text"}0 shop(s) found{/s}',
+        singleProgressBar: '{s name="progress/progress_bar_single_text"}Warm up cache for [0]{/s}',
+        loading: '{s name="progress/progress_bar_loading"}Loading...{/s}',
+        infoTitle: '{s name="fieldset/information/title"}Information{/s}',
+        infoDetail: '{s name="fieldset/information/detail"}This will warm up the cache for your shop themes. This process will take a few seconds per shop{/s}'
     },
 
     initComponent: function () {
@@ -197,7 +197,7 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
             forceSelection: true,
             multiSelect: true,
             editable: false,
-            emptyText: '{s name=fieldset/information/shopselection}Shop selection{/s}',
+            emptyText: '{s name="fieldset/information/shopselection"}Shop selection{/s}',
             listeners: {
                 scope: me,
                 select: function(combo, records) {

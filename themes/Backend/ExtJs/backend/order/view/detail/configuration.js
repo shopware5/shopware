@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order detail page
@@ -72,25 +72,25 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
      */
     snippets:{
         vatId: {
-            label: '{s name=configuration/vat_id_label}Customer VAT ID{/s}',
-            empty: '{s name=configuration/vat_id_empty}Not filed{/s}'
+            label: '{s name="configuration/vat_id_label"}Customer VAT ID{/s}',
+            empty: '{s name="configuration/vat_id_empty"}Not filed{/s}'
         },
-        documentType:  '{s name=configuration/document_type}Document type{/s}',
+        documentType:  '{s name="configuration/document_type"}Document type{/s}',
         comment: {
-            label:  '{s name=configuration/comment_label}Document comment{/s}',
-            support:  '{s name=configuration/comment_support}Changes are not saved permanently{/s}'
+            label:  '{s name="configuration/comment_label"}Document comment{/s}',
+            support:  '{s name="configuration/comment_support"}Changes are not saved permanently{/s}'
         },
-        voucher:  '{s name=configuration/voucher}Voucher{/s}',
-        taxFree:  '{s name=configuration/tax_free}Tax free{/s}',
-        invoiceNumber:  '{s name=configuration/invoice_number}Invoice number{/s}',
-        deliveryDate:  '{s name=configuration/delivery_date}Delivery date{/s}',
-        displayDate:  '{s name=configuration/display_date}Displayed date{/s}',
+        voucher:  '{s name="configuration/voucher"}Voucher{/s}',
+        taxFree:  '{s name="configuration/tax_free"}Tax free{/s}',
+        invoiceNumber:  '{s name="configuration/invoice_number"}Invoice number{/s}',
+        deliveryDate:  '{s name="configuration/delivery_date"}Delivery date{/s}',
+        displayDate:  '{s name="configuration/display_date"}Displayed date{/s}',
         buttons: {
-            preview:  '{s name=configuration/preview}Preview{/s}',
-            reset: '{s name=configuration/reset}Reset settings{/s}',
-            create: '{s name=configuration/create}Create document{/s}'
+            preview:  '{s name="configuration/preview"}Preview{/s}',
+            reset: '{s name="configuration/reset"}Reset settings{/s}',
+            create: '{s name="configuration/create"}Create document{/s}'
         },
-        form: '{s name=configuration/form_title}Configuration{/s}'
+        form: '{s name="configuration/form_title"}Configuration{/s}'
     },
 
     /**

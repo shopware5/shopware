@@ -1,5 +1,5 @@
 
-//{namespace name=backend/update_wizard/main}
+//{namespace name="backend/update_wizard/main"}
 
 //{block name="backend/update_wizard/app"}
 Ext.define('Shopware.apps.UpdateWizard', {

@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/feedback/view/survey}
+//{namespace name="backend/feedback/view/survey"}
 
 /**
  * Shopware UI - Feedback preview Window
@@ -32,7 +32,7 @@
 //{block name="backend/feedback/view/survey/window"}
 Ext.define('Shopware.apps.Feedback.view.survey.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window/title}{/s}',
+    title: '{s name="window/title"}{/s}',
     alias: 'widget.installation-survey-window',
     border: false,
     layout: 'fit',
@@ -64,12 +64,12 @@ Ext.define('Shopware.apps.Feedback.view.survey.Window', {
             padding: '0 0 0 5px',
             itemId: 'disableInstallationSurvey',
             width: 150,
-            boxLabel: '{s name=window/do_not_show_again}{/s}'
+            boxLabel: '{s name="window/do_not_show_again"}{/s}'
         });
 
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'primary',
-            text: '{s name=window/close}{/s}',
+            text: '{s name="window/close"}{/s}',
             handler: function() {
                 me.close();
             }

@@ -37,7 +37,7 @@
 Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
     extend: 'Ext.form.Panel',
     alias: 'widget.newsletter-manager-newsletter-editor',
-    title: '{s name=title/Editor}Newsletter Editor{/s}',
+    title: '{s name="title/Editor"}Newsletter Editor{/s}',
     layout: 'fit',
     autoScroll:true,
     defaults: {
@@ -98,14 +98,14 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
                             button.setDisabled(!(isValid && field.getValue() !== ''));
                         }
                     },
-                    fieldLabel: '{s name=testMailAddress}Mail address{/s}' // re-use the column-snippet
+                    fieldLabel: '{s name="testMailAddress"}Mail address{/s}' // re-use the column-snippet
                 },
                 {
                     xtype: 'button',
                     id: 'sendMail',
                     name: 'sendMail',
                     iconCls:'sprite-mail-send',
-                    text: '{s name=sendTestMail}Send testmail{/s}',
+                    text: '{s name="sendTestMail"}Send testmail{/s}',
                     handler: function() {
                         me.fireEvent('sendTestMail', me.form);
                     },
@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
                     xtype: 'button',
                     iconCls: 'sprite-globe--arrow',
                     name: 'preview',
-                    text: '{s name=preview}Preview{/s}',
+                    text: '{s name="preview"}Preview{/s}',
                     handler: function() {
                         me.fireEvent('openPreview', me.tinyMce);
                     }

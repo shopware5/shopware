@@ -30,18 +30,18 @@
 /**
  * todo@all: Documentation
  */
-//{namespace name=backend/static/widgets}
+//{namespace name="backend/static/widgets"}
 //{block name="backend/config/model/form/widget"}
 Ext.define('Shopware.apps.Config.model.form.Widget', {
 
     snippets: {
         //{block name="backend/widget/widget"}{/block}
-        swag_sales_widget: '{s name=swag_sales_widget}Yesterdays and todays sales{/s}',
-        swag_upload_widget: '{s name=swag_upload}Drag and Drop Upload{/s}',
-        swag_visitors_customers_widget: '{s name=swag_visitors_customers_widget}Customers online{/s}',
-        swag_last_orders_widget: '{s name=swag_last_orders_widget}Recent orders{/s}',
-        swag_notice_widget: '{s name=swag_notice_widget}Notepad{/s}',
-        swag_merchant_widget: '{s name=swag_merchant_widget}Merchant clearing{/s}'
+        swag_sales_widget: '{s name="swag_sales_widget"}Yesterdays and todays sales{/s}',
+        swag_upload_widget: '{s name="swag_upload"}Drag and Drop Upload{/s}',
+        swag_visitors_customers_widget: '{s name="swag_visitors_customers_widget"}Customers online{/s}',
+        swag_last_orders_widget: '{s name="swag_last_orders_widget"}Recent orders{/s}',
+        swag_notice_widget: '{s name="swag_notice_widget"}Notepad{/s}',
+        swag_merchant_widget: '{s name="swag_merchant_widget"}Merchant clearing{/s}'
     },
 
     extend: 'Ext.data.Model',

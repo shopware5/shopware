@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order batch window
@@ -84,10 +84,10 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
      * @type { Object }
      */
     snippets: {
-        subject: '{s name=subject}Subject{/s}',
-        to: '{s name=to}To{/s}',
-        button: '{s name=button}Send mail{/s}',
-        mailTemplate: '{s name=mail_template}Mail template{/s}'
+        subject: '{s name="subject"}Subject{/s}',
+        to: '{s name="to"}To{/s}',
+        button: '{s name="button"}Send mail{/s}',
+        mailTemplate: '{s name="mail_template"}Mail template{/s}'
     },
 
     /**

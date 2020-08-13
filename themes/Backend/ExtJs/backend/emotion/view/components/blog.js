@@ -28,14 +28,14 @@
  */
 
 //{block name="backend/emotion/view/components/blog"}
-//{namespace name=backend/emotion/view/components/blog}
+//{namespace name="backend/emotion/view/components/blog"}
 Ext.define('Shopware.apps.Emotion.view.components.Blog', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-blog',
 
     snippets: {
-        entry_amount: '{s name=entry_amount}Number of entries{/s}',
-        blog_entry_selection: '{s name=blog_entry_selection}Category{/s}'
+        entry_amount: '{s name="entry_amount"}Number of entries{/s}',
+        blog_entry_selection: '{s name="blog_entry_selection"}Category{/s}'
     },
 
     /**

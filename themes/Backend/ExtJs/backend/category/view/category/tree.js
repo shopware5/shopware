@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/* {namespace name=backend/category/main} */
+/* {namespace name="backend/category/main"} */
 
 /**
  * Shopware UI - Category management main window.
@@ -97,18 +97,18 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      */
     snippets : {
         // Grid headers
-        columnCategoryHeader : '{s name=view/category_column_title}Catergories{/s}',
-        columnActionHeader : '{s name=view/action_column_title}Action{/s}',
-        columnArticleHeader : '{s name=view/articles_column_title}Articles{/s}',
+        columnCategoryHeader : '{s name="view/category_column_title"}Catergories{/s}',
+        columnActionHeader : '{s name="view/action_column_title"}Action{/s}',
+        columnArticleHeader : '{s name="view/articles_column_title"}Articles{/s}',
         // Context menu
-        contextAddSubCategory : '{s name=view/context_add_category}Add new{/s}',
-        contextDuplicateSubCategory : '{s name=view/context_duplicate_category}Duplicate{/s}',
-        contextDeleteSubCategory : '{s name=view/context_delete_category}Delete{/s}',
-        contextReloadTree : '{s name=view/context_reload_tree}Reload{/s}',
+        contextAddSubCategory : '{s name="view/context_add_category"}Add new{/s}',
+        contextDuplicateSubCategory : '{s name="view/context_duplicate_category"}Duplicate{/s}',
+        contextDeleteSubCategory : '{s name="view/context_delete_category"}Delete{/s}',
+        contextReloadTree : '{s name="view/context_reload_tree"}Reload{/s}',
 
-        treeAdd : '{s name=view/tree_add}Add new{/s}',
-        treeDuplicate : '{s name=view/tree_duplicate}Duplicate{/s}',
-        treeDelete : '{s name=view/tree_delete}Delete{/s}'
+        treeAdd : '{s name="view/tree_add"}Add new{/s}',
+        treeDuplicate : '{s name="view/tree_duplicate"}Duplicate{/s}',
+        treeDelete : '{s name="view/tree_delete"}Delete{/s}'
     },
     /**
      * Name of the root node. We have to show the root node in order to move a subcategory under the root.

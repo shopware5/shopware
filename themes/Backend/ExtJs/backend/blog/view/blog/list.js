@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/blog/view/blog}
+//{namespace name="backend/blog/view/blog"}
 
 /**
  * Shopware UI - Blog list main window.
@@ -122,31 +122,31 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
 
         var columnsData = [
             {
-                header:'{s name=list/column/title}Title{/s}',
+                header:'{s name="list/column/title"}Title{/s}',
                 dataIndex:'title',
                 renderer: me.titleRenderer,
                 flex:6
             },
             {
-                header:'{s name=list/column/number_of_comments}Pending comments{/s}',
+                header:'{s name="list/column/number_of_comments"}Pending comments{/s}',
                 dataIndex:'numberOfComments',
                 renderer: me.greenRenderer,
                 flex:3
             },
             {
-                header:'{s name=list/column/views}Views{/s}',
+                header:'{s name="list/column/views"}Views{/s}',
                 dataIndex:'views',
                 renderer: me.greenRenderer,
                 flex:1
             },
             {
-                header:'{s name=list/column/date}Display at{/s}',
+                header:'{s name="list/column/date"}Display at{/s}',
                 dataIndex:'displayDate',
                 renderer: me.dateRenderer,
                 flex:3
             },
             {
-                header:'{s name=list/column/active}Active{/s}',
+                header:'{s name="list/column/active"}Active{/s}',
                 dataIndex:'active',
                 renderer: me.activeColumnRenderer,
                 flex:1
@@ -172,7 +172,7 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
         actionColumnData.push({
             iconCls:'sprite-pencil',
             cls:'editBtn',
-            tooltip:'{s name=list/action_column/edit}Edit this blog article{/s}',
+            tooltip:'{s name="list/action_column/edit"}Edit this blog article{/s}',
             handler:function (view, rowIndex, colIndex, item) {
                 me.fireEvent('editBlogArticle', view, rowIndex, colIndex, item);
             }
@@ -182,7 +182,7 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
             iconCls:'sprite-minus-circle-frame',
             action:'delete',
             cls:'delete',
-            tooltip:'{s name=list/action_column/delete}Delete this blog article{/s}',
+            tooltip:'{s name="list/action_column/delete"}Delete this blog article{/s}',
             handler:function (view, rowIndex, colIndex, item) {
                 me.fireEvent('deleteBlogArticle', view, rowIndex, colIndex, item);
             }
@@ -191,7 +191,7 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
         actionColumnData.push({
             iconCls:'sprite-blue-document-copy',
             cls:'duplicate',
-            tooltip:'{s name=list/action_column/duplicate}Duplicate this blog{/s}',
+            tooltip:'{s name="list/action_column/duplicate"}Duplicate this blog{/s}',
             handler:function (view, rowIndex, colIndex, item) {
                 me.fireEvent('duplicateColumn', view, rowIndex, colIndex, item);
             }
@@ -214,7 +214,7 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
             /* {if {acl_is_allowed privilege=create}} */
                     {
                         iconCls:'sprite-plus-circle',
-                        text:'{s name=list/button/add}Add blog article{/s}',
+                        text:'{s name="list/button/add"}Add blog article{/s}',
                         action:'add'
                     },
             /* {/if} */
@@ -222,7 +222,7 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
                     {
 
                         iconCls:'sprite-minus-circle-frame',
-                        text:'{s name=list/button/delete}Delete selected blog articles{/s}',
+                        text:'{s name="list/button/delete"}Delete selected blog articles{/s}',
                         disabled:true,
                         action:'deleteBlogArticles'
 
@@ -237,7 +237,7 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
                         cls: 'searchfield',
                         enableKeyEvents:true,
                         checkChangeBuffer: 500,
-                        emptyText:'{s name=list/field/search}Search...{/s}'
+                        emptyText:'{s name="list/field/search"}Search...{/s}'
                     },
                     { xtype:'tbspacer', width:6 }
                 ]

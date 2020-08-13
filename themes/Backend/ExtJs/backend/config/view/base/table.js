@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/main}
+//{namespace name="backend/config/view/main"}
 
 //{block name="backend/config/view/base/table"}
 Ext.define('Shopware.apps.Config.view.base.Table', {
@@ -93,16 +93,16 @@ Ext.define('Shopware.apps.Config.view.base.Table', {
         if(me.addable) {
             items.push({
                 iconCls:'sprite-plus-circle-frame',
-                text:'{s name=table/add_text}Add entry{/s}',
-                tooltip:'{s name=table/add_tooltip}Add (ALT + INSERT){/s}',
+                text:'{s name="table/add_text"}Add entry{/s}',
+                tooltip:'{s name="table/add_tooltip"}Add (ALT + INSERT){/s}',
                 action:'add'
             });
         }
         if(me.deletable) {
             items.push({
                 iconCls:'sprite-minus-circle-frame',
-                text:'{s name=table/delete_text}Delete entry{/s}',
-                tooltip:'{s name=table/delete_tooltip}Delete (ALT + DELETE){/s}',
+                text:'{s name="table/delete_text"}Delete entry{/s}',
+                tooltip:'{s name="table/delete_tooltip"}Delete (ALT + DELETE){/s}',
                 disabled:true,
                 action:'delete'
             });

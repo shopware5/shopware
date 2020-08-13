@@ -57,11 +57,11 @@ Ext.define('Shopware.form.field.EmotionGrid', {
             iconStyling = 'width:16px; height:16px; display:inline-block; margin-right:5px';
 
         var snippets = {
-            desktop: '{s namespace=backend/emotion/list/grid name=grid/renderer/desktop}For desktop{/s}',
-            tabletLandscape: '{s namespace=backend/emotion/list/grid name=grid/renderer/tabletLandscape}For tablet landscape{/s}',
-            tablet: '{s namespace=backend/emotion/list/grid name=grid/renderer/tablet}For tablet{/s}',
-            mobileLandscape: '{s namespace=backend/emotion/list/grid name=grid/renderer/mobileLandscape}For mobile landscape{/s}',
-            mobile: '{s namespace=backend/emotion/list/grid name=grid/renderer/mobile}For mobile{/s}'
+            desktop: '{s namespace=backend/emotion/list/grid name="grid/renderer/desktop"}For desktop{/s}',
+            tabletLandscape: '{s namespace=backend/emotion/list/grid name="grid/renderer/tabletLandscape"}For tablet landscape{/s}',
+            tablet: '{s namespace=backend/emotion/list/grid name="grid/renderer/tablet"}For tablet{/s}',
+            mobileLandscape: '{s namespace=backend/emotion/list/grid name="grid/renderer/mobileLandscape"}For mobile landscape{/s}',
+            mobile: '{s namespace=backend/emotion/list/grid name="grid/renderer/mobile"}For mobile{/s}'
         };
 
         // Device detection

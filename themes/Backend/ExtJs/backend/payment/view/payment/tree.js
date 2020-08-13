@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/payment/payment}
+//{namespace name="backend/payment/payment"}
 
 /**
  * Shopware UI - Tree to select the payment
@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Payment.view.payment.Tree', {
     rootVisible: false,
     useArrows: false,
     lines: false,
-    title: '{s name=tree_panel_title}Available payments{/s}',
+    title: '{s name="tree_panel_title"}Available payments{/s}',
     store: 'Payments',
 
     /**
@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Payment.view.payment.Tree', {
         });
 
         buttons.push(Ext.create('Ext.button.Button', {
-            text: '{s name=button_new}New{/s}',
+            text: '{s name="button_new"}New{/s}',
             iconCls: 'sprite-plus-circle',
             action: 'create',
             cls: 'small secondary',
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Payment.view.payment.Tree', {
         /*{if {acl_is_allowed privilege=delete}}*/
         buttons.push('->');
         buttons.push(Ext.create('Ext.button.Button', {
-            text: '{s name=button_delete}Delete{/s}',
+            text: '{s name="button_delete"}Delete{/s}',
             iconCls: 'sprite-minus-circle',
             action: 'delete',
             name: 'delete',

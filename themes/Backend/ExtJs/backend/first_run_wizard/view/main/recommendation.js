@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/first_run_wizard/main}
+//{namespace name="backend/first_run_wizard/main"}
 //{block name="backend/first_run_wizard/view/main/recommendation"}
 
 Ext.define('Shopware.apps.FirstRunWizard.view.main.Recommendation', {
@@ -50,13 +50,13 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Recommendation', {
 
     snippets: {
         content: {
-            title: '{s name=recommendation/content/title}Recommendations{/s}',
-            recommendedPluginsMessage: '{s name=recommendation/content/recommended_plugins_message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}',
-            integratedPluginsMessage: '{s name=recommendation/content/other_plugins_message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}'
+            title: '{s name="recommendation/content/title"}Recommendations{/s}',
+            recommendedPluginsMessage: '{s name="recommendation/content/recommended_plugins_message"}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}',
+            integratedPluginsMessage: '{s name="recommendation/content/other_plugins_message"}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}'
         },
         labels: {
-            integratedPluginsLanguageLabel: '{s name=recommendation/languages/label}Recommendations for:{/s}',
-            integratedPluginsMessageLabel: '{s name=recommendation/content/other_plugins_message/label}Country specific recommendations:{/s}'
+            integratedPluginsLanguageLabel: '{s name="recommendation/languages/label"}Recommendations for:{/s}',
+            integratedPluginsMessageLabel: '{s name="recommendation/content/other_plugins_message/label"}Country specific recommendations:{/s}'
         }
     },
 

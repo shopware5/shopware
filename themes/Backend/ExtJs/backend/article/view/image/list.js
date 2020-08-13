@@ -33,7 +33,7 @@
  * The component contains also a toolbar to define the preview image, remove selected images
  * and change the displayed image size over a slider. All events of the component handled in the media controller.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/image/list"}
 Ext.define('Shopware.apps.Article.view.image.List', {
 
@@ -67,14 +67,14 @@ Ext.define('Shopware.apps.Article.view.image.List', {
      * @object
      */
     snippets: {
-        title: '{s name=image/list/title}Assigned images{/s}',
-        comboBox: '{s name=image/list/combo_box}Images per page{/s}',
-        previewButton: '{s name=image/list/preview_button}Mark as preview image{/s}',
-        removeButton: '{s name=image/list/remove_button}Remove image(s)image/list/remove_button{/s}',
-        configButton: '{s name=image/list/config_button}Open configuration{/s}',
-        attributeButton: '{s name=image/list/attribute_button}Edit attributes{/s}',
-        downloadButton: '{s name=image/list/download_button}Download image{/s}',
-        mainImage:'{s name=image/list/main_image}Preview{/s}'
+        title: '{s name="image/list/title"}Assigned images{/s}',
+        comboBox: '{s name="image/list/combo_box"}Images per page{/s}',
+        previewButton: '{s name="image/list/preview_button"}Mark as preview image{/s}',
+        removeButton: '{s name="image/list/remove_button"}Remove image(s)image/list/remove_button{/s}',
+        configButton: '{s name="image/list/config_button"}Open configuration{/s}',
+        attributeButton: '{s name="image/list/attribute_button"}Edit attributes{/s}',
+        downloadButton: '{s name="image/list/download_button"}Download image{/s}',
+        mainImage:'{s name="image/list/main_image"}Preview{/s}'
     },
 
     dragOverCls: 'drag-over',

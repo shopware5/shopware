@@ -32,7 +32,7 @@
  *
  * The tax store loads and store the Tax model
  */
-//{namespace name=backend/voucher/view/tax}
+//{namespace name="backend/voucher/view/tax"}
 //{block name="backend/voucher/store/tax"}
 Ext.define('Shopware.apps.Voucher.store.Tax', {
 
@@ -71,15 +71,15 @@ Ext.define('Shopware.apps.Voucher.store.Tax', {
         load: function(store) {
             var defaultTaxModel = Ext.create('Shopware.apps.Voucher.model.Tax',{
                 id : 'default',
-                name : '{s name=detail_general/tax_combo_box/standard}Standard{/s}'
+                name : '{s name="detail_general/tax_combo_box/standard"}Standard{/s}'
             }),
             autoTaxModel = Ext.create('Shopware.apps.Voucher.model.Tax',{
                 id : 'auto',
-                name : '{s name=detail_general/tax_combo_box/auto}Auto detection{/s}'
+                name : '{s name="detail_general/tax_combo_box/auto"}Auto detection{/s}'
             }),
             noneTaxModel = Ext.create('Shopware.apps.Voucher.model.Tax',{
                 id : 'none',
-                name : '{s name=detail_general/tax_combo_box/tax_free}Tax-free{/s}'
+                name : '{s name="detail_general/tax_combo_box/tax_free"}Tax-free{/s}'
             });
 
             //insert the models at first position to the tax combobox

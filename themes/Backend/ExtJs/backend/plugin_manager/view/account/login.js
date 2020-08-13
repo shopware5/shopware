@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/plugin_manager/translation}
+//{namespace name="backend/plugin_manager/translation"}
 
 //{block name="backend/plugin_manager/view/account/login"}
 Ext.define('Shopware.apps.PluginManager.view.account.Login', {
@@ -39,13 +39,13 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
      * @object
      */
     snippets: {
-        title: '{s name=account/login/title}Already have an account?{/s}',
-        shopwareId: '{s name=account/login/shopwareId}Shopware ID{/s}',
-        password: '{s name=account/login/password}Password{/s}',
-        passwordMessage: '{s name=account/login/passwordMessage}The passwords do not match.{/s}',
-        forgotPassword: '{s name=account/login/forgotPassword}Forgot your password?{/s}',
-        forgotPasswordLink: '{s name=account/login/forgotPasswordLink}https://account.shopware.com/#/forgotPassword{/s}',
-        registerDomain: '{s name=account/login/register_domain}Register domain{/s}',
+        title: '{s name="account/login/title"}Already have an account?{/s}',
+        shopwareId: '{s name="account/login/shopwareId"}Shopware ID{/s}',
+        password: '{s name="account/login/password"}Password{/s}',
+        passwordMessage: '{s name="account/login/passwordMessage"}The passwords do not match.{/s}',
+        forgotPassword: '{s name="account/login/forgotPassword"}Forgot your password?{/s}',
+        forgotPasswordLink: '{s name="account/login/forgotPasswordLink"}https://account.shopware.com/#/forgotPassword{/s}',
+        registerDomain: '{s name="account/login/register_domain"}Register domain{/s}',
         cancelButton: '{s name="account/login/cancel"}Cancel{/s}',
         loginButton: '{s name="account/login/login"}Login{/s}'
     },

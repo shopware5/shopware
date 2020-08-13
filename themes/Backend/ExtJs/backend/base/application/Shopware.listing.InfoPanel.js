@@ -1,5 +1,5 @@
 
-//{namespace name=backend/application/main}
+//{namespace name="backend/application/main"}
 //{block name="backend/application/Shopware.listing.InfoPanel"}
 
 Ext.define('Shopware.listing.InfoPanel', {
@@ -128,11 +128,11 @@ Ext.define('Shopware.listing.InfoPanel', {
              *    }
              * });
              *
-             * This definition allows you to display only the name model field within the 
+             * This definition allows you to display only the name model field within the
              * info panel. The `undefined` value says that shopware creates a default info field
              * for the name field with the following template:
              *      '<p style="padding: 2px"><b>' + field.name +':</b> {literal}{' + field.name + '}{/literal}</p>'
-             * 
+             *
              * Each info field is created in the { @link #createTemplateForField }.
              * If you want to modify the template of a info field, you can set
              * three different values:

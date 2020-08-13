@@ -31,7 +31,7 @@
  * Shopware UI - Blog detail page - Sidebar
  * The assigned_articles component contains the configuration elements for the assgined blog articles relations.
  */
-//{namespace name=backend/blog/view/blog}
+//{namespace name="backend/blog/view/blog"}
 //{block name="backend/blog/view/detail/sidebar/assigned_articles"}
 Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
     /**
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
      */
     initComponent:function () {
         var me = this;
-        me.title = '{s name=detail/sidebar/assigned_articles/title}Assigned Articles{/s}';
+        me.title = '{s name="detail/sidebar/assigned_articles/title"}Assigned Articles{/s}';
         me.items = me.createElements();
         me.callParent(arguments);
     },
@@ -132,7 +132,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
 
         return Ext.create('Ext.container.Container', {
             style: 'font-style: italic; color: #999; margin: 0 0 8px 0;',
-            html: '{s name=detail/sidebar/assigned_articles/notice}At this point you have the option of linking articles with the current blog article. The linked articles are automatically displayed on the blog detail page.{/s}'
+            html: '{s name="detail/sidebar/assigned_articles/notice"}At this point you have the option of linking articles with the current blog article. The linked articles are automatically displayed on the blog detail page.{/s}'
         });
     },
 
@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
         return Ext.create('Ext.form.FieldSet', {
             layout: 'anchor',
             padding: 10,
-            title:'{s name=detail/sidebar/assigned_articles/field_set/title}Assign article{/s}',
+            title:'{s name="detail/sidebar/assigned_articles/field_set/title"}Assign article{/s}',
             defaults: {
                 labelWidth: 120,
                 anchor: '100%'
@@ -179,7 +179,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
 
         return Ext.create('Ext.button.Button', {
             cls: 'small secondary',
-            text: '{s name=detail/sidebar/assigned_articles/button/add}Add article{/s}',
+            text: '{s name="detail/sidebar/assigned_articles/button/add"}Add article{/s}',
             handler: function() {
                 me.fireEvent(me.addEvent, me, me.articleGrid, me.articleSearch);
             }
@@ -195,7 +195,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
 
         return Ext.create('Shopware.form.field.ArticleSearch', {
             name: 'number',
-            fieldLabel: '{s name=detail/sidebar/assigned_articles/article_search}Article{/s}',
+            fieldLabel: '{s name="detail/sidebar/assigned_articles/article_search"}Article{/s}',
             returnValue: 'name',
             hiddenReturnValue: 'number',
             articleStore: Ext.create('Shopware.store.Article'),
@@ -218,7 +218,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
         var me = this;
 
         return Ext.create('Ext.grid.Panel', {
-            title: '{s name=detail/sidebar/assigned_articles/grid/title}Assigned Articles{/s}',
+            title: '{s name="detail/sidebar/assigned_articles/grid/title"}Assigned Articles{/s}',
             cls: Ext.baseCSSPrefix + 'free-standing-grid',
             store: me.gridStore,
             name: 'listing',
@@ -226,11 +226,11 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
             minHeight: 50,
             columns: [
                 {
-                    header: '{s name=detail/sidebar/assigned_articles/grid/column/article_name}Article name{/s}',
+                    header: '{s name="detail/sidebar/assigned_articles/grid/column/article_name"}Article name{/s}',
                     dataIndex: 'name',
                     flex: 2
                 }, {
-                    header: '{s name=detail/sidebar/assigned_articles/grid/column/article_number}Article number{/s}',
+                    header: '{s name="detail/sidebar/assigned_articles/grid/column/article_number"}Article number{/s}',
                     dataIndex: 'number',
                     flex: 1
                 }, {
@@ -239,14 +239,14 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
                     items: [
                         {
                             iconCls: 'sprite-inbox',
-                            tooltip: '{s name=detail/sidebar/assigned_articles/grid/action/open_articel}Open article{/s}',
+                            tooltip: '{s name="detail/sidebar/assigned_articles/grid/action/open_articel"}Open article{/s}',
                             handler: function (view, rowIndex, colIndex, item, opts, record) {
                                 me.fireEvent('openArticleModule', record);
                             }
                         },
                         {
                             iconCls: 'sprite-minus-circle-frame',
-                            tooltip: '{s name=detail/sidebar/assigned_articles/grid/action/delete}Delete article mapping{/s}',
+                            tooltip: '{s name="detail/sidebar/assigned_articles/grid/action/delete"}Delete article mapping{/s}',
                             handler: function (view, rowIndex, colIndex, item, opts, record) {
                                 me.fireEvent(me.removeEvent, record, me.articleGrid);
                             }

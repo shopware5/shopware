@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/systeminfo/view}
+//{namespace name="backend/systeminfo/view"}
 
 /**
  * Shopware UI - Grid for the plugin-versions
@@ -93,11 +93,11 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Versionlist', {
 
         var columns = [
             {
-                header: '{s name=version_grid/column/name}Name{/s}',
+                header: '{s name="version_grid/column/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1
             },{
-                header: '{s name=version_grid/column/version}Version{/s}',
+                header: '{s name="version_grid/column/version"}Version{/s}',
                 dataIndex: 'version',
                 align: 'right',
                 flex: 1

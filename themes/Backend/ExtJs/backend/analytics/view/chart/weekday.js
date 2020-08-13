@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/chart/weekday"}
 Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
     extend: 'Shopware.apps.Analytics.view.main.Chart',
@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
                 type: 'Category',
                 position: 'bottom',
                 fields: ['date'],
-                title: '{s name=chart/weekday/titleBottom}Weekday{/s}',
+                title: '{s name="chart/weekday/titleBottom"}Weekday{/s}',
                 label: {
                     renderer:function (value) {
                         return Ext.util.Format.date(value, 'l');
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
                     {
                         xField: 'displayDate',
                         yField: 'turnover',
-                        title: '{s name=general/turnover}Turnover{/s}'
+                        title: '{s name="general/turnover"}Turnover{/s}'
                     },
                     {
                         width: 180,
@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
             grid: true,
             position: 'left',
             fields: me.getAxesFields('turnover'),
-            title: '{s name=general/turnover}Turnover{/s}'
+            title: '{s name="general/turnover"}Turnover{/s}'
         });
 
         me.callParent(arguments);

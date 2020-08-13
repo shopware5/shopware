@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/view/widgets}
+//{namespace name="backend/index/view/widgets"}
 
 /**
  * Shopware UI - Rating Widget
@@ -32,7 +32,7 @@
 Ext.define('Shopware.apps.Index.view.widgets.Rating', {
     extend: 'Shopware.apps.Index.view.widgets.Base',
     alias: 'widget.swag-rating-widget',
-    title: '{s name=rating/title}Unverified product ratings{/s}',
+    title: '{s name="rating/title"}Unverified product ratings{/s}',
     layout: 'fit',
 
     /**
@@ -41,13 +41,13 @@ Ext.define('Shopware.apps.Index.view.widgets.Rating', {
      */
     snippets: {
         headers: {
-            product: '{s name=rating/headers/product}Product{/s}',
-            date: '{s name=rating/headers/date}Date{/s}',
-            author: '{s name=rating/headers/author}Author{/s}',
-            title: '{s name=rating/headers/title}Title{/s}'
+            product: '{s name="rating/headers/product"}Product{/s}',
+            date: '{s name="rating/headers/date"}Date{/s}',
+            author: '{s name="rating/headers/author"}Author{/s}',
+            title: '{s name="rating/headers/title"}Title{/s}'
         },
         tooltips: {
-            rating: '{s name=merchant/tooltips/rating}Open Rating{/s}',
+            rating: '{s name="merchant/tooltips/rating"}Open Rating{/s}',
         }
     },
 

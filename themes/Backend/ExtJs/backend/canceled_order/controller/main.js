@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/canceled_order/controller/main}
+//{namespace name="backend/canceled_order/controller/main"}
 
 /**
  * Shopware Controller - Main controller

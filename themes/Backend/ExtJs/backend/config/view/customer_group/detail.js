@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/customer_group}
+//{namespace name="backend/config/view/customer_group"}
 
 //{block name="backend/config/view/customer_group/detail"}
 Ext.define('Shopware.apps.Config.view.customerGroup.Detail', {
@@ -36,14 +36,14 @@ Ext.define('Shopware.apps.Config.view.customerGroup.Detail', {
 
     snippets: {
         items:{
-            name: '{s name=items/name}Name{/s}',
-            key: '{s name=items/key}Key{/s}',
-            taxInput: '{s name=items/tax_input}Tax input{/s}',
-            taxOutput: '{s name=items/tax_output}Tax output{/s}',
-            discountMode:'{s name=items/discount_mode}Discount mode{/s}',
-            discount:'{s name=items/discount}Discount{/s}',
-            minimumOrder:'{s name=items/minimum_order}Min. order value{/s}',
-            minimumOrderSurcharge:'{s name=minimum_order_surcharge}Order surcharge{/s}'
+            name: '{s name="items/name"}Name{/s}',
+            key: '{s name="items/key"}Key{/s}',
+            taxInput: '{s name="items/tax_input"}Tax input{/s}',
+            taxOutput: '{s name="items/tax_output"}Tax output{/s}',
+            discountMode:'{s name="items/discount_mode"}Discount mode{/s}',
+            discount:'{s name="items/discount"}Discount{/s}',
+            minimumOrder:'{s name="items/minimum_order"}Min. order value{/s}',
+            minimumOrderSurcharge:'{s name="minimum_order_surcharge"}Order surcharge{/s}'
         }
     },
 

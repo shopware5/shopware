@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+// {namespace name="backend/customer/view/main"}
 // {block name="backend/customer/view/chart/chart"}
 Ext.define('Shopware.apps.Customer.view.chart.Chart', {
 

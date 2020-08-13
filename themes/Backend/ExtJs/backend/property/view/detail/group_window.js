@@ -1,5 +1,5 @@
 
-//{namespace name=backend/property/view/main}
+//{namespace name="backend/property/view/main"}
 //{block name="backend/property/view/detail/group_window"}
 
 Ext.define('Shopware.apps.Property.view.detail.GroupWindow', {
@@ -12,14 +12,14 @@ Ext.define('Shopware.apps.Property.view.detail.GroupWindow', {
 
     fields: [{
         xtype: 'textfield',
-        fieldLabel: '{s name=group/column_name}{/s}',
+        fieldLabel: '{s name="group/column_name"}{/s}',
         translatable: true,
         name: 'name',
         translationName: 'optionName',
         allowBlank: false
     }, {
         xtype: 'checkbox',
-        fieldLabel: '{s name=group/column_filterable}{/s}',
+        fieldLabel: '{s name="group/column_filterable"}{/s}',
         inputValue: true,
         uncheckedValue: false,
         name: 'filterable'

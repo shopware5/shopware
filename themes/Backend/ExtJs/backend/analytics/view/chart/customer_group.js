@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/chart/customer_group"}
 Ext.define('Shopware.apps.Analytics.view.chart.CustomerGroup', {
     extend: 'Shopware.apps.Analytics.view.main.Chart',
@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerGroup', {
                             (me.subApp.currencyAtEnd == 1)
                         );
 
-                        var title = '{s name=general/turnover}Turnover{/s}: ' + value;
+                        var title = '{s name="general/turnover"}Turnover{/s}: ' + value;
                         this.setTitle(title);
                     }
                 }

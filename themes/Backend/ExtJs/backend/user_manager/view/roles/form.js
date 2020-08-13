@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/user_manager/view/main}
+//{namespace name="backend/user_manager/view/main"}
 //{block name="backend/user_manager/view/roles/form"}
 Ext.define('Shopware.apps.UserManager.view.roles.Form', {
     extend: 'Enlight.app.Window',

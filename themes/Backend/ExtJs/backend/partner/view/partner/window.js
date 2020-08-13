@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/partner/view/partner}
+//{namespace name="backend/partner/view/partner"}
 
 /**
  * Shopware UI - Partner detail main window.
@@ -37,7 +37,7 @@
 //{block name="backend/partner/view/partner/window"}
 Ext.define('Shopware.apps.Partner.view.partner.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window/detail_title}Partner configuration{/s}',
+    title: '{s name="window/detail_title"}Partner configuration{/s}',
     alias: 'widget.partner-partner-window',
     border: false,
     autoShow: true,
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Window', {
         var me = this;
         return ['->',
             {
-                text:'{s name=detail_general/button/cancel}Cancel{/s}',
+                text:'{s name="detail_general/button/cancel"}Cancel{/s}',
                 cls: 'secondary',
                 scope:me,
                 handler:function () {
@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Window', {
                 }
             },
             {
-                text:'{s name=detail_general/button/save}Save{/s}',
+                text:'{s name="detail_general/button/save"}Save{/s}',
                 action:'save',
                 cls:'primary'
             }

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order detail page
@@ -56,12 +56,12 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
      * @object
      */
     snippets:{
-        title:'{s name=debit/title}Payment data{/s}',
-        payment:'{s name=debit/current_payment}Payment method{/s}',
-        account:'{s name=debit/account}Account{/s}',
-        accountHolder:'{s name=debit/account_holder}Account holder{/s}',
-        bankName:'{s name=debit/bank_name}Bank name{/s}',
-        bankCode:'{s name=debit/bank_code}Bank code{/s}'
+        title:'{s name="debit/title"}Payment data{/s}',
+        payment:'{s name="debit/current_payment"}Payment method{/s}',
+        account:'{s name="debit/account"}Account{/s}',
+        accountHolder:'{s name="debit/account_holder"}Account holder{/s}',
+        bankName:'{s name="debit/bank_name"}Bank name{/s}',
+        bankCode:'{s name="debit/bank_code"}Bank code{/s}'
     },
 
     /**

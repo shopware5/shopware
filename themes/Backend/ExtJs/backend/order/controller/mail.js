@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware Controller - Order backend module
@@ -59,17 +59,17 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
      * @type { Object }
      */
     snippets: {
-        growlMessage: '{s name=growlMessage}Order{/s}',
+        growlMessage: '{s name="growlMessage"}Order{/s}',
 
-        successTitle: '{s name=sent_success_title}Email has been sent to customer [0]{/s}',
-        successMessage: '{s name=sent_success_message}Email sent to customer [0]{/s}',
+        successTitle: '{s name="sent_success_title"}Email has been sent to customer [0]{/s}',
+        successMessage: '{s name="sent_success_message"}Email sent to customer [0]{/s}',
 
-        errorTitle: '{s name=sent_error_title}Email could not be sent.{/s}',
-        errorMessage: '{s name=sent_error_message}An error has occurred while sending the status mail:{/s}',
+        errorTitle: '{s name="sent_error_title"}Email could not be sent.{/s}',
+        errorMessage: '{s name="sent_error_message"}An error has occurred while sending the status mail:{/s}',
 
         confirmation: {
-            title: '{s name=mail_template_change/confirmation/title}Change mail template?{/s}',
-            message: '{s name=mail_template_change/confirmation/message}You have changed the content of the e-mail, if you change the mail template these changes will be lost. Do you still want to change the template?{/s}'
+            title: '{s name="mail_template_change/confirmation/title"}Change mail template?{/s}',
+            message: '{s name="mail_template_change/confirmation/message"}You have changed the content of the e-mail, if you change the mail template these changes will be lost. Do you still want to change the template?{/s}'
         }
     },
 
@@ -175,7 +175,7 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
 
                 failure: function (response) {
                     Shopware.Notification.createGrowlMessage(
-                        '{s name=document/attachemnt/error}Error{/s}',
+                        '{s name="document/attachemnt/error"}Error{/s}',
                         response.status + '<br />' + response.statusText
                     );
                 },

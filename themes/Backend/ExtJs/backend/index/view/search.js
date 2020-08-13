@@ -27,7 +27,7 @@
  * This component creates the global search for the Shopware
  * Backend.
  */
-//{namespace name=backend/index/view/main}
+//{namespace name="backend/index/view/main"}
 Ext.define('Shopware.apps.Index.view.Search', {
     extend: 'Ext.container.Container',
     alias: 'widget.searchfield',
@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Index.view.Search', {
         me.callParent(arguments);
 
         me.searchField = Ext.create('Ext.form.field.Text', {
-            emptyText: '{s name=view/search}Search...{/s}',
+            emptyText: '{s name="view/search"}Search...{/s}',
             cls: 'searchfield',
             margin: '5 0',
             allowBlank: true,

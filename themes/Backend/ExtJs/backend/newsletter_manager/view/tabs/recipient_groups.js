@@ -37,19 +37,19 @@
 Ext.define('Shopware.apps.NewsletterManager.view.tabs.RecipientGroups', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.newsletter-manager-tabs-recipient-groups',
-    title: '{s name=recipientGroups}Recipient groups{/s}',
+    title: '{s name="recipientGroups"}Recipient groups{/s}',
     region: 'center',
 
     border: false,
 
     snippets : {
         columns : {
-            groupName: '{s name=columns/groupName}Group name{/s}',
-            recipients: '{s name=columns/recipients}# Recipients{/s}',
-            groupId: '{s name=columns/id}ID{/s}',
-            actions: '{s name=columns/actions}Actions{/s}'
+            groupName: '{s name="columns/groupName"}Group name{/s}',
+            recipients: '{s name="columns/recipients"}# Recipients{/s}',
+            groupId: '{s name="columns/id"}ID{/s}',
+            actions: '{s name="columns/actions"}Actions{/s}'
         },
-        numberOfGroups: '{s name=numberOfGroups}Group(s){/s}'
+        numberOfGroups: '{s name="numberOfGroups"}Group(s){/s}'
     },
 
     /**
@@ -99,9 +99,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.RecipientGroups', {
                 {
                     formatHeader: function(field) {
                         if(field === false) {
-                            return '{s name=ownNewsletterGroups}Own recipient groups{/s}';
+                            return '{s name="ownNewsletterGroups"}Own recipient groups{/s}';
                         }else{
-                            return '{s name=customerGroups}Customer groups{/s}';
+                            return '{s name="customerGroups"}Customer groups{/s}';
                         }
                     }
                 }
@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.RecipientGroups', {
             {
                 iconCls:'sprite-minus-circle-frame',
                 action:'delete',
-                tooltip:'{s name=action/delete}Delete{/s}',
+                tooltip:'{s name="action/delete"}Delete{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('deleteSelected', [record]);
                 },
@@ -209,7 +209,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.RecipientGroups', {
         var me = this;
 
         me.deleteSelected = Ext.create('Ext.button.Button',{
-            text: '{s name=deleteSelected}Delete selected{/s}',
+            text: '{s name="deleteSelected"}Delete selected{/s}',
             iconCls: 'sprite-minus-circle',
             disabled: true,
             handler: function() {
@@ -233,7 +233,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.RecipientGroups', {
                 {
                     xtype: 'button',
                     iconCls: 'sprite-plus-circle',
-                    text: '{s name=createOwnNewsletterGroup}Create own newsletter group{/s}',
+                    text: '{s name="createOwnNewsletterGroup"}Create own newsletter group{/s}',
                     handler: function() {
                         me.fireEvent('createNewsletterGroup', me.store);
                     }

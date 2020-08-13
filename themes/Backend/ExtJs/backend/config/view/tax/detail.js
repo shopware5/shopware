@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/tax/detail"}
 Ext.define('Shopware.apps.Config.view.tax.Detail', {
@@ -49,12 +49,12 @@ Ext.define('Shopware.apps.Config.view.tax.Detail', {
         var me = this;
         return [{
             name: 'name',
-            fieldLabel: '{s name=tax/detail/name_label}Name{/s}'
+            fieldLabel: '{s name="tax/detail/name_label"}Name{/s}'
         },{
             xtype: 'config-element-number',
             name: 'tax',
             decimalPrecision: 2,
-            fieldLabel: '{s name=tax/detail/tax_label}Default tax{/s}'
+            fieldLabel: '{s name="tax/detail/tax_label"}Default tax{/s}'
         }, {
             xtype: 'config-tax-rule'
         }];

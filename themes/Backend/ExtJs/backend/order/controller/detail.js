@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware Controller - Order backend module
@@ -51,54 +51,54 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
     ],
 
     snippets: {
-        successTitle:'{s name=message/save/success_title}Successful{/s}',
-        failureTitle:'{s name=message/save/error_title}Error{/s}',
-        warningTitle:'{s name=message/save/warning_title}Warning{/s}',
+        successTitle:'{s name="message/save/success_title"}Successful{/s}',
+        failureTitle:'{s name="message/save/error_title"}Error{/s}',
+        warningTitle:'{s name="message/save/warning_title"}Warning{/s}',
         internalComment: {
-            successMessage: '{s name=message/internal_comment/success}Internal comment has been saved successfully for order [0]{/s}',
-            failureMessage: '{s name=message/internal_comment/failure}An error has occurred while saving the internal comment for order [0].{/s}'
+            successMessage: '{s name="message/internal_comment/success"}Internal comment has been saved successfully for order [0]{/s}',
+            failureMessage: '{s name="message/internal_comment/failure"}An error has occurred while saving the internal comment for order [0].{/s}'
         },
         externalComment: {
-            successMessage: '{s name=message/external_comment/success}External comment has been saved successfully for order [0]{/s}',
-            failureMessage: '{s name=message/external_comment/failure}An error has occurred while saving the external comment for order [0].{/s}'
+            successMessage: '{s name="message/external_comment/success"}External comment has been saved successfully for order [0]{/s}',
+            failureMessage: '{s name="message/external_comment/failure"}An error has occurred while saving the external comment for order [0].{/s}'
         },
         overview: {
-            successMessage: '{s name=message/overview/success}Order [0] has been saved successfully{/s}',
-            failureMessage: '{s name=message/overview/failure}An error has occurred while saving order [0].{/s}'
+            successMessage: '{s name="message/overview/success"}Order [0] has been saved successfully{/s}',
+            failureMessage: '{s name="message/overview/failure"}An error has occurred while saving order [0].{/s}'
         },
         details: {
-            successMessage: '{s name=message/details/success}The order addresses and payment method have been saved successfully for order [0]{/s}',
-            failureMessage: '{s name=message/details/failure}An error has occurred while saving the order details for order [0].{/s}'
+            successMessage: '{s name="message/details/success"}The order addresses and payment method have been saved successfully for order [0]{/s}',
+            failureMessage: '{s name="message/details/failure"}An error has occurred while saving the order details for order [0].{/s}'
         },
         positions: {
-            successMessage: '{s name=message/positions/success}The order position has been saved successfully{/s}',
-            failureMessage: '{s name=message/positions/failure}An error has occurred while saving the order positions.{/s}',
-            nonEditable: '{s name=message/positions/nonEditable}This article is not editable{/s}'
+            successMessage: '{s name="message/positions/success"}The order position has been saved successfully{/s}',
+            failureMessage: '{s name="message/positions/failure"}An error has occurred while saving the order positions.{/s}',
+            nonEditable: '{s name="message/positions/nonEditable"}This article is not editable{/s}'
         },
         documents: {
-            successMessage: '{s name=message/documents/success}Document has been created successfully{/s}',
-            failureMessage: '{s name=message/documents/failure}An error has occurred while creating the order document.{/s}'
+            successMessage: '{s name="message/documents/success"}Document has been created successfully{/s}',
+            failureMessage: '{s name="message/documents/failure"}An error has occurred while creating the order document.{/s}'
         },
         delete: {
-            title: '{s name=message/delete/title}Delete selected positions{/s}',
-            message: '{s name=message/delete/message}There have been marked [0] positions. Are you sure you want to delete all selected positions?{/s}',
-            successMessage: '{s name=message/delete/success}The order position(s) has been removed successfully{/s}',
-            failureMessage: '{s name=message/delete/failure}An error has occurred while saving the order position(s).{/s}'
+            title: '{s name="message/delete/title"}Delete selected positions{/s}',
+            message: '{s name="message/delete/message"}There have been marked [0] positions. Are you sure you want to delete all selected positions?{/s}',
+            successMessage: '{s name="message/delete/success"}The order position(s) has been removed successfully{/s}',
+            failureMessage: '{s name="message/delete/failure"}An error has occurred while saving the order position(s).{/s}'
         },
         convertOrder: {
-            title: '{s name=convertOrder/title}Convert order?{/s}',
-            message: '{s name=convertOrder/message}Do you want to convert this order to a regular order?{/s}',
-            successTitle: '{s name=convertOrderSuccess/tile}Order converted{/s}'
+            title: '{s name="convertOrder/title"}Convert order?{/s}',
+            message: '{s name="convertOrder/message"}Do you want to convert this order to a regular order?{/s}',
+            successTitle: '{s name="convertOrderSuccess/tile"}Order converted{/s}'
         },
         overwriteOrder: {
-            title: '{s name=overwriteOrder/title}Overwrite most recent changes{/s}',
-            message: '{s name=overwriteOrder/message}The order has been changed by another user in the meantime. To prevent overwriting these changes, saving the order was aborted. To show these changes, please close the order and re-open it.<br /><br /><b>Do you want to overwrite the latest changes?</b>{/s}',
+            title: '{s name="overwriteOrder/title"}Overwrite most recent changes{/s}',
+            message: '{s name="overwriteOrder/message"}The order has been changed by another user in the meantime. To prevent overwriting these changes, saving the order was aborted. To show these changes, please close the order and re-open it.<br /><br /><b>Do you want to overwrite the latest changes?</b>{/s}',
         },
         overwriteDocument: {
-            title: '{s name=document/overwrite/confirmation/title}{/s}',
-            message: '{s name=document/overwrite/confirmation/message}{/s}',
+            title: '{s name="document/overwrite/confirmation/title"}{/s}',
+            message: '{s name="document/overwrite/confirmation/message"}{/s}',
         },
-        growlMessage: '{s name=growlMessage}Order{/s}'
+        growlMessage: '{s name="growlMessage"}Order{/s}'
     },
 
     /**
@@ -198,7 +198,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         });
                         window.destroy();
                     } else {
-                        Shopware.Notification.createGrowlMessage('{s name=convertError}Order was not converted{/s}', status.message);
+                        Shopware.Notification.createGrowlMessage('{s name="convertError"}Order was not converted{/s}', status.message);
                     }
                 }
             });

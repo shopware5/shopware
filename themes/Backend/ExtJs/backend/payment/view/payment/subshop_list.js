@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/payment/payment}
+//{namespace name="backend/payment/payment"}
 
 /**
  * Shopware UI - Grid for Subshop-Selection
@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Payment.view.payment.SubshopList', {
      */
     getColumns: function(){
         var columns =  [{
-            header: '{s name=column_subShopSelection_name}Name{/s}',
+            header: '{s name="column_subShopSelection_name"}Name{/s}',
             flex: 1,
             dataIndex: 'name'
         }];

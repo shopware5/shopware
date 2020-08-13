@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/field/property"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Property', {
     extend: 'Shopware.apps.ProductStream.view.condition_list.field.Grid',

@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * SEO fieldSet for
@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
     /**
      * Description of the fieldSet
      */
-    caption: '{s name=tabs/settings/http_cache/title}HTTP Cache{/s}',
+    caption: '{s name="tabs/settings/http_cache/title"}HTTP Cache{/s}',
 
     layout: 'anchor',
 
@@ -68,56 +68,56 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/information}Information{/s}',
+                title: '{s name="fieldset/information"}Information{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name=fieldset/cache/info}{/s}")
+                    me.createDescriptionContainer('{s name="fieldset/cache/info"}{/s}')
                 ]},
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/http_cache_warmer/title}Cache Warmer{/s}',
+                title: '{s name="fieldset/http_cache_warmer/title"}Cache Warmer{/s}',
                 items: [
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'httpCacheWarmer',
                         showEvent: 'showMultiRequestTasks',
-                        title: '{s name=button/title/http_cache/warmUp}Warm up http cache{/s}'
+                        title: '{s name="button/title/http_cache/warmUp"}Warm up http cache{/s}'
                     },
-                    me.createDescriptionContainer("{s name=fieldset/cache_warmer/info}{/s}")
+                    me.createDescriptionContainer('{s name="fieldset/cache_warmer/info"}{/s}')
                 ]},
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/configuration}Configuration{/s}',
+                title: '{s name="fieldset/configuration"}Configuration{/s}',
                 items: [
                     {
-                        fieldLabel: '{s name=fieldset/http/enabled}Enable{/s}',
+                        fieldLabel: '{s name="fieldset/http/enabled"}Enable{/s}',
                         name: 'httpCache[enabled]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/http/ban}Enable Proxy BAN{/s}',
+                        fieldLabel: '{s name="fieldset/http/ban"}Enable Proxy BAN{/s}',
                         name: 'httpCache[HttpCache:proxyPrune]',
                         xtype: 'checkbox',
-                        helpText: '{s name=fieldset/http/ban/help}{/s}',
+                        helpText: '{s name="fieldset/http/ban/help"}{/s}',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/http/url}Alternate proxy URL{/s}',
+                        fieldLabel: '{s name="fieldset/http/url"}Alternate proxy URL{/s}',
                         name: 'httpCache[HttpCache:proxy]',
-                        helpText: '{s name=fieldset/http/url/help}{/s}',
+                        helpText: '{s name="fieldset/http/url/help"}{/s}',
                         xtype: 'textfield'
                     },
                     {
-                        fieldLabel: '{s name=fieldset/http/admin}Admin view{/s}',
+                        fieldLabel: '{s name="fieldset/http/admin"}Admin view{/s}',
                         name: 'httpCache[HttpCache:admin]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true,
-                        helpText: '{s name=fieldset/http/admin/help}{/s}',
+                        helpText: '{s name="fieldset/http/admin/help"}{/s}',
                         margin: '0 0 20 0'
                     },
                     {

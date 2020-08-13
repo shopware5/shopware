@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/mail/view/attachments}
+//{namespace name="backend/mail/view/attachments"}
 
 /**
  * todo@all: Documentation
@@ -110,11 +110,11 @@ Ext.define('Shopware.apps.Mail.view.main.Attachments', {
             dataIndex: 'filename',
             flex: 1,
             hideable: false,
-            text: '{s name=label_filename}File name{/s}'
+            text: '{s name="label_filename"}File name{/s}'
         }, {
             dataIndex: 'size',
             hideable: false,
-            text: '{s name=label_filesize}Size{/s}'
+            text: '{s name="label_filesize"}Size{/s}'
         }];
 
         /*{if {acl_is_allowed privilege=delete}}*/
@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.Mail.view.main.Attachments', {
             items: [{
                 action: 'delete',
                 cls: 'deleteBtn',
-                tooltip: '{s name=tooltip_delete_attachment}Delete this attachment{/s}',
+                tooltip: '{s name="tooltip_delete_attachment"}Delete this attachment{/s}',
                 iconCls: 'sprite-minus-circle-frame',
                 handler: function(grid, rowIndex, colIndex) {
                     me.fireEvent('onDeleteSingle', grid, rowIndex, colIndex);
@@ -158,7 +158,7 @@ Ext.define('Shopware.apps.Mail.view.main.Attachments', {
             xtype: 'mediafield',
             buttonOnly: true,
             multiSelect: true,
-            buttonText: '{s name=button_media}Add attachments{/s}',
+            buttonText: '{s name="button_media"}Add attachments{/s}',
             action: 'main-attachments-add',
             buttonIconCls: ''
         });
@@ -167,7 +167,7 @@ Ext.define('Shopware.apps.Mail.view.main.Attachments', {
         /*{if {acl_is_allowed privilege=update}}*/
         buttons.push({
             xtype: 'button',
-            text: '{s name=button_delete_attachments}Delete all selected attachments{/s}',
+            text: '{s name="button_delete_attachments"}Delete all selected attachments{/s}',
             action: 'main-attachments-delete',
             disabled: true
         });

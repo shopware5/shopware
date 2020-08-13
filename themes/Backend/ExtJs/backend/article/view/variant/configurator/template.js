@@ -38,7 +38,7 @@
  * @package Article
  * @subpackage Variants
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/variant/configurator/template"}
 Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
     /**
@@ -109,52 +109,52 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
      */
     snippets: {
         baseFieldSet: {
-            title:'{s name=detail/base/title_new}Head data{/s}',
-            number: '{s name=detail/base/number}Article number{/s}',
-            active: '{s name=detail/base/active}Active{/s}',
-            activeBox: '{s name=detail/base/active_box}Article will be displayed in store front{/s}',
-            numberValidation: '{s name=detail/base/number_validation}The inserted article number already exists!{/s}',
-            additionalText: '{s name=detail/base/additional_text}Additional text{/s}',
-            purchasePrice: '{s name=detail/base/purchase_price}Purchase price{/s}'
+            title:'{s name="detail/base/title_new"}Head data{/s}',
+            number: '{s name="detail/base/number"}Article number{/s}',
+            active: '{s name="detail/base/active"}Active{/s}',
+            activeBox: '{s name="detail/base/active_box"}Article will be displayed in store front{/s}',
+            numberValidation: '{s name="detail/base/number_validation"}The inserted article number already exists!{/s}',
+            additionalText: '{s name="detail/base/additional_text"}Additional text{/s}',
+            purchasePrice: '{s name="detail/base/purchase_price"}Purchase price{/s}'
         },
         basePrice: {
-            title:'{s name=detail/base_price/title}Base price calculation{/s}',
-            content:'{s name=detail/base_price/content}Content{/s}',
-            unit:'{s name=detail/base_price/unit}Unit{/s}',
-            basicUnit:'{s name=detail/base_price/basic_unit}Basic unit{/s}',
-            packingUnit:'{s name=detail/base_price/packing_unit}Packing unit{/s}',
-            empty:'{s name=empty}Please select...{/s}'
+            title:'{s name="detail/base_price/title"}Base price calculation{/s}',
+            content:'{s name="detail/base_price/content"}Content{/s}',
+            unit:'{s name="detail/base_price/unit"}Unit{/s}',
+            basicUnit:'{s name="detail/base_price/basic_unit"}Basic unit{/s}',
+            packingUnit:'{s name="detail/base_price/packing_unit"}Packing unit{/s}',
+            empty:'{s name="empty"}Please select...{/s}'
         },
         settings: {
-            title:'{s name=detail/settings/title}Settings{/s}',
-            supplierNumber:'{s name=detail/settings/supplier_number}Supplier number{/s}',
-            weight: '{s name=detail/settings/weight_bw}Weight (bw){/s}',
-            deliveryTime: '{s name=detail/settings/delivery_time}Delivery time (days){/s}',
-            stock: '{s name=detail/settings/stock}Stock{/s}',
-            minStock: '{s name=detail/settings/min_stock}Minimum storage inventory{/s}',
-            inStock: '{s name=detail/settings/on_sale_field}Disable when no stock{/s}',
-            inStockBox: '{s name=detail/settings/on_sale_box}Do not display if stock <= 0{/s}',
-            releaseDate: '{s name=detail/settings/release_date}Release date{/s}',
-            ean: '{s name=detail/settings/ean}EAN{/s}',
-            width: '{s name=detail/settings/width}Width{/s}',
-            height: '{s name=detail/settings/height}Height{/s}',
-            len: '{s name=detail/settings/length}Length{/s}',
+            title:'{s name="detail/settings/title"}Settings{/s}',
+            supplierNumber:'{s name="detail/settings/supplier_number"}Supplier number{/s}',
+            weight: '{s name="detail/settings/weight_bw"}Weight (bw){/s}',
+            deliveryTime: '{s name="detail/settings/delivery_time"}Delivery time (days){/s}',
+            stock: '{s name="detail/settings/stock"}Stock{/s}',
+            minStock: '{s name="detail/settings/min_stock"}Minimum storage inventory{/s}',
+            inStock: '{s name="detail/settings/on_sale_field"}Disable when no stock{/s}',
+            inStockBox: '{s name="detail/settings/on_sale_box"}Do not display if stock <= 0{/s}',
+            releaseDate: '{s name="detail/settings/release_date"}Release date{/s}',
+            ean: '{s name="detail/settings/ean"}EAN{/s}',
+            width: '{s name="detail/settings/width"}Width{/s}',
+            height: '{s name="detail/settings/height"}Height{/s}',
+            len: '{s name="detail/settings/length"}Length{/s}',
             shippingFree: {
-                field: '{s name=detail/settings/shipping_free_field}Free shipping{/s}',
-                box: '{s name=detail/settings/shipping_free_box}Select article as free shipping{/s}'
+                field: '{s name="detail/settings/shipping_free_field"}Free shipping{/s}',
+                box: '{s name="detail/settings/shipping_free_box"}Select article as free shipping{/s}'
             },
-            graduation: '{s name=detail/settings/graduation}Graduation{/s}',
-            maximumOrder: '{s name=detail/settings/maximum_order}Maximum order{/s}',
-            minimumOrder: '{s name=detail/settings/minimum_order}Minimum order{/s}'
+            graduation: '{s name="detail/settings/graduation"}Graduation{/s}',
+            maximumOrder: '{s name="detail/settings/maximum_order"}Maximum order{/s}',
+            minimumOrder: '{s name="detail/settings/minimum_order"}Minimum order{/s}'
         },
         additional: {
-            title:'{s name=detail/additional_fields/title}Additional fields{/s}',
-            comment:'{s name=detail/additional_fields/comment}Comment{/s}',
+            title:'{s name="detail/additional_fields/title"}Additional fields{/s}',
+            comment:'{s name="detail/additional_fields/comment"}Comment{/s}',
         },
-        data:'{s name=variant/list/toolbar/data}Apply standard data{/s}',
-        save:'{s name=detail/save_button}Save article{/s}',
-        cancel:'{s name=detail/cancel_button}Cancel{/s}',
-        title:'{s name=detail/configurator_template}Configurator Template{/s}'
+        data:'{s name="variant/list/toolbar/data"}Apply standard data{/s}',
+        save:'{s name="detail/save_button"}Save article{/s}',
+        cancel:'{s name="detail/cancel_button"}Cancel{/s}',
+        title:'{s name="detail/configurator_template"}Configurator Template{/s}'
     },
 
     /**

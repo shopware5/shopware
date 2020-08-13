@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/tax/view/main}
+//{namespace name="backend/tax/view/main"}
 
 /**
  * Shopware UI - Site site Tree View
@@ -46,8 +46,8 @@ Ext.define('Shopware.apps.Tax.view.main.Tree', {
      * Define snippets for multilingual support
      */
     snippets: {
-        treeCreateGroupButton: '{s name=ui/treeCreateAreaButton}Add area{/s}',
-        treeDeleteGroupButton: '{s name=ui/treeDeleteArea}Delete area{/s}'
+        treeCreateGroupButton: '{s name="ui/treeCreateAreaButton"}Add area{/s}',
+        treeDeleteGroupButton: '{s name="ui/treeDeleteArea"}Delete area{/s}'
     },
 
     viewConfig: {

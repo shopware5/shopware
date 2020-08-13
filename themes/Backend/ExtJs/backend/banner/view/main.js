@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/banner/view/main}*/
+/*{namespace name="backend/banner/view/main"}*/
 
 /**
  * Shopware UI - Banner View Main Panel
@@ -46,6 +46,6 @@ Ext.define('Shopware.apps.Banner.view.Main', {
     stateful: true,
     stateId: 'BannerManager',
     border: 0,
-    title: '{s name=main_title}Banner Management{/s}'
+    title: '{s name="main_title"}Banner Management{/s}'
 });
 //{/block}

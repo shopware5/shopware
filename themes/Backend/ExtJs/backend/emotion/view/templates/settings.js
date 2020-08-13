@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/emotion/view/detail}
+//{namespace name="backend/emotion/view/detail"}
 
 /**
  * Shopware UI - Media Manager Main Window
@@ -49,21 +49,21 @@ Ext.define('Shopware.apps.Emotion.view.templates.Settings', {
      * @Object
      */
     snippets: {
-        invalid_template: '{s name=templates/error/invalid_template}The provided file seems to be not a valid template file{/s}',
-        title_new: '{s name=templates/settings/title_new}Create new template{/s}',
-        title_edit: '{s name=templates/settings/title_edit}Edit existing template{/s}',
-        fieldset_title: '{s name=templates/settings/fieldset}Define template{/s}',
+        invalid_template: '{s name="templates/error/invalid_template"}The provided file seems to be not a valid template file{/s}',
+        title_new: '{s name="templates/settings/title_new"}Create new template{/s}',
+        title_edit: '{s name="templates/settings/title_edit"}Edit existing template{/s}',
+        fieldset_title: '{s name="templates/settings/fieldset"}Define template{/s}',
         fields: {
-            name: '{s name=templates/settings/name}Name{/s}',
-            file: '{s name=templates/settings/file}Template file{/s}'
+            name: '{s name="templates/settings/name"}Name{/s}',
+            file: '{s name="templates/settings/file"}Template file{/s}'
         },
         support: {
-            name: '{s name=templates/support/name}Initial description of the template.{/s}',
-            file: '{s name=templates/support/file}Template file name in the file system. The template must be under widgets/emotion.{/s}'
+            name: '{s name="templates/support/name"}Initial description of the template.{/s}',
+            file: '{s name="templates/support/file"}Template file name in the file system. The template must be under widgets/emotion.{/s}'
         },
         buttons: {
-            cancel: '{s name=templates/button/cancel}Cancel{/s}',
-            save: '{s name=templates/button/save}Save{/s}'
+            cancel: '{s name="templates/button/cancel"}Cancel{/s}',
+            save: '{s name="templates/button/save"}Save{/s}'
         }
     },
 

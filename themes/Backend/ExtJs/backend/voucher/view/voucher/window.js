@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/voucher/view/voucher}
+//{namespace name="backend/voucher/view/voucher"}
 
 /**
  * Shopware UI - Voucher detail main window.
@@ -37,7 +37,7 @@
 //{block name="backend/voucher/view/voucher/window"}
 Ext.define('Shopware.apps.Voucher.view.voucher.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window/detail_title}Voucher configuration{/s}',
+    title: '{s name="window/detail_title"}Voucher configuration{/s}',
     alias: 'widget.voucher-voucher-window',
     border: false,
     autoShow: true,

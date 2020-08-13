@@ -26,12 +26,12 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/log/main}
+//{namespace name="backend/log/main"}
 
 //{block name="backend/log/view/log/detail"}
 Ext.define('Shopware.apps.Log.view.log.Detail', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window_title}Log{/s}',
+    title: '{s name="window_title"}Log{/s}',
     cls: Ext.baseCSSPrefix + 'log-detail',
     alias: 'widget.log-detail-window',
     border: false,

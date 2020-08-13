@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/condition/sales"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Sales', {
     extend: 'ProductStream.filter.AbstractCondition',
@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Sales', {
     },
 
     getLabel: function() {
-        return '{s name=minimum_sales_condition}Minimum sales condition{/s}';
+        return '{s name="minimum_sales_condition"}Minimum sales condition{/s}';
     },
 
     isSingleton: function() {

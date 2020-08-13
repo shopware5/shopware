@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/canceled_order/view/main}
+//{namespace name="backend/canceled_order/view/main"}
 
 /**
  * Shopware UI - Detail view for the order tab, allows the user to send mails and vouchers
@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Detail', {
     extend: 'Ext.panel.Panel',
     collapsed: true,
     collapsible: true,
-    title: '{s name=customerFeedback}Customer Feedback{/s}',
+    title: '{s name="customerFeedback"}Customer Feedback{/s}',
     region: 'east',
     width: 300,
     alias: 'widget.canceled-order-view-order-detail',
@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Detail', {
         var me = this;
 
         me.infoLabel = Ext.create('Ext.form.Label', {
-            text: '{s name=detailsNoOrderSelected}No order selected{/s}',
+            text: '{s name="detailsNoOrderSelected"}No order selected{/s}',
             padding: '0 0 20 0'
         });
         return me.infoLabel;
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Detail', {
         var me = this;
 
         me.askReasonButton = Ext.create('Ext.button.Button', {
-            text: '{s name=askForReason}Ask for reason{/s}',
+            text: '{s name="askForReason"}Ask for reason{/s}',
             hidden: true,
             handler: function () {
                 me.fireEvent('askForReason');
@@ -117,10 +117,10 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Detail', {
 
         me.voucherCombo = Ext.create('Ext.form.ComboBox', {
             store: me.canceledOrderVoucher,
-            fieldLabel: '{s name=sendVoucher}Send Voucher{/s}',
+            fieldLabel: '{s name="sendVoucher"}Send Voucher{/s}',
             displayField: 'value',
             valueField: 'id',
-            emptyText: '{s name=selectVoucher}Select Voucher{/s}',
+            emptyText: '{s name="selectVoucher"}Select Voucher{/s}',
             editable: false,
             hidden: true,
             listeners: {

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/mail/view/form}
+//{namespace name="backend/mail/view/form"}
 
 /**
  * todo@all: Documentation
@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
         // disable attachments tab
         me.getComponent('tabpanel').getComponent('attachmentsTab').setDisabled(true);
 
-        me.setTitle('{s name=title_new}Create new template{/s}');
+        me.setTitle('{s name="title_new"}Create new template{/s}');
 
         me.getComponent('tabpanel').setActiveTab(0);
 
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
             me.getComponent('tabpanel').getComponent('htmlContentTab').setDisabled(false);
         }
 
-        me.setTitle(Ext.String.format('{s name=title_edit}Edit template - [0]{/s}', record.data.name));
+        me.setTitle(Ext.String.format('{s name="title_edit"}Edit template - [0]{/s}', record.data.name));
 
         me.getComponent('tabpanel').setActiveTab(0);
 
@@ -179,12 +179,12 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
                     xtype: 'mail-main-contentEditor',
                     itemId: 'contentTab',
                     name: 'contentTab',
-                    title: '{s name=tab_plaintext}Plaintext{/s}'
+                    title: '{s name="tab_plaintext"}Plaintext{/s}'
                 },
                 {
                     xtype: 'mail-main-contentEditor',
                     isHtml: true,
-                    title: '{s name=tab_html}HTML{/s}',
+                    title: '{s name="tab_html"}HTML{/s}',
                     itemId: 'htmlContentTab',
                     id: 'htmlContentTab',
                     name: 'htmlContentTab',
@@ -194,7 +194,7 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
                     xtype: 'mail-main-attachments',
                     itemId: 'attachmentsTab',
                     name: 'attachmentsTab',
-                    title: '{s name=tab_attachments}Attachments{/s}',
+                    title: '{s name="tab_attachments"}Attachments{/s}',
                     store: me.attachmentStore,
                     disabled: true
                 },
@@ -205,7 +205,7 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
         return [
             {
                 xtype: 'fieldset',
-                title: '{s name=fieldset_settings}Template settings{/s}',
+                title: '{s name="fieldset_settings"}Template settings{/s}',
                 defaultType: 'textfield',
                 autoScroll:true,
                 flex:1,
@@ -220,26 +220,26 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
                 },
                 items: [
                     {
-                        fieldLabel: '{s name=label_name}Name{/s}',
+                        fieldLabel: '{s name="label_name"}Name{/s}',
                         name: 'name',
                         allowBlank: false,
                         checkChangeBuffer: 300,
                         vtype: 'remote',
                         validationUrl: '{url controller="mail" action="validateName"}',
-                        validationErrorMsg: '{s name=validation_error_name}The entered name is already in use{/s}'
+                        validationErrorMsg: '{s name="validation_error_name"}The entered name is already in use{/s}'
                     },
                     {
-                        fieldLabel: '{s name=label_frommail}FromMail{/s}',
+                        fieldLabel: '{s name="label_frommail"}FromMail{/s}',
                         name: 'fromMail',
                         translatable: true // Indicates that this field is translatable
                     },
                     {
-                        fieldLabel: '{s name=label_fromname}FromName{/s}',
+                        fieldLabel: '{s name="label_fromname"}FromName{/s}',
                         name: 'fromName',
                         translatable: true // Indicates that this field is translatable
                     },
                     {
-                        fieldLabel: '{s name=label_subject}Subject{/s}',
+                        fieldLabel: '{s name="label_subject"}Subject{/s}',
                         name: 'subject',
                         translatable: true, // Indicates that this field is translatable
                         allowBlank: false
@@ -249,8 +249,8 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
                         inputValue: true,
                         uncheckedValue: false,
                         name: 'isHtml',
-                        fieldLabel: '{s name=label_htmlmail}HTML-Mail{/s}',
-                        boxLabel: '{s name=boxlabel_htmlmail}Send template as HTML email{/s}',
+                        fieldLabel: '{s name="label_htmlmail"}HTML-Mail{/s}',
+                        boxLabel: '{s name="boxlabel_htmlmail"}Send template as HTML email{/s}',
                         listeners: {
                             /**
                              * Fires when a user-initiated change is detected in the value of the field.

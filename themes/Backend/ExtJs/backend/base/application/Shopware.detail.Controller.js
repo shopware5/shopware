@@ -1,5 +1,5 @@
 
-//{namespace name=backend/application/main}
+//{namespace name="backend/application/main"}
 //{block name="backend/application/Shopware.detail.Controller"}
 Ext.define('Shopware.detail.Controller', {
     extend: 'Enlight.app.Controller',

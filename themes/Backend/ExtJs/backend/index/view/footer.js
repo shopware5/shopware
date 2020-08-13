@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/view/detail}
+//{namespace name="backend/index/view/detail"}
 
 /**
  * Shopware UI - Footer
@@ -49,10 +49,10 @@ Ext.define('Shopware.apps.Index.view.Footer', {
      * @object
      */
     snippets: {
-        logged_in_as: '{s name=footer/logged_in_as}Logging as{/s}',
-        logout_now: '{s name=footer/logout_now}Logout now{/s}',
-        minimize_all: '{s name=footer/minimize_all}Minimize all{/s}',
-        close_all: '{s name=footer/close_all}Close all{/s}'
+        logged_in_as: '{s name="footer/logged_in_as"}Logging as{/s}',
+        logout_now: '{s name="footer/logout_now"}Logout now{/s}',
+        minimize_all: '{s name="footer/minimize_all"}Minimize all{/s}',
+        close_all: '{s name="footer/close_all"}Close all{/s}'
     },
 
 

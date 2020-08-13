@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/form/customer_group"}
 Ext.define('Shopware.apps.Config.view.form.CustomerGroup', {
@@ -52,12 +52,12 @@ Ext.define('Shopware.apps.Config.view.form.CustomerGroup', {
         return [{
             xtype: 'gridcolumn',
             dataIndex: 'name',
-            text: '{s name=customer_group/table/name_text}Name{/s}',
+            text: '{s name="customer_group/table/name_text"}Name{/s}',
             flex: 1
         }, {
             xtype: 'gridcolumn',
             dataIndex: 'key',
-            text: '{s name=customer_group/table/key_text}Key{/s}',
+            text: '{s name="customer_group/table/key_text"}Key{/s}',
             flex: 1
         }, me.getActionColumn()];
     }

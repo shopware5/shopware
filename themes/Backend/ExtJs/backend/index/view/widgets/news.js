@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/view/widgets}
+//{namespace name="backend/index/view/widgets"}
 
 /**
  * Shopware UI - shopware News Widget
@@ -32,7 +32,7 @@
 Ext.define('Shopware.apps.Index.view.widgets.News', {
     extend: 'Shopware.apps.Index.view.widgets.Base',
     alias: 'widget.swag-shopware-news-widget',
-    title: '{s name=news/title}shopware News{/s}',
+    title: '{s name="news/title"}shopware News{/s}',
     layout: 'fit',
     bodyPadding: '8 8',
 
@@ -41,10 +41,10 @@ Ext.define('Shopware.apps.Index.view.widgets.News', {
      * @object
      */
     snippets: {
-        offlineMsg: "{s name=news/offline_msg}We can't establish a connection to the Shopware server. Please check your connection and try again later.{/s}",
+        offlineMsg: '{s name="news/offline_msg"}{/s}',
         headers: {
-            pubDate: '{s name=news/headers/date}Date{/s}',
-            title: '{s name=news/headers/title}Title{/s}'
+            pubDate: '{s name="news/headers/date"}Date{/s}',
+            title: '{s name="news/headers/title"}Title{/s}'
         }
     },
 

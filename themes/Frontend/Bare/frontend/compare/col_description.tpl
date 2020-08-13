@@ -13,7 +13,7 @@
                 </li>
             {/block}
             {block name='frontend_compare_votings'}
-                {if !{config name=VoteDisable}}
+                {if !{config name="VoteDisable"}}
                     <li class="list--entry entry--voting">
                         {s name="CompareColumnRating"}{/s}
                     </li>

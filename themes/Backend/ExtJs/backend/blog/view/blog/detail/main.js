@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/blog/view/blog}
+//{namespace name="backend/blog/view/blog"}
 /**
  * Shopware UI - Blog detail main window.
  *
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
      */
     initComponent: function () {
         this.generalFieldset = Ext.create('Ext.panel.Panel', {
-            title: '{s name=detail/main/field_set/general_data}General data{/s}',
+            title: '{s name="detail/main/field_set/general_data"}General data{/s}',
             margin: '0 0 10 0',
             layout: {
                 type: 'anchor'
@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
         });
 
         this.contentFieldset = Ext.create('Ext.panel.Panel', {
-            title: '{s name=detail/main/field_set/content_data}Content{/s}',
+            title: '{s name="detail/main/field_set/content_data"}Content{/s}',
             layout: {
                 type: 'anchor'
             },
@@ -118,7 +118,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
      */
     createGeneralForm: function () {
         this.mainTitle = Ext.create('Ext.form.field.Text', {
-            fieldLabel: '{s name=detail/main/field/title}Title{/s}',
+            fieldLabel: '{s name="detail/main/field/title"}Title{/s}',
             allowBlank: false,
             required: true,
             name: 'title',
@@ -133,7 +133,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
             {
                 xtype: 'combobox',
                 name: 'authorId',
-                fieldLabel: '{s name=detail/main/field/author}Author{/s}',
+                fieldLabel: '{s name="detail/main/field/author"}Author{/s}',
                 store: Ext.create('Shopware.store.User').load(),
                 valueField: 'id',
                 editable: true,
@@ -142,11 +142,11 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
             },
             {
                 xtype: 'checkbox',
-                fieldLabel: '{s name=detail/main/field/active}Active{/s}',
+                fieldLabel: '{s name="detail/main/field/active"}Active{/s}',
                 inputValue: 1,
                 uncheckedValue: 0,
                 name: 'active',
-                boxLabel: '{s name=detail/main/field/active/help}Blog article will be shown in the storefront{/s}'
+                boxLabel: '{s name="detail/main/field/active/help"}Blog article will be shown in the storefront{/s}'
             },
             this.shopsSelector
         ]
@@ -163,7 +163,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
                 xtype: 'textarea',
                 minWidth: 250,
                 height: 40,
-                fieldLabel: '{s name=detail/main/field/short_description}Short description{/s}',
+                fieldLabel: '{s name="detail/main/field/short_description"}Short description{/s}',
                 allowBlank: false,
                 required: true,
                 name: 'shortDescription',
@@ -171,7 +171,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
             },
             {
                 xtype: 'container',
-                html: '{s name=detail/main/field/short_description/help}The short description will be displayed in the listing of the store front.{/s}',
+                html: '{s name="detail/main/field/short_description/help"}The short description will be displayed in the listing of the store front.{/s}',
                 margin: '0 0 8 125',
                 style: 'font-size: 11px; color: #999; font-style: italic;'
             },
@@ -180,7 +180,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
                 height: 370,
                 name: 'description',
                 translatable: true,
-                translationLabel: '{s name=detail/main/field/description}{/s}'
+                translationLabel: '{s name="detail/main/field/description"}{/s}'
             }
         ]
     },
@@ -193,8 +193,8 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
 
         return Ext.create('Shopware.form.field.ShopGrid', {
             name: 'shopIds',
-            fieldLabel: '{s name=detail/main/field/title/shop_selector/label}Limit to shop(s){/s}',
-            helpText: '{s name=detail/main/field/title/shop_selector/helper}If set, it limits the blog\'s visibility to the configured shops. If this is left empty, the blog will be available in all shops.{/s}',
+            fieldLabel: '{s name="detail/main/field/title/shop_selector/label"}Limit to shop(s){/s}',
+            helpText: '{s name="detail/main/field/title/shop_selector/helper"}If set, it limits the blog\'s visibility to the configured shops. If this is left empty, the blog will be available in all shops.{/s}',
             allowSorting: false,
             height: 130,
             anchor: '100%',

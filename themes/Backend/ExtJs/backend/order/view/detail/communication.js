@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order detail page
@@ -69,19 +69,19 @@ Ext.define('Shopware.apps.Order.view.detail.Communication', {
      * @object
      */
     snippets:{
-        title: '{s name=communication/window_title}Communication{/s}',
+        title: '{s name="communication/window_title"}Communication{/s}',
         internal: {
-            title: '{s name=communication/internal/title}Internal communication{/s}',
-            text: '{s name=communication/internal/text}This comment box is for internal communication. The field is not visible in the frontend and for the customer at any given time.{/s}',
-            label: '{s name=communication/internal/label}Internal comment{/s}',
-            button: '{s name=communication/internal/button}Save internal comment{/s}'
+            title: '{s name="communication/internal/title"}Internal communication{/s}',
+            text: '{s name="communication/internal/text"}This comment box is for internal communication. The field is not visible in the frontend and for the customer at any given time.{/s}',
+            label: '{s name="communication/internal/label"}Internal comment{/s}',
+            button: '{s name="communication/internal/button"}Save internal comment{/s}'
         },
         external: {
-            title: '{s name=communication/external/title}Communication with the customer{/s}',
-            text: '{s name=communication/external/text}This comment box is for internal communication. The field is not visible in the frontend and for the customer at any given time.{/s}',
-            customerLabel: '{s name=communication/external/customer_label}Customer comment{/s}',
-            externalLabel: '{s name=communication/external/external_label}Your comment{/s}',
-            button: '{s name=communication/external/button}Save external comments{/s}'
+            title: '{s name="communication/external/title"}Communication with the customer{/s}',
+            text: '{s name="communication/external/text"}This comment box is for internal communication. The field is not visible in the frontend and for the customer at any given time.{/s}',
+            customerLabel: '{s name="communication/external/customer_label"}Customer comment{/s}',
+            externalLabel: '{s name="communication/external/external_label"}Your comment{/s}',
+            button: '{s name="communication/external/button"}Save external comments{/s}'
         }
     },
 

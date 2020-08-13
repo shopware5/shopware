@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/translation/view/main}
+//{namespace name="backend/translation/view/main"}
 
 /**
  * Shopware UI - Translation Manager Main Window
@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Translation.view.main.Window',
 /** @lends Enlight.app.Window# */
 {
     extend: 'Enlight.app.Window',
-    title: '{s name=window_title}Translation{/s}',
+    title: '{s name="window_title"}Translation{/s}',
     cls: Ext.baseCSSPrefix + 'translation-manager-window',
     alias: 'widget.translation-main-window',
     border: false,
@@ -97,15 +97,15 @@ Ext.define('Shopware.apps.Translation.view.main.Window',
      */
     createActionButtons: function() {
         return [{
-            text: '{s name=button/cancel}Cancel{/s}',
+            text: '{s name="button/cancel"}Cancel{/s}',
             cls: 'secondary',
             action: 'translation-main-window-cancel'
         }, {
-            text: '{s name=button/save_and_close}Save and close{/s}',
+            text: '{s name="button/save_and_close"}Save and close{/s}',
             cls: 'primary',
             action: 'translation-main-window-save-and-close'
         }, {
-            text: '{s name=button/save}Save translations{/s}',
+            text: '{s name="button/save"}Save translations{/s}',
             cls: 'primary',
             action: 'translation-main-window-save'
         }];

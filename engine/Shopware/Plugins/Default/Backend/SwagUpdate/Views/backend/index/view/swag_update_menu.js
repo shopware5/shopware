@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-// {namespace name=backend/swag_update/main}
+// {namespace name="backend/swag_update/main"}
 // {block name="backend/index/view/menu" append}
 Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
     override: 'Shopware.apps.Index.view.Menu',
@@ -53,11 +53,11 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
             snippets;
 
         snippets = {
-            title: '{s name=growl/update/title}A new version of Shopware is available{/s}',
-            button: '{s name=growl/update/button}Display info{/s}',
-            messageSticky: '{s name=growl/update/message}Version [0] of Shopware is available.{/s}',
-            errorTitle: '{s name=growl/update/error_title}Shopware Updater Error{/s}',
-            opensslMessage: '{s name=growl/update/openssl_message}Shopware needs OpenSSL to check for new versions{/s}'
+            title: '{s name="growl/update/title"}A new version of Shopware is available{/s}',
+            button: '{s name="growl/update/button"}Display info{/s}',
+            messageSticky: '{s name="growl/update/message"}Version [0] of Shopware is available.{/s}',
+            errorTitle: '{s name="growl/update/error_title"}Shopware Updater Error{/s}',
+            opensslMessage: '{s name="growl/update/openssl_message"}Shopware needs OpenSSL to check for new versions{/s}'
         };
 
         /**

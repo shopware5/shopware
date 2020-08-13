@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/order}
+// {namespace name="backend/customer/view/order"}
 
 /**
  * Shopware UI - Customer list backend module
@@ -83,8 +83,8 @@ Ext.define('Shopware.apps.Customer.view.order.Chart', {
      * @object
      */
     snippets: {
-        yAxis: '{s name=chart/y_axis}Turnover{/s}',
-        xAxis: '{s name=chart/x_axis}Month{/s}'
+        yAxis: '{s name="chart/y_axis"}Turnover{/s}',
+        xAxis: '{s name="chart/x_axis"}Month{/s}'
     },
 
     /**

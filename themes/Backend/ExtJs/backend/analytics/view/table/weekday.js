@@ -29,12 +29,12 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/weekday"}
 Ext.define('Shopware.apps.Analytics.view.table.Weekday', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-weekday',
-    shopColumnSales: "{s name=general/turnover}Turnover{/s}: [0]",
+    shopColumnSales: '{s name="general/turnover"}Turnover{/s}: [0]',
 
     initComponent: function () {
         var me = this;
@@ -62,13 +62,13 @@ Ext.define('Shopware.apps.Analytics.view.table.Weekday', {
             {
                 xtype: 'datecolumn',
                 dataIndex: 'date',
-                text: '{s name=table/weekday/weekday}Weekday{/s}',
+                text: '{s name="table/weekday/weekday"}Weekday{/s}',
                 format: 'l'
             },
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=general/turnover}Turnover{/s}',
+                text: '{s name="general/turnover"}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];

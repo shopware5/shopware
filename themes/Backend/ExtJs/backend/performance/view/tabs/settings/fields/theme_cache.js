@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Theme cache management
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.ThemeCache', {
     /**
      * Description of the fieldSet
      */
-    caption: '{s name=tabs/settings/theme_cache/title}Theme Cache{/s}',
+    caption: '{s name="tabs/settings/theme_cache/title"}Theme Cache{/s}',
 
     layout: 'anchor',
 
@@ -75,18 +75,18 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.ThemeCache', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/information}Information{/s}',
+                title: '{s name="fieldset/information"}Information{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name=fieldset/theme/info}If you have made changes to your theme or its configuration, the theme cache must be regenerated. If you choose not to do this, the process will be automatically triggered during the first frontend request, resulting in a noticeable delay in the page loading process.{/s}")
+                    me.createDescriptionContainer('{s name="fieldset/theme/info"}If you have made changes to your theme or its configuration, the theme cache must be regenerated. If you choose not to do this, the process will be automatically triggered during the first frontend request, resulting in a noticeable delay in the page loading process.{/s}')
                 ]
             },
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/configuration}Configuration{/s}',
+                title: '{s name="fieldset/configuration"}Configuration{/s}',
                 items: [
                     Ext.create('Ext.Button', {
-                        text: '{s name=fieldset/theme/warmup}Warm up theme cache{/s}',
+                        text: '{s name="fieldset/theme/warmup"}Warm up theme cache{/s}',
                         cls: 'primary',
                         scope: me,
                         handler:function () {

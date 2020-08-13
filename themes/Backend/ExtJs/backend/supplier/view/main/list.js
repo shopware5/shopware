@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/supplier/view/main}*/
+/*{namespace name="backend/supplier/view/main"}*/
 
 /**
  * Shopware View - Supplier
@@ -82,25 +82,25 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
         var me = this;
         return [
             {
-                header : '{s name=grid_name}Name{/s}',
+                header : '{s name="grid_name"}Name{/s}',
                 dataIndex : 'name',
                 renderer : me.nameColumn,
                 width: 125
             },
             {
-                header : '{s name=grid_articlecounter}Article{/s}',
+                header : '{s name="grid_articlecounter"}Article{/s}',
                 dataIndex : 'articleCounter',
                 width : 50,
                 renderer : me.articleCountColumn
             },
             {
-                header : '{s name=grid_link}URL{/s}',
+                header : '{s name="grid_link"}URL{/s}',
                 dataIndex : 'link',
                 width: 150,
                 renderer : me.urlColumn
             },
             {
-                header : '{s name=grid_description}Description{/s}',
+                header : '{s name="grid_description"}Description{/s}',
                 dataIndex : 'description',
                 flex : 1,
                 renderer : me.descriptionColumn
@@ -124,14 +124,14 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
             {
                 iconCls : 'sprite-minus-circle-frame',
                 action : 'delete',
-                tooltip : '{s name=grid_delete_tooltip}Delete this supplier{/s}'
+                tooltip : '{s name="grid_delete_tooltip"}Delete this supplier{/s}'
             },
             /*{/if}*/
             /*{if {acl_is_allowed privilege=update}}*/
             {
                 iconCls : 'sprite-pencil',
                 action : 'edit',
-                tooltip : '{s name=grid_edit_tooltip}Edit this supplier{/s}'
+                tooltip : '{s name="grid_edit_tooltip"}Edit this supplier{/s}'
             }
             /*{/if}*/
         ];
@@ -139,7 +139,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
 
     getPagingbar: function () {
         var me = this,
-            manufacturerSnippet = '{s name=paging_term}manufacturer{/s}';
+            manufacturerSnippet = '{s name="paging_term"}manufacturer{/s}';
 
         var pageSize = Ext.create('Ext.form.field.ComboBox', {
             labelWidth: 120,

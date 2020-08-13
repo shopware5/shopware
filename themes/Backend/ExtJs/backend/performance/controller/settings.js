@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Shopware Controller - Performance backend module
@@ -51,13 +51,13 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
     ],
 
     snippets: {
-        growlMessage: '{s name=growMessage}Performance Module{/s}',
-        successTitle: '{s name=successTitle}Success{/s}',
-        successMessage: '{s name=successMessage/configSaved}Configuration saved{/s}',
-        errorTitle: '{s name=errorTitle}Error{/s}',
-        errorMessage: '{s name=successMessage}Error saving the configuration{/s}',
-        noticeTitle: '{s name=noticeTitle}Invalid data{/s}',
-        noticeMessage: '{s name=noticeMessage}There are still invalid data entered in the forms, please check all forms before saving{/s}'
+        growlMessage: '{s name="growMessage"}Performance Module{/s}',
+        successTitle: '{s name="successTitle"}Success{/s}',
+        successMessage: '{s name="successMessage/configSaved"}Configuration saved{/s}',
+        errorTitle: '{s name="errorTitle"}Error{/s}',
+        errorMessage: '{s name="successMessage"}Error saving the configuration{/s}',
+        noticeTitle: '{s name="noticeTitle"}Invalid data{/s}',
+        noticeMessage: '{s name="noticeMessage"}There are still invalid data entered in the forms, please check all forms before saving{/s}'
     },
 
     /*

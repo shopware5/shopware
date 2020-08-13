@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/payment/payment}
+//{namespace name="backend/payment/payment"}
 
 /**
  * Shopware UI - Main payment window
@@ -37,7 +37,7 @@
 //{block name="backend/payment/view/main/window"}
 Ext.define('Shopware.apps.Payment.view.main.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=payment_title}Payments{/s}',
+    title: '{s name="payment_title"}Payments{/s}',
     cls: Ext.baseCSSPrefix + 'payment-window',
     alias: 'widget.payment-main-window',
     border: false,
@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.Payment.view.main.Window', {
         var buttons = ['->'];
         /*{if {acl_is_allowed privilege=update}}*/
         buttons.push(Ext.create('Ext.button.Button',{
-            text: '{s name=button_save}Save{/s}',
+            text: '{s name="button_save"}Save{/s}',
             cls: 'primary',
             action: 'save',
             name: 'save',
@@ -170,22 +170,22 @@ Ext.define('Shopware.apps.Payment.view.main.Window', {
             },
             items: [{
                 xtype: 'container',
-                title: '{s name=title_generalForm}General{/s}',
+                title: '{s name="title_generalForm"}General{/s}',
                 items: [ me.generalForm ]
             }, {
                 xtype: 'container',
                 autoRender: true,
-                title: '{s name=title_countrySelection}Country selection{/s}',
+                title: '{s name="title_countrySelection"}Country selection{/s}',
                 items: [ me.countrySelection ]
             }, {
                 xtype: 'container',
-                title: '{s name=title_countrySurcharge}Country surcharge{/s}',
+                title: '{s name="title_countrySurcharge"}Country surcharge{/s}',
                 autoRender: true,
                 items: [ me.surcharge ]
             }, {
                 xtype: 'container',
                 autoRender: true,
-                title: '{s name=title_subshopSelection}Subshop selection{/s}',
+                title: '{s name="title_subshopSelection"}Subshop selection{/s}',
                 items: [ me.subshopSelection ]
             }, me.attributeForm],
 

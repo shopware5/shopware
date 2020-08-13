@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/voucher/view/code}
+//{namespace name="backend/voucher/view/code"}
 
 /**
  * Shopware UI - Voucher Code List page additional panel
@@ -37,7 +37,7 @@
 //{block name="backend/voucher/view/code/list"}
 Ext.define('Shopware.apps.Voucher.view.code.List', {
     extend:'Ext.grid.Panel',
-    title:'{s name=detail_codes/win_title/code}Individual voucher codes{/s}',
+    title:'{s name="detail_codes/win_title/code"}Individual voucher codes{/s}',
     border:false,
     alias:'widget.voucher-code-list',
     region:'center',
@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
         // Define the columns and renderers
         return [
             {
-                header:'{s name=detail_codes/column/code}Code{/s}',
+                header:'{s name="detail_codes/column/code"}Code{/s}',
                 dataIndex:'code',
                 flex:1,
                 editor:{
@@ -110,14 +110,14 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
                 }
             },
             {
-                header:'{s name=detail_codes/column/cashed}Redeemed{/s}',
+                header:'{s name="detail_codes/column/cashed"}Redeemed{/s}',
                 dataIndex:'cashed',
                 flex:1,
                 renderer:me.cashedRenderer,
                 editor: me.createRedeemedEditor()
             },
             {
-                header:'{s name=detail_codes/column/customer_number}Customer number{/s}',
+                header:'{s name="detail_codes/column/customer_number"}Customer number{/s}',
                 dataIndex:'number',
                 flex:1,
                 editor:{
@@ -127,12 +127,12 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
                 }
             },
             {
-                header:'{s name=detail_codes/column/first_name}First name{/s}',
+                header:'{s name="detail_codes/column/first_name"}First name{/s}',
                 dataIndex:'firstName',
                 flex:1
             },
             {
-                header:'{s name=detail_codes/column/last_name}Last name{/s}',
+                header:'{s name="detail_codes/column/last_name"}Last name{/s}',
                 dataIndex:'lastName',
                 flex:1
             },
@@ -143,7 +143,7 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
                 items:[{
                     iconCls:'x-action-col-icon sprite-user--pencil',
                     cls:'sprite-user--pencil',
-                    tooltip:'{s name=list/action_column/link_customer}To customer account{/s}',
+                    tooltip:'{s name="list/action_column/link_customer"}To customer account{/s}',
                     getClass: function(value, metadata, record) {
                         if (!record.get("customerId")) {
                             return 'x-hidden';
@@ -170,8 +170,8 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
                     'name'
                 ],
                 data: [
-                    [false, '{s name=list/render_value/cashed/no}No{/s}'],
-                    [true, '{s name=list/render_value/cashed/yes}Yes{/s}']
+                    [false, '{s name="list/render_value/cashed/no"}No{/s}'],
+                    [true, '{s name="list/render_value/cashed/yes"}Yes{/s}']
                 ]
             }),
             displayField: 'name',
@@ -195,7 +195,7 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
                 {
                     /*{if {acl_is_allowed privilege=generate}}*/
                     iconCls:'sprite-plus-circle',
-                    text:'{s name=detail_codes/button/create_new_codes}Create new codes{/s}',
+                    text:'{s name="detail_codes/button/create_new_codes"}Create new codes{/s}',
                     action:'generateCodes'
                     /*{/if}*/
                 },
@@ -204,16 +204,16 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
                     xtype:'textfield',
                     name:'patternField',
                     width:200,
-                    helpText:'{s name=detail_codes/helptext/voucher_code_pattern}Optional you can enter your desired voucher code format. The Pattern %s generates a word character and the pattern %d a number. Make sure your code pattern is complex enough.{/s}',
+                    helpText:'{s name="detail_codes/helptext/voucher_code_pattern"}Optional you can enter your desired voucher code format. The Pattern %s generates a word character and the pattern %d a number. Make sure your code pattern is complex enough.{/s}',
                     stripCharsRe:/\\/,
-                    emptyText:'{s name=detail_codes/emptytext/voucher_code_pattern}Voucher code pattern...{/s}'
+                    emptyText:'{s name="detail_codes/emptytext/voucher_code_pattern"}Voucher code pattern...{/s}'
                     /*{/if}*/
                 },
                 '-',
                 {
                     /*{if {acl_is_allowed privilege=export}}*/
                     iconCls:'sprite-drive-download',
-                    text:'{s name=detail_codes/button/download_codes}Download codes{/s}',
+                    text:'{s name="detail_codes/button/download_codes"}Download codes{/s}',
                     action:'downloadCodes',
                     disabled: true
                     /*{/if}*/
@@ -227,7 +227,7 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
                     cls:'searchfield',
                     enableKeyEvents:true,
                     checkChangeBuffer:500,
-                    emptyText:'{s name=detail_codes/field/search}Search...{/s}'
+                    emptyText:'{s name="detail_codes/field/search"}Search...{/s}'
                 },
                 { xtype:'tbspacer', width:6 }
             ]
@@ -255,9 +255,10 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
      */
     cashedRenderer:function (value) {
         if(value==1){
-             return "{s name=list/render_value/cashed/yes}Yes{/s}";
+             return '{s name="list/render_value/cashed/yes"}Yes{/s}';
          }
-         return "{s name=list/render_value/cashed/no}No{/s}";
+
+         return '{s name="list/render_value/cashed/no"}No{/s}';
      }
 });
 //{/block}

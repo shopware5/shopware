@@ -33,7 +33,7 @@
  * handles the category fixing
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 //{block name="backend/performance/controller/cache"}
 Ext.define('Shopware.apps.Performance.controller.Cache', {
     extend: 'Enlight.app.Controller',
@@ -42,8 +42,8 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
         { ref: 'form', selector: 'performance-tabs-cache-form' },
     ],
 
-    infoTitle: '{s name=form/message_title}Shop cache{/s}',
-    infoMessageSuccess: '{s name=form/message}Shop cache has been cleared.{/s}',
+    infoTitle: '{s name="form/message_title"}Shop cache{/s}',
+    infoMessageSuccess: '{s name="form/message"}Shop cache has been cleared.{/s}',
 
     init: function () {
         var me = this;

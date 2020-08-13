@@ -28,7 +28,7 @@
  */
 
 //{block name="backend/base/store/corner_position"}
-// {namespace name=backend/application/main}
+// {namespace name="backend/application/main"}
 Ext.define('Shopware.apps.Base.store.CornerPosition', {
     extend: 'Ext.data.Store',
 

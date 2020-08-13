@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/first_run_wizard/main}
+//{namespace name="backend/first_run_wizard/main"}
 //{block name="backend/first_run_wizard/model/integrated_plugins_countries"}
 
 Ext.define('Shopware.apps.FirstRunWizard.model.IntegratedPluginsCountries', {

@@ -34,7 +34,7 @@
  * edit or create a voucher. The detail controller knows the different field sets
  * to display the voucher data in the form panel.
  */
-//{namespace name=backend/voucher/view/voucher}
+//{namespace name="backend/voucher/view/voucher"}
 //{block name="backend/voucher/controller/voucher"}
 Ext.define('Shopware.apps.Voucher.controller.Voucher', {
     /**
@@ -61,17 +61,17 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
      * Contains all snippets for the controller
      */
     snippets: {
-        copyFromSelectedVoucherTitle: '{s name=message/copyFromSelectedVoucherTitle}Copy of{/s}',
-        confirmDeleteSingleVoucherTitle: '{s name=message/confirmDeleteSingleVoucherTitle}Delete this voucher{/s}',
-        confirmDeleteSingleVoucher: '{s name=message/confirmDeleteSingleVoucher}Are you sure you want to delete the chosen voucher ([0])?{/s}',
-        confirmDeleteMultipleVoucher: '{s name=message/confirmDeleteMultipleVoucher}[0] vouchers selected. Are you sure you want to delete the selected vouchers?{/s}',
-        deleteSingleVoucherSuccess: '{s name=message/deleteSingleVoucherSuccess}The voucher has been successfully deleted{/s}',
-        deleteSingleVoucherError: '{s name=message/deleteSingleVoucherError}An error has occurred while deleting the selected Voucher: {/s}',
-        deleteMultipleVoucherSuccess: '{s name=message/deleteMultipleVoucherSuccess}The vouchers have been successfully deleted.{/s}',
-        deleteMultipleVoucherError: '{s name=message/deleteMultipleVoucherError}An error has occured while deleting the selected vouchers: {/s}',
-        onSaveVoucherSuccess: '{s name=message/onSaveVoucherSuccess}Changes saved successfully{/s}',
-        onSaveVoucherError: '{s name=message/onSaveVoucherError}An error has occured while saving your changes.{/s}',
-        growlMessage: '{s name=growlMessage}Voucher{/s}'
+        copyFromSelectedVoucherTitle: '{s name="message/copyFromSelectedVoucherTitle"}Copy of{/s}',
+        confirmDeleteSingleVoucherTitle: '{s name="message/confirmDeleteSingleVoucherTitle"}Delete this voucher{/s}',
+        confirmDeleteSingleVoucher: '{s name="message/confirmDeleteSingleVoucher"}Are you sure you want to delete the chosen voucher ([0])?{/s}',
+        confirmDeleteMultipleVoucher: '{s name="message/confirmDeleteMultipleVoucher"}[0] vouchers selected. Are you sure you want to delete the selected vouchers?{/s}',
+        deleteSingleVoucherSuccess: '{s name="message/deleteSingleVoucherSuccess"}The voucher has been successfully deleted{/s}',
+        deleteSingleVoucherError: '{s name="message/deleteSingleVoucherError"}An error has occurred while deleting the selected Voucher: {/s}',
+        deleteMultipleVoucherSuccess: '{s name="message/deleteMultipleVoucherSuccess"}The vouchers have been successfully deleted.{/s}',
+        deleteMultipleVoucherError: '{s name="message/deleteMultipleVoucherError"}An error has occured while deleting the selected vouchers: {/s}',
+        onSaveVoucherSuccess: '{s name="message/onSaveVoucherSuccess"}Changes saved successfully{/s}',
+        onSaveVoucherError: '{s name="message/onSaveVoucherError"}An error has occured while saving your changes.{/s}',
+        growlMessage: '{s name="growlMessage"}Voucher{/s}'
     },
 
     /**

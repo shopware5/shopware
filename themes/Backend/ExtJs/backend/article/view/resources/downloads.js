@@ -32,7 +32,7 @@
  * The link component contains the configuration elements for the article links
  * and article downloads.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/resources/downloads"}
 Ext.define('Shopware.apps.Article.view.resources.Downloads', {
     /**
@@ -56,14 +56,14 @@ Ext.define('Shopware.apps.Article.view.resources.Downloads', {
      * @object
      */
     snippets:{
-        title: '{s name=resources/downloads/field_set}Downloads{/s}',
-        notice: '{s name=resources/downloads/notice}Optionally, add additional downloads (e.g. pdf files).{/s}',
-        name: '{s name=resources/downloads/name}Name{/s}',
-        link: '{s name=resources/downloads/link}File{/s}',
-        button: '{s name=resources/downloads/button}Add download{/s}',
+        title: '{s name="resources/downloads/field_set"}Downloads{/s}',
+        notice: '{s name="resources/downloads/notice"}Optionally, add additional downloads (e.g. pdf files).{/s}',
+        name: '{s name="resources/downloads/name"}Name{/s}',
+        link: '{s name="resources/downloads/link"}File{/s}',
+        button: '{s name="resources/downloads/button"}Add download{/s}',
         grid: {
-            title: '{s name=resources/downloads/grid/title}Created downloads{/s}',
-            delete: '{s name=resources/downloads/grid/delete}Remove download{/s}'
+            title: '{s name="resources/downloads/grid/title"}Created downloads{/s}',
+            delete: '{s name="resources/downloads/grid/delete"}Remove download{/s}'
         }
     },
 

@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/view/widgets}
+//{namespace name="backend/index/view/widgets"}
 
 /**
  * todo@all: Documentation
@@ -43,19 +43,19 @@ Ext.define('Shopware.apps.Index.view.merchant.Window', {
      */
     snippets: {
         labels: {
-            recipient_mail: '{s name=merchant/window/label/recipient_mail}Recipient mail address{/s}',
-            sender_name: '{s name=merchant/window/label/sender_name}Sender {/s}',
-            sender_mail: '{s name=merchant/window/label/sender_mail}Sender mail address{/s}',
-            subject: '{s name=merchant/window/label/subject}Subject{/s}',
-            message: '{s name=merchant/window/label/message}Message{/s}'
+            recipient_mail: '{s name="merchant/window/label/recipient_mail"}Recipient mail address{/s}',
+            sender_name: '{s name="merchant/window/label/sender_name"}Sender {/s}',
+            sender_mail: '{s name="merchant/window/label/sender_mail"}Sender mail address{/s}',
+            subject: '{s name="merchant/window/label/subject"}Subject{/s}',
+            message: '{s name="merchant/window/label/message"}Message{/s}'
         },
         buttons: {
-            allow_merchant: '{s name=merchant/window/buttons/allow_merchant}Unlock and send confirmation{/s}',
-            decline_merchant: '{s name=merchant/window/buttons/decline_merchant}Deny inquiry{/s}'
+            allow_merchant: '{s name="merchant/window/buttons/allow_merchant"}Unlock and send confirmation{/s}',
+            decline_merchant: '{s name="merchant/window/buttons/decline_merchant"}Deny inquiry{/s}'
         },
         messages: {
-            success: '{s name=merchant/window/messages/success}The mail was sent successful.{/s}',
-            error: '{s name=merchant/window/messages/error}The mail could not be sent.{/s}'
+            success: '{s name="merchant/window/messages/success"}The mail was sent successful.{/s}',
+            error: '{s name="merchant/window/messages/error"}The mail could not be sent.{/s}'
         }
     },
 

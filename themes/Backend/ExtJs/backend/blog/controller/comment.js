@@ -32,7 +32,7 @@
  *
  * Media controller of the blog module. Handles all action around the comment part of sub-application
  */
-//{namespace name=backend/blog/view/blog}
+//{namespace name="backend/blog/view/blog"}
 //{block name="backend/blog/controller/comment"}
 Ext.define('Shopware.apps.Blog.controller.Comment', {
     /**
@@ -54,21 +54,21 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
      * Contains all snippets for the controller
      */
     snippets: {
-        confirmDeleteSingleBlogCommentTitle: '{s name=message/delete/confirm_single_blog_comment_title}Delete this blog comment{/s}',
-        confirmDeleteSingleBlogComment: '{s name=message/delete/confirm_single_blog_comment}Are you sure you want to delete the selected blog comment ([0])?{/s}',
-        deleteSingleBlogCommentSuccess: '{s name=message/delete/single_blog_comment/success}The Blog comment has been successfully deleted{/s}',
-        deleteSingleBlogCommentError: '{s name=message/delete/single_blog_comment/error}An error has occurred while deleting the selected blog comment: {/s}',
-        confirmDeleteMultipleBlogComments: '{s name=message/delete/multiple_blog_comments}[0] blog comments selected. Are you sure you want to delete the selected blog comments?{/s}',
-        deleteMultipleBlogCommentsSuccess: '{s name=message/delete/multiple_blog_comments/success}The blog comments have been successfully deleted.{/s}',
-        deleteMultipleBlogCommentsError: '{s name=message/delete/multiple_blog_comments/error}An error has occurred while deleting the selected blog comments: {/s}',
+        confirmDeleteSingleBlogCommentTitle: '{s name="message/delete/confirm_single_blog_comment_title"}Delete this blog comment{/s}',
+        confirmDeleteSingleBlogComment: '{s name="message/delete/confirm_single_blog_comment"}Are you sure you want to delete the selected blog comment ([0])?{/s}',
+        deleteSingleBlogCommentSuccess: '{s name="message/delete/single_blog_comment/success"}The Blog comment has been successfully deleted{/s}',
+        deleteSingleBlogCommentError: '{s name="message/delete/single_blog_comment/error"}An error has occurred while deleting the selected blog comment: {/s}',
+        confirmDeleteMultipleBlogComments: '{s name="message/delete/multiple_blog_comments"}[0] blog comments selected. Are you sure you want to delete the selected blog comments?{/s}',
+        deleteMultipleBlogCommentsSuccess: '{s name="message/delete/multiple_blog_comments/success"}The blog comments have been successfully deleted.{/s}',
+        deleteMultipleBlogCommentsError: '{s name="message/delete/multiple_blog_comments/error"}An error has occurred while deleting the selected blog comments: {/s}',
 
-        acceptSingleBlogCommentSuccess: '{s name=message/accept/single_blog_comment/success}The Blog comment has been successfully accepted{/s}',
-        acceptSingleBlogCommentError: '{s name=message/accept/single_blog_comment/error}An error has occurred while accepting the selected blog comment: {/s}',
-        confirmAcceptMultipleBlogCommentsTitle: '{s name=message/accept/multiple_blog_comments_title}Accepting the selected blog comments?{/s}',
-        confirmAcceptMultipleBlogComments: '{s name=message/accept/multiple_blog_comments}[0] blog comments selected. Are you sure you want to accept the selected blog comments?{/s}',
-        acceptMultipleBlogCommentsSuccess: '{s name=message/accept/multiple_blog_comments/success}The blog comments have been successfully accepted.{/s}',
-        acceptMultipleBlogCommentsError: '{s name=message/accept/multiple_blog_comments/error}An error has occurred while accepting the selected blog comments: {/s}',
-        growlMessage: '{s name=growlMessage}Blog{/s}'
+        acceptSingleBlogCommentSuccess: '{s name="message/accept/single_blog_comment/success"}The Blog comment has been successfully accepted{/s}',
+        acceptSingleBlogCommentError: '{s name="message/accept/single_blog_comment/error"}An error has occurred while accepting the selected blog comment: {/s}',
+        confirmAcceptMultipleBlogCommentsTitle: '{s name="message/accept/multiple_blog_comments_title"}Accepting the selected blog comments?{/s}',
+        confirmAcceptMultipleBlogComments: '{s name="message/accept/multiple_blog_comments"}[0] blog comments selected. Are you sure you want to accept the selected blog comments?{/s}',
+        acceptMultipleBlogCommentsSuccess: '{s name="message/accept/multiple_blog_comments/success"}The blog comments have been successfully accepted.{/s}',
+        acceptMultipleBlogCommentsError: '{s name="message/accept/multiple_blog_comments/error"}An error has occurred while accepting the selected blog comments: {/s}',
+        growlMessage: '{s name="growlMessage"}Blog{/s}'
     },
 
     /**

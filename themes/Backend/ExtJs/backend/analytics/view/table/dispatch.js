@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/dispatch"}
 Ext.define('Shopware.apps.Analytics.view.table.Dispatch', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Dispatch', {
             }
         };
 
-        me.initStoreIndices('turnover', '{s name=general/turnover}Turnover{/s}: [0]', {
+        me.initStoreIndices('turnover', '{s name="general/turnover"}Turnover{/s}: [0]', {
             xtype: 'numbercolumn',
             renderer: me.currencyRenderer
         });
@@ -65,12 +65,12 @@ Ext.define('Shopware.apps.Analytics.view.table.Dispatch', {
         return [
             {
                 dataIndex: 'name',
-                text: '{s name=table/dispatch/shippingmethod}Shipping method{/s}'
+                text: '{s name="table/dispatch/shippingmethod"}Shipping method{/s}'
             },
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=general/turnover}Turnover{/s}',
+                text: '{s name="general/turnover"}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];

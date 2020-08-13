@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/notification/view/main}
+//{namespace name="backend/notification/view/main"}
 
 /**
  * Shopware UI - notification customer list.
@@ -89,24 +89,24 @@ Ext.define('Shopware.apps.Notification.view.notification.Customer', {
 
         var columnsData = [
             {
-                header: '{s name=list/customer/column/registered_date}Registered on{/s}',
+                header: '{s name="list/customer/column/registered_date"}Registered on{/s}',
                 xtype: 'datecolumn',
                 dataIndex: 'date',
                 renderer: me.dateColumn,
                 flex: 1
             },
             {
-                header: '{s name=list/customer/column/mail}Email{/s}',
+                header: '{s name="list/customer/column/mail"}Email{/s}',
                 dataIndex: 'mail',
                 flex: 1
             },
             {
-                header: '{s name=list/customer/column/name}Name{/s}',
+                header: '{s name="list/customer/column/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1
             },
             {
-                header: '{s name=list/customer/column/notified}Notified{/s}',
+                header: '{s name="list/customer/column/notified"}Notified{/s}',
                 dataIndex: 'notified',
                 renderer: me.notifiedRenderer,
                 flex: 1
@@ -118,7 +118,7 @@ Ext.define('Shopware.apps.Notification.view.notification.Customer', {
                 items:[{
                     iconCls:'x-action-col-icon sprite-user--pencil',
                     cls:'sprite-user--pencil',
-                    tooltip:'{s name=list/action_column/link_customer}To customer account{/s}',
+                    tooltip:'{s name="list/action_column/link_customer"}To customer account{/s}',
                     getClass: function(value, metadata, record) {
                         if (!record.get("customerId")) {
                             return 'x-hidden';
@@ -154,7 +154,7 @@ Ext.define('Shopware.apps.Notification.view.notification.Customer', {
                             cls:'searchfield',
                             enableKeyEvents:true,
                             checkChangeBuffer:500,
-                            emptyText:'{s name=list/field/search_customer}Search...{/s}'
+                            emptyText:'{s name="list/field/search_customer"}Search...{/s}'
                         },
                         { xtype:'tbspacer', width:6 }
                     ]
@@ -182,9 +182,9 @@ Ext.define('Shopware.apps.Notification.view.notification.Customer', {
      */
     notifiedRenderer:function (value, p, r) {
         if(value!=1){
-            return '<span style="color:red;">{s name=list/render_value/notified/no}No{/s}</span>';
+            return '<span style="color:red;">{s name="list/render_value/notified/no"}No{/s}</span>';
         }
-        return '<span style="color:green;">{s name=list/render_value/notified/yes}Yes{/s}</span>';
+        return '<span style="color:green;">{s name="list/render_value/notified/yes"}Yes{/s}</span>';
     },
 
     /**

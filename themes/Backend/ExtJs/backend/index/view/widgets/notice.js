@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/view/widgets}
+//{namespace name="backend/index/view/widgets"}
 
 /**
  * Shopware UI - Upload Widget
@@ -48,16 +48,16 @@ Ext.define('Shopware.apps.Index.view.widgets.Notice', {
      */
     snippets: {
         buttons: {
-            reset: '{s name=notice/buttons/reset}Reset{/s}',
-            submit: '{s name=notice/buttons/submit}Submit{/s}'
+            reset: '{s name="notice/buttons/reset"}Reset{/s}',
+            submit: '{s name="notice/buttons/submit"}Submit{/s}'
         },
         success_msg: {
-            title: '{s name=notice/success_msg/title}Notice widget{/s}',
-            text: '{s name=notice/success_msg/text}Your notice was successfully saved.{/s}'
+            title: '{s name="notice/success_msg/title"}Notice widget{/s}',
+            text: '{s name="notice/success_msg/text"}Your notice was successfully saved.{/s}'
         },
         failure_msg: {
-            title: '{s name=notice/success_msg/title}Notice widget{/s}',
-            text: "{s name=notice/failure_msg/text}Your notice couldn't be saved successfully.{/s}"
+            title: '{s name="notice/success_msg/title"}Notice widget{/s}',
+            text: '{s name="notice/failure_msg/text"}{/s}'
         }
     },
 

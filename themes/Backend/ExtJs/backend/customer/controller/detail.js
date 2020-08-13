@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/detail}
+// {namespace name="backend/customer/view/detail"}
 
 /**
  * Shopware Controller - Customer list backend module
@@ -66,35 +66,35 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
 
     snippets: {
         form: {
-            errorTitle: '{s name=message/password/form/error_title}Error saving the form{/s}',
-            errorMessage: '{s name=message/password/form/error_message}The field [0] is not valid{/s}'
+            errorTitle: '{s name="message/password/form/error_title"}Error saving the form{/s}',
+            errorMessage: '{s name="message/password/form/error_message"}The field [0] is not valid{/s}'
         },
         password: {
-            support: '{s name=message/password/generated_password}The generated password is:{/s}',
-            successTitle: '{s name=message/password/success_title}Successfully{/s}',
-            successText: '{s name=message/password/success_text}Customer [0] has been saved{/s}',
-            errorTitle: '{s name=message/password/error_title}Failure{/s}',
-            errorText: '{s name=message/password/error_text}There is an error occurred while saving.{/s}'
+            support: '{s name="message/password/generated_password"}The generated password is:{/s}',
+            successTitle: '{s name="message/password/success_title"}Successfully{/s}',
+            successText: '{s name="message/password/success_text"}Customer [0] has been saved{/s}',
+            errorTitle: '{s name="message/password/error_title"}Failure{/s}',
+            errorText: '{s name="message/password/error_text"}There is an error occurred while saving.{/s}'
         },
         account: {
-            successTitle: '{s name=message/account/success_title}Successfully{/s}',
-            successText: '{s name=message/account/success_text}The account for the customer [0] has been created successfully.{/s}',
-            errorTitle: '{s name=message/account/error_title}Failure{/s}',
-            errorText: '{s name=message/account/error_text}There is an error occurred while saving.{/s}'
+            successTitle: '{s name="message/account/success_title"}Successfully{/s}',
+            successText: '{s name="message/account/success_text"}The account for the customer [0] has been created successfully.{/s}',
+            errorTitle: '{s name="message/account/error_title"}Failure{/s}',
+            errorText: '{s name="message/account/error_text"}There is an error occurred while saving.{/s}'
         },
         overwriteCustomer: {
-            title: '{s name=overwriteCustomer/title}Overwrite most recent changes{/s}',
-            message: '{s name=overwriteCustomer/message}Do you really want to overwrite the latest changes?{/s}',
+            title: '{s name="overwriteCustomer/title"}Overwrite most recent changes{/s}',
+            message: '{s name="overwriteCustomer/message"}Do you really want to overwrite the latest changes?{/s}',
         },
 
         unlock: {
-            successTitle: '{s name=base/unlock_customer/success_title}Successfully{/s}',
-            successText: '{s name=base/unlock_customer/success_text}Successfully unlocked the customer.{/s}',
-            errorTitle: '{s name=base/unlock_customer/error_title}Failure{/s}',
-            errorText: '{s name=base/unlock_customer/error_text}An error occurred while unlocking the customer.{/s}'
+            successTitle: '{s name="base/unlock_customer/success_title"}Successfully{/s}',
+            successText: '{s name="base/unlock_customer/success_text"}Successfully unlocked the customer.{/s}',
+            errorTitle: '{s name="base/unlock_customer/error_title"}Failure{/s}',
+            errorText: '{s name="base/unlock_customer/error_text"}An error occurred while unlocking the customer.{/s}'
         },
 
-        growlMessage: '{s name=message/growlMessage}Customer{/s}'
+        growlMessage: '{s name="message/growlMessage"}Customer{/s}'
     },
 
     /**
@@ -354,7 +354,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             form = win.down('form'),
             model = form.getRecord(),
             quickView = me.getQuickView(),
-            missingField = '{s name=unknown_field}Unknown field{/s}';
+            missingField = '{s name="unknown_field"}Unknown field{/s}';
 
         if (!form.getForm().isValid()) {
             // check which field is not valid in order to tell the user, why the customer cannot be saved

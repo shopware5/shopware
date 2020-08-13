@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Categories fieldSet
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
     /**
      * Description of the fieldSet
      */
-    caption: '{s name=tabs/settings/categories/title}Categories{/s}',
+    caption: '{s name="tabs/settings/categories/title"}Categories{/s}',
 
     /**
      * Component event method which is fired when the component
@@ -72,23 +72,23 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/information}Information{/s}',
+                title: '{s name="fieldset/information"}Information{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name=fieldset/customers/info}Konfigurieren Sie hier in welchen Abständen die Daten für die in Shopware integrierten Recommendation-Funktionen neu erzeugt werden sollen.{/s}")
+                    me.createDescriptionContainer('{s name="fieldset/customers/info"}Konfigurieren Sie hier in welchen Abständen die Daten für die in Shopware integrierten Recommendation-Funktionen neu erzeugt werden sollen.{/s}')
                 ]
             },
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/customers/fieldset/also_bought}Configuration \'Customers also bought\'{/s}',
+                title: '{s name="fieldset/customers/fieldset/also_bought"}Configuration \'Customers also bought\'{/s}',
                 items: [
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'alsoBought',
-                        title: '{s name=fieldset/also/buildIndex}Kunden kauften auch Index neu aufbauen{/s}'
+                        title: '{s name="fieldset/also/buildIndex"}Kunden kauften auch Index neu aufbauen{/s}'
                     },
                     {
-                        fieldLabel:  '{s name=fieldset/customers/also_bought/show}Kunden kauften auch im Frontend anzeigen{/s}',
+                        fieldLabel:  '{s name="fieldset/customers/also_bought/show"}Kunden kauften auch im Frontend anzeigen{/s}',
                         name: 'customer[alsoBoughtShow]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
@@ -99,38 +99,38 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/customers/fieldset/also_seen}Configuration \'Customers also viewed\'{/s}',
+                title: '{s name="fieldset/customers/fieldset/also_seen"}Configuration \'Customers also viewed\'{/s}',
                 items: [
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'similarShown',
-                        title: '{s name=fieldset/simiar/buildIndex}Kunden haben sich ebenfalls angesehen Index neu aufbauen{/s}'
+                        title: '{s name="fieldset/simiar/buildIndex"}Kunden haben sich ebenfalls angesehen Index neu aufbauen{/s}'
                     },
                     {
-                        fieldLabel: '{s name=fieldset/customers/fieldset/also_seen/enable}Kunden haben sich auch angesehen aktivieren{/s}',
+                        fieldLabel: '{s name="fieldset/customers/fieldset/also_seen/enable"}Kunden haben sich auch angesehen aktivieren{/s}',
                         name: 'customer[similarActive]',
-                        helpText: '{s name=fieldset/customers/fieldset/help/also_seen/enable}Über diese Funktion können Sie das Speichern der Daten beim abschließen einer Bestellung deaktivieren. Dies bietet sich an, wenn Sie die Funktion nicht benötigen und häufig Bestellungen mit sehr vielen Positionen im Shop haben, da jegliche Combinationen aktualisiert werden müssen.{/s}',
+                        helpText: '{s name="fieldset/customers/fieldset/help/also_seen/enable"}Über diese Funktion können Sie das Speichern der Daten beim abschließen einer Bestellung deaktivieren. Dies bietet sich an, wenn Sie die Funktion nicht benötigen und häufig Bestellungen mit sehr vielen Positionen im Shop haben, da jegliche Combinationen aktualisiert werden müssen.{/s}',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/customers/fieldset/alsobought/text/show}Show{/s}',
+                        fieldLabel: '{s name="fieldset/customers/fieldset/alsobought/text/show"}Show{/s}',
                         name: 'customer[similarViewedShow]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/customers/fieldset/alsobought/text/valid}Neu generieren nach [n] Tagen{/s}',
+                        fieldLabel: '{s name="fieldset/customers/fieldset/alsobought/text/valid"}Neu generieren nach [n] Tagen{/s}',
                         name: 'customer[similarValidationTime]',
                         xtype: 'numberfield',
                         minValue: 1,
                         maxValue: 365
                     },
                     {
-                        fieldLabel: '{s name=fieldset/refreshStrategy}Refresh strategy{/s}',
-                        helpText: '{s name=fieldset/refreshStrategy/help}How do you want to refresh this information?<br><br>' +
+                        fieldLabel: '{s name="fieldset/refreshStrategy"}Refresh strategy{/s}',
+                        helpText: '{s name="fieldset/refreshStrategy/help"}How do you want to refresh this information?<br><br>' +
                                 '<b>Manually</b>: Refresh by clicking the *build Index* button<br>' +
                                 '<b>CronJob</b>: Refresh with a CronJob (recommended)<br>' +
                                 '<b>Live</b>: Refresh in live operation (not recommended for large shops){/s}',
@@ -145,9 +145,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                                 { name: 'name', type: 'string' }
                             ],
                             data: [
-                                { id: 1, name: '{s name=fieldset/refreshStrategy/manual}Manually{/s}' },
-                                { id: 2, name: '{s name=fieldset/refreshStrategy/cronJob}CronJob{/s}' },
-                                { id: 3, name: '{s name=fieldset/refreshStrategy/live}Live{/s}' }
+                                { id: 1, name: '{s name="fieldset/refreshStrategy/manual"}Manually{/s}' },
+                                { id: 2, name: '{s name="fieldset/refreshStrategy/cronJob"}CronJob{/s}' },
+                                { id: 3, name: '{s name="fieldset/refreshStrategy/live"}Live{/s}' }
                             ]
                         })
                     }

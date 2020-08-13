@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/systeminfo/view}
+//{namespace name="backend/systeminfo/view"}
 
 /**
  * Shopware UI - Grid for the paths
@@ -92,11 +92,11 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Pathlist', {
 
         var columns = [
             {
-                header: '{s name=path_grid/column/name}Name{/s}',
+                header: '{s name="path_grid/column/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1
             },{
-                header: '{s name=path_grid/column/status}Status{/s}',
+                header: '{s name="path_grid/column/status"}Status{/s}',
                 dataIndex: 'result',
                 flex: 1,
                 renderer: me.renderStatus

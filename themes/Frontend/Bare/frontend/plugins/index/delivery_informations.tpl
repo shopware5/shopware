@@ -78,7 +78,7 @@
                     <p class="delivery--information">
                         <span class="delivery--text delivery--text-not-available">
                             <i class="delivery--status-icon delivery--status-not-available"></i>
-                            {s name="DetailDataNotAvailable"}{config name=notavailable}{/s}
+                            {s name="DetailDataNotAvailable"}{config name="notavailable"}{/s}
                         </span>
                     </p>
                 {/block}

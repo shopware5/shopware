@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/view/main/multi_edit_menu"}
 Ext.define('Shopware.apps.ArticleList.view.main.MultiEditMenu', {
     extend: 'Ext.panel.Panel',
@@ -33,7 +33,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.MultiEditMenu', {
         align: 'stretch'
     },
 
-    title: '{s name=bulkChange}Bulk change{/s}',
+    title: '{s name="bulkChange"}Bulk change{/s}',
 
     initComponent: function () {
         var me = this;
@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.MultiEditMenu', {
         /*{if {acl_is_allowed privilege=doMultiEdit}}*/
         items.push(
                 Ext.create('Ext.button.Button', {
-                    text: '{s name=window/multiEdit}Mehrfachänderung{/s}',
+                    text: '{s name="window/multiEdit"}Mehrfachänderung{/s}',
                     action: 'batchEdit',
                     padding: '10px',
                     margin: '5px',
@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.MultiEditMenu', {
         /*{if {acl_is_allowed privilege=doBackup}}*/
         items.push({
             xtype: 'button',
-            text: '{s name=restoreBackup}Revert changes{/s}',
+            text: '{s name="restoreBackup"}Revert changes{/s}',
             name: 'backup',
             action: 'backup',
             padding: '10px',

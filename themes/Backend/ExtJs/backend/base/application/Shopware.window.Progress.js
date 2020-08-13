@@ -1,6 +1,6 @@
 
 
-//{namespace name=backend/application/main}
+//{namespace name="backend/application/main"}
 //{block name="backend/application/Shopware.window.Progress"}
 
 Ext.define('Shopware.window.Progress', {

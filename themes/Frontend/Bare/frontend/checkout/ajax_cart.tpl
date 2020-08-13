@@ -78,7 +78,7 @@
 
         {block name='frontend_checkout_ajax_cart_prices_container'}
             {if $sBasket.content}
-                {if {config name=showShippingCostsOffCanvas} == 0}
+                {if {config name="showShippingCostsOffCanvas"} == 0}
                     {block name='frontend_checkout_ajax_cart_prices_container_without_shipping_costs'}
                         <div class="prices--container">
                             {block name='frontend_checkout_ajax_cart_prices_container_inner'}
@@ -104,7 +104,7 @@
                                 </div>
                             {/block}
                             {* Shipping costs & Shipping costs pre-calculation *}
-                            {if {config name=showShippingCostsOffCanvas} == 1}
+                            {if {config name="showShippingCostsOffCanvas"} == 1}
                                 {block name='frontend_checkout_shipping_costs_country_trigger'}
                                     {if !$sUserLoggedIn && !$sUserData.additional.user.id}
                                         <a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">
@@ -125,7 +125,7 @@
                                     {include file="frontend/checkout/shipping_costs.tpl" calculateShippingCosts=$showShippingCalculation}
                                 {/block}
                             {/if}
-                            {if {config name=showShippingCostsOffCanvas} == 2}
+                            {if {config name="showShippingCostsOffCanvas"} == 2}
                                 {block name='frontend_checkout_shipping_costs_country_include'}
                                     <div class="small--information">
                                         <span>{s name='CheckoutFooterEstimatedShippingCosts' namespace="frontend/checkout/cart_footer"}{/s}</span>
@@ -166,7 +166,7 @@
                             {* There is something in the basket *}
                             {if !($sDispatchNoOrder && !$sDispatches) && !$sInvalidCartItems}
                                 {block name='frontend_checkout_ajax_cart_open_checkout_inner'}
-                                    <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}" class="btn is--primary button--checkout is--icon-right" title="{$snippetAjaxCartLinkConfirm|escape}">
+                                    <a href="{if {config name="always_select_payment"}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}" class="btn is--primary button--checkout is--icon-right" title="{$snippetAjaxCartLinkConfirm|escape}">
                                         <i class="icon--arrow-right"></i>
                                         {s name='AjaxCartLinkConfirm'}{/s}
                                     </a>

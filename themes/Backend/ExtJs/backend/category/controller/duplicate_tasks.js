@@ -32,7 +32,7 @@
  * The duplicate tasks multi request dialog controller takes care of actual requests
  */
 
-//{namespace name=backend/category/main}
+//{namespace name="backend/category/main"}
 //{block name="backend/category/controller/duplicate_tasks"}
 Ext.define('Shopware.apps.Category.controller.DuplicateTasks', {
     extend: 'Enlight.app.Controller',
@@ -43,8 +43,8 @@ Ext.define('Shopware.apps.Category.controller.DuplicateTasks', {
      */
     snippets: {
         done: {
-            message: '{s name=batch/done_message}Operation finished{/s}',
-            title: '{s name=batch/done_title}Successful{/s}'
+            message: '{s name="batch/done_message"}Operation finished{/s}',
+            title: '{s name="batch/done_title"}Successful{/s}'
         }
     },
 
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Category.controller.DuplicateTasks', {
         );
 
         window.duplicateCategoryProgress.updateProgress(
-            0, '{s name=batch/progress/init/duplicateCategories}Duplicate categories{/s}'
+            0, '{s name="batch/progress/init/duplicateCategories"}Duplicate categories{/s}'
         );
 
         me.startBatchDuplicate(window, callback);
@@ -160,7 +160,7 @@ Ext.define('Shopware.apps.Category.controller.DuplicateTasks', {
             // updates the progress bar value and text, the last parameter is the animation flag
             me.progress.updateProgress(
                 (offset + params.children.length) / me.totalCount,
-                Ext.String.format('{s name=batch/progress/duplicateCategory}Duplicating category [0] of [1]{/s}', ( offset + me.batchSize), me.totalCount),
+                Ext.String.format('{s name="batch/progress/duplicateCategory"}Duplicating category [0] of [1]{/s}', ( offset + me.batchSize), me.totalCount),
                 true
             );
         }

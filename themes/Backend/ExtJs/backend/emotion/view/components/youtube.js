@@ -28,24 +28,24 @@
  */
 
 //{block name="backend/emotion/view/components/youtube"}
-//{namespace name=backend/emotion/view/components/youtube}
+//{namespace name="backend/emotion/view/components/youtube"}
 Ext.define('Shopware.apps.Emotion.view.components.Youtube', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-youtube',
 
     snippets: {
-        video_id: '{s name=video_id}Youtube video id{/s}',
-        video_hd: '{s name=video_hd}Use HD videos{/s}',
-        video_autoplay: '{s name=video_autoplay}Autostart video{/s}',
-        video_related: '{s name=video_related}Hide related{/s}',
-        video_controls: '{s name=video_controls}Hide controls{/s}',
-        video_start: '{s name=video_start}Start video at x-seconds{/s}',
-        video_end: '{s name=video_end}End video after x-seconds{/s}',
-        video_info: '{s name=video_info}Hide info{/s}',
-        video_branding: '{s name=video_branding}Hide video branding{/s}',
+        video_id: '{s name="video_id"}Youtube video id{/s}',
+        video_hd: '{s name="video_hd"}Use HD videos{/s}',
+        video_autoplay: '{s name="video_autoplay"}Autostart video{/s}',
+        video_related: '{s name="video_related"}Hide related{/s}',
+        video_controls: '{s name="video_controls"}Hide controls{/s}',
+        video_start: '{s name="video_start"}Start video at x-seconds{/s}',
+        video_end: '{s name="video_end"}End video after x-seconds{/s}',
+        video_info: '{s name="video_info"}Hide info{/s}',
+        video_branding: '{s name="video_branding"}Hide video branding{/s}',
         video_loop: {
-            fieldLabel: '{s name=video_loop}Loop video{/s}',
-            helpText: '{s name=video_loop_help}{/s}'
+            fieldLabel: '{s name="video_loop"}Loop video{/s}',
+            helpText: '{s name="video_loop_help"}{/s}'
         }
     },
 

@@ -27,7 +27,7 @@
  * @author     shopware AG
  */
 
-//{namespace name=backend/log/system}
+//{namespace name="backend/log/system"}
 
 //{block name="backend/log/view/system/list"}
 Ext.define('Shopware.apps.Log.view.system.List', {
@@ -64,22 +64,22 @@ Ext.define('Shopware.apps.Log.view.system.List', {
 
         var columns = [{
             xtype: 'datecolumn',
-            header: '{s name=model/field/date}Date{/s}',
+            header: '{s name="model/field/date"}Date{/s}',
             dataIndex: 'date',
             width: 150,
             format: Ext.Date.defaultFormat + ' H:i:s'
         }, {
-            header: '{s name=model/field/channel}Channel{/s}',
+            header: '{s name="model/field/channel"}Channel{/s}',
             dataIndex: 'channel',
             width: 100,
             sortable: false
         }, {
-            header: '{s name=model/field/level}Level{/s}',
+            header: '{s name="model/field/level"}Level{/s}',
             dataIndex: 'level',
             width: 100,
             sortable: false
         }, {
-            header: '{s name=model/field/message}Message{/s}',
+            header: '{s name="model/field/message"}Message{/s}',
             dataIndex: 'message',
             flex: 1,
             sortable: false,
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Log.view.system.List', {
                 return Ext.String.htmlEncode(value);
             }
         }, {
-            header: '{s name=model/field/code}Code{/s}',
+            header: '{s name="model/field/code"}Code{/s}',
             dataIndex: 'code',
             width: 75,
             sortable: false
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Log.view.system.List', {
             items: [{
                 iconCls: 'sprite-magnifier',
                 action: 'openLog',
-                tooltip: '{s name=grid/action/tooltip/open_log}Open log{/s}',
+                tooltip: '{s name="grid/action/tooltip/open_log"}Open log{/s}',
                 handler: function (view, rowIndex, colIndex, item, event, record) {
                     me.fireEvent('openLog', record);
                 }
@@ -113,7 +113,7 @@ Ext.define('Shopware.apps.Log.view.system.List', {
 
         me.downloadButton = Ext.create('Ext.Button', {
             iconCls: 'sprite-drive-download',
-            text: '{s name=toolbar/download}Download{/s}',
+            text: '{s name="toolbar/download"}Download{/s}',
             action: 'download',
             disabled: true,
             handler: function () {
@@ -144,7 +144,7 @@ Ext.define('Shopware.apps.Log.view.system.List', {
             labelWidth: 155,
             forceSelection: true,
             width: 400,
-            fieldLabel: '{s name=toolbar/file}File{/s}',
+            fieldLabel: '{s name="toolbar/file"}File{/s}',
             store: me.logFilesStore,
             valueField: 'name',
             displayField: 'name',

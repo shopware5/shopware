@@ -15,7 +15,7 @@
 
                         {* Rating tab *}
                         {block name="frontend_detail_tabs_rating"}
-                            {if !{config name=VoteDisable}}
+                            {if !{config name="VoteDisable"}}
                                 <a href="#" class="tab--link" title="{s name='DetailTabsRating'}{/s}" data-tabName="rating">
                                     {s name='DetailTabsRating'}{/s}
                                     {block name="frontend_detail_tabs_navigation_rating_count"}
@@ -71,7 +71,7 @@
 
                         {* Rating container *}
                         {block name="frontend_detail_tabs_content_rating"}
-                            {if !{config name=VoteDisable}}
+                            {if !{config name="VoteDisable"}}
                                 <div class="tab--container">
                                     {block name="frontend_detail_tabs_content_rating_inner"}
 

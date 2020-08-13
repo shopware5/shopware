@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/view/main/list}*/
+/*{namespace name="backend/shipping/view/main/list"}*/
 
 /**
  * Shopware UI - Shipping Costs
@@ -57,17 +57,17 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * Text to display on empty entries
      * @string
      */
-    emptyText: '{s name=grid_empty_text}No records{/s}',
+    emptyText: '{s name="grid_empty_text"}No records{/s}',
     /**
      * Text displayed if all shops are meant
      * @string
      */
-    emptySubshopText: '{s name=grid_empty_shop}All{/s}',
+    emptySubshopText: '{s name="grid_empty_shop"}All{/s}',
     /**
      * Text displayed if all customergroups are meant
      * @string
      */
-    emptyCustomerGroupText: '{s name=grid_empty_customer_group}All{/s}',
+    emptyCustomerGroupText: '{s name="grid_empty_customer_group"}All{/s}',
 
     /**
      * USe statfull
@@ -96,38 +96,38 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
         // Define the columns and renders
         me.columns = [
             {
-                header: '{s name=grid_name}Name{/s}',
+                header: '{s name="grid_name"}Name{/s}',
                 dataIndex : 'dispatch.name',
                 renderer: me.nameColumn,
                 width: 125
             },
             {
-                header:'{s name=grid_internal_comment}Internal comment{/s}',
+                header:'{s name="grid_internal_comment"}Internal comment{/s}',
                 dataIndex:'dispatch.comment',
                 renderer : me.commentColumn,
                 flex:1
             },
             {
-                header:'{s name=grid_active}Active{/s}',
+                header:'{s name="grid_active"}Active{/s}',
                 xtype: 'booleancolumn',
                 dataIndex:'dispatch.active',
                 width:50,
                 renderer:me.activeColumn
             },
             {
-                header:'{s name=grid_type}Type{/s}',
+                header:'{s name="grid_type"}Type{/s}',
                 dataIndex:'dispatch.type',
                 renderer:me.typeColumn,
                 width:120
             },
             {
-                header:'{s name=grid_shop}Shop{/s}',
+                header:'{s name="grid_shop"}Shop{/s}',
                 dataIndex:'dispatch.multiShopId',
                 renderer:me.multishopIdColumn,
                 width:120
             },
             {
-                header:'{s name=grid_customer_group}Customer group{/s}',
+                header:'{s name="grid_customer_group"}Customer group{/s}',
                 dataIndex:'dispatch.customerGroupId',
                 renderer:me.customerGroupColumn,
                 width:120
@@ -142,21 +142,21 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
                         iconCls : 'sprite-minus-circle-frame',
                         action  : 'delete',
                         cls     : 'dispatchDelete',
-                        tooltip : '{s name=grid_delete_tooltip}Delete this dispatch costs.{/s}'
+                        tooltip : '{s name="grid_delete_tooltip"}Delete this dispatch costs.{/s}'
                     },
                     /* {/if} */
                     /* {if {acl_is_allowed privilege=update}} */
                     {
                         iconCls : 'sprite-pencil',
                         cls     : 'editButton',
-                        tooltip : '{s name=grid_edit_tooltip}Edit these shipping costs{/s}'
+                        tooltip : '{s name="grid_edit_tooltip"}Edit these shipping costs{/s}'
                     },
                     /* {/if} */
                      /* {if {acl_is_allowed privilege=create}} */
                     {
                         iconCls :'sprite-blue-document-copy',
                         cls     :'cloneButton',
-                        tooltip :'{s name=grid_clone_tooltip}Duplicate these shipping costs{/s}',
+                        tooltip :'{s name="grid_clone_tooltip"}Duplicate these shipping costs{/s}',
                         style   : 'width: 16px; height: 16px'
                     }
                     /* {/if} */
@@ -185,14 +185,14 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
                 /*{if {acl_is_allowed privilege=delete}}*/
                 {
                     iconCls : 'sprite-plus-circle',
-                    text : '{s name=grid_add}Add{/s}',
+                    text : '{s name="grid_add"}Add{/s}',
                     action : 'addShipping'
                 },
                 /* {/if} */
                 /*{if {acl_is_allowed privilege=delete}}*/
                 {
                     iconCls : 'sprite-minus-circle',
-                    text : '{s name=grid_delete}Delete{/s}',
+                    text : '{s name="grid_delete"}Delete{/s}',
                     disabled : true,
                     action : 'deleteShipping'
                 }
@@ -224,15 +224,15 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
     typeColumn: function(value, obj, record) {
         switch (record.get('type')) {
             case 3:
-                return '{s name=grid_dispatch_type_discount}Discount rule{/s}';
+                return '{s name="grid_dispatch_type_discount"}Discount rule{/s}';
             case 2:
             case 4:
-                return '{s name=grid_dispatch_type_surcharge}Surcharge rule{/s}';
+                return '{s name="grid_dispatch_type_surcharge"}Surcharge rule{/s}';
             case 1:
-                return '{s name=grid_dispatch_type_alternative}Alternate shipping type{/s}';
+                return '{s name="grid_dispatch_type_alternative"}Alternate shipping type{/s}';
             case 0:
             default:
-                return '{s name=grid_dispatch_type_default}Default shipping type{/s}';
+                return '{s name="grid_dispatch_type_default"}Default shipping type{/s}';
         }
     },
     /**
@@ -302,9 +302,9 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      */
     activeColumn : function (value, metaData, record) {
         if(record.get('active') == 0) {
-            return '{s name=grid_active_false_label}Inactive{/s}';
+            return '{s name="grid_active_false_label"}Inactive{/s}';
         }
-        return '{s name=grid_active_true_label}Active{/s}';
+        return '{s name="grid_active_true_label"}Active{/s}';
     }
 });
 //{/block}

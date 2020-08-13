@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/form/tax"}
 Ext.define('Shopware.apps.Config.view.form.Tax', {
@@ -48,12 +48,12 @@ Ext.define('Shopware.apps.Config.view.form.Tax', {
         return [{
             xtype: 'gridcolumn',
             dataIndex: 'name',
-            text: '{s name=tax/table/name_text}Name{/s}',
+            text: '{s name="tax/table/name_text"}Name{/s}',
             flex: 1
         },{
             xtype: 'numbercolumn',
             dataIndex: 'tax',
-            text: '{s name=tax/table/tax_text}Default tax{/s}',
+            text: '{s name="tax/table/tax_text"}Default tax{/s}',
             align: 'right',
             flex: 1
         }, me.getActionColumn()];

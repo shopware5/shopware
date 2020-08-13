@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/notification/view/main}
+//{namespace name="backend/notification/view/main"}
 
 /**
  * Shopware UI - Notification detail main window.
@@ -38,7 +38,7 @@
 Ext.define('Shopware.apps.Notification.view.main.Window', {
     extend: 'Enlight.app.Window',
     alias : 'widget.notification-main-window',
-    title : '{s name=title}Notification{/s}',
+    title : '{s name="title"}Notification{/s}',
     layout:{
         type:'border'
     },
@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Notification.view.main.Window', {
     getLeftPanel: function() {
         var me = this;
         return Ext.create('Ext.panel.Panel', {
-            title: '{s name=notification/article/panel/title}Articles with notifications{/s}',
+            title: '{s name="notification/article/panel/title"}Articles with notifications{/s}',
             items:[
                 {
                     xtype:'notification-notification-article',
@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Notification.view.main.Window', {
     getRightPanel: function() {
         var me = this;
         return Ext.create('Ext.panel.Panel', {
-            title: '{s name=notification/customer/panel/title}Customer registered for Notification{/s}',
+            title: '{s name="notification/customer/panel/title"}Customer registered for Notification{/s}',
             items:[
                 {
                     xtype:'notification-notification-customer',

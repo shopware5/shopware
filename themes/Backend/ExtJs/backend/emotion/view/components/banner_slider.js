@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{block name="backend/emotion/view/components/banner_slider"}
-//{namespace name=backend/emotion/view/components/banner_slider}
+//{namespace name="backend/emotion/view/components/banner_slider"}
 Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-banner-slider',
@@ -37,23 +37,23 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
      * @object
      */
     snippets: {
-        'select_banner': '{s name=select_banner}Select banner(s){/s}',
-        'banner_administration': '{s name=banner_administration}Banner administration{/s}',
-        'path': '{s name=path}Image path{/s}',
-        'actions': '{s name=actions}Action(s){/s}',
-        'link': '{s name=link}Link{/s}',
-        'altText': '{s name=altText}Alternative text{/s}',
-        'title': '{s name=title}Title{/s}',
+        'select_banner': '{s name="select_banner"}Select banner(s){/s}',
+        'banner_administration': '{s name="banner_administration"}Banner administration{/s}',
+        'path': '{s name="path"}Image path{/s}',
+        'actions': '{s name="actions"}Action(s){/s}',
+        'link': '{s name="link"}Link{/s}',
+        'altText': '{s name="altText"}Alternative text{/s}',
+        'title': '{s name="title"}Title{/s}',
 
-        banner_slider_title: '{s name=banner_slider_title}Title{/s}',
-        banner_slider_arrows: '{s name=banner_slider_arrows}Display arrows{/s}',
+        banner_slider_title: '{s name="banner_slider_title"}Title{/s}',
+        banner_slider_arrows: '{s name="banner_slider_arrows"}Display arrows{/s}',
         banner_slider_numbers: {
-            fieldLabel: '{s name=banner_slider_numbers/label}Display numbers{/s}',
-            supportText: '{s name=banner_slider_numbers/support}Please note that this setting only affects the "emotion" template.{/s}'
+            fieldLabel: '{s name="banner_slider_numbers/label"}Display numbers{/s}',
+            supportText: '{s name="banner_slider_numbers/support"}Please note that this setting only affects the "emotion" template.{/s}'
         },
-        banner_slider_scrollspeed: '{s name=banner_slider_scrollspeed}Scroll speed{/s}',
-        banner_slider_rotation: '{s name=banner_slider_rotation}Rotate automatically{/s}',
-        banner_slider_rotatespeed: '{s name=banner_slider_rotatespeed}Rotation speed{/s}'
+        banner_slider_scrollspeed: '{s name="banner_slider_scrollspeed"}Scroll speed{/s}',
+        banner_slider_rotation: '{s name="banner_slider_rotation"}Rotate automatically{/s}',
+        banner_slider_rotatespeed: '{s name="banner_slider_rotatespeed"}Rotation speed{/s}'
     },
 
     /**

@@ -3,9 +3,9 @@
 {* Title *}
 {block name='frontend_index_header_title'}{strip}
     {if $sArticle.metaTitle}
-        {$sArticle.metaTitle|escapeHtml} | {{config name=sShopname}|escapeHtml}
+        {$sArticle.metaTitle|escapeHtml} | {{config name="sShopname"}|escapeHtml}
     {elseif $sCategoryContent.metaTitle}
-        {$sCategoryContent.metaTitle|escapeHtml} | {{config name=sShopname}|escapeHtml}
+        {$sCategoryContent.metaTitle|escapeHtml} | {{config name="sShopname"}|escapeHtml}
     {else}
         {$smarty.block.parent}
     {/if}
@@ -14,7 +14,7 @@
 {block name='frontend_index_header_meta_tags_opengraph'}
     {if $sArticle}
         <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
+        <meta property="og:site_name" content="{{config name="sShopname"}|escapeHtml}" />
         <meta property="og:title" content="{$sArticle.title|escapeHtml}" />
         <meta property="og:description" content="{$sArticle.description|strip_tags|trim|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
 
@@ -41,12 +41,12 @@
         {$description = $description|trim|truncate:$SeoDescriptionMaxLength:'…'}
 
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
+        <meta property="og:site_name" content="{{config name="sShopname"}|escapeHtml}" />
         <meta property="og:title" content="{$sCategoryContent.name|escapeHtml}" />
         <meta property="og:description" content="{$description|escapeHtml}" />
 
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:site" content="{{config name=sShopname}|escapeHtml}" />
+        <meta name="twitter:site" content="{{config name="sShopname"}|escapeHtml}" />
         <meta name="twitter:title" content="{$sCategoryContent.name|escapeHtml}" />
         <meta name="twitter:description" content="{$description|escapeHtml}" />
     {/if}
@@ -65,7 +65,7 @@
 
     {if $sArticle}
         <link rel="canonical" href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" />
-    {elseif {config name=seoIndexPaginationLinks} && $pages > 1}
+    {elseif {config name="seoIndexPaginationLinks"} && $pages > 1}
 
         {* Previous rel tag *}
         {if $sPage > 1}
@@ -78,7 +78,7 @@
             {$sCategoryContent.canonicalParams.sPage = $sPage + 1}
             <link rel="next" href="{url params = $sCategoryContent.canonicalParams}">
         {/if}
-    {elseif !{config name=seoIndexPaginationLinks}}
+    {elseif !{config name="seoIndexPaginationLinks"}}
         <link rel="canonical" href="{if $sCategoryContent.canonicalParams}{url params = $sCategoryContent.canonicalParams}{/if}" />
     {/if}
 {/block}

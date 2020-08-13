@@ -30,7 +30,7 @@
 /**
  * Shopware Controller - Article backend module
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/controller/media"}
 Ext.define('Shopware.apps.Article.controller.Media', {
     /**
@@ -45,20 +45,20 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      */
     snippets: {
         upload: {
-            text: '{s name=media/upload/text}The image was uploaded successfully.{/s}'
+            text: '{s name="media/upload/text"}The image was uploaded successfully.{/s}'
         },
         success: {
-            title: '{s name=media/success/title}Success{/s}',
-            mapping: '{s name=media/success/mapping}The image mapping saved successfully{/s}'
+            title: '{s name="media/success/title"}Success{/s}',
+            mapping: '{s name="media/success/mapping"}The image mapping saved successfully{/s}'
         },
         failure: {
-            title: '{s name=media/failure/title}Failure{/s}',
-            mapping: '{s name=media/failure/mapping_violation}An error occurred while saving the image mapping:{/s}',
-            noIdViolation: '{s name=media/failure/no_id_violation}No id passed to the php controller action{/s}',
-            noMoreInformation: '{s name=media/failure/no_more_information}No more information available.{/s}',
-            onlyOneCanBeChecked: '{s name=media/failure/only_one_node}You can only activate one configurator option per configurator group.{/s}'
+            title: '{s name="media/failure/title"}Failure{/s}',
+            mapping: '{s name="media/failure/mapping_violation"}An error occurred while saving the image mapping:{/s}',
+            noIdViolation: '{s name="media/failure/no_id_violation"}No id passed to the php controller action{/s}',
+            noMoreInformation: '{s name="media/failure/no_more_information"}No more information available.{/s}',
+            onlyOneCanBeChecked: '{s name="media/failure/only_one_node"}You can only activate one configurator option per configurator group.{/s}'
         },
-        growlMessage: '{s name=growlMessage}Article{/s}'
+        growlMessage: '{s name="growlMessage"}Article{/s}'
     },
 
     /**

@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/condition_panel"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
     extend: 'Ext.form.Panel',
@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
     bodyPadding: '10 20',
     conditions: [],
 
-    title: '{s name=conditions}Conditions{/s}',
+    title: '{s name="conditions"}Conditions{/s}',
 
     initComponent: function() {
         var me = this;
@@ -141,8 +141,8 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
 
             if (singleton && me.conditions.indexOf(name) > -1) {
                 Shopware.Notification.createGrowlMessage(
-                    '{s name=singleton_filter_title}Unique filter{/s}',
-                    '{s name=singleton_filter_description}Each filter type can only be added once{/s}'
+                    '{s name="singleton_filter_title"}Unique filter{/s}',
+                    '{s name="singleton_filter_description"}Each filter type can only be added once{/s}'
                 );
                 return;
             }
@@ -205,7 +205,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
         var me = this;
 
         me.addButton =Ext.create('Ext.button.Split', {
-            text: '{s name=add_condition}Add condition{/s}',
+            text: '{s name="add_condition"}Add condition{/s}',
             iconCls: 'sprite-plus-circle-frame',
             menu: me.createMenu()
         });
@@ -216,7 +216,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
         var me = this;
 
         me.previewButton = Ext.create('Ext.button.Button', {
-            text: '{s name=refresh_preview}Refresh preview{/s}',
+            text: '{s name="refresh_preview"}Refresh preview{/s}',
             iconCls: 'sprite-arrow-circle-225-left',
             handler: function() {
                 me.loadPreview();

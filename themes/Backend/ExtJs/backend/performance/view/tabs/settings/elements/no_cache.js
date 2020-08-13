@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Shopware UI - Customer list backend module
@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
     /**
      * Desciptive title for the grid
      */
-    title: '{s name=grid/noCache}Controller tags not to be cached{/s}',
+    title: '{s name="grid/noCache"}Controller tags not to be cached{/s}',
 
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
 
         return [
             {
-                header: '{s name=grid/column/controller}Controller{/s}',
+                header: '{s name="grid/column/controller"}Controller{/s}',
                 dataIndex: 'key',
                 flex: 2,
                 editor: {
@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
                 }
             },
             {
-                header: '{s name=grid/column/controllerTag}Tag{/s}',
+                header: '{s name="grid/column/controllerTag"}Tag{/s}',
                 dataIndex: 'value',
                 flex: 1,
                 editor: {
@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
                         cls: 'delteBtn',
                         iconCls: 'sprite-minus-circle-frame',
                         action: 'http-cache-delete-controller-time',
-                        tooltip: '{s name=grid/actionButton/delete}Delete entry{/s}',
+                        tooltip: '{s name="grid/actionButton/delete"}Delete entry{/s}',
                         /**
                          * Add button handler to fire the generatePassword event which is handled
                          * in the detail controller. The detail controller generates a password and set it into the password field

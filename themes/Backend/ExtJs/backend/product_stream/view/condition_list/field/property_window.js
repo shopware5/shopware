@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/field/property_window"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.PropertyWindow', {
     extend: 'Ext.window.Window',
@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.PropertyWindow
 
         me.propertyCombo = Ext.create('Ext.form.field.ComboBox', {
             name: 'property',
-            fieldLabel: '{s name=select_group}Select group{/s}',
+            fieldLabel: '{s name="select_group"}Select group{/s}',
             pageSize: 20,
             store: me.createStore(),
             valueField: 'id',
@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.PropertyWindow
         });
 
         me.notice = Ext.create('Ext.container.Container', {
-            html:  '{s name=property/input_text}Please select a property group{/s}',
+            html:  '{s name="property/input_text"}Please select a property group{/s}',
             height: 40
         });
 
@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.PropertyWindow
             dock: 'bottom',
             items: ['->', {
                 xtype: 'button',
-                text: '{s name=apply}Apply{/s}',
+                text: '{s name="apply"}Apply{/s}',
                 cls: 'primary',
                 handler: function() {
                     if (me.propertyCombo.getValue()) {

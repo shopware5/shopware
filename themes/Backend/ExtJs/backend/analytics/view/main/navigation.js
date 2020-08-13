@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/main/navigation"}
 Ext.define('Shopware.apps.Analytics.view.main.Navigation', {
     extend: 'Ext.tree.Panel',
@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Navigation', {
 
     store: 'Navigation',
     width: 250,
-    title: '{s name=navigation_title}Navigation{/s}',
+    title: '{s name="navigation_title"}Navigation{/s}',
     rootVisible: false,
 
     initComponent: function () {

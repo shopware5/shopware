@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/emotion/view/components/banner}
+//{namespace name="backend/emotion/view/components/banner"}
 Ext.define('Shopware.apps.Emotion.view.components.fields.LinkTarget', {
 
     extend: 'Ext.form.field.ComboBox',

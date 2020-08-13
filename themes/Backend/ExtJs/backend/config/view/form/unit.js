@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/form/unit"}
 Ext.define('Shopware.apps.Config.view.form.Unit', {
@@ -55,12 +55,12 @@ Ext.define('Shopware.apps.Config.view.form.Unit', {
         return [{
             xtype: 'gridcolumn',
             dataIndex: 'name',
-            text: '{s name=unit/table/name_text}Name{/s}',
+            text: '{s name="unit/table/name_text"}Name{/s}',
             flex: 1
         }, {
             xtype: 'gridcolumn',
             dataIndex: 'unit',
-            text: '{s name=unit/table/unit_text}Unit{/s}',
+            text: '{s name="unit/table/unit_text"}Unit{/s}',
             flex: 1
         }, me.getActionColumn()];
     },
@@ -69,12 +69,12 @@ Ext.define('Shopware.apps.Config.view.form.Unit', {
         var me = this;
         return [{
             name: 'name',
-            fieldLabel: '{s name=unit/detail/name_label}Name{/s}',
+            fieldLabel: '{s name="unit/detail/name_label"}Name{/s}',
             translatable: true,
             allowBlank: false
         },{
             name: 'unit',
-            fieldLabel: '{s name=unit/detail/unit_label}Unit{/s}',
+            fieldLabel: '{s name="unit/detail/unit_label"}Unit{/s}',
             translatable: true,
             allowBlank: false
         }];

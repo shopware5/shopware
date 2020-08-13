@@ -27,13 +27,13 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 //{block name="backend/performance/view/tabs/cache"}
 Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
     extend: 'Ext.form.Panel',
     alias: 'widget.performance-tabs-cache-main',
-    title: '{s name=tabs/cache/title}Cache{/s}',
+    title: '{s name="tabs/cache/title"}Cache{/s}',
 
     layout:'vbox',
 
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
      */
     getItems: function() {
         var me = this;
-        var info = '{s name=cache/info/text}Erfahre genaueres über das Performance-Modul in der <a href=\'https://docs.shopware.com/de/shopware-5-de/einstellungen/cache-performance-modul\' title=\'Shopware Performance-Modul\' target=\'_blank\'>Dokumentation</a>{/s}';
+        var info = '{s name="cache/info/text"}Erfahre genaueres über das Performance-Modul in der <a href=\'https://docs.shopware.com/de/shopware-5-de/einstellungen/cache-performance-modul\' title=\'Shopware Performance-Modul\' target=\'_blank\'>Dokumentation</a>{/s}';
 
         return [
         {
@@ -99,11 +99,11 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
      */
     getButtons: function() {
         return ['->', {
-            text: '{s name=form/buttons/select_all}Select all{/s}',
+            text: '{s name="form/buttons/select_all"}Select all{/s}',
             action: 'select-all',
             cls: 'secondary'
         },{
-            text: '{s name=form/buttons/submit}Clear{/s}',
+            text: '{s name="form/buttons/submit"}Clear{/s}',
             action: 'clear',
             cls: 'primary'
         }];

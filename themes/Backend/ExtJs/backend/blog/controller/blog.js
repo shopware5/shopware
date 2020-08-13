@@ -33,7 +33,7 @@
  * Detail controller of the blog module. Handles all action around to
  * edit or create and list a blog.
  */
-//{namespace name=backend/blog/view/blog}
+//{namespace name="backend/blog/view/blog"}
 //{block name="backend/blog/controller/blog"}
 Ext.define('Shopware.apps.Blog.controller.Blog', {
     /**
@@ -57,20 +57,20 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      * Contains all snippets for the controller
      */
     snippets: {
-        confirmDeleteSingleBlogArticleTitle: '{s name=message/delete/confirm_single_blog_article_title}Delete this blog article{/s}',
-        confirmDeleteSingleBlogArticle: '{s name=message/delete/confirm_single_blog_article}Are you sure you want to delete the selected blog article ([0])?{/s}',
-        deleteSingleBlogArticleSuccess: '{s name=message/delete/single_blog_article/success}The Blog article has been successfully deleted{/s}',
-        deleteSingleBlogArticleError: '{s name=message/delete/single_blog_article/error}An error has occurred while deleting the selected blog article: {/s}',
-        confirmDeleteMultipleBlogArticles: '{s name=message/delete/multiple_blog_articles}[0] blog articles selected. Are you sure you want to delete the selected blog articles?{/s}',
-        deleteMultipleBlogArticlesSuccess: '{s name=message/delete/multiple_blog_articles/success}The blog articles have been successfully deleted.{/s}',
-        deleteMultipleBlogArticlesError: '{s name=message/delete/multiple_blog_articles/error}An error has occurred while deleting the selected blog articles: {/s}',
-        onSaveChangesSuccess: '{s name=message/save/success}Blog article saved successfully{/s}',
-        onSaveChangesNotValid: '{s name=message/save/not_valid}There were not filled in all required fields{/s}',
-        assignedArticleExist: '{s name=message/add/assigned_article/exist}The article [0] has been already assigned to this blog article{/s}',
-        assignedArticleExistTitle: '{s name=message/add/assigned_article/exist/title}Already exists{/s}',
-        onSaveChangesError: '{s name=message/save/error}An error has occurred while saving your changes.{/s}',
-        chars: '{s name=seo_description/chars}Chars{/s}',
-        growlMessage: '{s name=growlMessage}Blog{/s}'
+        confirmDeleteSingleBlogArticleTitle: '{s name="message/delete/confirm_single_blog_article_title"}Delete this blog article{/s}',
+        confirmDeleteSingleBlogArticle: '{s name="message/delete/confirm_single_blog_article"}Are you sure you want to delete the selected blog article ([0])?{/s}',
+        deleteSingleBlogArticleSuccess: '{s name="message/delete/single_blog_article/success"}The Blog article has been successfully deleted{/s}',
+        deleteSingleBlogArticleError: '{s name="message/delete/single_blog_article/error"}An error has occurred while deleting the selected blog article: {/s}',
+        confirmDeleteMultipleBlogArticles: '{s name="message/delete/multiple_blog_articles"}[0] blog articles selected. Are you sure you want to delete the selected blog articles?{/s}',
+        deleteMultipleBlogArticlesSuccess: '{s name="message/delete/multiple_blog_articles/success"}The blog articles have been successfully deleted.{/s}',
+        deleteMultipleBlogArticlesError: '{s name="message/delete/multiple_blog_articles/error"}An error has occurred while deleting the selected blog articles: {/s}',
+        onSaveChangesSuccess: '{s name="message/save/success"}Blog article saved successfully{/s}',
+        onSaveChangesNotValid: '{s name="message/save/not_valid"}There were not filled in all required fields{/s}',
+        assignedArticleExist: '{s name="message/add/assigned_article/exist"}The article [0] has been already assigned to this blog article{/s}',
+        assignedArticleExistTitle: '{s name="message/add/assigned_article/exist/title"}Already exists{/s}',
+        onSaveChangesError: '{s name="message/save/error"}An error has occurred while saving your changes.{/s}',
+        chars: '{s name="seo_description/chars"}Chars{/s}',
+        growlMessage: '{s name="growlMessage"}Blog{/s}'
     },
 
     /**
@@ -397,7 +397,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      */
     onMetaDescriptionChange: function(textField) {
         var me = this;
-        var metaDescriptionLength = parseInt('{config name=metaDescriptionLength}');
+        var metaDescriptionLength = parseInt('{config name="metaDescriptionLength"}');
         textField.supportTextEl.update(textField.value.length + "/" + metaDescriptionLength + " " + me.snippets.chars);
     },
 

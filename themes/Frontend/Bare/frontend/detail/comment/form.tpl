@@ -9,7 +9,7 @@
 
 {* Display notice if the shop owner needs to unlock a comment before it will be listed *}
 {block name='frontend_detail_comment_post_notice'}
-    {if {config name=VoteUnlock}}
+    {if {config name="VoteUnlock"}}
         {s name="DetailCommentTextReview" assign="snippetDetailCommentTextReview"}{/s}
         {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetDetailCommentTextReview}
     {/if}
@@ -26,7 +26,7 @@
 
         {* Reviewer email address *}
         {block name='frontend_detail_comment_input_mail'}
-            {if {config name=OptinVote} == true}
+            {if {config name="OptinVote"} == true}
                 <input name="sVoteMail" type="email" value="{$sFormData.sVoteMail|escape}" class="review--field{if $sErrorFlag.sVoteMail} has--error{/if}" aria-label="{s name="DetailCommentLabelMail"}{/s}" placeholder="{s name="DetailCommentLabelMail"}{/s}*" required="required" aria-required="true" />
             {/if}
         {/block}
@@ -61,7 +61,7 @@
 
         {* Captcha *}
         {block name='frontend_detail_comment_input_captcha'}
-            {if {config name=captchaMethod} === 'legacy'}
+            {if {config name="captchaMethod"} === 'legacy'}
                 <div class="review--captcha">
 
                     {* Deferred loading of the captcha image *}
@@ -80,7 +80,7 @@
                     {/block}
                 </div>
             {else}
-                {$captchaName = {config name=captchaMethod}}
+                {$captchaName = {config name="captchaMethod"}}
                 {$captchaHasError = isset($sErrorFlag) && count($sErrorFlag) > 0}
                 {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
             {/if}
@@ -95,7 +95,7 @@
 
         {* Data protection information *}
         {block name='frontend_detail_comment_input_privacy'}
-            {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
+            {if {config name="ACTDPRTEXT"} || {config name="ACTDPRCHECK"}}
                 {include file="frontend/_includes/privacy.tpl"}
             {/if}
         {/block}

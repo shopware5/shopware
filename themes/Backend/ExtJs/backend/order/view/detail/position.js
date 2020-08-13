@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order detail page
@@ -74,9 +74,9 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
      * @object
      */
     snippets:{
-        title: '{s name=position/window_title}Positions{/s}',
-        add:'{s name=position/button_add}Add{/s}',
-        remove:'{s name=position/button_delete}Delete all selected{/s}'
+        title: '{s name="position/window_title"}Positions{/s}',
+        add:'{s name="position/button_add"}Add{/s}',
+        remove:'{s name="position/button_delete"}Delete all selected{/s}'
     },
 
 

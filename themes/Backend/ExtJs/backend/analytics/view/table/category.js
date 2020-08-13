@@ -28,7 +28,7 @@
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/category"}
 Ext.define('Shopware.apps.Analytics.view.table.Category', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
@@ -54,12 +54,12 @@ Ext.define('Shopware.apps.Analytics.view.table.Category', {
         return [
             {
                 dataIndex: 'name',
-                text: '{s name=table/category/category}Category{/s}'
+                text: '{s name="table/category/category"}Category{/s}'
             },
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=general/turnover}Turnover{/s}',
+                text: '{s name="general/turnover"}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];

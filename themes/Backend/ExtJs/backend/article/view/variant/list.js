@@ -31,7 +31,7 @@
  * Shopware UI - Article detail page
  * The variant list component is the listing component for the created article variants.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/variant/list"}
 Ext.define('Shopware.apps.Article.view.variant.List', {
 
@@ -64,47 +64,47 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      * @object
      */
     snippets:{
-        regexNumberValidation: '{s name=detail/base/regex_number_validation}The inserted article number contains illegal characters!{/s}',
+        regexNumberValidation: '{s name="detail/base/regex_number_validation"}The inserted article number contains illegal characters!{/s}',
         columns:{
-            number:'{s name=variant/list/column/number}Order number{/s}',
-            stock:'{s name=variant/list/column/stock}Stock{/s}',
+            number:'{s name="variant/list/column/number"}Order number{/s}',
+            stock:'{s name="variant/list/column/stock"}Stock{/s}',
             price: {
-                header: '{s name=variant/list/column/price}Price{/s}',
-                undefined: '{s name=variant/list/column/price_undefined}Undefined{/s}',
-                from: '{s name=variant/list/column/price_from}From{/s}'
+                header: '{s name="variant/list/column/price"}Price{/s}',
+                undefined: '{s name="variant/list/column/price_undefined"}Undefined{/s}',
+                from: '{s name="variant/list/column/price_from"}From{/s}'
             },
             pseudoPrice: {
-                header: '{s name=variant/list/column/pseudoprice}Pseudoprice{/s}',
-                undefined: '{s name=variant/list/column/pseudoprice_undefined}Undefined{/s}'
+                header: '{s name="variant/list/column/pseudoprice"}Pseudoprice{/s}',
+                undefined: '{s name="variant/list/column/pseudoprice_undefined"}Undefined{/s}'
             },
-            standard: '{s name=variant/list/column/standard}Preselection{/s}',
-            active: '{s name=variant/list/column/active}Active{/s}',
-            remove: '{s name=variant/list/column/remove}Remove variant{/s}',
-            edit: '{s name=variant/list/column/edit}Edit variant{/s}'
+            standard: '{s name="variant/list/column/standard"}Preselection{/s}',
+            active: '{s name="variant/list/column/active"}Active{/s}',
+            remove: '{s name="variant/list/column/remove"}Remove variant{/s}',
+            edit: '{s name="variant/list/column/edit"}Edit variant{/s}'
         },
         toolbar:{
-            add:'{s name=variant/list/toolbar/button_add}Add{/s}',
-            remove:'{s name=variant/list/toolbar/button_delete}Delete all selected{/s}',
-            search:'{s name=variant/list/toolbar/search_empty_text}Search...{/s}',
-            data:'{s name=variant/list/toolbar/data}Apply standard data{/s}',
-            save:'{s name=variant/list/toolbar/save}Save changes{/s}',
+            add:'{s name="variant/list/toolbar/button_add"}Add{/s}',
+            remove:'{s name="variant/list/toolbar/button_delete"}Delete all selected{/s}',
+            search:'{s name="variant/list/toolbar/search_empty_text"}Search...{/s}',
+            data:'{s name="variant/list/toolbar/data"}Apply standard data{/s}',
+            save:'{s name="variant/list/toolbar/save"}Save changes{/s}',
             orderNumber: {
-                field: '{s name=variant/list/toolbar/order_field}Apply standard prices{/s}',
-                button: '{s name=variant/list/toolbar/order_button}Regenerate order numbers{/s}',
-                empty: '{s name=variant/list/toolbar/order_empty}mainDetail.number{/s}'
+                field: '{s name="variant/list/toolbar/order_field"}Apply standard prices{/s}',
+                button: '{s name="variant/list/toolbar/order_button"}Regenerate order numbers{/s}',
+                empty: '{s name="variant/list/toolbar/order_empty"}mainDetail.number{/s}'
             }
         },
         saved: {
-            errorMessage: '{s name=article_saved/error_message}An error has occurred while saving the article:{/s}',
-            errorTitle: '{s name=article_saved/error_title}Error{/s}',
-            ordernumberNotMatch: '{s name=detail/base/regex_number_validation}The inserted article number contains illegal characters!{/s}'
+            errorMessage: '{s name="article_saved/error_message"}An error has occurred while saving the article:{/s}',
+            errorTitle: '{s name="article_saved/error_title"}Error{/s}',
+            ordernumberNotMatch: '{s name="detail/base/regex_number_validation"}The inserted article number contains illegal characters!{/s}'
         },
         graduatedPrices: {
-            title: '{s name=graduatedPrices/title}{/s}',
-            confirm: '{s name=graduatedPrices/confirm}{/s}'
+            title: '{s name="graduatedPrices/title"}{/s}',
+            confirm: '{s name="graduatedPrices/confirm"}{/s}'
         },
         paging: {
-            pageSize: '{s name=variant/variantPageSize}variants{/s}'
+            pageSize: '{s name="variant/variantPageSize"}variants{/s}'
         }
     },
 
@@ -211,12 +211,12 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                     oldValue = e.record.get('number');
                     newValue = e.record.get('details.number') || e.record.get('number')
                 }
-                
+
                if (e.field === 'details.inStock') {
                    oldValue = e.record.get('inStock');
                }
 
-                if(e.field === 'details.number' &&  (!newValue || !newValue.match(new RegExp({$orderNumberRegex})))) {
+                if(e.field === 'details.number' &&  (!newValue || !newValue.match(new RegExp('{$orderNumberRegex}')))) {
                     Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.ordernumberNotMatch, me.snippets.growlMessage);
                     e.record.set('number', oldValue);
                     e.record.set('details.number', oldValue);
@@ -230,7 +230,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 if (e.field === 'details.number') {
                     e.record.set('number', newValue);
                 }
-                
+
                 if (e.field === 'details.inStock') {
                     e.record.set('inStock', newValue);
                 }

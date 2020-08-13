@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/media_manager/view/main}
+//{namespace name="backend/media_manager/view/main"}
 
 /**
  * Shopware UI - Media Manager Media Controller
@@ -47,8 +47,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
     extend: 'Ext.app.Controller',
     snippets: {
         confirmMsgBox: {
-            deleteTitle: '{s name=confirmMsgBox/deleteTitle}Delete media files{/s}',
-            deleteText: '{s name=confirmMsgBox/deleteText}Are you sure you want to delete all selected media files?{/s}'
+            deleteTitle: '{s name="confirmMsgBox/deleteTitle"}Delete media files{/s}',
+            deleteText: '{s name="confirmMsgBox/deleteText"}Are you sure you want to delete all selected media files?{/s}'
         }
     },
 

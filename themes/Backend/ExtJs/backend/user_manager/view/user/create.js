@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/user_manager/view/main}
+//{namespace name="backend/user_manager/view/main"}
 
 /**
  * Shopware Backend - User administration detail view
@@ -173,7 +173,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                        items: [
                            {
                                 xtype: 'textfield',
-                                fieldLabel: '{s name=create_user/username}Username{/s}',
+                                fieldLabel: '{s name="create_user/username"}Username{/s}',
                                 anchor: '100%',
                                 name: 'username',
                                 allowBlank: false
@@ -181,12 +181,12 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                            {
                                xtype: 'checkbox',
                                name: 'active',
-                               boxLabel: '{s name=create_user/enabled}Enabled{/s}',
+                               boxLabel: '{s name="create_user/enabled"}Enabled{/s}',
                                anchor: '100%',
                                uncheckedValue: 0,
 
                                inputValue:1,
-                               supportText: '{s name=create_user/enabled_info}Enable or disable this account{/s}'
+                               supportText: '{s name="create_user/enabled_info"}Enable or disable this account{/s}'
                            }
                        ]
                   },
@@ -198,7 +198,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                        items: [
                            {
                                xtype: 'passwordmeter',
-                               fieldLabel: '{s name=create_user/password}Password{/s}',
+                               fieldLabel: '{s name="create_user/password"}Password{/s}',
                                name: 'password',
                                anchor: '100%',
                                margin: '0 0 20 0',
@@ -224,11 +224,11 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
     getUserPasswordFieldRepeat: function () {
         return Ext.create('Ext.form.field.Text',{
             inputType: 'password',
-            fieldLabel: '{s name=create_user/repeat_password}Repeat password{/s}',
+            fieldLabel: '{s name="create_user/repeat_password"}Repeat password{/s}',
             name: 'password2',
             anchor: '100%',
             allowBlank: this.edit,
-            supportText: '{s name=create_user/repeat_password_info}Repeat your password{/s}',
+            supportText: '{s name="create_user/repeat_password_info"}Repeat your password{/s}',
             vtype: 'passwordRepeat'
         });
     },
@@ -300,7 +300,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
         //create the password generation button
         me.apiKeyButton = Ext.create('Ext.button.Button', {
             iconCls:'sprite-license-key',
-            tooltip: '{s name=create_user/generate_api_key}Generate API-Key{/s}',
+            tooltip: '{s name="create_user/generate_api_key"}Generate API-Key{/s}',
             width: 24,
             /**
              * Add button handler to fire the generatePassword event which is handled
@@ -317,9 +317,9 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
             labelWidth: 75,
             flex: 1,
             allowBlank: false,
-            supportText: "{s name=create_user/generate_api_key_support_text}To use the REST API possibly a server configuration is necessary.{/s}",
+            supportText: '{s name="create_user/generate_api_key_support_text"}To use the REST API possibly a server configuration is necessary.{/s}',
             readOnly: true,
-            fieldLabel: '{s name=create_user/api_key}API-Key{/s}'
+            fieldLabel: '{s name="create_user/api_key"}API-Key{/s}'
         });
 
         return Ext.create('Ext.container.Container', {
@@ -341,7 +341,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
         var checked = (me.record.getId() > 0 && me.record.get('apiKey') !== null);
 
         var fieldset = Ext.create('Ext.form.FieldSet', {
-            title: '{s name=create_user/fieldset_api}API Access{/s}',
+            title: '{s name="create_user/fieldset_api"}API Access{/s}',
             bodyPadding: 10,
             items: [{
                 // Implementiert das Column Layout
@@ -357,7 +357,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                         xtype: 'checkbox',
                         checked: checked,
                         name: 'apiActive',
-                        boxLabel: '{s name=create_user/checkbox_api}Enabled{/s}',
+                        boxLabel: '{s name="create_user/checkbox_api"}Enabled{/s}',
                         anchor: '100%',
                         uncheckedValue: 0,
                         inputValue: 1,
@@ -404,7 +404,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
     getUserBaseFieldset: function() {
         return Ext.create('Ext.form.FieldSet',
         {
-            title: '{s name=create_user/main_data}Main data{/s}',
+            title: '{s name="create_user/main_data"}Main data{/s}',
             bodyPadding : 10,
             defaults    : {
                 labelWidth: 155
@@ -423,14 +423,14 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                        items: [
                            {
                               xtype: 'textfield',
-                              fieldLabel: '{s name=create_user/realname}Real name{/s}',
+                              fieldLabel: '{s name="create_user/realname"}Real name{/s}',
                               anchor: '100%',
                               name: 'name',
                               allowBlank: false
                            },
                            {
                                xtype: 'textfield',
-                               fieldLabel: '{s name=create_user/email}Email address{/s}',
+                               fieldLabel: '{s name="create_user/email"}Email address{/s}',
                                anchor: '100%',
                                vtype: 'remote',
                                checkChangeBuffer: 500,
@@ -452,7 +452,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                                xtype:'combobox',
                                triggerAction:'all',
                                name:'localeId',
-                               fieldLabel: '{s name=create_user/language}Default language{/s}',
+                               fieldLabel: '{s name="create_user/language"}Default language{/s}',
                                store:this.localeStore,
                                valueField:'id',
                                displayField:'name',
@@ -470,7 +470,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                               xtype:'combobox',
                               triggerAction:'all',
                               name:'roleId',
-                              fieldLabel: '{s name=create_user/role}Member of role{/s}',
+                              fieldLabel: '{s name="create_user/role"}Member of role{/s}',
                               store: this.roleStore,
                               valueField:'id',
                               displayField:'name',
@@ -497,7 +497,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
     getUserOptionsFieldset: function() {
         return Ext.create('Ext.form.FieldSet',
                 {
-                    title: '{s name=create_user/individual_user_options}Individual user options{/s}',
+                    title: '{s name="create_user/individual_user_options"}Individual user options{/s}',
                     bodyPadding : 10,
                     defaults    : {
                         labelWidth: 155
@@ -517,20 +517,20 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                                     {
                                         xtype: 'checkbox',
                                         name: 'extendedEditor',
-                                        boxLabel: '{s name=create_user/checkbox_extended_editor}Extended Editor{/s}',
+                                        boxLabel: '{s name="create_user/checkbox_extended_editor"}Extended Editor{/s}',
                                         anchor: '100%',
                                         uncheckedValue: 0,
                                         inputValue: 1,
-                                        supportText: '{s name=create_user/checkbox_extended_editor_info}Enable or disable extended editor{/s}'
+                                        supportText: '{s name="create_user/checkbox_extended_editor_info"}Enable or disable extended editor{/s}'
                                     },
                                     {
                                         xtype: 'checkbox',
                                         name: 'disabledCache',
-                                        boxLabel: '{s name=create_user/checkbox_disabled_cache}Disabled cache{/s}',
+                                        boxLabel: '{s name="create_user/checkbox_disabled_cache"}Disabled cache{/s}',
                                         anchor: '100%',
                                         uncheckedValue: 0,
                                         inputValue: 1,
-                                        supportText: '{s name=create_user/checkbox_disabled_cache_info}Enable or disable backend-cache{/s}'
+                                        supportText: '{s name="create_user/checkbox_disabled_cache_info"}Enable or disable backend-cache{/s}'
                                     }
                                  ]
                             },

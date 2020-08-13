@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/condition/immediate_delivery"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.ImmediateDelivery', {
     extend: 'ProductStream.filter.AbstractCondition',
@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.ImmediateD
     },
 
     getLabel: function() {
-        return '{s name=immediate_delivery_condition}Immediate delivery condition{/s}';
+        return '{s name="immediate_delivery_condition"}Immediate delivery condition{/s}';
     },
 
     isSingleton: function() {
@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.ImmediateD
             },
             items: [{
                 xtype: 'displayfield',
-                value: '{s name=immediate_delivery/display_text}Only products available for imediate delivery will be displyed{/s}',
+                value: '{s name="immediate_delivery/display_text"}Only products available for imediate delivery will be displyed{/s}',
             }, {
                 xtype: 'numberfield',
                 name: 'condition.' + this.getName(),

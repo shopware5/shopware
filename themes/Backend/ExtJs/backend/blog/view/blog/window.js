@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/blog/view/blog}
+//{namespace name="backend/blog/view/blog"}
 
 /**
  * Shopware UI - Blog detail main window.
@@ -37,7 +37,7 @@
 //{block name="backend/blog/view/blog/window"}
 Ext.define('Shopware.apps.Blog.view.blog.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window/detail_title}Blog article configuration{/s}',
+    title: '{s name="window/detail_title"}Blog article configuration{/s}',
     alias: 'widget.blog-blog-window',
     border: false,
     autoShow: true,
@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
             me.formPanel,
             {
                 xtype: 'blog-blog-detail-comments',
-                title: '{s name=comment/title}Blog article comments{/s}',
+                title: '{s name="comment/title"}Blog article comments{/s}',
                 commentStore: me.commentStore
             }
 
@@ -139,7 +139,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
             },
             border: 0,
             bodyPadding: 10,
-            title:'{s name=detail_general/title}General Settings{/s}',
+            title:'{s name="detail_general/title"}General Settings{/s}',
             plugins: [{
                 ptype: 'translation',
                 translationType: 'blog'
@@ -183,7 +183,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
         var me = this;
         return ['->',
             {
-                text:'{s name=detail_general/button/cancel}Cancel{/s}',
+                text:'{s name="detail_general/button/cancel"}Cancel{/s}',
                 cls: 'secondary',
                 scope:me,
                 handler:function () {
@@ -192,7 +192,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
             }
         /* {if {acl_is_allowed privilege=create}} */
             ,{
-                text:'{s name=detail_general/button/save}Save{/s}',
+                text:'{s name="detail_general/button/save"}Save{/s}',
                 action:'save',
                 cls:'primary'
             }

@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/view/widgets}
+//{namespace name="backend/index/view/widgets"}
 
 /**
  * Shopware UI - Sales Widget
@@ -32,7 +32,7 @@
 Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
     extend: 'Shopware.apps.Index.view.widgets.Base',
     alias: 'widget.swag-merchant-widget',
-    title: '{s name=orders/title}Last orders{/s}',
+    title: '{s name="orders/title"}Last orders{/s}',
     layout: 'fit',
 
     /**
@@ -41,23 +41,23 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
      */
     snippets: {
         headers: {
-            date: '{s name=merchant/headers/date}Date{/s}',
-            company_name: '{s name=merchant/headers/name}Company name{/s}',
-            customer: '{s name=merchant/headers/customer}Customer{/s}',
-            customer_group: '{s name=merchant/headers/customer_group}Customer group{/s}'
+            date: '{s name="merchant/headers/date"}Date{/s}',
+            company_name: '{s name="merchant/headers/name"}Company name{/s}',
+            customer: '{s name="merchant/headers/customer"}Customer{/s}',
+            customer_group: '{s name="merchant/headers/customer_group"}Customer group{/s}'
         },
         success_msg: {
-            title: '{s name=merchant/success_msg/title}Merchant widget{/s}',
-            text: '{s name=merchant/success_msg/text}Selected merchant was successfully unlocked{/s}'
+            title: '{s name="merchant/success_msg/title"}Merchant widget{/s}',
+            text: '{s name="merchant/success_msg/text"}Selected merchant was successfully unlocked{/s}'
         },
         failure_msg: {
-            title: '{s name=merchant/success_msg/title}Merchant widget{/s}',
-            text: "{s name=merchant/failure_msg/text}Selected merchant couldn't be unlocked successfully.{/s}"
+            title: '{s name="merchant/success_msg/title"}Merchant widget{/s}',
+            text: '{s name="merchant/failure_msg/text"}{/s}'
         },
         tooltips: {
-            customer: '{s name=merchant/tooltips/customer}Open customer{/s}',
-            unlock: '{s name=merchant/tooltips/allow}Unlock merchant{/s}',
-            decline: '{s name=merchant/tooltips/decline}Decline merchant{/s}'
+            customer: '{s name="merchant/tooltips/customer"}Open customer{/s}',
+            unlock: '{s name="merchant/tooltips/allow"}Unlock merchant{/s}',
+            decline: '{s name="merchant/tooltips/decline"}Decline merchant{/s}'
         }
     },
 

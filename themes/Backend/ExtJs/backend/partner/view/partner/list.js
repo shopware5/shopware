@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/partner/view/partner}
+//{namespace name="backend/partner/view/partner"}
 
 /**
  * Shopware UI - partner list window.
@@ -116,36 +116,36 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
 
         var columnsData = [
             {
-                header:'{s name=list/column/company}Company{/s}',
+                header:'{s name="list/column/company"}Company{/s}',
                 dataIndex:'company',
                 flex:1
             },
             {
-                header:'{s name=list/column/registered}Registered{/s}',
+                header:'{s name="list/column/registered"}Registered{/s}',
                 dataIndex:'date',
                 xtype: 'datecolumn',
                 flex:1
             },
             {
-                header:'{s name=list/column/active}Active{/s}',
+                header:'{s name="list/column/active"}Active{/s}',
                 dataIndex:'active',
                 renderer: me.activeRenderer,
                 flex:1
             },
             {
-                header:'{s name=list/column/monthly_amount}Monthly turnover{/s}',
+                header:'{s name="list/column/monthly_amount"}Monthly turnover{/s}',
                 dataIndex:'monthlyAmount',
                 xtype: 'numbercolumn',
                 flex:1
             },
             {
-                header:'{s name=list/column/yearly_amount}Yearly turnover{/s}',
+                header:'{s name="list/column/yearly_amount"}Yearly turnover{/s}',
                 dataIndex:'yearlyAmount',
                 xtype: 'numbercolumn',
                 flex:1
             },
             {
-                header:'{s name=list/column/partner_link}Partner link{/s}',
+                header:'{s name="list/column/partner_link"}Partner link{/s}',
                 dataIndex:'idCode',
                 renderer: me.partnerLinkRenderer,
                 flex:1
@@ -167,9 +167,9 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
      */
     activeRenderer : function(value) {
         if(value) {
-            return "<span style='font-weight: 700; color:green;'>{s name=list/active_value/yes}Yes{/s}</span>";
+            return '<span style="font-weight: 700; color:green;">{s name="list/active_value/yes"}Yes{/s}</span>';
         }
-        return "<span style='font-weight: 700; color:red;'>{s name=list/active_value/no}No{/s}</span>";
+        return '<span style="font-weight: 700; color:red;">{s name="list/active_value/no"}No{/s}</span>';
     },
 
     /**
@@ -194,7 +194,7 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
             actionColumnData.push({
                 iconCls:'sprite-pencil',
                 cls:'editBtn',
-                tooltip:'{s name=list/action_column/edit}Edit partner{/s}',
+                tooltip:'{s name="list/action_column/edit"}Edit partner{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('editColumn', view, rowIndex, colIndex, item);
                 }
@@ -206,7 +206,7 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
                iconCls:'sprite-minus-circle-frame',
                action:'delete',
                cls:'delete',
-               tooltip:'{s name=list/action_column/delete}Delete partner{/s}',
+               tooltip:'{s name="list/action_column/delete"}Delete partner{/s}',
                handler:function (view, rowIndex, colIndex, item) {
                    me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
                }
@@ -217,7 +217,7 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
             actionColumnData.push({
                 iconCls:'sprite-partner-stats',
                 cls:'chart-up-color',
-                tooltip:'{s name=list/action_column/statistic}Statistics{/s}',
+                tooltip:'{s name="list/action_column/statistic"}Statistics{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('statistic', view, rowIndex, colIndex, item);
                 }
@@ -239,7 +239,7 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
                     /*{if {acl_is_allowed privilege=create}}*/
                     {
                         iconCls:'sprite-plus-circle',
-                        text:'{s name=list/button/add}Add{/s}',
+                        text:'{s name="list/button/add"}Add{/s}',
                         action:'add'
                     }
                     /*{/if}*/

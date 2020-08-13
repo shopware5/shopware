@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Filter fieldSet
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
     /**
      * Description of the fieldSet
      */
-    caption: '{s name=tabs/settings/filter/title}Filters{/s}',
+    caption: '{s name="tabs/settings/filter/title"}Filters{/s}',
 
     /**
      * Component event method which is fired when the component
@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
 
         me.listingModeField = Ext.create('Shopware.apps.Base.view.element.ListingFilterModeSelect', {
             name: 'filters[listingMode]',
-            fieldLabel: '{s name=fieldset/filter/text/listingMode}{/s}',
+            fieldLabel: '{s name="fieldset/filter/text/listingMode"}{/s}',
             labelWidth: 210,
             labelStyle: 'font-weight: 700;',
             anchor: '100%'
@@ -80,15 +80,15 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/information}{/s}',
+                title: '{s name="fieldset/information"}{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name=fieldset/filter/info}{/s}")
+                    me.createDescriptionContainer('{s name="fieldset/filter/info"}{/s}')
                 ]
             },
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/listings}Listings{/s}',
+                title: '{s name="fieldset/listings"}Listings{/s}',
                 items: [ me.listingModeField ]
             }
         ];

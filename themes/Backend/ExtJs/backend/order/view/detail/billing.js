@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order detail page billing field set
@@ -61,25 +61,25 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
      * @object
      */
     snippets:{
-        title:'{s name=billing/title}Billing data{/s}',
+        title:'{s name="billing/title"}Billing data{/s}',
         salutation:{
-            label:'{s name=address/salutation}Salutation{/s}'
+            label:'{s name="address/salutation"}Salutation{/s}'
         },
-        titleField:'{s name=address/title_field}Title{/s}',
-        firstName:'{s name=address/first_name}First name{/s}',
-        lastName:'{s name=address/last_name}Last name{/s}',
-        street:'{s name=address/street}Street{/s}',
-        zipCode:'{s name=address/zip_code}Zip code{/s}',
-        city:'{s name=address/city}City{/s}',
-        additionalAddressLine1:'{s name=address/additionalAddressLine1}Additional address line 1{/s}',
-        additionalAddressLine2:'{s name=address/additionalAddressLine2}Additional address line 2{/s}',
-        state:'{s name=address/state}State{/s}',
-        birthday:'{s name=address/birthday_label}Day of birth{/s}',
-        country:'{s name=address/country}Country{/s}',
-        phone:'{s name=address/phone}Phone{/s}',
-        company:'{s name=address/company}Company{/s}',
-        department:'{s name=address/department}Department{/s}',
-        vatId:'{s name=address/vat_id}VAT ID{/s}'
+        titleField:'{s name="address/title_field"}Title{/s}',
+        firstName:'{s name="address/first_name"}First name{/s}',
+        lastName:'{s name="address/last_name"}Last name{/s}',
+        street:'{s name="address/street"}Street{/s}',
+        zipCode:'{s name="address/zip_code"}Zip code{/s}',
+        city:'{s name="address/city"}City{/s}',
+        additionalAddressLine1:'{s name="address/additionalAddressLine1"}Additional address line 1{/s}',
+        additionalAddressLine2:'{s name="address/additionalAddressLine2"}Additional address line 2{/s}',
+        state:'{s name="address/state"}State{/s}',
+        birthday:'{s name="address/birthday_label"}Day of birth{/s}',
+        country:'{s name="address/country"}Country{/s}',
+        phone:'{s name="address/phone"}Phone{/s}',
+        company:'{s name="address/company"}Company{/s}',
+        department:'{s name="address/department"}Department{/s}',
+        vatId:'{s name="address/vat_id"}VAT ID{/s}'
     },
 
     /**

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/order}
+// {namespace name="backend/customer/view/order"}
 
 /**
  * Shopware UI - Customer list backend module
@@ -62,15 +62,15 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
      * @object
      */
     snippets: {
-        search: '{s name=toolbar/search_empty_text}Search...{/s}',
-        openOrder: '{s name=column/open_order}Open order in a new window{/s}',
-        orderTime: '{s name=column/time}Order date{/s}',
-        number: '{s name=column/number}Order number{/s}',
-        paymentMethod: '{s name=column/payment_method}Payment method{/s}',
-        dispatchMethod: '{s name=column/dispatch_method}Shipping type{/s}',
-        orderStatus: '{s name=column/order_status}Order status{/s}',
-        paymentStatus: '{s name=column/payment_status}Payment status{/s}',
-        total: '{s name=column/total}Total{/s}'
+        search: '{s name="toolbar/search_empty_text"}Search...{/s}',
+        openOrder: '{s name="column/open_order"}Open order in a new window{/s}',
+        orderTime: '{s name="column/time"}Order date{/s}',
+        number: '{s name="column/number"}Order number{/s}',
+        paymentMethod: '{s name="column/payment_method"}Payment method{/s}',
+        dispatchMethod: '{s name="column/dispatch_method"}Shipping type{/s}',
+        orderStatus: '{s name="column/order_status"}Order status{/s}',
+        paymentStatus: '{s name="column/payment_status"}Payment status{/s}',
+        total: '{s name="column/total"}Total{/s}'
     },
 
     /**

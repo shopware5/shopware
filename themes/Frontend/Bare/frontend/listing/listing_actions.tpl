@@ -1,6 +1,6 @@
 {* Listing actions *}
 {block name='frontend_listing_actions_top'}
-    {$listingMode = {config name=listingMode}}
+    {$listingMode = {config name="listingMode"}}
 
     {block name="frontend_listing_actions_top_hide_detection"}
         {$class = 'listing--actions is--rounded'}

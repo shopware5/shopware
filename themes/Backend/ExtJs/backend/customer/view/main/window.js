@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+// {namespace name="backend/customer/view/main"}
 // {block name="backend/customer/view/main/window"}
 Ext.define('Shopware.apps.Customer.view.main.Window', {
     extend: 'Enlight.app.Window',
@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
     },
     width: '95%',
     height: '95%',
-    title: '{s name=window_title}{/s}',
+    title: '{s name="window_title"}{/s}',
 
     createItems: function() {
         var me = this, tabs = [];

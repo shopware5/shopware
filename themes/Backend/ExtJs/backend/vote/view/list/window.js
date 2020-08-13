@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/vote/main}
+//{namespace name="backend/vote/main"}
 
 //{block name="backend/vote/view/list/window"}
 Ext.define('Shopware.apps.Vote.view.list.Window', {
@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Vote.view.list.Window', {
     alias: 'widget.vote-list-window',
     height: '90%',
     width: '80%',
-    title : '{s name=window_title}Vote listing{/s}',
+    title : '{s name="window_title"}Vote listing{/s}',
 
     configure: function() {
         return {

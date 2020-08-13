@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/form}
+//{namespace name="backend/config/view/form"}
 
 //{block name="backend/config/view/form/page_group"}
 Ext.define('Shopware.apps.Config.view.form.PageGroup', {
@@ -53,17 +53,17 @@ Ext.define('Shopware.apps.Config.view.form.PageGroup', {
         return [{
             xtype: 'gridcolumn',
             dataIndex: 'name',
-            text: '{s name=page_group/table/name_text}Name{/s}',
+            text: '{s name="page_group/table/name_text"}Name{/s}',
             flex: 1
         }, {
             xtype: 'gridcolumn',
             dataIndex: 'mapping',
-            text: '{s name=page_group/table/mapping_text}Mapping{/s}',
+            text: '{s name="page_group/table/mapping_text"}Mapping{/s}',
             flex: 1
         }, {
             xtype: 'booleancolumn',
             name: 'active',
-            fieldLabel: '{s name=page_group/table/active_text}Active{/s}'
+            fieldLabel: '{s name="page_group/table/active_text"}Active{/s}'
         }, me.getActionColumn()];
     },
 
@@ -71,21 +71,21 @@ Ext.define('Shopware.apps.Config.view.form.PageGroup', {
         var me = this;
         return [{
             name: 'name',
-            fieldLabel: '{s name=page_group/detail/name_label}Name{/s}',
+            fieldLabel: '{s name="page_group/detail/name_label"}Name{/s}',
             allowBlank: false
         },{
             name: 'key',
-            fieldLabel: '{s name=page_group/detail/key_label}Template key{/s}',
+            fieldLabel: '{s name="page_group/detail/key_label"}Template key{/s}',
             allowBlank: false
         },{
             xtype: 'config-element-select',
             name: 'mappingId',
-            fieldLabel: '{s name=page_group/detail/mapping_label}Mapping{/s}',
+            fieldLabel: '{s name="page_group/detail/mapping_label"}Mapping{/s}',
             store: 'base.PageGroup'
         },{
             xtype: 'config-element-boolean',
             name: 'active',
-            fieldLabel: '{s name=page_group/detail/active_label}Active{/s}'
+            fieldLabel: '{s name="page_group/detail/active_label"}Active{/s}'
         }];
     }
 });

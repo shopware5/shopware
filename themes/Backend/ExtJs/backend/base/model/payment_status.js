@@ -33,7 +33,7 @@
  * The payment model represents a data row of the s_core_states or the
  * Shopware\Models\State\State doctrine model.
  */
-//{namespace name=backend/static/payment_status}
+//{namespace name="backend/static/payment_status"}
 //{block name="backend/base/model/payment_status"}
 Ext.define('Shopware.apps.Base.model.PaymentStatus', {
     /**

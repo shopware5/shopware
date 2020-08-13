@@ -24,7 +24,7 @@
 /**
  * The list controller handles the adding / editing of filters
  */
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/controller/filter"}
 Ext.define('Shopware.apps.ArticleList.controller.Filter', {
 
@@ -160,7 +160,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
             filterString = me.getFilterStringFromSimpleFilter().filterString;
         }
 
-        suggestController.loadFilter(filterString, '{s name=unsavedFilter}Unsaved filter{/s}');
+        suggestController.loadFilter(filterString, '{s name="unsavedFilter"}Unsaved filter{/s}');
     },
 
     /**
@@ -227,8 +227,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
                 me.loadSimpleTokens(value);
             } else  {
                 Ext.MessageBox.confirm(
-                    '{s name=proceed}Proceed?{/s}',
-                    '{s name=convertFilterMessage}You cannot convert this query to a simple filter. Do you want to proceed anyway and loose the current filter?{/s}',
+                    '{s name="proceed"}Proceed?{/s}',
+                    '{s name="convertFilterMessage"}You cannot convert this query to a simple filter. Do you want to proceed anyway and loose the current filter?{/s}',
                     function (response) {
                         if ( response === 'yes' ) {
                             return;
@@ -316,9 +316,9 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
             if (!filterString) {
                 message = 'Empty filter';
             } else {
-                message = Ext.String.format('{s name=parserError}Could not parse the string \'[0]\': <br><br>[1]{/s}', filterString, me.getController('Suggest').getErrorMessage());
+                message = Ext.String.format('{s name="parserError"}Could not parse the string \'[0]\': <br><br>[1]{/s}', filterString, me.getController('Suggest').getErrorMessage());
             }
-            Shopware.Notification.createGrowlMessage('{s name=error}Error{/s}', message);
+            Shopware.Notification.createGrowlMessage('{s name="error"}Error{/s}', message);
             return;
         }
 
@@ -329,15 +329,15 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
         record.save({
             success: function(record, operation) {
                 if (operation.success) {
-                    Shopware.Notification.createGrowlMessage('{s name=successTitle}Success{/s}', Ext.String.format('{s name=successMessage}Successfully saved [0]{/s}', ''));
+                    Shopware.Notification.createGrowlMessage('{s name="successTitle"}Success{/s}', Ext.String.format('{s name="successMessage"}Successfully saved [0]{/s}', ''));
                 }
                 me.subApplication.filterStore.load();
                 me.closeFilterWindow();
             },
             failure: function(record, operation) {
                 Shopware.Notification.createStickyGrowlMessage({
-                    title: '{s name=error}Error{/s}',
-                    text: '{s name=unknownError}An unknown error occurred, please check your server logs{/s}',
+                    title: '{s name="error"}Error{/s}',
+                    text: '{s name="unknownError"}An unknown error occurred, please check your server logs{/s}',
                     log: true
                 },
                 'ArticleList');
@@ -588,8 +588,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
             record = store.getAt(rowIndex);
 
         Ext.MessageBox.confirm(
-            '{s name=deleteFilterTitle}Delete filter?{/s}',
-            Ext.String.format('{s name=deleteFilterMessage}Do you want to delete the filter \'[0]\'?{/s}', record.get('name')),
+            '{s name="deleteFilterTitle"}Delete filter?{/s}',
+            Ext.String.format('{s name="deleteFilterMessage"}Do you want to delete the filter \'[0]\'?{/s}', record.get('name')),
             function (response) {
                 if ( response !== 'yes' ) {
                     return;
@@ -597,7 +597,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
                 record.destroy({
                     success: function() {
                         store.load();
-                        Shopware.Notification.createGrowlMessage('{s name=successTitle}Success{/s}', Ext.String.format('{s name=successDeleteMessage}Successfully deleted [0]{/s}', ''));
+                        Shopware.Notification.createGrowlMessage('{s name="successTitle"}Success{/s}', Ext.String.format('{s name="successDeleteMessage"}Successfully deleted [0]{/s}', ''));
                     }
                 });
             }

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order batch window
@@ -67,24 +67,24 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
      * Contains all snippets for the view component
      */
     snippets: {
-        info: '{s name=settings/info}Caution: If you have selected orders with an already existing receipt, these will be regenerated.{/s}',
+        info: '{s name="settings/info"}Caution: If you have selected orders with an already existing receipt, these will be regenerated.{/s}',
         mode: {
-            label: '{s name=settings/mode}Mode{/s}',
-            override: '{s name=settings/override}Recreate all documents{/s}',
-            notExist: '{s name=settings/not_exist}Create only not existing documents{/s}'
+            label: '{s name="settings/mode"}Mode{/s}',
+            override: '{s name="settings/override"}Recreate all documents{/s}',
+            notExist: '{s name="settings/not_exist"}Create only not existing documents{/s}'
         },
-        documentType: '{s name=settings/document_type}Document type{/s}',
-        paymentStatus: '{s name=settings/payment_status}Payment status{/s}',
-        orderStatus: '{s name=settings/order_status}Order status{/s}',
-        mail: '{s name=settings/auto_send}Send emails automatically{/s}',
-        generate: '{s name=settings/process}Process changes{/s}',
-        gridTitle: '{s name=settings/grid_title}Selected orders{/s}',
-        settingsFieldSetLabel: '{s name=settings/field_set_label}Settings to generate{/s}',
-        oneDocument: '{s name=settings/one_document}Create single document{/s}',
+        documentType: '{s name="settings/document_type"}Document type{/s}',
+        paymentStatus: '{s name="settings/payment_status"}Payment status{/s}',
+        orderStatus: '{s name="settings/order_status"}Order status{/s}',
+        mail: '{s name="settings/auto_send"}Send emails automatically{/s}',
+        generate: '{s name="settings/process"}Process changes{/s}',
+        gridTitle: '{s name="settings/grid_title"}Selected orders{/s}',
+        settingsFieldSetLabel: '{s name="settings/field_set_label"}Settings to generate{/s}',
+        oneDocument: '{s name="settings/one_document"}Create single document{/s}',
         selectOption: '{s name="settings/select_option"}Please select{/s}',
         invalidOption: '{s name="settings/invalid_option"}Invalid Option{/s}',
-        errorTitle: '{s name=batch/error/title}Error{/s}',
-        mustSelectDocument: '{s name=settings/must_select_document_type}Please select a document type first{/s}'
+        errorTitle: '{s name="batch/error/title"}Error{/s}',
+        mustSelectDocument: '{s name="settings/must_select_document_type"}Please select a document type first{/s}'
     },
 
     /**
@@ -457,7 +457,7 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
 
         return Ext.create('Ext.form.field.Checkbox', {
             name: 'addAttachments',
-            fieldLabel: '{s name=attachment/batch/add}{/s}',
+            fieldLabel: '{s name="attachment/batch/add"}{/s}',
             disabled: true,
             inputValue: true,
             uncheckedValue: false,

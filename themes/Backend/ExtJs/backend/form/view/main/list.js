@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/form/view/main}
+//{namespace name="backend/form/view/main"}
 
 /**
  * todo@all: Documentation
@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Form.view.main.List', {
         actionColumItems.push({
             action: 'delete',
             cls: 'deleteBtn',
-            tooltip: '{s name=tooltip_delete_form}Delete this form{/s}',
+            tooltip: '{s name="tooltip_delete_form"}Delete this form{/s}',
             iconCls: 'sprite-minus-circle-frame'
         });
         /*{/if}*/
@@ -97,14 +97,14 @@ Ext.define('Shopware.apps.Form.view.main.List', {
             action: 'edit',
             cls: 'editBtn',
             iconCls: 'sprite-pencil',
-            tooltip: '{s name=tooltip_edit_form}Edit this form{/s}'
+            tooltip: '{s name="tooltip_edit_form"}Edit this form{/s}'
         });
         /*{else}*/
         actionColumItems.push({
             action: 'edit',
             cls: 'editBtn',
             iconCls: 'sprite-magnifier',
-            tooltip: '{s name=tooltip_show_form}Display form{/s}'
+            tooltip: '{s name="tooltip_show_form"}Display form{/s}'
         });
         /*{/if}*/
 
@@ -113,20 +113,20 @@ Ext.define('Shopware.apps.Form.view.main.List', {
             iconCls: 'sprite-blue-document-copy',
             action: 'copy',
             cls: 'copyBtn',
-            tooltip: '{s name=tooltip_copy_form}Copy this form{/s}'
+            tooltip: '{s name="tooltip_copy_form"}Copy this form{/s}'
         });
         /*{/if}*/
 
         return [{
-            header: '{s name=column_name}Name{/s}',
+            header: '{s name="column_name"}Name{/s}',
             dataIndex: 'name',
             flex: 1
         }, {
-            header: '{s name=column_email}Email address{/s}',
+            header: '{s name="column_email"}Email address{/s}',
             dataIndex: 'email',
             flex: 1
         }, {
-            header: '{s name=column_active}Active{/s}',
+            header: '{s name="column_active"}Active{/s}',
             dataIndex: 'active',
             renderer: this.activeColumnRenderer,
             width: 40
@@ -168,7 +168,7 @@ Ext.define('Shopware.apps.Form.view.main.List', {
             /*{if {acl_is_allowed privilege=createupdate}}*/
             {
                 iconCls: 'sprite-plus-circle-frame',
-                text: '{s name=toolbar_add_form}Add{/s}',
+                text: '{s name="toolbar_add_form"}Add{/s}',
                 action: 'add'
             },
             /*{/if}*/
@@ -176,7 +176,7 @@ Ext.define('Shopware.apps.Form.view.main.List', {
             /*{if {acl_is_allowed privilege=delete}}*/
             {
                 iconCls:'sprite-minus-circle-frame',
-                text: '{s name=toolbar_delete}Delete all selected{/s}',
+                text: '{s name="toolbar_delete"}Delete all selected{/s}',
                 disabled: true,
                 action:'delete'
             },
@@ -190,7 +190,7 @@ Ext.define('Shopware.apps.Form.view.main.List', {
                 cls: 'searchfield',
                 enableKeyEvents: true,
                 checkChangeBuffer: 500,
-                emptyText : '{s name=toolbar_search}Search...{/s}'
+                emptyText : '{s name="toolbar_search"}Search...{/s}'
             }, {
                 xtype: 'tbspacer',
                 width: 6

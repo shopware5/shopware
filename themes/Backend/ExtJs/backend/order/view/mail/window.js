@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order list main window.
@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Order.view.mail.Window', {
      *
      * @type { String }
      */
-    title: '{s name=mail/title}Send an email to the customer{/s}',
+    title: '{s name="mail/title"}Send an email to the customer{/s}',
 
     /**
      * Constructor parameters

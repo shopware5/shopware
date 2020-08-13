@@ -25,7 +25,7 @@
  * @subpackage View
  */
 
-//{namespace name=backend/log/system}
+//{namespace name="backend/log/system"}
 
 //{block name="backend/log/view/system/detail"}
 Ext.define('Shopware.apps.Log.view.system.Detail', {
@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Log.view.system.Detail', {
     autoShow: true,
     layout: 'fit',
     record: null,
-    title: '{s name=detail/title}Log{/s}',
+    title: '{s name="detail/title"}Log{/s}',
     width: '90%',
     height: 700,
 
@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Log.view.system.Detail', {
         var dockButtons = ['->'];
 
         dockButtons.push({
-            text: '{s name=detail/toolbar/button/close}Close{/s}',
+            text: '{s name="detail/toolbar/button/close"}Close{/s}',
             cls: 'secondary',
             scope: me,
             handler: me.destroy
@@ -112,21 +112,21 @@ Ext.define('Shopware.apps.Log.view.system.Detail', {
 
         return [{
             xtype: 'displayfield',
-            fieldLabel: '{s name=model/field/date}Date{/s}',
+            fieldLabel: '{s name="model/field/date"}Date{/s}',
             value: Ext.Date.format(me.record.get('date'), Ext.Date.defaultFormat + ' H:i:s')
         }, {
             xtype: 'displayfield',
-            fieldLabel: '{s name=model/field/channel}Channel{/s}',
+            fieldLabel: '{s name="model/field/channel"}Channel{/s}',
             value: me.record.get('channel')
         }, {
             xtype: 'displayfield',
-            fieldLabel: '{s name=model/field/level}Level{/s}',
+            fieldLabel: '{s name="model/field/level"}Level{/s}',
             value: me.record.get('level')
         }, me.getBaseTextArea({
-            fieldLabel: '{s name=model/field/message}Message{/s}',
+            fieldLabel: '{s name="model/field/message"}Message{/s}',
             value: me.formatMessage(me.record.get('message'))
         }), me.getBaseTextArea({
-            fieldLabel: '{s name=model/field/context}Context{/s}',
+            fieldLabel: '{s name="model/field/context"}Context{/s}',
             value: me.formatMessage(me.record.get('context'))
         })];
     }

@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/search_terms"}
 Ext.define('Shopware.apps.Analytics.view.table.SearchTerms', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
@@ -60,11 +60,11 @@ Ext.define('Shopware.apps.Analytics.view.table.SearchTerms', {
         return [
             {
                 dataIndex: 'count',
-                text: '{s name=table/referrer_visitors/count}Number of{/s}'
+                text: '{s name="table/referrer_visitors/count"}Number of{/s}'
             },
             {
                 dataIndex: 'keyword',
-                text: '{s name=table/referrer_visitors/search_term}Search term{/s}'
+                text: '{s name="table/referrer_visitors/search_term"}Search term{/s}'
             }
         ];
     }

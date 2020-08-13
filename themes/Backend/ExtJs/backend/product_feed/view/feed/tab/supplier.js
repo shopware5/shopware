@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/product_feed/view/feed}
+//{namespace name="backend/product_feed/view/feed"}
 
 /**
  * Shopware UI - Tab View.
@@ -38,7 +38,7 @@
 Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Supplier', {
     extend:'Ext.container.Container',
     alias:'widget.product_feed-feed-tab-supplier',
-    title:'{s name=tab/title/supplier}Supplier filter{/s}',
+    title:'{s name="tab/title/supplier"}Supplier filter{/s}',
     border: 0,
     padding: 10,
     cls: 'shopware-toolbar',
@@ -60,16 +60,16 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Supplier', {
         var me = this;
         return [{
             xtype:'ddselector',
-            fromTitle: '{s name=tab/title/supplier_available}Available suppliers{/s}',
-            toTitle: '{s name=tab/title/supplier_chosen}Blocked suppliers{/s}',
+            fromTitle: '{s name="tab/title/supplier_available"}Available suppliers{/s}',
+            toTitle: '{s name="tab/title/supplier_chosen"}Blocked suppliers{/s}',
             fromStore: me.supplierStore,
             buttons:[ 'add','remove' ],
             gridHeight: 270,
             selectedItems: me.record.getSuppliers(),
             fromFieldDockedItems: [ me.getToolbar() ],
             buttonsText: {
-                add: "{s name=tab/supplier/button_add}Add{/s}",
-                remove: "{s name=tab/supplier/button_remove}Remove{/s}"
+                add: '{s name="tab/supplier/button_add"}Add{/s}',
+                remove: '{s name="tab/supplier/button_remove"}Remove{/s}'
             }
         }];
     },
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Supplier', {
                             cls:'searchfield',
                             enableKeyEvents:true,
                             checkChangeBuffer:500,
-                            emptyText:'{s name=tab/supplier/search}Search...{/s}'
+                            emptyText:'{s name="tab/supplier/search"}Search...{/s}'
                         },
                         { xtype:'tbspacer', width:6 }
                     ]

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/product_feed/view/feed}
+//{namespace name="backend/product_feed/view/feed"}
 
 /**
  * Shopware Controller - ProductFeed backend module
@@ -66,13 +66,13 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      */
     snippets: {
         //save changes
-        onSaveChangesSuccess: '{s name=message/on_save_changes_success}Changes have been saved successfully.{/s}',
-        onSaveChangesError: '{s name=message/on_save_changes_error}An error has occurred while saving your changes.{/s}',
-        confirmDeleteSingleItem: '{s name=message/confirm_delete_single_item}Delete this article{/s}',
-        confirmDeleteSingle: '{s name=message/confirm_delete_single}Are you sure you want to delete this article? ([0]){/s}',
-        deleteSingleItemSuccess: '{s name=message/confirm_delete_single_success}The article has been deleted successfully.{/s}',
-        deleteSingleItemError: '{s name=message/confirm_delete_single_error}An error has occurred while deleting the selected article: {/s}',
-        growlMessage: '{s name=window/main_title}{/s}'
+        onSaveChangesSuccess: '{s name="message/on_save_changes_success"}Changes have been saved successfully.{/s}',
+        onSaveChangesError: '{s name="message/on_save_changes_error"}An error has occurred while saving your changes.{/s}',
+        confirmDeleteSingleItem: '{s name="message/confirm_delete_single_item"}Delete this article{/s}',
+        confirmDeleteSingle: '{s name="message/confirm_delete_single"}Are you sure you want to delete this article? ([0]){/s}',
+        deleteSingleItemSuccess: '{s name="message/confirm_delete_single_success"}The article has been deleted successfully.{/s}',
+        deleteSingleItemError: '{s name="message/confirm_delete_single_error"}An error has occurred while deleting the selected article: {/s}',
+        growlMessage: '{s name="window/main_title"}{/s}'
     },
 
     /**

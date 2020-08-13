@@ -61,7 +61,7 @@
  *
  * The events are documented in the { @link #registerEvents } function
  */
-// {namespace name=backend/application/main}
+// {namespace name="backend/application/main"}
 // {block name="backend/application/Shopware.grid.Panel"}
 Ext.define('Shopware.grid.Panel', {
 

@@ -1,12 +1,12 @@
 {extends file='frontend/index/header.tpl'}
 
 {* Meta title *}
-{block name="frontend_index_header_title"}{if $sArticle.metaTitle}{$sArticle.metaTitle|escapeHtml} | {{config name=sShopname}|escapeHtml}{else}{$sArticle.articleName} | {$smarty.block.parent}{/if}{/block}
+{block name="frontend_index_header_title"}{if $sArticle.metaTitle}{$sArticle.metaTitle|escapeHtml} | {{config name="sShopname"}|escapeHtml}{else}{$sArticle.articleName} | {$smarty.block.parent}{/if}{/block}
 
 {* Meta opengraph tags *}
 {block name='frontend_index_header_meta_tags_opengraph'}
     <meta property="og:type" content="product" />
-    <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
+    <meta property="og:site_name" content="{{config name="sShopname"}|escapeHtml}" />
     <meta property="og:url" content="{url sArticle=$sArticle.articleID title=$sArticle.articleName controller=detail}" />
     <meta property="og:title" content="{$sArticle.articleName|escapeHtml}" />
     <meta property="og:description" content="{$sArticle.description_long|strip_tags|trim|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
@@ -17,7 +17,7 @@
     <meta property="product:product_link" content="{url sArticle=$sArticle.articleID title=$sArticle.articleName controller=detail}" />
 
     <meta name="twitter:card" content="product" />
-    <meta name="twitter:site" content="{{config name=sShopname}|escapeHtml}" />
+    <meta name="twitter:site" content="{{config name="sShopname"}|escapeHtml}" />
     <meta name="twitter:title" content="{$sArticle.articleName|escapeHtml}" />
     <meta name="twitter:description" content="{$sArticle.description_long|strip_tags|trim|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
     <meta name="twitter:image" content="{$sArticle.image.source}" />

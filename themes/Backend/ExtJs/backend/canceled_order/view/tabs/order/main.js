@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/canceled_order/view/main}
+//{namespace name="backend/canceled_order/view/main"}
 
 /**
  * Shopware UI - Main Order UI with grid panel and sidebar
@@ -37,7 +37,7 @@
 Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Main', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.canceled-order-tabs-order-main',
-    title: '{s name=canceledOrders}Canceled Orders{/s}',
+    title: '{s name="canceledOrders"}Canceled Orders{/s}',
     layout: 'border',
 
     defaults: {
@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Main', {
 
     snippets :  {
         sidebar: {
-            title: '{s name=order/sideBar/title}Details{/s}'
+            title: '{s name="order/sideBar/title"}Details{/s}'
         }
     },
 

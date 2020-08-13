@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * The cache time grid which allows the user to define cache times for each controller action
@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
     /**
      * Descriptive title for the grid
      */
-    title: '{s name=grid/cacheTime}Define cache times for controller (actions) here{/s}',
+    title: '{s name="grid/cacheTime"}Define cache times for controller (actions) here{/s}',
 
 
     /**
@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
     getColumns: function () {
         return [
             {
-                header: '{s name=grid/column/controller}Controller{/s}',
+                header: '{s name="grid/column/controller"}Controller{/s}',
                 dataIndex: 'key',
                 flex: 2,
                 editor: {
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
                 }
             },
             {
-                header: '{s name=grid/column/time}Time{/s}',
+                header: '{s name="grid/column/time"}Time{/s}',
                 dataIndex: 'value',
                 flex: 1,
                 editable: true,
@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
                         cls: 'delteBtn',
                         iconCls: 'sprite-minus-circle-frame',
                         action: 'http-cache-delete-controller-time',
-                        tooltip: '{s name=grid/actionButton/delete}Delete entry{/s}',
+                        tooltip: '{s name="grid/actionButton/delete"}Delete entry{/s}',
                         /**
                          * Add button handler to fire the generatePassword event which is handled
                          * in the detail controller. The detail controller generates a password and set it into the password field

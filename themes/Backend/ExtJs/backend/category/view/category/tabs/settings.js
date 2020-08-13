@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/* {namespace name=backend/category/main} */
+/* {namespace name="backend/category/main"} */
 
 /**
  * Shopware UI - Category Settings
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      * Title of this tab
      * @string
      */
-    title:'{s name=tabs/settings_title}Settings{/s}',
+    title:'{s name="tabs/settings_title"}Settings{/s}',
 
     /**
      * Specifies the border for this component. The border can be a single numeric
@@ -102,58 +102,58 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      * @object
      */
     snippets : {
-        noticeText : '{s name=view/settings_notice}To move a category, simply click and drag it to the desired position.<br/><br/>Right clicking in the menu to the left enables you to add or delete subcategories.{/s}',
-        emotionNotice : '{s name=view/settings_emotion_notice}An emotion is linked to this category{/s}',
+        noticeText : '{s name="view/settings_notice"}To move a category, simply click and drag it to the desired position.<br/><br/>Right clicking in the menu to the left enables you to add or delete subcategories.{/s}',
+        emotionNotice : '{s name="view/settings_emotion_notice"}An emotion is linked to this category{/s}',
 
-        createSubCategoryTitle : '{s name=view/settings_create_category_title}Create sub category{/s}',
-        createSubCategoryLabel : '{s name=view/settings_create_category_label}Sub category{/s}',
-        createSubCategoryButton: '{s name=view/settings_create_category_button}Create sub category{/s}',
+        createSubCategoryTitle : '{s name="view/settings_create_category_title"}Create sub category{/s}',
+        createSubCategoryLabel : '{s name="view/settings_create_category_label"}Sub category{/s}',
+        createSubCategoryButton: '{s name="view/settings_create_category_button"}Create sub category{/s}',
 
-        defaultSettingsTitleEmpty : '{s name=view/settings_default_settings_title_empty}Default settings{/s}',
-        defaultSettingsTitle : '{s name=view/settings_default_settings_title}Default Settings - Category: [0] (System-ID: [1]){/s}',
+        defaultSettingsTitleEmpty : '{s name="view/settings_default_settings_title_empty"}Default settings{/s}',
+        defaultSettingsTitle : '{s name="view/settings_default_settings_title"}Default Settings - Category: [0] (System-ID: [1]){/s}',
 
-        defaultSettingsCategoryLabel : '{s name=view/settings_default_settings_category_label}Category{/s}',
-        defaultSettingsActiveLabel : '{s name=view/settings_default_settings_active_label}Active{/s}',
-        defaultSettingsBlogLabel : '{s name=view/settings_default_settings_blog_label}Blog category{/s}',
+        defaultSettingsCategoryLabel : '{s name="view/settings_default_settings_category_label"}Category{/s}',
+        defaultSettingsActiveLabel : '{s name="view/settings_default_settings_active_label"}Active{/s}',
+        defaultSettingsBlogLabel : '{s name="view/settings_default_settings_blog_label"}Blog category{/s}',
 
-        defaultSettingsNameLabel : '{s name=view/settings_default_settings_name_label}Description{/s}',
-        defaultSettingsLinkExternalPageLabel : '{s name=view/settings_default_settings_link_external_page_label}Link to an external site{/s}',
-        defaultSettingsLinkExternalPageHelp : '{s name=view/settings_default_settings_link_external_page_help}The URL must begin with: http://{/s}',
-        defaultSettingsLinkExternalPageTarget : '{s name=view/settings_default_settings_link_external_page_target}Target for external site{/s}',
-        defaultSettingsLinkExternalPageTargetSelf : '{s name=view/settings_default_settings_link_external_page_target_self}Same window (default){/s}',
-        defaultSettingsLinkExternalPageTargetBlank : '{s name=view/settings_default_settings_link_external_page_target_blank}New window{/s}',
+        defaultSettingsNameLabel : '{s name="view/settings_default_settings_name_label"}Description{/s}',
+        defaultSettingsLinkExternalPageLabel : '{s name="view/settings_default_settings_link_external_page_label"}Link to an external site{/s}',
+        defaultSettingsLinkExternalPageHelp : '{s name="view/settings_default_settings_link_external_page_help"}The URL must begin with: http://{/s}',
+        defaultSettingsLinkExternalPageTarget : '{s name="view/settings_default_settings_link_external_page_target"}Target for external site{/s}',
+        defaultSettingsLinkExternalPageTargetSelf : '{s name="view/settings_default_settings_link_external_page_target_self"}Same window (default){/s}',
+        defaultSettingsLinkExternalPageTargetBlank : '{s name="view/settings_default_settings_link_external_page_target_blank"}New window{/s}',
 
-        defaultSettingsImageLabel : '{s name=view/settings_default_settings_image_label}Image{/s}',
-        defaultSettingsImageButtonText : '{s name=view/settings_default_settings_image_button_text}Select an image{/s}',
-        defaultSettingsImageSupportText : '{s name=view/settings_default_settings_image_support_text}You can use this image for individual template changes. This includes, for instance, the illustration of your category.{/s}',
-        errorMessageWrongFileTypeTitle : '{s name=view/error_message_wrong_file_type_title}Wrong file type{/s}',
-        errorMessageWrongFileType : '{s name=view/error_message_wrong_file_type}Wrong file type selected.{/s}',
+        defaultSettingsImageLabel : '{s name="view/settings_default_settings_image_label"}Image{/s}',
+        defaultSettingsImageButtonText : '{s name="view/settings_default_settings_image_button_text"}Select an image{/s}',
+        defaultSettingsImageSupportText : '{s name="view/settings_default_settings_image_support_text"}You can use this image for individual template changes. This includes, for instance, the illustration of your category.{/s}',
+        errorMessageWrongFileTypeTitle : '{s name="view/error_message_wrong_file_type_title"}Wrong file type{/s}',
+        errorMessageWrongFileType : '{s name="view/error_message_wrong_file_type"}Wrong file type selected.{/s}',
 
-        defaultSettingsTemplateLabel : '{s name=view/settings_default_settings_template_label}Individual layout{/s}',
-        defaultSettingsTemplateLabelStandard: '{s name=view/settings_default_settings_template_standard}Standard{/s}',
-        defaultSettingsTemplateNotAvailable: '{s name=view/settings_default_settings_template_not_available}Not available{/s}',
-        defaultSettingsHideTopLabel : '{s name=view/settings_default_settings_no_top_navigation_label}Do NOT show in top navigation.{/s}',
-        defaultSettingsNoDesignSwitchLabel : '{s name=view/settings_default_settings_no_design_switch_label}Do NOT switch design.{/s}',
+        defaultSettingsTemplateLabel : '{s name="view/settings_default_settings_template_label"}Individual layout{/s}',
+        defaultSettingsTemplateLabelStandard: '{s name="view/settings_default_settings_template_standard"}Standard{/s}',
+        defaultSettingsTemplateNotAvailable: '{s name="view/settings_default_settings_template_not_available"}Not available{/s}',
+        defaultSettingsHideTopLabel : '{s name="view/settings_default_settings_no_top_navigation_label"}Do NOT show in top navigation.{/s}',
+        defaultSettingsNoDesignSwitchLabel : '{s name="view/settings_default_settings_no_design_switch_label"}Do NOT switch design.{/s}',
 
-        defaultSettingsProductLayoutLabel: '{s name=view/settings_default_settings_box_layout_label}Product layout{/s}',
-        defaultSettingsProductLayoutHelp: '{s name=view/settings_default_settings_box_layout_help}Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.{/s}',
-        defaultSettingsProductStream: '{s name=view/settings_default_settings_box_stream_label}Product stream{/s}',
-        defaultSettingsProductStreamHelp: '{s name=view/settings_default_settings_box_stream_help}If a product stream is selected, the items from the stream will be used instead of the assigned ones. Subcategories do not inherit items from product streams.{/s}',
+        defaultSettingsProductLayoutLabel: '{s name="view/settings_default_settings_box_layout_label"}Product layout{/s}',
+        defaultSettingsProductLayoutHelp: '{s name="view/settings_default_settings_box_layout_help"}Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.{/s}',
+        defaultSettingsProductStream: '{s name="view/settings_default_settings_box_stream_label"}Product stream{/s}',
+        defaultSettingsProductStreamHelp: '{s name="view/settings_default_settings_box_stream_help"}If a product stream is selected, the items from the stream will be used instead of the assigned ones. Subcategories do not inherit items from product streams.{/s}',
 
-        cmsTitle : '{s name=view/settings_cms_title}CMS functions{/s}',
-        cmsHeaderLabel : '{s name=view/settings_cms_header_label}Header{/s}',
-        cmsTextLabel : '{s name=view/settings_cms_text_label}Text{/s}',
+        cmsTitle : '{s name="view/settings_cms_title"}CMS functions{/s}',
+        cmsHeaderLabel : '{s name="view/settings_cms_header_label"}Header{/s}',
+        cmsTextLabel : '{s name="view/settings_cms_text_label"}Text{/s}',
 
-        metaGroupTitle : '{s name=view/settings_meta_description_title}Meta information{/s}',
-        metaTitle : '{s name=view/settings_meta_title_label}Meta title{/s}',
-        metaDescription : '{s name=view/settings_meta_description_label}Meta description{/s}',
-        metaKeywords : '{s name=view/settings_meta_keywords_label}Meta keywords{/s}',
+        metaGroupTitle : '{s name="view/settings_meta_description_title"}Meta information{/s}',
+        metaTitle : '{s name="view/settings_meta_title_label"}Meta title{/s}',
+        metaDescription : '{s name="view/settings_meta_description_label"}Meta description{/s}',
+        metaKeywords : '{s name="view/settings_meta_keywords_label"}Meta keywords{/s}',
 
-        attribute_title : '{s name=view/settings_attribute_title}Free text fields{/s}',
+        attribute_title : '{s name="view/settings_attribute_title"}Free text fields{/s}',
 
-        categorySave : '{s name=view/settings_save}Save category{/s}',
+        categorySave : '{s name="view/settings_save"}Save category{/s}',
 
-        growlMessage: '{s name=window/main_title}Category{/s}'
+        growlMessage: '{s name="window/main_title"}Category{/s}'
     },
 
     /**
@@ -522,8 +522,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
         return this.shopSelector = Ext.create('Shopware.apps.Category.view.fields.ShopGrid', {
             name: 'shops',
-            fieldLabel: '{s name=label_shop}Limit to shop(s){/s}',
-            helpText: '{s name=shop_helper}Limit page visibility to the following shops. If left empty, page will be accessible in all shops.{/s}',
+            fieldLabel: '{s name="label_shop"}Limit to shop(s){/s}',
+            helpText: '{s name="shop_helper"}Limit page visibility to the following shops. If left empty, page will be accessible in all shops.{/s}',
             editable: false,
             allowSorting: false,
             height: 130,

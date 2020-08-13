@@ -31,7 +31,7 @@
  * Shopware Controller - Detail
  * The detail controller handles all events of the detail page main form element and the sidebar.
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/controller/crossselling"}
 Ext.define('Shopware.apps.Article.controller.Crossselling', {
 
@@ -47,20 +47,20 @@ Ext.define('Shopware.apps.Article.controller.Crossselling', {
      * @object
      */
     snippets: {
-        growlMessage: '{s name=growl_message}Article{/s}',
-        existTitle: '{s name=sidebar/accessory/already_assigned_title}Already exists{/s}',
+        growlMessage: '{s name="growl_message"}Article{/s}',
+        existTitle: '{s name="sidebar/accessory/already_assigned_title"}Already exists{/s}',
         similar: {
-            exist: '{s name=sidebar/similar/already_assigned_message}The article [0] has been assigned as similar article!{/s}'
+            exist: '{s name="sidebar/similar/already_assigned_message"}The article [0] has been assigned as similar article!{/s}'
         },
         accessory: {
-            exist: '{s name=sidebar/accessory/already_assigned_message}The article [0] has been already assigned as accessory article!{/s}'
+            exist: '{s name="sidebar/accessory/already_assigned_message"}The article [0] has been already assigned as accessory article!{/s}'
         },
         streams: {
-            exist: '{s name=cross_selling/streams/already_assigned_message}The stream with the ID [0] has already been assigned to this article.{/s}'
+            exist: '{s name="cross_selling/streams/already_assigned_message"}The stream with the ID [0] has already been assigned to this article.{/s}'
         },
         saved: {
-            title: '{s name=article_saved/title}Successful{/s}',
-            errorTitle: '{s name=article_saved/error_title}Error{/s}'
+            title: '{s name="article_saved/title"}Successful{/s}',
+            errorTitle: '{s name="article_saved/error_title"}Error{/s}'
         }
     },
 

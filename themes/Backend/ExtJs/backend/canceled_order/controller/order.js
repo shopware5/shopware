@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/canceled_order/controller/main}
+//{namespace name="backend/canceled_order/controller/main"}
 
 /**
  * Shopware Controller - Order Controller
@@ -47,26 +47,26 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
 
     snippets : {
         deleteOrder : {
-            title: '{s name=deleteOrder/title}Are you sure?{/s}',
-            message: '{s name=deleteOrder/message}Do you want to delete these order(s)?{/s}'
+            title: '{s name="deleteOrder/title"}Are you sure?{/s}',
+            message: '{s name="deleteOrder/message"}Do you want to delete these order(s)?{/s}'
         },
         askForReason: {
-            title: '{s name=askForReason/title}Ask the customer for reason?{/s}',
-            message: '{s name=askForReason/message}Do you want to send the customer a mail asking for the reason for canceling the order?{/s}'
+            title: '{s name="askForReason/title"}Ask the customer for reason?{/s}',
+            message: '{s name="askForReason/message"}Do you want to send the customer a mail asking for the reason for canceling the order?{/s}'
         },
         sendVoucher: {
-            title: '{s name=sendVoucher/title}Send the customer a voucher?{/s}',
-            message: '{s name=sendVoucher/message}Do you want to send the customer a voucher?{/s}'
+            title: '{s name="sendVoucher/title"}Send the customer a voucher?{/s}',
+            message: '{s name="sendVoucher/message"}Do you want to send the customer a voucher?{/s}'
         },
         convertOrder: {
-            title: '{s name=convertOrder/title}Convert order?{/s}',
-            message: '{s name=convertOrder/message}Do you want to convert this order to a regular order?{/s}',
-            refreshInStockTitle: '{s name=convertOrder/refreshInStockTitle}Refresh stocks{/s}',
-            refreshInStockMessage: '{s name=convertOrder/refreshInStockMessage}Do you want to refresh the stocks?{/s}',
-            successTitle: '{s name=convertOrderSuccess/title}Order converted{/s}',
-            successMessage: '{s name=convertOrderSuccess/message}Converted the order successfully.{/s}',
-            withInStockSuccessMessage: '{s name=convertOrderSuccess/withInStockMessage}Converted the order and refreshed the in stock successfully.{/s}',
-            showOrderMessage: '{s name=convertOrderSuccess/showOrderMessage}The order was converted. Do you want to open this order now?{/s}'
+            title: '{s name="convertOrder/title"}Convert order?{/s}',
+            message: '{s name="convertOrder/message"}Do you want to convert this order to a regular order?{/s}',
+            refreshInStockTitle: '{s name="convertOrder/refreshInStockTitle"}Refresh stocks{/s}',
+            refreshInStockMessage: '{s name="convertOrder/refreshInStockMessage"}Do you want to refresh the stocks?{/s}',
+            successTitle: '{s name="convertOrderSuccess/title"}Order converted{/s}',
+            successMessage: '{s name="convertOrderSuccess/message"}Converted the order successfully.{/s}',
+            withInStockSuccessMessage: '{s name="convertOrderSuccess/withInStockMessage"}Converted the order and refreshed the in stock successfully.{/s}',
+            showOrderMessage: '{s name="convertOrderSuccess/showOrderMessage"}The order was converted. Do you want to open this order now?{/s}'
         }
     },
 
@@ -132,7 +132,7 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
 
         Ext.MessageBox.confirm(me.snippets.sendVoucher.title, me.snippets.sendVoucher.message, function (response) {
             if ( response !== 'yes' ) {
-                detailView.voucherCombo.setValue('{s name=selectVoucher}Select Voucher{/s}');
+                detailView.voucherCombo.setValue('{s name="selectVoucher"}Select Voucher{/s}');
                 return;
             }
             me.contactUser('sCANCELEDVOUCHER', voucherId);
@@ -154,13 +154,13 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
             info = detailView.infoLabel;
 
         if (selections.length <= 0) {
-            info.setText('{s name=detailsNoOrderSelected}No order selected{/s}');
+            info.setText('{s name="detailsNoOrderSelected"}No order selected{/s}');
             button.hide();
             combo.hide();
             return;
         }
         if (selections.length > 1) {
-            info.setText('{s name=detailsMoreThanOneOrderSelected}More than one order selected{/s}');
+            info.setText('{s name="detailsMoreThanOneOrderSelected"}More than one order selected{/s}');
             button.hide();
             combo.hide();
             return;
@@ -208,17 +208,17 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
             info = detailView.infoLabel;
 
         if(comment == "") {
-            info.setText("{s name=yourOptions}You can ask your customer for a reason or send him a voucher{/s}");
+            info.setText('{s name="yourOptions"}You can ask your customer for a reason or send him a voucher{/s}');
             combo.show();
             button.show();
         }else if(comment == "Frage gesendet") {
-            info.setText("{s name=reasonMailAlreadySent}A 'Ask for reason' mail was already sent to this customer{/s}");
+            info.setText('{s name="reasonMailAlreadySent"}{/s}');
             button.hide();
             combo.show();
         }else {
             button.hide();
             combo.hide();
-            info.setText("{s name=voucherAlreadySent}A voucher was already sent to this customer{/s}");
+            info.setText('{s name="voucherAlreadySent"}A voucher was already sent to this customer{/s}');
         }
         Ext.apply(store.getProxy().extraParams, {
             id: record.get('id')
@@ -260,7 +260,7 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
             return;
         }
         if (selectedOrderRecords.length > 1) {
-            Shopware.Notification.createGrowlMessage('{s name=noMultipleContactsPossibleTitle}Not possible{/s}', '{s name=noMultipleContactsPossibleTitleMessage}Currently it is not possible to contact multiple users at the same time.{/s}');
+            Shopware.Notification.createGrowlMessage('{s name="noMultipleContactsPossibleTitle"}Not possible{/s}', '{s name="noMultipleContactsPossibleTitleMessage"}Currently it is not possible to contact multiple users at the same time.{/s}');
             return;
         }
 
@@ -289,12 +289,12 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
             success: function(response) {
                 var status = Ext.decode(response.responseText);
                 if (status.success) {
-                    Shopware.Notification.createGrowlMessage('{s name=mailSentTitle}Mail was sent{/s}', '{s name=mailSentMessage}You sent a mail to the customer{/s}');
+                    Shopware.Notification.createGrowlMessage('{s name="mailSentTitle"}Mail was sent{/s}', '{s name="mailSentMessage"}You sent a mail to the customer{/s}');
                     me.subApplication.canceledOrderStore.reload();
-                    detailView.voucherCombo.setValue('{s name=selectVoucher}Select Voucher{/s}');
+                    detailView.voucherCombo.setValue('{s name="selectVoucher"}Select Voucher{/s}');
                 } else {
-                    Shopware.Notification.createGrowlMessage('{s name=mailNotSent}Mail was not sent{/s}', status.message);
-                    detailView.voucherCombo.setValue('{s name=selectVoucher}Select Voucher{/s}');
+                    Shopware.Notification.createGrowlMessage('{s name="mailNotSent"}Mail was not sent{/s}', status.message);
+                    detailView.voucherCombo.setValue('{s name="selectVoucher"}Select Voucher{/s}');
                 }
             }
         });
@@ -363,7 +363,7 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
                         me.onOpenOrder(record);
                     });
                 } else {
-                    Shopware.Notification.createGrowlMessage('{s name=convertError}Order was not converted{/s}', status.message);
+                    Shopware.Notification.createGrowlMessage('{s name="convertError"}Order was not converted{/s}', status.message);
                 }
             }
         });

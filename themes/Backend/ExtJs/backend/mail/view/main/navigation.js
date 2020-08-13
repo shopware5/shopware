@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/mail/view/navigation}
+//{namespace name="backend/mail/view/navigation"}
 
 /**
  * todo@all: Documentation
@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Mail.view.main.Navigation', {
     extend: 'Ext.tree.Panel',
     alias: 'widget.mail-main-navigation',
     rootVisible: false,
-    title: '{s name=title}Templates{/s}',
+    title: '{s name="title"}Templates{/s}',
     collapsed: false,
     collapsible: true,
     width: 240,

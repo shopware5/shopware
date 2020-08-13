@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/field/grid"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Grid', {
     extend: 'Shopware.apps.ProductStream.view.SearchGrid',
@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Grid', {
 
         if (!valid) {
             Shopware.Notification.createGrowlMessage(
-                '{s name=validation_title}Validation{/s}',
+                '{s name="validation_title"}Validation{/s}',
                 this.getErrorMessage()
             );
         }

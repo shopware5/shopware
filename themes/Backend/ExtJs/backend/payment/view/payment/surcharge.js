@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/payment/payment}
+//{namespace name="backend/payment/payment"}
 
 /**
  * Shopware UI - Grid to edit the country-surcharge
@@ -89,11 +89,11 @@ Ext.define('Shopware.apps.Payment.view.payment.Surcharge', {
      */
     getColumns: function(){
         var columns =  [{
-            header: '{s name=column_countrySurcharge_name}Name{/s}',
+            header: '{s name="column_countrySurcharge_name"}Name{/s}',
             flex: 1,
             dataIndex: 'name'
         },{
-            header: '{s name=column_countrySurcharge_surcharge}Surcharge (in %){/s}',
+            header: '{s name="column_countrySurcharge_surcharge"}Surcharge (in %){/s}',
             flex: 1,
             dataIndex: 'surcharge',
             editor:{

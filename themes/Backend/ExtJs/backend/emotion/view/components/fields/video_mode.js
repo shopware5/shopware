@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/emotion/view/components/video}
+//{namespace name="backend/emotion/view/components/video"}
 Ext.define('Shopware.apps.Emotion.view.components.fields.VideoMode', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.emotion-components-fields-video-mode',
@@ -38,13 +38,13 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.VideoMode', {
      */
     snippets: {
         fields: {
-            'video_mode': '{s name=video/store/mode}Video Modus{/s}',
-            'empty_text': '{s name=video/store/pleaseselect}Bitte auswählen{/s}'
+            'video_mode': '{s name="video/store/mode"}Video Modus{/s}',
+            'empty_text': '{s name="video/store/pleaseselect"}Bitte auswählen{/s}'
         },
         store: {
-            'scalable': '{s name=video/store/scaleable}Skalierien{/s}',
-            'fill': '{s name=video/store/fill}Fülllen{/s}',
-            'stretch': '{s name=video/store/stretch}Strecken{/s}'
+            'scalable': '{s name="video/store/scaleable"}Skalierien{/s}',
+            'fill': '{s name="video/store/fill"}Fülllen{/s}',
+            'stretch': '{s name="video/store/stretch"}Strecken{/s}'
         }
     },
 

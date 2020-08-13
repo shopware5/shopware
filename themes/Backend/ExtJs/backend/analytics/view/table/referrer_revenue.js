@@ -29,12 +29,12 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/referrer_revenue"}
 Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-referrer_revenue',
-    shopColumnName: '{s name=nav/turnover_referrer}Turnover by referrer{/s}',
+    shopColumnName: '{s name="nav/turnover_referrer"}Turnover by referrer{/s}',
 
     initComponent: function () {
         var me = this;
@@ -65,50 +65,50 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
             {
                 dataIndex: 'host',
                 align: 'left',
-                text: '{s name=table/referrer_revenue/host}Host{/s}'
+                text: '{s name="table/referrer_revenue/host"}Host{/s}'
             },
             {
                 dataIndex: 'orderCount',
-                text: '{s name=table/referrer_revenue/orders}Orders{/s}'
+                text: '{s name="table/referrer_revenue/orders"}Orders{/s}'
             },
             {
                 dataIndex: 'turnover',
-                text: '{s name=general/turnover}Turnover{/s}',
+                text: '{s name="general/turnover"}Turnover{/s}',
                 renderer: me.currencyRenderer
             },
             {
                 dataIndex: 'average',
-                text: '{s name=table/referrer_revenue/average}Ø Order value{/s}',
+                text: '{s name="table/referrer_revenue/average"}Ø Order value{/s}',
                 renderer: me.currencyRenderer
             },
 
             {
                 dataIndex: 'newCustomers',
-                text: '{s name=table/referrer_revenue/new_customers}Orders new customers{/s}'
+                text: '{s name="table/referrer_revenue/new_customers"}Orders new customers{/s}'
             },
             {
                 dataIndex: 'turnoverNewCustomer',
-                text: '{s name=table/referrer_revenue/new_turnover}Turnover new customers{/s}',
+                text: '{s name="table/referrer_revenue/new_turnover"}Turnover new customers{/s}',
                 renderer: me.currencyRenderer
             },
             {
                 dataIndex: 'averageNewCustomer',
-                text: '{s name=table/referrer_revenue/average_new_customers}Ø New customer<br>order value{/s}',
+                text: '{s name="table/referrer_revenue/average_new_customers"}Ø New customer<br>order value{/s}',
                 renderer: me.currencyRenderer
             },
 
             {
                 dataIndex: 'regularCustomers',
-                text: '{s name=table/referrer_revenue/old_customers}Orders Regular customers{/s}'
+                text: '{s name="table/referrer_revenue/old_customers"}Orders Regular customers{/s}'
             },
             {
                 dataIndex: 'turnoverRegularCustomer',
-                text: '{s name=table/referrer_revenue/old_turnover}Turnover regular customers{/s}',
+                text: '{s name="table/referrer_revenue/old_turnover"}Turnover regular customers{/s}',
                 renderer: me.currencyRenderer
             },
             {
                 dataIndex: 'averageRegularCustomer',
-                text: '{s name=table/referrer_revenue/average_old_customers}Ø Regular customer<br>order value{/s}',
+                text: '{s name="table/referrer_revenue/average_old_customers"}Ø Regular customer<br>order value{/s}',
                 renderer: me.currencyRenderer
             }
         ];

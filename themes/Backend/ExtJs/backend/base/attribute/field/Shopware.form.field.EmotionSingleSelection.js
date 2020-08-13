@@ -34,11 +34,11 @@ Ext.define('Shopware.form.field.EmotionSingleSelection', {
     alias: 'widget.shopware-form-field-emotion-single-selection',
     iconStyling: 'width:16px; height:16px; display:inline-block; margin-right:5px',
     snippets: {
-        desktop: '{s namespace=backend/emotion/list/grid name=grid/renderer/desktop}{/s}',
-        tabletLandscape: '{s namespace=backend/emotion/list/grid name=grid/renderer/tabletLandscape}{/s}',
-        tablet: '{s namespace=backend/emotion/list/grid name=grid/renderer/tablet}{/s}',
-        mobileLandscape: '{s namespace=backend/emotion/list/grid name=grid/renderer/mobileLandscape}{/s}',
-        mobile: '{s namespace=backend/emotion/list/grid name=grid/renderer/mobile}{/s}'
+        desktop: '{s namespace=backend/emotion/list/grid name="grid/renderer/desktop"}{/s}',
+        tabletLandscape: '{s namespace=backend/emotion/list/grid name="grid/renderer/tabletLandscape"}{/s}',
+        tablet: '{s namespace=backend/emotion/list/grid name="grid/renderer/tablet"}{/s}',
+        mobileLandscape: '{s namespace=backend/emotion/list/grid name="grid/renderer/mobileLandscape"}{/s}',
+        mobile: '{s namespace=backend/emotion/list/grid name="grid/renderer/mobile"}{/s}'
     },
 
     getComboConfig: function() {

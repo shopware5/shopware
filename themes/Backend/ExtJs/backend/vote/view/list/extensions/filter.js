@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/vote/main}
+//{namespace name="backend/vote/main"}
 
 //{block name="backend/vote/view/list/extension/filter"}
 Ext.define('Shopware.apps.Vote.view.list.extensions.Filter', {

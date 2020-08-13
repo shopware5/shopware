@@ -71,13 +71,13 @@ Ext.define('Shopware.apps.Article.view.detail.Toolbar', {
      * @object
      */
     snippets: {
-        title: '{s name=detail/actions/title}Article actions{/s}',
-        duplicate: '{s name=detail/actions/duplicate}Duplicate{/s}',
-        delete: '{s name=detail/actions/delete}Delete{/s}',
-        translate: '{s name=detail/actions/translate}Translate{/s}',
-        preview: '{s name=detail/actions/preview}Preview{/s}',
-        previewLabel: '{s name=detail/actions/preview_label}Article preview{/s}',
-        previewShopSelect: '{s name=detail/actions/preview_select_shop}Select shop{/s}'
+        title: '{s name="detail/actions/title"}Article actions{/s}',
+        duplicate: '{s name="detail/actions/duplicate"}Duplicate{/s}',
+        delete: '{s name="detail/actions/delete"}Delete{/s}',
+        translate: '{s name="detail/actions/translate"}Translate{/s}',
+        preview: '{s name="detail/actions/preview"}Preview{/s}',
+        previewLabel: '{s name="detail/actions/preview_label"}Article preview{/s}',
+        previewShopSelect: '{s name="detail/actions/preview_select_shop"}Select shop{/s}'
     },
 
     /**

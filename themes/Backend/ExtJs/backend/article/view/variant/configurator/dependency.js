@@ -35,7 +35,7 @@
  * @package Article
  * @subpackage Configurator
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/variant/configurator/dependency"}
 Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
     /**
@@ -90,14 +90,14 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
      * @object
      */
     snippets: {
-        notice: '{s name=variant/configurator/dependency/notice}In this area you have the opportunity to declare restrictions for the generation of product variants. You can define combinations which are supposed to be excluded from the creation of the product variants. Restrictions are applied as a kind rule set, which offers the advantage to define restrictions based on several combinations of attribute groups and options. To define a restriction, please select the attribute group and option which is supposed to be excluded from the generation from the attached selection boxes below.{/s}',
-        group: '{s name=variant/configurator/dependency/group}Group{/s}',
-        option: '{s name=variant/configurator/dependency/option}Option{/s}',
-        operator: '{s name=variant/configurator/dependency/operator}Not with{/s}',
-        fieldSet: '{s name=variant/configurator/dependency/field_set}Define dependencies{/s}',
-        save: '{s name=variant/configurator/dependency/save}Save{/s}',
-        remove: '{s name=variant/configurator/dependency/remove}Delete{/s}',
-        title: '{s name=variant/configurator/dependency/title}Configurator dependency{/s}'
+        notice: '{s name="variant/configurator/dependency/notice"}In this area you have the opportunity to declare restrictions for the generation of product variants. You can define combinations which are supposed to be excluded from the creation of the product variants. Restrictions are applied as a kind rule set, which offers the advantage to define restrictions based on several combinations of attribute groups and options. To define a restriction, please select the attribute group and option which is supposed to be excluded from the generation from the attached selection boxes below.{/s}',
+        group: '{s name="variant/configurator/dependency/group"}Group{/s}',
+        option: '{s name="variant/configurator/dependency/option"}Option{/s}',
+        operator: '{s name="variant/configurator/dependency/operator"}Not with{/s}',
+        fieldSet: '{s name="variant/configurator/dependency/field_set"}Define dependencies{/s}',
+        save: '{s name="variant/configurator/dependency/save"}Save{/s}',
+        remove: '{s name="variant/configurator/dependency/remove"}Delete{/s}',
+        title: '{s name="variant/configurator/dependency/title"}Configurator dependency{/s}'
     },
 
     /**

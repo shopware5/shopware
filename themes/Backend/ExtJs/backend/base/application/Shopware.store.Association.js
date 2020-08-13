@@ -1,5 +1,5 @@
 
-//{namespace name=backend/application/main}
+//{namespace name="backend/application/main"}
 //{block name="backend/application/Shopware.store.Association"}
 Ext.define('Shopware.store.Association', {
 
@@ -230,7 +230,7 @@ Ext.define('Shopware.store.Association', {
             me.loading = true;
             proxy.read(operation, me.onProxyLoad, me);
         }
-        
+
         return me;
     },
 

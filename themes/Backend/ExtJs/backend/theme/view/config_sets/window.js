@@ -21,14 +21,14 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/theme/main}
+//{namespace name="backend/theme/main"}
 
 //{block name="backend/theme/view/config_set/window"}
 
 Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.theme-config-set-window',
-    title : '{s name=config_sets}Configuration sets{/s}',
+    title : '{s name="config_sets"}Configuration sets{/s}',
     width: 600,
     height: 250,
     layout: {
@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
         return Ext.create('Ext.form.FieldSet', {
             layout: 'fit',
             flex: 1,
-            title: '{s name=config_set_title_prefix}Configuration sets{/s} : ' + theme.get('name'),
+            title: '{s name="config_set_title_prefix"}Configuration sets{/s} : ' + theme.get('name'),
             items: [ me.createConfigSetCombo(theme) ]
         });
     },
@@ -159,7 +159,7 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
             name: 'cancel-button',
-            text: '{s name=cancel}Cancel{/s}',
+            text: '{s name="cancel"}Cancel{/s}',
             handler: function () {
                 me.destroy();
             }
@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
         me.saveButton = Ext.create('Ext.button.Button', {
             cls: 'primary',
             name: 'detail-save-button',
-            text: '{s name=load}Load{/s}',
+            text: '{s name="load"}Load{/s}',
             handler: function () {
                 me.fireEvent(
                     'assign-config-sets',

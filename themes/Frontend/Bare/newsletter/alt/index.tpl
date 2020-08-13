@@ -16,7 +16,7 @@
 {if $sCampaignContainer.type == "ctSuggest"}
 {$sRecommendations.description|strip_tags|strip}
 #################################################################
-{foreach from=$sRecommendations.data item=sArticle name=artikelListe}
+{foreach from=$sRecommendations.data item=sArticle name="artikelListe"}
 {$sArticle.articleName|truncate:40:"[..]"|strip_tags}
 
 {$sArticle.description_long|truncate:50:"..."|strip_tags|trim}
@@ -37,7 +37,7 @@
 {if $sCampaignContainer.type == "ctArticles"}
 {$sCampaignContainer.description|strip_tags}
 #################################################################
-{foreach from=$sCampaignContainer.data item=sArticle name=artikelListe}
+{foreach from=$sCampaignContainer.data item=sArticle name="artikelListe"}
 {$sArticle.articleName|truncate:40:"[..]"|strip_tags}
 
 {$sArticle.description_long|truncate:50:"..."|strip_tags|trim}

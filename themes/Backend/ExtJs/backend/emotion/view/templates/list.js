@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/emotion/templates/list}
+//{namespace name="backend/emotion/templates/list"}
 
 /**
  * Shopware UI - Emotion Toolbar
@@ -45,16 +45,16 @@ Ext.define('Shopware.apps.Emotion.view.templates.List', {
      * @Object
      */
     snippets: {
-        invalid_template: '{s name=templates/error/invalid_template}The provided file seems to be not a valid template file{/s}',
+        invalid_template: '{s name="templates/error/invalid_template"}The provided file seems to be not a valid template file{/s}',
         columns: {
-            name: '{s name=templates/list/columns/name}Name{/s}',
-            file: '{s name=templates/list/columns/file}Template file{/s}',
-            actions: '{s name=grids/list/columns/actions}Action(s){/s}'
+            name: '{s name="templates/list/columns/name"}Name{/s}',
+            file: '{s name="templates/list/columns/file"}Template file{/s}',
+            actions: '{s name="grids/list/columns/actions"}Action(s){/s}'
         },
         tooltips: {
-            edit: '{s name=grids/list/tooltip/edit}Edit{/s}',
-            duplicate: '{s name=grids/list/tooltip/duplicate}Duplicate{/s}',
-            remove: '{s name=grids/list/tooltip/remove}Delete{/s}'
+            edit: '{s name="grids/list/tooltip/edit"}Edit{/s}',
+            duplicate: '{s name="grids/list/tooltip/duplicate"}Duplicate{/s}',
+            remove: '{s name="grids/list/tooltip/remove"}Delete{/s}'
         }
     },
 

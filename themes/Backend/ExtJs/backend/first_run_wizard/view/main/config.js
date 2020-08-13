@@ -29,7 +29,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/first_run_wizard/main}
+//{namespace name="backend/first_run_wizard/main"}
 //{block name="backend/first_run_wizard/view/main/config"}
 
 Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
@@ -50,41 +50,41 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
 
     snippets: {
         buttons: {
-           save: '{s name=config/buttons/save}Save{/s}',
-            skip: '{s name=config/buttons/skip}Skip{/s}'
+           save: '{s name="config/buttons/save"}Save{/s}',
+            skip: '{s name="config/buttons/skip"}Skip{/s}'
         },
         content: {
-            title: '{s name=config/content/title}Configuration{/s}',
-            message: '{s name=config/content/message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}'
+            title: '{s name="config/content/title"}Configuration{/s}',
+            message: '{s name="config/content/message"}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}'
         },
         shopSettings: {
-            title: '{s name=config/shopSettings/title}Shop settings{/s}',
+            title: '{s name="config/shopSettings/title"}Shop settings{/s}',
             shopName: {
-                label: '{s name=config/shopSettings/shopName/label}Shop name{/s}'
+                label: '{s name="config/shopSettings/shopName/label"}Shop name{/s}'
             },
             mail: {
-                label: '{s name=config/shopSettings/mail/label}Your email address{/s}'
+                label: '{s name="config/shopSettings/mail/label"}Your email address{/s}'
             },
             address: {
-                label: '{s name=config/shopSettings/address/label}Address{/s}'
+                label: '{s name="config/shopSettings/address/label"}Address{/s}'
             },
             bankAccount: {
-                label: '{s name=config/shopSettings/bankAccount/label}Bank account{/s}'
+                label: '{s name="config/shopSettings/bankAccount/label"}Bank account{/s}'
             },
             company: {
-                label: '{s name=config/shopSettings/company/label}Company{/s}'
+                label: '{s name="config/shopSettings/company/label"}Company{/s}'
             }
         },
         themeSettings: {
-            title: '{s name=config/themeSettings/title}Theme settings{/s}',
+            title: '{s name="config/themeSettings/title"}Theme settings{/s}',
             brandPrimary: {
-                label: '{s name=config/themeSettings/brandPrimaryColor/label}Primary color{/s}'
+                label: '{s name="config/themeSettings/brandPrimaryColor/label"}Primary color{/s}'
             },
             brandSecondary: {
-                label: '{s name=config/themeSettings/brandSecondaryColor/label}Secondary color{/s}'
+                label: '{s name="config/themeSettings/brandSecondaryColor/label"}Secondary color{/s}'
             },
             logo: {
-                label: '{s name=config/themeSettings/logo/label}Shop\'s logo{/s}'
+                label: '{s name="config/themeSettings/logo/label"}Shop\'s logo{/s}'
             }
         }
     },

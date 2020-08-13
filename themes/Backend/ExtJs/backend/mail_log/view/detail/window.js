@@ -6,7 +6,7 @@ Ext.define('Shopware.apps.MailLog.view.detail.Window', {
     alias: 'widget.mail_log-detail-window',
     height: 600,
     width: 900,
-    title: '{s name=window_title}{/s}',
+    title: '{s name="window_title"}{/s}',
 
     createSaveButton: function () {
         return null;

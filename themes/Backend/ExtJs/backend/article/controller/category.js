@@ -32,7 +32,7 @@
  *
  * todo@all: Documentation
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/controller/category"}
 Ext.define('Shopware.apps.Article.controller.Category', {
     /**
@@ -47,9 +47,9 @@ Ext.define('Shopware.apps.Article.controller.Category', {
      */
     snippets: {
         alreadyExist: {
-            title: '{s name=category/already_exist/title}Failed{/s}',
-            message: '{s name=category/already_exist/message}Category: [0] has already been assigned{/s}',
-            caller: '{s name=category/already_exist/caller}Article{/s}'
+            title: '{s name="category/already_exist/title"}Failed{/s}',
+            message: '{s name="category/already_exist/message"}Category: [0] has already been assigned{/s}',
+            caller: '{s name="category/already_exist/caller"}Article{/s}'
         }
     },
     /**

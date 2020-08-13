@@ -1,4 +1,4 @@
-//{namespace name=backend/application/main}
+//{namespace name="backend/application/main"}
 //{block name="backend/application/Shopware.form.field.Media"}
 Ext.define('Shopware.form.field.Media', {
 

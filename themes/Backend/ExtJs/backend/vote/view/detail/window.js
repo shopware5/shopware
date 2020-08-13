@@ -27,13 +27,13 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/vote/main}
+//{namespace name="backend/vote/main"}
 
 //{block name="backend/vote/view/detail/window"}
 Ext.define('Shopware.apps.Vote.view.detail.Window', {
     extend: 'Shopware.window.Detail',
     alias: 'widget.vote-detail-window',
-    title : '{s name=detail_window_title}Vote details{/s}',
+    title : '{s name="detail_window_title"}Vote details{/s}',
     width: 720,
     minWidth: 400
 });

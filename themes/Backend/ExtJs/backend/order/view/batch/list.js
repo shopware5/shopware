@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order list backend module
@@ -77,15 +77,15 @@ Ext.define('Shopware.apps.Order.view.batch.List', {
      * @object
      */
     snippets:{
-        title: '{s name=column/number}Order number{/s}',
+        title: '{s name="column/number"}Order number{/s}',
         columns: {
-            number:'{s name=column/number}Order number{/s}',
-            customer:'{s name=column/customer}Customer{/s}',
-            orderStatus:'{s name=column/order_status}Order Status{/s}',
-            paymentStatus:'{s name=column/payment_status}Payment Status{/s}',
-            sent:'{s name=column/email_sent}Email has been sent{/s}',
-            orderTime:'{s name=column/order_time}Order time{/s}',
-            mailGenerated: '{s name=column/mail_generated}Mail has been generated{/s}'
+            number:'{s name="column/number"}Order number{/s}',
+            customer:'{s name="column/customer"}Customer{/s}',
+            orderStatus:'{s name="column/order_status"}Order Status{/s}',
+            paymentStatus:'{s name="column/payment_status"}Payment Status{/s}',
+            sent:'{s name="column/email_sent"}Email has been sent{/s}',
+            orderTime:'{s name="column/order_time"}Order time{/s}',
+            mailGenerated: '{s name="column/mail_generated"}Mail has been generated{/s}'
         }
     },
 

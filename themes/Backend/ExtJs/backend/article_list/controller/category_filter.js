@@ -24,7 +24,7 @@
 /**
  * The category_filter controllers handels filtering by category
  */
-//{namespace name=backend/article_list/main}
+//{namespace name="backend/article_list/main"}
 //{block name="backend/article_list/controller/category_filter"}
 Ext.define('Shopware.apps.ArticleList.controller.CategoryFilter', {
 
@@ -101,13 +101,13 @@ Ext.define('Shopware.apps.ArticleList.controller.CategoryFilter', {
             snippet;
 
         if (!categoryId) {
-            snippet = '{s name=allProducts}all products{/s}';
+            snippet = '{s name="allProducts"}all products{/s}';
         } else {
-            snippet = Ext.String.format('{s name=productsInCategory}products in category [0]{/s}', categoryId);
+            snippet = Ext.String.format('{s name="productsInCategory"}products in category [0]{/s}', categoryId);
         }
 
         if (showVariants) {
-            snippet += ' ' + '{s name=withVariants}with variants{/s}';
+            snippet += ' ' + '{s name="withVariants"}with variants{/s}';
         }
 
         return snippet;

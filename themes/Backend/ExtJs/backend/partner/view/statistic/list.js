@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/partner/view/partner}
+//{namespace name="backend/partner/view/partner"}
 
 /**
  * Shopware UI - partner statistic list window.
@@ -68,18 +68,18 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
 
         var columnsData = [
             {
-                header:'{s name=statistic/list/column/ordertime}Order time{/s}',
+                header:'{s name="statistic/list/column/ordertime"}Order time{/s}',
                 dataIndex:'orderTime',
                 xtype: 'datecolumn',
                 flex:1
             },
             {
-                header:'{s name=statistic/list/column/ordernumber}Order number{/s}',
+                header:'{s name="statistic/list/column/ordernumber"}Order number{/s}',
                 dataIndex:'number',
                 flex:1
             },
             {
-                header:'{s name=statistic/list/column/net_turnover}Net turnover{/s}',
+                header:'{s name="statistic/list/column/net_turnover"}Net turnover{/s}',
                 dataIndex:'netTurnOver',
                 xtype: 'numbercolumn',
                 summaryType: 'sum',
@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
                 flex:1
             },
             {
-                header:'{s name=statistic/list/column/provision}Provision{/s}',
+                header:'{s name="statistic/list/column/provision"}Provision{/s}',
                 dataIndex:'provision',
                 xtype: 'numbercolumn',
                 summaryType: 'sum',
@@ -118,7 +118,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
         if (summaryValue !== parseInt(summaryValue, 10)) {
             summaryValue = Ext.util.Format.number(summaryValue, '0.00');
         }
-        return '<b> {s name=statistic/list/label/total}Total:{/s} ' + summaryValue + '</b>';
+        return '<b> {s name="statistic/list/label/total"}Total:{/s} ' + summaryValue + '</b>';
     },
 
     /**
@@ -133,7 +133,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
         actionColumnData.push({
             iconCls:'sprite-pencil',
             cls:'editBtn',
-            tooltip:'{s name=list/action_column/edit}Edit partner{/s}',
+            tooltip:'{s name="list/action_column/edit"}Edit partner{/s}',
             handler:function (view, rowIndex, colIndex, item) {
                 me.fireEvent('editColumn', view, rowIndex, colIndex, item);
             }
@@ -143,7 +143,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
             iconCls:'sprite-minus-circle-frame',
             action:'delete',
             cls:'delete',
-            tooltip:'{s name=list/action_column/delete}Delete partner{/s}',
+            tooltip:'{s name="list/action_column/delete"}Delete partner{/s}',
             handler:function (view, rowIndex, colIndex, item) {
                 me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
             }
@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
         actionColumnData.push({
             iconCls:'sprite-chart-up-color',
             cls:'chart-up-color',
-            tooltip:'{s name=list/action_column/statistic}Statistics{/s}',
+            tooltip:'{s name="list/action_column/statistic"}Statistics{/s}',
             handler:function (view, rowIndex, colIndex, item) {
                 me.fireEvent('statistic', view, rowIndex, colIndex, item);
             }

@@ -28,7 +28,7 @@
  */
 
 //{block name="backend/emotion/view/components/iframe"}
-//{namespace name=backend/emotion/view/components/iframe}
+//{namespace name="backend/emotion/view/components/iframe"}
 Ext.define('Shopware.apps.Emotion.view.components.Iframe', {
 
     extend: 'Shopware.apps.Emotion.view.components.Base',

@@ -24,7 +24,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 //{block name="backend/order/controller/attachment"}
 Ext.define('Shopware.apps.Order.controller.Attachment', {
 
@@ -123,8 +123,8 @@ Ext.define('Shopware.apps.Order.controller.Attachment', {
 
         if (document.get('numbers') === 'doc_3') {
             Ext.Msg.prompt(
-                '{s name=document/attachment/invoice/number}{/s}',
-                '{s name=document/attachment/invoice/number/text}{/s}',
+                '{s name="document/attachment/invoice/number"}{/s}',
+                '{s name="document/attachment/invoice/number/text"}{/s}',
                 function(clickedButtonName, inputText) {
                     me.afterInsertNewInvoiceNumber(clickedButtonName, inputText, data);
                 }

@@ -20,7 +20,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-//{namespace name=backend/emotion/view/components/article}
+//{namespace name="backend/emotion/view/components/article"}
 Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleType', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.emotion-components-fields-article-type',
@@ -32,15 +32,15 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleType', {
      */
     snippets: {
         fields: {
-            'article_type': '{s name=article/fields/article_type}{/s}',
-            'empty_text': '{s name=article/fields/empty_text}{/s}'
+            'article_type': '{s name="article/fields/article_type"}{/s}',
+            'empty_text': '{s name="article/fields/empty_text"}{/s}'
         },
         store: {
-            'selected_article': '{s name=article/store/selected_article}{/s}',
-            'selected_variant': '{s name=article/store/selected_variant}{/s}',
-            'newcomer': '{s name=article/store/newcomer}{/s}',
-            'topseller': '{s name=article/store/topseller}{/s}',
-            'random_article': '{s name=article/store/random_article}{/s}'
+            'selected_article': '{s name="article/store/selected_article"}{/s}',
+            'selected_variant': '{s name="article/store/selected_variant"}{/s}',
+            'newcomer': '{s name="article/store/newcomer"}{/s}',
+            'topseller': '{s name="article/store/topseller"}{/s}',
+            'random_article': '{s name="article/store/random_article"}{/s}'
         }
     },
 

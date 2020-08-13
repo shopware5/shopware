@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/condition/closeout"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Closeout', {
     extend: 'ProductStream.filter.AbstractCondition',
@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Closeout',
     },
 
     getLabel: function() {
-        return '{s name=closeout_condition}Closeout condition{/s}';
+        return '{s name="closeout_condition"}Closeout condition{/s}';
     },
 
     isSingleton: function() {
@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Closeout',
             },
             items: [{
                 xtype: 'displayfield',
-                value: '{s name=closeout/display_text}Only products which marked as closeout will be displayed{/s}',
+                value: '{s name="closeout/display_text"}Only products which marked as closeout will be displayed{/s}',
             }, {
                 xtype: 'numberfield',
                 name: 'condition.' + this.getName(),

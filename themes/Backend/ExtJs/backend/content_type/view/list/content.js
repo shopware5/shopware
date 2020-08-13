@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.{$controllerName}.view.list.Content', {
             /* {/if} */
 
             detailWindow: 'Shopware.apps.{$controllerName}.view.detail.Window',
-            columns: {$listColumns|json_encode}
+            columns: JSON.parse('{$listColumns|json_encode}')
         }
     },
 });

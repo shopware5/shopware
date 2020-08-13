@@ -30,7 +30,7 @@
 /**
  * Shopware UI - Article crosselling page
  */
-//{namespace name=backend/article/view/main}
+//{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/crossseling/product_streams"}
 Ext.define('Shopware.apps.Article.view.crossselling.ProductStreams', {
 
@@ -70,14 +70,14 @@ Ext.define('Shopware.apps.Article.view.crossselling.ProductStreams', {
      * @object
      */
     snippets: {
-        'title': '{s name=cross_selling/streams/title}Product streams{/s}',
-        'gridTitle': '{s name=cross_selling/streams/grid_title}Assigned product streams{/s}',
-        'notice': '{s name=cross_selling/streams/notice}Custom product streams can be assigned to the article. The product streams will be shown as additional tab panels on the article detail page.{/s}',
-        'streamId': '{s name=cross_selling/streams/stream_id}Stream ID{/s}',
-        'streamName': '{s name=cross_selling/streams/stream_name}Name{/s}',
-        'streamDescription': '{s name=cross_selling/streams/stream_description}Description{/s}',
-        'addStream': '{s name=cross_selling/streams/stream_add}Add product stream{/s}',
-        'removeStream': '{s name=cross_selling/streams/stream_remove}Delete product stream{/s}'
+        'title': '{s name="cross_selling/streams/title"}Product streams{/s}',
+        'gridTitle': '{s name="cross_selling/streams/grid_title"}Assigned product streams{/s}',
+        'notice': '{s name="cross_selling/streams/notice"}Custom product streams can be assigned to the article. The product streams will be shown as additional tab panels on the article detail page.{/s}',
+        'streamId': '{s name="cross_selling/streams/stream_id"}Stream ID{/s}',
+        'streamName': '{s name="cross_selling/streams/stream_name"}Name{/s}',
+        'streamDescription': '{s name="cross_selling/streams/stream_description"}Description{/s}',
+        'addStream': '{s name="cross_selling/streams/stream_add"}Add product stream{/s}',
+        'removeStream': '{s name="cross_selling/streams/stream_remove"}Delete product stream{/s}'
     },
 
     /**

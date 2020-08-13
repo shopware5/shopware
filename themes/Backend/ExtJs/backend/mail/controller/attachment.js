@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/mail/controller/attachment}
+//{namespace name="backend/mail/controller/attachment"}
 
 /**
  * todo@all: Documentation
@@ -59,19 +59,19 @@ Ext.define('Shopware.apps.Mail.controller.Attachment', {
      * @object
      */
     snippets:{
-        multipleDeleteTitle: '{s name=message_delete_multiple_title}Delete selected attachments{/s}',
-        multipleDeleteMessage: '{s name=message_delete_multiple_content}[0] attachments have been selected. Are you sure you want to delete all selected attachments?{/s}',
+        multipleDeleteTitle: '{s name="message_delete_multiple_title"}Delete selected attachments{/s}',
+        multipleDeleteMessage: '{s name="message_delete_multiple_content"}[0] attachments have been selected. Are you sure you want to delete all selected attachments?{/s}',
 
-        deleteSuccessTitle: '{s name=message_delete_success_message}Successful{/s}',
-        deleteSuccessMessage: '{s name=message_delete_success_title}Attachments have been removed{/s}',
+        deleteSuccessTitle: '{s name="message_delete_success_message"}Successful{/s}',
+        deleteSuccessMessage: '{s name="message_delete_success_title"}Attachments have been removed{/s}',
 
-        deleteErrorTitle: '{s name=message_delete_error_title}Error{/s}',
-        deleteErrorMessage: '{s name=message_delete_error_message}An error has occurred while deleting.{/s}'  ,
+        deleteErrorTitle: '{s name="message_delete_error_title"}Error{/s}',
+        deleteErrorMessage: '{s name="message_delete_error_message"}An error has occurred while deleting.{/s}'  ,
 
-        singleDeleteTitle: '{s name=message_delete_single_title}Delete selected attachment{/s}',
-        singleDeletMessage: '{s name=message_delete_single_content}Are you sure that you want to delete the selected attachment?{/s}',
+        singleDeleteTitle: '{s name="message_delete_single_title"}Delete selected attachment{/s}',
+        singleDeletMessage: '{s name="message_delete_single_content"}Are you sure that you want to delete the selected attachment?{/s}',
 
-        growlMessage: '{s name=growlMessage}Mail{/s}'
+        growlMessage: '{s name="growlMessage"}Mail{/s}'
     },
 
     /**

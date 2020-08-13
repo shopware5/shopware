@@ -46,7 +46,7 @@
 
                         {* Reviews *}
                         {block name="frontend_note_item_rating"}
-                            {if !{config name=VoteDisable}}
+                            {if !{config name="VoteDisable"}}
                                 {include file="frontend/_includes/rating.tpl" points=$sBasketItem.sVoteAverage.average type="aggregated"}
                             {/if}
                         {/block}
@@ -76,8 +76,8 @@
 
                         {* Delivery information *}
                         {block name="frontend_note_item_delivery"}
-                            {if {config name=BASKETSHIPPINGINFO}}
-                                <div class="note--delivery{if {config name=VoteDisable}} vote_disabled{/if}"  >
+                            {if {config name="BASKETSHIPPINGINFO"}}
+                                <div class="note--delivery{if {config name="VoteDisable"}} vote_disabled{/if}"  >
                                     {include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sBasketItem}
                                 </div>
                             {/if}

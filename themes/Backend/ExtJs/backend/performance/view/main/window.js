@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 
 /**
  * Shopware UI - Performance list main window.
@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.Performance.view.main.Window', {
      * Set window title which is displayed in the window header
      * @string
      */
-    title:'{s name=window_title}Performance{/s}',
+    title:'{s name="window_title"}Performance{/s}',
 
     /**
      * Initializes the component and builds up the main interface

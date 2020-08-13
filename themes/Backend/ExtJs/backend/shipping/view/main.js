@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-/*{namespace name=backend/shipping/view/main}*/
+/*{namespace name="backend/shipping/view/main"}*/
 
 /**
  * Shopware UI - Shipping Costs
@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Shipping.view.Main', {
      * Name of the window
      * @string
      */
-    title       : '{s name=title}Shipping costs management{/s}',
+    title       : '{s name="title"}Shipping costs management{/s}',
     /**
      * @return void
      */

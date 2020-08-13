@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.{$controllerName}.view.detail.Content', {
     configure: function() {
         return {
             controller: '{$controllerName}',
-            fieldSets: {$detailFields|json_encode},
+            fieldSets: JSON.parse('{$detailFields|json_encode}'),
             splitFields: false
         }
     },

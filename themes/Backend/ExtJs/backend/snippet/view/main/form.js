@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/snippet/view/main}
+//{namespace name="backend/snippet/view/main"}
 
 /**
  * todo@all: Documentation
@@ -115,7 +115,7 @@ Ext.define('Shopware.apps.Snippet.view.main.Form', {
     getButtons: function() {
         return [{
             cls: 'primary',
-            text: '{s name=button_save_form}Save{/s}',
+            text: '{s name="button_save_form"}Save{/s}',
             action: 'save',
             formBind: true
         }];

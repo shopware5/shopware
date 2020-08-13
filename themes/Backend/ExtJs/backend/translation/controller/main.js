@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/translation/view/main}
+//{namespace name="backend/translation/view/main"}
 
 /**
  * Shopware UI - Translation Manager Main Controller
@@ -168,7 +168,7 @@ Ext.define('Shopware.apps.Translation.controller.Main',
         me.urls.add('google', {
             tpl: '{literal}//translate.google.de/?hl=de&tab=wT#{0}|{1}|{2}{/literal}',
             sep: '|',
-            fullName: '{s name=service/google}Google translator{/s}'
+            fullName: '{s name="service/google"}Google translator{/s}'
         });
     },
 
@@ -309,10 +309,10 @@ Ext.define('Shopware.apps.Translation.controller.Main',
             url: '{url action=saveTranslation}',
             params: params,
             success: function() {
-                Shopware.Notification.createGrowlMessage('{s name=messages/success_title}Successful{/s}', '{s name=messages/success_message}Translations have been saved successfully.{/s}', '{s name=window_title}Translation{/s}');
+                Shopware.Notification.createGrowlMessage('{s name="messages/success_title"}Successful{/s}', '{s name="messages/success_message"}Translations have been saved successfully.{/s}', '{s name="window_title"}Translation{/s}');
             },
             failure: function() {
-                Shopware.Notification.createGrowlMessage('{s name=messages/failure_title}Error{/s}', "{s name=messages/failure_message}Translations could not be saved.{/s}", '{s name=window_title}Translation{/s}');
+                Shopware.Notification.createGrowlMessage('{s name="messages/failure_title"}Error{/s}', '{s name="messages/failure_message"}Translations could not be saved.{/s}', '{s name="window_title"}Translation{/s}');
             }
         });
     },
@@ -353,7 +353,7 @@ Ext.define('Shopware.apps.Translation.controller.Main',
 
                 // Special behavior - if the fieldLabel contains a non-breaking space, then set an custom label
                 if(field.fieldLabel === '&nbsp') {
-                    label = '{s name=emptyFieldLabel}Description{/s}';
+                    label = '{s name="emptyFieldLabel"}Description{/s}';
                 }
 
                 data.push({ valueField: field.emptyText, displayField: label || field.fieldLabel });

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/order/main}
+//{namespace name="backend/order/main"}
 
 /**
  * Shopware UI - Order detail page
@@ -54,8 +54,8 @@ Ext.define('Shopware.apps.Order.view.detail.Dispatch', {
      * @object
      */
     snippets: {
-        title:'{s name=dispatch/title}Dispatch data{/s}',
-        dispatchMethod:'{s name=dispatch/fields/dispatch_method}Dispatch method{/s}'
+        title:'{s name="dispatch/title"}Dispatch data{/s}',
+        dispatchMethod:'{s name="dispatch/fields/dispatch_method"}Dispatch method{/s}'
     },
 
     /**

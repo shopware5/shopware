@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/address}
+// {namespace name="backend/customer/view/address"}
 
 /**
  * Shopware UI - Customer address detail backend module
@@ -50,24 +50,24 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
         },
         fields: {
             salutation: {
-                label: '{s name=detail/label/salutation}Salutation{/s}'
+                label: '{s name="detail/label/salutation"}Salutation{/s}'
             },
-            firstname: '{s name=detail/label/firstname}First name{/s}',
-            title: '{s name=detail/label/title}Title{/s}',
-            lastname: '{s name=detail/label/lastname}Last name{/s}',
-            street: '{s name=detail/label/street}Street{/s}',
-            zipcode: '{s name=detail/label/zipcode}Zip code{/s}',
-            city: '{s name=detail/label/city}City{/s}',
-            additionalAddressLine1: '{s name=detail/label/additionalAddressLine1}Additional address line 1{/s}',
-            additionalAddressLine2: '{s name=detail/label/additionalAddressLine2}Additional address line 2{/s}',
-            country: '{s name=detail/label/country}Country{/s}',
-            state: '{s name=detail/label/state}State{/s}',
-            phone: '{s name=detail/label/phone}Phone{/s}',
-            company: '{s name=detail/label/company}Company{/s}',
-            department: '{s name=detail/label/department}Department{/s}',
-            vatId: '{s name=detail/label/vat_id}VAT ID{/s}',
-            setDefaultBillingAddress: '{s name=detail/label/setDefaultBillingAddress}VAT ID{/s}',
-            setDefaultShippingAddress: '{s name=detail/label/setDefaultShippingAddress}VAT ID{/s}'
+            firstname: '{s name="detail/label/firstname"}First name{/s}',
+            title: '{s name="detail/label/title"}Title{/s}',
+            lastname: '{s name="detail/label/lastname"}Last name{/s}',
+            street: '{s name="detail/label/street"}Street{/s}',
+            zipcode: '{s name="detail/label/zipcode"}Zip code{/s}',
+            city: '{s name="detail/label/city"}City{/s}',
+            additionalAddressLine1: '{s name="detail/label/additionalAddressLine1"}Additional address line 1{/s}',
+            additionalAddressLine2: '{s name="detail/label/additionalAddressLine2"}Additional address line 2{/s}',
+            country: '{s name="detail/label/country"}Country{/s}',
+            state: '{s name="detail/label/state"}State{/s}',
+            phone: '{s name="detail/label/phone"}Phone{/s}',
+            company: '{s name="detail/label/company"}Company{/s}',
+            department: '{s name="detail/label/department"}Department{/s}',
+            vatId: '{s name="detail/label/vat_id"}VAT ID{/s}',
+            setDefaultBillingAddress: '{s name="detail/label/setDefaultBillingAddress"}VAT ID{/s}',
+            setDefaultShippingAddress: '{s name="detail/label/setDefaultShippingAddress"}VAT ID{/s}'
         }
     },
 
@@ -149,7 +149,7 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             anchor: '95%'
                         },
                         additionalAddressLine1: {
-                            /* {if {config name=showAdditionAddressLine1} && {config name=requireAdditionAddressLine1}} */
+                            /* {if {config name="showAdditionAddressLine1"} && {config name="requireAdditionAddressLine1"}} */
                             allowBlank: false,
                             /* {/if} */
                             fieldLabel: me.snippets.fields.additionalAddressLine1,
@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             anchor: '95%'
                         },
                         additionalAddressLine2: {
-                            /* {if {config name=showAdditionAddressLine2} && {config name=requireAdditionAddressLine2}} */
+                            /* {if {config name="showAdditionAddressLine2"} && {config name="requireAdditionAddressLine2"}} */
                             allowBlank: false,
                             /* {/if} */
                             fieldLabel: me.snippets.fields.additionalAddressLine2,
@@ -198,7 +198,7 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             pageSize: 25
                         },
                         phone: {
-                            /* {if {config name=showphonenumberfield} && {config name=requirePhoneField}} */
+                            /* {if {config name="showphonenumberfield"} && {config name="requirePhoneField"}} */
                             allowBlank: false,
                             /* {/if} */
                             fieldLabel: me.snippets.fields.phone,

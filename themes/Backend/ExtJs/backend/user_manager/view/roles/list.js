@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/user_manager/view/main}
+//{namespace name="backend/user_manager/view/main"}
 
 /**
  * Shopware Backend - View for role-grid
@@ -87,28 +87,28 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
 
         // Define the columns and renderers
         me.columns = [{
-            header: '{s name=roleslist/colname}{/s}',
+            header: '{s name="roleslist/colname"}{/s}',
             dataIndex: 'name',
             flex: 1,
             editor: {
                 xtype: 'textfield',
-                emptyText: '{s name=roles_list/enterName}{/s}'
+                emptyText: '{s name="roles_list/enterName"}{/s}'
             }
         }, {
-            header: '{s name=roleslist/coldescription}{/s}',
+            header: '{s name="roleslist/coldescription"}{/s}',
             dataIndex: 'description',
             flex: 1,
             editor: {
                 xtype: 'textfield',
-                emptyText: '{s name=roles_list/enterDescription}{/s}'
+                emptyText: '{s name="roles_list/enterDescription"}{/s}'
             }
         }, {
-            header: '{s name=roleslist/colsource}{/s}',
+            header: '{s name="roleslist/colsource"}{/s}',
             dataIndex: 'source',
             flex: 1
         }, {
             xtype: 'booleancolumn',
-            header: '{s name=roleslist/colactive}{/s}',
+            header: '{s name="roleslist/colactive"}{/s}',
             dataIndex: 'enabled',
             flex: 1,
             editor: {
@@ -118,7 +118,7 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
             }
         }, {
             xtype: 'booleancolumn',
-            header: '{s name=roleslist/coladmin}{/s}',
+            header: '{s name="roleslist/coladmin"}{/s}',
             dataIndex: 'admin',
             flex: 1,
             editor: {
@@ -134,7 +134,7 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
             items: [{
                 iconCls: 'sprite-minus-circle',
                 cls: 'delete',
-                tooltip: '{s name=roleslist/colactiondelete}{/s}',
+                tooltip: '{s name="roleslist/colactiondelete"}{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('deleteRole', view, rowIndex, colIndex, item);
                 },
@@ -156,14 +156,14 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
         /* {if {acl_is_allowed privilege=create}} */
             {
                 iconCls: 'sprite-plus-circle',
-                text: '{s name=roleslist/addrole}{/s}',
+                text: '{s name="roleslist/addrole"}{/s}',
                 action: 'addRole'
             }
         /* {/if} */
             /* {if {acl_is_allowed privilege=delete}} */
             ,{
                 iconCls: 'sprite-minus-circle',
-                text: '{s name=roleslist/deleterole}{/s}',
+                text: '{s name="roleslist/deleterole"}{/s}',
                 disabled: true,
                 action: 'deleteRole'
             }
@@ -216,8 +216,8 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
                 }
             });
             Shopware.Notification.createGrowlMessage(
-                '{s name=user/Success}{/s}',
-                '{s name=roles_list/updatedSuccesfully}{/s}',
+                '{s name="user/Success"}{/s}',
+                '{s name="roles_list/updatedSuccesfully"}{/s}',
                 '{s name="user/userManager"}{/s}'
             );
         }, function() {

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/user_manager/view/main}
+//{namespace name="backend/user_manager/view/main"}
 
 /**
  * Shopware UI - Media Manager Main Window
@@ -38,7 +38,7 @@
 //{block name="backend/user_manager/view/main/window"}
 Ext.define('Shopware.apps.UserManager.view.main.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window/title}Backend user administration{/s}',
+    title: '{s name="window/title"}Backend user administration{/s}',
     alias: 'widget.usermanager-main-window',
     border: false,
     autoShow: true,
@@ -49,9 +49,9 @@ Ext.define('Shopware.apps.UserManager.view.main.Window', {
     stateId: 'user-manager-main-window',
     snippets:{
         navigation: {
-            userList: '{s name=navigation/navigation_usermanager}{/s}',
-            roleList: '{s name=navigation/navigation_rolemanager}{/s}',
-            rulesTree: '{s name=navigation/navigation_rights_assignment}{/s}'
+            userList: '{s name="navigation/navigation_usermanager"}{/s}',
+            roleList: '{s name="navigation/navigation_rolemanager"}{/s}',
+            rulesTree: '{s name="navigation/navigation_rights_assignment"}{/s}'
         }
     },
 

@@ -26,7 +26,7 @@
  *
  * This class handles all theme cache warm up actions
  */
-//{namespace name=backend/index/controller/theme_cache_warm_up}
+//{namespace name="backend/index/controller/theme_cache_warm_up"}
 //{block name="backend/index/controller/theme_cache_warm_up"}
 Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
     extend: 'Ext.app.Controller',
@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
         me.cancelOperation = true;
 
         me.window.progressBar.updateText(
-            Ext.String.format('{s name=progress_bar/cancelling}Cancelling process ...{/s}')
+            Ext.String.format('{s name="progress_bar/cancelling"}Cancelling process ...{/s}')
         );
     },
 
@@ -131,8 +131,8 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
             });
 
             Shopware.Notification.createGrowlMessage(
-                '{s name=response/cancelled/title}Cancelled{/s}',
-                Ext.String.format('{s name=response/cancelled/detail}The process was cancelled. [0] of [1] caches were correctly warmed up{/s}', offset, batchSize)
+                '{s name="response/cancelled/title"}Cancelled{/s}',
+                Ext.String.format('{s name="response/cancelled/detail"}The process was cancelled. [0] of [1] caches were correctly warmed up{/s}', offset, batchSize)
             );
 
             return;
@@ -142,7 +142,7 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
             // updates the progress bar value and text, the last parameter is the animation flag
             me.window.progressBar.updateProgress(
                 (offset) / batchSize,
-                Ext.String.format('{s name=progress_bar/processing}Processing [0] ...{/s}', shop.get('name')),
+                Ext.String.format('{s name="progress_bar/processing"}Processing [0] ...{/s}', shop.get('name')),
                 true
             );
         }
@@ -170,7 +170,7 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
                         if (me.window.progressBar) {
                             me.window.progressBar.updateProgress(
                                 (offset+1) / batchSize,
-                                Ext.String.format('{s name=progress_bar/clearing_http_cache}Clearing HTTP cache{/s}'),
+                                Ext.String.format('{s name="progress_bar/clearing_http_cache"}Clearing HTTP cache{/s}'),
                                 true
                             );
                         }
@@ -182,12 +182,12 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
                         me.runRequest(shops, offset+1);
                     }
                 } else {
-                    message = Ext.String.format('{s name=response/error/detail}A server error occurred while processing your request for shop [0]{/s}', shop.get('name'));
+                    message = Ext.String.format('{s name="response/error/detail"}A server error occurred while processing your request for shop [0]{/s}', shop.get('name'));
                     if (!Ext.isEmpty(json.message)) {
                         message = message + ': ' + json.message;
                     }
                     Shopware.Notification.createGrowlMessage(
-                        '{s name=response/error/title}An error occurred{/s}',
+                        '{s name="response/error/title"}An error occurred{/s}',
                         message
                     );
 
@@ -225,13 +225,13 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
             success: function(response) {
                 if (Ext.isNumber(me.window.singleShopId)) {
                     Shopware.Notification.createGrowlMessage(
-                        '{s name=response/success/title}Theme shop cache warm up{/s}',
-                        '{s name=response/success/detail_single}Theme shop cache has been successfully warmed up{/s}'
+                        '{s name="response/success/title"}Theme shop cache warm up{/s}',
+                        '{s name="response/success/detail_single"}Theme shop cache has been successfully warmed up{/s}'
                     );
                 } else {
                     Shopware.Notification.createGrowlMessage(
-                        '{s name=response/success/title}Theme shop cache warm up{/s}',
-                        '{s name=response/success/detail_multiple}All theme shop caches have been successfully warmed up{/s}'
+                        '{s name="response/success/title"}Theme shop cache warm up{/s}',
+                        '{s name="response/success/detail_multiple"}All theme shop caches have been successfully warmed up{/s}'
                     );
                 }
 
@@ -242,14 +242,14 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
                 if (me.window.progressBar) {
                     me.window.progressBar.updateProgress(
                         0,
-                        Ext.String.format('{s name=response/error/progress_bar}Error{/s}'),
+                        Ext.String.format('{s name="response/error/progress_bar"}Error{/s}'),
                         true
                     );
                 }
 
                 Shopware.Notification.createGrowlMessage(
-                    '{s name=response/error/title}An error occurred{/s}',
-                    Ext.String.format('{s name=response/error/detail}A server error occurred while processing your request for shop [0]{/s}', shop.get('name'))
+                    '{s name="response/error/title"}An error occurred{/s}',
+                    Ext.String.format('{s name="response/error/detail"}A server error occurred while processing your request for shop [0]{/s}', shop.get('name'))
                 );
             }
         });

@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/emotion/view/components/slider_select}
+//{namespace name="backend/emotion/view/components/slider_select"}
 Ext.define('Shopware.apps.Emotion.view.components.fields.SliderSelect', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.emotion-components-fields-category-slider-select',
@@ -38,12 +38,12 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.SliderSelect', {
      */
     snippets: {
         fields: {
-            'slider_type': '{s name=article/fields/slider_type}Slider type{/s}',
-            'empty_text': '{s name=article/fields/empty_text}Please select...{/s}'
+            'slider_type': '{s name="article/fields/slider_type"}Slider type{/s}',
+            'empty_text': '{s name="article/fields/empty_text"}Please select...{/s}'
         },
         store: {
-            'vertical_slider': '{s name=article/store/vertical_slider}Vertical slider{/s}',
-            'horizontal_slider': '{s name=article/store/horizontal_slider}Horizontal slider{/s}'
+            'vertical_slider': '{s name="article/store/vertical_slider"}Vertical slider{/s}',
+            'horizontal_slider': '{s name="article/store/horizontal_slider"}Horizontal slider{/s}'
         }
     },
 

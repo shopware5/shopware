@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/main}
+//{namespace name="backend/config/view/main"}
 
 //{block name="backend/config/view/base/form"}
 Ext.define('Shopware.apps.Config.view.base.Form', {
@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Config.view.base.Form', {
             items.push({
                 iconCls: 'sprite-minus-circle-frame',
                 action: 'delete',
-                tooltip:'{s name=form/delete_tooltip}Delete (ALT + DELETE){/s}',
+                tooltip:'{s name="form/delete_tooltip"}Delete (ALT + DELETE){/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('delete', me, record);
                 },
@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Config.view.base.Form', {
             items.push({
                 iconCls: 'sprite-pencil',
                 action: 'edit',
-                tooltip: '{s name=form/edit_tooltip}Edit{/s}',
+                tooltip: '{s name="form/edit_tooltip"}Edit{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('edit', me, record);
                 }

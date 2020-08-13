@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/mail/view/main}
+//{namespace name="backend/mail/view/main"}
 
 /**
  * todo@all: Documentation
@@ -36,7 +36,7 @@
 Ext.define('Shopware.apps.Mail.view.main.Window', {
     extend: 'Enlight.app.Window',
     alias : 'widget.mail-main-window',
-    title : '{s name=title}Email templates{/s}',
+    title : '{s name="title"}Email templates{/s}',
     layout: 'border',
     width: '70%',
     height: '90%',
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Mail.view.main.Window', {
             items.push({
                 xtype: 'button',
                 iconCls: 'sprite-mail--plus',
-                text: '{s name=button_add_template}Add template{/s}',
+                text: '{s name="button_add_template"}Add template{/s}',
                 action: 'mail-window-add'
             });
         /*{/if}*/
@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.Mail.view.main.Window', {
             items.push({
                 xtype: 'button',
                 iconCls: 'sprite-mail--minus',
-                text: '{s name=button_delete_templates}Delete selected templates{/s}',
+                text: '{s name="button_delete_templates"}Delete selected templates{/s}',
                 action: 'mail-window-delete',
                 disabled: true
             });
@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.Mail.view.main.Window', {
             items.push({
                 xtype: 'button',
                 iconCls: 'sprite-blue-document-copy',
-                text: '{s name=button_duplicate_templates}Duplicate selected templates{/s}',
+                text: '{s name="button_duplicate_templates"}Duplicate selected templates{/s}',
                 action: 'mail-window-copy',
                 disabled: true
             });
@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.Mail.view.main.Window', {
             cls: 'searchfield',
             enableKeyEvents : true,
             checkChangeBuffer: 300,
-            emptyText : '{s name=toolbar_search}Search...{/s}'
+            emptyText : '{s name="toolbar_search"}Search...{/s}'
         });
 
         items.push({
@@ -151,7 +151,7 @@ Ext.define('Shopware.apps.Mail.view.main.Window', {
         /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
             items.push({
                 xtype: 'button',
-                text: '{s name=button_reset_template}Reset template{/s}',
+                text: '{s name="button_reset_template"}Reset template{/s}',
                 action: 'mail-window-reset',
                 cls: 'secondary',
                 disabled: true
@@ -160,7 +160,7 @@ Ext.define('Shopware.apps.Mail.view.main.Window', {
 
         /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
             items.push(Ext.create('Ext.button.Button', {
-                text: '{s name=button_save_template}Save template{/s}',
+                text: '{s name="button_save_template"}Save template{/s}',
                 action: 'mail-window-save',
                 cls: 'primary',
                 formBind: true

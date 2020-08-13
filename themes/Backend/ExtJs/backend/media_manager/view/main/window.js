@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/media_manager/view/main}
+//{namespace name="backend/media_manager/view/main"}
 
 /**
  * Shopware UI - Media Manager Main Window
@@ -38,7 +38,7 @@
 //{block name="backend/media_manager/view/main/window"}
 Ext.define('Shopware.apps.MediaManager.view.main.Window', {
     extend: 'Enlight.app.Window',
-    title: '{s name=mainWindowTitle}Mediamanager{/s}',
+    title: '{s name="mainWindowTitle"}Mediamanager{/s}',
     cls: Ext.baseCSSPrefix + 'media-manager-window',
     alias: 'widget.mediamanager-main-window',
     border: false,

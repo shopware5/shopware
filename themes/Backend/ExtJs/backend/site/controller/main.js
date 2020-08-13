@@ -33,7 +33,7 @@
  * This file handles the main window.
  */
 
-//{namespace name=backend/site/site}
+//{namespace name="backend/site/site"}
 
 //{block name="backend/site/controller/main"}
 Ext.define('Shopware.apps.Site.controller.Main', {
@@ -121,7 +121,7 @@ Ext.define('Shopware.apps.Site.controller.Main', {
                 parentId = data.helperId;
 
             //ask if the user wants to create a subSite of the currently selected one
-            Ext.Msg.confirm('{s name=onCreateNewSiteConfirmationBoxCaption}Create subpage?{/s}', Ext.String.format('{s name=onCreateNewSiteConfirmationBoxText}Are you sure you want to create a subpage of \'[0]\'?{/s}', parentName), function(btn){
+            Ext.Msg.confirm('{s name="onCreateNewSiteConfirmationBoxCaption"}Create subpage?{/s}', Ext.String.format('{s name="onCreateNewSiteConfirmationBoxText"}Are you sure you want to create a subpage of \'[0]\'?{/s}', parentName), function(btn){
                 if (btn === 'yes'){
                     ddselector.toStore.removeAll();
                     ddselector.fromStore.load();
@@ -162,7 +162,7 @@ Ext.define('Shopware.apps.Site.controller.Main', {
 
         //open confirmation box, ask if the user really wants to delete the selected site
         //if yes, delete site with id and reload store
-        Ext.Msg.confirm('{s name=onDeleteSiteConfirmationBoxCaption}Delete site?{/s}', Ext.String.format('{s name=onDeleteSiteConfirmationBoxText}Are you sure you want to delete \'[0]\'?{/s}', siteName), function(btn){
+        Ext.Msg.confirm('{s name="onDeleteSiteConfirmationBoxCaption"}Delete site?{/s}', Ext.String.format('{s name="onDeleteSiteConfirmationBoxText"}Are you sure you want to delete \'[0]\'?{/s}', siteName), function(btn){
             if (btn === 'yes'){
                 Ext.Ajax.request({
                     url : '{url action=deleteSite}',
@@ -174,11 +174,11 @@ Ext.define('Shopware.apps.Site.controller.Main', {
                         me.getStore('Nodes').load();
                         tree.getSelectionModel().deselectAll();
                         me.getDetailForm().getForm().reset();
-                        Shopware.Notification.createGrowlMessage('','{s name=onDeleteSiteSuccess}The Site has been deleted successfully.{/s}', '{s name=mainWindowTitle}{/s}');
+                        Shopware.Notification.createGrowlMessage('','{s name="onDeleteSiteSuccess"}The Site has been deleted successfully.{/s}', '{s name="mainWindowTitle"}{/s}');
                     },
                     failure: function(response) {
                         var errorMsg = response.proxy.reader.jsonData.message;
-                        Shopware.Notification.createGrowlMessage('','{s name=onDeleteSiteError}An error has occurred while trying to delete the site: {/s}' + errorMsg, '{s name=mainWindowTitle}{/s}');
+                        Shopware.Notification.createGrowlMessage('','{s name="onDeleteSiteError"}An error has occurred while trying to delete the site: {/s}' + errorMsg, '{s name="mainWindowTitle"}{/s}');
                     }
                 });
             }

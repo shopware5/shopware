@@ -40,17 +40,17 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
 
     snippets: {
         deleteNewsletter: {
-            successTitle: '{s name=deleteNewsletter/successTitle}Successfully deleted{/s}',
-            successMessage: '{s name=deleteNewsletter/successMessage}Successfully deleted the newsletter{/s}',
-            errorTitle: '{s name=deleteNewsletter/errorTitle}Error{/s}',
-            errorMessage: '{s name=deleteNewsletter/errorMessage}An error occured while deleting the newsletter{/s}'
+            successTitle: '{s name="deleteNewsletter/successTitle"}Successfully deleted{/s}',
+            successMessage: '{s name="deleteNewsletter/successMessage"}Successfully deleted the newsletter{/s}',
+            errorTitle: '{s name="deleteNewsletter/errorTitle"}Error{/s}',
+            errorMessage: '{s name="deleteNewsletter/errorMessage"}An error occured while deleting the newsletter{/s}'
         },
-        growl: '{s name=title}Newsletter Manager{/s}',
+        growl: '{s name="title"}Newsletter Manager{/s}',
         grid: {
-            activated: '{s name=grid/activated}Newsletter activated{/s}',
-            activatedTitle: '{s name=grid/activated_title}Released{/s}',
-            deactivated: '{s name=grid/deactivated}Newsletter deactivated{/s}',
-            deactivatedTitle: '{s name=grid/deactivated_title}Deactivated{/s}'
+            activated: '{s name="grid/activated"}Newsletter activated{/s}',
+            activatedTitle: '{s name="grid/activated_title"}Released{/s}',
+            deactivated: '{s name="grid/deactivated"}Newsletter deactivated{/s}',
+            deactivatedTitle: '{s name="grid/deactivated_title"}Deactivated{/s}'
         }
     },
 
@@ -122,7 +122,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
         var me = this,
             store = me.subApplication.mailingStore;
 
-        Ext.MessageBox.confirm('{s name=deleteNewsletter}Delete newsletter(s){/s}', '{s name=delteNewsletterMessage}Do you really want to delete the selected newsletter?{/s}', function (response) {
+        Ext.MessageBox.confirm('{s name="deleteNewsletter"}Delete newsletter(s){/s}', '{s name="delteNewsletterMessage"}Do you really want to delete the selected newsletter?{/s}', function (response) {
             if (response !== 'yes') {
                 return;
             }
@@ -140,7 +140,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
         var pos = location.href.search('/backend'),
             url = location.href.substr(0, pos) + '/backend/Newsletter/cron';
 
-        Ext.MessageBox.confirm('{s name=startSendingNewsletter/title}Start sending{/s}', '{s name=startSendingNewsletter/message}Do you really want to start sending this newsletter?{/s}', function (response) {
+        Ext.MessageBox.confirm('{s name="startSendingNewsletter/title"}Start sending{/s}', '{s name="startSendingNewsletter/message"}Do you really want to start sending this newsletter?{/s}', function (response) {
             if (response !== 'yes') {
                 return;
             }
@@ -148,9 +148,9 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
             record.set('publish', 1);
             record.save();
             Ext.Msg.show({
-                title: '{s name=startSendingNewsletter/title}Start sending{/s}',
+                title: '{s name="startSendingNewsletter/title"}Start sending{/s}',
                 //
-                msg: '{s name=startSendingNewsletterInfo/message}The newsletter is now queued for sending.<br />Please make sure, that you have set up the newsletter-script as a cron job or run it manually.<br /><br />Do you want to open the newsletter-script in a new window now?{/s}',
+                msg: '{s name="startSendingNewsletterInfo/message"}The newsletter is now queued for sending.<br />Please make sure, that you have set up the newsletter-script as a cron job or run it manually.<br /><br />Do you want to open the newsletter-script in a new window now?{/s}',
                 buttons: Ext.Msg.YESNO,
                 icon: Ext.Msg.QUESTION,
                 fn: function(response) {
@@ -170,7 +170,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
     onEditNewsletter: function(record) {
         var me = this,
             settings = Ext.create('Shopware.apps.NewsletterManager.model.Settings');
-        
+
         me.getView('newsletter.Window').create({
             senderStore: me.subApplication.senderStore,                     // available senders
             recipientGroupStore: me.subApplication.recipientGroupStore,     // available newsletter groups + available customer groups
@@ -179,7 +179,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
             shopStore: me.subApplication.shopStore,
             customerStreamStore: me.subApplication.customerStreamStore,
             dispatchStore:  me.getStore('MailDispatch'),
-            title: Ext.String.format("{s name=newsletterWindowEditTitle}Editing newsletter '{literal}{0}{/literal}{/s}'", record.get('subject')),
+            title: Ext.String.format('{s name="newsletterWindowEditTitle"}{/s}', record.get('subject')),
             record: record
         });
 

@@ -64,7 +64,7 @@
 
                     {* Product rating *}
                     {block name="frontend_detail_comments_overview"}
-                        {if !{config name=VoteDisable}}
+                        {if !{config name="VoteDisable"}}
                             <div class="product--rating-container">
                                 {s namespace="frontend/detail/actions" name="DetailLinkReview" assign="snippetDetailLinkReview"}{/s}
                                 <a href="#product--publish-comment" class="product--rating-link" rel="nofollow" title="{$snippetDetailLinkReview|escape}">

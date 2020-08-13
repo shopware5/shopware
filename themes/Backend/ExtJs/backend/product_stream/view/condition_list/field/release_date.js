@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
+//{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/field/release_date"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.ReleaseDate', {
 
@@ -56,14 +56,14 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.ReleaseDate', 
         me.directionStore = Ext.create('Ext.data.Store', {
             fields: ['value', 'label'],
             data: [
-                { value: 'past', label: '{s name=release_date/past}Past{/s}' },
-                { value: 'future', label: '{s name=release_date/future}Future{/s}' }
+                { value: 'past', label: '{s name="release_date/past"}Past{/s}' },
+                { value: 'future', label: '{s name="release_date/future"}Future{/s}' }
             ]
         });
 
         me.directionField = Ext.create('Ext.form.field.ComboBox', {
             allowBlank: false,
-            fieldLabel: '{s name=release_date/input_text}Release date in the{/s}',
+            fieldLabel: '{s name="release_date/input_text"}Release date in the{/s}',
             value: 'past',
             displayField: 'label',
             valueField: 'value',
@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.ReleaseDate', 
 
         me.dayField = Ext.create('Ext.form.field.Number', {
             labelWidth: 30,
-            fieldLabel: '{s name=days}days{/s}',
+            fieldLabel: '{s name="days"}days{/s}',
             allowBlank: false,
             minValue: 1,
             value: 1,

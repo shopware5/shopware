@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+// {namespace name="backend/customer/view/main"}
 // {block name="backend/customer/view/main/stream_view"}
 
 Ext.define('Shopware.apps.Customer.view.main.StreamView', {
@@ -108,18 +108,18 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             },
             menu: {
                 items: [{
-                    text: '{s name=view_table}{/s}',
+                    text: '{s name="view_table"}{/s}',
                     layout: 'table',
                     iconCls: 'sprite-table',
                     checked: true
                 }
                 /*{if {acl_is_allowed resource=customerstream privilege=charts}}*/
                 , {
-                    text: '{s name=view_chart}{/s}',
+                    text: '{s name="view_chart"}{/s}',
                     layout: 'amount_chart',
                     iconCls: 'sprite-chart-up'
                 }, {
-                    text: '{s name=view_chart_stream}{/s}',
+                    text: '{s name="view_chart_stream"}{/s}',
                     layout: 'stream_chart',
                     iconCls: 'sprite-chart-impressions'
                 }
@@ -164,7 +164,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
 
         me.indexSearchButton = Ext.create('Ext.button.Button', {
             iconCls: 'sprite-blue-document-search-result',
-            text: '{s name=analyse_customer}{/s}',
+            text: '{s name="analyse_customer"}{/s}',
             action: 'index',
             /*{if !{acl_is_allowed resource=customerstream privilege=search_index}}*/
                 hidden: true,
@@ -277,7 +277,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
         });
 
         me.refreshViewButton = Ext.create('Ext.button.Button', {
-            text: '{s name=refresh_preview}{/s}',
+            text: '{s name="refresh_preview"}{/s}',
             iconCls: 'sprite-arrow-circle-225-left',
             handler: Ext.bind(me.onRefreshView, me)
         });
@@ -365,7 +365,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             region: 'west',
             width: 390,
             collapsible: true,
-            title: '{s name=stream_listing}{/s}',
+            title: '{s name="stream_listing"}{/s}',
             margin: '10 0 10 10',
             layout: { type: 'vbox', align: 'stretch' },
             items: [

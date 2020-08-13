@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/canceled_order/view/main}
+//{namespace name="backend/canceled_order/view/main"}
 
 /**
  * Shopware UI - Tab showing canceled orders
@@ -43,14 +43,14 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
 
     snippets : {
         columns : {
-            orderTime: '{s name=columns/orderDate}Date{/s}',
-            amount: '{s name=columns/amount}Amount{/s}',
-            contact: '{s name=columns/contact}Contact{/s}',
-            transaction: '{s name=columns/transaction}Transaction{/s}',
-            payment: '{s name=columns/payment}Payment{/s}',
-            customer: '{s name=columns/customer}Customer{/s}',
-            action: '{s name=columns/action}Action{/s}',
-            deviceType: '{s name=columns/device_type}Device-Type{/s}'
+            orderTime: '{s name="columns/orderDate"}Date{/s}',
+            amount: '{s name="columns/amount"}Amount{/s}',
+            contact: '{s name="columns/contact"}Contact{/s}',
+            transaction: '{s name="columns/transaction"}Transaction{/s}',
+            payment: '{s name="columns/payment"}Payment{/s}',
+            customer: '{s name="columns/customer"}Customer{/s}',
+            action: '{s name="columns/action"}Action{/s}',
+            deviceType: '{s name="columns/device_type"}Device-Type{/s}'
         }
     },
 
@@ -287,7 +287,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
             {
                 iconCls : 'sprite-minus-circle-frame',
                 action : 'delete',
-                tooltip : '{s name=order_delete_tooltip}Delete{/s}',
+                tooltip : '{s name="order_delete_tooltip"}Delete{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     var records = [record];
                     me.fireEvent('deleteOrder', records);
@@ -297,7 +297,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
             {
                 iconCls:'sprite-arrow-circle',
                 action:'convert',
-                tooltip:'{s name=order_details_convert}Convert to regular order{/s}',
+                tooltip:'{s name="order_details_convert"}Convert to regular order{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('convertOrder', record);
                 }
@@ -316,7 +316,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
 
 
         me.deleteSelectedOrdersButton =Ext.create('Ext.button.Button', {
-            text: '{s name=order_delete_button}Delete selected orders{/s}',
+            text: '{s name="order_delete_button"}Delete selected orders{/s}',
             iconCls : 'sprite-minus-circle-frame',
             disabled: true,
             handler: function(){

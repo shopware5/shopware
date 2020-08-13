@@ -1,5 +1,5 @@
 
-//{namespace name=backend/update_wizard/translation}
+//{namespace name="backend/update_wizard/translation"}
 Ext.define('Shopware.apps.UpdateWizard.view.Plugins', {
     extend: 'Ext.container.Container',
     border: false,

@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/swag_update/main}
+//{namespace name="backend/swag_update/main"}
 //{block name="backend/swag_update/view/progress"}
 Ext.define('Shopware.apps.SwagUpdate.view.Progress', {
     /**
@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Progress', {
      * @object
      */
     snippets: {
-        title:'{s name=progress/title}Prepare Update{/s}'
+        title:'{s name="progress/title"}Prepare Update{/s}'
     },
 
     /**

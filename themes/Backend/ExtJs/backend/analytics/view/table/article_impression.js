@@ -29,12 +29,12 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/table/article_impression"}
 Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-article_impression',
-    shopColumnName: "{s name=table/article_impression/shop}Impressions{/s}: [0]",
+    shopColumnName: '{s name="table/article_impression/shop"}Impressions{/s}: [0]',
     initComponent: function () {
         var me = this;
 
@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
             {
                 xtype: 'actioncolumn',
                 dataIndex: 'articleName',
-                text: '{s name=table/article_impression/articleName}Article Name{/s}',
+                text: '{s name="table/article_impression/articleName"}Article Name{/s}',
                 renderer: function (val) {
                     return val;
                 },
@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
                     {
                         iconCls: 'sprite-pencil',
                         cls: 'editBtn',
-                        tooltip: '{s name=table/article_impression/action_column/edit}Edit this Article{/s}',
+                        tooltip: '{s name="table/article_impression/action_column/edit"}Edit this Article{/s}',
                         handler: function (view, rowIndex, colIndex, item, event, record) {
                             openNewModule('Shopware.apps.Article', {
                                 action: 'detail',
@@ -85,22 +85,22 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
             {
                 dataIndex: 'desktopImpressions',
                 align: 'right',
-                text: '{s name=table/article_impression/desktop_impressions}Desktop impressions{/s}'
+                text: '{s name="table/article_impression/desktop_impressions"}Desktop impressions{/s}'
             },
             {
                 dataIndex: 'tabletImpressions',
                 align: 'right',
-                text: '{s name=table/article_impression/tablet_impressions}Tablet impressions{/s}'
+                text: '{s name="table/article_impression/tablet_impressions"}Tablet impressions{/s}'
             },
             {
                 dataIndex: 'mobileImpressions',
                 align: 'right',
-                text: '{s name=table/article_impression/mobile_impressions}Mobile impressions{/s}'
+                text: '{s name="table/article_impression/mobile_impressions"}Mobile impressions{/s}'
             },
             {
                 dataIndex: 'totalImpressions',
                 align: 'right',
-                text: '{s name=table/article_impression/total_impressions}Total impressions{/s}'
+                text: '{s name="table/article_impression/total_impressions"}Total impressions{/s}'
             }
         ];
     }

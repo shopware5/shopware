@@ -5,7 +5,7 @@
 {* Page title *}
 {block name='frontend_index_header_title'}{strip}
     {if $sCategoryContent.metaTitle}
-        {$sCategoryContent.metaTitle|escapeHtml} | {{config name=sShopname}|escapeHtml}
+        {$sCategoryContent.metaTitle|escapeHtml} | {{config name="sShopname"}|escapeHtml}
     {else}
         {$smarty.block.parent}
     {/if}

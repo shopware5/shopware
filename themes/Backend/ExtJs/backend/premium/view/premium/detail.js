@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/premium/main}
+//{namespace name="backend/premium/main"}
 
 /**
  * todo@all: Documentation
@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Premium.view.premium.Detail', {
 
     layout:'border',
     autoShow:true,
-    title:'{s name=form/title}Premium artice details{/s}',
+    title:'{s name="form/title"}Premium artice details{/s}',
     border:0,
     width:600,
     height:270,
@@ -85,8 +85,8 @@ Ext.define('Shopware.apps.Premium.view.premium.Detail', {
                     searchFieldName: 'orderNumber',
                     returnValue: 'number',
                     name:'orderNumber',
-                    fieldLabel:'{s name=form_ordernumber}Order number{/s}',
-                    supportText:'{s name=form_ordernumber/supporttext}The order number of the article that will be added as premium article.{/s}',
+                    fieldLabel:'{s name="form_ordernumber"}Order number{/s}',
+                    supportText:'{s name="form_ordernumber/supporttext"}The order number of the article that will be added as premium article.{/s}',
                     allowBlank:false,
                     required: true,
                     formFieldConfig: {
@@ -98,25 +98,25 @@ Ext.define('Shopware.apps.Premium.view.premium.Detail', {
                 {
                     xtype:'textfield',
                     name:'orderNumberExport',
-                    fieldLabel:'{s name=form_export_ordernumber}Export order number{/s}',
-                    supportText:'{s name=form_export_ordernumber/supporttext}This number is not required. You may leave this field blank.{/s}',
+                    fieldLabel:'{s name="form_export_ordernumber"}Export order number{/s}',
+                    supportText:'{s name="form_export_ordernumber/supporttext"}This number is not required. You may leave this field blank.{/s}',
                     allowBlank:true
                 },
                 {
                     xtype:'combobox',
                     name:'shopId',
-                    fieldLabel:'{s name=form_subshop}Subshop{/s}',
+                    fieldLabel:'{s name="form_subshop"}Subshop{/s}',
                     store: Ext.create('Shopware.apps.Premium.store.Subshops').load(),
                     valueField:'id',
                     displayField:'name',
-                    emptyText:'{s name=form_subshop/emptytext}Please select{/s}',
+                    emptyText:'{s name="form_subshop/emptytext"}Please select{/s}',
                     allowBlank:false
                 },
                 {
                     xtype:'numberfield',
                     name:'startPrice',
-                    fieldLabel:'{s name=form_startprice}Minimum order value{/s}',
-                    supportText:'{s name=form_startprice/supporttext}The minimum order value for the premium article.{/s}',
+                    fieldLabel:'{s name="form_startprice"}Minimum order value{/s}',
+                    supportText:'{s name="form_startprice/supporttext"}The minimum order value for the premium article.{/s}',
                     hideTrigger:true,
                     allowBlank:false,
                     keyNavEnabled:false,
@@ -140,13 +140,13 @@ Ext.define('Shopware.apps.Premium.view.premium.Detail', {
         var me = this;
         var buttons = ['->',
             {
-                text:'{s name=detail_cancel}Cancel{/s}',
+                text:'{s name="detail_cancel"}Cancel{/s}',
                 cls: 'secondary',
                 scope:me,
                 handler:me.destroy
             },
             {
-                text:'{s name=detail_save}Save{/s}',
+                text:'{s name="detail_save"}Save{/s}',
                 action:'savePremium',
                 cls:'primary'
             }

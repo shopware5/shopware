@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/snippet/view/main}
+//{namespace name="backend/snippet/view/main"}
 
 /**
  * todo@all: Documentation
@@ -42,12 +42,12 @@ Ext.define('Shopware.apps.Snippet.view.main.Window', {
      * @object
      */
     snippets: {
-        title:                  '{s name=title}Snippet administration{/s}',
-        buttonInstallLanguage:  '{s name=button_install_language}Install new Language{/s}',
-        buttonRemoveLanguage:   '{s name=button_remove_language}Remove Language{/s}',
-        buttonLanguages:        '{s name=button_languages}Languages{/s}',
-        buttonImportExport:     '{s name=button_import_export}Import / Export{/s}',
-        buttonExpert:           '{s name=button_expert}Expert-Mode{/s}'
+        title:                  '{s name="title"}Snippet administration{/s}',
+        buttonInstallLanguage:  '{s name="button_install_language"}Install new Language{/s}',
+        buttonRemoveLanguage:   '{s name="button_remove_language"}Remove Language{/s}',
+        buttonLanguages:        '{s name="button_languages"}Languages{/s}',
+        buttonImportExport:     '{s name="button_import_export"}Import / Export{/s}',
+        buttonExpert:           '{s name="button_expert"}Expert-Mode{/s}'
     },
 
     /**

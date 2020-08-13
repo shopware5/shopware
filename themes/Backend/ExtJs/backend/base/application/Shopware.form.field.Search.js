@@ -1,5 +1,5 @@
 
-//{namespace name=backend/application/main}
+//{namespace name="backend/application/main"}
 
 //{block name="backend/application/Shopware.form.field.Search"}
 Ext.define('Shopware.form.field.Search', {

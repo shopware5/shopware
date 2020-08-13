@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/emotion/view/components/category_image_type}
+//{namespace name="backend/emotion/view/components/category_image_type"}
 Ext.define('Shopware.apps.Emotion.view.components.fields.CategoryImageType', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.emotion-components-fields-category-image-type',
@@ -38,12 +38,12 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.CategoryImageType', {
      */
     snippets: {
         fields: {
-            'image_type': '{s name=article/fields/article_type}Type{/s}',
-            'empty_text': '{s name=article/fields/empty_text}Please select...{/s}'
+            'image_type': '{s name="article/fields/article_type"}Type{/s}',
+            'empty_text': '{s name="article/fields/empty_text"}Please select...{/s}'
         },
         store: {
-            'selected_image': '{s name=article/store/selected_image}Selected image{/s}',
-            'random_article_image': '{s name=article/store/random_article}Random article{/s}'
+            'selected_image': '{s name="article/store/selected_image"}Selected image{/s}',
+            'random_article_image': '{s name="article/store/random_article"}Random article{/s}'
         }
     },
 

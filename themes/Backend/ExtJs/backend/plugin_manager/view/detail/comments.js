@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/plugin_manager/translation}
+//{namespace name="backend/plugin_manager/translation"}
 
 //{block name="backend/plugin_manager/view/detail/comments"}
 Ext.define('Shopware.apps.PluginManager.view.detail.Comments', {

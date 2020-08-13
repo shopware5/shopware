@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/mail/view/contentEditor}
+//{namespace name="backend/mail/view/contentEditor"}
 
 /**
  * todo@all: Documentation
@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
                     baseMode: 'text/html'
                 },
                 name: 'contentHtml',
-                translationLabel: '{s name=codemirrorHtml_translationLabel}Html-Content{/s}',
+                translationLabel: '{s name="codemirrorHtml_translationLabel"}Html-Content{/s}',
                 translatable: true, // Indicates that this field is translatable
                 completers: me.getCompletion()
             });
@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
                 xtype: 'codemirrorfield',
                 mode: 'smarty',
                 name: 'content',
-                translationLabel: '{s name=codemirror_translationLabel}Content{/s}',
+                translationLabel: '{s name="codemirror_translationLabel"}Content{/s}',
                 translatable: true, // Indicates that this field is translatable
                 completers: me.getCompletion()
             });
@@ -155,7 +155,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
             items: [
                 {
                     xtype: 'button',
-                    text: '{s name=button_preview}Display preview{/s}',
+                    text: '{s name="button_preview"}Display preview{/s}',
                     action: 'preview',
                     disabled: !me.isHtml,
                     listeners: {
@@ -169,7 +169,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
                 },
                 {
                     xtype: 'button',
-                    text: '{s name=button_send_testmail}Send testmail to shop owner{/s}',
+                    text: '{s name="button_send_testmail"}Send testmail to shop owner{/s}',
                     action: 'testmail',
                     disabled: !me.isHtml,
                     listeners: {

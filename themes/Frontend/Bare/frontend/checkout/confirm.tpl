@@ -84,7 +84,7 @@
 
                         {* Right of revocation notice *}
                         {block name='frontend_checkout_confirm_tos_revocation_notice'}
-                            {if {config name=revocationnotice}}
+                            {if {config name="revocationnotice"}}
                                 <div class="body--revocation" data-modalbox="true" data-targetSelector="a" data-mode="ajax" data-height="500" data-width="750">
                                     {s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
                                 </div>
@@ -172,7 +172,7 @@
 
                             {* Newsletter sign up checkbox *}
                             {block name='frontend_checkout_confirm_newsletter'}
-                                {if !$sUserData.additional.user.newsletter && {config name=newsletter}}
+                                {if !$sUserData.additional.user.newsletter && {config name="newsletter"}}
                                     <li class="block-group row--newsletter">
 
                                         {* Newsletter checkbox *}
@@ -197,7 +197,7 @@
 
                         {* Additional custom text field which can be used to display the terms of services *}
                         {block name="frontend_checkout_confirm_additional_free_text_display"}
-                            {if {config name=additionalfreetext}}
+                            {if {config name="additionalfreetext"}}
                                 <div class="notice--agb">
                                     {s name="ConfirmTextOrderDefault"}{/s}
                                 </div>
@@ -206,7 +206,7 @@
 
                         {* Additional notice - bank connection *}
                         {block name="frontend_checkout_confirm_bank_connection_notice"}
-                            {if {config name=bankConnection}}
+                            {if {config name="bankConnection"}}
                                 <p class="notice--change-now">
                                     {s name="ConfirmInfoChange"}{/s}
                                 </p>
@@ -258,7 +258,7 @@
                                                             <span class="address--street">{$sUserData.billingaddress.street|escapeHtml}</span><br />
                                                             {if $sUserData.billingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.billingaddress.additional_address_line1|escapeHtml}</span><br />{/if}
                                                             {if $sUserData.billingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.billingaddress.additional_address_line2|escapeHtml}</span><br />{/if}
-                                                            {if {config name=showZipBeforeCity}}
+                                                            {if {config name="showZipBeforeCity"}}
                                                                 <span class="address--zipcode">{$sUserData.billingaddress.zipcode|escapeHtml}</span> <span class="address--city">{$sUserData.billingaddress.city|escapeHtml}</span>
                                                             {else}
                                                                 <span class="address--city">{$sUserData.billingaddress.city|escapeHtml}</span> <span class="address--zipcode">{$sUserData.billingaddress.zipcode|escapeHtml}</span>
@@ -380,7 +380,7 @@
                                                     <span class="address--street">{$sUserData.billingaddress.street|escapeHtml}</span><br />
                                                     {if $sUserData.billingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.billingaddress.additional_address_line1|escapeHtml}</span><br />{/if}
                                                     {if $sUserData.billingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.billingaddress.additional_address_line2|escapeHtml}</span><br />{/if}
-                                                    {if {config name=showZipBeforeCity}}
+                                                    {if {config name="showZipBeforeCity"}}
                                                         <span class="address--zipcode">{$sUserData.billingaddress.zipcode|escapeHtml}</span> <span class="address--city">{$sUserData.billingaddress.city|escapeHtml}</span>
                                                     {else}
                                                         <span class="address--city">{$sUserData.billingaddress.city|escapeHtml}</span> <span class="address--zipcode">{$sUserData.billingaddress.zipcode|escapeHtml}</span>
@@ -467,7 +467,7 @@
                                                     <span class="address--street">{$sUserData.shippingaddress.street|escapeHtml}</span><br />
                                                     {if $sUserData.shippingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.shippingaddress.additional_address_line1|escapeHtml}</span><br />{/if}
                                                     {if $sUserData.shippingaddress.additional_address_line2}<span class="address--additional-one">{$sUserData.shippingaddress.additional_address_line2|escapeHtml}</span><br />{/if}
-                                                    {if {config name=showZipBeforeCity}}
+                                                    {if {config name="showZipBeforeCity"}}
                                                         <span class="address--zipcode">{$sUserData.shippingaddress.zipcode|escapeHtml}</span> <span class="address--city">{$sUserData.shippingaddress.city|escapeHtml}</span>
                                                     {else}
                                                         <span class="address--city">{$sUserData.shippingaddress.city|escapeHtml}</span> <span class="address--zipcode">{$sUserData.shippingaddress.zipcode|escapeHtml}</span>
@@ -585,7 +585,7 @@
     {/block}
 
     {* Additional feature which can be enabled / disabled in the base configuration *}
-    {if {config name=commentArticle}||{config name=bonussystem} && {config name=bonus_system_active} && {config name=displaySlider}}
+    {if {config name="commentArticle"}||{config name="bonussystem"} && {config name="bonus_system_active"} && {config name="displaySlider"}}
         {block name="frontend_checkout_confirm_additional_features"}
             <div class="panel has--border additional--features">
                 {block name="frontend_checkout_confirm_additional_features_headline"}
@@ -629,7 +629,7 @@
 
     {* Premiums articles *}
     {block name='frontend_checkout_confirm_premiums'}
-        {if $sPremiums && {config name=premiumarticles}}
+        {if $sPremiums && {config name="premiumarticles"}}
             {include file='frontend/checkout/premiums.tpl'}
         {/if}
     {/block}

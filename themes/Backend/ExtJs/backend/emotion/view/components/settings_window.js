@@ -27,7 +27,7 @@
  * @author      shopware AG
  */
 
-//{namespace name=backend/emotion/view/detail}
+//{namespace name="backend/emotion/view/detail"}
 //{block name="backend/emotion/view/component/settings_window"}
 Ext.define('Shopware.apps.Emotion.view.components.SettingsWindow', {
 
@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Emotion.view.components.SettingsWindow', {
         return ['->', {
             xtype: 'button',
             cls: 'secondary',
-            text: '{s name=settings_window/cancel}Cancel{/s}',
+            text: '{s name="settings_window/cancel"}Cancel{/s}',
             action: 'emotion-detail-settings-window-cancel',
             handler: function(button) {
                 var win = button.up('window');
@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.Emotion.view.components.SettingsWindow', {
         }, {
             xtype: 'button',
             cls: 'primary',
-            text: '{s name=settings_window/save}Save{/s}',
+            text: '{s name="settings_window/save"}Save{/s}',
             action: 'emotion-detail-settings-window-save',
             handler: function() {
                 me.fireEvent('saveComponent', me, me.settings.record, me.settings.fields);

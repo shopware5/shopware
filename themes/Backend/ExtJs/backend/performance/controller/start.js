@@ -26,18 +26,18 @@
  * handles the category fixing
  */
 
-//{namespace name=backend/performance/main}
+//{namespace name="backend/performance/main"}
 //{block name="backend/performance/controller/start"}
 Ext.define('Shopware.apps.Performance.controller.Start', {
     extend: 'Enlight.app.Controller',
 
-    infoTitle: '{s name=form/message_title}Shop cache{/s}',
-    infoMessageSuccess: '{s name=form/message}Shop cache has been cleared.{/s}',
-    infoTitlePerformanceMode: '{s name=tabs/start/performance_mode}{/s}',
-    infoMessageProductionMode: '{s name=tabs/start/production_mode_active}{/s}',
-    infoMessageDevelopmentMode: '{s name=tabs/start/development_mode_active}{/s}',
-    errorTitle: '{s name=errorTitle}{/s}',
-    httpCacheError: '{s name=tabs/start/errorHttpCache}{/s}',
+    infoTitle: '{s name="form/message_title"}Shop cache{/s}',
+    infoMessageSuccess: '{s name="form/message"}Shop cache has been cleared.{/s}',
+    infoTitlePerformanceMode: '{s name="tabs/start/performance_mode"}{/s}',
+    infoMessageProductionMode: '{s name="tabs/start/production_mode_active"}{/s}',
+    infoMessageDevelopmentMode: '{s name="tabs/start/development_mode_active"}{/s}',
+    errorTitle: '{s name="errorTitle"}{/s}',
+    httpCacheError: '{s name="tabs/start/errorHttpCache"}{/s}',
 
     running: false,
     state: null,

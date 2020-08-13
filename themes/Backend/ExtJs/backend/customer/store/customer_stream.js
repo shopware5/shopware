@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+// {namespace name="backend/customer/view/main"}
 // {block name="backend/customer/store/customer_stream"}
 Ext.define('Shopware.apps.Customer.store.CustomerStream', {
     extend: 'Shopware.store.Listing',

@@ -31,7 +31,7 @@
  * @package     MediaManager
  * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
  */
-//{namespace name=backend/media_manager/view/main}
+//{namespace name="backend/media_manager/view/main"}
 
 //{block name="backend/media_manager/view/main/thumbnails"}
 Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
@@ -117,19 +117,19 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
      */
     snippets: {
         batch: {
-            label: '{s name=thumbnail/batch/label}Batch size{/s}',
-            help: '{s name=thumbnail/batch/help}How many records should be processed per request? Default: 30{/s}',
-            cancel: '{s name=thumbnail/batch/cancel}Cancel process{/s}',
-            start: '{s name=thumbnail/batch/start}Start process{/s}',
-            close: '{s name=thumbnail/batch/close}Close window{/s}',
-            process: '{s name=thumbnail/batch/thumbnails}Creating thumbnails for [0]/[1] images{/s}'
+            label: '{s name="thumbnail/batch/label"}Batch size{/s}',
+            help: '{s name="thumbnail/batch/help"}How many records should be processed per request? Default: 30{/s}',
+            cancel: '{s name="thumbnail/batch/cancel"}Cancel process{/s}',
+            start: '{s name="thumbnail/batch/start"}Start process{/s}',
+            close: '{s name="thumbnail/batch/close"}Close window{/s}',
+            process: '{s name="thumbnail/batch/thumbnails"}Creating thumbnails for [0]/[1] images{/s}'
         }
     },
 
     /**
      * The title shown in the window header
      */
-    title: '{s name=thumbnail/batch/title}Create thumbnails{/s}',
+    title: '{s name="thumbnail/batch/title"}Create thumbnails{/s}',
 
     /**
      * The default generation batch size

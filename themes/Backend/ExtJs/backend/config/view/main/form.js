@@ -25,7 +25,7 @@
  * todo@all: Documentation
  */
 
-//{namespace name=backend/config/view/main}
+//{namespace name="backend/config/view/main"}
 
 //{block name="backend/config/view/main/form"}
 Ext.define('Shopware.apps.Config.view.main.Form', {
@@ -57,11 +57,11 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
     getButtons: function() {
         var me = this;
         return [{
-            text: '{s name=form/reset_text}Reset{/s}',
+            text: '{s name="form/reset_text"}Reset{/s}',
             cls: 'secondary',
             action: 'reset'
         },{
-            text: '{s name=form/save_text}Save{/s}',
+            text: '{s name="form/save_text"}Save{/s}',
             cls: 'primary',
             action: 'save'
         }];
@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
             items.push({
                 xtype: 'fieldset',
                 margin: 10,
-                title: '{s name=form/description_title}Description{/s}',
+                title: '{s name="form/description_title"}Description{/s}',
                 html: formDescription
             });
         }

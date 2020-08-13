@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/mail/controller/main}
+//{namespace name="backend/mail/controller/main"}
 
 /**
  * todo@all: Documentation
@@ -73,34 +73,34 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
      * @object
      */
     snippets: {
-        looseUnsavedTitle: '{s name=message_loose_unsaved_title}Unsaved changes{/s}',
-        looseUnsavedMessage: '{s name=message_loose_unsaved_message}The form contains unsaved changes. Are you sure you want to exit the form?{/s}',
+        looseUnsavedTitle: '{s name="message_loose_unsaved_title"}Unsaved changes{/s}',
+        looseUnsavedMessage: '{s name="message_loose_unsaved_message"}The form contains unsaved changes. Are you sure you want to exit the form?{/s}',
 
-        resetTitle: '{s name=message_reset_title}Reset form{/s}',
-        resetMessage: '{s name=message_reset_message}Are you sure you want to reset the form?{/s}',
+        resetTitle: '{s name="message_reset_title"}Reset form{/s}',
+        resetMessage: '{s name="message_reset_message"}Are you sure you want to reset the form?{/s}',
 
-        saveSuccessTitle: '{s name=message_save_success_title}Successful{/s}',
-        saveSuccessMessage: '{s name=message_save_success_message}The email template has been saved.{/s}',
+        saveSuccessTitle: '{s name="message_save_success_title"}Successful{/s}',
+        saveSuccessMessage: '{s name="message_save_success_message"}The email template has been saved.{/s}',
 
-        saveErrorTitle: '{s name=message_save_error_title}Error{/s}',
-        saveErrorMessage: '{s name=message_save_error_message}An error has occurred. The email template could not be saved.{/s}',
+        saveErrorTitle: '{s name="message_save_error_title"}Error{/s}',
+        saveErrorMessage: '{s name="message_save_error_message"}An error has occurred. The email template could not be saved.{/s}',
 
-        duplicateTitle: '{s name=message_duplicate_title}Duplicate template{/s}',
-        duplicateMessage: '{s name=message_duplicate_message}Are you sure you want to duplicate the selected template?{/s}',
+        duplicateTitle: '{s name="message_duplicate_title"}Duplicate template{/s}',
+        duplicateMessage: '{s name="message_duplicate_message"}Are you sure you want to duplicate the selected template?{/s}',
 
-        duplicateSuccessfullTitle :'{s name=message_duplicate_successfull_title}Successful{/s}',
-        duplicateSuccessfullMessage: '{s name=message_duplicate_successfull_message}The email template has been duplicated.{/s}',
+        duplicateSuccessfullTitle :'{s name="message_duplicate_successfull_title"}Successful{/s}',
+        duplicateSuccessfullMessage: '{s name="message_duplicate_successfull_message"}The email template has been duplicated.{/s}',
 
-        multipleDeleteTitle: '{s name=message_delete_multiple_title}Delete selected templates{/s}',
-        multipleDeleteMessage: '{s name=message_delete_multiple_message}Are you sure you want to delete all selected templates?{/s}',
+        multipleDeleteTitle: '{s name="message_delete_multiple_title"}Delete selected templates{/s}',
+        multipleDeleteMessage: '{s name="message_delete_multiple_message"}Are you sure you want to delete all selected templates?{/s}',
 
-        sendmailSuccessfullTitle :'{s name=message_sendmail_successfull_title}Successful{/s}',
-        sendmailSuccessfullMessage: '{s name=message_sendmail_successfull_message}Email has been sent.{/s}',
+        sendmailSuccessfullTitle :'{s name="message_sendmail_successfull_title"}Successful{/s}',
+        sendmailSuccessfullMessage: '{s name="message_sendmail_successfull_message"}Email has been sent.{/s}',
 
-        sendmailFailureTitle :'{s name=message_sendmail_failure_title}Failure{/s}',
-        sendmailFailureMessage: '{s name=message_sendmail_failure_message}Email could not be sent. Errormessage:{/s}',
+        sendmailFailureTitle :'{s name="message_sendmail_failure_title"}Failure{/s}',
+        sendmailFailureMessage: '{s name="message_sendmail_failure_message"}Email could not be sent. Errormessage:{/s}',
 
-        growlMessage: '{s name=growlMessage}Mail{/s}'
+        growlMessage: '{s name="growlMessage"}Mail{/s}'
     },
 
     /**
@@ -390,7 +390,7 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
                     }
 
                     Ext.create('Enlight.app.Window', {
-                        title : '{s name=title}Email templates{/s}',
+                        title : '{s name="title"}Email templates{/s}',
                         autoScroll: true,
                         subApplication: me.subApplication,
                         subApp: me.subApplication,

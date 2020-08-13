@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/overview/controller/main}
+//{namespace name="backend/overview/controller/main"}
 
 /**
  * todo@all: Documentation

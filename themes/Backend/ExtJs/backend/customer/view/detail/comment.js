@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/detail}
+// {namespace name="backend/customer/view/detail"}
 
 /**
  * Shopware UI - Customer detail page
@@ -57,9 +57,9 @@ Ext.define('Shopware.apps.Customer.view.detail.Comment', {
      * @object
      */
     snippets: {
-        title: '{s name=comment/title}Comment{/s}',
-        label: '{s name=comment/comment_label}Comment{/s}',
-        support: '{s name=comment/comment_support}Internal communication only{/s}'
+        title: '{s name="comment/title"}Comment{/s}',
+        label: '{s name="comment/comment_label"}Comment{/s}',
+        support: '{s name="comment/comment_support"}Internal communication only{/s}'
     },
 
     /**

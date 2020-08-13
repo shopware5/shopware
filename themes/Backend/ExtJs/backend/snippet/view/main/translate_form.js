@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/snippet/view/main}
+//{namespace name="backend/snippet/view/main"}
 
 //{block name="backend/snippet/view/main/translate_form"}
 Ext.define('Shopware.apps.Snippet.view.main.TranslateForm', {
@@ -133,7 +133,7 @@ Ext.define('Shopware.apps.Snippet.view.main.TranslateForm', {
 
         return [{
             cls: 'primary',
-            text: '{s name=button_save_form}Save{/s}',
+            text: '{s name="button_save_form"}Save{/s}',
             action: 'save',
             formBind: true,
             handler: function() {

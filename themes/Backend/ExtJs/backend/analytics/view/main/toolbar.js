@@ -29,7 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-//{namespace name=backend/analytics/view/main}
+//{namespace name="backend/analytics/view/main"}
 //{block name="backend/analytics/view/main/toolbar"}
 Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
     extend: 'Ext.toolbar.Toolbar',
@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                     iconCls: 'sprite-gear',
                     name: 'shop_selection',
                     queryMode: 'remote',
-                    fieldLabel: '{s name=toolbar/shop_name}Shop{/s}',
+                    fieldLabel: '{s name="toolbar/shop_name"}Shop{/s}',
                     store: me.shopStore,
                     multiSelect: true,
                     displayField: 'name',
@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                 },
                 {
                     xtype: 'datefield',
-                    fieldLabel: '{s name=toolbar/from_date}From{/s}',
+                    fieldLabel: '{s name="toolbar/from_date"}From{/s}',
                     labelWidth: 50,
                     width: 150,
                     name: 'from_date',
@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                 },
                 {
                     xtype: 'datefield',
-                    fieldLabel: '{s name=toolbar/to_date}To{/s}',
+                    fieldLabel: '{s name="toolbar/to_date"}To{/s}',
                     name: 'to_date',
                     width: 130,
                     labelWidth: 30,
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                 {
                     xtype: 'button',
                     iconCls: 'sprite-arrow-circle-135',
-                    text: '{s name=toolbar/update}Update{/s}',
+                    text: '{s name="toolbar/update"}Update{/s}',
                     name: 'refresh',
                     handler: function () {
                         me.fireEvent('refreshView')
@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                 },
                 {
                     xtype: 'button',
-                    text: '{s name=toolbar/export}Export{/s}',
+                    text: '{s name="toolbar/export"}Export{/s}',
                     name: 'export',
                     iconCls: 'sprite-drive-download',
                     handler: function () {
@@ -94,17 +94,17 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                 {
                     showText: true,
                     xtype: 'cycle',
-                    prependText: '{s name=toolbar/view}Display as{/s} ',
+                    prependText: '{s name="toolbar/view"}Display as{/s} ',
                     action: 'layout',
                     menu: {
                         items: [
                             {
-                                text: '{s name=toolbar/view_chart}Chart{/s}',
+                                text: '{s name="toolbar/view_chart"}Chart{/s}',
                                 layout: 'chart',
                                 iconCls: 'sprite-chart'
                             },
                             {
-                                text: '{s name=toolbar/view_table}Table{/s}',
+                                text: '{s name="toolbar/view_table"}Table{/s}',
                                 layout: 'table',
                                 iconCls: 'sprite-table',
                                 checked: true
