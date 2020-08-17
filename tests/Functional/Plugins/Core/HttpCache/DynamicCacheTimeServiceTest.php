@@ -96,6 +96,10 @@ class DynamicCacheTimeServiceTest extends TestCase
             'frontend/listing' => $this->defaultTime,
             'frontend/blog' => $this->defaultBlogTime,
         ];
+
+        if (PHP_VERSION_ID >= 80000) {
+            static::markTestSkipped('PHP8: ManyToManyPersister in Doctrine breaks while creating emotion worlds. Skip until Doctrine has fixed it');
+        }
     }
 
     public function testServiceIsAvailable()

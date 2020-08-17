@@ -203,7 +203,7 @@ class CookieHandlerTest extends TestCase
 
 class RegexCookieSubscriber
 {
-    public function addCookie(): CookieCollection
+    public static function addCookie(): CookieCollection
     {
         $cookieCollection = new CookieCollection();
         $cookieCollection->add(new CookieStruct(

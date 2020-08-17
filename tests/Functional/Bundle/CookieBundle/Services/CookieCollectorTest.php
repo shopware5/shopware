@@ -120,7 +120,7 @@ class CookieCollectorTest extends TestCase
 
 class ExampleTestSubscriber
 {
-    public function addInvalidCookie(): CookieCollection
+    public static function addInvalidCookie(): CookieCollection
     {
         $cookieCollection = new CookieCollection();
         $cookieCollection->add(new class() {
@@ -129,7 +129,7 @@ class ExampleTestSubscriber
         return $cookieCollection;
     }
 
-    public function addValidCookie(): CookieCollection
+    public static function addValidCookie(): CookieCollection
     {
         $cookieCollection = new CookieCollection();
         $cookieCollection->add(new CookieStruct(
@@ -142,7 +142,7 @@ class ExampleTestSubscriber
         return $cookieCollection;
     }
 
-    public function addInvalidCookieGroup(): CookieGroupCollection
+    public static function addInvalidCookieGroup(): CookieGroupCollection
     {
         $cookieGroupCollection = new CookieGroupCollection();
         $cookieGroupCollection->add(new class() {
@@ -151,7 +151,7 @@ class ExampleTestSubscriber
         return $cookieGroupCollection;
     }
 
-    public function addValidCookieGroup(): CookieGroupCollection
+    public static function addValidCookieGroup(): CookieGroupCollection
     {
         $cookieGroupCollection = new CookieGroupCollection();
         $cookieGroupCollection->add(new CookieGroupStruct(

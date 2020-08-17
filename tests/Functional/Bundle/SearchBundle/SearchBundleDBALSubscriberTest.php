@@ -49,7 +49,7 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit\Framework\TestCase
     public function testNestedArrays()
     {
         $this->expectException('RuntimeException');
-        $this->expectExceptionMessage('Unknown handler class  detected');
+        $this->expectExceptionMessage('Unknown handler class array detected');
         new SearchBundleDBALSubscriber([
             [new CategoryConditionHandler(), new CategoryConditionHandler()],
             new PopularitySortingHandler(),

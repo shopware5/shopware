@@ -297,7 +297,7 @@ class sArticlesComparisons implements \Enlight_Hook
         foreach ($articles as $productKey => $product) {
             $productProperties = [];
             foreach ($properties as $propertyKey => $property) {
-                if (array_key_exists($propertyKey, $product['sProperties'])) {
+                if (is_array($product['sProperties']) && array_key_exists($propertyKey, $product['sProperties'])) {
                     $productProperties[$propertyKey] = $product['sProperties'][$propertyKey];
                 } else {
                     $productProperties[$propertyKey] = null;

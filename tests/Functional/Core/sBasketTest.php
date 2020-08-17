@@ -1912,11 +1912,15 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             static::assertArrayHasKey($key, $result['content'][0]);
         }
 
+        $formatPrice = function (string $price) {
+            return (float) str_replace(',', '.', (string) $price);
+        };
+
         static::assertGreaterThanOrEqual(1, count($result['content']));
-        static::assertGreaterThanOrEqual(2, $result['Amount']);
-        static::assertGreaterThanOrEqual(2, $result['AmountNet']);
-        static::assertGreaterThanOrEqual(2, $result['AmountNumeric']);
-        static::assertGreaterThanOrEqual(2, $result['AmountNetNumeric']);
+        static::assertGreaterThanOrEqual(2, $formatPrice($result['Amount']));
+        static::assertGreaterThanOrEqual(2, $formatPrice($result['AmountNet']));
+        static::assertGreaterThanOrEqual(2, $formatPrice($result['AmountNumeric']));
+        static::assertGreaterThanOrEqual(2, $formatPrice($result['AmountNetNumeric']));
         static::assertEquals(1, $result['Quantity']);
     }
 

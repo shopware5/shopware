@@ -150,12 +150,16 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Country\State[] $states
+     * @param StoreFrontBundle\Struct\Country\State[]|null $states
      *
      * @return array
      */
     public function convertStateStructList($states)
     {
+        if ($states === null) {
+            return [];
+        }
+
         return array_map([$this, 'convertStateStruct'], $states);
     }
 

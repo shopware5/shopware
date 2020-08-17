@@ -170,6 +170,6 @@ class PresetDataSynchronizerTest extends TestCase
         $value = json_decode($presetData['elements'][0]['data'][6]['value'], true);
 
         static::assertMatchesRegularExpression('/media/', $value[0]['path']);
-        static::assertNotEmpty($presetData['elements'][0]['data'][6]['value'][0]['mediaId']);
+        static::assertNotEmpty($value[0]['mediaId']);
     }
 }
