@@ -124,6 +124,7 @@ class DqlHelper
         'Supplier_link',
         'Attribute_articleId',
         'Attribute_articleDetailId',
+        'Unit_id',
     ];
 
     /**
@@ -341,6 +342,9 @@ class DqlHelper
             LEFT JOIN `s_core_tax`
             ON s_core_tax.id = s_articles.taxID
 
+            LEFT JOIN `s_core_units`
+            ON s_core_units.id = s_articles_details.unitID
+
             WHERE s_articles_details.id IN (:ids)
         ";
 
@@ -435,7 +439,7 @@ class DqlHelper
                 $result[$key] = [
                     'entity' => $entityShort,
                     'field' => $name,
-                    'editable' => substr($name, -2) !== 'Id' && $name !== 'id' && substr($name, -2) !== 'ID' && $entity !== Tax::class && $entity !== Supplier::class,
+                    'editable' => substr($name, -2) !== 'Id' && $name !== 'id' && substr($name, -2) !== 'ID' && $entity !== Tax::class && $entity !== Unit::class && $entity !== Supplier::class,
                     'type' => $config['type'],
                     'precision' => $config['precision'],
                     'nullable' => (bool) $config['nullable'],
@@ -700,7 +704,7 @@ class DqlHelper
                 // Non-numeric tokens will become their quotes removed:
                 if (!is_numeric($token['token'])) {
                     $params[] = substr($token['token'], 1, -1);
-                // Numeric tokens can simple be appended to the params array
+                    // Numeric tokens can simple be appended to the params array
                 } else {
                     $params[] = $token['token'];
                 }
@@ -1068,6 +1072,7 @@ class DqlHelper
             'Detail',
             'Supplier',
             'Attribute',
+            'Unit'
         ];
 
         // By default show the main entities
