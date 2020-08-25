@@ -86,6 +86,7 @@ Thumbs.db
 /tests/nightwatch/node_modules
 /tests/.phpunit.result.cache
 /php-cs-fixer.xml
+.phpunit.result.cache
 
 # scripts
 !/build/composer-post-install-cmd.sh
