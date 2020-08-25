@@ -132,7 +132,7 @@ class Basket extends ModelEntity
     /**
      * @var \DateTimeInterface|null
      *
-     * @ORM\Column(name="datum", type="datetime", nullable=true)
+     * @ORM\Column(name="datum", type="date", nullable=true)
      */
     private $date;
 
