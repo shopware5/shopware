@@ -60,7 +60,7 @@
         "doctrine/persistence": "1.2.0",
         "beberlei/assert": "3.2.6",
         "wikimedia/less.php": "2.0.0",
-        "guzzlehttp/guzzle": "6.4.1",
+        "guzzlehttp/guzzle": "7.0.1",
         "elasticsearch/elasticsearch": "6.7.1",
         "ongr/elasticsearch-dsl": "6.0.3",
         "cocur/slugify": "3.2",

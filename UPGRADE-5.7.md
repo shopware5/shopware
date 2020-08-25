@@ -12,7 +12,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed Symfony version to 4.4
 * Changed Slugify version to 3.2
 * Changed Doctrine ORM version to 2.7.0
-* Changed Guzzle version to 6.4.1
+* Changed Guzzle version to 7.0.1
 * Changed Monolog version to 2.0.1
 * Changed FPDF version to 1.8.2
 * Changed FPDI version to 2.2.0
