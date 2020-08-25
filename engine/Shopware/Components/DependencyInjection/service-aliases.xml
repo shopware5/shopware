@@ -477,6 +477,9 @@
         <service id="Shopware\Bundle\StoreFrontBundle\Service\ListingLinkRewriteServiceInterface" alias="shopware_storefront.listing_link_rewrite_service" />
         <service id="Shopware\Bundle\StoreFrontBundle\Service\Core\HrefLangService" alias="shopware_storefront.href_lang_service" />
         <service id="Shopware\Bundle\StoreFrontBundle\Service\Core\CachedHrefLangService" alias="shopware_storefront.cached_href_lang_service" />
+        <service id="Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface" alias="shopware_storefront.custom_sorting_service"/>
+        <service id="Shopware\Bundle\StoreFrontBundle\Gateway\CustomSortingGatewayInterface" alias="shopware_storefront.custom_sorting_gateway"/>
+        <service id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator" alias="shopware_storefront.custom_listing_hydrator"/>
         <service id="Shopware\Bundle\SearchBundleDBAL\SearchTerm\TermHelperInterface" alias="shopware_searchdbal.search_term_helper"/>
         <service id="Shopware\Bundle\PluginInstallerBundle\StoreClient" alias="shopware_plugininstaller.store_client" />
         <service id="Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGenerator\UniqueIdGenerator" alias="shopware_plugininstaller.unique_id_generator" />
