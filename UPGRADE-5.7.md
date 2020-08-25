@@ -11,12 +11,15 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Added new required methods `saveCustomUrls` and `saveExcludedUrls` to interface `Shopware\Bundle\SitemapBundle\ConfigHandler\ConfigHandlerInterface`
 * Changed Symfony version to 4.4
 * Changed Slugify version to 3.2
-* Changed Doctrine ORM version to 2.7.0
+* Changed Doctrine ORM version to 2.7.3
+* Changed Doctrine Cache version to 1.10.2
+* Changed Doctrine Common version to 3.0.2
+* Changed Doctrine Persistence version to 2.0.0
 * Changed Guzzle version to 7.0.1
 * Changed Monolog version to 2.0.1
 * Changed FPDF version to 1.8.2
 * Changed FPDI version to 2.2.0
-* Changed mPDF version to 8.0.4
+* Changed mPDF version to 8.0.7
 * Migrated Zend components to new Laminas
 
 ### Additions

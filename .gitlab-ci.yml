@@ -192,7 +192,7 @@ Elasticsearch 7:
         - chown -R www-data:www-data .
         - sudo -E -u www-data vendor/bin/behat -vv --config=tests/Mink/behat.yml --format=pretty --out=std --format=junit --out=build/artifacts/mink --tags ${MINK_TAG}
     services:
-        -   name: selenium/standalone-chrome:3.8.1
+        -   name: selenium/standalone-chrome:84.0
             alias: selenium
         -   name: mailhog/mailhog
             alias: smtp
