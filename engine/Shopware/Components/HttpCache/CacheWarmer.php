@@ -117,7 +117,7 @@ class CacheWarmer
             $this->guzzleClient,
             $requests,
             [
-                'pool_size' => $concurrentRequests,
+                'concurrency' => $concurrentRequests,
                 'rejected' => function ($reason) use ($shopId, $events) {
                     $events->notify('Shopware_Components_CacheWarmer_ErrorOccured');
                     $this->logger->warning(
