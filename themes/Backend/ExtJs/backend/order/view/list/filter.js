@@ -394,10 +394,11 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         return Ext.create('Ext.form.field.ComboBox', {
             name: 'article.supplierId',
             fieldLabel: this.snippets.supplier,
-            store: this.getSupplierStore(),
+            store: Ext.create('Shopware.apps.Supplier.store.Supplier', { pageSize: 20 }),
             displayField: 'name',
             valueField: 'id',
             allowBlank: true,
+            pageSize: 20
         });
     },
 
@@ -416,11 +417,6 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         store.remoteSort = true;
 
         return store;
-    },
-
-    getSupplierStore: function () {
-        var store = Ext.data.StoreManager.get('supplierStore');
-        return store ? store : Ext.create('Shopware.apps.Supplier.store.Supplier');
     },
 
     /**
