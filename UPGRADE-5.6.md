@@ -2,14 +2,6 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
-## 5.6.9
-
-[View all changes from v5.6.8...v5.6.9](https://github.com/shopware/shopware/compare/v5.6.8...v5.6.9)
-
-### Changes
-
-* Changed `\Shopware_Controllers_Backend_ProductStream::loadPreviewAction` to return formatted prices
-
 ## 5.6.8
 
 [View all changes from v5.6.7...v5.6.8](https://github.com/shopware/shopware/compare/v5.6.7...v5.6.8)
