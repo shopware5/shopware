@@ -74,6 +74,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `HTML5 Video-Element` => `html_video`
     * `Code Element` => `code_element`
 * Changed the search to not consider keywords which match 90% of all variants 
+* Changed `\Shopware\Bundle\ESIndexingBundle\Product\ProductProvider` to set `hasStock` based on instock like DBAL implementation
 
 ### Removals
 
