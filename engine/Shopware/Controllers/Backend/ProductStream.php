@@ -26,6 +26,7 @@ use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Components\ProductStream\RepositoryInterface;
 use Shopware\Models\ProductStream\ProductStream;
@@ -109,6 +110,13 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
                 ->search($criteria, $context);
 
             $products = array_values($result->getProducts());
+            $products = array_map(function (ListProduct $product) {
+                $price = $product->getCheapestPrice()->getCalculatedPrice();
+                $product = json_decode(json_encode($product), true);
+                $product['cheapestPrice'] = $price;
+
+                return $product;
+            }, $products);
 
             $success = true;
             $error = false;
