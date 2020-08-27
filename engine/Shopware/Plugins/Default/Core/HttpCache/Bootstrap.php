@@ -856,7 +856,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     private function addSurrogateControl(Response $response)
     {
-        $response->headers->set('surrogate-control', 'content="ESI/1.0"', true);
+        $response->headers->set('Surrogate-Control', 'content="ESI/1.0"', true);
     }
 
     /**
