@@ -129,7 +129,6 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
         }, {
             header: '{s name=price}Price{/s}',
             dataIndex: 'cheapestPrice',
-            renderer: this.priceRenderer
         }];
     },
 
@@ -156,18 +155,6 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
                 });
             }
         }];
-    },
-
-    priceRenderer: function(value) {
-        if (!Ext.isObject(value)) {
-            return '';
-        }
-
-        if (!value.hasOwnProperty('calculatedPrice')) {
-            return '';
-        }
-
-        return value.calculatedPrice;
     }
 });
 //{/block}
