@@ -78,7 +78,7 @@ class ImmediateDeliveryConditionHandler implements PartialConditionHandlerInterf
         }
 
         $search->addPostFilter(
-            new TermQuery('hasAvailableVariant', true)
+            new TermQuery('hasStock', true)
         );
     }
 

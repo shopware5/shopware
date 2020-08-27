@@ -102,6 +102,11 @@ class Product extends ListProduct
     protected $manualSorting = [];
 
     /**
+     * @var bool
+     */
+    protected $hasStock;
+
+    /**
      * @return Product
      */
     public static function createFromListProduct(ListProduct $listProduct)
@@ -314,6 +319,16 @@ class Product extends ListProduct
     public function setManualSorting(array $manualSorting): void
     {
         $this->manualSorting = $manualSorting;
+    }
+
+    public function hasStock(): bool
+    {
+        return $this->hasStock;
+    }
+
+    public function setHasStock(bool $hasStock): void
+    {
+        $this->hasStock = $hasStock;
     }
 
     public function jsonSerialize(): array
