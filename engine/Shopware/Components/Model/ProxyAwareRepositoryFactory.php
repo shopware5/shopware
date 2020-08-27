@@ -24,9 +24,9 @@
 
 namespace Shopware\Components\Model;
 
-use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Repository\RepositoryFactory;
+use Doctrine\Persistence\ObjectRepository;
 
 class ProxyAwareRepositoryFactory implements RepositoryFactory
 {

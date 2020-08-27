@@ -845,7 +845,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
                     $associationModel = $this->getManager()->find($mapping['targetEntity'], $data[$field]);
 
                     //proxies need to be loaded, otherwise the validation will be failed.
-                    if ($associationModel instanceof \Doctrine\Common\Persistence\Proxy && method_exists($associationModel, '__load')) {
+                    if ($associationModel instanceof \Doctrine\Persistence\Proxy && method_exists($associationModel, '__load')) {
                         $associationModel->__load();
                     }
                     $data[$mapping['fieldName']] = $associationModel;

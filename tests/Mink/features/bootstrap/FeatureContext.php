@@ -115,6 +115,10 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
             return;
         }
 
+        if (!$this->getSession()->isStarted()) {
+            $this->getSession()->start();
+        }
+
         $this->getSession()->resizeWindow(1920, 1080, 'current');
     }
 
