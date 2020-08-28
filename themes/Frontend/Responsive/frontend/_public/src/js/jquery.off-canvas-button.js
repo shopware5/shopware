@@ -41,7 +41,22 @@
              *
              * @type {Boolean}
              */
-            fullscreen: true
+            fullscreen: true,
+
+            /**
+             * If this is set to true, the plugin will search its content container for an element matching the
+             * autoOpenSelector and open the offcanvas menu in case it finds one.
+             *
+             * @type {Boolean}
+             */
+            autoOpen: false,
+
+            /**
+             * The selector used to automatically open the offcanvas menu.
+             *
+             * @type {String}
+             */
+            autoOpenSelector: ''
         },
 
         /**
@@ -70,7 +85,9 @@
                 'direction': 'fromRight',
                 'offCanvasSelector': selector,
                 'fullscreen': opts.fullscreen,
-                'closeButtonSelector': opts.closeButtonSelector
+                'closeButtonSelector': opts.closeButtonSelector,
+                'autoOpen': opts.autoOpen,
+                'autoOpenSelector': opts.autoOpenSelector
             });
         },
 
