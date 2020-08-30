@@ -107,7 +107,7 @@ EOF
         if ($plugin->getActive()) {
             $output->writeln(sprintf('The plugin %s is already activated.', $pluginName));
 
-            return 1;
+            return 0;
         }
 
         if (!$plugin->getInstalled()) {
