@@ -76,6 +76,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed the search to not consider keywords which match 90% of all variants 
 * Changed `\Shopware\Bundle\ESIndexingBundle\Product\ProductProvider` to set `hasStock` based on instock like DBAL implementation
 * Changed `\Shopware_Controllers_Backend_ProductStream::loadPreviewAction` to return formatted prices
+* Changed `sw:plugin:activate` exit code from 1 to 0, when it's already installed.
 
 ### Removals
 
