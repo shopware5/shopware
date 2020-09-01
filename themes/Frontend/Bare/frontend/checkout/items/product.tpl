@@ -176,6 +176,8 @@
                         title="{$snippetCartItemLinkDelete|escape}">
                     <i class="icon--cross"></i>
                 </button>
+                {block name='frontend_checkout_cart_item_delete_article_form_inner'}        
+                {/block}
             </form>
         </div>
     {/block}
