@@ -830,7 +830,6 @@ return [
 * Removed following unnecessary Subscriber:
     * `Shopware\Bundle\EsBackendBundle\Subscriber\ServiceSubscriber`
     * `Shopware\Bundle\ESIndexingBundle\Subscriber\ServiceSubscriber`
-* Removed event `Shopware_Controllers_Widgets_Emotion_AddElement`
 * Removed Ioncube checks from PluginManager
 * Removed `SwagLicense` dependency in plugin licenses
 
