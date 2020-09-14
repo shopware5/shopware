@@ -61,6 +61,7 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
         }
 
         $listener = new Definition(ControllerPathListener::class);
+        $listener->setPublic(true);
 
         foreach ($controllers as $eventName => $file) {
             $listener
