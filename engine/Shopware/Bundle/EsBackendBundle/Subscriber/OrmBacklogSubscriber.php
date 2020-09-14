@@ -133,7 +133,7 @@ class OrmBacklogSubscriber implements EventSubscriber
         // Entity Insertions
         foreach ($uow->getScheduledEntityInsertions() as $entity) {
             $backlog = $this->getBacklog($entity);
-            if (!$backlog) {
+            if (!$backlog || $backlog->entity_id === null) {
                 continue;
             }
             $queue[$this->getBacklogKey($backlog)] = $backlog;

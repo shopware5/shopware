@@ -32,7 +32,7 @@ class Backlog
     public $entity;
 
     /**
-     * @var int
+     * @var int|null
      */
     public $entity_id;
 
