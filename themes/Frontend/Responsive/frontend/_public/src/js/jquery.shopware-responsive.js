@@ -65,8 +65,10 @@
         .addPlugin('.product--rating-link, .link--publish-comment', 'swScrollAnimate', {
             scrollTarget: '.tab-menu--product'
         }, ['s', 'm', 'l', 'xl'])
-        .addPlugin('a.link--publish-comment', 'swOffcanvasButton', {
-            contentSelector: '#tab--product-comment'
+        .addPlugin('a.product--rating-link', 'swOffcanvasButton', {
+            contentSelector: '#tab--product-comment',
+            autoOpen: true,
+            autoOpenSelector: '#detail--product-reviews > div.alert'
         }, ['xs'])
         .addPlugin('.tab-menu--product', 'swTabMenu', ['s', 'm', 'l', 'xl'])
         .addPlugin('.tab-menu--cross-selling', 'swTabMenu')

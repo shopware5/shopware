@@ -160,7 +160,22 @@
              *
              * @type {String}
              */
-            'ajaxURL': ''
+            'ajaxURL': '',
+
+            /**
+             * If this is set to true, the plugin will search its content container for an element matching the
+             * autoOpenSelector and open the offcanvas menu in case it finds one.
+             *
+             * @type {Boolean}
+             */
+            'autoOpen': false,
+
+            /**
+             * The selector used to automatically open the offcanvas menu.
+             *
+             * @type {String}
+             */
+            'autoOpenSelector': ''
         },
 
         /**
@@ -230,6 +245,10 @@
             me.$offCanvas.on(me.getEventName('click'), opts.closeButtonSelector, $.proxy(me.onClickCloseButton, me));
 
             $.subscribe(me.getEventName('plugin/swOffcanvasMenu/onBeforeOpenMenu'), $.proxy(me.onBeforeOpenMenu, me));
+
+            if (opts.autoOpen && opts.autoOpenSelector) {
+                $.subscribe(me.getEventName('plugin/swOffcanvasMenu/onInit'), $.proxy(me.onAutoOpen, me));
+            }
 
             $.publish('plugin/swOffcanvasMenu/onRegisterEvents', [ me ]);
         },
@@ -364,6 +383,20 @@
             me.$offCanvas.removeClass(opts.openClass);
 
             $.publish('plugin/swOffcanvasMenu/onCloseMenu', [ me ]);
+        },
+
+        /**
+         * Opens the menu, when a certain element matching opts.autoOpenSelector is detected.
+         *
+         * @public
+         * @method onAutoOpen
+         */
+        onAutoOpen: function () {
+            var me = this;
+
+            if (me.$offCanvas.find(me.opts.autoOpenSelector).length > 0) {
+                me.openMenu();
+            }
         },
 
         /**
