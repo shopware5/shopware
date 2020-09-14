@@ -57,23 +57,16 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     private $indexFactory;
 
     /**
-     * @var string
-     */
-    private $esVersion;
-
-    /**
      * @param HandlerInterface[] $handlers
      */
     public function __construct(
         Client $client,
         IndexFactoryInterface $indexFactory,
-        $handlers,
-        string $esVersion
+        $handlers
     ) {
         $this->client = $client;
         $this->handlers = $handlers;
         $this->indexFactory = $indexFactory;
-        $this->esVersion = $esVersion;
     }
 
     /**
@@ -88,17 +81,9 @@ class ProductNumberSearch implements ProductNumberSearchInterface
             'index' => $index->getName(),
             'type' => ProductMapping::TYPE,
             'body' => $search->toArray(),
+            'rest_total_hits_as_int' => true,
+            'track_total_hits' => true,
         ];
-
-        if (version_compare($this->esVersion, '7', '>=')) {
-            $arguments = array_merge(
-                $arguments,
-                [
-                    'rest_total_hits_as_int' => true,
-                    'track_total_hits' => true,
-                ]
-            );
-        }
 
         $data = $this->client->search(
             $arguments

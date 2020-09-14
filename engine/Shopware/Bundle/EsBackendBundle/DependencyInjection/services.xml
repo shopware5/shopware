@@ -11,7 +11,6 @@
             <argument id="Elasticsearch\Client" type="service"/>
             <argument type="tagged" tag="shopware_es_backend.repository" />
             <argument type="service" id="Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface"/>
-            <argument>%shopware.es.version%</argument>
             <argument type="service" id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface"/>
         </service>
 
@@ -31,7 +30,6 @@
             <argument type="service" id="shopware_es_backend.search_query_builder"/>
             <argument>orders</argument>
             <argument>%shopware.es.backend.enabled%</argument>
-            <argument>%shopware.es.version%</argument>
             <argument type="service" id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface"/>
         </service>
 
@@ -44,7 +42,6 @@
             <argument type="service" id="shopware_es_backend.search_query_builder"/>
             <argument>product</argument>
             <argument>%shopware.es.backend.enabled%</argument>
-            <argument>%shopware.es.version%</argument>
             <argument type="service" id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface"/>
         </service>
 
@@ -57,7 +54,6 @@
             <argument type="service" id="shopware_es_backend.search_query_builder"/>
             <argument>customer</argument>
             <argument>%shopware.es.backend.enabled%</argument>
-            <argument>%shopware.es.version%</argument>
             <argument type="service" id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface"/>
         </service>
 
