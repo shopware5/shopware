@@ -114,6 +114,9 @@ class User extends Resource
         $builder = $this->getRepository()->createQueryBuilder('user')
             ->join('user.role', 'role');
 
+        $builder->addSelect(['attribute'])
+            ->leftJoin('user.attribute', 'attribute');
+
         $builder->addFilter($criteria)
             ->addOrderBy($orderBy)
             ->setFirstResult($offset)
