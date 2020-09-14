@@ -33,6 +33,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Added `Shopware-Listing-Total` header to ajax listing loading
 * Added database transaction around plugin uninstall, activate and deactivate
 * Added support for MySQL 8 `sql_require_primary_key`
+* Added `attribute` to users listing in API
 
 ### Changes
 
