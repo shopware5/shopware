@@ -82,9 +82,12 @@ td.head  {
     {* @Deprecated: Wrong variable will be removed in next major release *}
     {$postions = $positions}
 
+    {block name="document_index_head_logo"}
     <div id="head_logo">
         {$Containers.Logo.value}
     </div>
+    {/block}
+    {block name="document_index_head_wrapper"}
     <div id="header">
         {block name="document_index_head_left_wrapper"}
             <div id="head_left">
@@ -147,6 +150,7 @@ td.head  {
             </div>
         {/block}
     </div>
+    {/block}
 
     {block name="document_index_head_bottom_wrapper"}
         <div id="head_bottom" style="clear:both">
