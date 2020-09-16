@@ -183,7 +183,7 @@ class SpecialContext extends SubContext
             return;
         }
 
-        Helper::pressNamedButton($element, $linkName);
+        $this->clickNamedButtonWhenClickable($element, $linkName);
     }
 
     /**
@@ -245,6 +245,27 @@ class SpecialContext extends SubContext
         $this->spin(function (SpecialContext $context) use ($element, $linkName) {
             try {
                 Helper::clickNamedLink($element, $linkName);
+
+                return true;
+            } catch (DriverException $e) {
+                // NOOP
+            }
+
+            return false;
+        }, $timeout);
+    }
+
+    /**
+     * Tries to click on a named button until the click is successfull or the timeout is reached
+     *
+     * @param string $key
+     * @param int    $timeout Defaults to 60 seconds
+     */
+    protected function clickNamedButtonWhenClickable(HelperSelectorInterface $element, $key, $timeout = 60)
+    {
+        $this->spin(function (SpecialContext $context) use ($element, $key) {
+            try {
+                Helper::pressNamedButton($element, $key);
 
                 return true;
             } catch (DriverException $e) {

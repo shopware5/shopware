@@ -5,7 +5,7 @@ Feature: Check that cart value is not negative
         Given I am on the detail page for article 4
 
     Scenario:
-        When    I click "addToCartButton" to add the article to the cart
+        When    I put the article into the basket
         And     I open the cart page
         Then    the cart should contain the following products:
             | number  | name                 | quantity | itemPrice | sum    |

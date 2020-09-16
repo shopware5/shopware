@@ -12,7 +12,7 @@ Feature: Note
         Then  I should see 1 element of type "NotePosition"
 
         When  I remove the article on position 1 of my note
-        Then  I should see 0 elements of type "NotePosition"
+        Then  I should see 0 element of type "NotePosition"
 
     @comparison
     Scenario: I can compare articles from my note
@@ -38,6 +38,7 @@ Feature: Note
         And   I should be on the page "Listing"
 
         When  I press the button "remember" of the element "ArticleBox" on position 2
+        And   Wait until ajax requests are done
         And   I am on the page "Note"
         Then  I should see 2 element of type "NotePosition"
 
@@ -47,5 +48,6 @@ Feature: Note
         And   I should be on the page "Listing"
 
         When  I press the button "remember" of the element "ArticleBox" on position 4
+        And   Wait until ajax requests are done
         And   I am on the page "Note"
         Then  I should see 3 element of type "NotePosition"

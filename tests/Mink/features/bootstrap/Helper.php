@@ -560,9 +560,6 @@ EOD
      */
     public static function fillForm(HelperSelectorInterface $parent, $formKey, $values, bool $waitForOverlays = false)
     {
-        $elements = self::findElements($parent, [$formKey]);
-        $form = $elements[$formKey];
-
         foreach ($values as $value) {
             $tempFieldName = $fieldName = $value['field'];
             unset($value['field']);
@@ -583,6 +580,9 @@ EOD
                 if (strpos($fieldName, '.') !== false) {
                     $fieldName = str_replace('.', '][', $fieldName);
                 }
+
+                $elements = self::findElements($parent, [$formKey]);
+                $form = $elements[$formKey];
 
                 $field = $form->findField($fieldName);
 

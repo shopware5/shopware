@@ -44,6 +44,7 @@ Feature: Checkout articles
 
         When  I proceed to order confirmation
         And   I change the payment method to 3
+        And   Wait until ajax requests are done
         Then  the current payment method should be "Nachnahme"
         And   the aggregations should look like this:
             | label         | value   |
@@ -59,6 +60,7 @@ Feature: Checkout articles
     Scenario:   I can switch to payment method with percentual surcharge and everything is calculated correctly
         Given   I proceed to order confirmation
         When    I change the payment method to 5
+        And     Wait until ajax requests are done
         Then    the current payment method should be "Vorkasse"
         And     I should see "Zuschlag für Zahlungsart"
         And     the aggregations should look like this:
@@ -94,6 +96,7 @@ Feature: Checkout articles
             | total    | 42,37 € |
 
         When  I change the payment method to 4
+        And   Wait until ajax requests are done
         Then  the current payment method should be "Rechnung"
         And   I should see "Zuschlag für Zahlungsart"
         And   the aggregations should look like this:
