@@ -52,11 +52,6 @@ class EsBackendIndexer
     private $evaluation;
 
     /**
-     * @var string
-     */
-    private $esVersion;
-
-    /**
      * @var IndexFactoryInterface
      */
     private $indexFactory;
@@ -65,13 +60,11 @@ class EsBackendIndexer
         Client $client,
         \IteratorAggregate $repositories,
         EvaluationHelperInterface $evaluation,
-        string $esVersion,
         IndexFactoryInterface $indexFactory
     ) {
         $this->client = $client;
         $this->repositories = $repositories;
         $this->evaluation = $evaluation;
-        $this->esVersion = $esVersion;
         $this->indexFactory = $indexFactory;
     }
 
@@ -256,16 +249,8 @@ class EsBackendIndexer
             'index' => $index,
             'type' => $entity->getDomainName(),
             'body' => $merged,
+            'include_type_name' => true,
         ];
-
-        if (version_compare($this->esVersion, '7', '>=')) {
-            $arguments = array_merge(
-                $arguments,
-                [
-                    'include_type_name' => true,
-                ]
-            );
-        }
 
         $this->client->indices()->putMapping(
             $arguments

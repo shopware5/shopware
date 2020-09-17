@@ -81,25 +81,18 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
      */
     private $indexFactory;
 
-    /**
-     * @var string
-     */
-    private $esVersion;
-
     public function __construct(
         QueryAliasMapper $queryAliasMapper,
         Client $client,
         Connection $connection,
         StructHydrator $hydrator,
-        IndexFactoryInterface $indexFactory,
-        string $esVersion
+        IndexFactoryInterface $indexFactory
     ) {
         $this->queryAliasMapper = $queryAliasMapper;
         $this->client = $client;
         $this->connection = $connection;
         $this->hydrator = $hydrator;
         $this->indexFactory = $indexFactory;
-        $this->esVersion = $esVersion;
     }
 
     /**
@@ -163,17 +156,9 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
             'index' => $index->getName(),
             'type' => PropertyMapping::TYPE,
             'body' => $search->toArray(),
+            'rest_total_hits_as_int' => true,
+            'track_total_hits' => true,
         ];
-
-        if (version_compare($this->esVersion, '7', '>=')) {
-            $arguments = array_merge(
-                $arguments,
-                [
-                    'rest_total_hits_as_int' => true,
-                    'track_total_hits' => true,
-                ]
-            );
-        }
 
         $data = $this->client->search(
             $arguments

@@ -68,11 +68,6 @@ class GenericSearcher implements SearcherInterface
     protected $enabled;
 
     /**
-     * @var string
-     */
-    private $esVersion;
-
-    /**
      * @var IndexFactoryInterface
      */
     private $indexFactory;
@@ -83,7 +78,6 @@ class GenericSearcher implements SearcherInterface
         SearchQueryBuilder $searchQueryBuilder,
         string $domainName,
         bool $enabled,
-        string $esVersion,
         IndexFactoryInterface $indexFactory
     ) {
         $this->decorated = $decorated;
@@ -91,7 +85,6 @@ class GenericSearcher implements SearcherInterface
         $this->searchQueryBuilder = $searchQueryBuilder;
         $this->domainName = $domainName;
         $this->enabled = $enabled;
-        $this->esVersion = $esVersion;
         $this->indexFactory = $indexFactory;
     }
 
@@ -145,17 +138,9 @@ class GenericSearcher implements SearcherInterface
             'index' => $this->indexFactory->createIndexConfiguration($this->domainName)->getAlias(),
             'type' => $this->domainName,
             'body' => $search->toArray(),
+            'rest_total_hits_as_int' => true,
+            'track_total_hits' => true,
         ];
-
-        if (version_compare($this->esVersion, '7', '>=')) {
-            $arguments = array_merge(
-                $arguments,
-                [
-                    'rest_total_hits_as_int' => true,
-                    'track_total_hits' => true,
-                ]
-            );
-        }
 
         return $this->client->search($arguments);
     }

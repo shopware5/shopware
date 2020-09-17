@@ -184,16 +184,8 @@ class ShopIndexer implements ShopIndexerInterface
             'index' => $index->getName(),
             'type' => $mapping->getType(),
             'body' => $mapping->get($index->getShop()),
+            'include_type_name' => true,
         ];
-
-        if (version_compare($this->esVersion, '7', '>=')) {
-            $arguments = array_merge(
-                $arguments,
-                [
-                    'include_type_name' => true,
-                ]
-            );
-        }
 
         $this->client->indices()->putMapping(
             $arguments

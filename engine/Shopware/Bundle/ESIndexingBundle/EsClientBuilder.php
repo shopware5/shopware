@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle;
 
+use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
 use Elasticsearch\Namespaces\AbstractNamespace;
 use Elasticsearch\Transport;
@@ -35,7 +36,7 @@ class EsClientBuilder extends ClientBuilder
      *
      * @return EsClientLogger
      */
-    protected function instantiate(Transport $transport, callable $endpoint, array $registeredNamespaces)
+    protected function instantiate(Transport $transport, callable $endpoint, array $registeredNamespaces): Client
     {
         return new EsClientLogger($transport, $endpoint, $registeredNamespaces);
     }
