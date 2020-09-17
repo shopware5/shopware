@@ -68,7 +68,7 @@ jobs:
   es:
     strategy:
       matrix:
-        elasticsearch: ['elastic/elasticsearch:6.3.0', 'elastic/elasticsearch:7.0.0']
+        elasticsearch: ['elastic/elasticsearch:7.0.0']
     runs-on: ubuntu-latest
     env:
         DB_USER: shopware
