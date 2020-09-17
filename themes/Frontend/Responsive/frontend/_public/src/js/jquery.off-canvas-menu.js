@@ -1,4 +1,4 @@
-(function ($) {
+(function ($, window) {
     'use strict';
 
     var $html = $('html');
@@ -225,6 +225,7 @@
 
             // Button click
             me._on(me.$el, 'click touch', $.proxy(me.onClickElement, me));
+            me._on(window, 'popstate', $.proxy(me.onBackButton, me));
 
             // Allow the user to close the off canvas menu
             me.$offCanvas.on(me.getEventName('click'), opts.closeButtonSelector, $.proxy(me.onClickCloseButton, me));
@@ -272,7 +273,7 @@
 
         /**
          * Called when the body was clicked on.
-         * Closes the off canvas menu.
+         * Triggers the history back functionality
          *
          * @public
          * @method onClickBody
@@ -284,14 +285,25 @@
             event.preventDefault();
             event.stopPropagation();
 
-            me.closeMenu();
+            if (me.isOpened) {
+                window.history.back();
+            }
 
             $.publish('plugin/swOffcanvasMenu/onClickCloseButton', [ me, event ]);
         },
 
         /**
+         * Called when the browser goes back in history
+         * Closes the off-canvas menu
+         */
+        onBackButton: function() {
+            this.closeMenu();
+        },
+
+        /**
          * Opens the off-canvas menu based on the direction.
          * Also closes all other off-canvas menus.
+         * Pushes to the history state, so it could be closed with browser back
          *
          * @public
          * @method openMenu
@@ -323,6 +335,8 @@
             }
 
             me.$offCanvas.addClass(opts.openClass);
+
+            window.history.pushState('offcanvas-open', '');
 
             $.publish('plugin/swOffcanvasMenu/onOpenMenu', [ me ]);
 
@@ -389,11 +403,13 @@
                 me.$pageWrap.prop('style', '');
             }
 
-            me.$el.off(me.getEventName('click'), opts.closeButtonSelector);
+            me._off(me.$el, 'click touch');
+            me._off(window, 'popstate');
+            me.$offCanvas.off(me.getEventName('click'), opts.closeButtonSelector);
 
             $.unsubscribe(me.getEventName('plugin/swOffcanvasMenu/onBeforeOpenMenu'));
 
             me._destroy();
         }
     });
-})(jQuery);
+})(jQuery, window);
