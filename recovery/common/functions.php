@@ -22,23 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\HttpClient;
-
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
-
-class GuzzleFactory
-{
-    /**
-     * @return ClientInterface
-     */
-    public function createClient(array $guzzleConfig = [])
+if (!function_exists('get_magic_quotes_gpc')) {
+    function get_magic_quotes_gpc()
     {
-        $certPath = __DIR__ . '/cacert.pem';
-        if (is_file($certPath)) {
-            $guzzleConfig['verify'] = $certPath;
-        }
-
-        return new Client($guzzleConfig);
+        return false;
     }
 }

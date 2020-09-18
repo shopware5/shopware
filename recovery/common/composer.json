@@ -3,19 +3,20 @@
     "require": {
         "php": "^7.3",
         "slim/slim": "2.6.3",
-        "symfony/console": "3.4.22",
+        "symfony/console": "4.4.13",
         "pimple/pimple": "3.2.3",
         "knplabs/gaufrette": "0.8.1",
         "ramsey/uuid": "3.5.2",
         "paragonie/random_compat": "2.0.11",
-        "symfony/finder": "3.4.22"
+        "symfony/finder": "4.4.13"
     },
     "autoload": {
         "psr-4": {
             "Shopware\\Recovery\\Common\\": "src",
             "Shopware\\Recovery\\Install\\": "../install/src",
             "Shopware\\Recovery\\Update\\": "../update/src"
-        }
+        },
+        "files": ["functions.php"]
     },
     "config": {
         "autoloader-suffix": "ShopwareRecovery",

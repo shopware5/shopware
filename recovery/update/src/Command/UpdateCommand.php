@@ -110,6 +110,8 @@ class UpdateCommand extends Command
         $ioService->writeln('Your shop is currently in maintenance mode.');
         $ioService->writeln(sprintf('Please delete <question>%s</question> to finish the update.', UPDATE_ASSET_PATH));
         $ioService->writeln('');
+
+        return 0;
     }
 
     private function unpackFiles()

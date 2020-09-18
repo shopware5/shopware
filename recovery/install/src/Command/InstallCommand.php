@@ -189,6 +189,8 @@ class InstallCommand extends Command
         if ($this->IOHelper->isInteractive()) {
             $this->IOHelper->writeln('<info>Shop successfully installed.</info>');
         }
+
+        return 0;
     }
 
     /**
