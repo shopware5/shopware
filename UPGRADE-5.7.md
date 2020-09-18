@@ -35,6 +35,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Added database transaction around plugin uninstall, activate and deactivate
 * Added support for MySQL 8 `sql_require_primary_key`
 * Added `attribute` to users listing in API
+* Added new blocks `document_index_head_logo` and `document_index_head_wrapper` to `themes/Frontend/Bare/documents/index.tpl`
 
 ### Changes
 
