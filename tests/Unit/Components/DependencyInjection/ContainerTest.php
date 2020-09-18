@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\Components\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -33,6 +34,8 @@ use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceExce
 
 class ContainerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Container
      */

@@ -20,7 +20,6 @@ variables:
 stages:
     - Static analysis
     - Unit
-    - Elasticsearch
     - E2E
     - Security
 
@@ -153,7 +152,7 @@ MariaDB 10.4:
 Elasticsearch 7:
     extends: .phpunit_es_base
     image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.4
-    stage: Elasticsearch
+    stage: Unit
     services:
         -   name: mysql:8.0.19
             alias: mysql
