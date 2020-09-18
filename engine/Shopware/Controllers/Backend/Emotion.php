@@ -89,7 +89,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $statement = $query->execute();
         $emotions = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        $query->select('COUNT(emotions.id) as count')
+        $query->select('COUNT(DISTINCT emotions.id) as count')
             ->resetQueryPart('groupBy')
             ->resetQueryPart('orderBy')
             ->setFirstResult(0)
