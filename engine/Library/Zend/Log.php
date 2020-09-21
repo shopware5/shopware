@@ -572,10 +572,9 @@ class Zend_Log
      * @param string $errstr
      * @param string $errfile
      * @param int $errline
-     * @param array $errcontext
      * @return boolean
      */
-    public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
+    public function errorHandler($errno, $errstr, $errfile, $errline)
     {
         $errorLevel = error_reporting();
 
@@ -585,11 +584,11 @@ class Zend_Log
             } else {
                 $priority = Zend_Log::INFO;
             }
-            $this->log($errstr, $priority, array('errno'=>$errno, 'file'=>$errfile, 'line'=>$errline, 'context'=>$errcontext));
+            $this->log($errstr, $priority, array('errno'=>$errno, 'file'=>$errfile, 'line'=>$errline));
         }
 
         if ($this->_origErrorHandler !== null) {
-            return call_user_func($this->_origErrorHandler, $errno, $errstr, $errfile, $errline, $errcontext);
+            return call_user_func($this->_origErrorHandler, $errno, $errstr, $errfile, $errline);
         }
         return false;
     }

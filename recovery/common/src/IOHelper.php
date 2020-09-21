@@ -149,7 +149,7 @@ class IOHelper
      *
      * @return string
      */
-    public function askConfirmation($question, $default = null)
+    public function askConfirmation($question, bool $default = true)
     {
         $question = $question instanceof ConfirmationQuestion
             ? $question

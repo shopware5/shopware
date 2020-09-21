@@ -1409,7 +1409,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
         // or the error was within smarty but masked to be ignored
         if (!$_is_muted_directory || ($errno && $errno & error_reporting())) {
             if (Smarty::$_previous_error_handler) {
-                return call_user_func(Smarty::$_previous_error_handler, $errno, $errstr, $errfile, $errline, $errcontext);
+                return call_user_func(Smarty::$_previous_error_handler, $errno, $errstr, $errfile, $errline);
             } else {
                 return false;
             }

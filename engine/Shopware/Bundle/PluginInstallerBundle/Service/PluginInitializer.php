@@ -149,14 +149,14 @@ class PluginInitializer
      *
      * @return mixed|void
      */
-    public function errorHandler(int $errno, string $errstr, string $errfile, int $errline, array $errcontext)
+    public function errorHandler(int $errno, string $errstr, string $errfile, int $errline)
     {
         if (stripos($errstr, 'should be compatible with Shopware\Components\Plugin::registerCommands(Symfony\Component\Console\Application $application)') !== false) {
             return;
         }
 
         if ($this->originalErrorHandler) {
-            return call_user_func($this->originalErrorHandler, $errno, $errstr, $errfile, $errline, $errcontext);
+            return call_user_func($this->originalErrorHandler, $errno, $errstr, $errfile, $errline);
         }
     }
 }
