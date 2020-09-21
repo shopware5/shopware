@@ -116,7 +116,7 @@ class Homepage extends Page implements HelperSelectorInterface
 
         $searchForm = $this->getElement('SearchForm');
         Helper::fillForm($searchForm, 'searchForm', $data);
-        $this->getSession()->wait(5000, "$('ul.searchresult').children().length > 0");
+        $this->getSession()->wait(5000, "$('ul.results--list').children().length > 0");
         $this->getSession()->wait(500);
     }
 
