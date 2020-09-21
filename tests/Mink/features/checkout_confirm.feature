@@ -10,7 +10,9 @@ Feature: Checkout articles (scenario origin is checkout confirm page logged in a
     @payment @delivery
     Scenario Outline: I can finish my order with different payment and delivery methods
         When  I change the payment method to <paymentMethod>
+        And   Wait until ajax requests are done
         And   I change the shipping method to <shippingMethodId>
+        And   Wait until ajax requests are done
 
         Then  the current payment method should be "<shippingMethodName>"
         And   the aggregations should look like this:
@@ -37,7 +39,9 @@ Feature: Checkout articles (scenario origin is checkout confirm page logged in a
             | sDebitBankcode   | 1234567        |
             | sDebitBankName   | Shopware Bank  |
             | sDebitBankHolder | Max Mustermann |
+        And   Wait until ajax requests are done
         And   I change the shipping method to <shippingMethod>
+        And   Wait until ajax requests are done
 
         Then  the current payment method should be "Lastschrift"
         And   I should see "Abschlag für Zahlungsart"

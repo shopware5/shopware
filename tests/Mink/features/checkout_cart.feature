@@ -73,6 +73,7 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
             | sSepaIban     | DE68210501700012345678 |
             | sSepaBic      | SHOPWAREXXX            |
             | sSepaBankName | Shopware Bank          |
+        And   Wait until ajax requests are done
         Then  the aggregations should look like this:
             | label    | value    |
             | shipping | 75,00 €  |
