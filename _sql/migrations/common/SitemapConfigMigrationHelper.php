@@ -57,6 +57,11 @@ class SitemapConfigMigrationHelper
         }
 
         $customConfiguration = require $customConfigurationPath;
+
+        if (!isset($customConfiguration['sitemap'])) {
+            return;
+        }
+
         $sitemapConfiguration = $customConfiguration['sitemap'];
 
         if ($sitemapConfiguration['custom_urls']) {
