@@ -117,7 +117,9 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         'Price_price': '{s name="columns/product/Price_price"}Price_price{/s}',
         'Price_netPrice': '{s name="columns/product/Price_netPrice"}Price_netPrice{/s}',
         'Supplier_name': '{s name="columns/product/Supplier_name"}Supplier{/s}',
-        'Tax_name': '{s name="columns/product/Tax_name"}Tax{/s}'
+        'Tax_name': '{s name="columns/product/Tax_name"}Tax{/s}',
+        'Unit_name': '{s name=columns/product/Unit_name}Unit Name{/s}',
+        'Unit_unit': '{s name=columns/product/Unit_unit}Unit{/s}'
     },
 
     /**
