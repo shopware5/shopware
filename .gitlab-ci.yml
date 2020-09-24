@@ -24,7 +24,7 @@ stages:
     - Security
 
 default:
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.3
     before_script:
         - sed -i -e "s;__ROOT__;$CI_PROJECT_DIR;g" /etc/nginx/sites-enabled/shopware.conf
         - /usr/bin/supervisord -c /etc/supervisord.conf &>/dev/null &
@@ -96,7 +96,7 @@ Code Coverage:
 
 PHP 7.3:
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.3
     stage: Unit
     services:
         -   name: mysql:5.7
@@ -104,7 +104,7 @@ PHP 7.3:
 
 PHP 7.4:
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.4
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.4
     stage: Unit
     services:
         -   name: mysql:5.7
@@ -112,7 +112,7 @@ PHP 7.4:
 
 PHP 8.0:
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:8.0
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.0
     allow_failure: true
     stage: Unit
     services:
@@ -151,7 +151,7 @@ MariaDB 10.4:
 # stage: Elasticsearch
 Elasticsearch 7:
     extends: .phpunit_es_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.4
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.4
     stage: Unit
     services:
         -   name: mysql:8.0.19
@@ -176,7 +176,7 @@ Elasticsearch 7:
 
 .mink_base:
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.3
     stage: E2E
     artifacts:
         when: always
