@@ -57,52 +57,6 @@ class ModelRepository extends EntityRepository implements \Enlight_Hook
     }
 
     /**
-     * Returns an instance of a \Doctrine\ORM\Query object which uses the createQueryBuilder function to generate
-     * the sql statements.
-     *
-     * @param int $limit  max count of returned rows
-     * @param int $offset start value for the limitation
-     *
-     * @return \Doctrine\ORM\Query
-     *
-     * @deprecated since 5.6, to be removed in 5.7. Use findBy([], null, $limit, $offset) instead
-     */
-    public function queryAll($limit = null, $offset = null)
-    {
-        return $this->queryBy([], [], $limit, $offset);
-    }
-
-    /**
-     * Returns an instance of a \Doctrine\ORM\Query object which uses the createQueryBuilder function to generate
-     * the sql statements. The query object is limited with the given extensions (where, order, limit).
-     *
-     * @param array $criteria Expects an array of Doctrine\ORM\Query\Expr to limit the result
-     * @param array $orderBy  Expects an array of order conditions (example: array('expression' => 'name', [OPTIONAL] 'direction' => 'ASC'))
-     * @param int   $limit    max count of returned rows
-     * @param int   $offset   start value for the limitation
-     *
-     * @return \Doctrine\ORM\Query
-     *
-     * @deprecated since 5.6, to be removed in 5.7. Use findBy instead
-     */
-    public function queryBy(array $criteria, array $orderBy = [], $limit = null, $offset = null)
-    {
-        $builder = $this->createQueryBuilder('entity');
-
-        $builder->addFilter($criteria);
-        $builder->addOrderBy($orderBy);
-
-        $query = $builder->getQuery();
-
-        if (isset($limit)) {
-            $query->setFirstResult($offset);
-            $query->setMaxResults($limit);
-        }
-
-        return $query;
-    }
-
-    /**
      * Adds filters to the query results.
      *
      * <code>

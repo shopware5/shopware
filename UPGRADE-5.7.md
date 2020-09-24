@@ -80,6 +80,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed `\Shopware\Bundle\ESIndexingBundle\Product\ProductProvider` to set `hasStock` based on instock like DBAL implementation
 * Changed `\Shopware_Controllers_Backend_ProductStream::loadPreviewAction` to return formatted prices
 * Changed `sw:plugin:activate` exit code from 1 to 0, when it's already installed.
+* Changed `\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryGateway::get` it accepts now only integers as id
 
 ### Removals
 
@@ -109,6 +110,28 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `\Shopware\Plugin\Debug\Components\TemplateCollector`
     * `\Shopware\Plugin\Debug\Components\TemplateVarCollector`
     * `\Shopware\Plugin\Debug\Components\Utils`
+    * `\Shopware\Components\Api\Resource\ApiProgressHelper`
+    * `\Shopware\Bundle\StoreFrontBundle\Struct\LocationContext`
+    * `\Shopware\Components\OpenSSLEncryption`
+    * `\Shopware\Bundle\SearchBundleES\DependencyInjection\Factory\ProductNumberSearchFactory`
+* Removed method `\Shopware\Bundle\EsBackendBundle\EsBackendIndexer::buildAlias` use `\Shopware\Bundle\EsBackendBundle\IndexFactoryInterface::createIndexConfiguration` instead
+* Removed method `\Shopware\Bundle\SearchBundleES\DependencyInjection\Factory\ProductNumberSearchFactory::registerHandlerCollection`, use DI Tag `shopware_search_es.search_handler` instead
+* Removed method `\Shopware\Components\Model\ModelRepository::queryAll`, use `\Shopware\Components\Model\ModelRepository::findAll` instead
+* Removed method `\Shopware\Components\Model\ModelRepository::queryAll`, use `\Shopware\Components\Model\ModelRepository::findAll` instead
+* Removed method `\Shopware\Components\Model\ModelRepository::queryBy`, use `\Shopware\Components\Model\ModelRepository::findBy` instead
+* Removed following interfaces:
+    * `\Shopware\Bundle\ESIndexingBundle\Product\ProductProviderInterface`
+    * `\Shopware\Bundle\ESIndexingBundle\Property\PropertyProviderInterface`
+    * `\Shopware\Bundle\ESIndexingBundle\EsSearchInterface`
+    * `\Shopware\Bundle\StoreFrontBundle\Struct\LocationContextInterface`
+* Removed from class `\Shopware\Components\HttpCache\CacheWarmer` following methods:
+    * `callUrls`
+    * `getSEOURLByViewPortCount`
+    * `getAllSEOUrlCount`
+    * `getAllSEOUrls`
+    * `getSEOUrlByViewPort`
+    * `prepareUrl`
+    * `getShopDataById`
 * Removed referenced value from magic getter in session
 * Removed the assignment of all request parameters to the view in `Shopware_Controllers_Widgets_Listing::productsAction`
 * Removed duplicate ExtJs classes and added alias to new class:
@@ -138,6 +161,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `symfony/polyfill-php70`
     * `symfony/polyfill-php71`
     * `symfony/polyfill-php72`
+* Removed field `size` from `Shopware\Models\Article\Download`. Use media_service to get the correct file size
 * Removed plugin `Debug`
 
 ### Deprecations

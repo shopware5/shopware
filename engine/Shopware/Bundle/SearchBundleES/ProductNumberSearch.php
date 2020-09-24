@@ -47,26 +47,23 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     private $client;
 
     /**
-     * @var HandlerInterface[]
-     */
-    private $handlers;
-
-    /**
      * @var IndexFactoryInterface
      */
     private $indexFactory;
 
     /**
-     * @param HandlerInterface[] $handlers
+     * @var HandlerRegistry
      */
+    private $handlerRegistry;
+
     public function __construct(
         Client $client,
         IndexFactoryInterface $indexFactory,
-        $handlers
+        HandlerRegistry $handlerRegistry
     ) {
         $this->client = $client;
-        $this->handlers = $handlers;
         $this->indexFactory = $indexFactory;
+        $this->handlerRegistry = $handlerRegistry;
     }
 
     /**
@@ -101,7 +98,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
             $result->addAttribute('elastic_search', new Attribute(['max_score' => $data['hits']['max_score']]));
         }
 
-        foreach ($this->handlers as $handler) {
+        foreach ($this->handlerRegistry->getHandlers() as $handler) {
             if (!($handler instanceof ResultHydratorInterface)) {
                 continue;
             }
@@ -132,6 +129,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
         if ($criteria->getLimit() !== null) {
             $search->setSize($criteria->getLimit());
         }
+
         $search->addSort(new FieldSort('id', 'asc'));
 
         return $search;
@@ -147,23 +145,10 @@ class ProductNumberSearch implements ProductNumberSearchInterface
         array $criteriaParts
     ) {
         foreach ($criteriaParts as $criteriaPart) {
-            $handler = $this->getHandler($criteriaPart);
+            $handler = $this->handlerRegistry->getHandler($criteriaPart);
 
             $handler->handle($criteriaPart, $criteria, $search, $context);
         }
-    }
-
-    /**
-     * @return HandlerInterface|PartialConditionHandlerInterface
-     */
-    private function getHandler(CriteriaPartInterface $criteriaPart)
-    {
-        foreach ($this->handlers as $handler) {
-            if ($handler->supports($criteriaPart)) {
-                return $handler;
-            }
-        }
-        throw new \RuntimeException(sprintf('%s class not supported', get_class($criteriaPart)));
     }
 
     /**
@@ -203,7 +188,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
         EsSearch $search
     ): void {
         foreach ($criteria->getBaseConditions() as $condition) {
-            $handler = $this->getHandler($condition);
+            $handler = $this->handlerRegistry->getHandler($condition);
 
             if ($handler instanceof PartialConditionHandlerInterface) {
                 $handler->handleFilter($condition, $criteria, $search, $context);
@@ -214,7 +199,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
         }
 
         foreach ($criteria->getUserConditions() as $criteriaPart) {
-            $handler = $this->getHandler($criteriaPart);
+            $handler = $this->handlerRegistry->getHandler($criteriaPart);
 
             // Trigger error when new interface isn't implemented
             if (!$handler instanceof PartialConditionHandlerInterface) {

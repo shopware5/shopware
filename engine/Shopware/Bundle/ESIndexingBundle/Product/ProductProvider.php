@@ -46,7 +46,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class ProductProvider implements ProviderInterface, ProductProviderInterface
+class ProductProvider implements ProviderInterface
 {
     /**
      * @var ContextServiceInterface
