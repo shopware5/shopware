@@ -7,21 +7,17 @@
     <services>
         <defaults public="true" />
 
-        <service id="shopware_search_es.handler_collection" class="Doctrine\Common\Collections\ArrayCollection">
-            <factory service="shopware_search_es.product_number_search_factory" method="registerHandlerCollection" />
-            <argument type="service" id="service_container" />
-        </service>
-
         <service id="shopware_search_es.struct_hydrator" class="Shopware\Bundle\SearchBundleES\StructHydrator" />
 
-        <service id="shopware_search_es.product_number_search_factory" class="Shopware\Bundle\SearchBundleES\DependencyInjection\Factory\ProductNumberSearchFactory">
+        <service id="Shopware\Bundle\SearchBundleES\HandlerRegistry">
             <argument type="tagged" tag="shopware_search_es.search_handler" />
+            <argument type="service" id="events"/>
         </service>
 
         <service id="shopware_search_es.product_number_search" class="Shopware\Bundle\SearchBundleES\ProductNumberSearch">
-            <factory service="shopware_search_es.product_number_search_factory" method="factory" />
-            <argument type="service" id="service_container" />
-            <argument type="service" id="service_container" />
+            <argument type="service" id="shopware_elastic_search.client"/>
+            <argument type="service" id="shopware_elastic_search.index_factory"/>
+            <argument type="service" id="Shopware\Bundle\SearchBundleES\HandlerRegistry"/>
         </service>
 
         <service id="shopware_search_es.search_term_query_builder" class="Shopware\Bundle\SearchBundleES\SearchTermQueryBuilder">

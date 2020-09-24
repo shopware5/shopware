@@ -29,7 +29,7 @@ use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\Serializer\OrderedSerializer;
 
-class EsSearch extends Search implements EsSearchInterface
+class EsSearch extends Search
 {
     /**
      * @var OrderedSerializer

@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Property;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\ESIndexingBundle\ProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -33,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class PropertyProvider implements PropertyProviderInterface
+class PropertyProvider implements ProviderInterface
 {
     /**
      * @var Connection

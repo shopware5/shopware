@@ -2280,7 +2280,6 @@ class Article extends Resource implements BatchInterface
 
                 $download->setFile($media->getPath());
                 $download->setName($media->getName());
-                $download->setSize($media->getFileSize());
             }
 
             $download->fromArray($downloadData);

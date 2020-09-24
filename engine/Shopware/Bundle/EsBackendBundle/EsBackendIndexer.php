@@ -81,20 +81,6 @@ class EsBackendIndexer
     }
 
     /**
-     * @deprecated since 5.6, will be removed with 5.7. Use IndexFactory service instead
-     *
-     * @param string $domainName
-     *
-     * @return string
-     */
-    public static function buildAlias($domainName)
-    {
-        trigger_error(sprintf('%s:%s is deprecated since 5.6 and will be removed with 5.7, use IndexNameBuilderInterface instead', __CLASS__, __FUNCTION__), E_USER_DEPRECATED);
-
-        return Shopware()->Container()->get(IndexFactoryInterface::class)->createIndexConfiguration($domainName)->getAlias();
-    }
-
-    /**
      * @param string $index
      */
     public function indexEntities($index, EsAwareRepository $repository, array $ids)
