@@ -124,7 +124,7 @@ class DqlHelper
         'Supplier_link',
         'Attribute_articleId',
         'Attribute_articleDetailId',
-        'Unit_id'
+        'Unit_id',
     ];
 
     /**
@@ -1072,7 +1072,7 @@ class DqlHelper
             'Detail',
             'Supplier',
             'Attribute',
-            'Unit'
+            'Unit',
         ];
 
         // By default show the main entities
