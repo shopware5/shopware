@@ -94,13 +94,15 @@ class CookieRemoveHandler extends CookieHandler implements CookieRemoveHandlerIn
         foreach ($requestCookies as $cookieKey => $cookieName) {
             if (!$validationFunction($cookieKey)) {
                 $host = preg_replace('/^www./', '', $request->getHost());
-                $response->headers->setCookie(new Cookie($cookieKey, null, 0, '/', $host));
-                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $cookieBasePath, $host));
-                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $cookiePath, $host));
-                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $currentPath, $host));
-                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $currentPathWithoutSlash, $host));
-                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $request->getBaseUrl(), $host));
-                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $cookieBasePath . $request->getBaseUrl(), $host));
+                foreach([$host, null] as $cookieHost) {
+                    $response->headers->setCookie(new Cookie($cookieKey, null, 0, '/', $cookieHost));
+                    $response->headers->setCookie(new Cookie($cookieKey, null, 0, $cookieBasePath, $cookieHost));
+                    $response->headers->setCookie(new Cookie($cookieKey, null, 0, $cookiePath, $cookieHost));
+                    $response->headers->setCookie(new Cookie($cookieKey, null, 0, $currentPath, $cookieHost));
+                    $response->headers->setCookie(new Cookie($cookieKey, null, 0, $currentPathWithoutSlash, $cookieHost));
+                    $response->headers->setCookie(new Cookie($cookieKey, null, 0, $request->getBaseUrl(), $cookieHost));
+                    $response->headers->setCookie(new Cookie($cookieKey, null, 0, $cookieBasePath . $request->getBaseUrl(), $cookieHost));
+                }
             }
         }
     }
