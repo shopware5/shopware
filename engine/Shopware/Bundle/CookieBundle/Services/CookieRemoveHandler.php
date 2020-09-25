@@ -94,7 +94,7 @@ class CookieRemoveHandler extends CookieHandler implements CookieRemoveHandlerIn
         foreach ($requestCookies as $cookieKey => $cookieName) {
             if (!$validationFunction($cookieKey)) {
                 $host = preg_replace('/^www./', '', $request->getHost());
-                foreach([$host, null] as $cookieHost) {
+                foreach ([$host, null] as $cookieHost) {
                     $response->headers->setCookie(new Cookie($cookieKey, null, 0, '/', $cookieHost));
                     $response->headers->setCookie(new Cookie($cookieKey, null, 0, $cookieBasePath, $cookieHost));
                     $response->headers->setCookie(new Cookie($cookieKey, null, 0, $cookiePath, $cookieHost));
