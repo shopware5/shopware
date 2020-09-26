@@ -383,11 +383,21 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
                 var status = Ext.decode(response.responseText);
                 if (status.success) {
 
-                    if (isHtml) {
-                        htmlString =  "<div style=\"margin: 15px\">" + status.message + "</div>"
-                    } else {
-                        htmlString =  "<div style=\"margin: 15px\"><pre>" + status.message + "</pre></div>"
+                    if (!isHtml) {
+                        status.message = "<pre>" + status.message + "</pre>";
                     }
+
+                    status.message = status.message.replace(/[&<>"']/g, function (char) {
+                        return {
+                            '&': '&amp;',
+                            '<': '&lt;',
+                            '>': '&gt;',
+                            '"': '&quot;',
+                            "'": '&#039;'
+                        }[char];
+                    });
+
+                    htmlString = "<iframe srcdoc=\"" + status.message + "\" sandbox></iframe>";
 
                     Ext.create('Enlight.app.Window', {
                         title : '{s name="title"}Email templates{/s}',
@@ -396,7 +406,11 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
                         subApp: me.subApplication,
                         items: [{
                             xtype: 'container',
-                            html: htmlString
+                            html: htmlString,
+                            style: {
+                                height: '100%',
+                                background: '#fff'
+                            }
                         }]
                     }).show();
                 } else {
