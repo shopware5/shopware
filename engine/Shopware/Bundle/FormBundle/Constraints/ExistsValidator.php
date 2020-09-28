@@ -70,7 +70,10 @@ class ExistsValidator extends ConstraintValidator
             }
         }
 
-        if ($builder->execute()->rowCount() > 0) {
+        /** @var \PDOStatement $stmt */
+        $stmt = $builder->execute();
+
+        if ($stmt->rowCount() > 0) {
             return;
         }
 

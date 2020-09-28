@@ -16,8 +16,8 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed Doctrine Cache version to 1.10.2
 * Changed Doctrine Common version to 3.0.2
 * Changed Doctrine Persistence version to 2.0.0
-* Changed Guzzle version to 7.0.1
-* Changed Monolog version to 2.0.1
+* Changed Guzzle version to 7.1
+* Changed Monolog version to 2
 * Changed FPDF version to 1.8.2
 * Changed FPDI version to 2.2.0
 * Changed mPDF version to 8.0.7

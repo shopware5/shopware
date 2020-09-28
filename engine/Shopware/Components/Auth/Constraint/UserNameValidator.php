@@ -112,7 +112,7 @@ class UserNameValidator extends ConstraintValidator
     private function isExistingUser($value, $userId = null)
     {
         $builder = $this->connection->createQueryBuilder();
-        $builder->select(1);
+        $builder->select('1');
         $builder->from('s_core_auth');
         $builder->andWhere('username = :username');
         $builder->setParameter('username', $value);
