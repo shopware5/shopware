@@ -112,7 +112,7 @@ class UserEmailValidator extends ConstraintValidator
     private function isExistingEmail($value, $userId = null)
     {
         $builder = $this->connection->createQueryBuilder();
-        $builder->select(1);
+        $builder->select('1');
         $builder->from('s_core_auth');
         $builder->andWhere('email = :email');
         $builder->setParameter('email', $value);

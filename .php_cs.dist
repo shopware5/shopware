@@ -1,12 +1,12 @@
 <?php
 
 use PhpCsFixer\Config;
-use PhpCsFixerCustomFixers\Fixer\NoUnneededConcatenationFixer;
 use PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer;
 use PhpCsFixerCustomFixers\Fixer\OperatorLinebreakFixer;
 use PhpCsFixerCustomFixers\Fixer\PhpdocParamTypeFixer;
 use PhpCsFixerCustomFixers\Fixer\SingleSpaceAfterStatementFixer;
 use PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer;
+use PhpCsFixerCustomFixers\Fixer\NoSuperfluousConcatenationFixer;
 use PhpCsFixerCustomFixers\Fixers;
 
 $finder = PhpCsFixer\Finder::create()
@@ -72,10 +72,10 @@ return Config::create()
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
 
         NoUselessCommentFixer::name() => true,
-        NoUnneededConcatenationFixer::name() => true,
         SingleSpaceAfterStatementFixer::name() => true,
         SingleSpaceBeforeStatementFixer::name() => true,
         PhpdocParamTypeFixer::name() => true,
+        NoSuperfluousConcatenationFixer::name() => true,
         OperatorLinebreakFixer::name() => ['only_booleans' => true],
     ])
     ->setFinder($finder);

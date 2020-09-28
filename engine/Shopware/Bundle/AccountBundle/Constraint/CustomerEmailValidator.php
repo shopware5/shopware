@@ -125,7 +125,7 @@ class CustomerEmailValidator extends ConstraintValidator
     private function isExistingEmail($value, Shop $shop, $customerId = null)
     {
         $builder = $this->connection->createQueryBuilder();
-        $builder->select(1);
+        $builder->select('1');
         $builder->from('s_user');
         $builder->andWhere('email = :email');
         $builder->andWhere('accountmode != ' . Customer::ACCOUNT_MODE_FAST_LOGIN);
