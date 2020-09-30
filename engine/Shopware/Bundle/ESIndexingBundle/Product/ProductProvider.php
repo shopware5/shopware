@@ -455,6 +455,7 @@ class ProductProvider implements ProviderInterface
             if (!isset($priceRules[$number])) {
                 continue;
             }
+
             $rules = $priceRules[$number];
 
             foreach ($contexts as $context) {
@@ -514,6 +515,12 @@ class ProductProvider implements ProviderInterface
         $currencies = $this->identifierSelector->getShopCurrencyIds($shop->getId());
         if (!$shop->isMain()) {
             $currencies = $this->identifierSelector->getShopCurrencyIds($shop->getParentId());
+        }
+
+        $defaultCurrencyId = $shop->getCurrency()->getId();
+
+        if (!in_array($defaultCurrencyId, $currencies, true)) {
+            $currencies[] = $defaultCurrencyId;
         }
 
         $customerGroups = $this->identifierSelector->getCustomerGroupKeys();
