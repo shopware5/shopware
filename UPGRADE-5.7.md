@@ -132,6 +132,10 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `getSEOUrlByViewPort`
     * `prepareUrl`
     * `getShopDataById`
+* Removed following methods from class `\Shopware_Controllers_Backend_Search`:
+    * `getArticles` 
+    * `getCustomers` 
+    * `getOrders` 
 * Removed referenced value from magic getter in session
 * Removed the assignment of all request parameters to the view in `Shopware_Controllers_Widgets_Listing::productsAction`
 * Removed duplicate ExtJs classes and added alias to new class:
