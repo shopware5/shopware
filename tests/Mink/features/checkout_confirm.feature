@@ -20,7 +20,8 @@ Feature: Checkout articles (scenario origin is checkout confirm page logged in a
             | shipping | <shippingCosts> |
             | total    | <totalSum>      |
 
-        When  I proceed to checkout
+        When  I am on the page "CheckoutConfirm"
+        And   I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
         Examples:
@@ -50,7 +51,8 @@ Feature: Checkout articles (scenario origin is checkout confirm page logged in a
             | shipping | <shippingCosts> |
             | total    | <totalSum>      |
 
-        When  I proceed to checkout
+        When  I am on the page "CheckoutConfirm"
+        And   I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
         Examples:
