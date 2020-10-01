@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Additions
 
 * Added PHP extension `ext-calendar` as requirement
+* Added filter event `Shopware_Controllers_Order_OpenPdf_FilterName` to `Shopware_Controllers_Backend_Order::openPdfAction()`
 
 ### Breaks
 
