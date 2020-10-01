@@ -36,6 +36,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Added support for MySQL 8 `sql_require_primary_key`
 * Added `attribute` to users listing in API
 * Added new blocks `document_index_head_logo` and `document_index_head_wrapper` to `themes/Frontend/Bare/documents/index.tpl`
+* Added filter event `Shopware_Controllers_Order_OpenPdf_FilterName` to `Shopware_Controllers_Backend_Order::openPdfAction()`
 
 ### Changes
 
