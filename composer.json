@@ -96,7 +96,7 @@
         "ext-zend-opcache": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.3",
+        "phpunit/phpunit": "^9.4",
         "phpspec/prophecy-phpunit": "^2.0",
         "behat/behat": "3.7.0",
         "behat/mink": "1.8.1",
