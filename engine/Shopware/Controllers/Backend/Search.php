@@ -104,6 +104,18 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         $search = $this->container->get(GlobalSearch::class);
         $result = $search->search($term);
 
+        if (!$this->_isAllowed('read', 'article')) {
+            $result['articles'] = [];
+        }
+
+        if (!$this->_isAllowed('read', 'customer')) {
+            $result['customers'] = [];
+        }
+
+        if (!$this->_isAllowed('read', 'order')) {
+            $result['orders'] = [];
+        }
+
         $this->View()->assign('searchResult', $result);
     }
 
