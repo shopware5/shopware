@@ -87,12 +87,16 @@ class IdentifierSelector
      */
     public function getShopCurrencyIds($shopId)
     {
-        return $this->connection->createQueryBuilder()
+        $ids = $this->connection->createQueryBuilder()
             ->select('currency_id')
             ->from('s_core_shop_currencies', 'currency')
             ->andWhere('currency.shop_id = :id')
             ->setParameter(':id', $shopId)
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
+
+        $ids = array_map('intval', $ids);
+
+        return $ids;
     }
 }
