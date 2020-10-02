@@ -56,11 +56,8 @@ Code Coverage:
             --log-junit build/artifacts/phpunit.junit.xml
             --colors=never
             --exclude-group=elasticSearch,pcovAdapterBrokenTest
-            --coverage-clover build/artifacts/phpunit.clover.xml
-            --coverage-html build/artifacts/phpunit-coverage-html
-            --coverage-text=build/artifacts/phpunit-coverage-text
-        - cat build/artifacts/phpunit-coverage-text | sed -e '/\\Shopware\\.*/d' -e '/\s*Methods:\s*\d*/d'
-    coverage: '/^\s*Lines:\s*(\d+(?:\.\d+)?%)/'
+            --coverage-clover=build/artifacts/phpunit.clover.xml
+            --coverage-cobertura=build/artifacts/phpunit-coverage-cobertura.xml
     services:
         -   name: mysql:5.7
             alias: mysql
@@ -69,6 +66,7 @@ Code Coverage:
             - build/artifacts/*
         reports:
             junit: build/artifacts/phpunit.junit.xml
+            cobertura: build/artifacts/phpunit-coverage-cobertura.xml
 
 # stage: Unit
 .phpunit_base:
