@@ -71,6 +71,9 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             'customer-list': {
                 'delete': me.deleteCustomerFromStream
             },
+            'customer-stream-preview-list': {
+                'delete': me.deleteCustomerFromStream
+            },
             'customer-stream-listing': {
                 'index-stream': me.indexStream,
                 'add-stream': me.addStream,
