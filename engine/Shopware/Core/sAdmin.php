@@ -1509,7 +1509,7 @@ class sAdmin implements \Enlight_Hook
                 [$userData['additional']['user']['email']]
             );
 
-            $userData['additional']['user']['newsletter'] = $newsletter['id'] ? 1 : 0;
+            $userData['additional']['user']['newsletter'] = isset($newsletter['id']) ? 1 : 0;
 
             $userData = $this->getUserShippingData($userId, $userData, $countryQuery);
             $userData = $this->overwriteBillingAddress($userData);
@@ -3844,7 +3844,6 @@ SQL;
         $userData['additional']['countryShipping'] = $this->sGetCountryTranslation(
             $userData['additional']['countryShipping']
         );
-        $this->session->offsetSet('sCountry', $userData['additional']['countryShipping']['id']);
 
         // State selection
         $userData['additional']['stateShipping'] = $this->db->fetchRow(
@@ -3853,10 +3852,18 @@ SQL;
         );
         $userData['additional']['stateShipping'] = $userData['additional']['stateShipping'] ?: [];
         $userData['additional']['stateShipping'] = $this->sGetCountryStateTranslation($userData['additional']['stateShipping']);
-        // Add stateId to session
-        $this->session->offsetSet('sState', $userData['additional']['stateShipping']['id']);
-        // Add areaId to session
-        $this->session->offsetSet('sArea', $userData['additional']['countryShipping']['areaID']);
+
+        if (!empty($userData['additional']['stateShipping'])) {
+            // Add stateId to session
+            $this->session->offsetSet('sState', $userData['additional']['stateShipping']['id']);
+        }
+
+        if (!empty($userData['additional']['countryShipping'])) {
+            // Add areaId to session
+            $this->session->offsetSet('sArea', $userData['additional']['countryShipping']['areaID']);
+            // Add countryId to session
+            $this->session->offsetSet('sCountry', $userData['additional']['countryShipping']['id']);
+        }
 
         return $userData;
     }

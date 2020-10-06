@@ -39,6 +39,9 @@ Thumbs.db
 /config.php
 /config_*.php
 
+/.env.*
+!/.env.dist
+
 # Caches/Proxies
 /tests/Shopware/TempFiles/*
 /var/cache/*

@@ -10,10 +10,13 @@ SHELL := bash
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
+ifeq ($(origin ENV_FILE), undefined)
+    ENV_FILE:=.env
+endif
+
+-include ${ENV_FILE}
 
 .PHONY: init clear-cache check-code mink elasticsearch-populate test-phpunit-elasticsearch unit-test-fast unit-test phpstan cs-fixer debug-config replace-config-variables clean-make-config clean
-
--include .env
 
 init: .make.init
 
@@ -87,7 +90,9 @@ clean:
 > cp ./build/config-elasticsearch.php config.php
 > touch .make.config.elasticsearch
 
-.make.init: clean-make-config .make.config replace-config-variables
+.make.install:
+> @echo "Read additional variables from ${ENV_FILE}"
+
 > composer install
 > bin/console sw:database:setup --steps=drop,create,import,importDemodata
 > bin/console sw:cache:clear
@@ -97,8 +102,10 @@ clean:
 > bin/console sw:firstrunwizard:disable
 > bin/console sw:admin:create --name="Demo" --email="demo@demo.de" --username="demo" --password="demo" --locale=de_DE -n
 > touch recovery/install/data/install.lock
-> touch .make.init
 
 .make.console.executable:
 > chmod u+x bin/console
 > touch .make.console.executable
+
+.make.init: clean-make-config .make.config replace-config-variables .make.install
+> touch .make.init

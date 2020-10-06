@@ -10,14 +10,15 @@ if (!function_exists('smarty_mb_str_replace')) {
     /**
      * Multibyte string replace
      *
-     * @param string $search  the string to be searched
-     * @param string $replace the replacement string
-     * @param string $subject the source string
-     * @param int    &$count  number of matches found
+     * @param string  $search the string to be searched
+     * @param string  $replace the replacement string
+     * @param string  $subject the source string
+     * @param int    &$count number of matches found
+     *
      * @return string replaced string
      * @author Rodney Rehm
      */
-    function smarty_mb_str_replace($search, $replace, $subject, &$count=0)
+    function smarty_mb_str_replace($search, $replace, $subject, &$count = 0)
     {
         if (!is_array($search) && is_array($replace)) {
             return false;
@@ -45,6 +46,10 @@ if (!function_exists('smarty_mb_str_replace')) {
             }
         } else {
             $parts = mb_split(preg_quote($search), $subject);
+            if ($parts === false) {
+                $parts = [];
+            }
+
             $count = count($parts) - 1;
             $subject = implode($replace, $parts);
         }

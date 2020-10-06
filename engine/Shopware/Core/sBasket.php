@@ -819,7 +819,7 @@ SQL;
         }
 
         // Check if the voucher is limited to certain products, and validate that
-        list($sErrorMessages, $restrictedProducts) = $this->filterProductVoucher($voucherDetails);
+        [$sErrorMessages, $restrictedProducts] = $this->filterProductVoucher($voucherDetails);
         if (!empty($sErrorMessages)) {
             return ['sErrorFlag' => true, 'sErrorMessages' => $sErrorMessages];
         }
@@ -876,7 +876,7 @@ SQL;
         }
 
         // Tax calculation for vouchers
-        list($taxRate, $tax, $voucherDetails, $freeShipping) = $this->calculateVoucherValues($voucherDetails);
+        [$taxRate, $tax, $voucherDetails, $freeShipping] = $this->calculateVoucherValues($voucherDetails);
 
         if ($this->proportionalTaxCalculation && !$this->session->get('taxFree') && $voucherDetails['taxconfig'] === 'auto') {
             $taxCalculator = Shopware()->Container()->get('shopware.cart.proportional_tax_calculator');
@@ -1392,13 +1392,13 @@ SQL;
         }
 
         // Reformatting data, add additional data fields to array
-        list(
+        [
             $getProducts,
             $totalAmount,
             $totalAmountWithTax,
             $totalCount,
-            $totalAmountNet
-            ) = $this->getBasketProducts($getProducts);
+            $totalAmountNet,
+        ] = $this->getBasketProducts($getProducts);
 
         if (static::roundTotal($totalAmount) < 0 || empty($totalCount)) {
             if (!$this->eventManager->notifyUntil('Shopware_Modules_Basket_sGetBasket_AllowEmptyBasket', [
@@ -1732,7 +1732,7 @@ SQL;
                     continue;
                 }
 
-                list($taxRate, $netPrice, $grossPrice) = $this->getTaxesForUpdateProduct(
+                [$taxRate, $netPrice, $grossPrice] = $this->getTaxesForUpdateProduct(
                     $quantity,
                     $updatedPrice,
                     $additionalInfo
@@ -2614,8 +2614,10 @@ SQL;
 
             // Get additional basket meta data for each product
             if ($getProducts[$key]['modus'] == 0) {
-                $getProducts[$key]['additional_details'] = $additionalDetails[$getProducts[$key]['ordernumber']];
-                $getProducts[$key]['shippingtime'] = $additionalDetails[$getProducts[$key]['ordernumber']]['shippingtime'];
+                if (isset($additionalDetails[$getProducts[$key]['ordernumber']])) {
+                    $getProducts[$key]['additional_details'] = $additionalDetails[$getProducts[$key]['ordernumber']];
+                    $getProducts[$key]['shippingtime'] = $additionalDetails[$getProducts[$key]['ordernumber']]['shippingtime'];
+                }
             }
 
             $getUnitData = [];
@@ -2728,7 +2730,10 @@ SQL;
 
             $totalAmount += round($getProducts[$key]['amount'], 2);
             // Needed if shop is in net-mode
-            $totalAmountWithTax += round($getProducts[$key]['amountWithTax'], 2);
+            if (isset($getProducts[$key]['amountWithTax'])) {
+                $totalAmountWithTax += round($getProducts[$key]['amountWithTax'], 2);
+            }
+
             // Ignore vouchers and premiums by counting products
             if (!$getProducts[$key]['modus']) {
                 ++$totalCount;
