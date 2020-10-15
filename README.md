@@ -70,10 +70,17 @@ In case you wish to contribute to Shopware, fork the `5.6` branch rather than cl
 Depending on your server configuration, it might be necessary to set whole write permissions (777) to the files and folders above.
 You can also start testing with lower permissions due to security reasons (644 for example) as long as your php process can write to those files.
 
-3.) A [Makefile](https://www.gnu.org/software/make/manual/make.html) is used to set up the configuration and database connection:
+3.) A [Makefile](https://www.gnu.org/software/make/manual/make.html) may be used to set up the configuration and database connection:
 
 * Copy `.env.dist` to `.env` and modify variables if needed
 * ``make init``
+
+**Info regarding platform intercompatibility**
+
+The `Makefile` is intended to work with Linux and Mac systems alike which means that we're not able to use all features
+of modern GNU make. Some workarounds are in place because of this and place constraints on the functionality of this way
+to set up Shopware (there might be issues when using special characters inside the variables of the `.env` file). **The
+`Makefile` is therefore only to be used for testing and development setups** at the moment.
 
 4.) Download the test images and extract them:
 
