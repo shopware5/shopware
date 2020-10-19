@@ -324,8 +324,8 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     private function createRangeResult(ProductAttributeFacet $criteriaPart, $data, Criteria $criteria)
     {
         $values = array_column($data['buckets'], 'key');
-        $min = min($values);
-        $max = max($values);
+        $min = empty($values) ? 0 : min($values);
+        $max = empty($values) ? 0 : max($values);
 
         $activeMin = $min;
         $activeMax = $max;

@@ -118,7 +118,7 @@ class RewriteGenerator implements GeneratorListInterface
         }, $orgQueryList);
 
         $urls = $this->rewriteList($orgPathList, $context);
-        if (max($urls) === false) {
+        if (empty($urls) || max($urls) === false) {
             return $list;
         }
 
