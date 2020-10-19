@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Performance.model.sitemap.CustomUrls', {
     fields: [
         //{block name="backend/performance/model/sitemap/custom_urls/fields"}{/block}
         { name: 'id', type: 'int' },
-        { name: 'url', type: 'string', defaultValue: 'example.org' },
+        { name: 'url', type: 'string', defaultValue: 'https://example.org' },
         { name: 'priority', type: 'int' },
         { name: 'changeFreq', type: 'string', defaultValue: 'weekly' },
         { name: 'lastMod', type: 'datetime' },

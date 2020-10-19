@@ -35,7 +35,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.SitemapCustomU
 
     initComponent: function () {
         this.plugins = [
-            this.createRowEditingPlugin()
+            this.createRowEditingPlugin(),
+            this.createHeaderToolTipPlugin()
         ];
 
         this.columns = this.createColumns();
@@ -55,16 +56,17 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.SitemapCustomU
             {
                 header: '{s name="customUrl/column/url"}URL{/s}',
                 dataIndex: 'url',
-                flex: 4,
+                flex: 10,
                 editor: {
                     xtype: 'textfield',
                     vtype: 'url'
-                }
+                },
+                tooltip: '{s name="customUrl/column/url/toolTip"}URLs have to start with http(s)://{/s}',
             },
             {
                 header: '{s name="customUrl/column/priority"}Priority{/s}',
                 dataIndex: 'priority',
-                flex: 1,
+                flex: 5,
                 editor: {
                     xtype: 'numberfield',
                     minValue: 0
@@ -74,13 +76,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.SitemapCustomU
             {
                 header: '{s name="customUrl/column/lastMod"}Last modification{/s}',
                 dataIndex: 'lastMod',
-                flex: 2
+                flex: 8
             },
             this.createShopColumn(),
             {
                 xtype: 'actioncolumn',
                 items: [ this.createRowDeleteButton() ],
-                flex: 1
+                flex: 4
             }
         ];
     },
@@ -112,7 +114,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.SitemapCustomU
         return {
             header: '{s name="customUrl/column/changeFreq"}Change frequency{/s}',
             dataIndex: 'changeFreq',
-            flex: 2,
+            flex: 8,
             editor: this.changeFrequencyEditor,
             renderer: this.renderChangeFrequency
         };
@@ -134,7 +136,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.SitemapCustomU
             dataIndex: 'shopId',
             editor: this.shopEditor,
             renderer: this.renderShopId,
-            flex: 2
+            flex: 6
         }
     },
 
@@ -147,6 +149,15 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.SitemapCustomU
             keepExisting: true,
             errorSummary: false,
         })
+    },
+
+    /**
+     * @returns { Shopware.grid.HeaderToolTip }
+     */
+    createHeaderToolTipPlugin: function() {
+        return Ext.create('Shopware.grid.HeaderToolTip', {
+            showIcons: true
+        });
     },
 
     createRowDeleteButton: function () {
