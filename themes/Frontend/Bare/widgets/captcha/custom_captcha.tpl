@@ -3,7 +3,7 @@
     {block name="frontend_widgets_captcha_custom_captcha_config"}
         {$isHoneypot = $captchaName === 'honeypot'}
         {$isNoCaptcha = $captchaName === 'nocaptcha'}
-        {$hasError = isset($captchaHasError) && count($captchaHasError) > 0}
+        {$hasError = isset($captchaHasError) && $captchaHasError|count > 0}
     {/block}
 
     {if !$isNoCaptcha}

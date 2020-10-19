@@ -17,7 +17,7 @@
 
                 {* Similar products *}
                 {block name="frontend_detail_index_recommendation_tabs_entry_similar_products"}
-                    {if count($sArticle.sSimilarArticles) > 0}
+                    {if $sArticle.sSimilarArticles|count > 0}
                         <a href="#content--similar-products" title="{s name="DetailRecommendationSimilarLabel" namespace="frontend/detail/index"}{/s}" class="tab--link">{s name="DetailRecommendationSimilarLabel" namespace="frontend/detail/index"}{/s}</a>
                     {/if}
                 {/block}

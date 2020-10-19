@@ -197,7 +197,7 @@
                                             </div>
                                         {else}
                                             {$captchaName = $newsletterCaptchaName}
-                                            {$captchaHasError = isset($sErrorFlag) && count($sErrorFlag) > 0}
+                                            {$captchaHasError = isset($sErrorFlag) && $sErrorFlag|count > 0}
                                             {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
                                         {/if}
                                     </div>

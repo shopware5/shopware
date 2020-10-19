@@ -17,8 +17,8 @@
                                 {$description = $image.description|escape|truncate:160}
                                 {$largeThumbnail = null}
 
-                                {if count($image.thumbnails) > 0}
-                                    {$largeThumbnail = $image.thumbnails[count($image.thumbnails) - 1]}
+                                {if $image.thumbnails|count > 0}
+                                    {$largeThumbnail = $image.thumbnails[$image.thumbnails|count - 1]}
                                 {/if}
                                 <div class="image-slider--item">
                                     {block name='frontend_content_type_field_mediagrid_slider_item'}
@@ -55,7 +55,7 @@
 
                                 <div class="thumbnail--link">
                                     {block name='frontend_content_type_field_mediagrid_thumbnail_slider_item'}
-                                        {if count($image.thumbnails) < 1}
+                                        {if $image.thumbnails|count < 1}
                                             <img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
                                                  alt="{$description}"
                                                  title="{$description}"/>

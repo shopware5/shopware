@@ -47,7 +47,7 @@
             {/if}
         {/block}
 
-        {$sCountConfigurator=$sArticle.sConfigurator|@count}
+        {$sCountConfigurator=$sArticle.sConfigurator|count}
 
         {block name="frontend_detail_buy_button_container_outer"}
             {if (!isset($sArticle.active) || $sArticle.active)}
