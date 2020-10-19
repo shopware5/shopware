@@ -24,10 +24,11 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
             | street        |                    | Musterstr. 55     |
             | zipcode       |                    | 55555             |
             | city          |                    | Musterhausen      |
-        And   I change the payment method to <paymentMethod>:
+        And I change the payment method to <paymentMethod>:
             | field     | value            |
             | sDispatch | <shippingMethod> |
-        Then  the aggregations should look like this:
+        And Wait until ajax requests are done
+        Then the aggregations should look like this:
             | label    | value           |
             | shipping | <shippingCosts> |
             | total    | <totalSum>      |
@@ -63,6 +64,7 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
             | sDebitBankcode   | 1234567        |
             | sDebitBankName   | Shopware Bank  |
             | sDebitBankHolder | Max Mustermann |
+        And Wait until ajax requests are done
         Then  the aggregations should look like this:
             | label    | value    |
             | shipping | 3,90 €   |

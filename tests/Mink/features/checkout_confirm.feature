@@ -6,6 +6,7 @@ Feature: Checkout articles (scenario origin is checkout confirm page logged in a
             | articleId | number  | name              | quantity | itemPrice | sum    |
             | 83        | SW10084 | Back-Set 3 teilig | 15       | 14,99     | 224,85 |
         And   I proceed to order confirmation with email "test@example.com" and password "shopware"
+        And   I am on the page "CheckoutConfirm"
 
     @payment @delivery
     Scenario Outline: I can finish my order with different payment and delivery methods
