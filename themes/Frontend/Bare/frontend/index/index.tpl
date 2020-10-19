@@ -88,7 +88,7 @@
 
                     {* Breadcrumb *}
                     {block name='frontend_index_breadcrumb'}
-                        {if count($sBreadcrumb)}
+                        {if $sBreadcrumb|count}
                             <nav class="content--breadcrumb block">
                                 {block name='frontend_index_breadcrumb_inner'}
                                     {include file='frontend/index/breadcrumb.tpl'}

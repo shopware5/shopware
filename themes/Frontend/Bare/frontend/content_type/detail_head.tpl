@@ -2,8 +2,8 @@
     {$imageDescription = $image.description|escape|truncate:160}
     {$largeThumbnail = null}
 
-    {if count($image.thumbnails) > 0}
-        {$largeThumbnail = $image.thumbnails[count($image.thumbnails) - 1]}
+    {if $image.thumbnails|count > 0}
+        {$largeThumbnail = $image.thumbnails[$image.thumbnails|count - 1]}
     {/if}
 
     {block name='frontend_content_type_detail_head_panel'}

@@ -10,7 +10,7 @@
            title="{$title}">
 
             {block name='frontend_content_type_field_media_image'}
-                {if count($content.thumbnails) < 2}
+                {if $content.thumbnails|count < 2}
                     <img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
                          alt="{$description}"
                          title="{$title}"/>
