@@ -24,9 +24,6 @@
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * @deprecated since 5.2 will be removed in 6.0
- */
 class Shopware_Bootstrap
 {
     /**
