@@ -29,6 +29,7 @@ use Behat\Mink\Element\DocumentElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\MultipleElement;
+use WebDriver\Exception\StaleElementReference;
 
 class Helper
 {
@@ -523,7 +524,16 @@ EOD
             $parent = self::getContentBlock($parent);
         }
 
-        $parent->pressButton($locatorArray[$key][self::$language]);
+        self::spin(static function () use ($parent, $locatorArray, $key): bool {
+            try {
+                $parent->pressButton($locatorArray[$key][self::$language]);
+
+                return true;
+            } catch (StaleElementReference $e) {
+                // got stale element, try again (refresh happens in the $parents pressButton method)
+                return false;
+            }
+        });
     }
 
     /**
@@ -604,20 +614,33 @@ EOD
 
                 $fieldType = $field->getAttribute('type');
 
-                //Select
-                if (empty($fieldType)) {
-                    $field->selectOption($fieldValue);
-                    continue;
-                }
+                self::spin(static function () use (&$field, $fieldType, $fieldValue, $form, $fieldName): bool {
+                    try {
+                        //Select
+                        if (empty($fieldType)) {
+                            $field->selectOption($fieldValue);
 
-                //Checkbox
-                if ($fieldType === 'checkbox') {
-                    $field->check();
-                    continue;
-                }
+                            return true;
+                        }
 
-                //Text
-                $field->setValue($fieldValue);
+                        //Checkbox
+                        if ($fieldType === 'checkbox') {
+                            $field->check();
+
+                            return true;
+                        }
+
+                        //Text
+                        $field->setValue($fieldValue);
+
+                        return true;
+                    } catch (StaleElementReference $e) {
+                        // got stale element, refresh and try again
+                        $field = $form->findField($fieldName);
+
+                        return false;
+                    }
+                });
             }
         }
     }
