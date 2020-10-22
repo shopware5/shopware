@@ -49,8 +49,9 @@ class DeviceConfiguration implements DeviceConfigurationInterface
     public function getListingEmotions($categoryId, $pageIndex)
     {
         $emotions = $this->get($categoryId);
+        $showListing = array_column($emotions, 'showListing');
 
-        if (max(array_column($emotions, 'showListing')) > 0) {
+        if (!empty($showListing) && max($showListing) > 0) {
             return $emotions;
         }
 

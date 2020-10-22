@@ -176,7 +176,9 @@ class SitePageMenu
             );
 
             if (!$site['active'] && count($site['subPages']) > 0) {
-                $site['active'] = max(array_column($site['subPages'], 'active'));
+                $activePages = array_column($site['subPages'], 'active');
+
+                $site['active'] = empty($activePages) ? 0 : max($activePages);
             }
 
             $site['childrenCount'] = count($site['subPages']);

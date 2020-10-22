@@ -98,7 +98,9 @@ class GenerateMigrationCommand extends ShopwareCommand
             return 0;
         }
 
-        return (int) max(array_column($values, '1'));
+        $versions = array_column($values, '1');
+
+        return empty($versions) ? 0 : (int) max($versions);
     }
 
     private function createMigration(string $migrationFolder, string $migrationName, ?string $pluginName, int $nextVersion): string

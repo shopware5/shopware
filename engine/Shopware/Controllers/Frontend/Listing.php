@@ -403,8 +403,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return true;
         }
 
-        $showListing = (bool) max(array_column($emotions, 'showListing'));
-        if ($showListing) {
+        $showListing = array_column($emotions, 'showListing');
+
+        if (!empty($showListing) && (bool) max($showListing)) {
             return true;
         }
 
