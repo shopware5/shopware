@@ -16,6 +16,7 @@
         <service id="Shopware\Components\Model\Configuration" alias="modelconfig" />
         <service id="shopware.model_config" alias="modelconfig" />
         <service id="Zend_Cache_Core" alias="cache" />
+        <service id="shopware.model_annotations" alias="modelannotations"/>
         <service id="Shopware\Components\DependencyInjection\Bridge\Models" alias="model_factory" />
         <service id="Shopware\Components\DependencyInjection\Bridge\Cache" alias="cache_factory" />
         <service id="Shopware\Components\DependencyInjection\Bridge\Config" alias="config_factory" />
