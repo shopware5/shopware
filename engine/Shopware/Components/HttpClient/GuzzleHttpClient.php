@@ -43,7 +43,7 @@ class GuzzleHttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function get($url = null, $headers = [])
+    public function get($url = null, $headers = []): Response
     {
         try {
             /** @var ResponseInterface $response */
@@ -68,7 +68,7 @@ class GuzzleHttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function head($url = null, array $headers = [])
+    public function head($url = null, array $headers = []): Response
     {
         try {
             /** @var ResponseInterface $response */
@@ -87,7 +87,7 @@ class GuzzleHttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function delete($url = null, array $headers = [])
+    public function delete($url = null, array $headers = []): Response
     {
         try {
             /** @var ResponseInterface $response */
@@ -106,17 +106,11 @@ class GuzzleHttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function put($url = null, array $headers = [], $content = null)
+    public function put($url = null, array $headers = [], $content = null): Response
     {
         try {
-            // http://guzzle.readthedocs.org/en/latest/clients.html#request-options
-            $options = [
-                'headers' => $headers,
-                'body' => $content,
-            ];
-
             /** @var ResponseInterface $response */
-            $response = $this->guzzleClient->put($url, $options);
+            $response = $this->guzzleClient->put($url, $this->formatOptions($headers, $content));
         } catch (\Exception $e) {
             throw new RequestException($e->getMessage(), $e->getCode(), $e);
         }
@@ -131,46 +125,15 @@ class GuzzleHttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function patch($url = null, array $headers = [], $content = null)
+    public function patch($url = null, array $headers = [], $content = null): Response
     {
         try {
-            // http://guzzle.readthedocs.org/en/latest/clients.html#request-options
-            $options = [
-                'headers' => $headers,
-                'body' => $content,
-            ];
-
             /** @var ResponseInterface $response */
-            $response = $this->guzzleClient->patch($url, $options);
+            $response = $this->guzzleClient->patch($url, $this->formatOptions($headers, $content));
         } catch (\Exception $e) {
-            throw new RequestException($e->getMessage(), $e->getCode(), $e);
-        }
-
-        return new Response(
-            (string) $response->getStatusCode(),
-            $response->getHeaders(),
-            (string) $response->getBody()
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function post($url = null, array $headers = [], $content = null)
-    {
-        try {
-            // http://guzzle.readthedocs.org/en/latest/clients.html#request-options
-            $options = [
-                'headers' => $headers,
-                'body' => $content,
-            ];
-
-            /** @var ResponseInterface $response */
-            $response = $this->guzzleClient->post($url, $options);
-        } catch (\Exception $e) {
-            /** @var GuzzleClientException $e */
             $body = '';
-            if ($e->hasResponse()) {
+
+            if (($e instanceof GuzzleClientException) && $e->hasResponse()) {
                 $body = (string) $e->getResponse()->getBody();
             }
 
@@ -182,5 +145,45 @@ class GuzzleHttpClient implements HttpClientInterface
             $response->getHeaders(),
             (string) $response->getBody()
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function post($url = null, array $headers = [], $content = null): Response
+    {
+        try {
+            /** @var ResponseInterface $response */
+            $response = $this->guzzleClient->post($url, $this->formatOptions($headers, $content));
+        } catch (\Exception $e) {
+            $body = '';
+
+            if (($e instanceof GuzzleClientException) && $e->hasResponse()) {
+                $body = (string) $e->getResponse()->getBody();
+            }
+
+            throw new RequestException($e->getMessage(), $e->getCode(), $e, $body);
+        }
+
+        return new Response(
+            (string) $response->getStatusCode(),
+            $response->getHeaders(),
+            (string) $response->getBody()
+        );
+    }
+
+    private function formatOptions(array $headers = [], $content = null): array
+    {
+        $options = [
+            'headers' => $headers,
+        ];
+
+        if (is_array($content)) {
+            $options['form_params'] = $content;
+        } elseif (is_string($content)) {
+            $options['body'] = $content;
+        }
+
+        return $options;
     }
 }
