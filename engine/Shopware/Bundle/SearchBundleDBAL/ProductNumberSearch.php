@@ -156,7 +156,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             if ($handler instanceof PartialFacetHandlerInterface) {
                 $result = $handler->generatePartialFacet($facet, $clone, $criteria, $context);
             } else {
-                trigger_error(sprintf("Facet handler %s doesn't support new filter mode. FacetHandlerInterface is deprecated since version 5.3 and will be removed in 6.0.", get_class($handler)), E_USER_DEPRECATED);
+                trigger_error(sprintf("Facet handler %s doesn't support new filter mode. FacetHandlerInterface is deprecated since version 5.3 and will be removed in 5.8.", get_class($handler)), E_USER_DEPRECATED);
                 $result = $handler->generateFacet($facet, $criteria, $context);
             }
 

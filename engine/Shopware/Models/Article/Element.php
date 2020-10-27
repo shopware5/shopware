@@ -28,7 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * @deprecated since 5.2 will be removed in 6.0, use \Shopware\Models\Attribute\Configuration instead
+ * @deprecated since 5.2 will be removed in 5.8, use \Shopware\Models\Attribute\Configuration instead
  *
  * @ORM\Table(name="s_core_engine_elements")
  * @ORM\Entity()
