@@ -817,7 +817,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
              */
             if ($mapping['type'] === ClassMetadataInfo::ONE_TO_ONE) {
                 $mappingData = $data[$mapping['fieldName']];
-                if (array_key_exists(0, $mappingData)) {
+                if (is_array($mappingData) && array_key_exists(0, $mappingData)) {
                     $data[$mapping['fieldName']] = $data[$mapping['fieldName']][0];
                 }
             }
