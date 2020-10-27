@@ -23,7 +23,7 @@
 function smarty_modifier_count($value)
 {
     // PHP version is below 8.0.0, use default behavior
-    if (PHP_VERSION_ID < 80000) {
+    if (\PHP_VERSION_ID < 80000) {
         return count($value);
     }
 
