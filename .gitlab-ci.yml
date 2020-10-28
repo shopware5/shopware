@@ -139,11 +139,11 @@ MariaDB 10.1:
         -   name: mariadb:10.1
             alias: mysql
 
-MariaDB 10.4:
+MariaDB 10.5:
     extends: .phpunit_base
     stage: Unit
     services:
-        -   name: mariadb:10.4
+        -   name: mariadb:10.5
             alias: mysql
 
 # stage: Elasticsearch
