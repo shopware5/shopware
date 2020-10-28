@@ -239,6 +239,9 @@
                 if ($.getCookie('cookiePreferences') && !this.hasPreferencesHashChanged()) {
                     callback(false);
                     return;
+                } else {
+                    callback(true);
+                    return;
                 }
             }
 
