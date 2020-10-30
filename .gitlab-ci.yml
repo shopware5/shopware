@@ -17,7 +17,7 @@ stages:
     - Security
 
 default:
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.3
     before_script:
         - sed -i -e "s;__ROOT__;$CI_PROJECT_DIR;g" /etc/nginx/sites-enabled/shopware.conf
         - cat /etc/nginx/sites-enabled/shopware.conf
@@ -97,7 +97,7 @@ Code Coverage:
 
 PHP 7.2:
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.2
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.2
     stage: Unit
     services:
         -   name: mysql:5.7
@@ -105,7 +105,7 @@ PHP 7.2:
 
 PHP 7.3:
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.3
     stage: Unit
     services:
         -   name: mysql:5.7
@@ -113,7 +113,7 @@ PHP 7.3:
 
 PHP 7.4:
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.4
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.4
     stage: Unit
     services:
         -   name: mysql:5.7
@@ -151,7 +151,7 @@ MariaDB 10.4:
 # stage: Elasticsearch
 Elasticsearch 6:
     extends: .phpunit_es_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.2
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.2
     stage: Elasticsearch
     services:
         -   name: mysql:8.0
@@ -163,7 +163,7 @@ Elasticsearch 6:
 
 Elasticsearch 7:
     extends: .phpunit_es_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.3
     stage: Elasticsearch
     services:
         -   name: mysql:8.0
@@ -175,7 +175,7 @@ Elasticsearch 7:
 
 Mink:
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.3
     stage: E2E
     artifacts:
         when: always
