@@ -400,7 +400,8 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                                 id: 'iframe-win',  // Add id
                                 autoEl: {
                                     tag: 'iframe',
-                                    src: url
+                                    src: url,
+                                    sandbox: '1'
                                 }
                             }]
                         }).show();
