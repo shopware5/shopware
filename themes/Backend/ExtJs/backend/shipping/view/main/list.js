@@ -244,7 +244,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      */
     multishopIdColumn : function(value, obj, record) {
         var me = this,
-            shop = me.shopStore.findRecord('id', record.get('multiShopId'));
+            shop = me.shopStore.findRecord('id', record.get('multiShopId'),0,false,false,true);
 
         // if we have an empty or a zero value show default empty text
         if (null === record.get('multiShopId') || 0 === record.get('multiShopId')) {
