@@ -3895,7 +3895,7 @@ SQL;
     private function subscribeNewsletter(string $email, int $groupID): array
     {
         $result = $this->db->fetchAll(
-            'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
+            'SELECT * FROM s_campaigns_mailaddresses WHERE email = "?"',
             [$email]
         );
         $isEmailExists = count($result) === 0;

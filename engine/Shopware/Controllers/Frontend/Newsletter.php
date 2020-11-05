@@ -63,7 +63,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         $config = $this->container->get(\Shopware_Components_Config::class);
         $noCaptchaAfterLogin = $config->get('noCaptchaAfterLogin');
         // redirect user if captcha is active and request is sent from the footer
-        if ($config->get('newsletterCaptcha') !== 'noCaptcha'
+        if (strtolower($config->get('newsletterCaptcha')) !== 'nocaptcha'
             && $this->Request()->getPost('redirect') !== null
             && !($noCaptchaAfterLogin && Shopware()->Modules()->Admin()->sCheckUser())) {
             return;
