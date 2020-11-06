@@ -401,7 +401,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                                 autoEl: {
                                     tag: 'iframe',
                                     src: url,
-                                    sandbox: '1'
+                                    sandbox: ''
                                 }
                             }]
                         }).show();
