@@ -30,7 +30,7 @@ use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @deprecated Since 5.3, will be removed in 6.0. This is a legacy layer which supports a deprecated event. Implement a ComponentHandler instead for performance benefit
+ * @deprecated Since 5.3, will be removed in 5.8. This is a legacy layer which supports a deprecated event. Implement a ComponentHandler instead for performance benefit
  */
 class EventComponentHandler implements ComponentHandlerInterface
 {
