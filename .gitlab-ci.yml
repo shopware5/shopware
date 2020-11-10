@@ -111,7 +111,6 @@ PHP 7.4:
 PHP 8.0:
     extends: .phpunit_base
     image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.0
-    allow_failure: true
     stage: Unit
     services:
         -   name: mysql:5.7

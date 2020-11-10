@@ -435,7 +435,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertCount(2, $article['related']);
 
         // Similar should be removed
-        static::assertEquals(0, count($article['similar']));
+        static::assertCount(0, $article['similar'] ?? []);
     }
 
     /**

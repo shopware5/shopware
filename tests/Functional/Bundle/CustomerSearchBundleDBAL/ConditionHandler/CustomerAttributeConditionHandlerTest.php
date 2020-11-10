@@ -34,9 +34,9 @@ class CustomerAttributeConditionHandlerTest extends TestCase
 {
     protected function setUp(): void
     {
-        parent::setUp();
         $service = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class);
         $service->update('s_user_attributes', 'test', 'integer');
+        parent::setUp();
     }
 
     protected function tearDown(): void
