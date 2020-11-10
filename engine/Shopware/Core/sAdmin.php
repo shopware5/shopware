@@ -267,7 +267,7 @@ class sAdmin implements \Enlight_Hook
         $sEsd = $this->moduleManager->Basket()->sCheckForESD();
         $isMobile = $this->front->Request()->getDeviceType() === 'mobile';
 
-        if (!count($user)) {
+        if (!is_array($user)) {
             $user = [];
         }
 

@@ -27,12 +27,9 @@ namespace Shopware\Tests\Functional\Bundle\AttributeBundle;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
-use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class SchemaOperatorTest extends TestCase
 {
-    use DatabaseTransactionBehaviour;
-
     public function testDefaultValues(): void
     {
         $types = [
