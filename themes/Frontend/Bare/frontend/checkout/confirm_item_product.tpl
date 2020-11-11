@@ -13,7 +13,13 @@
             </div>
         {/block}
 
-        {if $sUserData.additional.charge_vat}{$sBasketItem.tax|currency}{else}&nbsp;{/if}
+        {if $sUserData.additional.charge_vat && !$sUserData.additional.show_net}
+            {$sBasketItem.price|currency}
+        {elseif $sUserData.additional.charge_vat}
+            {$sBasketItem.tax|currency}
+        {else}
+            &nbsp;
+        {/if}
     </div>
 {/block}
 
