@@ -180,7 +180,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
     public function afterInit()
     {
-        $this->get('loader')->registerNamespace('ShopwarePlugins\\HttpCache', __DIR__);
+        $this->get('loader')->registerNamespace('ShopwarePlugins\\HttpCache', __DIR__ . DIRECTORY_SEPARATOR);
         parent::afterInit();
     }
 
