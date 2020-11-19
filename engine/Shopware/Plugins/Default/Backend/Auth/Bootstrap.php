@@ -365,6 +365,19 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function onInitResourceBackendSession(Enlight_Event_EventArgs $args)
     {
+        // If another session is already started, save and close it before starting the backend session below.
+        // We need to do this, because the other session would use the session id of the backend session and thus write
+        // its data into the wrong session.
+        Enlight_Components_Session_Namespace::ensureFrontendSessionClosed(Shopware()->Container());
+        // Ensure no session is active before starting the backend session below. We need to do this because there could
+        // be another session with inconsistent/invalid state in the container.
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_write_close();
+            // The empty session id signals to `Enlight_Components_Session_Namespace::start()` that the session cookie
+            // should be used as session id.
+            session_id('');
+        }
+
         $sessionOptions = $this->getSessionOptions();
         $saveHandler = $this->createSaveHandler(Shopware()->Container());
         $storage = new NativeSessionStorage($sessionOptions);

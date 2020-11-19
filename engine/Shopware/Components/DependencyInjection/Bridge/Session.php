@@ -67,6 +67,19 @@ class Session
      */
     public function createSession(Container $container, \SessionHandlerInterface $saveHandler = null)
     {
+        // If another session is already started, save and close it before starting the frontend session below.
+        // We need to do this, because the other session would use the session id of the frontend session and thus write
+        // its data into the wrong session.
+        \Enlight_Components_Session_Namespace::ensureBackendSessionClosed($container);
+        // Ensure no session is active before starting the frontend session below. We need to do this because there
+        // could be another session with inconsistent/invalid state in the container.
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_write_close();
+            // The empty session id signals to `Enlight_Components_Session_Namespace::start()` that the session cookie
+            // should be used as session id.
+            session_id('');
+        }
+
         $sessionOptions = $container->getParameter('shopware.session');
 
         /** @var \Shopware\Models\Shop\Shop $shop */
