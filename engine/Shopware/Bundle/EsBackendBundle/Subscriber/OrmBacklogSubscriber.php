@@ -76,6 +76,42 @@ class OrmBacklogSubscriber implements EventSubscriber
         }
     }
 
+    private function trace(OnFlushEventArgs $eventArgs): void
+    {
+        /** @var ModelManager $em */
+        $em = $eventArgs->getEntityManager();
+        $uow = $em->getUnitOfWork();
+
+        $queue = [];
+        // Entity deletions
+        foreach ($uow->getScheduledEntityDeletions() as $entity) {
+            $backlog = $this->getBacklog($entity);
+            if (!$backlog) {
+                continue;
+            }
+            $queue[$this->getBacklogKey($backlog)] = $backlog;
+        }
+
+        // Entity Insertions
+        foreach ($uow->getScheduledEntityInsertions() as $entity) {
+            $backlog = $this->getBacklog($entity);
+            if ($backlog && $backlog->toArray()['entity_id']) {
+                $queue[$this->getBacklogKey($backlog)] = $backlog;
+            }
+        }
+
+        // Entity updates
+        foreach ($uow->getScheduledEntityUpdates() as $entity) {
+            $backlog = $this->getBacklog($entity);
+            if (!$backlog) {
+                continue;
+            }
+            $queue[$this->getBacklogKey($backlog)] = $backlog;
+        }
+
+        $this->container->get('shopware_bundle_es_backend.backlog_service')->write(array_values($queue));
+    }
+
     private function getBacklog(object $entity): ?Backlog
     {
         switch (true) {
@@ -112,42 +148,5 @@ class OrmBacklogSubscriber implements EventSubscriber
     private function getBacklogKey(Backlog $backlog): string
     {
         return $backlog->entity . '_' . $backlog->entity_id;
-    }
-
-    private function trace(OnFlushEventArgs $eventArgs): void
-    {
-        /** @var ModelManager $em */
-        $em = $eventArgs->getEntityManager();
-        $uow = $em->getUnitOfWork();
-
-        $queue = [];
-        // Entity deletions
-        foreach ($uow->getScheduledEntityDeletions() as $entity) {
-            $backlog = $this->getBacklog($entity);
-            if (!$backlog) {
-                continue;
-            }
-            $queue[$this->getBacklogKey($backlog)] = $backlog;
-        }
-
-        // Entity Insertions
-        foreach ($uow->getScheduledEntityInsertions() as $entity) {
-            $backlog = $this->getBacklog($entity);
-            if (!$backlog || $backlog->entity_id === null) {
-                continue;
-            }
-            $queue[$this->getBacklogKey($backlog)] = $backlog;
-        }
-
-        // Entity updates
-        foreach ($uow->getScheduledEntityUpdates() as $entity) {
-            $backlog = $this->getBacklog($entity);
-            if (!$backlog) {
-                continue;
-            }
-            $queue[$this->getBacklogKey($backlog)] = $backlog;
-        }
-
-        $this->container->get('shopware_bundle_es_backend.backlog_service')->write(array_values($queue));
     }
 }
