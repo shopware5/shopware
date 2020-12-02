@@ -2,6 +2,8 @@
 
 {block name="frontend_index_header"}
     {$toAccount = ($sTarget == "account" || $sTarget == "address")}
+    {$toCheckout = $sTarget == "checkout"}
+
     {$smarty.block.parent}
 {/block}
 
@@ -14,7 +16,7 @@
 {block name='frontend_index_logo_trusted_shops'}
     {$smarty.block.parent}
     {block name='frontend_register_index_back_to_shop_button'}
-        {if $theme.checkoutHeader && !$toAccount}
+        {if $theme.checkoutHeader || $toCheckout}
             {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish" assign="snippetFinishButtonBackToShop"}{/s}
             <a href="{url controller='index'}"
                class="btn is--small btn--back-top-shop is--icon-left"
@@ -28,39 +30,39 @@
 
 {* Hide breadcrumb *}
 {block name='frontend_index_breadcrumb'}
-    {if $toAccount}
+    {if !$toCheckout}
         {$smarty.block.parent}
     {/if}
 {/block}
 
 {* Hide shop navigation *}
 {block name='frontend_index_shop_navigation'}
-    {if !$theme.checkoutHeader || $toAccount}
+    {if !$theme.checkoutHeader && !$toCheckout}
         {$smarty.block.parent}
     {/if}
 {/block}
 
 {* Step box *}
 {block name='frontend_index_navigation_categories_top'}
-    {if $toAccount}
-        {$smarty.block.parent}
-    {else}
+    {if $toCheckout}
         {if !$theme.checkoutHeader}
             {$smarty.block.parent}
         {/if}
         {include file="frontend/register/steps.tpl" sStepActive="address"}
+    {else}
+        {$smarty.block.parent}
     {/if}
 {/block}
 
 {* Hide top bar *}
 {block name='frontend_index_top_bar_container'}
-    {if !$theme.checkoutHeader || $toAccount}
+    {if !$theme.checkoutHeader && !$toCheckout}
         {$smarty.block.parent}
     {/if}
 {/block}
 
 {block name="frontend_index_logo_supportinfo"}
-    {if !$toAccount}
+    {if $toCheckout}
         {$smarty.block.parent}
     {/if}
 {/block}
@@ -72,7 +74,7 @@
 
 {* Footer *}
 {block name="frontend_index_footer"}
-    {if !$theme.checkoutFooter || $toAccount}
+    {if !$theme.checkoutFooter && !$toCheckout}
         {$smarty.block.parent}
     {else}
         {block name="frontend_index_register_footer"}
