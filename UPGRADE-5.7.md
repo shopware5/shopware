@@ -82,6 +82,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed `\Shopware_Controllers_Backend_ProductStream::loadPreviewAction` to return formatted prices
 * Changed `sw:plugin:activate` exit code from 1 to 0, when it's already installed.
 * Changed `\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryGateway::get` it accepts now only integers as id
+* Changed `sw:es:index:populate` to accept multiple shop ids with `--shopId={1,2}`
 
 ### Removals
 
