@@ -947,6 +947,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
             if (!empty($shopIds)) {
                 foreach ($shopIds as $shopId) {
+                    $row['orderCount' . $shopId] = (int) $row['orderCount' . $shopId];
                     $row['turnover' . $shopId] = (float) $row['turnover' . $shopId];
                 }
             }
