@@ -358,7 +358,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $data = Shopware()->Container()->get('db')->fetchAll($sql, [$timeBack]);
 
-        $result[] = [];
+        $result = [];
         foreach ($data as $row) {
             $result[] = [
                 'timestamp' => strtotime($row['date']),
