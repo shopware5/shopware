@@ -351,43 +351,49 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
     createColumns: function () {
         var me = this;
 
-        return {
-            items: [
-                {
-                    dataIndex: 'name',
-                    align: 'left',
-                    renderer: function (value) {
-                        return value;
-                    }
-                },
-                {
-                    header: me.snippets.headers.turnover,
-                    dataIndex: 'turnover',
-                    renderer: function (value) {
-                        return Ext.util.Format.currency(value);
-                    }
-                },
-                {
-                    header: me.snippets.headers.orders,
-                    dataIndex: 'orders'
-                },
-                {
-                    header: me.snippets.headers.new_customers,
-                    dataIndex: 'newCustomers'
-                },
-                {
-                    header: me.snippets.headers.visitors,
-                    dataIndex: 'visitors'
-                }
-            ],
-            defaults: {
-                flex: 1,
+        return [
+            {
+                dataIndex: 'name',
+                align: 'left',
+                flex: 1
+            },
+            {
+                header: me.snippets.headers.turnover,
+                dataIndex: 'turnover',
                 align: 'right',
+                flex: 1,
+                renderer: function (value) {
+                    return Ext.util.Format.currency(value);
+                }
+            },
+            {
+                header: me.snippets.headers.orders,
+                align: 'right',
+                dataIndex: 'orders',
+                flex: 1,
+                renderer: function (value) {
+                    return Ext.util.Format.number(value, '0,000');
+                }
+            },
+            {
+                header: me.snippets.headers.new_customers,
+                align: 'right',
+                dataIndex: 'newCustomers',
+                flex: 1,
+                renderer: function (value) {
+                    return Ext.util.Format.number(value, '0,000');
+                }
+            },
+            {
+                header: me.snippets.headers.visitors,
+                align: 'right',
+                dataIndex: 'visitors',
+                flex: 1,
                 renderer: function (value) {
                     return Ext.util.Format.number(value, '0,000');
                 }
             }
-        };
+        ];
     }
 });
 //{/block}
