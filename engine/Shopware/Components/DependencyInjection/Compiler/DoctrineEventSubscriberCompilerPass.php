@@ -43,6 +43,8 @@ class DoctrineEventSubscriberCompilerPass implements CompilerPassInterface
         );
 
         foreach ($taggedServices as $id => $attributes) {
+            $container->getDefinition($id)->setPublic(true);
+
             $definition->addMethodCall(
                 'addEventSubscriber',
                 [new Reference($id)]
