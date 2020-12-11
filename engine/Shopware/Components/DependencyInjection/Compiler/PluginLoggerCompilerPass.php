@@ -94,6 +94,7 @@ class PluginLoggerCompilerPass implements CompilerPassInterface
         return (new Definition(Logger::class, [$servicePrefix]))
             ->addMethodCall('pushHandler', [new Reference($this->getServiceIdLoggerHandler($servicePrefix))])
             ->addMethodCall('pushProcessor', [new Reference($this->getServiceIdLoggerFormatter($servicePrefix))])
+            ->setPublic(true)
         ;
     }
 

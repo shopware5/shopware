@@ -222,6 +222,7 @@ abstract class Plugin extends Bundle implements SubscriberInterface
                 'plugins/' . $this->getContainerPrefix(),
             ]
         );
+        $filesystem->setPublic(true);
 
         $container->setDefinition($serviceId, $filesystem);
     }

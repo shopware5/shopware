@@ -24,6 +24,7 @@
 
     <services>
         <defaults public="true" />
+        <service id="kernel"          synthetic="true" />
         <service id="application"     synthetic="true" />
         <service id="passwordencoder" synthetic="true" />
         <service id="db_connection"   synthetic="true" />
