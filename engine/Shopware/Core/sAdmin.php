@@ -3110,7 +3110,7 @@ class sAdmin implements \Enlight_Hook
         } elseif ($dispatch['calculation'] == 2) {
             $from = round($basket['count_article']);
         } elseif ($dispatch['calculation'] == 3) {
-            $from = round($basket['calculation_value_' . $dispatch['id']], 2);
+            $from = round((float) $basket['calculation_value_' . $dispatch['id']], 2);
         } else {
             return false;
         }
