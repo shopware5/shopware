@@ -73,9 +73,9 @@ class Shopware_Components_Acl extends Zend_Acl
         $repository = $this->em->getRepository(Role::class);
         $roles = $repository->findAll();
 
-        /** @var \Shopware\Models\User\Role $role */
+        /** @var Role $role */
         foreach ($roles as $role) {
-            /** @var \Shopware\Models\User\Role|null $parent */
+            /** @var Role|null $parent */
             $parent = $role->getParent();
 
             // Parent exist and not already added?
@@ -104,7 +104,7 @@ class Shopware_Components_Acl extends Zend_Acl
     {
         $rules = $this->em->getRepository(Rule::class)->findAll();
 
-        /** @var \Shopware\Models\User\Rule $rule */
+        /** @var Rule $rule */
         foreach ($rules as $rule) {
             $role = $rule->getRole();
 
@@ -144,12 +144,14 @@ class Shopware_Components_Acl extends Zend_Acl
      * @param string     $resourceName - unique identifier or resource key
      * @param array|null $privileges   - optionally array [a,b,c] of new privileges
      * @param null       $menuItemName - optionally s_core_menu.name item to link to this resource
-     * @param null       $pluginID     - optionally pluginID that implements this resource
-     *
-     * @throws Enlight_Exception
+     * @param int|null   $pluginID     - optionally pluginID that implements this resource
      */
-    public function createResource($resourceName, array $privileges = null, $menuItemName = null, $pluginID = null)
-    {
+    public function createResource(
+        $resourceName,
+        array $privileges = null,
+        /* @noinspection PhpUnusedParameterInspection */ $menuItemName = null,
+        $pluginID = null
+    ){
         // Check if resource already exists
         if ($this->hasResourceInDatabase($resourceName)) {
             throw new Enlight_Exception(sprintf('Resource "%s" already exists', $resourceName));
@@ -206,7 +208,7 @@ class Shopware_Components_Acl extends Zend_Acl
     {
         $repository = $this->em->getRepository(Resource::class);
 
-        /** @var \Shopware\Models\User\Resource|null $resource */
+        /** @var Resource|null $resource */
         $resource = $repository->findOneBy(['name' => $resourceName]);
         if ($resource === null) {
             return false;
