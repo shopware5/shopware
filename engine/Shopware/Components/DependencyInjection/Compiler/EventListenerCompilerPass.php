@@ -39,11 +39,6 @@ class EventListenerCompilerPass implements CompilerPassInterface
 
         foreach ($container->findTaggedServiceIds('shopware.event_listener') as $id => $events) {
             $def = $container->getDefinition($id);
-            if (!$def->isPublic()) {
-                throw new \InvalidArgumentException(sprintf('The service "%s" must be public as event listeners are lazy-loaded.', $id));
-            }
-
-            // isPublic default value is true when no public is specified. This should be fixed in Symfony
             $def->setPublic(true);
 
             if ($def->isAbstract()) {
