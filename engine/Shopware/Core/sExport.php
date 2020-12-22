@@ -908,7 +908,7 @@ class sExport implements \Enlight_Hook
                 IF(a.changetime!='0000-00-00 00:00:00',a.changetime,'') as `changed`,
                 IF(a.datum!='0000-00-00',a.datum,'') as `added`,
                 IF(d.releasedate!='0000-00-00',d.releasedate,'') as `releasedate`,
-                a.active as active,
+                IF(v.active IS NOT NULL,IF(a.active=0,0,v.active),a.active) as active,
 
                 d.id as `articledetailsID`,
                 IF(v.ordernumber IS NOT NULL,v.ordernumber,d.ordernumber) as ordernumber,
@@ -924,7 +924,6 @@ class sExport implements \Enlight_Hook
                 COALESCE(sai.impressions, 0) as impressions,
                 d.sales,
 
-                IF(v.active IS NOT NULL,IF(a.active=0,0,v.active),a.active) as active,
                 IF(v.instock IS NOT NULL,v.instock,d.instock) as instock,
                 (
                    SELECT AVG(av.points)
