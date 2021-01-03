@@ -198,11 +198,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             $this->checkFields();
         }
 
+        $orderNumber = $this->Request()->getParam('sOrdernumber');
+
         if (empty($this->Request()->Submit) || count($this->_errors)) {
             foreach ($this->_elements as $id => $element) {
                 if ($element['name'] === 'sordernumber') {
-                    $orderNumber = $this->Request()->getParam('sOrdernumber');
-
                     try {
                         $this->get(\Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface::class)
                             ->validate($orderNumber);
@@ -239,10 +239,10 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                             break;
 
                         case 'detail':
-                            if ($this->Request()->getParam('sOrdernumber') !== null) {
-                                $getName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($this->Request()->getParam('sOrdernumber'));
+                            if ($orderNumber !== null) {
+                                $getName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
                                 $text = Shopware()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextArticle');
-                                $text .= ' ' . $getName;
+                                $text .= ' ' . $getName . ' (' . htmlentities($orderNumber, ENT_QUOTES | ENT_HTML5) . ')';
                                 $this->_elements[$id]['value'] = $text;
                                 $element['value'] = $text;
                             }
