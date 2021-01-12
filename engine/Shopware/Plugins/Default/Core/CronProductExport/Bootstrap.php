@@ -48,6 +48,8 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
     public function onRun(Enlight_Components_Cron_EventArgs $job)
     {
         $this->exportProductFiles();
+
+        return sprintf('%s succeeded.', $job->getName());
     }
 
     /**
