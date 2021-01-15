@@ -21,6 +21,7 @@
         "ext-curl": "*",
         "ext-date": "*",
         "ext-dom": "*",
+        "ext-filter": "*",
         "ext-gd": "*",
         "ext-hash": "*",
         "ext-iconv": "*",
