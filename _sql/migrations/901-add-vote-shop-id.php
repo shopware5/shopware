@@ -20,7 +20,7 @@ EOD;
 
         $sql = <<<'EOD'
         SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'displayOnlySubShopVotes' LIMIT 1);
-        INSERT INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`) VALUES (@elementId, 2, 'Display shop specific votes only', NULL);
+        INSERT INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`) VALUES (@elementId, 2, 'Display shop specific votes only');
 EOD;
 
         $this->addSql($sql);
