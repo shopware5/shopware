@@ -16,7 +16,7 @@ class Migrations_Migration220 Extends Shopware\Components\Migrations\AbstractMig
                  HAVING COUNT(1) > 1
         ) as t);
 
-        ALTER IGNORE TABLE `s_core_payment_data` ADD UNIQUE (
+        ALTER TABLE `s_core_payment_data` ADD UNIQUE (
             `payment_mean_id` ,
             `user_id`
         );

@@ -44,7 +44,7 @@ EOD;
         $sql = <<<'EOD'
 SET @elementId = LAST_INSERT_ID();
 INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`)
-VALUES (@elementId, 2, 'Default href-lang', 'The selected shop will be shown as "x-default" in the href-lang tag, therefore using this shop's language as default.);
+VALUES (@elementId, 2, 'Default href-lang', 'The selected shop will be shown as "x-default" in the href-lang tag, therefore using this shop\'s language as default.');
 EOD;
         $this->addSql($sql);
     }

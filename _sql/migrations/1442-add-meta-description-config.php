@@ -36,7 +36,7 @@ EOD;
 
         $sql = <<<'EOD'
 SET @elementId = LAST_INSERT_ID();
-INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`)
+INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`)
 VALUES (@elementId, 2, 'Maximum allowed length of the meta description');
 EOD;
         $this->addSql($sql);

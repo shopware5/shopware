@@ -11,7 +11,6 @@ class Migrations_Migration388 Extends Shopware\Components\Migrations\AbstractMig
         $this->addSql("
             INSERT INTO `s_library_component_field` (`componentID`, `name`, `x_type`, `value_type`, `field_label`, `support_text`, `help_title`, `help_text`, `store`, `display_field`, `value_field`, `default_value`, `allow_blank`, `position`) VALUES
             (@parent, 'article_slider_category', 'emotion-components-fields-category-selection', '', '', '', '', '', '', '', '', '', 1, @maxNumberPosition);
-EOD;
         ");
     }
 }
