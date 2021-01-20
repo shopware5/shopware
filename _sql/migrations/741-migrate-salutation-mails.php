@@ -58,13 +58,6 @@ EOD;
 
 
         $sql = <<<'EOD'
-        SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'displayprofiletitle' LIMIT 1);
-        INSERT INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`) VALUES (@elementId, 2, 'Display title field');
-EOD;
-        $this->addSql($sql);
-
-
-        $sql = <<<'EOD'
 DELETE FROM `s_core_config_mails` WHERE dirty = 0 AND `name` IN (
     'sORDERSTATEMAIL11',
     'sORDERSTATEMAIL1',
