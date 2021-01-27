@@ -1345,6 +1345,7 @@ class sAdmin implements \Enlight_Hook
         );
         $foundOrdersCount = (int) Shopware()->Db()->fetchOne('SELECT FOUND_ROWS()');
 
+        $orderKeysToRemove = [];
         foreach ($orders as $orderKey => $orderValue) {
             $orders[$orderKey]['invoice_amount'] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderValue['invoice_amount']);
@@ -1353,8 +1354,17 @@ class sAdmin implements \Enlight_Hook
             $orders[$orderKey]['invoice_shipping'] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderValue['invoice_shipping']);
 
-            $orders = $this->processOpenOrderDetails($orderValue, $orders, $orderKey);
+            $ret = $this->processOpenOrderDetails($orderValue, $orders, $orderKey);
+            if ($ret) {
+                $orders = $ret;
+            } else {
+                $orderKeysToRemove[] = $orderKey;
+            }
             $orders[$orderKey]['dispatch'] = $this->sGetPremiumDispatch($orderValue['dispatchID']);
+        }
+
+        foreach ($orderKeysToRemove as $orderKeyToRemove) {
+            unset($orders[$orderKeyToRemove]);
         }
 
         $orders = $this->eventManager->filter(
@@ -3669,7 +3679,7 @@ SQL;
      *
      * @param string $orderKey
      *
-     * @return array
+     * @return array|false
      */
     private function processOpenOrderDetails(array $orderValue, array $orders, $orderKey)
     {
@@ -3680,9 +3690,7 @@ SQL;
         );
 
         if (!count($orderDetails)) {
-            unset($orders[$orderKey]);
-
-            return $orders;
+            return false;
         }
 
         $context = $this->contextService->getShopContext();
