@@ -86,7 +86,7 @@ class AttributeSubscriber implements SubscriberInterface
                 $response->sendResponse();
                 exit();
             }
-            die(sprintf("Failed to create the attribute models, please check the permissions of the '%s' directory", $generator->getPath()));
+            exit(sprintf("Failed to create the attribute models, please check the permissions of the '%s' directory", $generator->getPath()));
         }
     }
 

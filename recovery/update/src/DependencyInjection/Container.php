@@ -50,13 +50,13 @@ class Container extends BaseContainer
 
         $me = $this;
 
-        $container['shopware.version'] = function () use ($me) {
+        $container['shopware.version'] = function () {
             $version = trim(file_get_contents(UPDATE_ASSET_PATH . DIRECTORY_SEPARATOR . 'version'));
 
             return $version;
         };
 
-        $container['db'] = function () use ($me) {
+        $container['db'] = function () {
             $conn = Utils::getConnection(SW_PATH);
 
             return $conn;
@@ -69,7 +69,7 @@ class Container extends BaseContainer
             return new FilesystemFactory(SW_PATH, $ftp);
         };
 
-        $container['path.builder'] = function () use ($me, $backupDir) {
+        $container['path.builder'] = function () use ($backupDir) {
             $baseDir = SW_PATH;
             $updateDir = UPDATE_FILES_PATH;
 
@@ -85,7 +85,7 @@ class Container extends BaseContainer
             return $migrationManger;
         };
 
-        $container['dump'] = function () use ($me) {
+        $container['dump'] = function () {
             $snippetsSql = UPDATE_ASSET_PATH . DIRECTORY_SEPARATOR . 'snippets.sql';
             $snippetsSql = file_exists($snippetsSql) ? $snippetsSql : null;
 

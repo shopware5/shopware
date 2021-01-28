@@ -191,7 +191,7 @@ class Utils
         if (file_exists($shopPath . '/config.php')) {
             $config = require $shopPath . '/config.php';
         } else {
-            die('Could not find shopware config');
+            exit('Could not find shopware config');
         }
 
         $dbConfig = $config['db'];

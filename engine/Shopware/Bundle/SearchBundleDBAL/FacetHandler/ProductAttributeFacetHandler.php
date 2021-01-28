@@ -375,22 +375,16 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
     {
         switch (true) {
             case $type === TypeMappingInterface::TYPE_DATE && $mode === ProductAttributeFacet::MODE_RANGE_RESULT:
-
                 return 'frontend/listing/filter/facet-date-range.tpl';
             case $type === TypeMappingInterface::TYPE_DATE && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
-
                 return 'frontend/listing/filter/facet-date-multi.tpl';
             case $type === TypeMappingInterface::TYPE_DATE && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT:
-
                 return 'frontend/listing/filter/facet-date.tpl';
             case $type === TypeMappingInterface::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_RANGE_RESULT:
-
                 return 'frontend/listing/filter/facet-datetime-range.tpl';
             case $type === TypeMappingInterface::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
-
                 return 'frontend/listing/filter/facet-datetime-multi.tpl';
             case $type === TypeMappingInterface::TYPE_DATETIME && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT:
-
                 return 'frontend/listing/filter/facet-datetime.tpl';
             default:
                 return $defaultTemplate;

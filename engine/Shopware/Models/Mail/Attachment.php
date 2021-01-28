@@ -25,6 +25,8 @@
 namespace Shopware\Models\Mail;
 
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\Media\Media;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware attachment model represents a single attachment
@@ -51,7 +53,7 @@ class Attachment extends File
     /**
      * The role property is the owning side of the association between attachment and shop.
      *
-     * @var \Shopware\Models\Shop\Shop|null
+     * @var Shop|null
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shopID", referencedColumnName="id", nullable=true)
@@ -62,14 +64,14 @@ class Attachment extends File
      * Bidirectional
      * The role property is the owning side of the association between attachment and mail.
      *
-     * @var \Shopware\Models\Mail\Mail
+     * @var Mail
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Mail\Mail", inversedBy="attachments")
      * @ORM\JoinColumn(name="mailID", referencedColumnName="id")
      */
     protected $mail;
 
-    public function __construct(\Shopware\Models\Mail\Mail $mail, \Shopware\Models\Media\Media $media, \Shopware\Models\Shop\Shop $shop = null)
+    public function __construct(Mail $mail, Media $media, Shop $shop = null)
     {
         $this->mail = $mail;
         $this->media = $media;
@@ -77,7 +79,7 @@ class Attachment extends File
     }
 
     /**
-     * @return \Shopware\Models\Mail\Mail
+     * @return Mail
      */
     public function getMail()
     {
@@ -85,7 +87,7 @@ class Attachment extends File
     }
 
     /**
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function getMedia()
     {
@@ -93,7 +95,7 @@ class Attachment extends File
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop|null
+     * @return Shop|null
      */
     public function getShop()
     {
@@ -112,7 +114,7 @@ class Attachment extends File
         return null;
     }
 
-    public function setShop(\Shopware\Models\Shop\Shop $shop = null)
+    public function setShop(Shop $shop = null)
     {
         $this->shop = $shop;
     }

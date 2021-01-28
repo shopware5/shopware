@@ -88,11 +88,9 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
      * This method registers shopware's generic payment method handler
      * and the debit payment method handler
      *
-     * @param Enlight_Event_EventArgs $args
-     *
      * @return array
      */
-    public function addPaymentClass(\Enlight_Event_EventArgs $args)
+    public function addPaymentClass(Enlight_Event_EventArgs $args)
     {
         $dirs = $args->getReturn();
 

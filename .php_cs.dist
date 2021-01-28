@@ -2,7 +2,6 @@
 
 use PhpCsFixer\Config;
 use PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer;
-use PhpCsFixerCustomFixers\Fixer\OperatorLinebreakFixer;
 use PhpCsFixerCustomFixers\Fixer\PhpdocParamTypeFixer;
 use PhpCsFixerCustomFixers\Fixer\SingleSpaceAfterStatementFixer;
 use PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer;
@@ -15,6 +14,8 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/recovery')
     ->exclude('Plugins/Community')
     ->exclude('Plugins/Local')
+    ->exclude('install/templates')
+    ->exclude('update/templates')
     ->notPath('LegacyPhpDumper.php');
 
 $header = <<<EOF
@@ -40,7 +41,7 @@ trademark license. Therefore any rights, title and interest in
 our trademarks remain entirely with us.
 EOF;
 
-return Config::create()
+return (new Config())
     ->registerCustomFixers(new Fixers())
     ->setRiskyAllowed(true)
     ->setUsingCache(false)
@@ -70,12 +71,12 @@ return Config::create()
         'php_unit_test_case_static_method_calls' => true,
         'single_line_throw' => false,
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
+        'operator_linebreak' => ['only_booleans' => true],
 
         NoUselessCommentFixer::name() => true,
         SingleSpaceAfterStatementFixer::name() => true,
         SingleSpaceBeforeStatementFixer::name() => true,
         PhpdocParamTypeFixer::name() => true,
         NoSuperfluousConcatenationFixer::name() => true,
-        OperatorLinebreakFixer::name() => ['only_booleans' => true],
     ])
     ->setFinder($finder);

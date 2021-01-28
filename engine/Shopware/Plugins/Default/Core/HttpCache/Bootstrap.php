@@ -336,10 +336,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
     /**
      * Do http caching jobs
-     *
-     * @param Enlight_Controller_ActionEventArgs $args
      */
-    public function onPreDispatch(\Enlight_Controller_ActionEventArgs $args)
+    public function onPreDispatch(Enlight_Controller_ActionEventArgs $args)
     {
         $this->action = $args->getSubject();
         $this->request = $args->getRequest();
@@ -394,7 +392,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     /**
      * On post dispatch we try to find affected articleIds displayed during this request
      */
-    public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args)
+    public function onPostDispatch(Enlight_Controller_ActionEventArgs $args)
     {
         $view = $args->getSubject()->View();
         if (!$this->request->isDispatched()
@@ -431,11 +429,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      *
      * Clears the file-based http-cache storage directory
      *
-     * @param Shopware_Components_Cron_CronJob $job
-     *
      * @return string
      */
-    public function onClearHttpCache(\Shopware_Components_Cron_CronJob $job)
+    public function onClearHttpCache(Shopware_Components_Cron_CronJob $job)
     {
         if ($this->clearCache()) {
             return "Cleared HTTP-Cache\n";
@@ -452,7 +448,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * Shopware()->Events()->notify('Shopware_Plugins_HttpCache_ClearCache');
      * </code>
      */
-    public function onClearCache(\Enlight_Event_EventArgs $args)
+    public function onClearCache(Enlight_Event_EventArgs $args)
     {
         $result = $this->clearCache();
 
@@ -472,7 +468,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * );
      * </code>
      */
-    public function onInvalidateCacheId(\Enlight_Event_EventArgs $args)
+    public function onInvalidateCacheId(Enlight_Event_EventArgs $args)
     {
         $cacheId = $args->get('cacheId');
         if (!$cacheId) {

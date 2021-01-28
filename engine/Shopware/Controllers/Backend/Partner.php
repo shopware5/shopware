@@ -22,10 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Parameter;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Repository as CustomerRepository;
 use Shopware\Models\Partner\Partner;
+use Shopware\Models\Partner\Repository;
+use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -66,7 +73,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             // Order data
             $order = (array) $this->Request()->getParam('sort', []);
 
-            /** @var \Shopware\Models\Partner\Repository $repository */
+            /** @var Repository $repository */
             $repository = Shopware()->Models()->getRepository(Partner::class);
             $dataQuery = $repository->getListQuery($order, $offset, $limit);
 
@@ -95,7 +102,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             $fromDate = $this->getFromDate();
             $toDate = $this->getToDate();
 
-            /** @var \Shopware\Models\Partner\Repository $repository */
+            /** @var Repository $repository */
             $repository = Shopware()->Models()->getRepository(Partner::class);
             $dataQuery = $repository->getStatisticListQuery($order, $offset, $limit, $partnerId, false, $fromDate, $toDate);
 
@@ -128,7 +135,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         /** @var array $filter */
         $filter = $this->Request()->getParam('filter', []);
 
-        /** @var \Shopware\Models\Partner\Repository $repository */
+        /** @var Repository $repository */
         $repository = Shopware()->Models()->getRepository(Partner::class);
 
         $dataQuery = $repository->getDetailQuery($filter);
@@ -147,7 +154,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $fromDate = $this->getFromDate();
         $toDate = $this->getToDate();
 
-        /** @var \Shopware\Models\Partner\Repository $repository */
+        /** @var Repository $repository */
         $repository = Shopware()->Models()->getRepository(Partner::class);
 
         // Get the information of the partner chart
@@ -181,7 +188,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             Shopware()->Models()->persist($partnerModel);
             Shopware()->Models()->flush();
 
-            /** @var \Shopware\Models\Partner\Repository $repository */
+            /** @var Repository $repository */
             $repository = Shopware()->Models()->getRepository(Partner::class);
 
             $filter = [['property' => 'id', 'value' => $partnerModel->getId()]];
@@ -201,7 +208,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     {
         $mapCustomerAccountValue = $this->Request()->request->getInt('mapCustomerAccountValue');
 
-        /** @var \Shopware\Models\Customer\Repository $repository */
+        /** @var CustomerRepository $repository */
         $repository = $this->getModelManager()->getRepository(Customer::class);
         /** @var Customer|null $customer */
         $customer = $repository->find($mapCustomerAccountValue);
@@ -226,7 +233,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     public function deletePartnerAction()
     {
         try {
-            /** @var \Shopware\Models\Partner\Partner $model */
+            /** @var Partner $model */
             $model = Shopware()->Models()->getRepository(Partner::class)->find($this->Request()->id);
             Shopware()->Models()->remove($model);
             Shopware()->Models()->flush();
@@ -244,7 +251,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $trackingCode = $this->Request()->value;
         $partnerId = (int) $this->Request()->param;
 
-        /** @var \Shopware\Models\Partner\Repository $repository */
+        /** @var Repository $repository */
         $repository = Shopware()->Models()->getRepository(Partner::class);
         $foundPartner = $repository->getValidateTrackingCodeQuery($trackingCode, $partnerId);
         $foundPartnerArray = $foundPartner->getArrayResult();
@@ -259,7 +266,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $this->Front()->Plugins()->Json()->setRenderer(false);
         $partnerId = (int) $this->Request()->partnerId;
 
-        /** @var \Shopware\Models\Partner\Repository $repository */
+        /** @var Repository $repository */
         $repository = Shopware()->Models()->getRepository(Partner::class);
         $dataQuery = $repository->getStatisticListQuery(null, null, null, $partnerId, false, $this->getFromDate(), $this->getToDate());
         $resultArray = $dataQuery->getArrayResult();
@@ -293,11 +300,11 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveDefault();
 
-        if (!$shop instanceof \Shopware\Models\Shop\Shop) {
+        if (!$shop instanceof Shop) {
             throw new Exception('Invalid shop provided.');
         }
 
-        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        $this->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $url = $this->Front()->Router()->assemble(['module' => 'frontend', 'controller' => 'index']);
 
@@ -334,16 +341,14 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * Helper function returns total count of the passed query builder
-     *
-     * @return int|null
      */
-    private function getStatisticListTotalCount(\Doctrine\ORM\Query $dataQuery)
+    private function getStatisticListTotalCount(Query $dataQuery): ?int
     {
         //userCurrencyFactor has not to be part of the count parameters
         $originalParameters = $dataQuery->getParameters();
-        $countParameters = new \Doctrine\Common\Collections\ArrayCollection();
+        $countParameters = new ArrayCollection();
 
-        /** @var \Doctrine\ORM\Query\Parameter $parameter */
+        /** @var Parameter $parameter */
         foreach ($originalParameters as $parameter) {
             if ($parameter->getName() === 'userCurrencyFactor') {
                 continue;
@@ -361,17 +366,15 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * Helper to get the from date in the right format
-     *
-     * @return \DateTime
      */
-    private function getFromDate()
+    private function getFromDate(): DateTime
     {
         $fromDate = $this->Request()->getParam('fromDate');
         if (empty($fromDate)) {
-            $fromDate = new \DateTime();
+            $fromDate = new DateTime();
             $fromDate = $fromDate->sub(new DateInterval('P1Y'));
         } else {
-            $fromDate = new \DateTime($fromDate);
+            $fromDate = new DateTime($fromDate);
         }
 
         return $fromDate;
@@ -379,17 +382,15 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * helper to get the to date in the right format
-     *
-     * @return \DateTime
      */
-    private function getToDate()
+    private function getToDate(): DateTime
     {
         // If a to date passed, format it over the \DateTime object. Otherwise create a new date with today
         $toDate = $this->Request()->getParam('toDate');
         if (empty($toDate)) {
-            $toDate = new \DateTime();
+            $toDate = new DateTime();
         } else {
-            $toDate = new \DateTime($toDate);
+            $toDate = new DateTime($toDate);
         }
         // To get the right value cause 2012-02-02 is smaller than 2012-02-02 15:33:12
         return $toDate->add(new DateInterval('P1D'));

@@ -157,7 +157,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
      *
      * @return bool
      */
-    private function hasFreshStatistics(\DateTimeInterface $lastReceived)
+    private function hasFreshStatistics(DateTimeInterface $lastReceived)
     {
         $today = new \DateTime('now');
 
@@ -174,7 +174,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
      *
      * @return bool
      */
-    private function hasOutdatedStatistics(\DateTimeInterface $lastReceived)
+    private function hasOutdatedStatistics(DateTimeInterface $lastReceived)
     {
         $today = new \DateTime('now');
 

@@ -22,30 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Customer\Customer;
 use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 class sAdminTest extends PHPUnit\Framework\TestCase
 {
     /**
@@ -2470,7 +2449,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * Create dummy customer entity
      *
-     * @return \Shopware\Models\Customer\Customer
+     * @return Customer
      */
     private function createDummyCustomer()
     {
@@ -2541,7 +2520,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * Deletes all dummy customer entity
      */
-    private function deleteDummyCustomer(\Shopware\Models\Customer\Customer $customer)
+    private function deleteDummyCustomer(Customer $customer)
     {
         Shopware()->Db()->delete('s_user_addresses', 'user_id = ' . $customer->getId());
         Shopware()->Db()->delete('s_core_payment_data', 'user_id = ' . $customer->getId());

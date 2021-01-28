@@ -132,7 +132,7 @@ class AccountContext extends SubContext
     /**
      * @Given /^I register me:$/
      */
-    public function iRegisterMe(\Behat\Gherkin\Node\TableNode $table)
+    public function iRegisterMe(TableNode $table)
     {
         $this->getPage('Account')->register($table->getHash());
     }

@@ -366,10 +366,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         return !isset($this->namespaces[$key]) || count($this->namespaces[$key]) === 0;
     }
 
-    /**
-     * @return Enlight_Components_Snippet_Namespace
-     */
-    private function createDbNamespace(string $namespace, int $shopId, int $localeId): \Enlight_Components_Snippet_Namespace
+    private function createDbNamespace(string $namespace, int $shopId, int $localeId): Enlight_Components_Snippet_Namespace
     {
         return new $this->defaultNamespaceClass([
             'adapter' => $this->adapter,
@@ -379,10 +376,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         ]);
     }
 
-    /**
-     * @return Enlight_Components_Snippet_Namespace
-     */
-    private function createIniNamespace(string $namespace): \Enlight_Components_Snippet_Namespace
+    private function createIniNamespace(string $namespace): Enlight_Components_Snippet_Namespace
     {
         /** @var Enlight_Components_Snippet_Namespace $fullNamespace */
         $fullNamespace = new $this->defaultNamespaceClass([
@@ -407,10 +401,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         return $fullNamespace;
     }
 
-    /**
-     * @param Enlight_Components_Snippet_Namespace $instance
-     */
-    private function requiresFallback(\Enlight_Components_Snippet_Namespace $instance): bool
+    private function requiresFallback(Enlight_Components_Snippet_Namespace $instance): bool
     {
         if (!$instance instanceof Enlight_Components_Snippet_Namespace) {
             return false;

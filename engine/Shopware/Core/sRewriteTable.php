@@ -140,7 +140,7 @@ class sRewriteTable implements \Enlight_Hook
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         Shopware_Components_Config $config = null,
         ModelManager $modelManager = null,
-        \sSystem $systemModule = null,
+        sSystem $systemModule = null,
         Enlight_Template_Manager $template = null,
         Shopware_Components_Modules $moduleManager = null,
         SlugInterface $slug = null,

@@ -53,10 +53,8 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     /**
      * Listener method of the Enlight_Controller_Front_DispatchLoopShutdown event.
      * If the request is from a Bot, discard the session
-     *
-     * @param Enlight_Controller_EventArgs $args
      */
-    public function onDispatchLoopShutdown(\Enlight_Controller_EventArgs $args)
+    public function onDispatchLoopShutdown(Enlight_Controller_EventArgs $args)
     {
         if (PHP_SAPI === 'cli') {
             return;

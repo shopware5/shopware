@@ -33,7 +33,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_local_start()
+    public function testIndexActionShouldRedirectLocalStart()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
@@ -49,7 +49,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_cached_fresh_statistics()
+    public function testIndexActionShouldRedirectCachedFreshStatistics()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
@@ -69,7 +69,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_waiting_fresh_statistics_no_cached_template()
+    public function testIndexActionShouldRedirectWaitingFreshStatisticsNoCachedTemplate()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
@@ -88,7 +88,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_waiting_inactive()
+    public function testIndexActionShouldRedirectWaitingInactive()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
@@ -107,7 +107,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_waiting_active_outdated()
+    public function testIndexActionShouldRedirectWaitingActiveOutdated()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
@@ -127,7 +127,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_cached_active()
+    public function testIndexActionShouldRedirectCachedActive()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
@@ -145,7 +145,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         static::assertStringContainsString('BenchmarkOverview/render', $redirect);
     }
 
-    public function testRenderAction_should_render_cached_template()
+    public function testRenderActionShouldRenderCachedTemplate()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();

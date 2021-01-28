@@ -31,7 +31,7 @@ class ApplicationTest extends TestCase
     /**
      * @dataProvider formatSearchValueTestDataProvider
      */
-    public function test_formatSearchValue(array $parameter, string $expectedResult): void
+    public function testFormatSearchValue(array $parameter, string $expectedResult): void
     {
         $controller = new ApplicationControllerMock();
 

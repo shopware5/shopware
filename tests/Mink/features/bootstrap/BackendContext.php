@@ -67,7 +67,7 @@ class BackendContext extends SubContext
     {
         $page = $this->getPage('Backend');
 
-        $this->spin(function ($context) use ($page) {
+        $this->spin(function ($context) {
             $context->getPage('Backend')->verifyModule();
 
             return true;

@@ -172,7 +172,7 @@ class ProportionalTaxCalculatorTest extends \Enlight_Components_Test_TestCase
     /**
      * @dataProvider calculate_thereIsNoPriceWith_NAN_test_dataProvider
      */
-    public function testCalculate_thereIsNoPriceWith_NAN(Price $price): void
+    public function testCalculateThereIsNoPriceWithNAN(Price $price): void
     {
         $messageTemplate = 'The %s with value: %s is NAN';
 

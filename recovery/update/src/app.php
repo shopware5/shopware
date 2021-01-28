@@ -126,7 +126,7 @@ $app->map('/', function () use ($app) {
 })->via('GET', 'POST')->name('welcome');
 
 // Check file & directory permissions
-$app->map('/checks', function () use ($app, $container) {
+$app->map('/checks', function () use ($container) {
     $container->get('controller.requirements')->checkRequirements();
 })->via('GET', 'POST')->name('checks');
 
@@ -142,7 +142,7 @@ $app->map('/dbmigration', function () use ($app) {
     $app->render('dbmigration.php');
 })->via('GET', 'POST')->name('dbmigration');
 
-$app->map('/applyMigrations', function () use ($app, $container) {
+$app->map('/applyMigrations', function () use ($container) {
     $container->get('controller.batch')->applyMigrations();
 })->via('GET', 'POST')->name('applyMigrations');
 

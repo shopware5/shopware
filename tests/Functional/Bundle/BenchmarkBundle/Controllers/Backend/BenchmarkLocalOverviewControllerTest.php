@@ -33,7 +33,7 @@ class BenchmarkLocalOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testRenderAction_should_load_start()
+    public function testRenderActionShouldLoadStart()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkLocalOverview $controller */
         $controller = $this->getController();
@@ -51,7 +51,7 @@ class BenchmarkLocalOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testRenderAction_should_load_custom()
+    public function testRenderActionShouldLoadCustom()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkLocalOverview $controller */
         $controller = $this->getController();

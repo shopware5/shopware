@@ -980,7 +980,7 @@ class Category extends ModelEntity
      *
      * @return bool
      */
-    public function isChildOf(\Shopware\Models\Category\Category $parent)
+    public function isChildOf(Category $parent)
     {
         return $this->isChildOfInternal($this, $parent);
     }

@@ -336,7 +336,6 @@ class HookManagerTest extends TestCase
                 &$firstHookCallCounter,
                 &$secondHookCallCounter,
                 &$thirdHookCallCounter,
-                $firstHookReturnValue,
                 $secondHookReturnValue,
                 $thirdHookReturnValue
             ) {
@@ -372,8 +371,6 @@ class HookManagerTest extends TestCase
                 &$firstHookCallCounter,
                 &$secondHookCallCounter,
                 &$thirdHookCallCounter,
-                $firstHookReturnValue,
-                $secondHookReturnValue,
                 $thirdHookReturnValue
             ) {
                 ++$thirdHookCallCounter;
@@ -470,7 +467,6 @@ class HookManagerTest extends TestCase
             function (\Enlight_Hook_HookArgs $args) use (
                 &$firstHookCallCounter,
                 &$secondHookCallCounter,
-                $firstHookReturnValue,
                 $secondHookReturnValue
             ) {
                 ++$secondHookCallCounter;

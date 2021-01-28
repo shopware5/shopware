@@ -153,7 +153,7 @@ class sBasket implements \Enlight_Hook
         Enlight_Components_Session_Namespace $session = null,
         Enlight_Controller_Front $front = null,
         Shopware_Components_Modules $moduleManager = null,
-        \sSystem $systemModule = null,
+        sSystem $systemModule = null,
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
         StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
     ) {

@@ -41,12 +41,13 @@ use Shopware\Recovery\Install\Service\ThemeService;
 use Shopware\Recovery\Install\Service\TranslationService;
 use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
 use Shopware\Recovery\Install\Struct\LicenseUnpackRequest;
+use Slim\Slim;
 
 $config = require __DIR__ . '/../config/production.php';
 $container = new Container();
 $container->register(new ContainerProvider($config));
 
-/** @var \Slim\Slim $app */
+/** @var Slim $app */
 $app = $container->offsetGet('slim.app');
 
 // After instantiation
@@ -142,7 +143,7 @@ function localeForLanguage($language)
     return strtolower($language) . '_' . strtoupper($language);
 }
 
-function prefixSessionVars(\Slim\Slim $app)
+function prefixSessionVars(Slim $app)
 {
     // Save post parameters starting with 'c_' to session
     $params = $app->request()->params();
@@ -180,7 +181,7 @@ $app->view()->setData('parameters', $_SESSION['parameters']);
 
 $app->setCookie('installed-locale', localeForLanguage($selectedLanguage), time() + 7200, '/');
 
-$app->error(function (\Exception $e) use ($app) {
+$app->error(function (Exception $e) use ($app) {
     if (!$app->request()->isAjax()) {
         throw $e;
     }
