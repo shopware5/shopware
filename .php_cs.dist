@@ -46,11 +46,9 @@ return (new Config())
     ->setRiskyAllowed(true)
     ->setUsingCache(false)
     ->setRules([
-        '@PSR2' => true,
+        '@PSR12' => true,
         '@Symfony' => true,
 
-        'array_syntax' => ['syntax' => 'short'],
-        'blank_line_after_opening_tag' => false,
         'class_attributes_separation' => ['elements' => ['method', 'property']],
         'concat_space' => ['spacing' => 'one'],
         'doctrine_annotation_indentation' => true,
@@ -59,12 +57,9 @@ return (new Config())
              'annotations' => ['copyright', 'category'],
         ],
         'header_comment' => ['header' => $header, 'separate' => 'bottom', 'commentType' => 'PHPDoc'],
-        'method_argument_space' => ['on_multiline' => 'ensure_fully_multiline'],
         'no_useless_else' => true,
         'no_useless_return' => true,
         'no_superfluous_phpdoc_tags' => true,
-        'ordered_class_elements' => true,
-        'ordered_imports' => true,
         'phpdoc_order' => true,
         'phpdoc_summary' => false,
         'phpdoc_var_annotation_correct_order' => true,
