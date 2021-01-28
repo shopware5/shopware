@@ -1973,19 +1973,15 @@ EOT;
 
     /**
      * Helper function to recursively apply html_entity_decode() to the given data.
-     *
-     * @param array|string|null $data
-     *
-     * @return array|string|null
      */
-    private function htmlEntityDecodeRecursive($data)
+    private function htmlEntityDecodeRecursive(?array $data): ?array
     {
         if ($data === null) {
             return null;
         }
 
-        $func = function ($item) use (&$func) {
-            return is_array($item) ? array_map($func, $item) : call_user_func('html_entity_decode', $item);
+        $func = static function ($item) use (&$func) {
+            return is_array($item) ? array_map($func, $item) : html_entity_decode($item);
         };
 
         return array_map($func, $data);
@@ -2071,7 +2067,7 @@ EOT;
      * @param string $orderNumber
      * @param string $email
      */
-    private function logOrderMailException(\Exception $e, $orderNumber, $email)
+    private function logOrderMailException(Exception $e, $orderNumber, $email)
     {
         $message = sprintf(
             'Could not send order mail for ordernumber %s to address %s',

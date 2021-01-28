@@ -719,6 +719,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getArticleConfiguratorSet($articleId)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['configuratorSet', 'groups'])
             ->from(Configurator\Set::class, 'configuratorSet')
@@ -741,6 +742,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getArticleImages($articleId)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['images'])
             ->from(Image::class, 'images')
@@ -762,6 +764,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getArticleDownloads($articleId)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['downloads'])
             ->from(Download::class, 'downloads')
@@ -782,6 +785,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getArticleLinks($articleId)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['links'])
             ->from(Link::class, 'links')
@@ -803,6 +807,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getArticleCategories($articleId)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['categories.id', 'categories.name'])
             ->from(Category::class, 'categories')
@@ -820,6 +825,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getArticleSimilar($articleId)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['article', 'PARTIAL similar.{id, name}'])
             ->from(ProductModel::class, 'article')
@@ -839,6 +845,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getArticleRelated($articleId)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['article', 'PARTIAL related.{id, name}'])
             ->from(ProductModel::class, 'article')

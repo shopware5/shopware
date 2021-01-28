@@ -22,8 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Components\CSRFWhitelistAware;
-use Shopware\Models\Analytics\Repository;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Analytics\Repository as AnalyticsRepository;
+use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
@@ -39,17 +42,17 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * Entity Manager
      *
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $manager;
 
     /**
-     * @var \Shopware\Models\Shop\Repository
+     * @var ShopRepository
      */
     protected $shopRepository;
 
     /**
-     * @var Repository|null
+     * @var AnalyticsRepository|null
      */
     protected $repository;
 
@@ -117,7 +120,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      * @deprecated since 5.6 will be private in 5.8
      * Helper Method to get access to the shop repository.
      *
-     * @return Shopware\Models\Shop\Repository
+     * @return ShopRepository
      */
     public function getShopRepository()
     {
@@ -131,17 +134,17 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     }
 
     /**
-     * @deprecated since 5.6, will be private in 5.8
+     * @return AnalyticsRepository
      *
-     * @return Repository
+     * @deprecated since 5.6, will be private in 5.8
      */
     public function getRepository()
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         if (!$this->repository) {
-            $this->repository = new Repository(
-                $this->get(\Shopware\Components\Model\ModelManager::class)->getConnection(),
+            $this->repository = new AnalyticsRepository(
+                $this->get(ModelManager::class)->getConnection(),
                 $this->get('events')
             );
         }
@@ -353,8 +356,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
 
         // Sort the multidimensional array
-        usort($referrer, function ($a, $b) {
-            return $a['turnover'] < $b['turnover'];
+        usort($referrer, static function ($a, $b) {
+            return $a['turnover'] <=> $b['turnover'];
         });
 
         $this->send(
@@ -896,7 +899,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * Internal helper function to get access to the entity manager.
      *
-     * @return \Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     private function getManager()
     {
@@ -909,10 +912,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     /**
      * Returns the query builder to fetch all available stores
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getShopsQueryBuilder()
+    private function getShopsQueryBuilder(): QueryBuilder
     {
         $builder = $this->getManager()->getDBALQueryBuilder();
         $builder->select([
@@ -992,7 +993,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $array;
     }
 
-    private function getShopNames()
+    private function getShopNames(): array
     {
         $builder = $this->getManager()->getDBALQueryBuilder();
         $builder->select(['s.id', 's.name'])
@@ -1005,10 +1006,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
-    private function getCsvFileName()
+    private function getCsvFileName(): string
     {
         $name = $this->Request()->getActionName();
-        if (strpos($name, 'get') == 0) {
+        if (strpos($name, 'get') === 0) {
             $name = substr($name, 3);
         }
 
@@ -1018,7 +1019,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     private function underscoreToCamelCase($str)
     {
         $str[0] = strtolower($str[0]);
-        $func = function ($c) {
+        $func = static function ($c) {
             return '_' . strtolower($c[1]);
         };
 

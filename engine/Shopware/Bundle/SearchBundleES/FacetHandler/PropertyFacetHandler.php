@@ -178,22 +178,22 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
      *
      * @return Group[]
      */
-    private function hydrateProperties($data, $optionIds)
+    private function hydrateProperties(array $data, array $optionIds): array
     {
         $groups = [];
         foreach ($data as $row) {
             $group = $this->hydrator->createPropertyGroup($row['_source']);
 
-            $options = array_filter($group->getOptions(), function (Option $option) use ($optionIds) {
-                return in_array($option->getId(), $optionIds);
+            $options = array_filter($group->getOptions(), static function (Option $option) use ($optionIds) {
+                return \in_array($option->getId(), $optionIds);
             });
 
-            usort($options, function (Option $a, Option $b) {
+            usort($options, static function (Option $a, Option $b) {
                 if ($a->getPosition() !== $b->getPosition()) {
-                    return $a->getPosition() > $b->getPosition();
+                    return $a->getPosition() <=> $b->getPosition();
                 }
 
-                return $a->getName() > $b->getName();
+                return $a->getName() <=> $b->getName();
             });
 
             $group->setOptions($options);

@@ -1,12 +1,9 @@
-includes:
-    #- ../vendor/phpstan/phpstan-phpunit/rules.neon
-    #- ../vendor/phpstan/phpstan-phpunit/extension.neon
-    #- ../vendor/phpstan/phpstan-doctrine/extension.neon
 parameters:
     level: 5
     inferPrivatePropertyTypeFromConstructor: true
-    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: true
     treatPhpDocTypesAsCertain: false
+    tmpDir: var/cache/phpstan
 
     scanDirectories:
         - %currentWorkingDirectory%/var/cache
@@ -38,70 +35,43 @@ parameters:
     ignoreErrors:
         - '#apcu_#'
         - '#ioncube_#'
-        - '#opcache_#'
-        - '#imagettftext#'
-        - '#easter_days#'
-        - '#class Redis#'
 
-        # Ignore safety casts
-        - "#Casting to [a-zA-Z<>]+ something that's already [a-zA-Z<>]+#"
         # Ignore direct view assigns
         - '#Call to an undefined method#'
         - '#Access to an undefined property#'
-        - '#Method Symfony\\Component\\DependencyInjection\\LazyProxy\\PhpDumper\\DumperInterface\:\:getProxyFactoryCode\(\)#'
-        - '#Shopware_Components_Snippet_Manager::__construct\(\) does not call parent constructor from Enlight_Components_Snippet_Manager#'
-        - '#does not call parent constructor from Enlight_Class#'
-        - '#Binary operation "|=" between string and string results in an error.#'
-        - '#does not call parent constructor from Elasticsearch#'
-        - '#does not call parent constructor from Enlight_Controller_Action#'
-        - '#does not accept Doctrine\\Persistence\\ObjectRepository#'
-        - '#does not call parent constructor from Enlight_Controller_Action#'
         # "getRepository"-Methods
         - '#should return [a-zA-Z\\_]+Repository but returns Doctrine\\ORM\\EntityRepository#'
-        - '#should return [a-zA-Z\\_]+Repository but returns Doctrine\\Persistence\\ObjectRepository#'
         - '#Static property [a-zA-Z\\_\$\:]+ \(Shopware\\Models\\[a-zA-Z]+\\Repository\|null\) does not accept Doctrine\\ORM\\EntityRepository#'
         - '#\([a-zA-Z\\_]+Repository\) does not accept Doctrine\\ORM\\EntityRepository#'
-        - '#\([a-zA-Z\\_]+Repository\) does not accept Doctrine\\Persistence\\ObjectRepository#'
         - '#Array \(array<string, Shopware\\Components\\Model\\ModelRepository>\) does not accept Doctrine\\ORM\\EntityRepository#'
-        - '# should return Doctrine\\ORM\\EntityRepository\|null but returns Doctrine\\Persistence\\ObjectRepository#'
         # Return values in Models
-        - '# returns Shopware\\Components\\Model\\ModelEntity.#'
-        - '#does not accept Shopware\\Components\\Api\\Resource\\Resource#'
         - '# but returns Doctrine\\ORM\\QueryBuilder#'
         # Model properties with wrong default values
         - '#\([a-z]+\) does not accept default value of type [a-z]+\.#'
         # Models that are detached by cloning and nulling the id
         - '#\([a-z]+\) does not accept null\.#'
         - '#supplied for foreach, only iterables are supported#'
-        # Broken return value of Components/DependencyInjection/Container.php
-        - '#Return type \(bool\) of method Shopware\\Components\\DependencyInjection\\Container\:\:load\(\) should be compatible with return type \(object\) of method Symfony\\Component\\DependencyInjection\\Container\:\:load\(\)#'
-        # Broken return value of Components/Log/Handler/FirePHPHandler.php
-        - '#Return type \(array\) of method Shopware\\Components\\Log\\Handler\\FirePHPHandler\:\:createRecordHeader\(\) should be compatible with return type \(string\) of method Monolog\\Handler\\FirePHPHandler\:\:createRecordHeader\(\)#'
         # Interface / Implementation Switch
         - '#expects Shopware\\Bundle\\SearchBundle\\Facet\\[a-zA-Z]+Facet, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
         - '#expects Shopware\\Bundle\\SearchBundle\\Condition\\[a-zA-Z]+Condition, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
         # Product/Shopcontext mixup
         - '#expects Shopware\\Bundle\\StoreFrontBundle\\Struct\\ProductContextInterface, Shopware\\Bundle\\StoreFrontBundle\\Struct\\ShopContextInterface given#'
         # Interfaces not being recognized
-        - '#expects Shopware\\Components\\Form\\Container\\[a-zA-Z]+, Shopware\\Components\\Form\\Interfaces\\Container given#'
         - '#expects Doctrine\\ORM\\PersistentCollection, Doctrine\\Common\\Collections\\ArrayCollection&iterable<Shopware\\Models\\Shop\\TemplateConfig\\[a-zA-Z]+> given#'
-        - '#Parameter \#1 \$em of method Doctrine\\ORM\\EntityRepository::__construct\(\) expects Doctrine\\ORM\\EntityManager, Doctrine\\ORM\\EntityManagerInterface given#'
         - '#Parameter \#1 \$sort of method Doctrine\\ORM\\QueryBuilder::addOrderBy\(\) expects Doctrine\\ORM\\Query\\Expr\\OrderBy\|string, array given#'
-        - '#Parameter \#3 \$type of method Doctrine\\ORM\\QueryBuilder::setParameter\(\) expects string\|null, int given#'
-        - '#Parameter \#3 \$type of method Doctrine\\DBAL\\Query\\QueryBuilder::setParameter\(\) expects string\|null, int given#'
-        - '#Parameter \#1 \$reader of class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver constructor expects Doctrine\\Common\\Annotations\\AnnotationReader, Doctrine\\Common\\Annotations\\Reader given#'
         - '#Parameter \#1 \$request of method Shopware\\Bundle\\SearchBundle\\CriteriaRequestHandlerInterface::handleRequest\(\) expects Enlight_Controller_Request_RequestHttp, Enlight_Controller_Request_Request given#'
         # Container Issues
-        - '#Parameter \#2 \$service of method Symfony\\Component\\DependencyInjection\\ContainerInterface::set\(\) expects object, array<Shopware\\Bundle\\SearchBundleDBAL\\[a-zA-Z]+Interface> given#'
         - '#\$resource of method Shopware\\Components\\DependencyInjection\\Container::set#'
-        # Wrong type in ElasticsearchDSL
-        - '#Parameter \#2 \$value of class ONGR\\ElasticsearchDSL\\Query\\TermLevel\\TermQuery constructor expects string#'
-        - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Query\\Compound\\BoolQuery::addParameter\(\) expects array\|stdClass\|string#'
-        - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Aggregation\\AbstractAggregation::addParameter\(\) expects array\|stdClass\|string#'
-        - '#should return Shopware\\Bundle\\ContentTypeBundle\\Services\\RepositoryInterface but returns object#'
         # We manually check if the class exists before instantiating / using it
-        - '#Instantiated class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller not found#'
-        - '#Call to method saveConfiguration\(\) on an unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'
         - '#PHPDoc tag \@var for variable \$payPalInstaller contains unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'
         # offsetSet should not return
         - '#Method Shopware_Components_Config::offsetSet\(\) with return type void returns mixed but should not return anything#'
+        - # Seem to be issues, but need tests to verify changes there
+            message: '#Else branch is unreachable because previous condition is always true#'
+            path: 'engine/Shopware/Controllers/Frontend/Blog.php'
+        -
+            message: '#Negated boolean expression is always false#'
+            path: 'engine/Shopware/Core/sArticles.php'
+        -
+            message: '#Comparison operation ">=" between int<1, max> and 1 is always true#'
+            path: 'engine/Shopware/Core/sArticles.php'
