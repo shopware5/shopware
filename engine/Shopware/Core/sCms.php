@@ -128,7 +128,7 @@ class sCms implements \Enlight_Hook
 
         if ($translations) {
             foreach ($translations as $property => $translation) {
-                if (strlen($translation) > 0) {
+                if ($translation !== '') {
                     if (strpos($property, '__attribute_') === 0) {
                         $property = str_replace('__attribute_', '', $property);
                         $staticPage['attribute'][$property] = $translation;
@@ -241,7 +241,7 @@ class sCms implements \Enlight_Hook
 
         if ($translations) {
             foreach ($translations as $property => $translation) {
-                if (strlen($translation) > 0) {
+                if ($translation !== '') {
                     $parent[$property] = $translation;
                 }
             }

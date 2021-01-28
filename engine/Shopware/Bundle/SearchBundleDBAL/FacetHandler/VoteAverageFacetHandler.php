@@ -164,7 +164,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
         );
     }
 
-    private function buildItems(array $data, float $activeAverage): array
+    private function buildItems(array $data, ?float $activeAverage): array
     {
         usort($data, static function ($a, $b) {
             return $a['average'] <=> $b['average'];
@@ -172,7 +172,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
 
         $values = [];
         for ($i = 1; $i <= 4; ++$i) {
-            $affected = array_filter($data, function ($value) use ($i) {
+            $affected = array_filter($data, static function ($value) use ($i) {
                 return $value['average'] >= $i;
             });
 

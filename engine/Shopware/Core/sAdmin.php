@@ -48,6 +48,7 @@ use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Mail\Mail;
+use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 
 /**
  * Shopware Class that handles several
@@ -340,10 +341,12 @@ class sAdmin implements \Enlight_Hook
         }
 
         if (isset($data['id'])) {
-            $data = Shopware()->Container()->get(PaymentGatewayInterface::class)->getList([$data['id']], $this->contextService->getShopContext());
+            $data = Shopware()->Container()->get(PaymentGatewayInterface::class)
+                ->getList([$data['id']], $this->contextService->getShopContext());
 
             if (!empty($data)) {
-                $data = Shopware()->Container()->get(LegacyStructConverter::class)->convertPaymentStruct(current($data));
+                $data = Shopware()->Container()->get(LegacyStructConverter::class)
+                    ->convertPaymentStruct(current($data));
             }
         }
 
@@ -458,7 +461,8 @@ class sAdmin implements \Enlight_Hook
             $paymentMeans[] = ['id' => $this->config->offsetGet('paymentdefault')];
         }
 
-        $paymentMeans = Shopware()->Container()->get(PaymentGatewayInterface::class)->getList(array_column($paymentMeans, 'id'), $this->contextService->getShopContext());
+        $paymentMeans = Shopware()->Container()->get(PaymentGatewayInterface::class)
+            ->getList(array_column($paymentMeans, 'id'), $this->contextService->getShopContext());
 
         $paymentMeans = array_map(static function ($payment) {
             return Shopware()->Container()->get(LegacyStructConverter::class)->convertPaymentStruct($payment);
@@ -480,7 +484,7 @@ class sAdmin implements \Enlight_Hook
      *
      * @throws Enlight_Exception If no payment classes were loaded
      *
-     * @return ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod The payment mean handling class instance
+     * @return BasePaymentMethod The payment mean handling class instance
      */
     public function sInitiatePaymentClass($paymentData)
     {
@@ -884,7 +888,7 @@ class sAdmin implements \Enlight_Hook
         $sql = '
             SELECT * FROM s_user
             WHERE password = ? AND email = ? AND id = ?
-            AND UNIX_TIMESTAMP(lastlogin) >= (UNIX_TIMESTAMP(now())-?)
+            AND UNIX_TIMESTAMP(lastlogin) >= (UNIX_TIMESTAMP(NOW())-?)
         ';
 
         $getUser = $this->db->fetchRow(
@@ -1394,23 +1398,20 @@ class sAdmin implements \Enlight_Hook
             for ($i = 1; $i <= $numberOfPages; ++$i) {
                 $pagesStructure['numbers'][$i]['markup'] = ($i == $destinationPage);
                 $pagesStructure['numbers'][$i]['value'] = $i;
-                $pagesStructure['numbers'][$i]['link'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + ['sPage' => $i]
-                );
+                $pagesStructure['numbers'][$i]['link'] = $baseFile . $this->moduleManager->Core()
+                        ->sBuildLink($additionalParams + ['sPage' => $i]);
             }
             // Previous page
             if ($destinationPage != 1) {
-                $pagesStructure['previous'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + ['sPage' => $destinationPage - 1]
-                );
+                $pagesStructure['previous'] = $baseFile . $this->moduleManager->Core()
+                        ->sBuildLink($additionalParams + ['sPage' => $destinationPage - 1]);
             } else {
                 $pagesStructure['previous'] = null;
             }
             // Next page
             if ($destinationPage != $numberOfPages) {
-                $pagesStructure['next'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + ['sPage' => $destinationPage + 1]
-                );
+                $pagesStructure['next'] = $baseFile . $this->moduleManager->Core()
+                        ->sBuildLink($additionalParams + ['sPage' => $destinationPage + 1]);
             } else {
                 $pagesStructure['next'] = null;
             }
@@ -3663,7 +3664,8 @@ SQL;
             ]
         );
 
-        $mail = Shopware()->Container()->get(Shopware_Components_TemplateMail::class)->createMail('sOPTINREGISTER', $context);
+        $mail = Shopware()->Container()->get(Shopware_Components_TemplateMail::class)
+            ->createMail('sOPTINREGISTER', $context);
         $mail->addTo($userInfo['mail']);
         $mail->send();
     }

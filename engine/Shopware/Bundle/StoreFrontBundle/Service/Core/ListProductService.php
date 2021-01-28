@@ -181,7 +181,7 @@ class ListProductService implements ListProductServiceInterface
             }
 
             $product->setListingPrice($product->getCheapestUnitPrice());
-            $product->setDisplayFromPrice((count($product->getPrices()) > 1 || $product->hasDifferentPrices()));
+            $product->setDisplayFromPrice(count($product->getPrices()) > 1 || $product->hasDifferentPrices());
             $product->setAllowBuyInListing($this->allowBuyInListing($product));
             if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
                 $product->setListingPrice($product->getCheapestPrice());

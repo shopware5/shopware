@@ -568,7 +568,7 @@ class sArticles implements \Enlight_Hook
 
         // Condition Output-Netto AND NOT overwrite by customer-group
         // OR Output-Netto NOT SET AND tax-settings provided by customer-group
-        if ((!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])) {
+        if (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']) {
             $price = $this->sFormatPrice($price);
         } else {
             $price = $this->sFormatPrice(round($price * (100 + $tax) / 100, 3));
@@ -645,12 +645,12 @@ class sArticles implements \Enlight_Hook
         // Condition Output-Netto AND NOT overwrite by customer-group
         // OR Output-Netto NOT SET AND tax-settings provided by customer-group
         if ($doNotRound == true) {
-            if ((!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])) {
+            if (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']) {
             } else {
                 $price = $price * (100 + $tax) / 100;
             }
         } else {
-            if ((!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])) {
+            if (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']) {
                 $price = round($price, 2);
             } else {
                 $price = round($price * (100 + $tax) / 100, 2);

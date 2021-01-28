@@ -2128,7 +2128,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
             $number = $this->interpretNumberSyntax($product, $detail, $commands, $counter);
             ++$counter;
-            if (strlen($number) === 0) {
+            if ($number === '') {
                 continue;
             }
             $detail->setNumber($number);
@@ -2199,7 +2199,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ->getValidateNumberQuery($this->Request()->value, $this->Request()->param)
             ->getArrayResult();
 
-        if (empty($exist) && strlen($this->Request()->value) > 0) {
+        if (empty($exist) && $this->Request()->value !== '') {
             echo 'true';
         } else {
             return;

@@ -727,7 +727,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
         $builder->select($association);
         $builder->from($model, $association);
 
-        if (strlen($search) > 0) {
+        if ($search !== '') {
             $where = [];
 
             $fields = $this->getModelFields($model, $association);

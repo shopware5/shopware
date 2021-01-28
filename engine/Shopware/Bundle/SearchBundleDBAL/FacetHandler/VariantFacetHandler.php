@@ -202,8 +202,8 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
                     $option->getAttributes()
                 );
 
-                $isActive = ($isActive || $listItem->isActive());
-                $useMedia = ($useMedia || $listItem->getMedia() !== null);
+                $isActive = $isActive || $listItem->isActive();
+                $useMedia = $useMedia || $listItem->getMedia() !== null;
 
                 $items[] = $listItem;
             }

@@ -715,7 +715,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $icon = $data['iconCls'];
         }
 
-        $thumbnailHighDpi = (isset($data['thumbnailHighDpi']) && $data['thumbnailHighDpi']);
+        $thumbnailHighDpi = isset($data['thumbnailHighDpi']) && $data['thumbnailHighDpi'];
         $thumbnailQuality = $data['thumbnailQuality'] ?: 90;
         $thumbnailHighDpiQuality = $data['thumbnailHighDpiQuality'] ?: 70;
 

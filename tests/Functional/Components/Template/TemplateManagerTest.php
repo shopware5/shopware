@@ -96,8 +96,8 @@ class TemplateManagerTest extends TestCase
         $template->setCompileDir($cacheDirectory);
         $template->fetch('string:foobar');
 
-        $dirPermissions = (fileperms($cacheDirectory) & 0777);
-        $filePermissions = (fileperms($cacheFile) & 0666);
+        $dirPermissions = fileperms($cacheDirectory) & 0777;
+        $filePermissions = fileperms($cacheFile) & 0666;
 
         static::assertFileExists($cacheDirectory);
         static::assertFileExists($cacheFile);

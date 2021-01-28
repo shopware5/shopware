@@ -145,9 +145,6 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
         );
     }
 
-    /**
-     * @param float $activeAverage
-     */
     private function buildItems(array $data, ?float $activeAverage): array
     {
         usort($data, static function ($a, $b) {

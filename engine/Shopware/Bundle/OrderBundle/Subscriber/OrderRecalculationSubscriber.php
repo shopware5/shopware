@@ -68,10 +68,10 @@ class OrderRecalculationSubscriber implements SubscriberInterface
         //returns a change set for the model, which contains all changed properties with the old and new value.
         $changeSet = $entityManager->getUnitOfWork()->getEntityChangeSet($orderDetail);
 
-        $productChange = ($changeSet['articleNumber'][0] !== $changeSet['articleNumber'][1]);
-        $quantityChange = ($changeSet['quantity'][0] !== $changeSet['quantity'][1]);
-        $priceChanged = ($changeSet['price'][0] !== $changeSet['price'][1]);
-        $taxChanged = ($changeSet['taxRate'][0] !== $changeSet['taxRate'][1]);
+        $productChange = $changeSet['articleNumber'][0] !== $changeSet['articleNumber'][1];
+        $quantityChange = $changeSet['quantity'][0] !== $changeSet['quantity'][1];
+        $priceChanged = $changeSet['price'][0] !== $changeSet['price'][1];
+        $taxChanged = $changeSet['taxRate'][0] !== $changeSet['taxRate'][1];
 
         // If anything in the order position has been changed, we must recalculate the totals of the order
         if ($quantityChange || $productChange || $priceChanged || $taxChanged) {

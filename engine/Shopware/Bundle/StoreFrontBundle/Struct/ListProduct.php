@@ -1163,7 +1163,7 @@ class ListProduct extends BaseProduct
     public function setMainVariantId($mainVariantId)
     {
         $this->mainVariantId = $mainVariantId;
-        $this->isMainVariant = ($this->variantId == $this->mainVariantId);
+        $this->isMainVariant = $this->variantId == $this->mainVariantId;
     }
 
     /**

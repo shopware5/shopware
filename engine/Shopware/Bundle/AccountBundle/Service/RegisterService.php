@@ -286,7 +286,7 @@ class RegisterService implements RegisterServiceInterface
     {
         /** @var Request|null $request */
         $request = Shopware()->Container()->get('front')->Request();
-        $fromCheckout = ($request && $request->getParam('sTarget') === 'checkout');
+        $fromCheckout = $request && $request->getParam('sTarget') === 'checkout';
 
         $sql = "INSERT INTO `s_core_optin` (`type`, `datum`, `hash`, `data`)
                 VALUES ('swRegister', ?, ?, ?)";

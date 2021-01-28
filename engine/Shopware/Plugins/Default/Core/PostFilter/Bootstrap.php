@@ -208,11 +208,9 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         }
 
         // Check if the current link is a canonical link
-        $isCanonical = (
-            strpos($src[0], 'rel="canonical"') !== false
+        $isCanonical = strpos($src[0], 'rel="canonical"') !== false
             || strpos($src[0], 'rel="prev"') !== false
-            || strpos($src[0], 'rel="next"') !== false
-        );
+            || strpos($src[0], 'rel="next"') !== false;
 
         if ($this->useSecure && !$isCanonical && $src[1] !== 'a') {
             $link = str_replace('http://' . $this->basePath, 'https://' . $this->basePath, $link);

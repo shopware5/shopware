@@ -100,7 +100,7 @@ class SitePageMenu
 
                 if ($translations) {
                     foreach ($translations as $property => $translation) {
-                        if (strlen($translation) > 0) {
+                        if ($translation !== '') {
                             $site[$property] = $translation;
                         }
                     }
@@ -161,7 +161,7 @@ class SitePageMenu
     {
         $result = [];
         foreach ($sites as $index => $site) {
-            $site['active'] = ($site['id'] == $activeId);
+            $site['active'] = $site['id'] == $activeId;
 
             if ($site['parentID'] != $parentId) {
                 continue;

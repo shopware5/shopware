@@ -30,8 +30,8 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
     {
         $sArticles = new sArticles();
         $categoryId = Shopware()->Shop()->getCategory()->getId();
-        $translationId = (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
-        $customerGroupId = ((int) Shopware()->Modules()->System()->sUSERGROUPDATA['id']);
+        $translationId = !Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null;
+        $customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
 
         $this->assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId);
     }

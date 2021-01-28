@@ -61,8 +61,8 @@ class CacheTest extends TestCase
         $cacheDirectory = $testDir . '/shopware_test--0';
         $cacheFile = $cacheDirectory . '/shopware_test---bar';
 
-        $dirPermissions = (fileperms($cacheDirectory) & 0777);
-        $filePermissions = (fileperms($cacheFile) & 0777);
+        $dirPermissions = fileperms($cacheDirectory) & 0777;
+        $filePermissions = fileperms($cacheFile) & 0777;
 
         static::assertFileExists($cacheDirectory);
         static::assertFileExists($cacheFile);
@@ -94,8 +94,8 @@ class CacheTest extends TestCase
         $cacheDirectory = $testDir . '/shopware_test--0';
         $cacheFile = $cacheDirectory . '/shopware_test---bar';
 
-        $dirPermissions = (fileperms($cacheDirectory) & 0777);
-        $filePermissions = (fileperms($cacheFile) & 0777);
+        $dirPermissions = fileperms($cacheDirectory) & 0777;
+        $filePermissions = fileperms($cacheFile) & 0777;
 
         static::assertFileExists($cacheDirectory);
         static::assertFileExists($cacheFile);
@@ -127,8 +127,8 @@ class CacheTest extends TestCase
         $cacheDirectory = $testDir . '/shopware_test--0';
         $cacheFile = $cacheDirectory . '/shopware_test---bar';
 
-        $dirPermissions = (fileperms($cacheDirectory) & 0777);
-        $filePermissions = (fileperms($cacheFile) & 0777);
+        $dirPermissions = fileperms($cacheDirectory) & 0777;
+        $filePermissions = fileperms($cacheFile) & 0777;
 
         static::assertFileExists($cacheDirectory);
         static::assertFileExists($cacheFile);
@@ -160,8 +160,8 @@ class CacheTest extends TestCase
         $cacheDirectory = $testDir . '/shopware_test--0';
         $cacheFile = $cacheDirectory . '/shopware_test---bar';
 
-        $dirPermissions = (fileperms($cacheDirectory) & 0777);
-        $filePermissions = (fileperms($cacheFile) & 0777);
+        $dirPermissions = fileperms($cacheDirectory) & 0777;
+        $filePermissions = fileperms($cacheFile) & 0777;
 
         static::assertFileExists($cacheDirectory);
         static::assertFileExists($cacheFile);

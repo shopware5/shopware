@@ -334,7 +334,7 @@ class EmotionPreset extends Resource
                 ], $plugin);
 
                 $plugin['updateRequired'] = version_compare($plugin['version'], $plugin['current_version'], '>');
-                $plugin['valid'] = ($plugin['active'] && $plugin['installed'] && !$plugin['updateRequired']);
+                $plugin['valid'] = $plugin['active'] && $plugin['installed'] && !$plugin['updateRequired'];
 
                 return $plugin;
             },

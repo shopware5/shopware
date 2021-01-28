@@ -132,7 +132,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $viewAssignments['showListing'] = (bool) max($showListing);
         }
 
-        $showListing = (empty($emotion) || !empty($emotion['show_listing']));
+        $showListing = empty($emotion) || !empty($emotion['show_listing']);
         $viewAssignments['showListing'] = $showListing;
 
         $this->View()->assign($viewAssignments);

@@ -247,8 +247,8 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
                     $option->getAttributes()
                 );
 
-                $isActive = ($isActive || $listItem->isActive());
-                $useMedia = ($useMedia || $listItem->getMedia() !== null);
+                $isActive = $isActive || $listItem->isActive();
+                $useMedia = $useMedia || $listItem->getMedia() !== null;
                 $items[] = $listItem;
             }
 

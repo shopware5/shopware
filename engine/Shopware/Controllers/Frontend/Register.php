@@ -139,12 +139,10 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             ];
         }
 
-        $errors['occurred'] = (
-            !empty($errors['personal'])
+        $errors['occurred'] = !empty($errors['personal'])
             || !empty($errors['shipping'])
             || !empty($errors['billing'])
-            || !empty($errors['captcha'])
-        );
+            || !empty($errors['captcha']);
 
         if ($errors['occurred']) {
             $this->handleRegisterError($data, $errors);

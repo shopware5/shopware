@@ -385,7 +385,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             );
 
             if ($shop instanceof Shop && $shop->getTemplate() instanceof Template) {
-                $theme['enabled'] = ($theme['id'] === $shop->getTemplate()->getId());
+                $theme['enabled'] = $theme['id'] === $shop->getTemplate()->getId();
             }
         }
 
