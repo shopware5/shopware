@@ -2368,6 +2368,9 @@ class Article extends Resource implements BatchInterface
                     $image,
                     $media
                 );
+
+                $image->setPosition($position);
+                ++$position;
             }
 
             $image->fromArray($imageData);
