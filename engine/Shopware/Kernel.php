@@ -51,7 +51,9 @@ use Shopware\Bundle\OrderBundle\OrderBundle;
 use Shopware\Bundle\PluginInstallerBundle\PluginInstallerBundle;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Bundle\SearchBundle\SearchBundle;
+use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALHandlerCompilerPass;
 use Shopware\Bundle\SearchBundleDBAL\SearchBundleDBAL;
+use Shopware\Bundle\SearchBundleES\DependencyInjection\Compiler\ESHandlerCompilerPass;
 use Shopware\Bundle\SearchBundleES\SearchBundleES;
 use Shopware\Bundle\SitemapBundle\SitemapBundle;
 use Shopware\Bundle\StaticContentBundle\StaticContentBundle;
@@ -673,6 +675,8 @@ class Kernel extends SymfonyKernel
         $container->addCompilerPass(new ControllerCompilerPass());
         $container->addCompilerPass(new RegisterControllerArgumentLocatorsPass('argument_resolver.service', 'shopware.controller'));
         $container->addCompilerPass(new VersionCompilerPass());
+        $container->addCompilerPass(new DBALHandlerCompilerPass());
+        $container->addCompilerPass(new ESHandlerCompilerPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 
