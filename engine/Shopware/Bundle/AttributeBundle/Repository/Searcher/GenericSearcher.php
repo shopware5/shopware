@@ -110,9 +110,14 @@ class GenericSearcher implements SearcherInterface
     {
         $classMetaData = $this->entityManager->getClassMetadata($this->entity);
 
-        return array_map(function ($field) {
-            return 'entity.' . $field;
-        }, $classMetaData->fieldNames);
+        $searchFields = [];
+        foreach($classMetaData->fieldMappings as $key => $fieldMapping) {
+            if($fieldMapping['type'] !== 'datetime') {
+                $searchFields[] = 'entity.' . $fieldMapping['fieldName'];
+            }
+        }
+
+        return $searchFields;
     }
 
     /**
