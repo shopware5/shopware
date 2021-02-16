@@ -43,6 +43,7 @@ PHP analyze:
         -   name: mysql:5.7
             alias: mysql
     artifacts:
+        expire_in: 1 week
         reports:
             junit: php-cs-fixer.xml
 
@@ -64,6 +65,7 @@ Code Coverage:
     artifacts:
         paths:
             - build/artifacts/*
+        expire_in: 1 week
         reports:
             junit: build/artifacts/phpunit.junit.xml
             cobertura: build/artifacts/phpunit-coverage-cobertura.xml
@@ -78,6 +80,7 @@ Code Coverage:
         - make test-phpunit
 
     artifacts:
+        expire_in: 1 week
         reports:
             junit: build/artifacts/test-log.xml
 
@@ -89,6 +92,7 @@ Code Coverage:
         - make test-phpunit-elasticsearch
 
     artifacts:
+        expire_in: 1 week
         reports:
             junit: build/artifacts/test-log.xml
 
@@ -177,6 +181,7 @@ Elasticsearch 7:
     stage: E2E
     artifacts:
         when: always
+        expire_in: 1 week
         paths:
             - build/artifacts/**
             - build/logs/**
