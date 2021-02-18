@@ -66,9 +66,8 @@ class Migrations_Migration1459 extends Shopware\Components\Migrations\AbstractMi
         UPDATE s_core_config_elements set `type`='select', `position`=5, options='%s', `value`='i:1;', label='Versandkostenberechnung im Warenkorb anzeigen' where id=@elementId;
         UPDATE `s_core_config_element_translations` set `label`='Show shipping costs calculation in shopping cart' where element_id=@elementId;
 
-		UPDATE s_core_config_values SET value = 'i:0;'
-        FROM s_core_config_values
-        WHERE element_id = @elementId);
+        UPDATE s_core_config_values SET value = 'i:0;'
+        WHERE element_id = @elementId;
 SQL;
         $this->addSql(sprintf($sql, serialize($options)));
     }
