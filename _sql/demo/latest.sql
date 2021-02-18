@@ -7227,7 +7227,8 @@ INSERT INTO `s_emotion_element_value` (`id`, `emotionID`, `elementID`, `componen
 (4273, 6, 1409, 3, 85, ''),
 (4274, 1, 1023, 6, 68, '17'),
 (4275, 1, 1023, 6, 12, '3'),
-(4276, 1, 1023, 6, 67, '3');
+(4276, 1, 1023, 6, 67, '3'),
+(4277, 7, 1512, 6, 67, '3');
 
 TRUNCATE TABLE `s_emotion_templates`;
 INSERT INTO `s_emotion_templates` (`id`, `name`, `file`) VALUES
