@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,20 +24,31 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\AccountBundle\Service\OptInLoginService;
 use Shopware\Bundle\AccountBundle\Service\OptInLoginServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
-use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\AttributeBundle\Service\DataLoader;
+use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\PaymentGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Cart\CartOrderNumberProviderInterface;
 use Shopware\Components\Cart\CartPersistServiceInterface;
 use Shopware\Components\Cart\ConditionalLineItemServiceInterface;
-use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Components\Compatibility\LegacyStructConverter;
+use Shopware\Components\HolidayTableUpdater;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Password\Manager;
 use Shopware\Components\Random;
+use Shopware\Components\Routing\RouterInterface;
+use Shopware\Components\Validator\EmailValidator;
 use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Mail\Mail;
+use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 
 /**
  * Shopware Class that handles several
@@ -112,7 +124,7 @@ class sAdmin implements \Enlight_Hook
      * Shopware password encoder.
      * Injected over the class constructor
      *
-     * @var \Shopware\Components\Password\Manager
+     * @var Manager
      */
     private $passwordEncoder;
 
@@ -124,7 +136,7 @@ class sAdmin implements \Enlight_Hook
     private $snippetManager;
 
     /**
-     * @var StoreFrontBundle\Service\ContextServiceInterface
+     * @var ContextServiceInterface
      */
     private $contextService;
 
@@ -143,24 +155,9 @@ class sAdmin implements \Enlight_Hook
     private $emailValidator;
 
     /**
-     * @var AddressServiceInterface
-     */
-    private $addressService;
-
-    /**
-     * @var NumberRangeIncrementerInterface
-     */
-    private $numberRangeIncrementer;
-
-    /**
-     * @var Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface
+     * @var DataLoaderInterface
      */
     private $attributeLoader;
-
-    /**
-     * @var Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface
-     */
-    private $attributePersister;
 
     /**
      * @var Shopware_Components_Translation
@@ -201,14 +198,12 @@ class sAdmin implements \Enlight_Hook
         Shopware_Components_Config $config = null,
         Enlight_Components_Session_Namespace $session = null,
         Enlight_Controller_Front $front = null,
-        \Shopware\Components\Password\Manager $passwordEncoder = null,
+        Manager $passwordEncoder = null,
         Shopware_Components_Snippet_Manager $snippetManager = null,
         Shopware_Components_Modules $moduleManager = null,
-        \sSystem $systemModule = null,
-        StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
+        sSystem $systemModule = null,
+        ContextServiceInterface $contextService = null,
         EmailValidatorInterface $emailValidator = null,
-        AddressServiceInterface $addressService = null,
-        NumberRangeIncrementerInterface $numberRangeIncrementer = null,
         Shopware_Components_Translation $translationComponent = null,
         Connection $connection = null,
         OptInLoginServiceInterface $optInLoginService = null
@@ -226,16 +221,12 @@ class sAdmin implements \Enlight_Hook
         $mainShop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
         $this->scopedRegistration = $mainShop->getCustomerScope();
 
-        $this->contextService = $contextService ?: Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
-        $this->emailValidator = $emailValidator ?: Shopware()->Container()->get(\Shopware\Components\Validator\EmailValidator::class);
+        $this->contextService = $contextService ?: Shopware()->Container()->get(ContextServiceInterface::class);
+        $this->emailValidator = $emailValidator ?: Shopware()->Container()->get(EmailValidator::class);
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
-        $this->addressService = $addressService ?: Shopware()->Container()->get(\Shopware\Bundle\AccountBundle\Service\AddressServiceInterface::class);
-        $this->attributeLoader = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class);
-        $this->attributePersister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
-        $this->numberRangeIncrementer = $numberRangeIncrementer ?: Shopware()->Container()->get(\Shopware\Components\NumberRangeIncrementerInterface::class);
+        $this->attributeLoader = Shopware()->Container()->get(DataLoader::class);
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
-        $this->connection = $connection ?: Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
-        $this->basketHelper = Shopware()->Container()->get(\Shopware\Components\Cart\BasketHelperInterface::class);
+        $this->connection = $connection ?: Shopware()->Container()->get(Connection::class);
         $this->optInLoginService = $optInLoginService ?: Shopware()->Container()->get(OptInLoginService::class);
         $this->conditionalLineItemService = Shopware()->Container()->get(ConditionalLineItemServiceInterface::class);
         $this->cartOrderNumberProvider = Shopware()->Container()->get(CartOrderNumberProviderInterface::class);
@@ -292,7 +283,8 @@ class sAdmin implements \Enlight_Hook
         }
 
         // Check additional rules
-        if ($this->sManageRisks($data['id'], null, $user)
+        if (
+            $this->sManageRisks($data['id'], null, $user)
             && $data['id'] != $user['additional']['user']['paymentpreset']
         ) {
             $resetPayment = $this->config->get('sPAYMENTDEFAULT');
@@ -349,10 +341,12 @@ class sAdmin implements \Enlight_Hook
         }
 
         if (isset($data['id'])) {
-            $data = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Gateway\PaymentGatewayInterface::class)->getList([$data['id']], $this->contextService->getShopContext());
+            $data = Shopware()->Container()->get(PaymentGatewayInterface::class)
+                ->getList([$data['id']], $this->contextService->getShopContext());
 
             if (!empty($data)) {
-                $data = Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertPaymentStruct(current($data));
+                $data = Shopware()->Container()->get(LegacyStructConverter::class)
+                    ->convertPaymentStruct(current($data));
             }
         }
 
@@ -453,7 +447,8 @@ class sAdmin implements \Enlight_Hook
             }
 
             // Check additional rules
-            if ($this->sManageRisks($payValue['id'], null, $user)
+            if (
+                $this->sManageRisks($payValue['id'], null, $user)
                 && $payValue['id'] != $user['additional']['user']['paymentpreset']
             ) {
                 unset($paymentMeans[$payKey]);
@@ -466,10 +461,11 @@ class sAdmin implements \Enlight_Hook
             $paymentMeans[] = ['id' => $this->config->offsetGet('paymentdefault')];
         }
 
-        $paymentMeans = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Gateway\PaymentGatewayInterface::class)->getList(array_column($paymentMeans, 'id'), $this->contextService->getShopContext());
+        $paymentMeans = Shopware()->Container()->get(PaymentGatewayInterface::class)
+            ->getList(array_column($paymentMeans, 'id'), $this->contextService->getShopContext());
 
         $paymentMeans = array_map(static function ($payment) {
-            return Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertPaymentStruct($payment);
+            return Shopware()->Container()->get(LegacyStructConverter::class)->convertPaymentStruct($payment);
         }, $paymentMeans);
 
         $paymentMeans = $this->eventManager->filter(
@@ -488,7 +484,7 @@ class sAdmin implements \Enlight_Hook
      *
      * @throws Enlight_Exception If no payment classes were loaded
      *
-     * @return ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod The payment mean handling class instance
+     * @return BasePaymentMethod The payment mean handling class instance
      */
     public function sInitiatePaymentClass($paymentData)
     {
@@ -581,10 +577,7 @@ class sAdmin implements \Enlight_Hook
             );
         } else {
             // Check if mail address is already subscribed, return
-            if ($this->db->fetchOne(
-                'SELECT id FROM s_campaigns_mailaddresses WHERE email = ?',
-                [$email]
-            )) {
+            if ($this->db->fetchOne('SELECT id FROM s_campaigns_mailaddresses WHERE email = ?', [$email])) {
                 return false;
             }
 
@@ -739,14 +732,16 @@ class sAdmin implements \Enlight_Hook
      */
     public function sLogin($ignoreAccountMode = false)
     {
-        if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_Login_Start',
-            [
+        if (
+            $this->eventManager->notifyUntil(
+                'Shopware_Modules_Admin_Login_Start',
+                [
                 'subject' => $this,
                 'ignoreAccountMode' => $ignoreAccountMode,
                 'post' => $this->front->Request()->getPost(),
-            ]
-        )) {
+                ]
+            )
+        ) {
             return false;
         }
 
@@ -834,7 +829,7 @@ class sAdmin implements \Enlight_Hook
             }
 
             if (empty($encoderName)) {
-                throw new \Exception('No encoder name given.');
+                throw new Exception('No encoder name given.');
             }
 
             $hash = $getUser['password'];
@@ -866,10 +861,12 @@ class sAdmin implements \Enlight_Hook
      */
     public function sCheckUser()
     {
-        if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_CheckUser_Start',
-            ['subject' => $this]
-        )) {
+        if (
+            $this->eventManager->notifyUntil(
+                'Shopware_Modules_Admin_CheckUser_Start',
+                ['subject' => $this]
+            )
+        ) {
             return false;
         }
 
@@ -891,7 +888,7 @@ class sAdmin implements \Enlight_Hook
         $sql = '
             SELECT * FROM s_user
             WHERE password = ? AND email = ? AND id = ?
-            AND UNIX_TIMESTAMP(lastlogin) >= (UNIX_TIMESTAMP(now())-?)
+            AND UNIX_TIMESTAMP(lastlogin) >= (UNIX_TIMESTAMP(NOW())-?)
         ';
 
         $getUser = $this->db->fetchRow(
@@ -1130,10 +1127,12 @@ class sAdmin implements \Enlight_Hook
      */
     public function sSaveRegisterSendConfirmation($email)
     {
-        if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start',
-            ['subject' => $this, 'email' => $email]
-        )) {
+        if (
+            $this->eventManager->notifyUntil(
+                'Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start',
+                ['subject' => $this, 'email' => $email]
+            )
+        ) {
             return false;
         }
 
@@ -1218,7 +1217,8 @@ class sAdmin implements \Enlight_Hook
         );
 
         foreach ($getOrders as $orderKey => $orderValue) {
-            if (($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA['tax'])
+            if (
+                ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA['tax'])
                 || (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
             ) {
                 $getOrders[$orderKey]['invoice_amount'] = $this->moduleManager->Articles()
@@ -1398,23 +1398,20 @@ class sAdmin implements \Enlight_Hook
             for ($i = 1; $i <= $numberOfPages; ++$i) {
                 $pagesStructure['numbers'][$i]['markup'] = ($i == $destinationPage);
                 $pagesStructure['numbers'][$i]['value'] = $i;
-                $pagesStructure['numbers'][$i]['link'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + ['sPage' => $i]
-                );
+                $pagesStructure['numbers'][$i]['link'] = $baseFile . $this->moduleManager->Core()
+                        ->sBuildLink($additionalParams + ['sPage' => $i]);
             }
             // Previous page
             if ($destinationPage != 1) {
-                $pagesStructure['previous'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + ['sPage' => $destinationPage - 1]
-                );
+                $pagesStructure['previous'] = $baseFile . $this->moduleManager->Core()
+                        ->sBuildLink($additionalParams + ['sPage' => $destinationPage - 1]);
             } else {
                 $pagesStructure['previous'] = null;
             }
             // Next page
             if ($destinationPage != $numberOfPages) {
-                $pagesStructure['next'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + ['sPage' => $destinationPage + 1]
-                );
+                $pagesStructure['next'] = $baseFile . $this->moduleManager->Core()
+                        ->sBuildLink($additionalParams + ['sPage' => $destinationPage + 1]);
             } else {
                 $pagesStructure['next'] = null;
             }
@@ -1477,10 +1474,12 @@ class sAdmin implements \Enlight_Hook
      */
     public function sGetUserData()
     {
-        if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_GetUserData_Start',
-            ['subject' => $this]
-        )) {
+        if (
+            $this->eventManager->notifyUntil(
+                'Shopware_Modules_Admin_GetUserData_Start',
+                ['subject' => $this]
+            )
+        ) {
             return false;
         }
         $register = $this->session->offsetGet('sRegister');
@@ -1522,7 +1521,8 @@ class sAdmin implements \Enlight_Hook
         } else {
             // No user logged in
             $register = $this->session->offsetGet('sRegister');
-            if ($this->session->offsetGet('sCountry')
+            if (
+                $this->session->offsetGet('sCountry')
                 && $this->session->offsetGet('sCountry') != $register['billing']['country']
             ) {
                 $register['billing']['country'] = (int) $this->session->offsetGet('sCountry');
@@ -1588,7 +1588,8 @@ class sAdmin implements \Enlight_Hook
             } elseif ($rule['rule1'] && $rule['rule2']) {
                 $rule['rule1'] = 'sRisk' . $rule['rule1'];
                 $rule['rule2'] = 'sRisk' . $rule['rule2'];
-                if ($this->executeRiskRule($rule['rule1'], $user, $basket, $rule['value1'], $paymentID)
+                if (
+                    $this->executeRiskRule($rule['rule1'], $user, $basket, $rule['value1'], $paymentID)
                     && $this->executeRiskRule($rule['rule2'], $user, $basket, $rule['value2'], $paymentID)
                 ) {
                     return true;
@@ -1612,16 +1613,18 @@ class sAdmin implements \Enlight_Hook
      */
     public function executeRiskRule($rule, $user, $basket, $value, $paymentID = null)
     {
-        if ($event = $this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
-            [
+        if (
+            $event = $this->eventManager->notifyUntil(
+                'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
+                [
                 'rule' => $rule,
                 'user' => $user,
                 'basket' => $basket,
                 'value' => $value,
                 'paymentID' => $paymentID,
-            ]
-        )) {
+                ]
+            )
+        ) {
             return $event->getReturn();
         }
 
@@ -2290,9 +2293,10 @@ class sAdmin implements \Enlight_Hook
     {
         if (empty($unsubscribe)) {
             $errorFlag = [];
-            $config = Shopware()->Container()->get(\Shopware_Components_Config::class);
+            $config = Shopware()->Container()->get(Shopware_Components_Config::class);
 
-            if ($this->shouldVerifyCaptcha($config)
+            if (
+                $this->shouldVerifyCaptcha($config)
                 && (bool) $this->front->Request()->getParam('voteConfirmed', false) === false
             ) {
                 /** @var CaptchaValidator $captchaValidator */
@@ -2371,7 +2375,7 @@ class sAdmin implements \Enlight_Hook
         if (!empty($result['code']) && in_array($result['code'], [2, 3])) {
             $voteConfirmed = $this->front->getParam('voteConfirmed');
             $now = $this->front->getParam('optinNow');
-            $now = isset($now) ? $now : (new \DateTime())->format('Y-m-d H:i:s');
+            $now = isset($now) ? $now : (new DateTime())->format('Y-m-d H:i:s');
 
             $added = $voteConfirmed ? $this->front->getParam('optinDate') : $now;
             $doubleOptInConfirmed = $voteConfirmed ? $now : null;
@@ -2440,7 +2444,7 @@ class sAdmin implements \Enlight_Hook
      */
     public function sCreateHolidaysTable()
     {
-        /** @var \Shopware\Components\HolidayTableUpdater $updater */
+        /** @var HolidayTableUpdater $updater */
         $updater = Shopware()->Container()->get('shopware.holiday_table_updater');
         $updater->update();
 
@@ -2558,7 +2562,7 @@ class sAdmin implements \Enlight_Hook
             ]
         );
 
-        $calculations = $calculationQueryBuilder->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $calculations = $calculationQueryBuilder->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
 
         if (!empty($calculations)) {
             foreach ($calculations as $dispatchID => $calculation) {
@@ -2602,7 +2606,7 @@ class sAdmin implements \Enlight_Hook
             ]
         );
 
-        $basket = $queryBuilder->execute()->fetch(\PDO::FETCH_ASSOC);
+        $basket = $queryBuilder->execute()->fetch(PDO::FETCH_ASSOC);
 
         if ($basket === false) {
             return false;
@@ -2709,7 +2713,7 @@ class sAdmin implements \Enlight_Hook
             ->where('active = 1 AND type IN (0)')
             ->andWhere('bind_sql IS NOT NULL AND bind_sql != ""')
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->fetchAll(PDO::FETCH_KEY_PAIR);
 
         if (empty($basket)) {
             return [];
@@ -2799,7 +2803,7 @@ class sAdmin implements \Enlight_Hook
             ]
         );
 
-        $dispatches = $queryBuilder->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
+        $dispatches = $queryBuilder->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
 
         if (empty($dispatches)) {
             $sql = '
@@ -2840,7 +2844,7 @@ class sAdmin implements \Enlight_Hook
                 $dispatch['description'] = $object[$dispatch['id']]['dispatch_description'];
             }
 
-            $dispatch['attribute'] = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class)
+            $dispatch['attribute'] = Shopware()->Container()->get(DataLoader::class)
                 ->load('s_premium_dispatch_attributes', $dispatch['id']);
 
             if (!empty($dispatch['attribute'])) {
@@ -3080,7 +3084,8 @@ class sAdmin implements \Enlight_Hook
             $dispatch['shippingfree'] = round($dispatch['shippingfree'] / (100 + $discount_tax) * 100, 2);
         }
 
-        if ((!empty($dispatch['shippingfree']) && $dispatch['shippingfree'] <= $basket['amount_display'])
+        if (
+            (!empty($dispatch['shippingfree']) && $dispatch['shippingfree'] <= $basket['amount_display'])
             || empty($basket['count_article'])
             || (!empty($basket['shippingfree']) && empty($dispatch['bind_shippingfree']))
         ) {
@@ -3088,7 +3093,7 @@ class sAdmin implements \Enlight_Hook
                 $tax = (float) $basket['max_tax'];
 
                 if (!empty($dispatch['tax_calculation'])) {
-                    $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+                    $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
                     $taxRule = $context->getTaxRule($dispatch['tax_calculation']);
                     $tax = $taxRule->getTax();
                 }
@@ -3145,7 +3150,8 @@ class sAdmin implements \Enlight_Hook
         }
         $result['brutto'] *= $currencyFactor;
         $result['brutto'] = round($result['brutto'], 2);
-        if (!empty($payment['surcharge'])
+        if (
+            !empty($payment['surcharge'])
             && $dispatch['surcharge_calculation'] != 2
             && (empty($basket['shippingfree']) || empty($dispatch['surcharge_calculation']))
         ) {
@@ -3284,7 +3290,7 @@ class sAdmin implements \Enlight_Hook
                     'attrValue' => $value,
                     'sessionID' => $this->session->offsetGet('sessionId'),
                 ])
-                ->execute()->fetch(\PDO::FETCH_ASSOC);
+                ->execute()->fetch(PDO::FETCH_ASSOC);
 
             $sqlProductId = $this->connection->createQueryBuilder()
                 ->select(['s_articles_attributes.id'])
@@ -3298,7 +3304,7 @@ class sAdmin implements \Enlight_Hook
                     'attrValue' => $value,
                     'sessionID' => $this->session->offsetGet('sessionId'),
                 ])
-                ->execute()->fetch(\PDO::FETCH_ASSOC);
+                ->execute()->fetch(PDO::FETCH_ASSOC);
 
             return (bool) $sqlProductOrderNumber || (bool) $sqlProductId;
         }
@@ -3310,9 +3316,9 @@ class sAdmin implements \Enlight_Hook
      * Sends a mail to the given recipient with a given template.
      * If the opt in parameter is set, the sConfirmLink variable will be filled by the opt in link.
      *
-     * @param string                            $recipient
-     * @param string|\Shopware\Models\Mail\Mail $template
-     * @param string                            $optIn
+     * @param string      $recipient
+     * @param string|Mail $template
+     * @param string      $optIn
      */
     private function sendMail($recipient, $template, $optIn = '')
     {
@@ -3345,10 +3351,12 @@ class sAdmin implements \Enlight_Hook
     {
         $oldSessionId = $this->session->getId();
 
-        if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_regenerateSessionId_Start',
-            ['subject' => $this, 'sessionId' => $oldSessionId]
-        )) {
+        if (
+            $this->eventManager->notifyUntil(
+                'Shopware_Modules_Admin_regenerateSessionId_Start',
+                ['subject' => $this, 'sessionId' => $oldSessionId]
+            )
+        ) {
             return;
         }
 
@@ -3395,7 +3403,8 @@ class sAdmin implements \Enlight_Hook
     private function overwriteBillingAddress(array $userData)
     {
         // Temporarily overwrite billing address
-        if (!$this->session->offsetGet('checkoutBillingAddressId')
+        if (
+            !$this->session->offsetGet('checkoutBillingAddressId')
             || Shopware()->Front()->Request()->getControllerName() !== 'checkout'
         ) {
             return $userData;
@@ -3411,7 +3420,7 @@ class sAdmin implements \Enlight_Hook
 
             $userData['billingaddress'] = array_merge($userData['billingaddress'], $legacyAddress);
             $userData = $this->completeUserCountryData($userData);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             // No need to overwrite default billing address
             $this->session->offsetUnset('checkoutBillingAddressId');
         }
@@ -3427,8 +3436,10 @@ class sAdmin implements \Enlight_Hook
     private function overwriteShippingAddress(array $userData)
     {
         // Temporarily overwrite shipping address
-        if (!$this->session->offsetGet('checkoutShippingAddressId') || Shopware()->Front()->Request()
-                ->getControllerName() !== 'checkout') {
+        if (
+            !$this->session->offsetGet('checkoutShippingAddressId') || Shopware()->Front()->Request()
+                ->getControllerName() !== 'checkout'
+        ) {
             return $userData;
         }
 
@@ -3442,7 +3453,7 @@ class sAdmin implements \Enlight_Hook
 
             $userData['shippingaddress'] = array_merge($userData['shippingaddress'], $legacyAddress);
             $userData = $this->completeUserCountryData($userData, true);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             // No need to overwrite default shipping address
             $this->session->offsetUnset('checkoutShippingAddressId');
         }
@@ -3507,16 +3518,16 @@ SQL;
         $countryKey = $isShippingAddress ? 'countryShipping' : 'country';
         $stateKey = $isShippingAddress ? 'stateShipping' : 'state';
 
-        $userData['additional'][$countryKey] = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)
+        $userData['additional'][$countryKey] = Shopware()->Container()->get(Connection::class)
             ->executeQuery($sql, [$userData[$addressKey]['countryID']])
-            ->fetch(\PDO::FETCH_ASSOC);
+            ->fetch(PDO::FETCH_ASSOC);
 
-        $userData['additional'][$stateKey] = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)
+        $userData['additional'][$stateKey] = Shopware()->Container()->get(Connection::class)
             ->executeQuery(
                 'SELECT *, name AS statename FROM s_core_countries_states WHERE id = ?',
                 [$userData[$addressKey]['stateID']]
             )
-            ->fetch(\PDO::FETCH_ASSOC);
+            ->fetch(PDO::FETCH_ASSOC);
 
         // Get translations
         $userData['additional'][$countryKey] = $this->sGetCountryTranslation($userData['additional'][$countryKey]);
@@ -3561,7 +3572,7 @@ SQL;
             $hash = $this->optInLoginService->refreshOptInHashForUser(
                 (int) $getUser['id'],
                 (int) $getUser['register_opt_in_id'],
-                \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $getUser['doubleOptinEmailSentDate'])
+                DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $getUser['doubleOptinEmailSentDate'])
             );
 
             $userInfo = [
@@ -3632,7 +3643,7 @@ SQL;
      */
     private function resendConfirmationMail(array $userInfo, $hash)
     {
-        $link = Shopware()->Container()->get(\Shopware\Components\Routing\RouterInterface::class)->assemble([
+        $link = Shopware()->Container()->get(RouterInterface::class)->assemble([
             'sViewport' => 'register',
             'action' => 'confirmValidation',
             'sConfirmation' => $hash,
@@ -3653,7 +3664,8 @@ SQL;
             ]
         );
 
-        $mail = Shopware()->Container()->get(\Shopware_Components_TemplateMail::class)->createMail('sOPTINREGISTER', $context);
+        $mail = Shopware()->Container()->get(Shopware_Components_TemplateMail::class)
+            ->createMail('sOPTINREGISTER', $context);
         $mail->addTo($userInfo['mail']);
         $mail->send();
     }
@@ -3681,9 +3693,9 @@ SQL;
 
         $context = $this->contextService->getShopContext();
         $orderProductOrderNumbers = array_column($orderDetails, 'articleordernumber');
-        $listProducts = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
+        $listProducts = Shopware()->Container()->get(ListProductServiceInterface::class)
             ->getList($orderProductOrderNumbers, $context);
-        $listProducts = Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)
+        $listProducts = Shopware()->Container()->get(LegacyStructConverter::class)
             ->convertListProductStructList($listProducts);
 
         foreach ($listProducts as &$listProduct) {
@@ -3819,7 +3831,7 @@ SQL;
      */
     private function getUserShippingData($userId, $userData, $countryQuery)
     {
-        $entityManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
+        $entityManager = Shopware()->Container()->get(ModelManager::class);
         $customer = $entityManager->find(Shopware\Models\Customer\Customer::class, $userId);
         $shipping = $this->convertToLegacyAddressArray($customer->getDefaultShippingAddress());
         $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']);
@@ -3876,7 +3888,7 @@ SQL;
      */
     private function getUserBillingData(int $userId, array $userData): array
     {
-        $entityManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
+        $entityManager = Shopware()->Container()->get(ModelManager::class);
         $customer = $entityManager->find(Customer::class, $userId);
         if (!$customer) {
             throw new Exception(sprintf('Customer with id %s not found', $userId));
@@ -3916,7 +3928,7 @@ SQL;
 
             $voteConfirmed = $this->front->getParam('voteConfirmed');
             $now = $this->front->getParam('optinNow');
-            $now = isset($now) ? $now : (new \DateTime())->format('Y-m-d H:i:s');
+            $now = isset($now) ? $now : (new DateTime())->format('Y-m-d H:i:s');
 
             $added = $voteConfirmed ? $this->front->getParam('optinDate') : $now;
             $doubleOptInConfirmed = $voteConfirmed ? $now : null;
@@ -3983,7 +3995,8 @@ SQL;
             if (empty($dispatch['calculation'])) {
                 $from = round($basket['weight'], 3);
             } elseif ($dispatch['calculation'] == 1) {
-                if (($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA['tax'])
+                if (
+                    ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA['tax'])
                     || (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
                 ) {
                     $from = round($basket['amount_net'], 2);
@@ -4227,7 +4240,7 @@ SQL;
         if (!$this->session->offsetGet('sUserId')) {
             return 0;
         }
-        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $dbal = Shopware()->Container()->get(Connection::class);
 
         return (int) $dbal->fetchColumn(
             'SELECT default_billing_address_id
@@ -4248,7 +4261,7 @@ SQL;
         if (!$this->session->offsetGet('sUserId')) {
             return 0;
         }
-        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $dbal = Shopware()->Container()->get(Connection::class);
 
         return (int) $dbal->fetchColumn(
             'SELECT default_shipping_address_id
@@ -4259,7 +4272,7 @@ SQL;
     }
 
     /**
-     * @param \Shopware_Components_Config $config
+     * @param Shopware_Components_Config $config
      *
      * @return bool
      */
@@ -4273,7 +4286,7 @@ SQL;
      * @param string $amount
      * @param string $amount_net
      *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @return QueryBuilder
      */
     private function getBasketQueryBuilder($amount, $amount_net)
     {

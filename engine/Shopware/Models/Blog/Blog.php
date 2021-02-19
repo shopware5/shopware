@@ -328,7 +328,7 @@ class Blog extends ModelEntity
      */
     public function setDisplayDate($displayDate)
     {
-        if (!$displayDate instanceof \DateTimeInterface && strlen($displayDate) > 0) {
+        if (!$displayDate instanceof \DateTimeInterface && $displayDate !== '') {
             $displayDate = new \DateTime($displayDate);
         }
         $this->displayDate = $displayDate;

@@ -175,7 +175,7 @@ class ProductHydrator extends Hydrator
         $product->setAllowsNotification((bool) ($data['__product_notification']));
         $product->setKeywords($data['__product_keywords']);
         $product->setTemplate($data['__product_template']);
-        $product->setHasConfigurator(($data['__product_configurator_set_id'] > 0));
+        $product->setHasConfigurator($data['__product_configurator_set_id'] > 0);
         $product->setHasEsd((bool) $data['__product_has_esd']);
         $product->setIsPriceGroupActive((bool) $data['__product_pricegroupActive']);
         $product->setSales((int) $data['__topSeller_sales']);

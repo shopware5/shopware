@@ -283,7 +283,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             foreach ($snippets as $snippet) {
                 /** @var Snippet $snippetModel */
                 $snippetModel = Shopware()->Models()->getRepository(Snippet::class)->find($snippet['id']);
-                $dirty = ($snippetModel->getDirty() || strcmp($snippetModel->getValue(), $snippet['value']) != 0);
+                $dirty = $snippetModel->getDirty() || strcmp($snippetModel->getValue(), $snippet['value']) != 0;
                 $snippetModel->setDirty($dirty);
                 $snippetModel->setValue($snippet['value']);
 
@@ -314,7 +314,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         $params = $this->Request()->getPost();
-        $dirty = ($result->getDirty() || strcmp($result->getValue(), $params['value']) != 0);
+        $dirty = $result->getDirty() || strcmp($result->getValue(), $params['value']) != 0;
         $result->setDirty($dirty);
         $result->fromArray($params);
 

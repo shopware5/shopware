@@ -50,7 +50,7 @@ class BasketQueryHelperTest extends TestCase
         $this->queryHelper = null;
     }
 
-    public function test_getPositionPricesQuery()
+    public function testGetPositionPricesQuery()
     {
         $discountContext = $this->getDiscountContext();
         $result = $this->queryHelper->getPositionPricesQuery($discountContext);
@@ -61,7 +61,7 @@ class BasketQueryHelperTest extends TestCase
         static::assertSame($expectedSql, $result->getSQL());
     }
 
-    public function test_getInsertDiscountAttributeQuery()
+    public function testGetInsertDiscountAttributeQuery()
     {
         $discountContext = $this->getDiscountContext();
         $result = $this->queryHelper->getInsertDiscountAttributeQuery($discountContext);
@@ -72,7 +72,7 @@ class BasketQueryHelperTest extends TestCase
         static::assertSame($expectedSql, $result->getSQL());
     }
 
-    public function test_getInsertDiscountQuery()
+    public function testGetInsertDiscountQuery()
     {
         $discountContext = $this->getDiscountContext();
         $discountContext->setPrice($this->getPrice());
@@ -85,7 +85,7 @@ class BasketQueryHelperTest extends TestCase
         static::assertSame($expectedSql, $result->getSQL());
     }
 
-    public function test_getLastInsertId()
+    public function testGetLastInsertId()
     {
         $connectionMock = $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()

@@ -339,7 +339,7 @@ class StructHydrator
         $plugin->setCapabilityUpdate((bool) $data['capability_update']);
         $plugin->setCapabilityInstall((bool) $data['capability_install']);
         $plugin->setCapabilitySecureUninstall((bool) $data['capability_secure_uninstall']);
-        $plugin->setLocalUpdateAvailable(($data['update_version'] !== null));
+        $plugin->setLocalUpdateAvailable($data['update_version'] !== null);
         $plugin->setLink($data['link']);
 
         if (array_key_exists('redirectToStore', $data)) {

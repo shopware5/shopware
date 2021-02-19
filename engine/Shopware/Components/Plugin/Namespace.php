@@ -142,7 +142,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      *
      * @return Enlight_Plugin_PluginManager|Shopware_Components_Plugin_Namespace
      */
-    public function registerPlugin(Enlight_Plugin_Bootstrap $plugin, \DateTimeInterface $refreshDate = null)
+    public function registerPlugin(Enlight_Plugin_Bootstrap $plugin, DateTimeInterface $refreshDate = null)
     {
         parent::registerPlugin($plugin);
 

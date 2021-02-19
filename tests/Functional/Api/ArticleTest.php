@@ -268,7 +268,7 @@ class ArticleTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get(('Set-Cookie')));
+        static::assertEquals(null, $response->headers->get('Set-Cookie'));
         static::assertEquals(201, $response->getStatusCode());
         static::assertArrayHasKey('location', $response->headers->all());
 

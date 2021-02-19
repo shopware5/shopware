@@ -715,7 +715,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $icon = $data['iconCls'];
         }
 
-        $thumbnailHighDpi = (isset($data['thumbnailHighDpi']) && $data['thumbnailHighDpi']);
+        $thumbnailHighDpi = isset($data['thumbnailHighDpi']) && $data['thumbnailHighDpi'];
         $thumbnailQuality = $data['thumbnailQuality'] ?: 90;
         $thumbnailHighDpiQuality = $data['thumbnailHighDpiQuality'] ?: 70;
 
@@ -1150,12 +1150,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         return $builder->getQuery()->getResult();
     }
 
-    /**
-     * @param Exception $exception
-     *
-     * @return array
-     */
-    private function parseExceptionForResponse(\Exception $exception)
+    private function parseExceptionForResponse(Exception $exception): array
     {
         return array_merge(
             json_decode(json_encode($exception), true),

@@ -153,7 +153,7 @@ class PluginLicenceService
         $expirations = [];
         foreach ($licenses as $license) {
             if (!empty($license['license'])) {
-                $info = $this->unpackService->readLicenseInfo(($license['license']));
+                $info = $this->unpackService->readLicenseInfo($license['license']);
                 if (!$info) {
                     continue;
                 }

@@ -146,7 +146,7 @@ class PriceSortingTest extends TestCase
         );
 
         $context->getCurrentCustomerGroup()->setDisplayGrossPrices($displayGross);
-        $context->getCurrentCustomerGroup()->setUseDiscount(($discount !== null));
+        $context->getCurrentCustomerGroup()->setUseDiscount($discount !== null);
         $context->getCurrentCustomerGroup()->setPercentageDiscount($discount);
 
         return $context;

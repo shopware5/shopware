@@ -403,7 +403,7 @@ class TranslationTest extends TestCase
         $data = unserialize($result->getData());
 
         foreach ($data as $item) {
-            $isInString = (strpos($item, '-UpdateByNumber') !== false);
+            $isInString = strpos($item, '-UpdateByNumber') !== false;
             static::assertTrue($isInString);
         }
     }

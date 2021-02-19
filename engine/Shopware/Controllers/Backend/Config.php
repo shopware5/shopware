@@ -23,10 +23,13 @@
  */
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Connection;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Value;
 use Shopware\Models\Document\Element as DocumentElement;
+use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
+use Shopware\Models\Tax\Tax;
 
 class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_ExtJs
 {
@@ -654,7 +657,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 } else {
                     $data['mapping'] = null;
                 }
-                $connection = $this->container->get(\Doctrine\DBAL\Connection::class);
+                $connection = $this->container->get(Connection::class);
 
                 $currentKey = $connection->fetchColumn('SELECT `key` FROM s_cms_static_groups WHERE id = ?', [
                     (int) $this->Request()->getParam('id'),
@@ -1275,7 +1278,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
                 // check existence of each locale
                 foreach ($value as $localeId) {
-                    $locale = Shopware()->Models()->find('Shopware\Models\Shop\Locale', $localeId);
+                    $locale = Shopware()->Models()->find(Locale::class, $localeId);
                     if ($locale === null) {
                         return false;
                     }
@@ -1287,7 +1290,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         return true;
     }
 
-    private function saveTaxRules(array $data, \Shopware\Models\Tax\Tax $model)
+    private function saveTaxRules(array $data, Tax $model): void
     {
         if (isset($data['rules'])) {
             $model->getRules()->clear();
@@ -1309,20 +1312,11 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $this->View()->assign(['success' => true]);
     }
 
-    /**
-     * @param array $elementData
-     *
-     * @return bool
-     */
-    private function beforeSaveElement($elementData)
+    private function beforeSaveElement(array $elementData): void
     {
-        switch ($elementData['name']) {
-            case 'shopsalutations':
-                $this->createSalutationSnippets($elementData);
-                break;
+        if ($elementData['name'] === 'shopsalutations') {
+            $this->createSalutationSnippets($elementData);
         }
-
-        return true;
     }
 
     /**
@@ -1330,7 +1324,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     private function getShopLocaleMapping()
     {
-        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $connection = Shopware()->Container()->get(Connection::class);
         $query = $connection->createQueryBuilder();
         $query->select(['locale_id, IFNULL(main_id, id)']);
         $query->from('s_core_shops');
@@ -1345,9 +1339,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    private function createSalutationSnippets($elementData)
+    private function createSalutationSnippets($elementData): void
     {
-        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $connection = Shopware()->Container()->get(Connection::class);
 
         $shops = $this->getShopLocaleMapping();
 
@@ -1477,7 +1471,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             return 1;
         }
 
-        $fallback = (int) $this->container->get(\Doctrine\DBAL\Connection::class)->fetchColumn(
+        $fallback = (int) $this->container->get(Connection::class)->fetchColumn(
             "SELECT id FROM s_core_locales WHERE locale = 'en_GB'"
         );
 

@@ -22,10 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Customer\Address as AddressModel;
 use Shopware\Models\Customer\Customer;
+use Symfony\Component\Form\FormInterface;
 
 class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_Application
 {
@@ -44,7 +49,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
     public function preDispatch()
     {
         parent::preDispatch();
-        $this->addressService = $this->get(\Shopware\Bundle\AccountBundle\Service\AddressServiceInterface::class);
+        $this->addressService = $this->get(AddressServiceInterface::class);
     }
 
     /**
@@ -59,7 +64,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
             return;
         }
         $address = $this->getManager()->getRepository(AddressModel::class)->find($customerAddressId);
-        Shopware()->Container()->get(\Shopware\Bundle\AccountBundle\Service\AddressServiceInterface::class)->update($address);
+        Shopware()->Container()->get(AddressServiceInterface::class)->update($address);
     }
 
     /**
@@ -83,7 +88,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
         $data['country'] = $data['countryId'];
         $data['state'] = $data['stateId'];
 
-        /** @var \Symfony\Component\Form\FormInterface $form */
+        /** @var FormInterface $form */
         $form = $this->get('shopware.form.factory')->create(AddressFormType::class, $model);
         $form->submit($data);
 
@@ -105,7 +110,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
             $this->addressService->update($model);
         } else {
             /** @var Customer $customer */
-            $customer = $this->get(\Shopware\Components\Model\ModelManager::class)->find(Customer::class, $data['user_id']);
+            $customer = $this->get(ModelManager::class)->find(Customer::class, $data['user_id']);
             $this->addressService->create($model, $customer);
         }
 
@@ -173,13 +178,11 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
     /**
      * {@inheritdoc}
      */
-    protected function getQueryPaginator(
-        \Doctrine\ORM\QueryBuilder $builder,
-        $hydrationMode = \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
-    ) {
+    protected function getQueryPaginator(QueryBuilder $builder, $hydrationMode = AbstractQuery::HYDRATE_ARRAY)
+    {
         $query = $builder->getQuery();
         $query->setHydrationMode($hydrationMode);
-        $query->setHint(\Doctrine\ORM\Query::HINT_INCLUDE_META_COLUMNS, true);
+        $query->setHint(Query::HINT_INCLUDE_META_COLUMNS, true);
 
         return $this->getManager()->createPaginator($query);
     }
@@ -195,10 +198,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
         return $query;
     }
 
-    /**
-     * @return \Shopware\Components\Model\QueryBuilder
-     */
-    private function addAssociations(\Shopware\Components\Model\QueryBuilder $query)
+    private function addAssociations(QueryBuilder $query): QueryBuilder
     {
         $query
             ->addSelect(['country', 'state', 'PARTIAL customer.{id,email}'])

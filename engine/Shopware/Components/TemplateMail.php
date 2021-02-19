@@ -144,7 +144,7 @@ class Shopware_Components_TemplateMail
     /**
      * @return \Shopware_Components_TemplateMail
      */
-    public function setStringCompiler(\Shopware_Components_StringCompiler $stringCompiler)
+    public function setStringCompiler(Shopware_Components_StringCompiler $stringCompiler)
     {
         $this->stringCompiler = $stringCompiler;
 
@@ -262,7 +262,7 @@ class Shopware_Components_TemplateMail
      *
      * @return \Enlight_Components_Mail
      */
-    public function loadValues(\Enlight_Components_Mail $mail, Mail $mailModel, $overrideConfig = [])
+    public function loadValues(Enlight_Components_Mail $mail, Mail $mailModel, $overrideConfig = [])
     {
         $stringCompiler = $this->getStringCompiler();
 

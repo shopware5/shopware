@@ -48,7 +48,7 @@ class Shopware_Components_StringCompiler
     /**
      * @param array $context
      */
-    public function __construct(\Enlight_Template_Manager $view, $context = null)
+    public function __construct(Enlight_Template_Manager $view, $context = null)
     {
         $this->setView($view);
 
@@ -88,11 +88,9 @@ class Shopware_Components_StringCompiler
     }
 
     /**
-     * @param Enlight_Template_Manager $view
-     *
      * @return Shopware_Components_StringCompiler
      */
-    public function setView(\Enlight_Template_Manager $view)
+    public function setView(Enlight_Template_Manager $view)
     {
         $this->view = $view;
 
@@ -131,7 +129,7 @@ class Shopware_Components_StringCompiler
      */
     public function compileString($value, $context = null)
     {
-        if (strlen($value) == 0) {
+        if ($value == '') {
             return $value;
         }
 

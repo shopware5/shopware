@@ -66,7 +66,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
         $httpCache = $this->getPluginByName('HttpCache');
 
-        $active = ($httpCache->getActive() && $httpCache->getInstalled() != null);
+        $active = $httpCache->getActive() && $httpCache->getInstalled() != null;
 
         $this->View()->assign([
             'success' => true,

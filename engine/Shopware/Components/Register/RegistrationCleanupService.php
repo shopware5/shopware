@@ -40,7 +40,7 @@ class RegistrationCleanupService implements RegistrationCleanupServiceInterface
      */
     private $connection;
 
-    public function __construct(\Shopware_Components_Config $config, Connection $connection)
+    public function __construct(Shopware_Components_Config $config, Connection $connection)
     {
         $this->config = $config;
         $this->connection = $connection;

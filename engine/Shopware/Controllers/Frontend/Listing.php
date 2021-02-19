@@ -278,10 +278,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         $location = false;
 
-        $checkRedirect = (
-            ($hasEmotion && $this->Request()->getParam('sPage'))
-            || (!$hasEmotion)
-        );
+        $checkRedirect = ($hasEmotion && $this->Request()->getParam('sPage')) || (!$hasEmotion);
 
         if (!empty($categoryContent['external'])) {
             $location = $categoryContent['external'];

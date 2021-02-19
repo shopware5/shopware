@@ -47,7 +47,7 @@ class InheritanceTest extends Base
         $connection->rollBack();
     }
 
-    public function getTheme(\Shopware\Models\Shop\Template $template)
+    public function getTheme(Template $template)
     {
         if ($template->getParent() === null) {
             return $this->getBareTheme();

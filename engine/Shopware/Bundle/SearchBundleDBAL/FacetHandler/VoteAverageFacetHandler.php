@@ -164,21 +164,15 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
         );
     }
 
-    /**
-     * @param array $data
-     * @param float $activeAverage
-     *
-     * @return array
-     */
-    private function buildItems($data, $activeAverage)
+    private function buildItems(array $data, ?float $activeAverage): array
     {
-        usort($data, function ($a, $b) {
-            return $a['average'] > $b['average'];
+        usort($data, static function ($a, $b) {
+            return $a['average'] <=> $b['average'];
         });
 
         $values = [];
         for ($i = 1; $i <= 4; ++$i) {
-            $affected = array_filter($data, function ($value) use ($i) {
+            $affected = array_filter($data, static function ($value) use ($i) {
                 return $value['average'] >= $i;
             });
 
@@ -187,11 +181,11 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
                 continue;
             }
 
-            $values[] = new ValueListItem($i, (string) $count, $activeAverage == $i);
+            $values[] = new ValueListItem($i, (string) $count, (int) $activeAverage === $i);
         }
 
-        usort($values, function (ValueListItem $a, ValueListItem $b) {
-            return $a->getId() < $b->getId();
+        usort($values, static function (ValueListItem $a, ValueListItem $b) {
+            return $b->getId() <=> $a->getId();
         });
 
         return $values;

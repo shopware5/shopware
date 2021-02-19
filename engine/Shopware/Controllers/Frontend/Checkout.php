@@ -1384,7 +1384,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         if (Shopware()->Config()->get('sINQUIRYVALUE')) {
             $factor = Shopware()->System()->sCurrency['factor'] ? 1 : Shopware()->System()->sCurrency['factor'];
             $value = Shopware()->Config()->get('sINQUIRYVALUE') * $factor;
-            if ((!Shopware()->System()->sUSERGROUPDATA['tax'] && Shopware()->System()->sUSERGROUPDATA['id'])) {
+            if (!Shopware()->System()->sUSERGROUPDATA['tax'] && Shopware()->System()->sUSERGROUPDATA['id']) {
                 $amount = $this->View()->sBasket['AmountWithTaxNumeric'];
             } else {
                 $amount = $this->View()->sBasket['AmountNumeric'];

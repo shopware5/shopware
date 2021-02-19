@@ -125,7 +125,7 @@ class ProductListingVariationLoader
 
         $calculated = [];
         foreach ($contexts as $context) {
-            if (!array_key_exists($context->getCurrentCustomerGroup()->getKey(), $combinationPrices)) {
+            if (!\array_key_exists($context->getCurrentCustomerGroup()->getKey(), $combinationPrices)) {
                 continue;
             }
 
@@ -136,7 +136,7 @@ class ProductListingVariationLoader
 
             foreach ($customerPrices as $number => $productPrices) {
                 foreach ($productPrices as &$price) {
-                    $price = $price * $context->getCurrency()->getFactor();
+                    $price *= $context->getCurrency()->getFactor();
                 }
                 unset($price);
 
@@ -219,10 +219,10 @@ class ProductListingVariationLoader
         return array_filter($results);
     }
 
-    private function createSplitting(array $groups, array $availability, VariantFacet $facet)
+    private function createSplitting(array $groups, array $availability, VariantFacet $facet): array
     {
         $consider = array_filter($groups, function (Group $group) use ($facet) {
-            return in_array($group->getId(), $facet->getExpandGroupIds(), true);
+            return \in_array($group->getId(), $facet->getExpandGroupIds(), true);
         });
 
         $c = self::arrayCombinations(array_keys($consider));
@@ -240,12 +240,12 @@ class ProductListingVariationLoader
 
             $first = array_intersect_key($groups, array_diff_key($keys, $combination));
 
-            usort($full, function (Group $a, Group $b) {
-                return $a->getId() > $b->getId();
+            usort($full, static function (Group $a, Group $b) {
+                return $a->getId() <=> $b->getId();
             });
 
             // Create unique group key
-            $groupKey = array_map(function (Group $group) {
+            $groupKey = array_map(static function (Group $group) {
                 return $group->getId();
             }, $full);
             $groupKey = 'g' . implode('-', $groupKey);
@@ -261,10 +261,10 @@ class ProductListingVariationLoader
             }, $full);
 
             foreach ($groups as $group) {
-                if (in_array($group->getId(), $fullIds, true)) {
+                if (\in_array($group->getId(), $fullIds, true)) {
                     continue;
                 }
-                if (in_array($group->getId(), $firstIds, true)) {
+                if (\in_array($group->getId(), $firstIds, true)) {
                     continue;
                 }
                 $firstIds[] = $group->getId();
@@ -282,10 +282,8 @@ class ProductListingVariationLoader
      *
      * @param Group[] $groups
      * @param int[]   $onlyFirst
-     *
-     * @return array
      */
-    private function nestedArrayCombinations(array $groups, array $onlyFirst, array $availability)
+    private function nestedArrayCombinations(array $groups, array $onlyFirst, array $availability): array
     {
         $result = [[]];
 
@@ -294,15 +292,15 @@ class ProductListingVariationLoader
         /** @var Group $group */
         foreach ($groups as $index => $group) {
             // Check if options of this group only be combined with the first element
-            $isFirst = in_array($group->getId(), $onlyFirst, true);
+            $isFirst = \in_array($group->getId(), $onlyFirst, true);
             $new = [];
 
             foreach ($result as $item) {
                 $options = array_values($group->getOptions());
 
                 // Sort by ids ascending - forces always same order
-                usort($options, function (Option $a, Option $b) {
-                    return $a->getId() > $b->getId();
+                usort($options, static function (Option $a, Option $b) {
+                    return $a->getId() <=> $b->getId();
                 });
 
                 /** @var Option $option */
@@ -355,13 +353,13 @@ class ProductListingVariationLoader
         return $result;
     }
 
-    private function fetchPrices(array $products, ShopContextInterface $context)
+    private function fetchPrices(array $products, ShopContextInterface $context): array
     {
-        $ids = array_map(function (ListProduct $product) {
+        $ids = array_map(static function (ListProduct $product) {
             return $product->getId();
         }, $products);
 
-        $variantIds = array_map(function (ListProduct $product) {
+        $variantIds = array_map(static function (ListProduct $product) {
             return $product->getVariantId();
         }, $products);
 
@@ -469,9 +467,9 @@ class ProductListingVariationLoader
         return $prices;
     }
 
-    private function fetchAvailability(array $products)
+    private function fetchAvailability(array $products): array
     {
-        $variantIds = array_map(function (ListProduct $product) {
+        $variantIds = array_map(static function (ListProduct $product) {
             return $product->getVariantId();
         }, $products);
 
@@ -521,12 +519,12 @@ class ProductListingVariationLoader
         return $availability;
     }
 
-    private function buildListingVisibility(array $splitting, array $configuration)
+    private function buildListingVisibility(array $splitting, array $configuration): array
     {
         $key = [];
 
-        usort($configuration, function (Group $a, Group $b) {
-            return $a->getId() > $b->getId();
+        usort($configuration, static function (Group $a, Group $b) {
+            return $a->getId() <=> $b->getId();
         });
 
         /** @var Group $group */
@@ -541,17 +539,18 @@ class ProductListingVariationLoader
         $visibility = [];
 
         foreach ($splitting as $combination => $variants) {
-            $visibility[$combination] = in_array($key, $variants);
+            $visibility[$combination] = \in_array($key, $variants, true);
         }
 
         return $visibility;
     }
 
-    /**
-     * @return array
-     */
-    private function getCombinationPrices(array $configuration, array $prices, array $combinations, VariantFacet $variantFacet = null)
-    {
+    private function getCombinationPrices(
+        array $configuration,
+        array $prices,
+        array $combinations,
+        VariantFacet $variantFacet = null
+    ): array {
         $cheapestPrices = [];
 
         if ($variantFacet !== null) {
@@ -604,11 +603,12 @@ class ProductListingVariationLoader
         return $cheapestPrices;
     }
 
-    /**
-     * @return array
-     */
-    private function getCombinationAvailability(array $configuration, array $availabilities, array $combinations, VariantFacet $variantFacet = null)
-    {
+    private function getCombinationAvailability(
+        array $configuration,
+        array $availabilities,
+        array $combinations,
+        VariantFacet $variantFacet = null
+    ): array {
         $availabilityList = [];
 
         if ($variantFacet !== null) {
@@ -652,10 +652,7 @@ class ProductListingVariationLoader
         return $availabilityList;
     }
 
-    /**
-     * @return array
-     */
-    private function getPriceContexts(Shop $shop)
+    private function getPriceContexts(Shop $shop): array
     {
         $currencies = $this->identifierSelector->getShopCurrencyIds($shop->getId());
         if (!$shop->isMain()) {
@@ -667,7 +664,7 @@ class ProductListingVariationLoader
         return $this->getContexts($shop->getId(), $customerGroups, $currencies);
     }
 
-    private function getCustomerGroupContexts(Shop $shop)
+    private function getCustomerGroupContexts(Shop $shop): array
     {
         $customerGroups = $this->identifierSelector->getCustomerGroupKeys();
 
@@ -678,10 +675,8 @@ class ProductListingVariationLoader
      * @param int      $shopId
      * @param string[] $customerGroups
      * @param int[]    $currencies
-     *
-     * @return array
      */
-    private function getContexts($shopId, $customerGroups, $currencies)
+    private function getContexts($shopId, $customerGroups, $currencies): array
     {
         $contexts = [];
         foreach ($customerGroups as $customerGroup) {
@@ -696,7 +691,7 @@ class ProductListingVariationLoader
     private function getFilteredGroups(array $configuration, VariantFacet $variantFacet): array
     {
         return array_filter(array_map(static function (Group $group) use ($variantFacet) {
-            if (!in_array($group->getId(), $variantFacet->getGroupIds(), true)) {
+            if (!\in_array($group->getId(), $variantFacet->getGroupIds(), true)) {
                 return null;
             }
 

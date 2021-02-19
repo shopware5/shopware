@@ -22,14 +22,21 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\ShopRegistrationServiceInterface;
+use Shopware\Models\Article\Detail as ProductVariant;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Order\Detail;
+use Shopware\Models\Order\Number;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Order\Status;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Voucher\Code;
+use Shopware\Models\Voucher\Voucher;
 
 /**
  * Backend for various ajax queries
@@ -50,7 +57,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         // Get user, shipping and billing
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['orders', 'customer', 'billing', 'payment', 'shipping'])
-            ->from(\Shopware\Models\Order\Order::class, 'orders')
+            ->from(Order::class, 'orders')
             ->leftJoin('orders.customer', 'customer')
             ->leftJoin('orders.payment', 'payment')
             ->leftJoin('customer.defaultBillingAddress', 'billing')
@@ -71,8 +78,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         }
 
         // Get ordernumber
-        $numberRepository = Shopware()->Models()->getRepository(\Shopware\Models\Order\Number::class);
-        $numberModel = $numberRepository->findOneBy(['name' => 'invoice']);
+        $numberModel = Shopware()->Models()->getRepository(Number::class)->findOneBy(['name' => 'invoice']);
         if ($numberModel === null) {
             $this->View()->assign([
                 'success' => false,
@@ -84,11 +90,11 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $newOrderNumber = $numberModel->getNumber() + 1;
 
         // Set new ordernumber
-        $numberModel->setNumber((string) $newOrderNumber);
+        $numberModel->setNumber($newOrderNumber);
 
         // Set new ordernumber to the order and its details
         /** @var Order $orderModel */
-        $orderModel = Shopware()->Models()->find(\Shopware\Models\Order\Order::class, $orderId);
+        $orderModel = Shopware()->Models()->find(Order::class, $orderId);
         $orderModel->setNumber((string) $newOrderNumber);
         foreach ($orderModel->getDetails() as $detailModel) {
             $detailModel->setNumber((string) $newOrderNumber);
@@ -99,7 +105,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $outOfStock = $this->getOutOfStockProducts($orderModel);
 
             if (!empty($outOfStock)) {
-                $numbers = array_map(function (\Shopware\Models\Article\Detail $variant) {
+                $numbers = array_map(static function (ProductVariant $variant) {
                     return $variant->getNumber();
                 }, $outOfStock);
 
@@ -291,7 +297,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     public function sendCanceledQuestionMailAction()
     {
-        $voucherId = null;
         if (!($mailTo = $this->Request()->getParam('mail'))) {
             $this->View()->assign([
                 'success' => false,
@@ -310,7 +315,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             return;
         }
 
-        if (($template === 'sCANCELEDVOUCHER') && !($voucherId = $this->Request()->getParam('voucherId'))) {
+        $voucherId = (int) $this->Request()->getParam('voucherId');
+        if (($template === 'sCANCELEDVOUCHER') && $voucherId === 0) {
             $this->View()->assign([
                 'success' => false,
                 'message' => $this->translateMessage('errorMessage/noVoucherId', 'No voucherId passed.'),
@@ -375,7 +381,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $shop = $orderModel->getLanguageSubShop();
         }
 
-        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        $this->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         // Try to send the actual mail
         try {
@@ -389,7 +395,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             }
 
             $mail->send();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
             return;
@@ -458,7 +464,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $paymentMethods = Shopware()->Db()->fetchAll($sql, $params);
 
         // Translate payment method names.
-        $translator = $this->get(\Shopware_Components_Translation::class)->getObjectTranslator('config_payment');
+        $translator = $this->get(Shopware_Components_Translation::class)->getObjectTranslator('config_payment');
         foreach ($paymentMethods as &$paymentMethod) {
             $paymentMethod = $translator->translateObjectProperty($paymentMethod, 'description', 'paymentName');
         }
@@ -654,13 +660,13 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 ->setMaxResults($limit);
 
         $query = $builder->getQuery();
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
         $paginator = $this->getModelManager()->createPaginator($query);
         $total = $paginator->count();
         $orders = $paginator->getIterator()->getArrayCopy();
 
         // Translate payment and dispatch method names.
-        $translationComponent = $this->get(\Shopware_Components_Translation::class);
+        $translationComponent = $this->get(Shopware_Components_Translation::class);
         $orders = $translationComponent->translateOrders($orders);
 
         $this->View()->assign([
@@ -692,8 +698,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 continue;
             }
 
-            $model = Shopware()->Models()->find(\Shopware\Models\Order\Order::class, $order['id']);
-            if (!$model instanceof \Shopware\Models\Order\Order) {
+            $model = Shopware()->Models()->find(Order::class, $order['id']);
+            if (!$model instanceof Order) {
                 continue;
             }
             Shopware()->Models()->remove($model);
@@ -725,12 +731,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Read free codes from the database. If no free codes are available, null will be returned
-     *
-     * @param int $voucherId
-     *
-     * @return array|null
      */
-    private function getFreeVoucherCode($voucherId)
+    private function getFreeVoucherCode(int $voucherId): ?array
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select([
@@ -741,7 +743,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             'voucher.percental',
             'voucher.validFrom',
         ])
-                ->from('Shopware\Models\Voucher\Voucher', 'voucher')
+                ->from(Voucher::class, 'voucher')
                 ->leftJoin('voucher.codes', 'voucherCodes')
                 ->where('voucher.modus = ?1')
                 ->andWhere('voucher.id = :voucherId')
@@ -761,9 +763,9 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     }
 
     /**
-     * @return \Shopware\Models\Article\Detail[]
+     * @return ProductVariant[]
      */
-    private function getOutOfStockProducts(Order $order)
+    private function getOutOfStockProducts(Order $order): array
     {
         $products = $this->getProductsOfOrder($order);
 
@@ -785,10 +787,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         return $invalid;
     }
 
-    /**
-     * @return Detail|null
-     */
-    private function getOrderPositionByProduct(\Shopware\Models\Article\Detail $variant, Order $order)
+    private function getOrderPositionByProduct(ProductVariant $variant, Order $order): ?Detail
     {
         /** @var Detail $detail */
         foreach ($order->getDetails() as $detail) {
@@ -804,12 +803,12 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     }
 
     /**
-     * @return \Shopware\Models\Article\Detail[]
+     * @return ProductVariant[]
      */
-    private function getProductsOfOrder(Order $order)
+    private function getProductsOfOrder(Order $order): array
     {
-        /** @var \Shopware\Components\Model\ModelRepository $repository */
-        $repository = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shopware\Models\Article\Detail::class);
+        /** @var ModelRepository $repository */
+        $repository = $this->get(ModelManager::class)->getRepository(ProductVariant::class);
 
         $products = [];
         foreach ($order->getDetails() as $detail) {
@@ -817,7 +816,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             if (!$this->isProductPosition($detail)) {
                 continue;
             }
-            /** @var \Shopware\Models\Article\Detail $variant */
+            /** @var ProductVariant $variant */
             $variant = $repository->findOneBy(['number' => $detail->getArticleNumber()]);
             $products[] = $variant;
         }
@@ -828,13 +827,11 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     /**
      * Function which calculates, validates and updates the new in stock when a cancelled order will be transformed into
      * a regular order
-     *
-     * @return bool
      */
-    private function convertCancelledOrderInStock(Shopware\Models\Order\Order $orderModel)
+    private function convertCancelledOrderInStock(Order $orderModel): bool
     {
-        /** @var \Shopware\Components\Model\ModelManager $entityManager */
-        $entityManager = $this->get(\Shopware\Components\Model\ModelManager::class);
+        /** @var ModelManager $entityManager */
+        $entityManager = $this->get(ModelManager::class);
 
         $products = $this->getProductsOfOrder($orderModel);
 
@@ -856,13 +853,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Helper function to check if the stock is valid if the article is on sale
-     *
-     * @param \Shopware\Models\Article\Detail $variant
-     * @param int                             $newStock
-     *
-     * @return bool
      */
-    private function isValidStock(Shopware\Models\Article\Detail $variant, $newStock)
+    private function isValidStock(ProductVariant $variant, int $newStock): bool
     {
         if ($newStock < 0 && $variant->getLastStock()) {
             return false;
@@ -873,23 +865,16 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Checks if the order position is a regular product
-     *
-     * @return bool
      */
-    private function isProductPosition(Shopware\Models\Order\Detail $orderDetailModel)
+    private function isProductPosition(Detail $orderDetailModel): bool
     {
         return $orderDetailModel->getMode() === 0;
     }
 
     /**
      * Helper function to get the correct translation
-     *
-     * @param string $name
-     * @param string $default
-     *
-     * @return string
      */
-    private function translateMessage($name, $default = null)
+    private function translateMessage(string $name, string $default): string
     {
         $namespace = Shopware()->Snippets()->getNamespace('backend/canceled_order/controller/main');
 

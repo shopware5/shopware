@@ -130,7 +130,6 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
                 $this->forward('genericError', null, null, ['code' => $targetErrorCode]);
                 break;
             default:
-
                 // Try to load the emotion landingpage, render default error in case it is unavailable
                 try {
                     $result = $this->get('shopware.emotion.emotion_landingpage_loader')->load(

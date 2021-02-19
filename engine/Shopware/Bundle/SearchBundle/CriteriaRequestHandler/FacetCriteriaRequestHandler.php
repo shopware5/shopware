@@ -130,7 +130,6 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
         switch ($facet->getMode()) {
             case ProductAttributeFacet::MODE_BOOLEAN_RESULT:
-
                 $criteria->addCondition(
                     new ProductAttributeCondition(
                         $facet->getField(),
@@ -142,7 +141,6 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
                 return;
 
             case ProductAttributeFacet::MODE_RADIO_LIST_RESULT:
-
                 $criteria->addCondition(
                     new ProductAttributeCondition(
                         $facet->getField(),
@@ -154,7 +152,6 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
                 return;
 
             case ProductAttributeFacet::MODE_RANGE_RESULT:
-
                 $range = [];
                 if ($request->has('min' . $facet->getFormFieldName())) {
                     $range['min'] = $request->getParam('min' . $facet->getFormFieldName());
@@ -172,7 +169,6 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
                 return;
 
             case ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
-
                 $criteria->addCondition(
                     new ProductAttributeCondition(
                         $facet->getField(),

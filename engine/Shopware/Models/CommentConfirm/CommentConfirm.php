@@ -122,7 +122,7 @@ class CommentConfirm extends ModelEntity
      */
     public function setCreationDate($creationDate)
     {
-        if (!$creationDate instanceof \DateTimeInterface && strlen($creationDate) > 0) {
+        if (!$creationDate instanceof \DateTimeInterface && $creationDate !== '') {
             $creationDate = new \DateTime($creationDate);
         }
         $this->creationDate = $creationDate;

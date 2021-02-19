@@ -113,7 +113,7 @@ class DatabaseFactory
         $sql = 'SELECT VERSION()';
         $result = $conn->query($sql)->fetchColumn(0);
         if (version_compare($result, '5.5.0', '<')) {
-            throw new \RuntimeException(("Database error!: Your database server is running MySQL $result, but Shopware 5 requires at least MySQL 5.5"));
+            throw new \RuntimeException("Database error!: Your database server is running MySQL $result, but Shopware 5 requires at least MySQL 5.5");
         }
     }
 

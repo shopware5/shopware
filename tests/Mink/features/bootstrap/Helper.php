@@ -78,8 +78,8 @@ class Helper
             $haystack = (string) $comparison[0];
             $needle = (string) $comparison[1];
 
-            if (strlen($needle) === 0) {
-                if (strlen($haystack) === 0) {
+            if ($needle === '') {
+                if ($haystack === '') {
                     return true;
                 }
 

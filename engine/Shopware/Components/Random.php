@@ -121,7 +121,7 @@ abstract class Random
         // Charlist is empty or not provided
         if (empty($charlist)) {
             $numBytes = ceil($length * 0.75);
-            $bytes = static::getBytes($numBytes);
+            $bytes = static::getBytes((int) $numBytes);
 
             return mb_substr(rtrim(base64_encode($bytes), '='), 0, $length, '8bit');
         }

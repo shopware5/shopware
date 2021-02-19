@@ -128,8 +128,7 @@ class Download
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_NOPROGRESS, false);
 
-        $me = $this;
-        curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, function ($ch, $dltotal, $dlnow) use ($me, $size) {
+        curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, function ($ch, $dltotal, $dlnow) use ($size) {
             if ($dlnow > 0) {
                 $this->progress($dltotal, $dlnow, $size + $dlnow);
             }

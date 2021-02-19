@@ -53,15 +53,15 @@ class MarketingService implements Service\MarketingServiceInterface
         $marker = (int) $this->config->get('markAsNew');
 
         $attribute->setIsNew(
-            ($diff->days <= $marker || $product->getCreatedAt() > $today)
+            $diff->days <= $marker || $product->getCreatedAt() > $today
         );
 
         $attribute->setComingSoon(
-            ($product->getReleaseDate() && $product->getReleaseDate() > $today)
+            $product->getReleaseDate() && $product->getReleaseDate() > $today
         );
 
         $attribute->setIsTopSeller(
-            ($product->getSales() >= $this->config->get('markAsTopSeller'))
+            $product->getSales() >= $this->config->get('markAsTopSeller')
         );
 
         return $attribute;
