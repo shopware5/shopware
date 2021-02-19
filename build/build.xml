@@ -90,7 +90,7 @@
         <exec executable="${script.php}">
             <arg value="composer.phar"/>
             <arg value="self-update"/>
-            <arg value="1"/>
+            <arg value="--1"/>
             <arg value="--no-interaction"/>
         </exec>
     </target>
