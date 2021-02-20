@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
@@ -122,6 +123,12 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
                 InputOption::VALUE_NONE,
                 'Force complete thumbnail generation'
             )
+            ->addOption(
+                'batch',
+                'b',
+                InputOption::VALUE_OPTIONAL,
+                'Process media in a batch size of value items'
+            )
             ->setHelp('The <info>%command.name%</info> generates a thumbnail.');
     }
 
@@ -136,9 +143,10 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
         $this->generator = $this->getContainer()->get(\Shopware\Components\Thumbnail\Manager::class);
 
         $albumId = (int) $input->getOption('albumid');
+        $batchSize = (int) $input->getOption('batch');
 
         foreach ($this->getMediaAlbums($albumId) as $album) {
-            $this->createAlbumThumbnails($album);
+            $this->createAlbumThumbnails($album, $batchSize);
         }
 
         $this->printExitMessage();
@@ -189,7 +197,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
     /**
      * @throws Exception
      */
-    private function createAlbumThumbnails(Album $album)
+    private function createAlbumThumbnails(Album $album, int $batchSize)
     {
         $this->output->writeln("Generating Thumbnails for Album {$album->getName()} (ID: {$album->getId()})");
 
@@ -200,7 +208,14 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
         $repository = $em->getRepository(Media::class);
 
         $query = $repository->getAlbumMediaQuery($album->getId());
-        $paginator = $em->createPaginator($query);
+
+        if ($batchSize > 0) {
+            $query->setMaxResults($batchSize);
+            $paginator = new Paginator($query, false);
+            $paginator->setUseOutputWalkers(false);
+        } else {
+            $paginator = $em->createPaginator($query);
+        }
 
         $total = $paginator->count();
 
@@ -208,15 +223,21 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
         $progressBar->setRedrawFrequency(10);
         $progressBar->start();
 
-        /* @var Media $media */
-        foreach ($paginator->getIterator() as $media) {
-            try {
-                $this->createMediaThumbnails($media);
-            } catch (Exception $e) {
-                $this->errors[] = $e->getMessage();
+        while (($paginator->getQuery()->getFirstResult() ?? 0) < $total) {
+            /* @var Media $media */
+            foreach ($paginator->getIterator() as $media) {
+                try {
+                    $this->createMediaThumbnails($media);
+                } catch (Exception $e) {
+                    $this->errors[] = $e->getMessage();
+                }
+
+                $progressBar->advance();
             }
 
-            $progressBar->advance();
+            if ($paginator->getQuery()->getMaxResults() !== null) {
+                $paginator->getQuery()->setFirstResult(($paginator->getQuery()->getFirstResult() ?? 0) + $paginator->getQuery()->getMaxResults());
+            }
         }
 
         $progressBar->finish();
