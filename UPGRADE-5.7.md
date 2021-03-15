@@ -37,6 +37,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Added support for MySQL 8 `sql_require_primary_key`
 * Added `attribute` to users listing in API
 * Added new blocks `document_index_head_logo` and `document_index_head_wrapper` to `themes/Frontend/Bare/documents/index.tpl`
+* Added `unmapped_type` to `integer` in `engine/Shopware/Bundle/SearchBundleES/SortingHandler/ManualSortingHandler.php`
 
 ### Changes
 
