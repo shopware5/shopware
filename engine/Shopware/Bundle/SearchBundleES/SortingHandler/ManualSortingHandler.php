@@ -63,6 +63,7 @@ class ManualSortingHandler implements HandlerInterface
         $categoryId = $categoryCondition->getCategoryIds()[0];
         $fieldSort = new FieldSort('manualSorting.position', strtolower($criteriaPart->getDirection()), [
             'nested_path' => 'manualSorting',
+            'unmapped_type' => 'integer',
         ]);
         $fieldSort->setNestedFilter(new TermsQuery('manualSorting.category_id', [$categoryId]));
 
