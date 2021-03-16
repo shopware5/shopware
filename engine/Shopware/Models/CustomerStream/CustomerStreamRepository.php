@@ -339,7 +339,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
         $query->andWhere('orders.ordertime >= :orderTime');
         $query->andWhere('orders.ordernumber != 0');
         $query->setParameter(':cancelStatus', -1);
-        $query->setParameter(':orderTime', $date->format('Y-m'));
+        $query->setParameter(':orderTime', $date->format('Y-m-01'));
         $query->addGroupBy($format);
 
         return $query;
@@ -371,7 +371,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
         $query->andWhere('orders.ordertime >= :orderTime');
         $query->andWhere('orders.ordernumber != 0');
         $query->setParameter(':cancelStatus', -1);
-        $query->setParameter(':orderTime', $date->format('Y-m'));
+        $query->setParameter(':orderTime', $date->format('Y-m-01'));
         $query->groupBy("DATE_FORMAT(orders.ordertime,'%Y-%m')");
 
         if ($streamId) {
