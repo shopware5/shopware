@@ -24,12 +24,12 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
+use Assert\Assertion;
 use Doctrine\DBAL\Driver\ResultStatement;
 use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
-use Webmozart\Assert\Assert;
 
 class CategoryGateway implements Gateway\CategoryGatewayInterface
 {
@@ -63,7 +63,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
-        Assert::integer($id);
+        Assertion::integer($id);
         $categories = $this->getList([$id], $context);
 
         return array_shift($categories);
