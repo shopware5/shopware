@@ -36,6 +36,7 @@ use Shopware\Components\Theme\PathResolver;
 use Shopware_Components_Config;
 use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Zend_Cache;
 use Zend_Cache_Backend_Apcu;
 use Zend_Cache_Backend_Redis;
@@ -570,6 +571,21 @@ class CacheManager
             return;
         }
 
-        (new Filesystem())->remove($dir);
+        $fileSystem = new Filesystem();
+        $finder = new Finder();
+
+        $tempFileExtension = 'sw_bak';
+        $tempFileName = sprintf('%s_%s.%s', $dir, uniqid(), $tempFileExtension);
+
+        // Move the existing cache to a temporary new location prior to deletion, so it won't be written to in the meantime
+        $fileSystem->rename($dir, $tempFileName);
+
+        $finder->directories()
+            ->in(dirname($dir, 1))
+            ->name(sprintf('*.%s', $tempFileExtension));
+
+        if ($finder->hasResults()) {
+            $fileSystem->remove($finder);
+        }
     }
 }
