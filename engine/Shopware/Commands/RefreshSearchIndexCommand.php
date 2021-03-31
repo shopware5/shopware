@@ -59,8 +59,9 @@ class RefreshSearchIndexCommand extends ShopwareCommand
 
             /** @var \Doctrine\DBAL\Connection $connection */
             $connection = $this->container->get(\Doctrine\DBAL\Connection::class);
-            $connection->delete('s_search_index', ['*']);
-            $connection->delete('s_search_keywords', ['*']);
+            // Changed according to https://www.doctrine-project.org/projects/doctrine-dbal/en/2.12/reference/data-retrieval-and-manipulation.html#delete
+            $connection->delete('s_search_index', ['id' => '*']);
+            $connection->delete('s_search_keywords', ['id' => '*']);
         }
         $output->writeln('Creating the search index. This may take a while depending on the shop size.');
         /* @var \Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface; $indexer */
