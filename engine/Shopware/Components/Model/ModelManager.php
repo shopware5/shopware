@@ -329,10 +329,18 @@ class ModelManager extends EntityManager
         $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
 
         foreach ($metadata->fieldMappings as $field => $mapping) {
+            if (!($metadata->reflFields[$field] instanceof \ReflectionProperty)) {
+                throw new \InvalidArgumentException(sprintf('Expected an instance of %s', \ReflectionProperty::class));
+            }
+
             $data[$field] = $metadata->reflFields[$field]->getValue($entity);
         }
 
         foreach ($metadata->associationMappings as $field => $mapping) {
+            if (!($metadata->reflFields[$field] instanceof \ReflectionProperty)) {
+                throw new \InvalidArgumentException(sprintf('Expected an instance of %s', \ReflectionProperty::class));
+            }
+
             $key = $inflector->tableize($field);
             if ($mapping['isCascadeDetach']) {
                 $data[$key] = $metadata->reflFields[$field]->getValue($entity);

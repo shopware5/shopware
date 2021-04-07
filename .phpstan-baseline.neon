@@ -291,7 +291,7 @@ parameters:
 			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingService.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Service\\\\StoreFrontCustomerGreetingService\\:\\:fetchUserInfo\\(\\) should return array\\|null but returns array\\|false\\.$#"
+			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Service\\\\StoreFrontCustomerGreetingService\\:\\:fetchUserInfo\\(\\) should return array\\|null but returns array\\<string, mixed\\>\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingService.php
 
@@ -6336,7 +6336,7 @@ parameters:
 			path: engine/Shopware/Bundle/FormBundle/StringRendererServiceInterface.php
 
 		-
-			message: "#^Parameter \\#1 \\$entityName of method Doctrine\\\\ORM\\\\EntityManager\\:\\:find\\(\\) expects class\\-string\\<mixed\\>, string given\\.$#"
+			message: "#^Parameter \\#1 \\$className of method Doctrine\\\\ORM\\\\EntityManager\\:\\:find\\(\\) expects class\\-string\\<mixed\\>, string given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/FormBundle/Transformer/EntityTransformer.php
 
@@ -25121,7 +25121,12 @@ parameters:
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, int\\|string given\\.$#"
+			message: "#^Offset 'precision' does not exist on array\\('type' \\=\\> string, 'fieldName' \\=\\> string, 'columnName' \\=\\> string, 'inherited' \\=\\> class\\-string\\)\\.$#"
+			count: 1
+			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
+
+		-
+			message: "#^Offset 'nullable' does not exist on array\\('type' \\=\\> string, 'fieldName' \\=\\> string, 'columnName' \\=\\> string, 'inherited' \\=\\> class\\-string\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
 
@@ -26631,7 +26636,7 @@ parameters:
 			path: engine/Shopware/Components/ProductStream/Repository.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\ProductStream\\\\Repository\\:\\:getStreamById\\(\\) should return array but returns array\\|false\\.$#"
+			message: "#^Method Shopware\\\\Components\\\\ProductStream\\\\Repository\\:\\:getStreamById\\(\\) should return array but returns array\\<string, mixed\\>\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ProductStream/Repository.php
 
@@ -29396,7 +29401,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Address.php
 
 		-
-			message: "#^Parameter \\#1 \\$entityName of method Doctrine\\\\ORM\\\\EntityManager\\:\\:find\\(\\) expects class\\-string\\<mixed\\>, string given\\.$#"
+			message: "#^Parameter \\#1 \\$className of method Doctrine\\\\ORM\\\\EntityManager\\:\\:find\\(\\) expects class\\-string\\<mixed\\>, string given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Address.php
 
@@ -29831,7 +29836,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Application.php
 
 		-
-			message: "#^Parameter \\#1 \\$entityName of method Doctrine\\\\ORM\\\\EntityManager\\:\\:find\\(\\) expects class\\-string\\<mixed\\>, string given\\.$#"
+			message: "#^Parameter \\#1 \\$className of method Doctrine\\\\ORM\\\\EntityManager\\:\\:find\\(\\) expects class\\-string\\<mixed\\>, string given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Application.php
 
@@ -54211,12 +54216,12 @@ parameters:
 			path: engine/Shopware/Models/Snippet/SnippetRepository.php
 
 		-
-			message: "#^Cannot access offset 'id' on array\\|false\\.$#"
+			message: "#^Cannot access offset 'id' on array\\<string, mixed\\>\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Tax/Repository.php
 
 		-
-			message: "#^Cannot access offset 'tax' on array\\|false\\.$#"
+			message: "#^Cannot access offset 'tax' on array\\<string, mixed\\>\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Tax/Repository.php
 
