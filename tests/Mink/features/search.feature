@@ -2,7 +2,7 @@
 Feature: Search things
 
     Background:
-        Given I am on the homepage
+        Given I am on the page "Homepage"
 
     Scenario: Search front page with one hit
         When I search for "Ibiza"
@@ -45,8 +45,8 @@ Feature: Search things
 
     @javascript
     Scenario Outline: Live-Search with hits
-        When I received the search-results for "<searchTerm>"
-        Then I should see "<hits> Treffer"
+        When  I received the search-results for "<searchTerm>"
+        Then  I should see "<hits> Treffer"
 
         Examples:
             | searchTerm | hits |
