@@ -786,11 +786,6 @@ parameters:
 			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudService.php
 
 		-
-			message: "#^Parameter \\#2 \\$cmp_function of function usort expects callable\\(mixed, mixed\\)\\: int, Closure\\(Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\ConfigurationStruct, Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\ConfigurationStruct\\)\\: bool\\|int given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudService.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\CrudService\\:\\:updateConfig\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudService.php

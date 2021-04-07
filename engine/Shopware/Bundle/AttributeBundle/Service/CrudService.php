@@ -201,16 +201,16 @@ class CrudService implements CrudServiceInterface
 
         usort($items, function (ConfigurationStruct $a, ConfigurationStruct $b) {
             if ($a->getPosition() === null && $b->getPosition() !== null) {
-                return true;
+                return 1;
             }
             if ($b->getPosition() === null && $a->getPosition() !== null) {
-                return false;
+                return -1;
             }
             if ($a->getPosition() == $b->getPosition()) {
                 return strnatcasecmp($a->getColumnName(), $b->getColumnName());
             }
 
-            return $a->getPosition() > $b->getPosition();
+            return $a->getPosition() <=> $b->getPosition();
         });
 
         return $items;
