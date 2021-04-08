@@ -151,11 +151,15 @@ Feature: Successful changes of login data
     @profile
     Scenario Outline: I can change my profile
         Given I log in with email "test@example.com" and password "shopware"
+        Then  I should be on the page "Account"
+        And   I should see "Persönliche Daten ändern"
+
         When  I follow "Persönliche Daten ändern"
         And   I change my profile with "<salutation>" "<firstname>" "<lastname>"
-
         Then  I should see "Die persönlichen Daten wurden erfolgreich gespeichert."
-        Then  I follow "Übersicht" on Account menu
+
+        When  I follow "Übersicht" on Account menu
+        Then  I should be on the page "Account"
         And   I should be welcomed with "Willkommen, <firstname> <lastname>"
 
         Examples:

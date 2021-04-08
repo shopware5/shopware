@@ -50,6 +50,16 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     protected static $lastScenarioLine = 0;
 
     /**
+     * Contains tags for features which rely on account state being persistent for all the contained scenarios
+     *
+     * @var array
+     */
+    protected static $doNotResetFeatureTags = [
+        'accountaddressmanagement',
+        'checkoutadressmanagement',
+    ];
+
+    /**
      * @var Suite
      */
     protected static $suite;
@@ -87,8 +97,10 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
             self::$isPrepared = true;
         }
 
+        $isResettable = count(array_intersect(self::$doNotResetFeatureTags, $scope->getFeature()->getTags())) < 1;
+
         // Scenario skips a line so it's not a new example
-        if ($scope->getScenario()->getLine() !== self::$lastScenarioLine + 1) {
+        if ($isResettable && $scope->getScenario()->getLine() !== self::$lastScenarioLine + 1) {
             $this->reset();
         }
 
@@ -335,11 +347,16 @@ EOD;
 
         $sql = <<<"EOD"
             UPDATE s_user SET password = "$password", encoder = "md5", paymentID = 5, failedlogins = 0, lockeduntil = NULL;
+
+            SET FOREIGN_KEY_CHECKS = 0;
+
             TRUNCATE s_order_basket;
             TRUNCATE s_order_basket_attributes;
             TRUNCATE s_order_notes;
             TRUNCATE s_order_comparisons;
             DELETE FROM s_user WHERE id > 2;
+
+            SET FOREIGN_KEY_CHECKS = 1;
 EOD;
         $this->getService('db')->exec($sql);
     }

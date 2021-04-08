@@ -18,7 +18,9 @@ Feature: Using the address management system
       | zipcode       |                                    | 55555             |
       | city          |                                    | Musterhausen      |
       | country       |                                    | Deutschland       |
-    Then  I should see "Willkommen, Max Mustermann"
+
+    And  I am on the page "Account"
+    Then I should see "Willkommen, Max Mustermann"
 
   Scenario Outline: I can add a new address
     Given I log in successful as "<user>" with email "account@adressmanagement.localhost" and password "shopware"
