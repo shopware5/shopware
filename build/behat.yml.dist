@@ -8,6 +8,9 @@ default:
         Behat\MinkExtension:
             ## defined in buildscript
             base_url: 'http://%sw.host%%sw.path%'
+            show_cmd: 'echo "Scenario failed! Saved current page to %s"'
+            show_tmp_dir: 'build/artifacts/mink'
+            show_auto: true
             default_session: 'selenium2'
             javascript_session: 'selenium2'
             browser_name: chrome
