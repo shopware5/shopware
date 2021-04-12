@@ -57,10 +57,11 @@ class SubShopLayer extends AbstractShopConfigurationLayer
     {
         $queryBuilder = $this->connection->createQueryBuilder();
 
-        return $queryBuilder->from('s_core_shops')
-                ->select('1')
+        return $queryBuilder->select('1')
+                ->from('s_core_shops')
                 ->andWhere($queryBuilder->expr()->eq('id', ':id'))
                 ->andWhere($queryBuilder->expr()->isNull('main_id'))
+                ->andWhere($queryBuilder->expr()->lt('`default`', 1))
                 ->setParameter('id', $shopId)
                 ->execute()->fetchColumn() !== false
         ;

@@ -28,10 +28,11 @@ use DateTime;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Plugin\Configuration\Layers\DefaultLayer;
+use Shopware\Components\Plugin\Configuration\Layers\SubShopLayer;
 use Shopware\Components\Plugin\Configuration\ReaderInterface;
 use Shopware\Components\Plugin\Configuration\WriterInterface;
 use Shopware\Models\Plugin\Plugin;
-use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class ConfigWriterTest extends TestCase
@@ -304,5 +305,21 @@ class ConfigWriterTest extends TestCase
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
+    }
+
+    public function testSubshopLayerCallsParentForDefaultShopConfig(): void
+    {
+        $subShopLayer = static::getMockBuilder(SubShopLayer::class)
+            ->onlyMethods(['getParent'])
+            ->setConstructorArgs([
+                $this->connection,
+                $this->modelManager,
+                new DefaultLayer($this->connection),
+            ])
+            ->getMock();
+
+        $subShopLayer->expects(static::atLeastOnce())->method('getParent');
+
+        $subShopLayer->writeValues(self::PLUGIN_NAME, $this->installationShopId, []);
     }
 }
