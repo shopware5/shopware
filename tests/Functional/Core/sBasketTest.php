@@ -1031,6 +1031,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
         $this->deleteDummyCustomer($customer);
         $this->module->sSYSTEM->sUSERGROUPDATA['tax'] = $oldTaxValue;
+
+        Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->setId(1);
     }
 
     /**
@@ -1130,6 +1132,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             ['vouchercode = ?' => $voucherTwoData['vouchercode']]
         );
         $this->deleteDummyCustomer($customer);
+
+        Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->setId(1);
     }
 
     /**

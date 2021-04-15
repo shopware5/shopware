@@ -41986,22 +41986,7 @@ parameters:
 			path: engine/Shopware/Controllers/Widgets/Error.php
 
 		-
-			message: "#^Method Shopware_Controllers_Widgets_Index\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Index\\:\\:refreshStatisticAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Index.php
-
-		-
 			message: "#^Cannot call method Frontend\\(\\) on Enlight_Plugin_PluginManager\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Index\\:\\:menuAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Index.php
 
@@ -42014,41 +41999,6 @@ parameters:
 			message: "#^Cannot call method Core\\(\\) on Enlight_Plugin_PluginManager\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Index\\:\\:shopMenuAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Index.php
-
-		-
-			message: "#^Cannot call method getMain\\(\\) on Shopware\\\\Models\\\\Shop\\\\DetachedShop\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Widgets/Index.php
-
-		-
-			message: "#^Cannot call method detach\\(\\) on Shopware\\\\Components\\\\Model\\\\ModelManager\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Widgets/Index.php
-
-		-
-			message: "#^Cannot call method getCurrencies\\(\\) on Shopware\\\\Models\\\\Shop\\\\DetachedShop\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Index.php
-
-		-
-			message: "#^Cannot call method getChildren\\(\\) on Shopware\\\\Models\\\\Shop\\\\DetachedShop\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:productNavigationAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
 
 		-
 			message: "#^Cannot call method Articles\\(\\) on Shopware_Components_Modules\\|null\\.$#"
