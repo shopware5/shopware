@@ -40431,13 +40431,8 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Error.php
 
 		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Error.php
-
-		-
 			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
+			count: 6
 			path: engine/Shopware/Controllers/Frontend/Error.php
 
 		-
