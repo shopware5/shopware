@@ -192,8 +192,11 @@ class LogTest extends \Enlight_Components_Test_Controller_TestCase
         $pluginLogger->info('Running test...');
         $coreLogger->info('Running test...');
 
+        /** @var string $environment */
+        $environment = $container->getParameter('kernel.environment');
+
         // test filtering
-        $file = sprintf('core_%s', $container->getParameter('kernel.environment'));
+        $file = sprintf('core_%s', $environment);
         $this->Request()->setParams([
             'limit' => 1,
             'query' => $file,

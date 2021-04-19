@@ -54,6 +54,7 @@ class PluginCheck
         $technicalNames = array_column($installedPlugins, 'name');
         $locale = $this->getLocale();
 
+        /** @var string $shopwareVersion */
         $shopwareVersion = $this->container->getParameter('shopware.release.version');
 
         $request = new PluginsByTechnicalNameRequest($locale, $shopwareVersion, $technicalNames);

@@ -52,6 +52,10 @@ class ThemeDumpConfigurationCommand extends ShopwareCommand
         $compiler = $this->container->get('theme_compiler');
         $rootDir = $this->container->getParameter('shopware.app.rootDir');
 
+        if (!is_string($rootDir)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+        }
+
         /** @var Shop $shop */
         foreach ($shops as $shop) {
             $configuration = $compiler->getThemeConfiguration($shop);

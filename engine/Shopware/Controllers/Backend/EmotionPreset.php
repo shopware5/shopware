@@ -275,6 +275,10 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         $pluginManager = $this->container->get('shopware_plugininstaller.plugin_service_view');
         $shopwareVersion = $this->container->getParameter('shopware.release.version');
 
+        if (!is_string($shopwareVersion)) {
+            throw new \RuntimeException('Parameter shopware.release.version has to be an string');
+        }
+
         $names = [];
         foreach ($presets as $preset) {
             $names = array_merge($names, array_column($preset['requiredPlugins'], 'name'));

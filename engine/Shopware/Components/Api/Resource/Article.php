@@ -526,6 +526,11 @@ class Article extends Resource implements BatchInterface
             $media = $image->getMedia();
 
             $projectDir = $this->getContainer()->getParameter('shopware.app.rootDir');
+
+            if (!is_string($projectDir)) {
+                throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+            }
+
             if (!$force && $mediaService->has($projectDir . $media->getPath())) {
                 continue;
             }

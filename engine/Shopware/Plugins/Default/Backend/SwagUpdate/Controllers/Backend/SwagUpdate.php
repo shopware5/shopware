@@ -114,6 +114,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $namespace = $this->get('snippets')->getNamespace('backend/swag_update/main');
 
+        /** @var string $endpoint */
+        $endpoint = $this->container->getParameter('shopware.store.apiEndpoint');
+
         $fileSystem = new \ShopwarePlugins\SwagUpdate\Components\FileSystem();
         $conn = $this->get(\Doctrine\DBAL\Connection::class);
         $checks = [
@@ -123,7 +126,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             new EmotionTemplateCheck($conn, $namespace),
             new PHPExtensionCheck($namespace),
             new WritableCheck($fileSystem, $namespace),
-            new LicenseCheck($conn, $this->container->getParameter('shopware.store.apiEndpoint'), $this->getShopwareVersion(), $namespace),
+            new LicenseCheck($conn, $endpoint, $this->getShopwareVersion(), $namespace),
         ];
         $validation = new Validation($namespace, $checks);
 
@@ -250,6 +253,8 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         }
 
         $payload = json_encode($payload);
+
+        /** @var string $projectDir */
         $projectDir = $this->container->getParameter('shopware.app.rootDir');
         $updateFilePath = $projectDir . 'files/update/update.json';
 
@@ -428,7 +433,10 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         if (!empty($pluginConfig['update-fake-version'])) {
             $shopwareVersion = $pluginConfig['update-fake-version'];
         } else {
+            /** @var string $shopwareVersion */
             $shopwareVersion = $this->container->getParameter('shopware.release.version');
+
+            /** @var string $versionText */
             $versionText = $this->container->getParameter('shopware.release.version_text');
             if (!empty($versionText)) {
                 $shopwareVersion .= '-' . $versionText;
@@ -482,7 +490,10 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     {
         $filename = 'update_' . $version->sha1 . '.zip';
 
-        return $this->container->getParameter('shopware.app.rootDir') . $filename;
+        /** @var string $rootDir */
+        $rootDir = $this->container->getParameter('shopware.app.rootDir');
+
+        return $rootDir . $filename;
     }
 
     /**
@@ -529,6 +540,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
     private function checkSecurityPlugin(): bool
     {
-        return array_key_exists('SwagSecurity', $this->container->getParameter('active_plugins'));
+        /** @var array<string, string> $activePlugins */
+        $activePlugins = $this->container->getParameter('active_plugins');
+
+        return array_key_exists('SwagSecurity', $activePlugins);
     }
 }

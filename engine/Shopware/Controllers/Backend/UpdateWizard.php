@@ -95,12 +95,15 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
         return $this->container->get('auth')->getIdentity()->locale->getLocale();
     }
 
-    /**
-     * @return string
-     */
-    private function getVersion()
+    private function getVersion(): string
     {
-        return $this->container->getParameter('shopware.release.version');
+        $version = $this->container->getParameter('shopware.release.version');
+
+        if (!is_string($version)) {
+            throw new \RuntimeException('Parameter shopware.release.version has to be an string');
+        }
+
+        return $version;
     }
 
     /**

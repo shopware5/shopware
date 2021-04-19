@@ -46,7 +46,13 @@ class SnippetsRemoveCommand extends ShopwareCommand implements CompletionAwareIn
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
         if ($argumentName === 'folder') {
-            return $this->completeDirectoriesInDirectory($this->container->getParameter('kernel.root_dir'));
+            $rootDir = $this->container->getParameter('kernel.root_dir');
+
+            if (!is_string($rootDir)) {
+                throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+            }
+
+            return $this->completeInDirectory($rootDir);
         }
 
         return [];
@@ -73,7 +79,13 @@ class SnippetsRemoveCommand extends ShopwareCommand implements CompletionAwareIn
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $folder = $this->container->getParameter('kernel.root_dir') . '/' . $input->getArgument('folder') . '/';
+        $rootDir = $this->container->getParameter('kernel.root_dir');
+
+        if (!is_string($rootDir)) {
+            throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+        }
+
+        $folder = $rootDir . '/' . $input->getArgument('folder') . '/';
 
         $databaseLoader = $this->container->get(\Shopware\Components\Snippet\DatabaseHandler::class);
         $databaseLoader->setOutput($output);

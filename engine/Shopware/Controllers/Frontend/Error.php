@@ -165,7 +165,12 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
          * to pass it to the template
         */
         if ($this->Front()->getParam('showException') || $this->Request()->getModuleName() === 'backend') {
-            $path = Shopware()->Container()->getParameter('kernel.root_dir') . '/';
+            $rootDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
+            if (!is_string($rootDir)) {
+                throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+            }
+
+            $path = $rootDir . '/';
 
             /** @var \Exception $exception */
             $exception = $error->exception;

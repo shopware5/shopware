@@ -222,11 +222,14 @@ abstract class StoreCommand extends ShopwareCommand
         }), 'name');
     }
 
-    /**
-     * @return string
-     */
-    protected function getInstalledShopwareVersion()
+    protected function getInstalledShopwareVersion(): string
     {
-        return $this->container->getParameter('shopware.release.version');
+        $shopwareVersion = $this->container->getParameter('shopware.release.version');
+
+        if (!is_string($shopwareVersion)) {
+            throw new \RuntimeException('Parameter shopware.release.version has to be an string');
+        }
+
+        return $shopwareVersion;
     }
 }

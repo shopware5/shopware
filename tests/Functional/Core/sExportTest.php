@@ -73,7 +73,11 @@ class sExportTest extends PHPUnit\Framework\TestCase
         $this->export = Shopware()->Modules()->Export();
         $this->repository = $this->container->get('models')->getRepository(ProductFeed::class);
         $this->template = $this->container->get('template');
-        $this->cacheDir = $this->container->getParameter('kernel.cache_dir') . '/productexport/';
+
+        /** @var string $cacheDir */
+        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+
+        $this->cacheDir = $cacheDir . '/productexport/';
         $this->testDir = __DIR__ . '/fixtures/productexport/';
 
         if (!is_dir($this->cacheDir)) {

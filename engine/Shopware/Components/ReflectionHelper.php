@@ -49,6 +49,11 @@ class ReflectionHelper
 
         $docPath = $docPath === null ? Shopware()->Container()->getParameter('shopware.app.rootDir') : $docPath;
 
+        if (!is_string($docPath)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+        }
+
+        /** @var string[] $folders */
         $folders = Shopware()->Container()->getParameter('shopware.plugin_directories');
 
         $folders[] = Shopware()->DocPath('engine_Shopware');

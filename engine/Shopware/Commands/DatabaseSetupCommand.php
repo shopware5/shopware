@@ -114,12 +114,18 @@ class DatabaseSetupCommand extends ShopwareCommand implements CompletionAwareInt
             return 1;
         }
 
+        /** @var array<string, string> $dbConfig */
         $dbConfig = $this->getContainer()->getParameter('shopware.db');
         $rootDir = $this->getContainer()->getParameter('kernel.root_dir');
+
+        if (!is_string($rootDir)) {
+            throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+        }
 
         $connection = $this->createConnection($dbConfig);
         $database = new Database($connection);
 
+        /** @var string $steps */
         $steps = $input->getOption('steps');
         /** @var string[] $steps */
         $steps = array_filter(explode(',', $steps));

@@ -37,7 +37,10 @@ class CacheTest extends TestCase
     {
         parent::setUp();
 
+        /** @var string $httpCacheDir */
         $httpCacheDir = Shopware()->Container()->getParameter('shopware.httpcache.cache_dir');
+
+        /** @var string $templateCacheDir */
         $templateCacheDir = Shopware()->Container()->getParameter('shopware.template.cacheDir');
 
         @mkdir($httpCacheDir, 0777, true);

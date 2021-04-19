@@ -31,7 +31,9 @@ class SnippetStructureTest extends \Enlight_Components_Test_TestCase
      */
     public function testSnippetsShouldBeValid()
     {
-        $source = Shopware()->Container()->getParameter('kernel.root_dir') . '/snippets';
+        /** @var string $rootDir */
+        $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
+        $source = $rootDir . '/snippets';
 
         $validator = Shopware()->Container()->get('shopware.snippet_validator');
 

@@ -72,6 +72,7 @@ class TextMappingTest extends TestCase
 
         $this->helper->refreshSearchIndexes($context->getShop());
 
+        /** @var string $version */
         $version = Shopware()->Container()->getParameter('shopware.es.version');
 
         $arguments = [

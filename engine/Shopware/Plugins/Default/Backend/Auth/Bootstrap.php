@@ -449,6 +449,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     protected function initLocale()
     {
         $container = $this->Application()->Container();
+        /** @var string $revision */
+        $revision = $container->getParameter('shopware.release.revision');
 
         $locale = $this->getCurrentLocale();
         $container->get('locale')->setLocale($locale->toString());
@@ -457,7 +459,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $baseHash = $this->request->getScheme() . '://'
                   . $this->request->getHttpHost()
                   . $this->request->getBaseUrl() . '?'
-                  . $container->getParameter('shopware.release.revision');
+                  . $revision;
         $baseHash = substr(sha1($baseHash), 0, 5);
         $template->setCompileId('backend_' . $locale->toString() . '_' . $baseHash);
 
@@ -507,6 +509,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     private function getSessionOptions()
     {
+        /** @var array<string, string> $options */
         $options = Shopware()->Container()->getParameter('shopware.backendsession');
 
         if ($this->request !== null && !isset($options['cookie_path'])) {
@@ -532,11 +535,13 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     private function createSaveHandler(Container $container)
     {
+        /** @var array<string, string> $sessionOptions */
         $sessionOptions = $container->getParameter('shopware.backendsession');
         if (isset($sessionOptions['save_handler']) && $sessionOptions['save_handler'] !== 'db') {
             return null;
         }
 
+        /** @var array<string, string> $dbOptions */
         $dbOptions = $container->getParameter('shopware.db');
         $conn = Db::createPDO($dbOptions);
 

@@ -207,6 +207,10 @@ class PluginLocalService
     {
         $rootDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
 
+        if (!is_string($rootDir)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir needs to be a string');
+        }
+
         $path = Shopware()->Container()->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class)->getPluginPath($name);
         $path .= '/plugin.png';
 

@@ -828,6 +828,10 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             }
 
             $projectDir = $this->container->getParameter('shopware.app.rootDir');
+            if (!is_string($projectDir)) {
+                throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+            }
+
             $thumbnailDir = $projectDir . 'media' . DIRECTORY_SEPARATOR . strtolower($media['type']) . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
             $path = $thumbnailDir . $this->removeSpecialCharacters($media['name']) . '_' . $size . '.' . $media['extension'];
 
@@ -951,6 +955,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $name = $media->getName();
         $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
+        if (!is_string($projectDir)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+        }
 
         // Check if the name passed and is valid
         if (!empty($name)) {

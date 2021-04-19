@@ -92,7 +92,12 @@ class Shopware extends Enlight_Application
     {
         trigger_error('Shopware()->App() is deprecated since version 5.2 and will be removed in 5.8.', E_USER_DEPRECATED);
 
-        return $this->container->getParameter('kernel.name');
+        $name = $this->container->getParameter('kernel.name');
+        if (!is_string($name)) {
+            throw new \RuntimeException('Parameter kernel.name needs to be a string');
+        }
+
+        return $name;
     }
 
     /**
@@ -104,7 +109,12 @@ class Shopware extends Enlight_Application
     {
         trigger_error('Shopware()->Environment() is deprecated since version 5.2 and will be removed in 5.8. Use the kernel.environment parameter instead.', E_USER_DEPRECATED);
 
-        return $this->container->getParameter('kernel.environment');
+        $environment = $this->container->getParameter('kernel.environment');
+        if (!is_string($environment)) {
+            throw new \RuntimeException('Parameter kernel.environment needs to be a string');
+        }
+
+        return $environment;
     }
 
     /**

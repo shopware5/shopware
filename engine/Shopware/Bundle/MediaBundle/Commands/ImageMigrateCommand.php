@@ -38,8 +38,11 @@ class ImageMigrateCommand extends ShopwareCommand implements CompletionAwareInte
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
+        /** @var array<string, array> $cdnAdapters */
+        $cdnAdapters = $this->getContainer()->getParameter('shopware.cdn.adapters');
+
         if (in_array($optionName, ['from', 'to'])) {
-            return array_keys($this->getContainer()->getParameter('shopware.cdn.adapters'));
+            return array_keys($cdnAdapters);
         }
 
         return [];

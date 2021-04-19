@@ -16071,11 +16071,6 @@ parameters:
 			path: engine/Shopware/Commands/DatabaseSetupCommand.php
 
 		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/DatabaseSetupCommand.php
-
-		-
 			message: "#^Property Shopware\\\\Commands\\\\DatabaseSetupCommand\\:\\:\\$validSteps has no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/DatabaseSetupCommand.php

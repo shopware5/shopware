@@ -85,7 +85,12 @@ class MigrationsMigrateCommand extends ShopwareCommand implements CompletionAwar
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $connection = $this->getContainer()->get(\PDO::class);
-        $rootDir = $this->getContainer()->getParameter('kernel.root_dir');
+
+        $rootDir = $this->container->getParameter('kernel.root_dir');
+
+        if (!is_string($rootDir)) {
+            throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+        }
 
         $mode = $input->getOption('mode');
 

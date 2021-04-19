@@ -142,7 +142,7 @@ class sExport implements \Enlight_Hook
         $this->db = $db ?: $container->get('db');
         $this->config = $config ?: $container->get(\Shopware_Components_Config::class);
         $this->configuratorService = $configuratorService ?: $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface::class);
-        $this->cdnConfig = $container->getParameter('shopware.cdn');
+        $this->cdnConfig = (array) $container->getParameter('shopware.cdn');
     }
 
     /**

@@ -195,6 +195,10 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
 
         // Clear feed cache
         $cacheDir = $this->container->getParameter('kernel.cache_dir');
+        if (!is_string($cacheDir)) {
+            throw new \RuntimeException('Parameter kernel.cache_dir has to be an string');
+        }
+
         $cacheDir .= '/productexport/';
         if (!is_dir($cacheDir)) {
             if (@mkdir($cacheDir, 0777, true) === false) {

@@ -97,6 +97,11 @@ class Backup
     public function setupBackupDir()
     {
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
+
+        if (!is_string($projectDir)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+        }
+
         $this->backupPath = $projectDir . 'files/backup/multi_edit';
         $this->backupPath = rtrim($this->backupPath, '/\\') . '/';
 
