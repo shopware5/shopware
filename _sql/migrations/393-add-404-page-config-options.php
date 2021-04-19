@@ -4,6 +4,11 @@ class Migrations_Migration393 Extends Shopware\Components\Migrations\AbstractMig
     public function up($modus)
     {
         $this->addSql("SET @formId = (SELECT `id` FROM `s_core_config_forms` WHERE name = 'Frontend100');");
+        $sql = <<<EOD
+          INSERT IGNORE INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
+          VALUES (@formId, 'PageNotFoundDestination', 'i:-2;', '\"Seite nicht gefunden\" Ziel', 'Wenn der Besucher eine nicht existierende Seite aufruft, wird ihm diese angezeigt.', 'select', 1, 0, 1, 'a:4:{s:5:"store";s:35:"base.PageNotFoundDestinationOptions";s:12:"displayField";s:4:"name";s:10:"valueField";s:2:"id";s:10:"allowBlank";s:5:"false";}');
+EOD;
+        $this->addSql($sql);
         $this->addSql("SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'PageNotFoundDestination' LIMIT 1);");
 
         $this->addSql("
@@ -11,6 +16,11 @@ class Migrations_Migration393 Extends Shopware\Components\Migrations\AbstractMig
             VALUES (@elementId, '2', '\"Page not found\" destination', 'When the user requests a non-existent page, he will be shown the following page.' );
         ");
 
+        $sql = <<<EOD
+          INSERT IGNORE INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`)
+          VALUES (@formId, 'PageNotFoundCode', 'i:404;', '\"Seite nicht gefunden\" Fehlercode', 'Übertragener HTTP Statuscode bei \"Seite nicht gefunden\" meldungen', 'number', 1, 0, 1);
+EOD;
+        $this->addSql($sql);
         $this->addSql("SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'PageNotFoundCode' LIMIT 1);");
 
         $this->addSql("
