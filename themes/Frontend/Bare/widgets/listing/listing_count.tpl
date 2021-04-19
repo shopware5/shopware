@@ -13,7 +13,7 @@
 
     {if $facets}
         <div id="facets">
-            {$facets}
+            {$facets|@json_encode}
         </div>
     {/if}
 </div>
