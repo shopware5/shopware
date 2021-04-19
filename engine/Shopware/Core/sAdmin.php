@@ -3993,20 +3993,20 @@ SQL;
 
         foreach ($dispatches as $dispatch) {
             if (empty($dispatch['calculation'])) {
-                $from = round($basket['weight'], 3);
+                $from = round((float) $basket['weight'], 3);
             } elseif ($dispatch['calculation'] == 1) {
                 if (
                     ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA['tax'])
                     || (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
                 ) {
-                    $from = round($basket['amount_net'], 2);
+                    $from = round((float) $basket['amount_net'], 2);
                 } else {
-                    $from = round($basket['amount'], 2);
+                    $from = round((float) $basket['amount'], 2);
                 }
             } elseif ($dispatch['calculation'] == 2) {
-                $from = round($basket['count_article']);
+                $from = (int) $basket['count_article'];
             } elseif ($dispatch['calculation'] == 3) {
-                $from = round($basket['calculation_value_' . $dispatch['id']]);
+                $from = (int) $basket['calculation_value_' . $dispatch['id']];
             } else {
                 continue;
             }
