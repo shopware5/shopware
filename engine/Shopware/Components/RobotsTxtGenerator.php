@@ -74,8 +74,6 @@ class RobotsTxtGenerator implements RobotsTxtGeneratorInterface
         if (in_array($allow, $this->disallows, true)) {
             $index = array_search($allow, $this->disallows);
             unset($this->disallows[$index]);
-
-            return;
         }
 
         if (in_array($allow, $this->allows, true)) {
@@ -90,8 +88,6 @@ class RobotsTxtGenerator implements RobotsTxtGeneratorInterface
         if (in_array($disallow, $this->allows, true)) {
             $index = array_search($disallow, $this->allows);
             unset($this->allows[$index]);
-
-            return;
         }
 
         if (in_array($disallow, $this->disallows, true)) {
