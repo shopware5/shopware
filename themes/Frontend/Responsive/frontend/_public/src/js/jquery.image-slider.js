@@ -242,7 +242,7 @@
             imageSlideSelector: '.image-slider--slide',
 
             /**
-             * The selector fot the container element holding the thumbnails.
+             * The selector for the container element holding the thumbnails.
              *
              * @property thumbnailContainerSelector
              * @type {String}
