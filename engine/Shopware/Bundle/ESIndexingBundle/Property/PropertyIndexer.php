@@ -95,7 +95,6 @@ class PropertyIndexer implements DataIndexerInterface
 
         $this->client->bulk([
             'index' => $index->getName(),
-            'type' => PropertyMapping::TYPE,
             'body' => $documents,
         ]);
     }

@@ -117,7 +117,7 @@ class EsClientLogger extends Client implements EsClientInterface
         switch ($method) {
             case 'bulk':
             case 'search':
-                $message .= ' ' . $request['type'] . ' ' . $request['index'];
+                $message .= ' ' . $request['index'];
                 break;
             default:
                 break;

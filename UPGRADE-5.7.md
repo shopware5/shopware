@@ -23,6 +23,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed FPDI version to 2.2.0
 * Changed mPDF version to 8.0.7
 * Migrated Zend components to new Laminas
+* Elasticsearch indices doesn't use anymore types
 
 ### Additions
 

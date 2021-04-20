@@ -182,9 +182,7 @@ class ShopIndexer implements ShopIndexerInterface
     {
         $arguments = [
             'index' => $index->getName(),
-            'type' => $mapping->getType(),
             'body' => $mapping->get($index->getShop()),
-            'include_type_name' => true,
         ];
 
         $this->client->indices()->putMapping(

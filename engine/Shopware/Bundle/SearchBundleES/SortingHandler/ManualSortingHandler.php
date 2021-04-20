@@ -61,11 +61,16 @@ class ManualSortingHandler implements HandlerInterface
         $categoryCondition = $criteria->getBaseCondition('category');
 
         $categoryId = $categoryCondition->getCategoryIds()[0];
+
+        // Elasticsearch DSL does not support the new format
+        // @see: https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-request-sort.html#_nested_sorting_examples
         $fieldSort = new FieldSort('manualSorting.position', strtolower($criteriaPart->getDirection()), [
-            'nested_path' => 'manualSorting',
             'unmapped_type' => 'integer',
+            'nested' => [
+                'path' => 'manualSorting',
+                'filter' => (new TermsQuery('manualSorting.category_id', [$categoryId]))->toArray(),
+            ],
         ]);
-        $fieldSort->setNestedFilter(new TermsQuery('manualSorting.category_id', [$categoryId]));
 
         /* @var ManualSorting $criteriaPart */
         $search->addSort(
