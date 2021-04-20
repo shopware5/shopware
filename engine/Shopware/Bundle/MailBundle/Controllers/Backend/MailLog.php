@@ -236,8 +236,23 @@ class MailLog extends \Shopware_Controllers_Backend_Application
     {
         $conditions = parent::getFilterConditions($filters, $model, $alias, $whiteList);
 
+        $handledAllFilters = count($conditions) >= count($filters);
+
+        // Enable searching for recipients
+        foreach ($filters as $filter) {
+            if ($filter['property'] === 'search') {
+                $value = $this->formatSearchValue($filter['value'], ['type' => 'text']);
+
+                $conditions[] = [
+                    'property' => self::JOIN_ALIAS_RECIPIENTS . '.mailAddress',
+                    'operator' => 'OR',
+                    'value' => $value,
+                ];
+            }
+        }
+
         // Simple check to see if there were any filter conditions which couldn't be handled by the parent method
-        if (count($conditions) >= count($filters)) {
+        if ($handledAllFilters) {
             return $conditions;
         }
 
