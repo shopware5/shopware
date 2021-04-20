@@ -154,7 +154,6 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
 
         $arguments = [
             'index' => $index->getName(),
-            'type' => PropertyMapping::TYPE,
             'body' => $search->toArray(),
             'rest_total_hits_as_int' => true,
             'track_total_hits' => true,

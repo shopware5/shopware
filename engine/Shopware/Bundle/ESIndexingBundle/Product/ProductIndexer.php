@@ -117,7 +117,6 @@ class ProductIndexer implements DataIndexerInterface
 
         $this->client->bulk([
             'index' => $index->getName(),
-            'type' => ProductMapping::TYPE,
             'body' => $documents,
         ]);
     }
