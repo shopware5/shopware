@@ -80,7 +80,7 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
         $this
             ->setName('sw:es:index:populate')
             ->setDescription('Reindex all shops into a new index and switch the live-system alias after the index process.')
-            ->addOption('shopId', null, InputOption::VALUE_OPTIONAL, 'The shop to populate')
+            ->addOption('shopId', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The shop to populate (multiple Ids -> shopId={1,2})')
             ->addOption('index', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'The index to populate')
             ->addOption('no-evaluation', null, InputOption::VALUE_NONE, 'Disable evaluation for each index')
             ->addOption('stop-on-error', null, InputOption::VALUE_NONE, 'Abort indexing if an error occurs')
@@ -93,7 +93,11 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if ($shopId = $input->getOption('shopId')) {
-            $shops = [$this->container->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface::class)->get($shopId)];
+            $shops = [];
+
+            foreach ($input->getOption('shopId') as $shopId) {
+                $shops[] = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface::class)->get($shopId);
+            }
         } else {
             $shops = $this->container->get(\Shopware\Bundle\ESIndexingBundle\IdentifierSelector::class)->getShops();
         }
