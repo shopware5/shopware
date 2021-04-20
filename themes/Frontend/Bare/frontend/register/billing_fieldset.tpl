@@ -167,6 +167,8 @@
                                 id="country"
                                 required="required"
                                 aria-required="true"
+                                data-shipping-alert-target="#billingCountryBlockedAlert"
+                                data-shipping-alert-message="{s name="RegisterBillingBlockedBillingCountry"}{/s}"
                                 class="select--country is--required{if isset($error_flags.country)} has--error{/if}">
 
                             <option disabled="disabled"
@@ -177,11 +179,21 @@
                             </option>
 
                             {foreach $country_list as $country}
-                                <option value="{$country.id}" {if $country.id eq $form_data.country}selected="selected"{/if} {if $country.states}stateSelector="country_{$country.id}_states"{/if}>
+                                <option value="{$country.id}" {if $country.id eq $form_data.country}selected="selected"{/if} {if $country.states}stateSelector="country_{$country.id}_states"{/if} data-blocked-as-shipping="{if !$country.allowShipping}1{else}0{/if}">
                                     {$country.countryname}
                                 </option>
                             {/foreach}
                         </select>
+                    </div>
+                {/block}
+
+                {block name='frontend_register_billing_fieldset_input_country_shipping_info'}
+                    <div class="alert is--warning is--rounded is--hidden" id="billingCountryBlockedAlert">
+                        <div class="alert--icon">
+                            <i class="icon--element icon--info"></i>
+                        </div>
+                        <div class="alert--content">
+                        </div>
                     </div>
                 {/block}
 

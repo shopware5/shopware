@@ -201,7 +201,15 @@
              * @property personalPasswordConfirmationSelector
              * @type {String}
              */
-            personalGuestSelector: '#register_personal_skipLogin'
+            personalGuestSelector: '#register_personal_skipLogin',
+
+            /**
+             * Selector for the billing country select
+             *
+             * @property personalPasswordConfirmationSelector
+             * @type {String}
+             */
+            billingCountrySelector: '[data-shipping-alert-target]'
         },
 
         /**
@@ -223,6 +231,7 @@
             me.$personalEmailConfirmation = $el.find(opts.personalEmailConfirmationSelector);
             me.$personalPasswordConfirmation = $el.find(opts.personalPasswordConfirmationSelector);
             me.$personalGuest = $el.find(opts.personalGuestSelector);
+            me.$billingCountrySelect = $el.find(opts.billingCountrySelector);
 
             me.$form = $el.find(opts.formSelector);
 
@@ -266,6 +275,7 @@
             me._on(me.$paymentMethods, 'change', $.proxy(me.onPaymentChanged, me));
             me._on(me.$form, 'focusout', $.proxy(me.onValidateInput, me));
             me._on(me.$submitBtn, 'click', $.proxy(me.onSubmitBtn, me));
+            me._on(me.$billingCountrySelect, 'change', $.proxy(me.onBillingCountryChange, me));
 
             $.publish('plugin/swRegister/onRegisterEvents', [ me ]);
         },
@@ -449,6 +459,21 @@
             });
 
             $.publish('plugin/swRegister/onPaymentChanged', [ me ]);
+        },
+
+        onBillingCountryChange: function () {
+            var targetAlert = this.$el.find(this.$billingCountrySelect.data('shipping-alert-target')),
+                text = this.$billingCountrySelect.data('shipping-alert-message'),
+                selectedOption = this.$billingCountrySelect.find(':selected'),
+                showAlert = selectedOption.data('blocked-as-shipping'),
+                label = selectedOption.html().trim();
+
+            if (showAlert) {
+                targetAlert.removeClass('is--hidden');
+                targetAlert.find('.alert--content').html(text.replace('[COUNTRY]', label))
+            } else {
+                targetAlert.addClass('is--hidden');
+            }
         },
 
         /**
