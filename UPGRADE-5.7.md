@@ -39,6 +39,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Added `attribute` to users listing in API
 * Added new blocks `document_index_head_logo` and `document_index_head_wrapper` to `themes/Frontend/Bare/documents/index.tpl`
 * Added `unmapped_type` to `integer` in `engine/Shopware/Bundle/SearchBundleES/SortingHandler/ManualSortingHandler.php`
+* Added a notice to registration form when a shipment blocked country has been selected
 
 ### Changes
 
