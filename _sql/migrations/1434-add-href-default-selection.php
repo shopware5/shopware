@@ -40,5 +40,12 @@ VALUES
 (@formId, 'hrefLangDefaultShop', 's:0:"";', 'href-lang Standardsprache', 'Gibt für diesen Shop "x-default" im href-lang-Tag aus und definiert damit die Sprache dieses Shops als Standardsprache.', 'combo', 0, 0, 0, '%s');
 EOD;
         $this->addSql(sprintf($sql, serialize($settings)));
+
+        $sql = <<<'EOD'
+SET @elementId = LAST_INSERT_ID();
+INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`)
+VALUES (@elementId, 2, 'Default href-lang', 'The selected shop will be shown as "x-default" in the href-lang tag, therefore using this shop\'s language as default.');
+EOD;
+        $this->addSql($sql);
     }
 }

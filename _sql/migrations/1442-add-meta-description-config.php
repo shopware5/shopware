@@ -33,5 +33,12 @@ VALUES
 (@formId, 'metaDescriptionLength', 's:3:"150";', 'Maximal erlaubte Länge der Meta Description', '', 'number', 0, 0, 0, NULL);
 EOD;
         $this->addSql($sql);
+
+        $sql = <<<'EOD'
+SET @elementId = LAST_INSERT_ID();
+INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`)
+VALUES (@elementId, 2, 'Maximum allowed length of the meta description');
+EOD;
+        $this->addSql($sql);
     }
 }
