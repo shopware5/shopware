@@ -488,12 +488,7 @@ class Kernel extends SymfonyKernel
 
         $plugins = $initializer->initializePlugins();
 
-        /*
-         * @deprecated since 5.5, is true by default since 5.6 will be removed in Shopware 5.7
-         */
-        if ($this->config['backward_compatibility']['predictable_plugin_order'] === true) {
-            ksort($plugins);
-        }
+        ksort($plugins);
 
         $this->bundles = array_merge($this->bundles, $plugins);
 
