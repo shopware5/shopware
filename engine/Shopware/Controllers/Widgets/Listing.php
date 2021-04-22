@@ -33,7 +33,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     /**
      * Pre dispatch method
      */
-    public function preDispatch()
+    public function preDispatch(): void
     {
         $this->Response()->setHeader('x-robots-tag', 'noindex');
     }
@@ -41,7 +41,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     /**
      * Product navigation as json string
      */
-    public function productNavigationAction()
+    public function productNavigationAction(): void
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 

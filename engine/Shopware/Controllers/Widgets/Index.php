@@ -22,12 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Shop\DetachedShop;
+
 class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
 {
     /**
      * Pre dispatch method
      */
-    public function preDispatch()
+    public function preDispatch(): void
     {
         $this->Response()->setHeader('x-robots-tag', 'noindex');
 
@@ -39,7 +41,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
     /**
      * Refresh shop statistic
      */
-    public function refreshStatisticAction()
+    public function refreshStatisticAction(): void
     {
         $request = $this->Request();
         $response = $this->Response();
@@ -52,7 +54,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
     /**
      * Get cms menu
      */
-    public function menuAction()
+    public function menuAction(): void
     {
         $this->View()->assign('sGroup', $this->Request()->getParam('group'));
         $plugin = Shopware()->Plugins()->Core()->ControllerBase();
@@ -62,11 +64,15 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
     /**
      * Get shop menu
      */
-    public function shopMenuAction()
+    public function shopMenuAction(): void
     {
         $shop = Shopware()->Shop();
-        $main = $shop->getMain() !== null ? $shop->getMain() : $shop;
-        Shopware()->Models()->detach($main);
+
+        if ($shop === null) {
+            throw new RuntimeException('Shop needs to be set to call this action');
+        }
+
+        $main = DetachedShop::createFromShop($shop->getMain() !== null ? $shop->getMain() : $shop);
 
         $this->View()->assign('shop', $shop);
         if (!$this->Request()->getParam('hideCurrency', false)) {
@@ -74,7 +80,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         }
         $languages = $shop->getChildren()->toArray();
         foreach ($languages as $languageKey => $language) {
-            Shopware()->Models()->detach($language);
+            $language = DetachedShop::createFromShop($language);
             if (!$language->getActive()) {
                 unset($languages[$languageKey]);
             }
