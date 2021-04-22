@@ -50,10 +50,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
             $this->enableBackendTheme();
         }
 
-        if (strpos($this->Request()->getHeader('Content-Type'), 'application/json') === 0) {
-            $this->Front()->Plugins()->Json()->setRenderer();
-            $this->View()->assign('success', false);
-        } elseif ($this->Request()->isXmlHttpRequest() || !Shopware()->Container()->initialized('db')) {
+        if ($this->Request()->isXmlHttpRequest() || !Shopware()->Container()->initialized('db')) {
             $this->View()->loadTemplate($templateModule . '/error/exception.tpl');
         } elseif (isset($_ENV['SHELL']) || PHP_SAPI === 'cli') {
             $this->View()->loadTemplate($templateModule . '/error/cli.tpl');
