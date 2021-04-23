@@ -4686,11 +4686,6 @@ parameters:
 			path: engine/Shopware/Bundle/ESIndexingBundle/Product/ProductProvider.php
 
 		-
-			message: "#^Cannot call method setRule\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/Product/ProductProvider.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\Product\\\\ProductProvider\\:\\:getContexts\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ESIndexingBundle/Product/ProductProvider.php
