@@ -140,4 +140,48 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
         parent::clear();
         $this->set('sessionId', $this->getId());
     }
+
+    public function start()
+    {
+        // Generally `start()` is called by Shopware's session factories
+        // - Shopware_Plugins_Backend_Auth_Bootstrap::onInitResourceBackendSession()
+        // - Shopware\Components\DependencyInjection\Bridge\Session::createSession()
+        // In case the session is started somewhere else we need to ensure no other session is active. The same logic as
+        // in Shopware's factories is used here.
+        // This behaviour is analogue to Zend: https://github.com/shopware/shopware/blob/cbc212ca4642878cac62193d3a2f41e08f4849a2/engine/Library/Zend/Session.php#L413
+        $container = Shopware()->Container();
+        self::ensureFrontendSessionClosed($container);
+        self::ensureBackendSessionClosed($container);
+
+        return parent::start();
+    }
+
+    public static function ensureFrontendSessionClosed($container)
+    {
+        self::ensureSessionClosed($container, 'session');
+    }
+
+    public static function ensureBackendSessionClosed($container)
+    {
+        self::ensureSessionClosed($container, 'backendsession');
+    }
+
+    /**
+     * Saves the session and ensures it can be reused.
+     *
+     * This method can be used to ensure other sessions are closed before starting a new session, because the other
+     * sessions would use the session id of the new session and thus write their data into the wrong session.
+     *
+     * @param $container
+     * @param $sessionServiceName
+     */
+    private static function ensureSessionClosed($container, $sessionServiceName)
+    {
+        $session = $container->initialized($sessionServiceName) ? $container->get($sessionServiceName) : null;
+        if ($session && $session->isStarted()) {
+            $session->save();
+            // The empty session id signals that upon starting a session the session cookie is used.
+            $session->setId('');
+        }
+    }
 }
