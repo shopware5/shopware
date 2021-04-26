@@ -153,16 +153,6 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
         self::ensureFrontendSessionClosed($container);
         self::ensureBackendSessionClosed($container);
 
-        // When the session cookie is present but no session id is currently set, set its value as session id as
-        // otherwise a new session id is generated when a session was active before. This is required to resume a
-        // previously active session after switching back from another session. This behaviour is analogue to Zend:
-        // https://github.com/shopware/shopware/blob/cbc212ca4642878cac62193d3a2f41e08f4849a2/engine/Library/Zend/Session.php#L421-L423
-        // The session id can be empty on first start or when it has been set to an empty string, for example by
-        // `ensureSessionClosed()`.
-        if (!$this->getId() && ini_get('session.use_cookies') === '1' && !empty($_COOKIE[$this->getName()])) {
-            $this->setId($_COOKIE[$this->getName()]);
-        }
-
         return parent::start();
     }
 
