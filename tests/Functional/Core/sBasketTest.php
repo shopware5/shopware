@@ -2640,6 +2640,21 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $resourceHelper->cleanUp();
     }
 
+    public function testMinPurchaseMultipleTimesAdded(): void
+    {
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(mt_rand(), true);
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+
+        Shopware()->Db()->exec('UPDATE s_articles_details SET minpurchase = 2 WHERE ordernumber = "SW10239"');
+
+        $this->module->sAddArticle('SW10239', 1);
+        $this->module->sAddArticle('SW10239', 1);
+
+        Shopware()->Db()->exec('UPDATE s_articles_details SET minpurchase = 0 WHERE ordernumber = "SW10239"');
+
+        static::assertSame('4', $this->module->sGetBasketData()['content'][0]['quantity']);
+    }
+
     private function generateBasketSession(): string
     {
         // Create session id
