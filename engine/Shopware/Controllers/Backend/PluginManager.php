@@ -99,7 +99,7 @@ class PluginManager extends \Shopware_Controllers_Backend_ExtJs
 
         $offset = (int) $this->Request()->getParam('offset');
 
-        $downloadsDir = $this->container->getParameter('shopware.app.downloadsdir');
+        $downloadsDir = $this->container->getParameter('shopware.app.downloadsDir');
         $destination = rtrim($downloadsDir, '/') . DIRECTORY_SEPARATOR . $metaStruct->getFileName();
         if ($offset === 0) {
             unlink($destination);
@@ -141,7 +141,7 @@ class PluginManager extends \Shopware_Controllers_Backend_ExtJs
             return;
         }
 
-        $downloadsDir = $this->container->getParameter('shopware.app.downloadsdir');
+        $downloadsDir = $this->container->getParameter('shopware.app.downloadsDir');
         $filePath = rtrim($downloadsDir, '/') . DIRECTORY_SEPARATOR . $metaStruct->getFileName();
         $service = Shopware()->Container()->get('shopware_plugininstaller.plugin_download_service');
 
