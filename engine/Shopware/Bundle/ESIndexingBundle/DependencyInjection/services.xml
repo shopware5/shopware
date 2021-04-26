@@ -149,6 +149,7 @@
             <argument type="service" id="Shopware\Bundle\ESIndexingBundle\Product\ProductListingVariationLoader"/>
             <argument type="service" id="Shopware\Bundle\AttributeBundle\Service\CrudService"/>
             <argument type="service" id="Shopware\Bundle\ESIndexingBundle\Product\ProductManualPositionLoader"/>
+            <argument type="service" id="config"/>
         </service>
 
         <service id="shopware_elastic_search.product_mapping"

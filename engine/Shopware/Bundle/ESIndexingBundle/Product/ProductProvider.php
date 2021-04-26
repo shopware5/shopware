@@ -128,6 +128,11 @@ class ProductProvider implements ProviderInterface
      */
     private $manualPositionLoader;
 
+    /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
     public function __construct(
         ListProductGatewayInterface $productGateway,
         CheapestPriceServiceInterface $cheapestPriceService,
@@ -143,7 +148,8 @@ class ProductProvider implements ProviderInterface
         ProductConfigurationLoader $configurationLoader,
         ProductListingVariationLoader $visibilityLoader,
         CrudServiceInterface $crudService,
-        ProductManualPositionLoaderInterface $manualPositionLoader
+        ProductManualPositionLoaderInterface $manualPositionLoader,
+        \Shopware_Components_Config $config
     ) {
         $this->productGateway = $productGateway;
         $this->cheapestPriceService = $cheapestPriceService;
@@ -160,6 +166,7 @@ class ProductProvider implements ProviderInterface
         $this->listingVariationLoader = $visibilityLoader;
         $this->crudService = $crudService;
         $this->manualPositionLoader = $manualPositionLoader;
+        $this->config = $config;
     }
 
     /**
@@ -227,6 +234,7 @@ class ProductProvider implements ProviderInterface
             if (isset($average[$number])) {
                 $product->setVoteAverage($average[$number]);
             }
+
             if (isset($calculated[$number])) {
                 $product->setCalculatedPrices($calculated[$number]);
             }
@@ -473,10 +481,16 @@ class ProductProvider implements ProviderInterface
                 /* @var ProductContextInterface $context */
                 $this->priceCalculationService->calculateProduct($product, $context);
 
-                if ($product->getCheapestPrice()) {
-                    $product->getCheapestPrice()->setRule(null);
+                $priceObj = $product->getCheapestUnitPrice();
 
-                    $prices[$number][$key] = $product->getCheapestPrice();
+                if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
+                    $priceObj = $product->getCheapestPrice();
+                }
+
+                if ($priceObj) {
+                    $priceObj->setRule(null);
+
+                    $prices[$number][$key] = $priceObj;
                 }
             }
         }
