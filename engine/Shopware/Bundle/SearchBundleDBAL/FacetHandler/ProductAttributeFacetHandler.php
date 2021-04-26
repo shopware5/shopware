@@ -226,15 +226,25 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
             return null;
         }
 
+        /** @var float $activeMin */
         $activeMin = $result['minValues'];
+
+        /** @var float $activeMax */
         $activeMax = $result['maxValues'];
 
         /** @var ProductAttributeCondition|null $condition */
         $condition = $criteria->getCondition($facet->getName());
         if ($condition !== null) {
+            /** @var array{'min'?: float, 'max'?: float} $data */
             $data = $condition->getValue();
-            $activeMin = $data['min'];
-            $activeMax = $data['max'];
+
+            if (isset($data['min'])) {
+                $activeMin = $data['min'];
+            }
+
+            if (isset($data['max'])) {
+                $activeMax = $data['max'];
+            }
         }
 
         return new RangeFacetResult(

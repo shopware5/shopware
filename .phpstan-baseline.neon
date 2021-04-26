@@ -9516,16 +9516,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/ProductAttributeFacetHandler.php
 
 		-
-			message: "#^Offset 'min' does not exist on array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
-			message: "#^Offset 'max' does not exist on array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:addTranslations\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/ProductAttributeFacetHandler.php

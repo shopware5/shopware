@@ -154,6 +154,10 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
             $type = $attribute ? $attribute->getColumnType() : null;
 
+            $aggregations[$key]['buckets'] = array_filter($aggregations[$key]['buckets'], function ($item) {
+                return $item['key'] !== '';
+            });
+
             if (in_array($type, [TypeMappingInterface::TYPE_DATE, TypeMappingInterface::TYPE_DATETIME])) {
                 $aggregations[$key] = $this->formatDates($aggregations[$key]);
             }
