@@ -8,7 +8,7 @@ Feature: forms
         Then  I should be on the page "Form"
         And   I should see "Anfrage-Formular"
         And   I ignore browser validation
-        And   the "inquiry" field should contain "Ich habe folgende Fragen zum Artikel Blütenarrangement mit Rattan"
+        And   the "inquiry" field should contain "Ich habe folgende Fragen zum Artikel Blütenarrangement mit Rattan (SW10097)"
 
         When  I submit the inquiry form with:
             | field    | value            |
