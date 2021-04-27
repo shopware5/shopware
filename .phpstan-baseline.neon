@@ -39082,7 +39082,7 @@ parameters:
 
 		-
 			message: "#^Cannot call method get\\(\\) on Shopware_Components_Config\\|null\\.$#"
-			count: 12
+			count: 11
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
@@ -39466,12 +39466,17 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Cannot access property \\$serviceAttrField on Shopware_Components_Config\\|null\\.$#"
+			message: "#^Cannot call method offsetGet\\(\\) on Shopware_Components_Config\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:basketHasMixedProducts\\(\\) has parameter \\$basket with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Shopware/Controllers/Frontend/Checkout.php
+
+		-
+			message: "#^Cannot access property \\$serviceAttrField on Shopware_Components_Config\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
@@ -39487,11 +39492,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getDefaultPaymentMethod\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Cannot call method offsetGet\\(\\) on Shopware_Components_Config\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 

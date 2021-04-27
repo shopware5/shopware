@@ -123,6 +123,72 @@ class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
         Shopware()->Modules()->Basket()->sDeleteBasket();
     }
 
+    public function testRequestPaymentWithoutAGB(): void
+    {
+        // Login
+        $this->loginFrontendUser();
+
+        // Add article to basket
+        $this->addBasketArticle(self::USER_AGENT, 5);
+
+        // Confirm checkout
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $this->dispatch('/checkout/confirm');
+
+        // Finish checkout
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $this->dispatch('/checkout/payment');
+
+        static::assertTrue($this->View()->getAssign('sAGBError'));
+
+        // Got redirected back
+        static::assertSame('confirm', $this->Request()->getActionName());
+
+        // Logout frontend user
+        Shopware()->Modules()->Admin()->logout();
+    }
+
+    public function testRequestPaymentWithoutServiceAgreement(): void
+    {
+        // Login
+        $this->loginFrontendUser();
+
+        // Add article to basket
+        $this->addBasketArticle(self::USER_AGENT, 5);
+
+        Shopware()->Db()->beginTransaction();
+        $this->setConfig('serviceAttrField', 'attr1');
+        Shopware()->Db()->exec('UPDATE s_articles_attributes SET attr1 = 1');
+
+        // Confirm checkout
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $this->dispatch('/checkout/confirm');
+
+        // Finish checkout
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $this->Request()->setPost('sAGB', 'on');
+        $this->dispatch('/checkout/payment');
+
+        $this->setConfig('serviceAttrField', null);
+        Shopware()->Db()->rollBack();
+
+        static::assertFalse($this->View()->getAssign('sAGBError'));
+
+        // Got redirected back
+        static::assertSame('confirm', $this->Request()->getActionName());
+
+        // Logout frontend user
+        Shopware()->Modules()->Admin()->logout();
+    }
+
     /**
      * Compares the calculated price from a basket with the calculated price from \Shopware\Bundle\OrderBundle\Service\CalculationService::recalculateOrderTotals()
      * It does so by creating via the frontend controllers, and comparing the amount (net & gross) with the values provided by
