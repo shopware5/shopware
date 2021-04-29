@@ -9,15 +9,16 @@ parameters:
     tmpDir: var/cache/phpstan
 
     scanDirectories:
-        - %currentWorkingDirectory%/var/cache
+        - %currentWorkingDirectory%/var/cache/production____REVISION___/doctrine
+        - %currentWorkingDirectory%/var/cache/production____REVISION___/proxies
         - %currentWorkingDirectory%/engine/Library
-    scanFiles:
-        - %currentWorkingDirectory%/vendor/autoload.php
 
     paths:
         - %currentWorkingDirectory%/engine/Shopware
+        - %currentWorkingDirectory%/tests
     excludes_analyse:
-        - %currentWorkingDirectory%/engine/Shopware/Plugins
+        - %currentWorkingDirectory%/engine/Shopware/Plugins/Community
+        - %currentWorkingDirectory%/engine/Shopware/Plugins/Local
 
     ignoreErrors:
         - '#apcu_#'
