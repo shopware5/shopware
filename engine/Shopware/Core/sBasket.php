@@ -755,7 +755,7 @@ SQL;
                 );
                 unset($voucherCodeDetails['voucherID']);
                 $voucherDetails = array_merge($voucherCodeDetails, $voucherDetails);
-                $individualCode = ($voucherDetails && $voucherDetails['description']);
+                $individualCode = $voucherDetails && $voucherDetails['description'];
             }
         }
         $streams = array_filter(explode('|', $voucherDetails['customer_stream_ids']));
@@ -2586,7 +2586,7 @@ SQL;
                 ['subject' => $this, 'getArticles' => $getProducts]
             );
 
-            $getProducts[$key]['shippinginfo'] = (empty($getProducts[$key]['modus']));
+            $getProducts[$key]['shippinginfo'] = empty($getProducts[$key]['modus']);
 
             if (!empty($getProducts[$key]['releasedate'])
                 && strtotime($getProducts[$key]['releasedate']) <= time()

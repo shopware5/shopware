@@ -6,5 +6,5 @@ return [
         'dbname' => '%db.database%',
         'host' => '%db.host%',
         'port' => '%db.port%',
-    ]
+    ],
 ];

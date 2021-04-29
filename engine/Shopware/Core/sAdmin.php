@@ -1103,7 +1103,7 @@ class sAdmin implements \Enlight_Hook
         $countryList = array_map(function ($country) {
             $request = $this->front->Request();
             $countryId = (int) $country['id'];
-            $country['flag'] = ((int) $request->getPost('country') === $countryId || (int) $request->getPost('countryID') === $countryId);
+            $country['flag'] = (int) $request->getPost('country') === $countryId || (int) $request->getPost('countryID') === $countryId;
 
             return $country;
         }, $countryList);
@@ -1396,7 +1396,7 @@ class sAdmin implements \Enlight_Hook
         $baseFile = $this->config->get('sBASEFILE');
         if ($numberOfPages > 1) {
             for ($i = 1; $i <= $numberOfPages; ++$i) {
-                $pagesStructure['numbers'][$i]['markup'] = ($i == $destinationPage);
+                $pagesStructure['numbers'][$i]['markup'] = $i == $destinationPage;
                 $pagesStructure['numbers'][$i]['value'] = $i;
                 $pagesStructure['numbers'][$i]['link'] = $baseFile . $this->moduleManager->Core()
                         ->sBuildLink($additionalParams + ['sPage' => $i]);

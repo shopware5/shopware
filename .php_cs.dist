@@ -76,5 +76,6 @@ return (new Config())
         PhpdocParamTypeFixer::name() => true,
         NoSuperfluousConcatenationFixer::name() => true,
         NoUselessStrlenFixer::name() => true,
+        NoUselessParenthesisFixer::name() => true,
     ])
     ->setFinder($finder);
