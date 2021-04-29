@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "30868fa9fc97c5577785d87321a73ead",
+    "content-hash": "26a6f6020e202a9237e30fd0ee88fa5c",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -3162,16 +3162,16 @@
         },
         {
             "name": "ongr/elasticsearch-dsl",
-            "version": "v7.1.2",
+            "version": "v7.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ongr-io/ElasticsearchDSL.git",
-                "reference": "1bfcd23999fb297fbaf141d10753d8400b9f6016"
+                "reference": "286ad9dad3278e7a5c1cd9084b64c72bc31dffb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ongr-io/ElasticsearchDSL/zipball/1bfcd23999fb297fbaf141d10753d8400b9f6016",
-                "reference": "1bfcd23999fb297fbaf141d10753d8400b9f6016",
+                "url": "https://api.github.com/repos/ongr-io/ElasticsearchDSL/zipball/286ad9dad3278e7a5c1cd9084b64c72bc31dffb5",
+                "reference": "286ad9dad3278e7a5c1cd9084b64c72bc31dffb5",
                 "shasum": ""
             },
             "require": {
@@ -3213,9 +3213,9 @@
             "homepage": "http://ongr.io",
             "support": {
                 "issues": "https://github.com/ongr-io/ElasticsearchDSL/issues",
-                "source": "https://github.com/ongr-io/ElasticsearchDSL/tree/v7.1.2"
+                "source": "https://github.com/ongr-io/ElasticsearchDSL/tree/v7.1.3"
             },
-            "time": "2020-02-20T20:33:51+00:00"
+            "time": "2020-10-26T08:47:12+00:00"
         },
         {
             "name": "php-http/message",
@@ -11074,6 +11074,7 @@
         "ext-gd": "*",
         "ext-hash": "*",
         "ext-iconv": "*",
+        "ext-intl": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
@@ -11084,7 +11085,6 @@
         "ext-xml": "*",
         "ext-zip": "*",
         "ext-zlib": "*",
-        "ext-intl": "*",
         "lib-libxml": "*"
     },
     "platform-dev": [],
