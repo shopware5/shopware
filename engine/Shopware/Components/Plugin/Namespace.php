@@ -277,7 +277,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             return $result;
         }
 
-        /** @var Shopware\Models\Plugin\Plugin $plugin */
         /** @var Shopware\Models\Widget\Widget $widget */
         foreach ($plugin->getWidgets() as $widget) {
             $name = $widget->getName();
@@ -531,15 +530,15 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     {
         $sql = '
             SELECT
-              name, 
-              id, 
-              name, 
+              name,
+              id,
+              name,
               label,
-              description, 
-              source, 
+              description,
+              source,
               active,
               installation_date as installationDate,
-              update_date as updateDate, 
+              update_date as updateDate,
               version
             FROM s_core_plugins
             WHERE namespace=:namespace AND name not IN(:names)

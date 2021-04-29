@@ -24,13 +24,15 @@
 
 namespace Shopware\Components\Password;
 
+use Shopware\Components\Password\Encoder\PasswordEncoderInterface;
+
 /**
  * Password Manager
  */
 class Manager
 {
     /**
-     * @var array
+     * @var array<string, PasswordEncoderInterface>
      */
     protected $encoder = [];
 
@@ -47,7 +49,7 @@ class Manager
     /**
      * @throws \Exception
      */
-    public function addEncoder(Encoder\PasswordEncoderInterface $encoder)
+    public function addEncoder(PasswordEncoderInterface $encoder)
     {
         $name = strtolower(trim($encoder->getName()));
 
@@ -63,7 +65,7 @@ class Manager
      *
      * @throws \Exception
      *
-     * @return Encoder\PasswordEncoderInterface
+     * @return PasswordEncoderInterface
      */
     public function getEncoderByName($name)
     {

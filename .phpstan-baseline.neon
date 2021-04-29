@@ -3296,16 +3296,6 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CronJobProgressHelper.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CronJobSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CronJobSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CronJobSubscriber\\:\\:refresh\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CronJobSubscriber.php
-
-		-
 			message: "#^Cannot access offset 'static' on \\(array&nonEmpty\\)\\|true\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CronJobSubscriber.php
@@ -3317,11 +3307,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method fetchAll\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CronJobSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CronJobSubscriber\\:\\:createQuery\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CronJobSubscriber.php
 
@@ -3401,27 +3386,12 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrder.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrder\\:\\:setProducts\\(\\) has parameter \\$products with no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrder.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrder\\:\\:setManufacturers\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrder.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrder\\:\\:setManufacturers\\(\\) has parameter \\$manufacturers with no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrder.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrder\\:\\:setCategories\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrder.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrder\\:\\:setCategories\\(\\) has parameter \\$categories with no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrder.php
 
@@ -6346,11 +6316,6 @@ parameters:
 			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between Enlight_View_Default and null will always evaluate to false\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLog\\:\\:saveConfigAction\\(\\) has parameter \\$mailLogActiveFilters with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
@@ -7547,11 +7512,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$categories of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginCategoryService\\:\\:buildTree\\(\\) expects array\\<Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\>, array\\<array\\<Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\>\\|Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginCategoryService.php
-
-		-
-			message: "#^Parameter \\#1 \\$children of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\:\\:setChildren\\(\\) expects array\\<Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\>, array\\<Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\>\\|Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginCategoryService.php
 
@@ -16906,11 +16866,6 @@ parameters:
 			path: engine/Shopware/Commands/ThemeCacheGenerateCommand.php
 
 		-
-			message: "#^Parameter \\#2 \\$arr2 of function array_intersect_key expects array, array\\<\\(float\\|int\\), mixed\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/ThemeCacheGenerateCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\ThemeCacheGenerateCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/ThemeCacheGenerateCommand.php
@@ -17941,11 +17896,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Category.php
 
 		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Category.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Category\\:\\:prepareMediaData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Category.php
@@ -18377,11 +18327,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\EmotionPreset\\:\\:hydrate\\(\\) has parameter \\$presets with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/EmotionPreset.php
-
-		-
-			message: "#^Parameter \\#1 \\$technicalNames of method Shopware\\\\Components\\\\Api\\\\Resource\\\\EmotionPreset\\:\\:getPlugins\\(\\) expects array\\<string\\>, array\\<int, int\\|string\\> given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/EmotionPreset.php
 
@@ -25391,11 +25336,6 @@ parameters:
 			path: engine/Shopware/Components/Password/Encoder/Sha256.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\Password\\\\Manager\\:\\:\\$encoder type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Password/Manager.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Password\\\\Manager\\:\\:addEncoder\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Password/Manager.php
@@ -27972,11 +27912,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Theme\\\\EventListener\\\\ConfigLoader\\:\\:onDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/EventListener/ConfigLoader.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/EventListener/ConfigLoader.php
 
@@ -40448,11 +40383,6 @@ parameters:
 		-
 			message: "#^Cannot access property \\$sDispatch on Enlight_Components_Session_Namespace\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Payment.php
-
-		-
-			message: "#^Offset 'additional' does not exist on array\\|null\\.$#"
-			count: 3
 			path: engine/Shopware/Controllers/Frontend/Payment.php
 
 		-

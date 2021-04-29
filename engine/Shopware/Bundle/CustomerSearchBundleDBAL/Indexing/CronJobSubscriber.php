@@ -60,6 +60,9 @@ class CronJobSubscriber implements SubscriberInterface
         $this->customerStream = $customerStream;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public static function getSubscribedEvents()
     {
         return [
@@ -67,6 +70,9 @@ class CronJobSubscriber implements SubscriberInterface
         ];
     }
 
+    /**
+     * @return bool
+     */
     public function refresh()
     {
         $helper = new CronJobProgressHelper();
@@ -90,6 +96,8 @@ class CronJobSubscriber implements SubscriberInterface
         foreach ($streams as $stream) {
             if ($stream['freeze_up']) {
                 $stream['freeze_up'] = new \DateTime($stream['freeze_up']);
+            } else {
+                $stream['freeze_up'] = null;
             }
             $result = $this->customerStream->updateFrozenState($stream['id'], $stream['freeze_up'], $stream['conditions']);
             if ($result) {
@@ -106,10 +114,7 @@ class CronJobSubscriber implements SubscriberInterface
         return true;
     }
 
-    /**
-     * @return array
-     */
-    private function fetchStreams()
+    private function fetchStreams(): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(['id', 'name', 'conditions', 'freeze_up', 'static']);
@@ -118,7 +123,7 @@ class CronJobSubscriber implements SubscriberInterface
         return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    private function createQuery()
+    private function createQuery(): LastIdQuery
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(['id', 'id']);

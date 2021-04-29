@@ -70,9 +70,6 @@ parameters:
         # offsetSet should not return
         - '#Method Shopware_Components_Config::offsetSet\(\) with return type void returns mixed but should not return anything#'
         - # Seem to be issues, but need tests to verify changes there
-            message: '#Else branch is unreachable because previous condition is always true#'
-            path: 'engine/Shopware/Controllers/Frontend/Blog.php'
-        -
             message: '#Negated boolean expression is always false#'
             path: 'engine/Shopware/Core/sArticles.php'
         -

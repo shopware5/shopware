@@ -133,10 +133,6 @@ class MailLog extends \Shopware_Controllers_Backend_Application
         $view = $this->View();
         $baseEntry = $this->getRepository()->find($id);
 
-        if ($view === null) {
-            return;
-        }
-
         if (!($baseEntry instanceof Log)) {
             $view->assign([
                 'success' => false,
