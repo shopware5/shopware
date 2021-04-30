@@ -3096,8 +3096,7 @@ class ArticleTest extends TestCase
                 'id' => $createdAttributeIds,
             ]),
             sprintf(
-                'Deletion of the article\'s (id = %s) details\' (%s) '
-                . 'attributes (%s) failed.',
+                'Deletion of the article\'s (id = %s) details\' (%s) attributes (%s) failed.',
                 $createdArticleId,
                 implode(', ', $createdDetailIds),
                 implode(', ', $createdAttributeIds)

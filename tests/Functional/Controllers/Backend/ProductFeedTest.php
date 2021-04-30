@@ -200,7 +200,7 @@ class ProductFeedTest extends \Enlight_Components_Test_Controller_TestCase
     public function testDeleteFeed($id)
     {
         $params = [];
-        $params['id'] = intval($id);
+        $params['id'] = (int) $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/ProductFeed/deleteFeed');
         static::assertTrue($this->View()->success);

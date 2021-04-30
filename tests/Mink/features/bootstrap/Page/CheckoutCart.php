@@ -335,7 +335,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
         $labels = $this->getNamedSelectors();
 
         if (strpos($key, '%') !== false) {
-            $taxRate = intval($key);
+            $taxRate = (int) $key;
 
             return sprintf($labels['tax'][$language], $taxRate);
         }

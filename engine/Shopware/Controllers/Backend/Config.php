@@ -354,8 +354,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $select->from(['c' => $table]);
                 if (isset($search)) {
                     $select->where(
-                        'c.name LIKE :search OR ' .
-                        'c.action LIKE :search'
+                        'c.name LIKE :search OR c.action LIKE :search'
                     );
                     $select->bind(
                         [
@@ -416,9 +415,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         LEFT JOIN s_search_tables t on f.tableID = t.id';
 
                 if (isset($search)) {
-                    $sql .= ' WHERE f.name LIKE :search OR ' .
-                        'f.field LIKE :search OR ' .
-                        't.table LIKE :search';
+                    $sql .= ' WHERE f.name LIKE :search OR f.field LIKE :search OR t.table LIKE :search';
                     $sqlParams = ['search' => $search];
                 }
 
