@@ -22,7 +22,6 @@ parameters:
 
     ignoreErrors:
         - '#apcu_#'
-        - '#ioncube_#'
 
         # Interface / Implementation Switch
         - '#expects Shopware\\Bundle\\SearchBundle\\Facet\\[a-zA-Z]+Facet, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
@@ -37,3 +36,7 @@ parameters:
         -
             message: '#Comparison operation ">=" between int<1, max> and 1 is always true#'
             path: 'engine/Shopware/Core/sArticles.php'
+
+        - # We override the method in higher class inheritance to public method
+            message: '#Call to protected method verifyPage#'
+            path: 'tests/Mink/features/bootstrap/SpecialContext.php'

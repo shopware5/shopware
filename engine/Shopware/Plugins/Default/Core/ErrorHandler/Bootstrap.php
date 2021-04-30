@@ -226,7 +226,6 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
                 break;
             default:
                 throw new ErrorException($this->_errorLevelList[$errno] . ': ' . $errstr, 0, $errno, $errfile, $errline);
-                break;
         }
 
         if (self::$_origErrorHandler !== null) {

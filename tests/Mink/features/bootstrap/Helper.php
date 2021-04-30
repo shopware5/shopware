@@ -917,4 +917,21 @@ EOD
             }
         });
     }
+
+    /**
+     * @return bool
+     */
+    private static function filter(array $var)
+    {
+        /** @var MultipleElement $element */
+        foreach (self::$filterElements as $element) {
+            if (self::assertElementProperties($element, $var) === true) {
+                self::$filterElements->remove();
+
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -215,24 +215,6 @@ class Requirements
     }
 
     /**
-     * Checks the ion cube loader
-     *
-     * @return bool|string
-     */
-    private function checkIonCubeLoader()
-    {
-        if (!extension_loaded('ionCube Loader')) {
-            return false;
-        }
-
-        if (!function_exists('ioncube_loader_version')) {
-            return false;
-        }
-
-        return ioncube_loader_version();
-    }
-
-    /**
      * Checks the php version
      *
      * @return string

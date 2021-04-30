@@ -25,7 +25,6 @@
 use Psr\Log\LoggerInterface;
 use Shopware\Components\CSRFWhitelistAware;
 use ShopwarePlugins\SwagUpdate\Components\Checks\EmotionTemplateCheck;
-use ShopwarePlugins\SwagUpdate\Components\Checks\IonCubeLoaderCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\LicenseCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\MySQLVersionCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\PHPExtensionCheck;
@@ -124,7 +123,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             new EmotionTemplateCheck($conn, $namespace),
             new PHPExtensionCheck($namespace),
             new WritableCheck($fileSystem, $namespace),
-            new IonCubeLoaderCheck($namespace),
             new LicenseCheck($conn, $this->container->getParameter('shopware.store.apiEndpoint'), $this->getShopwareVersion(), $namespace),
         ];
         $validation = new Validation($namespace, $checks);

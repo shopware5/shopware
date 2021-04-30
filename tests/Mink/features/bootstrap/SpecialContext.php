@@ -72,6 +72,7 @@ class SpecialContext extends SubContext
      */
     public function iShouldBeOnThePage(Page $page)
     {
+        $page->verifyPage();
     }
 
     /**
