@@ -190,9 +190,8 @@ class PriceConditionTest extends TestCase
     }
 
     /**
-     * @param string                             $number
-     * @param \Shopware\Models\Category\Category $category
-     * @param array                              $prices
+     * @param string $number
+     * @param array  $prices
      *
      * @return array
      */

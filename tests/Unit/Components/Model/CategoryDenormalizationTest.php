@@ -29,9 +29,6 @@ use Shopware\Components\Model\CategoryDenormalization;
 
 class PDOMock extends \PDO
 {
-    public function __construct()
-    {
-    }
 }
 
 class CategoryDenormalizationTest extends TestCase
@@ -52,10 +49,6 @@ class CategoryDenormalizationTest extends TestCase
             static::markTestSkipped(
                 'The Sqlite3 extension is not available.'
             );
-
-            parent::setUp();
-
-            return;
         }
 
         try {

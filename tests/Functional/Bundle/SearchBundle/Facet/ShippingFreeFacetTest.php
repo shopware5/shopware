@@ -72,9 +72,8 @@ class ShippingFreeFacetTest extends TestCase
     }
 
     /**
-     * @param string                             $number
-     * @param \Shopware\Models\Category\Category $category
-     * @param bool                               $shippingFree
+     * @param string $number
+     * @param bool   $shippingFree
      *
      * @return array
      */

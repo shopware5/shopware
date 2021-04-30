@@ -33,7 +33,7 @@ class ArticleTest extends AbstractMarketing
      */
     protected $module;
 
-    protected $category = null;
+    protected $category;
 
     /**
      * Set up function for this test case.

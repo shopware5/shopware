@@ -284,21 +284,4 @@ class ConfigTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertCount(2, $returnData);
         static::assertTrue($this->View()->getAssign('success'));
     }
-
-    /**
-     * Resets the Shopware container
-     */
-    private function resetContainer()
-    {
-        // Synthetic services
-        $kernel = Shopware()->Container()->get('kernel');
-        $connection = Shopware()->Container()->get(\PDO::class);
-        $application = Shopware()->Container()->get('application');
-
-        Shopware()->Container()->reset();
-
-        Shopware()->Container()->set('kernel', $kernel);
-        Shopware()->Container()->set('db_connection', $connection);
-        Shopware()->Container()->set('application', $application);
-    }
 }

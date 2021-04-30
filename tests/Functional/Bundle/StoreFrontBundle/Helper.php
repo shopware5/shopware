@@ -138,8 +138,6 @@ class Helper
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway
-     *
      * @return StoreFrontBundle\Struct\Property\Set
      */
     public function getProductProperties(
@@ -194,7 +192,6 @@ class Helper
      *
      * @param string $number
      * @param Tax    $tax
-     * @param Group  $customerGroup
      * @param float  $priceOffset
      *
      * @return array
@@ -876,9 +873,6 @@ class Helper
     }
 
     /**
-     * @param Models\Customer\Group $fallbackCustomerGroup
-     * @param Models\Shop\Currency  $currency
-     *
      * @return TestContext
      */
     public function createContext(

@@ -295,9 +295,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param string   $number
-     * @param Category $category
-     * @param array    $additionally
+     * @param string $number
+     * @param array  $additionally
      *
      * @return array
      */
@@ -324,9 +323,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
             $additionally = [];
         }
 
-        $product = array_merge($product, $additionally);
-
-        return $product;
+        return array_merge($product, $additionally);
     }
 
     /**

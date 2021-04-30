@@ -79,9 +79,8 @@ class SearchTermConditionTest extends TestCase
     }
 
     /**
-     * @param string   $number
-     * @param Category $category
-     * @param string   $name
+     * @param string $number
+     * @param string $name
      *
      * @return array
      */

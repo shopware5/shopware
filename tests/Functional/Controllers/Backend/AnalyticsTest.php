@@ -1104,8 +1104,7 @@ class AnalyticsTest extends \Enlight_Components_Test_Controller_TestCase
         $ref = $matches[2][0];
         $ref = html_entity_decode(rawurldecode(strtolower($ref)));
         $ref = str_replace('+', ' ', $ref);
-        $ref = trim(preg_replace('/\s\s+/', ' ', $ref));
 
-        return $ref;
+        return trim(preg_replace('/\s\s+/', ' ', $ref));
     }
 }

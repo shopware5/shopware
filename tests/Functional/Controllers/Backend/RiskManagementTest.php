@@ -64,7 +64,6 @@ class RiskManagementTest extends \Enlight_Components_Test_Controller_TestCase
     public function testCreateRule()
     {
         $manager = Shopware()->Models();
-        /** @var \Shopware\Models\Payment\RuleSet */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Payment\RuleSet');
 
         $rules = $repository->findBy(['paymentId' => 2]);

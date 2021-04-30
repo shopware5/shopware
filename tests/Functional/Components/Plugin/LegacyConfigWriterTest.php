@@ -62,11 +62,6 @@ class LegacyConfigWriterTest extends TestCase
     private $plugin;
 
     /**
-     * @var int
-     */
-    private $configElementId;
-
-    /**
      * @var Shop
      */
     private $installationShop;
@@ -137,7 +132,6 @@ class LegacyConfigWriterTest extends TestCase
             'position' => 0,
             'scope' => 1,
         ]);
-        $this->configElementId = $this->connection->lastInsertId();
 
         // setup shops
         // assume shop by id 1 exists

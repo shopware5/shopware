@@ -339,8 +339,6 @@ class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
             'Form element store options are missing.' . $formDataErrorMessageSuffix
         );
 
-        $storeSettings = $formData->elements[0]->options->store;
-
-        return $storeSettings;
+        return $formData->elements[0]->options->store;
     }
 }

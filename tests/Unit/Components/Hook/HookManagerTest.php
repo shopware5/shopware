@@ -83,7 +83,6 @@ class HookManagerTest extends TestCase
             $this->addHookListener(HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME, HookHandler::TypeAfter);
             $this->addHookListener(HookManagerTestTarget::VOID_TEST_METHOD_NAME, HookHandler::TypeAfter);
             $proxyClass = $this->hookManager->getProxy(HookManagerTestTarget::class);
-            $proxy = new $proxyClass();
         }
     }
 
@@ -514,7 +513,6 @@ class HookManagerTest extends TestCase
     {
         $firstHookCallCounter = 0;
         $firstHookReturnValue = self::TEST_RETURN_VALUE . '_first';
-        $secondHookReturnValue = self::TEST_RETURN_VALUE . '_second';
 
         // Register first hook (to be executed first)
         $this->addHookListener(
@@ -968,9 +966,8 @@ class HookManagerTest extends TestCase
     private function createProxy()
     {
         $proxyClass = $this->hookManager->getProxy(HookManagerTestTarget::class);
-        $proxy = new $proxyClass();
 
-        return $proxy;
+        return new $proxyClass();
     }
 
     private function assertHookArgs(\Enlight_Hook_HookArgs $args)

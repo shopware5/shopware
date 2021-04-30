@@ -215,8 +215,6 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
     /**
      * @BeforeScenario @configChange
-     *
-     * @param ScenarioScope $scope
      */
     public function clearCache(ScenarioScope $scope = null)
     {

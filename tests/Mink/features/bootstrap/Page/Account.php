@@ -590,7 +590,7 @@ class Account extends Page implements HelperSelectorInterface
     {
         $esd = [];
 
-        foreach ($articles as $key => $article) {
+        foreach ($articles as $article) {
             if (empty($article['esd'])) {
                 continue;
             }

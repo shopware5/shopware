@@ -73,7 +73,7 @@ class SecurityContext extends SubContext
      */
     public function theHttpResponseCodeShouldBe($expectedCode)
     {
-        $code = (int) $this->getSession()->getStatusCode();
+        $code = $this->getSession()->getStatusCode();
         if ($expectedCode == $this->getSession()->getStatusCode()) {
             return;
         }

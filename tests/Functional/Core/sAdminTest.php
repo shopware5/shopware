@@ -1503,7 +1503,6 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'invoice_shipping_net' => '0',
             'ordertime' => $date->format('Y-m-d H:i:s'),
             'status' => '0',
-            'cleared' => '17',
             'paymentID' => '4',
             'transactionID' => '',
             'comment' => '',

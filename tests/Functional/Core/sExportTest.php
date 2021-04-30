@@ -126,7 +126,7 @@ class sExportTest extends PHPUnit\Framework\TestCase
     private function generateFeed(int $feedId): string
     {
         /** @var ProductFeed $productFeed */
-        $productFeed = $this->repository->find((int) $feedId);
+        $productFeed = $this->repository->find($feedId);
 
         if (!$productFeed) {
             throw new Exception('Product feed not found');

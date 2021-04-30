@@ -85,8 +85,6 @@ class Converter
     /**
      * Converts a currency doctrine model to a currency struct
      *
-     * @param \Shopware\Models\Shop\Currency $currency
-     *
      * @return Struct\Currency
      */
     public function convertCurrency(Models\Shop\Currency $currency)
@@ -104,8 +102,6 @@ class Converter
 
     /**
      * Converts a shop doctrine model to a shop struct
-     *
-     * @param \Shopware\Models\Shop\Shop $shop
      *
      * @return Struct\Shop
      */

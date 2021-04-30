@@ -32,7 +32,6 @@ class EnlightHookProxyFactoryTest extends TestCase
 
     public function setUp(): void
     {
-        /** @var \Enlight_Hook_HookManager $SUT */
         $hookManager = $this->createConfiguredMock(\Enlight_Hook_HookManager::class, [
             'hasHooks' => true,
         ]);

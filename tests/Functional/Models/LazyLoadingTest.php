@@ -201,7 +201,6 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
     {
         $groupId = $customer->getGroup()->getId();
         $groupKey = $customer->getGroup()->getKey();
-        $customer = null;
         $this->em->clear();
 
         $customer = new Customer();

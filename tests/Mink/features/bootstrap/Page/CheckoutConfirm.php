@@ -110,9 +110,8 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
         $orderDetails = $elements['orderNumber']->getText();
 
         preg_match("/\d+/", $orderDetails, $orderNumber);
-        $orderNumber = intval($orderNumber[0]);
 
-        return $orderNumber;
+        return intval($orderNumber[0]);
     }
 
     /**

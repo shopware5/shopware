@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\Bundle\BenchmarkBundle;
 
 use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 

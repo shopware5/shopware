@@ -971,9 +971,6 @@ class TranslationTest extends TestCase
                     'packUnit' => 'Dummy Translation',
                 ];
             case 'link':
-                return [
-                    'description' => 'Dummy Translation',
-                ];
             case 'download':
                 return [
                     'description' => 'Dummy Translation',

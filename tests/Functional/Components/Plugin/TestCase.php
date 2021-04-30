@@ -94,7 +94,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         self::$pluginStates[$pluginName] = [
             'isInstalled' => (bool) $plugin->getInstalled(),
-            'isActive' => (bool) $plugin->getActive(),
+            'isActive' => $plugin->getActive(),
         ];
 
         self::$pluginManager->installPlugin($plugin);

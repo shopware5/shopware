@@ -818,7 +818,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     private function getRandomArticles()
     {
-        $details = Shopware()->Db()->fetchAll(
+        return Shopware()->Db()->fetchAll(
             "SELECT
                 a.id as id,
                 a.name      as articlename,
@@ -846,8 +846,6 @@ class sOrderTest extends PHPUnit\Framework\TestCase
              LIMIT 2
             "
         );
-
-        return $details;
     }
 
     private function getRandomUser()
@@ -928,13 +926,11 @@ class sOrderTest extends PHPUnit\Framework\TestCase
      */
     private function convertToLegacyAddressArray($address)
     {
-        $output = array_merge($address, [
+        return array_merge($address, [
             'userID' => $address['user_id'],
             'countryID' => $address['country_id'],
             'stateID' => $address['state_id'],
         ]);
-
-        return $output;
     }
 
     private function getBasketRows()

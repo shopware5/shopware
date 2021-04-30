@@ -25,7 +25,6 @@
 namespace Shopware\Tests\Functional\Components\DependencyInjection\Compiler;
 
 use Enlight_Components_Test_Controller_TestCase;
-use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Tests\Functional\Helper\Utils;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -38,7 +37,6 @@ class ConfigureApiResourcesPassTest extends Enlight_Components_Test_Controller_T
      */
     public function testApiResourcesAreSetUpCorrect($serviceId): void
     {
-        /** @var resource $service */
         $resource = Shopware()->Container()->get($serviceId);
         static::assertNotNull($resource->getManager());
     }
@@ -64,7 +62,7 @@ class ConfigureApiResourcesPassTest extends Enlight_Components_Test_Controller_T
 
     public function provideApiResourceIds(): array
     {
-        $services = array_map(
+        return array_map(
             function ($id) {
                 return [$id];
             },
@@ -72,7 +70,5 @@ class ConfigureApiResourcesPassTest extends Enlight_Components_Test_Controller_T
                 return strpos($id, 'shopware.api.') === 0;
             })
         );
-
-        return $services;
     }
 }

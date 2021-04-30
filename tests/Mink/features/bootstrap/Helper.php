@@ -396,12 +396,8 @@ EOD
         switch ($type) {
             case self::EXCEPTION_GENERIC:
                 throw new \Exception($message);
-                break;
-
             case self::EXCEPTION_PENDING:
                 throw new PendingException($message);
-                break;
-
             default:
                 self::throwException('Invalid exception type!', self::EXCEPTION_PENDING);
                 break;
@@ -920,24 +916,5 @@ EOD
                 return true;
             }
         });
-    }
-
-    /**
-     * @param array $var
-     *
-     * @return bool
-     */
-    private static function filter($var)
-    {
-        /** @var MultipleElement $element */
-        foreach (self::$filterElements as $element) {
-            if (self::assertElementProperties($element, $var) === true) {
-                self::$filterElements->remove();
-
-                return false;
-            }
-        }
-
-        return true;
     }
 }

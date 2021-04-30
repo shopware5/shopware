@@ -58,10 +58,8 @@ class Utils
 
     public static function hijackAndReadProperty($object, $propertyName)
     {
-        $ret = self::bindAndCall(function () use ($object, $propertyName) {
+        return self::bindAndCall(function () use ($object, $propertyName) {
             return $object->$propertyName;
         }, $object);
-
-        return $ret;
     }
 }

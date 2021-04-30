@@ -83,7 +83,6 @@ class NoteContext extends SubContext
         /** @var Note $page */
         $page = $this->getPage('Note');
 
-        /** @var NotePosition $cartPosition */
         $notePositions = $this->getMultipleElement($page, 'NotePosition');
 
         $page->checkNoteProducts($notePositions, $items->getHash());

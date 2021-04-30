@@ -62,9 +62,8 @@ class OrderNumberConditionTest extends TestCase
     }
 
     /**
-     * @param string   $number
-     * @param Category $category
-     * @param string   $name
+     * @param string $number
+     * @param string $name
      *
      * @return array
      */
@@ -74,8 +73,6 @@ class OrderNumberConditionTest extends TestCase
         Category $category = null,
         $name = null
     ) {
-        $product = parent::getProduct($number, $context, $category);
-
-        return $product;
+        return parent::getProduct($number, $context, $category);
     }
 }

@@ -240,22 +240,20 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     {
         $emailPrefix = $randomEmail ? uniqid(rand()) : '';
 
-        $data = [
+        return [
             'salutation' => 'mr',
             'firstname' => 'Albert',
             'lastname' => 'McTaggart',
             'email' => $emailPrefix . 'albert.mctaggart@shopware.test',
             'password' => uniqid(rand()),
         ];
-
-        return $data;
     }
 
     private function getBillingDemoData()
     {
         $country = $this->createCountry();
 
-        $data = [
+        return [
             'salutation' => 'mr',
             'firstname' => 'Sherman',
             'lastname' => 'Horton',
@@ -265,13 +263,11 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
             'country' => $country,
             'state' => $this->createState($country),
         ];
-
-        return $data;
     }
 
     private function getShippingDemoData()
     {
-        $data = [
+        return [
             'salutation' => 'mr',
             'firstname' => 'Nathaniel',
             'lastname' => 'Fajardo',
@@ -280,8 +276,6 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
             'city' => 'Santa Barbara',
             'country' => $this->createCountry(),
         ];
-
-        return $data;
     }
 
     /**

@@ -58,11 +58,6 @@ class ConfigWriterTest extends TestCase
     /**
      * @var int
      */
-    private $configElementId;
-
-    /**
-     * @var int
-     */
     private $installationShopId;
 
     /**
@@ -132,7 +127,6 @@ class ConfigWriterTest extends TestCase
             'position' => 0,
             'scope' => 1,
         ]);
-        $this->configElementId = $this->connection->lastInsertId();
 
         // setup shops
         // assume shop by id 1 exists

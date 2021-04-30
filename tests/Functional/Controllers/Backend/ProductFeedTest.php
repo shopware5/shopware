@@ -69,7 +69,7 @@ class ProductFeedTest extends \Enlight_Components_Test_Controller_TestCase
     ];
 
     /** @var \Shopware\Components\Model\ModelManager */
-    private $manager = null;
+    private $manager;
 
     /**
      * Standard set up for every test - just disable auth

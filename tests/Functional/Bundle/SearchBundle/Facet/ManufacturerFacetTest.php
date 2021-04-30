@@ -103,9 +103,8 @@ class ManufacturerFacetTest extends TestCase
     }
 
     /**
-     * @param string                             $number
-     * @param \Shopware\Models\Category\Category $category
-     * @param Supplier                           $manufacturer
+     * @param string   $number
+     * @param Supplier $manufacturer
      *
      * @return array
      */

@@ -78,7 +78,7 @@ class CustomerStreamTest extends \Enlight_Components_Test_TestCase
 
         $ids = $this->connection->fetchAll(
             'SELECT customer_id FROM s_customer_streams_mapping WHERE stream_id = :streamId',
-            [':streamId' => (int) $stream->getId()]
+            [':streamId' => $stream->getId()]
         );
 
         $ids = array_column($ids, 'customer_id');

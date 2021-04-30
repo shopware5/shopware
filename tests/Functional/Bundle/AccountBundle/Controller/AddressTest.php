@@ -343,22 +343,20 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $emailPrefix = $randomEmail ? uniqid(rand()) : '';
 
-        $data = [
+        return [
             'salutation' => 'mr',
             'firstname' => 'Albert',
             'lastname' => 'McTaggart',
             'email' => $emailPrefix . 'albert.mctaggart@shopware.test',
             'password' => uniqid(rand()),
         ];
-
-        return $data;
     }
 
     private static function getBillingDemoData()
     {
         $country = self::createCountry();
 
-        $data = [
+        return [
             'salutation' => 'mr',
             'firstname' => 'Sherman',
             'lastname' => 'Horton',
@@ -368,13 +366,11 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
             'country' => $country,
             'state' => self::createState($country),
         ];
-
-        return $data;
     }
 
     private static function getShippingDemoData()
     {
-        $data = [
+        return [
             'salutation' => 'mr',
             'firstname' => 'Nathaniel',
             'lastname' => 'Fajardo',
@@ -383,8 +379,6 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
             'city' => 'Santa Barbara',
             'country' => self::createCountry(),
         ];
-
-        return $data;
     }
 
     /**

@@ -108,7 +108,7 @@ class DetailTest extends \Enlight_Components_Test_Controller_TestCase
         $dbal = Shopware()->Container()->get('dbal_connection');
         $ordernumber_export = 't3st' . mt_rand(1000, 9999);
         $ordernumber = 'SW10170';
-        $num = $dbal->insert('s_addon_premiums', ['startprice' => 0, 'ordernumber' => $ordernumber, 'ordernumber_export' => $ordernumber_export, 'subshopID' => 0]);
+        $dbal->insert('s_addon_premiums', ['startprice' => 0, 'ordernumber' => $ordernumber, 'ordernumber_export' => $ordernumber_export, 'subshopID' => 0]);
         $this->dispatch('/detail/productQuickView?ordernumber=' . $ordernumber_export);
         $sArticle = $this->View()->getAssign('sArticle');
         static::assertEquals($ordernumber, $sArticle['ordernumber']);
