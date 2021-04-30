@@ -39,7 +39,7 @@ class RandomTest extends \Enlight_Components_Test_TestCase
         $sets[] = '23456789';
         $sets[] = '!@#$%&*?';
 
-        $chars = implode($sets);
+        $chars = implode('', $sets);
 
         $password = Random::generatePassword();
         static::assertEquals(15, strlen($password));

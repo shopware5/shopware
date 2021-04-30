@@ -209,7 +209,7 @@ class DefaultCaptcha implements CaptchaInterface
 
         $numericRange = range(1, 9);
 
-        $charlist = implode($alphabet) . implode($numericRange);
+        $charlist = implode('', $alphabet) . implode('', $numericRange);
 
         return Random::getString(5, $charlist);
     }

@@ -87,4 +87,16 @@ class CustomerNumberSearchTest extends TestCase
             return $customer->getNumber();
         }, $searchResult->getCustomers());
     }
+
+    protected static function customerFromNumber(string $customerNumber = 'none'): array
+    {
+        return [
+            'number' => $customerNumber,
+            'email' => sprintf('%s@example.com', $customerNumber),
+            'active' => true,
+            'addresses' => array_map(static function ($id) {
+                return ['country_id' => $id];
+            }, self::ADDRESS_COUNTRY_IDS),
+        ];
+    }
 }
