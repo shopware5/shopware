@@ -8,6 +8,11 @@ parameters:
     treatPhpDocTypesAsCertain: false
     tmpDir: var/cache/phpstan
 
+    symfony:
+        constant_hassers: false
+        container_xml_path: 'var/cache/production____REVISION___/container.xml'
+        console_application_loader: tests/phpstan-console-application.php
+
     scanDirectories:
         - %currentWorkingDirectory%/var/cache/production____REVISION___/doctrine
         - %currentWorkingDirectory%/var/cache/production____REVISION___/proxies

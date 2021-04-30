@@ -77,6 +77,7 @@ use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Dumper\XmlDumper;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Form\DependencyInjection\FormPass;
@@ -590,6 +591,11 @@ class Kernel extends SymfonyKernel
         }
 
         $cache->write($content, $container->getResources());
+
+        $xmlDumper = new XmlDumper($container);
+        $xml = $xmlDumper->dump(['class' => $class, 'base_class' => $baseClass]);
+
+        \file_put_contents($this->getCacheDir() . '/container.xml', $xml);
     }
 
     /**
