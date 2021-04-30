@@ -300,6 +300,11 @@ class Plugin extends ModelEntity
         $this->widgets = new ArrayCollection();
     }
 
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     /**
      * @return int
      */

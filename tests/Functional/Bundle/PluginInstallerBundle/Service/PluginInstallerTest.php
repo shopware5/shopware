@@ -22,50 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\PluginInstallerBundle\Service;
+namespace Shopware\Tests\Functional\Bundle\PluginInstallerBundle\Service;
 
-use DateTimeImmutable;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Statement;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Shopware\Bundle\PluginInstallerBundle\Service\PluginInstaller;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\RequirementValidator;
 use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
+use Shopware\Models\Plugin\Plugin as PluginModel;
+use Shopware\Tests\Unit\Components\Plugin\MyPlugin;
 
 class PluginInstallerTest extends TestCase
 {
-    public function testRefreshPluginList()
+    public function testSnippetsFromMenuGetRemovedOnUninstall(): void
     {
-        $dateTime = new DateTimeImmutable();
-
-        $expectedData = [
-            'namespace' => 'ShopwarePlugins',
-            'version' => '1.0.0',
-            'author' => null,
-            'name' => 'TestPlugin',
-            'link' => null,
-            'label' => 'TestPlugin',
-            'description' => null,
-            'capability_update' => true,
-            'capability_install' => true,
-            'capability_enable' => true,
-            'capability_secure_uninstall' => true,
-            'refresh_date' => $dateTime,
-            'translations' => '{"en":{"label":"TestPlugin"}}',
-            'changes' => null,
-            'added' => $dateTime,
-        ];
-
-        $connection = $this->createMock(Connection::class);
-        $connection->expects(static::once())->method('fetchAssoc')->willReturn(null);
-        $connection->expects(static::once())->method('insert')->with('s_core_plugins', $expectedData, [
-            'added' => 'datetime',
-            'refresh_date' => 'datetime',
-        ]);
+        $connection = Shopware()->Container()->get('dbal_connection');
 
         $entityManager = $this->createMock(ModelManager::class);
         $entityManager->expects(static::any())->method('getConnection')->willReturn($connection);
@@ -73,14 +48,12 @@ class PluginInstallerTest extends TestCase
         $databaseHandler = $this->createMock(DatabaseHandler::class);
         $requirementValidator = $this->createMock(RequirementValidator::class);
 
-        $statement = $this->createMock(Statement::class);
-        $statement->expects(static::once())->method('fetchAll')->willReturn([]);
-
         $pdo = $this->createMock(PDO::class);
-        $pdo->expects(static::once())->method('query')->willReturn($statement);
 
-        $kernel = new Kernel('testing', true);
-        $releaseArray = $kernel->getRelease();
+        $kernel = $this->createMock(Kernel::class);
+        $kernel->method('getPlugins')->willReturn([
+            'TestPlugin' => new MyPlugin(true, 'noop'),
+        ]);
 
         $pluginInstaller = new PluginInstaller(
             $entityManager,
@@ -89,11 +62,30 @@ class PluginInstallerTest extends TestCase
             $pdo,
             new \Enlight_Event_EventManager(),
             ['ShopwarePlugins' => __DIR__ . '/Fixtures'],
-            new ShopwareReleaseStruct($releaseArray['version'], $releaseArray['version_text'], $releaseArray['revision']),
+            new ShopwareReleaseStruct('1.0.0', '', '___VERSION___'),
             new NullLogger(),
             $kernel
         );
 
-        $pluginInstaller->refreshPluginList($dateTime);
+        $plugin = new PluginModel();
+        $plugin->setId(5);
+        $plugin->setName('TestPlugin');
+
+        $connection->insert('s_core_menu', [
+            'name' => 'bla',
+            'controller' => 'TestPlugin',
+            'action' => 'Index',
+            'pluginID' => 5,
+        ]);
+
+        $connection->insert('s_core_snippets', [
+            'namespace' => 'backend/index/view/main',
+            'name' => 'TestPlugin',
+        ]);
+
+        $pluginInstaller->uninstallPlugin($plugin, false);
+
+        static::assertFalse($connection->fetchOne('SELECT 1 FROM s_core_menu WHERE controller = "TestPlugin"'));
+        static::assertFalse($connection->fetchOne('SELECT 1 FROM s_core_snippets WHERE name = "TestPlugin"'));
     }
 }

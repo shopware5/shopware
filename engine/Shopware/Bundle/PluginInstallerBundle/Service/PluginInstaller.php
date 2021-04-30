@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\ResultStatement;
 use Enlight_Event_EventManager;
 use Psr\Log\LoggerInterface;
 use Shopware\Bundle\PluginInstallerBundle\Events\PluginEvent;
@@ -109,6 +110,11 @@ class PluginInstaller
     private $logger;
 
     /**
+     * @var Kernel
+     */
+    private $kernel;
+
+    /**
      * @param string|string[] $pluginDirectories
      */
     public function __construct(
@@ -119,7 +125,8 @@ class PluginInstaller
         Enlight_Event_EventManager $events,
         $pluginDirectories,
         ShopwareReleaseStruct $release,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Kernel $kernel
     ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
@@ -130,6 +137,7 @@ class PluginInstaller
         $this->pluginDirectories = (array) $pluginDirectories;
         $this->release = $release;
         $this->logger = $logger;
+        $this->kernel = $kernel;
     }
 
     /**
@@ -496,9 +504,7 @@ class PluginInstaller
      */
     private function getPluginByName($pluginName)
     {
-        /** @var Kernel $kernel */
-        $kernel = Shopware()->Container()->get('kernel');
-        $plugins = $kernel->getPlugins();
+        $plugins = $this->kernel->getPlugins();
 
         if (!isset($plugins[$pluginName])) {
             throw new \InvalidArgumentException(sprintf('Plugin by name "%s" not found.', $pluginName));
@@ -565,12 +571,44 @@ SQL;
     }
 
     /**
-     * @param int $pluginId
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
-    private function removeMenuEntries($pluginId)
+    private function removeMenuEntries(int $pluginId)
     {
+        $builder = $this->em->getConnection()->createQueryBuilder();
+        $builder->select(['id', 'controller', 'action']);
+        $builder->from('s_core_menu');
+        $builder->andWhere('pluginID = :pluginId');
+        $builder->setParameter(':pluginId', $pluginId);
+
+        /** @var ResultStatement<array> $statement */
+        $statement = $builder->execute();
+
+        $menuItems = $statement->fetchAll();
+
+        if (\count($menuItems) === 0) {
+            return;
+        }
+
+        $deleteSnippets = [];
+
+        foreach ($menuItems as $menuItem) {
+            $name = $menuItem['controller'];
+
+            // Index actions aren't appended to the name of the snippet, they are an exemption from the rule
+            if ($menuItem['action'] !== 'Index') {
+                $name .= '/' . $menuItem['action'];
+            }
+
+            $deleteSnippets[] = $name;
+        }
+
+        $this->em->getConnection()->executeQuery(
+            'DELETE FROM s_core_snippets WHERE namespace = "backend/index/view/main" AND `name` IN (:names)',
+            ['names' => $deleteSnippets],
+            ['names' => Connection::PARAM_STR_ARRAY]
+        );
+
         $sql = 'DELETE FROM s_core_menu WHERE pluginID = :pluginId';
         $this->connection->executeStatement($sql, [':pluginId' => $pluginId]);
     }
