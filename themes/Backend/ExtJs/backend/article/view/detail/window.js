@@ -361,7 +361,10 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         title = me.snippets.titleNew;
         if (me.article && me.article.get('id')>0) {
-            title = Ext.String.format(me.snippets.titleEdit, me.article.get('name'));
+            title = Ext.String.format(
+                me.snippets.titleEdit,
+                Ext.String.htmlEncode(me.article.get('name'))
+            );
         }
         me.setTitle(title);
 

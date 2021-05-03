@@ -267,7 +267,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             success: function(record, operation) {
 
                 var newArticle = operation.getResultSet().records[0],
-                    message = Ext.String.format(me.snippets.saved.message, article.get('name'));
+                    message = Ext.String.format(
+                        me.snippets.saved.message,
+                        Ext.String.htmlEncode(article.get('name'))
+                    );
 
                 if (supplierNeedsReload) {
                     mainWindow.supplierStore.filters.clear();
