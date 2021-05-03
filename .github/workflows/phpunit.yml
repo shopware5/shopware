@@ -8,7 +8,7 @@ jobs:
   php:
     strategy:
       matrix:
-        php: ['7.3', '7.4']
+        php: ['7.4', '8.0']
     runs-on: ubuntu-latest
     env:
         DB_USER: shopware

@@ -10,13 +10,13 @@
     ],
     "support": {
         "forum": "https://forum.shopware.com",
-        "chat": "https://gitter.im/shopware/shopware",
-        "wiki": "https://docs.shopware.com/",
+        "chat": "https://slack.shopware.com",
+        "wiki": "https://developers.shopware.com/",
         "source": "https://github.com/shopware/shopware",
         "issues": "https://issues.shopware.com"
     },
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-date": "*",
@@ -150,7 +150,7 @@
         "autoloader-suffix": "Shopware",
         "optimize-autoloader": true,
         "platform": {
-            "php": "7.3.0"
+            "php": "7.4.0"
         },
         "sort-packages": true
     },
