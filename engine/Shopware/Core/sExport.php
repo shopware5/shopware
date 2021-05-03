@@ -595,8 +595,8 @@ class sExport implements \Enlight_Hook
         if (empty($articleId) || empty($orderNumber)) {
             return '';
         }
-        $imageData = Shopware()->Modules()->sArticles()->sGetArticlePictures($articleId, false, null, $orderNumber);
-        $cover = Shopware()->Modules()->sArticles()->sGetArticlePictures($articleId, true, null, $orderNumber);
+        $imageData = Shopware()->Modules()->Articles()->sGetArticlePictures($articleId, false, null, $orderNumber);
+        $cover = Shopware()->Modules()->Articles()->sGetArticlePictures($articleId, true, null, $orderNumber);
         $returnData[] = $cover['src'][$imageSize];
         foreach ($imageData as $image) {
             $returnData[] = $image['src'][$imageSize];
@@ -981,6 +981,9 @@ class sExport implements \Enlight_Hook
             AND customergroupID = {$this->db->quote($this->sSettings['customergroupID'])}
             AND discountstart=1
 
+            LEFT JOIN s_articles_avoid_customergroups avoid
+            ON avoid.articleID = a.id AND avoid.customergroupID = {$this->db->quote($this->sSettings['customergroupID'])}
+
             LEFT JOIN s_articles_esd e ON e.articledetailsID=d.id
 
             LEFT JOIN (
@@ -1019,6 +1022,7 @@ class sExport implements \Enlight_Hook
             AND a.mode = 0
             AND d.kind != 3
             AND ba.articleID IS NULL
+            AND avoid.articleID IS NULL
             $sql_add_where
 
             $sql_add_group_by
@@ -1222,7 +1226,7 @@ class sExport implements \Enlight_Hook
         }
 
         $productCategoryId = $this->sSYSTEM->sMODULES['sCategories']->sGetCategoryIdByArticleId($articleID, $categoryID);
-        $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($productCategoryId));
+        $breadcrumb = array_reverse(Shopware()->Modules()->Categories()->sGetCategoriesByParent($productCategoryId));
         $breadcrumbs = [];
 
         foreach ($breadcrumb as $breadcrumbObj) {

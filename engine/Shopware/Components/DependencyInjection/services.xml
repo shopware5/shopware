@@ -24,20 +24,19 @@
 
     <services>
         <defaults public="true" />
-        <service id="kernel"          synthetic="true" />
-        <service id="application"     synthetic="true" />
-        <service id="passwordencoder" synthetic="true" />
-        <service id="db_connection"   synthetic="true" />
-        <service id="alsobought"      synthetic="true"/>
-        <service id="modules"         synthetic="true" />
-        <service id="similarshown"    synthetic="true"/>
-        <service id="seoindex"        synthetic="true"/>
-        <service id="sessionid"       synthetic="true"/>
-        <service id="topseller"       synthetic="true"/>
-        <service id="backendsession"  synthetic="true"/>
-        <service id="httpcache"       synthetic="true"/>
-        <service id="swagupdateupdatecheck"   synthetic="true"/>
-        <service id="categorydenormalization" synthetic="true"/>
+        <service id="kernel" class="Shopware\Kernel" synthetic="true" />
+        <service id="application" class="Shopware" synthetic="true" />
+        <service id="passwordencoder" class="Shopware\Components\Password\Manager" synthetic="true" />
+        <service id="db_connection" class="PDO" synthetic="true" />
+        <service id="alsobought" class="Shopware_Components_AlsoBought" synthetic="true"/>
+        <service id="modules" class="Shopware_Components_Modules" synthetic="true" />
+        <service id="similarshown" class="Shopware_Components_SimilarShown" synthetic="true"/>
+        <service id="seoindex" class="Shopware_Components_SeoIndex" synthetic="true"/>
+        <service id="sessionid"  synthetic="true"/>
+        <service id="topseller" class="Shopware_Components_TopSeller" synthetic="true"/>
+        <service id="backendsession" class="Enlight_Components_Session_Namespace"  synthetic="true"/>
+        <service id="httpcache" class="Shopware\Components\HttpCache\AppCache" synthetic="true"/>
+        <service id="swagupdateupdatecheck" class="ShopwarePlugins\SwagUpdate\Components\UpdateCheck" synthetic="true"/>
 
         <service id="shopware.release" class="Shopware\Components\ShopwareReleaseStruct">
             <argument>%shopware.release.version%</argument>

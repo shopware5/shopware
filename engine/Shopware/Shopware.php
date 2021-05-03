@@ -210,7 +210,7 @@ class Shopware extends Enlight_Application
     /**
      * Returns access layer to deprecated shopware frontend objects
      *
-     * @return Shopware_Components_Modules|null
+     * @return Shopware_Components_Modules
      */
     public function Modules()
     {
@@ -236,7 +236,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return Shopware\Components\Model\ModelManager|null
+     * @return Shopware\Components\Model\ModelManager
      */
     public function Models()
     {
