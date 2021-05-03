@@ -39,6 +39,13 @@ class ListingTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(200, $this->Response()->getHttpResponseCode());
     }
 
+    public function testDispatchExistingCategoryWithPageNotAvailable(): void
+    {
+        static::expectException(\Enlight_Controller_Exception::class);
+        $this->dispatch('/cat/?sCategory=14&sPage=2');
+        static::assertEquals(200, $this->Response()->getHttpResponseCode());
+    }
+
     /**
      * Test that requesting a non-existing category-id throws an error
      */

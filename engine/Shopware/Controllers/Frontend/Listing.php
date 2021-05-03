@@ -544,6 +544,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $categoryProducts = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
 
+        if ($categoryProducts['sPage'] > 1 && empty($categoryProducts['sArticles'])) {
+            throw new Enlight_Controller_Exception('Listing page is empty', Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found);
+        }
+
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
             $viewData = $this->View()->getAssign();
             $this->Response()->headers->set('content-type', 'text/xml');
