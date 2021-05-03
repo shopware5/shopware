@@ -24,7 +24,7 @@ stages:
     - Security
 
 default:
-    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.4
     before_script:
         - sed -i -e "s;__ROOT__;$CI_PROJECT_DIR;g" /etc/nginx/sites-enabled/shopware.conf
         - /usr/bin/supervisord -c /etc/supervisord.conf &>/dev/null &
@@ -95,14 +95,6 @@ Code Coverage:
         expire_in: 1 week
         reports:
             junit: build/artifacts/test-log.xml
-
-PHP 7.3:
-    extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.3
-    stage: Unit
-    services:
-        -   name: mysql:5.7
-            alias: mysql
 
 PHP 7.4:
     extends: .phpunit_base
@@ -177,7 +169,7 @@ Elasticsearch 7:
 
 .mink_base:
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.4
     stage: E2E
     artifacts:
         when: always
@@ -245,7 +237,7 @@ Mink Misc:
 
 RIPS security:
     stage: Security
-    image: php:7.3-alpine
+    image: php:7.4-alpine
     before_script: []
     only:
         variables:

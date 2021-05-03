@@ -8,7 +8,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Do not use the `count()` smarty function in your templates anymore, since this will break with PHP version > 8.0. Use `|count` modifier instead!
 * Replaced `psh` and `ant` with an `Makefile`. See updated README.md for installation workflow.
-* Changed min PHP version to 7.3
+* Changed min PHP version to 7.4
 * Changed min Elasticsearch version to 7
 * Added new required methods `saveCustomUrls` and `saveExcludedUrls` to interface `Shopware\Bundle\SitemapBundle\ConfigHandler\ConfigHandlerInterface`
 * Changed Symfony version to 4.4
