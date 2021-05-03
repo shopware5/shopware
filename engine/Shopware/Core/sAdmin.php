@@ -1974,19 +1974,19 @@ class sAdmin implements \Enlight_Hook
     public function sRiskCUSTOMERATTRISNOT($user, array $order, string $value)
     {
         if (!isset($user['additional']['user'])) {
-            return;
+            return true;
         }
 
         $values = explode('|', $value);
         if (!isset($values[0], $values[1])) {
-            return;
+            return true;
         }
 
         $attribute = $values[0];
         $value = $values[1];
 
         if (!isset($user['additional']['user'][$attribute])) {
-            return;
+            return true;
         }
 
         return $user['additional']['user'][$attribute] !== $value;

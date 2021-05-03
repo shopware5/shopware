@@ -2428,6 +2428,79 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param array<string, array> $userData
+     * @dataProvider testDataCustomerAttributeIsNot
+     */
+    public function testCustomerAttributeIsNot(array $userData, string $attribute, bool $expectation): void
+    {
+        static::assertSame($expectation, $this->module->sRiskCUSTOMERATTRISNOT($userData, [], $attribute));
+    }
+
+    /**
+     * @return array<int, array>
+     */
+    public function testDataCustomerAttributeIsNot(): iterable
+    {
+        // Not logged in
+        yield [
+            [
+                'additional' => [],
+            ],
+            'attr1|1',
+            true,
+        ];
+
+        // Wrong configured
+        yield [
+            [
+                'additional' => [
+                    'user' => [],
+                ],
+            ],
+            'attr1',
+            true,
+        ];
+
+        // Attribute not existing
+        yield [
+            [
+                'additional' => [
+                    'user' => [
+                    ],
+                ],
+            ],
+            'attr1|1',
+            true,
+        ];
+
+        // Not Matching
+        yield [
+            [
+                'additional' => [
+                    'user' => [
+                        'attr1' => '1',
+                    ],
+                ],
+            ],
+            'attr1|1',
+            false,
+        ];
+
+        // Matching
+        yield [
+            [
+                'additional' => [
+                    'user' => [
+                        'attr1' => '2',
+                    ],
+                ],
+            ],
+            'attr1|1',
+            true,
+        ];
+    }
+
+    /**
      * @param array $expected
      * @param array $actual
      */
