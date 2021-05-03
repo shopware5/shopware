@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\HttpCache;
 
+use Symfony\Component\HttpFoundation\IpUtils;
 use Shopware\Bundle\CookieBundle;
 use Shopware\Bundle\CookieBundle\CookieGroupCollection;
 use Shopware\Components\Privacy\CookieRemoveSubscriber;
@@ -301,7 +302,7 @@ class AppCache extends HttpCache
             }
         }
 
-        return $this->isPurgeIPAllowed($request->getClientIp());
+        return IpUtils::checkIp($request->getClientIp(), $this->getPurgeAllowedIPs());
     }
 
     /**
