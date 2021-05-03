@@ -61,7 +61,7 @@ class CookieRemoveHandler extends CookieHandler implements CookieRemoveHandlerIn
         $technicallyRequiredCookies = $this->getTechnicallyRequiredCookies();
 
         $this->removeCookies($request, $response, static function (string $cookieKey) use ($technicallyRequiredCookies) {
-            return $technicallyRequiredCookies->hasCookieWithName($cookieKey);
+            return $technicallyRequiredCookies->hasCookieWithName($cookieKey) || $cookieKey === self::XDEBUG_COOKIE_NAME;
         });
     }
 

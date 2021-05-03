@@ -33,6 +33,7 @@ use Shopware\Bundle\CookieBundle\Structs\CookieGroupStruct;
 class CookieHandler implements CookieHandlerInterface
 {
     public const PREFERENCES_COOKIE_NAME = 'cookiePreferences';
+    public const XDEBUG_COOKIE_NAME = 'XDEBUG_SESSION';
 
     /**
      * @var CookieGroupCollection
@@ -56,6 +57,11 @@ class CookieHandler implements CookieHandlerInterface
 
     public function isCookieAllowedByPreferences(string $cookieName, array $preferences): bool
     {
+        // XDebug Cookie
+        if ($cookieName === self::XDEBUG_COOKIE_NAME) {
+            return true;
+        }
+
         $foundCookie = $this->getCookies()->matchCookieByName($cookieName);
 
         if (!$foundCookie) {
