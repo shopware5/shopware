@@ -110,7 +110,7 @@ class PropertyHydrator extends Hydrator
         $group->setFilterable((bool) $data['__propertyGroup_filterable']);
 
         if ($data['__propertyGroupAttribute_id']) {
-            $this->attributeHydrator->addAttribute($group, $data, 'propertyGroupAttribute');
+            $this->attributeHydrator->addAttribute($group, $data, 'propertyGroupAttribute', null, 'propertyGroup');
         }
 
         return $group;
