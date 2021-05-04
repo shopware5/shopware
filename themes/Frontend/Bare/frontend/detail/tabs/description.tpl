@@ -19,7 +19,7 @@
     {* Headline *}
     {block name='frontend_detail_description_title'}
         <div class="content--title">
-            {s name="DetailDescriptionHeader"}{/s} "{$sArticle.articleName}"
+            {s name="DetailDescriptionHeader"}{/s} "{$sArticle.articleName|escape}"
         </div>
     {/block}
 
@@ -59,7 +59,7 @@
         {* Further links title *}
         {block name='frontend_detail_description_links_title'}
             <div class="content--title">
-                {s name="ArticleTipMoreInformation"}{/s} "{$sArticle.articleName}"
+                {s name="ArticleTipMoreInformation"}{/s} "{$sArticle.articleName|escape}"
             </div>
         {/block}
 
@@ -148,7 +148,7 @@
             {* Comment title  *}
             {block name='frontend_detail_description_our_comment_title'}
                 <div class="content--title">
-                    {s name='DetailDescriptionComment'}{/s} "{$sArticle.articleName}"
+                    {s name='DetailDescriptionComment'}{/s} "{$sArticle.articleName|escape}"
                 </div>
             {/block}
 

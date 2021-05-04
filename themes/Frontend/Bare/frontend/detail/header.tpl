@@ -1,7 +1,7 @@
 {extends file='frontend/index/header.tpl'}
 
 {* Meta title *}
-{block name="frontend_index_header_title"}{if $sArticle.metaTitle}{$sArticle.metaTitle|escapeHtml} | {{config name=sShopname}|escapeHtml}{else}{$sArticle.articleName} | {$smarty.block.parent}{/if}{/block}
+{block name="frontend_index_header_title"}{if $sArticle.metaTitle}{$sArticle.metaTitle|escapeHtml} | {{config name=sShopname}|escapeHtml}{else}{$sArticle.articleName|escape} | {$smarty.block.parent}{/if}{/block}
 
 {* Meta opengraph tags *}
 {block name='frontend_index_header_meta_tags_opengraph'}
