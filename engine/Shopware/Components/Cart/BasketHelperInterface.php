@@ -28,8 +28,8 @@ use Shopware\Components\Cart\Struct\DiscountContext;
 
 interface BasketHelperInterface
 {
-    const DISCOUNT_ABSOLUTE = 1;
-    const DISCOUNT_PERCENT = 2;
+    public const DISCOUNT_ABSOLUTE = 1;
+    public const DISCOUNT_PERCENT = 2;
 
     public function addProportionalDiscount(DiscountContext $discountContext);
 

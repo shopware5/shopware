@@ -29,7 +29,7 @@ use Shopware\Components\Routing\Context;
 
 class BlogProvider extends CategoryProvider
 {
-    const NAME = 'blog';
+    public const NAME = 'blog';
 
     /**
      * {@inheritdoc}

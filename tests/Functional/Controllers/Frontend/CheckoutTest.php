@@ -26,8 +26,8 @@ namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
 {
-    const ARTICLE_NUMBER = 'SW10239';
-    const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
+    public const ARTICLE_NUMBER = 'SW10239';
+    public const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
 
     /**
      * Reads the user agent black list and test if the bot can add an article

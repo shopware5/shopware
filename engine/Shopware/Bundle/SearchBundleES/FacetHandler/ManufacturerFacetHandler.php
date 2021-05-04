@@ -42,7 +42,7 @@ use Shopware_Components_Snippet_Manager;
 
 class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    const AGGREGATION_SIZE = 1000;
+    public const AGGREGATION_SIZE = 1000;
 
     /**
      * @var ManufacturerServiceInterface

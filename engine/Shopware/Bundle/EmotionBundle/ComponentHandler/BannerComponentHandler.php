@@ -31,8 +31,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class BannerComponentHandler implements ComponentHandlerInterface
 {
-    const LEGACY_CONVERT_FUNCTION = 'getBannerMappingLinks';
-    const COMPONENT_NAME = 'emotion-components-banner';
+    public const LEGACY_CONVERT_FUNCTION = 'getBannerMappingLinks';
+    public const COMPONENT_NAME = 'emotion-components-banner';
 
     /**
      * {@inheritdoc}

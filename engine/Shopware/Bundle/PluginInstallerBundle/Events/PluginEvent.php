@@ -29,16 +29,16 @@ use Shopware\Components\Plugin\Context\InstallContext;
 
 abstract class PluginEvent extends \Enlight_Event_EventArgs
 {
-    const PRE_INSTALL = PrePluginInstallEvent::class;
-    const POST_INSTALL = PostPluginInstallEvent::class;
-    const PRE_UNINSTALL = PrePluginUninstallEvent::class;
-    const POST_UNINSTALL = PostPluginUninstallEvent::class;
-    const PRE_UPDATE = PrePluginUpdateEvent::class;
-    const POST_UPDATE = PostPluginUpdateEvent::class;
-    const PRE_ACTIVATE = PrePluginActivateEvent::class;
-    const POST_ACTIVATE = PostPluginActivateEvent::class;
-    const PRE_DEACTIVATE = PrePluginDeactivateEvent::class;
-    const POST_DEACTIVATE = PostPluginDeactivateEvent::class;
+    public const PRE_INSTALL = PrePluginInstallEvent::class;
+    public const POST_INSTALL = PostPluginInstallEvent::class;
+    public const PRE_UNINSTALL = PrePluginUninstallEvent::class;
+    public const POST_UNINSTALL = PostPluginUninstallEvent::class;
+    public const PRE_UPDATE = PrePluginUpdateEvent::class;
+    public const POST_UPDATE = PostPluginUpdateEvent::class;
+    public const PRE_ACTIVATE = PrePluginActivateEvent::class;
+    public const POST_ACTIVATE = PostPluginActivateEvent::class;
+    public const PRE_DEACTIVATE = PrePluginDeactivateEvent::class;
+    public const POST_DEACTIVATE = PostPluginDeactivateEvent::class;
 
     public function __construct(InstallContext $context, Plugin $plugin)
     {

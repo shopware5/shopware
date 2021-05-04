@@ -28,9 +28,9 @@ use Shopware\Models\Shop\Shop;
 
 interface SitemapExporterInterface
 {
-    const STRATEGY_MANUAL = 1;
-    const STRATEGY_CRON = 2;
-    const STRATEGY_LIVE = 3;
+    public const STRATEGY_MANUAL = 1;
+    public const STRATEGY_CRON = 2;
+    public const STRATEGY_LIVE = 3;
 
     public function generate(Shop $shop);
 }

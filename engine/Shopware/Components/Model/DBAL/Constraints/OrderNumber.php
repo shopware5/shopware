@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Constraint;
  */
 class OrderNumber extends Constraint
 {
-    const VALIDATOR = 'order_number_constraint_validator';
+    public const VALIDATOR = 'order_number_constraint_validator';
 
     public function getTargets(): string
     {

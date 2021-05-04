@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 class Media extends Extendable
 {
-    const TYPE_IMAGE = 'IMAGE';
+    public const TYPE_IMAGE = 'IMAGE';
 
     /**
      * @var int

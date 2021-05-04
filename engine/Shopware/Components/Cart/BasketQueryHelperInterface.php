@@ -29,11 +29,11 @@ use Shopware\Components\Cart\Struct\DiscountContext;
 
 interface BasketQueryHelperInterface
 {
-    const BASKET_TABLE_NAME = 's_order_basket';
+    public const BASKET_TABLE_NAME = 's_order_basket';
 
-    const BASKET_ATTRIBUTE_TABLE_NAME = 's_order_basket_attributes';
+    public const BASKET_ATTRIBUTE_TABLE_NAME = 's_order_basket_attributes';
 
-    const BASKET_TABLE_ALIAS = 'basket';
+    public const BASKET_TABLE_ALIAS = 'basket';
 
     /**
      * @return QueryBuilder

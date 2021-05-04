@@ -59,42 +59,42 @@ class Media extends ModelEntity
     /**
      * Flag for an image media
      */
-    const TYPE_IMAGE = 'IMAGE';
+    public const TYPE_IMAGE = 'IMAGE';
 
     /**
      * Flag for a vector media
      */
-    const TYPE_VECTOR = 'VECTOR';
+    public const TYPE_VECTOR = 'VECTOR';
 
     /**
      * Flag for a video media
      */
-    const TYPE_VIDEO = 'VIDEO';
+    public const TYPE_VIDEO = 'VIDEO';
 
     /**
      * Flag for a music media
      */
-    const TYPE_MUSIC = 'MUSIC';
+    public const TYPE_MUSIC = 'MUSIC';
 
     /**
      * Flag for an archive media
      */
-    const TYPE_ARCHIVE = 'ARCHIVE';
+    public const TYPE_ARCHIVE = 'ARCHIVE';
 
     /**
      * Flag for a pdf media
      */
-    const TYPE_PDF = 'PDF';
+    public const TYPE_PDF = 'PDF';
 
     /**
      * Flag for a 3D model media
      */
-    const TYPE_MODEL = 'MODEL';
+    public const TYPE_MODEL = 'MODEL';
 
     /**
      * Flag for an unknown media
      */
-    const TYPE_UNKNOWN = 'UNKNOWN';
+    public const TYPE_UNKNOWN = 'UNKNOWN';
 
     /**
      * INVERSE SIDE

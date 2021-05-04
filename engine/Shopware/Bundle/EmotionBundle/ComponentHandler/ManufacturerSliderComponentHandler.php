@@ -33,11 +33,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
 {
-    const TYPE_STATIC = 'selected_manufacturers';
-    const TYPE_BY_CATEGORY = 'manufacturers_by_cat';
+    public const TYPE_STATIC = 'selected_manufacturers';
+    public const TYPE_BY_CATEGORY = 'manufacturers_by_cat';
 
-    const LEGACY_CONVERT_FUNCTION = 'getManufacturerSlider';
-    const COMPONENT_NAME = 'emotion-components-manufacturer-slider';
+    public const LEGACY_CONVERT_FUNCTION = 'getManufacturerSlider';
+    public const COMPONENT_NAME = 'emotion-components-manufacturer-slider';
 
     /**
      * @var ManufacturerServiceInterface

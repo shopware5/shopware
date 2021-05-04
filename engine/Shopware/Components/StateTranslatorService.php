@@ -26,8 +26,8 @@ namespace Shopware\Components;
 
 class StateTranslatorService implements StateTranslatorServiceInterface
 {
-    const STATE_PAYMENT = 'payment';
-    const STATE_ORDER = 'order';
+    public const STATE_PAYMENT = 'payment';
+    public const STATE_ORDER = 'order';
 
     /**
      * @var \Shopware_Components_Snippet_Manager

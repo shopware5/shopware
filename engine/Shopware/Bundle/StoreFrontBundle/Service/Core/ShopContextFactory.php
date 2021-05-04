@@ -35,7 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ShopContextFactory implements ShopContextFactoryInterface
 {
-    const FALLBACK_CUSTOMER_GROUP = 'EK';
+    public const FALLBACK_CUSTOMER_GROUP = 'EK';
 
     /**
      * @var CustomerGroupGatewayInterface

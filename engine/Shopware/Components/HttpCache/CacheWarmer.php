@@ -42,12 +42,12 @@ use Shopware_Components_Config as Config;
  */
 class CacheWarmer
 {
-    const ARTICLE_PATH = 'sViewport=detail&sArticle';
-    const CATEGORY_PATH = 'sViewport=cat&sCategory';
-    const BlOG_PATH = 'sViewport=blog';
-    const SUPPLIER_PATH = 'sViewport=listing&sAction=manufacturer&sSupplier=';
-    const CUSTOM_PATH = 'sViewport=custom&sCustom';
-    const EMOTION_LANDING_PAGE_PATH = 'sViewport=campaign';
+    public const ARTICLE_PATH = 'sViewport=detail&sArticle';
+    public const CATEGORY_PATH = 'sViewport=cat&sCategory';
+    public const BlOG_PATH = 'sViewport=blog';
+    public const SUPPLIER_PATH = 'sViewport=listing&sAction=manufacturer&sSupplier=';
+    public const CUSTOM_PATH = 'sViewport=custom&sCustom';
+    public const EMOTION_LANDING_PAGE_PATH = 'sViewport=campaign';
 
     /**
      * @var Connection connection

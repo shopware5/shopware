@@ -32,8 +32,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class Html5VideoComponentHandler implements ComponentHandlerInterface
 {
-    const LEGACY_CONVERT_FUNCTION = 'getHtml5Video';
-    const COMPONENT_NAME = 'emotion-components-html-video';
+    public const LEGACY_CONVERT_FUNCTION = 'getHtml5Video';
+    public const COMPONENT_NAME = 'emotion-components-html-video';
 
     /**
      * @var MediaServiceInterface

@@ -32,7 +32,7 @@ use PDO;
 
 class CustomerStreamRepository implements CustomerStreamRepositoryInterface
 {
-    const INDEXING_LIMIT = 250;
+    public const INDEXING_LIMIT = 250;
 
     /**
      * @var Connection

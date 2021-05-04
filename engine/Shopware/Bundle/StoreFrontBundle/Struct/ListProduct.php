@@ -37,7 +37,7 @@ class ListProduct extends BaseProduct
     /**
      * State for a calculated product price.
      */
-    const STATE_PRICE_CALCULATED = 'price_calculated';
+    public const STATE_PRICE_CALCULATED = 'price_calculated';
 
     /**
      * Contains the product name.

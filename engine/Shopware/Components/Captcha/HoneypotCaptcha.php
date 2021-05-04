@@ -28,7 +28,7 @@ use Enlight_Controller_Request_Request;
 
 class HoneypotCaptcha implements CaptchaInterface
 {
-    const CAPTCHA_METHOD = 'honeypot';
+    public const CAPTCHA_METHOD = 'honeypot';
 
     /**
      * {@inheritdoc}

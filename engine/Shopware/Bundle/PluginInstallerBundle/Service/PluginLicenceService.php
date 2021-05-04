@@ -32,7 +32,7 @@ use Shopware\Components\License\Service\LocalLicenseUnpackService;
 
 class PluginLicenceService
 {
-    const TYPE_UNLICENSED = 99;
+    public const TYPE_UNLICENSED = 99;
 
     /**
      * @var Connection

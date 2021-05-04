@@ -54,7 +54,7 @@ use Shopware\Components\QueryAliasMapper;
 
 class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    const AGGREGATION_SIZE = 5000;
+    public const AGGREGATION_SIZE = 5000;
 
     /**
      * @var QueryAliasMapper

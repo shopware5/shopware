@@ -29,7 +29,7 @@ use Shopware\Components\Random;
 
 class LegacyCaptcha implements CaptchaInterface
 {
-    const CAPTCHA_METHOD = 'legacy';
+    public const CAPTCHA_METHOD = 'legacy';
 
     /**
      * @var \Shopware_Components_Config

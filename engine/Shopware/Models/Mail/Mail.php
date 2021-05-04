@@ -52,10 +52,10 @@ class Mail extends ModelEntity
     /**
      * Consts defining the mailtype
      */
-    const MAILTYPE_USER = 1;
-    const MAILTYPE_SYSTEM = 2;
-    const MAILTYPE_STATE = 3;
-    const MAILTYPE_DOCUMENT = 4;
+    public const MAILTYPE_USER = 1;
+    public const MAILTYPE_SYSTEM = 2;
+    public const MAILTYPE_STATE = 3;
+    public const MAILTYPE_DOCUMENT = 4;
 
     /**
      * OWNING SIDE

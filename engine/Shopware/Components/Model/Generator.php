@@ -31,17 +31,17 @@ class Generator
     /**
      * Definition of the "create target directory failure" exception.
      */
-    const CREATE_TARGET_DIRECTORY_FAILED = 1;
+    public const CREATE_TARGET_DIRECTORY_FAILED = 1;
 
     /**
      * Contains the standard php file header tag
      */
-    const PHP_FILE_HEADER = '<?php';
+    public const PHP_FILE_HEADER = '<?php';
 
     /**
      * Contains the AGPLv3 licence
      */
-    const SHOPWARE_LICENCE = '
+    public const SHOPWARE_LICENCE = '
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -69,7 +69,7 @@ class Generator
     /**
      * Contains the required namespaces for a shopware model
      */
-    const NAMESPACE_HEADER = '
+    public const NAMESPACE_HEADER = '
 namespace Shopware\Models\Attribute;
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping AS ORM,
@@ -80,7 +80,7 @@ use Shopware\Components\Model\ModelEntity,
     /**
      * Definition of the standard shopware model class header.
      */
-    const CLASS_HEADER = '
+    public const CLASS_HEADER = '
 /**
  * @ORM\Entity
  * @ORM\Table(name="%tableName%")
@@ -92,7 +92,7 @@ class %className% extends ModelEntity
     /**
      * Definition of the standard shopware model property
      */
-    const COLUMN_PROPERTY = '
+    public const COLUMN_PROPERTY = '
     /**
      * @var %propertyType% $%propertyName%
     %ID%
@@ -104,13 +104,13 @@ class %className% extends ModelEntity
     /**
      * Definition of the standard shopware id property.
      */
-    const PRIMARY_KEY = ' * @ORM\Id
+    public const PRIMARY_KEY = ' * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")';
 
     /**
      * Definition of a standard shopware association property.
      */
-    const ASSOCIATION_PROPERTY = '
+    public const ASSOCIATION_PROPERTY = '
     /**
      * @var \%foreignClass%
      *
@@ -125,7 +125,7 @@ class %className% extends ModelEntity
     /**
      * Definition of a constructor for initializing properties.
      */
-    const CONSTRUCTOR = '
+    public const CONSTRUCTOR = '
     public function __construct()
     {
         %propertyInitializations%
@@ -136,7 +136,7 @@ class %className% extends ModelEntity
      * Definition of the standard shopware getter and setter
      * functions of a single model column property.
      */
-    const COLUMN_FUNCTIONS = '
+    public const COLUMN_FUNCTIONS = '
     public function get%upperPropertyName%()
     {
         return $this->%lowerPropertyName%;
@@ -153,7 +153,7 @@ class %className% extends ModelEntity
      * Definition of the standard shopware getter and setter
      * functions of a single model association property.
      */
-    const ASSOCIATION_FUNCTIONS = '
+    public const ASSOCIATION_FUNCTIONS = '
     public function get%upperPropertyName%()
     {
         return $this->%lowerPropertyName%;

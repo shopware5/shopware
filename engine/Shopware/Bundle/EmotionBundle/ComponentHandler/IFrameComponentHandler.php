@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class IFrameComponentHandler implements ComponentHandlerInterface
 {
-    const COMPONENT_NAME = 'emotion-components-iframe';
+    public const COMPONENT_NAME = 'emotion-components-iframe';
 
     /**
      * @var \Enlight_Event_EventManager

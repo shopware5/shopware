@@ -28,7 +28,7 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class Backend extends Page
 {
-    const TIMEOUT_MILLISECONDS = 500;
+    public const TIMEOUT_MILLISECONDS = 500;
 
     /**
      * @var string

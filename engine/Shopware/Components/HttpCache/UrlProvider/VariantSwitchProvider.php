@@ -29,7 +29,7 @@ use Shopware\Components\Routing\Context;
 
 class VariantSwitchProvider extends ProductProvider
 {
-    const NAME = 'variantswitch';
+    public const NAME = 'variantswitch';
 
     /**
      * {@inheritdoc}

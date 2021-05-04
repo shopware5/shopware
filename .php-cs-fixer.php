@@ -46,19 +46,19 @@ EOF;
 return (new Config())
     ->registerCustomFixers(new Fixers())
     ->setRiskyAllowed(true)
-    ->setUsingCache(false)
+    ->setCacheFile('var/cache/php-cs-fixer')
     ->setRules([
         '@PSR12' => true,
         '@Symfony' => true,
 
-        'class_attributes_separation' => ['elements' => ['method', 'property']],
+        'class_attributes_separation' => ['elements' => ['method' => 'one', 'property' => 'one']],
         'concat_space' => ['spacing' => 'one'],
         'doctrine_annotation_indentation' => true,
         'doctrine_annotation_spaces' => true,
         'general_phpdoc_annotation_remove' => [
              'annotations' => ['copyright', 'category'],
         ],
-        'header_comment' => ['header' => $header, 'separate' => 'bottom', 'commentType' => 'PHPDoc'],
+        'header_comment' => ['header' => $header, 'separate' => 'bottom', 'comment_type' => 'PHPDoc'],
         'no_useless_else' => true,
         'no_useless_return' => true,
         'no_superfluous_phpdoc_tags' => true,

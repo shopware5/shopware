@@ -49,7 +49,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     /**
      * Cache key for update response
      */
-    const CACHE_KEY = 'swag_update_response';
+    public const CACHE_KEY = 'swag_update_response';
 
     public function changelogAction()
     {

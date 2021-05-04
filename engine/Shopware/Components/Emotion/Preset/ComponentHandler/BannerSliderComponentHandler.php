@@ -28,9 +28,9 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class BannerSliderComponentHandler extends AbstractComponentHandler
 {
-    const COMPONENT_TYPE = 'emotion-components-banner-slider';
+    public const COMPONENT_TYPE = 'emotion-components-banner-slider';
 
-    const ELEMENT_DATA_KEY = 'banner_slider';
+    public const ELEMENT_DATA_KEY = 'banner_slider';
 
     /**
      * {@inheritdoc}

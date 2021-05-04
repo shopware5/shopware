@@ -38,7 +38,7 @@ class BatchProcess
      *
      * Due to a problem in PHP (https://bugs.php.net/bug.php?id=70110) long values can lead to a problem parsing the DQL
      */
-    const MAX_VALUE_LENGTH = 2700;
+    public const MAX_VALUE_LENGTH = 2700;
 
     /**
      * Reference to an instance of the DqlHelper

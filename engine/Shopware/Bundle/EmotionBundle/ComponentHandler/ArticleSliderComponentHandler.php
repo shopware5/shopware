@@ -41,17 +41,17 @@ use Shopware_Components_Config as ShopwareConfig;
 
 class ArticleSliderComponentHandler implements ComponentHandlerInterface
 {
-    const TYPE_PRODUCT_STREAM = 'product_stream';
-    const TYPE_STATIC_PRODUCT = 'selected_article';
-    const TYPE_STATIC_VARIANT = 'selected_variant';
-    const TYPE_RANDOM = 'random_product';
-    const TYPE_NEWCOMER = 'newcomer';
-    const TYPE_TOPSELLER = 'topseller';
-    const TYPE_LOWEST_PRICE = 'price_asc';
-    const TYPE_HIGHEST_PRICE = 'price_desc';
+    public const TYPE_PRODUCT_STREAM = 'product_stream';
+    public const TYPE_STATIC_PRODUCT = 'selected_article';
+    public const TYPE_STATIC_VARIANT = 'selected_variant';
+    public const TYPE_RANDOM = 'random_product';
+    public const TYPE_NEWCOMER = 'newcomer';
+    public const TYPE_TOPSELLER = 'topseller';
+    public const TYPE_LOWEST_PRICE = 'price_asc';
+    public const TYPE_HIGHEST_PRICE = 'price_desc';
 
-    const LEGACY_CONVERT_FUNCTION = 'getArticleSlider';
-    const COMPONENT_NAME = 'emotion-components-article-slider';
+    public const LEGACY_CONVERT_FUNCTION = 'getArticleSlider';
+    public const COMPONENT_NAME = 'emotion-components-article-slider';
 
     /**
      * @var StoreFrontCriteriaFactoryInterface

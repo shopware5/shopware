@@ -54,7 +54,7 @@ use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 
 class PluginManager extends \Shopware_Controllers_Backend_ExtJs
 {
-    const FALLBACK_LOCALE = 'en_GB';
+    public const FALLBACK_LOCALE = 'en_GB';
 
     public function preDispatch()
     {

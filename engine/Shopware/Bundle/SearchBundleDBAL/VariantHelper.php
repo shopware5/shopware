@@ -35,8 +35,8 @@ use Shopware\Components\ReflectionHelper;
 
 class VariantHelper implements VariantHelperInterface
 {
-    const VARIANTS_JOINED = 'all_variants';
-    const VARIANT_LISTING_PRICE_JOINED = 'variant_listing_price';
+    public const VARIANTS_JOINED = 'all_variants';
+    public const VARIANT_LISTING_PRICE_JOINED = 'variant_listing_price';
 
     /**
      * @var Connection

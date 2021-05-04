@@ -31,7 +31,7 @@ use Shopware\Components\Routing\RouterInterface;
 
 class CategoryProvider implements UrlProviderInterface
 {
-    const NAME = 'category';
+    public const NAME = 'category';
 
     /**
      * @var Connection

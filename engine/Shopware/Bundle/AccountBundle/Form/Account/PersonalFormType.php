@@ -49,7 +49,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class PersonalFormType extends AbstractType
 {
-    const SNIPPET_BIRTHDAY = [
+    public const SNIPPET_BIRTHDAY = [
         'namespace' => 'frontend/account/internalMessages',
         'name' => 'DateFailure',
         'default' => 'Please enter a valid birthday',

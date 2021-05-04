@@ -29,7 +29,7 @@ class PluginInformationStruct implements \JsonSerializable
     /**
      * @const array
      */
-    const TYPE_MAPPING = [
+    public const TYPE_MAPPING = [
         'buy' => 1,
         'rent' => 2,
         'test' => 3,

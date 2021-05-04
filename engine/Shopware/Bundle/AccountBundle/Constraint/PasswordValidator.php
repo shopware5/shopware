@@ -35,13 +35,13 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class PasswordValidator extends ConstraintValidator
 {
-    const SNIPPET_PASSWORD_CONFIRMATION = [
+    public const SNIPPET_PASSWORD_CONFIRMATION = [
         'namespace' => 'frontend',
         'name' => 'AccountPasswordNotEqual',
         'default' => 'The passwords are not equal',
     ];
 
-    const SNIPPET_PASSWORD_LENGTH = [
+    public const SNIPPET_PASSWORD_LENGTH = [
         'namespace' => 'frontend',
         'name' => 'RegisterPasswordLength',
         'default' => '',

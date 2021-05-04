@@ -30,17 +30,17 @@ use Doctrine\DBAL\Types\Type;
 
 interface TypeMappingInterface
 {
-    const TYPE_STRING = 'string';
-    const TYPE_TEXT = 'text';
-    const TYPE_HTML = 'html';
-    const TYPE_INTEGER = 'integer';
-    const TYPE_FLOAT = 'float';
-    const TYPE_BOOLEAN = 'boolean';
-    const TYPE_DATE = 'date';
-    const TYPE_DATETIME = 'datetime';
-    const TYPE_COMBOBOX = 'combobox';
-    const TYPE_SINGLE_SELECTION = 'single_selection';
-    const TYPE_MULTI_SELECTION = 'multi_selection';
+    public const TYPE_STRING = 'string';
+    public const TYPE_TEXT = 'text';
+    public const TYPE_HTML = 'html';
+    public const TYPE_INTEGER = 'integer';
+    public const TYPE_FLOAT = 'float';
+    public const TYPE_BOOLEAN = 'boolean';
+    public const TYPE_DATE = 'date';
+    public const TYPE_DATETIME = 'datetime';
+    public const TYPE_COMBOBOX = 'combobox';
+    public const TYPE_SINGLE_SELECTION = 'single_selection';
+    public const TYPE_MULTI_SELECTION = 'multi_selection';
 
     /**
      * @return array

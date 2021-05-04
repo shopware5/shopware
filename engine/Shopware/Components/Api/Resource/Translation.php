@@ -47,20 +47,20 @@ use Shopware\Models\Translation\Translation as TranslationModel;
  */
 class Translation extends Resource implements BatchInterface
 {
-    const TYPE_PRODUCT = 'article';
-    const TYPE_VARIANT = 'variant';
-    const TYPE_PRODUCT_LINK = 'link';
-    const TYPE_PRODUCT_DOWNLOAD = 'download';
-    const TYPE_PRODUCT_MANUFACTURER = 'supplier';
-    const TYPE_COUNTRY = 'config_countries';
-    const TYPE_COUNTRY_STATE = 'config_country_states';
-    const TYPE_DISPATCH = 'config_dispatch';
-    const TYPE_PAYMENT = 'config_payment';
-    const TYPE_FILTER_SET = 'propertygroup';
-    const TYPE_FILTER_GROUP = 'propertyoption';
-    const TYPE_FILTER_OPTION = 'propertyvalue';
-    const TYPE_CONFIGURATOR_GROUP = 'configuratorgroup';
-    const TYPE_CONFIGURATOR_OPTION = 'configuratoroption';
+    public const TYPE_PRODUCT = 'article';
+    public const TYPE_VARIANT = 'variant';
+    public const TYPE_PRODUCT_LINK = 'link';
+    public const TYPE_PRODUCT_DOWNLOAD = 'download';
+    public const TYPE_PRODUCT_MANUFACTURER = 'supplier';
+    public const TYPE_COUNTRY = 'config_countries';
+    public const TYPE_COUNTRY_STATE = 'config_country_states';
+    public const TYPE_DISPATCH = 'config_dispatch';
+    public const TYPE_PAYMENT = 'config_payment';
+    public const TYPE_FILTER_SET = 'propertygroup';
+    public const TYPE_FILTER_GROUP = 'propertyoption';
+    public const TYPE_FILTER_OPTION = 'propertyvalue';
+    public const TYPE_CONFIGURATOR_GROUP = 'configuratorgroup';
+    public const TYPE_CONFIGURATOR_OPTION = 'configuratoroption';
 
     /**
      * @var \Shopware_Components_Translation

@@ -30,7 +30,7 @@ use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 class PHPExtensionCheck implements CheckInterface
 {
-    const CHECK_TYPE = 'phpextension';
+    public const CHECK_TYPE = 'phpextension';
 
     /**
      * @var SnippetNamespace

@@ -33,7 +33,7 @@ use Symfony\Component\Finder\Finder;
 
 class RegisterControllerCompilerPass implements CompilerPassInterface
 {
-    const MODULES = ['Backend', 'Frontend', 'Widgets', 'Api'];
+    public const MODULES = ['Backend', 'Frontend', 'Widgets', 'Api'];
 
     /**
      * @var Plugin[]

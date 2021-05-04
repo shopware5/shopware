@@ -29,9 +29,9 @@ use Shopware\Models\Customer\Customer;
 
 class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    const TEST_MAIL = 'unittest@mail.com';
-    const SAVE_URL = '/register/saveRegister/sTarget/account/sTargetAction/index';
-    const CONFIRM_URL_PREFIX = '/register/confirmValidation/sConfirmation/';
+    public const TEST_MAIL = 'unittest@mail.com';
+    public const SAVE_URL = '/register/saveRegister/sTarget/account/sTargetAction/index';
+    public const CONFIRM_URL_PREFIX = '/register/confirmValidation/sConfirmation/';
 
     public static function tearDownAfterClass(): void
     {

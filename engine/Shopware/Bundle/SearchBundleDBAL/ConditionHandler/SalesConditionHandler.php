@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class SalesConditionHandler implements ConditionHandlerInterface
 {
-    const STATE_INCLUDES_TOPSELLER_TABLE = 'topseller';
+    public const STATE_INCLUDES_TOPSELLER_TABLE = 'topseller';
 
     /**
      * {@inheritdoc}

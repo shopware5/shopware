@@ -50,7 +50,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    const AGGREGATION_SIZE = 5000;
+    public const AGGREGATION_SIZE = 5000;
 
     /**
      * @var FacetInterface[]|CriteriaPartInterface[]

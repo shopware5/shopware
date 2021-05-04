@@ -48,12 +48,12 @@ abstract class Resource implements ContainerAwareInterface
     /**
      * Hydrates an object graph. This is the default behavior.
      */
-    const HYDRATE_OBJECT = 1;
+    public const HYDRATE_OBJECT = 1;
 
     /**
      * Hydrates an array graph.
      */
-    const HYDRATE_ARRAY = 2;
+    public const HYDRATE_ARRAY = 2;
 
     /**
      * Contains the Shopware model manager

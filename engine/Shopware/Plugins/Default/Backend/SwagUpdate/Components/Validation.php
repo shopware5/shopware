@@ -32,18 +32,18 @@ class Validation
     /**
      * Flag if a validation is valid.
      */
-    const REQUIREMENT_VALID = 0;
+    public const REQUIREMENT_VALID = 0;
 
     /**
      * Flag if a validation should be displayed as warning
      */
-    const REQUIREMENT_WARNING = 10;
+    public const REQUIREMENT_WARNING = 10;
 
     /**
      * Flag if a validation should be displayed as critical and
      * abort the update process.
      */
-    const REQUIREMENT_CRITICAL = 20;
+    public const REQUIREMENT_CRITICAL = 20;
 
     /**
      * @var \Enlight_Components_Snippet_Namespace

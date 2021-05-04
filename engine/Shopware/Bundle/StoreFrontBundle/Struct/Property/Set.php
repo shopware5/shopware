@@ -31,17 +31,17 @@ class Set extends Extendable
     /**
      * Constant for the alphanumeric sort configuration of the category filters
      */
-    const SORT_ALPHANUMERIC = 0;
+    public const SORT_ALPHANUMERIC = 0;
 
     /**
      * Constant for the numeric sort configuration of the category filters
      */
-    const SORT_NUMERIC = 1;
+    public const SORT_NUMERIC = 1;
 
     /**
      * Constant for the position sort configuration of the category filters
      */
-    const SORT_POSITION = 3;
+    public const SORT_POSITION = 3;
 
     /**
      * @var int

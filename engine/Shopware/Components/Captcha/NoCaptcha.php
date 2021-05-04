@@ -28,7 +28,7 @@ use Enlight_Controller_Request_Request;
 
 class NoCaptcha implements CaptchaInterface
 {
-    const CAPTCHA_METHOD = 'nocaptcha';
+    public const CAPTCHA_METHOD = 'nocaptcha';
 
     /**
      * {@inheritdoc}

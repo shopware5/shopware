@@ -28,7 +28,7 @@ use Shopware\Components\Routing\Context;
 
 class ProductWithNumberProvider extends ProductProvider
 {
-    const NAME = 'productwithnumber';
+    public const NAME = 'productwithnumber';
 
     /**
      * {@inheritdoc}

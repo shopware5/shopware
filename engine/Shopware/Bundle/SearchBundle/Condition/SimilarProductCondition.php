@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class SimilarProductCondition implements ConditionInterface, \JsonSerializable
 {
-    const NAME = 'similar_products';
+    public const NAME = 'similar_products';
 
     /**
      * @var string

@@ -31,7 +31,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
 abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
+    public const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
 
     public $clearBasketOnReset = true;
 

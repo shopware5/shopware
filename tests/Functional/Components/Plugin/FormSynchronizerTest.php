@@ -38,7 +38,7 @@ class FormSynchronizerTest extends Base
     /**
      * @var array
      */
-    const CONFIG_1 = [
+    public const CONFIG_1 = [
         'elements' => [
             [
                 'isRequired' => false,
@@ -57,7 +57,7 @@ class FormSynchronizerTest extends Base
     /**
      * @var array
      */
-    const CONFIG_2 = [
+    public const CONFIG_2 = [
         'elements' => [
             [
                 'isRequired' => false,

@@ -31,11 +31,11 @@ use Doctrine\ORM\Query\SqlWalker;
  */
 class ForceIndexWalker extends SqlWalker
 {
-    const HINT_FORCE_INDEX = 'ForceIndexWalker.ForceIndex';
+    public const HINT_FORCE_INDEX = 'ForceIndexWalker.ForceIndex';
 
-    const HINT_STRAIGHT_JOIN = 'StraightJoinWalker.StraightJoin';
+    public const HINT_STRAIGHT_JOIN = 'StraightJoinWalker.StraightJoin';
 
-    const HINT_SQL_NO_CACHE = 'SqlNoCacheWalker.SqlNoCache';
+    public const HINT_SQL_NO_CACHE = 'SqlNoCacheWalker.SqlNoCache';
 
     public function walkSelectClause($selectClause)
     {

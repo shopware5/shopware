@@ -31,7 +31,7 @@ use Shopware\Components\Routing\RouterInterface;
 
 class FormProvider implements UrlProviderInterface
 {
-    const NAME = 'form';
+    public const NAME = 'form';
 
     /**
      * @var Connection

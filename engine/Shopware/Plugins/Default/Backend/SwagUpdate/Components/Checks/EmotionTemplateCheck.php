@@ -31,7 +31,7 @@ use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 class EmotionTemplateCheck implements CheckInterface
 {
-    const CHECK_TYPE = 'emotiontemplate';
+    public const CHECK_TYPE = 'emotiontemplate';
 
     /**
      * @var SnippetNamespace

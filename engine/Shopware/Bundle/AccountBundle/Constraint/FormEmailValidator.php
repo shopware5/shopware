@@ -34,7 +34,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class FormEmailValidator extends ConstraintValidator
 {
-    const SNIPPET_EMAIL_CONFIRMATION = [
+    public const SNIPPET_EMAIL_CONFIRMATION = [
         'namespace' => 'frontend/account/internalMessages',
         'name' => 'MailFailureNotEqual',
         'default' => 'The mail addresses entered are not equal',

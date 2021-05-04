@@ -28,9 +28,9 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class CategoryTeaserComponentHandler extends AbstractComponentHandler
 {
-    const COMPONENT_TYPE = 'emotion-components-category-teaser';
+    public const COMPONENT_TYPE = 'emotion-components-category-teaser';
 
-    const ELEMENT_DATA_KEY = 'image';
+    public const ELEMENT_DATA_KEY = 'image';
 
     /**
      * {@inheritdoc}

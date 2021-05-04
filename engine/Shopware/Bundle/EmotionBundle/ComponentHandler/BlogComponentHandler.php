@@ -35,7 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class BlogComponentHandler implements ComponentHandlerInterface
 {
-    const COMPONENT_NAME = 'emotion-components-blog';
+    public const COMPONENT_NAME = 'emotion-components-blog';
 
     /**
      * @var BlogServiceInterface

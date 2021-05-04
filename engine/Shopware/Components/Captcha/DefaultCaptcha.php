@@ -30,8 +30,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DefaultCaptcha implements CaptchaInterface
 {
-    const SESSION_KEY = __CLASS__ . '_sRandom';
-    const CAPTCHA_METHOD = 'default';
+    public const SESSION_KEY = __CLASS__ . '_sRandom';
+    public const CAPTCHA_METHOD = 'default';
 
     /**
      * @var ContainerInterface

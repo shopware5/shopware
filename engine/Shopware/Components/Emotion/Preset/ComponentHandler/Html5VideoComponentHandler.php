@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class Html5VideoComponentHandler extends AbstractComponentHandler
 {
-    const COMPONENT_TYPE = 'emotion-components-html-video';
+    public const COMPONENT_TYPE = 'emotion-components-html-video';
 
     /**
      * {@inheritdoc}

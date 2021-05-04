@@ -30,9 +30,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 class ConfiguratorService implements Service\ConfiguratorServiceInterface
 {
-    const CONFIGURATOR_TYPE_STANDARD = 0;
-    const CONFIGURATOR_TYPE_SELECTION = 1;
-    const CONFIGURATOR_TYPE_PICTURE = 2;
+    public const CONFIGURATOR_TYPE_STANDARD = 0;
+    public const CONFIGURATOR_TYPE_SELECTION = 1;
+    public const CONFIGURATOR_TYPE_PICTURE = 2;
 
     /**
      * @var Gateway\ProductConfigurationGatewayInterface

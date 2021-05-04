@@ -29,7 +29,7 @@ use Shopware\Components\Routing\Context;
 
 class EmotionProvider extends CategoryProvider
 {
-    const NAME = 'emotion';
+    public const NAME = 'emotion';
 
     /**
      * {@inheritdoc}

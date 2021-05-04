@@ -31,7 +31,7 @@ use Shopware\Components\Routing\RouterInterface;
 
 class StaticProvider implements UrlProviderInterface
 {
-    const NAME = 'static';
+    public const NAME = 'static';
 
     /**
      * @var Connection

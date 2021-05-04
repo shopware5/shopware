@@ -32,8 +32,8 @@ class ShopwareConfigTest extends Enlight_Components_Test_TestCase
     /**
      * Random plugin id that should be unique
      */
-    const PLUGIN_ID = 20095;
-    const PLUGIN_NAME = 'Testplugin';
+    public const PLUGIN_ID = 20095;
+    public const PLUGIN_NAME = 'Testplugin';
 
     /**
      * @throws \Doctrine\ORM\ORMException

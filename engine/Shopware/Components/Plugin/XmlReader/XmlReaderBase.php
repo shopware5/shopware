@@ -35,10 +35,10 @@ use Symfony\Component\Config\Util\XmlUtils;
 
 abstract class XmlReaderBase implements XmlReaderInterface
 {
-    const SCOPE_LOCALE = 0;
-    const SCOPE_SHOP = 1;
+    public const SCOPE_LOCALE = 0;
+    public const SCOPE_SHOP = 1;
 
-    const DEFAULT_LANG = 'en';
+    public const DEFAULT_LANG = 'en';
 
     /**
      * @var string should be set in instance that extends this class

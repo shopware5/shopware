@@ -35,7 +35,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ShopwareExtension implements ExtensionInterface
 {
-    const KERNEL_ID = 'shopware_extension.kernel';
+    public const KERNEL_ID = 'shopware_extension.kernel';
 
     /**
      * Returns the extension config key.

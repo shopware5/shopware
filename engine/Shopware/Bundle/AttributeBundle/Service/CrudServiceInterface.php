@@ -28,8 +28,8 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 
 interface CrudServiceInterface
 {
-    const EXT_JS_PREFIX = '__attribute_';
-    const NULL_STRING = 'NULL';
+    public const EXT_JS_PREFIX = '__attribute_';
+    public const NULL_STRING = 'NULL';
 
     /**
      * @param string $table

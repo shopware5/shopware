@@ -31,7 +31,7 @@ use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 class MySQLVersionCheck implements CheckInterface
 {
-    const CHECK_TYPE = 'mysqlversion';
+    public const CHECK_TYPE = 'mysqlversion';
 
     /**
      * @var Connection

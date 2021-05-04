@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend;
 
 class BenchmarkControllerTest extends BenchmarkControllerTestCase
 {
-    const CONTROLLER_NAME = \Shopware_Controllers_Backend_Benchmark::class;
+    public const CONTROLLER_NAME = \Shopware_Controllers_Backend_Benchmark::class;
 
     /**
      * @group BenchmarkBundle

@@ -34,7 +34,7 @@ class EsBackendIndexer
     /**
      * @deprecated Use IndexNameBuilderInterface instead
      */
-    const INDEX_NAME = 'backend_index';
+    public const INDEX_NAME = 'backend_index';
 
     /**
      * @var Client

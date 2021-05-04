@@ -26,8 +26,8 @@ use Shopware\Components\CSRFWhitelistAware;
 
 class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
-    const MIN_DAYS_INSTALLATION_SURVEY = 14;
-    const MIN_DAYS_BI_TEASER = 10;
+    public const MIN_DAYS_INSTALLATION_SURVEY = 14;
+    public const MIN_DAYS_BI_TEASER = 10;
 
     /**
      * @var Shopware_Plugins_Backend_Auth_Bootstrap

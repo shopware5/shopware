@@ -28,7 +28,7 @@ use Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend\Mocks\A
 
 class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 {
-    const CONTROLLER_NAME = \Shopware_Controllers_Backend_BenchmarkOverview::class;
+    public const CONTROLLER_NAME = \Shopware_Controllers_Backend_BenchmarkOverview::class;
 
     /**
      * @group BenchmarkBundle

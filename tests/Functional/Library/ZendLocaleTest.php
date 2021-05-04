@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 
 class ZendLocaleTest extends TestCase
 {
-    const KNOWN_FAILURE = [
+    public const KNOWN_FAILURE = [
         'wo_SN',
         'tt_RU',
         'syr_SY',

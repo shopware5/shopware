@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class HtmlElementComponentHandler implements ComponentHandlerInterface
 {
-    const COMPONENT_NAME = 'emotion-components-html-element';
+    public const COMPONENT_NAME = 'emotion-components-html-element';
 
     /**
      * @var \Enlight_Event_EventManager

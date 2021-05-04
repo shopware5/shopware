@@ -39,7 +39,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class Media extends Resource
 {
-    const FILENAME_LENGTH = 200;
+    public const FILENAME_LENGTH = 200;
 
     /**
      * @return \Shopware\Models\Media\Repository

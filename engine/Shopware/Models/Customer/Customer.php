@@ -67,11 +67,11 @@ class Customer extends LazyFetchModelEntity
      */
     use AttributeCleanerTrait;
 
-    const ACCOUNT_MODE_CUSTOMER = 0;
-    const ACCOUNT_MODE_FAST_LOGIN = 1;
+    public const ACCOUNT_MODE_CUSTOMER = 0;
+    public const ACCOUNT_MODE_FAST_LOGIN = 1;
 
-    const CUSTOMER_TYPE_PRIVATE = 'private';
-    const CUSTOMER_TYPE_BUSINESS = 'business';
+    public const CUSTOMER_TYPE_PRIVATE = 'private';
+    public const CUSTOMER_TYPE_BUSINESS = 'business';
 
     /**
      * Contains the unique customer number

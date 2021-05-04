@@ -35,7 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PriceConditionHandler implements ConditionHandlerInterface, CriteriaAwareInterface
 {
-    const LISTING_PRICE_JOINED = 'listing_price';
+    public const LISTING_PRICE_JOINED = 'listing_price';
 
     /**
      * @var ListingPriceSwitcher

@@ -53,19 +53,19 @@ use Shopware\Components\Model\ModelEntity;
  */
 class Album extends ModelEntity
 {
-    const ALBUM_ARTICLE = -1;
-    const ALBUM_BANNER = -2;
-    const ALBUM_EMOTION = -3;
-    const ALBUM_PROMOTIONS = -4;
-    const ALBUM_NEWSLETTER = -5;
-    const ALBUM_FILES = -6;
-    const ALBUM_VIDEO = -7;
-    const ALBUM_MUSIC = -8;
-    const ALBUM_OTHER = -9;
-    const ALBUM_UNSORTED = -10;
-    const ALBUM_BLOG = -11;
-    const ALBUM_SUPPLIER = -12;
-    const ALBUM_GARBAGE = -13;
+    public const ALBUM_ARTICLE = -1;
+    public const ALBUM_BANNER = -2;
+    public const ALBUM_EMOTION = -3;
+    public const ALBUM_PROMOTIONS = -4;
+    public const ALBUM_NEWSLETTER = -5;
+    public const ALBUM_FILES = -6;
+    public const ALBUM_VIDEO = -7;
+    public const ALBUM_MUSIC = -8;
+    public const ALBUM_OTHER = -9;
+    public const ALBUM_UNSORTED = -10;
+    public const ALBUM_BLOG = -11;
+    public const ALBUM_SUPPLIER = -12;
+    public const ALBUM_GARBAGE = -13;
 
     /**
      * Settings of the album.
