@@ -44,6 +44,10 @@ Ext.define('Shopware.grid.plugin.Attribute', {
         var me = this;
 
         me.loadConfig(function() {
+            if (!Ext.isDefined(me.grid.view) || me.grid.view.isDestroyed === true) {
+                return;
+            }
+
             if (me.grid.getStore()) {
                 me.grid.reconfigure(me.grid.getStore());
             } else {
