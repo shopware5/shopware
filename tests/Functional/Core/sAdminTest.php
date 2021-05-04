@@ -2429,7 +2429,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
     /**
      * @param array<string, array> $userData
-     * @dataProvider testDataCustomerAttributeIsNot
+     * @dataProvider dataProviderDataCustomerAttributeIsNot
      */
     public function testCustomerAttributeIsNot(array $userData, string $attribute, bool $expectation): void
     {
@@ -2439,7 +2439,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @return array<int, array>
      */
-    public function testDataCustomerAttributeIsNot(): iterable
+    public function dataProviderDataCustomerAttributeIsNot(): iterable
     {
         // Not logged in
         yield [

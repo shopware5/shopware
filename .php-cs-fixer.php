@@ -18,7 +18,8 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('Plugins/Local')
     ->exclude('install/templates')
     ->exclude('update/templates')
-    ->notPath('LegacyPhpDumper.php');
+    ->notPath('LegacyPhpDumper.php')
+    ->notPath('MemoryLimitTest.php');
 
 $header = <<<EOF
 Shopware 5
