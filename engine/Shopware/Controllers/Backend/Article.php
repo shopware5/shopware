@@ -173,7 +173,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), ['index', 'load', 'validateNumber', 'getEsdDownload'])) {
+        if (!\in_array($this->Request()->getActionName(), ['index', 'load', 'validateNumber', 'getEsdDownload'])) {
             $this->Front()->Plugins()->Json()->setRenderer();
         }
     }
@@ -661,7 +661,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $this->View()->assign([
             'data' => array_values($options),
-            'total' => count($options),
+            'total' => \count($options),
             'success' => true,
         ]);
     }
@@ -1445,7 +1445,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ->getQuery()
             ->getArrayResult();
 
-        if (count($boundedProducts) > 0) {
+        if (\count($boundedProducts) > 0) {
             $products = [];
             foreach ($boundedProducts as $boundedProduct) {
                 $products[] = $boundedProduct['number'] . ' - ' . $boundedProduct['additionalText'];
@@ -1530,7 +1530,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ->getQuery()
             ->getArrayResult();
 
-        if (count($boundedProducts) > 0) {
+        if (\count($boundedProducts) > 0) {
             $articles = [];
             foreach ($boundedProducts as $boundedProduct) {
                 $articles[] = $boundedProduct['number'] . ' - ' . $boundedProduct['additionalText'];
@@ -1790,7 +1790,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $query = $this->getRepository()->getUnusedSerialsByEsdQuery($esdId);
         $serials = $query->execute();
-        $totalCount = count($serials);
+        $totalCount = \count($serials);
 
         foreach ($serials as $serial) {
             $this->getManager()->remove($serial);
@@ -1915,7 +1915,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $this->View()->assign([
             'data' => $result,
-            'total' => count($result),
+            'total' => \count($result),
             'success' => true,
         ]);
     }
@@ -1946,13 +1946,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ]
         );
 
-        if (in_array($extension, $blacklist, true)) {
+        if (\in_array($extension, $blacklist, true)) {
             $e = new MediaFileExtensionIsBlacklistedException($extension);
             $this->View()->assign([
                 'success' => false,
                 'message' => $e->getMessage(),
                 'exception' => [
-                    '_class' => get_class($e),
+                    '_class' => \get_class($e),
                     'extension' => $extension,
                 ],
             ]);
@@ -2077,7 +2077,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $this->View()->assign([
             'data' => $result,
-            'total' => count($result),
+            'total' => \count($result),
             'success' => true,
         ]);
     }
@@ -2182,7 +2182,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $this->View()->assign([
             'data' => $result,
-            'total' => count($result),
+            'total' => \count($result),
             'success' => true,
         ]);
     }
@@ -2978,7 +2978,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $detailIds[] = $detail['id'];
         }
 
-        if (count($detailIds) === 0) {
+        if (\count($detailIds) === 0) {
             return;
         }
 
@@ -3337,7 +3337,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $ids = [];
         /** @var Option $oldOption */
         foreach ($oldOptions as $oldOption) {
-            if (!array_key_exists($oldOption->getId(), $selectedOptions)) {
+            if (!\array_key_exists($oldOption->getId(), $selectedOptions)) {
                 $details = $this->getRepository()
                     ->getArticleDetailByConfiguratorOptionIdQuery($article->getId(), $oldOption->getId())
                     ->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT)
@@ -3406,7 +3406,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $abortVariant = false;
         foreach ($dependencies as $dependency) {
-            if (in_array($dependency['parentId'], $optionIds) && in_array($dependency['childId'], $optionIds)) {
+            if (\in_array($dependency['parentId'], $optionIds) && \in_array($dependency['childId'], $optionIds)) {
                 $abortVariant = true;
             }
         }
@@ -3752,7 +3752,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->getQuery()
                     ->getArrayResult();
 
-                if (count($products) <= 1) {
+                if (\count($products) <= 1) {
                     $set = Shopware()->Models()->find(Set::class, $article->getConfiguratorSet()->getId());
                     Shopware()->Models()->remove($set);
                 }
@@ -4237,8 +4237,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function increaseAutoNumber($autoNumber, $number)
     {
-        if (strlen($number) > 2) {
-            $number = substr($number, strlen(Shopware()->Config()->backendAutoOrderNumberPrefix));
+        if (\strlen($number) > 2) {
+            $number = substr($number, \strlen(Shopware()->Config()->backendAutoOrderNumberPrefix));
         }
         if ($number == $autoNumber) {
             $sql = "UPDATE s_order_number SET number = ? WHERE name = 'articleordernumber'";
@@ -4319,7 +4319,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function recursiveInterpreter($cursor, $index, $commands)
     {
-        if (!is_object($cursor)) {
+        if (!\is_object($cursor)) {
             return '';
         }
 
@@ -4345,7 +4345,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             return implode('.', $results);
 
         // If the result of the current command on the cursor is an object
-        } elseif (is_object($result)) {
+        } elseif (\is_object($result)) {
             // We have to execute the next command on the result
             return $this->recursiveInterpreter($result, $index, $commands);
 
@@ -4481,7 +4481,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
 
             foreach ($unserialized as $field => $translation) {
-                if (!array_key_exists($field, $translatedFields)) {
+                if (!\array_key_exists($field, $translatedFields)) {
                     $translatedFields[$field] = true;
                 }
             }

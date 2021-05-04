@@ -61,7 +61,7 @@ class Helper
     public static function checkArray(array $check, $strict = false)
     {
         foreach ($check as $key => $comparison) {
-            if ((!is_array($comparison)) || (count($comparison) != 2)) {
+            if ((!\is_array($comparison)) || (\count($comparison) != 2)) {
                 self::throwException('Each comparison have to be an array with exactly two values!');
             }
 
@@ -71,7 +71,7 @@ class Helper
                 continue;
             }
 
-            if ($strict || is_float($comparison[0]) || is_float($comparison[1])) {
+            if ($strict || \is_float($comparison[0]) || \is_float($comparison[1])) {
                 return $key;
             }
 
@@ -103,14 +103,14 @@ class Helper
      */
     public static function floatValue($value)
     {
-        if (is_float($value)) {
+        if (\is_float($value)) {
             return $value;
         }
 
         $float = str_replace([' ', '.', ','], ['', '', '.'], $value);
         preg_match('/([0-9]+[\\.]?[0-9]*)/', $float, $matches);
 
-        return floatval($matches[0]);
+        return \floatval($matches[0]);
     }
 
     /**
@@ -120,7 +120,7 @@ class Helper
      */
     public static function floatArray(array $values, array $keys = [])
     {
-        if (is_array(current($values))) {
+        if (\is_array(current($values))) {
             foreach ($values as &$array) {
                 $array = self::floatArray($array, $keys);
             }
@@ -155,7 +155,7 @@ class Helper
     public static function countElements($parent, $elementLocator, $count = 0)
     {
         $elements = self::findAllOfElements($parent, [$elementLocator], false);
-        $countElements = count($elements[$elementLocator]);
+        $countElements = \count($elements[$elementLocator]);
 
         if ($countElements === $count) {
             return true;
@@ -175,7 +175,7 @@ class Helper
     public static function compareArrays($array1, $array2)
     {
         foreach ($array1 as $key => $value) {
-            if (!array_key_exists($key, $array2)) {
+            if (!\array_key_exists($key, $array2)) {
                 return [
                     'error' => 'keyNotExists',
                     'key' => $key,
@@ -184,7 +184,7 @@ class Helper
                 ];
             }
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $result = self::compareArrays($value, $array2[$key]);
 
                 if ($result !== true) {
@@ -238,13 +238,13 @@ class Helper
         }
 
         if ($throwExceptions) {
-            $messages = ['The following elements of ' . get_class($parent) . ' were not found:'];
+            $messages = ['The following elements of ' . \get_class($parent) . ' were not found:'];
 
             foreach ($notFound as $key => $locator) {
                 $messages[] = sprintf('%s ("%s")', $key, $locator);
             }
 
-            if (count($messages) > 1) {
+            if (\count($messages) > 1) {
                 self::throwException($messages);
             }
         }
@@ -280,13 +280,13 @@ class Helper
         }
 
         if ($throwExceptions) {
-            $messages = ['The following elements of ' . get_class($parent) . ' were not found:'];
+            $messages = ['The following elements of ' . \get_class($parent) . ' were not found:'];
 
             foreach ($notFound as $key => $locator) {
                 $messages[] = sprintf('%s ("%s")', $key, $locator);
             }
 
-            if (count($messages) > 1) {
+            if (\count($messages) > 1) {
                 self::throwException($messages);
             }
         }
@@ -312,7 +312,7 @@ class Helper
         $selectors = $parent->getCssSelectors();
 
         foreach ($keys as $key) {
-            if (!array_key_exists($key, $selectors)) {
+            if (!\array_key_exists($key, $selectors)) {
                 $errors['noSelector'][] = $key;
                 continue;
             }
@@ -329,7 +329,7 @@ class Helper
             return $locators;
         }
 
-        $message = ['Following element selectors of ' . get_class($parent) . ' are wrong:'];
+        $message = ['Following element selectors of ' . \get_class($parent) . ' are wrong:'];
 
         if (isset($errors['noSelector'])) {
             $message[] = sprintf('%s (not defined)', implode(', ', $errors['noSelector']));
@@ -365,7 +365,7 @@ class Helper
      */
     public static function throwException($messages = [], $type = self::EXCEPTION_GENERIC)
     {
-        if (!is_array($messages)) {
+        if (!\is_array($messages)) {
             $messages = [$messages];
         }
 
@@ -677,7 +677,7 @@ EOD
             $activeModes = [];
 
             foreach ($modes as $mode => $prefix) {
-                if (in_array($mode, $selectionMode)) {
+                if (\in_array($mode, $selectionMode)) {
                     $activeModes[] = $prefix . '([A-Za-z]+)';
                 }
             }
@@ -694,17 +694,17 @@ EOD
 
             $result = array_fill_keys($selectionMode, null);
 
-            if (array_key_exists('controller', $result)) {
+            if (\array_key_exists('controller', $result)) {
                 $result['controller'] = $mode['1'];
 
-                if (array_key_exists('action', $result) && isset($mode['2'])) {
+                if (\array_key_exists('action', $result) && isset($mode['2'])) {
                     $result['action'] = $mode['2'];
                 }
-            } elseif (array_key_exists('action', $result) && isset($mode['1'])) {
+            } elseif (\array_key_exists('action', $result) && isset($mode['1'])) {
                 $result['action'] = $mode['1'];
             }
 
-            if (array_key_exists('template', $result)) {
+            if (\array_key_exists('template', $result)) {
                 $result['template'] = $template;
             }
 
@@ -767,7 +767,7 @@ EOD
     {
         $unique = array_unique($array);
 
-        if (count($unique) > 1) {
+        if (\count($unique) > 1) {
             $messages = ['There are more than one unique values in the array!'];
             foreach ($unique as $key => $value) {
                 $messages[] = sprintf('"%s" (Key: "%s")', $value, $key);
@@ -864,11 +864,11 @@ EOD
      */
     public static function assertElementCount(MultipleElement $elements, $count = 0)
     {
-        if ($count !== count($elements)) {
+        if ($count !== \count($elements)) {
             $message = sprintf(
                 'There are %d elements of type "%s" on page (should be %d)',
-                count($elements),
-                get_class($elements),
+                \count($elements),
+                \get_class($elements),
                 $count
             );
             self::throwException($message);

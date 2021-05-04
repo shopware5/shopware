@@ -53,7 +53,7 @@ class Repository extends EntityRepository implements \Enlight_Hook
 
         foreach ($allShopIds as $shopId => $shopName) {
             // Config for this shop is already in database, skip
-            if (array_key_exists($shopId, $savedConfigs)) {
+            if (\array_key_exists($shopId, $savedConfigs)) {
                 continue;
             }
 
@@ -66,7 +66,7 @@ class Repository extends EntityRepository implements \Enlight_Hook
             $configModel->setActive(false);
 
             // Config for this shop was sent from on-boarding
-            if (array_key_exists($shopId, $newConfigs)) {
+            if (\array_key_exists($shopId, $newConfigs)) {
                 $config = $newConfigs[$shopId];
 
                 // Config is also complete, both type and industry were set
@@ -167,14 +167,14 @@ class Repository extends EntityRepository implements \Enlight_Hook
 
         /** @var BenchmarkConfig $config */
         foreach ($configs as $config) {
-            if (!in_array($config->getShopId(), $shopIds)) {
+            if (!\in_array($config->getShopId(), $shopIds)) {
                 // Shop does not exist anymore
                 $this->getEntityManager()->remove($config);
             }
         }
 
         foreach ($shopIds as $shopId) {
-            if (!in_array($shopId, $benchmarkShopIds)) {
+            if (!\in_array($shopId, $benchmarkShopIds)) {
                 $config = new BenchmarkConfig(Uuid::uuid4()->toString());
                 $config->setShopId($shopId);
                 $this->getEntityManager()->persist($config);

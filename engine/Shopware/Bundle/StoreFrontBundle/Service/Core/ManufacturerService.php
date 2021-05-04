@@ -71,7 +71,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
         $links = $this->collectLinks($manufacturers);
         $urls = $this->router->generateList($links);
         foreach ($manufacturers as $manufacturer) {
-            if (array_key_exists($manufacturer->getId(), $urls)) {
+            if (\array_key_exists($manufacturer->getId(), $urls)) {
                 $manufacturer->setLink($urls[$manufacturer->getId()]);
             }
         }

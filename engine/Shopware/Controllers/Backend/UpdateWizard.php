@@ -99,7 +99,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
     {
         $version = $this->container->getParameter('shopware.release.version');
 
-        if (!is_string($version)) {
+        if (!\is_string($version)) {
             throw new \RuntimeException('Parameter shopware.release.version has to be an string');
         }
 

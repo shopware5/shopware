@@ -77,7 +77,7 @@ class XmlCronjobReaderTest extends TestCase
 
     public function testReadEmptyFile(): void
     {
-        $reflection = new \ReflectionClass(get_class($this->cronjobReader));
+        $reflection = new \ReflectionClass(\get_class($this->cronjobReader));
         $method = $reflection->getMethod('parseList');
         $method->setAccessible(true);
 

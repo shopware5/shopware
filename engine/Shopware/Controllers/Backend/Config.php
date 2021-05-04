@@ -122,7 +122,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $this->View()->assign([
             'success' => true,
             'data' => $data,
-            'total' => count($data),
+            'total' => \count($data),
         ]);
     }
 
@@ -185,7 +185,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             $values = $this->translateValues($fallback, $values);
             $values = $this->translateValues($locale->getId(), $values);
 
-            if (!in_array($values['type'], ['select', 'combo'])) {
+            if (!\in_array($values['type'], ['select', 'combo'])) {
                 continue;
             }
 
@@ -208,7 +208,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $this->View()->assign([
             'success' => true,
             'data' => $data,
-            'total' => count($data),
+            'total' => \count($data),
         ]);
     }
 
@@ -381,7 +381,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         'informMail' => $row['inform_mail'],
                         'pluginId' => isset($row['pluginID']) ? (int) $row['pluginID'] : null,
                     ];
-                    $row['data'] = !is_string($row['data']) ? var_export($row['data'], true) : $row['data'];
+                    $row['data'] = !\is_string($row['data']) ? var_export($row['data'], true) : $row['data'];
                 }
                 //get the total count
                 $select->reset(Zend_Db_Select::FROM);
@@ -435,7 +435,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 break;
         }
 
-        $totalCount = empty($totalCount) ? count($data) : $totalCount;
+        $totalCount = empty($totalCount) ? \count($data) : $totalCount;
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $totalCount]);
     }
 
@@ -515,7 +515,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $query = $builder->getQuery();
         $data = $query->getArrayResult();
-        $total = count($data);
+        $total = \count($data);
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
@@ -593,7 +593,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     $data['pages'] = $currencies;
                 }
                 foreach ($data as $key => $value) {
-                    if ($value === '' && !in_array($key, ['name', 'hosts'])) {
+                    if ($value === '' && !\in_array($key, ['name', 'hosts'])) {
                         $data[$key] = null;
                     }
                 }
@@ -1003,10 +1003,10 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     private function translateValues($localeId, array $values)
     {
-        if (!array_key_exists('translations', $values)) {
+        if (!\array_key_exists('translations', $values)) {
             return $values;
         }
-        if (!array_key_exists($localeId, $values['translations'])) {
+        if (!\array_key_exists($localeId, $values['translations'])) {
             return $values;
         }
         $translation = $values['translations'][$localeId];
@@ -1043,7 +1043,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     private function translateStore($language, $store, array $fallbackLocales)
     {
-        if (!is_array($store)) {
+        if (!\is_array($store)) {
             return $store;
         }
 
@@ -1054,7 +1054,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             $value = array_pop($row);
 
             // If not an array, there are no translations and we directly choose the given value:
-            if (!is_array($value)) {
+            if (!\is_array($value)) {
                 $row[] = $value;
                 continue;
             }
@@ -1083,7 +1083,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $namespace = $this->container->get('snippets')->getNamespace($namespace);
         foreach ($store as &$row) {
             $text = $row[1];
-            if (is_array($text)) {
+            if (\is_array($text)) {
                 $text = current($text);
             }
 
@@ -1269,7 +1269,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
              * Add rules for a bad case and return false to abort saving
              */
             case 'backendLocales':
-                if (!is_array($value) || count($value) === 0) {
+                if (!\is_array($value) || \count($value) === 0) {
                     return false;
                 }
 

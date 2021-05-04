@@ -79,7 +79,7 @@ class ContentType extends \Enlight_Controller_Action
 
         $result = $this->repository->findAll($criteria);
 
-        if (count($result->items) === 0) {
+        if (\count($result->items) === 0) {
             throw new \Enlight_Controller_Exception(sprintf('Cannot find element with id %d of type \'%s\'', $id, $this->type->getInternalName()));
         }
 

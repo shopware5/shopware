@@ -73,7 +73,7 @@ class CacheTest extends TestCase
     {
         $caches = $this->getResource()->getList();
 
-        static::assertEquals(6, count($caches['data']));
+        static::assertEquals(6, \count($caches['data']));
     }
 
     /**

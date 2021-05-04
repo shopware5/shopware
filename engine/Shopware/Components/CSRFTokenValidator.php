@@ -182,7 +182,7 @@ class CSRFTokenValidator implements SubscriberInterface
         $whitelistedActions = $controller->getWhitelistedCSRFActions();
         $whitelistedActions = array_map('strtolower', $whitelistedActions);
 
-        return in_array($calledAction, $whitelistedActions);
+        return \in_array($calledAction, $whitelistedActions);
     }
 
     /**
@@ -202,6 +202,6 @@ class CSRFTokenValidator implements SubscriberInterface
         $protectedActions = $controller->getCSRFProtectedActions();
         $protectedActions = array_map('strtolower', $protectedActions);
 
-        return in_array($calledAction, $protectedActions);
+        return \in_array($calledAction, $protectedActions);
     }
 }

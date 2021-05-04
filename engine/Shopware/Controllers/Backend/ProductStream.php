@@ -247,7 +247,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => true,
             'data' => $columns,
-            'total' => count($data),
+            'total' => \count($data),
         ]);
     }
 

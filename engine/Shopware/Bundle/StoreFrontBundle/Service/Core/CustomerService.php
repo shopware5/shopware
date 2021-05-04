@@ -68,12 +68,12 @@ class CustomerService implements CustomerServiceInterface
 
         foreach ($customers as $id => &$customer) {
             $addressId = $customer->getDefaultBillingAddressId();
-            if (array_key_exists($addressId, $addresses)) {
+            if (\array_key_exists($addressId, $addresses)) {
                 $customer->setBillingAddress($addresses[$addressId]);
             }
 
             $addressId = $customer->getDefaultShippingAddressId();
-            if (array_key_exists($addressId, $addresses)) {
+            if (\array_key_exists($addressId, $addresses)) {
                 $customer->setShippingAddress($addresses[$addressId]);
             }
         }

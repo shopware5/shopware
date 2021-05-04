@@ -86,10 +86,10 @@ class StatisticsService
     {
         $benchmarkData = $this->benchmarkCollector->get($this->contextService->createShopContext($config->getShopId()), $batchSize);
 
-        $ordersCount = count($benchmarkData['orders']['list']);
-        $customersCount = count($benchmarkData['customers']['list']);
-        $productsCount = count($benchmarkData['products']['list']);
-        $analyticsCount = count($benchmarkData['analytics']['list']);
+        $ordersCount = \count($benchmarkData['orders']['list']);
+        $customersCount = \count($benchmarkData['customers']['list']);
+        $productsCount = \count($benchmarkData['products']['list']);
+        $analyticsCount = \count($benchmarkData['analytics']['list']);
 
         // If all entity counts are below the batch size (or the batch size is null), we are likely to be in the last iteration
         if ($batchSize === null
@@ -121,7 +121,7 @@ class StatisticsService
 
     private function updateLastIds(BenchmarkConfig $config, array $benchmarkData)
     {
-        if (!empty($benchmarkData['orders']['list']) && (!array_key_exists('moved', $benchmarkData['updated_orders']) || !$benchmarkData['updated_orders']['moved'])) {
+        if (!empty($benchmarkData['orders']['list']) && (!\array_key_exists('moved', $benchmarkData['updated_orders']) || !$benchmarkData['updated_orders']['moved'])) {
             $order = end($benchmarkData['orders']['list']);
             $config->setLastOrderId($order['orderId']);
         }
@@ -154,11 +154,11 @@ class StatisticsService
             $config->setLastUpdatedOrdersDate(new \DateTime('now'));
         }
 
-        if (!array_key_exists('moved', $benchmarkData['updated_orders']) || !$benchmarkData['updated_orders']['moved'] || !$benchmarkData['orders']['list']) {
+        if (!\array_key_exists('moved', $benchmarkData['updated_orders']) || !$benchmarkData['updated_orders']['moved'] || !$benchmarkData['orders']['list']) {
             return;
         }
 
-        $ordersCount = count($benchmarkData['orders']['list']);
+        $ordersCount = \count($benchmarkData['orders']['list']);
 
         // Set the last_updated column to the most recent date of all updated orders if chances are high that another batch of orders
         // is necessary

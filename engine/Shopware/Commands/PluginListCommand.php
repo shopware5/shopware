@@ -131,7 +131,7 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
         }
 
         $namespace = $input->getOption('namespace');
-        if (count($namespace)) {
+        if (\count($namespace)) {
             $builder->andWhere('plugin.namespace IN (:namespace)');
             $builder->setParameter('namespace', $namespace);
         }

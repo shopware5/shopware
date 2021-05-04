@@ -256,7 +256,7 @@ class InstallCommand extends Command
         $adminUser->locale = $input->getOption('admin-locale');
         $adminUser->name = $input->getOption('admin-name');
 
-        if ($adminUser->locale && !in_array($adminUser->locale, Locale::getValidLocales())) {
+        if ($adminUser->locale && !\in_array($adminUser->locale, Locale::getValidLocales())) {
             throw new \RuntimeException('Invalid admin-locale provided');
         }
 
@@ -338,7 +338,7 @@ class InstallCommand extends Command
         $shop->locale = $input->getOption('shop-locale');
         $shop->currency = $input->getOption('shop-currency');
 
-        if ($shop->locale && !in_array($shop->locale, Locale::getValidLocales())) {
+        if ($shop->locale && !\in_array($shop->locale, Locale::getValidLocales())) {
             throw new \RuntimeException('Invalid shop-locale provided');
         }
 
@@ -417,7 +417,7 @@ class InstallCommand extends Command
 
         $defaultChoice = null;
         if ($connectionInfo->databaseName) {
-            if (in_array($connectionInfo->databaseName, $databaseNames)) {
+            if (\in_array($connectionInfo->databaseName, $databaseNames)) {
                 $defaultChoice = array_search($connectionInfo->databaseName, $databaseNames);
             }
         }

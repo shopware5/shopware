@@ -54,7 +54,7 @@ class ProductRepository extends GenericRepository implements EsAwareRepository
      */
     public function supports($entity)
     {
-        return in_array($entity, [
+        return \in_array($entity, [
             \Shopware\Models\Article\Article::class,
             \Shopware\Models\Article\Detail::class,
         ]);

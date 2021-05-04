@@ -47,7 +47,7 @@ class LandingPageUrlProvider extends BaseUrlProvider
         $builder = $emotionRepository->getCampaignsByShopId($shopId);
         $campaigns = $builder->getQuery()->getArrayResult();
 
-        if (count($campaigns) === 0) {
+        if (\count($campaigns) === 0) {
             return [];
         }
 
@@ -70,7 +70,7 @@ class LandingPageUrlProvider extends BaseUrlProvider
         $routes = $this->router->generateList(array_column($campaigns, 'urlParams'), $routingContext);
         $urls = [];
 
-        for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
+        for ($i = 0, $routeCount = \count($routes); $i < $routeCount; ++$i) {
             $urls[] = new Url($routes[$i], $campaigns[$i]['changed'], 'weekly', Emotion::class, $campaigns[$i]['id']);
         }
 

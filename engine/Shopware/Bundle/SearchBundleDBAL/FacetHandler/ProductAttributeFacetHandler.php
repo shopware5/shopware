@@ -163,7 +163,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
             $actives = $condition->getValue();
         }
 
-        if (!is_array($actives)) {
+        if (!\is_array($actives)) {
             $actives = [$actives];
         }
 
@@ -174,7 +174,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
                 $viewName = $translation;
             }
 
-            return new ValueListItem($row[$facet->getField()], $viewName, in_array($row[$facet->getField()], $actives));
+            return new ValueListItem($row[$facet->getField()], $viewName, \in_array($row[$facet->getField()], $actives));
         }, $result);
 
         if ($facet->getMode() == ProductAttributeFacet::MODE_RADIO_LIST_RESULT) {

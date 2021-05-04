@@ -127,7 +127,7 @@ class CartPosition extends MultipleElement
     {
         $name = array_unique($names);
 
-        switch (count($name)) {
+        switch (\count($name)) {
             //normal case
             case 1:
                 return current($name);

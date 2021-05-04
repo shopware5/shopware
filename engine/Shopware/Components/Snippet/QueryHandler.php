@@ -70,7 +70,7 @@ class QueryHandler
         $finder->files()->in($snippetsDir);
         foreach ($finder as $file) {
             $filePath = $file->getRelativePathname();
-            if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
+            if (strpos($filePath, '.ini') == \strlen($filePath) - 4) {
                 $namespace = substr($filePath, 0, -4);
             } else {
                 continue;
@@ -82,7 +82,7 @@ class QueryHandler
             ]);
 
             foreach ($namespaceData->read()->toArray() as $index => $values) {
-                if (!array_key_exists($index, $locales)) {
+                if (!\array_key_exists($index, $locales)) {
                     $locales[$index] = 'SET @locale_' . $index . ' = (SELECT id FROM s_core_locales WHERE locale = \'' . $index . '\');';
                 }
 

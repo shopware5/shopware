@@ -163,7 +163,7 @@ class UpdateCommand extends Command
 
         $versions = $manager->getMigrationsForVersion($currentVersion);
 
-        $progress = $this->IOHelper->createProgressBar(count($versions));
+        $progress = $this->IOHelper->createProgressBar(\count($versions));
         $progress->start();
 
         $step = new MigrationStep($manager);

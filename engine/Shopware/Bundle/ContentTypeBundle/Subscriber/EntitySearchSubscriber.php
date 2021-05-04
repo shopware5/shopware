@@ -122,7 +122,7 @@ class EntitySearchSubscriber implements SubscriberInterface
             $data = $this->filterTypes($ids, $data);
         }
 
-        $controller->View()->assign('total', count($data));
+        $controller->View()->assign('total', \count($data));
         $controller->View()->assign('data', $data);
         $controller->View()->assign('success', true);
     }

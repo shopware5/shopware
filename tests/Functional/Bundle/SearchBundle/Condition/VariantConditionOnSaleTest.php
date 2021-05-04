@@ -646,7 +646,7 @@ class VariantConditionOnSaleTest extends TestCase
                         ];
                         $priceCount += 9;
                     }
-                    $variant['prices'][count($variant['prices']) - 1]['to'] = 'beliebig';
+                    $variant['prices'][\count($variant['prices']) - 1]['to'] = 'beliebig';
                 }
 
                 ++$variantCount;
@@ -717,7 +717,7 @@ class VariantConditionOnSaleTest extends TestCase
 
                 $options = [];
                 foreach ($globalGroup->getOptions() as $option) {
-                    if (in_array($option->getName(), $optionNames, true)) {
+                    if (\in_array($option->getName(), $optionNames, true)) {
                         $options[] = $option;
                     }
                 }

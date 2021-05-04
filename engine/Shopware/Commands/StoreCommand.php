@@ -226,7 +226,7 @@ abstract class StoreCommand extends ShopwareCommand
     {
         $shopwareVersion = $this->container->getParameter('shopware.release.version');
 
-        if (!is_string($shopwareVersion)) {
+        if (!\is_string($shopwareVersion)) {
             throw new \RuntimeException('Parameter shopware.release.version has to be an string');
         }
 

@@ -285,7 +285,7 @@ class %className% extends ModelEntity
 
         $errors = [];
         foreach ($this->getSchemaManager()->listTableNames() as $tableName) {
-            if (!empty($tableNames) && !in_array($tableName, $tableNames)) {
+            if (!empty($tableNames) && !\in_array($tableName, $tableNames)) {
                 continue;
             }
 
@@ -383,7 +383,7 @@ class %className% extends ModelEntity
             // preg match for the model class name!
             $matches = [];
             preg_match('/class\s+([a-zA-Z0-9_]+)/', $content, $matches);
-            if (count($matches) === 0) {
+            if (\count($matches) === 0) {
                 continue;
             }
             $className = $matches[1];
@@ -391,7 +391,7 @@ class %className% extends ModelEntity
             // preg match for the model namespace!
             $matches = [];
             preg_match('/namespace\s+(.*);/', $content, $matches);
-            if (count($matches) === 0) {
+            if (\count($matches) === 0) {
                 continue;
             }
             $namespace = $matches[1];
@@ -401,7 +401,7 @@ class %className% extends ModelEntity
             preg_match('/@ORM\\\Table\\(name="(.*)"\\)/', $content, $matches);
 
             // Repository has no table annotation
-            if (count($matches) === 0) {
+            if (\count($matches) === 0) {
                 continue;
             }
             $tableName = $matches[1];
@@ -511,7 +511,7 @@ class %className% extends ModelEntity
             $className = $this->getClassNameOfTableName($parentClass);
 
         // If the passed table is not an attribute table, we have to check if the table is already declared
-        } elseif (array_key_exists($table->getName(), $this->getTableMapping())) {
+        } elseif (\array_key_exists($table->getName(), $this->getTableMapping())) {
             // If this is the case we will use the already declared class name
             $className = $this->tableMapping[$table->getName()]['class'];
         }
@@ -534,7 +534,7 @@ class %className% extends ModelEntity
      */
     protected function getClassNameOfTableName($tableName)
     {
-        if (!array_key_exists($tableName, $this->tableMapping)) {
+        if (!\array_key_exists($tableName, $this->tableMapping)) {
             return '';
         }
 
@@ -760,7 +760,7 @@ class %className% extends ModelEntity
     {
         $source = self::ASSOCIATION_PROPERTY;
 
-        if (!array_key_exists($foreignKey->getForeignTableName(), $this->tableMapping)) {
+        if (!\array_key_exists($foreignKey->getForeignTableName(), $this->tableMapping)) {
             return '';
         }
 
@@ -803,7 +803,7 @@ class %className% extends ModelEntity
             // Make sure not to set default values for foreign key properties
             $isForeignKeyColumn = false;
             foreach ($table->getForeignKeys() as $foreignKey) {
-                if (in_array($column->getName(), $foreignKey->getLocalColumns())) {
+                if (\in_array($column->getName(), $foreignKey->getLocalColumns())) {
                     $isForeignKeyColumn = true;
                     break;
                 }
@@ -832,7 +832,7 @@ class %className% extends ModelEntity
 
             $initializations[] = '$this->' . lcfirst($property) . ' = ' . $default . ';';
         }
-        if (count($initializations) === 0) {
+        if (\count($initializations) === 0) {
             // No need for a constructor
             return '';
         }
@@ -935,7 +935,7 @@ class %className% extends ModelEntity
      */
     private function stringEndsWith($haystack, $needle)
     {
-        $length = strlen($needle);
+        $length = \strlen($needle);
         if ($length === 0) {
             return true;
         }

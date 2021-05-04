@@ -200,7 +200,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $orderNumber = $this->Request()->getParam('sOrdernumber');
 
-        if (empty($this->Request()->Submit) || count($this->_errors)) {
+        if (empty($this->Request()->Submit) || \count($this->_errors)) {
             foreach ($this->_elements as $id => $element) {
                 if ($element['name'] === 'sordernumber') {
                     try {
@@ -501,12 +501,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 switch ($element['typ']) {
                     case 'date':
                         $values = preg_split('#[^0-9]#', $inputs[$element['id']], -1, PREG_SPLIT_NO_EMPTY);
-                        if (count($values) !== 3) {
+                        if (\count($values) !== 3) {
                             unset($value);
                             $valid = false;
                             break;
                         }
-                        if (strlen($values[0]) === 4) {
+                        if (\strlen($values[0]) === 4) {
                             $value = mktime(0, 0, 0, (int) $values[1], (int) $values[2], (int) $values[0]);
                         } else {
                             $value = mktime(0, 0, 0, (int) $values[0], (int) $values[2], (int) $values[1]);
@@ -660,7 +660,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     private function handleFormPost($formId)
     {
-        if (count($this->_errors) || empty($this->Request()->Submit)) {
+        if (\count($this->_errors) || empty($this->Request()->Submit)) {
             return;
         }
 

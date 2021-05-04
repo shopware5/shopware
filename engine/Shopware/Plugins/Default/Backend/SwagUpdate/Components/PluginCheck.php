@@ -70,8 +70,8 @@ class PluginCheck
                 $key = strtolower($plugin['name']);
                 $name = $plugin['label'];
 
-                $inStore = array_key_exists($key, $storePlugins);
-                $targetVersionUpdateAvailable = array_key_exists($key, $updatesAvailable);
+                $inStore = \array_key_exists($key, $storePlugins);
+                $targetVersionUpdateAvailable = \array_key_exists($key, $updatesAvailable);
                 $description = $this->getPluginStateDescription($inStore, $targetVersionUpdateAvailable);
 
                 $results[] = [

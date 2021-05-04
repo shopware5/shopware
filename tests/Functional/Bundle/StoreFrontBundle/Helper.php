@@ -1290,7 +1290,7 @@ class Helper
         if (!isset($arrays[$i])) {
             return [];
         }
-        if ($i == count($arrays) - 1) {
+        if ($i == \count($arrays) - 1) {
             return $arrays[$i];
         }
 
@@ -1299,7 +1299,7 @@ class Helper
 
         foreach ($arrays[$i] as $v) {
             foreach ($tmp as $t) {
-                $result[] = is_array($t) ? array_merge([$v], $t) : [$v, $t];
+                $result[] = \is_array($t) ? array_merge([$v], $t) : [$v, $t];
             }
         }
 

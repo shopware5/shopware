@@ -117,7 +117,7 @@ class ModelManager extends EntityManager
             $entity = iterator_to_array($entity);
         }
 
-        if (is_array($entity)) {
+        if (\is_array($entity)) {
             return array_map([$this, 'serializeEntity'], $entity);
         }
 
@@ -214,7 +214,7 @@ class ModelManager extends EntityManager
             if (strpos($tableName, '_attributes') === false) {
                 continue;
             }
-            if (!empty($tableNames) && !in_array($tableName, $tableNames, true)) {
+            if (!empty($tableNames) && !\in_array($tableName, $tableNames, true)) {
                 continue;
             }
             $attributeMetaData[] = $metaData;
@@ -322,7 +322,7 @@ class ModelManager extends EntityManager
             $entity->__load();
             $className = get_parent_class($entity);
         } else {
-            $className = get_class($entity);
+            $className = \get_class($entity);
         }
         $metadata = $this->getClassMetadata($className);
         $data = [];

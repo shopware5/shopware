@@ -145,7 +145,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
         $missingFormLabels = $statement->fetchAll();
 
         $output->writeln('<info></info>');
-        $output->writeln('<info>' . count($missingFormLabels) . ' missing form labels detected</info>');
+        $output->writeln('<info>' . \count($missingFormLabels) . ' missing form labels detected</info>');
         if ($missingFormLabels) {
             $formLabelFilePath = $dir . 'formTranslations' . str_replace('_', '', $locale->getLocale()) . '.php';
 
@@ -184,7 +184,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
         $missingElementLabels = $statement->fetchAll();
 
         $output->writeln('<info></info>');
-        $output->writeln('<info>' . count($missingElementLabels) . ' missing element labels detected</info>');
+        $output->writeln('<info>' . \count($missingElementLabels) . ' missing element labels detected</info>');
         if ($missingElementLabels) {
             $elementLabelFilePath = $dir . 'elementTranslations' . str_replace('_', '', $locale->getLocale()) . '.php';
 

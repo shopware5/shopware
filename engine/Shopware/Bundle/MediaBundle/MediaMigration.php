@@ -126,7 +126,7 @@ class MediaMigration
         $path = $toFileSystem->encode($path);
 
         $dirString = '';
-        $dirs = explode('/', dirname($path));
+        $dirs = explode('/', \dirname($path));
         foreach ($dirs as $dir) {
             $dirString .= '/' . $dir;
             $toFileSystem->createDir($dirString);

@@ -43,7 +43,7 @@ class Utils
             return true;
         }
 
-        return self::check(dirname($file));
+        return self::check(\dirname($file));
     }
 
     /**
@@ -143,7 +143,7 @@ class Utils
         $allowed = explode("\n", $allowed);
         $allowed = array_map('trim', $allowed);
 
-        return in_array($clientIp, $allowed);
+        return \in_array($clientIp, $allowed);
     }
 
     /**
@@ -156,7 +156,7 @@ class Utils
         $allowedLanguages = ['de', 'en'];
         $selectedLanguage = 'de';
 
-        if ($lang && in_array($lang, $allowedLanguages)) {
+        if ($lang && \in_array($lang, $allowedLanguages)) {
             return $lang;
         }
 
@@ -165,14 +165,14 @@ class Utils
             $selectedLanguage = substr($selectedLanguage[0], 0, 2);
         }
 
-        if (empty($selectedLanguage) || !in_array($selectedLanguage, $allowedLanguages)) {
+        if (empty($selectedLanguage) || !\in_array($selectedLanguage, $allowedLanguages)) {
             $selectedLanguage = 'de';
         }
 
-        if (isset($_POST['language']) && in_array($_POST['language'], $allowedLanguages)) {
+        if (isset($_POST['language']) && \in_array($_POST['language'], $allowedLanguages)) {
             $selectedLanguage = $_POST['language'];
             $_SESSION['language'] = $selectedLanguage;
-        } elseif (isset($_SESSION['language']) && in_array($_SESSION['language'], $allowedLanguages)) {
+        } elseif (isset($_SESSION['language']) && \in_array($_SESSION['language'], $allowedLanguages)) {
             $selectedLanguage = $_SESSION['language'];
         } else {
             $_SESSION['language'] = $selectedLanguage;

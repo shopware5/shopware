@@ -227,7 +227,7 @@ class CrudService implements CrudServiceInterface
             $model = $this->entityManager->find('Shopware\Models\Attribute\Configuration', $id);
         }
 
-        if (isset($data['arrayStore']) && is_array($data['arrayStore'])) {
+        if (isset($data['arrayStore']) && \is_array($data['arrayStore'])) {
             $data['arrayStore'] = json_encode($data['arrayStore']);
         }
 
@@ -297,7 +297,7 @@ class CrudService implements CrudServiceInterface
         ]);
 
         $configId = null;
-        if (array_key_exists('id', $data)) {
+        if (\array_key_exists('id', $data)) {
             $configId = $data['id'];
         }
 

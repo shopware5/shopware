@@ -204,7 +204,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $this->View()->assign('sState', $this->getSelectedState());
 
         $payment = $this->getSelectedPayment();
-        if (array_key_exists('validation', $payment) && !empty($payment['validation'])) {
+        if (\array_key_exists('validation', $payment) && !empty($payment['validation'])) {
             $this->onPaymentMethodValidationFail();
 
             return;
@@ -243,7 +243,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->saveTemporaryOrder();
 
-        if ($this->getMinimumCharge() || count($this->View()->sBasket['content']) <= 0 || $this->View()->getAssign('sInvalidCartItems')) {
+        if ($this->getMinimumCharge() || \count($this->View()->sBasket['content']) <= 0 || $this->View()->getAssign('sInvalidCartItems')) {
             return $this->forward('cart');
         }
 
@@ -397,7 +397,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $agreements = $this->getInvalidAgreements($basket, $this->Request());
 
         if (!empty($agreements)) {
-            $this->View()->assign('sAGBError', array_key_exists('agbError', $agreements));
+            $this->View()->assign('sAGBError', \array_key_exists('agbError', $agreements));
 
             return $this->forward(
                 'confirm',
@@ -507,7 +507,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $agreements = $this->getInvalidAgreements($this->View()->getAssign('sBasket'), $this->Request());
 
         if (!empty($agreements)) {
-            $this->View()->assign('sAGBError', array_key_exists('agbError', $agreements));
+            $this->View()->assign('sAGBError', \array_key_exists('agbError', $agreements));
 
             return $this->forward(
                 'confirm',
@@ -745,7 +745,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         }
 
         // Redirect if basket is empty
-        if (!array_key_exists('content', $this->getBasket())) {
+        if (!\array_key_exists('content', $this->getBasket())) {
             return $this->redirect(['controller' => 'checkout', 'action' => 'cart']);
         }
 
@@ -1858,11 +1858,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     private function addAccessories($accessories, $quantities)
     {
-        if (is_string($accessories)) {
+        if (\is_string($accessories)) {
             $accessories = explode(';', $accessories);
         }
 
-        if (empty($accessories) || !is_array($accessories)) {
+        if (empty($accessories) || !\is_array($accessories)) {
             return;
         }
 
@@ -2116,7 +2116,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             unset($addressA[$key], $addressB[$key]);
         }
 
-        return count(array_diff($addressA, $addressB)) === 0;
+        return \count(array_diff($addressA, $addressB)) === 0;
     }
 
     /**
@@ -2193,11 +2193,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             return $allowedByDefault;
         }
 
-        if (!array_key_exists($countryId, $countryTranslations)) {
+        if (!\array_key_exists($countryId, $countryTranslations)) {
             return $allowedByDefault;
         }
 
-        if (!array_key_exists('allow_shipping', $countryTranslations[$countryId])) {
+        if (!\array_key_exists('allow_shipping', $countryTranslations[$countryId])) {
             return $allowedByDefault;
         }
 

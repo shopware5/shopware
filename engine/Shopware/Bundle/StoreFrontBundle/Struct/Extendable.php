@@ -77,7 +77,7 @@ abstract class Extendable extends Struct implements \JsonSerializable
      */
     public function hasAttribute($name)
     {
-        return array_key_exists($name, $this->attributes);
+        return \array_key_exists($name, $this->attributes);
     }
 
     /**

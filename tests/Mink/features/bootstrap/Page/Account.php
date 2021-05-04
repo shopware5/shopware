@@ -349,8 +349,8 @@ class Account extends Page implements HelperSelectorInterface
             $parts = explode('<br />', $part);
             foreach ($parts as &$part) {
                 $part = strip_tags($part);
-                $part = str_replace([chr(0x0009), '  '], ' ', $part);
-                $part = str_replace([chr(0x0009), '  '], ' ', $part);
+                $part = str_replace([\chr(0x0009), '  '], ' ', $part);
+                $part = str_replace([\chr(0x0009), '  '], ' ', $part);
                 $part = trim($part);
             }
             unset($part);

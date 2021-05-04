@@ -126,6 +126,6 @@ class HideNoInStockTest extends TestCase
 
     private static function categoryConditionFilter($el): bool
     {
-        return get_class($el) !== CategoryCondition::class;
+        return \get_class($el) !== CategoryCondition::class;
     }
 }

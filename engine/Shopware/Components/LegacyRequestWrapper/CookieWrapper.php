@@ -58,7 +58,7 @@ class CookieWrapper implements \ArrayAccess
     {
         $cookieData = $this->request->getCookie();
 
-        return array_key_exists($offset, $cookieData);
+        return \array_key_exists($offset, $cookieData);
     }
 
     /**

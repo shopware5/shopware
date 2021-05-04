@@ -94,10 +94,10 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
         // Apply translations for countries and states to address array, converting them from structs to arrays in the process
         foreach ($addresses as &$address) {
-            if (array_key_exists($address['countryId'], $countries)) {
+            if (\array_key_exists($address['countryId'], $countries)) {
                 $address['country'] = json_decode(json_encode($countries[$address['countryId']]), true);
             }
-            if (array_key_exists($address['stateId'], $states)) {
+            if (\array_key_exists($address['stateId'], $states)) {
                 $address['state'] = json_decode(json_encode($states[$address['stateId']]), true);
             }
         }
@@ -511,7 +511,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $keys = array_filter(explode(',', $extraData['sessionKey']));
 
         return $extraData['setDefaultShippingAddress'] === '1'
-            || in_array('checkoutShippingAddressId', $keys, true);
+            || \in_array('checkoutShippingAddressId', $keys, true);
     }
 
     /**

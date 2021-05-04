@@ -158,7 +158,7 @@ class Homepage extends Page implements HelperSelectorInterface
      */
     public function checkComparisonProducts(CompareColumn $compareColumns, array $items)
     {
-        Helper::assertElementCount($compareColumns, count($items));
+        Helper::assertElementCount($compareColumns, \count($items));
         $result = Helper::searchElements($items, $compareColumns);
 
         if ($result !== true) {
@@ -182,7 +182,7 @@ class Homepage extends Page implements HelperSelectorInterface
             'image' => $image,
         ];
 
-        if (!is_null($link)) {
+        if (!\is_null($link)) {
             $properties['link'] = $link;
         }
 
@@ -287,7 +287,7 @@ class Homepage extends Page implements HelperSelectorInterface
     {
         $properties = array_keys(current($slides));
 
-        $sliderSlides = array_slice($slider->getSlides($properties), 0, count($slides));
+        $sliderSlides = \array_slice($slider->getSlides($properties), 0, \count($slides));
 
         $result = Helper::compareArrays($sliderSlides, $slides);
 
@@ -311,7 +311,7 @@ class Homepage extends Page implements HelperSelectorInterface
     {
         $properties = array_keys(current($slides));
 
-        $sliderSlides = array_slice($slider->getSlides($properties), 0, count($slides));
+        $sliderSlides = \array_slice($slider->getSlides($properties), 0, \count($slides));
 
         usort($sliderSlides, function ($a, $b) {
             return strcmp($a['name'], $b['name']);

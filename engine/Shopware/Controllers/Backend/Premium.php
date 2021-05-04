@@ -51,7 +51,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), ['index', 'load', 'validateArticle'])) {
+        if (!\in_array($this->Request()->getActionName(), ['index', 'load', 'validateArticle'])) {
             $this->Front()->Plugins()->Json()->setRenderer(true);
         }
     }
@@ -97,7 +97,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         if ($this->Request()->get('filter')) {
             //Get the value itself
             $filter = $this->Request()->get('filter');
-            $filter = $filter[count($filter) - 1];
+            $filter = $filter[\count($filter) - 1];
             $filterValue = $filter['value'];
 
             $query = $this->repository->getBackendPremiumListQuery($start, $limit, $order, $filterValue);

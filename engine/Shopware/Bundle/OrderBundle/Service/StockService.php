@@ -92,7 +92,7 @@ class StockService implements StockServiceInterface
      */
     protected function getProductFromDetail(OrderDetail $detail): ?ProductDetail
     {
-        if (in_array($detail->getMode(), [0, 1], true)) {
+        if (\in_array($detail->getMode(), [0, 1], true)) {
             if ($detail->getArticleDetail() && $detail->getArticleDetail()->getId()) { // After the detail got removed, the association to the product detail does not exist anymore.
                 return $detail->getArticleDetail();
             } elseif ($detail->getArticleNumber()) {

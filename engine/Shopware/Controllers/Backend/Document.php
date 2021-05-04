@@ -42,7 +42,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
         $delivery_date = $this->Request()->delivery_date;
         $bid = $this->Request()->bid;
         $renderer = strtolower($this->Request()->getParam('renderer', 'pdf')); // html / pdf
-        if (!in_array($renderer, ['html', 'pdf'])) {
+        if (!\in_array($renderer, ['html', 'pdf'])) {
             $renderer = 'pdf';
         }
         $this->View()->setTemplate();

@@ -102,7 +102,7 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
         $facets = ['width', 'height', 'length', 'weight'];
         $results = [];
         foreach ($criteria->getFacets() as $criteriaFacet) {
-            if (!in_array($criteriaFacet->getName(), $facets, true)) {
+            if (!\in_array($criteriaFacet->getName(), $facets, true)) {
                 continue;
             }
             $facetResult = $this->createRangeFacet($criteriaFacet, $stats, $criteria);

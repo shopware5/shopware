@@ -86,7 +86,7 @@ class StaticUrlProvider implements UrlProviderInterface
 
         $this->allExported = true;
 
-        if (count($sites) === 0) {
+        if (\count($sites) === 0) {
             return null;
         }
 
@@ -94,7 +94,7 @@ class StaticUrlProvider implements UrlProviderInterface
 
         $urls = [];
 
-        for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
+        for ($i = 0, $routeCount = \count($routes); $i < $routeCount; ++$i) {
             $urls[] = new Url($routes[$i], $sites[$i]['changed'], 'weekly', Site::class, $sites[$i]['id']);
         }
 
@@ -180,7 +180,7 @@ class StaticUrlProvider implements UrlProviderInterface
         $userParams = parse_url($link, PHP_URL_QUERY);
         parse_str($userParams, $userParams);
         $blacklist = ['', 'sitemap', 'sitemapXml'];
-        if (in_array($userParams['sViewport'], $blacklist)) {
+        if (\in_array($userParams['sViewport'], $blacklist)) {
             return false;
         }
 

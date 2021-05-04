@@ -661,7 +661,7 @@ class Repository extends ModelRepository
      */
     protected function addAliasJoin(QueryBuilder $builder, $alias)
     {
-        if (in_array($alias, $builder->getAllAliases(), true)) {
+        if (\in_array($alias, $builder->getAllAliases(), true)) {
             return;
         }
 

@@ -227,7 +227,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
         // Get class name without namespace
         $exceptionType = (new \ReflectionClass($e))->getShortName();
 
-        if (in_array($exceptionType, $this->licenseException)) {
+        if (\in_array($exceptionType, $this->licenseException)) {
             $errorType = $exceptionType;
 
             return $errorType;

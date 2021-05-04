@@ -90,12 +90,12 @@ class ProductsProvider implements BatchableProviderInterface
 
         foreach ($basicProducts as $productId => &$basicProduct) {
             $basicProduct['variants'] = [];
-            if (array_key_exists($productId, $variantsPerProduct)) {
+            if (\array_key_exists($productId, $variantsPerProduct)) {
                 $basicProduct['variants'] = $variantsPerProduct[$productId];
             }
 
             $basicProduct['images'] = [];
-            if (array_key_exists($productId, $imagesPerProduct)) {
+            if (\array_key_exists($productId, $imagesPerProduct)) {
                 $basicProduct['images'] = $imagesPerProduct[$productId];
             }
         }

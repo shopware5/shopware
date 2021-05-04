@@ -42,7 +42,7 @@ trait AttributeCleanerTrait
     {
         $callback = $callback ? $callback : 'strip_tags';
 
-        if (!is_string($var) || empty($var)) {
+        if (!\is_string($var) || empty($var)) {
             return $var;
         }
 

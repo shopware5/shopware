@@ -58,7 +58,7 @@ class ThemeCreateCommand extends ShopwareCommand implements CompletionAwareInter
             /** @var QueryBuilder $queryBuilder */
             $queryBuilder = $this->getRepository()->createQueryBuilder('tpl');
 
-            if (strlen($context->getCurrentWord())) {
+            if (\strlen($context->getCurrentWord())) {
                 $queryBuilder->andWhere($queryBuilder->expr()->like('tpl.template', ':search'))
                     ->setParameter('search', addcslashes($context->getCurrentWord(), '_%') . '%');
             }

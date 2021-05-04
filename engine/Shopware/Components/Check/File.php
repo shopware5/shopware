@@ -80,7 +80,7 @@ class Shopware_Components_Check_File
         foreach ($md5Sums as $row) {
             list($expectedMd5Sum, $file) = explode('  ', trim($row));
 
-            if (in_array($file, $this->skipList)) {
+            if (\in_array($file, $this->skipList)) {
                 continue;
             }
 

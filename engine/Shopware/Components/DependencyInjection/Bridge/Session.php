@@ -47,7 +47,7 @@ class Session
         }
 
         $dbOptions = $container->getParameter('shopware.db');
-        if (!is_array($dbOptions)) {
+        if (!\is_array($dbOptions)) {
             throw new \RuntimeException('Parameter shopware.db has to be an array');
         }
 
@@ -86,7 +86,7 @@ class Session
 
         $sessionOptions = $container->getParameter('shopware.session');
 
-        if (!is_array($sessionOptions)) {
+        if (!\is_array($sessionOptions)) {
             throw new \RuntimeException('Parameter shopware.session has to be an array');
         }
 

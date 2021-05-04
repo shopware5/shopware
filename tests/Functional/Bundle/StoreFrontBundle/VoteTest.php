@@ -213,18 +213,18 @@ class VoteTest extends TestCase
             $context = $this->getContext($shopId);
 
             //validate vote count of provided shop
-            if (array_key_exists('count', $data)) {
+            if (\array_key_exists('count', $data)) {
                 $votes = $service->get($product, $context);
-                static::assertEquals($data['count'], count($votes), sprintf('Vote count %s for shop %s of product %s not match', $data['count'], $shopId, $product->getNumber()));
+                static::assertEquals($data['count'], \count($votes), sprintf('Vote count %s for shop %s of product %s not match', $data['count'], $shopId, $product->getNumber()));
             }
 
             //validates provided average value of provided shop
-            if (array_key_exists('average', $data)) {
+            if (\array_key_exists('average', $data)) {
                 $average = $service->getAverage($product, $context);
                 static::assertEquals($data['average'], $average->getAverage(), sprintf('Vote average %s for shop %s of product %s not match', $data['average'], $shopId, $product->getNumber()));
             }
 
-            if (array_key_exists('points', $data)) {
+            if (\array_key_exists('points', $data)) {
                 $average = $service->getAverage($product, $context);
 
                 $actual = [];

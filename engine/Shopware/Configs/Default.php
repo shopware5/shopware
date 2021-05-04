@@ -32,7 +32,7 @@ if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
     $customConfig = [];
 }
 
-if (!is_array($customConfig)) {
+if (!\is_array($customConfig)) {
     throw new Enlight_Exception('The custom configuration file must return an array.');
 }
 

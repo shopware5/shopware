@@ -38,13 +38,13 @@ class GarbageCollectorFactoryTest extends TestCase
         ), Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class));
         $collector = $factory->factory();
 
-        $currentCount = count($this->getMediaPositionsFromGarbageCollector($collector));
+        $currentCount = \count($this->getMediaPositionsFromGarbageCollector($collector));
 
         Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class)->update('s_articles_attributes', 'foo', TypeMappingInterface::TYPE_HTML);
 
         $collector = $factory->factory();
 
-        static::assertNotEquals($currentCount, count($this->getMediaPositionsFromGarbageCollector($collector)));
+        static::assertNotEquals($currentCount, \count($this->getMediaPositionsFromGarbageCollector($collector)));
 
         Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class)->delete('s_articles_attributes', 'foo');
     }

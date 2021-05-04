@@ -200,7 +200,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         foreach ($blogArticles as $key => $blogArticle) {
             // Adding number of comments to the blog article
-            $blogArticles[$key]['numberOfComments'] = count($blogArticle['comments']);
+            $blogArticles[$key]['numberOfComments'] = \count($blogArticle['comments']);
 
             // Adding tags and tag filter links to the blog article
             $tagsData = $this->repository->getTagsByBlogId($blogArticle['id'])->getArrayResult();

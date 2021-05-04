@@ -111,10 +111,10 @@ class EmotionPreset extends Resource
      */
     public function create(array $data, $locale = 'de_DE')
     {
-        if (!array_key_exists('name', $data)) {
+        if (!\array_key_exists('name', $data)) {
             throw new ParameterMissingException('name');
         }
-        if (!array_key_exists('presetData', $data)) {
+        if (!\array_key_exists('presetData', $data)) {
             throw new ParameterMissingException('presetData');
         }
 
@@ -162,7 +162,7 @@ class EmotionPreset extends Resource
             unset($translation);
         }
 
-        if (!is_array($data['requiredPlugins'])) {
+        if (!\is_array($data['requiredPlugins'])) {
             $data['requiredPlugins'] = [];
         }
 

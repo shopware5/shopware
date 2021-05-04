@@ -224,7 +224,7 @@ class ConfiguratorTest extends TestCase
     {
         foreach ($configurator->getGroups() as $group) {
             foreach ($group->getOptions() as $option) {
-                if (in_array($option->getName(), $expectedOptions)) {
+                if (\in_array($option->getName(), $expectedOptions)) {
                     static::assertFalse($option->getActive());
                 } else {
                     static::assertTrue($option->getActive());

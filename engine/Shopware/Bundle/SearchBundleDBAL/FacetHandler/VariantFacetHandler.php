@@ -197,7 +197,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
                 $listItem = new MediaListItem(
                     $option->getId(),
                     $option->getName(),
-                    in_array($option->getId(), $actives, true),
+                    \in_array($option->getId(), $actives, true),
                     $option->getMedia(),
                     $option->getAttributes()
                 );

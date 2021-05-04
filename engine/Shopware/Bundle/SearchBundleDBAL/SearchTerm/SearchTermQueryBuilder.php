@@ -223,6 +223,6 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     private function addAndSearchLogic($query, $term)
     {
         $searchTerms = $this->termHelper->splitTerm($term);
-        $query->andWhere('termCount >= ' . count($searchTerms));
+        $query->andWhere('termCount >= ' . \count($searchTerms));
     }
 }

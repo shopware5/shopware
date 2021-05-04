@@ -77,7 +77,7 @@ class PluginLocalService
 
         return new ListingResultStruct(
             $plugins,
-            count($plugins)
+            \count($plugins)
         );
     }
 
@@ -207,7 +207,7 @@ class PluginLocalService
     {
         $rootDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
 
-        if (!is_string($rootDir)) {
+        if (!\is_string($rootDir)) {
             throw new \RuntimeException('Parameter shopware.app.rootDir needs to be a string');
         }
 

@@ -55,7 +55,7 @@ class BlogProvider extends CategoryProvider
 
         $result = $qb->execute()->fetchAll();
 
-        if (!count($result)) {
+        if (!\count($result)) {
             return [];
         }
 

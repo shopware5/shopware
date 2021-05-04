@@ -105,11 +105,11 @@ class EsBackendIndexer
                     $value = $value->format('Y-m-d');
                 }
 
-                if (in_array($key, $booleanFields, true)) {
+                if (\in_array($key, $booleanFields, true)) {
                     $value = (bool) $value;
                 }
 
-                if (is_string($value)) {
+                if (\is_string($value)) {
                     $value = mb_strtolower($value);
                 }
             }
@@ -176,7 +176,7 @@ class EsBackendIndexer
         while ($ids = $iterator->fetch()) {
             $this->indexEntities($index, $repository, $ids);
 
-            $progress->advance(count($ids));
+            $progress->advance(\count($ids));
         }
 
         $this->client->indices()->refresh(['index' => $index]);
@@ -227,7 +227,7 @@ class EsBackendIndexer
         $own = $entity->getMapping();
 
         $merged = $mapping;
-        if (is_array($own)) {
+        if (\is_array($own)) {
             $merged = array_replace_recursive($mapping, $own);
         }
 

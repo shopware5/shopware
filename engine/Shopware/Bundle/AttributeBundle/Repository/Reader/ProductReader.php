@@ -180,7 +180,7 @@ class ProductReader extends GenericReader
         foreach ($products as &$product) {
             $mapping = [];
             $id = $product['articleId'];
-            if (array_key_exists($id, $categories)) {
+            if (\array_key_exists($id, $categories)) {
                 $mapping = array_values(array_filter(explode(',', $categories[$id])));
             }
             $product['categoryIds'] = $mapping;
@@ -207,7 +207,7 @@ class ProductReader extends GenericReader
 
         foreach ($products as &$product) {
             $id = $product['variantId'];
-            if (array_key_exists($id, $prices)) {
+            if (\array_key_exists($id, $prices)) {
                 $product['price'] = $prices[$id];
             }
         }

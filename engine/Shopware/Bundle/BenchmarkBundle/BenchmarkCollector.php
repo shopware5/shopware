@@ -86,7 +86,7 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
     private function moveShopData(array $providerData)
     {
         $shopDataArrayKey = 'shop';
-        if (!array_key_exists($shopDataArrayKey, $providerData)) {
+        if (!\array_key_exists($shopDataArrayKey, $providerData)) {
             throw new \Exception(sprintf('Necessary data with name \'%s\' not provided.', $shopDataArrayKey));
         }
 
@@ -104,7 +104,7 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
     private function moveUpdatedOrdersData(array $providerData)
     {
         // Nothing to be moved
-        if (!array_key_exists('updated_orders', $providerData) || !$providerData['updated_orders']['list']) {
+        if (!\array_key_exists('updated_orders', $providerData) || !$providerData['updated_orders']['list']) {
             return $providerData;
         }
 

@@ -337,7 +337,7 @@ class PluginInstaller
             $translations = [];
             $translatableInfoKeys = ['label', 'description'];
             foreach ($info as $key => $value) {
-                if (!in_array($key, $translatableInfoKeys, true)) {
+                if (!\in_array($key, $translatableInfoKeys, true)) {
                     continue;
                 }
 

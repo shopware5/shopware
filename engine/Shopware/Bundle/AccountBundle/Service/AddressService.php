@@ -91,7 +91,7 @@ class AddressService implements AddressServiceInterface
             $address->getCustomer()->getDefaultBillingAddress()->getId(),
         ];
 
-        if (in_array($address->getId(), $preventDeletionOf)) {
+        if (\in_array($address->getId(), $preventDeletionOf)) {
             throw new \RuntimeException('The address is defined as default billing or shipping address and cannot be removed.');
         }
 

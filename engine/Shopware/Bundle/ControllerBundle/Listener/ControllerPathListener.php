@@ -48,7 +48,7 @@ class ControllerPathListener
     public function getControllerPath(Enlight_Event_EventArgs $args)
     {
         $name = strtolower($args->getName());
-        if (array_key_exists($name, $this->controllers)) {
+        if (\array_key_exists($name, $this->controllers)) {
             return $this->controllers[$name];
         }
 

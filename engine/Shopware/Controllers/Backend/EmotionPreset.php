@@ -275,7 +275,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         $pluginManager = $this->container->get('shopware_plugininstaller.plugin_service_view');
         $shopwareVersion = $this->container->getParameter('shopware.release.version');
 
-        if (!is_string($shopwareVersion)) {
+        if (!\is_string($shopwareVersion)) {
             throw new \RuntimeException('Parameter shopware.release.version has to be an string');
         }
 
@@ -299,7 +299,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
 
         foreach ($presets as &$preset) {
             foreach ($preset['requiredPlugins'] as &$plugin) {
-                $plugin['in_store'] = array_key_exists(strtolower($plugin['name']), $plugins);
+                $plugin['in_store'] = \array_key_exists(strtolower($plugin['name']), $plugins);
             }
         }
 

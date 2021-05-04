@@ -421,7 +421,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
     private function isShippingProvided(array $data): bool
     {
-        return array_key_exists('shippingAddress', $data['register']['billing']);
+        return \array_key_exists('shippingAddress', $data['register']['billing']);
     }
 
     private function getPostData(): array

@@ -45,7 +45,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), ['index', 'load', 'info'])) {
+        if (!\in_array($this->Request()->getActionName(), ['index', 'load', 'info'])) {
             $this->Front()->Plugins()->Json()->setRenderer(true);
         }
     }
@@ -142,7 +142,7 @@ SQL;
                 ->query($sql)
                 ->fetchColumn(0);
 
-            if (in_array($timezone[0], ['-', '+'], true)) {
+            if (\in_array($timezone[0], ['-', '+'], true)) {
                 $databaseZone = new DateTimeZone($timezone);
             } else {
                 $databaseZone = timezone_open(timezone_name_from_abbr($timezone));
@@ -173,7 +173,7 @@ SQL;
         $_COOKIE = [];
         $_REQUEST = [];
         $_SERVER['HTTP_COOKIE'] = null;
-        if (function_exists('apache_setenv')) {
+        if (\function_exists('apache_setenv')) {
             apache_setenv('HTTP_COOKIE', '');
         }
         phpinfo();
@@ -194,7 +194,7 @@ SQL;
 
         $this->View()->assign('success', true);
         $this->View()->assign('data', $optimizerResult);
-        $this->View()->assign('total', count($optimizerResult));
+        $this->View()->assign('total', \count($optimizerResult));
     }
 
     /**

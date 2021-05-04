@@ -84,14 +84,14 @@ class VariantSearch implements ProductSearchInterface
 
         if (!empty($filterGroupIds)) {
             foreach ($products as $product) {
-                if (!array_key_exists($product->getNumber(), $configurations)) {
+                if (!\array_key_exists($product->getNumber(), $configurations)) {
                     continue;
                 }
 
                 $groups = [];
                 /** @var Group $group */
                 foreach ($configurations[$product->getNumber()] as $group) {
-                    if (in_array($group->getId(), $filterGroupIds)) {
+                    if (\in_array($group->getId(), $filterGroupIds)) {
                         $groups[] = ['groupName' => $group->getName(), 'optionName' => $group->getOptions()[0]->getName()];
                     }
                 }

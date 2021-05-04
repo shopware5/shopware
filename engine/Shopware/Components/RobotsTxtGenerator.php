@@ -71,12 +71,12 @@ class RobotsTxtGenerator implements RobotsTxtGeneratorInterface
 
     public function setAllow(string $allow): void
     {
-        if (in_array($allow, $this->disallows, true)) {
+        if (\in_array($allow, $this->disallows, true)) {
             $index = array_search($allow, $this->disallows);
             unset($this->disallows[$index]);
         }
 
-        if (in_array($allow, $this->allows, true)) {
+        if (\in_array($allow, $this->allows, true)) {
             return;
         }
 
@@ -85,12 +85,12 @@ class RobotsTxtGenerator implements RobotsTxtGeneratorInterface
 
     public function setDisallow(string $disallow): void
     {
-        if (in_array($disallow, $this->allows, true)) {
+        if (\in_array($disallow, $this->allows, true)) {
             $index = array_search($disallow, $this->allows);
             unset($this->allows[$index]);
         }
 
-        if (in_array($disallow, $this->disallows, true)) {
+        if (\in_array($disallow, $this->disallows, true)) {
             return;
         }
 

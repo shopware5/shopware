@@ -55,7 +55,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
             }
         }
 
-        if (count($sErrorFlag)) {
+        if (\count($sErrorFlag)) {
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages')
                 ->get('ErrorFillIn', 'Please fill in all red fields');
 

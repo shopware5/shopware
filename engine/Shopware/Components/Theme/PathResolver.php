@@ -93,7 +93,7 @@ class PathResolver
             return $this->getFrontendThemeDirectory() . DIRECTORY_SEPARATOR . $template['template'];
         }
 
-        if (in_array($template['plugin_namespace'], ['ShopwarePlugins', 'ProjectPlugins'], true)) {
+        if (\in_array($template['plugin_namespace'], ['ShopwarePlugins', 'ProjectPlugins'], true)) {
             return implode(
                 DIRECTORY_SEPARATOR,
                 [

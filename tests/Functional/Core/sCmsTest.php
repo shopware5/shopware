@@ -72,7 +72,7 @@ class sCmsTest extends Enlight_Components_Test_Controller_TestCase
                     static::assertArrayHasKey('page_title', $siblingPage);
                 }
                 static::assertArrayHasKey('parent', $page);
-                if (count($page['parent']) > 0) {
+                if (\count($page['parent']) > 0) {
                     static::assertArrayHasKey('id', $page['parent']);
                     static::assertArrayHasKey('description', $page['parent']);
                     static::assertArrayHasKey('link', $page['parent']);

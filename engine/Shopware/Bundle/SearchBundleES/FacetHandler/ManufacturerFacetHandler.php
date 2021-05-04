@@ -138,7 +138,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
             $items[] = new ValueListItem(
                 $manufacturer->getId(),
                 $manufacturer->getName(),
-                in_array($manufacturer->getId(), $actives),
+                \in_array($manufacturer->getId(), $actives),
                 $manufacturer->getAttributes()
             );
         }

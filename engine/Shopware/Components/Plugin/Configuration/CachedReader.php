@@ -50,7 +50,7 @@ class CachedReader implements ReaderInterface
         if ($this->cache->test($cacheKey) !== false) {
             $cacheResult = $this->cache->load($cacheKey, true);
 
-            if (is_array($cacheResult)) {
+            if (\is_array($cacheResult)) {
                 return $cacheResult;
             }
         }

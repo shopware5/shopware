@@ -45,7 +45,7 @@ class CategoryDenormalizationTest extends TestCase
 
     protected function setUp(): void
     {
-        if (!extension_loaded('sqlite3')) {
+        if (!\extension_loaded('sqlite3')) {
             static::markTestSkipped(
                 'The Sqlite3 extension is not available.'
             );

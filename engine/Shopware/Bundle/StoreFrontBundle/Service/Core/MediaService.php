@@ -141,7 +141,7 @@ class MediaService implements Service\MediaServiceInterface
         foreach ($products as $product) {
             $variantMedia = [];
 
-            if (array_key_exists($product->getNumber(), $specifyMedia)) {
+            if (\array_key_exists($product->getNumber(), $specifyMedia)) {
                 $variantMedia = $specifyMedia[$product->getNumber()];
             }
 

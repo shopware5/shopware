@@ -154,7 +154,7 @@ class ContentTypesReader extends XmlReaderBase
 
         foreach ($fields as $field) {
             if ($value = self::getElementChildValueByName($element, $field)) {
-                if (in_array($field, $boolFields, true)) {
+                if (\in_array($field, $boolFields, true)) {
                     $value = (bool) XmlUtils::phpize($value);
                 }
 
@@ -229,7 +229,7 @@ class ContentTypesReader extends XmlReaderBase
                 if ($child->nodeType == XML_TEXT_NODE) {
                     $result['_value'] = $child->nodeValue;
 
-                    return count($result) == 1
+                    return \count($result) == 1
                         ? $result['_value']
                         : $result;
                 }
@@ -254,7 +254,7 @@ class ContentTypesReader extends XmlReaderBase
     private static function cleanArray(array $haystack): array
     {
         foreach ($haystack as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $haystack[$key] = self::cleanArray($haystack[$key]);
             }
 

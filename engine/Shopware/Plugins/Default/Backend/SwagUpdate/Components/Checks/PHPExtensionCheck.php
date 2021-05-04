@@ -60,7 +60,7 @@ class PHPExtensionCheck implements CheckInterface
         $successMessage = $this->namespace->get('controller/check_phpextension_success');
         $failMessage = $this->namespace->get('controller/check_phpextension_failure');
 
-        if (extension_loaded($requiredExtension)) {
+        if (\extension_loaded($requiredExtension)) {
             return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => Validation::REQUIREMENT_VALID,

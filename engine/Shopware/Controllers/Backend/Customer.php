@@ -117,7 +117,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), ['index', 'load', 'validateEmail'])) {
+        if (!\in_array($this->Request()->getActionName(), ['index', 'load', 'validateEmail'])) {
             $this->Front()->Plugins()->Json()->setRenderer(true);
         }
     }
@@ -719,7 +719,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         if (!empty($orders)) {
             $first = new \DateTime($orders[0]['date']);
-            $last = new \DateTime($orders[count($orders) - 1]['date']);
+            $last = new \DateTime($orders[\count($orders) - 1]['date']);
 
             // To display the whole time range the user inserted, check if the date of the first order equals the fromDate parameter
             if ($fromDate->format('Y-m') !== $first->format('Y-m')) {

@@ -207,11 +207,11 @@ class DataPersister implements DataPersisterInterface
                 continue;
             }
 
-            if (!array_key_exists($column->getName(), $data)) {
+            if (!\array_key_exists($column->getName(), $data)) {
                 continue;
             }
 
-            if (in_array($column->getName(), $readOnly, true)) {
+            if (\in_array($column->getName(), $readOnly, true)) {
                 continue;
             }
 

@@ -43,7 +43,7 @@ class Download
      */
     public function setProgressCallback($callback)
     {
-        if (!is_callable($callback)) {
+        if (!\is_callable($callback)) {
             throw new \Exception('Callback not callable');
         }
 
@@ -57,7 +57,7 @@ class Download
      */
     public function setHaltCallback($callback)
     {
-        if (!is_callable($callback)) {
+        if (!\is_callable($callback)) {
             throw new \Exception('Callback not callable');
         }
 
@@ -73,7 +73,7 @@ class Download
             return false;
         }
 
-        return (bool) call_user_func($this->haltCallback);
+        return (bool) \call_user_func($this->haltCallback);
     }
 
     /**
@@ -113,7 +113,7 @@ class Download
 
         $range = $size . '-' . ($totalSize - 1);
 
-        if (!function_exists('curl_init')) {
+        if (!\function_exists('curl_init')) {
             throw new \Exception('PHP Extension "curl" is required to download a file');
         }
 
@@ -153,7 +153,7 @@ class Download
                 return -1;
             }
 
-            return strlen($str);
+            return \strlen($str);
         });
 
         $result = curl_exec($ch);
@@ -205,7 +205,7 @@ class Download
             return;
         }
 
-        call_user_func_array($this->progressCallback, [$downloadSize, $downloaded, $total]);
+        \call_user_func_array($this->progressCallback, [$downloadSize, $downloaded, $total]);
     }
 
     /**

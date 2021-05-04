@@ -117,12 +117,12 @@ class EmotionElementHydrator extends Hydrator
      */
     private function assignConfigTranslation(array $config)
     {
-        if (count($config)) {
+        if (\count($config)) {
             $translation = $this->getTranslation(reset($config), '__emotionElementValue', [], null, false);
 
             foreach ($config as &$configItem) {
                 $key = $configItem['__emotionLibraryComponentField_name'];
-                if (array_key_exists($key, $translation)) {
+                if (\array_key_exists($key, $translation)) {
                     $configItem['__emotionElementValue_value'] = $translation[$key];
                 }
             }

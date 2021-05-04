@@ -259,11 +259,11 @@ class FormSynchronizer
                         continue;
                     }
 
-                    if (array_key_exists('label', $translationArray)) {
+                    if (\array_key_exists('label', $translationArray)) {
                         $existingTranslation->setLabel($translationArray['label']);
                     }
 
-                    if (array_key_exists('description', $translationArray)) {
+                    if (\array_key_exists('description', $translationArray)) {
                         $existingTranslation->setDescription($translationArray['description']);
                     }
                     $isUpdate = true;
@@ -272,10 +272,10 @@ class FormSynchronizer
 
                 if (!$isUpdate) {
                     $elementTranslation = new ElementTranslation();
-                    if (array_key_exists('label', $translationArray)) {
+                    if (\array_key_exists('label', $translationArray)) {
                         $elementTranslation->setLabel($translationArray['label']);
                     }
-                    if (array_key_exists('description', $translationArray)) {
+                    if (\array_key_exists('description', $translationArray)) {
                         $elementTranslation->setDescription($translationArray['description']);
                     }
                     $elementTranslation->setLocale($locale);
@@ -293,10 +293,10 @@ class FormSynchronizer
             if ($existingTranslation->getLocale()->getLocale() != $locale->getLocale()) {
                 continue;
             }
-            if (array_key_exists('label', $translationArray)) {
+            if (\array_key_exists('label', $translationArray)) {
                 $existingTranslation->setLabel($translationArray['label']);
             }
-            if (array_key_exists('description', $translationArray)) {
+            if (\array_key_exists('description', $translationArray)) {
                 $existingTranslation->setDescription($translationArray['description']);
             }
             $isUpdate = true;
@@ -304,10 +304,10 @@ class FormSynchronizer
         }
         if (!$isUpdate) {
             $formTranslation = new FormTranslation();
-            if (array_key_exists('label', $translationArray)) {
+            if (\array_key_exists('label', $translationArray)) {
                 $formTranslation->setLabel($translationArray['label']);
             }
-            if (array_key_exists('description', $translationArray)) {
+            if (\array_key_exists('description', $translationArray)) {
                 $formTranslation->setDescription($translationArray['description']);
             }
             $formTranslation->setLocale($locale);

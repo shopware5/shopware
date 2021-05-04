@@ -104,7 +104,7 @@ class Cache
             return false;
         }
 
-        if (!extension_loaded('apcu')) {
+        if (!\extension_loaded('apcu')) {
             return false;
         }
 

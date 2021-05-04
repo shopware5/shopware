@@ -117,7 +117,7 @@ class Requirements
     {
         $xmlObject = simplexml_load_string(file_get_contents($this->sourceFile));
 
-        if (!is_object($xmlObject->requirements)) {
+        if (!\is_object($xmlObject->requirements)) {
             throw new \RuntimeException('Requirements XML file is not valid.');
         }
 
@@ -158,11 +158,11 @@ class Requirements
             return $this->$m($requirement);
         }
 
-        if (extension_loaded($name)) {
+        if (\extension_loaded($name)) {
             return true;
         }
 
-        if (function_exists($name)) {
+        if (\function_exists($name)) {
             return true;
         }
 
@@ -260,7 +260,7 @@ class Requirements
      */
     private function checkOpcache()
     {
-        if (!extension_loaded('Zend OPcache')) {
+        if (!\extension_loaded('Zend OPcache')) {
             return [];
         }
 
@@ -304,11 +304,11 @@ class Requirements
      */
     private function checkCurl()
     {
-        if (function_exists('curl_version')) {
+        if (\function_exists('curl_version')) {
             $curl = curl_version();
 
             return $curl['version'];
-        } elseif (function_exists('curl_init')) {
+        } elseif (\function_exists('curl_init')) {
             return true;
         }
 
@@ -322,7 +322,7 @@ class Requirements
      */
     private function checkLibXml()
     {
-        if (defined('LIBXML_DOTTED_VERSION')) {
+        if (\defined('LIBXML_DOTTED_VERSION')) {
             return LIBXML_DOTTED_VERSION;
         }
 
@@ -336,7 +336,7 @@ class Requirements
      */
     private function checkGd()
     {
-        if (function_exists('gd_info')) {
+        if (\function_exists('gd_info')) {
             $gd = gd_info();
             if (preg_match('#[0-9.]+#', $gd['GD Version'], $match)) {
                 if (substr_count($match[0], '.') == 1) {
@@ -359,7 +359,7 @@ class Requirements
      */
     private function checkGdJpg()
     {
-        if (function_exists('gd_info')) {
+        if (\function_exists('gd_info')) {
             $gd = gd_info();
 
             return !empty($gd['JPEG Support']) || !empty($gd['JPG Support']);
@@ -375,7 +375,7 @@ class Requirements
      */
     private function checkFreetype()
     {
-        if (function_exists('gd_info')) {
+        if (\function_exists('gd_info')) {
             $gd = gd_info();
 
             return !empty($gd['FreeType Support']);
@@ -391,7 +391,7 @@ class Requirements
      */
     private function checkSessionSavePath()
     {
-        if (function_exists('session_save_path')) {
+        if (\function_exists('session_save_path')) {
             return (bool) session_save_path();
         }
 
@@ -409,7 +409,7 @@ class Requirements
      */
     private function checkDiskFreeSpace()
     {
-        if (function_exists('disk_free_space')) {
+        if (\function_exists('disk_free_space')) {
             // Prevent Warning: disk_free_space() [function.disk-free-space]: Value too large for defined data type
             $freeSpace = @disk_free_space(__DIR__);
 
@@ -441,7 +441,7 @@ class Requirements
      */
     private function checkIncludePath()
     {
-        if (function_exists('set_include_path')) {
+        if (\function_exists('set_include_path')) {
             $old = set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . DIRECTORY_SEPARATOR);
 
             return $old && get_include_path() != $old;
@@ -477,7 +477,7 @@ class Requirements
     private function decodePhpSize($val)
     {
         $val = trim($val);
-        $last = strtolower($val[strlen($val) - 1]);
+        $last = strtolower($val[\strlen($val) - 1]);
         $val = (float) $val;
         switch ($last) {
             /* @noinspection PhpMissingBreakStatementInspection */
@@ -535,7 +535,7 @@ class Requirements
     private function encodeSize($bytes)
     {
         $types = ['B', 'KB', 'MB', 'GB', 'TB'];
-        for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++);
+        for ($i = 0; $bytes >= 1024 && $i < (\count($types) - 1); $bytes /= 1024, $i++);
 
         return round($bytes, 2) . ' ' . $types[$i];
     }

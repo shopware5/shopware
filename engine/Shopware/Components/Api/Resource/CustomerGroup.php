@@ -221,7 +221,7 @@ class CustomerGroup extends Resource
     {
         $oldDiscounts = $group->getDiscounts();
         foreach ($oldDiscounts as $oldDiscount) {
-            if (!in_array($oldDiscount, $discounts)) {
+            if (!\in_array($oldDiscount, $discounts)) {
                 $this->getManager()->remove($oldDiscount);
             }
         }

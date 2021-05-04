@@ -167,7 +167,7 @@ class sExportTest extends PHPUnit\Framework\TestCase
 
         $handle = fopen($this->cacheDir . $fileName, 'w');
 
-        if (!is_resource($handle)) {
+        if (!\is_resource($handle)) {
             throw new RuntimeException('Cannot open file');
         }
 

@@ -76,7 +76,7 @@ class CustomerNumberSearchTest extends TestCase
 
     private static function assertSearchResultEqualsInput(CustomerNumberSearchResult $result): void
     {
-        static::assertCount(count(self::CUSTOMERNUMBERS), $result->getCustomers());
+        static::assertCount(\count(self::CUSTOMERNUMBERS), $result->getCustomers());
         static::assertCount(0, array_diff(self::CUSTOMERNUMBERS, self::getCustomerNumbers($result)));
     }
 

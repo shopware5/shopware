@@ -98,7 +98,7 @@ class Application extends BaseApplication
         if (!$this->commandsRegistered) {
             $this->setCommandLoader($this->kernel->getContainer()->get('console.command_loader'));
 
-            if (!in_array($input->getFirstArgument(), self::IMPORTANT_COMMANDS, true)) {
+            if (!\in_array($input->getFirstArgument(), self::IMPORTANT_COMMANDS, true)) {
                 $this->registerCommands($output);
             }
 
@@ -206,7 +206,7 @@ class Application extends BaseApplication
             $commandIds = $this->kernel->getContainer()->getParameter('console.command.ids');
 
             foreach ($commandIds as $id) {
-                if (!in_array($id, $lazyServices)) {
+                if (!\in_array($id, $lazyServices)) {
                     $this->add($this->kernel->getContainer()->get($id));
                 }
             }

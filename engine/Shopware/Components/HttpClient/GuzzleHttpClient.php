@@ -178,9 +178,9 @@ class GuzzleHttpClient implements HttpClientInterface
             'headers' => $headers,
         ];
 
-        if (is_array($content)) {
+        if (\is_array($content)) {
             $options['form_params'] = $content;
-        } elseif (is_string($content)) {
+        } elseif (\is_string($content)) {
             $options['body'] = $content;
         }
 

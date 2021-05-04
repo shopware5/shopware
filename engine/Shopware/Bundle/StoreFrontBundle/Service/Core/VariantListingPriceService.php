@@ -109,7 +109,7 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
             $number = $product->getNumber();
 
             /* @var PriceRule $cheapestPriceRule */
-            if (!array_key_exists($number, $cheapestPriceData)) {
+            if (!\array_key_exists($number, $cheapestPriceData)) {
                 $cheapestPriceRule = $product->getPriceRules()[0];
                 $displayFromPrice = $product->displayFromPrice();
             } else {

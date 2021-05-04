@@ -77,7 +77,7 @@ class CookieRemoveHandler extends CookieHandler implements CookieRemoveHandlerIn
             $cookieName = $responseCookie->getName();
 
             if (!$validationFunction($cookieName)) {
-                if (array_key_exists($cookieName, $requestCookies)) {
+                if (\array_key_exists($cookieName, $requestCookies)) {
                     continue;
                 }
 

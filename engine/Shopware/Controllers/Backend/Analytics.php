@@ -206,7 +206,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         // Sets the correct limit
         $limit = 25;
         if (strtolower($this->format) === 'csv') {
-            $limit = count($data);
+            $limit = \count($data);
         }
 
         $values = array_values($data);
@@ -216,7 +216,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('limit', $limit)
         );
 
-        $this->send($splice, count($data));
+        $this->send($splice, \count($data));
     }
 
     public function getRatingAction()
@@ -286,7 +286,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             (int) $this->Request()->getParam('limit', 25)
         );
 
-        $this->send($splice, count($data));
+        $this->send($splice, \count($data));
     }
 
     public function getReferrerRevenueAction()
@@ -306,7 +306,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $url = parse_url($row['referrer']);
             $host = $url['host'];
 
-            if (!array_key_exists($host, $referrer)) {
+            if (!\array_key_exists($host, $referrer)) {
                 $referrer[$host] = [
                     'host' => $host,
                     'orderCount' => 0,
@@ -321,7 +321,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 ];
             }
 
-            if (!in_array($row['userID'], $customers)) {
+            if (!\in_array($row['userID'], $customers)) {
                 if (strtotime($row['orderTime']) - strtotime($row['firstLogin']) < 60 * 60 * 24) {
                     $referrer[$host]['turnoverNewCustomer'] += $row['turnover'];
                     ++$referrer[$host]['newCustomers'];
@@ -419,7 +419,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $host = parse_url($row['referrer']);
             $host = str_replace('www.', '', $host['host']);
 
-            if (!array_key_exists($host, $referrer)) {
+            if (!\array_key_exists($host, $referrer)) {
                 $referrer[$host] = [
                     'count' => 0,
                     'referrer' => $host,
@@ -474,7 +474,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     break;
             }
 
-            if ($row['isNewCustomerOrder'] && !in_array($row['userId'], $users[$week])) {
+            if ($row['isNewCustomerOrder'] && !\in_array($row['userId'], $users[$week])) {
                 ++$customers[$week]['registration'];
             }
 
@@ -507,7 +507,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         foreach ($result->getData() as $row) {
             $age = floor((time() - strtotime($row['birthday'])) / (60 * 60 * 24 * 365));
 
-            if (!array_key_exists("$age", $ages)) {
+            if (!\array_key_exists("$age", $ages)) {
                 $ages["$age"] = [
                     'age' => $age,
                     'count' => 0,
@@ -516,11 +516,11 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
             if (!empty($shopIds)) {
                 foreach ($shopIds as $shopId) {
-                    if (!array_key_exists($shopId, $subShopCounts)) {
+                    if (!\array_key_exists($shopId, $subShopCounts)) {
                         $subShopCounts[$shopId] = 0;
                     }
 
-                    if (!array_key_exists('count' . $shopId, $ages["$age"])) {
+                    if (!\array_key_exists('count' . $shopId, $ages["$age"])) {
                         $ages["$age"]['count' . $shopId] = 0;
                     }
 
@@ -789,7 +789,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $ref = str_replace('+', ' ', $ref);
             $ref = trim(preg_replace('/\s\s+/', ' ', $ref));
 
-            if (!array_key_exists($ref, $keywords)) {
+            if (!\array_key_exists($ref, $keywords)) {
                 $keywords[$ref] = [
                     'keyword' => $ref,
                     'count' => 0,
@@ -801,7 +801,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $keywords = array_values($keywords);
 
-        $this->send($keywords, count($keywords));
+        $this->send($keywords, \count($keywords));
     }
 
     public function getSearchUrlsAction()
@@ -852,9 +852,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $ids = $this->getSelectedShopIds();
         $fields = [];
         foreach (array_keys($data) as $key) {
-            if (in_array($key, $this->shopFields)) {
+            if (\in_array($key, $this->shopFields)) {
                 foreach ($ids as $id) {
-                    if (array_key_exists($key . $id, $data)) {
+                    if (\array_key_exists($key . $id, $data)) {
                         $fields[$key . $id] = $id;
                     }
                 }
@@ -868,7 +868,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $fields = [];
         foreach (array_keys($data) as $key) {
-            if (in_array($key, $this->dateFields)) {
+            if (\in_array($key, $this->dateFields)) {
                 $fields[] = $key;
             }
         }
@@ -961,7 +961,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         if ($fields = $this->getDateFields($data[0])) {
             foreach ($data as &$row) {
                 foreach ($fields as $field) {
-                    if (array_key_exists($field, $row)) {
+                    if (\array_key_exists($field, $row)) {
                         $row[$field] = date('Y-m-d H:i:s', $row[$field]);
                     }
                 }
@@ -972,7 +972,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $shopNames = $this->getShopNames();
 
             foreach ($fields as $field => $shopId) {
-                $suffix = substr($field, 0, strlen($fields) - strlen($shopId));
+                $suffix = substr($field, 0, \strlen($fields) - \strlen($shopId));
                 $data = $this->switchArrayKeys($data, $shopNames[$shopId] . ' (' . $suffix . ')', $field);
             }
         }
@@ -983,7 +983,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     private function switchArrayKeys($array, $newKey, $oldKey)
     {
         foreach ($array as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $array[$key] = $this->switchArrayKeys($value, $newKey, $oldKey);
             } else {
                 $array[$newKey] = $array[$oldKey];
@@ -1127,8 +1127,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      */
     private function insertArrayAtPosition($insertValue, $array, $position)
     {
-        return array_slice($array, 0, $position, true) +
+        return \array_slice($array, 0, $position, true) +
                 $insertValue +
-                array_slice($array, $position, count($array), true);
+                \array_slice($array, $position, \count($array), true);
     }
 }

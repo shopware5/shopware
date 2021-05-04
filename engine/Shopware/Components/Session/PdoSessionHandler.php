@@ -541,7 +541,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
                     return '';
                 }
 
-                return is_resource($sessionRows[0][0]) ? stream_get_contents($sessionRows[0][0]) : $sessionRows[0][0];
+                return \is_resource($sessionRows[0][0]) ? stream_get_contents($sessionRows[0][0]) : $sessionRows[0][0];
             }
 
             if ($this->lockMode === self::LOCK_TRANSACTIONAL && $this->driver !== 'sqlite') {

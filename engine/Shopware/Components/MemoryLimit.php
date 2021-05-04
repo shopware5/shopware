@@ -55,9 +55,9 @@ class MemoryLimit
         $memoryLimit = strtolower($memoryLimit);
         $max = strtolower(ltrim($memoryLimit, '+'));
         if (strpos($max, '0x') === 0) {
-            $max = intval($max, 16);
+            $max = \intval($max, 16);
         } elseif (strpos($max, '0') === 0) {
-            $max = intval($max, 8);
+            $max = \intval($max, 8);
         } else {
             $max = (int) $max;
         }

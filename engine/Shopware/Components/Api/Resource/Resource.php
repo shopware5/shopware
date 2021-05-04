@@ -131,9 +131,9 @@ abstract class Resource implements ContainerAwareInterface
         if (!$this->getAcl()->isAllowed($role, $resource, $privilege)) {
             $message = sprintf(
                 'Role "%s" is not allowed to "%s" on resource "%s"',
-                is_string($role) ? $role : $role->getRoleId(),
+                \is_string($role) ? $role : $role->getRoleId(),
                 $privilege,
-                is_string($resource) ? $resource : $resource->getResourceId()
+                \is_string($resource) ? $resource : $resource->getResourceId()
             );
             throw new ApiException\PrivilegeException($message);
         }
@@ -429,7 +429,7 @@ abstract class Resource implements ContainerAwareInterface
             $method = 'get' . ucfirst($property);
 
             if (!method_exists($entity, $method)) {
-                throw new RuntimeException(sprintf('Method %s not found on entity %s', $method, get_class($entity)));
+                throw new RuntimeException(sprintf('Method %s not found on entity %s', $method, \get_class($entity)));
             }
             if ($entity->$method() === $value) {
                 return $entity;

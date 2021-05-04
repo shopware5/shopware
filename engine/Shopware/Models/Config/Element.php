@@ -258,7 +258,7 @@ class Element extends ModelEntity
     {
         $fields = ['label', 'value', 'description', 'required', 'scope', 'position'];
         foreach ($fields as $field) {
-            if (array_key_exists($field, $options)) {
+            if (\array_key_exists($field, $options)) {
                 $method = 'set' . ucfirst($field);
                 $this->$method($options[$field]);
                 unset($options[$field]);

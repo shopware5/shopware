@@ -86,7 +86,7 @@ class BlogUrlProvider implements UrlProviderInterface
             $blogIds[] = $blogCategory['id'];
         }
 
-        if (count($blogIds) === 0) {
+        if (\count($blogIds) === 0) {
             return [];
         }
 
@@ -128,7 +128,7 @@ class BlogUrlProvider implements UrlProviderInterface
         $routes = $this->router->generateList(array_column($blogs, 'urlParams'), $routingContext);
         $urls = [];
 
-        for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
+        for ($i = 0, $routeCount = \count($routes); $i < $routeCount; ++$i) {
             $urls[] = new Url($routes[$i], $blogs[$i]['changed'], 'weekly', Blog::class, $blogs[$i]['id']);
         }
 

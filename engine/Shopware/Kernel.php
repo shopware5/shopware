@@ -286,7 +286,7 @@ class Kernel extends SymfonyKernel
             $key = empty($prefix) ? $key : $prefix . $key;
             if (is_scalar($value)) {
                 ini_set($key, $value);
-            } elseif (is_array($value)) {
+            } elseif (\is_array($value)) {
                 $this->setPhpSettings($value, $key . '.');
             }
         }
@@ -339,7 +339,7 @@ class Kernel extends SymfonyKernel
      */
     public function getRootDir()
     {
-        return dirname(__DIR__, 2);
+        return \dirname(__DIR__, 2);
     }
 
     /**
@@ -398,7 +398,7 @@ class Kernel extends SymfonyKernel
      */
     public function getHttpCacheConfig()
     {
-        return is_array($this->config['httpcache']) ? $this->config['httpcache'] : [];
+        return \is_array($this->config['httpcache']) ? $this->config['httpcache'] : [];
     }
 
     /**
@@ -406,7 +406,7 @@ class Kernel extends SymfonyKernel
      */
     public function getElasticSearchConfig()
     {
-        return is_array($this->config['es']) ? $this->config['es'] : [];
+        return \is_array($this->config['es']) ? $this->config['es'] : [];
     }
 
     /**
@@ -595,7 +595,7 @@ class Kernel extends SymfonyKernel
         $xmlDumper = new XmlDumper($container);
         $xml = $xmlDumper->dump(['class' => $class, 'base_class' => $baseClass]);
 
-        \file_put_contents($this->getCacheDir() . '/container.xml', $xml);
+        file_put_contents($this->getCacheDir() . '/container.xml', $xml);
     }
 
     /**
@@ -696,7 +696,7 @@ class Kernel extends SymfonyKernel
         foreach ($options as $key => $option) {
             $container->setParameter($alias . '.' . $key, $option);
 
-            if (is_array($option)) {
+            if (\is_array($option)) {
                 $this->addShopwareConfig($container, $alias . '.' . $key, $option);
             }
         }
@@ -781,7 +781,7 @@ class Kernel extends SymfonyKernel
 
     private function loadPlugins(ContainerBuilder $container): void
     {
-        if (count($this->bundles) === 0) {
+        if (\count($this->bundles) === 0) {
             return;
         }
 

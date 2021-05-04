@@ -107,7 +107,7 @@ class Router
 
     private function convertIteratorToArray(iterable $iterator): array
     {
-        if (is_array($iterator)) {
+        if (\is_array($iterator)) {
             return $iterator;
         }
 

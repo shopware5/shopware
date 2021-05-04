@@ -76,7 +76,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
         );
 
         foreach ($required as &$product) {
-            if (!array_key_exists($product->getNumber(), $configurations)) {
+            if (!\array_key_exists($product->getNumber(), $configurations)) {
                 continue;
             }
 

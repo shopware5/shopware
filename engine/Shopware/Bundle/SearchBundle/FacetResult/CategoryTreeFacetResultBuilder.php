@@ -110,7 +110,7 @@ class CategoryTreeFacetResultBuilder
             }
 
             $parents = $category->getPath();
-            $lastParent = $parents[count($parents) - 1];
+            $lastParent = $parents[\count($parents) - 1];
 
             if ($lastParent == $parentId) {
                 $result[] = $category;
@@ -138,7 +138,7 @@ class CategoryTreeFacetResultBuilder
         return new TreeItem(
             $category->getId(),
             $category->getName(),
-            in_array($category->getId(), $actives),
+            \in_array($category->getId(), $actives),
             $values,
             $category->getAttributes()
         );

@@ -146,6 +146,6 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
             $mail->send();
         }
 
-        return count($users) . ' birthday email(s) with voucher was send.';
+        return \count($users) . ' birthday email(s) with voucher was send.';
     }
 }

@@ -45,7 +45,7 @@ class SysteminfoTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertTrue($this->View()->success);
 
         $body = $response->getBody();
-        $jsonBody = \json_decode($body, true);
+        $jsonBody = json_decode($body, true);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -63,7 +63,7 @@ class SysteminfoTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertTrue($this->View()->success);
 
         $body = $response->getBody();
-        $jsonBody = \json_decode($body, true);
+        $jsonBody = json_decode($body, true);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -79,7 +79,7 @@ class SysteminfoTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertTrue($this->View()->success);
 
         $body = $response->getBody();
-        $jsonBody = \json_decode($body, true);
+        $jsonBody = json_decode($body, true);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -92,7 +92,7 @@ class SysteminfoTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertTrue($this->View()->success);
 
         $body = $response->getBody();
-        $jsonBody = \json_decode($body, true);
+        $jsonBody = json_decode($body, true);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);

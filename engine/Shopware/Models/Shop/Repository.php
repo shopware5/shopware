@@ -490,7 +490,7 @@ class Repository extends ModelRepository
                 }
             } elseif ($requestPath === $currentShop['base_url']
                 || (strpos($requestPath, $currentShop['base_url']) === 0
-                    && in_array($requestPath[strlen($currentShop['base_url'])], ['/', '?']))
+                    && \in_array($requestPath[\strlen($currentShop['base_url'])], ['/', '?']))
             ) {
                 /*
                  * Check if the url is the same as the (sub)shop url

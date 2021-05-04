@@ -150,7 +150,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareI
         $io->writeln(sprintf('Calling URLs with %d concurrent requests', $concurrentRequests));
 
         // Print warming information
-        if (!in_array(false, $options, true)) {
+        if (!\in_array(false, $options, true)) {
             $io->write('Standard warmup - Warming every url type');
         } else {
             $optionsKeys = array_keys($options, function ($setting) {
@@ -191,10 +191,10 @@ class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareI
 
             // Warm URL-List
             while ($offset < $totalResultCount) {
-                $sliceUrls = array_slice($urls, $offset, $limit, true);
+                $sliceUrls = \array_slice($urls, $offset, $limit, true);
                 $cacheWarmer->warmUpUrls($sliceUrls, $context, $concurrentRequests);
 
-                $sliceCount = count($sliceUrls);
+                $sliceCount = \count($sliceUrls);
                 if ($sliceCount === 0) {
                     break;
                 }
@@ -223,7 +223,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareI
         foreach ($factory->getAllProviders() as $provider) {
             $providerName = $provider->getName();
 
-            if (in_array($providerName, $this->defaultProviderNames, true)) {
+            if (\in_array($providerName, $this->defaultProviderNames, true)) {
                 $options[$providerName] = $input[$providerName];
             } else {
                 $extensions[$providerName] = true;
@@ -234,7 +234,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareI
             $options = array_merge($options, $extensions);
         }
 
-        return (in_array(true, $options, true) || $input['extensions'] === true) ? $options : array_map(function () {
+        return (\in_array(true, $options, true) || $input['extensions'] === true) ? $options : array_map(function () {
             return true;
         }, array_merge($options, $extensions));
     }

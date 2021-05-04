@@ -596,7 +596,7 @@ class sCategories implements \Enlight_Hook
                 );
             }
 
-            $category['flag'] = in_array($categoryId, $activePath);
+            $category['flag'] = \in_array($categoryId, $activePath);
 
             $result[$categoryId] = $category;
         }

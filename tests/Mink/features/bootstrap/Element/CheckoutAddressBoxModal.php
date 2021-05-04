@@ -97,7 +97,7 @@ class CheckoutAddressBoxModal extends MultipleElement
             return false;
         }
 
-        if (count($givenAddress) === 5) {
+        if (\count($givenAddress) === 5) {
             $testAddress[] = $this->getCompanyOrNull();
         }
 

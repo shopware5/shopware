@@ -175,7 +175,7 @@ class sArticlesComparisons implements \Enlight_Hook
             [$this->session->offsetGet('sessionId')]
         );
 
-        if (!count($checkForProduct)) {
+        if (!\count($checkForProduct)) {
             return [];
         }
 
@@ -211,7 +211,7 @@ class sArticlesComparisons implements \Enlight_Hook
             [$this->session->offsetGet('sessionId')]
         );
 
-        if (!count($checkForProduct)) {
+        if (!\count($checkForProduct)) {
             return [];
         }
 
@@ -274,7 +274,7 @@ class sArticlesComparisons implements \Enlight_Hook
             ]);
 
             foreach ($productProperties as $productProperty) {
-                if (!array_key_exists($productProperty['id'], $properties)) {
+                if (!\array_key_exists($productProperty['id'], $properties)) {
                     //the key is not part of the array so add it to the end
                     $properties[$productProperty['id']] = $this->extractPropertyTranslation($productProperty);
                 }
@@ -297,7 +297,7 @@ class sArticlesComparisons implements \Enlight_Hook
         foreach ($articles as $productKey => $product) {
             $productProperties = [];
             foreach ($properties as $propertyKey => $property) {
-                if (is_array($product['sProperties']) && array_key_exists($propertyKey, $product['sProperties'])) {
+                if (\is_array($product['sProperties']) && \array_key_exists($propertyKey, $product['sProperties'])) {
                     $productProperties[$propertyKey] = $product['sProperties'][$propertyKey];
                 } else {
                     $productProperties[$propertyKey] = null;
@@ -349,6 +349,6 @@ class sArticlesComparisons implements \Enlight_Hook
      */
     private function containsTranslation($translation)
     {
-        return is_array($translation) && isset($translation['optionName']) && $translation['optionName'];
+        return \is_array($translation) && isset($translation['optionName']) && $translation['optionName'];
     }
 }

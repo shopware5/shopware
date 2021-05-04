@@ -65,7 +65,7 @@ class PropertyIndexer implements DataIndexerInterface
 
         while ($ids = $query->fetch()) {
             $this->indexProperties($index, $ids);
-            $progress->advance(count($ids));
+            $progress->advance(\count($ids));
         }
         $progress->finish();
     }

@@ -274,7 +274,7 @@ class CategoryDenormalization
             return 1;
         }
 
-        return count($rows);
+        return \count($rows);
     }
 
     /**
@@ -350,7 +350,7 @@ class CategoryDenormalization
             return 1;
         }
 
-        return count($rows);
+        return \count($rows);
     }
 
     /**
@@ -384,7 +384,7 @@ class CategoryDenormalization
         }
 
         // in case that a leaf category is moved
-        if (count($affectedCategories) === 0) {
+        if (\count($affectedCategories) === 0) {
             $affectedCategories = [$categoryId];
         }
 

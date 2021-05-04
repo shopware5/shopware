@@ -59,7 +59,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $sort = $this->Request()->getParam('sort', [['property' => 'dispatch.name', 'direction' => 'ASC']]);
 
         $filter = $this->Request()->getParam('filter');
-        if (is_array($filter) && isset($filter[0]['value'])) {
+        if (\is_array($filter) && isset($filter[0]['value'])) {
             $filter = $filter[0]['value'];
         }
 
@@ -100,7 +100,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $sort = $this->Request()->getParam('sort', [['property' => 'dispatch.name', 'direction' => 'ASC']]);
 
         $filter = $this->Request()->getParam('filter');
-        if (is_array($filter) && isset($filter[0]['value'])) {
+        if (\is_array($filter) && isset($filter[0]['value'])) {
             $filter = $filter[0]['value'];
         }
 
@@ -126,7 +126,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $dispatchId = $this->Request()->getParam('dispatchId');
         $filter = $this->Request()->getParam('filter', []);
 
-        if (is_array($filter) && isset($filter[0]['value'])) {
+        if (\is_array($filter) && isset($filter[0]['value'])) {
             $filter = $filter[0]['value'];
         }
         $query = $this->getRepository()->getShippingCostsMatrixQuery($dispatchId, $filter);
@@ -271,11 +271,11 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $costsMatrix = $this->Request()->getParam('costMatrix');
         $params = $this->Request()->getParams();
 
-        if (!empty($params) && !is_array($costsMatrix)) {
+        if (!empty($params) && !\is_array($costsMatrix)) {
             $costsMatrix = [$params];
         }
 
-        if (!is_array($costsMatrix)) {
+        if (!\is_array($costsMatrix)) {
             $this->View()->assign(['success' => false, 'errorMsg' => 'Empty data set.']);
 
             return;
@@ -365,7 +365,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $sort = $this->Request()->getParam('sort');
         $filter = $this->Request()->getParam('filter');
 
-        if (is_array($filter) && isset($filter[0]['value'])) {
+        if (\is_array($filter) && isset($filter[0]['value'])) {
             $filter = $filter[0]['value'];
         }
 

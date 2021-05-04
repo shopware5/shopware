@@ -94,7 +94,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
 
         if (!empty($shopIds)) {
             $shopsWithThemes = array_filter($shopsWithThemes, function (Shop $shop) use ($shopIds) {
-                return in_array($shop->getId(), $shopIds);
+                return \in_array($shop->getId(), $shopIds);
             });
         }
 

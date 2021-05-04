@@ -73,7 +73,7 @@ class MediaManagerTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertTrue($jsonBody['success']);
 
         $parentNode = $jsonBody['data'][0];
-        $newAlbum = $parentNode['data'][count($parentNode['data']) - 1];
+        $newAlbum = $parentNode['data'][\count($parentNode['data']) - 1];
 
         static::assertEquals($parentNode['thumbnailSize'], $newAlbum['thumbnailSize']);
         static::assertEquals($parentNode['thumbnailHighDpi'], $newAlbum['thumbnailHighDpi']);

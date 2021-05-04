@@ -73,7 +73,7 @@ class PluginContextTest extends TestCase
         $plugin->install($context);
         static::assertArrayHasKey('cache', $context->getScheduled());
         static::assertNotEmpty($context->getScheduled()['cache']);
-        static::assertCount(count(InstallContext::CACHE_LIST_ALL), $context->getScheduled()['cache']);
+        static::assertCount(\count(InstallContext::CACHE_LIST_ALL), $context->getScheduled()['cache']);
     }
 
     public function testDefault()

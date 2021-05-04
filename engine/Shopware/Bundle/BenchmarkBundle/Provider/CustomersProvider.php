@@ -173,7 +173,7 @@ class CustomersProvider implements BatchableProviderInterface
             return $customer;
         }
 
-        if (in_array($customer['gender'], ['mrs', 'ms'])) {
+        if (\in_array($customer['gender'], ['mrs', 'ms'])) {
             $customer['gender'] = 'female';
 
             return $customer;

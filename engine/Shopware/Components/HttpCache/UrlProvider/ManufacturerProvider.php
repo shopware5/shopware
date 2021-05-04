@@ -73,7 +73,7 @@ class ManufacturerProvider implements UrlProviderInterface
 
         $result = $qb->execute()->fetchAll();
 
-        if (!count($result)) {
+        if (!\count($result)) {
             return [];
         }
 

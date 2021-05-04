@@ -72,7 +72,7 @@ class Repository extends ModelRepository
             ->setParameter(6, null);
 
         $ids = $this->getBannerIds($filter, $limit);
-        if (!count($ids)) {
+        if (!\count($ids)) {
             return false;
         }
 
@@ -135,7 +135,7 @@ class Repository extends ModelRepository
         shuffle($retval);
 
         if ($limit > 0) {
-            $retval = array_slice($retval, 0, $limit);
+            $retval = \array_slice($retval, 0, $limit);
         }
 
         return $retval;

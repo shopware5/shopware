@@ -64,7 +64,7 @@ class PremiumTest extends \Enlight_Components_Test_Controller_TestCase
 
         // Testing the search-function
         $filter = [
-            'filter' => \json_encode([[
+            'filter' => json_encode([[
                 'value' => 'test',
             ]]),
         ];

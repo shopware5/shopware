@@ -61,7 +61,7 @@ class Theme implements Form\Interfaces\Persister
      */
     private function saveContainer(Form\Interfaces\Container $container, Template $template, TemplateConfig\Layout $parent = null)
     {
-        $class = get_class($container);
+        $class = \get_class($container);
 
         $entity = $this->createContainer($container, $template, $parent);
 
@@ -156,7 +156,7 @@ class Theme implements Form\Interfaces\Persister
     {
         /** @var Form\Field $field */
         $lessCompatible = true;
-        if (array_key_exists('lessCompatible', $field->getAttributes())) {
+        if (\array_key_exists('lessCompatible', $field->getAttributes())) {
             $attributes = $field->getAttributes();
             $lessCompatible = (bool) $attributes['lessCompatible'];
         }
@@ -171,7 +171,7 @@ class Theme implements Form\Interfaces\Persister
             'lessCompatible' => $lessCompatible,
         ];
 
-        $class = get_class($field);
+        $class = \get_class($field);
 
         switch ($class) {
             case 'Shopware\\Components\\Form\\Field\\Text':

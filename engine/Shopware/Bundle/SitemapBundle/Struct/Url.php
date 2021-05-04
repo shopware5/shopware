@@ -87,7 +87,7 @@ class Url
      */
     public function __toString()
     {
-        return \sprintf(
+        return sprintf(
             '<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
             $this->getLoc(),
             $this->getLastmod()->format('Y-m-d'),

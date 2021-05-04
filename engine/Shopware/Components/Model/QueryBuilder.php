@@ -95,7 +95,7 @@ class QueryBuilder extends BaseQueryBuilder
 
         $existingParameters = $this->getParameters();
 
-        if (count($existingParameters) && is_array($parameters)) {
+        if (\count($existingParameters) && \is_array($parameters)) {
             return $this->addParameters($parameters);
         }
 
@@ -188,14 +188,14 @@ class QueryBuilder extends BaseQueryBuilder
                 $where = $where['value'];
             }
 
-            if (!\preg_match('#^[a-z][a-z0-9_.]+$#i', $exprKey)) {
+            if (!preg_match('#^[a-z][a-z0-9_.]+$#i', $exprKey)) {
                 continue;
             }
 
             // The return value of uniqid, even w/o parameters, may contain dots in some environments
             // so we make sure to strip those as well
-            $parameterKey = \str_replace(['.'], ['_'], $exprKey . \uniqid());
-            if (isset($this->alias) && \strpos($exprKey, '.') === false) {
+            $parameterKey = str_replace(['.'], ['_'], $exprKey . uniqid());
+            if (isset($this->alias) && strpos($exprKey, '.') === false) {
                 $exprKey = $this->alias . '.' . $exprKey;
             }
 
@@ -224,7 +224,7 @@ class QueryBuilder extends BaseQueryBuilder
             }
 
             $exprParameterKey = ':' . $parameterKey;
-            if (is_array($where)) {
+            if (\is_array($where)) {
                 $exprParameterKey = '(' . $exprParameterKey . ')';
             }
 
@@ -264,7 +264,7 @@ class QueryBuilder extends BaseQueryBuilder
     {
         /** @var array<int, mixed|null> $select */
         $select = $this->getDQLPart('select');
-        if (is_array($orderBy)) {
+        if (\is_array($orderBy)) {
             foreach ($orderBy as $order) {
                 if (!isset($order['property']) || !preg_match('#^[a-zA-Z0-9_.]+$#', $order['property'])) {
                     continue;

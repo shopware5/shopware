@@ -229,7 +229,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         }
 
         if (self::$_origErrorHandler !== null) {
-            return call_user_func(self::$_origErrorHandler, $errno, $errstr, $errfile, $errline);
+            return \call_user_func(self::$_origErrorHandler, $errno, $errstr, $errfile, $errline);
         }
 
         return true;
@@ -272,7 +272,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         $logger = $this->get('corelogger');
         foreach ($exceptions as $exception) {
             // Check the exception having been catched with the list of exceptions to ignore
-            if (in_array(get_class($exception), $this->ignoredExceptionClasses, true)) {
+            if (\in_array(\get_class($exception), $this->ignoredExceptionClasses, true)) {
                 continue;
             }
 
@@ -295,7 +295,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         $logLevel = \Monolog\Logger::toMonologLevel($config->get('logMailLevel'));
         $recipients = array_filter(explode("\n", $config->get('logMailAddress')));
 
-        if (count($recipients) < 1) {
+        if (\count($recipients) < 1) {
             $recipients[] = $config->get('mail');
         }
 

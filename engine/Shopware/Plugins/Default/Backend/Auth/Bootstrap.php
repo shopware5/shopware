@@ -340,7 +340,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         );
 
         // if default shop locale is allowed, use it, otherwise use the first allowed locale
-        return in_array($defaultShopLocale, $backendLocales) ? $defaultShopLocale : array_shift($backendLocales);
+        return \in_array($defaultShopLocale, $backendLocales) ? $defaultShopLocale : array_shift($backendLocales);
     }
 
     /**

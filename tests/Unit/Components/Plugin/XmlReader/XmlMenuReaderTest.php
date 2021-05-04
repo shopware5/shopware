@@ -49,7 +49,7 @@ class XmlMenuReaderTest extends TestCase
         $dom = new DOMDocument();
         $dom->loadXML('<entries></entries>');
 
-        $reflection = new ReflectionClass(get_class($this->menuReader));
+        $reflection = new ReflectionClass(\get_class($this->menuReader));
         $method = $reflection->getMethod('parseFile');
         $method->setAccessible(true);
 

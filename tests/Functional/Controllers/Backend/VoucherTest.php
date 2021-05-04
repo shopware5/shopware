@@ -92,7 +92,7 @@ class VoucherTest extends \Enlight_Components_Test_Controller_TestCase
         $returnData = $this->View()->data;
         static::assertNotEmpty($returnData);
         static::assertGreaterThan(0, $this->View()->totalCount);
-        $lastInsert = $returnData[count($returnData) - 1];
+        $lastInsert = $returnData[\count($returnData) - 1];
         static::assertEquals($voucher->getId(), $lastInsert['id']);
 
         $this->manager->remove($voucher);
@@ -284,7 +284,7 @@ class VoucherTest extends \Enlight_Components_Test_Controller_TestCase
         $lastHeader = array_pop($header);
         static::assertEquals('Content-Disposition', $lastHeader['name']);
         static::assertEquals('attachment;filename=voucherCodes.csv', $lastHeader['value']);
-        static::assertGreaterThan(1000, strlen($this->Response()->getBody()));
+        static::assertGreaterThan(1000, \strlen($this->Response()->getBody()));
 
         return $id;
     }

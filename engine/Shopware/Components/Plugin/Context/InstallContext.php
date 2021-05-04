@@ -135,7 +135,7 @@ class InstallContext implements \JsonSerializable
      */
     public function scheduleClearCache(array $caches)
     {
-        if (!array_key_exists('cache', $this->scheduled)) {
+        if (!\array_key_exists('cache', $this->scheduled)) {
             $this->scheduled['cache'] = [];
         }
         $this->scheduled['cache'] = array_values(array_unique(array_merge($this->scheduled['cache'], $caches)));

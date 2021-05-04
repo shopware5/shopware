@@ -117,7 +117,7 @@ class CleanupController
             $this->cleanupMedia();
         }
 
-        if (count($cleanupList) == 0) {
+        if (\count($cleanupList) == 0) {
             $_SESSION['CLEANUP_DONE'] = true;
             $this->response->redirect($this->app->urlFor('done'));
         }
@@ -130,13 +130,13 @@ class CleanupController
                 $result = array_merge($result, Utils::cleanPath($path));
             }
 
-            if (count($result) == 0) {
+            if (\count($result) == 0) {
                 $_SESSION['CLEANUP_DONE'] = true;
                 $this->response->redirect($this->app->urlFor('done'));
             } else {
                 $result = array_map(
                     function ($path) {
-                        return substr($path, strlen(SW_PATH) + 1);
+                        return substr($path, \strlen(SW_PATH) + 1);
                     },
                     $result
                 );
@@ -146,7 +146,7 @@ class CleanupController
         } else {
             $cleanupList = array_map(
                 function ($path) {
-                    return substr($path, strlen(SW_PATH) + 1);
+                    return substr($path, \strlen(SW_PATH) + 1);
                 },
                 $cleanupList
             );

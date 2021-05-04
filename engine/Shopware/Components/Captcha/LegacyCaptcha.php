@@ -135,7 +135,7 @@ class LegacyCaptcha implements CaptchaInterface
         $string = implode(' ', str_split($string));
 
         if (!empty($font)) {
-            for ($i = 0; $i <= strlen($string); ++$i) {
+            for ($i = 0; $i <= \strlen($string); ++$i) {
                 $rand1 = Random::getInteger(35, 40);
                 $rand2 = Random::getInteger(15, 20);
                 $rand3 = Random::getInteger(60, 70);

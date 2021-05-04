@@ -77,7 +77,7 @@ class ThumbnailCleanupCommand extends ShopwareCommand
 
         $thumbnailFiles = $this->searchThumbnails($io, $filesystem);
 
-        if (count($thumbnailFiles) === 0) {
+        if (\count($thumbnailFiles) === 0) {
             $io->success('No orphaned thumbnails found.');
 
             return;
@@ -89,13 +89,13 @@ class ThumbnailCleanupCommand extends ShopwareCommand
             $io->listing($thumbnailFiles);
         }
 
-        if (!$io->confirm(sprintf('Found %d orphaned thumbnails. Are you sure you want to delete the files? This step is irreversible.', count($thumbnailFiles)))) {
+        if (!$io->confirm(sprintf('Found %d orphaned thumbnails. Are you sure you want to delete the files? This step is irreversible.', \count($thumbnailFiles)))) {
             return;
         }
 
         $deletedThumbnails = $this->deleteThumbnails($io, $filesystem, $thumbnailFiles);
 
-        $io->success(sprintf('Removed %d/%d orphaned thumbnails.', $deletedThumbnails, count($thumbnailFiles)));
+        $io->success(sprintf('Removed %d/%d orphaned thumbnails.', $deletedThumbnails, \count($thumbnailFiles)));
     }
 
     /**
@@ -135,7 +135,7 @@ class ThumbnailCleanupCommand extends ShopwareCommand
             // strip thumbnail info to get the base filename
             $strippedName = preg_replace('/(_[0-9]+x[0-9]+(@2x)?)$/', '', $baseName);
 
-            if (array_key_exists($strippedName, $this->baseFiles)) {
+            if (\array_key_exists($strippedName, $this->baseFiles)) {
                 return;
             }
 
@@ -146,7 +146,7 @@ class ThumbnailCleanupCommand extends ShopwareCommand
 
         $this->baseFiles[$baseName] = 1;
 
-        if (array_key_exists($baseName, $this->thumbnailFiles)) {
+        if (\array_key_exists($baseName, $this->thumbnailFiles)) {
             unset($this->thumbnailFiles[$baseName]);
         }
     }
@@ -184,7 +184,7 @@ class ThumbnailCleanupCommand extends ShopwareCommand
     private function deleteThumbnails(SymfonyStyle $io, FilesystemInterface $filesystem, array $thumbnailFiles)
     {
         $deleted = 0;
-        $progressBar = $io->createProgressBar(count($thumbnailFiles));
+        $progressBar = $io->createProgressBar(\count($thumbnailFiles));
         $progressBar->setFormat('verbose');
 
         foreach ($thumbnailFiles as $mediaPath) {

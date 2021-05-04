@@ -100,7 +100,7 @@ class WildfireFormatter extends BaseWildfireFormatter
             $message['extra'] = $record['extra'];
             $handleError = true;
         }
-        if (count($message) === 1) {
+        if (\count($message) === 1) {
             $message = reset($message);
         }
 
@@ -162,7 +162,7 @@ class WildfireFormatter extends BaseWildfireFormatter
             return $trace;
         }
 
-        for ($i = 0; $i < count($trace); ++$i) {
+        for ($i = 0; $i < \count($trace); ++$i) {
             if (isset($trace[$i]['args'])) {
                 $trace[$i]['args'] = $this->encodeObject($trace[$i]['args']);
             }
@@ -184,7 +184,7 @@ class WildfireFormatter extends BaseWildfireFormatter
 
         $trace = array_splice($trace, $options['traceOffset']);
 
-        if (!count($trace)) {
+        if (!\count($trace)) {
             return $trace;
         }
 
@@ -207,21 +207,21 @@ class WildfireFormatter extends BaseWildfireFormatter
     {
         $return = [];
 
-        if (is_resource($object)) {
+        if (\is_resource($object)) {
             return '** ' . (string) $object . ' **';
-        } elseif (is_object($object)) {
+        } elseif (\is_object($object)) {
             if ($objectDepth > $this->options['maxObjectDepth']) {
                 return '** Max Object Depth (' . $this->options['maxObjectDepth'] . ') **';
             }
 
             foreach ($this->objectStack as $refVal) {
                 if ($refVal === $object) {
-                    return '** Recursion (' . get_class($object) . ') **';
+                    return '** Recursion (' . \get_class($object) . ') **';
                 }
             }
             $this->objectStack[] = $object;
 
-            $return['__className'] = $class = get_class($object);
+            $return['__className'] = $class = \get_class($object);
 
             $reflectionClass = new \ReflectionClass($class);
             $properties = [];
@@ -250,10 +250,10 @@ class WildfireFormatter extends BaseWildfireFormatter
                 }
 
                 if (!(isset($this->objectFilters[$class])
-                    && is_array($this->objectFilters[$class])
-                    && in_array($just_name, $this->objectFilters[$class]))
+                    && \is_array($this->objectFilters[$class])
+                    && \in_array($just_name, $this->objectFilters[$class]))
                 ) {
-                    if (array_key_exists($raw_name, $members) && !$property->isStatic()) {
+                    if (\array_key_exists($raw_name, $members) && !$property->isStatic()) {
                         $return[$name] = $this->encodeObject($members[$raw_name], $objectDepth + 1);
                     } else {
                         if (method_exists($property, 'setAccessible')) {
@@ -283,8 +283,8 @@ class WildfireFormatter extends BaseWildfireFormatter
                     $name = 'undeclared:' . $name;
 
                     if (!(isset($this->objectFilters[$class])
-                        && is_array($this->objectFilters[$class])
-                        && in_array($just_name, $this->objectFilters[$class]))
+                        && \is_array($this->objectFilters[$class])
+                        && \in_array($just_name, $this->objectFilters[$class]))
                     ) {
                         $return[$name] = $this->encodeObject($value, $objectDepth + 1);
                     } else {
@@ -294,7 +294,7 @@ class WildfireFormatter extends BaseWildfireFormatter
             }
 
             array_pop($this->objectStack);
-        } elseif (is_array($object)) {
+        } elseif (\is_array($object)) {
             if ($arrayDepth > $this->options['maxArrayDepth']) {
                 return '** Max Array Depth (' . $this->options['maxArrayDepth'] . ') **';
             }
@@ -304,7 +304,7 @@ class WildfireFormatter extends BaseWildfireFormatter
                 // if the recursion is not reset here as it contains
                 // a reference to itself. This is the only way I have come up
                 // with to stop infinite recursion in this case.
-                if ($key == 'GLOBALS' && is_array($val) && array_key_exists('GLOBALS', $val)) {
+                if ($key == 'GLOBALS' && \is_array($val) && \array_key_exists('GLOBALS', $val)) {
                     $val['GLOBALS'] = '** Recursion (GLOBALS) **';
                 }
                 $return[$key] = $this->encodeObject($val, 1, $arrayDepth + 1);

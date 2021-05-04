@@ -27,16 +27,16 @@ use Shopware\Components\Password\Manager;
 /*
  * @see rfc for argon2 in PHP -> https://wiki.php.net/rfc/argon2_password_hash
  */
-if (!defined('PASSWORD_ARGON2_DEFAULT_MEMORY_COST')) {
-    define('PASSWORD_ARGON2_DEFAULT_MEMORY_COST', 1024); // 1KiB
+if (!\defined('PASSWORD_ARGON2_DEFAULT_MEMORY_COST')) {
+    \define('PASSWORD_ARGON2_DEFAULT_MEMORY_COST', 1024); // 1KiB
 }
 
-if (!defined('PASSWORD_ARGON2_DEFAULT_TIME_COST')) {
-    define('PASSWORD_ARGON2_DEFAULT_TIME_COST', 2);
+if (!\defined('PASSWORD_ARGON2_DEFAULT_TIME_COST')) {
+    \define('PASSWORD_ARGON2_DEFAULT_TIME_COST', 2);
 }
 
-if (!defined('PASSWORD_ARGON2_DEFAULT_THREADS')) {
-    define('PASSWORD_ARGON2_DEFAULT_THREADS', 2);
+if (!\defined('PASSWORD_ARGON2_DEFAULT_THREADS')) {
+    \define('PASSWORD_ARGON2_DEFAULT_THREADS', 2);
 }
 
 class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Components_Plugin_Bootstrap

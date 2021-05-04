@@ -298,7 +298,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             return true;
         }
 
-        if (!array_key_exists($defaultShopCategoryId, $categoryPath)) {
+        if (!\array_key_exists($defaultShopCategoryId, $categoryPath)) {
             return false;
         }
 

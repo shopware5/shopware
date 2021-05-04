@@ -398,7 +398,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
 
         // Count the views of this blog item
         $visitedBlogItems = $session->get('visitedBlogItems');
-        if (in_array($blogArticleId, $visitedBlogItems, true)) {
+        if (\in_array($blogArticleId, $visitedBlogItems, true)) {
             return;
         }
         // Use plain sql, because the http cache should no be cleared

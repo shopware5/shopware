@@ -470,7 +470,7 @@ class HookManagerTest extends TestCase
             ) {
                 ++$secondHookCallCounter;
                 $this->assertHookArgs($args);
-                static::assertTrue(in_array($args->getSubject()->originalMethodCallCounter, [0, 1]));
+                static::assertTrue(\in_array($args->getSubject()->originalMethodCallCounter, [0, 1]));
                 if ($secondHookCallCounter === 1) {
                     static::assertNull($args->getReturn());
                 } else {

@@ -38,7 +38,7 @@ class EventComponentHandlerTest extends \Enlight_Components_Test_TestCase
                 ->getMock();
 
         $eventComponentHandlerMock
-                ->expects(static::atLeast(count($emotionElementIds)))
+                ->expects(static::atLeast(\count($emotionElementIds)))
                 ->method('handle');
 
         $emotionElementService = new EmotionElementService(

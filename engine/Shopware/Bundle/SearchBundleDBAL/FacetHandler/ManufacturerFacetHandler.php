@@ -132,7 +132,7 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
             $listItem = new ValueListItem(
                 $manufacturer->getId(),
                 $manufacturer->getName(),
-                in_array($manufacturer->getId(), $activeIds),
+                \in_array($manufacturer->getId(), $activeIds),
                 $manufacturer->getAttributes()
             );
 

@@ -192,7 +192,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
             if ($handler instanceof PartialConditionHandlerInterface) {
                 $handler->handleFilter($condition, $criteria, $search, $context);
             } else {
-                trigger_error(sprintf("Condition handler %s doesn't support new filter mode. Class has to implement \\Shopware\\Bundle\\SearchBundleES\\PartialConditionHandlerInterface.", get_class($handler)), E_USER_DEPRECATED);
+                trigger_error(sprintf("Condition handler %s doesn't support new filter mode. Class has to implement \\Shopware\\Bundle\\SearchBundleES\\PartialConditionHandlerInterface.", \get_class($handler)), E_USER_DEPRECATED);
                 $handler->handle($condition, $criteria, $search, $context);
             }
         }
@@ -202,12 +202,12 @@ class ProductNumberSearch implements ProductNumberSearchInterface
 
             // Trigger error when new interface isn't implemented
             if (!$handler instanceof PartialConditionHandlerInterface) {
-                trigger_error(sprintf('Condition handler "%s" doesn\'t support new filter mode. Class has to implement "%s".', get_class($handler), PartialConditionHandlerInterface::class), E_USER_DEPRECATED);
+                trigger_error(sprintf('Condition handler "%s" doesn\'t support new filter mode. Class has to implement "%s".', \get_class($handler), PartialConditionHandlerInterface::class), E_USER_DEPRECATED);
             }
 
             // Filter mode active and handler doesn't supports the filter mode?
             if (!$handler instanceof PartialConditionHandlerInterface && $criteria->generatePartialFacets()) {
-                throw new \Exception(sprintf('New filter mode activated, handler class %s doesn\'t support this mode', get_class($handler)));
+                throw new \Exception(sprintf('New filter mode activated, handler class %s doesn\'t support this mode', \get_class($handler)));
             }
 
             // Filter mode active and handler supports new filter mode?
@@ -236,10 +236,10 @@ class ProductNumberSearch implements ProductNumberSearchInterface
         $sortedFacets = [];
 
         foreach ($result->getFacets() as $facetResult) {
-            if (array_key_exists($facetResult->getFacetName(), $sorting)) {
+            if (\array_key_exists($facetResult->getFacetName(), $sorting)) {
                 $position = $sorting[$facetResult->getFacetName()];
             } else {
-                $position = count($sorting) + count($sortedFacets) + 1;
+                $position = \count($sorting) + \count($sortedFacets) + 1;
             }
 
             $sortedFacets[$position] = $facetResult;

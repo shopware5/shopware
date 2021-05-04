@@ -100,7 +100,7 @@ class SupplierTest extends \Enlight_Components_Test_Controller_TestCase
     public function testUpdateSupplier($lastSupplier)
     {
         foreach ($lastSupplier as $key => $value) {
-            if (!is_null($value)) {
+            if (!\is_null($value)) {
                 $supplier[$key] = $value;
             }
         }

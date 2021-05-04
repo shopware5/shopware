@@ -50,7 +50,7 @@ class AclTest extends Enlight_Components_Test_TestCase
     public function testAclShouldContainRoles()
     {
         $roles = $this->acl->getRoles();
-        static::assertGreaterThan(0, count($roles));
+        static::assertGreaterThan(0, \count($roles));
     }
 
     /**
@@ -59,7 +59,7 @@ class AclTest extends Enlight_Components_Test_TestCase
     public function testAclShouldContainResources()
     {
         $resources = $this->acl->getResources();
-        static::assertGreaterThan(0, count($resources));
+        static::assertGreaterThan(0, \count($resources));
     }
 
     /**

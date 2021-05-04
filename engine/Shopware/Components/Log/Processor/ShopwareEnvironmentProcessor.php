@@ -67,7 +67,7 @@ class ShopwareEnvironmentProcessor
             $record['extra']['shop'] = 'No shop data available';
         }
 
-        if (!empty($_SESSION) && is_object($_SESSION['Shopware']['Auth'])) {
+        if (!empty($_SESSION) && \is_object($_SESSION['Shopware']['Auth'])) {
             $record['extra']['session'] = [
                 'userId' => $_SESSION['Shopware']['Auth']->id,
                 'roleId' => $_SESSION['Shopware']['Auth']->roleID,
@@ -109,7 +109,7 @@ class ShopwareEnvironmentProcessor
     {
         unset($array[$unwantedKey]);
         foreach ($array as &$value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->recursiveUnset($value, $unwantedKey);
             }
         }

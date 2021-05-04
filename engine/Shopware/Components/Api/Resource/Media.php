@@ -76,7 +76,7 @@ class Media extends Resource
         }
 
         $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
-        if (is_array($media)) {
+        if (\is_array($media)) {
             $media['path'] = $mediaService->getUrl($media['path']);
         } else {
             $media->setPath($mediaService->getUrl($media->getPath()));
@@ -130,7 +130,7 @@ class Media extends Resource
         $media->fromArray($params);
         $attribute = new MediaAttribute();
 
-        if (isset($params['attribute']) && is_array($params['attribute'])) {
+        if (isset($params['attribute']) && \is_array($params['attribute'])) {
             $attribute->fromArray($params['attribute']);
         }
         $media->setAttribute($attribute);
@@ -194,7 +194,7 @@ class Media extends Resource
             }
         }
 
-        if (isset($params['attribute']) && is_array($params['attribute'])) {
+        if (isset($params['attribute']) && \is_array($params['attribute'])) {
             $attribute = $media->getAttribute();
             $attribute->fromArray($params['attribute']);
 
@@ -505,7 +505,7 @@ class Media extends Resource
     {
         $oldFilename = pathinfo($oldPath, PATHINFO_BASENAME);
 
-        if (strlen($oldFilename) >= self::FILENAME_LENGTH) {
+        if (\strlen($oldFilename) >= self::FILENAME_LENGTH) {
             return str_replace($oldFilename, $filename, $oldPath);
         }
 
@@ -519,7 +519,7 @@ class Media extends Resource
     {
         if (file_exists($file)) {
             unlink($file);
-            rmdir(dirname($file));
+            rmdir(\dirname($file));
         }
     }
 }

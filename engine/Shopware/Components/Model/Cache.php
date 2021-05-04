@@ -82,7 +82,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      */
     protected function doContains($id)
     {
-        return is_int($this->cache->test($this->prefix . md5($id)));
+        return \is_int($this->cache->test($this->prefix . md5($id)));
     }
 
     /**

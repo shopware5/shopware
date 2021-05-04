@@ -85,7 +85,7 @@ class CurlClient implements Client
      */
     private function call($url, $method = self::METHOD_GET, array $header = [], $data = null)
     {
-        if (!in_array($method, $this->validMethods)) {
+        if (!\in_array($method, $this->validMethods)) {
             throw new ClientException('Invalid HTTP-METHOD: ' . $method);
         }
 

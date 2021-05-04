@@ -205,7 +205,7 @@ class Basic implements GeneratorInterface
         // Creates a new image with given size
         $newImage = imagecreatetruecolor($newSize['width'], $newSize['height']);
 
-        if (in_array($extension, ['jpg', 'jpeg'])) {
+        if (\in_array($extension, ['jpg', 'jpeg'])) {
             $background = imagecolorallocate($newImage, 255, 255, 255);
             imagefill($newImage, 0, 0, $background);
         } else {

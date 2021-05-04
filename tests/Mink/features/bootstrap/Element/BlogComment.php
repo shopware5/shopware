@@ -63,7 +63,7 @@ class BlogComment extends MultipleElement
     {
         $elements = Helper::findAllOfElements($this, ['stars', 'half-star'], false);
 
-        return 2 * (count($elements['stars']) + 0.5 * count($elements['half-star']));
+        return 2 * (\count($elements['stars']) + 0.5 * \count($elements['half-star']));
     }
 
     /**

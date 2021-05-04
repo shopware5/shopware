@@ -137,9 +137,9 @@ class Configuration extends BaseConfiguration
     {
         $cache = null;
 
-        if (extension_loaded('apcu')) {
+        if (\extension_loaded('apcu')) {
             $cache = new ApcuCache();
-        } elseif (extension_loaded('xcache')) {
+        } elseif (\extension_loaded('xcache')) {
             $cache = new XcacheCache();
         }
 

@@ -231,7 +231,7 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
         /** @var CategoryCondition $condition */
         $condition = $criteria->getBaseCondition('category');
 
-        if (!in_array($systemId, $condition->getCategoryIds())) {
+        if (!\in_array($systemId, $condition->getCategoryIds())) {
             $criteria->removeBaseCondition('category');
             $criteria->addCondition($condition);
             $criteria->addBaseCondition(new CategoryCondition([$systemId]));

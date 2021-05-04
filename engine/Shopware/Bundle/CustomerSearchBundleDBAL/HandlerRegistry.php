@@ -58,7 +58,7 @@ class HandlerRegistry
                 return $handler;
             }
         }
-        throw new \RuntimeException(sprintf('Condition class %s not supported', get_class($condition)));
+        throw new \RuntimeException(sprintf('Condition class %s not supported', \get_class($condition)));
     }
 
     /**
@@ -79,7 +79,7 @@ class HandlerRegistry
                 return $handler;
             }
         }
-        throw new \RuntimeException(sprintf('Sorting class %s not supported', get_class($sorting)));
+        throw new \RuntimeException(sprintf('Sorting class %s not supported', \get_class($sorting)));
     }
 
     /**

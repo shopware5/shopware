@@ -87,7 +87,7 @@ class TermHelper implements TermHelperInterface
         // Parse string into array
         $wordsTmp = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
 
-        if (count($wordsTmp)) {
+        if (\count($wordsTmp)) {
             $words = array_unique($wordsTmp);
         } elseif (!empty($string)) {
             $words = [$string];
@@ -110,7 +110,7 @@ class TermHelper implements TermHelperInterface
      */
     private function filterBadWordsFromString(array $words)
     {
-        if (!count($words) || !is_array($words)) {
+        if (!\count($words) || !\is_array($words)) {
             return false;
         }
 
@@ -145,7 +145,7 @@ class TermHelper implements TermHelperInterface
             );
         }
 
-        if (in_array((string) $word, $badWords)) {
+        if (\in_array((string) $word, $badWords)) {
             return false;
         }
 

@@ -526,7 +526,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         $this->View()->assign([
             'success' => true,
-            'data' => ['count' => count($urls)],
+            'data' => ['count' => \count($urls)],
         ]);
     }
 
@@ -615,14 +615,14 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             [
                 'id' => 1,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/apc'),
-                'value' => extension_loaded('apcu'),
-                'valid' => extension_loaded('apcu') === true && ini_get('apc.enabled') ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
+                'value' => \extension_loaded('apcu'),
+                'valid' => \extension_loaded('apcu') === true && ini_get('apc.enabled') ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
             ],
             [
                 'id' => 3,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/zend'),
-                'value' => extension_loaded('Zend OPcache'),
-                'valid' => extension_loaded('Zend OPcache') === true && ini_get('opcache.enable') ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
+                'value' => \extension_loaded('Zend OPcache'),
+                'valid' => \extension_loaded('Zend OPcache') === true && ini_get('opcache.enable') ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
             ],
             [
                 'id' => 4,

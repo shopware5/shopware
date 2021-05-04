@@ -118,7 +118,7 @@ class DatabaseSetupCommand extends ShopwareCommand implements CompletionAwareInt
         $dbConfig = $this->getContainer()->getParameter('shopware.db');
         $rootDir = $this->getContainer()->getParameter('kernel.root_dir');
 
-        if (!is_string($rootDir)) {
+        if (!\is_string($rootDir)) {
             throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
         }
 
@@ -131,7 +131,7 @@ class DatabaseSetupCommand extends ShopwareCommand implements CompletionAwareInt
         $steps = array_filter(explode(',', $steps));
 
         foreach ($steps as $step) {
-            if (!in_array($step, $this->validSteps, true)) {
+            if (!\in_array($step, $this->validSteps, true)) {
                 $io->error(
                     sprintf("Unknown install step (%s). Valid steps: %s\n", $step, implode(', ', $this->validSteps))
                 );

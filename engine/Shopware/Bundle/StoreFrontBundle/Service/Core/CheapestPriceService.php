@@ -79,7 +79,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
         $fallbackProducts = array_filter(
             $products,
             function (BaseProduct $product) use ($prices) {
-                return !array_key_exists($product->getNumber(), $prices);
+                return !\array_key_exists($product->getNumber(), $prices);
             }
         );
 
@@ -156,7 +156,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
         foreach ($products as $product) {
             $key = $product->getId();
 
-            if (!array_key_exists($key, $priceRules) || empty($priceRules[$key])) {
+            if (!\array_key_exists($key, $priceRules) || empty($priceRules[$key])) {
                 continue;
             }
 

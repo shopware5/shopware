@@ -203,7 +203,7 @@ class SitemapXMLRepository
 
         sort($result, SORT_NUMERIC);
 
-        $lastProductId = $result[count($result) - 1];
+        $lastProductId = $result[\count($result) - 1];
 
         $criteria->removeBaseCondition('last_product_id');
         $criteria->addBaseCondition(new LastProductIdCondition($lastProductId));
@@ -347,7 +347,7 @@ class SitemapXMLRepository
 
         $blacklist = ['', 'sitemap', 'sitemapXml'];
 
-        if (in_array($userParams['sViewport'], $blacklist)) {
+        if (\in_array($userParams['sViewport'], $blacklist)) {
             return false;
         }
 

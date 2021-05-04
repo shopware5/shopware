@@ -750,7 +750,7 @@ class Plugin extends ModelEntity
      */
     public function isLegacyPlugin()
     {
-        return !in_array($this->namespace, ['ShopwarePlugins', 'ProjectPlugins'], true);
+        return !\in_array($this->namespace, ['ShopwarePlugins', 'ProjectPlugins'], true);
     }
 
     /**

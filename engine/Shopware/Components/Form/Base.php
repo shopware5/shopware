@@ -60,10 +60,10 @@ class Base implements Element
      */
     public function toArray()
     {
-        $properties = get_class_vars(get_class($this));
+        $properties = get_class_vars(\get_class($this));
 
         $data = [
-            'type' => get_class($this),
+            'type' => \get_class($this),
         ];
 
         foreach ($properties as $property => $value) {

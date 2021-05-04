@@ -458,7 +458,7 @@ class sMarketing implements \Enlight_Hook
         $products = $this->sSYSTEM->sMODULES['sArticles']->sGetTranslations($products, 'article');
 
         $pos = 1;
-        $anz = count($products);
+        $anz = \count($products);
         if (!empty($this->sSYSTEM->sCONFIG['sTAGCLOUDSPLIT'])) {
             $steps = (int) $this->sSYSTEM->sCONFIG['sTAGCLOUDSPLIT'];
         } else {

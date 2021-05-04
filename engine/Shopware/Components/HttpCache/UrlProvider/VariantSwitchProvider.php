@@ -62,7 +62,7 @@ class VariantSwitchProvider extends ProductProvider
 
         $resultArray = $qb->execute()->fetchAll();
 
-        if (!count($resultArray)) {
+        if (!\count($resultArray)) {
             return [];
         }
 

@@ -28,9 +28,9 @@ class Utils
 {
     public static function bindAndCall(callable $fn, $newThis, $args = [], $bindClass = null)
     {
-        $func = \Closure::bind($fn, $newThis, $bindClass ?: get_class($newThis));
+        $func = \Closure::bind($fn, $newThis, $bindClass ?: \get_class($newThis));
         if ($args) {
-            return call_user_func_array($func, $args);
+            return \call_user_func_array($func, $args);
         }
 
         return $func(); //faster
@@ -52,7 +52,7 @@ class Utils
     public static function hijackMethod($object, $methodName, array $arguments = [])
     {
         return self::bindAndCall(function () use ($object, $methodName, $arguments) {
-            return call_user_func_array([$object, $methodName], $arguments);
+            return \call_user_func_array([$object, $methodName], $arguments);
         }, $object);
     }
 

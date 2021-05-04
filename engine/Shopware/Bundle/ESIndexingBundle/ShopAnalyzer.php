@@ -47,7 +47,7 @@ class ShopAnalyzer implements ShopAnalyzerInterface
         $language = $mapping[$language];
         $language = strtolower($language);
 
-        if (!in_array($language, $supported)) {
+        if (!\in_array($language, $supported)) {
             return ['standard'];
         }
 

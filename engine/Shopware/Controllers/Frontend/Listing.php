@@ -304,7 +304,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             /** @var ProductNumberSearchResult $result */
             $result = $this->get(\Shopware\Bundle\SearchBundle\ProductNumberSearchInterface::class)->search($criteria, $context);
 
-            if (count($result->getProducts()) === 1) {
+            if (\count($result->getProducts()) === 1) {
                 $products = $result->getProducts();
                 /** @var \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct $first */
                 $first = array_shift($products);
@@ -358,7 +358,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryRepository = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
         $categoryPath = $categoryRepository->getPathById($categoryId);
 
-        if (!array_key_exists($defaultShopCategoryId, $categoryPath)) {
+        if (!\array_key_exists($defaultShopCategoryId, $categoryPath)) {
             $this->Request()->setQuery('sCategory', $defaultShopCategoryId);
             $this->Response()->setStatusCode(404);
 
@@ -416,7 +416,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         $entryPageEmotions = array_filter($emotions, function ($emotion) {
-            return in_array($emotion['listing_visibility'], [
+            return \in_array($emotion['listing_visibility'], [
                 Emotion::LISTING_VISIBILITY_ONLY_START,
                 Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
             ], true);
@@ -624,7 +624,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         if ((int) $this->Request()->getParam('sPage') > 0) {
             return array_filter($emotions, function ($emotion) {
-                return in_array($emotion['listing_visibility'], [
+                return \in_array($emotion['listing_visibility'], [
                     Emotion::LISTING_VISIBILITY_ONLY_LISTING,
                     Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
                 ], true);
@@ -632,7 +632,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         return array_filter($emotions, function ($emotion) {
-            return in_array($emotion['listing_visibility'], [
+            return \in_array($emotion['listing_visibility'], [
                 Emotion::LISTING_VISIBILITY_ONLY_START,
                 Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
             ], true);
@@ -649,6 +649,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $devices = array_unique($devices);
 
-        return count($devices) === 5;
+        return \count($devices) === 5;
     }
 }

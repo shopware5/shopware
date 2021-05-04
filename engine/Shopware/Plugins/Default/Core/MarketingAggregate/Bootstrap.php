@@ -302,7 +302,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         }
 
         $variants = $arguments->getDetails();
-        if (count($variants) <= 1) {
+        if (\count($variants) <= 1) {
             return $arguments->getReturn();
         }
         $sql = '

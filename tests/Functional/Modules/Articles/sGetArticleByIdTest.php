@@ -3525,7 +3525,7 @@ class sGetArticleByIdTest extends \Enlight_Components_Test_Plugin_TestCase
 
         Shopware()->Db()->query('UPDATE s_articles SET active = 1 WHERE id = ?', [$id]);
 
-        static::assertGreaterThan(0, count($this->Module()->sGetArticleById($id)));
+        static::assertGreaterThan(0, \count($this->Module()->sGetArticleById($id)));
     }
 
     private function assertArticleData($expected, $data)
@@ -3547,7 +3547,7 @@ class sGetArticleByIdTest extends \Enlight_Components_Test_Plugin_TestCase
     private function assertLinks($expected, $data)
     {
         static::assertCount(
-            count($expected['sLinks']),
+            \count($expected['sLinks']),
             $data['sLinks'],
             sprintf("Link count doesn't match for article : %s - %s", $expected['ordernumber'], $expected['articleName'])
         );
@@ -3555,10 +3555,10 @@ class sGetArticleByIdTest extends \Enlight_Components_Test_Plugin_TestCase
 
     private function assertRelated($expected, $data)
     {
-        static::assertCount(count($expected['sRelatedArticles']), $data['sRelatedArticles']);
+        static::assertCount(\count($expected['sRelatedArticles']), $data['sRelatedArticles']);
         $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
-        for ($i = 0; $i < count($expected['sRelatedArticles']); ++$i) {
+        for ($i = 0; $i < \count($expected['sRelatedArticles']); ++$i) {
             $expectedArticle = $expected['sRelatedArticles'][$i];
 
             if (isset($expectedArticle['supplierImg'])) {
@@ -3568,7 +3568,7 @@ class sGetArticleByIdTest extends \Enlight_Components_Test_Plugin_TestCase
             $gotArticle = $data['sRelatedArticles'][$i];
 
             foreach ($this->articleProperties as $property) {
-                if (!array_key_exists($property, $expectedArticle)) {
+                if (!\array_key_exists($property, $expectedArticle)) {
                     continue;
                 }
 

@@ -192,11 +192,11 @@ class OrdersProvider implements BatchableProviderInterface
             $basicOrder['customer']['billing']['country'] = isset($billingCountries[$orderId]) ? $billingCountries[$orderId] : '--';
             $basicOrder['customer']['shipping']['country'] = isset($shippingCountries[$orderId]) ? $shippingCountries[$orderId] : '--';
 
-            if (strlen($basicOrder['customer']['billing']['country']) !== 2) {
+            if (\strlen($basicOrder['customer']['billing']['country']) !== 2) {
                 $basicOrder['customer']['billing']['country'] = '--';
             }
 
-            if (strlen($basicOrder['customer']['shipping']['country']) !== 2) {
+            if (\strlen($basicOrder['customer']['shipping']['country']) !== 2) {
                 $basicOrder['customer']['shipping']['country'] = '--';
             }
         }
@@ -432,7 +432,7 @@ class OrdersProvider implements BatchableProviderInterface
             return $customer;
         }
 
-        if (in_array($customer['gender'], ['mrs', 'ms'])) {
+        if (\in_array($customer['gender'], ['mrs', 'ms'])) {
             $customer['gender'] = 'female';
 
             return $customer;

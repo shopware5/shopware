@@ -88,7 +88,7 @@ class FilesystemFactory implements FilesystemFactoryInterface
         $dupes = [];
         foreach ($adapterFactories as $adapter) {
             $type = strtolower($adapter->getType());
-            if (array_key_exists($type, $dupes)) {
+            if (\array_key_exists($type, $dupes)) {
                 throw DuplicateFilesystemFactoryException::fromAdapterType($type);
             }
 

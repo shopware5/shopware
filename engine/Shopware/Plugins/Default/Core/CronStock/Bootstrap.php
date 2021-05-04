@@ -96,7 +96,7 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
         ';
         $articles = Shopware()->Db()->fetchAssoc($sql);
         $data = [
-            'count' => count($articles),
+            'count' => \count($articles),
             'numbers' => array_keys($articles),
         ];
 

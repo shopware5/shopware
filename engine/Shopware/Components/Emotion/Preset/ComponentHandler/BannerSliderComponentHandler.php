@@ -78,15 +78,15 @@ class BannerSliderComponentHandler extends AbstractComponentHandler
         foreach ($data as &$elementData) {
             if ($elementData['key'] === self::ELEMENT_DATA_KEY) {
                 $sliders = json_decode($elementData['value'], true);
-                if (!is_array($sliders)) {
+                if (!\is_array($sliders)) {
                     break;
                 }
 
                 foreach ($sliders as $key => &$slide) {
-                    if (!array_key_exists($slide['path'], $assets)) {
+                    if (!\array_key_exists($slide['path'], $assets)) {
                         break;
                     }
-                    if (!array_key_exists($slide['path'], $importedAssets)) {
+                    if (!\array_key_exists($slide['path'], $importedAssets)) {
                         $assetPath = $assets[$slide['path']];
 
                         $media = $this->doAssetImport($assetPath);
@@ -124,7 +124,7 @@ class BannerSliderComponentHandler extends AbstractComponentHandler
         foreach ($data as &$elementData) {
             if ($elementData['key'] === self::ELEMENT_DATA_KEY) {
                 $sliders = json_decode($elementData['value'], true);
-                if (!is_array($sliders)) {
+                if (!\is_array($sliders)) {
                     break;
                 }
 

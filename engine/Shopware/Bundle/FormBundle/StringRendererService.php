@@ -61,7 +61,7 @@ class StringRendererService implements StringRendererServiceInterface
         foreach ($placeholders as $placeholder) {
             $placeholderString = preg_replace($this->functionRegEx, '', $placeholder);
 
-            if (strlen($placeholderString) < 1) {
+            if (\strlen($placeholderString) < 1) {
                 continue;
             }
 
@@ -91,7 +91,7 @@ class StringRendererService implements StringRendererServiceInterface
         }
 
         while ($currentLayer = array_shift($placeholder)) {
-            if (!array_key_exists($currentLayer, $variable)) {
+            if (!\array_key_exists($currentLayer, $variable)) {
                 return '';
             }
 
@@ -102,8 +102,8 @@ class StringRendererService implements StringRendererServiceInterface
             return '';
         }
 
-        if (!in_array(gettype($variable), $this->whiteListTypeArray)) {
-            throw new \Exception(sprintf('Could not render type of %s', gettype($variable)));
+        if (!\in_array(\gettype($variable), $this->whiteListTypeArray)) {
+            throw new \Exception(sprintf('Could not render type of %s', \gettype($variable)));
         }
 
         return (string) $variable;

@@ -275,7 +275,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
             $category = $result[$index];
 
             foreach ($expectedCategory as $property => $value) {
-                if (is_array($value)) {
+                if (\is_array($value)) {
                     $array = $category[$property];
 
                     foreach ($value as $arrayProperty => $arrayValue) {
@@ -360,7 +360,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
     private function assertAndGetSubCategories($category, $expectedIds)
     {
         $sub = $category['subcategories'];
-        static::assertCount(count($expectedIds), $sub);
+        static::assertCount(\count($expectedIds), $sub);
 
         foreach ($expectedIds as $id) {
             static::assertArrayHasKey($id, $sub);

@@ -51,7 +51,7 @@ class CacheClearCommand extends ShopwareCommand
 
         $realCacheDir = $this->getContainer()->getParameter('kernel.cache_dir');
 
-        if (!is_string($realCacheDir)) {
+        if (!\is_string($realCacheDir)) {
             throw new \RuntimeException('Parameter kernel.cache_dir needs to be a string');
         }
 

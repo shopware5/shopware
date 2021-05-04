@@ -64,11 +64,11 @@ class Db
             }
 
             foreach (($dbConfig['session'] ?? []) as $sessionKey => $sessionValue) {
-                if (is_int($sessionValue)) {
+                if (\is_int($sessionValue)) {
                     $conn->exec(sprintf('SET @@session.`%s` = %d;', $sessionKey, $sessionValue));
-                } elseif (is_float($sessionValue)) {
+                } elseif (\is_float($sessionValue)) {
                     $conn->exec(sprintf('SET @@session.`%s` = %f;', $sessionKey, $sessionValue));
-                } elseif (is_string($sessionValue)) {
+                } elseif (\is_string($sessionValue)) {
                     $conn->exec(sprintf('SET @@session.`%s` = %s;', $sessionKey, $conn->quote($sessionValue)));
                 } elseif ($sessionValue === null) {
                     $conn->exec(sprintf('SET @@session.`%s` = NULL;', $sessionKey));

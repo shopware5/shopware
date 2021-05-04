@@ -77,7 +77,7 @@ class StoreListUpdatesCommand extends StoreCommand implements CompletionAwareInt
         if (empty($version)) {
             $version = $this->container->getParameter('shopware.release.version');
 
-            if (!is_string($version)) {
+            if (!\is_string($version)) {
                 throw new \RuntimeException('Parameter shopware.release.version has to be an string');
             }
         }

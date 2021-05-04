@@ -214,12 +214,12 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 ) {
                     $scheme = parse_url($value, PHP_URL_SCHEME);
 
-                    if (!in_array($scheme, ['http', 'https'], true) && !is_int($value)) {
+                    if (!\in_array($scheme, ['http', 'https'], true) && !\is_int($value)) {
                         $value = $mediaService->getUrl($value);
                     }
                 }
 
-                if (in_array($entry['name'], ['selected_manufacturers', 'banner_slider'])) {
+                if (\in_array($entry['name'], ['selected_manufacturers', 'banner_slider'])) {
                     foreach ($value as $k => $v) {
                         if (isset($v['path'])) {
                             $value[$k]['path'] = $mediaService->getUrl($v['path']);
@@ -1254,8 +1254,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $emotion->setSeoTitle($data['seoTitle']);
         $emotion->setSeoKeywords($data['seoKeywords']);
         $emotion->setSeoDescription($data['seoDescription']);
-        $emotion->setPreviewId(array_key_exists('previewId', $data) ? $data['previewId'] : null);
-        $emotion->setPreviewSecret(array_key_exists('previewSecret', $data) ? $data['previewSecret'] : null);
+        $emotion->setPreviewId(\array_key_exists('previewId', $data) ? $data['previewId'] : null);
+        $emotion->setPreviewSecret(\array_key_exists('previewSecret', $data) ? $data['previewSecret'] : null);
         $emotion->setCustomerStreamIds($data['customerStreamIds'] ?: null);
         $emotion->setReplacement($data['replacement'] ?: null);
         $emotion->setListingVisibility($data['listingVisibility']);
@@ -1351,7 +1351,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $mediaFields = $this->getMediaXTypes();
 
         if ($valueType === 'json') {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 foreach ($value as &$val) {
                     $val['path'] = $mediaService->normalize($val['path']);
                 }
@@ -1360,7 +1360,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $value = Zend_Json::encode($value);
         }
 
-        if (in_array($xType, $mediaFields)) {
+        if (\in_array($xType, $mediaFields)) {
             if ($mediaService->isEncoded($value)) {
                 $value = $mediaService->normalize($value);
             }
@@ -1393,7 +1393,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         foreach ($result as $emotion) {
             $devices = explode(',', $emotion['device']);
             foreach ($devices as $device) {
-                if (!in_array($device, $usedDevices)) {
+                if (!\in_array($device, $usedDevices)) {
                     $usedDevices[] = $device;
                 } else {
                     return true;

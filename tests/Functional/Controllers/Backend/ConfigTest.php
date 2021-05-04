@@ -203,7 +203,7 @@ class ConfigTest extends \Enlight_Components_Test_Controller_TestCase
         $this->Request()->setMethod('GET');
         $this->dispatch('backend/Config/getTableList/_repositoryClass/' . $tableListName);
         $returnData = $this->View()->getAssign('data');
-        static::assertGreaterThan(2, count($returnData));
+        static::assertGreaterThan(2, \count($returnData));
         static::assertTrue($this->View()->getAssign('success'));
     }
 
@@ -249,8 +249,8 @@ class ConfigTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->dispatch($url . $query);
         $returnData = $this->View()->getAssign('data');
-        static::assertGreaterThan(0, count($returnData));
-        static::assertLessThan($totalCount, count($returnData));
+        static::assertGreaterThan(0, \count($returnData));
+        static::assertLessThan($totalCount, \count($returnData));
         static::assertTrue($this->View()->getAssign('success'));
     }
 

@@ -100,7 +100,7 @@ class Sha256 implements PasswordEncoderInterface
             return true;
         }
 
-        if (strlen($salt) != $this->options['salt_len']) {
+        if (\strlen($salt) != $this->options['salt_len']) {
             return true;
         }
 

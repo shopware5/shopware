@@ -69,6 +69,7 @@ return (new Config())
         'single_line_throw' => false,
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
         'operator_linebreak' => ['only_booleans' => true],
+        'native_function_invocation' => true,
 
         NoUselessCommentFixer::name() => true,
         SingleSpaceAfterStatementFixer::name() => true,

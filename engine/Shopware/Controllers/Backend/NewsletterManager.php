@@ -60,7 +60,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $this->View()->assign([
             'success' => true,
             'data' => $groups,
-            'total' => count($groups),
+            'total' => \count($groups),
         ]);
     }
 
@@ -111,7 +111,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             $direction = $sort[1]['direction'];
 
             // Whitelist for valid fields
-            if (!in_array($field, ['name', 'number', 'internalId'], true) || !in_array($direction, ['ASC', 'DESC'], true)) {
+            if (!\in_array($field, ['name', 'number', 'internalId'], true) || !\in_array($direction, ['ASC', 'DESC'], true)) {
                 $field = 'name';
                 $direction = 'DESC';
             }

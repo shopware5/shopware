@@ -44,7 +44,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     public function preDispatch()
     {
         parent::preDispatch();
-        if (in_array($this->Request()->getActionName(), ['validateTrackingCode', 'mapCustomerAccount'])) {
+        if (\in_array($this->Request()->getActionName(), ['validateTrackingCode', 'mapCustomerAccount'])) {
             $this->Front()->Plugins()->Json()->setRenderer(false);
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         }
@@ -276,7 +276,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         // Use this to set the BOM to show it in the right way for excel and stuff
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');
-        if (is_array($resultArray[0])) {
+        if (\is_array($resultArray[0])) {
             fputcsv($fp, array_keys($resultArray[0]), ';');
         }
 

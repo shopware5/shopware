@@ -147,7 +147,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
         );
 
         return array_filter($ids, function ($id) use ($system) {
-            return !in_array($id, $system);
+            return !\in_array($id, $system);
         });
     }
 

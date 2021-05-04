@@ -84,7 +84,7 @@ class GarbageCollector
         // Change album to recycle bin
         $this->moveToTrash();
 
-        return count($this->mediaPositions);
+        return \count($this->mediaPositions);
     }
 
     /**
@@ -167,7 +167,7 @@ class GarbageCollector
                 continue;
             }
 
-            if (is_array($jsonValues)) {
+            if (\is_array($jsonValues)) {
                 foreach ($jsonValues as $value) {
                     if (isset($value->mediaId)) {
                         $this->addMediaById((int) $value->mediaId);
@@ -175,7 +175,7 @@ class GarbageCollector
                         $this->addMediaByPath($value->path);
                     }
                 }
-            } elseif (is_object($jsonValues)) {
+            } elseif (\is_object($jsonValues)) {
                 if (isset($jsonValues->mediaId)) {
                     $this->addMediaById((int) $jsonValues->mediaId);
                 } elseif (isset($jsonValues->path)) {

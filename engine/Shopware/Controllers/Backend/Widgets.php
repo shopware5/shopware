@@ -782,7 +782,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
 
         if ($limit) {
-            $result = array_slice($result, 0, $limit);
+            $result = \array_slice($result, 0, $limit);
         }
 
         return $result;

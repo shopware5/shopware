@@ -54,7 +54,7 @@ class CombinedConditionFacet implements FacetInterface
      */
     public function __construct($conditions, $label, $requestParameter, $stream = null)
     {
-        if (is_array($conditions)) {
+        if (\is_array($conditions)) {
             $this->conditions = $conditions;
         } else {
             $this->conditions = $this->unserialize(json_decode($conditions, true));
@@ -82,7 +82,7 @@ class CombinedConditionFacet implements FacetInterface
     public function getName()
     {
         $classes = array_map(function ($class) {
-            return get_class($class);
+            return \get_class($class);
         }, $this->conditions);
 
         return 'combined_facet_' . md5(json_encode($this->conditions) . json_encode($classes));

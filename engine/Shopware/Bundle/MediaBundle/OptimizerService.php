@@ -69,7 +69,7 @@ class OptimizerService implements OptimizerServiceInterface
     public function getOptimizerByMimeType($mime)
     {
         foreach ($this->optimizers as $optimizer) {
-            if (in_array($mime, $optimizer->getSupportedMimeTypes()) && $optimizer->isRunnable()) {
+            if (\in_array($mime, $optimizer->getSupportedMimeTypes()) && $optimizer->isRunnable()) {
                 return $optimizer;
             }
         }

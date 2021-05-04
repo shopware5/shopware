@@ -32,6 +32,6 @@ abstract class Base implements FilterInterface
     public function isFiltered($identifier, array $filters)
     {
         // Check if identifier is explicitly in the filters
-        return in_array($identifier, $filters, true);
+        return \in_array($identifier, $filters, true);
     }
 }

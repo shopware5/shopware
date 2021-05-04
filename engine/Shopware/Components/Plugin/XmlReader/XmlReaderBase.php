@@ -81,7 +81,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
     {
         $list = self::getChildren($element, $name);
 
-        if (count($list) === 0) {
+        if (\count($list) === 0) {
             return null;
         }
 
@@ -116,7 +116,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
     {
         $children = self::getChildren($list, $name);
 
-        if (count($children) === 0) {
+        if (\count($children) === 0) {
             return null;
         }
 
@@ -185,7 +185,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
     {
         $children = self::getChildren($element, $name);
 
-        if (count($children) === 0) {
+        if (\count($children) === 0) {
             if ($throwException) {
                 throw new InvalidArgumentException(sprintf('Element with %s not found', $name));
             }

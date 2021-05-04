@@ -205,7 +205,7 @@ class PriceConditionTest extends TestCase
 
         $product['mainDetail']['prices'] = [];
         $productPrices = $prices;
-        if (array_key_exists('prices', $prices)) {
+        if (\array_key_exists('prices', $prices)) {
             $productPrices = $prices['prices'];
         }
 

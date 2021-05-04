@@ -63,7 +63,7 @@ class LandingPageViewLoader
         $shopId = $context->getShop()->getId();
         $fallbackId = $context->getShop()->getFallbackId();
 
-        if (!$landingPage || !in_array($shopId, $landingPageShops)) {
+        if (!$landingPage || !\in_array($shopId, $landingPageShops)) {
             throw new \Enlight_Controller_Exception('Landing page missing, non-existent or invalid for the current shop', 404);
         }
 

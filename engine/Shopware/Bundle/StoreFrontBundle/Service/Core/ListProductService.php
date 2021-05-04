@@ -143,7 +143,7 @@ class ListProductService implements ListProductServiceInterface
 
         $result = [];
         foreach ($numbers as $number) {
-            if (!array_key_exists($number, $products)) {
+            if (!\array_key_exists($number, $products)) {
                 continue;
             }
             $product = $products[$number];
@@ -181,7 +181,7 @@ class ListProductService implements ListProductServiceInterface
             }
 
             $product->setListingPrice($product->getCheapestUnitPrice());
-            $product->setDisplayFromPrice(count($product->getPrices()) > 1 || $product->hasDifferentPrices());
+            $product->setDisplayFromPrice(\count($product->getPrices()) > 1 || $product->hasDifferentPrices());
             $product->setAllowBuyInListing($this->allowBuyInListing($product));
             if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
                 $product->setListingPrice($product->getCheapestPrice());
@@ -200,7 +200,7 @@ class ListProductService implements ListProductServiceInterface
      */
     private function isProductValid(ListProduct $product, ShopContextInterface $context)
     {
-        if (in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupIds())) {
+        if (\in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupIds())) {
             return false;
         }
 
@@ -217,7 +217,7 @@ class ListProductService implements ListProductServiceInterface
             return $category->getId();
         }, $product->getCategories());
 
-        return in_array($context->getShop()->getCategory()->getId(), $ids);
+        return \in_array($context->getShop()->getCategory()->getId(), $ids);
     }
 
     /**

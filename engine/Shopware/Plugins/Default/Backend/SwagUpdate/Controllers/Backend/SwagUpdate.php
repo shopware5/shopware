@@ -158,7 +158,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $result = $fs->checkDirectoryPermissions(Shopware()->DocPath(), true);
 
         if (!empty($result)) {
-            $wrongPermissionCount = count($result);
+            $wrongPermissionCount = \count($result);
 
             $this->container->get('corelogger')->error(
                 sprintf('SwagUpdate: There are %d files without write permission. FTP credentials are needed.', $wrongPermissionCount),
@@ -360,7 +360,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             $sourceFile = $file->getPathname();
             $destinationFile = Shopware()->DocPath() . str_replace($fileDir, '', $file->getPathname());
 
-            $destinationDirectory = dirname($destinationFile);
+            $destinationDirectory = \dirname($destinationFile);
             $fs->mkdir($destinationDirectory);
             $fs->rename($sourceFile, $destinationFile, true);
         }
@@ -543,6 +543,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         /** @var array<string, string> $activePlugins */
         $activePlugins = $this->container->getParameter('active_plugins');
 
-        return array_key_exists('SwagSecurity', $activePlugins);
+        return \array_key_exists('SwagSecurity', $activePlugins);
     }
 }

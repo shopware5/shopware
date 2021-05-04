@@ -202,7 +202,7 @@ class sRewriteTable implements \Enlight_Hook
         @set_time_limit(0);
 
         $keys = isset($this->template->registered_plugins['function']) ? array_keys($this->template->registered_plugins['function']) : [];
-        if (!in_array('sCategoryPath', $keys)) {
+        if (!\in_array('sCategoryPath', $keys)) {
             $this->template->registerPlugin(
                 Smarty::PLUGIN_FUNCTION,
                 'sCategoryPath',
@@ -210,7 +210,7 @@ class sRewriteTable implements \Enlight_Hook
             );
         }
 
-        if (!in_array('createSupplierPath', $keys)) {
+        if (!\in_array('createSupplierPath', $keys)) {
             $this->template->registerPlugin(
                 Smarty::PLUGIN_FUNCTION,
                 'createSupplierPath',
@@ -367,7 +367,7 @@ class sRewriteTable implements \Enlight_Hook
             ->getActiveChildrenList($parentId);
 
         if (isset($offset, $limit)) {
-            $categories = array_slice($categories, $offset, $limit);
+            $categories = \array_slice($categories, $offset, $limit);
         }
 
         $template = 'string:' . $routerCategoryTemplate;
@@ -850,7 +850,7 @@ class sRewriteTable implements \Enlight_Hook
         $parts = $this->modelManager->getRepository(\Shopware\Models\Category\Category::class)
             ->getPathById($categoryId);
         $level = Shopware()->Shop()->getCategory()->getLevel() ?: 1;
-        $parts = array_slice($parts, $level);
+        $parts = \array_slice($parts, $level);
 
         return $parts;
     }

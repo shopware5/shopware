@@ -65,7 +65,7 @@ class OrderNumberValidator extends ConstraintValidator
             $value = (string) $value;
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             throw new UnexpectedTypeException($value, 'string');
         }
 

@@ -208,11 +208,11 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
         $prices = array_values($product->getPrices());
         $product->setListingPrice($prices[0]);
 
-        $product->setDisplayFromPrice(count($product->getPrices()) > 1);
+        $product->setDisplayFromPrice(\count($product->getPrices()) > 1);
 
         if ($this->shopwareConfig->get('useLastGraduationForCheapestPrice')) {
             $product->setListingPrice(
-                $prices[count($prices) - 1]
+                $prices[\count($prices) - 1]
             );
         }
     }

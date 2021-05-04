@@ -147,7 +147,7 @@ class RegisterWithCaptchaTest extends \Enlight_Components_Test_Plugin_TestCase
 
     private static function saveConfig($name, $value)
     {
-        $formattedValue = sprintf('s:%d:"%s";', strlen($value), $value);
+        $formattedValue = sprintf('s:%d:"%s";', \strlen($value), $value);
         Shopware()->Db()->query(
             'UPDATE s_core_config_elements SET value = ? WHERE name = ?',
             [$formattedValue, $name]

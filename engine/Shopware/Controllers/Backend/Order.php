@@ -136,7 +136,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function preDispatch()
     {
         $actions = ['index', 'load', 'skeleton', 'extends', 'mergeDocuments'];
-        if (!in_array($this->Request()->getActionName(), $actions)) {
+        if (!\in_array($this->Request()->getActionName(), $actions)) {
             $this->Front()->Plugins()->Json()->setRenderer();
         }
     }
@@ -327,7 +327,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         if ($orderId !== null) {
             $orderIdFilter = ['property' => 'orders.id', 'value' => $orderId];
-            if (!is_array($filter)) {
+            if (!\is_array($filter)) {
                 $filter = [];
             }
             $filter[] = $orderIdFilter;
@@ -934,7 +934,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $data = json_decode($data);
 
-        if ($data->orders === null || count($data->orders) === 0) {
+        if ($data->orders === null || \count($data->orders) === 0) {
             $this->View()->assign([
                 'success' => false,
                 'message' => 'No valid order id passed.',
@@ -1409,7 +1409,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $result = [];
         foreach ($ids as $id) {
-            if (!array_key_exists($id, $orders)) {
+            if (!\array_key_exists($id, $orders)) {
                 continue;
             }
             $order = $orders[$id];
@@ -1639,7 +1639,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $mail = $this->getMailForOrder($order->getId(), null, $documentTypeId);
         }
 
-        if (is_object($mail['mail'])) {
+        if (\is_object($mail['mail'])) {
             if ($addAttachments) {
                 // Attach documents
                 $document = $this->getDocument($documentTypeId, $order);
@@ -1652,7 +1652,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 /** @var Enlight_Components_Mail $mailObject */
                 $mailObject = $mail['mail'];
                 $result = Shopware()->Modules()->Order()->sendStatusMail($mailObject);
-                $mail['data']['sent'] = is_object($result);
+                $mail['data']['sent'] = \is_object($result);
             }
 
             return $mail['data'];
@@ -1842,7 +1842,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     private function createDocument($orderId, $documentType)
     {
         $renderer = strtolower($this->Request()->getParam('renderer', 'pdf')); // html / pdf
-        if (!in_array($renderer, ['html', 'pdf'])) {
+        if (!\in_array($renderer, ['html', 'pdf'])) {
             $renderer = 'pdf';
         }
 
@@ -2213,7 +2213,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $statement->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
-        if (!empty($result) || !array_key_exists('name', $result)) {
+        if (!empty($result) || !\array_key_exists('name', $result)) {
             $templateName = $result['name'];
         }
 

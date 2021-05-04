@@ -168,10 +168,10 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
                 $groups = explode('|', $site['grouping']);
 
                 // If we only have one group, exploding isn't possible, thus we create the array
-                (count($groups) == 1) ? $groups = [$site['grouping']] : null;
+                (\count($groups) == 1) ? $groups = [$site['grouping']] : null;
 
                 // If the current site is associated with the requested group and has no other groups
-                if (in_array($key, $groups) && count($groups) == 1) {
+                if (\in_array($key, $groups) && \count($groups) == 1) {
                     //set group to gDisabled to prevent orphanage
                     Shopware()->Db()->query(
                         'UPDATE s_cms_static SET grouping = ? WHERE id = ?',
@@ -179,7 +179,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
                     );
                 } // If the current site is associated with the requested group and does have other associations
                 else {
-                    if (in_array($key, $groups) && count($groups) > 1) {
+                    if (\in_array($key, $groups) && \count($groups) > 1) {
                         // Remove the requested group from the groupings field
                         $site['grouping'] = str_replace($key, '', $site['grouping']);
                         $site['grouping'] = str_replace('|', '', $site['grouping']);
@@ -302,7 +302,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             $groups = $query->getArrayResult();
 
             foreach ($groups as $groupKey => $group) {
-                if (in_array($group['key'], $grouping)) {
+                if (\in_array($group['key'], $grouping)) {
                     unset($groups[$groupKey]);
                 }
             }
@@ -324,7 +324,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             $groups = $query->getArrayResult();
 
             foreach ($groups as $groupKey => $group) {
-                if (!in_array($group['key'], $grouping)) {
+                if (!\in_array($group['key'], $grouping)) {
                     unset($groups[$groupKey]);
                 }
             }

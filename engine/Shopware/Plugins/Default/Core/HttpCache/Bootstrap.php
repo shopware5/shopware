@@ -371,7 +371,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return null;
         }
 
-        if (!in_array($this->request->getModuleName(), ['frontend', 'widgets'], true)) {
+        if (!\in_array($this->request->getModuleName(), ['frontend', 'widgets'], true)) {
             return null;
         }
 
@@ -572,7 +572,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         } elseif ($remove) {
             // Remove $noCacheTag from $newCacheTags
             $newCacheTags = array_diff($existingTags, [$newTag]);
-        } elseif (!$remove && !in_array($newTag, $existingTags)) {
+        } elseif (!$remove && !\in_array($newTag, $existingTags)) {
             // Add $noCacheTag to $newCacheTags
             $newCacheTags = $existingTags;
             $newCacheTags[] = $newTag;
@@ -631,7 +631,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
             $entityName = get_parent_class($entity);
         } else {
-            $entityName = get_class($entity);
+            $entityName = \get_class($entity);
         }
 
         if (Shopware()->Events()->notifyUntil(

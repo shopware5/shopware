@@ -199,7 +199,7 @@ class BatchProcess
             list($prefix, $column) = explode('.', $operation['column']);
 
             $type = $columnInfo[ucfirst($prefix) . ucfirst($column)]['type'];
-            if ($operation['value'] && in_array($type, ['decimal', 'integer', 'float'], true)) {
+            if ($operation['value'] && \in_array($type, ['decimal', 'integer', 'float'], true)) {
                 $operation['value'] = str_replace(',', '.', $operation['value']);
             }
 

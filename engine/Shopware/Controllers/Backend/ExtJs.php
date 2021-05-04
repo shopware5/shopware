@@ -53,7 +53,7 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), ['index', 'load', 'skeleton', 'extends'])) {
+        if (!\in_array($this->Request()->getActionName(), ['index', 'load', 'skeleton', 'extends'])) {
             $this->Front()->Plugins()->Json()->setRenderer();
         }
     }

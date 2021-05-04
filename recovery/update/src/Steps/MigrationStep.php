@@ -54,7 +54,7 @@ class MigrationStep
         $currentVersion = $this->migrationManager->getCurrentVersion();
 
         if (!$totalCount) {
-            $totalCount = count($this->migrationManager->getMigrationsForVersion($currentVersion));
+            $totalCount = \count($this->migrationManager->getMigrationsForVersion($currentVersion));
         }
 
         $migration = $this->migrationManager->getNextMigrationForVersion($currentVersion);
@@ -66,7 +66,7 @@ class MigrationStep
         try {
             $this->migrationManager->apply($migration, AbstractMigration::MODUS_UPDATE);
         } catch (\Exception $e) {
-            $reflection = new \ReflectionClass(get_class($migration));
+            $reflection = new \ReflectionClass(\get_class($migration));
             $classFile = $reflection->getFileName();
 
             return new ErrorResult($e->getMessage(), $e, [

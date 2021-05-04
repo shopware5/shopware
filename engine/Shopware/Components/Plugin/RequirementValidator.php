@@ -94,7 +94,7 @@ class RequirementValidator
 
     private function assertShopwareVersion(array $compatibility, string $shopwareVersion): void
     {
-        if (isset($compatibility['blacklist']) && in_array($shopwareVersion, $compatibility['blacklist'])) {
+        if (isset($compatibility['blacklist']) && \in_array($shopwareVersion, $compatibility['blacklist'])) {
             throw new \Exception(sprintf($this->namespace->get('shopware_version_blacklisted'), $shopwareVersion));
         }
 
@@ -134,7 +134,7 @@ class RequirementValidator
                 throw new \Exception(sprintf($this->namespace->get('required_plugin_not_active'), $requiredPlugin['pluginName']));
             }
 
-            if (isset($requiredPlugin['blacklist']) && in_array($plugin->getVersion(), $requiredPlugin['blacklist'])) {
+            if (isset($requiredPlugin['blacklist']) && \in_array($plugin->getVersion(), $requiredPlugin['blacklist'])) {
                 throw new \Exception(sprintf($this->namespace->get('required_plugin_blacklisted'), $plugin->getName(), $plugin->getVersion()));
             }
 

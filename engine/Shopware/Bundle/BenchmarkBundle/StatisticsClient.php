@@ -127,7 +127,7 @@ class StatisticsClient implements StatisticsClientInterface
             true
         );
 
-        if (!is_array($data)) {
+        if (!\is_array($data)) {
             throw new StatisticsHydratingException(sprintf('Could not interpret statistics response from %s', $this->statisticsApiEndpoint));
         }
 

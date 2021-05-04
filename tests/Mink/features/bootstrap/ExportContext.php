@@ -225,7 +225,7 @@ SQL;
                     $expected = $entry[$key];
                     $actual = $row[$key];
 
-                    if (in_array($key, ['url', 'image'], true)) {
+                    if (\in_array($key, ['url', 'image'], true)) {
                         $prefix = ($shopType === 'subshop') ? $subshopBaseUrl : $baseUrl;
                         $expected = $prefix . '/' . ltrim($entry[$key], '/');
                     }
@@ -238,7 +238,7 @@ SQL;
 
     private function assertKeyExists($key, array $row)
     {
-        if (!array_key_exists($key, $row)) {
+        if (!\array_key_exists($key, $row)) {
             Helper::throwException("Field '$key' was not found in export row " . print_r($row, true));
         }
     }

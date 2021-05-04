@@ -47,7 +47,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
             $localeRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Locale::class);
             $queryBuilder = $localeRepository->createQueryBuilder('locale');
 
-            if (strlen($context->getCurrentWord())) {
+            if (\strlen($context->getCurrentWord())) {
                 $queryBuilder->andWhere($queryBuilder->expr()->like('locale.locale', ':search'))
                     ->setParameter('search', addcslashes($context->getCurrentWord(), '_%') . '%');
             }
@@ -168,7 +168,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
         $snippets = $statement->execute()->fetchAll();
 
         $output->writeln('<info></info>');
-        $output->writeln('<info>' . count($snippets) . ' missing snippets detected</info>');
+        $output->writeln('<info>' . \count($snippets) . ' missing snippets detected</info>');
 
         $outputAdapter = new \Enlight_Config_Adapter_File([
             'configDir' => $input->getOption('target') . '/',
@@ -177,7 +177,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
         $data = [];
 
         foreach ($snippets as $snippet) {
-            if (!array_key_exists($snippet['namespace'], $data)) {
+            if (!\array_key_exists($snippet['namespace'], $data)) {
                 $data[$snippet['namespace']] = new \Enlight_Components_Snippet_Namespace([
                     'name' => $snippet['namespace'],
                     'section' => [
@@ -189,7 +189,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
 
             $content->set($snippet['name'], isset($snippet['value']) ? $snippet['value'] : '');
         }
-        $output->writeln('<info>' . count($data) . ' namespaces written</info>');
+        $output->writeln('<info>' . \count($data) . ' namespaces written</info>');
 
         foreach ($data as $namespace) {
             $outputAdapter->write($namespace, true);

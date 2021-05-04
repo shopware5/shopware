@@ -97,7 +97,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
             self::$isPrepared = true;
         }
 
-        $isResettable = count(array_intersect(self::$doNotResetFeatureTags, $scope->getFeature()->getTags())) < 1;
+        $isResettable = \count(array_intersect(self::$doNotResetFeatureTags, $scope->getFeature()->getTags())) < 1;
 
         // Scenario skips a line so it's not a new example
         if ($isResettable && $scope->getScenario()->getLine() !== self::$lastScenarioLine + 1) {

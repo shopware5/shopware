@@ -49,7 +49,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $emotions = $emotionService->getList($emotionIds, $shopContext);
 
-        if (!count($emotions)) {
+        if (!\count($emotions)) {
             return;
         }
 

@@ -107,7 +107,7 @@ class PersonalFormType extends AbstractType
             $data = $event->getData();
 
             array_walk_recursive($data, function (&$item, $key) use ($whitelist) {
-                if (in_array($key, $whitelist, true)) {
+                if (\in_array($key, $whitelist, true)) {
                     return $item;
                 }
                 $item = strip_tags($item);

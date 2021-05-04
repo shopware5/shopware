@@ -88,11 +88,11 @@ class BlogGateway implements Gateway\BlogGatewayInterface
 
             $blog = $this->blogHydrator->hydrate($row);
 
-            if (array_key_exists($id, $articles)) {
+            if (\array_key_exists($id, $articles)) {
                 $blog->setProductNumbers($articles[$id]);
             }
 
-            if (array_key_exists($id, $medias)) {
+            if (\array_key_exists($id, $medias)) {
                 $blog->setMediaIds($medias[$id]);
             }
 

@@ -85,7 +85,7 @@ abstract class PluginCommand extends ShopwareCommand
         $tags = [];
 
         foreach ($contexts as $context) {
-            if (!$context instanceof InstallContext || !array_key_exists('cache', $context->getScheduled())) {
+            if (!$context instanceof InstallContext || !\array_key_exists('cache', $context->getScheduled())) {
                 continue;
             }
 

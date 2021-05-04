@@ -99,7 +99,7 @@ class MenuHelper
     public function getNextUrl($params = [])
     {
         $entries = $this->entries;
-        $currentEntry = \next($entries);
+        $currentEntry = next($entries);
 
         return $this->slim->urlFor($currentEntry, $params);
     }
@@ -112,7 +112,7 @@ class MenuHelper
     public function getPreviousUrl($params = [])
     {
         $entries = $this->entries;
-        $currentEntry = \prev($entries);
+        $currentEntry = prev($entries);
 
         return $this->slim->urlFor($currentEntry, $params);
     }
@@ -125,7 +125,7 @@ class MenuHelper
     public function getCurrentUrl($params = [])
     {
         $entries = $this->entries;
-        $currentEntry = \current($entries);
+        $currentEntry = current($entries);
 
         return $this->slim->urlFor($currentEntry, $params);
     }

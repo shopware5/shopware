@@ -283,7 +283,7 @@ class PropertyConditionTest extends TestCase
 
         $values = [];
         foreach ($properties['propertyValues'] as $index => $value) {
-            if (in_array($index, $indexes)) {
+            if (\in_array($index, $indexes)) {
                 $values[] = $value;
             }
         }

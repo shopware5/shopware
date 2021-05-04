@@ -94,6 +94,6 @@ class CustomUrlProvider implements UrlProviderInterface
      */
     private function isAvailableForShop(array $url, $shopId)
     {
-        return in_array((int) $url['shopId'], [$shopId, 0], true);
+        return \in_array((int) $url['shopId'], [$shopId, 0], true);
     }
 }

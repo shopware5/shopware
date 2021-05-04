@@ -44,7 +44,7 @@ abstract class ModelEntity
     public function fromArray(array $array = [], array $fillable = [])
     {
         foreach ($array as $key => $value) {
-            if (count($fillable) && !in_array($key, $fillable)) {
+            if (\count($fillable) && !\in_array($key, $fillable)) {
                 continue;
             }
 
@@ -122,7 +122,7 @@ abstract class ModelEntity
         }
 
         // If the parameter is no array, return
-        if (!is_array($data) || empty($data)) {
+        if (!\is_array($data) || empty($data)) {
             return $this;
         }
 
@@ -201,13 +201,13 @@ abstract class ModelEntity
         // Iterate all passed items
         foreach ($data as $item) {
             // To get the right collection item use the internal helper function
-            if (is_array($item) && isset($item['id']) && $item['id'] !== null) {
+            if (\is_array($item) && isset($item['id']) && $item['id'] !== null) {
                 $attribute = $this->getArrayCollectionElementById($this->$getterFunction(), $item['id']);
                 if (!$attribute instanceof $model) {
                     $attribute = new $model();
                 }
                 // If the item is an array without an id, create a new model.
-            } elseif (is_array($item)) {
+            } elseif (\is_array($item)) {
                 $attribute = new $model();
             // If the item is no array, it could be an instance of the expected object.
             } else {
@@ -220,7 +220,7 @@ abstract class ModelEntity
             }
 
             // If the current item is an array, use the from array function to set the data.
-            if (is_array($item)) {
+            if (\is_array($item)) {
                 $attribute->fromArray($item);
             }
 
@@ -297,7 +297,7 @@ abstract class ModelEntity
         }
 
         // If the parameter is no array, return
-        if (!is_array($data) || empty($data)) {
+        if (!\is_array($data) || empty($data)) {
             return $this;
         }
 

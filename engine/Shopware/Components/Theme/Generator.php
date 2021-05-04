@@ -335,7 +335,7 @@ EOD;
     private function generateStructure($directory, $baseDir)
     {
         foreach ($directory as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->fileSystem->mkdir($baseDir . DIRECTORY_SEPARATOR . $key);
 
                 $this->generateStructure($value, $baseDir . DIRECTORY_SEPARATOR . $key);

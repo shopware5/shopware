@@ -203,7 +203,7 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
         $rawValue = $input->getArgument('value');
         $value = $this->castValue($rawValue);
 
-        if (preg_match('/^\[(.+,?)*\]$/', $value, $matches) && count($matches) == 2) {
+        if (preg_match('/^\[(.+,?)*\]$/', $value, $matches) && \count($matches) == 2) {
             $value = explode(',', $matches[1]);
             $value = array_map(function ($val) {
                 return $this->castValue($val);

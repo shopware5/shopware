@@ -53,7 +53,7 @@ class Attribute extends Struct implements \JsonSerializable, \ArrayAccess
      */
     public function exists($key)
     {
-        return array_key_exists($key, $this->storage);
+        return \array_key_exists($key, $this->storage);
     }
 
     /**
@@ -144,7 +144,7 @@ class Attribute extends Struct implements \JsonSerializable, \ArrayAccess
             return true;
         }
 
-        if (is_array($value)) {
+        if (\is_array($value)) {
             foreach ($value as $val) {
                 if (!$this->isValid($val)) {
                     return false;

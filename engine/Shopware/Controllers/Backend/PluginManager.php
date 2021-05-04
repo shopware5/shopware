@@ -100,7 +100,7 @@ class PluginManager extends \Shopware_Controllers_Backend_ExtJs
         $offset = (int) $this->Request()->getParam('offset');
 
         $downloadsDir = $this->container->getParameter('shopware.app.downloadsDir');
-        if (!is_string($downloadsDir)) {
+        if (!\is_string($downloadsDir)) {
             throw new \RuntimeException('Parameter shopware.app.downloadsdir has to be an string');
         }
 
@@ -146,7 +146,7 @@ class PluginManager extends \Shopware_Controllers_Backend_ExtJs
         }
 
         $downloadsDir = $this->container->getParameter('shopware.app.downloadsDir');
-        if (!is_string($downloadsDir)) {
+        if (!\is_string($downloadsDir)) {
             throw new \RuntimeException('Parameter shopware.app.downloadsdir has to be an string');
         }
 
@@ -177,7 +177,7 @@ class PluginManager extends \Shopware_Controllers_Backend_ExtJs
 
     public function checkIonCubeLoaderAction()
     {
-        $this->View()->assign(['success' => extension_loaded('ionCube Loader')]);
+        $this->View()->assign(['success' => \extension_loaded('ionCube Loader')]);
     }
 
     public function getCategoriesAction()
@@ -749,7 +749,7 @@ class PluginManager extends \Shopware_Controllers_Backend_ExtJs
     {
         $version = $this->container->getParameter('shopware.release.version');
 
-        if (!is_string($version)) {
+        if (!\is_string($version)) {
             throw new \RuntimeException('Parameter shopware.release.version has to be an string');
         }
 

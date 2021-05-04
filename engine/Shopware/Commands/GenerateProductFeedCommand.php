@@ -110,7 +110,7 @@ class GenerateProductFeedCommand extends ShopwareCommand implements CompletionAw
         $this->output = $output;
         $cacheDir = $this->container->getParameter('kernel.cache_dir');
 
-        if (!is_string($cacheDir)) {
+        if (!\is_string($cacheDir)) {
             throw new \RuntimeException('Parameter kernel.cache_dir has to be an string');
         }
 

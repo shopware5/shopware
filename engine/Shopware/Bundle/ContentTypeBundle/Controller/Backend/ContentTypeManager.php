@@ -110,7 +110,7 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
 
         $this->View()->assign('success', true);
         $this->View()->assign('data', array_values($types));
-        $this->View()->assign('count', count($types));
+        $this->View()->assign('count', \count($types));
     }
 
     public function fieldsAction(): void
@@ -132,7 +132,7 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
                     'id' => $id,
                     'name' => $name,
                     'label' => sprintf($namespace->get($snippetName, $snippetName, true), ucfirst(explode('-', $id)[0])),
-                    'hasResolver' => array_key_exists(ResolveableFieldInterface::class, class_implements($name)),
+                    'hasResolver' => \array_key_exists(ResolveableFieldInterface::class, class_implements($name)),
                 ];
 
                 continue;
@@ -142,7 +142,7 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
                 'id' => $id,
                 'name' => $name,
                 'label' => $namespace->get($id, $id, true),
-                'hasResolver' => array_key_exists(ResolveableFieldInterface::class, class_implements($name)),
+                'hasResolver' => \array_key_exists(ResolveableFieldInterface::class, class_implements($name)),
             ];
         }
 

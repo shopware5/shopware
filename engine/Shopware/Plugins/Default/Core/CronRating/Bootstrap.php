@@ -417,7 +417,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $firstPosition = $positions[array_keys($positions)[0]];
             $shopId = is_numeric($firstPosition['language']) ? $firstPosition['language'] : $firstPosition['subshopID'];
 
-            if (!is_array($shopPositionNumbers[$shopId])) {
+            if (!\is_array($shopPositionNumbers[$shopId])) {
                 $shopPositionNumbers[$shopId] = [];
             }
 

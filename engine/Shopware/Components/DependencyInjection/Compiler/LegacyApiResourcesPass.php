@@ -50,7 +50,7 @@ class LegacyApiResourcesPass implements CompilerPassInterface
                     continue;
                 }
 
-                if (count($definition->getTag('shopware.api_resource')) !== 0) {
+                if (\count($definition->getTag('shopware.api_resource')) !== 0) {
                     continue;
                 }
 

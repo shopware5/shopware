@@ -1045,7 +1045,7 @@ class MediaExtensionMappingService implements MediaExtensionMappingServiceInterf
     {
         foreach ($mapping as $extension) {
             $extension = strtolower($extension);
-            if (!array_key_exists($extension, $this->mapping)) {
+            if (!\array_key_exists($extension, $this->mapping)) {
                 $this->mapping[$extension] = Media::TYPE_UNKNOWN;
             }
         }
@@ -1058,7 +1058,7 @@ class MediaExtensionMappingService implements MediaExtensionMappingServiceInterf
     {
         $extension = strtolower($extension);
 
-        return array_key_exists($extension, $this->mapping);
+        return \array_key_exists($extension, $this->mapping);
     }
 
     /**
@@ -1068,6 +1068,6 @@ class MediaExtensionMappingService implements MediaExtensionMappingServiceInterf
     {
         $extension = strtolower($extension);
 
-        return array_key_exists($extension, $this->mapping) ? $this->mapping[$extension] : Media::TYPE_UNKNOWN;
+        return \array_key_exists($extension, $this->mapping) ? $this->mapping[$extension] : Media::TYPE_UNKNOWN;
     }
 }

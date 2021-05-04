@@ -237,7 +237,7 @@ class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
 
         $newLocale = new \Shopware\Models\Shop\Locale();
         $newLocale->setLocale($locale);
-        $newLocale->setLanguage('<' . $locale . ' language name as created for ' . get_class($this) . '>');
+        $newLocale->setLanguage('<' . $locale . ' language name as created for ' . \get_class($this) . '>');
         $newLocale->setTerritory('<' . $locale . ' territory name>');
         $entityManager->persist($newLocale);
         // Flush $newLocale to database,so we can retrieve its new id afterwards.
@@ -314,7 +314,7 @@ class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new \Exception('JSON parse error: ' . json_last_error_msg() . ' for request to ' . $requestUrl . ' which returned ' . $responseBody);
         }
-        if (!is_object($responseDataTransferObject)) {
+        if (!\is_object($responseDataTransferObject)) {
             throw new \Exception('Response could not be parsed to an object for request to ' . $requestUrl . ' which returned ' . $responseBody);
         }
 

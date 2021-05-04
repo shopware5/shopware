@@ -56,7 +56,7 @@ class TypeReader
                     continue;
                 }
 
-                if (!in_array($pluginDir->getBasename(), $activePlugins, true)) {
+                if (!\in_array($pluginDir->getBasename(), $activePlugins, true)) {
                     continue;
                 }
 

@@ -774,7 +774,7 @@ class Translation extends Resource implements BatchInterface
     {
         $numbers = explode('|', $number);
 
-        if (count($numbers) < 2) {
+        if (\count($numbers) < 2) {
             throw new ApiException\CustomValidationException(sprintf('Passed filter group number %s contains not the full path: set|group', $number));
         }
 
@@ -821,7 +821,7 @@ class Translation extends Resource implements BatchInterface
     {
         $numbers = explode('|', $number);
 
-        if (count($numbers) < 3) {
+        if (\count($numbers) < 3) {
             throw new ApiException\CustomValidationException(sprintf('Passed filter option number %s contains not the full path: set|group|option', $number));
         }
 
@@ -904,7 +904,7 @@ class Translation extends Resource implements BatchInterface
     {
         $numbers = explode('|', $number);
 
-        if (count($numbers) < 2) {
+        if (\count($numbers) < 2) {
             throw new ApiException\CustomValidationException(sprintf('Passed configurator option name %s contains not the full path: group|option', $number));
         }
 
@@ -946,7 +946,7 @@ class Translation extends Resource implements BatchInterface
                 throw new ApiException\ParameterMissingException('The parameter data is required for a object translation');
             }
 
-            if (!is_array($data['data'])) {
+            if (!\is_array($data['data'])) {
                 throw new ApiException\CustomValidationException('The parameter data has to be an array.');
             }
         }

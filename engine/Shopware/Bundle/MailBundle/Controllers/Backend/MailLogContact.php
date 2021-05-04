@@ -43,7 +43,7 @@ class MailLogContact extends \Shopware_Controllers_Backend_Application
      */
     protected function getList($offset, $limit, $sort = [], $filter = [], array $wholeParams = [])
     {
-        if (!array_key_exists('id', $wholeParams)) {
+        if (!\array_key_exists('id', $wholeParams)) {
             return parent::getList($offset, $limit, $sort, $filter, $wholeParams);
         }
 

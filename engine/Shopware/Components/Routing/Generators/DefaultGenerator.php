@@ -59,7 +59,7 @@ class DefaultGenerator implements GeneratorInterface
     {
         $route = [];
 
-        if (array_key_exists('_seo', $params)) {
+        if (\array_key_exists('_seo', $params)) {
             unset($params['_seo']);
         }
 
@@ -85,12 +85,12 @@ class DefaultGenerator implements GeneratorInterface
         }
 
         foreach ($params as $key => $value) {
-            if (is_object($value)) {
+            if (\is_object($value)) {
                 trigger_error(sprintf('Using objects as params in %s:%s is deprecated since Shopware 5.6 and will result in an exception with 5.7.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
             }
 
             $route[] = $key;
-            $route[] = is_array($value) ? http_build_query($value) : $value;
+            $route[] = \is_array($value) ? http_build_query($value) : $value;
         }
 
         $route = array_map('urlencode', $route);

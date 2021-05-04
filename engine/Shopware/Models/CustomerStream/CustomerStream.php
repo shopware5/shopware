@@ -161,7 +161,7 @@ class CustomerStream extends ModelEntity
      */
     public function setFreezeUp($freezeUp)
     {
-        if (is_string($freezeUp)) {
+        if (\is_string($freezeUp)) {
             $freezeUp = new \DateTime($freezeUp);
         }
         $this->freezeUp = $freezeUp;

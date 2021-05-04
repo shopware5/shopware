@@ -258,7 +258,7 @@ class sAdmin implements \Enlight_Hook
         $sEsd = $this->moduleManager->Basket()->sCheckForESD();
         $isMobile = $this->front->Request()->getDeviceType() === 'mobile';
 
-        if (!is_array($user)) {
+        if (!\is_array($user)) {
             $user = [];
         }
 
@@ -457,7 +457,7 @@ class sAdmin implements \Enlight_Hook
         }
 
         // If no payment is left use always the fallback payment no matter if it has any restrictions too
-        if (!count($paymentMeans)) {
+        if (!\count($paymentMeans)) {
             $paymentMeans[] = ['id' => $this->config->offsetGet('paymentdefault')];
         }
 
@@ -490,7 +490,7 @@ class sAdmin implements \Enlight_Hook
     {
         $dirs = [];
 
-        if (substr($paymentData['class'], -strlen('.php')) === '.php') {
+        if (substr($paymentData['class'], -\strlen('.php')) === '.php') {
             $index = substr($paymentData['class'], 0, strpos($paymentData['class'], '.php'));
         } else {
             $index = $paymentData['class'];
@@ -502,7 +502,7 @@ class sAdmin implements \Enlight_Hook
             ['subject' => $this]
         );
 
-        $class = array_key_exists($index, $dirs) ? $dirs[$index] : $dirs['default'];
+        $class = \array_key_exists($index, $dirs) ? $dirs[$index] : $dirs['default'];
         if (!$class) {
             throw new Enlight_Exception('sValidateStep3 #02: Payment classes dir not loaded');
         }
@@ -536,7 +536,7 @@ class sAdmin implements \Enlight_Hook
         $checkPayment = null;
         $sPaymentObject = null;
 
-        if (!count($paymentData)) {
+        if (!\count($paymentData)) {
             throw new Enlight_Exception('sValidateStep3 #01: Could not load paymentmean');
         }
         // Include management class and check input data
@@ -818,7 +818,7 @@ class sAdmin implements \Enlight_Hook
         $plaintext = null;
         $encoderName = null;
 
-        if (!count($getUser)) {
+        if (!\count($getUser)) {
             $isValidLogin = false;
         } else {
             if ($isPreHashed) {
@@ -1166,11 +1166,11 @@ class sAdmin implements \Enlight_Hook
             $context[$key] = $value;
         }
 
-        if (array_key_exists('password', $context)) {
+        if (\array_key_exists('password', $context)) {
             unset($context['password']);
         }
 
-        if (array_key_exists('passwordConfirmation', $context)) {
+        if (\array_key_exists('passwordConfirmation', $context)) {
             unset($context['passwordConfirmation']);
         }
 
@@ -1238,7 +1238,7 @@ class sAdmin implements \Enlight_Hook
                 [$orderValue['id']]
             );
 
-            if (!count($getOrderDetails)) {
+            if (!\count($getOrderDetails)) {
                 unset($getOrders[$orderKey]);
             } else {
                 $foundESD = false;
@@ -1292,12 +1292,12 @@ class sAdmin implements \Enlight_Hook
 
         if ($perPage != 0) {
             // Make Array with page-structure to render in template
-            $numberOfPages = ceil(count($getOrders) / $perPage);
+            $numberOfPages = ceil(\count($getOrders) / $perPage);
         } else {
             $numberOfPages = 0;
         }
         $offset = ($destinationPage - 1) * $perPage;
-        $orderData['orderData'] = array_slice($getOrders, $offset, $perPage, true);
+        $orderData['orderData'] = \array_slice($getOrders, $offset, $perPage, true);
         $orderData['numberOfPages'] = $numberOfPages;
         $orderData['pages'] = $this->getPagerStructure($destinationPage, $numberOfPages);
 
@@ -1889,7 +1889,7 @@ class sAdmin implements \Enlight_Hook
      */
     public function sRiskORDERPOSITIONSMORE($user, $order, $value)
     {
-        return is_array($order['content']) ? count($order['content']) : $order['content'] >= $value;
+        return \is_array($order['content']) ? \count($order['content']) : $order['content'] >= $value;
     }
 
     /**
@@ -2123,7 +2123,7 @@ class sAdmin implements \Enlight_Hook
                 [$this->session->offsetGet('sUserId')]
             );
 
-            return count($checkOrder) <= $value;
+            return \count($checkOrder) <= $value;
         }
 
         return true;
@@ -2372,7 +2372,7 @@ class sAdmin implements \Enlight_Hook
             }
         }
 
-        if (!empty($result['code']) && in_array($result['code'], [2, 3])) {
+        if (!empty($result['code']) && \in_array($result['code'], [2, 3])) {
             $voteConfirmed = $this->front->getParam('voteConfirmed');
             $now = $this->front->getParam('optinNow');
             $now = isset($now) ? $now : (new DateTime())->format('Y-m-d H:i:s');
@@ -2470,7 +2470,7 @@ class sAdmin implements \Enlight_Hook
 
         if (is_numeric($country)) {
             $sql = $this->db->quoteInto('c.id = ?', $country);
-        } elseif (is_string($country)) {
+        } elseif (\is_string($country)) {
             $sql = $this->db->quoteInto('c.countryiso = ?', $country);
         } else {
             return false;
@@ -2505,7 +2505,7 @@ class sAdmin implements \Enlight_Hook
         }
         if (is_numeric($payment)) {
             $sql = $this->db->quoteInto('id = ?', $payment);
-        } elseif (is_string($payment)) {
+        } elseif (\is_string($payment)) {
             $sql = $this->db->quoteInto('name = ?', $payment);
         } else {
             return false;
@@ -2633,7 +2633,7 @@ class sAdmin implements \Enlight_Hook
         foreach ($paymentMeans as $paymentMean) {
             $paymentIDs[] = $paymentMean['id'];
         }
-        if (!in_array($paymentID, $paymentIDs)) {
+        if (!\in_array($paymentID, $paymentIDs)) {
             $paymentID = reset($paymentIDs);
         }
 
@@ -2827,7 +2827,7 @@ class sAdmin implements \Enlight_Hook
 
         $names = [];
         foreach ($dispatches as $dispatchID => $dispatch) {
-            if (in_array($dispatch['name'], $names)) {
+            if (\in_array($dispatch['name'], $names)) {
                 unset($dispatches[$dispatchID]);
             } else {
                 $names[] = $dispatch['name'];
@@ -3685,7 +3685,7 @@ SQL;
             [$orderValue['id']]
         );
 
-        if (!count($orderDetails)) {
+        if (!\count($orderDetails)) {
             unset($orders[$orderKey]);
 
             return $orders;
@@ -3716,7 +3716,7 @@ SQL;
                 $tmpProduct = $listProducts[$orderDetailsValue['articleordernumber']];
             }
 
-            if (!empty($tmpProduct) && is_array($tmpProduct)) {
+            if (!empty($tmpProduct) && \is_array($tmpProduct)) {
                 // Set product in activate state
                 $orderDetails[$orderDetailsKey]['active'] = 1;
                 $orderDetails[$orderDetailsKey]['article'] = $tmpProduct;
@@ -3732,7 +3732,7 @@ SQL;
                     $orderDetails[$orderDetailsKey]['referenceprice'] = $tmpProduct['referenceprice'];
                 }
 
-                if (!empty($tmpProduct['sUnit']) && is_array($tmpProduct['sUnit'])) {
+                if (!empty($tmpProduct['sUnit']) && \is_array($tmpProduct['sUnit'])) {
                     $orderDetails[$orderDetailsKey]['sUnit'] = $tmpProduct['sUnit'];
                 }
 
@@ -3910,7 +3910,7 @@ SQL;
             'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
             [$email]
         );
-        $isEmailExists = count($result) === 0;
+        $isEmailExists = \count($result) === 0;
 
         if ($result === false) {
             $result = [
@@ -3920,7 +3920,7 @@ SQL;
             ];
 
             return $result;
-        } elseif (count($result) === 0) {
+        } elseif (\count($result) === 0) {
             $customer = $this->db->fetchOne(
                 'SELECT id FROM s_user WHERE email = ? LIMIT 1',
                 [$email]

@@ -280,7 +280,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 
         $blacklist = ['', 'sitemap', 'sitemapXml'];
 
-        if (in_array($userParams['sViewport'], $blacklist)) {
+        if (\in_array($userParams['sViewport'], $blacklist)) {
             return false;
         }
 
@@ -409,7 +409,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     {
         $userParams = [];
 
-        if (is_string($link)) {
+        if (\is_string($link)) {
             $userParams = parse_url($link, PHP_URL_QUERY);
             parse_str($userParams, $userParams);
         }
@@ -421,7 +421,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             ];
         }
 
-        if (is_array($link)) {
+        if (\is_array($link)) {
             $userParams = array_merge($userParams, $link);
         }
 

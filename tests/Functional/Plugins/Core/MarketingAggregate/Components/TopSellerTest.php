@@ -41,7 +41,7 @@ class TopSellerTest extends AbstractMarketing
         $this->TopSeller()->initTopSeller();
 
         static::assertCount(
-            count($this->getAllArticles()),
+            \count($this->getAllArticles()),
             $this->getAllTopSeller()
         );
     }
@@ -71,7 +71,7 @@ class TopSellerTest extends AbstractMarketing
         //now we can update the all other top seller data
         $this->TopSeller()->updateElapsedTopSeller();
         static::assertCount(
-            count($this->getAllTopSeller()),
+            \count($this->getAllTopSeller()),
             $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ")
         );
     }
@@ -154,7 +154,7 @@ class TopSellerTest extends AbstractMarketing
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
         static::assertCount(
-            count($this->getAllTopSeller()),
+            \count($this->getAllTopSeller()),
             $topSeller
         );
     }

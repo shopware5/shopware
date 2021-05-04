@@ -212,7 +212,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $operators = [];
         foreach ($columns as $columnOperators) {
             foreach ($columnOperators as $operator) {
-                if (!array_key_exists($operator, $operators)) {
+                if (!\array_key_exists($operator, $operators)) {
                     $operators[$operator] = ['name' => $operator];
                 }
             }
@@ -503,7 +503,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
         /** @var Detail $variant */
         $variant = $this->getDetailRepository()->find($id);
-        if (!is_object($variant)) {
+        if (!\is_object($variant)) {
             $this->View()->assign([
                 'success' => false,
             ]);

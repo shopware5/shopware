@@ -104,7 +104,7 @@ class PresetDataSynchronizerTest extends TestCase
         $this->synchronizerService->importElementAssets($preset, 'key');
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
-        static::assertEquals(1, count($presets));
+        static::assertEquals(1, \count($presets));
         $createdPreset = $presets[0];
 
         static::assertJson($createdPreset['preset_data']);
@@ -118,7 +118,7 @@ class PresetDataSynchronizerTest extends TestCase
         $this->synchronizerService->importElementAssets($preset, 'key');
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
-        static::assertEquals(1, count($presets));
+        static::assertEquals(1, \count($presets));
 
         $createdPreset = $presets[0];
 
@@ -140,7 +140,7 @@ class PresetDataSynchronizerTest extends TestCase
         $this->synchronizerService->importElementAssets($preset, 'key');
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
-        static::assertEquals(1, count($presets));
+        static::assertEquals(1, \count($presets));
 
         $createdPreset = $presets[0];
 
@@ -155,7 +155,7 @@ class PresetDataSynchronizerTest extends TestCase
         $this->synchronizerService->importElementAssets($preset, 'key');
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
-        static::assertEquals(1, count($presets));
+        static::assertEquals(1, \count($presets));
 
         $createdPreset = $presets[0];
 

@@ -81,7 +81,7 @@ class BacklogSyncCommand extends ShopwareCommand
         }
 
         /** @var Backlog $last */
-        $last = $backlogs[count($backlogs) - 1];
+        $last = $backlogs[\count($backlogs) - 1];
         $reader->setLastBacklogId($last->getId());
         $shops = $this->container->get(\Shopware\Bundle\ESIndexingBundle\IdentifierSelector::class)->getShops();
         foreach ($shops as $shop) {
@@ -93,7 +93,7 @@ class BacklogSyncCommand extends ShopwareCommand
             }
         }
 
-        $io->success(sprintf('Synchronized %d items', count($backlogs)));
+        $io->success(sprintf('Synchronized %d items', \count($backlogs)));
 
         return 0;
     }

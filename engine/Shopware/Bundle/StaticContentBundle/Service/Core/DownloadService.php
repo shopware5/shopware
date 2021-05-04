@@ -135,6 +135,6 @@ class DownloadService implements DownloadServiceInterface
 
     private function canServedLocal(FilesystemInterface $filesystem, int $downloadStrategy): bool
     {
-        return $filesystem instanceof Filesystem && $filesystem->getAdapter() instanceof Local && in_array($downloadStrategy, [0, 2, 3], true);
+        return $filesystem instanceof Filesystem && $filesystem->getAdapter() instanceof Local && \in_array($downloadStrategy, [0, 2, 3], true);
     }
 }

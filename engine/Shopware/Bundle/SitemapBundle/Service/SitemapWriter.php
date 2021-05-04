@@ -122,7 +122,7 @@ class SitemapWriter implements SitemapWriterInterface
      */
     private function closeFile($shopId)
     {
-        if (!array_key_exists($shopId, $this->files)) {
+        if (!\array_key_exists($shopId, $this->files)) {
             throw new UnknownFileException(sprintf('No open file "%s"', $shopId));
         }
 
@@ -131,7 +131,7 @@ class SitemapWriter implements SitemapWriterInterface
 
         gzclose($fileHandle);
 
-        if (!array_key_exists($shopId, $this->sitemaps)) {
+        if (!\array_key_exists($shopId, $this->sitemaps)) {
             $this->sitemaps[$shopId] = [];
         }
 
@@ -152,7 +152,7 @@ class SitemapWriter implements SitemapWriterInterface
      */
     private function openFile($shopId)
     {
-        if (array_key_exists($shopId, $this->files)) {
+        if (\array_key_exists($shopId, $this->files)) {
             return true;
         }
 

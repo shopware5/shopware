@@ -649,7 +649,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $selection = [];
-        if (is_array($fields)) {
+        if (\is_array($fields)) {
             foreach ($fields as $field) {
                 $selection[] = 'category.' . $field;
             }
@@ -680,7 +680,7 @@ class Repository extends ModelRepository
             }
         }
 
-        if (is_array($fields)) {
+        if (\is_array($fields)) {
             return $result;
         }
 

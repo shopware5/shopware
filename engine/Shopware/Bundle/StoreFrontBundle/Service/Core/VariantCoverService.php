@@ -60,7 +60,7 @@ class VariantCoverService implements VariantCoverServiceInterface
 
         $fallback = [];
         foreach ($products as $product) {
-            if (!array_key_exists($product->getNumber(), $covers)) {
+            if (!\array_key_exists($product->getNumber(), $covers)) {
                 $fallback[] = $product;
             }
         }

@@ -251,7 +251,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
     {
         $version = $this->container->getParameter('shopware.release.version');
 
-        if (!is_string($version)) {
+        if (!\is_string($version)) {
             throw new \RuntimeException('Parameter shopware.release.version has to be an string');
         }
 
@@ -285,12 +285,12 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
         $locale = $user->locale;
         $localeCode = $locale->getLocale();
 
-        if (array_key_exists($localeCode, $locales)) {
+        if (\array_key_exists($localeCode, $locales)) {
             return $locales[$localeCode];
         }
 
         // Fallback to english locale when available
-        if (array_key_exists('en_GB', $locales)) {
+        if (\array_key_exists('en_GB', $locales)) {
             return $locales['en_GB'];
         }
 

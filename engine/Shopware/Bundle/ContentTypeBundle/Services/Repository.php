@@ -172,7 +172,7 @@ class Repository implements RepositoryInterface
                     $expression = null;
 
                     if ($item['property'] === 'id') {
-                        $idSearch = is_array($where) ? $where : [$where];
+                        $idSearch = \is_array($where) ? $where : [$where];
                     }
 
                     if (isset($item['expression'])) {
@@ -181,10 +181,10 @@ class Repository implements RepositoryInterface
 
                     if ($expression === null) {
                         switch (true) {
-                            case is_string($where):
+                            case \is_string($where):
                                 $expression = 'LIKE';
                                 break;
-                            case is_array($where):
+                            case \is_array($where):
                                 $expression = 'IN';
                                 break;
                             case $where === null:
@@ -221,7 +221,7 @@ class Repository implements RepositoryInterface
         }
 
         // Sorting result by given ids
-        if ($idSearch && count($filters) === 1) {
+        if ($idSearch && \count($filters) === 1) {
             $idSearch = array_map('intval', $idSearch);
 
             $orderBy = sprintf('FIELD(id, %s)', implode(',', $idSearch));
@@ -269,7 +269,7 @@ class Repository implements RepositoryInterface
         $names[] = 'created_at';
 
         foreach ($fields as $key => $field) {
-            if (!in_array($key, $names, true)) {
+            if (!\in_array($key, $names, true)) {
                 unset($fields[$key]);
             }
         }

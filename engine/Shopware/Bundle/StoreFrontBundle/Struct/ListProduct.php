@@ -405,7 +405,7 @@ class ListProduct extends BaseProduct
      */
     public function hasState($state)
     {
-        return in_array($state, $this->states);
+        return \in_array($state, $this->states);
     }
 
     /**

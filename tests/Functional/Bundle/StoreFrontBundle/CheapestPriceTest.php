@@ -50,7 +50,7 @@ class CheapestPriceTest extends TestCase
         $context = $this->getContext();
         $data = $this->getConfiguratorProduct($number, $context);
 
-        $count = count($data['variants']) - 1;
+        $count = \count($data['variants']) - 1;
 
         $data['variants'][$count]['active'] = false;
         $data['variants'][$count - 1]['active'] = false;
@@ -70,7 +70,7 @@ class CheapestPriceTest extends TestCase
         $context = $this->getContext();
         $data = $this->getConfiguratorProduct($number, $context);
 
-        $count = count($data['variants']) - 1;
+        $count = \count($data['variants']) - 1;
 
         $data['lastStock'] = true;
         $data['variants'][$count]['inStock'] = 0;
@@ -252,7 +252,7 @@ class CheapestPriceTest extends TestCase
 
         $data['priceGroupActive'] = true;
         $data['priceGroupId'] = $priceGroup->getId();
-        $count = count($data['variants']) - 1;
+        $count = \count($data['variants']) - 1;
         $data['lastStock'] = true;
 
         /*

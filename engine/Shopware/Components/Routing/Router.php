@@ -104,7 +104,7 @@ class Router extends EnlightRouter implements RouterInterface
 
         foreach ($this->matchers as $route) {
             $params = $route->match($pathInfo, $context);
-            if (is_array($params)) {
+            if (\is_array($params)) {
                 // Adds support for rewrite queries
                 return array_merge($params, $context->getParams());
             }
@@ -139,7 +139,7 @@ class Router extends EnlightRouter implements RouterInterface
                 $urls = $route->generateList($list, $context);
             } elseif ($route instanceof GeneratorInterface) {
                 foreach ($list as $key => $params) {
-                    if (isset($urls[$key]) && is_string($urls[$key])) {
+                    if (isset($urls[$key]) && \is_string($urls[$key])) {
                         continue;
                     }
                     $urls[$key] = $route->generate($params, $contextList[$key]);
@@ -179,12 +179,12 @@ class Router extends EnlightRouter implements RouterInterface
         foreach ($this->generators as $route) {
             if ($route instanceof GeneratorInterface) {
                 $url = $route->generate($userParams, $context);
-                if (is_string($url)) {
+                if (\is_string($url)) {
                     break;
                 }
             }
         }
-        if (!is_string($url)) {
+        if (!\is_string($url)) {
             return false;
         }
         foreach ($this->postFilters as $postFilter) {

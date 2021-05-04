@@ -52,7 +52,7 @@ class VariantFacet implements FacetInterface
             $expandGroupIds = [];
         }
 
-        if (is_string($groupIds)) {
+        if (\is_string($groupIds)) {
             $groupIds = array_filter(explode('|', $groupIds));
         }
         Assertion::allIntegerish($groupIds);
@@ -62,7 +62,7 @@ class VariantFacet implements FacetInterface
             $expandGroupIds = [];
         }
 
-        if (is_string($expandGroupIds)) {
+        if (\is_string($expandGroupIds)) {
             $expandGroupIds = array_filter(explode('|', $expandGroupIds));
         }
 

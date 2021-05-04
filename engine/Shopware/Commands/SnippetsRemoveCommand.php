@@ -48,7 +48,7 @@ class SnippetsRemoveCommand extends ShopwareCommand implements CompletionAwareIn
         if ($argumentName === 'folder') {
             $rootDir = $this->container->getParameter('kernel.root_dir');
 
-            if (!is_string($rootDir)) {
+            if (!\is_string($rootDir)) {
                 throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
             }
 
@@ -81,7 +81,7 @@ class SnippetsRemoveCommand extends ShopwareCommand implements CompletionAwareIn
     {
         $rootDir = $this->container->getParameter('kernel.root_dir');
 
-        if (!is_string($rootDir)) {
+        if (!\is_string($rootDir)) {
             throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
         }
 

@@ -86,7 +86,7 @@ class CategoryDuplicator
 
         unset($originalCategory['id'], $originalCategory['path']);
 
-        $valuePlaceholders = array_fill(0, count($originalCategory), '?');
+        $valuePlaceholders = array_fill(0, \count($originalCategory), '?');
         $insertStmt = $this->connection->prepare(
             'INSERT INTO s_categories (`' . implode('`, `', array_keys($originalCategory)) . '`)
             VALUES (' . implode(', ', $valuePlaceholders) . ')'

@@ -179,7 +179,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
              */
             $mainQuery->setParameter($valueKey, $valueId);
 
-            if (array_key_exists($tableKey, $tableKeys)) {
+            if (\array_key_exists($tableKey, $tableKeys)) {
                 continue;
             }
 

@@ -156,7 +156,7 @@ class SnippetsToSqlCommand extends ShopwareCommand implements CompletionAwareInt
 
         $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
 
-        if (!is_array($pluginDirectories)) {
+        if (!\is_array($pluginDirectories)) {
             throw new \RuntimeException('Parameter shopware.plugin_directories has to be an array');
         }
 

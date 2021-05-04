@@ -188,7 +188,7 @@ class Manager
         ksort($migrations);
 
         if ($limit !== null) {
-            return array_slice($migrations, 0, $limit, true);
+            return \array_slice($migrations, 0, $limit, true);
         }
 
         return $migrations;
@@ -214,7 +214,7 @@ class Manager
         } catch (\Exception $e) {
             $this->markMigrationAsFailed($migration, $e);
 
-            throw new \Exception(sprintf('Could not apply migration (%s). Error: %s ', get_class($migration), $e->getMessage()));
+            throw new \Exception(sprintf('Could not apply migration (%s). Error: %s ', \get_class($migration), $e->getMessage()));
         }
 
         $this->markMigrationAsFinished($migration);
@@ -234,7 +234,7 @@ class Manager
 
         $migrations = $this->getMigrationsForVersion($currentVersion);
 
-        $this->log(sprintf('Found %s migrations to apply', count($migrations)));
+        $this->log(sprintf('Found %s migrations to apply', \count($migrations)));
 
         foreach ($migrations as $migration) {
             $this->log(sprintf('Apply MigrationNumber: %s - %s', $migration->getVersion(), $migration->getLabel()));

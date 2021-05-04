@@ -58,7 +58,7 @@ class GetWrapper implements \ArrayAccess
     {
         $getData = $this->request->getQuery();
 
-        return array_key_exists($offset, $getData);
+        return \array_key_exists($offset, $getData);
     }
 
     /**

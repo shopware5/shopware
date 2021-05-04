@@ -84,7 +84,7 @@ class HrefLangService implements HrefLangServiceInterface
         $shops = $this->getLanguageShops($contextService->getShop());
         $config = clone $this->config;
 
-        if (count($shops) === 1) {
+        if (\count($shops) === 1) {
             return [];
         }
 
@@ -116,7 +116,7 @@ class HrefLangService implements HrefLangServiceInterface
             $hrefs[] = $href;
         }
 
-        if (count($hrefs) === 1) {
+        if (\count($hrefs) === 1) {
             return [];
         }
 
