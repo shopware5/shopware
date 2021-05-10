@@ -108,8 +108,8 @@ class Repository extends ModelRepository
 
         if ($shopId && Shopware()->Config()->get('displayOnlySubShopBlogComments')) {
             $builder
-                ->leftJoin('blog.comments', 'comments', Join::WITH, 'comments.active = 1 AND (comments.shopId IS NULL OR comments.shopId = :shopId)')
-                ->setParameter('shopId', $shopId);
+                ->leftJoin('blog.comments', 'comments', Join::WITH, 'comments.active = 1 AND (comments.shopId IS NULL OR comments.shopId = :commentShopId)')
+                ->setParameter('commentShopId', $shopId);
         } else {
             $builder->leftJoin('blog.comments', 'comments', Join::WITH, 'comments.active = 1');
         }
@@ -465,8 +465,8 @@ class Repository extends ModelRepository
 
         if ($shopId && Shopware()->Config()->get('displayOnlySubShopBlogComments')) {
             $builder
-                ->leftJoin('blog.comments', 'comments', Join::WITH, 'comments.active = 1 AND (comments.shopId IS NULL OR comments.shopId = :shopId)')
-                ->setParameter('shopId', $shopId);
+                ->leftJoin('blog.comments', 'comments', Join::WITH, 'comments.active = 1 AND (comments.shopId IS NULL OR comments.shopId = :commentShopId)')
+                ->setParameter('commentShopId', $shopId);
         } else {
             $builder->leftJoin('blog.comments', 'comments', Join::WITH, 'comments.active = 1');
         }
