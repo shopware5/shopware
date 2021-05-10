@@ -47,7 +47,7 @@
     {* Review title *}
     {block name="frontend_detail_tabs_rating_title"}
         <div class="content--title">
-            {s name="DetailCommentHeader"}{/s} "{$sArticle.articleName}"
+            {s name="DetailCommentHeader"}{/s} "{$sArticle.articleName|escape}"
         </div>
     {/block}
 

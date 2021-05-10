@@ -25,18 +25,28 @@
 //{block name="extjs/overrides/string"}
 Ext.override(Ext.String, {
     /**
+     * @var DOMParser _domParser
+     */
+    _domParser: new DOMParser(),
+
+    /**
      * Return the text content of the element
      *
      * @returns string
      */
     getText: function(value) {
-        var me = this,
-            elementNode;
+        var me = this;
 
-        elementNode = document.createElement('div');
-        elementNode.innerHTML = value;
+        if (!value) {
+            return '';
+        }
 
-        return me._getText([elementNode]);
+        var elementNodes = me._domParser
+            .parseFromString(Ext.String.format('<div>[0]</div>', value), "text/html")
+            .documentElement
+            .querySelectorAll('div');
+
+        return me._getText(elementNodes);
     },
 
     /**
