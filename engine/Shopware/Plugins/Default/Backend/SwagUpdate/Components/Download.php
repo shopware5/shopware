@@ -175,13 +175,20 @@ class Download
             $this->verifyHash($partFile, $hash);
             // close local file connections before move for windows
             $partFilePath = $partFile->getPathname();
-            fclose($destination);
+
+            if (is_resource($destination)) {
+                fclose($destination);
+            }
+
             unset($partFile);
             $this->moveFile($partFilePath, $destinationUri);
         }
 
         // close local file
-        fclose($destination);
+        if (is_resource($destination)) {
+            fclose($destination);
+        }
+
         unset($partFile);
 
         return $size;
