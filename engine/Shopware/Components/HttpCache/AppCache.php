@@ -306,6 +306,8 @@ class AppCache extends HttpCache
     }
 
     /**
+     * @deprecated Since this method does not respect subnet definitions, please use IpUtils::checkIp instead
+     *
      * Checks if $ip is allowed for Http PURGE requests
      *
      * @param string $ip
