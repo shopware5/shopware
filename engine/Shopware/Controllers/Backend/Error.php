@@ -24,4 +24,14 @@
 
 class Shopware_Controllers_Backend_Error extends Shopware_Controllers_Frontend_Error
 {
+    public function preDispatch(): void
+    {
+        parent::preDispatch();
+
+        $contentType = $this->Request()->getHeader('Content-Type');
+        if ($contentType && strpos($contentType, 'application/json') === 0) {
+            $this->Front()->Plugins()->Json()->setRenderer();
+            $this->View()->assign('success', false);
+        }
+    }
 }

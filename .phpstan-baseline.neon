@@ -361,11 +361,6 @@ parameters:
 			path: engine/Shopware/Bundle/AttributeBundle/Controllers/Backend/AttributeData.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 5
-			path: engine/Shopware/Bundle/AttributeBundle/Controllers/Backend/AttributeData.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_AttributeData\\:\\:saveDataAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AttributeBundle/Controllers/Backend/AttributeData.php
@@ -388,11 +383,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_Attributes\\:\\:getTablesAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Controllers/Backend/Attributes.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 18
 			path: engine/Shopware/Bundle/AttributeBundle/Controllers/Backend/Attributes.php
 
 		-
@@ -448,11 +438,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_EntitySearch\\:\\:searchAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Controllers/Backend/EntitySearch.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
 			path: engine/Shopware/Bundle/AttributeBundle/Controllers/Backend/EntitySearch.php
 
 		-
@@ -1191,11 +1176,6 @@ parameters:
 			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/Benchmark.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 9
-			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/Benchmark.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Benchmark\\:\\:saveIndustryAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/Benchmark.php
@@ -1276,16 +1256,6 @@ parameters:
 			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkLocalOverview.php
 
 		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkLocalOverview.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 4
-			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkLocalOverview.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_BenchmarkLocalOverview\\:\\:initAcl\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkLocalOverview.php
@@ -1328,11 +1298,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_BenchmarkOverview\\:\\:saveIndustryAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverview.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
 			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverview.php
 
 		-
@@ -1936,28 +1901,8 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Api/ContentType.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 8
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Api/ContentType.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Backend\\\\ContentType\\:\\:setContainer\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentType.php
-
-		-
-			message: "#^Cannot call method Engine\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentType.php
-
-		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentType.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 10
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentType.php
 
 		-
@@ -1986,11 +1931,6 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 9
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
-
-		-
 			message: "#^Parameter \\#2 \\$search of function array_key_exists expects array, array\\<string, string\\>\\|false given\\.$#"
 			count: 2
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
@@ -2016,22 +1956,7 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 15
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Frontend/ContentType.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Frontend\\\\ContentType\\:\\:postDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Frontend/ContentType.php
-
-		-
-			message: "#^Cannot call method Template\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Frontend/ContentType.php
-
-		-
-			message: "#^Cannot call method templateExists\\(\\) on Enlight_View_Default\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Frontend/ContentType.php
 
@@ -2753,11 +2678,6 @@ parameters:
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Subscriber\\\\EntitySearchSubscriber\\:\\:onSearch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
 			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Subscriber/EntitySearchSubscriber.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 6
 			path: engine/Shopware/Bundle/ContentTypeBundle/Subscriber/EntitySearchSubscriber.php
 
 		-
@@ -6421,12 +6341,12 @@ parameters:
 			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 5
+			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLog\\:\\:resendMailAction\\(\\) has parameter \\$recipients with no value type specified in iterable type array\\.$#"
+			count: 1
 			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLog\\:\\:resendMailAction\\(\\) has parameter \\$recipients with no value type specified in iterable type array\\.$#"
+			message: "#^Strict comparison using \\=\\=\\= between Enlight_View_Default and null will always evaluate to false\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
 
@@ -11039,11 +10959,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\ConfigHandler\\\\File\\:\\:getSitemapCustomUrls\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/ConfigHandler/File.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Controller/Frontend/SitemapIndexXml.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\BaseUrlProvider\\:\\:reset\\(\\) has no return typehint specified\\.$#"
@@ -23576,11 +23491,6 @@ parameters:
 			path: engine/Shopware/Components/LastArticlesSubscriber.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/LastArticlesSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\LastArticlesSubscriber\\:\\:cleanupLastProducts\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/LastArticlesSubscriber.php
@@ -23692,11 +23602,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\License\\\\Service\\\\LicenseServiceSubscriber\\:\\:onPostDispatchBackendIndex\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Components/License/Service/LicenseServiceSubscriber.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/License/Service/LicenseServiceSubscriber.php
 
@@ -26496,11 +26401,6 @@ parameters:
 			path: engine/Shopware/Components/Privacy/CookieRemoveSubscriber.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Privacy/CookieRemoveSubscriber.php
-
-		-
 			message: "#^Parameter \\#2 \\$values of method Symfony\\\\Component\\\\HttpFoundation\\\\ResponseHeaderBag\\:\\:set\\(\\) expects array\\<string\\>\\|string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Privacy/CookieRemoveSubscriber.php
@@ -28086,7 +27986,7 @@ parameters:
 			path: engine/Shopware/Components/Theme/EventListener/ConfigLoader.php
 
 		-
-			message: "#^Cannot call method hasTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
+			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/EventListener/ConfigLoader.php
 
@@ -29136,53 +29036,8 @@ parameters:
 			path: engine/Shopware/Components/WebLinkManager.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
-			path: engine/Shopware/Controllers/Api/Addresses.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
-			path: engine/Shopware/Controllers/Api/Articles.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 5
-			path: engine/Shopware/Controllers/Api/Caches.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
-			path: engine/Shopware/Controllers/Api/Categories.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 9
-			path: engine/Shopware/Controllers/Api/Countries.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
-			path: engine/Shopware/Controllers/Api/CustomerGroups.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 9
-			path: engine/Shopware/Controllers/Api/CustomerStreams.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
-			path: engine/Shopware/Controllers/Api/Customers.php
-
-		-
 			message: "#^Method Shopware_Controllers_Api_Error\\:\\:invalidAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Api/Error.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 11
 			path: engine/Shopware/Controllers/Api/Error.php
 
 		-
@@ -29196,11 +29051,6 @@ parameters:
 			path: engine/Shopware/Controllers/Api/Error.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/GenerateArticleImages.php
-
-		-
 			message: "#^Method Shopware_Controllers_Api_GenerateArticleImages\\:\\:batchAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/GenerateArticleImages.php
@@ -29209,16 +29059,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Api_GenerateArticleImages\\:\\:batchDeleteAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/GenerateArticleImages.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
-			path: engine/Shopware/Controllers/Api/Manufacturers.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
-			path: engine/Shopware/Controllers/Api/Media.php
 
 		-
 			message: "#^Method Shopware_Controllers_Api_Media\\:\\:prepareUploadedFile\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
@@ -29239,21 +29079,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Api_Media\\:\\:prepareFallbackUser\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/Media.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 6
-			path: engine/Shopware/Controllers/Api/Orders.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
-			path: engine/Shopware/Controllers/Api/PaymentMethods.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
-			path: engine/Shopware/Controllers/Api/PropertyGroups.php
 
 		-
 			message: "#^Property Shopware_Controllers_Api_Rest\\:\\:\\$apiBaseUrl has no typehint specified\\.$#"
@@ -29281,29 +29106,14 @@ parameters:
 			path: engine/Shopware/Controllers/Api/Rest.php
 
 		-
-			message: "#^Cannot call method getAssign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Rest.php
-
-		-
 			message: "#^Method Shopware_Controllers_Api_Rest\\:\\:batchAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Api/Rest.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Api/Rest.php
 
 		-
 			message: "#^Method Shopware_Controllers_Api_Rest\\:\\:batchDeleteAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/Rest.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
-			path: engine/Shopware/Controllers/Api/Shops.php
 
 		-
 			message: "#^Method Shopware_Controllers_Api_Translations\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
@@ -29313,11 +29123,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Api_Translations\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Api/Translations.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 5
 			path: engine/Shopware/Controllers/Api/Translations.php
 
 		-
@@ -29336,24 +29141,9 @@ parameters:
 			path: engine/Shopware/Controllers/Api/Translations.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 9
-			path: engine/Shopware/Controllers/Api/Users.php
-
-		-
 			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/Users.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
-			path: engine/Shopware/Controllers/Api/Variants.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Api/Version.php
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Address\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
@@ -29428,11 +29218,6 @@ parameters:
 		-
 			message: "#^Cannot call method fetchRow\\(\\) on Enlight_Components_Db_Adapter_Pdo_Mysql\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Analytics.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 4
 			path: engine/Shopware/Controllers/Backend/Analytics.php
 
 		-
@@ -29771,11 +29556,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Application.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:detailAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Application.php
@@ -30013,11 +29793,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:saveAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 66
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
@@ -31196,11 +30971,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/ArticleList.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 19
-			path: engine/Shopware/Controllers/Backend/ArticleList.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:saveSingleEntityAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ArticleList.php
@@ -31361,11 +31131,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/ArticlePriceVariation.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 8
-			path: engine/Shopware/Controllers/Backend/ArticlePriceVariation.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_ArticlePriceVariation\\:\\:updatePriceVariationAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ArticlePriceVariation.php
@@ -31433,11 +31198,6 @@ parameters:
 		-
 			message: "#^Cannot call method getQueryCount\\(\\) on Shopware\\\\Components\\\\Model\\\\ModelManager\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Banner.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 11
 			path: engine/Shopware/Controllers/Backend/Banner.php
 
 		-
@@ -31526,11 +31286,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Base.php
 
 		-
-			message: "#^Cannot call method addTemplateDir\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Base.php
-
-		-
 			message: "#^Cannot call method Backend\\(\\) on Enlight_Plugin_PluginManager\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Base.php
@@ -31543,11 +31298,6 @@ parameters:
 		-
 			message: "#^Cannot call method getRepository\\(\\) on Shopware\\\\Components\\\\Model\\\\ModelManager\\|null\\.$#"
 			count: 19
-			path: engine/Shopware/Controllers/Backend/Base.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 28
 			path: engine/Shopware/Controllers/Backend/Base.php
 
 		-
@@ -31801,11 +31551,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Blog.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 17
-			path: engine/Shopware/Controllers/Backend/Blog.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Blog\\:\\:getBlogCategoriesAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Blog.php
@@ -31961,11 +31706,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Cache.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 5
-			path: engine/Shopware/Controllers/Backend/Cache.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Cache\\:\\:clearCacheAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Cache.php
@@ -32053,11 +31793,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:convertOrderAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 21
 			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
 
 		-
@@ -32208,11 +31943,6 @@ parameters:
 		-
 			message: "#^PHPDoc tag @var for variable \\$filter has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Category.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 19
 			path: engine/Shopware/Controllers/Backend/Category.php
 
 		-
@@ -32443,11 +32173,6 @@ parameters:
 		-
 			message: "#^Cannot call method createQueryBuilder\\(\\) on Doctrine\\\\ORM\\\\EntityRepository\\|null\\.$#"
 			count: 2
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 20
 			path: engine/Shopware/Controllers/Backend/Config.php
 
 		-
@@ -32756,11 +32481,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/CoreLicense.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 11
-			path: engine/Shopware/Controllers/Backend/CoreLicense.php
-
-		-
 			message: "#^Parameter \\#1 \\$pdo of class Shopware\\\\Components\\\\LicenseInstaller constructor expects Doctrine\\\\DBAL\\\\Connection, object\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CoreLicense.php
@@ -32816,11 +32536,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/CustomFacet.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/CustomFacet.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_CustomFacet\\:\\:copyCategorySettingsAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CustomFacet.php
@@ -32846,11 +32561,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/CustomSorting.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/CustomSorting.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_CustomSorting\\:\\:changePositionAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CustomSorting.php
@@ -32868,11 +32578,6 @@ parameters:
 		-
 			message: "#^Cannot call method fetchRow\\(\\) on Enlight_Components_Db_Adapter_Pdo_Mysql\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Customer.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 17
 			path: engine/Shopware/Controllers/Backend/Customer.php
 
 		-
@@ -33176,11 +32881,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/CustomerStream.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 14
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:indexStreamAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CustomerStream.php
@@ -33311,11 +33011,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Document.php
 
 		-
-			message: "#^Cannot call method setTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Document.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Document\\:\\:duplicatePropertiesAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Document.php
@@ -33338,11 +33033,6 @@ parameters:
 		-
 			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 36
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
 		-
@@ -33726,11 +33416,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 13
-			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_EmotionPreset\\:\\:previewAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
@@ -33891,11 +33576,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Export.php
 
 		-
-			message: "#^Cannot call method Engine\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Export.php
-
-		-
 			message: "#^Parameter \\#1 \\$handleResource of method sExport\\:\\:executeExport\\(\\) expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Export.php
@@ -33941,11 +33621,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/ExtJs.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:loadAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ExtJs.php
@@ -33973,11 +33648,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_Feedback\\:\\:loadAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Feedback.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 3
 			path: engine/Shopware/Controllers/Backend/Feedback.php
 
 		-
@@ -34061,11 +33731,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 19
-			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_FirstRunWizard\\:\\:pingServerAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
@@ -34111,22 +33776,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
 
 		-
-			message: "#^Cannot call method getAssign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_FirstRunWizard\\:\\:registerDomainAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
 
 		-
 			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, array\\<string\\>\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
-
-		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
 
@@ -34143,11 +33798,6 @@ parameters:
 		-
 			message: "#^Cannot call method getName\\(\\) on Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\LocaleStruct\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/FirstRunWizardPluginManager.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 15
 			path: engine/Shopware/Controllers/Backend/FirstRunWizardPluginManager.php
 
 		-
@@ -34188,11 +33838,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_Form\\:\\:getFormsAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Form.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 24
 			path: engine/Shopware/Controllers/Backend/Form.php
 
 		-
@@ -34301,11 +33946,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Index.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 24
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Index.php
@@ -34386,11 +34026,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Log.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 6
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:deleteLogsAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Log.php
@@ -34466,11 +34101,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Logger.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Logger.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Login\\:\\:init\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Login.php
@@ -34483,11 +34113,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_Login\\:\\:loginAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
 			path: engine/Shopware/Controllers/Backend/Login.php
 
 		-
@@ -34581,11 +34206,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Mail.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 48
-			path: engine/Shopware/Controllers/Backend/Mail.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Mail\\:\\:createMailAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Mail.php
@@ -34652,11 +34272,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Mail\\:\\:verifySmartyAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Mail.php
-
-		-
-			message: "#^Cannot call method Engine\\(\\) on Enlight_View_Default\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Mail.php
 
@@ -34731,11 +34346,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/ManualSorting.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Backend/ManualSorting.php
-
-		-
 			message: "#^Method Shopware\\\\Controllers\\\\Backend\\\\ManualSorting\\:\\:assignPositionAction\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ManualSorting.php
@@ -34758,11 +34368,6 @@ parameters:
 		-
 			message: "#^Cannot call method createQueryBuilder\\(\\) on Shopware\\\\Components\\\\Model\\\\ModelManager\\|null\\.$#"
 			count: 3
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 34
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
 		-
@@ -35431,11 +35036,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/NewsletterManager.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 35
-			path: engine/Shopware/Controllers/Backend/NewsletterManager.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_NewsletterManager\\:\\:createRecipientAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/NewsletterManager.php
@@ -35591,11 +35191,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Notification.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 4
-			path: engine/Shopware/Controllers/Backend/Notification.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Notification\\:\\:getCustomerListAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Notification.php
@@ -35623,11 +35218,6 @@ parameters:
 		-
 			message: "#^Cannot call method getPaymentStatusQuery\\(\\) on Shopware\\\\Models\\\\Order\\\\Repository\\|null\\.$#"
 			count: 3
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 37
 			path: engine/Shopware/Controllers/Backend/Order.php
 
 		-
@@ -36136,11 +35726,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Overview.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Overview.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Overview\\:\\:initAcl\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Overview.php
@@ -36163,11 +35748,6 @@ parameters:
 		-
 			message: "#^Cannot call method getQueryCount\\(\\) on Shopware\\\\Components\\\\Model\\\\ModelManager\\|null\\.$#"
 			count: 2
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 10
 			path: engine/Shopware/Controllers/Backend/Partner.php
 
 		-
@@ -36286,11 +35866,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Payment.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 10
-			path: engine/Shopware/Controllers/Backend/Payment.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Payment\\:\\:getCountriesAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Payment.php
@@ -36358,11 +35933,6 @@ parameters:
 		-
 			message: "#^Cannot call method getInstalled\\(\\) on Shopware\\\\Models\\\\Plugin\\\\Plugin\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Performance.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 13
 			path: engine/Shopware/Controllers/Backend/Performance.php
 
 		-
@@ -36631,11 +36201,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/PluginInstaller.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 21
-			path: engine/Shopware/Controllers/Backend/PluginInstaller.php
-
-		-
 			message: "#^Method Shopware\\\\Controllers\\\\Backend\\\\PluginInstaller\\:\\:updateAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/PluginInstaller.php
@@ -36708,11 +36273,6 @@ parameters:
 		-
 			message: "#^Method Shopware\\\\Controllers\\\\Backend\\\\PluginManager\\:\\:metaDownloadAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/PluginManager.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 38
 			path: engine/Shopware/Controllers/Backend/PluginManager.php
 
 		-
@@ -36886,11 +36446,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/PluginManager.php
 
 		-
-			message: "#^Cannot call method clearAssign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/PluginManager.php
-
-		-
 			message: "#^Cannot call method createQueryBuilder\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/PluginManager.php
@@ -36958,11 +36513,6 @@ parameters:
 		-
 			message: "#^Cannot call method getRepository\\(\\) on Shopware\\\\Components\\\\Model\\\\ModelManager\\|null\\.$#"
 			count: 7
-			path: engine/Shopware/Controllers/Backend/Premium.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 11
 			path: engine/Shopware/Controllers/Backend/Premium.php
 
 		-
@@ -37043,11 +36593,6 @@ parameters:
 		-
 			message: "#^Cannot call method getQueryCount\\(\\) on Shopware\\\\Components\\\\Model\\\\ModelManager\\|null\\.$#"
 			count: 3
-			path: engine/Shopware/Controllers/Backend/ProductFeed.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 10
 			path: engine/Shopware/Controllers/Backend/ProductFeed.php
 
 		-
@@ -37133,11 +36678,6 @@ parameters:
 		-
 			message: "#^Cannot call method cloneAttribute\\(\\) on object\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
 			path: engine/Shopware/Controllers/Backend/ProductStream.php
 
 		-
@@ -37251,11 +36791,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/RiskManagement.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 9
-			path: engine/Shopware/Controllers/Backend/RiskManagement.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_RiskManagement\\:\\:deleteRuleAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/RiskManagement.php
@@ -37298,11 +36833,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_Search\\:\\:searchAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Search.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Backend/Search.php
 
 		-
@@ -37373,11 +36903,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_Shipping\\:\\:getShippingCostsAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Shipping.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 19
 			path: engine/Shopware/Controllers/Backend/Shipping.php
 
 		-
@@ -37501,11 +37026,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Site.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 21
-			path: engine/Shopware/Controllers/Backend/Site.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Site\\:\\:createGroupAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Site.php
@@ -37578,11 +37098,6 @@ parameters:
 		-
 			message: "#^Cannot call method fetchAll\\(\\) on Enlight_Components_Db_Adapter_Pdo_Mysql\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 16
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
 		-
@@ -37846,11 +37361,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Supplier.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 8
-			path: engine/Shopware/Controllers/Backend/Supplier.php
-
-		-
 			message: "#^Cannot call method find\\(\\) on Shopware\\\\Components\\\\Model\\\\ModelManager\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Controllers/Backend/Supplier.php
@@ -37971,11 +37481,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Systeminfo.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 9
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Systeminfo\\:\\:getPathListAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Systeminfo.php
@@ -38048,11 +37553,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:assignAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
 			path: engine/Shopware/Controllers/Backend/Theme.php
 
 		-
@@ -38216,11 +37716,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Translation.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Backend/Translation.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Translation\\:\\:readTranslationAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Translation.php
@@ -38256,11 +37751,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
-
-		-
 			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
@@ -38283,11 +37773,6 @@ parameters:
 		-
 			message: "#^Cannot call method fetchColumn\\(\\) on object\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/UserConfig.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Backend/UserConfig.php
 
 		-
@@ -38318,11 +37803,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_UserManager\\:\\:passwordConfirmationRequiredAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/UserManager.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 21
 			path: engine/Shopware/Controllers/Backend/UserManager.php
 
 		-
@@ -38541,11 +38021,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Voucher.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 11
-			path: engine/Shopware/Controllers/Backend/Voucher.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Voucher\\:\\:getVoucherAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Voucher.php
@@ -38696,11 +38171,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Widgets.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 26
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
 			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Widgets.php
@@ -38846,11 +38316,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Widgets.php
 
 		-
-			message: "#^Cannot call method Engine\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
 			message: "#^Cannot call method IsHTML\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Widgets.php
@@ -38931,11 +38396,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Account.php
 
 		-
-			message: "#^Cannot call method setScope\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
 			message: "#^Cannot access offset 'additional' on array\\|false\\.$#"
 			count: 5
 			path: engine/Shopware/Controllers/Frontend/Account.php
@@ -38946,11 +38406,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Account.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 48
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Account.php
@@ -38958,16 +38413,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:paymentAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Cannot access property \\$sUserData on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Cannot access property \\$sFormData on Enlight_View_Default\\|null\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Frontend/Account.php
 
 		-
@@ -39131,11 +38576,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Account.php
 
 		-
-			message: "#^Cannot call method fetch\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
 			message: "#^Cannot call method setEncoderName\\(\\) on Shopware\\\\Models\\\\Customer\\\\Customer\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Account.php
@@ -39148,11 +38588,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:profileAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Cannot call method getAssign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
 			path: engine/Shopware/Controllers/Frontend/Account.php
 
 		-
@@ -39223,16 +38658,6 @@ parameters:
 		-
 			message: "#^Cannot call method get\\(\\) on object\\|null\\.$#"
 			count: 2
-			path: engine/Shopware/Controllers/Frontend/Address.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 18
-			path: engine/Shopware/Controllers/Frontend/Address.php
-
-		-
-			message: "#^Cannot call method getAssign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
 			path: engine/Shopware/Controllers/Frontend/Address.php
 
 		-
@@ -39376,18 +38801,8 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/AjaxSearch.php
 
 		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/AjaxSearch.php
-
-		-
 			message: "#^Cannot call method get\\(\\) on Shopware_Components_Config\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/AjaxSearch.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 3
 			path: engine/Shopware/Controllers/Frontend/AjaxSearch.php
 
 		-
@@ -39421,11 +38836,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Blog.php
 
 		-
-			message: "#^Cannot call method setScope\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Blog.php
-
-		-
 			message: "#^Cannot call method getRepository\\(\\) on Shopware\\\\Components\\\\Model\\\\ModelManager\\|null\\.$#"
 			count: 4
 			path: engine/Shopware/Controllers/Frontend/Blog.php
@@ -39433,16 +38843,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Blog\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Blog.php
-
-		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Frontend/Blog.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 7
 			path: engine/Shopware/Controllers/Frontend/Blog.php
 
 		-
@@ -39611,11 +39011,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Campaign.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Campaign.php
-
-		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Campaign.php
@@ -39656,16 +39051,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Cannot call method setScope\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 81
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:flagPaymentBlocked\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
@@ -39688,21 +39073,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:cartAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Cannot access property \\$sUserData on Enlight_View_Default\\|null\\.$#"
-			count: 21
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Cannot call method getAssign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 12
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Cannot access property \\$sBasket on Enlight_View_Default\\|null\\.$#"
-			count: 24
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
@@ -39741,11 +39111,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Cannot call method clearAssign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
 			message: "#^Cannot call method getNamespace\\(\\) on object\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
@@ -39763,11 +39128,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:paymentAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Cannot access property \\$sPayment on Enlight_View_Default\\|null\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
@@ -40196,11 +39556,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Compare.php
 
 		-
-			message: "#^Cannot call method setScope\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Compare.php
-
-		-
 			message: "#^Cannot call method Articles\\(\\) on Shopware_Components_Modules\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Compare.php
@@ -40208,11 +39563,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Compare\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Compare.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 4
 			path: engine/Shopware/Controllers/Frontend/Compare.php
 
 		-
@@ -40256,11 +39606,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Custom.php
 
 		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Custom.php
-
-		-
 			message: "#^Cannot call method getShopContext\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Custom.php
@@ -40276,27 +39621,7 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Custom.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Frontend/Custom.php
-
-		-
-			message: "#^Cannot call method templateExists\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Custom.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Custom.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Detail\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Detail.php
-
-		-
-			message: "#^Cannot call method setScope\\(\\) on Enlight_View_Default\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Detail.php
 
@@ -40313,11 +39638,6 @@ parameters:
 		-
 			message: "#^Cannot call method Marketing\\(\\) on Shopware_Components_Modules\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Detail.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 15
 			path: engine/Shopware/Controllers/Frontend/Detail.php
 
 		-
@@ -40348,11 +39668,6 @@ parameters:
 		-
 			message: "#^Cannot call method Articles\\(\\) on Shopware_Components_Modules\\|null\\.$#"
 			count: 4
-			path: engine/Shopware/Controllers/Frontend/Detail.php
-
-		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 3
 			path: engine/Shopware/Controllers/Frontend/Detail.php
 
 		-
@@ -40426,16 +39741,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Error.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 6
-			path: engine/Shopware/Controllers/Frontend/Error.php
-
-		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 5
-			path: engine/Shopware/Controllers/Frontend/Error.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Error\\:\\:errorAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Error.php
@@ -40462,16 +39767,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Error\\:\\:genericErrorAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Error.php
-
-		-
-			message: "#^Cannot call method getAssign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Error.php
-
-		-
-			message: "#^Cannot call method clearAssign\\(\\) on Enlight_View_Default\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Error.php
 
@@ -40512,21 +39807,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Forms\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 6
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
-			message: "#^Cannot access property \\$sSupport on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
-			message: "#^Parameter \\#1 \\$view of method Shopware_Controllers_Frontend_Forms\\:\\:renderElementNote\\(\\) expects Enlight_View_Default, Enlight_View_Default\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Forms.php
 
@@ -40656,11 +39936,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Forms.php
 
 		-
-			message: "#^Cannot access property \\$id on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
 			message: "#^Possibly invalid array key type \\(array\\|string\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Forms.php
@@ -40696,11 +39971,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Index.php
 
 		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Index.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Index\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Index.php
@@ -40712,11 +39982,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method Categories\\(\\) on Shopware_Components_Modules\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Index.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Index.php
 
@@ -40753,21 +40018,6 @@ parameters:
 		-
 			message: "#^Cannot call method hasCustomerStreamEmotions\\(\\) on object\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Cannot call method getAssign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 5
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 13
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
 		-
@@ -40926,11 +40176,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
 		-
-			message: "#^Cannot call method templateExists\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadCategoryContent\\(\\) should return array but returns array\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Listing.php
@@ -40971,16 +40216,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Newsletter.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 16
-			path: engine/Shopware/Controllers/Frontend/Newsletter.php
-
-		-
-			message: "#^Cannot access property \\$voteConfirmed on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Frontend/Newsletter.php
-
-		-
 			message: "#^Cannot call method Admin\\(\\) on Shopware_Components_Modules\\|null\\.$#"
 			count: 6
 			path: engine/Shopware/Controllers/Frontend/Newsletter.php
@@ -40998,11 +40233,6 @@ parameters:
 		-
 			message: "#^Cannot call method get\\(\\) on object\\|null\\.$#"
 			count: 2
-			path: engine/Shopware/Controllers/Frontend/Newsletter.php
-
-		-
-			message: "#^Cannot call method getAssign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 5
 			path: engine/Shopware/Controllers/Frontend/Newsletter.php
 
 		-
@@ -41093,16 +40323,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Note\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Note.php
-
-		-
-			message: "#^Cannot call method setScope\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Note.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 5
 			path: engine/Shopware/Controllers/Frontend/Note.php
 
 		-
@@ -41291,18 +40511,8 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Register.php
 
 		-
-			message: "#^Cannot call method setScope\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Register.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Register\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Register.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 6
 			path: engine/Shopware/Controllers/Frontend/Register.php
 
 		-
@@ -41366,11 +40576,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Register.php
 
 		-
-			message: "#^Cannot call method fetch\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Register.php
-
-		-
 			message: "#^Cannot call method getName\\(\\) on Symfony\\\\Component\\\\Form\\\\FormInterface\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Register.php
@@ -41392,11 +40597,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Register\\:\\:getRegisterData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Register.php
-
-		-
-			message: "#^Cannot call method getAssign\\(\\) on Enlight_View_Default\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Register.php
 
@@ -41461,11 +40661,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/RobotsTxt.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/RobotsTxt.php
-
-		-
 			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/RobotsTxt.php
@@ -41506,11 +40701,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Search.php
 
 		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Search.php
-
-		-
 			message: "#^Cannot call method createSearchCriteria\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Search.php
@@ -41522,11 +40712,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method getList\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Search.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Search.php
 
@@ -41547,11 +40732,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method filter\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Sitemap.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Sitemap.php
 
@@ -41711,16 +40891,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
 
 		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 9
-			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Tellafriend\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
@@ -41771,11 +40941,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Tracking.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Widgets/Blog.php
-
-		-
 			message: "#^Method Shopware_Controllers_Widgets_Campaign\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Campaign.php
@@ -41787,11 +40952,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Widgets_Campaign\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Campaign.php
-
-		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Campaign.php
 
@@ -41813,16 +40973,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Widgets_Captcha\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Widgets/Captcha.php
-
-		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Widgets/Captcha.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Widgets/Captcha.php
 
 		-
@@ -41856,11 +41006,6 @@ parameters:
 			path: engine/Shopware/Controllers/Widgets/Checkout.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 6
-			path: engine/Shopware/Controllers/Widgets/Checkout.php
-
-		-
 			message: "#^Method Shopware_Controllers_Widgets_Compare\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Compare.php
@@ -41872,11 +41017,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method Articles\\(\\) on Shopware_Components_Modules\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Compare.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Compare.php
 
@@ -41898,16 +41038,6 @@ parameters:
 		-
 			message: "#^Cannot call method getFile\\(\\) on Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\EmotionTemplate\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Widgets/Emotion.php
-
-		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Widgets/Emotion.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 14
 			path: engine/Shopware/Controllers/Widgets/Emotion.php
 
 		-
@@ -41981,11 +41111,6 @@ parameters:
 			path: engine/Shopware/Controllers/Widgets/Index.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 5
-			path: engine/Shopware/Controllers/Widgets/Index.php
-
-		-
 			message: "#^Cannot call method Core\\(\\) on Enlight_Plugin_PluginManager\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Index.php
@@ -42006,18 +41131,8 @@ parameters:
 			path: engine/Shopware/Controllers/Widgets/Listing.php
 
 		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 11
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
 			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:productsAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Cannot call method loadTemplate\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 4
 			path: engine/Shopware/Controllers/Widgets/Listing.php
 
 		-
@@ -42131,11 +41246,6 @@ parameters:
 			path: engine/Shopware/Controllers/Widgets/Listing.php
 
 		-
-			message: "#^Cannot call method fetch\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
 			message: "#^Cannot call method getQueryAliases\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Listing.php
@@ -42188,11 +41298,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Widgets_Recommendation\\:\\:viewedAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Widgets/Recommendation.php
-
-		-
-			message: "#^Cannot call method assign\\(\\) on Enlight_View_Default\\|null\\.$#"
-			count: 6
 			path: engine/Shopware/Controllers/Widgets/Recommendation.php
 
 		-

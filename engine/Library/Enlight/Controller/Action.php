@@ -181,7 +181,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             if (!$event = Shopware()->Events()->notifyUntil(__CLASS__ . '_' . $action_name, $args)) {
                 $this->$action(...$this->getActionArguments($action));
             }
-            
+
             $this->postDispatch();
         }
 
@@ -343,7 +343,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Returns view instance
      *
-     * @return Enlight_View_Default|null
+     * @return Enlight_View_Default
      */
     public function View()
     {

@@ -211,9 +211,10 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
      */
     public function setHeader($header, $value)
     {
+        $this->headers->set($header, $value);
         $temp = strtoupper(str_replace('-', '_', $header));
         $_SERVER['HTTP_' . $temp] = $value;
-        $this->headers->set('HTTP_' . $temp, $value);
+        $this->server->set('HTTP_' . $temp, $value);
 
         return $this;
     }
