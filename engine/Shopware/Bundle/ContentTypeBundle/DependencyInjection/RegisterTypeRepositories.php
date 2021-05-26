@@ -47,6 +47,8 @@ class RegisterTypeRepositories implements CompilerPassInterface
                 new Reference(TypeFieldResolver::class),
             ]);
 
+            $def->setPublic(true);
+
             $container->setDefinition('shopware.bundle.content_type.' . $name, $def);
         }
     }
