@@ -176,7 +176,7 @@ class Download
             // close local file connections before move for windows
             $partFilePath = $partFile->getPathname();
 
-            if (is_resource($destination)) {
+            if (\is_resource($destination)) {
                 fclose($destination);
             }
 
@@ -185,7 +185,7 @@ class Download
         }
 
         // close local file
-        if (is_resource($destination)) {
+        if (\is_resource($destination)) {
             fclose($destination);
         }
 

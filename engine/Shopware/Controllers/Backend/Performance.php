@@ -45,8 +45,8 @@ use Shopware\Models\Site\Site;
 
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
-   public const PHP_RECOMMENDED_VERSION = '8.0.0';
-   public const PHP_MINIMUM_VERSION = '7.4.0';
+    public const PHP_RECOMMENDED_VERSION = '8.0.0';
+    public const PHP_MINIMUM_VERSION = '7.4.0';
 
     public const PERFORMANCE_VALID = 1;
     public const PERFORMANCE_WARNING = 2;
