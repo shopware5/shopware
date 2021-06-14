@@ -285,6 +285,12 @@
             <argument type="service" id="PDO"/>
         </service>
 
+        <!-- This service listens to creation of dbal connection and creates also a zend db connection to ensure it's available to all zend components -->
+        <service id="Shopware\Components\Model\ZendDbInitializer">
+            <argument type="service" id="db"/>
+            <tag name="shopware.event_listener" event="Enlight_Bootstrap_AfterInitResource_dbal_connection" method="init"/>
+        </service>
+
         <service id="model_annotations_factory" class="Shopware\Components\DependencyInjection\Bridge\ModelAnnotation" />
 
         <service id="modelannotations" class="Doctrine\ORM\Mapping\Driver\AnnotationDriver">

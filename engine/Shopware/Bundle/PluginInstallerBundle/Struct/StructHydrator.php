@@ -515,7 +515,7 @@ class StructHydrator
         $plugin->setInstallationManual($data['installationManual']);
         $plugin->setExampleUrl($data['examplePageUrl']);
         $plugin->setIconPath($data['iconPath']);
-        $plugin->setUseContactForm((bool) $data['useContactForm']);
+        $plugin->setUseContactForm((bool) ($data['useContactForm'] ?? false));
         $plugin->setRating($data['ratingAverage']);
 
         if (isset($data['priceModels']) && !empty($data['priceModels'])) {
