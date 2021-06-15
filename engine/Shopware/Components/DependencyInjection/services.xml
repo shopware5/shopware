@@ -172,6 +172,9 @@
             <argument type="service" id="locale"/>
         </service>
 
+        <service id="Loader" alias="loader">
+            <deprecated>The "%alias_id%" service is deprecated. Use "%service_id%" instead</deprecated>
+        </service>
         <service id="loader" class="Enlight_Loader" />
         <service id="shopware.loader" alias="loader" />
         <service id="snippets"   class="Shopware_Components_Snippet_Manager">
