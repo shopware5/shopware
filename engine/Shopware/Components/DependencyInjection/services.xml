@@ -76,6 +76,9 @@
         </service>
 
         <service id="template_factory" class="Shopware\Components\DependencyInjection\Bridge\Template" />
+        <service id="Template" alias="template">
+            <deprecated>The "%alias_id%" service is deprecated. Use "template" instead</deprecated>
+        </service>
         <service id="template" class="Enlight_Template_Manager">
             <factory service="template_factory" method="factory" />
             <argument type="service" id="Shopware\Components\ContainerAwareEventManager"/>
@@ -173,7 +176,7 @@
         </service>
 
         <service id="Loader" alias="loader">
-            <deprecated>The "%alias_id%" service is deprecated. Use "%service_id%" instead</deprecated>
+            <deprecated>The "%alias_id%" service is deprecated. Use "loader" instead</deprecated>
         </service>
         <service id="loader" class="Enlight_Loader" />
         <service id="shopware.loader" alias="loader" />
