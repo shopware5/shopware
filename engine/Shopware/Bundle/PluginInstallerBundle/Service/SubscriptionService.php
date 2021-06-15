@@ -225,9 +225,9 @@ class SubscriptionService
             AccessTokenStruct::class,
         ];
 
-        $token = unserialize(Shopware()->BackendSession()->offsetGet('store_token'), ['allowed_classes' => $allowedClassList]);
+        $token = @unserialize(Shopware()->BackendSession()->offsetGet('store_token'), ['allowed_classes' => $allowedClassList]);
 
-        if ($token === null) {
+        if ($token === null || $token === false) {
             $token = Shopware()->BackendSession()->accessToken;
         }
 
