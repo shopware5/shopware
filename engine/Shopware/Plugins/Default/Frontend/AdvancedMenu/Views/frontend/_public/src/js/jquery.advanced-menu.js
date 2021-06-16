@@ -157,6 +157,8 @@
                 me._on($el, 'click', $.proxy(me.onClick, me, i, $el));
             });
 
+            $body.on('mousemove touchstart', $.proxy(me.onMouseMove, me));
+
             me._on(me._$closeButton, 'click', $.proxy(me.onCloseButtonClick, me));
         },
 
@@ -312,8 +314,6 @@
         openMenu: function () {
             var me = this;
 
-            $body.on('mousemove touchstart', $.proxy(me.onMouseMove, me));
-
             me.$el.show();
 
             $.publish('plugin/swAdvancedMenu/onOpenMenu', [ me ]);
@@ -332,8 +332,6 @@
             me._$list.find('.' + opts.itemHoverClass).removeClass(opts.itemHoverClass);
 
             me.$el.hide();
-
-            $body.off('mousemove touchstart', $.proxy(me.onMouseMove, me));
 
             me._targetIndex = -1;
 
