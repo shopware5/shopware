@@ -197,7 +197,10 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             return $category;
         }
 
-        $translation = unserialize($category['__category_translation'], ['allowed_classes' => false]);
+        $translation = @unserialize($category['__category_translation'], ['allowed_classes' => false]);
+        if ($translation === false) {
+            $translation = [];
+        }
 
         if (!empty($translation['imagePath'])) {
             $category['mediaTranslation'] = $this->mediaService->get($translation['imagePath'], $context);

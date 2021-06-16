@@ -792,7 +792,11 @@ class sArticles implements \Enlight_Hook
                       AND objectlanguage=" . Shopware()->Shop()->getId();
             $translation = $this->db->fetchOne($sql);
             if (!empty($translation)) {
-                $translation = unserialize($translation, ['allowed_classes' => false]);
+                $translation = @unserialize($translation, ['allowed_classes' => false]);
+
+                if ($translation === false) {
+                    $translation = [];
+                }
             }
             if (!empty($translation[$id])) {
                 $unit = array_merge($unit, $translation[$id]);
@@ -1738,7 +1742,12 @@ class sArticles implements \Enlight_Hook
 
         foreach ($translations as $translation) {
             $productId = (int) $translation['objectkey'];
-            $object = unserialize($translation['objectdata'], ['allowed_classes' => false]);
+            $object = @unserialize($translation['objectdata'], ['allowed_classes' => false]);
+
+            if ($object === false) {
+                $object = [];
+            }
+
             foreach ($object as $translateKey => $value) {
                 if (isset($map[$translateKey])) {
                     $key = $map[$translateKey];
@@ -1821,7 +1830,11 @@ class sArticles implements \Enlight_Hook
         ";
         $objectData = $this->db->fetchOne($sql, [$id]);
         if (!empty($objectData)) {
-            $objectData = unserialize($objectData, ['allowed_classes' => false]);
+            $objectData = @unserialize($objectData, ['allowed_classes' => false]);
+
+            if ($objectData === false) {
+                $objectData = [];
+            }
         } else {
             $objectData = [];
         }
@@ -1835,6 +1848,11 @@ class sArticles implements \Enlight_Hook
             $objectFallback = $this->db->fetchOne($sql);
             if (!empty($objectFallback)) {
                 $objectFallback = unserialize($objectFallback, ['allowed_classes' => false]);
+
+                if ($objectFallback === false) {
+                    $objectFallback = [];
+                }
+
                 $objectData = array_merge($objectFallback, $objectData);
             }
         }

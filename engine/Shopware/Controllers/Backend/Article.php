@@ -4474,7 +4474,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $translatedFields = [];
         foreach ($newTranslations as $values) {
             $data = $values['objectdata'];
-            foreach (unserialize($data, ['allowed_classes' => false]) as $field => $translation) {
+            $unserialized = @unserialize($data, ['allowed_classes' => false]);
+
+            if ($unserialized === false) {
+                $unserialized = [];
+            }
+
+            foreach ($unserialized as $field => $translation) {
                 if (!array_key_exists($field, $translatedFields)) {
                     $translatedFields[$field] = true;
                 }
@@ -4483,7 +4489,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         // Save the old product translation as new variant translations
         foreach ($oldTranslations as $language => $values) {
-            $data = unserialize($values['objectdata'], ['allowed_classes' => false]);
+            $data = @unserialize($values['objectdata'], ['allowed_classes' => false]);
+            if ($data === false) {
+                $data = [];
+            }
+
             $newData = array_intersect_key($data, $translatedFields);
             $this->getTranslationComponent()->write(
                 $language,
@@ -4495,12 +4505,20 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         // Save the new mainDetail translations as product translations
         foreach ($newTranslations as $language => $values) {
-            $data = unserialize($values['objectdata'], ['allowed_classes' => false]);
+            $data = @unserialize($values['objectdata'], ['allowed_classes' => false]);
+            if ($data === false) {
+                $data = [];
+            }
+
             $newData = array_intersect_key($data, $translatedFields);
             // We need to check and include old translations, as an product
             // translation is a superset of a variant translation
             if ($oldValues = $oldTranslations[$language]) {
-                $oldData = unserialize($oldValues['objectdata'], ['allowed_classes' => false]);
+                $oldData = @unserialize($oldValues['objectdata'], ['allowed_classes' => false]);
+                if ($oldData === false) {
+                    $oldData = [];
+                }
+
                 $newData = array_merge($oldData, $newData);
             }
             $this->getTranslationComponent()->write(
