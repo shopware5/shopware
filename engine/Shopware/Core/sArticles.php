@@ -1900,7 +1900,8 @@ class sArticles implements \Enlight_Hook
                         }
                     }
                 }
-                foreach (array_merge($sArticle['images'], [count($sArticle['images']) => $sArticle['image']]) as $value) {
+
+                foreach (array_merge($sArticle['images'] ?? [], [count($sArticle['images'] ?? []) => $sArticle['image']]) as $value) {
                     if (preg_match('/(.*){(.*)}/', $value['relations'])) {
                         $configuratorImages = true;
 
