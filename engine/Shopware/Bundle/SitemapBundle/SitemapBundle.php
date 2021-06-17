@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SitemapBundle;
 
+use Shopware\Bundle\SitemapBundle\DependencyInjection\SitemapCompilerPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -34,6 +35,8 @@ class SitemapBundle extends Bundle
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
+
+        $container->addCompilerPass(new SitemapCompilerPass());
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/DependencyInjection'));
         $loader->load('services.xml');

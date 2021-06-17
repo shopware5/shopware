@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,34 +24,16 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler;
+namespace Shopware\Bundle\SitemapBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class DBALHandlerCompilerPass implements CompilerPassInterface
+class SitemapCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        $taggedServicesIds = [];
-        $taggedServicesIds += array_keys($container->findTaggedServiceIds(
-            'condition_handler_dbal'
-        ));
-        $taggedServicesIds += array_keys($container->findTaggedServiceIds(
-            'sorting_handler_dbal'
-        ));
-        $taggedServicesIds += array_keys($container->findTaggedServiceIds(
-            'facet_handler_dbal'
-        ));
-        $taggedServicesIds += array_keys($container->findTaggedServiceIds(
-            'criteria_request_handler'
-        ));
-
-        if (empty($taggedServicesIds)) {
-            return;
-        }
-
-        foreach ($taggedServicesIds as $id) {
+        foreach (array_keys($container->findTaggedServiceIds('sitemap_url_provider')) as $id) {
             $def = $container->getDefinition($id);
             $def->setPublic(true);
         }
