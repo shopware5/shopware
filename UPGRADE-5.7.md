@@ -2,6 +2,25 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.1
+
+[View all changes from v5.7.0...v5.7.1](https://github.com/shopware/shopware/compare/v5.7.0...v5.7.1)
+
+### Additions
+
+* Added service alias from `Template` to `template`
+* Added service alias from `Loader` to `loader`
+
+### Changes
+
+* Changed the visibility of services from tags `shopware_emotion.component_handler`, `criteria_request_handler` and `sitemap_url_provider` to public
+* Changed following columns type from `date` to `datetime`
+  * `s_order_basket.datum`
+  * `s_order_comparisons.datum`
+  * `s_order_notes.datum`
+
+## 5.7.0
+
 [View all changes from v5.6.1...v5.7.0](https://github.com/shopware/shopware/compare/v5.6.1...v5.7.0)
 
 ### Breaks
