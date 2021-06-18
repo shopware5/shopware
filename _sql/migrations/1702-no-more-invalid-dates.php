@@ -33,9 +33,9 @@ class Migrations_Migration1702 extends Shopware\Components\Migrations\AbstractMi
         $sql[] = 'ALTER TABLE `s_emarketing_banners` CHANGE `valid_to` `valid_to` DATETIME  NULL  DEFAULT NULL;';
         $sql[] = 'ALTER TABLE `s_emarketing_lastarticles` CHANGE `time` `time` DATETIME  NULL  DEFAULT NULL;';
         $sql[] = 'ALTER TABLE `s_emarketing_tellafriend` CHANGE `datum` `datum` DATE  NULL  DEFAULT NULL;';
-        $sql[] = 'ALTER TABLE `s_order_basket` CHANGE `datum` `datum` DATE  NULL  DEFAULT NULL;';
-        $sql[] = 'ALTER TABLE `s_order_comparisons` CHANGE `datum` `datum` DATE  NULL  DEFAULT NULL;';
-        $sql[] = 'ALTER TABLE `s_order_notes` CHANGE `datum` `datum` DATE  NULL  DEFAULT NULL;';
+        $sql[] = 'ALTER TABLE `s_order_basket` CHANGE `datum` `datum` DATETIME  NULL  DEFAULT NULL;';
+        $sql[] = 'ALTER TABLE `s_order_comparisons` CHANGE `datum` `datum` DATETIME  NULL  DEFAULT NULL;';
+        $sql[] = 'ALTER TABLE `s_order_notes` CHANGE `datum` `datum` DATETIME  NULL  DEFAULT NULL;';
         $sql[] = 'ALTER TABLE `s_statistics_pool` CHANGE `datum` `datum` DATE  NULL  DEFAULT NULL;';
         $sql[] = 'ALTER TABLE `s_statistics_referer` CHANGE `datum` `datum` DATE  NULL  DEFAULT NULL;';
         $sql[] = 'ALTER TABLE `s_statistics_visitors` CHANGE `datum` `datum` DATE  NULL  DEFAULT NULL;';
