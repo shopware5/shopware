@@ -282,6 +282,10 @@ class PluginLocalService
     {
         $html = strip_tags($html, '<br><i><b><strong><em><del><u><div><span><ul><li><ll><ol><p><a>');
 
+        if ($html === '') {
+            return '';
+        }
+
         $dom = new \DOMDocument();
         $dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
 
