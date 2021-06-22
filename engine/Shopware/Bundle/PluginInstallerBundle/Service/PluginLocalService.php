@@ -278,7 +278,7 @@ class PluginLocalService
     {
         $html = strip_tags($html, '<br><i><b><strong><em><del><u><div><span><ul><li><ll><ol><p><a>');
 
-        if (empty($html)) {
+        if ($html === '') {
             return '';
         }
 
