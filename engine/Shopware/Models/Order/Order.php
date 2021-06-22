@@ -627,7 +627,7 @@ class Order extends ModelEntity
      */
     public function setOrderTime($orderTime)
     {
-        if (!$orderTime instanceof \DateTimeInterface && is_string($orderTime)) {
+        if (!$orderTime instanceof \DateTimeInterface && \is_string($orderTime)) {
             $orderTime = new \DateTime($orderTime);
         }
         $this->orderTime = $orderTime;
@@ -810,7 +810,7 @@ class Order extends ModelEntity
      */
     public function setClearedDate($clearedDate)
     {
-        if (!$clearedDate instanceof \DateTimeInterface && is_string($clearedDate)) {
+        if (!$clearedDate instanceof \DateTimeInterface && \is_string($clearedDate)) {
             $clearedDate = new \DateTime($clearedDate);
         }
         $this->clearedDate = $clearedDate;

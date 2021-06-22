@@ -34,7 +34,7 @@ class PluginZipDetector
         $entry = $archive->statIndex(0);
         $rootDirectory = explode('/', $entry['name'])[0];
 
-        return in_array($rootDirectory, ['Frontend', 'Backend', 'Core']);
+        return \in_array($rootDirectory, ['Frontend', 'Backend', 'Core']);
     }
 
     /**

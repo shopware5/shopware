@@ -170,7 +170,7 @@ class SchemaOperator implements SchemaOperatorInterface
         }
 
         $lowerCaseName = strtolower($name);
-        if (in_array($lowerCaseName, $this->nameBlacklist)) {
+        if (\in_array($lowerCaseName, $this->nameBlacklist)) {
             throw new \Exception(sprintf('Provided name %s is a reserved keyword.', $name));
         }
     }
@@ -182,7 +182,7 @@ class SchemaOperator implements SchemaOperatorInterface
      */
     private function validateField($field)
     {
-        if (strlen($field) > 64) {
+        if (\strlen($field) > 64) {
             throw new \Exception('Maximum length: 64 chars');
         }
 
@@ -198,7 +198,7 @@ class SchemaOperator implements SchemaOperatorInterface
      */
     private function filterDefaultValue($defaultValue)
     {
-        if (!is_string($defaultValue)) {
+        if (!\is_string($defaultValue)) {
             return $defaultValue;
         }
 

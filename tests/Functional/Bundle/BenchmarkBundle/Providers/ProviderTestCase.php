@@ -52,7 +52,7 @@ abstract class ProviderTestCase extends \Shopware\Tests\Functional\Bundle\Benchm
     public function testGetValidateTypes()
     {
         $resultData = $this->getBenchmarkData();
-        if (!is_array($this::EXPECTED_TYPES)) {
+        if (!\is_array($this::EXPECTED_TYPES)) {
             foreach ($this::EXPECTED_TYPES as $key => $type) {
                 switch ($type) {
                     case IsType::TYPE_ARRAY:
@@ -112,7 +112,7 @@ abstract class ProviderTestCase extends \Shopware\Tests\Functional\Bundle\Benchm
             if (!$expectedTypes[$resultKey]) {
                 continue;
             }
-            if (is_array($expectedTypes[$resultKey])) {
+            if (\is_array($expectedTypes[$resultKey])) {
                 $this->checkForTypes($resultItem, $expectedTypes[$resultKey]);
                 continue;
             }

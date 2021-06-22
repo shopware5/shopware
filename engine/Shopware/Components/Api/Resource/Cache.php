@@ -107,7 +107,7 @@ class Cache extends Resource implements BatchInterface
             $this->getCacheInfo('opcache'),
         ];
 
-        return ['data' => $data, 'total' => count($data)];
+        return ['data' => $data, 'total' => \count($data)];
     }
 
     /**

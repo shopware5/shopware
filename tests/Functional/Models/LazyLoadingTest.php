@@ -201,7 +201,6 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
     {
         $groupId = $customer->getGroup()->getId();
         $groupKey = $customer->getGroup()->getKey();
-        $customer = null;
         $this->em->clear();
 
         $customer = new Customer();
@@ -383,7 +382,7 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randomString = '';
         for ($i = 0; $i < $length; ++$i) {
-            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+            $randomString .= $characters[rand(0, \strlen($characters) - 1)];
         }
 
         return $randomString;

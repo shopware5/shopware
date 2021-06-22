@@ -51,7 +51,7 @@ class Shopware extends Enlight_Application
 
         $this->container = $container;
         $this->appPath = __DIR__ . DIRECTORY_SEPARATOR;
-        $this->docPath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR;
+        $this->docPath = \dirname(__DIR__, 2) . DIRECTORY_SEPARATOR;
 
         parent::__construct();
     }
@@ -75,7 +75,7 @@ class Shopware extends Enlight_Application
 
         if (!$this->container->has($name)) {
             throw new Enlight_Exception(
-                sprintf('Method "%s::%s" not found failure', get_class($this), $name),
+                sprintf('Method "%s::%s" not found failure', \get_class($this), $name),
                 Enlight_Exception::METHOD_NOT_FOUND
             );
         }
@@ -92,7 +92,12 @@ class Shopware extends Enlight_Application
     {
         trigger_error('Shopware()->App() is deprecated since version 5.2 and will be removed in 5.8.', E_USER_DEPRECATED);
 
-        return $this->container->getParameter('kernel.name');
+        $name = $this->container->getParameter('kernel.name');
+        if (!\is_string($name)) {
+            throw new \RuntimeException('Parameter kernel.name needs to be a string');
+        }
+
+        return $name;
     }
 
     /**
@@ -104,7 +109,12 @@ class Shopware extends Enlight_Application
     {
         trigger_error('Shopware()->Environment() is deprecated since version 5.2 and will be removed in 5.8. Use the kernel.environment parameter instead.', E_USER_DEPRECATED);
 
-        return $this->container->getParameter('kernel.environment');
+        $environment = $this->container->getParameter('kernel.environment');
+        if (!\is_string($environment)) {
+            throw new \RuntimeException('Parameter kernel.environment needs to be a string');
+        }
+
+        return $environment;
     }
 
     /**
@@ -210,7 +220,7 @@ class Shopware extends Enlight_Application
     /**
      * Returns access layer to deprecated shopware frontend objects
      *
-     * @return Shopware_Components_Modules|null
+     * @return Shopware_Components_Modules
      */
     public function Modules()
     {
@@ -236,7 +246,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return Shopware\Components\Model\ModelManager|null
+     * @return Shopware\Components\Model\ModelManager
      */
     public function Models()
     {

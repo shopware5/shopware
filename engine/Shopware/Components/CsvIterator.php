@@ -24,8 +24,8 @@
 
 class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
 {
-    const DEFAULT_DELIMITER = ';';
-    const DEFAULT_LENGTH = 60000;
+    public const DEFAULT_DELIMITER = ';';
+    public const DEFAULT_LENGTH = 60000;
 
     /**
      * The CSV file handler.

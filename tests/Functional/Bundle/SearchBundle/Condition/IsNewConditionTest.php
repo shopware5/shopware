@@ -54,9 +54,8 @@ class IsNewConditionTest extends TestCase
     }
 
     /**
-     * @param string                             $number
-     * @param \Shopware\Models\Category\Category $category
-     * @param array                              $data
+     * @param string $number
+     * @param array  $data
      *
      * @return array
      */
@@ -67,8 +66,7 @@ class IsNewConditionTest extends TestCase
         $data = []
     ) {
         $product = parent::getProduct($number, $context, $category);
-        $product = array_merge($product, $data);
 
-        return $product;
+        return array_merge($product, $data);
     }
 }

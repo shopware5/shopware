@@ -137,7 +137,7 @@ class ORMBacklogSubscriberTest extends TestCase
     {
         return static function (Backlog $backlog) use ($event, $payloadProperty, $payloadPropertyValue) {
             return $backlog->getEvent() === $event
-                && array_key_exists($payloadProperty, $backlog->getPayload())
+                && \array_key_exists($payloadProperty, $backlog->getPayload())
                 && $backlog->getPayload()[$payloadProperty] === $payloadPropertyValue;
         };
     }

@@ -32,7 +32,7 @@ use PDO;
 
 class CustomerStreamRepository implements CustomerStreamRepositoryInterface
 {
-    const INDEXING_LIMIT = 250;
+    public const INDEXING_LIMIT = 250;
 
     /**
      * @var Connection
@@ -85,7 +85,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
             $data['interests'] = json_decode($data['interests'], true);
 
             $data['streams'] = [];
-            if (array_key_exists($id, $streams)) {
+            if (\array_key_exists($id, $streams)) {
                 $data['streams'] = $streams[$id];
             }
 
@@ -193,7 +193,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
             $month = $date->add(new DateInterval('P' . 1 . 'M'));
             $format = $month->format('Y-m');
 
-            if (array_key_exists($format, $data)) {
+            if (\array_key_exists($format, $data)) {
                 $chart[] = $data[$format];
             } else {
                 $chart[] = [
@@ -252,7 +252,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
 
             $chart[$format] = array_merge(['yearMonth' => $format], $default);
 
-            if (array_key_exists($format, $amount)) {
+            if (\array_key_exists($format, $amount)) {
                 $chart[$format]['unassigned'] = (float) $amount[$format];
             }
 

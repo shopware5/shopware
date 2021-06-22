@@ -313,7 +313,6 @@ class ShopwareContext extends SubContext
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
-        /** @var \Shopware\Tests\Mink\Element\BannerSlider $slider */
         $blogArticle = $this->getMultipleElement($page, 'BlogArticle', 1);
 
         $articles = $articles->getHash();
@@ -343,7 +342,6 @@ class ShopwareContext extends SubContext
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
-        /** @var \Shopware\Tests\Mink\Element\Youtube $slider */
         $youtube = $this->getMultipleElement($page, 'YouTube', 1);
 
         $page->checkYoutubeVideo($youtube, $code);

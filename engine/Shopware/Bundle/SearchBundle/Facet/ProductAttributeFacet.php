@@ -28,10 +28,10 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 class ProductAttributeFacet implements FacetInterface
 {
-    const MODE_VALUE_LIST_RESULT = 'value_list';
-    const MODE_RADIO_LIST_RESULT = 'radio';
-    const MODE_BOOLEAN_RESULT = 'boolean';
-    const MODE_RANGE_RESULT = 'range';
+    public const MODE_VALUE_LIST_RESULT = 'value_list';
+    public const MODE_RADIO_LIST_RESULT = 'radio';
+    public const MODE_BOOLEAN_RESULT = 'boolean';
+    public const MODE_RANGE_RESULT = 'range';
 
     /**
      * @var string

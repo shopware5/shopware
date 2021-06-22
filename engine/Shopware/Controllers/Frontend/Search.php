@@ -55,7 +55,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         $this->View()->loadTemplate('frontend/search/fuzzy.tpl');
 
         $minLengthSearchTerm = $this->get(\Shopware_Components_Config::class)->get('minSearchLenght');
-        if (strlen($term) < (int) $minLengthSearchTerm) {
+        if (\strlen($term) < (int) $minLengthSearchTerm) {
             return;
         }
 
@@ -129,7 +129,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
         $minSearch = empty($config->sMINSEARCHLENGHT) ? 2 : (int) $config->sMINSEARCHLENGHT;
         $number = null;
-        if (!empty($search) && strlen($search) >= $minSearch) {
+        if (!empty($search) && \strlen($search) >= $minSearch) {
             $sql = '
                 SELECT DISTINCT articleID, ordernumber, s_articles.configurator_set_id
                 FROM s_articles_details
@@ -159,7 +159,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 $products = $this->get('db')->fetchCol($sql, [$search, $like_search]);
             }
         }
-        if (!empty($products) && count($products) == 1) {
+        if (!empty($products) && \count($products) == 1) {
             $sql = '
                 SELECT ac.articleID
                 FROM  s_articles_categories_ro ac
@@ -176,7 +176,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 $products[0],
             ]);
         }
-        if (!empty($products) && count($products) == 1) {
+        if (!empty($products) && \count($products) == 1) {
             $assembleParams = [
                 'sViewport' => 'detail',
                 'sArticle' => $products[0],

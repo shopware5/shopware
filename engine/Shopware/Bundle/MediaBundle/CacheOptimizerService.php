@@ -66,7 +66,7 @@ class CacheOptimizerService implements OptimizerServiceInterface
      */
     public function getOptimizerByMimeType($mime)
     {
-        if (array_key_exists($mime, $this->mimeCache)) {
+        if (\array_key_exists($mime, $this->mimeCache)) {
             return $this->mimeCache[$mime];
         }
 

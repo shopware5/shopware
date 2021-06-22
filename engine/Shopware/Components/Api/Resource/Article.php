@@ -526,6 +526,11 @@ class Article extends Resource implements BatchInterface
             $media = $image->getMedia();
 
             $projectDir = $this->getContainer()->getParameter('shopware.app.rootDir');
+
+            if (!\is_string($projectDir)) {
+                throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+            }
+
             if (!$force && $mediaService->has($projectDir . $media->getPath())) {
                 continue;
             }
@@ -644,7 +649,7 @@ class Article extends Resource implements BatchInterface
             // Backward compatibility for attribute translations
             foreach ($translation as $key => $value) {
                 $attrKey = '__attribute_' . $key;
-                if (in_array($attrKey, $whitelist) && !isset($translation[$attrKey])) {
+                if (\in_array($attrKey, $whitelist) && !isset($translation[$attrKey])) {
                     $translation[$attrKey] = $value;
                 }
             }
@@ -994,12 +999,12 @@ class Article extends Resource implements BatchInterface
         if ($oldMainDetail) {
             $mainDetailGetsConfigurator = false;
             foreach ($data['variants'] as $variantData) {
-                if (isset($variantData['configuratorOptions']) && is_array($variantData['configuratorOptions'])) {
+                if (isset($variantData['configuratorOptions']) && \is_array($variantData['configuratorOptions'])) {
                     $mainDetailGetsConfigurator = true;
                 }
             }
 
-            if (!$mainDetailGetsConfigurator && count($oldMainDetail->getConfiguratorOptions()) === 0) {
+            if (!$mainDetailGetsConfigurator && \count($oldMainDetail->getConfiguratorOptions()) === 0) {
                 $this->getManager()->remove($oldMainDetail);
                 $setFirstVariantMain = true;
             }

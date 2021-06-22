@@ -32,7 +32,7 @@ use Shopware\Bundle\ESIndexingBundle\SynchronizerInterface;
 
 class ProductSynchronizer implements SynchronizerInterface
 {
-    const LIMIT = 100;
+    public const LIMIT = 100;
 
     /**
      * @var ProductIndexer

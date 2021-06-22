@@ -67,7 +67,7 @@ abstract class AbstractMigration
 
         $regexPattern = '/[\d]*-(.+)\.php$/i';
 
-        $rc = new \ReflectionClass(get_class($this));
+        $rc = new \ReflectionClass(\get_class($this));
         $fileName = basename($rc->getFileName());
 
         preg_match($regexPattern, $fileName, $result);
@@ -80,7 +80,7 @@ abstract class AbstractMigration
         $result = [];
         $regexPattern = '/[\d]*$/';
 
-        preg_match($regexPattern, get_class($this), $result);
+        preg_match($regexPattern, \get_class($this), $result);
 
         return (int) $result[0];
     }

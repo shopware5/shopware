@@ -93,7 +93,7 @@ class Shopware_Components_Translation
             }
         }
         foreach ($tmp as $tmpKey => $value) {
-            if (!is_string($value)) {
+            if (!\is_string($value)) {
                 continue;
             }
             if (trim($value) === '') {
@@ -232,7 +232,7 @@ class Shopware_Components_Translation
                 ->setParameter('objectType', $type);
         }
         if ($key) {
-            if (is_array($key)) {
+            if (\is_array($key)) {
                 $queryBuilder
                     ->andWhere('t.objectkey IN (:objectKey)')
                     ->setParameter('objectKey', $key, Connection::PARAM_INT_ARRAY);
@@ -283,7 +283,7 @@ class Shopware_Components_Translation
                 // We need something like array_merge_recursive, but that also
                 // recursively merges elements with int keys.
                 foreach ($translationFallback as $translationKey => $data) {
-                    if (array_key_exists($translationKey, $translationData)) {
+                    if (\array_key_exists($translationKey, $translationData)) {
                         $translationData[$translationKey] += $data;
                     } else {
                         $translationData[$translationKey] = $data;
@@ -337,7 +337,7 @@ class Shopware_Components_Translation
         $requiredKeys = ['objectdata', 'objectlanguage', 'objecttype', 'objectkey'];
 
         foreach ($data as $translation) {
-            if (count(array_intersect_key(array_flip($requiredKeys), $translation)) !== count($requiredKeys)) {
+            if (\count(array_intersect_key(array_flip($requiredKeys), $translation)) !== \count($requiredKeys)) {
                 continue;
             }
 
@@ -433,7 +433,7 @@ class Shopware_Components_Translation
             if (isset($order['payment'])) {
                 $paymentMethods[$order['payment']['id']] = $order['payment'];
             }
-            if (array_key_exists('documents', $order)) {
+            if (\array_key_exists('documents', $order)) {
                 foreach ($order['documents'] as $documentIndex => $document) {
                     if (!$document['type']) {
                         continue;
@@ -451,7 +451,7 @@ class Shopware_Components_Translation
         // Save the translated objects
         foreach ($orders as &$order) {
             $orderDocuments = $order['documents'];
-            for ($documentCounter = 0, $orderDocumentsCount = count($orderDocuments); $documentCounter < $orderDocumentsCount; ++$documentCounter) {
+            for ($documentCounter = 0, $orderDocumentsCount = \count($orderDocuments); $documentCounter < $orderDocumentsCount; ++$documentCounter) {
                 $type = $orderDocuments[$documentCounter]['type'];
                 $order['documents'][$documentCounter]['type'] = $translatedDocumentTypes[$type['id']];
             }
@@ -589,7 +589,7 @@ class Shopware_Components_Translation
 
         $text = html_entity_decode($text);
         $text = preg_replace('!<[^>]*?>!', ' ', $text);
-        $text = str_replace(chr(0xa0), ' ', $text);
+        $text = str_replace(\chr(0xa0), ' ', $text);
         $text = preg_replace('/\s\s+/', ' ', $text);
         $text = htmlspecialchars($text);
         $text = trim($text);
@@ -696,7 +696,7 @@ class Shopware_Components_Translation
     private function prepareArticleData(string $data): array
     {
         $data = unserialize($data, ['allowed_classes' => false]);
-        if (!empty($data['txtlangbeschreibung']) && strlen($data['txtlangbeschreibung']) > 1000) {
+        if (!empty($data['txtlangbeschreibung']) && \strlen($data['txtlangbeschreibung']) > 1000) {
             $data['txtlangbeschreibung'] = substr(strip_tags($data['txtlangbeschreibung']), 0, 1000);
         }
 
@@ -717,7 +717,7 @@ class Shopware_Components_Translation
             $column = str_replace(CrudServiceInterface::EXT_JS_PREFIX, '', $column);
 
             unset($data[$key]);
-            if (in_array($column, $columns)) {
+            if (\in_array($column, $columns)) {
                 $data[$column] = $value;
             }
         }

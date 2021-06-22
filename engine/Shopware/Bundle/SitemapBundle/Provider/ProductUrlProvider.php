@@ -101,7 +101,7 @@ class ProductUrlProvider implements UrlProviderInterface
 
         $productNumberSearchResult = $this->productNumberSearch->search($criteria, $shopContext);
 
-        if (count($productNumberSearchResult->getProducts()) === 0) {
+        if (\count($productNumberSearchResult->getProducts()) === 0) {
             return [];
         }
 
@@ -133,7 +133,7 @@ class ProductUrlProvider implements UrlProviderInterface
         $routes = $this->router->generateList(array_column($products, 'urlParams'), $routingContext);
 
         $urls = [];
-        for ($i = 0, $productCount = count($products); $i < $productCount; ++$i) {
+        for ($i = 0, $productCount = \count($products); $i < $productCount; ++$i) {
             $urls[] = new Url($routes[$i], new \DateTime($products[$i]['changetime']), 'weekly', Product::class, $products[$i]['id']);
         }
 

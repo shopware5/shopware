@@ -76,7 +76,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             [
                 'success' => true,
                 'data' => $assignments,
-                'total' => count($assignments),
+                'total' => \count($assignments),
             ]
         );
     }
@@ -381,7 +381,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $this->View()->assign([
             'success' => true,
             'data' => $values,
-            'total' => count($values),
+            'total' => \count($values),
         ]);
     }
 

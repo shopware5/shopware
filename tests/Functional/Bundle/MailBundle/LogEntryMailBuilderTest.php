@@ -63,7 +63,7 @@ class LogEntryMailBuilderTest extends \PHPUnit\Framework\TestCase
 
         static::assertNotNull($built);
         static::assertEquals($mail->getFrom(), $built->getFrom());
-        static::assertCount(count($mail->getTo()), $built->getTo());
+        static::assertCount(\count($mail->getTo()), $built->getTo());
 
         /*
          * Check if the log-derived mail object contains all original recipient addresses.

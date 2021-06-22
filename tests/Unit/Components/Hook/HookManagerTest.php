@@ -30,17 +30,17 @@ use PHPUnit\Framework\TestCase;
 
 class HookManagerTest extends TestCase
 {
-    const TEST_NAME_ARG = 'Test Name';
-    const TEST_VALUES_ARG = [
+    public const TEST_NAME_ARG = 'Test Name';
+    public const TEST_VALUES_ARG = [
         'foo' => 'bar',
     ];
-    const TEST_ARGS = [
+    public const TEST_ARGS = [
         'name' => self::TEST_NAME_ARG,
         'values' => self::TEST_VALUES_ARG,
     ];
-    const TEST_RETURN_VALUE = 'ReturnValue';
-    const RECURSIVE_TEST_LIMIT_ARG = 2;
-    const RECURSIVE_TEST_ARGS = [
+    public const TEST_RETURN_VALUE = 'ReturnValue';
+    public const RECURSIVE_TEST_LIMIT_ARG = 2;
+    public const RECURSIVE_TEST_ARGS = [
         'limit' => self::RECURSIVE_TEST_LIMIT_ARG,
     ];
 
@@ -83,7 +83,6 @@ class HookManagerTest extends TestCase
             $this->addHookListener(HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME, HookHandler::TypeAfter);
             $this->addHookListener(HookManagerTestTarget::VOID_TEST_METHOD_NAME, HookHandler::TypeAfter);
             $proxyClass = $this->hookManager->getProxy(HookManagerTestTarget::class);
-            $proxy = new $proxyClass();
         }
     }
 
@@ -471,7 +470,7 @@ class HookManagerTest extends TestCase
             ) {
                 ++$secondHookCallCounter;
                 $this->assertHookArgs($args);
-                static::assertTrue(in_array($args->getSubject()->originalMethodCallCounter, [0, 1]));
+                static::assertTrue(\in_array($args->getSubject()->originalMethodCallCounter, [0, 1]));
                 if ($secondHookCallCounter === 1) {
                     static::assertNull($args->getReturn());
                 } else {
@@ -514,7 +513,6 @@ class HookManagerTest extends TestCase
     {
         $firstHookCallCounter = 0;
         $firstHookReturnValue = self::TEST_RETURN_VALUE . '_first';
-        $secondHookReturnValue = self::TEST_RETURN_VALUE . '_second';
 
         // Register first hook (to be executed first)
         $this->addHookListener(
@@ -968,9 +966,8 @@ class HookManagerTest extends TestCase
     private function createProxy()
     {
         $proxyClass = $this->hookManager->getProxy(HookManagerTestTarget::class);
-        $proxy = new $proxyClass();
 
-        return $proxy;
+        return new $proxyClass();
     }
 
     private function assertHookArgs(\Enlight_Hook_HookArgs $args)

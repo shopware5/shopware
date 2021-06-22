@@ -159,7 +159,7 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
     {
         $title = array_unique($titles);
 
-        switch (count($title)) {
+        switch (\count($title)) {
             //normal case
             case 1:
                 return current($title);

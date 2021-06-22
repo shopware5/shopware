@@ -29,7 +29,7 @@ use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 
 class RegexCheck implements CheckInterface
 {
-    const CHECK_TYPE = 'regex';
+    public const CHECK_TYPE = 'regex';
 
     /**
      * @var SnippetNamespace

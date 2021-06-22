@@ -197,7 +197,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $result = Shopware()->Db()->query($sql, $params);
         $total = $result->rowCount();
 
-        if (is_array($filter) && isset($filter[0]['value'])) {
+        if (\is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND lastviewport LIKE :filter';
         } else {
@@ -249,7 +249,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         // Insert the percentage into each field manually
         if ($data !== null) {
-            for ($i = 0, $iMax = count($data); $i < $iMax; ++$i) {
+            for ($i = 0, $iMax = \count($data); $i < $iMax; ++$i) {
                 if ($total !== 0) {
                     $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
                 } else {
@@ -261,7 +261,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => true,
             'data' => $data,
-            'total' => count($data),
+            'total' => \count($data),
         ]);
     }
 
@@ -288,7 +288,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => true,
             'data' => $data,
-            'total' => count($data),
+            'total' => \count($data),
         ]);
     }
 
@@ -445,7 +445,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             'startDate' => $startDate,
         ];
 
-        if (is_array($filter) && isset($filter[0]['value'])) {
+        if (\is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND s_core_paymentmeans.description LIKE :filter';
         } else {
@@ -472,7 +472,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => true,
             'data' => $paymentMethods,
-            'total' => count($paymentMethods),
+            'total' => \count($paymentMethods),
         ]);
     }
 
@@ -491,7 +491,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             'startDate' => $startDate,
         ];
 
-        if (is_array($filter) && isset($filter[0]['value'])) {
+        if (\is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND (s_articles.name LIKE :filter OR s_order_basket.ordernumber LIKE :filter)';
         } else {
@@ -542,7 +542,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => true,
             'data' => $data,
-            'total' => count($data),
+            'total' => \count($data),
         ]);
     }
 
@@ -561,7 +561,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             'startDate' => $startDate,
         ];
 
-        if (is_array($filter) && isset($filter[0]['value'])) {
+        if (\is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND s_order_basket.datum LIKE :filter';
         } else {
@@ -617,7 +617,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => true,
             'data' => $data,
-            'total' => count($data),
+            'total' => \count($data),
         ]);
     }
 

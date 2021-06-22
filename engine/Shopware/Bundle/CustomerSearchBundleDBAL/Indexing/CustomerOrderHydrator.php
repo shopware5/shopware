@@ -48,13 +48,13 @@ class CustomerOrderHydrator
         $struct->setDispatches($this->explodeAndFilter($data['selected_dispachtes']));
         $struct->setWeekdays($this->explodeAndFilter($data['weekdays']));
 
-        if (array_key_exists('product_numbers', $data)) {
+        if (\array_key_exists('product_numbers', $data)) {
             $struct->setProducts($this->explodeAndFilter($data['product_numbers']));
         }
-        if (array_key_exists('category_ids', $data)) {
+        if (\array_key_exists('category_ids', $data)) {
             $struct->setCategories($this->explodeAndFilter($data['category_ids']));
         }
-        if (array_key_exists('manufacturer_ids', $data)) {
+        if (\array_key_exists('manufacturer_ids', $data)) {
             $struct->setManufacturers($this->explodeAndFilter($data['manufacturer_ids']));
         }
 

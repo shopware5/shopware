@@ -164,7 +164,7 @@ class PaymentsProvider implements BenchmarkProviderInterface
             unset($payments[$key]);
         }
 
-        return count($payments);
+        return \count($payments);
     }
 
     /**
@@ -190,7 +190,7 @@ class PaymentsProvider implements BenchmarkProviderInterface
             unset($payments[$key]);
         }
 
-        return count($payments);
+        return \count($payments);
     }
 
     /**
@@ -287,7 +287,7 @@ class PaymentsProvider implements BenchmarkProviderInterface
      */
     private function getPossiblePaymentIds()
     {
-        if (array_key_exists($this->shopId, $this->paymentIds)) {
+        if (\array_key_exists($this->shopId, $this->paymentIds)) {
             return $this->paymentIds[$this->shopId];
         }
 

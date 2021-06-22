@@ -50,6 +50,11 @@ class CacheClearCommand extends ShopwareCommand
         $io = new SymfonyStyle($input, $output);
 
         $realCacheDir = $this->getContainer()->getParameter('kernel.cache_dir');
+
+        if (!\is_string($realCacheDir)) {
+            throw new \RuntimeException('Parameter kernel.cache_dir needs to be a string');
+        }
+
         // the old cache dir name must not be longer than the real one to avoid exceeding
         // the maximum length of a directory or file path within it (esp. Windows MAX_PATH)
         $oldCacheDir = substr($realCacheDir, 0, -1) . (substr($realCacheDir, -1) === '~' ? '+' : '~');

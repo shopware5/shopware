@@ -43,7 +43,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), ['index', 'load'])) {
+        if (!\in_array($this->Request()->getActionName(), ['index', 'load'])) {
             $this->Front()->Plugins()->Json()->setRenderer(true);
         }
     }
@@ -313,7 +313,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
 
         foreach ($surcharges as $surcharge) {
             $keys = explode(':', $surcharge);
-            if (in_array($keys[0], $isoCodes)) {
+            if (\in_array($keys[0], $isoCodes)) {
                 $buffer[] = $surcharge;
             }
         }

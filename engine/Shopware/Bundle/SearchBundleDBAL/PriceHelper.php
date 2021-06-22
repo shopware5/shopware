@@ -30,11 +30,11 @@ use Shopware_Components_Config;
 
 class PriceHelper implements PriceHelperInterface
 {
-    const STATE_INCLUDES_CHEAPEST_PRICE = 'cheapest_price';
+    public const STATE_INCLUDES_CHEAPEST_PRICE = 'cheapest_price';
 
-    const STATE_INCLUDES_DEFAULT_PRICE = 'default_price';
+    public const STATE_INCLUDES_DEFAULT_PRICE = 'default_price';
 
-    const STATE_INCLUDES_AVAILABLE_VARIANT = 'available_variant';
+    public const STATE_INCLUDES_AVAILABLE_VARIANT = 'available_variant';
 
     /**
      * @var Shopware_Components_Config

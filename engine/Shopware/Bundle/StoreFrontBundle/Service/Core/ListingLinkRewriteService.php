@@ -82,7 +82,7 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
         $rewrite = $this->router->generateList($urls);
 
         foreach ($articles as $key => &$product) {
-            if (!array_key_exists($key, $rewrite)) {
+            if (!\array_key_exists($key, $rewrite)) {
                 continue;
             }
             $product['linkDetails'] = $rewrite[$key];
@@ -118,10 +118,10 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
         }, $conditions);
 
         $filtered = array_filter($config, function (Group $group) use ($groupIds) {
-            return in_array($group->getId(), $groupIds, true);
+            return \in_array($group->getId(), $groupIds, true);
         });
 
-        if (count($config) === count($filtered)) {
+        if (\count($config) === \count($filtered)) {
             return 'number=' . $number;
         }
 

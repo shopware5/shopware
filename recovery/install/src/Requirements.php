@@ -123,7 +123,7 @@ class Requirements
     {
         $xmlObject = simplexml_load_file($this->sourceFile);
 
-        if (!is_object($xmlObject->requirements)) {
+        if (!\is_object($xmlObject->requirements)) {
             throw new \RuntimeException('Requirements XML file is not valid.');
         }
 
@@ -153,9 +153,9 @@ class Requirements
         $m = 'check' . str_replace(' ', '', ucwords(str_replace(['_', '.'], ' ', $name)));
         if (method_exists($this, $m)) {
             return $this->$m();
-        } elseif (extension_loaded($name)) {
+        } elseif (\extension_loaded($name)) {
             return true;
-        } elseif (function_exists($name)) {
+        } elseif (\function_exists($name)) {
             return true;
         } elseif (($value = ini_get($name)) !== null) {
             if (strtolower($value) == 'off' || (is_numeric($value) && $value == 0)) {
@@ -224,7 +224,7 @@ class Requirements
      */
     private function checkOpcache()
     {
-        if (!extension_loaded('Zend OPcache')) {
+        if (!\extension_loaded('Zend OPcache')) {
             return [];
         }
 
@@ -266,11 +266,11 @@ class Requirements
      */
     private function checkCurl()
     {
-        if (function_exists('curl_version')) {
+        if (\function_exists('curl_version')) {
             $curl = curl_version();
 
             return $curl['version'];
-        } elseif (function_exists('curl_init')) {
+        } elseif (\function_exists('curl_init')) {
             return true;
         }
 
@@ -284,7 +284,7 @@ class Requirements
      */
     private function checkLibXml()
     {
-        if (defined('LIBXML_DOTTED_VERSION')) {
+        if (\defined('LIBXML_DOTTED_VERSION')) {
             return LIBXML_DOTTED_VERSION;
         }
 
@@ -298,7 +298,7 @@ class Requirements
      */
     private function checkGd()
     {
-        if (function_exists('gd_info')) {
+        if (\function_exists('gd_info')) {
             $gd = gd_info();
             if (preg_match('#[0-9.]+#', $gd['GD Version'], $match)) {
                 if (substr_count($match[0], '.') == 1) {
@@ -321,7 +321,7 @@ class Requirements
      */
     private function checkGdJpg()
     {
-        if (function_exists('gd_info')) {
+        if (\function_exists('gd_info')) {
             $gd = gd_info();
 
             return !empty($gd['JPEG Support']) || !empty($gd['JPG Support']);
@@ -337,7 +337,7 @@ class Requirements
      */
     private function checkFreetype()
     {
-        if (function_exists('gd_info')) {
+        if (\function_exists('gd_info')) {
             $gd = gd_info();
 
             return !empty($gd['FreeType Support']);
@@ -353,7 +353,7 @@ class Requirements
      */
     private function checkSessionSavePath()
     {
-        if (function_exists('session_save_path')) {
+        if (\function_exists('session_save_path')) {
             return (bool) session_save_path();
         } elseif (ini_get('session.save_path')) {
             return true;
@@ -478,7 +478,7 @@ class Requirements
     private function encodeSize($bytes)
     {
         $types = ['B', 'KB', 'MB', 'GB', 'TB'];
-        for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++);
+        for ($i = 0; $bytes >= 1024 && $i < (\count($types) - 1); $bytes /= 1024, $i++);
 
         return round($bytes, 2) . ' ' . $types[$i];
     }

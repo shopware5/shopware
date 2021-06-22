@@ -67,7 +67,7 @@ class KeywordFinder implements KeywordFinderInterface
     public function getKeywordsOfTerm($term)
     {
         // Set terms to search on, limit to maxKeywords
-        $keywords = array_slice($this->termHelper->splitTerm($term), 0, $this->maxKeywords);
+        $keywords = \array_slice($this->termHelper->splitTerm($term), 0, $this->maxKeywords);
 
         // If any term in search request
         if (empty($keywords)) {
@@ -146,7 +146,7 @@ class KeywordFinder implements KeywordFinderInterface
             $keywordID = $keyword['id'];
             $keyword = $keyword['keyword'];
 
-            if (strlen($term) < strlen($keyword)) {
+            if (\strlen($term) < \strlen($keyword)) {
                 $term1 = $keyword;
                 $term2 = $term;
             } else {
@@ -158,15 +158,15 @@ class KeywordFinder implements KeywordFinderInterface
 
             // Check for sub term matching
             if (strpos($term1, $term2) !== false) {
-                if (strlen($term1) < 4) {
+                if (\strlen($term1) < 4) {
                     $relevance = $this->config->get('fuzzySearchMatchFactor', 5);
 
                 //ipod === ipods
-                } elseif (strlen($term1) - strlen($term2) <= 1) {
+                } elseif (\strlen($term1) - \strlen($term2) <= 1) {
                     $relevance = $this->config->get('fuzzySearchExactMatchFactor', 100);
 
                 //digital == digi
-                } elseif ((round(strlen($term2) / strlen($term1), 2) * 100) >= $this->config->get('fuzzySearchPartNameDistancen', 25)) {
+                } elseif ((round(\strlen($term2) / \strlen($term1), 2) * 100) >= $this->config->get('fuzzySearchPartNameDistancen', 25)) {
                     $relevance = $this->config->get('fuzzySearchPatternMatchFactor', 50);
                 }
             }

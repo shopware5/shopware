@@ -190,7 +190,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     private function hydrateSearchResult(string $entity, array $data): array
     {
         $data = array_map(static function ($row) {
-            if (array_key_exists('_score', $row) && array_key_exists(0, $row)) {
+            if (\array_key_exists('_score', $row) && \array_key_exists(0, $row)) {
                 return $row[0];
             }
 
@@ -215,7 +215,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             static function ($field) use ($metaData) {
                 $type = $metaData->getTypeOfField($field);
 
-                return in_array($type, ['string', 'text', 'decimal', 'float']);
+                return \in_array($type, ['string', 'text', 'decimal', 'float']);
             }
         );
 

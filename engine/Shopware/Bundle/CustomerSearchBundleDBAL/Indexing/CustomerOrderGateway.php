@@ -62,21 +62,21 @@ class CustomerOrderGateway
         $structs = [];
         foreach ($customerIds as $customerId) {
             $customerData = [];
-            if (array_key_exists($customerId, $data)) {
+            if (\array_key_exists($customerId, $data)) {
                 $customerData = $data[$customerId];
             }
 
-            if (array_key_exists($customerId, $products)) {
+            if (\array_key_exists($customerId, $products)) {
                 $customerData = array_merge($customerData, $products[$customerId]);
             }
 
-            if (array_key_exists($customerId, $amount)) {
+            if (\array_key_exists($customerId, $amount)) {
                 $customerData = array_merge($customerData, $amount[$customerId]);
             }
 
             $struct = $this->hydrator->hydrate($customerData);
 
-            $struct->setHasCanceledOrders(in_array($customerId, $canceled));
+            $struct->setHasCanceledOrders(\in_array($customerId, $canceled));
 
             $structs[$customerId] = $struct;
         }

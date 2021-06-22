@@ -683,15 +683,20 @@
                         {else}
                             {block name='frontend_checkout_confirm_submit'}
                                 {* Submit order button *}
-                                {if $sPayment.embediframe || $sPayment.action}
-                                    <button type="submit" class="btn is--primary is--large right is--icon-right" form="confirm--form" data-preloader-button="true">
-                                        {s name='ConfirmDoPayment'}{/s}<i class="icon--arrow-right"></i>
-                                    </button>
-                                {else}
-                                    <button type="submit" class="btn is--primary is--large right is--icon-right" form="confirm--form" data-preloader-button="true">
-                                        {s name='ConfirmActionSubmit'}{/s}<i class="icon--arrow-right"></i>
-                                    </button>
-                                {/if}
+                                <button type="submit"
+                                        class="btn is--primary is--large right is--icon-right"
+                                        form="confirm--form"
+                                        data-preloader-button="true"
+                                        {if $sDispatchNoOrder || $countryNotAllowedForShipping}disabled{/if}>
+                                    <span>
+                                        {if $sPayment.embediframe || $sPayment.action}
+                                            {s name='ConfirmDoPayment'}{/s}
+                                        {else}
+                                            {s name='ConfirmActionSubmit'}{/s}
+                                        {/if}
+                                    </span>
+                                    <i class="icon--arrow-right"></i>
+                                </button>
                             {/block}
                         {/if}
                     </div>

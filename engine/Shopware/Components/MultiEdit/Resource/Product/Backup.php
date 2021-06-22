@@ -97,6 +97,11 @@ class Backup
     public function setupBackupDir()
     {
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
+
+        if (!\is_string($projectDir)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+        }
+
         $this->backupPath = $projectDir . 'files/backup/multi_edit';
         $this->backupPath = rtrim($this->backupPath, '/\\') . '/';
 
@@ -222,7 +227,7 @@ class Backup
         }
 
         $path = $backup->getPath();
-        $dir = dirname($path);
+        $dir = \dirname($path);
 
         if ($offset === 0) {
             $zip = new \ZipArchive();
@@ -259,7 +264,7 @@ class Backup
             $query = file_get_contents($headerPath) . file_get_contents($dataPath) . file_get_contents($footerPath);
             $this->getDqlHelper()->getDb()->exec($query);
 
-            $numFiles = count($dataFiles);
+            $numFiles = \count($dataFiles);
 
             unlink($dataPath);
         }
@@ -301,7 +306,7 @@ class Backup
             throw new \RuntimeException(sprintf('Backup by id %d not found', $id));
         }
 
-        $dir = dirname($backup->getPath());
+        $dir = \dirname($backup->getPath());
 
         // Delete the zip file
         unlink($backup->getPath());
@@ -414,11 +419,11 @@ class Backup
             $prefix = ucfirst(strtolower($config['entity']));
             // Only check for prefix, if prefix array was set
             // Else, all default tables will be exported
-            if ($prefixes && !in_array($prefix, $prefixes)) {
+            if ($prefixes && !\in_array($prefix, $prefixes)) {
                 continue;
             }
             if ($config['editable']) {
-                if (in_array($config['field'], $fields[$prefix])) {
+                if (\in_array($config['field'], $fields[$prefix])) {
                     // We always need the id field
                     $tables[$config['table']]['prefix'] = $prefix;
                     $tables[$config['table']]['columns']['id'] = 'id';
@@ -673,7 +678,7 @@ class Backup
         $files = scandir($path);
         foreach ($files as $key => &$file) {
             $extension = pathinfo($path . $file, PATHINFO_EXTENSION);
-            if ($file == '.' || $file == '..' || in_array($file, $blacklistName) || !in_array($extension, $findExtension)) {
+            if ($file == '.' || $file == '..' || \in_array($file, $blacklistName) || !\in_array($extension, $findExtension)) {
                 unset($files[$key]);
             }
             $file = $path . $file;

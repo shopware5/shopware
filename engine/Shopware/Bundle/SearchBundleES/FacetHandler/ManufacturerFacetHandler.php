@@ -42,7 +42,7 @@ use Shopware_Components_Snippet_Manager;
 
 class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    const AGGREGATION_SIZE = 1000;
+    public const AGGREGATION_SIZE = 1000;
 
     /**
      * @var ManufacturerServiceInterface
@@ -138,7 +138,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
             $items[] = new ValueListItem(
                 $manufacturer->getId(),
                 $manufacturer->getName(),
-                in_array($manufacturer->getId(), $actives),
+                \in_array($manufacturer->getId(), $actives),
                 $manufacturer->getAttributes()
             );
         }

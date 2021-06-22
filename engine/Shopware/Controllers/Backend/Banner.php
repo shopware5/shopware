@@ -87,7 +87,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             $data[$key]['leaf'] = empty($data[$key]['childrenCount']);
             $data[$key]['allowDrag'] = true;
             if ($preselectedNodes !== null) {
-                $data[$key]['checked'] = in_array($category['id'], $preselectedNodes);
+                $data[$key]['checked'] = \in_array($category['id'], $preselectedNodes);
             }
         }
 

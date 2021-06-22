@@ -54,7 +54,7 @@ use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 
 class PluginManager extends \Shopware_Controllers_Backend_ExtJs
 {
-    const FALLBACK_LOCALE = 'en_GB';
+    public const FALLBACK_LOCALE = 'en_GB';
 
     public function preDispatch()
     {
@@ -100,6 +100,10 @@ class PluginManager extends \Shopware_Controllers_Backend_ExtJs
         $offset = (int) $this->Request()->getParam('offset');
 
         $downloadsDir = $this->container->getParameter('shopware.app.downloadsDir');
+        if (!\is_string($downloadsDir)) {
+            throw new \RuntimeException('Parameter shopware.app.downloadsdir has to be an string');
+        }
+
         $destination = rtrim($downloadsDir, '/') . DIRECTORY_SEPARATOR . $metaStruct->getFileName();
         if ($offset === 0) {
             unlink($destination);
@@ -142,6 +146,10 @@ class PluginManager extends \Shopware_Controllers_Backend_ExtJs
         }
 
         $downloadsDir = $this->container->getParameter('shopware.app.downloadsDir');
+        if (!\is_string($downloadsDir)) {
+            throw new \RuntimeException('Parameter shopware.app.downloadsdir has to be an string');
+        }
+
         $filePath = rtrim($downloadsDir, '/') . DIRECTORY_SEPARATOR . $metaStruct->getFileName();
         $service = Shopware()->Container()->get('shopware_plugininstaller.plugin_download_service');
 
@@ -169,7 +177,7 @@ class PluginManager extends \Shopware_Controllers_Backend_ExtJs
 
     public function checkIonCubeLoaderAction()
     {
-        $this->View()->assign(['success' => extension_loaded('ionCube Loader')]);
+        $this->View()->assign(['success' => \extension_loaded('ionCube Loader')]);
     }
 
     public function getCategoriesAction()
@@ -737,12 +745,15 @@ class PluginManager extends \Shopware_Controllers_Backend_ExtJs
         return $this->container->get('shopware_plugininstaller.account_manager_service')->getDomain();
     }
 
-    /**
-     * @return string
-     */
-    private function getVersion()
+    private function getVersion(): string
     {
-        return $this->container->getParameter('shopware.release.version');
+        $version = $this->container->getParameter('shopware.release.version');
+
+        if (!\is_string($version)) {
+            throw new \RuntimeException('Parameter shopware.release.version has to be an string');
+        }
+
+        return $version;
     }
 
     /**

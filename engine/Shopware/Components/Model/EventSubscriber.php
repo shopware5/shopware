@@ -177,7 +177,7 @@ class EventSubscriber implements BaseEventSubscriber
         if ($entity instanceof Proxy) {
             $entityName = get_parent_class($entity);
         } else {
-            $entityName = get_class($entity);
+            $entityName = \get_class($entity);
         }
 
         return $entityName;

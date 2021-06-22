@@ -96,7 +96,7 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
         // Parse string into array
         $wordsTmp = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
 
-        if (count($wordsTmp)) {
+        if (\count($wordsTmp)) {
             $words = array_unique($wordsTmp);
         } elseif (!empty($string)) {
             $words = [$string];

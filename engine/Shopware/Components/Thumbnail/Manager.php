@@ -292,18 +292,18 @@ class Manager
     protected function uniformThumbnailSizes(array $thumbnailSizes)
     {
         foreach ($thumbnailSizes as &$size) {
-            if (is_string($size)) {
+            if (\is_string($size)) {
                 if (strpos($size, 'x') !== false) {
                     $size = $this->stringSizeToArray($size);
                 } else {
                     $size = ['width' => $size, 'height' => $size];
                 }
             } else {
-                if (is_array($size) && !array_key_exists('width', $size)) {
+                if (\is_array($size) && !\array_key_exists('width', $size)) {
                     $size = ['width' => $size[0], 'height' => $size[1] ?? $size[0]];
                 }
 
-                if (is_int($size)) {
+                if (\is_int($size)) {
                     $size = ['width' => $size, 'height' => $size];
                 }
             }

@@ -26,8 +26,8 @@ namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
 {
-    const ARTICLE_NUMBER = 'SW10239';
-    const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
+    public const ARTICLE_NUMBER = 'SW10239';
+    public const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
 
     /**
      * Reads the user agent black list and test if the bot can add an article
@@ -121,6 +121,72 @@ class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->dispatch('/checkout/addArticle/sAdd/' . self::ARTICLE_NUMBER);
 
         Shopware()->Modules()->Basket()->sDeleteBasket();
+    }
+
+    public function testRequestPaymentWithoutAGB(): void
+    {
+        // Login
+        $this->loginFrontendUser();
+
+        // Add article to basket
+        $this->addBasketArticle(self::USER_AGENT, 5);
+
+        // Confirm checkout
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $this->dispatch('/checkout/confirm');
+
+        // Finish checkout
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $this->dispatch('/checkout/payment');
+
+        static::assertTrue($this->View()->getAssign('sAGBError'));
+
+        // Got redirected back
+        static::assertSame('confirm', $this->Request()->getActionName());
+
+        // Logout frontend user
+        Shopware()->Modules()->Admin()->logout();
+    }
+
+    public function testRequestPaymentWithoutServiceAgreement(): void
+    {
+        // Login
+        $this->loginFrontendUser();
+
+        // Add article to basket
+        $this->addBasketArticle(self::USER_AGENT, 5);
+
+        Shopware()->Db()->beginTransaction();
+        $this->setConfig('serviceAttrField', 'attr1');
+        Shopware()->Db()->exec('UPDATE s_articles_attributes SET attr1 = 1');
+
+        // Confirm checkout
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $this->dispatch('/checkout/confirm');
+
+        // Finish checkout
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $this->Request()->setPost('sAGB', 'on');
+        $this->dispatch('/checkout/payment');
+
+        $this->setConfig('serviceAttrField', null);
+        Shopware()->Db()->rollBack();
+
+        static::assertFalse($this->View()->getAssign('sAGBError'));
+
+        // Got redirected back
+        static::assertSame('confirm', $this->Request()->getActionName());
+
+        // Logout frontend user
+        Shopware()->Modules()->Admin()->logout();
     }
 
     /**

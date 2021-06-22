@@ -22,8 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\EntityRepository;
 use Shopware\Models\ProductFeed\ProductFeed;
-use Shopware\Models\ProductFeed\Repository;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -47,7 +47,7 @@ class sExportTest extends PHPUnit\Framework\TestCase
     private $cacheDir;
 
     /**
-     * @var Repository
+     * @var EntityRepository<ProductFeed>
      */
     private $repository;
 
@@ -69,10 +69,15 @@ class sExportTest extends PHPUnit\Framework\TestCase
     public function setUp(): void
     {
         $this->container = Shopware()->Container();
-        $this->export = $this->container->get('modules')->Export();
+
+        $this->export = Shopware()->Modules()->Export();
         $this->repository = $this->container->get('models')->getRepository(ProductFeed::class);
         $this->template = $this->container->get('template');
-        $this->cacheDir = $this->container->getParameter('kernel.cache_dir') . '/productexport/';
+
+        /** @var string $cacheDir */
+        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+
+        $this->cacheDir = $cacheDir . '/productexport/';
         $this->testDir = __DIR__ . '/fixtures/productexport/';
 
         if (!is_dir($this->cacheDir)) {
@@ -87,13 +92,13 @@ class sExportTest extends PHPUnit\Framework\TestCase
         $this->connection = $this->container->get('dbal_connection');
     }
 
-    public function testNewFields()
+    public function testNewFields(): void
     {
-        $this->connection->exec(file_get_contents($this->testDir . 'products.sql'));
+        $this->connection->executeQuery((string) file_get_contents($this->testDir . 'products.sql'));
 
         $sql = 'REPLACE INTO `s_export` (`id`, `name`, `last_export`, `active`, `hash`, `show`, `count_articles`, `expiry`, `interval`, `formatID`, `last_change`, `filename`, `encodingID`, `categoryID`, `currencyID`, `customergroupID`, `partnerID`, `languageID`, `active_filter`, `image_filter`, `stockmin_filter`, `instock_filter`, `price_filter`, `own_filter`, `header`, `body`, `footer`, `count_filter`, `multishopID`, `variant_export`, `cache_refreshed`, `dirty`) VALUES
 (99, \'Test\', \'2019-11-18 19:26:59\', 1, \'be825a3aec75a7793e11ccf74caffbb9\', 0, 52, \'2019-11-18 22:46:10\', 0, 1, \'2019-11-18 22:46:10\', \'test.csv\', 2, 3, 1, 1, \'\', 1, 1, 0, 0, 0, 0, \'\', \'{strip}\narticleID{#S#}\npseudosales{#S#}\nmetaTitle{#S#}\nnotification{#S#}\navailable_from{#S#}\navailable_to{#S#}\npricegroupActive{#S#}\npricegroupID\n{/strip}{#L#}\', \'{strip}\n{$sArticle.articleID|escape}{#S#}\n{$sArticle.pseudosales|escape}{#S#}\n{$sArticle.metaTitle|escape}{#S#}\n{$sArticle.notification|escape}{#S#}\n{$sArticle.available_from|escape}{#S#}\n{$sArticle.available_to|escape}{#S#}\n{$sArticle.pricegroupActive|escape}{#S#}\n{$sArticle.pricegroupID|escape}\n{/strip}{#L#}\', \'\', 0, NULL, 1, \'2000-01-01 00:00:00\', 1);';
-        $this->connection->exec($sql);
+        $this->connection->executeQuery($sql);
 
         $fileName = $this->generateFeed(99);
 
@@ -103,17 +108,36 @@ class sExportTest extends PHPUnit\Framework\TestCase
         );
     }
 
-    public function testMetaTitleTranslation()
+    public function testMetaTitleTranslation(): void
     {
-        $this->connection->exec(file_get_contents($this->testDir . 'products.sql'));
+        $this->connection->executeQuery((string) file_get_contents($this->testDir . 'products.sql'));
 
         $sql = 'REPLACE INTO `s_export` (`id`, `name`, `last_export`, `active`, `hash`, `show`, `count_articles`, `expiry`, `interval`, `formatID`, `last_change`, `filename`, `encodingID`, `categoryID`, `currencyID`, `customergroupID`, `partnerID`, `languageID`, `active_filter`, `image_filter`, `stockmin_filter`, `instock_filter`, `price_filter`, `own_filter`, `header`, `body`, `footer`, `count_filter`, `multishopID`, `variant_export`, `cache_refreshed`, `dirty`) VALUES
 (99, \'Test\', \'2019-11-19 18:07:35\', 1, \'be825a3aec75a7793e11ccf74caffbb9\', 0, 29, \'2019-11-19 18:16:09\', 0, 1, \'2019-11-19 18:16:09\', \'test_translation.csv\', 2, 0, 1, 1, \'\', 2, 1, 0, 0, 0, 0, \'\', \'{strip}\narticleID{#S#}\npseudosales{#S#}\nmetaTitle{#S#}\nnotification{#S#}\navailable_from{#S#}\navailable_to{#S#}\npricegroupActive{#S#}\npricegroupID\n{/strip}{#L#}\', \'{strip}\n{$sArticle.articleID|escape}{#S#}\n{$sArticle.pseudosales|escape}{#S#}\n{$sArticle.metaTitle|escape}{#S#}\n{$sArticle.notification|escape}{#S#}\n{$sArticle.available_from|escape}{#S#}\n{$sArticle.available_to|escape}{#S#}\n{$sArticle.pricegroupActive|escape}{#S#}\n{$sArticle.pricegroupID|escape}\n{/strip}{#L#}\', \'\', 0, NULL, 1, \'2000-01-01 00:00:00\', 1);';
-        $this->connection->exec($sql);
+        $this->connection->executeQuery($sql);
 
         $sql = 'REPLACE INTO `s_core_translations` (`id`, `objecttype`, `objectdata`, `objectkey`, `objectlanguage`, `dirty`) VALUES
 (NULL, \'article\', \'a:1:{s:9:\"metaTitle\";s:9:\"Meta test\";}\', 1, \'2\', 1);';
-        $this->connection->exec($sql);
+        $this->connection->executeQuery($sql);
+
+        $fileName = $this->generateFeed(99);
+
+        static::assertFileEquals(
+            $this->testDir . $fileName,
+            $this->cacheDir . $fileName
+        );
+    }
+
+    public function testCustomerGroupExclusionWorks(): void
+    {
+        $this->connection->executeQuery((string) file_get_contents($this->testDir . 'products.sql'));
+
+        $sql = 'REPLACE INTO `s_export` (`id`, `name`, `last_export`, `active`, `hash`, `show`, `count_articles`, `expiry`, `interval`, `formatID`, `last_change`, `filename`, `encodingID`, `categoryID`, `currencyID`, `customergroupID`, `partnerID`, `languageID`, `active_filter`, `image_filter`, `stockmin_filter`, `instock_filter`, `price_filter`, `own_filter`, `header`, `body`, `footer`, `count_filter`, `multishopID`, `variant_export`, `cache_refreshed`, `dirty`) VALUES
+(99, \'Test\', \'2019-11-19 18:07:35\', 1, \'be825a3aec75a7793e11ccf74caffbb9\', 0, 29, \'2019-11-19 18:16:09\', 0, 1, \'2019-11-19 18:16:09\', \'customergroup_exlusion.csv\', 2, 0, 1, 1, \'\', 2, 1, 0, 0, 0, 0, \'\', \'{strip}\narticleID{#S#}\npseudosales{#S#}\nmetaTitle{#S#}\nnotification{#S#}\navailable_from{#S#}\navailable_to{#S#}\npricegroupActive{#S#}\npricegroupID\n{/strip}{#L#}\', \'{strip}\n{$sArticle.articleID|escape}{#S#}\n{$sArticle.pseudosales|escape}{#S#}\n{$sArticle.metaTitle|escape}{#S#}\n{$sArticle.notification|escape}{#S#}\n{$sArticle.available_from|escape}{#S#}\n{$sArticle.available_to|escape}{#S#}\n{$sArticle.pricegroupActive|escape}{#S#}\n{$sArticle.pricegroupID|escape}\n{/strip}{#L#}\', \'\', 0, NULL, 1, \'2000-01-01 00:00:00\', 1);';
+        $this->connection->executeQuery($sql);
+
+        $sql = 'INSERT INTO s_articles_avoid_customergroups (articleID, customergroupID) VALUES(1, 1)';
+        $this->connection->executeQuery($sql);
 
         $fileName = $this->generateFeed(99);
 
@@ -125,10 +149,10 @@ class sExportTest extends PHPUnit\Framework\TestCase
 
     private function generateFeed(int $feedId): string
     {
-        /** @var ProductFeed $productFeed */
-        $productFeed = $this->repository->find((int) $feedId);
+        /** @var ProductFeed|null $productFeed */
+        $productFeed = $this->repository->find($feedId);
 
-        if (!$productFeed) {
+        if ($productFeed === null) {
             throw new Exception('Product feed not found');
         }
 
@@ -142,6 +166,10 @@ class sExportTest extends PHPUnit\Framework\TestCase
         $fileName = $productFeed->getHash() . '_' . $productFeed->getFileName();
 
         $handle = fopen($this->cacheDir . $fileName, 'w');
+
+        if (!\is_resource($handle)) {
+            throw new RuntimeException('Cannot open file');
+        }
 
         $this->export->executeExport($handle);
 

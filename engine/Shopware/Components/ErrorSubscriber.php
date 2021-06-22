@@ -97,13 +97,13 @@ class ErrorSubscriber implements SubscriberInterface
 
         if ($this->isInsideErrorHandlerLoop) {
             $exceptions = $response->getException();
-            if (count($exceptions) > $this->exceptionCountAtFirstEncounter) {
+            if (\count($exceptions) > $this->exceptionCountAtFirstEncounter) {
                 // Exception thrown by error handler; tell the front controller to throw it
                 $front->throwExceptions(true);
                 throw array_pop($exceptions);
             }
 
-            if (is_array($exceptions)) {
+            if (\is_array($exceptions)) {
                 $last = array_pop($exceptions);
 
                 if ($this->eventManager->notifyUntil('Shopware_Components_Error_Log', [
@@ -114,13 +114,13 @@ class ErrorSubscriber implements SubscriberInterface
 
                 // Make sure this is an Exception and also no minor one
                 if ($last instanceof \Exception
-                    && !in_array($last->getCode(), [
+                    && !\in_array($last->getCode(), [
                     \Enlight_Controller_Exception::ActionNotFound,
                     \Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found,
                     \Enlight_Controller_Exception::Controller_Dispatcher_Controller_No_Route,
                     \Enlight_Controller_Exception::NO_ROUTE,
                     ], true)
-                    && !in_array(get_class($last), $this->ignoredExceptionClasses, true) // Check for exceptions to be ignored
+                    && !\in_array(\get_class($last), $this->ignoredExceptionClasses, true) // Check for exceptions to be ignored
                 ) {
                     if ($last instanceof CSRFTokenValidationException) {
                         $this->logger->warning($last->getMessage());
@@ -149,7 +149,7 @@ class ErrorSubscriber implements SubscriberInterface
         $error->request = clone $request;
 
         // Get a count of the number of exceptions encountered
-        $this->exceptionCountAtFirstEncounter = count($exceptions);
+        $this->exceptionCountAtFirstEncounter = \count($exceptions);
 
         // Forward to the error handler
         $request->setParam('error_handler', $error)

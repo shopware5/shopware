@@ -83,7 +83,7 @@ class GenericRepository implements RepositoryInterface
         if ($criteria->ids) {
             $data = $this->getList($criteria->ids);
 
-            return new SearchResult(count($data), $data);
+            return new SearchResult(\count($data), $data);
         }
 
         $result = $this->searcher->search($criteria);

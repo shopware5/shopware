@@ -84,7 +84,7 @@ class AddressManagementAddressBox extends MultipleElement
     public function containsAdress($givenAddress)
     {
         $testAddress = [];
-        if (count($givenAddress) === 5) {
+        if (\count($givenAddress) === 5) {
             $testAddress[] = $this->getCompanyOrNull();
         }
 

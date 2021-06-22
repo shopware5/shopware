@@ -49,7 +49,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class PersonalFormType extends AbstractType
 {
-    const SNIPPET_BIRTHDAY = [
+    public const SNIPPET_BIRTHDAY = [
         'namespace' => 'frontend/account/internalMessages',
         'name' => 'DateFailure',
         'default' => 'Please enter a valid birthday',
@@ -107,7 +107,7 @@ class PersonalFormType extends AbstractType
             $data = $event->getData();
 
             array_walk_recursive($data, function (&$item, $key) use ($whitelist) {
-                if (in_array($key, $whitelist, true)) {
+                if (\in_array($key, $whitelist, true)) {
                     return $item;
                 }
                 $item = strip_tags($item);

@@ -33,17 +33,17 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     /**
      * Constant for the alphanumeric sort configuration of the category filters
      */
-    const FILTERS_SORT_ALPHANUMERIC = 0;
+    public const FILTERS_SORT_ALPHANUMERIC = 0;
 
     /**
      * Constant for the numeric sort configuration of the category filters
      */
-    const FILTERS_SORT_NUMERIC = 1;
+    public const FILTERS_SORT_NUMERIC = 1;
 
     /**
      * Constant for the position sort configuration of the category filters
      */
-    const FILTERS_SORT_POSITION = 3;
+    public const FILTERS_SORT_POSITION = 3;
 
     /**
      * @var Hydrator\PropertyHydrator

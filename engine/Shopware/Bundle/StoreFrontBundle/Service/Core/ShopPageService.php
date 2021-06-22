@@ -83,7 +83,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
 
         foreach ($shopPages as $page) {
             $pageShops = array_filter($shops, function (Struct\Shop $shop) use ($page) {
-                return array_key_exists($shop->getId(), $page->getShopIds());
+                return \array_key_exists($shop->getId(), $page->getShopIds());
             });
 
             $page->setShops($pageShops);
@@ -109,7 +109,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
                 continue;
             }
 
-            if (array_key_exists($parentId, $shopPages)) {
+            if (\array_key_exists($parentId, $shopPages)) {
                 $shopPages[$parentId]->setChildren(array_merge($shopPages[$parentId]->getChildren(), [$page]));
             }
         }
@@ -127,7 +127,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
         $parentPages = $this->shopPageGateway->getList($parentIds, $context);
 
         foreach ($shopPages as $page) {
-            if (array_key_exists($page->getParentId(), $parentPages)) {
+            if (\array_key_exists($page->getParentId(), $parentPages)) {
                 $page->setParent($parentPages[$page->getParentId()]);
             }
         }

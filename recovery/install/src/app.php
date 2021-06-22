@@ -92,11 +92,11 @@ function selectLanguage(array $allowedLanguages)
         $selectedLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
         $selectedLanguage = strtolower(substr($selectedLanguage[0], 0, 2));
     }
-    if (empty($selectedLanguage) || !in_array($selectedLanguage, $allowedLanguages)) {
+    if (empty($selectedLanguage) || !\in_array($selectedLanguage, $allowedLanguages)) {
         $selectedLanguage = 'de';
     }
 
-    if (isset($_REQUEST['language']) && in_array($_REQUEST['language'], $allowedLanguages)) {
+    if (isset($_REQUEST['language']) && \in_array($_REQUEST['language'], $allowedLanguages)) {
         $selectedLanguage = $_REQUEST['language'];
         unset($_SESSION['parameters']['c_config_shop_language'],
             $_SESSION['parameters']['c_config_shop_currency'],
@@ -104,7 +104,7 @@ function selectLanguage(array $allowedLanguages)
         $_SESSION['language'] = $selectedLanguage;
 
         return $selectedLanguage;
-    } elseif (isset($_SESSION['language']) && in_array($_SESSION['language'], $allowedLanguages)) {
+    } elseif (isset($_SESSION['language']) && \in_array($_SESSION['language'], $allowedLanguages)) {
         $selectedLanguage = $_SESSION['language'];
 
         return $selectedLanguage;
@@ -224,7 +224,7 @@ $app->map('/license', function () use ($app, $menuHelper, $container) {
     $tosUrls = $container->offsetGet('config')['tos.urls'];
     $tosUrl = $tosUrls['en'];
 
-    if (array_key_exists($container->offsetGet('install.language'), $tosUrls)) {
+    if (\array_key_exists($container->offsetGet('install.language'), $tosUrls)) {
         $tosUrl = $tosUrls[$container->offsetGet('install.language')];
     }
 
@@ -520,10 +520,10 @@ $app->map('/finish/', function () use ($app, $menuHelper, $container) {
 
     $schema = 'http';
     // This is for supporting Apache 2.2
-    if (array_key_exists('HTTPS', $_SERVER) && strtolower($_SERVER['HTTPS']) === 'on') {
+    if (\array_key_exists('HTTPS', $_SERVER) && strtolower($_SERVER['HTTPS']) === 'on') {
         $schema = 'https';
     }
-    if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
+    if (\array_key_exists('REQUEST_SCHEME', $_SERVER)) {
         $schema = $_SERVER['REQUEST_SCHEME'];
     }
 

@@ -40,11 +40,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CategoryTeaserComponentHandler implements ComponentHandlerInterface
 {
-    const TYPE_IMAGE = 'selected_image';
-    const TYPE_ARTICLE_OR_BLOG = 'random_article_image';
+    public const TYPE_IMAGE = 'selected_image';
+    public const TYPE_ARTICLE_OR_BLOG = 'random_article_image';
 
-    const LEGACY_CONVERT_FUNCTION = 'getCategoryTeaser';
-    const COMPONENT_NAME = 'emotion-components-category-teaser';
+    public const LEGACY_CONVERT_FUNCTION = 'getCategoryTeaser';
+    public const COMPONENT_NAME = 'emotion-components-category-teaser';
 
     /**
      * @var StoreFrontCriteriaFactoryInterface

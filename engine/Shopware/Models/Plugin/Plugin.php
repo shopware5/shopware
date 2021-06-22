@@ -300,6 +300,11 @@ class Plugin extends ModelEntity
         $this->widgets = new ArrayCollection();
     }
 
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     /**
      * @return int
      */
@@ -745,7 +750,7 @@ class Plugin extends ModelEntity
      */
     public function isLegacyPlugin()
     {
-        return !in_array($this->namespace, ['ShopwarePlugins', 'ProjectPlugins'], true);
+        return !\in_array($this->namespace, ['ShopwarePlugins', 'ProjectPlugins'], true);
     }
 
     /**

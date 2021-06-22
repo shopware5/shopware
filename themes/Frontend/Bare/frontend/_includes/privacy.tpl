@@ -1,5 +1,5 @@
 {block name="frontend_data_protection_information"}
-    <p class="privacy-information">
+    <p class="privacy-information block-group">
         {if {config name="ACTDPRCHECK"} && !$hideCheckbox}
             {block name="frontend_data_protection_information_checkbox"}
                 {s name="PrivacyText" namespace="frontend/index/privacy" assign="snippetPrivacyText"}{/s}

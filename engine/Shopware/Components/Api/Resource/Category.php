@@ -97,7 +97,7 @@ class Category extends Resource
                 if (!empty($attributeTranslation)) {
                     $attributeTranslation['shopId'] = $shop['id'];
 
-                    if (!is_array($category['translations'][$shop['id']])) {
+                    if (!\is_array($category['translations'][$shop['id']])) {
                         $category['translations'][$shop['id']] = [];
                     }
 
@@ -417,7 +417,7 @@ class Category extends Resource
 
     private function prepareManualSorting(array $data, CategoryModel $category): array
     {
-        if (!array_key_exists('manualSorting', $data)) {
+        if (!\array_key_exists('manualSorting', $data)) {
             return $data;
         }
 

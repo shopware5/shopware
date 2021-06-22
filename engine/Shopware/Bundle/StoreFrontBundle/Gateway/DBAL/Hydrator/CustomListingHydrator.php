@@ -87,7 +87,7 @@ class CustomListingHydrator extends Hydrator
         foreach ($facets as $class => &$facet) {
             $facet = array_merge($facet, $translation);
 
-            if (array_key_exists('streamId', $facet)) {
+            if (\array_key_exists('streamId', $facet)) {
                 $facet['stream'] = $streams[$facet['streamId']];
             }
         }

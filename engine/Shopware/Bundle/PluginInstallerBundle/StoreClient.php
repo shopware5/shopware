@@ -318,7 +318,7 @@ class StoreClient
             $header['X-Shopware-Token'] = $token->getToken();
         }
 
-        if (count($headers) > 0) {
+        if (\count($headers) > 0) {
             $header = array_merge($header, $headers);
         }
 
@@ -354,7 +354,7 @@ class StoreClient
             $header['X-Shopware-Token'] = $token->getToken();
         }
 
-        if (count($headers) > 0) {
+        if (\count($headers) > 0) {
             $header = array_merge($header, $headers);
         }
 
@@ -399,7 +399,7 @@ class StoreClient
             throw $requestException;
         }
 
-        $httpCode = array_key_exists('error', $data) ? $data['error'] : 0;
+        $httpCode = \array_key_exists('error', $data) ? $data['error'] : 0;
         $sbpCode = $data['code'];
 
         switch ($sbpCode) {
@@ -501,7 +501,7 @@ class StoreClient
                 throw new MissingDoubleOptInConfirmationException($sbpCode, 'missing_doi_confirmation', $httpCode, $requestException);
         }
 
-        $reason = array_key_exists('reason', $data) ? $data['reason'] : sprintf('Unknown error occurred. (%s)', $sbpCode);
+        $reason = \array_key_exists('reason', $data) ? $data['reason'] : sprintf('Unknown error occurred. (%s)', $sbpCode);
 
         throw new StoreException($sbpCode, $reason, $httpCode, $requestException);
     }

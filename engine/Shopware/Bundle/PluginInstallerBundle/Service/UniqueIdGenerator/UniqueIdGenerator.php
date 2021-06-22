@@ -73,7 +73,7 @@ WHERE s_core_config_values.shop_id = 1
 sql;
         $uniqueId = $this->connection->fetchColumn($sql);
 
-        if ($uniqueId !== false && is_string($uniqueId)) {
+        if ($uniqueId !== false && \is_string($uniqueId)) {
             return unserialize($uniqueId, ['allowed_classes' => false]);
         }
 

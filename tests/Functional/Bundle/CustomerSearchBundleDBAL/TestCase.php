@@ -94,10 +94,10 @@ class TestCase extends \Enlight_Components_Test_TestCase
         $result = $search->search($criteria);
 
         foreach ($expectedNumbers as $number) {
-            static::assertTrue(in_array($number, $result->getNumbers()), 'Customer number: ' . $number . ' not found');
+            static::assertTrue(\in_array($number, $result->getNumbers()), 'Customer number: ' . $number . ' not found');
         }
         foreach ($result->getNumbers() as $number) {
-            static::assertTrue(in_array($number, $expectedNumbers), 'Customer number: ' . $number . ' not expected');
+            static::assertTrue(\in_array($number, $expectedNumbers), 'Customer number: ' . $number . ' not expected');
         }
 
         return $result;
@@ -109,7 +109,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
             'customernumber' => $customer['number'],
         ]);
 
-        if (!array_key_exists('addresses', $customer)) {
+        if (!\array_key_exists('addresses', $customer)) {
             $customer['addresses'] = [['country_id' => 2]];
         }
 
@@ -124,7 +124,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
             'failedlogins' => 0,
         ], $customer));
 
-        if (array_key_exists('addresses', $customer)) {
+        if (\array_key_exists('addresses', $customer)) {
             foreach ($customer['addresses'] as $address) {
                 $address['user_id'] = $userId;
                 $addressId = $this->insert('s_user_addresses', $address);
@@ -140,7 +140,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
             }
         }
 
-        if (array_key_exists('orders', $customer)) {
+        if (\array_key_exists('orders', $customer)) {
             foreach ($customer['orders'] as $order) {
                 $order = array_merge([
                     'ordertime' => (new \DateTime())->format('Y-m-d H:i:s'),
@@ -149,7 +149,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
                     'currencyFactor' => 1,
                 ], $order);
 
-                if (!array_key_exists('details', $order)) {
+                if (!\array_key_exists('details', $order)) {
                     $order['details'] = [
                         ['ordernumber' => 'SW10235', 'modus' => 0],
                     ];
@@ -157,7 +157,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
                 $order['userID'] = $userId;
                 $orderId = $this->insert('s_order', $order);
 
-                if (array_key_exists('details', $order)) {
+                if (\array_key_exists('details', $order)) {
                     foreach ($order['details'] as $detail) {
                         $detail['orderID'] = $orderId;
                         $this->insert('s_order_details', $detail);
@@ -166,7 +166,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
             }
         }
 
-        if (array_key_exists('newsletter', $customer)) {
+        if (\array_key_exists('newsletter', $customer)) {
             foreach ($customer['newsletter'] as $newsletter) {
                 $newsletter = array_merge([
                     'customer' => 0,
@@ -178,7 +178,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
             }
         }
 
-        if (array_key_exists('attribute', $customer)) {
+        if (\array_key_exists('attribute', $customer)) {
             /** @var DataPersisterInterface $persister */
             $persister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface::class);
             $persister->persist($customer['attribute'], 's_user_attributes', $userId);

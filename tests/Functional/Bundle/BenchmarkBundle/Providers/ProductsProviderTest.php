@@ -28,9 +28,9 @@ use PHPUnit\Framework\Constraint\IsType;
 
 class ProductsProviderTest extends ProviderTestCase
 {
-    const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\ProductsProvider::class;
-    const EXPECTED_KEYS_COUNT = 1;
-    const EXPECTED_TYPES = [
+    public const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\ProductsProvider::class;
+    public const EXPECTED_KEYS_COUNT = 1;
+    public const EXPECTED_TYPES = [
         'list' => IsType::TYPE_ARRAY,
     ];
 

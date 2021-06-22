@@ -187,7 +187,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         foreach ($list['data'] as &$row) {
             $id = (int) $row['id'];
 
-            if (array_key_exists($id, $attributes)) {
+            if (\array_key_exists($id, $attributes)) {
                 $row['attribute'] = $attributes[$id];
             }
         }

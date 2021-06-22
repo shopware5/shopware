@@ -8,73 +8,40 @@ parameters:
     treatPhpDocTypesAsCertain: false
     tmpDir: var/cache/phpstan
 
+    symfony:
+        constant_hassers: false
+        container_xml_path: 'var/cache/production____REVISION___/container.xml'
+        console_application_loader: tests/phpstan-console-application.php
+
     scanDirectories:
-        - %currentWorkingDirectory%/var/cache
+        - %currentWorkingDirectory%/var/cache/production____REVISION___/doctrine
+        - %currentWorkingDirectory%/var/cache/production____REVISION___/proxies
         - %currentWorkingDirectory%/engine/Library
-    scanFiles:
-        - %currentWorkingDirectory%/vendor/autoload.php
 
     paths:
         - %currentWorkingDirectory%/engine/Shopware
+        - %currentWorkingDirectory%/tests
     excludes_analyse:
-        - %currentWorkingDirectory%/engine/Shopware/Plugins
-        - %currentWorkingDirectory%/engine/Shopware/Configs/Default.php
-        # Broken external interface definition
-        - %currentWorkingDirectory%/engine/Shopware/Bundle/SearchBundleES/CombinedConditionQueryBuilder.php
-        - %currentWorkingDirectory%/engine/Shopware/Components/Emotion/EmotionImporter.php # zip::locateName does not annotate correct return type
-        - %currentWorkingDirectory%/engine/Shopware/Components/Theme/Compiler.php # fwrite does not annotate correct return type
-        # Broken internal interface usage
-        - %currentWorkingDirectory%/engine/Shopware/Components/Log/Handler/FirePHPHandler.php
-        - %currentWorkingDirectory%/engine/Shopware/Components/DependencyInjection/Container.php
-        # Unsure how to fix
-        - %currentWorkingDirectory%/engine/Shopware/Models/Media/MediaSubscriber.php
-        - %currentWorkingDirectory%/engine/Shopware/Controllers/Backend/Property.php
-        - %currentWorkingDirectory%/engine/Shopware/Models/Document/Order.php
-        - %currentWorkingDirectory%/engine/Shopware/Components/Session/PdoSessionHandler.php
-        - %currentWorkingDirectory%/engine/Shopware/Components/DependencyInjection/LegacyPhpDumper.php
-        - %currentWorkingDirectory%/engine/Shopware/Components/ContainerAwareEventManager.php
-        - %currentWorkingDirectory%/engine/Shopware/Components/Install/Database.php
+        - %currentWorkingDirectory%/engine/Shopware/Plugins/Community
+        - %currentWorkingDirectory%/engine/Shopware/Plugins/Local
 
     ignoreErrors:
         - '#apcu_#'
-        - '#ioncube_#'
 
-        # Ignore direct view assigns
-        - '#Call to an undefined method#'
-        - '#Access to an undefined property#'
-        # "getRepository"-Methods
-        - '#should return [a-zA-Z\\_]+Repository but returns Doctrine\\ORM\\EntityRepository#'
-        - '#Static property [a-zA-Z\\_\$\:]+ \(Shopware\\Models\\[a-zA-Z]+\\Repository\|null\) does not accept Doctrine\\ORM\\EntityRepository#'
-        - '#\([a-zA-Z\\_]+Repository\) does not accept Doctrine\\ORM\\EntityRepository#'
-        - '#Array \(array<string, Shopware\\Components\\Model\\ModelRepository>\) does not accept Doctrine\\ORM\\EntityRepository#'
-        # Return values in Models
-        - '# but returns Doctrine\\ORM\\QueryBuilder#'
-        # Model properties with wrong default values
-        - '#\([a-z]+\) does not accept default value of type [a-z]+\.#'
-        # Models that are detached by cloning and nulling the id
-        - '#\([a-z]+\) does not accept null\.#'
-        - '#supplied for foreach, only iterables are supported#'
         # Interface / Implementation Switch
         - '#expects Shopware\\Bundle\\SearchBundle\\Facet\\[a-zA-Z]+Facet, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
         - '#expects Shopware\\Bundle\\SearchBundle\\Condition\\[a-zA-Z]+Condition, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
         # Product/Shopcontext mixup
         - '#expects Shopware\\Bundle\\StoreFrontBundle\\Struct\\ProductContextInterface, Shopware\\Bundle\\StoreFrontBundle\\Struct\\ShopContextInterface given#'
-        # Interfaces not being recognized
-        - '#expects Doctrine\\ORM\\PersistentCollection, Doctrine\\Common\\Collections\\ArrayCollection&iterable<Shopware\\Models\\Shop\\TemplateConfig\\[a-zA-Z]+> given#'
-        - '#Parameter \#1 \$sort of method Doctrine\\ORM\\QueryBuilder::addOrderBy\(\) expects Doctrine\\ORM\\Query\\Expr\\OrderBy\|string, array given#'
-        - '#Parameter \#1 \$request of method Shopware\\Bundle\\SearchBundle\\CriteriaRequestHandlerInterface::handleRequest\(\) expects Enlight_Controller_Request_RequestHttp, Enlight_Controller_Request_Request given#'
-        # Container Issues
-        - '#\$resource of method Shopware\\Components\\DependencyInjection\\Container::set#'
         # We manually check if the class exists before instantiating / using it
         - '#PHPDoc tag \@var for variable \$payPalInstaller contains unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'
-        # offsetSet should not return
-        - '#Method Shopware_Components_Config::offsetSet\(\) with return type void returns mixed but should not return anything#'
         - # Seem to be issues, but need tests to verify changes there
-            message: '#Else branch is unreachable because previous condition is always true#'
-            path: 'engine/Shopware/Controllers/Frontend/Blog.php'
-        -
             message: '#Negated boolean expression is always false#'
             path: 'engine/Shopware/Core/sArticles.php'
         -
             message: '#Comparison operation ">=" between int<1, max> and 1 is always true#'
             path: 'engine/Shopware/Core/sArticles.php'
+
+        - # We override the method in higher class inheritance to public method
+            message: '#Call to protected method verifyPage#'
+            path: 'tests/Mink/features/bootstrap/SpecialContext.php'

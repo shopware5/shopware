@@ -47,20 +47,20 @@ use Shopware\Models\Translation\Translation as TranslationModel;
  */
 class Translation extends Resource implements BatchInterface
 {
-    const TYPE_PRODUCT = 'article';
-    const TYPE_VARIANT = 'variant';
-    const TYPE_PRODUCT_LINK = 'link';
-    const TYPE_PRODUCT_DOWNLOAD = 'download';
-    const TYPE_PRODUCT_MANUFACTURER = 'supplier';
-    const TYPE_COUNTRY = 'config_countries';
-    const TYPE_COUNTRY_STATE = 'config_country_states';
-    const TYPE_DISPATCH = 'config_dispatch';
-    const TYPE_PAYMENT = 'config_payment';
-    const TYPE_FILTER_SET = 'propertygroup';
-    const TYPE_FILTER_GROUP = 'propertyoption';
-    const TYPE_FILTER_OPTION = 'propertyvalue';
-    const TYPE_CONFIGURATOR_GROUP = 'configuratorgroup';
-    const TYPE_CONFIGURATOR_OPTION = 'configuratoroption';
+    public const TYPE_PRODUCT = 'article';
+    public const TYPE_VARIANT = 'variant';
+    public const TYPE_PRODUCT_LINK = 'link';
+    public const TYPE_PRODUCT_DOWNLOAD = 'download';
+    public const TYPE_PRODUCT_MANUFACTURER = 'supplier';
+    public const TYPE_COUNTRY = 'config_countries';
+    public const TYPE_COUNTRY_STATE = 'config_country_states';
+    public const TYPE_DISPATCH = 'config_dispatch';
+    public const TYPE_PAYMENT = 'config_payment';
+    public const TYPE_FILTER_SET = 'propertygroup';
+    public const TYPE_FILTER_GROUP = 'propertyoption';
+    public const TYPE_FILTER_OPTION = 'propertyvalue';
+    public const TYPE_CONFIGURATOR_GROUP = 'configuratorgroup';
+    public const TYPE_CONFIGURATOR_OPTION = 'configuratoroption';
 
     /**
      * @var \Shopware_Components_Translation
@@ -774,7 +774,7 @@ class Translation extends Resource implements BatchInterface
     {
         $numbers = explode('|', $number);
 
-        if (count($numbers) < 2) {
+        if (\count($numbers) < 2) {
             throw new ApiException\CustomValidationException(sprintf('Passed filter group number %s contains not the full path: set|group', $number));
         }
 
@@ -821,7 +821,7 @@ class Translation extends Resource implements BatchInterface
     {
         $numbers = explode('|', $number);
 
-        if (count($numbers) < 3) {
+        if (\count($numbers) < 3) {
             throw new ApiException\CustomValidationException(sprintf('Passed filter option number %s contains not the full path: set|group|option', $number));
         }
 
@@ -904,7 +904,7 @@ class Translation extends Resource implements BatchInterface
     {
         $numbers = explode('|', $number);
 
-        if (count($numbers) < 2) {
+        if (\count($numbers) < 2) {
             throw new ApiException\CustomValidationException(sprintf('Passed configurator option name %s contains not the full path: group|option', $number));
         }
 
@@ -946,7 +946,7 @@ class Translation extends Resource implements BatchInterface
                 throw new ApiException\ParameterMissingException('The parameter data is required for a object translation');
             }
 
-            if (!is_array($data['data'])) {
+            if (!\is_array($data['data'])) {
                 throw new ApiException\CustomValidationException('The parameter data has to be an array.');
             }
         }

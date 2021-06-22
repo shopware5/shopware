@@ -144,7 +144,7 @@ class Blog extends Page implements HelperSelectorInterface
 
         $check = [
             'articleRating' => [$elements['articleRating']->getAttribute('content'), $average],
-            'articleRatingCount' => [$elements['articleRatingCount']->getText(), count($blogComments)],
+            'articleRatingCount' => [$elements['articleRatingCount']->getText(), \count($blogComments)],
         ];
 
         $check = Helper::floatArray($check);

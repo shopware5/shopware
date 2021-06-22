@@ -26,23 +26,23 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 
 class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    const TEST_USER_USERNAME = 'testuser';
-    const TEST_ROLE_NAME = 'testadminrole';
-    const TEST_FORM_NAME = 'FormUnderTest';
-    const TEST_FORM_ELEMENT_NAME = 'formElementUnderTest';
-    const TEST_LOCALE_LOCALE = 'test_TEST';
-    const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS = [
+    public const TEST_USER_USERNAME = 'testuser';
+    public const TEST_ROLE_NAME = 'testadminrole';
+    public const TEST_FORM_NAME = 'FormUnderTest';
+    public const TEST_FORM_ELEMENT_NAME = 'formElementUnderTest';
+    public const TEST_LOCALE_LOCALE = 'test_TEST';
+    public const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS = [
         'aa_DJ' => 'aa_DJ: Language fallback that should never happen if there is an en/en_GB locale',
         'de_DE' => 'de_DE: Getestete Einstellung',
         self::TEST_LOCALE_LOCALE => 'test_TEST: Tested Test Translation',
         'en_GB' => 'en_GB: Tested Setting',
         'en' => 'en: Tested Setting (fallback)',
     ];
-    const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK = [
+    public const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK = [
         'aa_DJ' => 'aa_DJ: Language fallback that should never happen',
         self::TEST_LOCALE_LOCALE => 'test_TEST: Tested Test Translation',
     ];
-    const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_EN_FALLBACK = [
+    public const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_EN_FALLBACK = [
         'aa_DJ' => 'aa_DJ: Language fallback that should never happen if there is an en/en_GB locale',
         'en' => 'en: Fallback locale translation',
         self::TEST_LOCALE_LOCALE => 'test_TEST: Tested Test Translation',
@@ -237,7 +237,7 @@ class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
 
         $newLocale = new \Shopware\Models\Shop\Locale();
         $newLocale->setLocale($locale);
-        $newLocale->setLanguage('<' . $locale . ' language name as created for ' . get_class($this) . '>');
+        $newLocale->setLanguage('<' . $locale . ' language name as created for ' . \get_class($this) . '>');
         $newLocale->setTerritory('<' . $locale . ' territory name>');
         $entityManager->persist($newLocale);
         // Flush $newLocale to database,so we can retrieve its new id afterwards.
@@ -314,7 +314,7 @@ class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new \Exception('JSON parse error: ' . json_last_error_msg() . ' for request to ' . $requestUrl . ' which returned ' . $responseBody);
         }
-        if (!is_object($responseDataTransferObject)) {
+        if (!\is_object($responseDataTransferObject)) {
             throw new \Exception('Response could not be parsed to an object for request to ' . $requestUrl . ' which returned ' . $responseBody);
         }
 
@@ -339,8 +339,6 @@ class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
             'Form element store options are missing.' . $formDataErrorMessageSuffix
         );
 
-        $storeSettings = $formData->elements[0]->options->store;
-
-        return $storeSettings;
+        return $formData->elements[0]->options->store;
     }
 }

@@ -35,7 +35,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ShopwareExtension implements ExtensionInterface
 {
-    const KERNEL_ID = 'shopware_extension.kernel';
+    public const KERNEL_ID = 'shopware_extension.kernel';
 
     /**
      * Returns the extension config key.
@@ -109,9 +109,11 @@ class ShopwareExtension implements ExtensionInterface
     public function process(ContainerBuilder $container)
     {
         // get base path
+        /** @var string $basePath */
         $basePath = $container->getParameter('paths.base');
 
         // find and require bootstrap
+        /** @var string $bootstrapPath */
         $bootstrapPath = $container->getParameter('shopware_extension.kernel.bootstrap');
 
         if ($bootstrapPath) {
@@ -123,6 +125,7 @@ class ShopwareExtension implements ExtensionInterface
         }
 
         // find and require kernel
+        /** @var string $kernelPath */
         $kernelPath = $container->getParameter('shopware_extension.kernel.path');
         if (file_exists($kernel = $basePath . '/' . $kernelPath)) {
             $container->getDefinition(self::KERNEL_ID)->setFile($kernel);

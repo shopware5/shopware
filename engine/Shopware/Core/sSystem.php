@@ -207,6 +207,6 @@ class sSystem implements \Enlight_Hook
      */
     public function __call($name, $params = null)
     {
-        return call_user_func_array([Shopware()->Modules()->Core(), $name], $params);
+        return \call_user_func_array([Shopware()->Modules()->Core(), $name], $params);
     }
 }

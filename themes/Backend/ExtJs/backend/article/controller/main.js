@@ -266,6 +266,11 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 globalGroup.set('active', true);
                 globalOptions = globalGroup.getConfiguratorOptions();
 
+                // Set all options to active false, to ensure active property exists on all options
+                globalOptions.each(function (globalOption) {
+                    globalOption.set('active', false);
+                });
+
                 // If no article options exists, continue
                 if (!articleOptions) {
                     return true;

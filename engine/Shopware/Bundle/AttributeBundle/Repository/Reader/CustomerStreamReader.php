@@ -54,7 +54,7 @@ class CustomerStreamReader extends GenericReader
 
         foreach ($data as &$row) {
             $id = (int) $row['id'];
-            if (!array_key_exists($id, $counts)) {
+            if (!\array_key_exists($id, $counts)) {
                 $row['customer_count'] = 0;
                 $row['newsletter_count'] = 0;
             } else {

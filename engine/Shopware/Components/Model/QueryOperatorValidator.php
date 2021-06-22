@@ -85,9 +85,9 @@ class QueryOperatorValidator
      */
     public function __construct(array $validOperators = [])
     {
-        $this->validOperators = \array_merge(
+        $this->validOperators = array_merge(
             $this->validOperators,
-            \array_map('strtoupper', $validOperators)
+            array_map('strtoupper', $validOperators)
         );
     }
 
@@ -98,10 +98,10 @@ class QueryOperatorValidator
      */
     public function isValid($operator)
     {
-        if (\in_array(\trim(\str_replace([' ', 'NOT'], '', \strtoupper($operator))), $this->validOperators, true)) {
+        if (\in_array(trim(str_replace([' ', 'NOT'], '', strtoupper($operator))), $this->validOperators, true)) {
             return true;
         }
 
-        throw new InvalidArgumentException(\sprintf("'%s' is no valid operator", $operator));
+        throw new InvalidArgumentException(sprintf("'%s' is no valid operator", $operator));
     }
 }

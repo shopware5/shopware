@@ -52,7 +52,7 @@ class ElementData implements \JsonSerializable
      */
     public function get($name, $default = null)
     {
-        return array_key_exists($name, $this->storage) ? $this->storage[$name] : $default;
+        return \array_key_exists($name, $this->storage) ? $this->storage[$name] : $default;
     }
 
     /**

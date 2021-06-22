@@ -334,9 +334,8 @@ class VariantConditionWithCurrencyFactor extends TestCase
     /**
      * Get products and set the graduated prices and inStock of the variants.
      *
-     * @param string   $number
-     * @param Category $category
-     * @param array    $data
+     * @param string $number
+     * @param array  $data
      *
      * @return array
      */
@@ -381,7 +380,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
                         ];
                         $priceCount += 9;
                     }
-                    $variant['prices'][count($variant['prices']) - 1]['to'] = 'beliebig';
+                    $variant['prices'][\count($variant['prices']) - 1]['to'] = 'beliebig';
                 }
 
                 ++$variantCount;
@@ -484,7 +483,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
                 $options = [];
                 foreach ($globalGroup->getOptions() as $option) {
-                    if (in_array($option->getName(), $optionNames, true)) {
+                    if (\in_array($option->getName(), $optionNames, true)) {
                         $options[] = $option;
                     }
                 }
@@ -542,7 +541,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
             static::assertContains($number, $numbers, sprintf('Expected cheapest price of product with number: `%s` not found', $number));
         }
 
-        static::assertCount(count($expectedCheapestPriceNumbers), $products);
+        static::assertCount(\count($expectedCheapestPriceNumbers), $products);
 
         // Pseudo prices
         $expectedPseudoPriceNumbers = array_keys($prices['pseudoPrice']);
@@ -554,6 +553,6 @@ class VariantConditionWithCurrencyFactor extends TestCase
             static::assertContains($number, $numbers, sprintf('Expected pseudo price of product with number: `%s` not found', $number));
         }
 
-        static::assertCount(count($expectedPseudoPriceNumbers), $products);
+        static::assertCount(\count($expectedPseudoPriceNumbers), $products);
     }
 }

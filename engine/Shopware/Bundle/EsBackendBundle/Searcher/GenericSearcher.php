@@ -208,7 +208,7 @@ class GenericSearcher implements SearcherInterface
             switch (strtolower($expression)) {
                 case 'in':
                     $value = $condition['value'];
-                    if (!is_array($value)) {
+                    if (!\is_array($value)) {
                         $value = [$value];
                     }
                     $query->add(

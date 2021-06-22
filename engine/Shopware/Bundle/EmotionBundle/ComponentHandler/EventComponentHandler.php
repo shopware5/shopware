@@ -78,7 +78,7 @@ class EventComponentHandler implements ComponentHandlerInterface
     private function deprecationLog(Element $element)
     {
         $types = ['emotion-components-html-code', 'emotion-components-html-element', 'emotion-components-iframe', 'emotion-components-youtube'];
-        if (!in_array($element->getComponent()->getType(), $types, true)) {
+        if (!\in_array($element->getComponent()->getType(), $types, true)) {
             $message = sprintf('%s is deprecated since 5.3 and will be removed with 6.0. Implement a ComponentHandler instead for performance benefit.', __CLASS__);
             trigger_error($message, E_USER_DEPRECATED);
         }

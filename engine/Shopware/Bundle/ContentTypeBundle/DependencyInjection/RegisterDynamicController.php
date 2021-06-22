@@ -35,6 +35,7 @@ class RegisterDynamicController implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
+        /** @var array<string, array> $types */
         $types = $container->getParameter('shopware.bundle.content_type.types');
 
         foreach ($types as $name => $type) {

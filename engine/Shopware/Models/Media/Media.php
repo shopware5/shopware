@@ -59,42 +59,42 @@ class Media extends ModelEntity
     /**
      * Flag for an image media
      */
-    const TYPE_IMAGE = 'IMAGE';
+    public const TYPE_IMAGE = 'IMAGE';
 
     /**
      * Flag for a vector media
      */
-    const TYPE_VECTOR = 'VECTOR';
+    public const TYPE_VECTOR = 'VECTOR';
 
     /**
      * Flag for a video media
      */
-    const TYPE_VIDEO = 'VIDEO';
+    public const TYPE_VIDEO = 'VIDEO';
 
     /**
      * Flag for a music media
      */
-    const TYPE_MUSIC = 'MUSIC';
+    public const TYPE_MUSIC = 'MUSIC';
 
     /**
      * Flag for an archive media
      */
-    const TYPE_ARCHIVE = 'ARCHIVE';
+    public const TYPE_ARCHIVE = 'ARCHIVE';
 
     /**
      * Flag for a pdf media
      */
-    const TYPE_PDF = 'PDF';
+    public const TYPE_PDF = 'PDF';
 
     /**
      * Flag for a 3D model media
      */
-    const TYPE_MODEL = 'MODEL';
+    public const TYPE_MODEL = 'MODEL';
 
     /**
      * Flag for an unknown media
      */
-    const TYPE_UNKNOWN = 'UNKNOWN';
+    public const TYPE_UNKNOWN = 'UNKNOWN';
 
     /**
      * INVERSE SIDE
@@ -884,7 +884,7 @@ class Media extends ModelEntity
 
         // Concat default sizes
         foreach ($this->defaultThumbnails as $size) {
-            if (count($size) === 1) {
+            if (\count($size) === 1) {
                 $sizes[] = $size . 'x' . $size;
             } else {
                 $sizes[] = $size[0] . 'x' . $size[1];
@@ -1049,6 +1049,10 @@ class Media extends ModelEntity
         $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
 
+        if (!\is_string($projectDir)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+        }
+
         // Move the file to the upload directory
         if ($this->file !== null) {
             // File already exists?
@@ -1106,7 +1110,7 @@ class Media extends ModelEntity
         $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         foreach ($this->defaultThumbnails as $size) {
-            if (count($size) === 1) {
+            if (\count($size) === 1) {
                 $sizeString = $size . 'x' . $size;
             } else {
                 $sizeString = $size[0] . 'x' . $size[1];
@@ -1140,6 +1144,10 @@ class Media extends ModelEntity
     {
         // The absolute directory path where uploaded documents should be saved
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
+
+        if (!\is_string($projectDir)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+        }
 
         return $projectDir . 'media' . DIRECTORY_SEPARATOR . strtolower($this->type) . DIRECTORY_SEPARATOR;
     }
@@ -1238,7 +1246,7 @@ class Media extends ModelEntity
         }
 
         // #2 - blacklist
-        if (in_array($extension, \Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist, true)) {
+        if (\in_array($extension, \Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist, true)) {
             throw new MediaFileExtensionIsBlacklistedException($extension);
         }
 
@@ -1257,6 +1265,10 @@ class Media extends ModelEntity
         $this->extension = str_replace('jpeg', 'jpg', $extension);
 
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
+        if (!\is_string($projectDir)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+        }
+
         $this->path = str_replace($projectDir, '', $this->getUploadDir() . $this->getFileName());
 
         if (DIRECTORY_SEPARATOR !== '/') {

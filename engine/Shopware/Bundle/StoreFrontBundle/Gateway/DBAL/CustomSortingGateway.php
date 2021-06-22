@@ -202,7 +202,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
         $mapping = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
 
         $allSortingIds = [];
-        $hasEmpty = count(array_filter($mapping)) !== count($mapping);
+        $hasEmpty = \count(array_filter($mapping)) !== \count($mapping);
         if ($hasEmpty) {
             $allSortingIds = $this->getAllCategorySortingIds();
         }

@@ -126,7 +126,7 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
         }
 
         $groups = array_filter($groups, function (Group $group) use ($facet) {
-            return in_array($group->getId(), $facet->getGroupIds(), true);
+            return \in_array($group->getId(), $facet->getGroupIds(), true);
         });
 
         $actives = $this->getFilteredValues($criteria);
@@ -156,7 +156,7 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
                 $listItem = new MediaListItem(
                     $option->getId(),
                     $option->getName(),
-                    in_array($option->getId(), $actives, true),
+                    \in_array($option->getId(), $actives, true),
                     $option->getMedia(),
                     $option->getAttributes()
                 );

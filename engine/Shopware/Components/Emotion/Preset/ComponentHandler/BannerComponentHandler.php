@@ -28,9 +28,9 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class BannerComponentHandler extends AbstractComponentHandler
 {
-    const COMPONENT_TYPE = 'emotion-components-banner';
+    public const COMPONENT_TYPE = 'emotion-components-banner';
 
-    const ELEMENT_DATA_KEY = 'file';
+    public const ELEMENT_DATA_KEY = 'file';
 
     /**
      * {@inheritdoc}
@@ -75,10 +75,10 @@ class BannerComponentHandler extends AbstractComponentHandler
 
         foreach ($data as &$elementData) {
             if ($elementData['key'] === self::ELEMENT_DATA_KEY) {
-                if (!array_key_exists($elementData['value'], $assets)) {
+                if (!\array_key_exists($elementData['value'], $assets)) {
                     break;
                 }
-                if (!array_key_exists($elementData['value'], $importedAssets)) {
+                if (!\array_key_exists($elementData['value'], $importedAssets)) {
                     $assetPath = $assets[$elementData['value']];
 
                     $media = $this->doAssetImport($assetPath);

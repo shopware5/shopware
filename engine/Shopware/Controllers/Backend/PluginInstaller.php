@@ -228,7 +228,7 @@ class PluginInstaller extends \Shopware_Controllers_Backend_ExtJs
         }
 
         $tempFileName = tempnam(sys_get_temp_dir(), $file->getClientOriginalName());
-        $tempDirectory = dirname(realpath($tempFileName));
+        $tempDirectory = \dirname(realpath($tempFileName));
 
         try {
             $file = $file->move($tempDirectory, $tempFileName);

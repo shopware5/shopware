@@ -203,6 +203,6 @@ class TypeBuilder
 
     private function implementsFieldInterface(string $className): bool
     {
-        return array_key_exists(FieldInterface::class, class_implements($className));
+        return \array_key_exists(FieldInterface::class, class_implements($className));
     }
 }

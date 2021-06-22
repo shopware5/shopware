@@ -39,14 +39,14 @@ use Shopware_Components_Config as ShopwareConfig;
 
 class ArticleComponentHandler implements ComponentHandlerInterface
 {
-    const TYPE_STATIC_PRODUCT = 'selected_article';
-    const TYPE_STATIC_VARIANT = 'selected_variant';
-    const TYPE_RANDOM = 'random_article';
-    const TYPE_NEWCOMER = 'newcomer';
-    const TYPE_TOPSELLER = 'topseller';
+    public const TYPE_STATIC_PRODUCT = 'selected_article';
+    public const TYPE_STATIC_VARIANT = 'selected_variant';
+    public const TYPE_RANDOM = 'random_article';
+    public const TYPE_NEWCOMER = 'newcomer';
+    public const TYPE_TOPSELLER = 'topseller';
 
-    const LEGACY_CONVERT_FUNCTION = 'getArticle';
-    const COMPONENT_NAME = 'emotion-components-article';
+    public const LEGACY_CONVERT_FUNCTION = 'getArticle';
+    public const COMPONENT_NAME = 'emotion-components-article';
 
     /**
      * @var StoreFrontCriteriaFactoryInterface
@@ -129,11 +129,11 @@ class ArticleComponentHandler implements ComponentHandlerInterface
         $prices = array_values($product->getPrices());
         $product->setListingPrice($prices[0]);
 
-        $product->setDisplayFromPrice(count($product->getPrices()) > 1);
+        $product->setDisplayFromPrice(\count($product->getPrices()) > 1);
 
         if ($this->shopwareConfig->get('useLastGraduationForCheapestPrice')) {
             $product->setListingPrice(
-                $prices[count($prices) - 1]
+                $prices[\count($prices) - 1]
             );
         }
     }

@@ -31,7 +31,7 @@ class TransformContext extends SubContext
      */
     public function castStringToNumber($string)
     {
-        return intval($string);
+        return (int) $string;
     }
 
     /**

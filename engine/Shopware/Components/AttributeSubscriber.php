@@ -30,7 +30,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AttributeSubscriber implements SubscriberInterface
 {
-    const redirectCookieString = 'ShopwarePluginsCoreSelfHealingRedirect';
+    public const redirectCookieString = 'ShopwarePluginsCoreSelfHealingRedirect';
 
     /**
      * @var ContainerInterface

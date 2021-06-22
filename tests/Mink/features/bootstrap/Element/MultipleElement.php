@@ -137,7 +137,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      */
     public function count()
     {
-        return count($this->siblings);
+        return \count($this->siblings);
     }
 
     /**

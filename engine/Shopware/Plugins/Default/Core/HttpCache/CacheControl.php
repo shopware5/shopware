@@ -35,7 +35,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 
 class CacheControl
 {
-    const AUTO_NO_CACHE_CONTROLLERS = [
+    public const AUTO_NO_CACHE_CONTROLLERS = [
         'frontend/checkout' => ['checkout'],
         'frontend/note' => ['checkout'],
         'frontend/detail' => ['detail'],

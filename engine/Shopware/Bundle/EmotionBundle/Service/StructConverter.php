@@ -87,7 +87,7 @@ class StructConverter
             $category['hideFilter'] = !$category['displayFacets'];
             $category['external'] = $category['externalLink'];
             $category['mediaId'] = $category['media'] ? $category['media']['id'] : null;
-            $category['path'] = count($category['path']) ? '|' . implode('|', $category['path']) . '|' : null;
+            $category['path'] = \count($category['path']) ? '|' . implode('|', $category['path']) . '|' : null;
             $category['active'] = true;
         }
 
@@ -219,7 +219,7 @@ class StructConverter
                     $entries[] = $this->converter->convertBlogStruct($blog);
                 }
 
-                $elementArray['data']['totalCount'] = count($entries);
+                $elementArray['data']['totalCount'] = \count($entries);
                 $elementArray['data']['entries'] = $entries;
                 break;
         }

@@ -540,6 +540,10 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         countryStateCombo.show();
         store.load({
             callback: function() {
+                if (!Ext.isDefined(countryStateCombo.view) || countryStateCombo.view.isDestroyed === true) {
+                    return;
+                }
+
                 var record = store.getById(oldStateId);
                 if (store.getCount() === 0) {
                     countryStateCombo.setValue(null);

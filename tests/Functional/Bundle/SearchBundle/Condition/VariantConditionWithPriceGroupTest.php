@@ -231,9 +231,8 @@ class VariantConditionWithPriceGroupTest extends TestCase
     /**
      * Get products and set the graduated prices and inStock of the variants.
      *
-     * @param string   $number
-     * @param Category $category
-     * @param array    $data
+     * @param string $number
+     * @param array  $data
      *
      * @return array
      */
@@ -294,7 +293,7 @@ class VariantConditionWithPriceGroupTest extends TestCase
 
                 $options = [];
                 foreach ($globalGroup->getOptions() as $option) {
-                    if (in_array($option->getName(), $optionNames, true)) {
+                    if (\in_array($option->getName(), $optionNames, true)) {
                         $options[] = $option;
                     }
                 }

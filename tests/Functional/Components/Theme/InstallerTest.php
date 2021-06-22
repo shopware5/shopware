@@ -51,6 +51,9 @@ class InstallerTest extends Base
 
         $configurator = $this->getConfigurator();
 
+        /** @var array<string, string> $snippet */
+        $snippet = Shopware()->Container()->getParameter('shopware.snippet');
+
         $installer = new \Shopware\Components\Theme\Installer(
             $entityManager,
             $configurator,
@@ -58,7 +61,6 @@ class InstallerTest extends Base
             Shopware()->Container()->get(\Shopware\Components\Theme\Util::class),
             $this->getSnippetHandler(),
             Shopware()->Container()->get(\Shopware\Components\Theme\Service::class),
-            Shopware()->Container()->getParameter('shopware.snippet')
         );
         //creates a directory iterator for the default theme directory (engine/Shopware/Themes)
         $directories = new \DirectoryIterator(

@@ -154,7 +154,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         $this->View()->assign([
             'success' => true,
             'data' => $data,
-            'total' => count($data),
+            'total' => \count($data),
         ]);
     }
 

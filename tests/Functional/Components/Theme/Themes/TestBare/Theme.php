@@ -26,7 +26,7 @@ namespace Shopware\Themes\TestBare;
 
 class Theme extends \Shopware\Components\Theme
 {
-    protected $extends = null;
+    protected $extends;
 
     protected $javascript = ['bare_1.js', 'bare_2.js'];
 

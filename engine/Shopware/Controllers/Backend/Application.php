@@ -821,7 +821,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
              */
             if ($mapping['type'] === ClassMetadataInfo::ONE_TO_ONE) {
                 $mappingData = $data[$mapping['fieldName']];
-                if (is_array($mappingData) && array_key_exists(0, $mappingData)) {
+                if (\is_array($mappingData) && \array_key_exists(0, $mappingData)) {
                     $data[$mapping['fieldName']] = $data[$mapping['fieldName']][0];
                 }
             }
@@ -992,12 +992,12 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
         $conditions = [];
         foreach ($sort as $condition) {
             //check if the passed field is a valid doctrine model field of the configured model.
-            if (!array_key_exists($condition['property'], $fields)) {
+            if (!\array_key_exists($condition['property'], $fields)) {
                 continue;
             }
 
             //check if the developer limited the sortable fields and the passed property defined in the sort fields parameter.
-            if (!empty($whiteList) && !in_array($condition['property'], $whiteList)) {
+            if (!empty($whiteList) && !\in_array($condition['property'], $whiteList)) {
                 continue;
             }
             $condition['property'] = $fields[$condition['property']]['alias'];
@@ -1054,7 +1054,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
             if ($condition['property'] === 'search') {
                 foreach ($fields as $name => $field) {
                     //check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
-                    if (!empty($whiteList) && !in_array($name, $whiteList)) {
+                    if (!empty($whiteList) && !\in_array($name, $whiteList)) {
                         continue;
                     }
 
@@ -1066,9 +1066,9 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
                         'value' => $value,
                     ];
                 }
-            } elseif (array_key_exists($condition['property'], $fields)) {
+            } elseif (\array_key_exists($condition['property'], $fields)) {
                 //check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
-                if (!empty($whiteList) && !in_array($condition['property'], $whiteList)) {
+                if (!empty($whiteList) && !\in_array($condition['property'], $whiteList)) {
                     continue;
                 }
 

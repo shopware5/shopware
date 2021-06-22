@@ -228,7 +228,7 @@ class FirstRunWizardPluginStoreService
         foreach ($plugins as &$plugin) {
             $key = strtolower($plugin->getTechnicalName());
 
-            if (!array_key_exists($key, $local)) {
+            if (!\array_key_exists($key, $local)) {
                 $merged[$key] = $plugin;
                 continue;
             }

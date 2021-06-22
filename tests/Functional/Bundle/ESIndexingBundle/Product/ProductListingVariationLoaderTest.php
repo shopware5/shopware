@@ -118,9 +118,7 @@ class ProductListingVariationLoaderTest extends TestCase
             ]
         );
 
-        $product = array_merge($product, $configurator);
-
-        return $product;
+        return array_merge($product, $configurator);
     }
 
     private function getProductGroups(Product $product): array

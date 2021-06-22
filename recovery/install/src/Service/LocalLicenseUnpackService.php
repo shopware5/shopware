@@ -59,7 +59,7 @@ class LocalLicenseUnpackService implements LicenseUnpackService
             throw new LicenseInvalidException($translation->translate('license_incorrect'));
         }
 
-        if (strlen($info) > (512 + 60) || strlen($info) < 100) {
+        if (\strlen($info) > (512 + 60) || \strlen($info) < 100) {
             throw new LicenseInvalidException($translation->translate('license_incorrect'));
         }
 
@@ -106,6 +106,6 @@ class LocalLicenseUnpackService implements LicenseUnpackService
         }
         $validKeys = ShopwareEdition::getValidEditions();
 
-        return in_array($productKey, $validKeys, true);
+        return \in_array($productKey, $validKeys, true);
     }
 }

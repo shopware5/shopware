@@ -207,7 +207,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
         $resultArray = $this->getManager()->toArray($result);
 
-        $this->View()->assign(['success' => true, 'data' => $resultArray, 'total' => count($resultArray)]);
+        $this->View()->assign(['success' => true, 'data' => $resultArray, 'total' => \count($resultArray)]);
     }
 
     /**

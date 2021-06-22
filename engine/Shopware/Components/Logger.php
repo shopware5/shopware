@@ -34,7 +34,7 @@ class Logger extends BaseLogger
      */
     public function table($label, $data = null)
     {
-        if (is_array($label)) {
+        if (\is_array($label)) {
             list($label, $data) = $label;
         }
 

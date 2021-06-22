@@ -141,7 +141,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             static::assertArrayHasKey('surchargestring', $paymentMean);
             static::assertArrayHasKey('active', $paymentMean);
             static::assertArrayHasKey('esdactive', $paymentMean);
-            static::assertTrue(in_array((int) $paymentMean['id'], [3, 5, 6], true));
+            static::assertTrue(\in_array((int) $paymentMean['id'], [3, 5, 6], true));
         }
     }
 
@@ -154,7 +154,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         foreach ($payments as $payment) {
             $paymentClass = $this->module->sInitiatePaymentClass($this->module->sGetPaymentMeanById($payment->getId()));
-            if (is_bool($paymentClass)) {
+            if (\is_bool($paymentClass)) {
                 static::assertFalse($paymentClass);
             } else {
                 static::assertInstanceOf('ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod', $paymentClass);
@@ -162,8 +162,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
                 $requestData = Shopware()->Front()->Request()->getParams();
                 $validationResult = $paymentClass->validate($requestData);
-                static::assertTrue(is_array($validationResult));
-                if (count($validationResult)) {
+                static::assertTrue(\is_array($validationResult));
+                if (\count($validationResult)) {
                     static::assertArrayHasKey('sErrorFlag', $validationResult);
                     static::assertArrayHasKey('sErrorMessages', $validationResult);
                 }
@@ -1503,7 +1503,6 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'invoice_shipping_net' => '0',
             'ordertime' => $date->format('Y-m-d H:i:s'),
             'status' => '0',
-            'cleared' => '17',
             'paymentID' => '4',
             'transactionID' => '',
             'comment' => '',
@@ -2362,7 +2361,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         $result = $this->module->sGetPremiumDispatches();
 
-        static::assertGreaterThan(0, count($result));
+        static::assertGreaterThan(0, \count($result));
         foreach ($result as $dispatch) {
             static::assertArrayHasKey('id', $dispatch);
             static::assertArrayHasKey('name', $dispatch);
@@ -2429,6 +2428,79 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param array<string, array> $userData
+     * @dataProvider dataProviderDataCustomerAttributeIsNot
+     */
+    public function testCustomerAttributeIsNot(array $userData, string $attribute, bool $expectation): void
+    {
+        static::assertSame($expectation, $this->module->sRiskCUSTOMERATTRISNOT($userData, [], $attribute));
+    }
+
+    /**
+     * @return array<int, array>
+     */
+    public function dataProviderDataCustomerAttributeIsNot(): iterable
+    {
+        // Not logged in
+        yield [
+            [
+                'additional' => [],
+            ],
+            'attr1|1',
+            true,
+        ];
+
+        // Wrong configured
+        yield [
+            [
+                'additional' => [
+                    'user' => [],
+                ],
+            ],
+            'attr1',
+            true,
+        ];
+
+        // Attribute not existing
+        yield [
+            [
+                'additional' => [
+                    'user' => [
+                    ],
+                ],
+            ],
+            'attr1|1',
+            true,
+        ];
+
+        // Not Matching
+        yield [
+            [
+                'additional' => [
+                    'user' => [
+                        'attr1' => '1',
+                    ],
+                ],
+            ],
+            'attr1|1',
+            false,
+        ];
+
+        // Matching
+        yield [
+            [
+                'additional' => [
+                    'user' => [
+                        'attr1' => '2',
+                    ],
+                ],
+            ],
+            'attr1|1',
+            true,
+        ];
+    }
+
+    /**
      * @param array $expected
      * @param array $actual
      */
@@ -2438,7 +2510,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             static::assertArrayHasKey($key, $actual);
             $currentActual = $actual[$key];
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->assertArray($value, $currentActual);
             } else {
                 static::assertEquals($value, $currentActual);

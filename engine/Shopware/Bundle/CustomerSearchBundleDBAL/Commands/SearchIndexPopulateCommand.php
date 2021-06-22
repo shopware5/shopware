@@ -61,7 +61,7 @@ class SearchIndexPopulateCommand extends ShopwareCommand
 
                 while ($ids = $query->fetch()) {
                     $indexer->populate($ids);
-                    $helper->advance(count($ids));
+                    $helper->advance(\count($ids));
                 }
             }
         );

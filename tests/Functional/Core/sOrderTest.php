@@ -386,7 +386,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
      */
     public function invokeMethod(&$object, $methodName, array $parameters = [])
     {
-        $reflection = new \ReflectionClass(get_class($object));
+        $reflection = new \ReflectionClass(\get_class($object));
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
 
@@ -489,7 +489,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                     'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ? AND serialID = 0',
                     [1234, 4567]
                 ));
-            } elseif (count($availableSerials) < $basketRow['quantity']) {
+            } elseif (\count($availableSerials) < $basketRow['quantity']) {
                 // ESD with serial but not enough available, ensure nothing is done
                 static::assertFalse(Shopware()->Db()->fetchRow(
                     'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
@@ -818,7 +818,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     private function getRandomArticles()
     {
-        $details = Shopware()->Db()->fetchAll(
+        return Shopware()->Db()->fetchAll(
             "SELECT
                 a.id as id,
                 a.name      as articlename,
@@ -846,8 +846,6 @@ class sOrderTest extends PHPUnit\Framework\TestCase
              LIMIT 2
             "
         );
-
-        return $details;
     }
 
     private function getRandomUser()
@@ -928,13 +926,11 @@ class sOrderTest extends PHPUnit\Framework\TestCase
      */
     private function convertToLegacyAddressArray($address)
     {
-        $output = array_merge($address, [
+        return array_merge($address, [
             'userID' => $address['user_id'],
             'countryID' => $address['country_id'],
             'stateID' => $address['state_id'],
         ]);
-
-        return $output;
     }
 
     private function getBasketRows()

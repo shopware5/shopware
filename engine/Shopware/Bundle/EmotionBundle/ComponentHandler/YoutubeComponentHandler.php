@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class YoutubeComponentHandler implements ComponentHandlerInterface
 {
-    const COMPONENT_NAME = 'emotion-components-youtube';
+    public const COMPONENT_NAME = 'emotion-components-youtube';
 
     /**
      * @var \Enlight_Event_EventManager

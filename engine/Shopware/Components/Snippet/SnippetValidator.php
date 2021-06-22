@@ -79,7 +79,7 @@ class SnippetValidator
                 $invalidSnippets[] = $error['message'] . ' (' . $entry->getRealPath() . ')';
             } else {
                 $diffGroups = array_diff(array_keys($data), $validLocales);
-                if (array_key_exists('default', $data)) {
+                if (\array_key_exists('default', $data)) {
                     $invalidSnippets[] = '"Default" snippet group is deprecated (' . $entry->getRealPath() . ')';
                 } elseif ($diffGroups) {
                     $invalidSnippets[] = sprintf(

@@ -84,18 +84,18 @@ class BatchProductNumberSearch
     private function getBaseProductsRange($key, array $baseProducts, $numberOfProducts = 0)
     {
         // cancel on empty results to prevent infinite loop
-        if (count($baseProducts) === 0) {
+        if (\count($baseProducts) === 0) {
             return [];
         }
 
-        if (!array_key_exists($key, $this->pointer)) {
+        if (!\array_key_exists($key, $this->pointer)) {
             $this->pointer[$key] = 0;
         }
 
         // use internal pointer to return different products to each request with the same criteria/context
-        $items = array_slice($baseProducts, $this->pointer[$key], $numberOfProducts);
-        $missingItems = $numberOfProducts - count($items);
-        $this->pointer[$key] += count($items);
+        $items = \array_slice($baseProducts, $this->pointer[$key], $numberOfProducts);
+        $missingItems = $numberOfProducts - \count($items);
+        $this->pointer[$key] += \count($items);
 
         if ($missingItems === 0) {
             return $items;
@@ -222,7 +222,7 @@ class BatchProductNumberSearch
     {
         $baseProductList = [];
 
-        if (count($request->getProductNumbers())) {
+        if (\count($request->getProductNumbers())) {
             $productNumbers = array_merge(...array_values($request->getProductNumbers()));
             $baseProductList = $this->baseProductFactoryService->createBaseProducts($productNumbers);
         }

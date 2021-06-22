@@ -41,9 +41,9 @@ use Shopware\Components\Model\ModelEntity;
  */
 class Emotion extends ModelEntity
 {
-    const LISTING_VISIBILITY_ONLY_START = 'only_start';
-    const LISTING_VISIBILITY_ONLY_START_AND_LISTING = 'start_and_listing';
-    const LISTING_VISIBILITY_ONLY_LISTING = 'only_listing';
+    public const LISTING_VISIBILITY_ONLY_START = 'only_start';
+    public const LISTING_VISIBILITY_ONLY_START_AND_LISTING = 'start_and_listing';
+    public const LISTING_VISIBILITY_ONLY_LISTING = 'only_listing';
 
     /**
      * Contains the assigned \Shopware\Models\Category\Category

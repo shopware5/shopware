@@ -79,7 +79,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         if (!empty($cronSecureAllowedIp)) {
             $requestIp = $request->getServer('REMOTE_ADDR');
 
-            if (in_array($requestIp, explode(';', $cronSecureAllowedIp))) {
+            if (\in_array($requestIp, explode(';', $cronSecureAllowedIp))) {
                 return true;
             }
         }

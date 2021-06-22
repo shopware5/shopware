@@ -360,7 +360,7 @@ class Inheritance
         $template = $templates[$templateId];
 
         $config = [];
-        if (array_key_exists($templateId, $configs)) {
+        if (\array_key_exists($templateId, $configs)) {
             $config = $configs[$templateId];
         }
 
@@ -410,7 +410,7 @@ class Inheritance
             }
         }
 
-        if (!is_array($config) || empty($config)) {
+        if (!\is_array($config) || empty($config)) {
             return [];
         }
 

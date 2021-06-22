@@ -26,8 +26,8 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 
 class CanceledOrderTest extends \Enlight_Components_Test_Plugin_TestCase
 {
-    const FIRST_DUMMY_SESSION_ID = '1231231231231231231231231231231231231320';
-    const SECOND_DUMMY_SESSION_ID = '1231231231231231231231231231231231231321';
+    public const FIRST_DUMMY_SESSION_ID = '1231231231231231231231231231231231231320';
+    public const SECOND_DUMMY_SESSION_ID = '1231231231231231231231231231231231231321';
 
     /**
      * Set up test case, fix demo data where needed

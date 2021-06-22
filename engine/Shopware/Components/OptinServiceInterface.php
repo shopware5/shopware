@@ -26,8 +26,8 @@ namespace Shopware\Components;
 
 interface OptinServiceInterface
 {
-    const TYPE_CUSTOMER_LOGIN_FROM_BACKEND = 'swCustomerLoginFromBackend';
-    const TYPE_THEME_PREVIEW = 'swThemePreview';
+    public const TYPE_CUSTOMER_LOGIN_FROM_BACKEND = 'swCustomerLoginFromBackend';
+    public const TYPE_THEME_PREVIEW = 'swThemePreview';
 
     /**
      * @param string $type

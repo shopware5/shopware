@@ -138,7 +138,7 @@ This can take a very long time, depending on the number of files that need to be
         $numberOfFiles = 0;
         if (!$input->getOption('skip-scan')) {
             // Do not count directories, the many sub-dirs would otherwise throw off the progressbar
-            $numberOfFiles = count(array_filter($mediaService->getFilesystem()->listContents($path, true), function (array $element) {
+            $numberOfFiles = \count(array_filter($mediaService->getFilesystem()->listContents($path, true), function (array $element) {
                 return $element['type'] === 'file';
             }));
         }

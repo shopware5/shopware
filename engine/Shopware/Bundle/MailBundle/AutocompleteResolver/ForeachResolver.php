@@ -42,7 +42,7 @@ class ForeachResolver extends AbstractResolver
                 continue;
             }
 
-            $count = count($value);
+            $count = \count($value);
 
             if ($count) {
                 $key = array_keys($value)[0];

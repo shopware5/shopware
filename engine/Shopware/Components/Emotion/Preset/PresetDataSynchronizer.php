@@ -79,13 +79,13 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
 
         $presetData = json_decode($preset->getPresetData(), true);
 
-        if (!$presetData || !is_array($presetData) || !array_key_exists('elements', $presetData)) {
+        if (!$presetData || !\is_array($presetData) || !\array_key_exists('elements', $presetData)) {
             throw new PresetAssetImportException(sprintf('The preset data of the %s preset seems to be invalid.', $preset->getName()));
         }
 
         // continue if no sync data present or we just have an assets key which is empty
         if (empty($presetData['syncData'])
-            || (count($presetData['syncData']) === 1 && empty($presetData['syncData']['assets']))
+            || (\count($presetData['syncData']) === 1 && empty($presetData['syncData']['assets']))
         ) {
             return;
         }
@@ -230,7 +230,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
         $assets = $syncData->get('assets');
 
         foreach ($assets as $key => &$path) {
-            if (is_array($path)) {
+            if (\is_array($path)) {
                 continue;
             }
 

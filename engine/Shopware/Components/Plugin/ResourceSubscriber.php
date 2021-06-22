@@ -94,7 +94,7 @@ class ResourceSubscriber
 
         $templates = (array) $args->getReturn();
 
-        if (!in_array($viewsDirectory, $templates, true)) {
+        if (!\in_array($viewsDirectory, $templates, true)) {
             $templates[] = $viewsDirectory;
             $args->setReturn($templates);
         }

@@ -378,7 +378,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                     $shipping['modus'] = 1;
                     $shipping['amount_netto'] = $tax->getNetPrice();
                     $shipping['articleordernumber'] = '';
-                    $shipping['name'] = $shippingName . ' ' . (count($taxes) > 1 ? '(' . $tax->getTaxRate() . '%)' : '');
+                    $shipping['name'] = $shippingName . ' ' . (\count($taxes) > 1 ? '(' . $tax->getTaxRate() . '%)' : '');
 
                     $this->_positions[] = $shipping;
                 }
@@ -444,7 +444,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             SELECT * FROM s_order_details_attributes WHERE detailID = ?
             ', [$position['id']]);
 
-            if (in_array((int) $position['modus'], [0, 1], true)) {
+            if (\in_array((int) $position['modus'], [0, 1], true)) {
                 $kind = (int) $position['kind'];
                 $translation = $translator->read(
                     $orderLocale,
@@ -914,7 +914,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 continue;
             }
 
-            $attributeKey = substr($key, strlen($prefix));
+            $attributeKey = substr($key, \strlen($prefix));
             $position[$attributeKey] = $value;
         }
 

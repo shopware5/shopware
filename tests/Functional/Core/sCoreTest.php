@@ -53,7 +53,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             'variables' => 'values',
         ]);
         static::assertIsString($sVariablesTestResult);
-        static::assertGreaterThan(0, strlen($sVariablesTestResult));
+        static::assertGreaterThan(0, \strlen($sVariablesTestResult));
 
         $resultArray = [];
         parse_str(trim($sVariablesTestResult, '?'), $resultArray);
@@ -81,7 +81,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             'nullVariables' => null,
         ]);
         static::assertIsString($sVariablesTestResult);
-        static::assertGreaterThan(0, strlen($sVariablesTestResult));
+        static::assertGreaterThan(0, \strlen($sVariablesTestResult));
 
         $resultArray = [];
         parse_str(trim($sVariablesTestResult, '?'), $resultArray);
@@ -111,7 +111,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             'variables' => 'values',
         ]);
         static::assertIsString($sVariablesTestResult);
-        static::assertGreaterThan(0, strlen($sVariablesTestResult));
+        static::assertGreaterThan(0, \strlen($sVariablesTestResult));
 
         $resultArray = [];
         parse_str(trim($sVariablesTestResult, '?'), $resultArray);
@@ -142,7 +142,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             'variables' => 'values',
         ]);
         static::assertIsString($sVariablesTestResult);
-        static::assertGreaterThan(0, strlen($sVariablesTestResult));
+        static::assertGreaterThan(0, \strlen($sVariablesTestResult));
 
         $resultArray = [];
         parse_str(trim($sVariablesTestResult, '?'), $resultArray);
@@ -171,7 +171,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
 
         // Without arguments, we expect the base url
         static::assertIsString($baseUrl);
-        static::assertGreaterThan(0, strlen($baseUrl));
+        static::assertGreaterThan(0, \strlen($baseUrl));
 
         // Fetch all rows and test them
         $paths = Shopware()->Db()->fetchCol(

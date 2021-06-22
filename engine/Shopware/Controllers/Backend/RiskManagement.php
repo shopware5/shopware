@@ -42,7 +42,7 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), ['index', 'load'])) {
+        if (!\in_array($this->Request()->getActionName(), ['index', 'load'])) {
             $this->Front()->Plugins()->Json()->setRenderer(true);
         }
     }

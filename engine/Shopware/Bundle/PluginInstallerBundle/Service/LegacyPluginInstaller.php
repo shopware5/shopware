@@ -96,7 +96,7 @@ class LegacyPluginInstaller
             throw new \Exception(sprintf("Unable to install '%s', got exception:\n%s\n", $plugin->getName(), $e->getMessage()), 0, $e);
         }
 
-        $result = is_bool($result) ? ['success' => $result] : $result;
+        $result = \is_bool($result) ? ['success' => $result] : $result;
 
         if (!$result['success']) {
             if (isset($result['message'])) {
@@ -128,7 +128,7 @@ class LegacyPluginInstaller
             throw new \Exception(sprintf("Unable to uninstall '%s', got exception:\n%s\n", $plugin->getName(), $e->getMessage()), 0, $e);
         }
 
-        $result = is_bool($result) ? ['success' => $result] : $result;
+        $result = \is_bool($result) ? ['success' => $result] : $result;
 
         if (!$result['success']) {
             if (isset($result['message'])) {
@@ -158,7 +158,7 @@ class LegacyPluginInstaller
             throw new \Exception(sprintf("Unable to update '%s', got exception:\n'%s'\n", $plugin->getName(), $e->getMessage()), 0, $e);
         }
 
-        $result = is_bool($result) ? ['success' => $result] : $result;
+        $result = \is_bool($result) ? ['success' => $result] : $result;
 
         if (!$result['success']) {
             if (isset($result['message'])) {
@@ -180,7 +180,7 @@ class LegacyPluginInstaller
         $bootstrap = $this->getPluginBootstrap($plugin);
 
         $result = $bootstrap->enable();
-        $result = is_bool($result) ? ['success' => $result] : $result;
+        $result = \is_bool($result) ? ['success' => $result] : $result;
 
         if ($result['success'] == false) {
             throw new \Exception(sprintf('Not allowed to enable plugin "%s".', $plugin->getName()));
@@ -203,7 +203,7 @@ class LegacyPluginInstaller
         $bootstrap = $this->getPluginBootstrap($plugin);
 
         $result = $bootstrap->disable();
-        $result = is_bool($result) ? ['success' => $result] : $result;
+        $result = \is_bool($result) ? ['success' => $result] : $result;
 
         if ($result['success'] == false) {
             throw new \Exception(sprintf('Not allowed to disable plugin "%s".', $plugin->getName()));
@@ -281,7 +281,7 @@ class LegacyPluginInstaller
      */
     private function validateIonCube($file)
     {
-        if (extension_loaded('ionCube Loader')) {
+        if (\extension_loaded('ionCube Loader')) {
             return false;
         }
 

@@ -346,7 +346,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @var string[]
+     * @param string[] $products
      */
     public function setProducts($products)
     {
@@ -362,7 +362,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @var int[]
+     * @param int[] $manufacturers
      */
     public function setManufacturers($manufacturers)
     {
@@ -378,7 +378,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @var int[]
+     * @param int[] $categories
      */
     public function setCategories($categories)
     {

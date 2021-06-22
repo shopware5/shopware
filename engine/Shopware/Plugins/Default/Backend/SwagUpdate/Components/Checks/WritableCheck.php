@@ -31,7 +31,7 @@ use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 class WritableCheck implements CheckInterface
 {
-    const CHECK_TYPE = 'writable';
+    public const CHECK_TYPE = 'writable';
 
     /**
      * @var SnippetNamespace

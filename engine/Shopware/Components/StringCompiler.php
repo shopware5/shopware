@@ -186,7 +186,7 @@ class Shopware_Components_StringCompiler
     public function compileCompatibilityMode($value, $context)
     {
         foreach ($context as $key => $replacement) {
-            if (!is_string($replacement)) {
+            if (!\is_string($replacement)) {
                 continue;
             }
             $value = str_replace('{' . $key . '}', '{$' . $key . '}', $value);

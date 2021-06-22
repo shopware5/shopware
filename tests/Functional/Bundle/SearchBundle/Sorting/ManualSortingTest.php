@@ -24,7 +24,6 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Sorting;
 
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Sorting\ManualSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
@@ -44,16 +43,10 @@ class ManualSortingTest extends TestCase
      */
     private $category;
 
-    /**
-     * @var CategoryCondition
-     */
-    private $condition;
-
     public function setUp(): void
     {
         parent::setUp();
         $this->category = $this->helper->createCategory(['name' => 'My fancy Products']);
-        $this->condition = new CategoryCondition([$this->category->getId()]);
     }
 
     public function testAscendingSorting(): void

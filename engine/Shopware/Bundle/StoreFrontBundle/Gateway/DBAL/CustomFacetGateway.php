@@ -205,7 +205,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         $mapping = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
         $allFacetIds = [];
 
-        $hasEmpty = count(array_filter($mapping)) !== count($mapping);
+        $hasEmpty = \count(array_filter($mapping)) !== \count($mapping);
         if ($hasEmpty) {
             $allFacetIds = $this->getAllCategoryFacetIds();
         }
@@ -233,7 +233,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         foreach ($data as $facet) {
             $config = json_decode($facet['__customFacet_facet'], true);
             $config = array_shift($config);
-            if (array_key_exists('streamId', $config)) {
+            if (\array_key_exists('streamId', $config)) {
                 $streamIds[] = $config['streamId'];
             }
         }

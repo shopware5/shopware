@@ -95,11 +95,11 @@ class PluginViewService
             $storePlugin = null;
             $localPlugin = null;
 
-            if (array_key_exists($name, $localePlugins)) {
+            if (\array_key_exists($name, $localePlugins)) {
                 $localPlugin = $localePlugins[$name];
             }
 
-            if (array_key_exists($name, $storePlugins)) {
+            if (\array_key_exists($name, $storePlugins)) {
                 $storePlugin = $storePlugins[$name];
             }
 
@@ -199,7 +199,7 @@ class PluginViewService
         foreach ($plugins as $plugin) {
             $key = strtolower($plugin->getTechnicalName());
 
-            if (!array_key_exists($key, $store)) {
+            if (!\array_key_exists($key, $store)) {
                 $merged[$key] = $plugin;
                 continue;
             }
@@ -237,7 +237,7 @@ class PluginViewService
         foreach ($plugins as &$plugin) {
             $key = strtolower($plugin->getTechnicalName());
 
-            if (!array_key_exists($key, $local)) {
+            if (!\array_key_exists($key, $local)) {
                 $merged[$key] = $plugin;
                 continue;
             }

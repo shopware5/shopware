@@ -106,6 +106,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed `\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryGateway::get` it accepts now only integers as id
 * Changed `sw:es:index:populate` to accept multiple shop ids with `--shopId={1,2}`
 * Changed `\Shopware\Bundle\ESIndexingBundle\Product\ProductProvider` to consider cheapest price configuration
+* Changed `\Shopware\Bundle\PluginInstallerBundle\Service\PluginInstaller` to remove also menu translations
 
 ### Removals
 

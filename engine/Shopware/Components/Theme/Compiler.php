@@ -232,7 +232,7 @@ class Compiler
 
         $file = $this->pathResolver->getTmpCssFilePath($shop, $timestamp);
 
-        $dir = dirname($file);
+        $dir = \dirname($file);
         if (!is_dir($dir)) {
             if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
                 throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'web', $dir));
@@ -421,7 +421,7 @@ class Compiler
         );
 
         foreach ($collection as $temp) {
-            if (!is_array($temp)) {
+            if (!\is_array($temp)) {
                 throw new \Exception('The passed plugin less config isn\'t an array!');
             }
             $config = array_merge($config, $temp);

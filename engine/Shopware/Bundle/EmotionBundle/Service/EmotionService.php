@@ -77,13 +77,13 @@ class EmotionService implements EmotionServiceInterface
 
         $result = [];
         foreach ($emotionIds as $emotionId) {
-            if (!array_key_exists($emotionId, $emotions)) {
+            if (!\array_key_exists($emotionId, $emotions)) {
                 continue;
             }
 
             $emotion = $emotions[$emotionId];
 
-            if (array_key_exists($emotionId, $elements)) {
+            if (\array_key_exists($emotionId, $elements)) {
                 $emotion->setElements($elements[$emotionId]);
             }
 

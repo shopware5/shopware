@@ -74,7 +74,7 @@ class GenericReader implements ReaderInterface
             $originalId = $id;
             $row = $data[$id];
 
-            if (array_key_exists($identifierField, $row)) {
+            if (\array_key_exists($identifierField, $row)) {
                 $originalId = $row[$identifierField];
             }
 

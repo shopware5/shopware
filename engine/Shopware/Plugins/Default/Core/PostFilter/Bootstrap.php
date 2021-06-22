@@ -101,7 +101,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
                 return $source;
             }
         }
-        if (!in_array($request->getModuleName(), ['frontend', 'widgets'], true)) {
+        if (!\in_array($request->getModuleName(), ['frontend', 'widgets'], true)) {
             return $args->getReturn();
         }
         $source = $this->filterUrls($source);
@@ -175,7 +175,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         if (!empty($this->backLinkWhiteList)) {
             if ($src[1] === 'a' && preg_match('#^https?://#', $src[3])) {
                 $host = @parse_url($src[3], PHP_URL_HOST);
-                if (!strstr($src[0], 'rel=') && !in_array($host, $this->backLinkWhiteList)) {
+                if (!strstr($src[0], 'rel=') && !\in_array($host, $this->backLinkWhiteList)) {
                     $src[0] = rtrim($src[0], '>') . ' rel="nofollow noopener">';
                 }
             }

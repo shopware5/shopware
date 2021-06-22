@@ -31,7 +31,7 @@ class BlogCategoryTreeListQueryTest extends \Enlight_Components_Test_TestCase
     /**
      * @var \Shopware\Models\Category\Repository
      */
-    protected $repo = null;
+    protected $repo;
 
     protected $expected = [
         1 => [

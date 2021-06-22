@@ -44,9 +44,6 @@ class DynamicCacheTimeServiceTest extends TestCase
     /** @var CacheTimeServiceInterface */
     private $cacheTimeService;
 
-    /** @var array */
-    private $routes = [];
-
     /** @var int */
     private $defaultTime;
 
@@ -90,12 +87,6 @@ class DynamicCacheTimeServiceTest extends TestCase
 
         $this->defaultTime = 3600;
         $this->defaultBlogTime = 14400;
-
-        $this->routes = [
-            'frontend/detail' => $this->defaultTime,
-            'frontend/listing' => $this->defaultTime,
-            'frontend/blog' => $this->defaultBlogTime,
-        ];
 
         Shopware()->Models()->clear();
     }
@@ -223,8 +214,6 @@ class DynamicCacheTimeServiceTest extends TestCase
             return $blog;
         } catch (Exception $e) {
             static::fail($e->getMessage());
-
-            return null;
         }
     }
 
@@ -245,8 +234,6 @@ class DynamicCacheTimeServiceTest extends TestCase
             return $blog;
         } catch (Exception $e) {
             static::fail($e->getMessage());
-
-            return null;
         }
     }
 
@@ -281,8 +268,6 @@ class DynamicCacheTimeServiceTest extends TestCase
             return $emotion;
         } catch (Exception $e) {
             static::fail($e->getMessage());
-
-            return null;
         }
     }
 
@@ -313,8 +298,6 @@ class DynamicCacheTimeServiceTest extends TestCase
             return $category;
         } catch (Exception $e) {
             static::fail($e->getMessage());
-
-            return null;
         }
     }
 
@@ -359,8 +342,6 @@ class DynamicCacheTimeServiceTest extends TestCase
             return $product;
         } catch (Exception $e) {
             static::fail($e->getMessage());
-
-            return null;
         }
     }
 

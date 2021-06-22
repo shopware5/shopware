@@ -49,13 +49,18 @@ class ReflectionHelper
 
         $docPath = $docPath === null ? Shopware()->Container()->getParameter('shopware.app.rootDir') : $docPath;
 
+        if (!\is_string($docPath)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+        }
+
+        /** @var string[] $folders */
         $folders = Shopware()->Container()->getParameter('shopware.plugin_directories');
 
         $folders[] = Shopware()->DocPath('engine_Shopware');
         $folders[] = Shopware()->DocPath('vendor_shopware_shopware');
 
         foreach ($folders as $folder) {
-            $directories[] = substr($folder, strlen($docPath));
+            $directories[] = substr($folder, \strlen($docPath));
         }
 
         if ($secure) {
@@ -104,21 +109,21 @@ class ReflectionHelper
     private function verifyClass(\ReflectionClass $class, $docPath, array $directories)
     {
         $fileName = $class->getFileName();
-        $fileDir = substr($fileName, 0, strlen($docPath));
+        $fileDir = substr($fileName, 0, \strlen($docPath));
 
         // Trying to execute a class outside of the Shopware DocumentRoot
         if ($fileDir !== $docPath) {
             throw new \InvalidArgumentException(sprintf('Class "%s" out of scope', $class->getFileName()), 1);
         }
 
-        $fileName = substr($fileName, strlen($docPath));
+        $fileName = substr($fileName, \strlen($docPath));
 
         $error = true;
 
         foreach ($directories as $directory) {
             $directory = strtolower(trim($directory, DIRECTORY_SEPARATOR));
 
-            $classDir = substr($fileName, 0, strlen($directory));
+            $classDir = substr($fileName, 0, \strlen($directory));
             $classDir = trim($classDir, DIRECTORY_SEPARATOR);
             $classDir = strtolower($classDir);
 
@@ -133,7 +138,7 @@ class ReflectionHelper
         }
 
         $className = $class->getName();
-        if (!array_key_exists(ReflectionAwareInterface::class, class_implements($className))) {
+        if (!\array_key_exists(ReflectionAwareInterface::class, class_implements($className))) {
             throw new \InvalidArgumentException(sprintf('Class %s has to implement the interface %s', $className, ReflectionAwareInterface::class));
         }
     }

@@ -57,7 +57,7 @@ class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
     private $updateStreet = 'Abbey Road';
 
     /** @var \Shopware\Components\Model\ModelManager */
-    private $manager = null;
+    private $manager;
 
     /**
      * Cleaning up testData

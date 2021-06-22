@@ -39,12 +39,12 @@ class RandomTest extends \Enlight_Components_Test_TestCase
         $sets[] = '23456789';
         $sets[] = '!@#$%&*?';
 
-        $chars = implode($sets);
+        $chars = implode('', $sets);
 
         $password = Random::generatePassword();
-        static::assertEquals(15, strlen($password));
+        static::assertEquals(15, \strlen($password));
 
-        for ($i = 0; $i < strlen($password); ++$i) {
+        for ($i = 0; $i < \strlen($password); ++$i) {
             $char = $password[$i];
 
             static::assertStringContainsString($char, $chars);

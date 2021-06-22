@@ -52,7 +52,7 @@ class StoreFrontEmotionDeviceConfiguration implements StoreFrontEmotionDeviceCon
 
         // filter by shop id
         $configurations = array_filter($configurations, function ($config) use ($context) {
-            return empty($config['shopIds']) || in_array($context->getShop()->getId(), $config['shopIds']);
+            return empty($config['shopIds']) || \in_array($context->getShop()->getId(), $config['shopIds']);
         });
 
         //no active stream detected? display only emotions without customer stream configuration
@@ -81,7 +81,7 @@ class StoreFrontEmotionDeviceConfiguration implements StoreFrontEmotionDeviceCon
         return array_filter(
             $configurations,
             function (array $config) use ($replacements) {
-                return !in_array($config['id'], $replacements);
+                return !\in_array($config['id'], $replacements);
             }
         );
     }

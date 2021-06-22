@@ -33,7 +33,7 @@ use Symfony\Component\Finder\Finder;
 
 class RegisterControllerCompilerPass implements CompilerPassInterface
 {
-    const MODULES = ['Backend', 'Frontend', 'Widgets', 'Api'];
+    public const MODULES = ['Backend', 'Frontend', 'Widgets', 'Api'];
 
     /**
      * @var Plugin[]
@@ -51,12 +51,12 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $paths = $this->collectControllerPaths($this->plugins);
-        if (count($paths) === 0) {
+        if (\count($paths) === 0) {
             return;
         }
 
         $controllers = $this->getControllers($paths);
-        if (count($controllers) === 0) {
+        if (\count($controllers) === 0) {
             return;
         }
 

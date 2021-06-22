@@ -33,6 +33,6 @@ namespace Shopware\Bundle\SearchBundle;
  */
 interface SortingInterface extends CriteriaPartInterface
 {
-    const SORT_ASC = 'ASC';
-    const SORT_DESC = 'DESC';
+    public const SORT_ASC = 'ASC';
+    public const SORT_DESC = 'DESC';
 }

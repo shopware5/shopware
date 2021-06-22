@@ -302,7 +302,7 @@ class DeviceConfiguration implements DeviceConfigurationInterface
     private function getEmotionsByVisibility(array $emotions, array $visibility)
     {
         return array_filter($emotions, function ($emotion) use ($visibility) {
-            return in_array($emotion['listing_visibility'], $visibility);
+            return \in_array($emotion['listing_visibility'], $visibility);
         });
     }
 }

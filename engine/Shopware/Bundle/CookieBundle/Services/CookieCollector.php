@@ -150,6 +150,6 @@ class CookieCollector implements CookieCollectorInterface
             return strcmp($firstCookie->getLabel(), $secondCookie->getLabel());
         });
 
-        return new CookieCollection(\iterator_to_array($cookieIterator, false));
+        return new CookieCollection(iterator_to_array($cookieIterator, false));
     }
 }

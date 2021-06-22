@@ -85,7 +85,7 @@ class CategoryService implements Service\CategoryServiceInterface
         $customerGroup = $context->getCurrentCustomerGroup();
 
         return array_filter($categories, function (Struct\Category $category) use ($customerGroup) {
-            return !(in_array($customerGroup->getId(), $category->getBlockedCustomerGroupIds()));
+            return !(\in_array($customerGroup->getId(), $category->getBlockedCustomerGroupIds()));
         });
     }
 }

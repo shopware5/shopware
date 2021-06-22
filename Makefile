@@ -15,6 +15,12 @@ endif
 
 init: .make.init
 
+clean-setup:
+	bash ./var/cache/clear_cache.sh
+	rm -rf web/cache/*.js
+	rm -rf web/cache/*.css
+	rm -rf web/sitemap/shop*
+
 clear-cache: .make.console.executable
 	./bin/console sw:cache:clear
 

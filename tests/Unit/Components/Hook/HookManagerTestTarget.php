@@ -26,11 +26,11 @@ namespace Shopware\Tests\Unit\Components\Hook;
 
 class HookManagerTestTarget implements \Enlight_Hook
 {
-    const TEST_METHOD_NAME = 'testMethod';
-    const RECURSIVE_TEST_METHOD_NAME = 'recursiveTestMethod';
-    const PROTECTED_TEST_METHOD_NAME = 'protectedTestMethod';
-    const VARIABLE_NAME_COLLISION_TEST_METHOD_NAME = 'variableNameCollisionTestMethod';
-    const VOID_TEST_METHOD_NAME = 'voidTestMethod';
+    public const TEST_METHOD_NAME = 'testMethod';
+    public const RECURSIVE_TEST_METHOD_NAME = 'recursiveTestMethod';
+    public const PROTECTED_TEST_METHOD_NAME = 'protectedTestMethod';
+    public const VARIABLE_NAME_COLLISION_TEST_METHOD_NAME = 'variableNameCollisionTestMethod';
+    public const VOID_TEST_METHOD_NAME = 'voidTestMethod';
 
     public $originalMethodCallCounter = 0;
 

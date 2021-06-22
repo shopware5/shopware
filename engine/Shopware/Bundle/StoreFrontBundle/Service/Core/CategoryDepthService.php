@@ -45,7 +45,7 @@ class CategoryDepthService implements CategoryDepthServiceInterface
      */
     public function get(Category $category, $depth, array $filterIds = [])
     {
-        $depth += count(array_filter($category->getPath()));
+        $depth += \count(array_filter($category->getPath()));
         $query = $this->connection->createQueryBuilder();
         $query->select(['category.id', 'category.path'])
             ->from('s_categories', 'category')
@@ -64,7 +64,7 @@ class CategoryDepthService implements CategoryDepthServiceInterface
         $ids = array_keys($paths);
         $plain = array_values($paths);
 
-        if (count($plain) > 0 && strpos($plain[0], '|') !== false) {
+        if (\count($plain) > 0 && strpos($plain[0], '|') !== false) {
             $rootPath = explode('|', $plain[0]);
             $rootPath = array_filter(array_unique($rootPath));
             $ids = array_merge($ids, $rootPath);

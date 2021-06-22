@@ -173,7 +173,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
 
     protected function printExitMessage()
     {
-        if (count($this->errors) === 0) {
+        if (\count($this->errors) === 0) {
             $this->output->writeln('<info>Thumbnail generation finished successfully</info>');
 
             return;
@@ -258,6 +258,10 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
         $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $projectDir = $this->container->getParameter('shopware.app.rootDir');
 
+        if (!\is_string($projectDir)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+        }
+
         return $mediaService->has($projectDir . $thumbnailPath);
     }
 
@@ -270,6 +274,10 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
     {
         $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $projectDir = $this->container->getParameter('shopware.app.rootDir');
+
+        if (!\is_string($projectDir)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+        }
 
         return $mediaService->has($projectDir . $media->getPath());
     }

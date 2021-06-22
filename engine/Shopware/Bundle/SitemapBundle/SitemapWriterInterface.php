@@ -28,7 +28,7 @@ use Shopware\Models\Shop\Shop;
 
 interface SitemapWriterInterface
 {
-    const SITEMAP_URL_LIMIT = 49999;
+    public const SITEMAP_URL_LIMIT = 49999;
 
     /**
      * @return bool

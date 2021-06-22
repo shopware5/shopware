@@ -130,7 +130,7 @@ class SnippetsToSqlCommand extends ShopwareCommand implements CompletionAwareInt
 
     protected function exportDefaultPlugins(InputInterface $input, OutputInterface $output, QueryHandler $queryLoader)
     {
-        $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
+        $pluginDirectories = (array) $this->container->getParameter('shopware.plugin_directories');
         $pluginBasePath = $pluginDirectories['Default'];
 
         foreach (['Backend', 'Core', 'Frontend'] as $namespace) {
@@ -155,6 +155,10 @@ class SnippetsToSqlCommand extends ShopwareCommand implements CompletionAwareInt
         $plugins = $pluginRepository->findBy(['active' => true]);
 
         $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
+
+        if (!\is_array($pluginDirectories)) {
+            throw new \RuntimeException('Parameter shopware.plugin_directories has to be an array');
+        }
 
         foreach ($plugins as $plugin) {
             if ($plugin->getSource()) {

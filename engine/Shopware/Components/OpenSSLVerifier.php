@@ -55,7 +55,7 @@ class OpenSSLVerifier
      */
     public function isSystemSupported()
     {
-        return function_exists('openssl_verify');
+        return \function_exists('openssl_verify');
     }
 
     /**

@@ -56,7 +56,7 @@ class SortingCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             $context
         );
 
-        if (count($customSortings) === 0) {
+        if (\count($customSortings) === 0) {
             return;
         }
 

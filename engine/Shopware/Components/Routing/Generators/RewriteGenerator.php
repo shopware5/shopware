@@ -61,17 +61,17 @@ class RewriteGenerator implements GeneratorListInterface
      */
     public function generate(array $params, Context $context)
     {
-        if (array_key_exists('_seo', $params) && !$params['_seo']) {
+        if (\array_key_exists('_seo', $params) && !$params['_seo']) {
             return $params;
         }
 
-        if (array_key_exists('_seo', $params)) {
+        if (\array_key_exists('_seo', $params)) {
             unset($params['_seo']);
         }
 
         $orgQuery = $this->preAssemble($params, $context);
 
-        if (!is_array($orgQuery)) {
+        if (!\is_array($orgQuery)) {
             return false;
         }
 
@@ -109,7 +109,7 @@ class RewriteGenerator implements GeneratorListInterface
             return $this->preAssemble($params, $context);
         }, $list);
 
-        if (count($orgQueryList) === 0 || max($orgQueryList) === false) {
+        if (\count($orgQueryList) === 0 || max($orgQueryList) === false) {
             return $list;
         }
 

@@ -55,12 +55,12 @@ class OrderNumberValidatorTest extends TestCase
         foreach ($values as $value) {
             $catch = $value;
             try {
-                $this->validator->validate($value, new Constraints\Ordernumber());
+                $this->validator->validate($value, new \Shopware\Components\Model\DBAL\Constraints\OrderNumber());
             } catch (\Symfony\Component\Validator\Exception\UnexpectedTypeException $exception) {
                 $catch = null;
             }
 
-            static::assertNull($catch, sprintf('Type of variable "%s" did not throw an exception', gettype($value)));
+            static::assertNull($catch, sprintf('Type of variable "%s" did not throw an exception', \gettype($value)));
         }
     }
 

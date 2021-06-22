@@ -97,7 +97,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
         if ($this->Request()->has('columns')) {
             $whitelist = json_decode($this->Request()->getParam('columns', []), true);
             $columns = array_filter($columns, function (ConfigurationStruct $column) use ($whitelist) {
-                return in_array($column->getColumnName(), $whitelist);
+                return \in_array($column->getColumnName(), $whitelist);
             });
         }
 

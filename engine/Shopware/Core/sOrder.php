@@ -303,7 +303,7 @@ class sOrder implements \Enlight_Hook
 
         $availableSerials = $this->getAvailableSerialsOfEsd($esdProduct['id']);
 
-        if ((count($availableSerials) <= $this->config->get('esdMinSerials')) || count($availableSerials) <= $quantity) {
+        if ((\count($availableSerials) <= $this->config->get('esdMinSerials')) || \count($availableSerials) <= $quantity) {
             // Not enough serial numbers anymore, inform merchant
             $context = [
                 'sArticleName' => $basketRow['articlename'],
@@ -322,7 +322,7 @@ class sOrder implements \Enlight_Hook
         }
 
         // Check if enough serials are available, if not, an email has been sent, and we can return
-        if (count($availableSerials) < $quantity) {
+        if (\count($availableSerials) < $quantity) {
             return $basketRow;
         }
 
@@ -1092,7 +1092,7 @@ class sOrder implements \Enlight_Hook
 
         $attributes = $this->attributeLoader->load('s_user_addresses_attributes', $billingAddressId);
 
-        if (!is_array($attributes)) {
+        if (!\is_array($attributes)) {
             $attributes = [];
         }
 
@@ -1782,7 +1782,7 @@ EOT;
      */
     private function isTransactionExist($transactionId)
     {
-        if (strlen($transactionId) <= 3) {
+        if (\strlen($transactionId) <= 3) {
             return false;
         }
 
@@ -1981,7 +1981,7 @@ EOT;
         }
 
         $func = static function ($item) use (&$func) {
-            return is_array($item) ? array_map($func, $item) : html_entity_decode($item);
+            return \is_array($item) ? array_map($func, $item) : html_entity_decode($item);
         };
 
         return array_map($func, $data);

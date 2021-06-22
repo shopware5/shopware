@@ -112,7 +112,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     public function productsAction()
     {
         $numbers = $this->Request()->getParam('numbers');
-        if (is_string($numbers)) {
+        if (\is_string($numbers)) {
             $numbers = array_filter(explode('|', $numbers));
         }
 
@@ -122,7 +122,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
         }
 
-        if (!is_array($numbers)) {
+        if (!\is_array($numbers)) {
             return;
         }
 
@@ -267,14 +267,14 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         foreach ($categories as $category) {
             $temp = $this->container->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertCategoryStruct($category);
             $childrenIds = $this->getCategoryChildrenIds($category->getId());
-            $temp['childrenCount'] = count($childrenIds);
+            $temp['childrenCount'] = \count($childrenIds);
             $converted[$category->getId()] = $temp;
         }
 
         $result = $converted[$categoryId];
         unset($converted[$categoryId]);
         $result['children'] = $converted;
-        $result['childrenCount'] = count($converted);
+        $result['childrenCount'] = \count($converted);
 
         return $result;
     }
@@ -525,7 +525,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $useShortDescription = $this->get('config')->get('useShortDescriptionInListing');
         if ($useShortDescription) {
             foreach ($products as &$product) {
-                if (strlen($product['description']) > 5) {
+                if (\strlen($product['description']) > 5) {
                     $product['description_long'] = $product['description'];
                 }
             }

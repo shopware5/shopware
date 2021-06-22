@@ -133,10 +133,6 @@ class MailLog extends \Shopware_Controllers_Backend_Application
         $view = $this->View();
         $baseEntry = $this->getRepository()->find($id);
 
-        if ($view === null) {
-            return;
-        }
-
         if (!($baseEntry instanceof Log)) {
             $view->assign([
                 'success' => false,
@@ -236,7 +232,7 @@ class MailLog extends \Shopware_Controllers_Backend_Application
     {
         $conditions = parent::getFilterConditions($filters, $model, $alias, $whiteList);
 
-        $handledAllFilters = count($conditions) >= count($filters);
+        $handledAllFilters = \count($conditions) >= \count($filters);
 
         // Enable searching for recipients
         foreach ($filters as $filter) {
@@ -265,7 +261,7 @@ class MailLog extends \Shopware_Controllers_Backend_Application
             $value = $filter['value'];
 
             // The property can already be filtered correctly if it is available via getModelFields
-            if (array_key_exists($property, $fields)) {
+            if (\array_key_exists($property, $fields)) {
                 continue;
             }
 
@@ -316,7 +312,7 @@ class MailLog extends \Shopware_Controllers_Backend_Application
 
     private function overrideRecipients(Enlight_Components_Mail $mail, array $recipients): Enlight_Components_Mail
     {
-        if (count($recipients) > 0) {
+        if (\count($recipients) > 0) {
             $mail->clearRecipients();
             $mail->addTo(array_column($recipients, 'mailAddress'));
         }

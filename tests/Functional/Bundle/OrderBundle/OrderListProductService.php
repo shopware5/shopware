@@ -45,7 +45,7 @@ class OrderListProductService extends TestCase
 
         $result = $productService->getList($productNumbers, $context->getShopContext());
 
-        static::assertCount(count($productNumbers), $result);
+        static::assertCount(\count($productNumbers), $result);
 
         static::assertEquals($productNumbers, array_keys($result));
 

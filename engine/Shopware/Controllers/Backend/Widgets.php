@@ -320,17 +320,17 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
                 'data' => [
                     [
                         'name' => $namespace->get('today', 'Today'),
-                        'turnover' => $fetchAmount['today'],
-                        'visitors' => $fetchVisitors['today'],
-                        'newCustomers' => $fetchCustomers['today'],
-                        'orders' => $fetchOrders['today'],
+                        'turnover' => (float) $fetchAmount['today'],
+                        'visitors' => (int) $fetchVisitors['today'],
+                        'newCustomers' => (int) $fetchCustomers['today'],
+                        'orders' => (int) $fetchOrders['today'],
                     ],
                     [
                         'name' => $namespace->get('yesterday', 'Yesterday'),
-                        'turnover' => $fetchAmount['yesterday'],
-                        'visitors' => $fetchVisitors['yesterday'],
-                        'newCustomers' => $fetchCustomers['yesterday'],
-                        'orders' => $fetchOrders['yesterday'],
+                        'turnover' => (float) $fetchAmount['yesterday'],
+                        'visitors' => (int) $fetchVisitors['yesterday'],
+                        'newCustomers' => (int) $fetchCustomers['yesterday'],
+                        'orders' => (int) $fetchOrders['yesterday'],
                     ],
                 ],
                 'conversion' => $fetchConversion,
@@ -358,7 +358,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $data = Shopware()->Container()->get('db')->fetchAll($sql, [$timeBack]);
 
-        $result[] = [];
+        $result = [];
         foreach ($data as $row) {
             $result[] = [
                 'timestamp' => strtotime($row['date']),
@@ -782,7 +782,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
 
         if ($limit) {
-            $result = array_slice($result, 0, $limit);
+            $result = \array_slice($result, 0, $limit);
         }
 
         return $result;

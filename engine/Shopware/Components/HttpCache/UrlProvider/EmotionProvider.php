@@ -29,7 +29,7 @@ use Shopware\Components\Routing\Context;
 
 class EmotionProvider extends CategoryProvider
 {
-    const NAME = 'emotion';
+    public const NAME = 'emotion';
 
     /**
      * {@inheritdoc}
@@ -56,7 +56,7 @@ class EmotionProvider extends CategoryProvider
 
         $result = $qb->execute()->fetchAll();
 
-        if (!count($result)) {
+        if (!\count($result)) {
             return [];
         }
 

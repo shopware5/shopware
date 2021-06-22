@@ -108,7 +108,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             return [
                 'elementName' => $configKey,
                 'shopId' => $defaultShop->getId(),
-                'value' => array_key_exists($configKey, $values) ? $values[$configKey] : '',
+                'value' => \array_key_exists($configKey, $values) ? $values[$configKey] : '',
             ];
         }, $themeConfigKeys);
 
@@ -209,7 +209,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             }
         }
 
-        if (count($persistElements)) {
+        if (\count($persistElements)) {
             Shopware()->Models()->flush($persistElements);
         }
 
@@ -359,7 +359,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $this->View()->assign([
             'success' => true,
             'data' => $data,
-            'total' => count($data),
+            'total' => \count($data),
         ]);
     }
 
@@ -458,7 +458,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         $domains = $this->getDomains($token);
 
-        if (in_array($domain, $domains)) {
+        if (\in_array($domain, $domains)) {
             $this->View()->assign([
                 'success' => true,
                 'message' => $this->get('snippets')
@@ -495,6 +495,10 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         /** @var \Symfony\Component\Filesystem\Filesystem $fileSystem */
         $fileSystem = $this->container->get('file_system');
         $rootDir = $this->container->getParameter('kernel.root_dir');
+        if (!\is_string($rootDir)) {
+            throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+        }
+
         $filePath = $rootDir . DIRECTORY_SEPARATOR . $filename;
 
         try {
@@ -558,12 +562,15 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $this->View()->loadTemplate(sprintf('backend/first_run_wizard/template/%s.tpl', $view));
     }
 
-    /**
-     * @return string
-     */
-    private function getVersion()
+    private function getVersion(): string
     {
-        return $this->container->getParameter('shopware.release.version');
+        $version = $this->container->getParameter('shopware.release.version');
+
+        if (!\is_string($version)) {
+            throw new \RuntimeException('Parameter shopware.release.version has to be an string');
+        }
+
+        return $version;
     }
 
     /**
@@ -604,7 +611,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $locale = $user->locale;
         $localeCode = $locale->getLocale();
 
-        return array_key_exists($localeCode, $locales) ? $locales[$localeCode] : null;
+        return \array_key_exists($localeCode, $locales) ? $locales[$localeCode] : null;
     }
 
     /**

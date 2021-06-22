@@ -62,7 +62,7 @@ class NotificationTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertTrue($this->View()->success);
         $returnData = $this->View()->data;
         static::assertNotEmpty($returnData);
-        static::assertEquals(2, count($returnData));
+        static::assertEquals(2, \count($returnData));
         $listingFirstEntry = $returnData[0];
 
         // cause of the DataSet you can assert fix values
@@ -82,7 +82,7 @@ class NotificationTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertTrue($this->View()->success);
 
         $returnData = $this->View()->data;
-        static::assertEquals(2, count($returnData));
+        static::assertEquals(2, \count($returnData));
         $listingFirstEntry = $returnData[0];
         $listingSecondEntry = $returnData[1];
 

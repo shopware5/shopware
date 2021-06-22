@@ -115,7 +115,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     {
         $params = $request->getParams();
 
-        return array_key_exists('sSearch', $params);
+        return \array_key_exists('sSearch', $params);
     }
 
     private function handleProductAttributeFacet(
@@ -205,15 +205,15 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     {
         $params = $request->getParams();
 
-        if (array_key_exists($facet->getFormFieldName(), $params)) {
+        if (\array_key_exists($facet->getFormFieldName(), $params)) {
             return true;
         }
         if ($facet->getMode() !== ProductAttributeFacet::MODE_RANGE_RESULT) {
             return false;
         }
 
-        return array_key_exists('min' . $facet->getFormFieldName(), $params)
-            || array_key_exists('max' . $facet->getFormFieldName(), $params)
+        return \array_key_exists('min' . $facet->getFormFieldName(), $params)
+            || \array_key_exists('max' . $facet->getFormFieldName(), $params)
         ;
     }
 }

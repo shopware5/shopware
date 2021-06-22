@@ -84,7 +84,7 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
             $this->Request()->setPost('password', $passwordPlain);
         }
 
-        if ($this->Request()->getParam('apiKey') && strlen($this->Request()->getParam('apiKey')) < 40) {
+        if ($this->Request()->getParam('apiKey') && \strlen($this->Request()->getParam('apiKey')) < 40) {
             throw new CustomValidationException('apiKey is too short. The minimal length is 40.');
         }
 
@@ -112,7 +112,7 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
     {
         $id = (int) $this->Request()->getParam('id');
 
-        if ($this->Request()->getParam('apiKey') && strlen($this->Request()->getParam('apiKey')) < 40) {
+        if ($this->Request()->getParam('apiKey') && \strlen($this->Request()->getParam('apiKey')) < 40) {
             throw new CustomValidationException('apiKey is too short. The minimal length is 40.');
         }
 

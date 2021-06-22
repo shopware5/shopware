@@ -90,8 +90,8 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testValidateEmptyGet()
     {
         $validationResult = self::$sepaPaymentMethod->validate([]);
-        static::assertTrue(is_array($validationResult));
-        if (count($validationResult)) {
+        static::assertTrue(\is_array($validationResult));
+        if (\count($validationResult)) {
             static::assertArrayHasKey('sErrorFlag', $validationResult);
             static::assertArrayHasKey('sErrorMessages', $validationResult);
             static::assertArrayHasKey('sSepaIban', $validationResult['sErrorFlag']);
@@ -109,14 +109,14 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
         ];
 
         $validationResult = self::$sepaPaymentMethod->validate($data);
-        static::assertTrue(is_array($validationResult));
-        if (count($validationResult)) {
+        static::assertTrue(\is_array($validationResult));
+        if (\count($validationResult)) {
             static::assertArrayHasKey('sErrorFlag', $validationResult);
             static::assertArrayHasKey('sErrorMessages', $validationResult);
             static::assertContains(Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')
                 ->get('ErrorIBAN', 'Invalid IBAN'), $validationResult['sErrorMessages']);
-            static::assertFalse(array_key_exists('sSepaBic', $validationResult['sErrorFlag']));
-            static::assertFalse(array_key_exists('sSepaBankName', $validationResult['sErrorFlag']));
+            static::assertFalse(\array_key_exists('sSepaBic', $validationResult['sErrorFlag']));
+            static::assertFalse(\array_key_exists('sSepaBankName', $validationResult['sErrorFlag']));
         }
     }
 
@@ -129,7 +129,7 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
         ];
 
         $validationResult = self::$sepaPaymentMethod->validate($data);
-        static::assertTrue(is_array($validationResult));
+        static::assertTrue(\is_array($validationResult));
         static::assertCount(0, $validationResult);
     }
 

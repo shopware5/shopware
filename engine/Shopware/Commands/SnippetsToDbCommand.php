@@ -41,7 +41,13 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
     public function completeOptionValues($optionName, CompletionContext $context)
     {
         if ($optionName === 'source') {
-            return $this->completeInDirectory($this->container->getParameter('kernel.root_dir'));
+            $rootDir = $this->container->getParameter('kernel.root_dir');
+
+            if (!\is_string($rootDir)) {
+                throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+            }
+
+            return $this->completeInDirectory($rootDir);
         }
 
         return [];
@@ -94,7 +100,13 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
         $databaseLoader = $this->container->get(\Shopware\Components\Snippet\DatabaseHandler::class);
         $force = $input->getOption('force');
 
-        $sourceDir = $this->container->getParameter('kernel.root_dir') . '/' . $input->getOption('source') . '/';
+        $rootDir = $this->container->getParameter('kernel.root_dir');
+
+        if (!\is_string($rootDir)) {
+            throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+        }
+
+        $sourceDir = $rootDir . '/' . $input->getOption('source') . '/';
 
         $databaseLoader->setOutput($output);
         $databaseLoader->loadToDatabase($sourceDir, $force);
@@ -108,8 +120,12 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
 
             $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
 
+            if (!\is_array($pluginDirectories)) {
+                throw new \RuntimeException('Parameter shopware.plugin_directories has to be an array');
+            }
+
             foreach ($plugins as $plugin) {
-                if (array_key_exists($plugin->getSource(), $pluginDirectories)) {
+                if (\array_key_exists($plugin->getSource(), $pluginDirectories)) {
                     $pluginPath = $pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . '/' . $plugin->getName();
 
                     $databaseLoader->loadToDatabase($pluginPath . '/Snippets/', $force);
@@ -142,7 +158,7 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
         $kernel = $this->container->get('kernel');
         $plugins = $kernel->getPlugins();
 
-        if (!array_key_exists($pluginName, $plugins)) {
+        if (!\array_key_exists($pluginName, $plugins)) {
             return null;
         }
 

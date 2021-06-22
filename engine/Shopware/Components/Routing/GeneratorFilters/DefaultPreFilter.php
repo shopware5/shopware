@@ -35,7 +35,7 @@ class DefaultPreFilter implements PreFilterInterface
     public function preFilter($params, Context $context = null)
     {
         // Add support for "shopware.php?sViewport,cat&sCategory=3"
-        if (is_string($params)) {
+        if (\is_string($params)) {
             $params = parse_url($params, PHP_URL_QUERY);
             $params = str_replace(',', '=', $params);
             parse_str($params, $params);

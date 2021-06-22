@@ -62,7 +62,7 @@ class SimilarShownTest extends AbstractMarketing
         $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
 
         static::assertCount(
-            count($this->getAllSimilarShown()),
+            \count($this->getAllSimilarShown()),
             $articles
         );
     }
@@ -93,7 +93,7 @@ class SimilarShownTest extends AbstractMarketing
         $this->insertDemoData();
         $this->SimilarShown()->initSimilarShown();
 
-        $countBefore = count($this->getAllSimilarShown());
+        $countBefore = \count($this->getAllSimilarShown());
         $this->saveConfig('similarRefreshStrategy', 3);
         Shopware()->Container()->get('cache')->clean();
 
@@ -130,7 +130,7 @@ class SimilarShownTest extends AbstractMarketing
 
         $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
         static::assertCount(
-            count($this->getAllSimilarShown()),
+            \count($this->getAllSimilarShown()),
             $articles
         );
     }

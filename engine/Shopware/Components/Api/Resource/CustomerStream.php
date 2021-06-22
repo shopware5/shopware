@@ -178,7 +178,7 @@ class CustomerStream extends Resource
 
         foreach ($data as &$row) {
             $id = (int) $row['id'];
-            if (!array_key_exists($id, $counts)) {
+            if (!\array_key_exists($id, $counts)) {
                 $row['customer_count'] = 0;
                 $row['newsletter_count'] = 0;
             } else {
@@ -224,7 +224,7 @@ class CustomerStream extends Resource
             $this->indexStream($stream);
         }
 
-        if (array_key_exists('customers', $data) && $stream->isStatic()) {
+        if (\array_key_exists('customers', $data) && $stream->isStatic()) {
             $this->insertCustomers($data['customers'], $stream->getId());
         }
 
@@ -271,7 +271,7 @@ class CustomerStream extends Resource
             $this->indexStream($stream);
         }
 
-        if (array_key_exists('customers', $data) && $stream->isStatic()) {
+        if (\array_key_exists('customers', $data) && $stream->isStatic()) {
             $this->insertCustomers($data['customers'], $stream->getId());
         }
 

@@ -206,7 +206,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
     protected function mergeValues(array $old, array $new): array
     {
         foreach ($new as $key => $value) {
-            if (!array_key_exists($key, $old) || $value !== null) {
+            if (!\array_key_exists($key, $old) || $value !== null) {
                 $old[$key] = $value;
             }
         }

@@ -111,10 +111,10 @@ class EmotionPreset extends Resource
      */
     public function create(array $data, $locale = 'de_DE')
     {
-        if (!array_key_exists('name', $data)) {
+        if (!\array_key_exists('name', $data)) {
             throw new ParameterMissingException('name');
         }
-        if (!array_key_exists('presetData', $data)) {
+        if (!\array_key_exists('presetData', $data)) {
             throw new ParameterMissingException('presetData');
         }
 
@@ -162,7 +162,7 @@ class EmotionPreset extends Resource
             unset($translation);
         }
 
-        if (!is_array($data['requiredPlugins'])) {
+        if (!\is_array($data['requiredPlugins'])) {
             $data['requiredPlugins'] = [];
         }
 
@@ -240,7 +240,12 @@ class EmotionPreset extends Resource
         $pluginNames = [];
         foreach ($presets as $id => $preset) {
             $plugins = json_decode($preset['requiredPlugins'], true) ?? [];
-            $preset['requiredPlugins'] = array_combine(array_column($plugins, 'name'), $plugins);
+            $combinedPlugins = array_combine(array_column($plugins, 'name'), $plugins);
+            if (\is_array($combinedPlugins)) {
+                $preset['requiredPlugins'] = $combinedPlugins;
+            } else {
+                $preset['requiredPlugins'] = [];
+            }
             $pluginNames = array_merge($pluginNames, array_keys($preset['requiredPlugins']));
             $presets[$id] = $preset;
         }

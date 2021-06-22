@@ -41,7 +41,7 @@ if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
 }
 date_default_timezone_set(@date_default_timezone_get());
 
-define('SW_PATH', realpath(__DIR__ . '/../../'));
+\define('SW_PATH', realpath(__DIR__ . '/../../'));
 
 /** @var \Composer\Autoload\ClassLoader $autoloader */
 $autoloader = require_once __DIR__ . '/vendor/autoload.php';

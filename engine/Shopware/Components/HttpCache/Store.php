@@ -235,7 +235,7 @@ class Store extends BaseStore
     {
         $requestParams = $request->query->all();
 
-        if (count($requestParams) === 0) {
+        if (\count($requestParams) === 0) {
             return $request->getUri();
         }
 
@@ -365,11 +365,11 @@ class Store extends BaseStore
     private function save($key, $data)
     {
         $path = $this->getPath($key);
-        if (!is_dir(dirname($path)) && @mkdir(dirname($path), 0777, true) === false && !is_dir(dirname($path))) {
+        if (!is_dir(\dirname($path)) && @mkdir(\dirname($path), 0777, true) === false && !is_dir(\dirname($path))) {
             return false;
         }
 
-        $tmpFile = tempnam(dirname($path), basename($path));
+        $tmpFile = tempnam(\dirname($path), basename($path));
         if (false === $fp = @fopen($tmpFile, 'wb')) {
             return false;
         }

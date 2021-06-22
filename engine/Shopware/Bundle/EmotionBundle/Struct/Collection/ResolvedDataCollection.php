@@ -47,7 +47,7 @@ class ResolvedDataCollection extends Extendable
      */
     public function getMedia($mediaId)
     {
-        if (!array_key_exists($mediaId, $this->mediaList)) {
+        if (!\array_key_exists($mediaId, $this->mediaList)) {
             return null;
         }
 
@@ -61,7 +61,7 @@ class ResolvedDataCollection extends Extendable
      */
     public function getMediaByPath($mediaPath)
     {
-        if (!array_key_exists($mediaPath, $this->mediaList)) {
+        if (!\array_key_exists($mediaPath, $this->mediaList)) {
             return null;
         }
 

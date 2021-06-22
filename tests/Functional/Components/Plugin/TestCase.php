@@ -63,7 +63,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $loadedPlugins = static::$ensureLoadedPlugins;
 
         foreach ($loadedPlugins as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $pluginName = $key;
                 $config = $value;
             } else {
@@ -94,7 +94,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         self::$pluginStates[$pluginName] = [
             'isInstalled' => (bool) $plugin->getInstalled(),
-            'isActive' => (bool) $plugin->getActive(),
+            'isActive' => $plugin->getActive(),
         ];
 
         self::$pluginManager->installPlugin($plugin);

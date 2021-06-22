@@ -51,7 +51,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     public function preDispatch()
     {
         parent::preDispatch();
-        if (in_array($this->Request()->getActionName(), [
+        if (\in_array($this->Request()->getActionName(), [
             'validateOrderCode', 'validateVoucherCode', 'validateDescription', ])) {
             $this->Front()->Plugins()->Json()->setRenderer(false);
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
@@ -525,7 +525,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     {
         $allPatternsReplaced = false;
         while (!$allPatternsReplaced) {
-            $generatedCode = preg_replace('/\\' . $pattern . '/', $range[Random::getInteger(1, count($range) - 1)], $generatedCode, 1);
+            $generatedCode = preg_replace('/\\' . $pattern . '/', $range[Random::getInteger(1, \count($range) - 1)], $generatedCode, 1);
             $allPatternsReplaced = substr_count($generatedCode, $pattern) == 0;
         }
 

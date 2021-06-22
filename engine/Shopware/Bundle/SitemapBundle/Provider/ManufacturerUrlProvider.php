@@ -84,7 +84,7 @@ class ManufacturerUrlProvider implements UrlProviderInterface
         $routes = $this->router->generateList(array_column($manufacturers, 'urlParams'), $routingContext);
         $urls = [];
 
-        for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
+        for ($i = 0, $routeCount = \count($routes); $i < $routeCount; ++$i) {
             $urls[] = new Url($routes[$i], $manufacturers[$i]['changed'], 'weekly', Supplier::class, $manufacturers[$i]['id']);
         }
 

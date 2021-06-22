@@ -81,7 +81,7 @@ class CategoryUrlProvider extends BaseUrlProvider
         $routes = $this->router->generateList(array_column($categories, 'urlParams'), $routingContext);
         $urls = [];
 
-        for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
+        for ($i = 0, $routeCount = \count($routes); $i < $routeCount; ++$i) {
             $urls[] = new Url($routes[$i], $categories[$i]['changed'], 'weekly', Category::class, $categories[$i]['id']);
         }
 

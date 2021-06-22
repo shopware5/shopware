@@ -32,7 +32,6 @@ class EnlightHookProxyFactoryTest extends TestCase
 
     public function setUp(): void
     {
-        /** @var \Enlight_Hook_HookManager $SUT */
         $hookManager = $this->createConfiguredMock(\Enlight_Hook_HookManager::class, [
             'hasHooks' => true,
         ]);
@@ -274,7 +273,7 @@ EOT;
 
     private function invokeMethod($object, $methodName, array $parameters = [])
     {
-        $reflection = new \ReflectionClass(get_class($object));
+        $reflection = new \ReflectionClass(\get_class($object));
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
 

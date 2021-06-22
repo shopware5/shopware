@@ -31,7 +31,7 @@ use Shopware\Components\Routing\RouterInterface;
 
 class StaticProvider implements UrlProviderInterface
 {
-    const NAME = 'static';
+    public const NAME = 'static';
 
     /**
      * @var Connection
@@ -74,7 +74,7 @@ class StaticProvider implements UrlProviderInterface
 
         $result = $qb->execute()->fetchAll();
 
-        if (!count($result)) {
+        if (!\count($result)) {
             return [];
         }
 

@@ -180,7 +180,7 @@ class ShipmentsProvider implements BenchmarkProviderInterface
     private function getShipmentIds()
     {
         $shopId = $this->shopContext->getShop()->getId();
-        if (array_key_exists($shopId, $this->shipmentIds)) {
+        if (\array_key_exists($shopId, $this->shipmentIds)) {
             return $this->shipmentIds[$shopId];
         }
 
@@ -207,7 +207,7 @@ class ShipmentsProvider implements BenchmarkProviderInterface
         foreach ($forbiddenCategoriesByDispatchId as $dispatchId => $forbiddenCategories) {
             $availableCategoryIds = array_combine($categoryIds, $categoryIds);
             foreach ($forbiddenCategories as $forbiddenCategory) {
-                if (array_key_exists($forbiddenCategory, $availableCategoryIds)) {
+                if (\array_key_exists($forbiddenCategory, $availableCategoryIds)) {
                     unset($availableCategoryIds[$forbiddenCategory]);
                 }
             }

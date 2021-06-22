@@ -85,7 +85,7 @@ class User extends Resource
 
         if (!$this->hasPrivilege('create', 'usermanager')
             && !$this->hasPrivilege('update', 'usermanager')) {
-            if (is_array($user)) {
+            if (\is_array($user)) {
                 unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
             } else {
                 $user->setApiKey('');
@@ -254,7 +254,7 @@ class User extends Resource
         }
 
         if (!$resource) {
-            $calledClass = get_called_class();
+            $calledClass = \get_called_class();
             $calledClass = explode('\\', $calledClass);
             $resource = strtolower(end($calledClass));
         }
@@ -266,7 +266,7 @@ class User extends Resource
         $role = $this->getRole();
 
         if (!$this->getAcl()->isAllowed($role, $resource, $privilege)) {
-            throw new ApiException\PrivilegeException(sprintf('Role "%s" is not allowed to "%s" on resource "%s"', is_string($role) ? $role : $role->getRoleId(), $privilege, is_string($resource) ? $resource : $resource->getResourceId()));
+            throw new ApiException\PrivilegeException(sprintf('Role "%s" is not allowed to "%s" on resource "%s"', \is_string($role) ? $role : $role->getRoleId(), $privilege, \is_string($resource) ? $resource : $resource->getResourceId()));
         }
     }
 
@@ -376,7 +376,7 @@ class User extends Resource
 
         $locales = $element->getValue();
 
-        return in_array($id, $locales);
+        return \in_array($id, $locales);
     }
 
     /**

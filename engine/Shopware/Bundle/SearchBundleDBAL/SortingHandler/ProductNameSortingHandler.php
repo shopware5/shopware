@@ -32,11 +32,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductNameSortingHandler implements SortingHandlerInterface
 {
-    const TRANSLATION = 'productTranslationName';
+    public const TRANSLATION = 'productTranslationName';
 
-    const TRANSLATION_NAME = self::TRANSLATION . '.name';
+    public const TRANSLATION_NAME = self::TRANSLATION . '.name';
 
-    const PRODUCT = 'product';
+    public const PRODUCT = 'product';
 
     /**
      * {@inheritdoc}

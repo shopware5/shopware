@@ -71,7 +71,7 @@ abstract class BinaryOptimizer implements OptimizerInterface
         $suppressOutput = ' 1> /dev/null 2> /dev/null';
         $escapeShellCmd = 'escapeshellcmd';
 
-        $isWindowsPlatform = defined('PHP_WINDOWS_VERSION_BUILD');
+        $isWindowsPlatform = \defined('PHP_WINDOWS_VERSION_BUILD');
         if ($isWindowsPlatform) {
             $suppressOutput = '';
             $escapeShellCmd = 'escapeshellarg';

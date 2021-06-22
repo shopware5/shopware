@@ -157,7 +157,7 @@ class EmotionsProvider implements BenchmarkProviderInterface
 
         $deviceCounts = [0, 0, 0, 0, 0];
         foreach ($devicesUsed as $device) {
-            if (array_key_exists($device, $deviceCounts)) {
+            if (\array_key_exists($device, $deviceCounts)) {
                 ++$deviceCounts[$device];
                 continue;
             }
@@ -189,7 +189,7 @@ class EmotionsProvider implements BenchmarkProviderInterface
     private function getEmotionIds()
     {
         $shopId = $this->shopContext->getShop()->getId();
-        if (array_key_exists($shopId, $this->emotionIds)) {
+        if (\array_key_exists($shopId, $this->emotionIds)) {
             return $this->emotionIds[$shopId];
         }
 

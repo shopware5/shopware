@@ -32,11 +32,11 @@ class Utils
      */
     public static function clearOpcodeCache()
     {
-        if (function_exists('opcache_reset')) {
+        if (\function_exists('opcache_reset')) {
             opcache_reset();
         }
 
-        if (function_exists('apcu_clear_cache')) {
+        if (\function_exists('apcu_clear_cache')) {
             apcu_clear_cache();
         }
     }
@@ -56,7 +56,7 @@ class Utils
             return '';
         }
         if (basename($baseUrl) === $filename) {
-            $basePath = dirname($baseUrl);
+            $basePath = \dirname($baseUrl);
         } else {
             $basePath = $baseUrl;
         }

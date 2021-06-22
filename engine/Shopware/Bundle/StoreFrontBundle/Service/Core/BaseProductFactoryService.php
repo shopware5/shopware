@@ -55,7 +55,7 @@ class BaseProductFactoryService implements BaseProductFactoryServiceInterface
      */
     public function createBaseProducts($numbers)
     {
-        if (!count($numbers)) {
+        if (!\count($numbers)) {
             return [];
         }
 

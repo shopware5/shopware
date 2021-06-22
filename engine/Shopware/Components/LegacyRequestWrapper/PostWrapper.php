@@ -58,7 +58,7 @@ class PostWrapper implements \ArrayAccess
     {
         $postData = $this->request->getPost();
 
-        return array_key_exists($offset, $postData);
+        return \array_key_exists($offset, $postData);
     }
 
     /**

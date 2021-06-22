@@ -43,7 +43,7 @@ class OptinService implements OptinServiceInterface
      */
     public function add($type, $duration, array $data)
     {
-        if (!is_string($type)) {
+        if (!\is_string($type)) {
             throw new \InvalidArgumentException('$type has to be of type string');
         }
 
@@ -79,11 +79,11 @@ SQL;
      */
     public function get($type, $hash)
     {
-        if (!is_string($type)) {
+        if (!\is_string($type)) {
             throw new \InvalidArgumentException('$type has to be of type string');
         }
 
-        if (!is_string($hash)) {
+        if (!\is_string($hash)) {
             throw new \InvalidArgumentException('$hash has to be of type string');
         }
 
@@ -118,11 +118,11 @@ SQL;
      */
     public function delete($type, $hash)
     {
-        if (!is_string($type)) {
+        if (!\is_string($type)) {
             throw new \InvalidArgumentException('$type has to be of type string');
         }
 
-        if (!is_string($hash)) {
+        if (!\is_string($hash)) {
             throw new \InvalidArgumentException('$hash has to be of type string');
         }
 

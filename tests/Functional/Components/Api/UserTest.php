@@ -112,9 +112,9 @@ class UserTest extends TestCase
 
         static::assertEquals($user->getEncoder(), $testData['encoder']);
         static::assertEquals($user->getApiKey(), $testData['apiKey']);
-        static::assertEquals($user->getLastLogin(), new \DateTime((string) $testData['lastLogin']));
+        static::assertEquals($user->getLastLogin(), new \DateTime($testData['lastLogin']));
         static::assertEquals($user->getFailedLogins(), $testData['failedLogins']);
-        static::assertEquals($user->getLockedUntil(), new \DateTime((string) $testData['lockedUntil']));
+        static::assertEquals($user->getLockedUntil(), new \DateTime($testData['lockedUntil']));
         static::assertEquals($user->getExtendedEditor(), $testData['extendedEditor']);
         static::assertEquals($user->getDisabledCache(), $testData['disabledCache']);
 

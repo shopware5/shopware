@@ -45,12 +45,12 @@ use Shopware\Models\Site\Site;
 
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
-    const PHP_RECOMMENDED_VERSION = '8.0.0';
-    const PHP_MINIMUM_VERSION = '7.4.0';
+    public const PHP_RECOMMENDED_VERSION = '8.0.0';
+    public const PHP_MINIMUM_VERSION = '7.4.0';
 
-    const PERFORMANCE_VALID = 1;
-    const PERFORMANCE_WARNING = 2;
-    const PERFORMANCE_INVALID = 0;
+    public const PERFORMANCE_VALID = 1;
+    public const PERFORMANCE_WARNING = 2;
+    public const PERFORMANCE_INVALID = 0;
 
     /**
      * Stores a list of all needed config data
@@ -526,7 +526,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         $this->View()->assign([
             'success' => true,
-            'data' => ['count' => count($urls)],
+            'data' => ['count' => \count($urls)],
         ]);
     }
 
@@ -615,14 +615,14 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             [
                 'id' => 1,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/apc'),
-                'value' => extension_loaded('apcu'),
-                'valid' => extension_loaded('apcu') === true && ini_get('apc.enabled') ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
+                'value' => \extension_loaded('apcu'),
+                'valid' => \extension_loaded('apcu') === true && ini_get('apc.enabled') ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
             ],
             [
                 'id' => 3,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/zend'),
-                'value' => extension_loaded('Zend OPcache'),
-                'valid' => extension_loaded('Zend OPcache') === true && ini_get('opcache.enable') ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
+                'value' => \extension_loaded('Zend OPcache'),
+                'valid' => \extension_loaded('Zend OPcache') === true && ini_get('opcache.enable') ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
             ],
             [
                 'id' => 4,

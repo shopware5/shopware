@@ -93,13 +93,13 @@ class ConfigLoader
     {
         $suffix = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-        if (!in_array($suffix, ['php', 'inc'])) {
+        if (!\in_array($suffix, ['php', 'inc'])) {
             throw new \Exception(sprintf('Invalid configuration file provided; unknown config type "%s"', $suffix));
         }
 
         $config = include $file;
 
-        if (!is_array($config)) {
+        if (!\is_array($config)) {
             throw new \Exception('Invalid configuration file provided; PHP file does not return an array value');
         }
 

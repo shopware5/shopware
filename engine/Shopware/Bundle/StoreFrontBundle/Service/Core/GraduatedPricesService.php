@@ -78,7 +78,7 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
         $fallbackProducts = array_filter(
             $products,
             function (ListProduct $product) use ($prices) {
-                return !array_key_exists($product->getNumber(), $prices);
+                return !\array_key_exists($product->getNumber(), $prices);
             }
         );
 
@@ -210,7 +210,7 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
         foreach ($products as $product) {
             $key = $product->getNumber();
 
-            if (!array_key_exists($key, $priceRules) || empty($priceRules[$key])) {
+            if (!\array_key_exists($key, $priceRules) || empty($priceRules[$key])) {
                 continue;
             }
 

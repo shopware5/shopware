@@ -69,7 +69,7 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
         foreach ($prices as $price) {
             $key = md5((string) $price->getTaxRate());
 
-            if (!array_key_exists($key, $discounts)) {
+            if (!\array_key_exists($key, $discounts)) {
                 $discounts[$key] = [
                     'price' => 0,
                     'netPrice' => 0,
@@ -99,7 +99,7 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
             return $price->getTaxRate();
         }, $prices);
 
-        return count(array_unique($taxes)) > 1;
+        return \count(array_unique($taxes)) > 1;
     }
 
     /**
@@ -113,7 +113,7 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
         foreach ($prices as $price) {
             $key = (string) $price->getTaxRate();
             $taxPrice = 0;
-            if (array_key_exists($key, $sum)) {
+            if (\array_key_exists($key, $sum)) {
                 $taxPrice = $sum[$key];
             }
 

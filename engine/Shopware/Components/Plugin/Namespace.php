@@ -162,7 +162,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $data = [
             'namespace' => $this->getName(),
             'name' => $plugin->getName(),
-            'label' => isset($info['label']) && is_string($info['label']) ? $info['label'] : $plugin->getName(),
+            'label' => isset($info['label']) && \is_string($info['label']) ? $info['label'] : $plugin->getName(),
             'version' => isset($info['version']) ? $info['version'] : '1.0.0',
             'author' => isset($info['author']) ? $info['author'] : 'shopware AG',
             'copyright' => isset($info['copyright']) ? $info['copyright'] : 'Copyright © 2012, shopware AG',
@@ -242,7 +242,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
         $result = $bootstrap->install();
 
-        $success = is_bool($result) ? $result : !empty($result['success']);
+        $success = \is_bool($result) ? $result : !empty($result['success']);
         if ($success) {
             $this->Application()->Events()->notify(
                 'Shopware_Plugin_PostInstall',
@@ -277,7 +277,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             return $result;
         }
 
-        /** @var Shopware\Models\Plugin\Plugin $plugin */
         /** @var Shopware\Models\Widget\Widget $widget */
         foreach ($plugin->getWidgets() as $widget) {
             $name = $widget->getName();
@@ -322,7 +321,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $result = $bootstrap->disable();
         $capabilities = $bootstrap->getCapabilities();
         $capabilities['secureUninstall'] = !empty($capabilities['secureUninstall']);
-        $success = is_bool($result) ? $result : !empty($result['success']);
+        $success = \is_bool($result) ? $result : !empty($result['success']);
 
         if (!$success) {
             return $result;
@@ -354,7 +353,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             ]
         );
 
-        $success = is_bool($result) ? $result : !empty($result['success']);
+        $success = \is_bool($result) ? $result : !empty($result['success']);
 
         if (!$success) {
             return $result;
@@ -444,7 +443,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         );
 
         $result = $plugin->update($oldVersion);
-        $success = is_bool($result) ? $result : !empty($result['success']);
+        $success = \is_bool($result) ? $result : !empty($result['success']);
         if ($success) {
             $this->Application()->Events()->notify(
                 'Shopware_Plugin_PostUpdate',
@@ -531,15 +530,15 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     {
         $sql = '
             SELECT
-              name, 
-              id, 
-              name, 
+              name,
+              id,
+              name,
               label,
-              description, 
-              source, 
+              description,
+              source,
               active,
               installation_date as installationDate,
-              update_date as updateDate, 
+              update_date as updateDate,
               version
             FROM s_core_plugins
             WHERE namespace=:namespace AND name not IN(:names)

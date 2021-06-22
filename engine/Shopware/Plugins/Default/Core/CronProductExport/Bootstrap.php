@@ -61,6 +61,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
      */
     public function exportProductFiles()
     {
+        /** @var string $cacheDir */
         $cacheDir = Shopware()->Container()->getParameter('kernel.cache_dir');
         $cacheDir .= '/productexport/';
         if (!is_dir($cacheDir)) {

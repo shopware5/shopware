@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class Html5VideoComponentHandler extends AbstractComponentHandler
 {
-    const COMPONENT_TYPE = 'emotion-components-html-video';
+    public const COMPONENT_TYPE = 'emotion-components-html-video';
 
     /**
      * {@inheritdoc}
@@ -72,11 +72,11 @@ class Html5VideoComponentHandler extends AbstractComponentHandler
         $importedAssets = $syncData->get('importedAssets', []);
 
         foreach ($data as &$elementData) {
-            if (!array_key_exists($elementData['value'], $assets)) {
+            if (!\array_key_exists($elementData['value'], $assets)) {
                 continue;
             }
 
-            if (!array_key_exists($elementData['value'], $importedAssets)) {
+            if (!\array_key_exists($elementData['value'], $importedAssets)) {
                 $assetPath = $assets[$elementData['value']];
 
                 $media = null;

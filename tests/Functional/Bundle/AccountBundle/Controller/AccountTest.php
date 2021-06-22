@@ -61,7 +61,7 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
 
         static::assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"', $this->Response()->getHeader('Content-Disposition'));
         static::assertGreaterThan(630, (int) $this->Response()->getHeader('Content-Length'));
-        static::assertEquals(strlen($this->Response()->getBody()), (int) $this->Response()->getHeader('Content-Length'));
+        static::assertEquals(\strlen($this->Response()->getBody()), (int) $this->Response()->getHeader('Content-Length'));
 
         if ($deleteFolderOnTearDown) {
             $filesystem->delete($filePath);

@@ -31,7 +31,7 @@ use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 class LicenseCheck implements CheckInterface
 {
-    const CHECK_TYPE = 'licensecheck';
+    public const CHECK_TYPE = 'licensecheck';
 
     /**
      * @var SnippetNamespace

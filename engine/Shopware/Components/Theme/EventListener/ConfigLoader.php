@@ -59,7 +59,7 @@ class ConfigLoader implements SubscriberInterface
         /** @var \Enlight_Controller_Action $controller */
         $controller = $args->get('subject');
 
-        if (!$controller->View() || !$controller->View()->hasTemplate()) {
+        if (!$controller->View()->hasTemplate()) {
             return;
         }
 

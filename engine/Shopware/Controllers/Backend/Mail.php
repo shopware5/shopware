@@ -606,7 +606,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         foreach ($context as $key => $value) {
             if (strpos($key, $prefix) !== false || !$prefix) {
-                $result[] = ['word' => '$' . $key, 'value' => is_array($value) ? 'Array' : (string) $value];
+                $result[] = ['word' => '$' . $key, 'value' => \is_array($value) ? 'Array' : (string) $value];
             }
         }
 

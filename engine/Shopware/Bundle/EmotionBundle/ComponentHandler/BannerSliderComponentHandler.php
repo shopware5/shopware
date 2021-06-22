@@ -32,8 +32,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class BannerSliderComponentHandler implements ComponentHandlerInterface
 {
-    const LEGACY_CONVERT_FUNCTION = 'getBannerSlider';
-    const COMPONENT_NAME = 'emotion-components-banner-slider';
+    public const LEGACY_CONVERT_FUNCTION = 'getBannerSlider';
+    public const COMPONENT_NAME = 'emotion-components-banner-slider';
 
     /**
      * @var MediaServiceInterface

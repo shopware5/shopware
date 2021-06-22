@@ -29,7 +29,7 @@ use Shopware\Components\Routing\Context;
 
 class BlogProvider extends CategoryProvider
 {
-    const NAME = 'blog';
+    public const NAME = 'blog';
 
     /**
      * {@inheritdoc}
@@ -55,7 +55,7 @@ class BlogProvider extends CategoryProvider
 
         $result = $qb->execute()->fetchAll();
 
-        if (!count($result)) {
+        if (!\count($result)) {
             return [];
         }
 

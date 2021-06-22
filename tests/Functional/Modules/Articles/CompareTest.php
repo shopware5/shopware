@@ -117,7 +117,7 @@ class CompareTest extends Enlight_Components_Test_TestCase
     {
         static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        static::assertEquals(count($this->Module()->sGetComparisons()), 2);
+        static::assertEquals(\count($this->Module()->sGetComparisons()), 2);
     }
 
     /**
@@ -127,7 +127,7 @@ class CompareTest extends Enlight_Components_Test_TestCase
     {
         static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        static::assertEquals(count($this->Module()->sGetComparisonList()), 2);
+        static::assertEquals(\count($this->Module()->sGetComparisonList()), 2);
     }
 
     /**

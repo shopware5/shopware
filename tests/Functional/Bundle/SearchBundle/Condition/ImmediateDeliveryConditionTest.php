@@ -87,9 +87,8 @@ class ImmediateDeliveryConditionTest extends TestCase
     }
 
     /**
-     * @param string                             $number
-     * @param \Shopware\Models\Category\Category $category
-     * @param array                              $data
+     * @param string $number
+     * @param array  $data
      *
      * @return array
      */

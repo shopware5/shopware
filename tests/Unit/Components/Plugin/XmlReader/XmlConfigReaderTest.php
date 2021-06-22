@@ -130,7 +130,7 @@ class XmlConfigReaderTest extends TestCase
 
     public function testParseElementNodeListEmpty(): void
     {
-        $reflection = new \ReflectionClass(get_class($this->configReader));
+        $reflection = new \ReflectionClass(\get_class($this->configReader));
         $method = $reflection->getMethod('parseElementNodeList');
         $method->setAccessible(true);
 

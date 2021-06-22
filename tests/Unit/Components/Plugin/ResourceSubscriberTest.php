@@ -75,7 +75,7 @@ class ResourceSubscriberTest extends TestCase
         $subscriberWithViews = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin');
         $templateEventArgs = new \Enlight_Event_EventArgs();
         $subscriberWithViews->onRegisterTemplate($templateEventArgs);
-        static::assertTrue(is_array($templateEventArgs->getReturn()));
+        static::assertTrue(\is_array($templateEventArgs->getReturn()));
         static::assertSame(
             [
                 __DIR__ . '/examples/TestPlugin/Resources/views',

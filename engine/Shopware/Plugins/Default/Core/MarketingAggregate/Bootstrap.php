@@ -27,17 +27,17 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
     /**
      * Refresh the marketing data only manuel.
      */
-    const AGGREGATE_STRATEGY_MANUAL = 1;
+    public const AGGREGATE_STRATEGY_MANUAL = 1;
 
     /**
      * Refresh the marketing data over a cron job.
      */
-    const AGGREGATE_STRATEGY_CRON_JOB = 2;
+    public const AGGREGATE_STRATEGY_CRON_JOB = 2;
 
     /**
      * Refresh the marketing data after access the specified core function
      */
-    const AGGREGATE_STRATEGY_LIVE = 3;
+    public const AGGREGATE_STRATEGY_LIVE = 3;
 
     /**
      * Returns the capabilities for this plugin.
@@ -302,7 +302,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         }
 
         $variants = $arguments->getDetails();
-        if (count($variants) <= 1) {
+        if (\count($variants) <= 1) {
             return $arguments->getReturn();
         }
         $sql = '

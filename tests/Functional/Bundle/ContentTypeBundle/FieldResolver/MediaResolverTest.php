@@ -72,6 +72,6 @@ class MediaResolverTest extends TestCase
         $this->service->resolve();
 
         $media = $this->service->get($ids, $this->field);
-        static::assertCount(count($idsArray), $media);
+        static::assertCount(\count($idsArray), $media);
     }
 }

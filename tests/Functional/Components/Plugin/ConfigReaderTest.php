@@ -27,7 +27,6 @@ namespace Shopware\Tests\Functional\Components\Plugin;
 use DateTime;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Configuration\ReaderInterface;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
@@ -43,11 +42,6 @@ class ConfigReaderTest extends TestCase
      * @var Connection
      */
     private $connection;
-
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
 
     /**
      * @var ReaderInterface
@@ -76,7 +70,6 @@ class ConfigReaderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->modelManager = Shopware()->Container()->get('models');
         $this->connection = Shopware()->Container()->get('dbal_connection');
 
         // setup plugin

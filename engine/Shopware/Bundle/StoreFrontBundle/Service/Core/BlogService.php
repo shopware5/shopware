@@ -58,7 +58,7 @@ class BlogService implements Service\BlogServiceInterface
         $this->resolveMedias($blogs, $context);
 
         foreach ($ids as $id) {
-            if (!array_key_exists($id, $blogs)) {
+            if (!\array_key_exists($id, $blogs)) {
                 continue;
             }
 
@@ -75,14 +75,14 @@ class BlogService implements Service\BlogServiceInterface
     {
         $mediaIds = [];
         foreach ($blogs as $blog) {
-            if (count($blog->getMediaIds()) === 0) {
+            if (\count($blog->getMediaIds()) === 0) {
                 continue;
             }
 
             $mediaIds[] = $blog->getMediaIds();
         }
 
-        if (count($mediaIds) === 0) {
+        if (\count($mediaIds) === 0) {
             return;
         }
 
@@ -93,7 +93,7 @@ class BlogService implements Service\BlogServiceInterface
             $medias = [];
 
             foreach ($blog->getMediaIds() as $mediaId) {
-                if (array_key_exists($mediaId, $mediaList)) {
+                if (\array_key_exists($mediaId, $mediaList)) {
                     $medias[$mediaId] = $mediaList[$mediaId];
                 }
             }

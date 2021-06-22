@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Unit\Bundle\CookieBundle;
 
-use PHPunit\Framework\TestCase;
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CookieBundle\CookieGroupCollection;
 use Shopware\Bundle\CookieBundle\Exceptions\NoCookieGroupByNameKnownException;
 use Shopware\Bundle\CookieBundle\Structs\CookieGroupStruct;

@@ -61,7 +61,7 @@ abstract class Random
     {
         $byte = static::getBytes(1);
 
-        return (bool) (ord($byte) % 2);
+        return (bool) (\ord($byte) % 2);
     }
 
     /**
@@ -92,8 +92,8 @@ abstract class Random
     public static function getFloat()
     {
         $bytes = static::getBytes(7);
-        $bytes[6] = $bytes[6] | chr(0xF0);
-        $bytes .= chr(63); // exponent bias (1023)
+        $bytes[6] = $bytes[6] | \chr(0xF0);
+        $bytes .= \chr(63); // exponent bias (1023)
         list(, $float) = unpack('d', $bytes);
 
         return $float - 1;
@@ -158,7 +158,7 @@ abstract class Random
             throw new \DomainException('Length should be >= 1');
         }
 
-        $charlist = implode(range('a', 'z')) . implode(range('A', 'Z')) . implode(range(0, 9));
+        $charlist = implode('', range('a', 'z')) . implode('', range('A', 'Z')) . implode('', range(0, 9));
 
         return static::getString($length, $charlist);
     }
@@ -181,16 +181,16 @@ abstract class Random
     public static function generatePassword($length = 15, $availableSets = ['l', 'u', 'd', 's'])
     {
         $sets = [];
-        if (in_array('l', $availableSets, true)) {
+        if (\in_array('l', $availableSets, true)) {
             $sets[] = 'abcdefghjkmnpqrstuvwxyz';
         }
-        if (in_array('u', $availableSets, true)) {
+        if (\in_array('u', $availableSets, true)) {
             $sets[] = 'ABCDEFGHJKMNPQRSTUVWXYZ';
         }
-        if (in_array('d', $availableSets, true)) {
+        if (\in_array('d', $availableSets, true)) {
             $sets[] = '23456789';
         }
-        if (in_array('s', $availableSets, true)) {
+        if (\in_array('s', $availableSets, true)) {
             $sets[] = '!@#$%&*?';
         }
 
@@ -203,7 +203,7 @@ abstract class Random
         }
 
         $pool = str_split($pool);
-        for ($i = 0; $i < $length - count($sets); ++$i) {
+        for ($i = 0; $i < $length - \count($sets); ++$i) {
             $password .= self::getRandomArrayElement($pool);
         }
         $password = str_shuffle($password);
@@ -218,6 +218,6 @@ abstract class Random
      */
     public static function getRandomArrayElement($array)
     {
-        return $array[self::getInteger(0, count($array) - 1)];
+        return $array[self::getInteger(0, \count($array) - 1)];
     }
 }

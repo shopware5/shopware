@@ -56,7 +56,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
             'paymentData' => $paymentData,
         ]);
 
-        if (count($sErrorFlag)) {
+        if (\count($sErrorFlag)) {
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages')->get('ErrorFillIn', 'Please fill in all red fields');
         }
 
@@ -65,7 +65,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
             $sErrorFlag['sSepaIban'] = true;
         }
 
-        if (count($sErrorMessages)) {
+        if (\count($sErrorMessages)) {
             return [
                 'sErrorFlag' => $sErrorFlag,
                 'sErrorMessages' => $sErrorMessages,
@@ -200,21 +200,21 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
         $teststring = preg_replace('/\s+|\./', '', $value);
 
-        if (strlen($teststring) < 4) {
+        if (\strlen($teststring) < 4) {
             return false;
         }
 
         $teststring = substr($teststring, 4)
-            . (string) (ord($teststring[0]) - 55)
-            . (string) (ord($teststring[1]) - 55)
+            . (string) (\ord($teststring[0]) - 55)
+            . (string) (\ord($teststring[1]) - 55)
             . substr($teststring, 2, 2);
 
         $teststring = preg_replace_callback('/[A-Za-z]/', function ($letter) {
-            return (int) (ord(strtolower($letter[0])) - 87);
+            return (int) (\ord(strtolower($letter[0])) - 87);
         }, $teststring);
 
         $rest = 0;
-        $strlen = strlen($teststring);
+        $strlen = \strlen($teststring);
         for ($pos = 0; $pos < $strlen; $pos += 7) {
             $part = (string) $rest . substr($teststring, $pos, 7);
             $rest = (int) $part % 97;
@@ -266,6 +266,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
         Shopware()->Template()->addTemplateDir(__DIR__ . '/../Views/');
         $data = Shopware()->Template()->fetch('frontend/plugins/sepa/email.tpl');
 
+        /** @var array<string, string> $mpdfConfig */
         $mpdfConfig = Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig');
         $mpdf = new Mpdf($mpdfConfig);
         $mpdf->WriteHTML($data);

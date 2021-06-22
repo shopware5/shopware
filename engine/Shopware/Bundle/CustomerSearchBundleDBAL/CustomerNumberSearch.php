@@ -61,7 +61,7 @@ class CustomerNumberSearch implements CustomerNumberSearchInterface
 
         $customers = $this->fetchCustomers($criteria, $query);
 
-        $total = count($customers);
+        $total = \count($customers);
         if ($criteria->fetchCount()) {
             $total = $this->fetchTotal($query);
         }

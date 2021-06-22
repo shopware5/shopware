@@ -46,10 +46,16 @@ class TypeSynchronizerCommand extends ShopwareCommand
     {
         $sync = $this->container->get(DatabaseContentTypeSynchronizerInterface::class);
 
-        $types = $sync->sync(array_keys($this->container->getParameter('active_plugins')), $input->getOption('destructive'));
+        $activePlugins = $this->container->getParameter('active_plugins');
+
+        if (!\is_array($activePlugins)) {
+            throw new \RuntimeException('Parameter active_plugins needs to be an array');
+        }
+
+        $types = $sync->sync(array_keys($activePlugins), $input->getOption('destructive'));
         $io = new SymfonyStyle($input, $output);
 
-        $io->success(sprintf('Synchronized %d type(s)', count($types)));
+        $io->success(sprintf('Synchronized %d type(s)', \count($types)));
 
         return 0;
     }

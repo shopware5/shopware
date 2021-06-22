@@ -209,18 +209,18 @@ class ArticleTest extends TestCase
         );
 
         $propertyValues = $article->getPropertyValues()->getValues();
-        static::assertEquals(count($propertyValues), count($testData['propertyValues']));
+        static::assertEquals(\count($propertyValues), \count($testData['propertyValues']));
         foreach ($propertyValues as $propertyValue) {
             static::assertContains($propertyValue->getValue(), ['grün', 'testWert']);
         }
 
         static::assertEquals($testData['taxId'], $article->getTax()->getId());
 
-        static::assertEquals(2, count($article->getCategories()));
-        static::assertEquals(2, count($article->getRelated()));
-        static::assertEquals(2, count($article->getSimilar()));
-        static::assertEquals(2, count($article->getLinks()));
-        static::assertEquals(2, count($article->getMainDetail()->getPrices()));
+        static::assertEquals(2, \count($article->getCategories()));
+        static::assertEquals(2, \count($article->getRelated()));
+        static::assertEquals(2, \count($article->getSimilar()));
+        static::assertEquals(2, \count($article->getLinks()));
+        static::assertEquals(2, \count($article->getMainDetail()->getPrices()));
         foreach ($article->getMainDetail()->getPrices() as $price) {
             static::assertGreaterThan(0, $price->getFrom());
         }
@@ -958,18 +958,18 @@ class ArticleTest extends TestCase
         );
 
         $propertyValues = $article->getPropertyValues()->getValues();
-        static::assertEquals(count($propertyValues), count($testData['propertyValues']));
+        static::assertEquals(\count($propertyValues), \count($testData['propertyValues']));
         foreach ($propertyValues as $propertyValue) {
             static::assertContains($propertyValue->getValue(), ['grün', 'testWert']);
         }
 
         static::assertEquals($testData['taxId'], $article->getTax()->getId());
 
-        static::assertEquals(2, count($article->getCategories()));
-        static::assertEquals(0, count($article->getRelated()));
-        static::assertEquals(0, count($article->getSimilar()));
-        static::assertEquals(2, count($article->getLinks()));
-        static::assertEquals(2, count($article->getMainDetail()->getPrices()));
+        static::assertEquals(2, \count($article->getCategories()));
+        static::assertEquals(0, \count($article->getRelated()));
+        static::assertEquals(0, \count($article->getSimilar()));
+        static::assertEquals(2, \count($article->getLinks()));
+        static::assertEquals(2, \count($article->getMainDetail()->getPrices()));
 
         $groups = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\Group')->findBy(
             ['name' => ['Group1', 'Group2']]
@@ -1106,16 +1106,16 @@ class ArticleTest extends TestCase
         static::assertEquals($testData['supplierId'], $article->getSupplier()->getId());
 
         $propertyValues = $article->getPropertyValues()->getValues();
-        static::assertEquals(count($propertyValues), count($testData['propertyValues']));
+        static::assertEquals(\count($propertyValues), \count($testData['propertyValues']));
 
         // Categories should be updated
-        static::assertEquals(1, count($article->getCategories()));
+        static::assertEquals(1, \count($article->getCategories()));
 
         // Related should be untouched
-        static::assertEquals(2, count($article->getRelated()));
+        static::assertEquals(2, \count($article->getRelated()));
 
         // Similar should be removed
-        static::assertEquals(0, count($article->getSimilar()));
+        static::assertEquals(0, \count($article->getSimilar()));
 
         return $number;
     }
@@ -1153,16 +1153,16 @@ class ArticleTest extends TestCase
         static::assertEquals($testData['supplierId'], $article->getSupplier()->getId());
 
         $propertyValues = $article->getPropertyValues()->getValues();
-        static::assertEquals(count($propertyValues), count($testData['propertyValues']));
+        static::assertEquals(\count($propertyValues), \count($testData['propertyValues']));
 
         // Categories should be updated
-        static::assertEquals(1, count($article->getCategories()));
+        static::assertEquals(1, \count($article->getCategories()));
 
         // Related should be untouched
-        static::assertEquals(2, count($article->getRelated()));
+        static::assertEquals(2, \count($article->getRelated()));
 
         // Similar should be removed
-        static::assertEquals(0, count($article->getSimilar()));
+        static::assertEquals(0, \count($article->getSimilar()));
 
         return $id;
     }
@@ -1348,7 +1348,7 @@ class ArticleTest extends TestCase
         /** @var \Shopware\Models\Article\Detail $variant */
         foreach ($updated->getDetails() as $variant) {
             static::assertTrue(
-                in_array(
+                \in_array(
                     $variant->getNumber(),
                     ['turn', 'turn.1', 'turn.2', 'turn.3'],
                     'Variant number dont match'
@@ -1359,7 +1359,7 @@ class ArticleTest extends TestCase
 
             /** @var \Shopware\Models\Article\Configurator\Option $option */
             foreach ($variant->getConfiguratorOptions() as $option) {
-                static::assertTrue(in_array($option->getName(), ['M', 'S', 'blau', 'grün']));
+                static::assertTrue(\in_array($option->getName(), ['M', 'S', 'blau', 'grün']));
             }
         }
 
@@ -1477,7 +1477,7 @@ class ArticleTest extends TestCase
         /** @var \Shopware\Models\Article\Detail $variant */
         foreach ($updated->getDetails() as $variant) {
             static::assertTrue(
-                in_array(
+                \in_array(
                     $variant->getNumber(),
                     ['turn', 'turn.1', 'turn.2', 'turn.3'],
                     'Variant number dont match'
@@ -1486,7 +1486,7 @@ class ArticleTest extends TestCase
 
             /** @var \Shopware\Models\Article\Configurator\Option $option */
             foreach ($variant->getConfiguratorOptions() as $option) {
-                static::assertTrue(in_array($option->getName(), ['M', 'S', 'blau', 'grün']));
+                static::assertTrue(\in_array($option->getName(), ['M', 'S', 'blau', 'grün']));
 
                 switch ($option->getName()) {
                     case 'M':
@@ -2039,7 +2039,7 @@ class ArticleTest extends TestCase
 
         $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
-        static::assertCount(count($data['images']), $article['images']);
+        static::assertCount(\count($data['images']), $article['images']);
         foreach ($article['images'] as $image) {
             $key = 'media/image/' . $image['path'] . '.' . $image['extension'];
             static::assertTrue($mediaService->has($key));
@@ -2178,8 +2178,8 @@ class ArticleTest extends TestCase
         );
         $article = $this->resource->getOne($article->getId());
         foreach ($article['propertyValues'] as $value) {
-            static::assertTrue(in_array($value['id'], $valueIds));
-            static::assertTrue(in_array($value['optionId'], $optionIds));
+            static::assertTrue(\in_array($value['id'], $valueIds));
+            static::assertTrue(\in_array($value['optionId'], $optionIds));
         }
     }
 
@@ -2215,7 +2215,7 @@ class ArticleTest extends TestCase
         $databaseValuesOptions = $builder->getQuery()->getArrayResult();
 
         static::assertEquals($article['propertyValues'][0]['optionId'], $article['propertyValues'][1]['optionId']);
-        static::assertEquals(1, count($databaseValuesOptions));
+        static::assertEquals(1, \count($databaseValuesOptions));
 
         $this->resource->delete($articleId);
 
@@ -2265,8 +2265,8 @@ class ArticleTest extends TestCase
         $article = $this->resource->update($article->getId(), $update);
         /** @var \Shopware\Models\Property\Value $value */
         foreach ($article->getPropertyValues() as $value) {
-            static::assertTrue(in_array($value->getId(), $valueIds));
-            static::assertTrue(in_array($value->getOption()->getId(), $optionIds));
+            static::assertTrue(\in_array($value->getId(), $valueIds));
+            static::assertTrue(\in_array($value->getOption()->getId(), $optionIds));
         }
     }
 
@@ -2339,7 +2339,7 @@ class ArticleTest extends TestCase
         $databaseValuesOptions = $builder->getQuery()->getArrayResult();
 
         static::assertEquals($article['propertyValues'][0]['optionId'], $article['propertyValues'][1]['optionId']);
-        static::assertEquals(1, count($databaseValuesOptions));
+        static::assertEquals(1, \count($databaseValuesOptions));
 
         $this->resource->delete($articleId);
 
@@ -2589,8 +2589,8 @@ class ArticleTest extends TestCase
         static::assertCount(2, $article->getSeoCategories());
 
         foreach ($article->getSeoCategories() as $category) {
-            static::assertTrue(in_array($category->getCategory()->getId(), $ids));
-            static::assertTrue(in_array($category->getShop()->getId(), [1, 2]));
+            static::assertTrue(\in_array($category->getCategory()->getId(), $ids));
+            static::assertTrue(\in_array($category->getShop()->getId(), [1, 2]));
         }
     }
 
@@ -2719,7 +2719,7 @@ class ArticleTest extends TestCase
 
         $result = $this->resource->batchDelete($delete);
 
-        static::assertEquals(3, count($result));
+        static::assertEquals(3, \count($result));
     }
 
     public function testCategoryAssignment()
@@ -3056,11 +3056,11 @@ class ArticleTest extends TestCase
             static::assertCount(3, $createdAttributeIds);
 
             // Verify created article's details match test setup assumptions.
-            static::assertCount(count($createdDetailIds), $detailRepository->findBy([
+            static::assertCount(\count($createdDetailIds), $detailRepository->findBy([
                 'id' => $createdDetailIds,
             ]));
             // Verify created article's attributes match test setup assumptions.
-            static::assertCount(count($createdAttributeIds), $attributeRepository->findBy([
+            static::assertCount(\count($createdAttributeIds), $attributeRepository->findBy([
                 'id' => $createdAttributeIds,
             ]));
         } finally {
@@ -3096,8 +3096,7 @@ class ArticleTest extends TestCase
                 'id' => $createdAttributeIds,
             ]),
             sprintf(
-                'Deletion of the article\'s (id = %s) details\' (%s) '
-                . 'attributes (%s) failed.',
+                'Deletion of the article\'s (id = %s) details\' (%s) attributes (%s) failed.',
                 $createdArticleId,
                 implode(', ', $createdDetailIds),
                 implode(', ', $createdAttributeIds)
@@ -3261,7 +3260,7 @@ class ArticleTest extends TestCase
         if (!isset($arrays[$i])) {
             return [];
         }
-        if ($i == count($arrays) - 1) {
+        if ($i == \count($arrays) - 1) {
             return $arrays[$i];
         }
 
@@ -3273,7 +3272,7 @@ class ArticleTest extends TestCase
         // concat each array from tmp with each element from $arrays[$i]
         foreach ($arrays[$i] as $v) {
             foreach ($tmp as $t) {
-                $result[] = is_array($t) ? array_merge([$v], $t) : [$v, $t];
+                $result[] = \is_array($t) ? array_merge([$v], $t) : [$v, $t];
             }
         }
 
@@ -3295,7 +3294,7 @@ class ArticleTest extends TestCase
         $data[$arrayKey] = $createdEntities;
 
         $article = $this->resource->create($data);
-        static::assertCount(count($createdEntities), $article->$getter());
+        static::assertCount(\count($createdEntities), $article->$getter());
 
         $updatedEntity = $this->getEntityOffset($entity, 20, 5, ['id']);
 
@@ -3306,26 +3305,26 @@ class ArticleTest extends TestCase
         $article = $this->resource->update($article->getId(), $update);
 
         if ($replace == true) {
-            static::assertCount(count($updatedEntity), $article->$getter());
+            static::assertCount(\count($updatedEntity), $article->$getter());
         } else {
-            static::assertCount(count($createdEntities) + count($updatedEntity), $article->$getter());
+            static::assertCount(\count($createdEntities) + \count($updatedEntity), $article->$getter());
         }
     }
 
     private function getOptionsForImage($configuratorSet, $optionCount = null, $property = 'id')
     {
-        if (!is_int($optionCount)) {
-            $optionCount = rand(1, count($configuratorSet['groups']) - 1);
+        if (!\is_int($optionCount)) {
+            $optionCount = rand(1, \count($configuratorSet['groups']) - 1);
         }
 
         $options = [];
         foreach ($configuratorSet['groups'] as $group) {
-            $id = rand(0, count($group['options']) - 1);
+            $id = rand(0, \count($group['options']) - 1);
             $option = $group['options'][$id];
             $options[] = [
                 $property => $option[$property],
             ];
-            if (count($options) == $optionCount) {
+            if (\count($options) == $optionCount) {
                 return $options;
             }
         }
@@ -3494,7 +3493,7 @@ class ArticleTest extends TestCase
     {
         $options = [];
         foreach ($configuratorSet['groups'] as $group) {
-            $id = rand(0, count($group['options']) - 1);
+            $id = rand(0, \count($group['options']) - 1);
             $option = $group['options'][$id];
             $options[] = [
                 'optionId' => $option['id'],

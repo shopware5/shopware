@@ -111,7 +111,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         if ($request->get('action') === 'manufacturer' && $request->get('controller') === 'listing') {
             $alias = $mapper->getQueryAliases();
 
-            if (array_key_exists('sSupplier', $alias) && ($index = array_search($alias['sSupplier'], $queryBlacklist, true))) {
+            if (\array_key_exists('sSupplier', $alias) && ($index = array_search($alias['sSupplier'], $queryBlacklist, true))) {
                 unset($queryBlacklist[$index]);
             }
 
@@ -121,13 +121,13 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 
             if ($request->getQuery('sCategory') !== Shopware()->Shop()->getCategory()->getId()) {
                 $queryBlacklist[] = 'sCategory';
-                if (array_key_exists('sCategory', $alias)) {
+                if (\array_key_exists('sCategory', $alias)) {
                     $queryBlacklist[] = $alias['sCategory'];
                 }
             }
         }
 
-        if (!empty($controllerBlacklist) && in_array($controller, $controllerBlacklist)) {
+        if (!empty($controllerBlacklist) && \in_array($controller, $controllerBlacklist)) {
             $metaRobots = 'noindex,follow';
         } elseif (!empty($queryBlacklist)) {
             foreach ($queryBlacklist as $queryKey) {
@@ -153,7 +153,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             $params = $request->getParams();
             $sCategoryContent = $view->getAssign('sCategoryContent');
 
-            if ($sCategoryContent && $request->getControllerName() === 'listing' && isset($sCategoryContent['canonicalParams']) && is_array($sCategoryContent['canonicalParams'])) {
+            if ($sCategoryContent && $request->getControllerName() === 'listing' && isset($sCategoryContent['canonicalParams']) && \is_array($sCategoryContent['canonicalParams'])) {
                 $params = $sCategoryContent['canonicalParams'];
             }
 
@@ -221,7 +221,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             return false;
         }
 
-        if (!$controller->View()->hasTemplate() || in_array(strtolower($controller->Request()->getModuleName()), ['backend', 'api'])) {
+        if (!$controller->View()->hasTemplate() || \in_array(strtolower($controller->Request()->getModuleName()), ['backend', 'api'])) {
             return false;
         }
 

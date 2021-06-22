@@ -132,7 +132,7 @@ class Repository extends ModelRepository
         }
 
         // Filter for file types
-        if ($validTypes !== null && is_array($validTypes) && !empty($validTypes)) {
+        if ($validTypes !== null && \is_array($validTypes) && !empty($validTypes)) {
             $builder->andWhere('media.extension IN (?2)');
             $builder->setParameter(2, $validTypes);
         }

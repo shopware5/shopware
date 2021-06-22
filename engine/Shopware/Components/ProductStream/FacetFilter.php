@@ -179,7 +179,7 @@ class FacetFilter implements FacetFilterInterface
             $filtered = false;
             foreach ($conditions as $condition) {
                 $diff = array_diff($condition->getValueIds(), $ids);
-                $filtered = count($condition->getValueIds()) !== count($diff);
+                $filtered = \count($condition->getValueIds()) !== \count($diff);
 
                 if ($filtered) {
                     break;

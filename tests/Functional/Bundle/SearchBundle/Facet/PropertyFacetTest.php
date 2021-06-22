@@ -127,9 +127,8 @@ class PropertyFacetTest extends TestCase
         $properties = []
     ) {
         $product = parent::getProduct($number, $context, $category);
-        $product = array_merge($product, $properties);
 
-        return $product;
+        return array_merge($product, $properties);
     }
 
     private function createPropertyCombination($properties, $indexes)
@@ -139,7 +138,7 @@ class PropertyFacetTest extends TestCase
 
         $values = [];
         foreach ($properties['propertyValues'] as $index => $value) {
-            if (in_array($index, $indexes)) {
+            if (\in_array($index, $indexes)) {
                 $values[] = $value;
             }
         }

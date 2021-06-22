@@ -38,9 +38,6 @@ class EmotionToPresetDataTransformerTest extends TestCase
     /** @var EmotionToPresetDataTransformer */
     private $transformer;
 
-    /** @var EmotionPreset */
-    private $presetResource;
-
     /** @var Connection */
     private $connection;
 
@@ -53,7 +50,6 @@ class EmotionToPresetDataTransformerTest extends TestCase
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
 
         $this->transformer = Shopware()->Container()->get(\Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformerInterface::class);
-        $this->presetResource = Shopware()->Container()->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
     }
 
     protected function tearDown(): void
@@ -93,8 +89,6 @@ class EmotionToPresetDataTransformerTest extends TestCase
     public function testTransformWithTranslationsShouldSucceed()
     {
         $emotionId = $this->connection->executeQuery('SELECT id FROM s_emotion LIMIT 1')->fetchColumn();
-
-        $translation = serialize([]);
         $this->connection->insert('s_core_translations', ['objecttype' => 'emotion', 'objectdata' => 'a:1:{s:4:"name";s:11:"My homepage";}', 'objectkey' => $emotionId, 'objectlanguage' => 2, 'dirty' => 1]);
 
         $data = $this->transformer->transform($emotionId);

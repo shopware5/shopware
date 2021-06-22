@@ -148,10 +148,10 @@ class MediaHydrator extends Hydrator
         if ($media->getType() !== Struct\Media::TYPE_IMAGE) {
             return false;
         }
-        if (!array_key_exists('__media_width', $data)) {
+        if (!\array_key_exists('__media_width', $data)) {
             return false;
         }
-        if (!array_key_exists('__media_height', $data)) {
+        if (!\array_key_exists('__media_height', $data)) {
             return false;
         }
         if ($data['__media_width'] !== null && $data['__media_height'] !== null) {

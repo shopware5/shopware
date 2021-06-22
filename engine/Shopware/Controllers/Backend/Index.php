@@ -26,8 +26,8 @@ use Shopware\Components\CSRFWhitelistAware;
 
 class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
-    const MIN_DAYS_INSTALLATION_SURVEY = 14;
-    const MIN_DAYS_BI_TEASER = 10;
+    public const MIN_DAYS_INSTALLATION_SURVEY = 14;
+    public const MIN_DAYS_BI_TEASER = 10;
 
     /**
      * @var Shopware_Plugins_Backend_Auth_Bootstrap
@@ -66,7 +66,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     public function preDispatch()
     {
         // Redirect broken backend urls to frontend
-        if (!in_array($this->Request()->getActionName(), ['index', 'load', 'menu', 'auth', 'changeLocale'])) {
+        if (!\in_array($this->Request()->getActionName(), ['index', 'load', 'menu', 'auth', 'changeLocale'])) {
             $uri = $this->Request()->getRequestUri();
             $uri = str_replace(['shopware.php/', '/backend/'], ['', '/'], $uri);
             $this->redirect($uri, ['code' => 301]);
@@ -181,7 +181,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         if (!$locale) {
             $locale = $localeRepository->findBy(['locale' => $localeId]);
 
-            if ($locale && count($locale) === 1) {
+            if ($locale && \count($locale) === 1) {
                 $locale = $locale[0];
             }
         }
@@ -302,7 +302,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     {
         $shopwareVersionText = $this->container->getParameter('shopware.release.version_text');
 
-        return !in_array($shopwareVersionText, ['', '___VERSION_TEXT___'], true);
+        return !\in_array($shopwareVersionText, ['', '___VERSION_TEXT___'], true);
     }
 
     /**
@@ -360,7 +360,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         /** @var \Shopware\Models\Benchmark\Repository $configRepository */
         $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
-        $validShopCount = count($configRepository->getValidShops());
+        $validShopCount = \count($configRepository->getValidShops());
 
         return $validShopCount > 0;
     }

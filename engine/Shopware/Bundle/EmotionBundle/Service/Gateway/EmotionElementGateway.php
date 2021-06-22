@@ -80,12 +80,12 @@ class EmotionElementGateway
             $key = $row['__emotionElement_id'];
 
             $config = [];
-            if (array_key_exists($key, $elementConfigs)) {
+            if (\array_key_exists($key, $elementConfigs)) {
                 $config = $elementConfigs[$key];
             }
 
             $viewports = [];
-            if (array_key_exists($key, $elementViewports)) {
+            if (\array_key_exists($key, $elementViewports)) {
                 $viewports = $elementViewports[$key];
             }
 

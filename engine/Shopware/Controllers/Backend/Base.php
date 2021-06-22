@@ -64,7 +64,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     public function init()
     {
         if (!$this->Request()->getActionName()
-            || in_array($this->Request()->getActionName(), ['index', 'load'])
+            || \in_array($this->Request()->getActionName(), ['index', 'load'])
         ) {
             $this->View()->addTemplateDir('.');
             $this->Front()->Plugins()->ScriptRenderer()->setRender();
@@ -144,7 +144,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         /** @var \Shopware\Models\Payment\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Payment\Payment::class);
         $filter = $this->Request()->getParam('filter', []);
-        $hasActiveFilter = in_array('active', array_column($filter, 'property'), true);
+        $hasActiveFilter = \in_array('active', array_column($filter, 'property'), true);
 
         if (!$hasActiveFilter) {
             $filter[] = [
@@ -843,7 +843,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $builder->addFilter((array) $this->Request()->getParam('filter', []));
 
         $sort = $this->Request()->getParam('sort', []);
-        if (is_array($sort) && count($sort) === 0) {
+        if (\is_array($sort) && \count($sort) === 0) {
             $builder->addOrderBy('l.language');
             $builder->addOrderBy('l.territory');
         }
@@ -928,7 +928,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $blacklist = ['prehashed', 'legacybackendmd5'];
 
         foreach ($hashes as $hash) {
-            if (in_array(strtolower($hash->getName()), $blacklist)) {
+            if (\in_array(strtolower($hash->getName()), $blacklist)) {
                 continue;
             }
 
@@ -937,7 +937,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             ];
         }
 
-        $totalResult = count($hashes);
+        $totalResult = \count($hashes);
 
         $this->View()->assign([
             'success' => true,
@@ -963,7 +963,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             ];
         }
 
-        $totalResult = count($availableCaptchas);
+        $totalResult = \count($availableCaptchas);
 
         $this->View()->assign([
             'success' => true,
@@ -1043,7 +1043,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         if (!empty($whitelist)) {
             $whitelist = json_decode($whitelist, true);
             $value = array_filter($value, function ($key) use ($whitelist) {
-                return in_array($key, $whitelist, true);
+                return \in_array($key, $whitelist, true);
             });
         }
 
@@ -1174,7 +1174,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
 
         foreach ($properties as $key => $property) {
-            if (array_key_exists($property['property'], $fields)) {
+            if (\array_key_exists($property['property'], $fields)) {
                 $property['property'] = $fields[$property['property']];
             }
             $properties[$key] = $property;
@@ -1198,7 +1198,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
                 $asPos = strpos($field, $asStr, 1);
 
                 if ($asPos) {
-                    $fieldName = substr($field, $asPos + strlen($asStr));
+                    $fieldName = substr($field, $asPos + \strlen($asStr));
                 } else {
                     $fieldName = substr($field, $dotPos + 1);
                 }

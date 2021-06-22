@@ -72,7 +72,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
         if ($argumentName === 'technical-name') {
-            if (!is_null($token = $this->getAuthenticationFromArguments($context->getWords()))) {
+            if (!\is_null($token = $this->getAuthenticationFromArguments($context->getWords()))) {
                 $context = new LicenceRequest('en_GB', $this->getVersionFromArguments($context->getWords()), $this->getDomainFromArguments($context->getWords()), $token);
 
                 /** @var PluginStoreService $pluginStoreService */
@@ -362,11 +362,11 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
      */
     private function clearOpcodeCache()
     {
-        if (function_exists('opcache_reset')) {
+        if (\function_exists('opcache_reset')) {
             opcache_reset();
         }
 
-        if (function_exists('apcu_clear_cache')) {
+        if (\function_exists('apcu_clear_cache')) {
             apcu_clear_cache();
         }
     }

@@ -213,7 +213,7 @@ class SearchIndexer implements SearchIndexerInterface
                     }
 
                     // If last row or more then 5000 keywords fetched, write results to index
-                    if ($currentRow == count($getTableKeywords) - 1 || count($keywords) > $this->batchSize) {
+                    if ($currentRow == \count($getTableKeywords) - 1 || \count($keywords) > $this->batchSize) {
                         $keywords = array_unique($keywords); // Remove duplicates
                         $sql_keywords = 'INSERT IGNORE INTO `s_search_keywords` (`keyword`) VALUES';
                         $sql_keywords .= ' (' . implode('), (', $keywords) . ')';
@@ -286,7 +286,7 @@ class SearchIndexer implements SearchIndexerInterface
                 $qb->setParameter('fieldIDs' . $table['tableID'], $table['fieldIDs']);
             }
 
-            if (!in_array($table['reference_table'] ?: $table['table'], $selected)) {
+            if (!\in_array($table['reference_table'] ?: $table['table'], $selected)) {
                 $qb->addSelect(
                     sprintf(
                         '(SELECT COUNT(*) * :threshold FROM %s) AS cnt_%1$s',

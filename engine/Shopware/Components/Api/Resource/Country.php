@@ -261,7 +261,7 @@ class Country extends Resource
      */
     private function prepareCountryStatesData(array $params)
     {
-        if (!isset($params['states']) || !is_array($params['states'])) {
+        if (!isset($params['states']) || !\is_array($params['states'])) {
             return $params;
         }
 

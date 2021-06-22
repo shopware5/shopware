@@ -30,17 +30,17 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * Refresh the data only manuel.
      */
-    const STRATEGY_MANUAL = 1;
+    public const STRATEGY_MANUAL = 1;
 
     /**
      * Refresh the data over a cron job.
      */
-    const STRATEGY_CRON_JOB = 2;
+    public const STRATEGY_CRON_JOB = 2;
 
     /**
      * Refresh the data after access the specified core function
      */
-    const STRATEGY_LIVE = 3;
+    public const STRATEGY_LIVE = 3;
 
     /**
      * Returns capabilities so the plugin is default not installable and hidden in the plugin manager

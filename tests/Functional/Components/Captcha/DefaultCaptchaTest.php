@@ -86,7 +86,7 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
         static::assertCount(5, $random, 'Invalid captcha should not decrease captcha backlog');
 
         // extract second generated captcha
-        $challenge = array_slice(array_keys($random), 1, 1)[0];
+        $challenge = \array_slice(array_keys($random), 1, 1)[0];
         $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setParam('sCaptcha', $challenge);
         static::assertTrue($this->captcha->validate($request));

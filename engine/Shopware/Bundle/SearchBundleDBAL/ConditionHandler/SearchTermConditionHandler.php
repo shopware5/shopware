@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class SearchTermConditionHandler implements ConditionHandlerInterface
 {
-    const STATE_INCLUDES_RANKING = 'ranking';
+    public const STATE_INCLUDES_RANKING = 'ranking';
 
     /**
      * @var SearchTermQueryBuilderInterface

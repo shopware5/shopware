@@ -32,8 +32,8 @@ class FormTest extends Enlight_Components_Test_Plugin_TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    const GERMAN_NAME = 'Partnerformular';
-    const ENGLISH_NAME = 'Partner Form';
+    public const GERMAN_NAME = 'Partnerformular';
+    public const ENGLISH_NAME = 'Partner Form';
 
     /**
      * Request form page

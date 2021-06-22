@@ -31,7 +31,7 @@ use Shopware\Components\Routing\RouterInterface;
 
 class ProductProvider implements UrlProviderInterface
 {
-    const NAME = 'product';
+    public const NAME = 'product';
 
     /**
      * @var Connection
@@ -75,7 +75,7 @@ class ProductProvider implements UrlProviderInterface
 
         $result = $qb->execute()->fetchAll();
 
-        if (!count($result)) {
+        if (!\count($result)) {
             return [];
         }
 

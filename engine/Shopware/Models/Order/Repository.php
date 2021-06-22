@@ -44,7 +44,7 @@ class Repository extends ModelRepository
     /**
      * Limits the result of the search term queries
      */
-    const SEARCH_TERM_LIMIT = 400;
+    public const SEARCH_TERM_LIMIT = 400;
 
     /**
      * Returns a query-object for all known payment status
@@ -661,7 +661,7 @@ class Repository extends ModelRepository
      */
     protected function addAliasJoin(QueryBuilder $builder, $alias)
     {
-        if (in_array($alias, $builder->getAllAliases(), true)) {
+        if (\in_array($alias, $builder->getAllAliases(), true)) {
             return;
         }
 

@@ -37,7 +37,7 @@ class SecurityContext extends SubContext
     {
         $config = require self::$configPath;
 
-        if (!array_key_exists('csrfProtection', $config)) {
+        if (!\array_key_exists('csrfProtection', $config)) {
             $config['csrfProtection'] = ['frontend' => false, 'backend' => false];
         }
 
@@ -73,7 +73,7 @@ class SecurityContext extends SubContext
      */
     public function theHttpResponseCodeShouldBe($expectedCode)
     {
-        $code = (int) $this->getSession()->getStatusCode();
+        $code = $this->getSession()->getStatusCode();
         if ($expectedCode == $this->getSession()->getStatusCode()) {
             return;
         }

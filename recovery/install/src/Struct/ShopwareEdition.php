@@ -26,12 +26,12 @@ namespace Shopware\Recovery\Install\Struct;
 
 class ShopwareEdition
 {
-    const CE = 'CE'; // Community Edition
-    const PE = 'PE'; // Professional - SwagCore
-    const PP = 'PP'; // Professional - SwagCorePlus
-    const EE = 'EE'; // Enterprise - SwagEnterprisePlatform
-    const EB = 'EB'; // (legacy) Enterprise Basic - SwagEnterprise
-    const EC = 'EC'; // (legacy) Enterprise Premium - SwagEnterprisePremium/SwagEnterpriseCluster
+    public const CE = 'CE'; // Community Edition
+    public const PE = 'PE'; // Professional - SwagCore
+    public const PP = 'PP'; // Professional - SwagCorePlus
+    public const EE = 'EE'; // Enterprise - SwagEnterprisePlatform
+    public const EB = 'EB'; // (legacy) Enterprise Basic - SwagEnterprise
+    public const EC = 'EC'; // (legacy) Enterprise Premium - SwagEnterprisePremium/SwagEnterpriseCluster
 
     /**
      * @var string

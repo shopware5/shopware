@@ -79,7 +79,7 @@ class SearchQueryBuilder
             array_filter(
                 $tokens,
                 function ($token) {
-                    return strlen($token) >= 2;
+                    return \strlen($token) >= 2;
                 }
             )
         );

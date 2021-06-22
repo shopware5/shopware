@@ -41,7 +41,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    const AGGREGATION_SIZE = 1000;
+    public const AGGREGATION_SIZE = 1000;
 
     /**
      * @var CategoryServiceInterface
@@ -147,7 +147,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
         );
 
         return array_filter($ids, function ($id) use ($system) {
-            return !in_array($id, $system);
+            return !\in_array($id, $system);
         });
     }
 

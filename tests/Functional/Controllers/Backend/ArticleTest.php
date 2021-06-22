@@ -28,7 +28,6 @@ use ReflectionMethod;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
-use Shopware\Models\Article\Repository;
 
 class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
 {
@@ -36,11 +35,6 @@ class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
      * @var ModelManager
      */
     private $modelManager;
-
-    /**
-     * @var Repository
-     */
-    private $repository;
 
     /**
      * @var ReflectionMethod
@@ -65,7 +59,6 @@ class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
         parent::setUp();
 
         $this->modelManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
-        $this->repository = $this->modelManager->getRepository(Article::class);
 
         Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
 

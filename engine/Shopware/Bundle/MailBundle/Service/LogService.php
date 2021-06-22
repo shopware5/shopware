@@ -176,7 +176,7 @@ class LogService implements LogServiceInterface
         $foundRecipients = $this->connection->executeQuery($sql, ['addresses' => $recipients])->fetchAll(\PDO::FETCH_KEY_PAIR);
 
         foreach ($recipients as $recipient) {
-            if (array_key_exists($recipient, $foundRecipients)) {
+            if (\array_key_exists($recipient, $foundRecipients)) {
                 continue;
             }
 

@@ -65,7 +65,7 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
      */
     public function addListenerService($eventName, $callback, $priority = 0)
     {
-        if (!is_array($callback) || count($callback) !== 2) {
+        if (!\is_array($callback) || \count($callback) !== 2) {
             throw new \InvalidArgumentException('Expected an array("service", "method") argument');
         }
 
@@ -151,9 +151,9 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
         foreach ($class::getSubscribedEvents() as $eventName => $params) {
             $eventName = strtolower($eventName);
 
-            if (is_string($params)) {
+            if (\is_string($params)) {
                 $this->listenerIds[$eventName][] = [$serviceId, $params, 0];
-            } elseif (is_string($params[0])) {
+            } elseif (\is_string($params[0])) {
                 $this->listenerIds[$eventName][] = [$serviceId, $params[0], isset($params[1]) ? $params[1] : 0];
             } else {
                 foreach ($params as $listener) {

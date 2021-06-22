@@ -33,7 +33,7 @@ class RoundLineAfterQuantity implements RoundingInterface
         }
 
         $netPrice = round($netPrice, 2) / 100 * (100 + $tax);
-        $netPrice = (is_int($quantity) && $quantity !== 1) ? round($netPrice * $quantity, 2) : $netPrice;
+        $netPrice = (\is_int($quantity) && $quantity !== 1) ? round($netPrice * $quantity, 2) : $netPrice;
 
         return $netPrice;
     }

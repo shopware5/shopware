@@ -32,7 +32,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ContextService implements ContextServiceInterface
 {
-    const FALLBACK_CUSTOMER_GROUP = 'EK';
+    public const FALLBACK_CUSTOMER_GROUP = 'EK';
 
     /**
      * @var ContainerInterface

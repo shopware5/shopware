@@ -51,12 +51,12 @@ class TypeReaderTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Type with name "text" does not exist');
 
-        $this->typeReader->getTypes(['SwagTest'], [dirname(__DIR__) . '/fixtures/plugins'], []);
+        $this->typeReader->getTypes(['SwagTest'], [\dirname(__DIR__) . '/fixtures/plugins'], []);
     }
 
     public function testGetTypesWithMapping(): void
     {
-        $types = $this->typeReader->getTypes(['SwagTest'], [dirname(__DIR__) . '/fixtures/plugins'], $this->mapping);
+        $types = $this->typeReader->getTypes(['SwagTest'], [\dirname(__DIR__) . '/fixtures/plugins'], $this->mapping);
         static::assertArrayHasKey('store', $types);
         static::assertEquals('stores', $types['store']['name']);
     }

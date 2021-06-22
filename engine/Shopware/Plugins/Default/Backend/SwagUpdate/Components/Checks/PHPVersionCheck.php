@@ -30,7 +30,7 @@ use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 class PHPVersionCheck implements CheckInterface
 {
-    const CHECK_TYPE = 'phpversion';
+    public const CHECK_TYPE = 'phpversion';
 
     /**
      * @var SnippetNamespace

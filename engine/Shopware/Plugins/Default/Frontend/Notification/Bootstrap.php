@@ -99,7 +99,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
             if (!empty($ordernumbers)) {
                 foreach ($ordernumbers as $ordernumber) {
-                    if (in_array($ordernumber, $notificationProducts)) {
+                    if (\in_array($ordernumber, $notificationProducts)) {
                         $notificationVariants[] = $ordernumber;
                         if ($ordernumber === $sArticle) {
                             $view->assign('NotifyAlreadyRegistered', true);
@@ -152,7 +152,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 $sError = true;
                 $action->View()->assign('NotifyEmailError', true);
             } elseif (!empty($sNotificatedArticles)) {
-                if (in_array($notifyOrderNumber, $sNotificatedArticles)) {
+                if (\in_array($notifyOrderNumber, $sNotificatedArticles)) {
                     $sError = true;
                     $action->View()->assign('ShowNotification', false);
                     $action->View()->assign('NotifyAlreadyRegistered', true);

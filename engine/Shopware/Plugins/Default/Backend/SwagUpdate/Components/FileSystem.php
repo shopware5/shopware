@@ -97,7 +97,7 @@ class FileSystem
             }
 
             // skip VCS dirs
-            if (in_array($fileInfo->getBasename(), $this->VCSDirs, true)) {
+            if (\in_array($fileInfo->getBasename(), $this->VCSDirs, true)) {
                 continue;
             }
 

@@ -192,7 +192,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function checkCartProducts(CartPosition $cartPositions, array $items)
     {
-        Helper::assertElementCount($cartPositions, count($items));
+        Helper::assertElementCount($cartPositions, \count($items));
         $items = Helper::floatArray($items, ['quantity', 'itemPrice', 'sum']);
         $result = Helper::assertElements($items, $cartPositions);
 
@@ -335,7 +335,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
         $labels = $this->getNamedSelectors();
 
         if (strpos($key, '%') !== false) {
-            $taxRate = intval($key);
+            $taxRate = (int) $key;
 
             return sprintf($labels['tax'][$language], $taxRate);
         }
@@ -364,7 +364,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
         $lastKey = max(array_keys($labels));
 
         do {
-            if (array_key_exists($key, $labels)) {
+            if (\array_key_exists($key, $labels)) {
                 $readLabel = $labels[$key]->getText();
 
                 if ($givenLabel === $readLabel) {

@@ -113,7 +113,7 @@ class CategoriesProvider implements BenchmarkProviderInterface
     {
         $counts = $this->getProductsInCategoriesCounts();
 
-        if (count($counts) === 0) {
+        if (\count($counts) === 0) {
             return 0;
         }
 
@@ -181,7 +181,7 @@ class CategoriesProvider implements BenchmarkProviderInterface
     private function getCategoryIds()
     {
         $shopId = $this->shopContext->getShop()->getId();
-        if (array_key_exists($shopId, $this->categoryIds)) {
+        if (\array_key_exists($shopId, $this->categoryIds)) {
             return $this->categoryIds[$shopId];
         }
 

@@ -41,7 +41,7 @@ class DecoratingService extends OriginalService
 
     public function getOriginalClass(): string
     {
-        return get_class($this->originalService);
+        return \get_class($this->originalService);
     }
 
     public function getName(): string

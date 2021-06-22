@@ -66,7 +66,7 @@ class CurrencyService
     {
         $currency = strtoupper($shop->currency);
 
-        if (!array_key_exists($currency, $this->currencySettings)) {
+        if (!\array_key_exists($currency, $this->currencySettings)) {
             throw new \RuntimeException("Couldn't find definitions for the select currency");
         }
 

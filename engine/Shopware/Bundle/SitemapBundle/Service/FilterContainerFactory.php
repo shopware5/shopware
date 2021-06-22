@@ -90,7 +90,7 @@ class FilterContainerFactory
         $filtersForResource = [];
 
         foreach ($filters as $filter) {
-            if ($filter['resource'] === $resourceName && in_array((int) $filter['shopId'], [$shopId, 0], true)) {
+            if ($filter['resource'] === $resourceName && \in_array((int) $filter['shopId'], [$shopId, 0], true)) {
                 $filtersForResource[] = $filter;
             }
         }

@@ -54,6 +54,6 @@ class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
      */
     public function hasState($state)
     {
-        return in_array($state, $this->states);
+        return \in_array($state, $this->states);
     }
 }

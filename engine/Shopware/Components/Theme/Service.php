@@ -494,11 +494,11 @@ class Service
      */
     private function translateRecursive($data, \Enlight_Components_Snippet_Namespace $namespace)
     {
-        if (is_array($data)) {
+        if (\is_array($data)) {
             foreach ($data as &$value) {
                 $value = $this->translateRecursive($value, $namespace);
             }
-        } elseif (is_string($data)) {
+        } elseif (\is_string($data)) {
             $data = $this->convertSnippet($data, $namespace);
         }
 

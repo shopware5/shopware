@@ -69,7 +69,7 @@ class ProductFeedTest extends \Enlight_Components_Test_Controller_TestCase
     ];
 
     /** @var \Shopware\Components\Model\ModelManager */
-    private $manager = null;
+    private $manager;
 
     /**
      * Standard set up for every test - just disable auth
@@ -200,7 +200,7 @@ class ProductFeedTest extends \Enlight_Components_Test_Controller_TestCase
     public function testDeleteFeed($id)
     {
         $params = [];
-        $params['id'] = intval($id);
+        $params['id'] = (int) $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/ProductFeed/deleteFeed');
         static::assertTrue($this->View()->success);
@@ -224,7 +224,7 @@ class ProductFeedTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $this->dispatch('backend/ProductFeed/getArticles');
         static::assertTrue($this->View()->success);
-        static::assertEquals(20, count($this->View()->data));
+        static::assertEquals(20, \count($this->View()->data));
     }
 
     /**

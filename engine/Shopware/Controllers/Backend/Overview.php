@@ -104,7 +104,7 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
         $this->View()->assign([
             'success' => true,
             'data' => $orders,
-            'total' => count($orders),
+            'total' => \count($orders),
         ]);
     }
 

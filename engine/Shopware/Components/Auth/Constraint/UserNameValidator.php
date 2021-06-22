@@ -32,13 +32,13 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class UserNameValidator extends ConstraintValidator
 {
-    const SNIPPET_NAME_FAILURE = [
+    public const SNIPPET_NAME_FAILURE = [
         'namespace' => 'frontend/account/internalMessages',
         'name' => 'NameFailure',
         'default' => 'Please enter a valid user name',
     ];
 
-    const SNIPPET_NAME_DUPLICATE = [
+    public const SNIPPET_NAME_DUPLICATE = [
         'namespace' => 'frontend/account/internalMessages',
         'name' => 'NameFailureAlreadyRegistered',
         'default' => 'This user name already exists',

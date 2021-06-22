@@ -54,7 +54,7 @@ use Shopware\Components\QueryAliasMapper;
 
 class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    const AGGREGATION_SIZE = 5000;
+    public const AGGREGATION_SIZE = 5000;
 
     /**
      * @var QueryAliasMapper
@@ -241,7 +241,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
                 $listItem = new MediaListItem(
                     $option->getId(),
                     $option->getName(),
-                    in_array($option->getId(), $actives),
+                    \in_array($option->getId(), $actives),
                     $option->getMedia(),
                     $option->getAttributes()
                 );

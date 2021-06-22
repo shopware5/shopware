@@ -39,7 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
 {
-    const DEFAULT_ANALYZERS = [
+    public const DEFAULT_ANALYZERS = [
         'standard',
         'simple',
         'whitespace',

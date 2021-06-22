@@ -68,7 +68,7 @@ trait DynamicConditionParserTrait
             return strtolower($column->getName());
         }, $columns);
 
-        if (!array_key_exists(strtolower($field), $names)) {
+        if (!\array_key_exists(strtolower($field), $names)) {
             throw new \InvalidArgumentException(sprintf('Invalid column name "%s" specified.', $field), 1);
         }
 
@@ -144,7 +144,7 @@ trait DynamicConditionParserTrait
                 $query->andWhere($query->expr()->notIn($field, $boundParamName));
                 $query->setParameter(
                     $boundParamName,
-                    !is_array($value) ? [(string) $value] : $value,
+                    !\is_array($value) ? [(string) $value] : $value,
                     Connection::PARAM_STR_ARRAY
                 );
                 break;
@@ -153,7 +153,7 @@ trait DynamicConditionParserTrait
                 $query->andWhere($query->expr()->in($field, $boundParamName));
                 $query->setParameter(
                     $boundParamName,
-                    !is_array($value) ? [(string) $value] : $value,
+                    !\is_array($value) ? [(string) $value] : $value,
                     Connection::PARAM_STR_ARRAY
                 );
                 break;

@@ -83,6 +83,6 @@ EOT;
     {
         $dateCheck = strtotime($date);
 
-        return is_int($dateCheck) && $dateCheck > 0 ? $date : null;
+        return \is_int($dateCheck) && $dateCheck > 0 ? $date : null;
     }
 }

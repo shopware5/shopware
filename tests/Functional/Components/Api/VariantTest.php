@@ -226,7 +226,7 @@ class VariantTest extends TestCase
 
         static::assertEquals($testData['taxId'], $article->getTax()->getId());
 
-        static::assertEquals(2, count($article->getMainDetail()->getPrices()));
+        static::assertEquals(2, \count($article->getMainDetail()->getPrices()));
 
         return $article;
     }
@@ -341,13 +341,13 @@ class VariantTest extends TestCase
         $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
 
         $variant = $this->resource->create($create);
-        static::assertCount(count($create['configuratorOptions']), $variant->getConfiguratorOptions());
+        static::assertCount(\count($create['configuratorOptions']), $variant->getConfiguratorOptions());
 
         $create = $this->getSimpleVariantData();
         $create['articleId'] = $article->getId();
         $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
         $variant = $this->resource->create($create);
-        static::assertCount(count($create['configuratorOptions']), $variant->getConfiguratorOptions());
+        static::assertCount(\count($create['configuratorOptions']), $variant->getConfiguratorOptions());
 
         $this->resourceArticle->setResultMode(Variant::HYDRATE_ARRAY);
         $id = $article->getId();
@@ -888,7 +888,7 @@ class VariantTest extends TestCase
     {
         $options = [];
         foreach ($configuratorSet['groups'] as $group) {
-            $id = rand(0, count($group['options']) - 1);
+            $id = rand(0, \count($group['options']) - 1);
             $option = $group['options'][$id];
             $options[] = [
                 'optionId' => $option['id'],

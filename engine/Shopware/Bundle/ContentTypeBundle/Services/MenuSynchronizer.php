@@ -68,7 +68,7 @@ class MenuSynchronizer implements MenuSynchronizerInterface
                 /** @var Menu $parent */
                 $parent = $this->menuRepository->findOneBy($menuItem['parent']);
 
-                if (!is_object($parent)) {
+                if (!\is_object($parent)) {
                     throw new \InvalidArgumentException(sprintf('Unable to find parent for query %s', print_r($menuItem['parent'], true)));
                 }
             }
@@ -91,7 +91,7 @@ class MenuSynchronizer implements MenuSynchronizerInterface
             'label' => $menuItem['name'],
         ]);
 
-        if (!is_object($item)) {
+        if (!\is_object($item)) {
             $item = new Menu();
         }
 

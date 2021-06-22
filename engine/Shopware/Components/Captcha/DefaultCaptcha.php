@@ -30,8 +30,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DefaultCaptcha implements CaptchaInterface
 {
-    const SESSION_KEY = __CLASS__ . '_sRandom';
-    const CAPTCHA_METHOD = 'default';
+    public const SESSION_KEY = __CLASS__ . '_sRandom';
+    public const CAPTCHA_METHOD = 'default';
 
     /**
      * @var ContainerInterface
@@ -65,11 +65,11 @@ class DefaultCaptcha implements CaptchaInterface
     {
         $captchaArray = $this->container->get('session')->get(self::SESSION_KEY, []);
 
-        if (count($captchaArray) === 0) {
+        if (\count($captchaArray) === 0) {
             return false;
         }
 
-        if (!array_key_exists($request->get('sCaptcha'), $captchaArray)) {
+        if (!\array_key_exists($request->get('sCaptcha'), $captchaArray)) {
             return false;
         }
 
@@ -99,8 +99,8 @@ class DefaultCaptcha implements CaptchaInterface
         $sRandArray = $this->container->get('session')->get(self::SESSION_KEY, []);
 
         $threshold = 51;
-        if (count($sRandArray) > $threshold) {
-            $sRandArray = array_slice($sRandArray, -$threshold);
+        if (\count($sRandArray) > $threshold) {
+            $sRandArray = \array_slice($sRandArray, -$threshold);
         }
 
         $sRandArray[$string] = true;
@@ -153,7 +153,7 @@ class DefaultCaptcha implements CaptchaInterface
         $string = implode(' ', str_split($string));
 
         if (!empty($font)) {
-            for ($i = 0; $i <= strlen($string); ++$i) {
+            for ($i = 0; $i <= \strlen($string); ++$i) {
                 $rand1 = Random::getInteger(35, 40);
                 $rand2 = Random::getInteger(15, 20);
                 $rand3 = Random::getInteger(60, 70);
@@ -209,7 +209,7 @@ class DefaultCaptcha implements CaptchaInterface
 
         $numericRange = range(1, 9);
 
-        $charlist = implode($alphabet) . implode($numericRange);
+        $charlist = implode('', $alphabet) . implode('', $numericRange);
 
         return Random::getString(5, $charlist);
     }

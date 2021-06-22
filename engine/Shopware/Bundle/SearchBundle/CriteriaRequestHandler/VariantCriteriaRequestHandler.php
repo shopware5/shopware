@@ -77,7 +77,7 @@ class VariantCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         }
 
         foreach ($filters as $groupId => $filter) {
-            $condition = new VariantCondition($filter, in_array($groupId, $groups), $groupId);
+            $condition = new VariantCondition($filter, \in_array($groupId, $groups), $groupId);
             $criteria->addCondition($condition);
         }
     }

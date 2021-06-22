@@ -73,11 +73,11 @@ class ProductDimensionsFacetHandler implements HandlerInterface, ResultHydratorI
 
         $facets = ['width', 'height', 'length', 'weight'];
         foreach ($criteria->getFacets() as $criteriaFacet) {
-            if (!in_array($criteriaFacet->getName(), $facets, true)) {
+            if (!\in_array($criteriaFacet->getName(), $facets, true)) {
                 continue;
             }
 
-            if (!array_key_exists($criteriaFacet->getName(), $elasticResult['aggregations'])) {
+            if (!\array_key_exists($criteriaFacet->getName(), $elasticResult['aggregations'])) {
                 continue;
             }
 

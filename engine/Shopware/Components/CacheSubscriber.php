@@ -63,7 +63,7 @@ class CacheSubscriber implements SubscriberInterface
 
     public function onKernelTerminate(\Enlight_Event_EventArgs $args): void
     {
-        if (count($this->clearTags) === 0) {
+        if (\count($this->clearTags) === 0) {
             return;
         }
 

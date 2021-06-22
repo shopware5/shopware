@@ -259,14 +259,14 @@ class Configurator
 
         /** @var Shop\TemplateConfig\Layout $layout */
         foreach ($containers as $layout) {
-            if (!in_array($layout->getName(), $structure['containers'])) {
+            if (!\in_array($layout->getName(), $structure['containers'])) {
                 $this->entityManager->remove($layout);
             }
         }
 
         /** @var Shop\TemplateConfig\Element $layout */
         foreach ($fields as $layout) {
-            if (!in_array($layout->getName(), $structure['fields'])) {
+            if (!\in_array($layout->getName(), $structure['fields'])) {
                 $this->entityManager->remove($layout);
             }
         }

@@ -61,7 +61,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param array $products
+     * @param array<string, array> $products
      *
      * @return Article[]
      */
@@ -243,8 +243,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
             static::assertContains($number, $numbers, sprintf('Expected product number: `%s` not found', $number));
         }
 
-        static::assertCount(count($expectedNumbers), $result->getProducts());
-        static::assertEquals(count($expectedNumbers), $result->getTotalCount());
+        static::assertCount(\count($expectedNumbers), $result->getProducts());
+        static::assertEquals(\count($expectedNumbers), $result->getTotalCount());
     }
 
     protected function assertSearchResultSorting(
@@ -295,9 +295,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param string   $number
-     * @param Category $category
-     * @param array    $additionally
+     * @param string $number
+     * @param array  $additionally
      *
      * @return array
      */
@@ -320,13 +319,11 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
             ];
         }
 
-        if (!is_array($additionally)) {
+        if (!\is_array($additionally)) {
             $additionally = [];
         }
 
-        $product = array_merge($product, $additionally);
-
-        return $product;
+        return array_merge($product, $additionally);
     }
 
     /**

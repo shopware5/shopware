@@ -247,12 +247,15 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
         ]);
     }
 
-    /**
-     * @return string
-     */
-    private function getVersion()
+    private function getVersion(): string
     {
-        return $this->container->getParameter('shopware.release.version');
+        $version = $this->container->getParameter('shopware.release.version');
+
+        if (!\is_string($version)) {
+            throw new \RuntimeException('Parameter shopware.release.version has to be an string');
+        }
+
+        return $version;
     }
 
     /**
@@ -282,12 +285,12 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
         $locale = $user->locale;
         $localeCode = $locale->getLocale();
 
-        if (array_key_exists($localeCode, $locales)) {
+        if (\array_key_exists($localeCode, $locales)) {
             return $locales[$localeCode];
         }
 
         // Fallback to english locale when available
-        if (array_key_exists('en_GB', $locales)) {
+        if (\array_key_exists('en_GB', $locales)) {
             return $locales['en_GB'];
         }
 

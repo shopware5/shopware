@@ -24,17 +24,27 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Models;
+use Shopware\Bundle\StoreFrontBundle\Struct\Category;
+use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group as CustomerGroup;
+use Shopware\Bundle\StoreFrontBundle\Struct\Locale;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax as TaxStruct;
+use Shopware\Models\Category\Category as CategoryModel;
+use Shopware\Models\Customer\Group as CustomerGroupModel;
+use Shopware\Models\Price\Group as PriceGroupModel;
+use Shopware\Models\Shop\Currency as CurrencyModel;
+use Shopware\Models\Shop\Locale as LocaleModel;
+use Shopware\Models\Shop\Shop as ShopModel;
+use Shopware\Models\Tax\Tax as TaxModel;
 
 class Converter
 {
-    /**
-     * @return Struct\Tax
-     */
-    public function convertTax(Models\Tax\Tax $tax)
+    public function convertTax(TaxModel $tax): TaxStruct
     {
-        $struct = new Struct\Tax();
+        $struct = new TaxStruct();
         $struct->setId($tax->getId());
         $struct->setTax($tax->getTax());
         $struct->setName($tax->getName());
@@ -42,12 +52,9 @@ class Converter
         return $struct;
     }
 
-    /**
-     * @return Struct\Product\PriceGroup
-     */
-    public function convertPriceGroup(Models\Price\Group $entity)
+    public function convertPriceGroup(PriceGroupModel $entity): PriceGroup
     {
-        $struct = new Struct\Product\PriceGroup();
+        $struct = new PriceGroup();
 
         $struct->setId($entity->getId());
 
@@ -56,7 +63,7 @@ class Converter
         $discounts = [];
 
         foreach ($entity->getDiscounts() as $discountEntity) {
-            $discount = new Struct\Product\PriceDiscount();
+            $discount = new PriceDiscount();
 
             $discount->setId($discountEntity->getId());
 
@@ -72,9 +79,9 @@ class Converter
         return $struct;
     }
 
-    public function convertCategory(Models\Category\Category $category)
+    public function convertCategory(CategoryModel $category): Category
     {
-        $struct = new Struct\Category();
+        $struct = new Category();
         $struct->setId($category->getId());
         $struct->setName($category->getName());
         $struct->setPath($category->getPath());
@@ -84,14 +91,10 @@ class Converter
 
     /**
      * Converts a currency doctrine model to a currency struct
-     *
-     * @param \Shopware\Models\Shop\Currency $currency
-     *
-     * @return Struct\Currency
      */
-    public function convertCurrency(Models\Shop\Currency $currency)
+    public function convertCurrency(CurrencyModel $currency): Currency
     {
-        $struct = new Struct\Currency();
+        $struct = new Currency();
 
         $struct->setId($currency->getId());
         $struct->setName($currency->getName());
@@ -104,14 +107,10 @@ class Converter
 
     /**
      * Converts a shop doctrine model to a shop struct
-     *
-     * @param \Shopware\Models\Shop\Shop $shop
-     *
-     * @return Struct\Shop
      */
-    public function convertShop(Models\Shop\Shop $shop)
+    public function convertShop(ShopModel $shop): Shop
     {
-        $struct = new Struct\Shop();
+        $struct = new Shop();
         $struct->setId($shop->getId());
 
         $struct->setName($shop->getName());
@@ -139,12 +138,9 @@ class Converter
         return $struct;
     }
 
-    /**
-     * @return Struct\Customer\Group
-     */
-    public function convertCustomerGroup(Models\Customer\Group $group)
+    public function convertCustomerGroup(CustomerGroupModel $group): CustomerGroup
     {
-        $customerGroup = new Struct\Customer\Group();
+        $customerGroup = new CustomerGroup();
         $customerGroup->setKey($group->getKey());
         $customerGroup->setUseDiscount($group->getMode());
         $customerGroup->setId($group->getId());
@@ -157,17 +153,9 @@ class Converter
         return $customerGroup;
     }
 
-    /**
-     * @param Models\Shop\Locale $locale
-     *
-     * @return Struct\Locale
-     */
-    public function convertLocale($locale)
+    public function convertLocale(LocaleModel $locale): Locale
     {
-        $struct = new Struct\Locale();
-        if (!$locale) {
-            return $locale;
-        }
+        $struct = new Locale();
 
         $struct->setId($locale->getId());
         $struct->setLocale($locale->getLocale());

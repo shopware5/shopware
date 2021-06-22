@@ -65,7 +65,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
-        if (in_array($argumentName, ['category', 'target'])) {
+        if (\in_array($argumentName, ['category', 'target'])) {
             /** @var Repository $categoryRepository */
             $categoryRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)
                 ->getRepository(Category::class);
@@ -193,14 +193,14 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
                 $categoryInput
             );
 
-        if (is_array($category)) {
-            if (count($category) > 1) {
+        if (\is_array($category)) {
+            if (\count($category) > 1) {
                 $this->printCategoriesTable($category);
 
                 return null;
             }
 
-            if (count($category) === 1) {
+            if (\count($category) === 1) {
                 $category = array_shift($category);
             }
         }

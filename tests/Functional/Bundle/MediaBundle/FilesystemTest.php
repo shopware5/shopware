@@ -66,7 +66,7 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
                 'grumpy guy',
             ],
         ];
-        $this->testFileSize = strlen(json_encode($this->testData));
+        $this->testFileSize = \strlen(json_encode($this->testData));
     }
 
     protected function tearDown(): void

@@ -72,9 +72,14 @@ class StoreListUpdatesCommand extends StoreCommand implements CompletionAwareInt
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var string $version */
         $version = $input->getOption('shopware-version');
         if (empty($version)) {
             $version = $this->container->getParameter('shopware.release.version');
+
+            if (!\is_string($version)) {
+                throw new \RuntimeException('Parameter shopware.release.version has to be an string');
+            }
         }
 
         $plugins = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService::class)->getPluginsForUpdateCheck();

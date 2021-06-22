@@ -67,13 +67,13 @@ class Note extends Page
     public function checkNoteProducts(NotePosition $notePositions, array $items)
     {
         foreach ($items as &$item) {
-            if (array_key_exists('description', $item)) {
+            if (\array_key_exists('description', $item)) {
                 unset($item['description']);
             }
         }
         unset($item);
 
-        Helper::assertElementCount($notePositions, count($items));
+        Helper::assertElementCount($notePositions, \count($items));
         $result = Helper::searchElements($items, $notePositions);
 
         if ($result !== true) {

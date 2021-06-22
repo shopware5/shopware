@@ -101,7 +101,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         if (!empty($filter)) {
             $albums = $this->filterAlbums($albums, $filter);
         }
-        $this->View()->assign(['success' => true, 'data' => $albums, 'total' => count($albums)]);
+        $this->View()->assign(['success' => true, 'data' => $albums, 'total' => \count($albums)]);
     }
 
     /**
@@ -189,7 +189,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $media['path'] = $mediaService->getUrl($media['path']);
             $media['virtualPath'] = $mediaService->normalize($media['path']);
 
-            if (!in_array($media['type'], [Media::TYPE_VECTOR, Media::TYPE_IMAGE], true)) {
+            if (!\in_array($media['type'], [Media::TYPE_VECTOR, Media::TYPE_IMAGE], true)) {
                 continue;
             }
 
@@ -432,7 +432,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $data = $this->getMedia($media->getId())->getQuery()->getArrayResult();
 
             if ($media->getType() === Media::TYPE_IMAGE // GD doesn't support the following image formats
-                && !in_array($media->getExtension(), ['tif', 'tiff'], true)) {
+                && !\in_array($media->getExtension(), ['tif', 'tiff'], true)) {
                 $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
                 $manager->createMediaThumbnail($media, [], true);
             }
@@ -564,7 +564,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             }
         }
 
-        $this->View()->assign(['success' => true, 'total' => count($medias) * count($thumbnailSizes), 'fails' => $fails]);
+        $this->View()->assign(['success' => true, 'total' => \count($medias) * \count($thumbnailSizes), 'fails' => $fails]);
     }
 
     /**
@@ -613,7 +613,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
 
         $this->View()->assign([
-            'success' => count($input) > 0,
+            'success' => \count($input) > 0,
             'data' => $output,
         ]);
     }
@@ -791,7 +791,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
                 $found[] = $album;
             }
             $children = $album['data'];
-            if (count($children) > 0) {
+            if (\count($children) > 0) {
                 $foundChildren = $this->filterAlbums($children, $search);
                 $found = array_merge($found, $foundChildren);
             }
@@ -828,6 +828,10 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             }
 
             $projectDir = $this->container->getParameter('shopware.app.rootDir');
+            if (!\is_string($projectDir)) {
+                throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+            }
+
             $thumbnailDir = $projectDir . 'media' . DIRECTORY_SEPARATOR . strtolower($media['type']) . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
             $path = $thumbnailDir . $this->removeSpecialCharacters($media['name']) . '_' . $size . '.' . $media['extension'];
 
@@ -951,6 +955,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $name = $media->getName();
         $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
+        if (!\is_string($projectDir)) {
+            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+        }
 
         // Check if the name passed and is valid
         if (!empty($name)) {
@@ -1086,7 +1093,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $node['thumbnailHighDpiQuality'] = $settings['thumbnailHighDpiQuality'];
             $thumbnails = explode(';', $settings['thumbnailSize']);
             $node['thumbnailSize'] = [];
-            $count = count($thumbnails);
+            $count = \count($thumbnails);
 
             // Convert the thumbnail to an array width the index and value
             for ($i = 0; $i <= $count; ++$i) {
@@ -1098,7 +1105,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
 
         // Has sub-albums, then iterate and add the media count to the parent album.
-        if (count($album->getChildren()) > 0) {
+        if (\count($album->getChildren()) > 0) {
             $node['data'] = $this->toTree($album->getChildren(), $node);
             $node['leaf'] = false;
         } else {
@@ -1154,7 +1161,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     {
         return array_merge(
             json_decode(json_encode($exception), true),
-            ['_class' => get_class($exception)]
+            ['_class' => \get_class($exception)]
         );
     }
 }

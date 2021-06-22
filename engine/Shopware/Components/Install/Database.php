@@ -65,14 +65,14 @@ class Database
     public function setupShop($url, $dbName)
     {
         $parts = parse_url($url);
-        if ($parts === false || !array_key_exists('host', $parts)) {
+        if ($parts === false || !\array_key_exists('host', $parts)) {
             throw new \InvalidArgumentException(sprintf('Invalid Shop URL (%s)', $url));
         }
 
         $isSecure = $parts['scheme'] === 'https';
         $host = $parts['host'];
-        $path = array_key_exists('path', $parts) ? $parts['path'] : '';
-        $host .= array_key_exists('port', $parts) ? ':' . $parts['port'] : '';
+        $path = \array_key_exists('path', $parts) ? $parts['path'] : '';
+        $host .= \array_key_exists('port', $parts) ? ':' . $parts['port'] : '';
 
         if ($path === '/') {
             $path = '';

@@ -51,7 +51,7 @@ class BatchProductNumberSearchResult
      */
     public function get($key)
     {
-        if (array_key_exists($key, $this->storage)) {
+        if (\array_key_exists($key, $this->storage)) {
             return $this->storage[$key];
         }
 
@@ -71,7 +71,7 @@ class BatchProductNumberSearchResult
      */
     public function getProductNumbers()
     {
-        if (!count($this->storage)) {
+        if (!\count($this->storage)) {
             return $this->storage;
         }
 

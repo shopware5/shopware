@@ -351,11 +351,11 @@ class Customer extends Resource
      */
     protected function prepareCustomerPaymentData($data, CustomerModel $customer)
     {
-        if (!array_key_exists('paymentData', $data) && !array_key_exists('debit', $data)) {
+        if (!\array_key_exists('paymentData', $data) && !\array_key_exists('debit', $data)) {
             return $data;
         }
 
-        if (array_key_exists('debit', $data) && !array_key_exists('paymentData', $data)) {
+        if (\array_key_exists('debit', $data) && !\array_key_exists('paymentData', $data)) {
             $debitPaymentMean = $this->getManager()->getRepository(\Shopware\Models\Payment\Payment::class)->findOneBy(['name' => 'debit']);
 
             if ($debitPaymentMean) {
@@ -428,21 +428,21 @@ class Customer extends Resource
      */
     private function prepareCustomerData(array $params, CustomerModel $customer)
     {
-        if (array_key_exists('groupKey', $params)) {
+        if (\array_key_exists('groupKey', $params)) {
             $params['group'] = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Group::class)->findOneBy(['key' => $params['groupKey']]);
             if (!$params['group']) {
                 throw new ApiException\CustomValidationException(sprintf('CustomerGroup by key %s not found', $params['groupKey']));
             }
         }
 
-        if (array_key_exists('shopId', $params)) {
+        if (\array_key_exists('shopId', $params)) {
             $params['shop'] = Shopware()->Models()->find(\Shopware\Models\Shop\Shop::class, $params['shopId']);
             if (!$params['shop']) {
                 throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $params['shopId']));
             }
         }
 
-        if (array_key_exists('priceGroupId', $params)) {
+        if (\array_key_exists('priceGroupId', $params)) {
             $priceGroupId = (int) $params['priceGroupId'];
             if ($priceGroupId > 0) {
                 $params['priceGroup'] = Shopware()->Models()->find(\Shopware\Models\Customer\PriceGroup::class, $params['priceGroupId']);
@@ -529,19 +529,19 @@ class Customer extends Resource
         $billingData = [];
         $shippingData = [];
 
-        if (array_key_exists('billing', $params)) {
+        if (\array_key_exists('billing', $params)) {
             $billingData = $this->prepareAddressData($params['billing'], true);
         }
 
-        if (array_key_exists('shipping', $params)) {
+        if (\array_key_exists('shipping', $params)) {
             $shippingData = $this->prepareAddressData($params['shipping'], true);
         }
 
-        if (array_key_exists('defaultBillingAddress', $params)) {
+        if (\array_key_exists('defaultBillingAddress', $params)) {
             $billingData = array_merge($billingData, $this->prepareAddressData($params['defaultBillingAddress'], true));
         }
 
-        if (array_key_exists('defaultShippingAddress', $params)) {
+        if (\array_key_exists('defaultShippingAddress', $params)) {
             $shippingData = array_merge($shippingData, $this->prepareAddressData($params['defaultShippingAddress'], true));
         }
 

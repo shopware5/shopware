@@ -79,7 +79,12 @@ class SnippetsValidateCommand extends ShopwareCommand implements CompletionAware
         $validator = $this->container->get('shopware.snippet_validator');
 
         if (empty($argument)) {
-            $invalidPaths = $validator->validate($this->container->getParameter('kernel.root_dir') . '/snippets');
+            $rootDir = $this->container->getParameter('kernel.root_dir');
+            if (!\is_string($rootDir)) {
+                throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+            }
+
+            $invalidPaths = $validator->validate($rootDir . '/snippets');
             $invalidPaths = array_merge(
                 $invalidPaths,
                 $this->validatePlugins($validator)

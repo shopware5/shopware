@@ -57,7 +57,7 @@ class MailTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->Request()->setMethod('POST')->setPost($this->testData);
         $response = $this->dispatch('/backend/mail/createMail');
-        $jsonBody = \json_decode($response->getBody(), true);
+        $jsonBody = json_decode($response->getBody(), true);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -86,7 +86,7 @@ class MailTest extends \Enlight_Components_Test_Controller_TestCase
 
         $response = $this->dispatch('/backend/mail/getMails?&node=NaN&id=' . $id);
         $body = $response->getBody();
-        $jsonBody = \json_decode($body, true);
+        $jsonBody = json_decode($body, true);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -116,7 +116,7 @@ class MailTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->Request()->setMethod('POST')->setPost($updateTestData);
         $response = $this->dispatch('/backend/mail/updateMail?id=' . $id);
-        $jsonBody = \json_decode($response->getBody(), true);
+        $jsonBody = json_decode($response->getBody(), true);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -137,7 +137,7 @@ class MailTest extends \Enlight_Components_Test_Controller_TestCase
     public function testRemoveMail($id)
     {
         $response = $this->dispatch('/backend/mail/removeMail?id=' . $id);
-        $jsonBody = \json_decode($response->getBody(), true);
+        $jsonBody = json_decode($response->getBody(), true);
 
         static::assertArrayHasKey('success', $jsonBody);
         static::assertTrue($jsonBody['success']);
@@ -148,7 +148,7 @@ class MailTest extends \Enlight_Components_Test_Controller_TestCase
         $this->Request()->setMethod('GET');
 
         $response = $this->dispatch('/backend/mail/getAttachments');
-        $jsonBody = \json_decode($response->getBody(), true);
+        $jsonBody = json_decode($response->getBody(), true);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -160,7 +160,7 @@ class MailTest extends \Enlight_Components_Test_Controller_TestCase
         $this->Request()->setMethod('GET');
 
         $response = $this->dispatch('/backend/mail/getMails?&node=NaN');
-        $jsonBody = \json_decode($response->getBody(), true);
+        $jsonBody = json_decode($response->getBody(), true);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);

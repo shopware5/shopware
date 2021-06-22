@@ -108,7 +108,7 @@ class OrderTest extends TestCase
         static::assertArrayHasKey('data', $result);
         static::assertIsArray($result['data']);
 
-        static::assertGreaterThanOrEqual(1, count($result['data']));
+        static::assertGreaterThanOrEqual(1, \count($result['data']));
 
         $firstOrder = $result['data'][0];
 
@@ -521,7 +521,7 @@ class OrderTest extends TestCase
         static::assertEquals($newOrder->getInvoiceAmount(), $order['invoiceAmount']);
         static::assertEquals($newOrder->getBilling()->getCity(), $order['billing']['city']);
         static::assertEquals($newOrder->getShipping()->getCity(), $order['shipping']['city']);
-        static::assertCount(count($newOrder->getDetails()), $order['details']);
+        static::assertCount(\count($newOrder->getDetails()), $order['details']);
         static::assertEquals($newOrder->getDetails()[0]->getArticleName(), $order['details'][0]['articleName']);
         static::assertEquals((int) $newOrder->getDetails()[0]->getNumber(), ($oldOrderNumber + 1));
     }

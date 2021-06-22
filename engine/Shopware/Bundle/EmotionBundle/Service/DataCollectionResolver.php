@@ -82,7 +82,7 @@ class DataCollectionResolver implements DataCollectionResolverInterface
         $mediaIds = $this->convertMediaPathsToIds($prepareDataCollection->getMediaPathList());
         $mediaIds = array_merge($prepareDataCollection->getMediaIdList(), $mediaIds);
 
-        if (count($mediaIds) === 0) {
+        if (\count($mediaIds) === 0) {
             return [];
         }
 

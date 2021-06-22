@@ -80,7 +80,7 @@ class ContentType extends \Shopware_Controllers_Backend_ExtJs
     {
         parent::postDispatch();
 
-        if (in_array(strtolower($this->Request()->getActionName()), ['index', 'load', 'extends'])) {
+        if (\in_array(strtolower($this->Request()->getActionName()), ['index', 'load', 'extends'])) {
             $this->View()->assign('controllerName', $this->Request()->getControllerName());
             $this->View()->assign('modelFields', $this->extjsBuilder->buildModelFields($this->type));
             $this->View()->assign('listColumns', $this->extjsBuilder->buildColumns($this->type));

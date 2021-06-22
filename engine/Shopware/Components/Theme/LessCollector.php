@@ -92,7 +92,7 @@ class LessCollector
         );
 
         $discardLess = [];
-        for ($i = count($definitions) - 1; $i >= 0; --$i) {
+        for ($i = \count($definitions) - 1; $i >= 0; --$i) {
             $definition = $definitions[$i];
             $theme = $definition->getTheme();
 
@@ -100,10 +100,10 @@ class LessCollector
                 continue;
             }
 
-            $themeClassName = get_class($theme);
+            $themeClassName = \get_class($theme);
             $discardLess = array_merge($discardLess, $theme->getDiscardedLessThemes());
 
-            if (in_array($themeClassName, $discardLess)) {
+            if (\in_array($themeClassName, $discardLess)) {
                 $definitions[$i]->setFiles([]);
             }
         }
@@ -202,7 +202,7 @@ class LessCollector
             ['shop' => $shop, 'template' => $template]
         );
 
-        if (count($collection) <= 0) {
+        if (\count($collection) <= 0) {
             return [];
         }
 

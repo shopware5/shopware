@@ -442,8 +442,8 @@ class DqlHelper
                     'columnName' => $mapping['columnName'],
                     'table' => $metadata->getTableName(),
                     'alias' => $alias,
-                    'show' => in_array($alias, $shownColumns),
-                    'position' => array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
+                    'show' => \in_array($alias, $shownColumns),
+                    'position' => \array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
                 ];
 
                 $result[$key]['allowInGrid'] = $this->showColumnInGrid($result[$key]);
@@ -463,8 +463,8 @@ class DqlHelper
             'table' => 's_articles_prices',
             'alias' => $alias,
             'allowInGrid' => true,
-            'show' => in_array($alias, $shownColumns),
-            'position' => array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
+            'show' => \in_array($alias, $shownColumns),
+            'position' => \array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
         ];
 
         $alias = 'Price_pseudoPrice';
@@ -480,8 +480,8 @@ class DqlHelper
             'table' => 's_articles_prices',
             'alias' => $alias,
             'allowInGrid' => true,
-            'show' => in_array($alias, $shownColumns),
-            'position' => array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
+            'show' => \in_array($alias, $shownColumns),
+            'position' => \array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
         ];
 
         $alias = 'Price_netPrice';
@@ -496,8 +496,8 @@ class DqlHelper
             'table' => 's_articles_prices',
             'alias' => 'Price_netPrice',
             'allowInGrid' => true,
-            'show' => in_array($alias, $shownColumns),
-            'position' => array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
+            'show' => \in_array($alias, $shownColumns),
+            'position' => \array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
         ];
 
         // Sort columns by position
@@ -667,7 +667,7 @@ class DqlHelper
             )
             ) {
                 $return = $event->getReturn();
-                if (!is_array($return)) {
+                if (!\is_array($return)) {
                     $newTokens[] = $return;
                 } else {
                     $newToken[] = $return[0];
@@ -688,7 +688,7 @@ class DqlHelper
                 $mode = $lastToken === '~' ? 1 : 0;
 
                 // Build the DQL Token - we've registered our own RegExp DoctrineExtension before
-                $newTokens[] = ' RegExp (?' . count($params) . ", {$attribute}) = {$mode}";
+                $newTokens[] = ' RegExp (?' . \count($params) . ", {$attribute}) = {$mode}";
                 // Consume the next token as param and skip it in the next iteration
                 $params[] = substr($token['token'], 1, -1);
                 continue;
@@ -696,7 +696,7 @@ class DqlHelper
 
             // Quoting value tokens:
             if ($token['type'] === 'values') {
-                $newTokens[] = '?' . count($params);
+                $newTokens[] = '?' . \count($params);
                 // Non-numeric tokens will become their quotes removed:
                 if (!is_numeric($token['token'])) {
                     $params[] = substr($token['token'], 1, -1);
@@ -1040,11 +1040,11 @@ class DqlHelper
             $product['hasConfigurator'] = !empty($product['Article_configuratorSetId']);
             $product['imageSrc'] = null;
 
-            if (array_key_exists($id, $images)) {
+            if (\array_key_exists($id, $images)) {
                 $product['imageSrc'] = $images[$id] . '_140x140.jpg';
             }
 
-            $product['hasCategories'] = in_array($id, $categories, true);
+            $product['hasCategories'] = \in_array($id, $categories, true);
         }
 
         return $articles;
@@ -1071,10 +1071,10 @@ class DqlHelper
         ];
 
         // By default show the main entities
-        $show = in_array($column['entity'], $entitiesToShow);
+        $show = \in_array($column['entity'], $entitiesToShow);
 
         // If column was blacklisted explicitly, set $show = false
-        if (in_array($column['alias'], $this->columnsNotToShowInGrid)) {
+        if (\in_array($column['alias'], $this->columnsNotToShowInGrid)) {
             $show = false;
         }
 

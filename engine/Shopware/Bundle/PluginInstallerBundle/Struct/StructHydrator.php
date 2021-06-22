@@ -342,11 +342,11 @@ class StructHydrator
         $plugin->setLocalUpdateAvailable($data['update_version'] !== null);
         $plugin->setLink($data['link']);
 
-        if (array_key_exists('redirectToStore', $data)) {
+        if (\array_key_exists('redirectToStore', $data)) {
             $plugin->setRedirectToStore((bool) $data['redirectToStore']);
         }
 
-        if (array_key_exists('lowestPriceValue', $data)) {
+        if (\array_key_exists('lowestPriceValue', $data)) {
             $plugin->setLowestPrice((float) $data['lowestPriceValue']);
         }
 
@@ -542,11 +542,11 @@ class StructHydrator
             $addons = $data['addons'];
 
             $plugin->setAddons($addons);
-            $plugin->setCapabilityDummy(in_array('SW5_integrated', $addons));
-            $plugin->setFreeDownload(in_array('integrated', $addons));
-            $plugin->setEncrypted(in_array('encryptionIonCube', $addons));
-            $plugin->setLicenceCheck(in_array('licenseCheck', $addons));
-            $plugin->setCertified(in_array('enterpriseCertified', $addons));
+            $plugin->setCapabilityDummy(\in_array('SW5_integrated', $addons));
+            $plugin->setFreeDownload(\in_array('integrated', $addons));
+            $plugin->setEncrypted(\in_array('encryptionIonCube', $addons));
+            $plugin->setLicenceCheck(\in_array('licenseCheck', $addons));
+            $plugin->setCertified(\in_array('enterpriseCertified', $addons));
         }
     }
 

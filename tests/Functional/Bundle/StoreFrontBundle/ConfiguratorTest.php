@@ -113,8 +113,6 @@ class ConfiguratorTest extends TestCase
         foreach ($configurator->getGroups() as $group) {
             switch ($group->getName()) {
                 case 'Farbe':
-                    static::assertTrue($group->isSelected());
-                    break;
                 case 'Größe':
                     static::assertTrue($group->isSelected());
                     break;
@@ -203,9 +201,7 @@ class ConfiguratorTest extends TestCase
             ]
         );
 
-        $product = array_merge($product, $configurator);
-
-        return $product;
+        return array_merge($product, $configurator);
     }
 
     private function createSelection(ListProduct $listProduct, array $optionNames)
@@ -228,7 +224,7 @@ class ConfiguratorTest extends TestCase
     {
         foreach ($configurator->getGroups() as $group) {
             foreach ($group->getOptions() as $option) {
-                if (in_array($option->getName(), $expectedOptions)) {
+                if (\in_array($option->getName(), $expectedOptions)) {
                     static::assertFalse($option->getActive());
                 } else {
                     static::assertTrue($option->getActive());

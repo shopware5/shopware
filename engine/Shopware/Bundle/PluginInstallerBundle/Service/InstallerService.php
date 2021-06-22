@@ -316,15 +316,15 @@ class InstallerService
      */
     private function applyLegacyResultToContext($result, InstallContext $context)
     {
-        if (is_bool($result)) {
+        if (\is_bool($result)) {
             return;
         }
 
-        if (array_key_exists('invalidateCache', $result)) {
+        if (\array_key_exists('invalidateCache', $result)) {
             $context->scheduleClearCache($result['invalidateCache']);
         }
 
-        if (array_key_exists('message', $result)) {
+        if (\array_key_exists('message', $result)) {
             $context->scheduleMessage($result['message']);
         }
     }

@@ -28,7 +28,7 @@ use Shopware\Components\Routing\Context;
 
 class ProductWithCategoryProvider extends ProductProvider
 {
-    const NAME = 'productwithcategory';
+    public const NAME = 'productwithcategory';
 
     /**
      * {@inheritdoc}
@@ -57,7 +57,7 @@ class ProductWithCategoryProvider extends ProductProvider
 
         $result = $qb->execute()->fetchAll();
 
-        if (!count($result)) {
+        if (!\count($result)) {
             return [];
         }
 

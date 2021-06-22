@@ -85,6 +85,6 @@ class CombinedConditionHandler implements ConditionHandlerInterface
             }
         }
 
-        throw new \Exception(sprintf('Condition %s not supported', get_class($condition)));
+        throw new \Exception(sprintf('Condition %s not supported', \get_class($condition)));
     }
 }

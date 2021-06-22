@@ -146,7 +146,7 @@ class CategorySubscriber implements BaseEventSubscriber
 
             $category = $this->setPathForCategory($category);
 
-            $md = $em->getClassMetadata(get_class($category));
+            $md = $em->getClassMetadata(\get_class($category));
             $uow->recomputeSingleEntityChangeSet($md, $category);
         }
 
@@ -176,7 +176,7 @@ class CategorySubscriber implements BaseEventSubscriber
 
             $category = $this->setPathForCategory($category);
 
-            $md = $em->getClassMetadata(get_class($category));
+            $md = $em->getClassMetadata(\get_class($category));
             $uow->recomputeSingleEntityChangeSet($md, $category);
 
             $this->addPendingMove($category);

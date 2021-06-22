@@ -28,9 +28,9 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class CategoryTeaserComponentHandler extends AbstractComponentHandler
 {
-    const COMPONENT_TYPE = 'emotion-components-category-teaser';
+    public const COMPONENT_TYPE = 'emotion-components-category-teaser';
 
-    const ELEMENT_DATA_KEY = 'image';
+    public const ELEMENT_DATA_KEY = 'image';
 
     /**
      * {@inheritdoc}
@@ -75,10 +75,10 @@ class CategoryTeaserComponentHandler extends AbstractComponentHandler
 
         foreach ($data as &$elementData) {
             if ($elementData['key'] === self::ELEMENT_DATA_KEY && !empty($elementData['value'])) {
-                if (!array_key_exists($elementData['value'], $assets)) {
+                if (!\array_key_exists($elementData['value'], $assets)) {
                     break;
                 }
-                if (!array_key_exists($elementData['value'], $importedAssets)) {
+                if (!\array_key_exists($elementData['value'], $importedAssets)) {
                     $assetPath = $assets[$elementData['value']];
 
                     if (!$assetPath) {

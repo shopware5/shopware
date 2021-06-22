@@ -65,9 +65,6 @@ class BatchProductSearchTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createProducts($products, ShopContext $context, Category $category)
     {
         $articles = parent::createProducts($products, $context, $category);
@@ -81,14 +78,14 @@ class BatchProductSearchTest extends TestCase
     {
         $context = $this->getContext();
         $category = $this->helper->createCategory();
-        $this->createProducts([10002 => [], 'SW10001' => []], $context, $category);
+        $this->createProducts(['SW10002' => [], 'SW10001' => []], $context, $category);
 
         $request = new BatchProductNumberSearchRequest();
-        $request->setProductNumbers('test-1', [10002, 'SW10001']);
+        $request->setProductNumbers('test-1', ['SW10002', 'SW10001']);
 
         $result = $this->batchProductSearch->search($request, $context);
 
-        static::assertArrayHasKey(10002, $result->get('test-1'));
+        static::assertArrayHasKey('SW10002', $result->get('test-1'));
         static::assertArrayHasKey('SW10001', $result->get('test-1'));
     }
 

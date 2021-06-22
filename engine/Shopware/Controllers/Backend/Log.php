@@ -57,7 +57,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     {
         if ($this->Request()->getActionName() === 'downloadLogFile') {
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
-        } elseif (!in_array($this->Request()->getActionName(), ['index', 'load'])) {
+        } elseif (!\in_array($this->Request()->getActionName(), ['index', 'load'])) {
             $this->Front()->Plugins()->Json()->setRenderer(true);
         }
     }
@@ -207,8 +207,8 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $start = $this->Request()->getParam('start', 0);
         $limit = $this->Request()->getParam('limit', 100);
 
-        $count = count($files);
-        $files = array_slice($files, $start, $limit);
+        $count = \count($files);
+        $files = \array_slice($files, $start, $limit);
 
         $this->View()->assign([
             'success' => true,

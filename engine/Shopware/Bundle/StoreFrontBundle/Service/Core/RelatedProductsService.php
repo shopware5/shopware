@@ -106,7 +106,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
         $result = [];
 
         foreach ($products as $product) {
-            if (in_array($product->getNumber(), $numbers)) {
+            if (\in_array($product->getNumber(), $numbers)) {
                 $result[$product->getNumber()] = $product;
             }
         }

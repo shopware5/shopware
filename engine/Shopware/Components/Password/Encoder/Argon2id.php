@@ -54,7 +54,7 @@ class Argon2id implements PasswordEncoderInterface
      */
     public function isCompatible()
     {
-        return defined('PASSWORD_ARGON2ID');
+        return \defined('PASSWORD_ARGON2ID');
     }
 
     /**

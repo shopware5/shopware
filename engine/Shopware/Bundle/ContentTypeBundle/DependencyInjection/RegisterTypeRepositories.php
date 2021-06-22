@@ -36,7 +36,10 @@ class RegisterTypeRepositories implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        foreach (array_keys($container->getParameter('shopware.bundle.content_type.types')) as $name) {
+        /** @var array<string, array> $types */
+        $types = $container->getParameter('shopware.bundle.content_type.types');
+
+        foreach (array_keys($types) as $name) {
             $def = new Definition(Repository::class);
 
             $def->setArguments([

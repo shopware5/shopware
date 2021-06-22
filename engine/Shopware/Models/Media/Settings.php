@@ -195,7 +195,7 @@ class Settings extends ModelEntity
      */
     public function setThumbnailSize($thumbnailSize)
     {
-        if (is_array($thumbnailSize)) {
+        if (\is_array($thumbnailSize)) {
             $thumbnailSize = implode(';', $thumbnailSize);
         }
         $this->thumbnailSize = $thumbnailSize;

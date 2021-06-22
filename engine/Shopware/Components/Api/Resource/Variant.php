@@ -495,7 +495,7 @@ class Variant extends Resource implements BatchInterface
             );
         }
 
-        if (isset($data['purchasePrice']) && is_string($data['purchasePrice'])) {
+        if (isset($data['purchasePrice']) && \is_string($data['purchasePrice'])) {
             $data['purchasePrice'] = (float) str_replace(',', '.', $data['purchasePrice']);
         }
 
@@ -734,7 +734,7 @@ class Variant extends Resource implements BatchInterface
 
                 $option = new Option();
                 $option->setPosition(0);
-                if (array_key_exists('position', $optionData)) {
+                if (\array_key_exists('position', $optionData)) {
                     $option->setPosition((int) $optionData['position']);
                 }
                 $option->setName($optionData['option']);
@@ -885,13 +885,13 @@ class Variant extends Resource implements BatchInterface
      */
     private function mergePriceData(array $priceData, Tax $tax)
     {
-        if (array_key_exists('from', $priceData)) {
+        if (\array_key_exists('from', $priceData)) {
             $priceData['from'] = (int) $priceData['from'];
             if ($priceData['from'] <= 0) {
                 throw new ApiException\CustomValidationException(sprintf('Invalid Price "from" value'));
             }
         }
-        if (array_key_exists('to', $priceData)) {
+        if (\array_key_exists('to', $priceData)) {
             $priceData['to'] = (int) $priceData['to'];
             // if the "to" value isn't numeric, set the place holder "beliebig"
             if ($priceData['to'] <= 0) {
@@ -900,16 +900,16 @@ class Variant extends Resource implements BatchInterface
         }
 
         foreach (['price', 'pseudoPrice', 'percent'] as $key) {
-            if (array_key_exists($key, $priceData)) {
+            if (\array_key_exists($key, $priceData)) {
                 $priceData[$key] = (float) str_replace(',', '.', $priceData[$key]);
             }
         }
 
         if ($priceData['customerGroup']->getTaxInput()) {
-            if (array_key_exists('price', $priceData)) {
+            if (\array_key_exists('price', $priceData)) {
                 $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
             }
-            if (array_key_exists('pseudoPrice', $priceData)) {
+            if (\array_key_exists('pseudoPrice', $priceData)) {
                 $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
             }
         }
@@ -999,7 +999,7 @@ class Variant extends Resource implements BatchInterface
      */
     private function prepareEsdAssociation($data, Detail $variant)
     {
-        if (is_array($data['esd'])) {
+        if (\is_array($data['esd'])) {
             $esd = $variant->getEsd();
 
             // Use already uploaded download file

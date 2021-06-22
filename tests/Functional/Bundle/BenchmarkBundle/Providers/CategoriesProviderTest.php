@@ -28,9 +28,9 @@ use PHPUnit\Framework\Constraint\IsType;
 
 class CategoriesProviderTest extends ProviderTestCase
 {
-    const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\CategoriesProvider::class;
-    const EXPECTED_KEYS_COUNT = 2;
-    const EXPECTED_TYPES = [
+    public const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\CategoriesProvider::class;
+    public const EXPECTED_KEYS_COUNT = 2;
+    public const EXPECTED_TYPES = [
         'products' => [
             'average' => IsType::TYPE_FLOAT,
             'max' => IsType::TYPE_INT,

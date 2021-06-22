@@ -58,7 +58,7 @@ class HandlerRegistryTest extends TestCase
         $handlers = $registry->getConditionHandlers();
         $classes = [];
         foreach ($handlers as $handler) {
-            $classes[] = get_class($handler);
+            $classes[] = \get_class($handler);
         }
 
         static::assertContains(AgeConditionHandler::class, $classes);

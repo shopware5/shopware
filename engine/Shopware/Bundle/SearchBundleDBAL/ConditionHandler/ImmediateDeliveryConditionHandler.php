@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface, CriteriaAwareInterface
 {
-    const STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS = 'ImmediateDeliveryVariants';
+    public const STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS = 'ImmediateDeliveryVariants';
 
     /**
      * @var VariantHelperInterface

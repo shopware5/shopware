@@ -363,7 +363,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
             return false;
         }
 
-        return !isset($this->namespaces[$key]) || count($this->namespaces[$key]) === 0;
+        return !isset($this->namespaces[$key]) || \count($this->namespaces[$key]) === 0;
     }
 
     private function createDbNamespace(string $namespace, int $shopId, int $localeId): Enlight_Components_Snippet_Namespace
@@ -387,9 +387,9 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
 
         $locale = $this->locale ? $this->locale->getLocale() : $this->getDefaultLocale()->getLocale();
         if (
-            !array_key_exists($locale, $fullNamespace->toArray())
-            && in_array($locale, ['en_GB', 'default'])
-            && count(array_keys($fullNamespace->toArray()))
+            !\array_key_exists($locale, $fullNamespace->toArray())
+            && \in_array($locale, ['en_GB', 'default'])
+            && \count(array_keys($fullNamespace->toArray()))
         ) {
             $diff = array_diff(['en_GB', 'default'], [$locale]);
             $locale = array_shift($diff);
@@ -412,7 +412,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         if (!$this->locale) {
             return false;
         }
-        if (array_key_exists('showSnippetPlaceholder', $this->snippetConfig) && $this->snippetConfig['showSnippetPlaceholder']) {
+        if (\array_key_exists('showSnippetPlaceholder', $this->snippetConfig) && $this->snippetConfig['showSnippetPlaceholder']) {
             return false;
         }
 

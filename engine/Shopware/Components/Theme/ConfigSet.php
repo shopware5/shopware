@@ -138,7 +138,7 @@ class ConfigSet
         if (!$this->name) {
             throw new \Exception('Each config set requires a configured name!');
         }
-        if (!$this->values || !is_array($this->values)) {
+        if (!$this->values || !\is_array($this->values)) {
             throw new \Exception(sprintf('Config set %s defined without values array.', $this->name));
         }
     }

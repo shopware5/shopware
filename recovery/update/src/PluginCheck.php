@@ -116,7 +116,7 @@ class PluginCheck
     {
         $paths = explode('.', $version);
         $paths = array_map('intval', $paths);
-        if (count($paths) === 3) {
+        if (\count($paths) === 3) {
             $paths[] = 0;
         }
 
@@ -155,7 +155,7 @@ EOT;
 
         foreach ($results as $result) {
             foreach ($result['plugin_names'] as $pluginName) {
-                if (!in_array($pluginName, $localPluginNames)) {
+                if (!\in_array($pluginName, $localPluginNames)) {
                     continue;
                 }
 
@@ -181,7 +181,7 @@ EOT;
 
         foreach ($results as $result) {
             foreach ($result['plugin_names'] as $pluginName) {
-                if (!in_array($pluginName, $localPluginNames)) {
+                if (!\in_array($pluginName, $localPluginNames)) {
                     continue;
                 }
 

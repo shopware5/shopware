@@ -44,7 +44,7 @@ class ShortForeachResolver extends AbstractResolver
                     continue;
                 }
 
-                if (count($value)) {
+                if (\count($value)) {
                     $key = array_keys($value)[0];
                     $context[$match['value']] = $value[$key];
                     if (isset($match['key'])) {

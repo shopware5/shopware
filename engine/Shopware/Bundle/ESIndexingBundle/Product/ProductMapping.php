@@ -35,7 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class ProductMapping implements MappingInterface
 {
-    const TYPE = 'product';
+    public const TYPE = 'product';
 
     /**
      * @var bool

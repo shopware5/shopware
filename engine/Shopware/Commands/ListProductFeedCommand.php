@@ -32,9 +32,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ListProductFeedCommand extends ShopwareCommand
 {
-    const METHOD_LIVE = 0;
+    public const METHOD_LIVE = 0;
 
-    const METHOD_ONLY_CRON = -1;
+    public const METHOD_ONLY_CRON = -1;
 
     /**
      * {@inheritdoc}

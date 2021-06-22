@@ -139,7 +139,7 @@ class DetailTest extends \Enlight_Components_Test_TestCase
     {
         $validator = Shopware()->Container()->get(\Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface::class);
 
-        $property = (new ReflectionClass(get_class($validator)))->getProperty('pattern');
+        $property = (new ReflectionClass(\get_class($validator)))->getProperty('pattern');
         $property->setAccessible(true);
         $property->setValue($validator, $regex);
 

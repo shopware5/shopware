@@ -496,11 +496,6 @@ class CustomerTest extends AbstractApiTestCase
     {
         $id = 99999999;
 
-        $requestData = [
-            'active' => true,
-            'email' => 'test@foobar.com',
-        ];
-
         $this->authenticatedApiRequest('PUT', '/api/customers/' . $id);
         $response = $this->client->getResponse();
 

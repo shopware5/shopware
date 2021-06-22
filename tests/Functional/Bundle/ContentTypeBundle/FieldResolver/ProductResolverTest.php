@@ -72,6 +72,6 @@ class ProductResolverTest extends TestCase
         $this->service->resolve();
 
         $products = $this->service->get($ids, $this->field);
-        static::assertCount(count($idsArray), $products);
+        static::assertCount(\count($idsArray), $products);
     }
 }

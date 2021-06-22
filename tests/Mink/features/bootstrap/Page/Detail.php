@@ -92,11 +92,11 @@ class Detail extends Page implements HelperSelectorInterface
         $result = [];
         $message = ['You are not on a detail page:'];
 
-        if (is_array($links)) {
+        if (\is_array($links)) {
             $result = array_merge($result, $links);
         }
 
-        if (is_array($buttons)) {
+        if (\is_array($buttons)) {
             $result = array_merge($result, $buttons);
         }
 
@@ -264,8 +264,8 @@ class Detail extends Page implements HelperSelectorInterface
     public function checkSelect($select, $min, $max, $graduation)
     {
         $selectBox = $this->findField($select);
-        $min = strval($min);
-        $max = strval($max);
+        $min = \strval($min);
+        $max = \strval($max);
 
         if (empty($selectBox)) {
             $message = sprintf('Select box "%s" was not found!', $select);
@@ -349,7 +349,7 @@ class Detail extends Page implements HelperSelectorInterface
         $elements = Helper::findElements($this, ['productRating', 'productRatingCount']);
         $check = [
             'productRating' => [$elements['productRating']->getAttribute('content'), $average],
-            'productRatingCount' => [$elements['productRatingCount']->getText(), count($articleEvaluations)],
+            'productRatingCount' => [$elements['productRatingCount']->getText(), \count($articleEvaluations)],
         ];
 
         $check = Helper::floatArray($check);

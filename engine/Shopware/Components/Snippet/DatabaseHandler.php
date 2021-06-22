@@ -103,7 +103,7 @@ class DatabaseHandler
 
         foreach ($finder as $file) {
             $filePath = $file->getRelativePathname();
-            if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
+            if (strpos($filePath, '.ini') == \strlen($filePath) - 4) {
                 $namespace = substr($filePath, 0, -4);
                 $namespace = str_replace('\\', '/', $namespace);
             } else {
@@ -128,7 +128,7 @@ class DatabaseHandler
                 if ($locale) {
                     $databaseWriter->write($values, $namespacePrefix . $namespace, $locale->getId(), 1);
 
-                    $this->printNotice('<info>Imported ' . count($values) . ' snippets into ' . $locale->getLocale() . '</info>');
+                    $this->printNotice('<info>Imported ' . \count($values) . ' snippets into ' . $locale->getLocale() . '</info>');
                 }
             }
 
@@ -155,7 +155,7 @@ class DatabaseHandler
 
         $locale = $this->em->getRepository('Shopware\Models\Shop\Locale')->findOneByLocale($localeName);
         if (!$locale) {
-            throw new \Exception(\sprintf('Locale "%s" not found.', $localeName));
+            throw new \Exception(sprintf('Locale "%s" not found.', $localeName));
         }
 
         $outputAdapter = new \Enlight_Config_Adapter_File([
@@ -175,7 +175,7 @@ class DatabaseHandler
             $snippetRepository->getDistinctNamespacesQuery($locale->getId())->getArrayResult()
         );
 
-        if (count($namespaces) == 0) {
+        if (\count($namespaces) == 0) {
             $this->printWarning('<error>No snippets found for the given locale(s)</error>');
 
             return;
@@ -184,7 +184,7 @@ class DatabaseHandler
         $data = [];
 
         foreach ($namespaces as $namespace) {
-            if (!array_key_exists($namespace, $data)) {
+            if (!\array_key_exists($namespace, $data)) {
                 $data[$namespace] = true;
                 $content = new \Enlight_Components_Snippet_Namespace([
                     'adapter' => $inputAdapter,
@@ -233,7 +233,7 @@ class DatabaseHandler
 
         foreach ($finder as $file) {
             $filePath = $file->getRelativePathname();
-            if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
+            if (strpos($filePath, '.ini') == \strlen($filePath) - 4) {
                 $namespace = substr($filePath, 0, -4);
                 $namespace = str_replace('\\', '/', $namespace);
             } else {
@@ -258,7 +258,7 @@ class DatabaseHandler
                 $namespaceData->setData($values);
                 $outputAdapter->delete($namespaceData, array_keys($values), $removeDirty);
 
-                $this->printNotice('<info>Deleted ' . count($values) . ' snippets from ' . $locale->getLocale() . '</info>');
+                $this->printNotice('<info>Deleted ' . \count($values) . ' snippets from ' . $locale->getLocale() . '</info>');
             }
 
             $this->printNotice('<info></info>');

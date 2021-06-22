@@ -103,11 +103,11 @@ ON DUPLICATE KEY UPDATE
 
         $i = 1;
         foreach ($products as $key => $product) {
-            if (in_array((int) $product['id'], $productIds, true)) {
+            if (\in_array((int) $product['id'], $productIds, true)) {
                 continue;
             }
 
-            while (in_array($i, $positionValues, true)) {
+            while (\in_array($i, $positionValues, true)) {
                 if ($maxPosition === $i) {
                     $hasFoundMaxPosition = true;
                 }

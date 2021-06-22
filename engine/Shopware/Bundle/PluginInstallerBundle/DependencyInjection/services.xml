@@ -41,6 +41,7 @@
             </argument>
             <argument type="service" id="shopware.release" />
             <argument type="service" id="pluginlogger" />
+            <argument type="service" id="kernel" />
         </service>
 
         <service id="shopware_plugininstaller.legacy_plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller">

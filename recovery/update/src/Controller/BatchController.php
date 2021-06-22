@@ -170,7 +170,7 @@ class BatchController
         $this->response->header('Content-Type', 'application/json');
         $this->response->status($code);
 
-        if (defined('JSON_PRETTY_PRINT')) {
+        if (\defined('JSON_PRETTY_PRINT')) {
             $this->response->body(json_encode($data, JSON_PRETTY_PRINT));
         } else {
             $this->response->body(json_encode($data));

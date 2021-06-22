@@ -28,8 +28,8 @@ use Shopware\Bundle\SitemapBundle\ConfigHandler\ConfigHandlerInterface;
 
 class ConfigHandler
 {
-    const EXCLUDED_URLS_KEY = 'excludedUrls';
-    const CUSTOM_URLS_KEY = 'customUrls';
+    public const EXCLUDED_URLS_KEY = 'excludedUrls';
+    public const CUSTOM_URLS_KEY = 'customUrls';
 
     /**
      * @var ConfigHandlerInterface[]

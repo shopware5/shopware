@@ -67,7 +67,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $this->View()->assign([
             'success' => true,
             'data' => $locales,
-            'total' => count($locales),
+            'total' => \count($locales),
         ]);
     }
 
@@ -237,7 +237,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $isSingleSnippet = false;
         $result = [];
 
-        if (array_key_exists('namespace', $snippets)) {
+        if (\array_key_exists('namespace', $snippets)) {
             $snippets = [$snippets];
             $isSingleSnippet = true;
         }
@@ -387,7 +387,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $fileName = basename($_FILES['file']['name']);
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
 
-        if (!in_array($extension, ['csv', 'txt', 'xml'])) {
+        if (!\in_array($extension, ['csv', 'txt', 'xml'])) {
             echo json_encode([
                 'success' => false,
                 'message' => 'Unknown Extension',
@@ -445,7 +445,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $headers = $snippets->GetHeader();
         }
 
-        if (empty($headers) || !in_array('namespace', $headers) || !in_array('name', $headers)) {
+        if (empty($headers) || !\in_array('namespace', $headers) || !\in_array('name', $headers)) {
             echo json_encode([
                 'success' => false,
                 'message' => 'File not in right format',
@@ -492,7 +492,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                 $value = $this->getFormatSnippetForSave($value);
 
                 $dirty = 0;
-                if (array_key_exists('dirty-' . $translation['both'], $snippet)) {
+                if (\array_key_exists('dirty-' . $translation['both'], $snippet)) {
                     $dirty = trim(ltrim($snippet['dirty-' . $translation['both']], "'"));
                 }
 
@@ -657,7 +657,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $this->View()->assign([
                 'success' => true,
                 'data' => $result,
-                'total' => count($result),
+                'total' => \count($result),
             ]);
 
             return;
@@ -679,7 +679,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $this->View()->assign([
            'success' => true,
            'data' => $result,
-           'total' => count($result),
+           'total' => \count($result),
         ]);
     }
 
@@ -810,7 +810,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $tmp['namespace'] = $namespace;
             $tmp['id'] = $ns . $namespace;
 
-            if (is_array($value['data'])) {
+            if (\is_array($value['data'])) {
                 $tmp['data'] = $this->normalize($value['data'], $tmp['id'] . '/');
             } else {
                 $tmp['leaf'] = true;

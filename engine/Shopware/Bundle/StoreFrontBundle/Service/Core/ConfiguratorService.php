@@ -30,9 +30,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 class ConfiguratorService implements Service\ConfiguratorServiceInterface
 {
-    const CONFIGURATOR_TYPE_STANDARD = 0;
-    const CONFIGURATOR_TYPE_SELECTION = 1;
-    const CONFIGURATOR_TYPE_PICTURE = 2;
+    public const CONFIGURATOR_TYPE_STANDARD = 0;
+    public const CONFIGURATOR_TYPE_SELECTION = 1;
+    public const CONFIGURATOR_TYPE_PICTURE = 2;
 
     /**
      * @var Gateway\ProductConfigurationGatewayInterface
@@ -89,7 +89,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
             );
         }
 
-        $onlyOneGroup = count($configurator->getGroups()) === self::CONFIGURATOR_TYPE_SELECTION;
+        $onlyOneGroup = \count($configurator->getGroups()) === self::CONFIGURATOR_TYPE_SELECTION;
 
         foreach ($configurator->getGroups() as $group) {
             $group->setSelected(
@@ -98,7 +98,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
 
             foreach ($group->getOptions() as $option) {
                 $option->setSelected(
-                    in_array($option->getId(), $selection)
+                    \in_array($option->getId(), $selection)
                 );
 
                 $isValid = $this->isCombinationValid(
@@ -140,7 +140,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
         }
 
         foreach ($selection as $selectedGroup => $selectedOption) {
-            if (!in_array($selectedOption, $combinations) && $selectedGroup !== $group->getId()) {
+            if (!\in_array($selectedOption, $combinations) && $selectedGroup !== $group->getId()) {
                 return false;
             }
         }

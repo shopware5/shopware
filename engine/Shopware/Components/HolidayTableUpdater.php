@@ -130,7 +130,7 @@ SQL;
      */
     private function getEasterDays($year)
     {
-        if (!function_exists('easter_days')) {
+        if (!\function_exists('easter_days')) {
             return $this->easterDaysFallback($year);
         }
 

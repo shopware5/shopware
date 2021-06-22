@@ -179,10 +179,10 @@ class Theme
      */
     public function getTemplate()
     {
-        $class = get_class($this);
+        $class = \get_class($this);
         $paths = explode('\\', $class);
 
-        return $paths[count($paths) - 2];
+        return $paths[\count($paths) - 2];
     }
 
     /**

@@ -77,7 +77,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->assign('sUserLoggedIn', $this->admin->sCheckUser());
         $this->View()->assign('sAction', $this->request->getActionName());
 
-        if ($this->isOneTimeAccount() && !in_array($this->request->getActionName(), ['abort', 'login', 'register'])) {
+        if ($this->isOneTimeAccount() && !\in_array($this->request->getActionName(), ['abort', 'login', 'register'])) {
             $this->logoutAction();
             $this->redirect(['controller' => 'register']);
         }
@@ -751,7 +751,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
     private function shouldForwardToRegister(): bool
     {
-        return !in_array($this->Request()->getActionName(), ['login', 'logout', 'password', 'resetPassword'])
+        return !\in_array($this->Request()->getActionName(), ['login', 'logout', 'password', 'resetPassword'])
             && !$this->admin->sCheckUser();
     }
 

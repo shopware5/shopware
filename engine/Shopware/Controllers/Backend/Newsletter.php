@@ -210,7 +210,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             );
 
             echo "Current mail: '" . $subjectCurrentMailing . "'\n";
-            echo count($emails) . " Recipients fetched\n";
+            echo \count($emails) . " Recipients fetched\n";
         } else {
             $mailing = $this->initMailing($mailingID);
             $emails = [$this->Request()->getParam('testmail')];
@@ -282,7 +282,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
                 Shopware()->Db()->query($sql, [$mailing['id'], $user['email']]);
             }
         }
-        echo $counter . ' out of ' . count($emails) . ' Mails sent successfully';
+        echo $counter . ' out of ' . \count($emails) . ' Mails sent successfully';
 
         // In cronmode: Once we are done, release the lock (by setting it 15 seconds to future)
         if (empty($mailingID)) {
@@ -834,7 +834,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
 
         // todo@all Create new method to get same secret hashes for values
         $license = '';
-        $parts = func_get_args();
+        $parts = \func_get_args();
         $parts[] = $license;
 
         return md5(implode('|', $parts));

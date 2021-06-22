@@ -293,7 +293,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     private function setActiveFlags($categories, $actives)
     {
         foreach ($categories as &$category) {
-            $category['flag'] = in_array($category['id'], $actives);
+            $category['flag'] = \in_array($category['id'], $actives);
 
             if (!empty($category['sub'])) {
                 $category['sub'] = $this->setActiveFlags($category['sub'], $actives);
@@ -369,7 +369,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             }
             $children = $this->getCategoriesOfParent($category['id'], $categories);
             $category['sub'] = $children;
-            $category['activeCategories'] = count($children);
+            $category['activeCategories'] = \count($children);
             $result[] = $category;
         }
 

@@ -69,7 +69,9 @@ class SyncSubscriber implements SubscriberInterface
             return;
         }
 
-        $installedPlugins = array_keys($this->container->getParameter('active_plugins'));
+        /** @var array<string,string> $installedPluginsParameter */
+        $installedPluginsParameter = $this->container->getParameter('active_plugins');
+        $installedPlugins = array_keys($installedPluginsParameter);
 
         if ($eventArgs->getName() === PluginEvent::POST_INSTALL) {
             $installedPlugins[] = $eventArgs->getPlugin()->getName();

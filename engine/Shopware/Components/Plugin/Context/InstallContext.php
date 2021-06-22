@@ -29,17 +29,17 @@ use Shopware\Models\Plugin\Plugin;
 
 class InstallContext implements \JsonSerializable
 {
-    const CACHE_TAG_TEMPLATE = CacheManager::CACHE_TAG_TEMPLATE;
-    const CACHE_TAG_CONFIG = CacheManager::CACHE_TAG_CONFIG;
-    const CACHE_TAG_ROUTER = CacheManager::CACHE_TAG_ROUTER;
-    const CACHE_TAG_PROXY = CacheManager::CACHE_TAG_PROXY;
-    const CACHE_TAG_THEME = CacheManager::CACHE_TAG_THEME;
-    const CACHE_TAG_HTTP = CacheManager::CACHE_TAG_HTTP;
+    public const CACHE_TAG_TEMPLATE = CacheManager::CACHE_TAG_TEMPLATE;
+    public const CACHE_TAG_CONFIG = CacheManager::CACHE_TAG_CONFIG;
+    public const CACHE_TAG_ROUTER = CacheManager::CACHE_TAG_ROUTER;
+    public const CACHE_TAG_PROXY = CacheManager::CACHE_TAG_PROXY;
+    public const CACHE_TAG_THEME = CacheManager::CACHE_TAG_THEME;
+    public const CACHE_TAG_HTTP = CacheManager::CACHE_TAG_HTTP;
 
     /**
      * pre defined list to invalidate simple caches
      */
-    const CACHE_LIST_DEFAULT = [
+    public const CACHE_LIST_DEFAULT = [
         self::CACHE_TAG_TEMPLATE,
         self::CACHE_TAG_CONFIG,
         self::CACHE_TAG_ROUTER,
@@ -49,7 +49,7 @@ class InstallContext implements \JsonSerializable
     /**
      * pre defined list to invalidate required frontend caches
      */
-    const CACHE_LIST_FRONTEND = [
+    public const CACHE_LIST_FRONTEND = [
         self::CACHE_TAG_TEMPLATE,
         self::CACHE_TAG_THEME,
         self::CACHE_TAG_HTTP,
@@ -58,7 +58,7 @@ class InstallContext implements \JsonSerializable
     /**
      * pre defined list to invalidate all caches
      */
-    const CACHE_LIST_ALL = [
+    public const CACHE_LIST_ALL = [
         self::CACHE_TAG_TEMPLATE,
         self::CACHE_TAG_CONFIG,
         self::CACHE_TAG_ROUTER,
@@ -135,7 +135,7 @@ class InstallContext implements \JsonSerializable
      */
     public function scheduleClearCache(array $caches)
     {
-        if (!array_key_exists('cache', $this->scheduled)) {
+        if (!\array_key_exists('cache', $this->scheduled)) {
             $this->scheduled['cache'] = [];
         }
         $this->scheduled['cache'] = array_values(array_unique(array_merge($this->scheduled['cache'], $caches)));

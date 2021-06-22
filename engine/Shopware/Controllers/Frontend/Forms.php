@@ -198,11 +198,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             $this->checkFields();
         }
 
-        if (empty($this->Request()->Submit) || count($this->_errors)) {
+        $orderNumber = $this->Request()->getParam('sOrdernumber');
+
+        if (empty($this->Request()->Submit) || \count($this->_errors)) {
             foreach ($this->_elements as $id => $element) {
                 if ($element['name'] === 'sordernumber') {
-                    $orderNumber = $this->Request()->getParam('sOrdernumber');
-
                     try {
                         $this->get(\Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface::class)
                             ->validate($orderNumber);
@@ -239,10 +239,10 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                             break;
 
                         case 'detail':
-                            if ($this->Request()->getParam('sOrdernumber') !== null) {
-                                $getName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($this->Request()->getParam('sOrdernumber'));
+                            if ($orderNumber !== null) {
+                                $getName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
                                 $text = Shopware()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextArticle');
-                                $text .= ' ' . $getName;
+                                $text .= ' ' . $getName . ' (' . htmlentities($orderNumber, ENT_QUOTES | ENT_HTML5) . ')';
                                 $this->_elements[$id]['value'] = $text;
                                 $element['value'] = $text;
                             }
@@ -501,12 +501,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 switch ($element['typ']) {
                     case 'date':
                         $values = preg_split('#[^0-9]#', $inputs[$element['id']], -1, PREG_SPLIT_NO_EMPTY);
-                        if (count($values) !== 3) {
+                        if (\count($values) !== 3) {
                             unset($value);
                             $valid = false;
                             break;
                         }
-                        if (strlen($values[0]) === 4) {
+                        if (\strlen($values[0]) === 4) {
                             $value = mktime(0, 0, 0, (int) $values[1], (int) $values[2], (int) $values[0]);
                         } else {
                             $value = mktime(0, 0, 0, (int) $values[0], (int) $values[2], (int) $values[1]);
@@ -660,7 +660,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     private function handleFormPost($formId)
     {
-        if (count($this->_errors) || empty($this->Request()->Submit)) {
+        if (\count($this->_errors) || empty($this->Request()->Submit)) {
             return;
         }
 

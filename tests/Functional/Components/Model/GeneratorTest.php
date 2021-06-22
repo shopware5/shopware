@@ -28,10 +28,10 @@ use Shopware\Components\Model\Generator;
 
 class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
-    const TEST_TABLE_NAME = 's_articles_attributes';
-    const TEST_ATTRIBUTE_FIELD_PREFIX = 'test_';
-    const TEST_ATTRIBUTE_FIELD_NAME = 'not_null_default_value_field';
-    const TEST_ATTRIBUTE_PROPERTY_NAME = 'testNotNullDefaultValueField';
+    public const TEST_TABLE_NAME = 's_articles_attributes';
+    public const TEST_ATTRIBUTE_FIELD_PREFIX = 'test_';
+    public const TEST_ATTRIBUTE_FIELD_NAME = 'not_null_default_value_field';
+    public const TEST_ATTRIBUTE_PROPERTY_NAME = 'testNotNullDefaultValueField';
 
     /**
      * @var \Shopware\Components\Model\ModelManager
