@@ -94,6 +94,12 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if (($host = $request->getHeader('X_FORWARDED_HOST')) !== null
             && $host === $shop->getHost()
         ) {
+            // If the base path is null, set it to empty string. Otherwise the request will try to assemble the base path. On a reverse proxy setup with varnish this will fail on virtual URLs like /en
+            // The X-Forwarded-Host header is only set in such environments
+            if ($shop->getBasePath() === null) {
+                $shop->setBasePath('');
+            }
+
             $request->setSecure();
             $request->setBasePath($shop->getBasePath());
             $request->setBaseUrl($shop->getBaseUrl());
