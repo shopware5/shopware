@@ -73,7 +73,7 @@
         "guzzlehttp/psr7": "1.6.1",
         "php-http/message": "1.8.0",
         "fig/link-util": "1.1.1",
-        "league/flysystem": "1.1.3",
+        "league/flysystem": "~1.1.4",
         "league/flysystem-aws-s3-v3": "1.0.28",
         "superbalist/flysystem-google-storage": "7.2.2",
         "stecman/symfony-console-completion": "0.11.0",
