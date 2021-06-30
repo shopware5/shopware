@@ -1200,13 +1200,11 @@ class sExport implements Enlight_Hook
             }
             $rows[] = $row;
 
-            if ($rowIndex == $count || \count($rows) >= 50) {
-                @set_time_limit(30);
-
+            if ($rowIndex === $count || \count($rows) >= 50) {
                 $rows = Shopware()->Container()->get('events')->filter(
                     'Shopware_Modules_Export_ExportResult_Filter_Fixed',
                     $rows,
-                    ['feedId' => $this->sFeedID, 'subject' => $this]
+                    ['feedId' => $this->sFeedID, 'subject' => $this, 'rowIndex' => $rowIndex]
                 );
 
                 $this->sSmarty->assign('sArticles', $rows);

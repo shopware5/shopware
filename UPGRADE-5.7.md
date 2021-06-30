@@ -14,6 +14,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Added filter event `Shopware_Controllers_Order_OpenPdf_FilterName` to `Shopware_Controllers_Backend_Order::openPdfAction()`
 * Added new composer dependency `psr/http-message`
+* Added new parameter `rowIndex` to `Shopware_Modules_Export_ExportResult_Filter_Fixed` event
 
 ### Breaks
 
