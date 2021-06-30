@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.2
+
+[View all changes from v5.7.1...v5.7.2](https://github.com/shopware/shopware/compare/v5.7.1...v5.7.2)
+
+### Changes
+
+* Updated `league/flysystem` to 1.1.4
+
 ## 5.7.1
 
 [View all changes from v5.7.0...v5.7.1](https://github.com/shopware/shopware/compare/v5.7.0...v5.7.1)
