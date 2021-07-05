@@ -44,7 +44,7 @@ class StockService implements StockServiceInterface
         if ($product) {
             $product->setInStock($product->getInStock() - $detail->getQuantity());
             $this->entityManager->persist($product);
-            $this->entityManager->flush();
+            $this->entityManager->flush($product);
         }
     }
 
