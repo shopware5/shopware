@@ -25,11 +25,11 @@
  */
 function smarty_modifier_array_unset($value, $keys)
 {
-    if (!is_array($value)) {
+    if (!\is_array($value)) {
         return $value;
     }
 
-    if (is_string($keys)) {
+    if (\is_string($keys)) {
         $keys = [$keys];
     }
 

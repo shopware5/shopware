@@ -34,10 +34,10 @@ function smarty_modifier_currency($value, $config = null, $position = null)
         return $value;
     }
 
-    if (!empty($config) && is_string($config)) {
+    if (!empty($config) && \is_string($config)) {
         $config = strtoupper($config);
-        if (defined('Zend_Currency::' . $config)) {
-            $config = ['display' => constant('Zend_Currency::' . $config)];
+        if (\defined('Zend_Currency::' . $config)) {
+            $config = ['display' => \constant('Zend_Currency::' . $config)];
         } else {
             $config = [];
         }
@@ -45,10 +45,10 @@ function smarty_modifier_currency($value, $config = null, $position = null)
         $config = [];
     }
 
-    if (!empty($position) && is_string($position)) {
+    if (!empty($position) && \is_string($position)) {
         $position = strtoupper($position);
-        if (defined('Zend_Currency::' . $position)) {
-            $config['position'] = constant('Zend_Currency::' . $position);
+        if (\defined('Zend_Currency::' . $position)) {
+            $config['position'] = \constant('Zend_Currency::' . $position);
         }
     }
 

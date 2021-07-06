@@ -25,6 +25,7 @@
  *
  * @category   Enlight
  * @package    Enlight_Event
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -46,18 +47,18 @@ class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
      * The storage can be overwritten by the options parameter which must contain the "storage" element
      * which is an instance of the Enlight_Config.
      *
-     * @param   null $options
+     * @param null $options
      */
     public function __construct($options = null)
     {
-        if (!is_array($options)) {
-            $options = array('storage' => $options);
+        if (!\is_array($options)) {
+            $options = ['storage' => $options];
         }
-        if (isset($options['storage']) && is_string($options['storage'])) {
-            $this->storage = new Enlight_Config($options['storage'], array(
+        if (isset($options['storage']) && \is_string($options['storage'])) {
+            $this->storage = new Enlight_Config($options['storage'], [
                 'allowModifications' => true,
                 'adapter' => isset($options['storageAdapter']) ? $options['storageAdapter'] : null,
-                'section' => isset($options['section']) ? $options['section'] : 'production')
+                'section' => isset($options['section']) ? $options['section'] : 'production', ]
             );
         } elseif (isset($options['storage']) && $options['storage'] instanceof Enlight_Config) {
             $this->storage = $options['storage'];
@@ -69,34 +70,33 @@ class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
     /**
      * Retrieves a list of listeners registered.
      *
-     * @return  array
+     * @return array
      */
     public function getListeners()
     {
         if ($this->listeners === null) {
             $this->read();
         }
+
         return $this->listeners;
     }
 
     /**
      * Registers a listener to an event.
      *
-     * @param Enlight_Event_Handler $handler
-     *
-     * @return  Enlight_Event_Subscriber
+     * @return Enlight_Event_Subscriber
      */
     public function registerListener(Enlight_Event_Handler $handler)
     {
         $this->listeners[] = $handler;
+
         return $this;
     }
 
     /**
      * Removes an event listener from storage.
      *
-     * @param   Enlight_Event_Handler $handler
-     * @return  Enlight_Event_Subscriber
+     * @return Enlight_Event_Subscriber
      */
     public function removeListener(Enlight_Event_Handler $handler)
     {
@@ -104,33 +104,35 @@ class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
         if ($handlerIndex !== false) {
             array_splice($this->listeners, $handlerIndex, 1);
         }
+
         return $this;
     }
 
     /**
      * Writes all registered listeners into the Enlight_Config.
      *
-     * @return  Enlight_Event_Subscriber_Config
+     * @return Enlight_Event_Subscriber_Config
      */
     public function write()
     {
-        $listeners = array();
+        $listeners = [];
         foreach ($this->listeners as $handler) {
             $listeners[] = $handler->toArray();
         }
         $this->storage->listeners = $listeners;
         $this->storage->write();
+
         return $this;
     }
 
     /**
      * Loads the event listener from storage.
      *
-     * @return  Enlight_Event_Subscriber_Config
+     * @return Enlight_Event_Subscriber_Config
      */
     public function read()
     {
-        $this->listeners = array();
+        $this->listeners = [];
 
         if ($this->storage->listeners !== null) {
             foreach ($this->storage->listeners as $entry) {
@@ -144,6 +146,7 @@ class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
                 );
             }
         }
+
         return $this;
     }
 }

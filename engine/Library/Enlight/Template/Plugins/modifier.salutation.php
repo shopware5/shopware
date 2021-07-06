@@ -17,11 +17,16 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+/**
+ * @param string $salutation
+ *
+ * @return string
+ */
 function smarty_modifier_salutation($salutation)
 {
     $snippets = Shopware()->Container()->get('snippets');
     $label = $snippets->getNamespace('frontend/salutation')->get($salutation);
-    if (strlen(trim($label)) === 0) {
+    if (trim($label) === '') {
         return $salutation;
     }
 

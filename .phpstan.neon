@@ -45,3 +45,7 @@ parameters:
         - # We override the method in higher class inheritance to public method
             message: '#Call to protected method verifyPage#'
             path: 'tests/Mink/features/bootstrap/SpecialContext.php'
+
+        # Some day this should be specified
+        - '#no value type specified in iterable type Enlight_Components_Snippet_Namespace#'
+        - '#no value type specified in iterable type Enlight_Config#'

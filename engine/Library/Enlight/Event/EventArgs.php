@@ -25,33 +25,33 @@
  *
  * @category   Enlight
  * @package    Enlight_Event
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
 {
     /**
-     * @var bool Flag whether the listener has finished running.
+     * @var bool flag whether the listener has finished running
      */
     protected $_processed;
 
     /**
-     * @var string Contains the name of the event.
+     * @var string contains the name of the event
      */
     protected $_name;
 
     /**
-     * @var mixed Contains the return value, which can be set by the setReturn method.
+     * @var mixed contains the return value, which can be set by the setReturn method
      */
     protected $_return;
 
     /**
      * The Enlight_Event_EventArgs class constructor expects the name of the event.
      *
-     * @param              $name
-     * @param   array|null $args
+     * @param array|null $args
      */
-    public function __construct(array $args = array())
+    public function __construct(array $args = [])
     {
         parent::__construct($args);
     }
@@ -64,6 +64,7 @@ class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
     public function stop()
     {
         $this->_processed = true;
+
         return $this;
     }
 
@@ -77,6 +78,7 @@ class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
     public function setProcessed($processed)
     {
         $this->_processed = (bool) $processed;
+
         return $this;
     }
 
@@ -93,8 +95,7 @@ class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
     /**
      * Setter method for the event name property.
      *
-     * @param   $name
-     * @return  string
+     * @return string
      */
     public function setName($name)
     {
@@ -114,8 +115,7 @@ class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
     /**
      * Setter method for the return property.
      *
-     * @param   mixed $return
-     * @return  void
+     * @return void
      */
     public function setReturn($return)
     {
@@ -124,8 +124,6 @@ class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
 
     /**
      * Getter method for the return property.
-     *
-     * @return  mixed
      */
     public function getReturn()
     {

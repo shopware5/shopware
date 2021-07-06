@@ -20,12 +20,12 @@
 /**
  * Returns a number in local specific format.
  *
- * @link http://framework.zend.com/manual/de/zend.locale.parsing.html
+ * @see http://framework.zend.com/manual/de/zend.locale.parsing.html
+ *
  * @param int|float $value
  * @param array     $format
- * @return mixed
  */
-function smarty_modifier_number($value, $format = array())
+function smarty_modifier_number($value, $format = [])
 {
     if (empty($format['locale'])) {
         $format['locale'] = Shopware()->Container()->get('locale');

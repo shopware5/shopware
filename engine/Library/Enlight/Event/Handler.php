@@ -25,6 +25,7 @@
  *
  * @category   Enlight
  * @package    Enlight_Event
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -36,7 +37,7 @@ abstract class Enlight_Event_Handler
     protected $name;
 
     /**
-     * @var integer Contains the event position of the event handler.
+     * @var int contains the event position of the event handler
      */
     protected $position;
 
@@ -44,8 +45,7 @@ abstract class Enlight_Event_Handler
      * The Enlight_Event_Handler class constructor expects an event name. If no name is given,
      * the constructor throws an Enlight_Event_Exception.
      *
-     * @throws  Enlight_Event_Exception
-     * @param   $event
+     * @throws Enlight_Event_Exception
      */
     public function __construct($event)
     {
@@ -57,7 +57,8 @@ abstract class Enlight_Event_Handler
 
     /**
      * Getter method for the name property. Contains the event name.
-     * @return  string
+     *
+     * @return string
      */
     public function getName()
     {
@@ -66,7 +67,8 @@ abstract class Enlight_Event_Handler
 
     /**
      * Getter method for the position property. Contains the event position of the event handler.
-     * @return  integer
+     *
+     * @return int
      */
     public function getPosition()
     {
@@ -76,25 +78,26 @@ abstract class Enlight_Event_Handler
     /**
      * Setter method for the position property.
      *
-     * @param   integer $position
-     * @return  Enlight_Event_Handler
+     * @param int $position
+     *
+     * @return Enlight_Event_Handler
      */
     public function setPosition($position)
     {
         $this->position = (int) $position;
+
         return $this;
     }
 
     /**
      * Getter method for the listener property.
-     * @return  callback
+     *
+     * @return callable
      */
     abstract public function getListener();
 
     /**
      * Executes the event handler with the Enlight_Event_EventArgs.
-     * @param   Enlight_Event_EventArgs $args
-     * @return  mixed
      */
     abstract public function execute(Enlight_Event_EventArgs $args);
 }

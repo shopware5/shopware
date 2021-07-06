@@ -34,21 +34,21 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
     /**
      * Whether in-memory modifications to configuration data are allowed
      *
-     * @var boolean
+     * @var bool
      */
     protected $_allowModifications;
 
     /**
      * Iteration index
      *
-     * @var integer
+     * @var int
      */
     protected $_index;
 
     /**
      * Number of elements in configuration data
      *
-     * @var integer
+     * @var int
      */
     protected $_count;
 
@@ -63,7 +63,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      * Used when unsetting values during iteration to ensure we do not skip
      * the next element
      *
-     * @var boolean
+     * @var bool
      */
     protected $_skipNextIteration;
 
@@ -71,8 +71,6 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      * Contains which config file sections were loaded. This is null
      * if all sections were loaded, a string name if one section is loaded
      * and an array of string names if multiple sections were loaded.
-     *
-     * @var mixed
      */
     protected $_loadedSection;
 
@@ -82,7 +80,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      *
      * @var array
      */
-    protected $_extends = array();
+    protected $_extends = [];
 
     /**
      * Load file error string.
@@ -101,39 +99,38 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      * Enlight_Config_BaseConfig also implements Countable and Iterator to
      * facilitate easy access to the data.
      *
-     * @param  array   $array
-     * @param  boolean $allowModifications
+     * @param bool $allowModifications
+     *
      * @return void
      */
     public function __construct(array $array, $allowModifications = false)
     {
-        $this->_allowModifications = (boolean) $allowModifications;
+        $this->_allowModifications = (bool) $allowModifications;
         $this->_loadedSection = null;
         $this->_index = 0;
-        $this->_data = array();
+        $this->_data = [];
         foreach ($array as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->_data[$key] = new self($value, $this->_allowModifications);
             } else {
                 $this->_data[$key] = $value;
             }
         }
-        $this->_count = count($this->_data);
+        $this->_count = \count($this->_data);
     }
 
     /**
      * Retrieve a value and return $default if there is no element set.
      *
      * @param string $name
-     * @param mixed $default
-     * @return mixed
      */
     public function get($name, $default = null)
     {
         $result = $default;
-        if (array_key_exists($name, $this->_data)) {
+        if (\array_key_exists($name, $this->_data)) {
             $result = $this->_data[$name];
         }
+
         return $result;
     }
 
@@ -141,7 +138,6 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      * Magic function so that $obj->value will work.
      *
      * @param string $name
-     * @return mixed
      */
     public function __get($name)
     {
@@ -152,20 +148,21 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      * Only allow setting of a property if $allowModifications
      * was set to true on construction. Otherwise, throw an exception.
      *
-     * @param  string $name
-     * @param  mixed  $value
+     * @param string $name
+     *
      * @throws Enlight_Config_Exception
+     *
      * @return void
      */
     public function __set($name, $value)
     {
         if ($this->_allowModifications) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->_data[$name] = new self($value, true);
             } else {
                 $this->_data[$name] = $value;
             }
-            $this->_count = count($this->_data);
+            $this->_count = \count($this->_data);
         } else {
             throw new Enlight_Config_Exception('Enlight_Config_BaseConfig is read only');
         }
@@ -179,7 +176,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      */
     public function __clone()
     {
-        $array = array();
+        $array = [];
         foreach ($this->_data as $key => $value) {
             if ($value instanceof Enlight_Config_BaseConfig) {
                 $array[$key] = clone $value;
@@ -197,7 +194,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      */
     public function toArray()
     {
-        $array = array();
+        $array = [];
         $data = $this->_data;
         foreach ($data as $key => $value) {
             if ($value instanceof Enlight_Config_BaseConfig) {
@@ -206,6 +203,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
                 $array[$key] = $value;
             }
         }
+
         return $array;
     }
 
@@ -213,7 +211,8 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      * Support isset() overloading on PHP 5.1
      *
      * @param string $name
-     * @return boolean
+     *
+     * @return bool
      */
     public function __isset($name)
     {
@@ -223,15 +222,17 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
     /**
      * Support unset() overloading on PHP 5.1
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @throws Enlight_Config_Exception
+     *
      * @return void
      */
     public function __unset($name)
     {
         if ($this->_allowModifications) {
             unset($this->_data[$name]);
-            $this->_count = count($this->_data);
+            $this->_count = \count($this->_data);
             $this->_skipNextIteration = true;
         } else {
             throw new Enlight_Config_Exception('Enlight_Config_BaseConfig is read only');
@@ -250,19 +251,16 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
 
     /**
      * Defined by Iterator interface
-     *
-     * @return mixed
      */
     public function current()
     {
         $this->_skipNextIteration = false;
+
         return current($this->_data);
     }
 
     /**
      * Defined by Iterator interface
-     *
-     * @return mixed
      */
     public function key()
     {
@@ -271,21 +269,20 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
 
     /**
      * Defined by Iterator interface
-     *
      */
     public function next()
     {
         if ($this->_skipNextIteration) {
             $this->_skipNextIteration = false;
+
             return;
         }
         next($this->_data);
-        $this->_index++;
+        ++$this->_index;
     }
 
     /**
      * Defined by Iterator interface
-     *
      */
     public function rewind()
     {
@@ -297,7 +294,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
     /**
      * Defined by Iterator interface
      *
-     * @return boolean
+     * @return bool
      */
     public function valid()
     {
@@ -306,40 +303,37 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
 
     /**
      * Returns the section name(s) loaded.
-     *
-     * @return mixed
      */
     public function getSectionName()
     {
-        if (is_array($this->_loadedSection) && count($this->_loadedSection) == 1) {
+        if (\is_array($this->_loadedSection) && \count($this->_loadedSection) == 1) {
             $this->_loadedSection = $this->_loadedSection[0];
         }
+
         return $this->_loadedSection;
     }
 
     /**
      * Returns true if all sections were loaded
      *
-     * @return boolean
+     * @return bool
      */
     public function areAllSectionsLoaded()
     {
         return $this->_loadedSection === null;
     }
 
-
     /**
      * Merge another Enlight_Config_BaseConfig with this one. The items
      * in $merge will override the same named items in
      * the current config.
      *
-     * @param Enlight_Config_BaseConfig $merge
      * @return Enlight_Config_BaseConfig
      */
     public function merge(Enlight_Config_BaseConfig $merge)
     {
         foreach ($merge as $key => $item) {
-            if (array_key_exists($key, $this->_data)) {
+            if (\array_key_exists($key, $this->_data)) {
                 if ($item instanceof Enlight_Config_BaseConfig && $this->$key instanceof Enlight_Config_BaseConfig) {
                     $this->$key = $this->$key->merge(new Enlight_Config_BaseConfig($item->toArray(), !$this->readOnly()));
                 } else {
@@ -361,7 +355,6 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      * Prevent any more modifications being made to this instance. Useful
      * after merge() has been used to merge multiple Enlight_Config_BaseConfig objects
      * into one object which should then not be modified again.
-     *
      */
     public function setReadOnly()
     {
@@ -376,7 +369,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
     /**
      * Returns if this Enlight_Config_BaseConfig object is read only or not.
      *
-     * @return boolean
+     * @return bool
      */
     public function readOnly()
     {
@@ -396,8 +389,9 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
     /**
      * Set an extend for Enlight_Config_Writer_Writer
      *
-     * @param  string $extendingSection
-     * @param  string $extendedSection
+     * @param string $extendingSection
+     * @param string $extendedSection
+     *
      * @return void
      */
     public function setExtend($extendingSection, $extendedSection = null)
@@ -413,16 +407,18 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      * Throws an exception if $extendingSection may not extend $extendedSection,
      * and tracks the section extension if it is valid.
      *
-     * @param  string $extendingSection
-     * @param  string $extendedSection
+     * @param string $extendingSection
+     * @param string $extendedSection
+     *
      * @throws Enlight_Config_Exception
+     *
      * @return void
      */
     protected function _assertValidExtend($extendingSection, $extendedSection)
     {
         // detect circular section inheritance
         $extendedSectionCurrent = $extendedSection;
-        while (array_key_exists($extendedSectionCurrent, $this->_extends)) {
+        while (\array_key_exists($extendedSectionCurrent, $this->_extends)) {
             if ($this->_extends[$extendedSectionCurrent] == $extendingSection) {
                 throw new Enlight_Config_Exception('Illegal circular inheritance detected');
             }
@@ -435,10 +431,10 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
     /**
      * Handle any errors from simplexml_load_file or parse_ini_file
      *
-     * @param integer $errno
+     * @param int    $errno
      * @param string $errstr
      * @param string $errfile
-     * @param integer $errline
+     * @param int    $errline
      */
     protected function _loadFileErrorHandler($errno, $errstr, $errfile, $errline)
     {
@@ -453,19 +449,20 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      * Merge two arrays recursively, overwriting keys of the same name
      * in $firstArray with the value in $secondArray.
      *
-     * @param  mixed $firstArray  First array
-     * @param  mixed $secondArray Second array to merge into first array
+     * @param mixed $firstArray  First array
+     * @param mixed $secondArray Second array to merge into first array
+     *
      * @return array
      */
     protected function _arrayMergeRecursive($firstArray, $secondArray)
     {
-        if (is_array($firstArray) && is_array($secondArray)) {
+        if (\is_array($firstArray) && \is_array($secondArray)) {
             foreach ($secondArray as $key => $value) {
                 if (isset($firstArray[$key])) {
                     $firstArray[$key] = $this->_arrayMergeRecursive($firstArray[$key], $value);
                 } else {
                     if ($key === 0) {
-                        $firstArray= array(0=>$this->_arrayMergeRecursive($firstArray, $value));
+                        $firstArray = [0 => $this->_arrayMergeRecursive($firstArray, $value)];
                     } else {
                         $firstArray[$key] = $value;
                     }

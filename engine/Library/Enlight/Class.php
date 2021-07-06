@@ -47,13 +47,13 @@ abstract class Enlight_Class
      */
     public function __construct()
     {
-        $class = get_class($this);
+        $class = \get_class($this);
         if ($this instanceof Enlight_Singleton) {
             if (!isset(self::$instances[$class])) {
                 self::$instances[$class] = $this;
             } else {
                 throw new Enlight_Exception(
-                    'Class "' . get_class($this) . '" is singleton, please use the instance method'
+                    'Class "' . \get_class($this) . '" is singleton, please use the instance method'
                 );
             }
         }
@@ -61,12 +61,12 @@ abstract class Enlight_Class
           && !$this instanceof Enlight_Hook_Proxy
           && Shopware()->Hooks()->hasProxy($class)) {
             throw new Enlight_Exception(
-                'Class "' . get_class($this) . '" has hooks, please use the instance method'
+                'Class "' . \get_class($this) . '" has hooks, please use the instance method'
             );
         }
         if (method_exists($this, 'init')) {
-            if (func_num_args()) {
-                call_user_func_array([$this, 'init'], func_get_args());
+            if (\func_num_args()) {
+                \call_user_func_array([$this, 'init'], \func_get_args());
             } else {
                 $this->init();
             }
@@ -84,7 +84,7 @@ abstract class Enlight_Class
     public function __call($name, $args = null)
     {
         throw new Enlight_Exception(
-            'Method "' . get_class($this) . '::' . $name . '" not found failure',
+            'Method "' . \get_class($this) . '::' . $name . '" not found failure',
             Enlight_Exception::METHOD_NOT_FOUND
         );
     }
@@ -100,7 +100,7 @@ abstract class Enlight_Class
     public static function __callStatic($name, $args = null)
     {
         throw new Enlight_Exception(
-            'Method "' . get_called_class() . '::' . $name . '" not found failure',
+            'Method "' . \get_called_class() . '::' . $name . '" not found failure',
             Enlight_Exception::METHOD_NOT_FOUND
         );
     }
@@ -121,7 +121,6 @@ abstract class Enlight_Class
      * Magic setter
      *
      * @param string $name
-     * @param mixed  $value
      *
      * @throws \Enlight_Exception
      */
@@ -134,8 +133,6 @@ abstract class Enlight_Class
      * Returns the class name of the given class. If no class is given, the class will drawn by
      * get_called_class(). If the given class has an hook proxy the function will return the proxy class.
      *
-     * @param mixed $class
-     *
      * @throws \Enlight_Exception
      *
      * @return string
@@ -143,16 +140,16 @@ abstract class Enlight_Class
     public static function getClassName($class = null)
     {
         if (empty($class)) {
-            $class = get_called_class();
+            $class = \get_called_class();
         }
 
-        if (is_object($class)) {
-            $class = get_class($class);
+        if (\is_object($class)) {
+            $class = \get_class($class);
         } elseif (!class_exists($class)) {
             throw new Enlight_Exception('Class ' . $class . ' does not exist and could not be loaded');
         }
 
-        if (in_array('Enlight_Hook', class_implements($class))) {
+        if (\in_array('Enlight_Hook', class_implements($class))) {
             $class = Shopware()->Hooks()->getProxy($class);
         }
 
@@ -190,8 +187,6 @@ abstract class Enlight_Class
 
     /**
      * Reset the instance of the given class.
-     *
-     * @param mixed $class
      */
     public static function resetInstance($class = null)
     {

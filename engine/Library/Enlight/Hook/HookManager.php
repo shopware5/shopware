@@ -40,7 +40,7 @@
 class Enlight_Hook_HookManager extends Enlight_Class
 {
     /**
-     * @var null|Enlight_Hook_ProxyFactory instance of the Enlight_Hook_ProxyFactory
+     * @var Enlight_Hook_ProxyFactory|null instance of the Enlight_Hook_ProxyFactory
      */
     protected $proxyFactory = null;
 
@@ -55,13 +55,11 @@ class Enlight_Hook_HookManager extends Enlight_Class
     protected $eventManager;
 
     /**
-     * @param Enlight_Event_EventManager $eventManager
-     * @param Enlight_Loader             $loader
-     * @param array                      $options
+     * @param array $options
      *
      * @throws Exception
      */
-    public function __construct(\Enlight_Event_EventManager $eventManager, \Enlight_Loader $loader, $options)
+    public function __construct(Enlight_Event_EventManager $eventManager, Enlight_Loader $loader, $options)
     {
         $this->eventManager = $eventManager;
 
@@ -138,8 +136,6 @@ class Enlight_Hook_HookManager extends Enlight_Class
      * already instantiated it, the function instantiates it automatically.
      *
      * @param string $class
-     *
-     * @return mixed
      */
     public function getProxy($class)
     {
@@ -162,11 +158,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
      * Creates a new hook execution context using the given $subject, $method and $args and executes it. Finally the
      * execution result is returned.
      *
-     * @param Enlight_Hook_Proxy $subject
-     * @param string             $method
-     * @param array              $args
-     *
-     * @return mixed
+     * @param string $method
      */
     public function executeHooks(Enlight_Hook_Proxy $subject, $method, array $args)
     {
@@ -200,7 +192,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
      *
      * @param string $name
      *
-     * @return null|mixed
+     * @return mixed|null
      */
     public function getAlias($name)
     {

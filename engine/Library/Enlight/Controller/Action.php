@@ -28,7 +28,6 @@ use Symfony\Component\Form\Form;
  * for the data access. After the dispatcher is dispatched the controller Enlight_Controller_Action
  * takes care, that the right action is executed.
  *
- *
  * @license    http://enlight.de/license     New BSD License
  */
 abstract class Enlight_Controller_Action extends Enlight_Class implements Enlight_Hook, ContainerAwareInterface
@@ -260,7 +259,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     public function redirect($url, array $options = [])
     {
-        if (is_array($url)) {
+        if (\is_array($url)) {
             $url = $this->Front()->Router()->assemble($url);
         }
         if (!preg_match('#^(https?|ftp)://#', $url)) {
@@ -276,7 +275,6 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
     /**
      * Set view instance
-     *
      *
      * @return Enlight_Controller_Action
      */
@@ -317,7 +315,6 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Set request instance
      *
-     *
      * @return Enlight_Controller_Action
      */
     public function setRequest(Enlight_Controller_Request_RequestHttp $request)
@@ -329,7 +326,6 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
     /**
      * Set response instance
-     *
      *
      * @return Enlight_Controller_Action
      */

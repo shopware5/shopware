@@ -26,6 +26,7 @@
  *
  * @category   Enlight
  * @package    Enlight_Plugin
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -33,14 +34,14 @@ abstract class Enlight_Plugin_Namespace extends Enlight_Plugin_PluginCollection
 {
     /**
      * @var Enlight_Plugin_PluginManager This property contains an instance of the Enlight_Plugin_PluginManager.
-     * Can be set over the setManager() method. Is set automatically when the namespace is registered by
-     * the plugin manager.
+     *                                   Can be set over the setManager() method. Is set automatically when the namespace is registered by
+     *                                   the plugin manager.
      */
     protected $manager;
 
     /**
      * @var string This property contains the name of the namespace. Used as array key in the
-     * Enlight_Plugin_PluginCollection.
+     *             Enlight_Plugin_PluginCollection.
      */
     protected $name;
 
@@ -48,7 +49,7 @@ abstract class Enlight_Plugin_Namespace extends Enlight_Plugin_PluginCollection
      * The Enlight_Plugin_Namespace class constructor expects the name of the namespace and sets it
      * into the internal property.
      *
-     * @param   string $name
+     * @param string $name
      */
     public function __construct($name)
     {
@@ -79,19 +80,19 @@ abstract class Enlight_Plugin_Namespace extends Enlight_Plugin_PluginCollection
     /**
      * Setter method for the manager property.
      *
-     * @param Enlight_Plugin_PluginCollection $manager
      * @return Enlight_Plugin_PluginCollection
      */
     public function setManager(Enlight_Plugin_PluginCollection $manager)
     {
         $this->manager = $manager;
+
         return $this;
     }
 
     /**
      * Getter method for the manager property.
      *
-     * @return  Enlight_Plugin_PluginManager
+     * @return Enlight_Plugin_PluginManager
      */
     public function Manager()
     {

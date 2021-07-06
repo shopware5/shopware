@@ -25,6 +25,7 @@
  *
  * @category   Enlight
  * @package    Enlight_Exception
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -33,17 +34,17 @@ class Enlight_Exception extends Exception
     /**
      * Constant that a class could not be found
      */
-    const CLASS_NOT_FOUND = 1000;
+    public const CLASS_NOT_FOUND = 1000;
 
     /**
      * Constant that a method could not be found
      */
-    const METHOD_NOT_FOUND = 1100;
+    public const METHOD_NOT_FOUND = 1100;
 
     /**
      * Constant that a class property could not be found
      */
-    const PROPERTY_NOT_FOUND = 1200;
+    public const PROPERTY_NOT_FOUND = 1200;
 
     /**
      * The class constructor sets the given previous exception into the internal property.
@@ -51,14 +52,13 @@ class Enlight_Exception extends Exception
      * the returned values to set the line and file property.
      *
      * @param string $message
-     * @param int $code
-     * @param Exception|null $previous
+     * @param int    $code
      */
     public function __construct($message = '', $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
 
-        if (in_array($code, array(self::CLASS_NOT_FOUND, self::METHOD_NOT_FOUND, self::PROPERTY_NOT_FOUND))) {
+        if (\in_array($code, [self::CLASS_NOT_FOUND, self::METHOD_NOT_FOUND, self::PROPERTY_NOT_FOUND])) {
             $trace = debug_backtrace(false);
             foreach ($trace as $i => $var) {
                 if (!$i || $var['function'] == '__call' || !isset($var['line'])) {

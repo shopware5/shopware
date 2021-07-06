@@ -42,8 +42,6 @@ abstract class Enlight_Controller_Router extends Enlight_Class
     /**
      * Setter method for the front controller.
      *
-     * @param Enlight_Controller_Front $front
-     *
      * @return self
      */
     public function setFront(Enlight_Controller_Front $front)
@@ -66,8 +64,6 @@ abstract class Enlight_Controller_Router extends Enlight_Class
     /**
      * Starts the routing-process.
      *
-     * @param Enlight_Controller_Request_Request $request
-     *
      * @throws Enlight_Controller_Exception
      *
      * @return Enlight_Controller_Request_Request
@@ -87,7 +83,6 @@ abstract class Enlight_Controller_Router extends Enlight_Class
      * Sets a global parameter.
      *
      * @param string $name
-     * @param mixed  $value
      *
      * @return self
      */

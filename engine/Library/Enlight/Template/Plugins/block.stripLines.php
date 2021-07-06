@@ -27,7 +27,7 @@
  */
 function smarty_block_stripLines($params, $content, $template, $repeat)
 {
-    if (is_null($content) || $repeat) {
+    if (\is_null($content) || $repeat) {
         return;
     }
 

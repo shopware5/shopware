@@ -22,6 +22,6 @@
  *
  * An Enlight_Hook_Exception is thrown if a class is used for the HookManger without Enlight_Hook.
  */
-class Enlight_Hook_Exception extends Enlight_Exception {
-
+class Enlight_Hook_Exception extends Enlight_Exception
+{
 }

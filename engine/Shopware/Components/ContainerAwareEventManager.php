@@ -189,6 +189,9 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
 
         foreach ($this->listenerIds[$eventName] as list($serviceId, $method, $priority)) {
             $listener = $this->container->get($serviceId);
+            if ($listener === null) {
+                continue;
+            }
 
             $key = $serviceId . '.' . $method;
             if (!isset($this->containerListeners[$eventName][$key])) {

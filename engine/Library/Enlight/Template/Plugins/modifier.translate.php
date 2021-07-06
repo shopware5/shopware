@@ -20,10 +20,12 @@
 /**
  * Returns known translations.
  *
- * @link http://framework.zend.com/manual/de/zend.locale.functions.html
+ * @see http://framework.zend.com/manual/de/zend.locale.functions.html
+ *
  * @param string $value
  * @param string $path
  * @param string $locale
+ *
  * @return string|null
  */
 function smarty_modifier_translate($value = null, $path = null, $locale = null)
@@ -37,5 +39,6 @@ function smarty_modifier_translate($value = null, $path = null, $locale = null)
     if ($path === 'currency') {
         $path = 'nametocurrency';
     }
+
     return $locale->getTranslation($value, $path, $locale);
 }

@@ -26,7 +26,6 @@
  * This porting is in full compliance with the New BSD License
  * under which the original file is distributed.
  *
- *
  * @category   Enlight
  * @package    Enlight_Config
  */
@@ -46,14 +45,15 @@ class Enlight_Config_Writer_FileAbstract extends Enlight_Config_Writer_Writer
     /**
      * Wether to exclusively lock the file or not
      *
-     * @var boolean
+     * @var bool
      */
     protected $_exclusiveLock = false;
 
     /**
      * Set the target filename
      *
-     * @param  string $filename
+     * @param string $filename
+     *
      * @return Enlight_Config_Writer_FileAbstract
      */
     public function setFilename($filename)
@@ -66,7 +66,8 @@ class Enlight_Config_Writer_FileAbstract extends Enlight_Config_Writer_Writer
     /**
      * Set wether to exclusively lock the file or not
      *
-     * @param  boolean     $exclusiveLock
+     * @param bool $exclusiveLock
+     *
      * @return Enlight_Config_Writer_FileAbstract
      */
     public function setExclusiveLock($exclusiveLock)
@@ -79,9 +80,10 @@ class Enlight_Config_Writer_FileAbstract extends Enlight_Config_Writer_Writer
     /**
      * Write configuration to file.
      *
-     * @param string $filename
+     * @param string         $filename
      * @param Enlight_Config $config
-     * @param bool $exclusiveLock
+     * @param bool           $exclusiveLock
+     *
      * @return void
      */
     public function write($filename = null, Enlight_Config $config = null, $exclusiveLock = null)
@@ -125,11 +127,13 @@ class Enlight_Config_Writer_FileAbstract extends Enlight_Config_Writer_Writer
      * Render a Enlight_Config into a config file string.
      *
      * @since 1.10
+     *
      * @todo For 2.0 this should be redone into an abstract method.
+     *
      * @return string
      */
     public function render()
     {
-        return "";
+        return '';
     }
 }

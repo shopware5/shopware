@@ -168,7 +168,9 @@ class ContainerAwareEventManagerTest extends TestCase
 
         $this->eventManager->addListenerService('onEvent', ['service.listener', 'onEvent']);
 
-        $handler = new \Enlight_Event_Handler_Default('onEvent', [$this->container->get('service.listener'), 'onEvent']);
+        $listener = $this->container->get('service.listener');
+        static::assertNotNull($listener);
+        $handler = new \Enlight_Event_Handler_Default('onEvent', [$listener, 'onEvent']);
 
         $this->eventManager->notify('onEvent', $eventArgs);
 
@@ -183,7 +185,9 @@ class ContainerAwareEventManagerTest extends TestCase
         $this->container->set('service.listener', $service);
         $this->eventManager->addListenerService('onEvent', ['service.listener', 'onEvent']);
 
-        $this->eventManager->removeListener(new \Enlight_Event_Handler_Default('onEvent', [$this->container->get('service.listener'), 'onEvent']));
+        $listener = $this->container->get('service.listener');
+        static::assertNotNull($listener);
+        $this->eventManager->removeListener(new \Enlight_Event_Handler_Default('onEvent', [$listener, 'onEvent']));
 
         static::assertFalse($this->eventManager->hasListeners('onEvent'));
     }

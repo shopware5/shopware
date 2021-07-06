@@ -20,6 +20,7 @@
 /**
  * @category   Enlight
  * @package    Enlight_Controller
+ *
  * @copyright  Copyright (c) 2013, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -28,15 +29,15 @@ class Enlight_Controller_ActionEventArgs extends Enlight_Event_EventArgs
     /**
      * Global constant for the pre dispatch events.
      */
-    const PRE_EVENT = 'Enlight_Controller_Action_PreDispatch';
+    public const PRE_EVENT = 'Enlight_Controller_Action_PreDispatch';
     /**
      * Global constant for the post dispatch event
      */
-    const POST_EVENT = 'Enlight_Controller_Action_PostDispatch';
+    public const POST_EVENT = 'Enlight_Controller_Action_PostDispatch';
     /**
      * Global constant for the secured post dispatch event
      */
-    const POST_SECURE_EVENT = 'Enlight_Controller_Action_PostDispatchSecure';
+    public const POST_SECURE_EVENT = 'Enlight_Controller_Action_PostDispatchSecure';
 
     /**
      * @return Enlight_Controller_Action

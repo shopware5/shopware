@@ -22,6 +22,7 @@ namespace Enlight\Event;
 /**
  * @category  Enlight
  * @package   Enlight\Event
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface SubscriberInterface

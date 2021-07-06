@@ -56,7 +56,7 @@ function smarty_function_flink($params, $template)
 
         // Some cleanup code
         if (strpos($file, $docPath) === 0) {
-            $file = substr($file, strlen($docPath));
+            $file = substr($file, \strlen($docPath));
         }
 
         // Make sure we have the right separator for the web context

@@ -188,7 +188,7 @@ class PreCommitChecks
             $configParameter = '';
 
             if (strpos($file, 'engine/Library/Enlight/') === 0) {
-                $configParameter = '--config engine/Library/Enlight/.php_cs.dist';
+                $configParameter = '--config engine/Library/Enlight/.php-cs-fixer.php';
             }
 
             exec('./vendor/bin/php-cs-fixer fix -v ' . $configParameter . ' --no-ansi --dry-run ' . escapeshellarg($file) . ' 2>&1', $output, $return);

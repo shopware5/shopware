@@ -23,7 +23,6 @@
  * The Enlight_Components_Mail is a component for sending an email. It extends the zend form
  * with php mailer functions.
  *
- *
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Components_Mail extends Zend_Mail

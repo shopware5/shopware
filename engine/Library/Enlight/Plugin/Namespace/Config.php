@@ -53,7 +53,7 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
      * If the name is passed as array, it is used to instantiate the storage.
      *
      * @param string              $name
-     * @param null|Enlight_Config $storage
+     * @param Enlight_Config|null $storage
      */
     public function __construct($name, $storage = null)
     {
@@ -176,9 +176,6 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
     }
 
     /**
-     * @param $name
-     * @param $config
-     *
      * @return Enlight_Plugin_Namespace_Config
      */
     public function setConfig($name, $config)
@@ -204,7 +201,7 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
         foreach ($this->plugins as $name => $plugin) {
             $plugins[$name] = [
                 'name' => $plugin->getName(),
-                'class' => get_class($plugin),
+                'class' => \get_class($plugin),
                 'config' => $plugin->Config(),
             ];
         }

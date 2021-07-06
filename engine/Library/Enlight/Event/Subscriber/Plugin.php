@@ -38,7 +38,6 @@ class Enlight_Event_Subscriber_Plugin extends Enlight_Event_Subscriber_Config
     /**
      * The Enlight_Event_Subscriber_Plugin class constructor expects an instance of the Enlight_Plugin_Namespace.
      *
-     * @param      $namespace
      * @param null $options
      */
     public function __construct($namespace, $options = null)

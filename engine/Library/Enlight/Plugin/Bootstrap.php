@@ -72,8 +72,6 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
     /**
      * Setter method for the collection property.
      *
-     * @param Enlight_Plugin_PluginCollection|null $collection
-     *
      * @return Enlight_Plugin_Bootstrap
      */
     public function setCollection(Enlight_Plugin_PluginCollection $collection = null)
@@ -108,8 +106,6 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      * Get service from resource loader
      *
      * @param string $name
-     *
-     * @return mixed
      */
     public function get($name)
     {

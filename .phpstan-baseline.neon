@@ -21551,27 +21551,7 @@ parameters:
 			path: engine/Shopware/Components/ContainerAwareEventManager.php
 
 		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, array\\<int, mixed\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ContainerAwareEventManager.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of method Enlight_Event_EventManager\\:\\:addListener\\(\\) expects array\\<int, object\\|string\\>\\|callback, array\\<int, mixed\\> given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/ContainerAwareEventManager.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\ContainerAwareEventManager\\:\\:\\$listenerIds type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ContainerAwareEventManager.php
-
-		-
-			message: "#^Result of && is always false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ContainerAwareEventManager.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between callback and array\\(callable\\(\\)\\: mixed, mixed\\) will always evaluate to false\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ContainerAwareEventManager.php
 
@@ -55905,11 +55885,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, array\\<int, \\$this\\(Shopware_Plugins_Core_HttpCache_Bootstrap\\)\\|string\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Parameter \\#2 \\$prefix of function http_build_query expects string, null given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
@@ -57976,11 +57951,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Plugins_Frontend_RouterRewrite_Bootstrap\\:\\:onStartDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/RouterRewrite/Bootstrap.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, array\\<int, \\$this\\(Shopware_Plugins_Frontend_RouterRewrite_Bootstrap\\)\\|string\\> given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/RouterRewrite/Bootstrap.php
 
@@ -60151,11 +60121,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @var for variable \\$collection has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CookieBundle/Services/CookieCollectorTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, array\\<int, string\\> given\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/CookieBundle/Services/CookieCollectorTest.php
 
@@ -67626,11 +67591,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\DependencyInjection\\\\ContainerTest\\:\\:testDecorationOfAliasWorks\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/DependencyInjection/ContainerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, array\\<int, mixed\\> given\\.$#"
 			count: 1
 			path: tests/Functional/Components/DependencyInjection/ContainerTest.php
 
@@ -80400,11 +80360,6 @@ parameters:
 			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$listener of method Enlight_Event_EventManager\\:\\:addListener\\(\\) expects array\\<int, object\\|string\\>\\|callback, Closure\\(Enlight_Event_EventArgs\\)\\: void given\\.$#"
-			count: 3
-			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
-
-		-
 			message: "#^Service \"alias\" is not registered in the container\\.$#"
 			count: 1
 			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
@@ -80655,11 +80610,6 @@ parameters:
 			path: tests/Unit/Components/Event/ContainerAwareEventManagerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, array\\<int, object\\|string\\|null\\> given\\.$#"
-			count: 2
-			path: tests/Unit/Components/Event/ContainerAwareEventManagerTest.php
-
-		-
 			message: "#^Service \"service\\.listener\" is not registered in the container\\.$#"
 			count: 2
 			path: tests/Unit/Components/Event/ContainerAwareEventManagerTest.php
@@ -80770,26 +80720,6 @@ parameters:
 			path: tests/Unit/Components/Event/EventManagerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_EventHandler constructor expects callback, array\\<int, \\$this\\(Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\EventManagerTest\\)\\|string\\> given\\.$#"
-			count: 4
-			path: tests/Unit/Components/Event/EventManagerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, Closure\\(Enlight_Event_EventArgs\\)\\: string given\\.$#"
-			count: 1
-			path: tests/Unit/Components/Event/EventManagerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, Closure\\(mixed\\)\\: string given\\.$#"
-			count: 7
-			path: tests/Unit/Components/Event/EventManagerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, Closure\\(mixed\\)\\: void given\\.$#"
-			count: 1
-			path: tests/Unit/Components/Event/EventManagerTest.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\EventManagerTest\\:\\:\\$eventManager has no typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Event/EventManagerTest.php
@@ -80810,11 +80740,6 @@ parameters:
 			path: tests/Unit/Components/Event/SubscriberArrayTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, Closure\\(mixed\\)\\: string given\\.$#"
-			count: 4
-			path: tests/Unit/Components/Event/SubscriberArrayTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\SubscriberConfigTest\\:\\:testAddSubscriber\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Event/SubscriberConfigTest.php
@@ -80832,11 +80757,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$options of class Enlight_Event_Subscriber_Config constructor expects null, string given\\.$#"
 			count: 1
-			path: tests/Unit/Components/Event/SubscriberConfigTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, Closure\\(mixed\\)\\: string given\\.$#"
-			count: 4
 			path: tests/Unit/Components/Event/SubscriberConfigTest.php
 
 		-
@@ -81296,11 +81216,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$input1 of function array_map expects array, array\\<int, string\\>\\|false given\\.$#"
-			count: 1
-			path: tests/Unit/Components/Hook/HookManagerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of method Enlight_Event_EventManager\\:\\:addListener\\(\\) expects array\\<int, object\\|string\\>\\|callback, callable given\\.$#"
 			count: 1
 			path: tests/Unit/Components/Hook/HookManagerTest.php
 
@@ -82673,4 +82588,3 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testXssFilter\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
-

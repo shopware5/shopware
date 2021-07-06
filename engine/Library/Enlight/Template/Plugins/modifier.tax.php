@@ -21,8 +21,7 @@
  * Returns a tax value in local specific format.
  *
  * @param int|float $value
- * @param string     $locale
- * @return mixed
+ * @param string    $locale
  */
 function smarty_modifier_tax($value, $locale = null)
 {
@@ -38,7 +37,7 @@ function smarty_modifier_tax($value, $locale = null)
     }
 
     // check if value is integer
-    if ((int)($value) == $value) {
+    if ((int) ($value) == $value) {
         $format['precision'] = 0;
     }
 

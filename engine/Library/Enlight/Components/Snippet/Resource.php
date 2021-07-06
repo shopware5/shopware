@@ -42,8 +42,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     /**
      * Class constructor, sets snippet manager
      *
-     * @param Enlight_Components_Snippet_Manager $snippetManager
-     * @param bool                               $showSnippetPlaceholder
+     * @param bool $showSnippetPlaceholder
      */
     public function __construct(Enlight_Components_Snippet_Manager $snippetManager, $showSnippetPlaceholder = false)
     {
@@ -74,8 +73,6 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     /**
      * Compiles the given snippet block if the content parameter is filled.
      *
-     * @param                              $params
-     * @param                              $content
      * @param Smarty_Internal_TemplateBase $template
      *
      * @return string
@@ -99,7 +96,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
 
             $attr = '';
             foreach ($params as $key => $param) {
-                if (in_array($key, ['name', 'tag', 'assign', 'name', 'namespace', 'default', 'force'])) {
+                if (\in_array($key, ['name', 'tag', 'assign', 'name', 'namespace', 'default', 'force'])) {
                     continue;
                 }
                 $attr .= ' ' . $key . '="' . htmlentities($param, ENT_COMPAT, mb_internal_encoding(), false) . '"';
@@ -132,7 +129,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
      */
     public function compileSnippetModifier($content, $name = null, $namespace = null, $force = false)
     {
-        if (is_string($namespace)) {
+        if (\is_string($namespace)) {
             $namespace = $this->snippetManager->getNamespace($namespace);
         } elseif (!$namespace instanceof Enlight_Config) {
             return $content;
@@ -173,8 +170,6 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     /**
      * Returns the snippet content of the passed smarty template source instance.
      *
-     * @param Smarty_Template_Source $source
-     *
      * @throws SmartyException
      *
      * @return string
@@ -192,7 +187,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
             $_block_args = $_block_match[2][0];
             $_block_default = $_block_match[3][0];
             list($_block_tag, $_block_start) = $_block_match[0];
-            $_block_length = strlen($_block_tag);
+            $_block_length = \strlen($_block_tag);
             if (!preg_match("!(.?)(name=)(.*?)(?=(\s|$))!", $_block_args, $_match) && empty($_block_default)) {
                 throw new SmartyException('"' . $_block_tag . '" missing name attribute');
             }
@@ -243,11 +238,9 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     /**
      * Returns the snippet namespace class for the given smarty template source.
      *
-     * @param Smarty_Template_Source $source
-     *
      * @throws Enlight_Exception
      *
-     * @return null|string
+     * @return string|null
      */
     public function getSnippetNamespace(Smarty_Template_Source $source)
     {
@@ -269,9 +262,9 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
         foreach ($source->smarty->getTemplateDir() as $template_dir) {
             $template_dir = Enlight_Loader::realpath($template_dir);
             if (strpos($path, $template_dir) === 0) {
-                $namespace = substr($path, strlen($template_dir));
+                $namespace = substr($path, \strlen($template_dir));
                 $namespace = strtr($namespace, DIRECTORY_SEPARATOR, '/');
-                $namespace = dirname($namespace) . '/' . pathinfo($namespace, PATHINFO_FILENAME);
+                $namespace = \dirname($namespace) . '/' . pathinfo($namespace, PATHINFO_FILENAME);
                 $namespace = trim($namespace, '/');
 
                 return $namespace;
@@ -287,10 +280,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
      *
      * @param string $namespace
      * @param string $name
-     * @param mixed  $default
      * @param bool   $force
-     *
-     * @return mixed
      */
     protected function getSnippet($namespace, $name, $default, $force = false)
     {

@@ -36,9 +36,9 @@ abstract class Enlight_Config_Writer_Writer
      *
      * @var array
      */
-    protected $_skipOptions = array(
-        'options'
-    );
+    protected $_skipOptions = [
+        'options',
+    ];
 
     /**
      * Config object to write
@@ -51,12 +51,10 @@ abstract class Enlight_Config_Writer_Writer
      * Create a new adapter
      *
      * $options can only be passed as array or be omitted
-     *
-     * @param null|array $options
      */
     public function __construct(array $options = null)
     {
-        if (is_array($options)) {
+        if (\is_array($options)) {
             $this->setOptions($options);
         }
     }
@@ -64,7 +62,6 @@ abstract class Enlight_Config_Writer_Writer
     /**
      * Set options via a Enlight_Config_BaseConfig instance
      *
-     * @param  Enlight_Config_BaseConfig $config
      * @return Enlight_Config_Writer_Writer
      */
     public function setConfig(Enlight_Config_BaseConfig $config)
@@ -77,13 +74,12 @@ abstract class Enlight_Config_Writer_Writer
     /**
      * Set options via an array
      *
-     * @param  array $options
      * @return Enlight_Config_Writer_Writer
      */
     public function setOptions(array $options)
     {
         foreach ($options as $key => $value) {
-            if (in_array(strtolower($key), $this->_skipOptions)) {
+            if (\in_array(strtolower($key), $this->_skipOptions)) {
                 continue;
             }
 

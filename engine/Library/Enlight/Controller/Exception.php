@@ -24,13 +24,14 @@
  *
  * @category   Enlight
  * @package    Enlight_Controller
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Controller_Exception extends Enlight_Exception
 {
-    const ActionNotFound = 3100;
-    const Controller_Dispatcher_Controller_Not_Found = 4200;
-    const Controller_Dispatcher_Controller_No_Route = 4400;
-    const NO_ROUTE = 404;
+    public const ActionNotFound = 3100;
+    public const Controller_Dispatcher_Controller_Not_Found = 4200;
+    public const Controller_Dispatcher_Controller_No_Route = 4400;
+    public const NO_ROUTE = 404;
 }

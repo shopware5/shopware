@@ -45,7 +45,6 @@ class Enlight_Components_Cron_Manager
     /**
      * Constructor can be injected with a read / write adapter object
      *
-     * @param Enlight_Components_Cron_Adapter $adapter
      * @param Enlight_Event_EventManager|null $eventManager
      * @param string                          $eventArgsClass
      *
@@ -65,8 +64,6 @@ class Enlight_Components_Cron_Manager
 
     /**
      * Sets the read / write adapter
-     *
-     * @param Enlight_Components_Cron_Adapter $adapter
      *
      * @return Enlight_Components_Cron_Manager
      */
@@ -90,8 +87,6 @@ class Enlight_Components_Cron_Manager
     /**
      * Sets an Event Manager. Needed to execute the cron
      *
-     * @param Enlight_Event_EventManager|null $eventManager
-     *
      * @return Enlight_Components_Cron_Manager
      */
     public function setEventManager(Enlight_Event_EventManager $eventManager = null)
@@ -113,8 +108,6 @@ class Enlight_Components_Cron_Manager
 
     /**
      * Deactivate a given Cron Job in the crontab
-     *
-     * @param Enlight_Components_Cron_Job $job
      *
      * @return Enlight_Components_Cron_Adapter
      */
@@ -172,7 +165,7 @@ class Enlight_Components_Cron_Manager
      *
      * @param int $id
      *
-     * @return null|Enlight_Components_Cron_Job
+     * @return Enlight_Components_Cron_Job|null
      */
     public function getJobById($id)
     {
@@ -189,7 +182,7 @@ class Enlight_Components_Cron_Manager
      *
      * @param string $name
      *
-     * @return null|Enlight_Components_Cron_Job
+     * @return Enlight_Components_Cron_Job|null
      */
     public function getJobByName($name)
     {
@@ -206,7 +199,7 @@ class Enlight_Components_Cron_Manager
      *
      * @param string $action
      *
-     * @return null|Enlight_Components_Cron_Job
+     * @return Enlight_Components_Cron_Job|null
      */
     public function getJobByAction($action)
     {
@@ -220,8 +213,6 @@ class Enlight_Components_Cron_Manager
 
     /**
      * Adds an job to the crontab
-     *
-     * @param Enlight_Components_Cron_Job $job
      *
      * @return Enlight_Components_Cron_Manager
      */
@@ -237,7 +228,7 @@ class Enlight_Components_Cron_Manager
      *
      * @param bool $force
      *
-     * @return null|Enlight_Components_Cron_Job
+     * @return Enlight_Components_Cron_Job|null
      */
     public function getNextJob($force = false)
     {
@@ -246,8 +237,6 @@ class Enlight_Components_Cron_Manager
 
     /**
      * Runs a job by handing it over to
-     *
-     * @param Enlight_Components_Cron_Job $job
      *
      * @throws Throwable
      *
@@ -318,8 +307,6 @@ class Enlight_Components_Cron_Manager
 
     /**
      * Ends a job by handing it over to
-     *
-     * @param Enlight_Components_Cron_Job $job
      */
     protected function endJob(Enlight_Components_Cron_Job $job)
     {

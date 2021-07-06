@@ -25,6 +25,7 @@
  *
  * @category   Enlight
  * @package    Enlight_Config
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -47,15 +48,13 @@ abstract class Enlight_Config_Adapter extends Enlight_Class
     /**
      * Allow writes
      *
-     * @var boolean
+     * @var bool
      */
     protected $_allowWrites = true;
 
     /**
      * The Enlight_Config_Adapter class constructor expects an config array which should contains a
      * suffix and a prefix for the configuration names.
-     *
-     * @param array $config
      */
     public function __construct(array $config)
     {
@@ -65,7 +64,6 @@ abstract class Enlight_Config_Adapter extends Enlight_Class
     /**
      * Sets the options of an array.
      *
-     * @param array $options
      * @return Enlight_Config_Adapter
      */
     public function setOptions(array $options)
@@ -77,19 +75,19 @@ abstract class Enlight_Config_Adapter extends Enlight_Class
                     $this->{'_' . $key} = (string) $option;
                     break;
                 case 'allowWrites':
-                    $this->_allowWrites = (boolean) $option;
+                    $this->_allowWrites = (bool) $option;
                     break;
                 default:
                     break;
             }
         }
+
         return $this;
     }
 
     /**
      * Reads a section from the data store.
      *
-     * @param Enlight_Config $config
      * @return Enlight_Config_Adapter_File
      */
     abstract public function read(Enlight_Config $config);
@@ -97,7 +95,6 @@ abstract class Enlight_Config_Adapter extends Enlight_Class
     /**
      * Saves the data changes to the data store.
      *
-     * @param Enlight_Config $config
      * @return Enlight_Config_Adapter_File
      */
     abstract public function write(Enlight_Config $config);

@@ -24,9 +24,6 @@
  * - name : The name of the action to call
  * - params : optional params array for the specific action call
  *
- * @param                          $params
- * @param Enlight_Template_Default $template
- *
  * @throws Exception
  *
  * @return string

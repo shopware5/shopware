@@ -67,8 +67,6 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
      * Called from the event manager before the dispatch process.
      * Parse the json input data, when it was activated.
      *
-     * @param Enlight_Event_EventArgs $args
-     *
      * @return bool
      */
     public function onPreDispatch(Enlight_Event_EventArgs $args)
@@ -102,7 +100,7 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
         }
 
         // Parse the json Params
-        if (count($this->parseParams)) {
+        if (\count($this->parseParams)) {
             foreach ($this->parseParams as $Param) {
                 if (($value = $request->getParam($Param)) !== null) {
                     $value = Zend_Json::decode($value);

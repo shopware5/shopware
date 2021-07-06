@@ -17,12 +17,15 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+/**
+ * Request object which should be used in tests
+ */
 class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Request_RequestHttp
 {
     /**
      * Valid request method types
      *
-     * @var array
+     * @var string[]
      */
     protected $_validMethodTypes = [
         'DELETE',
@@ -131,7 +134,6 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
      * Set a cookie
      *
      * @param string $key
-     * @param mixed  $value
      *
      * @return Enlight_Controller_Request_RequestTestCase
      */
@@ -145,8 +147,6 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
 
     /**
      * Set multiple cookies at once
-     *
-     * @param array $cookies
      *
      * @return self
      */
@@ -184,7 +184,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
     public function setMethod($type)
     {
         $type = strtoupper(trim((string) $type));
-        if (!in_array($type, $this->_validMethodTypes, true)) {
+        if (!\in_array($type, $this->_validMethodTypes, true)) {
             throw new \Exception('Invalid request method specified');
         }
 
@@ -228,8 +228,6 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
     /**
      * Set request headers
      *
-     * @param array $headers
-     *
      * @return Enlight_Controller_Request_RequestTestCase
      */
     public function setHeaders(array $headers)
@@ -245,7 +243,6 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
      * Get request header
      *
      * @param string $header
-     * @param mixed  $default
      *
      * @return string|null
      */
@@ -380,7 +377,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
     public function setDeviceType($deviceType)
     {
         $deviceType = strtolower($deviceType);
-        $this->deviceType = in_array($deviceType, $this->validDeviceTypes, true) ? $deviceType : 'desktop';
+        $this->deviceType = \in_array($deviceType, $this->validDeviceTypes, true) ? $deviceType : 'desktop';
     }
 
     /**
