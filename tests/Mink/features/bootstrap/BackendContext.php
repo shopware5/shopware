@@ -51,7 +51,7 @@ class BackendContext extends SubContext
     /**
      * @When /^I open the module "([^"]*)"$/
      */
-    public function iOpenTheModule($moduleName)
+    public function iOpenTheModule(string $moduleName): void
     {
         $this->spin(function ($context) use ($moduleName) {
             $context->getPage('Backend')->openModule($moduleName);
@@ -63,7 +63,7 @@ class BackendContext extends SubContext
     /**
      * @Then /^The module should open a window$/
      */
-    public function theModuleShouldOpenAWindow()
+    public function theModuleShouldOpenAWindow(): void
     {
         $this->getPage('Backend');
 
@@ -72,6 +72,24 @@ class BackendContext extends SubContext
 
             return true;
         });
+    }
+
+    /**
+     * @Then I should see a dropdown appear
+     */
+    public function iShouldSeeADropdownAppear(): void
+    {
+        $this->spin(function ($context) {
+            return $context->getPage('Backend')->find('css', '.x-boundlist-item') !== null;
+        });
+    }
+
+    /**
+     * @Then I should see a success message
+     */
+    public function iShouldSeeASuccessMessage(): void
+    {
+        $this->waitIfThereIsText('Erfolgreich', 5);
     }
 
     /**
@@ -103,6 +121,22 @@ class BackendContext extends SubContext
         }
 
         throw new \Exception("Spin function timed out after {$wait} seconds");
+    }
+
+    /**
+     * @Then There should be a window with the alias :alias
+     */
+    public function thereShouldBeAWindowWithTheAlias(string $alias): bool
+    {
+        $script = <<<'JS'
+return Shopware.app.Application.getActiveWindows().filter(function(activeWindow) {
+    return activeWindow.alias.some(function (alias) {
+        return alias.endsWith('%s');
+    });
+}).length > 0;
+JS;
+
+        return (bool) $this->getDriver()->evaluateScript(sprintf($script, $alias));
     }
 
     /**

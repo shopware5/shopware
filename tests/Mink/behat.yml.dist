@@ -2,8 +2,12 @@ default:
     extensions:
         SensioLabs\Behat\PageObjectExtension:
             namespaces:
-                page: Shopware\Tests\Mink\Page
-                element: Shopware\Tests\Mink\Element
+                page:
+                    - Shopware\Tests\Mink\Page
+                    - Shopware\Tests\Mink\Page\Backend
+                element:
+                    - Shopware\Tests\Mink\Element
+                    - Shopware\Tests\Mink\Element\Backend
         Shopware\Behat\ShopwareExtension: ~
         Behat\MinkExtension:
             ## defined in buildscript
@@ -26,7 +30,6 @@ default:
             contexts:
                 - Behat\MinkExtension\Context\MinkContext
                 - Shopware\Tests\Mink\FeatureContext
-                - Shopware\Tests\Mink\BackendContext
                 - Shopware\Tests\Mink\AccountContext
                 - Shopware\Tests\Mink\BlogContext
                 - Shopware\Tests\Mink\CheckoutContext
@@ -41,3 +44,5 @@ default:
                 - Shopware\Tests\Mink\TransformContext
                 - Shopware\Tests\Mink\SecurityContext
                 - Shopware\Tests\Mink\ExportContext
+                - Shopware\Tests\Mink\BackendContext
+                - Shopware\Tests\Mink\BackendContentTypeManagerContext

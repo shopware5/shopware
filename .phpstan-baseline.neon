@@ -79009,21 +79009,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/BackendContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\BackendContext\\:\\:iOpenTheModule\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/BackendContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\BackendContext\\:\\:iOpenTheModule\\(\\) has parameter \\$moduleName with no typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/BackendContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\BackendContext\\:\\:theModuleShouldOpenAWindow\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/BackendContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\BackendContext\\:\\:waitForText\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/BackendContext.php
@@ -81394,32 +81379,12 @@ parameters:
 			path: tests/Mink/features/bootstrap/Page/Backend.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\:\\:getXPathSelectors\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/Backend.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\:\\:login\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/Backend.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\:\\:login\\(\\) has parameter \\$password with no typehint specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/Backend.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\:\\:login\\(\\) has parameter \\$user with no typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/Backend.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\:\\:openModule\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/Backend.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\:\\:verifyModule\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/Backend.php
 
