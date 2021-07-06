@@ -69,7 +69,7 @@ class Migrations_Migration1607 extends Shopware\Components\Migrations\AbstractMi
         INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`)
         VALUES (@voucherModeElementId, '2', 'Display voucher field on checkout page');
 
-        SET @commentArticleElementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'commentVoucherArticle'); 
+        SET @commentArticleElementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'commentVoucherArticle');
         UPDATE `s_core_config_elements` SET `description` = 'Artikel hinzuf&uuml;gen, Kommentarfunktion', name = 'commentArticle' WHERE id = @commentArticleElementId;
         UPDATE `s_core_config_element_translations` SET description = 'Add product, comment function' WHERE element_id = @commentArticleElementId;
 SQL;
@@ -80,8 +80,12 @@ SQL;
             INSERT INTO `s_core_config_values` (`element_id`, `shop_id`, `value`)
             SELECT @voucherModeElementId, `id`, 'i:0;' FROM s_core_shops
             WHERE id NOT IN (SELECT `shop_id` FROM `s_core_config_values` WHERE `element_id` = @voucherModeElementId);
-            DELETE FROM `s_core_config_values` WHERE `element_id` = @voucherModeElementId && 
-            (SELECT value FROM `s_core_config_values` WHERE `element_id` = @commentArticleElementId) = 'b:1;';
+
+            SET @commentArticleConfigValue = (SELECT value FROM `s_core_config_values` WHERE `element_id` = @commentArticleElementId LIMIT 1);
+
+            DELETE FROM `s_core_config_values`
+            WHERE `element_id` = @voucherModeElementId
+            AND @commentArticleConfigValue = 'b:1;';
 SQL;
             $this->addSql($sql);
         }

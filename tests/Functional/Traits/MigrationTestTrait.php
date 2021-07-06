@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,16 +26,18 @@
 
 namespace Shopware\Tests\Functional\Traits;
 
-trait FixtureBehaviour
+use Shopware\Components\Migrations\AbstractMigration;
+use Shopware\Components\Migrations\Manager;
+
+trait MigrationTestTrait
 {
-    protected static function executeFixture(string $name): void
+    public function getMigrationManager(\PDO $connection): Manager
     {
-        $sql = file_get_contents($name);
+        return new Manager($connection, __DIR__ . '/../../../_sql/migrations');
+    }
 
-        if (!\is_string($sql)) {
-            throw new \RuntimeException(sprintf('Could not read fixture "%s"', $name));
-        }
-
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->exec($sql);
+    public function getMigration(\PDO $connection, int $number): AbstractMigration
+    {
+        return $this->getMigrationManager($connection)->getMigrationsForVersion(0)[$number];
     }
 }
