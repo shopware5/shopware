@@ -82698,4 +82698,3 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testXssFilter\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
-
