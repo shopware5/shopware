@@ -26,6 +26,8 @@
                                    data-img-large="{$sArticle.image.thumbnails[2].source}"
                                    data-img-small="{$sArticle.image.thumbnails[0].source}"
                                    data-img-original="{$sArticle.image.source}"
+                                   data-img-width="{$sArticle.image.width}"
+                                   data-img-height="{$sArticle.image.height}"
                                   {/if}
                                    data-alt="{$alt}">
 
@@ -78,6 +80,8 @@
                                       data-img-large="{$image.thumbnails[2].source}"
                                       data-img-small="{$image.thumbnails[0].source}"
                                       data-img-original="{$image.source}"
+                                      data-img-width="{$image.image.width}"
+                                      data-img-height="{$image.image.height}"
                                       data-alt="{$alt}">
 
                                     {block name='frontend_detail_images_image_media'}

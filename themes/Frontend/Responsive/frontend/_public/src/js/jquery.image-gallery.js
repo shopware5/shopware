@@ -460,6 +460,8 @@
                     'class': 'image--element',
                     'src': $el.attr('data-img-original'),
                     'alt': $el.attr('data-alt'),
+                    'width': $el.attr('data-img-width'),
+                    'height': $el.attr('data-img-height'),
                     'data-extension': $mediaEl.hasClass('image--svg') ? 'svg' : ''
                 });
 
