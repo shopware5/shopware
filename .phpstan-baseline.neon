@@ -67120,11 +67120,6 @@ parameters:
 			path: tests/Functional/Components/Cart/CartMigrationTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/CartMigrationTest.php
-
-		-
 			message: "#^Cannot access offset 'id' on array\\<string, mixed\\>\\|false\\.$#"
 			count: 2
 			path: tests/Functional/Components/Cart/CartPersistServiceTest.php
@@ -82683,3 +82678,4 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testXssFilter\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
+
