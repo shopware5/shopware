@@ -743,7 +743,7 @@ SQL;
             $voucherCodeDetails = $this->db->fetchRow(
                 'SELECT id, voucherID, code as vouchercode FROM s_emarketing_voucher_codes c WHERE c.code = ? AND c.cashed != 1 LIMIT 1;',
                 [$voucherCode]
-            );
+            ) ?: [];
 
             if ($voucherCodeDetails && $voucherCodeDetails['voucherID']) {
                 $voucherDetails = $this->db->fetchRow(
@@ -757,7 +757,7 @@ SQL;
                       OR valid_to is NULL
                 ) LIMIT 1',
                     [(int) $voucherCodeDetails['voucherID']]
-                );
+                ) ?: [];
                 unset($voucherCodeDetails['voucherID']);
                 $voucherDetails = array_merge($voucherCodeDetails, $voucherDetails);
                 $individualCode = $voucherDetails && $voucherDetails['description'];
