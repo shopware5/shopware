@@ -733,14 +733,14 @@ class sAdmin implements \Enlight_Hook
     public function sLogin($ignoreAccountMode = false)
     {
         if (
-            $this->eventManager->notifyUntil(
-                'Shopware_Modules_Admin_Login_Start',
-                [
+        $this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_Login_Start',
+            [
                 'subject' => $this,
                 'ignoreAccountMode' => $ignoreAccountMode,
                 'post' => $this->front->Request()->getPost(),
-                ]
-            )
+            ]
+        )
         ) {
             return false;
         }
@@ -776,7 +776,7 @@ class sAdmin implements \Enlight_Hook
         }
 
         if ($sErrorMessages) {
-            list($sErrorMessages, $sErrorFlag) = $this->eventManager->filter(
+            [$sErrorMessages, $sErrorFlag] = $this->eventManager->filter(
                 'Shopware_Modules_Admin_Login_FilterResult',
                 [$sErrorMessages, $sErrorFlag],
                 ['subject' => $this, 'email' => null, 'password' => null, 'error' => $sErrorMessages]
@@ -845,7 +845,7 @@ class sAdmin implements \Enlight_Hook
             $sErrorMessages = $this->failedLoginUser($addScopeSql, $email, $sErrorMessages, $password);
         }
 
-        list($sErrorMessages, $sErrorFlag) = $this->eventManager->filter(
+        [$sErrorMessages, $sErrorFlag] = $this->eventManager->filter(
             'Shopware_Modules_Admin_Login_FilterResult',
             [$sErrorMessages, $sErrorFlag],
             ['subject' => $this, 'email' => $email, 'password' => $password, 'error' => $sErrorMessages]
@@ -862,10 +862,10 @@ class sAdmin implements \Enlight_Hook
     public function sCheckUser()
     {
         if (
-            $this->eventManager->notifyUntil(
-                'Shopware_Modules_Admin_CheckUser_Start',
-                ['subject' => $this]
-            )
+        $this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_CheckUser_Start',
+            ['subject' => $this]
+        )
         ) {
             return false;
         }
@@ -1128,10 +1128,10 @@ class sAdmin implements \Enlight_Hook
     public function sSaveRegisterSendConfirmation($email)
     {
         if (
-            $this->eventManager->notifyUntil(
-                'Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start',
-                ['subject' => $this, 'email' => $email]
-            )
+        $this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start',
+            ['subject' => $this, 'email' => $email]
+        )
         ) {
             return false;
         }
@@ -1475,10 +1475,10 @@ class sAdmin implements \Enlight_Hook
     public function sGetUserData()
     {
         if (
-            $this->eventManager->notifyUntil(
-                'Shopware_Modules_Admin_GetUserData_Start',
-                ['subject' => $this]
-            )
+        $this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_GetUserData_Start',
+            ['subject' => $this]
+        )
         ) {
             return false;
         }
@@ -1497,8 +1497,8 @@ class sAdmin implements \Enlight_Hook
           WHERE c.id = ?';
 
         // If user is logged in
-        $userId = $this->session->offsetGet('sUserId');
-        if (!empty($userId)) {
+        $userId = (int) $this->session->offsetGet('sUserId');
+        if ($userId !== 0) {
             $userData = $this->getUserBillingData($userId, $userData);
 
             $userData = $this->getUserCountryData($userData, $userId);
@@ -1614,16 +1614,16 @@ class sAdmin implements \Enlight_Hook
     public function executeRiskRule($rule, $user, $basket, $value, $paymentID = null)
     {
         if (
-            $event = $this->eventManager->notifyUntil(
-                'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
-                [
+        $event = $this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
+            [
                 'rule' => $rule,
                 'user' => $user,
                 'basket' => $basket,
                 'value' => $value,
                 'paymentID' => $paymentID,
-                ]
-            )
+            ]
+        )
         ) {
             return $event->getReturn();
         }
@@ -2520,7 +2520,7 @@ class sAdmin implements \Enlight_Hook
         $this->cache['payment'][$payment]['country_surcharge'] = [];
         if (!empty($this->cache['payment'][$payment]['surchargestring'])) {
             foreach (explode(';', $this->cache['payment'][$payment]['surchargestring']) as $countrySurcharge) {
-                list($key, $value) = explode(':', $countrySurcharge);
+                [$key, $value] = explode(':', $countrySurcharge);
                 $value = (float) str_replace(',', '.', $value);
                 if (!empty($value)) {
                     $this->cache['payment'][$payment]['country_surcharge'][$key] = $value;
@@ -3352,10 +3352,10 @@ class sAdmin implements \Enlight_Hook
         $oldSessionId = $this->session->getId();
 
         if (
-            $this->eventManager->notifyUntil(
-                'Shopware_Modules_Admin_regenerateSessionId_Start',
-                ['subject' => $this, 'sessionId' => $oldSessionId]
-            )
+        $this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_regenerateSessionId_Start',
+            ['subject' => $this, 'sessionId' => $oldSessionId]
+        )
         ) {
             return;
         }
@@ -3464,7 +3464,7 @@ class sAdmin implements \Enlight_Hook
     /**
      * Converts an address to the array key structure of a legacy billing or shipping address
      *
-     * @return array
+     * @return array<string, mixed>
      */
     private function convertToLegacyAddressArray(Address $address)
     {
@@ -3825,16 +3825,22 @@ SQL;
      * Helper function for sAdmin::sGetUserData()
      * Gets user shipping data (address, payment)
      *
-     * @param int    $userId
-     * @param array  $userData
-     * @param string $countryQuery
+     *  @return array<string, mixed>
      */
-    private function getUserShippingData($userId, $userData, $countryQuery)
+    private function getUserShippingData(int $userId, array $userData, string $countryQuery): array
     {
         $entityManager = Shopware()->Container()->get(ModelManager::class);
-        $customer = $entityManager->find(Shopware\Models\Customer\Customer::class, $userId);
-        $shipping = $this->convertToLegacyAddressArray($customer->getDefaultShippingAddress());
-        $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']);
+
+        $customer = $entityManager->find(Customer::class, $userId);
+        if (!$customer instanceof Customer) {
+            throw new \InvalidArgumentException('User with provided id not found');
+        }
+
+        $shipping = $this->getShippingAddressData($entityManager, $customer);
+        if ($shipping === null) {
+            throw new \UnexpectedValueException('No shipping address found for user with provided userId');
+        }
+
         $userData['shippingaddress'] = $shipping;
 
         if (!isset($userData['shippingaddress']['firstname'])) {
@@ -4318,5 +4324,39 @@ SQL;
             ->groupBy('b.sessionID');
 
         return $queryBuilder;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getShippingAddressData(ModelManager $entityManager, Customer $customer): ?array
+    {
+        $shippingAddress = null;
+
+        if ($this->session->offsetExists('checkoutShippingAddressId')) {
+            $shippingId = (int) $this->session->offsetGet('checkoutShippingAddressId');
+            $shippingAddress = $entityManager->find(Address::class, $shippingId);
+        }
+
+        if ($shippingAddress === null) {
+            $shippingAddress = $customer->getDefaultShippingAddress();
+        }
+
+        if (!$shippingAddress instanceof Address) {
+            return null;
+        }
+
+        if ($shippingAddress->getCustomer()->getId() !== $customer->getId()) {
+            throw new \UnexpectedValueException('Address did not match the user');
+        }
+
+        $shippingAddressArray = $this->convertToLegacyAddressArray($shippingAddress);
+
+        $shippingAddressArray['attributes'] = $this->attributeLoader->load(
+            's_user_addresses_attributes',
+            $shippingAddress->getid()
+        );
+
+        return $shippingAddressArray;
     }
 }
