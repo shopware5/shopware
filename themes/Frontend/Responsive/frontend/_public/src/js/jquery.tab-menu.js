@@ -206,15 +206,11 @@
             $tab = $(me.$tabs.get(index));
             $container = $(me.$container.get(index));
 
-            me.$tabContainer
-                .find('.' + activeTabClass)
-                .removeClass(activeTabClass);
+            me.$tabs.removeClass(activeTabClass);
 
             $tab.addClass(activeTabClass);
 
-            me.$containerList
-                .find('.' + activeContainerClass)
-                .removeClass(activeContainerClass);
+            me.$container.removeClass(activeContainerClass);
 
             $container.addClass(activeContainerClass);
 
