@@ -60,7 +60,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
      *
      * @var array
      */
-    protected $conditions = ['active=1', 'lockeduntil <= NOW()'];
+    protected $conditions = ['active=1', '(lockeduntil <= NOW() OR lockeduntil IS NULL)'];
 
     /**
      * Column that holds the expire date
