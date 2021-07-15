@@ -47,6 +47,7 @@ test-mink: init .make.config.build.mink
 test-phpunit: init
 	./vendor/bin/phpunit --config tests/phpunit_unit.xml.dist --log-junit build/artifacts/test-log.xml
 	./vendor/bin/phpunit --config tests/phpunit.xml.dist --log-junit build/artifacts/test-log.xml --exclude-group=elasticSearch
+	./vendor/bin/phpunit --config recovery/common/phpunit.xml.dist --log-junit build/artifacts/test-log.xml
 
 test-phpunit-elasticsearch: elasticsearch-populate
 	./vendor/bin/phpunit --config tests/phpunit.xml.dist --log-junit build/artifacts/test-log.xml --exclude-group=skipElasticSearch --group=elasticSearch
@@ -91,6 +92,7 @@ debug-config-test: .make.config.build.debug
 .make.install:
 	@echo "Read additional variables from $(ENV_FILE)"
 	composer install
+	composer install -d recovery/common
 	./bin/console sw:database:setup --steps=drop,create,import,importDemodata
 	./bin/console sw:cache:clear
 	./bin/console sw:database:setup --steps=setupShop --shop-url=http://$(SW_HOST)$(SW_BASE_PATH)

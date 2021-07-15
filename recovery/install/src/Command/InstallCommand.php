@@ -778,7 +778,7 @@ EOT;
         $this->IOHelper->printBanner();
         $this->IOHelper->writeln(sprintf('<info>Welcome to the Shopware %s installer</info>', $version));
         $this->IOHelper->writeln('');
-        $this->IOHelper->ask(new Question('Press return to start installation.'));
+        $this->IOHelper->ask(new Question('Press return to start installation.', \PHP_EOL));
         $this->IOHelper->cls();
     }
 
