@@ -66955,11 +66955,6 @@ parameters:
 			path: tests/Functional/Components/AuthTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$credential of method Zend_Auth_Adapter_DbTable\\:\\:setCredential\\(\\) expects Zend_Date, string given\\.$#"
-			count: 4
-			path: tests/Functional/Components/AuthTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$prefix of function uniqid expects string, int given\\.$#"
 			count: 3
 			path: tests/Functional/Components/AuthTest.php

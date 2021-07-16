@@ -235,7 +235,7 @@ class Zend_Auth_Adapter_DbTable implements Zend_Auth_Adapter_Interface
      * setCredential() - set the credential value to be used, optionally can specify a treatment
      * to be used, should be supplied in parameterized form, such as 'MD5(?)' or 'PASSWORD(?)'
      *
-     * @param Zend_Date $credential
+     * @param Zend_Date | string $credential
      *
      * @return Zend_Auth_Adapter_DbTable Provides a fluent interface
      */
