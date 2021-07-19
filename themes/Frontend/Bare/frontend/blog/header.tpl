@@ -61,11 +61,8 @@
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
     {* Count of available product pages *}
-    {if $sPerPage != 0}
-        {$pages = ceil($sNumberArticles / $sPerPage)}
-    {else}
-        {$pages = 0}
-    {/if}
+    {$pages = 0}
+    {if $sPerPage != 0}{$pages = ceil($sNumberArticles / $sPerPage)}{/if}
 
     {if $sArticle}
         <link rel="canonical" href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" />
