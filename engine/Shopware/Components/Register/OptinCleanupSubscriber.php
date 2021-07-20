@@ -39,7 +39,7 @@ class OptinCleanupSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {

@@ -40,7 +40,7 @@ class CleanupSignatureSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {

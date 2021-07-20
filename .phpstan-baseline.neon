@@ -2821,11 +2821,6 @@ parameters:
 			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
 
 		-
-			message: "#^Method Enlight\\\\Event\\\\SubscriberInterface\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/SubscriberInterface.php
-
-		-
 			message: "#^Method Enlight_Hook_HookArgs\\:\\:__construct\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Hook/HookArgs.php
@@ -6901,11 +6896,6 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Subscriber/EntitySearchSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Subscriber\\\\EntitySearchSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Subscriber/EntitySearchSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Subscriber\\\\EntitySearchSubscriber\\:\\:onSearch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Subscriber/EntitySearchSubscriber.php
@@ -6918,11 +6908,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getPlugin\\(\\)\\.$#"
 			count: 3
-			path: engine/Shopware/Bundle/ContentTypeBundle/Subscriber/SyncSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Subscriber\\\\SyncSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Subscriber/SyncSubscriber.php
 
 		-
@@ -9286,11 +9271,6 @@ parameters:
 			path: engine/Shopware/Bundle/ESIndexingBundle/Struct/Product.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\Subscriber\\\\DomainBacklogSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/Subscriber/DomainBacklogSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\Subscriber\\\\DomainBacklogSubscriber\\:\\:onProductStockWasChanged\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ESIndexingBundle/Subscriber/DomainBacklogSubscriber.php
@@ -9299,11 +9279,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\Subscriber\\\\DomainBacklogSubscriber\\:\\:onProductStockWasChanged\\(\\) has parameter \\$eventArgs with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ESIndexingBundle/Subscriber/DomainBacklogSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\Subscriber\\\\ORMBacklogSaveSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/Subscriber/ORMBacklogSaveSubscriber.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\Subscriber\\\\ORMBacklogSaveSubscriber\\:\\:onTerminate\\(\\) has no return typehint specified\\.$#"
@@ -10381,11 +10356,6 @@ parameters:
 			path: engine/Shopware/Bundle/EsBackendBundle/Struct/Backlog.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\Subscriber\\\\DomainBacklogSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EsBackendBundle/Subscriber/DomainBacklogSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\Subscriber\\\\DomainBacklogSubscriber\\:\\:onOrderCreated\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/EsBackendBundle/Subscriber/DomainBacklogSubscriber.php
@@ -10631,24 +10601,9 @@ parameters:
 			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLogContact.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\DependencyInjection\\\\EventListener\\\\MailLogCleanupCronSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/DependencyInjection/EventListener/MailLogCleanupCronSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\DependencyInjection\\\\EventListener\\\\MailSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/DependencyInjection/EventListener/MailSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\DependencyInjection\\\\EventListener\\\\MailSubscriber\\:\\:onSendMail\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MailBundle/DependencyInjection/EventListener/MailSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\DependencyInjection\\\\EventListener\\\\TerminationSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/DependencyInjection/EventListener/TerminationSubscriber.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Service\\\\Filter\\\\AssociationExistsFilter\\:\\:__construct\\(\\) has parameter \\$associations with no value type specified in iterable type array\\.$#"
@@ -11331,11 +11286,6 @@ parameters:
 			path: engine/Shopware/Bundle/MediaBundle/Strategy/Md5Strategy.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Subscriber\\\\ServiceSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/Subscriber/ServiceSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\OrderBundle\\\\Service\\\\ConsiderInactiveProductsListProductGateway\\:\\:getQuery\\(\\) has parameter \\$numbers with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/OrderBundle/Service/ConsiderInactiveProductsListProductGateway.php
@@ -11381,11 +11331,6 @@ parameters:
 			path: engine/Shopware/Bundle/OrderBundle/Service/StockService.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\OrderBundle\\\\Subscriber\\\\OrderRecalculationSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/OrderBundle/Subscriber/OrderRecalculationSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\OrderBundle\\\\Subscriber\\\\OrderRecalculationSubscriber\\:\\:postPersist\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/OrderBundle/Subscriber/OrderRecalculationSubscriber.php
@@ -11419,11 +11364,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$order of method Shopware\\\\Bundle\\\\OrderBundle\\\\Service\\\\CalculationServiceInterface\\:\\:recalculateOrderTotals\\(\\) expects Shopware\\\\Models\\\\Order\\\\Order, Shopware\\\\Models\\\\Order\\\\Order\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/OrderBundle/Subscriber/OrderRecalculationSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\OrderBundle\\\\Subscriber\\\\ProductStockSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/OrderBundle/Subscriber/ProductStockSubscriber.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\OrderBundle\\\\Subscriber\\\\ProductStockSubscriber\\:\\:postPersist\\(\\) has no return typehint specified\\.$#"
@@ -11974,56 +11914,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginLicenceService\\:\\:updateLocalLicenseInformation\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLicenceService.php
-
-		-
-			message: "#^Argument of an invalid type DOMNodeList\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLocalService.php
-
-		-
-			message: "#^Cannot call method getBasePath\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLocalService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginLocalService\\:\\:addSortings\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLocalService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginLocalService\\:\\:getPlugin\\(\\) should return Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\PluginStruct but returns Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\PluginStruct\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLocalService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginLocalService\\:\\:getPluginsForUpdateCheck\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLocalService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginLocalService\\:\\:getPluginsForUpdateCheck\\(\\) should return array but returns array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLocalService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginLocalService\\:\\:iteratePlugins\\(\\) has parameter \\$plugins with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLocalService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginLocalService\\:\\:parseChangeLog\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLocalService.php
-
-		-
-			message: "#^Parameter \\#1 \\$plugins of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginLocalService\\:\\:iteratePlugins\\(\\) expects array, array\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLocalService.php
-
-		-
-			message: "#^Right side of && is always true\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLocalService.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginStoreService\\:\\:getLicences\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -14181,11 +14071,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchBundleDBALSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchBundleDBALSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchBundleDBALSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchBundleDBALSubscriber\\:\\:registerConditionHandlers\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchBundleDBALSubscriber.php
@@ -15431,11 +15316,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/StructHydrator.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\Subscriber\\\\ServiceSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/Subscriber/ServiceSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\Subscriber\\\\ServiceSubscriber\\:\\:registerProductNumberSearch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/Subscriber/ServiceSubscriber.php
@@ -15827,11 +15707,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\EntityRepository\\<Shopware\\\\Models\\\\Shop\\\\Shop\\>\\:\\:getActiveShopsFixed\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Subscriber/CronjobSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Subscriber\\\\CronjobSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Subscriber/CronjobSubscriber.php
 
@@ -21546,11 +21421,6 @@ parameters:
 			path: engine/Shopware/Components/AddLinkHeaderSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\AddLinkHeaderSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/AddLinkHeaderSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\AddLinkHeaderSubscriber\\:\\:onDispatchLoopShutdown\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Components/AddLinkHeaderSubscriber.php
@@ -24161,11 +24031,6 @@ parameters:
 			path: engine/Shopware/Components/AttributeSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\AttributeSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/AttributeSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\AttributeSubscriber\\:\\:handleException\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/AttributeSubscriber.php
@@ -24386,11 +24251,6 @@ parameters:
 			path: engine/Shopware/Components/BasketSignature/CleanupSignatureSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\BasketSignature\\\\CleanupSignatureSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/BasketSignature/CleanupSignatureSubscriber.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\CSRFTokenValidationException\\:\\:\\$code has no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/CSRFTokenValidationException.php
@@ -24422,11 +24282,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\CSRFTokenValidator\\:\\:checkFrontendTokenValidation\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CSRFTokenValidator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\CSRFTokenValidator\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/CSRFTokenValidator.php
 
@@ -24572,11 +24427,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method getName\\(\\) on Shopware\\\\Models\\\\Plugin\\\\Plugin\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CacheSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\CacheSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/CacheSubscriber.php
 
@@ -24779,11 +24629,6 @@ parameters:
 			message: "#^Property Shopware\\\\Components\\\\Cart\\\\CartPersistService\\:\\:\\$cartAttributes type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/CartPersistService.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Cart\\\\PaymentTokenSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/PaymentTokenSubscriber.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\PaymentTokenSubscriber\\:\\:onPreDispatchFrontend\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
@@ -25837,11 +25682,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\CustomerStream\\\\CookieSubscriber\\:\\:checkCookie\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CustomerStream/CookieSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\CustomerStream\\\\CookieSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/CustomerStream/CookieSubscriber.php
 
@@ -26946,11 +26786,6 @@ parameters:
 			path: engine/Shopware/Components/Emotion/DeviceConfigurationInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Emotion\\\\EmotionComponentViewSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Emotion/EmotionComponentViewSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Emotion\\\\EmotionComponentViewSubscriber\\:\\:registerBackendTemplates\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Emotion/EmotionComponentViewSubscriber.php
@@ -27577,11 +27412,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\ErrorSubscriber\\:\\:__construct\\(\\) has parameter \\$ignoredExceptionClasses with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ErrorSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\ErrorSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ErrorSubscriber.php
 
@@ -28626,11 +28456,6 @@ parameters:
 			path: engine/Shopware/Components/LastArticlesSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\LastArticlesSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/LastArticlesSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\LastArticlesSubscriber\\:\\:onPostDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/LastArticlesSubscriber.php
@@ -28732,11 +28557,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\License\\\\Service\\\\LicenseServiceSubscriber\\:\\:__construct\\(\\) has parameter \\$plugins with no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
-			count: 1
-			path: engine/Shopware/Components/License/Service/LicenseServiceSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\License\\\\Service\\\\LicenseServiceSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/License/Service/LicenseServiceSubscriber.php
 
@@ -29302,11 +29122,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Model\\\\CategorySubscriber\\:\\:disableForNextFlush\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/CategorySubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Model\\\\CategorySubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/CategorySubscriber.php
 
@@ -30629,77 +30444,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Password\\\\Manager\\:\\:getCompatibleEncoders\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Password/Manager.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\:\\:activate\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\:\\:build\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\:\\:deactivate\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\:\\:install\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\:\\:loadFiles\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\:\\:registerCommands\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\:\\:registerFilesystem\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\:\\:registerFilesystems\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\:\\:setContainer\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\:\\:uninstall\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\:\\:update\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function ltrim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\Plugin\\:\\:\\$autoloadViews has no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin.php
-
 		-
 			message: "#^Property Symfony\\\\Component\\\\HttpKernel\\\\Bundle\\\\Bundle\\:\\:\\$container \\(Symfony\\\\Component\\\\DependencyInjection\\\\ContainerInterface\\) does not accept Symfony\\\\Component\\\\DependencyInjection\\\\ContainerInterface\\|null\\.$#"
 			count: 1
@@ -31646,11 +31390,6 @@ parameters:
 			path: engine/Shopware/Components/Privacy/CookieRemoveSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Privacy\\\\CookieRemoveSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Privacy/CookieRemoveSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Privacy\\\\CookieRemoveSubscriber\\:\\:onPostDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Privacy/CookieRemoveSubscriber.php
@@ -31677,11 +31416,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Privacy\\\\PrivacyCleanupCronSubscriber\\:\\:cleanupGuestCustomers\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Privacy/PrivacyCleanupCronSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Privacy\\\\PrivacyCleanupCronSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Privacy/PrivacyCleanupCronSubscriber.php
 
@@ -31891,17 +31625,7 @@ parameters:
 			path: engine/Shopware/Components/Register/OptinCleanupSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Register\\\\OptinCleanupSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Register/OptinCleanupSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Register\\\\RegistrationCleanupSubscriber\\:\\:cleanup\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Register/RegistrationCleanupSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Register\\\\RegistrationCleanupSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Register/RegistrationCleanupSubscriber.php
 
@@ -33556,11 +33280,6 @@ parameters:
 			path: engine/Shopware/Components/Theme/EventListener/BackendTheme.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\EventListener\\\\ConfigLoader\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/EventListener/ConfigLoader.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Theme\\\\EventListener\\\\ConfigLoader\\:\\:onDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/EventListener/ConfigLoader.php
@@ -34559,11 +34278,6 @@ parameters:
 			message: "#^Property Shopware\\\\Components\\\\UploadMaxSizeException\\:\\:\\$message has no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/UploadMaxSizeException.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\UploadMaxSizeValidator\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/UploadMaxSizeValidator.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\UploadMaxSizeValidator\\:\\:validateContentLength\\(\\) has no return typehint specified\\.$#"
@@ -54661,11 +54375,6 @@ parameters:
 			path: engine/Shopware/Models/Media/MediaSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Media\\\\MediaSubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Media\\\\MediaSubscriber\\:\\:migrateMeta\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Media/MediaSubscriber.php
@@ -55973,11 +55682,6 @@ parameters:
 		-
 			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
 			count: 3
-			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\OrderHistorySubscriber\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
 			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
 
 		-
@@ -83875,11 +83579,6 @@ parameters:
 			path: tests/Unit/Bundle/MediaBundle/Strategy/PlainStrategyTest.php
 
 		-
-			message: "#^Method TestPlugin\\\\TestPlugin\\:\\:build\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/PluginInstallerBundle/Fixtures/TestPlugin/TestPlugin.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstallerTest\\:\\:testRefreshPluginList\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/PluginInstallerBundle/PluginInstallerTest.php
@@ -84730,11 +84429,6 @@ parameters:
 			path: tests/Unit/Components/Event/ContainerAwareEventManagerTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\SubscriberService\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Unit/Components/Event/ContainerAwareEventManagerTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\SubscriberService\\:\\:onEvent\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Event/ContainerAwareEventManagerTest.php
@@ -84866,11 +84560,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\EventManagerTest\\:\\:testRemoveSubscriber\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Event/EventManagerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\EventSubscriberTest\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Components/Event/EventManagerTest.php
 
@@ -86143,41 +85832,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Sha256Test\\:\\:testVerifyShouldReturnTrueForMatchingHash\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Password/Encoder/Sha256Test.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Plugin\\\\MyPlugin\\:\\:activate\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Plugin/PluginContextTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Plugin\\\\MyPlugin\\:\\:deactivate\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Plugin/PluginContextTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Plugin\\\\MyPlugin\\:\\:install\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Plugin/PluginContextTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Plugin\\\\PluginContextTest\\:\\:testCacheCombination\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Plugin/PluginContextTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Plugin\\\\PluginContextTest\\:\\:testDefault\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Plugin/PluginContextTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Plugin\\\\PluginContextTest\\:\\:testFrontendCaches\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Plugin/PluginContextTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Plugin\\\\PluginContextTest\\:\\:testMessage\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Plugin/PluginContextTest.php
 
 		-
 			message: "#^Service \"filled_plugin\\.internal\\.resource_subscriber\" is not registered in the container\\.$#"

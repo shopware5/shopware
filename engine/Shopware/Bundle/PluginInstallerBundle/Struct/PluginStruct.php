@@ -160,7 +160,7 @@ class PluginStruct implements \JsonSerializable
     private $installationManual;
 
     /**
-     * @var string
+     * @var array<array<string, string>>
      */
     private $changelog;
 
@@ -629,7 +629,7 @@ class PluginStruct implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return array<array<string, string>>
      */
     public function getChangelog()
     {
@@ -637,7 +637,7 @@ class PluginStruct implements \JsonSerializable
     }
 
     /**
-     * @param string $changelog
+     * @param array<array<string, string>> $changelog
      */
     public function setChangelog($changelog)
     {

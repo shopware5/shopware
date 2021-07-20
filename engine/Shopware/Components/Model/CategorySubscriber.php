@@ -100,9 +100,7 @@ class CategorySubscriber implements BaseEventSubscriber
     }
 
     /**
-     * Returns an array of events this subscriber wants to listen to.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getSubscribedEvents()
     {

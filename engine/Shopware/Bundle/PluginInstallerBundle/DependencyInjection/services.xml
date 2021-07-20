@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <defaults public="true" />
+        <defaults public="true"/>
 
         <service id="shopware_plugininstaller.http_client" class="Shopware\Components\HttpClient\GuzzleHttpClient">
             <argument type="service" id="guzzle_http_client_factory"/>
@@ -18,30 +18,30 @@
         </service>
 
         <service id="shopware_plugininstaller.store_client" class="Shopware\Bundle\PluginInstallerBundle\StoreClient">
-            <argument type="service" id="shopware_plugininstaller.http_client" />
+            <argument type="service" id="shopware_plugininstaller.http_client"/>
             <argument>%shopware.store.apiEndpoint%</argument>
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator" />
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator"/>
             <argument type="service" id="Shopware\Components\OpenSSLVerifier"/>
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGenerator\UniqueIdGenerator" />
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGenerator\UniqueIdGenerator"/>
         </service>
 
         <service id="shopware_plugininstaller.unique_id_generator" class="Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGenerator\UniqueIdGenerator">
-            <argument type="service" id="Doctrine\DBAL\Connection" />
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
 
         <service id="shopware_plugininstaller.plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginInstaller">
             <argument type="service" id="Shopware\Components\Model\ModelManager"/>
-            <argument type="service" id="Shopware\Components\Snippet\DatabaseHandler" />
-            <argument type="service" id="Shopware\Components\Plugin\RequirementValidator" />
-            <argument type="service" id="PDO" />
-            <argument type="service" id="Shopware\Components\ContainerAwareEventManager" />
+            <argument type="service" id="Shopware\Components\Snippet\DatabaseHandler"/>
+            <argument type="service" id="Shopware\Components\Plugin\RequirementValidator"/>
+            <argument type="service" id="PDO"/>
+            <argument type="service" id="Shopware\Components\ContainerAwareEventManager"/>
             <argument type="collection">
                 <argument type="string" key="ShopwarePlugins">%shopware.plugin_directories.ShopwarePlugins%</argument>
                 <argument type="string" key="ProjectPlugins">%shopware.plugin_directories.ProjectPlugins%</argument>
             </argument>
-            <argument type="service" id="shopware.release" />
-            <argument type="service" id="pluginlogger" />
-            <argument type="service" id="kernel" />
+            <argument type="service" id="shopware.release"/>
+            <argument type="service" id="pluginlogger"/>
+            <argument type="service" id="kernel"/>
         </service>
 
         <service id="shopware_plugininstaller.legacy_plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller">
@@ -50,76 +50,78 @@
             <argument>%shopware.plugin_directories%</argument>
         </service>
 
-
-        <service id="shopware.plugin_manager" alias="shopware_plugininstaller.plugin_manager" />
+        <service id="shopware.plugin_manager" alias="shopware_plugininstaller.plugin_manager"/>
         <service id="shopware_plugininstaller.plugin_manager" class="Shopware\Bundle\PluginInstallerBundle\Service\InstallerService">
             <argument type="service" id="Shopware\Components\Model\ModelManager"/>
             <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\PluginInstaller"/>
             <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller"/>
             <argument type="service" id="Shopware\Components\Plugin\ConfigWriter"/>
             <argument type="service" id="Shopware\Components\Plugin\DBALConfigReader"/>
-            <argument type="service" id="shopware.release" />
+            <argument type="service" id="shopware.release"/>
         </service>
 
         <service id="shopware_plugininstaller.plugin_download_service" class="Shopware\Bundle\PluginInstallerBundle\Service\DownloadService">
             <argument>%shopware.plugin_directories%</argument>
             <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\StoreClient"/>
-            <argument type="service" id="Doctrine\DBAL\Connection" />
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\PluginExtractor" />
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\PluginExtractor"/>
         </service>
 
-        <service id="shopware_plugininstaller.plugin_service_store" alias="shopware_plugininstaller.plugin_service_store_production" />
+        <service id="shopware_plugininstaller.plugin_service_store" alias="shopware_plugininstaller.plugin_service_store_production"/>
 
         <service id="shopware_plugininstaller.plugin_service_store_production" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService">
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\StoreClient" />
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator" />
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\StoreClient"/>
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator"/>
         </service>
 
         <service id="shopware_plugininstaller.plugin_service_local" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService">
-            <argument type="service" id="Doctrine\DBAL\Connection" />
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator" />
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator"/>
+            <argument>%shopware.app.rootDir%</argument>
+            <argument type="service" id="shopware_plugininstaller.plugin_manager"/>
+            <argument type="service" id="front"/>
         </service>
 
         <service id="shopware_plugininstaller.plugin_service_view" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginViewService">
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService" />
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService" />
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator" />
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService"/>
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService"/>
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator"/>
         </service>
 
         <service id="shopware_plugininstaller.store_order_service" class="Shopware\Bundle\PluginInstallerBundle\Service\StoreOrderService">
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\StoreClient" />
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator" />
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\StoreClient"/>
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator"/>
         </service>
 
         <service id="shopware_plugininstaller.account_manager_service" class="Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService">
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\StoreClient" />
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator" />
-            <argument type="service" id="Shopware_Components_Snippet_Manager" />
-            <argument type="service" id="Shopware\Components\Model\ModelManager" />
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\StoreClient"/>
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator"/>
+            <argument type="service" id="Shopware_Components_Snippet_Manager"/>
+            <argument type="service" id="Shopware\Components\Model\ModelManager"/>
         </service>
 
         <service id="shopware_plugininstaller.plugin_licence_service" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService">
-            <argument type="service" id="Doctrine\DBAL\Connection" />
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\StoreClient" />
-            <argument type="service" id="Shopware\Components\License\Service\LocalLicenseUnpackService" />
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\StoreClient"/>
+            <argument type="service" id="Shopware\Components\License\Service\LocalLicenseUnpackService"/>
         </service>
 
-        <service id="shopware_plugininstaller.plugin_installer_struct_hydrator" class="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator" />
+        <service id="shopware_plugininstaller.plugin_installer_struct_hydrator" class="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator"/>
 
         <service id="shopware_plugininstaller.subscription_service" class="Shopware\Bundle\PluginInstallerBundle\Service\SubscriptionService">
-            <argument type="service" id="Doctrine\DBAL\Connection" />
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\StoreClient" />
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\StoreClient"/>
             <argument type="service" id="Shopware\Components\Model\ModelManager"/>
-            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService" />
-            <argument type="service" id="shopware.release" />
+            <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService"/>
+            <argument type="service" id="shopware.release"/>
         </service>
 
         <service id="shopware_plugininstaller.plugin_extractor" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginExtractor">
             <argument>%shopware.plugin_directories.ShopwarePlugins%</argument>
-            <argument type="service" id="file_system" />
+            <argument type="service" id="file_system"/>
             <argument>%shopware.plugin_directories%</argument>
-            <argument type="service" id="shopware.release" />
-            <argument type="service" id="Shopware\Components\Plugin\RequirementValidator" />
+            <argument type="service" id="shopware.release"/>
+            <argument type="service" id="Shopware\Components\Plugin\RequirementValidator"/>
         </service>
 
         <service id="Shopware\Bundle\PluginInstallerBundle\Service\PluginCategoryService">
