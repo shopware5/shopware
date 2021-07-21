@@ -21,6 +21,7 @@ parameters:
     paths:
         - %currentWorkingDirectory%/engine/Shopware
         - %currentWorkingDirectory%/tests
+        - %currentWorkingDirectory%/engine/Library/Enlight
     excludes_analyse:
         - %currentWorkingDirectory%/engine/Shopware/Plugins/Community
         - %currentWorkingDirectory%/engine/Shopware/Plugins/Local
