@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,34 +24,28 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Register;
+namespace Shopware\Tests\Functional\Bundle\PluginInstallerBundle\Fixture\MyPlugin;
 
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin;
+use Shopware\Components\Plugin\Context\ActivateContext;
+use Shopware\Components\Plugin\Context\DeactivateContext;
+use Shopware\Components\Plugin\Context\InstallContext;
 
-class RegistrationCleanupSubscriber implements SubscriberInterface
+class MyPlugin extends Plugin
 {
-    /**
-     * @var RegistrationCleanupServiceInterface
-     */
-    private $cleanupService;
-
-    public function __construct(RegistrationCleanupServiceInterface $cleanupService)
+    public function activate(ActivateContext $context)
     {
-        $this->cleanupService = $cleanupService;
+        $context->scheduleClearCache(InstallContext::CACHE_LIST_FRONTEND);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
+    public function deactivate(DeactivateContext $context)
     {
-        return [
-            'Shopware_CronJob_RegistrationCleanup' => 'cleanup',
-        ];
+        $context->scheduleMessage('Clear the caches');
     }
 
-    public function cleanup()
+    public function install(InstallContext $context)
     {
-        return $this->cleanupService->cleanup();
+        $context->scheduleClearCache(InstallContext::CACHE_LIST_FRONTEND);
+        $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
     }
 }

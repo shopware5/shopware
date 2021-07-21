@@ -34,7 +34,7 @@ use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin as PluginModel;
-use Shopware\Tests\Unit\Components\Plugin\MyPlugin;
+use Shopware\Tests\Functional\Bundle\PluginInstallerBundle\Fixture\MyPlugin\MyPlugin;
 
 class PluginInstallerTest extends TestCase
 {
@@ -43,7 +43,7 @@ class PluginInstallerTest extends TestCase
         $connection = Shopware()->Container()->get('dbal_connection');
 
         $entityManager = $this->createMock(ModelManager::class);
-        $entityManager->expects(static::any())->method('getConnection')->willReturn($connection);
+        $entityManager->method('getConnection')->willReturn($connection);
 
         $databaseHandler = $this->createMock(DatabaseHandler::class);
         $requirementValidator = $this->createMock(RequirementValidator::class);

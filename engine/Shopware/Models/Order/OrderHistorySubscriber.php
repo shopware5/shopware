@@ -31,9 +31,7 @@ use Doctrine\ORM\Events;
 class OrderHistorySubscriber implements EventSubscriber
 {
     /**
-     * Returns an array of events this subscriber wants to listen to.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getSubscribedEvents()
     {

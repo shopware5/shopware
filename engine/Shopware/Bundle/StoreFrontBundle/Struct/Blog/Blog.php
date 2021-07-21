@@ -118,7 +118,7 @@ class Blog extends Extendable
     /**
      * @var Media[]
      */
-    protected $medias;
+    protected $medias = [];
 
     /**
      * @return int
