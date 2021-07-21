@@ -25,8 +25,6 @@
  * @param array  $params
  * @param array  $smarty
  * @param string $template
- *
- * @return mixed
  */
 function smarty_function_encoding($params, $smarty, $template = null)
 {

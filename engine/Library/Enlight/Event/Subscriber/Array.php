@@ -25,6 +25,7 @@
  *
  * @category   Enlight
  * @package    Enlight_Event
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -33,16 +34,16 @@ class Enlight_Event_Subscriber_Array extends Enlight_Event_Subscriber
     /**
      * @var array
      */
-    protected $listeners = array();
+    protected $listeners = [];
 
     /**
      * The Enlight_Event_Subscriber_Array class constructor registers all listeners in the options parameter.
      *
-     * @param   null|array $options
+     * @param array|null $options
      */
     public function __construct($options = null)
     {
-        if (is_array($options) && isset($options[0])) {
+        if (\is_array($options) && isset($options[0])) {
             foreach ($options as $listener) {
                 if (!$listener instanceof Enlight_Event_Handler) {
                     $listener = new Enlight_Event_Handler_Default(
@@ -59,7 +60,7 @@ class Enlight_Event_Subscriber_Array extends Enlight_Event_Subscriber
     /**
      * Retrieves a list of listeners registered.
      *
-     * @return  array
+     * @return array
      */
     public function getListeners()
     {
@@ -69,20 +70,19 @@ class Enlight_Event_Subscriber_Array extends Enlight_Event_Subscriber
     /**
      * Registers a listener to an event.
      *
-     * @param   Enlight_Event_Handler $handler
-     * @return  Enlight_Event_Subscriber
+     * @return Enlight_Event_Subscriber
      */
     public function registerListener(Enlight_Event_Handler $handler)
     {
         $this->listeners[] = $handler;
+
         return $this;
     }
 
     /**
      * Removes an event listener from storage.
      *
-     * @param   Enlight_Event_Handler $handler
-     * @return  Enlight_Event_Subscriber
+     * @return Enlight_Event_Subscriber
      */
     public function removeListener(Enlight_Event_Handler $handler)
     {
@@ -90,6 +90,7 @@ class Enlight_Event_Subscriber_Array extends Enlight_Event_Subscriber
         if ($handlerIndex !== false) {
             array_splice($this->listeners, $handlerIndex, 1);
         }
+
         return $this;
     }
 }

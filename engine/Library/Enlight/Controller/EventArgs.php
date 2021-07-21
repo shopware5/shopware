@@ -24,6 +24,7 @@
  *
  * @category   Enlight
  * @package    Enlight_Controller
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */

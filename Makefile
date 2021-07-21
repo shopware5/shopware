@@ -27,10 +27,12 @@ clear-cache: .make.console.executable
 check-code: check-phpstan check-php-cs-fixer
 
 check-php-cs-fixer:
-	./vendor/bin/php-cs-fixer fix --dry-run -v --allow-risky=yes --format=junit | tee php-cs-fixer.xml
+	./vendor/bin/php-cs-fixer fix --dry-run -v
+	./vendor/bin/php-cs-fixer fix --dry-run -v --config engine/Library/Enlight/.php-cs-fixer.php
 
 fix-code-style:
-	php -d memory_limit=-1 ./vendor/bin/php-cs-fixer fix --allow-risky=yes -v
+	php -d memory_limit=-1 ./vendor/bin/php-cs-fixer fix -v
+	php -d memory_limit=-1 ./vendor/bin/php-cs-fixer fix -v --config engine/Library/Enlight/.php-cs-fixer.php
 
 check-phpstan:
 	php -d memory_limit=4G ./vendor/bin/phpstan analyze -c .phpstan.neon --no-progress --error-format=table

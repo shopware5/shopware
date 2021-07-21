@@ -17,12 +17,12 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use Laminas\Code\Generator\PropertyGenerator;
+use Laminas\Code\Reflection\MethodReflection;
 use ProxyManager\Generator\ClassGenerator;
 use ProxyManager\Generator\MethodGenerator;
 use ProxyManager\Generator\Util\ClassGeneratorUtils;
 use ProxyManager\ProxyGenerator\Assertion\CanProxyAssertion;
-use Laminas\Code\Generator\PropertyGenerator;
-use Laminas\Code\Reflection\MethodReflection;
 
 /**
  * The Enlight_Hook_ProxyFactory is the factory for the class proxies.
@@ -33,6 +33,7 @@ use Laminas\Code\Reflection\MethodReflection;
  *
  * @category   Enlight
  * @package    Enlight_Hook
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -44,7 +45,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     protected $hookManager;
 
     /**
-     * @var null|string namespace of the proxy
+     * @var string|null namespace of the proxy
      */
     protected $proxyNamespace;
 
@@ -54,7 +55,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     protected $proxyDir;
 
     /**
-     * @var string extension of the hook files.
+     * @var string extension of the hook files
      */
     protected $fileExtension = '.php';
 
@@ -63,9 +64,10 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
      * If no namespace is given, the default namespace _Proxies is used.
      * If no proxy directory is given, the default directory Proxies is used.
      *
-     * @param  Enlight_Hook_HookManager $hookManager
-     * @param  string                   $proxyNamespace
-     * @param  string                   $proxyDir
+     * @param Enlight_Hook_HookManager $hookManager
+     * @param string                   $proxyNamespace
+     * @param string                   $proxyDir
+     *
      * @throws RuntimeException
      */
     public function __construct($hookManager, $proxyNamespace, $proxyDir)
@@ -74,11 +76,11 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         $this->proxyNamespace = $proxyNamespace;
 
         if (!is_dir($proxyDir)) {
-            if (false === @mkdir($proxyDir, 0777, true) && !is_dir($proxyDir)) {
-                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", "Proxy", $proxyDir));
+            if (@mkdir($proxyDir, 0777, true) === false && !is_dir($proxyDir)) {
+                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Proxy', $proxyDir));
             }
         } elseif (!is_writable($proxyDir)) {
-            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", "Proxy", $proxyDir));
+            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Proxy', $proxyDir));
         }
 
         $proxyDir = rtrim(Enlight_Loader::realpath($proxyDir), '\\/') . DIRECTORY_SEPARATOR;
@@ -90,13 +92,15 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
      * Returns the proxy of the given class. If the proxy is not already created
      * it is generated and written.
      *
-     * @param  string    $class
+     * @param string $class
+     *
      * @throws Exception
+     *
      * @return string
      */
     public function getProxy($class)
     {
-        if (!in_array('Enlight_Hook', class_implements($class))) {
+        if (!\in_array('Enlight_Hook', class_implements($class))) {
             trigger_error(sprintf('The class "%s" does not implement the Enlight_Hook Interface. It will be thrown in 5.8.', $class), E_USER_WARNING);
             //throw new Enlight_Hook_Exception('The class' . $class . ' does not implement Enlight_Hook interface.');
         }
@@ -114,7 +118,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
                 throw new \RuntimeException(sprintf('The directory "%s" is not writable.', $this->proxyDir));
             }
 
-                $content = $this->generateProxyClass($class);
+            $content = $this->generateProxyClass($class);
             $this->writeProxyClass($proxyFile, $content);
         } elseif (!method_exists($proxy, 'executeParent')) {
             @unlink($proxyFile);
@@ -126,7 +130,8 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     /**
      * Returns proxy class name
      *
-     * @param  string $class
+     * @param string $class
+     *
      * @return string
      */
     public function getProxyClassName($class)
@@ -137,18 +142,20 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     /**
      * Formats the given class name.
      *
-     * @param  string $class
+     * @param string $class
+     *
      * @return string
      */
     public function formatClassName($class)
     {
-        return str_replace(array('_', '\\'), '', $class) . 'Proxy';
+        return str_replace(['_', '\\'], '', $class) . 'Proxy';
     }
 
     /**
      * Returns proxy file name for the given class.
      *
-     * @param  string $class
+     * @param string $class
+     *
      * @return string
      */
     public function getProxyFileName($class)
@@ -162,7 +169,8 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
      * This function creates the proxy class for the given class name.
      * The proxy class extends the original class and implements the Enlight_Hook_Proxy.
      *
-     * @param  string       $class
+     * @param string $class
+     *
      * @return mixed|string
      */
     protected function generateProxyClass($class)
@@ -177,7 +185,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         $classGenerator = new ClassGenerator($proxyClassName);
         $classGenerator->setExtendedClass($reflectionClass->getName());
         $classGenerator->setImplementedInterfaces([
-            Enlight_Hook_Proxy::class
+            Enlight_Hook_Proxy::class,
         ]);
 
         // Add the private '__hookProxyExecutionContexts' array property
@@ -191,11 +199,11 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         }
 
         // Add the static 'getHookMethods' method (from Enlight_Hook_Proxy)
-        $hookMethodNameString = (count($hookMethodGenerators) > 0) ? ("'" . implode("', '", array_keys($hookMethodGenerators)) . "'") : '';
+        $hookMethodNameString = (\count($hookMethodGenerators) > 0) ? ("'" . implode("', '", array_keys($hookMethodGenerators)) . "'") : '';
         $getHookMethodsGenerator = MethodGenerator::fromArray([
             'name' => 'getHookMethods',
             'static' => true,
-            'body' => "return [" . $hookMethodNameString . "];\n"
+            'body' => 'return [' . $hookMethodNameString . "];\n",
         ]);
         $getHookMethodsGenerator->setDocblock('@inheritdoc');
         ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $getHookMethodsGenerator);
@@ -205,14 +213,14 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
             'name' => '__pushHookExecutionContext',
             'parameters' => [
                 [
-                    'name' => 'method'
+                    'name' => 'method',
                 ],
                 [
                     'type' => Enlight_Hook_HookExecutionContext::class,
-                    'name' => 'context'
-                ]
+                    'name' => 'context',
+                ],
             ],
-            'body' => "\$this->__hookProxyExecutionContexts[\$method][] = \$context;\n"
+            'body' => "\$this->__hookProxyExecutionContexts[\$method][] = \$context;\n",
         ]);
         $pushHookExecutionContextGenerator->setDocblock('@inheritdoc');
         ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $pushHookExecutionContextGenerator);
@@ -222,14 +230,14 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
             'name' => '__popHookExecutionContext',
             'parameters' => [
                 [
-                    'name' => 'method'
-                ]
+                    'name' => 'method',
+                ],
             ],
             'body' => (
                 "if (isset(\$this->__hookProxyExecutionContexts[\$method])) {\n" .
                 "    array_pop(\$this->__hookProxyExecutionContexts[\$method]);\n" .
                 "}\n"
-            )
+            ),
         ]);
         $popHookExecutionContextGenerator->setDocblock('@inheritdoc');
         ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $popHookExecutionContextGenerator);
@@ -239,8 +247,8 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
             'name' => '__getCurrentHookProxyExecutionContext',
             'parameters' => [
                 [
-                    'name' => 'method'
-                ]
+                    'name' => 'method',
+                ],
             ],
             'body' => (
                 "if (!isset(\$this->__hookProxyExecutionContexts[\$method]) || count(\$this->__hookProxyExecutionContexts[\$method]) === 0) {\n" .
@@ -251,7 +259,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
                 "\$context = \$this->__hookProxyExecutionContexts[\$method][\$contextCount - 1];\n" .
                 "\n" .
                 "return \$context;\n"
-            )
+            ),
         ]);
         $getCurrentHookProxyExecutionContextGenerator->setDocblock('@inheritdoc');
         ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $getCurrentHookProxyExecutionContextGenerator);
@@ -261,15 +269,15 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
             'name' => '__getActiveHookManager',
             'parameters' => [
                 [
-                    'name' => 'method'
-                ]
+                    'name' => 'method',
+                ],
             ],
             'body' => (
                 "\$context = \$this->__getCurrentHookProxyExecutionContext(\$method);\n" .
                 "\$hookManager = (\$context) ? \$context->getHookManager() : Shopware()->Hooks();\n" .
                 "\n" .
                 "return \$hookManager;\n"
-            )
+            ),
         ]);
         $getActiveHookManagerGenerator->setDocblock('@inheritdoc');
         ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $getActiveHookManagerGenerator);
@@ -279,13 +287,13 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
             'name' => 'executeParent',
             'parameters' => [
                 [
-                    'name' => 'method'
+                    'name' => 'method',
                 ],
                 [
                     'type' => 'array',
                     'name' => 'args',
-                    'defaultValue' => []
-                ]
+                    'defaultValue' => [],
+                ],
             ],
             'body' => (
                 "\$context = \$this->__getCurrentHookProxyExecutionContext(\$method);\n" .
@@ -296,7 +304,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
                 "}\n" .
                 "\n" .
                 "return \$context->executeReplaceChain(\$args);\n"
-            )
+            ),
         ]);
         $executeParentGenerator->setDocblock('@inheritdoc');
         ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $executeParentGenerator);
@@ -306,15 +314,15 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
             'name' => '__executeOriginalMethod',
             'parameters' => [
                 [
-                    'name' => 'method'
+                    'name' => 'method',
                 ],
                 [
                     'type' => 'array',
                     'name' => 'args',
-                    'defaultValue' => []
-                ]
+                    'defaultValue' => [],
+                ],
             ],
-            'body' => "return parent::{\$method}(...\$args);\n"
+            'body' => "return parent::{\$method}(...\$args);\n",
         ]);
         $executeOriginalMethodGenerator->setDocblock('@inheritdoc');
         ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $executeOriginalMethodGenerator);
@@ -329,7 +337,6 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     }
 
     /**
-     * @param ReflectionClass $class
      * @return ReflectionMethod[]
      */
     protected function getHookedMethods(ReflectionClass $class)
@@ -347,7 +354,6 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     }
 
     /**
-     * @param ReflectionMethod $method
      * @return MethodGenerator
      */
     protected function createMethodGenerator(ReflectionMethod $method)
@@ -389,14 +395,15 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     /**
      * This function writes the generated proxy class to the file system.
      *
-     * @param  string            $fileName
-     * @param  string            $content
+     * @param string $fileName
+     * @param string $content
+     *
      * @throws Enlight_Exception
      */
     protected function writeProxyClass($fileName, $content)
     {
-        $tmpFile = tempnam(dirname($fileName), basename($fileName));
-        if (false !== @file_put_contents($tmpFile, $content) && @rename($tmpFile, $fileName)) {
+        $tmpFile = tempnam(\dirname($fileName), basename($fileName));
+        if (@file_put_contents($tmpFile, $content) !== false && @rename($tmpFile, $fileName)) {
             @chmod($fileName, 0666 & ~umask());
 
             return;

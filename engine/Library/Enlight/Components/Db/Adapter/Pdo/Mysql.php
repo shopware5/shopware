@@ -38,8 +38,7 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
     protected $dbalConnection;
 
     /**
-     * @param Connection $connection
-     * @param array      $config
+     * @param array $config
      *
      * @return self
      */
@@ -70,7 +69,7 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
             $bind = $sql->getBind();
         }
 
-        if (!is_array($bind)) {
+        if (!\is_array($bind)) {
             $bind = [$bind];
         }
 
@@ -104,8 +103,6 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
      * Alias for query.
      *
      * @param string $query
-     * @param array  $params
-     * @param array  $types
      *
      * @return Zend_Db_Statement_Pdo
      */

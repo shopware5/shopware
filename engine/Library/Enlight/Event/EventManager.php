@@ -59,9 +59,9 @@ class Enlight_Event_EventManager extends Enlight_Class
     /**
      * $eventManager->addListener('foo.action', array($listener, 'onFooAction'));
      *
-     * @param string   $eventName
-     * @param callback|array<int, object|string> $listener
-     * @param int      $priority
+     * @param string                             $eventName
+     * @param callable|array<int, object|string> $listener
+     * @param int                                $priority
      *
      * @return Enlight_Event_EventManager
      */
@@ -87,8 +87,6 @@ class Enlight_Event_EventManager extends Enlight_Class
      * If no event position is set in the event handler, the event handler will be added to the
      * end of the list.
      *
-     * @param Enlight_Event_Handler $handler
-     *
      * @return Enlight_Event_EventManager
      */
     public function registerListener(Enlight_Event_Handler $handler)
@@ -104,7 +102,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         if ($handler->getPosition()) {
             $position = (int) $handler->getPosition();
         } else {
-            $position = count($list);
+            $position = \count($list);
         }
         while (isset($list[$position])) {
             ++$position;
@@ -118,8 +116,6 @@ class Enlight_Event_EventManager extends Enlight_Class
 
     /**
      * Removes the listeners for the given event handler.
-     *
-     * @param Enlight_Event_Handler $handler
      *
      * @return Enlight_Event_EventManager
      */
@@ -152,13 +148,11 @@ class Enlight_Event_EventManager extends Enlight_Class
     {
         $event = strtolower($event);
 
-        return isset($this->listeners[$event]) && count($this->listeners[$event]);
+        return isset($this->listeners[$event]) && \count($this->listeners[$event]);
     }
 
     /**
      * Retrieve a list of listeners registered to a given event.
-     *
-     * @param $event
      *
      * @return Enlight_Event_Handler[]
      */
@@ -274,12 +268,9 @@ class Enlight_Event_EventManager extends Enlight_Class
      * The return value of the execute method will be set in the event arguments return value.
      *
      * @param string                             $event
-     * @param mixed                              $value
      * @param Enlight_Event_EventArgs|array|null $eventArgs
      *
      * @throws Enlight_Event_Exception
-     *
-     * @return mixed
      */
     public function filter($event, $value, $eventArgs = null)
     {
@@ -306,9 +297,8 @@ class Enlight_Event_EventManager extends Enlight_Class
      * Event which is fired to collect plugin parameters
      * to register additionally application components or configurations.
      *
-     * @param string          $event
-     * @param ArrayCollection $collection
-     * @param array|null      $eventArgs
+     * @param string     $event
+     * @param array|null $eventArgs
      *
      * @throws Enlight_Event_Exception
      *
@@ -339,15 +329,12 @@ class Enlight_Event_EventManager extends Enlight_Class
         return $collection;
     }
 
-    /**
-     * @param SubscriberInterface $subscriber
-     */
     public function addSubscriber(SubscriberInterface $subscriber)
     {
         foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
-            if (is_string($params)) {
+            if (\is_string($params)) {
                 $this->addListener($eventName, [$subscriber, $params]);
-            } elseif (is_string($params[0])) {
+            } elseif (\is_string($params[0])) {
                 $this->addListener($eventName, [$subscriber, $params[0]], isset($params[1]) ? $params[1] : 0);
             } else {
                 foreach ($params as $listener) {
@@ -359,8 +346,6 @@ class Enlight_Event_EventManager extends Enlight_Class
 
     /**
      * Registers all listeners of the given Enlight_Event_Subscriber.
-     *
-     * @param Enlight_Event_Subscriber $subscriber
      */
     public function registerSubscriber(Enlight_Event_Subscriber $subscriber)
     {
@@ -392,7 +377,7 @@ class Enlight_Event_EventManager extends Enlight_Class
      */
     private function buildEventArgs($eventArgs = null)
     {
-        if (isset($eventArgs) && is_array($eventArgs)) {
+        if (isset($eventArgs) && \is_array($eventArgs)) {
             return new Enlight_Event_EventArgs($eventArgs);
         } elseif (!isset($eventArgs)) {
             return new Enlight_Event_EventArgs();

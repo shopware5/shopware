@@ -17,6 +17,9 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+/**
+ * Interface for HTTP requests
+ */
 interface Enlight_Controller_Request_Request
 {
     /**
@@ -26,20 +29,15 @@ interface Enlight_Controller_Request_Request
      * @see http://msdn.microsoft.com/en-us/library/system.web.httprequest.item.aspx
      *
      * @param string $key
-     *
-     * @return mixed
      */
     public function __get($key);
 
     /**
-     * Set values
-     *
      * In order to follow {@link __get()}, which operates on a number of
      * superglobals, setting values through overloading is not allowed and will
      * raise an exception. Use setParam() instead.
      *
      * @param string $key
-     * @param mixed  $value
      *
      * @throws \Exception
      */
@@ -162,8 +160,6 @@ interface Enlight_Controller_Request_Request
      *
      * @param string $key
      * @param string $default Default value to use if key not found
-     *
-     * @return mixed
      */
     public function getUserParam($key, $default = null);
 
@@ -194,8 +190,6 @@ interface Enlight_Controller_Request_Request
      * Alias to __get
      *
      * @param string $key
-     *
-     * @return mixed
      */
     public function get($key);
 
@@ -203,7 +197,6 @@ interface Enlight_Controller_Request_Request
      * Alias to __set()
      *
      * @param string $key
-     * @param mixed  $value
      */
     public function set($key, $value);
 
@@ -301,8 +294,6 @@ interface Enlight_Controller_Request_Request
      * environment, using SCRIPT_FILENAME, SCRIPT_NAME, PHP_SELF, and
      * ORIG_SCRIPT_NAME in its determination.
      *
-     * @param mixed $baseUrl
-     *
      * @return Enlight_Controller_Request_Request
      */
     public function setBaseUrl($baseUrl = null);
@@ -357,8 +348,6 @@ interface Enlight_Controller_Request_Request
      *
      * Can be empty array, or contain one or more of '_GET' or '_POST'.
      *
-     * @param array $paramSources
-     *
      * @return Enlight_Controller_Request_Request
      */
     public function setParamSources(array $paramSources = []);
@@ -375,9 +364,6 @@ interface Enlight_Controller_Request_Request
      *
      * Uses $key to set a userland parameter.
      *
-     * @param mixed $key
-     * @param mixed $value
-     *
      * @return Enlight_Controller_Request_Request
      */
     public function setParam($key, $value);
@@ -389,10 +375,7 @@ interface Enlight_Controller_Request_Request
      * userland parameters (see {@link setParam()}), $_GET, $_POST. If a
      * parameter matching the $key is not found, null is returned.
      *
-     * @param mixed $key
      * @param mixed $default Default value to use if key not found
-     *
-     * @return mixed
      */
     public function getParam($key, $default = null);
 
@@ -408,12 +391,8 @@ interface Enlight_Controller_Request_Request
     public function getParams();
 
     /**
-     * Set parameters
-     *
      * Set one or more parameters. Parameters are set as userland parameters,
      * using the keys specified in the array.
-     *
-     * @param array $params
      *
      * @return Enlight_Controller_Request_Request
      */
@@ -446,8 +425,6 @@ interface Enlight_Controller_Request_Request
      *
      * @param string $name    the attribute name
      * @param mixed  $default default value to return if the attribute does not exist
-     *
-     * @return mixed
      */
     public function getAttribute($name, $default = null);
 
@@ -580,7 +557,7 @@ interface Enlight_Controller_Request_Request
      * Set GET values method
      *
      * @param string|array $spec
-     * @param null|mixed   $value
+     * @param mixed|null   $value
      *
      * @return Enlight_Controller_Request_Request
      */
@@ -597,7 +574,7 @@ interface Enlight_Controller_Request_Request
      * Set POST values method
      *
      * @param string|array $spec
-     * @param null|mixed   $value
+     * @param mixed|null   $value
      *
      * @return Enlight_Controller_Request_Request
      */
@@ -659,7 +636,6 @@ interface Enlight_Controller_Request_Request
      * Sets HTTP header method
      *
      * @param string $header
-     * @param        $value
      *
      * @return Enlight_Controller_Request_Request
      */

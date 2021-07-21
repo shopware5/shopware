@@ -51,7 +51,6 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Sets a value of an element in the list.
      *
      * @param string $key
-     * @param mixed  $value
      */
     public function __set($key, $value = null)
     {
@@ -62,8 +61,6 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Returns a value of an element in the list.
      *
      * @param string $key
-     *
-     * @return mixed
      */
     public function __get($key)
     {
@@ -99,8 +96,6 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      *
      * @param string $name
      * @param array  $args
-     *
-     * @return mixed
      */
     public function __call($name, $args = null)
     {
@@ -117,7 +112,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
                 return $this->set($key, isset($args[0]) ? $args[0] : null);
             default:
                 throw new Enlight_Exception(
-                    'Method "' . get_class($this) . '::' . $name . '" not found failure',
+                    'Method "' . \get_class($this) . '::' . $name . '" not found failure',
                     Enlight_Exception::METHOD_NOT_FOUND
                 );
         }
@@ -130,14 +125,13 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      */
     public function count()
     {
-        return count($this->_elements);
+        return \count($this->_elements);
     }
 
     /**
      * Sets a value of an element in the list.
      *
      * @param string $key
-     * @param mixed  $value
      *
      * @return Enlight_Collection_ArrayCollection
      */
@@ -152,8 +146,6 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Returns a value of an element in the list.
      *
      * @param string $key
-     *
-     * @return mixed
      */
     public function get($key)
     {
@@ -169,7 +161,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      */
     public function containsKey($key)
     {
-        return array_key_exists($key, $this->_elements);
+        return \array_key_exists($key, $this->_elements);
     }
 
     /**
@@ -212,8 +204,6 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Returns a value of an element in the list.
      *
      * @param string $key
-     *
-     * @return mixed
      */
     public function offsetGet($key)
     {
@@ -224,7 +214,6 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Sets a value of an element in the list.
      *
      * @param string $key
-     * @param mixed  $value
      */
     public function offsetSet($key, $value)
     {

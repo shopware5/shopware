@@ -26,14 +26,14 @@
  *
  * @param array  $params
  * @param string $content
- * @param mixed  $smarty
  * @param int    $repeat
  * @param string $template
+ *
  * @return string
  */
 function smarty_block_replace($params, $content, $smarty, &$repeat, $template)
 {
-    if (is_null($content)) {
+    if (\is_null($content)) {
         return;
     }
 
@@ -44,6 +44,7 @@ function smarty_block_replace($params, $content, $smarty, &$repeat, $template)
         $params['replace'] = '';
     }
 
-    require_once(SMARTY_PLUGINS_DIR . 'shared.mb_str_replace.php');
+    require_once SMARTY_PLUGINS_DIR . 'shared.mb_str_replace.php';
+
     return mb_str_replace($params['search'], $params['replace'], $content);
 }

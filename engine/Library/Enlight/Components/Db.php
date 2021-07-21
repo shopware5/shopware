@@ -27,6 +27,7 @@
  *
  * @category   Enlight
  * @package    Enlight_Db
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -34,6 +35,7 @@ class Enlight_Components_Db extends Zend_Db
 {
     /**
      * Namespace of the adapter (default : Enlight_Components_Db_Adapter)
+     *
      * @var string
      */
     protected static $_adapterNamespace = 'Enlight_Components_Db_Adapter';
@@ -58,12 +60,14 @@ class Enlight_Components_Db extends Zend_Db
      * If the first argument is of type Zend_Config, it is assumed to contain
      * all parameters, and the second argument is ignored.
      *
-     * @param  mixed $adapter String name of base adapter class, or Zend_Config object.
-     * @param  mixed $config  OPTIONAL; an array or Zend_Config object with adapter parameters.
-     * @return Zend_Db_Adapter_Abstract
+     * @param mixed $adapter string name of base adapter class, or Zend_Config object
+     * @param mixed $config  OPTIONAL; an array or Zend_Config object with adapter parameters
+     *
      * @throws Zend_Db_Exception
+     *
+     * @return Zend_Db_Adapter_Abstract
      */
-    public static function factory($adapter, $config = array())
+    public static function factory($adapter, $config = [])
     {
         if ($config instanceof Zend_Config) {
             $config = $config->toArray();

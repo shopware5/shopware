@@ -54,7 +54,6 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCa
      * Allows to set a shopware config
      *
      * @param string $name
-     * @param mixed  $value
      */
     protected function setConfig($name, $value)
     {

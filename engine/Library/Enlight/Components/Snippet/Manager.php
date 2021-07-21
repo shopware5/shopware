@@ -64,7 +64,7 @@ class Enlight_Components_Snippet_Manager extends Enlight_Class
      */
     public function __construct($options = null)
     {
-        if (!is_array($options)) {
+        if (!\is_array($options)) {
             $options = ['adapter' => $options];
         }
 

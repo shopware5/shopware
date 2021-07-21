@@ -25,6 +25,7 @@
  *
  * @category   Enlight
  * @package    Enlight_Event
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -33,23 +34,21 @@ abstract class Enlight_Event_Subscriber extends Enlight_Class
     /**
      * Retrieves a list of listeners registered to a given event.
      *
-     * @return  array
+     * @return array
      */
     abstract public function getListeners();
 
     /**
      * Registers a listener to an event.
      *
-     * @param   Enlight_Event_Handler $handler
-     * @return  Enlight_Event_Subscriber
+     * @return Enlight_Event_Subscriber
      */
     abstract public function registerListener(Enlight_Event_Handler $handler);
 
     /**
      * Removes an event listener.
      *
-     * @param   Enlight_Event_Handler $handler
-     * @return  Enlight_Event_Subscriber
+     * @return Enlight_Event_Subscriber
      */
     abstract public function removeListener(Enlight_Event_Handler $handler);
 }

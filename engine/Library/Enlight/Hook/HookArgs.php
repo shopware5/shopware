@@ -25,14 +25,12 @@
  *
  * @category   Enlight
  * @package    Enlight_Hook
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Hook_HookArgs extends Enlight_Event_EventArgs
 {
-    /**
-     * @var mixed
-     */
     protected $_subject;
 
     /**
@@ -41,11 +39,9 @@ class Enlight_Hook_HookArgs extends Enlight_Event_EventArgs
     protected $_method;
 
     /**
-     * @param mixed $subject
      * @param string $method
-     * @param array $args
      */
-    public function __construct($subject, $method, array $args = array())
+    public function __construct($subject, $method, array $args = [])
     {
         parent::__construct($args);
         $this->_subject = $subject;
@@ -53,7 +49,7 @@ class Enlight_Hook_HookArgs extends Enlight_Event_EventArgs
     }
 
     /**
-     * @return mixed The instance which the hook is executed on.
+     * @return mixed the instance which the hook is executed on
      */
     public function getSubject()
     {
@@ -61,7 +57,7 @@ class Enlight_Hook_HookArgs extends Enlight_Event_EventArgs
     }
 
     /**
-     * @return string The name of the method whose hooks are being executed.
+     * @return string the name of the method whose hooks are being executed
      */
     public function getMethod()
     {
@@ -69,7 +65,7 @@ class Enlight_Hook_HookArgs extends Enlight_Event_EventArgs
     }
 
     /**
-     * @return array The arguments passed to the hooked method.
+     * @return array the arguments passed to the hooked method
      */
     public function getArgs()
     {
@@ -79,27 +75,26 @@ class Enlight_Hook_HookArgs extends Enlight_Event_EventArgs
     /**
      * Sets the given property to null.
      *
-     * @param   $key
-     * @return  \Enlight_Hook_HookArgs
+     * @return \Enlight_Hook_HookArgs
      */
     public function remove($key)
     {
         $this->set($key, null);
+
         return $this;
     }
 
     /**
      * Default set function to set the value to the given property
      *
-     * @param   $key
-     * @param   $value
-     * @return  \Enlight_Hook_HookArgs
+     * @return \Enlight_Hook_HookArgs
      */
     public function set($key, $value)
     {
         if ($this->containsKey($key)) {
             parent::set($key, $value);
         }
+
         return $this;
     }
 }

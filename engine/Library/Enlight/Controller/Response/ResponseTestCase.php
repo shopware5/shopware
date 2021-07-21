@@ -17,6 +17,9 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+/**
+ * Response object which should be used in tests
+ */
 class Enlight_Controller_Response_ResponseTestCase extends Enlight_Controller_Response_ResponseHttp
 {
     /**
@@ -36,8 +39,6 @@ class Enlight_Controller_Response_ResponseTestCase extends Enlight_Controller_Re
      *
      * @param string $name
      * @param string $default
-     *
-     * @return mixed
      */
     public function getCookie($name, $default = null)
     {
@@ -50,8 +51,6 @@ class Enlight_Controller_Response_ResponseTestCase extends Enlight_Controller_Re
      * Gets all the information for a cookie
      *
      * @param string $name
-     *
-     * @return mixed
      */
     public function getFullCookie($name)
     {
@@ -65,8 +64,6 @@ class Enlight_Controller_Response_ResponseTestCase extends Enlight_Controller_Re
      *
      * @param string $name
      * @param string $default
-     *
-     * @return mixed
      */
     public function getHeader($name, $default = null)
     {

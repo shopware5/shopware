@@ -35,7 +35,7 @@ function smarty_function_partition($params, $smarty)
     // read the param key parts
     $p = $params['parts'];
     // get the length of array
-    $listlen = count($list);
+    $listlen = \count($list);
     // calculate partsize
     $partlen = floor($listlen / $p);
     $partrem = $listlen % $p;
@@ -44,7 +44,7 @@ function smarty_function_partition($params, $smarty)
     // Split array in to chunks
     for ($px = 0; $px < $p; ++$px) {
         $incr = ($px < $partrem) ? $partlen + 1 : $partlen;
-        $partition[$px] = array_slice($list, $mark, $incr);
+        $partition[$px] = \array_slice($list, $mark, $incr);
         $mark += $incr;
     }
     $smarty->assign($params['assign'], $partition);

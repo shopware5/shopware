@@ -24,7 +24,6 @@
  * It supports an automatically serialization of the configuration data, supports configuration sections and
  * update and create columns.
  *
- *
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
@@ -102,7 +101,6 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
     /**
      * Sets the options of an array.
      *
-     *
      * @return Enlight_Config_Adapter
      */
     public function setOptions(array $options)
@@ -160,7 +158,6 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
     /**
      * Reads a section from the data store.
      *
-     *
      * @return Enlight_Config_Adapter_DbTable
      */
     public function read(Enlight_Config $config)
@@ -171,7 +168,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
         $data = [];
 
         $extends = $config->getExtends();
-        $currentSection = is_array($section) ? implode(':', $section) : $section;
+        $currentSection = \is_array($section) ? implode(':', $section) : $section;
         while ($currentSection !== null) {
             $data += $this->readSection($name, $currentSection);
             $currentSection = isset($extends[$currentSection]) ? $extends[$currentSection] : null;
@@ -228,7 +225,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
         }
 
         if ($section !== null) {
-            if (is_array($this->_sectionColumn)) {
+            if (\is_array($this->_sectionColumn)) {
                 foreach ($this->_sectionColumn as $key => $sectionColumn) {
                     if (isset($section[$key])) {
                         $where[] = $db->quoteInto($sectionColumn . '=?', $section[$key]);
@@ -316,7 +313,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
         }
 
         if ($section !== null) {
-            if (is_array($this->_sectionColumn)) {
+            if (\is_array($this->_sectionColumn)) {
                 foreach ($this->_sectionColumn as $key => $sectionColumn) {
                     if (isset($section[$key])) {
                         $where[] = $db->quoteInto($sectionColumn . '=?', $section[$key]);
@@ -358,7 +355,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
         }
 
         if ($section !== null && $this->_sectionColumn !== null) {
-            if (is_array($this->_sectionColumn)) {
+            if (\is_array($this->_sectionColumn)) {
                 $section = explode(':', $section);
                 foreach ($this->_sectionColumn as $key => $sectionColumn) {
                     if (!empty($section[$key])) {

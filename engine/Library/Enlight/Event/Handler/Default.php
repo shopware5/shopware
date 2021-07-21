@@ -24,13 +24,14 @@
  *
  * @category   Enlight
  * @package    Enlight_Event
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Event_Handler_Default extends Enlight_Event_Handler
 {
     /**
-     * @var callback Contains the callback function.
+     * @var callable contains the callback function
      */
     protected $listener;
 
@@ -38,10 +39,11 @@ class Enlight_Event_Handler_Default extends Enlight_Event_Handler
      * The Enlight_Event_Handler_Default class constructor expects the event name, the callback function and
      * optional the position of the event handler.
      *
-     * @throws  Enlight_Exception
-     * @param   string   $event
-     * @param   callback $listener
-     * @param   integer  $position
+     * @param string                                      $event
+     * @param callable|array<int, object|string|callable> $listener
+     * @param int                                         $position
+     *
+     * @throws Enlight_Exception
      */
     public function __construct($event, $listener, $position = null)
     {
@@ -54,13 +56,15 @@ class Enlight_Event_Handler_Default extends Enlight_Event_Handler
      * Checks if the given listener is callable. If it is callable the listener is set
      * in the internal property and can be accessed by using the getListener() function.
      *
-     * @param   callback $listener
-     * @return  Enlight_Event_Handler_Default
-     * @throws  Enlight_Event_Exception
+     * @param callable|array<int, object|string> $listener
+     *
+     * @throws Enlight_Event_Exception
+     *
+     * @return Enlight_Event_Handler_Default
      */
     public function setListener($listener)
     {
-        if (!is_callable($listener, true, $listener_event)) {
+        if (!\is_callable($listener, true, $listener_event)) {
             throw new Enlight_Event_Exception('Listener "' . $listener_event . '" is not callable');
         }
         $this->listener = $listener;
@@ -70,7 +74,8 @@ class Enlight_Event_Handler_Default extends Enlight_Event_Handler
 
     /**
      * Getter method for the listener property.
-     * @return  callback
+     *
+     * @return callable
      */
     public function getListener()
     {
@@ -79,25 +84,24 @@ class Enlight_Event_Handler_Default extends Enlight_Event_Handler
 
     /**
      * Executes the listener with the given Enlight_Event_EventArgs.
-     * @param   Enlight_Event_EventArgs $args
-     * @return  mixed
      */
     public function execute(Enlight_Event_EventArgs $args)
     {
-        return call_user_func($this->listener, $args);
+        return \call_user_func($this->listener, $args);
     }
 
     /**
      * Returns the handler properties as array.
+     *
      * @return array
      */
     public function toArray()
     {
-        return array(
+        return [
             'name' => $this->name,
             'position' => $this->position,
             'plugin' => $this->getName(),
-            'listener' => $this->listener
-        );
+            'listener' => $this->listener,
+        ];
     }
 }

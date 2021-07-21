@@ -42,10 +42,6 @@ PHP analyze:
     services:
         -   name: mysql:5.7
             alias: mysql
-    artifacts:
-        expire_in: 1 week
-        reports:
-            junit: php-cs-fixer.xml
 
 Code Coverage:
     stage: Static analysis

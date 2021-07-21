@@ -63,7 +63,7 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
         // Removes the arguments that were not in the original.
         $noArgs = [];
         foreach ($args as $arg) {
-            if (is_array($arg)) {
+            if (\is_array($arg)) {
                 $noArgs[] = key($arg);
             } else {
                 $noArgs[] = trim($arg, "'");

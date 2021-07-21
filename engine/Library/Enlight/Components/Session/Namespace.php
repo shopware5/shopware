@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
  *
  * The Enlight_Components_Session_Namespace extends the Symfony Session with an easy array access.
  *
- *
  * @license     http://enlight.de/license     New BSD License
  */
 class Enlight_Components_Session_Namespace extends Session implements ArrayAccess
@@ -132,6 +131,7 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
     public function unsetAll()
     {
         trigger_error('Enlight_Components_Session_Namespace::unsetAll is deprecated since 5.7 and will be removed with 5.9. Use Enlight_Components_Session_Namespace::clear instead', E_USER_DEPRECATED);
+
         return $this->clear();
     }
 
@@ -171,9 +171,6 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
      *
      * This method can be used to ensure other sessions are closed before starting a new session, because the other
      * sessions would use the session id of the new session and thus write their data into the wrong session.
-     *
-     * @param $container
-     * @param $sessionServiceName
      */
     private static function ensureSessionClosed($container, $sessionServiceName)
     {

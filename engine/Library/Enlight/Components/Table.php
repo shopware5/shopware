@@ -22,9 +22,9 @@
  *
  * The Enlight_Components_Table extend the zend db table with the hook ability.
  *
- *
  * @category   Enlight
  * @package    Enlight_Table
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -43,6 +43,7 @@ class Enlight_Components_Table extends Zend_Db_Table implements Enlight_Hook
                 $maps[$rule][self::REF_TABLE_CLASS] = Enlight_Class::getClassName($map[self::REF_TABLE_CLASS]);
             }
         }
+
         return $maps;
     }
 }

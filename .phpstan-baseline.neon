@@ -1,6 +1,4161 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Parameter \\#1 \\$newInstance of function Shopware expects Shopware\\|null, Enlight_Application\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Application.php
+
+		-
+			message: "#^Method Enlight_Class\\:\\:Instance\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Method Enlight_Class\\:\\:Instance\\(\\) should return Enlight_Class but returns object\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Method Enlight_Class\\:\\:__call\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Method Enlight_Class\\:\\:__call\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Method Enlight_Class\\:\\:__callStatic\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Method Enlight_Class\\:\\:__callStatic\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Method Enlight_Class\\:\\:__get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Method Enlight_Class\\:\\:__set\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Method Enlight_Class\\:\\:__set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Method Enlight_Class\\:\\:getClassName\\(\\) has parameter \\$class with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Method Enlight_Class\\:\\:resetInstance\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Method Enlight_Class\\:\\:resetInstance\\(\\) has parameter \\$class with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Parameter \\#1 \\$argument of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, array\\<string, string\\>\\|false given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Property Enlight_Class\\:\\:\\$instances type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Class.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:__call\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:__call\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:__construct\\(\\) has parameter \\$elements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:__get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:__set\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:__set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Iterator\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:offsetGet\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:offsetSet\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:remove\\(\\) return type has no value type specified in iterable type Enlight_Collection_ArrayCollection\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:set\\(\\) return type has no value type specified in iterable type Enlight_Collection_ArrayCollection\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Parameter \\#1 \\$key of method Enlight_Collection_ArrayCollection\\:\\:remove\\(\\) expects string, unknown_type given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|null given\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Parameter \\$key of method Enlight_Collection_ArrayCollection\\:\\:offsetUnset\\(\\) has invalid typehint type unknown_type\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Property Enlight_Collection_ArrayCollection\\:\\:\\$_elements type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/ArrayCollection.php
+
+		-
+			message: "#^Interface Enlight_Collection_Collection extends generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/Collection.php
+
+		-
+			message: "#^Interface Enlight_Collection_Collection extends generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: engine/Library/Enlight/Collection/Collection.php
+
+		-
+			message: "#^Call to an undefined method Zend_Auth_Adapter_Interface\\:\\:refresh\\(\\)\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Auth.php
+
+		-
+			message: "#^Method Enlight_Components_Auth\\:\\:getInstance\\(\\) should return Enlight_Components_Auth but returns Zend_Auth\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Auth.php
+
+		-
+			message: "#^Method Enlight_Components_Auth_Adapter_DbTable\\:\\:updateExpiry\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Auth/Adapter/DbTable.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Adapter\\:\\:startJob\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Adapter.php
+
+		-
+			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
+			message: "#^Cannot call method fetchAll\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Adapter_DBAL\\:\\:getJobByAction\\(\\) should return Enlight_Components_Cron_Job but returns Enlight_Components_Cron_Job\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Adapter_DBAL\\:\\:getJobById\\(\\) should return Enlight_Components_Cron_Job but returns Enlight_Components_Cron_Job\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Adapter_DBAL\\:\\:getJobByName\\(\\) should return Enlight_Components_Cron_Job but returns Enlight_Components_Cron_Job\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Adapter_DBAL\\:\\:isJobStillOverdue\\(\\) has parameter \\$jobId with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Adapter_DBAL\\:\\:startJob\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Adapter_DBAL\\:\\:updateJob\\(\\) should return Enlight_Components_Cron_Manager but return statement is missing\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Enlight_Components_Cron_Adapter_DBAL\\:\\:getJobByColumn\\(\\) expects string, int given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between int and null will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
+			message: "#^Ternary operator condition is always true\\.$#"
+			count: 3
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:__get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:get\\(\\) has parameter \\$default with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:get\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:getDisableOnError\\(\\) should return int but returns bool\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:getEnd\\(\\) should return Zend_Date but returns string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:getName\\(\\) should return String but returns string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:getNext\\(\\) should return Zend_Date but returns string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:getStart\\(\\) should return Zend_Date but returns string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:setData\\(\\) has parameter \\$data with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:setOptions\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Job\\:\\:setOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Property Enlight_Components_Cron_Job\\:\\:\\$active \\(int\\) does not accept bool\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Property Enlight_Components_Cron_Job\\:\\:\\$active \\(int\\) does not accept default value of type true\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Property Enlight_Components_Cron_Job\\:\\:\\$data \\(string\\) does not accept default value of type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Property Enlight_Components_Cron_Job\\:\\:\\$end \\(string\\) does not accept Zend_Date\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Property Enlight_Components_Cron_Job\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Return typehint of method Enlight_Components_Cron_Job\\:\\:getName\\(\\) has invalid type String\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Job.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Manager\\:\\:disableJob\\(\\) should return Enlight_Components_Cron_Adapter but returns Enlight_Components_Cron_Manager\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Manager.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Manager\\:\\:endJob\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Manager.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Manager\\:\\:runJob\\(\\) return type has no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Manager.php
+
+		-
+			message: "#^Method Enlight_Components_Cron_Manager\\:\\:runJob\\(\\) should return Enlight_Event_EventArgs but returns Enlight_Event_EventArgs\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Manager.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$eventManager with type Enlight_Event_EventManager\\|null is not subtype of native type Enlight_Event_EventManager\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Manager.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$jobArgs has no value type specified in iterable type Enlight_Components_Cron_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Manager.php
+
+		-
+			message: "#^Parameter \\#1 \\$end of method Enlight_Components_Cron_Job\\:\\:setEnd\\(\\) expects string\\|Zend_Date\\|null, int\\|string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Manager.php
+
+		-
+			message: "#^Parameter \\#1 \\$next of method Enlight_Components_Cron_Job\\:\\:setNext\\(\\) expects string\\|Zend_Date\\|null, float\\|int\\|string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Manager.php
+
+		-
+			message: "#^Property Enlight_Components_Cron_Manager\\:\\:\\$eventArgsClass has no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Manager.php
+
+		-
+			message: "#^Property Enlight_Components_Cron_Manager\\:\\:\\$eventManager \\(Enlight_Event_EventManager\\) does not accept Enlight_Event_EventManager\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method errorInfo\\(\\) on object\\|resource\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
+
+		-
+			message: "#^Cannot call method rowCount\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
+
+		-
+			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:createFromDbalConnectionAndConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
+
+		-
+			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:executeQuery\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
+
+		-
+			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:executeQuery\\(\\) has parameter \\$types with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
+
+		-
+			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type Zend_Db_Statement_Pdo\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
+
+		-
+			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:executeQuery\\(\\) should return Zend_Db_Statement_Pdo but returns Zend_Db_Statement_Pdo\\|false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
+
+		-
+			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:executeUpdate\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
+
+		-
+			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:executeUpdate\\(\\) has parameter \\$types with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
+
+		-
+			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:query\\(\\) has parameter \\$bind with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
+
+		-
+			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:query\\(\\) return type has no value type specified in iterable type Zend_Db_Statement_Pdo\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
+
+		-
+			message: "#^Cannot call method notify\\(\\) on Enlight_Event_EventManager\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Method Enlight_Components_Mail\\:\\:IsHTML\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Method Enlight_Components_Mail\\:\\:__get\\(\\) should return string\\|unknown\\|null but return statement is missing\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Method Enlight_Components_Mail\\:\\:__set\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Method Enlight_Components_Mail\\:\\:__set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Method Enlight_Components_Mail\\:\\:getAsscociations\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Method Enlight_Components_Mail\\:\\:getFromName\\(\\) should return unknown but returns array\\|string\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Method Enlight_Components_Mail\\:\\:getTemplateName\\(\\) should return string but returns null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Method Enlight_Components_Mail\\:\\:getTo\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Method Enlight_Components_Mail\\:\\:setAssociations\\(\\) has parameter \\$associations with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Method Enlight_Components_Mail\\:\\:setTemplateName\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Parameter \\#2 \\$name of method Enlight_Components_Mail\\:\\:setFrom\\(\\) expects string\\|null, unknown given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Property Enlight_Components_Mail\\:\\:\\$_fromName type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Property Enlight_Components_Mail\\:\\:\\$_plainBody \\(null\\) does not accept string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Property Enlight_Components_Mail\\:\\:\\$_plainBodyText \\(null\\) does not accept string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Property Enlight_Components_Mail\\:\\:\\$_plainSubject \\(null\\) does not accept string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Property Enlight_Components_Mail\\:\\:\\$asscociations type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Property Enlight_Components_Mail\\:\\:\\$templateName \\(null\\) does not accept string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Return typehint of method Enlight_Components_Mail\\:\\:__get\\(\\) has invalid type unknown\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Return typehint of method Enlight_Components_Mail\\:\\:getFromName\\(\\) has invalid type unknown\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 5
+			path: engine/Library/Enlight/Components/Mail.php
+
+		-
+			message: "#^Class Enlight_Components_Session_Namespace implements generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:__get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:__set\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:__set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:__unset\\(\\) with return type void returns mixed but should not return anything\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:clear\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:ensureBackendSessionClosed\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:ensureBackendSessionClosed\\(\\) has parameter \\$container with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:ensureFrontendSessionClosed\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:ensureFrontendSessionClosed\\(\\) has parameter \\$container with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:ensureSessionClosed\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:ensureSessionClosed\\(\\) has parameter \\$container with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:ensureSessionClosed\\(\\) has parameter \\$sessionServiceName with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Session_Namespace\\:\\:unsetAll\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Session/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Snippet_Manager\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Manager.php
+
+		-
+			message: "#^Property Enlight_Components_Snippet_Manager\\:\\:\\$ignoreNamespace \\(string\\) does not accept bool\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Manager.php
+
+		-
+			message: "#^Property Enlight_Components_Snippet_Manager\\:\\:\\$namespaces type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Manager.php
+
+		-
+			message: "#^Cannot access offset 'name' on array\\|bool\\|null\\.$#"
+			count: 3
+			path: engine/Library/Enlight/Components/Snippet/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Snippet_Namespace\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Snippet_Namespace\\:\\:get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Snippet_Namespace\\:\\:get\\(\\) has parameter \\$default with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Namespace.php
+
+		-
+			message: "#^Method Enlight_Components_Snippet_Namespace\\:\\:setFallback\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Namespace.php
+
+		-
+			message: "#^Right side of && is always true\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Namespace.php
+
+		-
+			message: "#^Argument of an invalid type array\\|string supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Resource.php
+
+		-
+			message: "#^Method Enlight_Components_Snippet_Resource\\:\\:compileSnippetBlock\\(\\) has parameter \\$content with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Resource.php
+
+		-
+			message: "#^Method Enlight_Components_Snippet_Resource\\:\\:compileSnippetBlock\\(\\) has parameter \\$params with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Resource.php
+
+		-
+			message: "#^Method Enlight_Components_Snippet_Resource\\:\\:getSnippet\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Resource.php
+
+		-
+			message: "#^Method Enlight_Components_Snippet_Resource\\:\\:getSnippet\\(\\) has parameter \\$default with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Resource.php
+
+		-
+			message: "#^Method Enlight_Components_Snippet_Resource\\:\\:populate\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Resource.php
+
+		-
+			message: "#^Parameter \\#1 \\$namespace of method Enlight_Components_Snippet_Resource\\:\\:getSnippet\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Snippet/Resource.php
+
+		-
+			message: "#^Method Enlight_Components_Table\\:\\:_getReferenceMapNormalized\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Table.php
+
+		-
+			message: "#^Call to an undefined method Enlight_Controller_Response_ResponseHttp\\:\\:getHeader\\(\\)\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Cannot call method getPlugins\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Cannot call method reset\\(\\) on Enlight_Event_EventManager\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Cannot call method reset\\(\\) on Enlight_Plugin_PluginManager\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Left side of && is always true\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Method Enlight_Components_Test_Controller_TestCase\\:\\:Request\\(\\) should return Enlight_Controller_Request_RequestTestCase but returns Enlight_Controller_Request_Request\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Method Enlight_Components_Test_Controller_TestCase\\:\\:Response\\(\\) should return Enlight_Controller_Response_ResponseHttp but returns Enlight_Controller_Response_Response\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Method Enlight_Components_Test_Controller_TestCase\\:\\:__get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Method Enlight_Components_Test_Controller_TestCase\\:\\:__get\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Method Enlight_Components_Test_Controller_TestCase\\:\\:reset\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Method Enlight_Components_Test_Controller_TestCase\\:\\:setConfig\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Method Enlight_Components_Test_Controller_TestCase\\:\\:setConfig\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Parameter \\#1 \\$shop of method Shopware_Components_Config\\:\\:setShop\\(\\) expects Shopware\\\\Models\\\\Shop\\\\Shop, Shopware\\\\Models\\\\Shop\\\\DetachedShop\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Parameter \\#1 \\$url of method Enlight_Components_Test_Controller_TestCase\\:\\:dispatch\\(\\) expects string\\|null, string\\|false\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Property Enlight_Components_Test_Controller_TestCase\\:\\:\\$_front \\(Enlight_Controller_Front\\) does not accept null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Property Enlight_Components_Test_Controller_TestCase\\:\\:\\$_request \\(Enlight_Controller_Request_Request\\) does not accept null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Property Enlight_Components_Test_Controller_TestCase\\:\\:\\$_response \\(Enlight_Controller_Response_Response\\) does not accept null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Property Enlight_Components_Test_Controller_TestCase\\:\\:\\$_template \\(Enlight_Template_Manager\\) does not accept null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Property Enlight_Components_Test_Controller_TestCase\\:\\:\\$_view \\(Enlight_View_Default\\) does not accept null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
+
+		-
+			message: "#^Method Enlight_Components_Test_Plugin_TestCase\\:\\:createEventArgs\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Plugin/TestCase.php
+
+		-
+			message: "#^Method Enlight_Components_Test_Plugin_TestCase\\:\\:createEventArgs\\(\\) has parameter \\$name with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Plugin/TestCase.php
+
+		-
+			message: "#^Method Enlight_Components_Test_Plugin_TestCase\\:\\:createEventArgs\\(\\) return type has no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/Plugin/TestCase.php
+
+		-
+			message: "#^Method Enlight_Components_Test_TestCase\\:\\:setConfig\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/TestCase.php
+
+		-
+			message: "#^Method Enlight_Components_Test_TestCase\\:\\:setConfig\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/TestCase.php
+
+		-
+			message: "#^Parameter \\#1 \\$shop of method Shopware_Components_Config\\:\\:setShop\\(\\) expects Shopware\\\\Models\\\\Shop\\\\Shop, Shopware\\\\Models\\\\Shop\\\\DetachedShop\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Components/Test/TestCase.php
+
+		-
+			message: "#^Cannot access an offset on bool\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Class Enlight_Config implements generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:__set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:get\\(\\) has parameter \\$default with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:getDirtyFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:getDirtyFields\\(\\) should return array but returns bool\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:getName\\(\\) should return Enlight_Config but returns string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:offsetGet\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:offsetSet\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:setData\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:setData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:setDefaultAdapter\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:setDirtyFields\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:setExtends\\(\\) has parameter \\$extends with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config\\:\\:setSection\\(\\) has parameter \\$section with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Property Enlight_Config\\:\\:\\$_dirtyFields \\(bool\\) does not accept array\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Property Enlight_Config\\:\\:\\$_dirtyFields \\(bool\\) does not accept default value of type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config.php
+
+		-
+			message: "#^Method Enlight_Config_Adapter\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter.php
+
+		-
+			message: "#^Method Enlight_Config_Adapter\\:\\:setOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter.php
+
+		-
+			message: "#^Binary operation \"\\.\" between string and Enlight_Config results in an error\\.$#"
+			count: 3
+			path: engine/Library/Enlight/Config/Adapter/DbTable.php
+
+		-
+			message: "#^Call to function is_array\\(\\) with string will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter/DbTable.php
+
+		-
+			message: "#^Call to function is_array\\(\\) with string\\|null will always evaluate to false\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Config/Adapter/DbTable.php
+
+		-
+			message: "#^Cannot access offset \\*NEVER\\* on array\\<int, string\\>\\|false\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Config/Adapter/DbTable.php
+
+		-
+			message: "#^Method Enlight_Config_Adapter_DbTable\\:\\:delete\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter/DbTable.php
+
+		-
+			message: "#^Method Enlight_Config_Adapter_DbTable\\:\\:readSection\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter/DbTable.php
+
+		-
+			message: "#^Method Enlight_Config_Adapter_DbTable\\:\\:setOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter/DbTable.php
+
+		-
+			message: "#^Method Enlight_Config_Adapter_DbTable\\:\\:write\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter/DbTable.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of method Enlight_Config_Adapter_DbTable\\:\\:getTable\\(\\) expects null, string\\|null given\\.$#"
+			count: 3
+			path: engine/Library/Enlight/Config/Adapter/DbTable.php
+
+		-
+			message: "#^Return type \\(Enlight_Config_Adapter_DbTable\\) of method Enlight_Config_Adapter_DbTable\\:\\:read\\(\\) should be compatible with return type \\(Enlight_Config_Adapter_File\\) of method Enlight_Config_Adapter\\:\\:read\\(\\)$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter/DbTable.php
+
+		-
+			message: "#^Return type \\(Enlight_Config_Adapter_DbTable\\) of method Enlight_Config_Adapter_DbTable\\:\\:write\\(\\) should be compatible with return type \\(Enlight_Config_Adapter_File\\) of method Enlight_Config_Adapter\\:\\:write\\(\\)$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter/DbTable.php
+
+		-
+			message: "#^Call to function is_array\\(\\) with string will always evaluate to false\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Config/Adapter/File.php
+
+		-
+			message: "#^Method Enlight_Config_Adapter_File\\:\\:addConfigDir\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter/File.php
+
+		-
+			message: "#^Method Enlight_Config_Adapter_File\\:\\:setOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter/File.php
+
+		-
+			message: "#^Parameter \\#1 \\$extendingSection of method Enlight_Config\\:\\:setExtend\\(\\) expects string, null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter/File.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of method Enlight_Config_Adapter_File\\:\\:getFilename\\(\\) expects string, Enlight_Config given\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Config/Adapter/File.php
+
+		-
+			message: "#^Property Enlight_Config_Adapter_File\\:\\:\\$_configDir type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter/File.php
+
+		-
+			message: "#^Result of && is always false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Adapter/File.php
+
+		-
+			message: "#^Class Enlight_Config_BaseConfig implements generic interface Iterator but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:__construct\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:__get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:__set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:_arrayMergeRecursive\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:_loadFileErrorHandler\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:current\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:get\\(\\) has parameter \\$default with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:getExtends\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:getSectionName\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:key\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:setReadOnly\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Method Enlight_Config_BaseConfig\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Property Enlight_Config_BaseConfig\\:\\:\\$_data type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Property Enlight_Config_BaseConfig\\:\\:\\$_extends type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Property Enlight_Config_BaseConfig\\:\\:\\$_loadedSection has no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/BaseConfig.php
+
+		-
+			message: "#^Cannot access offset 0 on array\\<int, string\\>\\|false\\.$#"
+			count: 10
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Cannot access offset 1 on array\\<int, string\\>\\|false\\.$#"
+			count: 3
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Format_Ini\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Format_Ini\\:\\:__construct\\(\\) has parameter \\$section with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Format_Ini\\:\\:_loadIniFile\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Format_Ini\\:\\:_parseIniFile\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Format_Ini\\:\\:_parseIniFile\\(\\) should return array but returns array\\|false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Format_Ini\\:\\:_processKey\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Format_Ini\\:\\:_processKey\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Format_Ini\\:\\:_processSection\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Format_Ini\\:\\:_processSection\\(\\) has parameter \\$iniArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Format_Ini\\:\\:_processSection\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\<int, string\\>\\|false given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Format/Ini.php
+
+		-
+			message: "#^Binary operation \"\\.\" between string and void results in an error\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Config/Writer/Ini.php
+
+		-
+			message: "#^Binary operation \"\\.\\=\" between '' and void results in an error\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Writer/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Writer_Ini\\:\\:_addBranch\\(\\) has parameter \\$parents with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Writer/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Writer_Ini\\:\\:_addBranch\\(\\) with return type void returns mixed but should not return anything\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Writer/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Writer_Ini\\:\\:_prepareValue\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Writer/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Writer_Ini\\:\\:_prepareValue\\(\\) should return string but returns float\\|int\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Writer/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Writer_Ini\\:\\:setNestSeparator\\(\\) has parameter \\$separator with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Writer/Ini.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(Enlight_Config_BaseConfig\\)\\: Unexpected token \"\\\\n     \\*\", expected variable at offset 220$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Writer/Ini.php
+
+		-
+			message: "#^Result of method Enlight_Config_Writer_Ini\\:\\:_addBranch\\(\\) \\(void\\) is used\\.$#"
+			count: 4
+			path: engine/Library/Enlight/Config/Writer/Ini.php
+
+		-
+			message: "#^Method Enlight_Config_Writer_Writer\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Writer/Writer.php
+
+		-
+			message: "#^Method Enlight_Config_Writer_Writer\\:\\:setOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Writer/Writer.php
+
+		-
+			message: "#^Property Enlight_Config_Writer_Writer\\:\\:\\$_skipOptions type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Config/Writer/Writer.php
+
+		-
+			message: "#^Cannot call method notify\\(\\) on Enlight_Event_EventManager\\|null\\.$#"
+			count: 11
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Cannot call method notifyUntil\\(\\) on Enlight_Event_EventManager\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:__call\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:__call\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:createForm\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:createForm\\(\\) should return Symfony\\\\Component\\\\Form\\\\Form but returns Symfony\\\\Component\\\\Form\\\\FormInterface\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:dispatch\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:forward\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:forward\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:getActionArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:initController\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:postDispatch\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:redirect\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:redirect\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:redirect\\(\\) has parameter \\$url with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:setContainer\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Parameter \\#2 \\$controller of method Symfony\\\\Component\\\\HttpKernel\\\\Controller\\\\ArgumentResolver\\:\\:getArguments\\(\\) expects callable\\(\\)\\: mixed, array\\(\\$this\\(Enlight_Controller_Action\\), string\\) given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Property Enlight_Controller_Action\\:\\:\\$container \\(Shopware\\\\Components\\\\DependencyInjection\\\\Container\\) does not accept Shopware\\\\Components\\\\DependencyInjection\\\\Container\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Property Enlight_Controller_Action\\:\\:\\$view \\(Enlight_View_Default\\) does not accept Enlight_View\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Dispatcher\\:\\:dispatch\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher.php
+
+		-
+			message: "#^Property Enlight_Controller_Dispatcher\\:\\:\\$response \\(Enlight_Controller_Response_Response\\) does not accept Enlight_Controller_Response_Response\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher.php
+
+		-
+			message: "#^Binary operation \"\\.\" between 'Controller \"' and array\\|string results in an error\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Call to function is_object\\(\\) with array\\|string will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Call to function is_object\\(\\) with string will always evaluate to false\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Cannot call method notifyUntil\\(\\) on Enlight_Event_EventManager\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Cannot clone object\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:__construct\\(\\) has parameter \\$controllers with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:dispatch\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:formatActionName\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:formatControllerName\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:getControllerClass\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:getControllerPath\\(\\) should return string but returns null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:getControllerPath\\(\\) should return string but returns object\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:getModules\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:setModules\\(\\) has parameter \\$modules with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Parameter \\#1 \\$class of method Enlight_Hook_HookManager\\:\\:getProxy\\(\\) expects string, array\\|string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Parameter \\#1 \\$className of method Enlight_Controller_Dispatcher_Default\\:\\:isForbiddenController\\(\\) expects string, array\\|string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Parameter \\#1 \\$classname of function class_exists expects string, array\\|string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Parameter \\#1 \\$content of method Enlight_Controller_Response_Response\\:\\:appendBody\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Parameter \\#1 \\$request of method Enlight_Controller_Action\\:\\:initController\\(\\) expects Enlight_Controller_Request_RequestHttp, Enlight_Controller_Request_Request given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Parameter \\#2 \\$response of method Enlight_Controller_Action\\:\\:initController\\(\\) expects Enlight_Controller_Response_ResponseHttp, Enlight_Controller_Response_Response given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Property Enlight_Controller_Dispatcher_Default\\:\\:\\$controllers type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Property Enlight_Controller_Dispatcher_Default\\:\\:\\$modules type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
+
+		-
+			message: "#^Method Enlight_Controller_Front\\:\\:Dispatcher\\(\\) should return Enlight_Controller_Dispatcher_Default but returns Enlight_Controller_Dispatcher\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Method Enlight_Controller_Front\\:\\:Plugins\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Loader\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Method Enlight_Controller_Front\\:\\:getParam\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Method Enlight_Controller_Front\\:\\:getParam\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Method Enlight_Controller_Front\\:\\:getParams\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Method Enlight_Controller_Front\\:\\:setParam\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Method Enlight_Controller_Front\\:\\:setParams\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Method Enlight_Controller_Front\\:\\:setPlugins\\(\\) has parameter \\$plugins with no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Method Enlight_Controller_Front\\:\\:setRequest\\(\\) has parameter \\$request with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Method Enlight_Controller_Front\\:\\:setResponse\\(\\) has parameter \\$response with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 4
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$plugins with type Enlight_Plugin_Namespace\\|string is not subtype of native type Enlight_Plugin_Namespace\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Parameter \\#1 \\$request of method Symfony\\\\Component\\\\HttpFoundation\\\\RequestStack\\:\\:push\\(\\) expects Symfony\\\\Component\\\\HttpFoundation\\\\Request, Enlight_Controller_Request_Request given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Property Enlight_Controller_Front\\:\\:\\$invokeParams type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Property Enlight_Controller_Front\\:\\:\\$plugins \\(Enlight_Plugin_Namespace_Loader\\) does not accept Enlight_Plugin_Namespace\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Property Enlight_Controller_Front\\:\\:\\$plugins type has no value type specified in iterable type Enlight_Plugin_Namespace_Loader\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Property Enlight_Controller_Front\\:\\:\\$response \\(Enlight_Controller_Response_ResponseHttp\\) does not accept Enlight_Controller_Response_Response\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Front.php
+
+		-
+			message: "#^Cannot call method registerListener\\(\\) on Enlight_Event_EventManager\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:convertDateTime\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:convertDateTime\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:convertToJson\\(\\) has parameter \\$data with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:convertToJson\\(\\) should return string but returns string\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:convertToUtf8\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:convertToUtf8\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:init\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:onPostDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:onPostDispatch\\(\\) should return bool but empty return statement found\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:onPostDispatch\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Possibly invalid array key type array\\|string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Property Enlight_Controller_Plugins_Json_Bootstrap\\:\\:\\$padding \\(string\\) does not accept bool\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Property Enlight_Controller_Plugins_Json_Bootstrap\\:\\:\\$padding \\(string\\) does not accept null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Property Enlight_Controller_Plugins_Json_Bootstrap\\:\\:\\$padding \\(string\\) does not accept string\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Property Enlight_Controller_Plugins_Json_Bootstrap\\:\\:\\$renderer \\(bool\\) does not accept null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between Enlight_Plugin_PluginCollection and null will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between string and true will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Variable \\$controller in PHPDoc tag @var does not match assigned variable \\$subject\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
+
+		-
+			message: "#^Cannot call method registerListener\\(\\) on Enlight_Event_EventManager\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:getPadding\\(\\) should return string but returns bool\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:init\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:onPreDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:onPreDispatch\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:setPadding\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:setPadding\\(\\) has parameter \\$padding with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:setParseParams\\(\\) has parameter \\$parseParams with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
+
+		-
+			message: "#^Parameter \\#1 \\$spec of method Enlight_Controller_Request_RequestHttp\\:\\:setPost\\(\\) expects array\\|string, bool given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
+
+		-
+			message: "#^Property Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:\\$padding \\(bool\\) does not accept null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
+
+		-
+			message: "#^Property Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:\\$parseParams type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between Enlight_Plugin_PluginCollection and null will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
+
+		-
+			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getSubject\\(\\)\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
+
+		-
+			message: "#^Cannot call method registerListener\\(\\) on Enlight_Event_EventManager\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ScriptRenderer_Bootstrap\\:\\:camelCaseToUnderScore\\(\\) should return string but returns string\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ScriptRenderer_Bootstrap\\:\\:getTemplateName\\(\\) should return string but returns null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ScriptRenderer_Bootstrap\\:\\:init\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ScriptRenderer_Bootstrap\\:\\:onPreDispatch\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ScriptRenderer_Bootstrap\\:\\:onPreDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
+
+		-
+			message: "#^Parameter \\#1 \\$str of function trim expects string, array\\|string\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
+
+		-
+			message: "#^Property Enlight_Controller_Plugins_ScriptRenderer_Bootstrap\\:\\:\\$headers type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
+
+		-
+			message: "#^Property Enlight_Controller_Plugins_ScriptRenderer_Bootstrap\\:\\:\\$viewRenderer \\(Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\) does not accept Enlight_Plugin_Bootstrap\\|Enlight_Plugin_Namespace\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
+
+		-
+			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getSubject\\(\\)\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Cannot call method filter\\(\\) on Enlight_Event_EventManager\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Cannot call method notify\\(\\) on Enlight_Event_EventManager\\|null\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Cannot call method registerListener\\(\\) on Enlight_Event_EventManager\\|null\\.$#"
+			count: 4
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:init\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:initEngine\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:initView\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:onActionInit\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:onActionInit\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:onDispatchLoopStartup\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:onDispatchLoopStartup\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:onPostDispatch\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:onPostDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:onPreDispatch\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:onPreDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_View_Default\\:\\:render\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^PHPDoc tag @return has invalid value \\(\\)\\: Unexpected token \"\\\\n     \", expected type at offset 278$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:__get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:__set\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:__set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:getAttribute\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:getParam\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:getParam\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:getParamSources\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:getParams\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:getUserParam\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:getUserParams\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:replacePost\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:replacePost\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:set\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:setAttribute\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:setBaseUrl\\(\\) has parameter \\$baseUrl with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:setHeader\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:setParam\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:setParam\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:setParamSources\\(\\) has parameter \\$paramSources with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:setParams\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:setPost\\(\\) has parameter \\$spec with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:setQuery\\(\\) has parameter \\$spec with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_Request\\:\\:unsetAttribute\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/Request.php
+
+		-
+			message: "#^Cannot cast array\\|string to string\\.$#"
+			count: 4
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:__get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:__set\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:__set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:getAttribute\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:getParam\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:getParam\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:getParamSources\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:getParams\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:getUserParam\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:getUserParams\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:replacePost\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:replacePost\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:set\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:setAttribute\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:setBaseUrl\\(\\) has parameter \\$baseUrl with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:setFiles\\(\\) has parameter \\$files with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:setHeader\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:setParam\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:setParam\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:setParamSources\\(\\) has parameter \\$paramSources with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:setParams\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:setPost\\(\\) has parameter \\$spec with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:setQuery\\(\\) has parameter \\$spec with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:unsetAttribute\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$spec has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|false given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Property Enlight_Controller_Request_RequestHttp\\:\\:\\$_params type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestTestCase\\:\\:clearAll\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestTestCase\\:\\:getClientIp\\(\\) should return string but returns string\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestTestCase\\:\\:getHeader\\(\\) has parameter \\$default with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestTestCase\\:\\:getHeaders\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestTestCase\\:\\:getRawBody\\(\\) should return string\\|null but returns resource\\|string\\|false\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestTestCase\\:\\:setCookie\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestTestCase\\:\\:setCookies\\(\\) has parameter \\$cookies with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestTestCase\\:\\:setDeviceType\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Request_RequestTestCase\\:\\:setHeaders\\(\\) has parameter \\$headers with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestTestCase.php
+
+		-
+			message: "#^Property Enlight_Controller_Request_RequestTestCase\\:\\:\\$_serverParams type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Request/RequestTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_Response\\:\\:getBody\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/Response.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_Response\\:\\:getCookies\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/Response.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_Response\\:\\:getExceptionByCode\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/Response.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_Response\\:\\:getExceptionByCode\\(\\) has parameter \\$code with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/Response.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_Response\\:\\:getExceptionByMessage\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/Response.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_Response\\:\\:getExceptionByType\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/Response.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_Response\\:\\:getHeaders\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/Response.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_Response\\:\\:prepend\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/Response.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_Response\\:\\:setBody\\(\\) has parameter \\$content with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/Response.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:__toString\\(\\) should return string but returns string\\|false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:clearRawHeader\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:clearRawHeader\\(\\) has parameter \\$headerRaw with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:clearRawHeaders\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:getBody\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:getCookies\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:getExceptionByCode\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:getExceptionByCode\\(\\) has parameter \\$code with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:getExceptionByMessage\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:getExceptionByType\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:getHeaders\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:getRawHeaderParts\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:getRawHeaders\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:outputBody\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:prepend\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:removeCookie\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:renderExceptions\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:renderExceptions\\(\\) has parameter \\$flag with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:sendCookies\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:sendResponse\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:setBody\\(\\) has parameter \\$content with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:setRawHeader\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseHttp\\:\\:setRawHeader\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Parameter \\#1 \\(array\\|string\\|null\\) of echo cannot be converted to string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Parameter \\#2 \\$path of method Symfony\\\\Component\\\\HttpFoundation\\\\ResponseHeaderBag\\:\\:removeCookie\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Property Symfony\\\\Component\\\\HttpFoundation\\\\Response\\:\\:\\$content \\(string\\) does not accept null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseHttp.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseTestCase\\:\\:getBody\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseTestCase\\:\\:getCookie\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseTestCase\\:\\:getFullCookie\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Response_ResponseTestCase\\:\\:getHeader\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseTestCase.php
+
+		-
+			message: "#^Parameter \\#2 \\$pieces of function implode expects array, \\$this\\(Enlight_Controller_Response_ResponseTestCase\\) given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Response/ResponseTestCase.php
+
+		-
+			message: "#^Method Enlight_Controller_Router\\:\\:assemble\\(\\) has parameter \\$userParams with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Router.php
+
+		-
+			message: "#^Method Enlight_Controller_Router\\:\\:setGlobalParam\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Router.php
+
+		-
+			message: "#^Property Enlight_Controller_Router\\:\\:\\$globalParams type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Router.php
+
+		-
+			message: "#^Method Enlight_Event_EventArgs\\:\\:__construct\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventArgs.php
+
+		-
+			message: "#^Method Enlight_Event_EventArgs\\:\\:getReturn\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventArgs.php
+
+		-
+			message: "#^Method Enlight_Event_EventArgs\\:\\:setName\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventArgs.php
+
+		-
+			message: "#^Method Enlight_Event_EventArgs\\:\\:setName\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventArgs.php
+
+		-
+			message: "#^Method Enlight_Event_EventArgs\\:\\:setProcessed\\(\\) return type has no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventArgs.php
+
+		-
+			message: "#^Method Enlight_Event_EventArgs\\:\\:setReturn\\(\\) has parameter \\$return with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventArgs.php
+
+		-
+			message: "#^Method Enlight_Event_EventArgs\\:\\:stop\\(\\) return type has no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventArgs.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$args with type array\\|null is not subtype of native type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventArgs.php
+
+		-
+			message: "#^Method Enlight_Event_EventHandler\\:\\:__construct\\(\\) has parameter \\$plugin with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventHandler.php
+
+		-
+			message: "#^Method Enlight_Event_EventHandler\\:\\:getPlugin\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventHandler.php
+
+		-
+			message: "#^Method Enlight_Event_EventHandler\\:\\:setPlugin\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventHandler.php
+
+		-
+			message: "#^Method Enlight_Event_EventHandler\\:\\:setPlugin\\(\\) has parameter \\$plugin with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventHandler.php
+
+		-
+			message: "#^Method Enlight_Event_EventHandler\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventHandler.php
+
+		-
+			message: "#^Property Enlight_Event_EventHandler\\:\\:\\$plugin has no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventHandler.php
+
+		-
+			message: "#^Argument of an invalid type Enlight_Event_Handler supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Array \\(array\\<Enlight_Event_Handler\\>\\) does not accept array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Cannot access offset int on array\\(\\)\\|Enlight_Event_Handler\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Cannot access offset mixed on Enlight_Event_Handler\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:addSubscriber\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:buildEventArgs\\(\\) has parameter \\$eventArgs with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:buildEventArgs\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:buildEventArgs\\(\\) return type has no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:collect\\(\\) has parameter \\$collection with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:collect\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:collect\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:filter\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:filter\\(\\) has parameter \\$eventArgs with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:filter\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:filter\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:getEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:getListeners\\(\\) has parameter \\$event with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:getListeners\\(\\) should return array\\<Enlight_Event_Handler\\> but returns Enlight_Event_Handler\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:notify\\(\\) has parameter \\$eventArgs with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:notify\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:notify\\(\\) return type has no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:notifyUntil\\(\\) has parameter \\$eventArgs with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:notifyUntil\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:notifyUntil\\(\\) return type has no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_EventManager\\:\\:registerSubscriber\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$array_arg of function ksort expects array, array\\<int, Enlight_Event_Handler\\>\\|Enlight_Event_Handler given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, Enlight_Event_Handler given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\|Enlight_Event_Handler given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Method Enlight_Event_Handler\\:\\:__construct\\(\\) has parameter \\$event with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler.php
+
+		-
+			message: "#^Method Enlight_Event_Handler\\:\\:execute\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler.php
+
+		-
+			message: "#^Method Enlight_Event_Handler\\:\\:execute\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler.php
+
+		-
+			message: "#^Method Enlight_Event_Handler_Default\\:\\:execute\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Default.php
+
+		-
+			message: "#^Method Enlight_Event_Handler_Default\\:\\:execute\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Default.php
+
+		-
+			message: "#^Method Enlight_Event_Handler_Default\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Default.php
+
+		-
+			message: "#^Parameter \\#1 \\$listener of method Enlight_Event_Handler_Default\\:\\:setListener\\(\\) expects array\\<int, object\\|string\\>\\|\\(callable\\(\\)\\: mixed\\), array\\<int, \\(callable\\(\\)\\: mixed\\)\\|object\\|string\\>\\|\\(callable\\(\\)\\: mixed\\) given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Default.php
+
+		-
+			message: "#^Parameter \\#1 \\$position of method Enlight_Event_Handler\\:\\:setPosition\\(\\) expects int, int\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Default.php
+
+		-
+			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:Plugin\\(\\) should return Enlight_Plugin_Bootstrap but returns Enlight_Plugin_Bootstrap\\|Enlight_Plugin_Namespace\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Plugin.php
+
+		-
+			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:__construct\\(\\) has parameter \\$namespace with no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Plugin.php
+
+		-
+			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:execute\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Plugin.php
+
+		-
+			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:execute\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Plugin.php
+
+		-
+			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:setNamespace\\(\\) has parameter \\$namespace with no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Plugin.php
+
+		-
+			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Plugin.php
+
+		-
+			message: "#^Parameter \\#1 \\$position of method Enlight_Event_Handler\\:\\:setPosition\\(\\) expects int, int\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Plugin.php
+
+		-
+			message: "#^Property Enlight_Event_Handler_Plugin\\:\\:\\$namespace type has no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Plugin.php
+
+		-
+			message: "#^Variable \\$plugin might not be defined\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Handler/Plugin.php
+
+		-
+			message: "#^Method Enlight_Event_Subscriber\\:\\:getListeners\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber.php
+
+		-
+			message: "#^Method Enlight_Event_Subscriber_Array\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Array.php
+
+		-
+			message: "#^Method Enlight_Event_Subscriber_Array\\:\\:getListeners\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Array.php
+
+		-
+			message: "#^Parameter \\#2 \\$offset of function array_splice expects int, int\\|string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Array.php
+
+		-
+			message: "#^Property Enlight_Event_Subscriber_Array\\:\\:\\$listeners type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Array.php
+
+		-
+			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$listener\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Config.php
+
+		-
+			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$listeners\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Event/Subscriber/Config.php
+
+		-
+			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$name\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Config.php
+
+		-
+			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$position\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Config.php
+
+		-
+			message: "#^Instanceof between \\*NEVER\\* and Enlight_Config will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Config.php
+
+		-
+			message: "#^Method Enlight_Event_Subscriber_Config\\:\\:getListeners\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Config.php
+
+		-
+			message: "#^Parameter \\#2 \\$offset of function array_splice expects int, int\\|string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Config.php
+
+		-
+			message: "#^Property Enlight_Event_Subscriber_Config\\:\\:\\$listeners type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Config.php
+
+		-
+			message: "#^Result of && is always false\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Event/Subscriber/Config.php
+
+		-
+			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$listener\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
+
+		-
+			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$listeners\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
+
+		-
+			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$name\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
+
+		-
+			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$plugin\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
+
+		-
+			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$position\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
+
+		-
+			message: "#^Method Enlight_Event_Subscriber_Plugin\\:\\:__construct\\(\\) has parameter \\$namespace with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
+
+		-
+			message: "#^Method Enlight_Event_Subscriber_Plugin\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
+
+		-
+			message: "#^Property Enlight_Event_Subscriber_Plugin\\:\\:\\$namespace type has no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
+
+		-
+			message: "#^Method Enlight\\\\Event\\\\SubscriberInterface\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/SubscriberInterface.php
+
+		-
+			message: "#^Method Enlight_Hook_HookArgs\\:\\:__construct\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookArgs.php
+
+		-
+			message: "#^Method Enlight_Hook_HookArgs\\:\\:__construct\\(\\) has parameter \\$subject with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookArgs.php
+
+		-
+			message: "#^Method Enlight_Hook_HookArgs\\:\\:getArgs\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookArgs.php
+
+		-
+			message: "#^Method Enlight_Hook_HookArgs\\:\\:remove\\(\\) return type has no value type specified in iterable type Enlight_Hook_HookArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookArgs.php
+
+		-
+			message: "#^Method Enlight_Hook_HookArgs\\:\\:set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookArgs.php
+
+		-
+			message: "#^Method Enlight_Hook_HookArgs\\:\\:set\\(\\) return type has no value type specified in iterable type Enlight_Hook_HookArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookArgs.php
+
+		-
+			message: "#^Property Enlight_Hook_HookArgs\\:\\:\\$_subject has no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookArgs.php
+
+		-
+			message: "#^Method Enlight_Hook_HookExecutionContext\\:\\:__construct\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookExecutionContext.php
+
+		-
+			message: "#^Method Enlight_Hook_HookExecutionContext\\:\\:execute\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookExecutionContext.php
+
+		-
+			message: "#^Method Enlight_Hook_HookExecutionContext\\:\\:executeReplaceChain\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookExecutionContext.php
+
+		-
+			message: "#^Method Enlight_Hook_HookExecutionContext\\:\\:executeReplaceChain\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookExecutionContext.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of method Enlight_Hook_HookManager\\:\\:getAlias\\(\\) expects string, class\\-string\\|false given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookExecutionContext.php
+
+		-
+			message: "#^Property Enlight_Hook_HookExecutionContext\\:\\:\\$args type has no value type specified in iterable type Enlight_Hook_HookArgs\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookExecutionContext.php
+
+		-
+			message: "#^Method Enlight_Hook_HookManager\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookManager.php
+
+		-
+			message: "#^Method Enlight_Hook_HookManager\\:\\:executeHooks\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookManager.php
+
+		-
+			message: "#^Method Enlight_Hook_HookManager\\:\\:executeHooks\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookManager.php
+
+		-
+			message: "#^Method Enlight_Hook_HookManager\\:\\:getProxy\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookManager.php
+
+		-
+			message: "#^Method Enlight_Hook_HookManager\\:\\:getProxyFactory\\(\\) should return Enlight_Hook_ProxyFactory but returns Enlight_Hook_ProxyFactory\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookManager.php
+
+		-
+			message: "#^Property Enlight_Hook_HookManager\\:\\:\\$aliases type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/HookManager.php
+
+		-
+			message: "#^Method Enlight_Hook_Proxy\\:\\:__executeOriginalMethod\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/Proxy.php
+
+		-
+			message: "#^Method Enlight_Hook_Proxy\\:\\:__executeOriginalMethod\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/Proxy.php
+
+		-
+			message: "#^Method Enlight_Hook_Proxy\\:\\:__popHookExecutionContext\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/Proxy.php
+
+		-
+			message: "#^Method Enlight_Hook_Proxy\\:\\:__pushHookExecutionContext\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/Proxy.php
+
+		-
+			message: "#^Method Enlight_Hook_Proxy\\:\\:executeParent\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/Proxy.php
+
+		-
+			message: "#^Method Enlight_Hook_Proxy\\:\\:executeParent\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/Proxy.php
+
+		-
+			message: "#^Cannot call method getName\\(\\) on ReflectionType\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/ProxyFactory.php
+
+		-
+			message: "#^Method Enlight_Hook_ProxyFactory\\:\\:clearCache\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/ProxyFactory.php
+
+		-
+			message: "#^Method Enlight_Hook_ProxyFactory\\:\\:createMethodGenerator\\(\\) should return ProxyManager\\\\Generator\\\\MethodGenerator but returns Laminas\\\\Code\\\\Generator\\\\MethodGenerator\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/ProxyFactory.php
+
+		-
+			message: "#^Method Enlight_Hook_ProxyFactory\\:\\:getHookedMethods\\(\\) has parameter \\$class with generic class ReflectionClass but does not specify its types\\: T$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/ProxyFactory.php
+
+		-
+			message: "#^Method Enlight_Hook_ProxyFactory\\:\\:writeProxyClass\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/ProxyFactory.php
+
+		-
+			message: "#^Parameter \\#1 \\$argument of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/ProxyFactory.php
+
+		-
+			message: "#^Parameter \\#1 \\$file of function file_put_contents expects string, string\\|false given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/ProxyFactory.php
+
+		-
+			message: "#^Parameter \\#1 \\$old_name of function rename expects string, string\\|false given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/ProxyFactory.php
+
+		-
+			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, array\\<string, string\\>\\|false given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Hook/ProxyFactory.php
+
+		-
+			message: "#^Cannot assign offset '0' to string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Method Enlight_Loader\\:\\:addIncludePath\\(\\) should return string but returns bool\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Method Enlight_Loader\\:\\:autoload\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Method Enlight_Loader\\:\\:explodeIncludePath\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Method Enlight_Loader\\:\\:explodeIncludePath\\(\\) should return array but returns array\\<int, string\\>\\|false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Method Enlight_Loader\\:\\:getClassPath\\(\\) should return string\\|void but returns null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Method Enlight_Loader\\:\\:getClassPath\\(\\) should return string\\|void but returns string\\|true\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Method Enlight_Loader\\:\\:loadClass\\(\\) has parameter \\$class with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Method Enlight_Loader\\:\\:loadFile\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Method Enlight_Loader\\:\\:realpath\\(\\) should return string but returns string\\|false\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Method Enlight_Loader\\:\\:setIncludePath\\(\\) has parameter \\$path with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Method Enlight_Loader\\:\\:setIncludePath\\(\\) should return string but returns string\\|false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(\\)\\: mixed\\)\\|null, array\\(\\$this\\(Enlight_Loader\\), 'Enlight_Loader\\:…'\\) given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Parameter \\#1 \\$path of method Enlight_Loader\\:\\:loadFile\\(\\) expects string, string\\|void given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|false given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Parameter \\#2 \\$subject of function preg_split expects string, string\\|false given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Property Enlight_Loader\\:\\:\\$namespaces type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between string\\|void and null will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
+			message: "#^Method Enlight_Plugin_Bootstrap\\:\\:Collection\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Plugin_Bootstrap\\:\\:afterInit\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Plugin_Bootstrap\\:\\:get\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Plugin_Bootstrap\\:\\:setCollection\\(\\) has parameter \\$collection with no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap.php
+
+		-
+			message: "#^Property Enlight_Plugin_Bootstrap\\:\\:\\$collection \\(Enlight_Plugin_PluginCollection\\) does not accept Enlight_Plugin_PluginCollection\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap.php
+
+		-
+			message: "#^Property Enlight_Plugin_Bootstrap\\:\\:\\$collection type has no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap.php
+
+		-
+			message: "#^Method Enlight_Plugin_Bootstrap_Config\\:\\:Collection\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Config\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Bootstrap_Config\\:\\:install\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
+
+		-
+			message: "#^Parameter \\#1 \\$event of class Enlight_Event_Handler_Plugin constructor expects string, Enlight_Event_Handler\\|Enlight_Hook_HookHandler\\|string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
+
+		-
+			message: "#^Parameter \\#4 \\$listener of class Enlight_Event_Handler_Plugin constructor expects string\\|null, \\(callable\\)\\|string\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
+
+		-
+			message: "#^Property Enlight_Plugin_Bootstrap_Config\\:\\:\\$collection type has no value type specified in iterable type Enlight_Plugin_Namespace_Config\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
+
+		-
+			message: "#^Property Enlight_Plugin_Bootstrap_Config\\:\\:\\$config \\(Enlight_Config\\) does not accept array\\|Enlight_Config\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Bootstrap_Default\\:\\:__construct\\(\\) has parameter \\$collection with no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Bootstrap/Default.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace\\:\\:Manager\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace\\:\\:setManager\\(\\) has parameter \\$manager with no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace\\:\\:setManager\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace.php
+
+		-
+			message: "#^Property Enlight_Plugin_Namespace\\:\\:\\$manager \\(Enlight_Plugin_PluginManager\\) does not accept Enlight_Plugin_PluginCollection\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace.php
+
+		-
+			message: "#^Property Enlight_Plugin_Namespace\\:\\:\\$manager type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace.php
+
+		-
+			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$listeners\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$plugins\\.$#"
+			count: 7
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:Subscriber\\(\\) should return Enlight_Event_Subscriber_Plugin but returns Enlight_Event_Subscriber\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:getConfig\\(\\) return type has no value type specified in iterable type array\\|Enlight_Config\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:initStorage\\(\\) should return Enlight_Config but return statement is missing\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:load\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:read\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Config\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:setConfig\\(\\) has parameter \\$config with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:setConfig\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:setConfig\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Config\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:write\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Config\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Parameter \\#2 \\$options of class Enlight_Event_Subscriber_Plugin constructor expects null, Enlight_Config given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Config.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:Json\\(\\) should return Enlight_Controller_Plugins_Json_Bootstrap but returns Enlight_Plugin_Bootstrap\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:JsonRequest\\(\\) should return Enlight_Controller_Plugins_JsonRequest_Bootstrap but returns Enlight_Plugin_Bootstrap\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:ScriptRenderer\\(\\) should return Enlight_Controller_Plugins_ScriptRenderer_Bootstrap but returns Enlight_Plugin_Bootstrap\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:ViewRenderer\\(\\) should return Enlight_Controller_Plugins_ViewRenderer_Bootstrap but returns Enlight_Plugin_Bootstrap\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:addPrefixPath\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:initPlugin\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Loader\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:load\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:load\\(\\) should return Enlight_Plugin_PluginCollection but return statement is missing\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
+
+		-
+			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:loadAll\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
+
+		-
+			message: "#^Property Enlight_Plugin_Namespace_Loader\\:\\:\\$prefixPaths type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
+
+		-
+			message: "#^Class Enlight_Plugin_PluginCollection implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:__call\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:__call\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:__call\\(\\) should return Enlight_Plugin_Bootstrap\\|Enlight_Plugin_Namespace but returns Enlight_Plugin_Bootstrap\\|Enlight_Plugin_Namespace\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:get\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:getIterator\\(\\) return type with generic class ArrayObject does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:load\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:load\\(\\) has parameter \\$throwException with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:load\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:registerPlugin\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:registerPlugin\\(\\) should return Enlight_Plugin_PluginManager but returns \\$this\\(Enlight_Plugin_PluginCollection\\)\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:reset\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:reset\\(\\) should return Enlight_Plugin_PluginManager but returns \\$this\\(Enlight_Plugin_PluginCollection\\)\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Property Enlight_Plugin_PluginCollection\\:\\:\\$plugins with generic class ArrayObject does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginCollection.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginManager\\:\\:registerNamespace\\(\\) has parameter \\$namespace with no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginManager.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginManager\\:\\:registerNamespace\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginManager.php
+
+		-
+			message: "#^Method Enlight_Plugin_PluginManager\\:\\:setApplication\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Plugin/PluginManager.php
+
+		-
+			message: "#^Method Enlight_Template_Default\\:\\:Engine\\(\\) should return Enlight_Template_Manager but returns Smarty\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Default.php
+
+		-
+			message: "#^Method Enlight_Template_Default\\:\\:assign\\(\\) has parameter \\$tpl_var with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Default.php
+
+		-
+			message: "#^Method Enlight_Template_Default\\:\\:clearAssign\\(\\) has parameter \\$tpl_var with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Default.php
+
+		-
+			message: "#^Method Enlight_Template_Default\\:\\:extendsBlock\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Default.php
+
+		-
+			message: "#^Method Enlight_Template_Default\\:\\:extendsBlock\\(\\) has parameter \\$content with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Default.php
+
+		-
+			message: "#^Method Enlight_Template_Default\\:\\:extendsBlock\\(\\) has parameter \\$spec with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Default.php
+
+		-
+			message: "#^Method Enlight_Template_Default\\:\\:extendsTemplate\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Default.php
+
+		-
+			message: "#^Parameter \\#1 \\$varname of method Smarty_Internal_Data\\:\\:assignGlobal\\(\\) expects string, array\\|string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Default.php
+
+		-
+			message: "#^Access to an undefined property Smarty_Security\\:\\:\\$smarty\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^Cannot assign new offset to array\\|string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^Cannot assign offset string to array\\|string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^Method Enlight_Template_Manager\\:\\:__construct\\(\\) has parameter \\$backendOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^Method Enlight_Template_Manager\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^Method Enlight_Template_Manager\\:\\:resolveTemplateDir\\(\\) should return string but returns bool\\|string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^Method Enlight_Template_Manager\\:\\:setOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^Method Enlight_Template_Manager\\:\\:setTemplateDir\\(\\) has parameter \\$template_dir with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^Parameter \\#1 \\$stack of function array_unshift expects array, array\\|string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^Parameter \\#2 \\$callback of function array_filter expects callable\\(mixed, mixed\\)\\: bool, Closure\\(mixed\\)\\: int\\<0, max\\>\\|false given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^Parameter \\#2 \\.\\.\\.\\$args of function array_merge expects array, array\\|string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^Property Smarty\\:\\:\\$start_time \\(int\\) does not accept float\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Manager.php
+
+		-
+			message: "#^Function mb_str_replace not found\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/block.replace.php
+
+		-
+			message: "#^Function smarty_block_replace\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/block.replace.php
+
+		-
+			message: "#^Function smarty_block_replace\\(\\) has parameter \\$smarty with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/block.replace.php
+
+		-
+			message: "#^Function smarty_block_replace\\(\\) should return string but empty return statement found\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/block.replace.php
+
+		-
+			message: "#^Function smarty_block_stripLines\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/block.stripLines.php
+
+		-
+			message: "#^Function smarty_block_stripLines\\(\\) never returns void so it can be removed from the return typehint\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/block.stripLines.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on Shopware_Components_Config\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.config.php
+
+		-
+			message: "#^Cannot call method getByNamespace\\(\\) on Shopware_Components_Config\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.config.php
+
+		-
+			message: "#^Method Smarty_Compiler_Config\\:\\:compile\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.config.php
+
+		-
+			message: "#^Method Smarty_Compiler_Config\\:\\:compile\\(\\) should return string but returns null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.config.php
+
+		-
+			message: "#^Property Smarty_Compiler_Config\\:\\:\\$optional_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.config.php
+
+		-
+			message: "#^Property Smarty_Compiler_Config\\:\\:\\$required_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.config.php
+
+		-
+			message: "#^Method Smarty_Compiler_DnsPrefetch\\:\\:compile\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.dnsPrefetch.php
+
+		-
+			message: "#^Property Smarty_Compiler_DnsPrefetch\\:\\:\\$optional_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.dnsPrefetch.php
+
+		-
+			message: "#^Property Smarty_Compiler_DnsPrefetch\\:\\:\\$required_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.dnsPrefetch.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$smarty\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.link.php
+
+		-
+			message: "#^Method Smarty_Compiler_Link\\:\\:compile\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.link.php
+
+		-
+			message: "#^Method Smarty_Compiler_Link\\:\\:compile\\(\\) should return string but returns false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.link.php
+
+		-
+			message: "#^Parameter \\#2 \\$template of function smarty_function_flink expects string, object given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.link.php
+
+		-
+			message: "#^Property Smarty_Compiler_Link\\:\\:\\$option_flags type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.link.php
+
+		-
+			message: "#^Property Smarty_Compiler_Link\\:\\:\\$required_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.link.php
+
+		-
+			message: "#^Method Smarty_Compiler_Media\\:\\:compile\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.media.php
+
+		-
+			message: "#^Method Smarty_Compiler_Media\\:\\:compile\\(\\) should return string but returns false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.media.php
+
+		-
+			message: "#^Method Smarty_Compiler_Media\\:\\:parseAttributes\\(\\) has parameter \\$attributes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.media.php
+
+		-
+			message: "#^Method Smarty_Compiler_Media\\:\\:parseAttributes\\(\\) should return string but returns array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.media.php
+
+		-
+			message: "#^Offset 'path' does not exist on string\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.media.php
+
+		-
+			message: "#^Property Smarty_Compiler_Media\\:\\:\\$required_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.media.php
+
+		-
+			message: "#^Method Smarty_Compiler_Preconnect\\:\\:compile\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.preconnect.php
+
+		-
+			message: "#^Property Smarty_Compiler_Preconnect\\:\\:\\$optional_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.preconnect.php
+
+		-
+			message: "#^Property Smarty_Compiler_Preconnect\\:\\:\\$required_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.preconnect.php
+
+		-
+			message: "#^Method Smarty_Compiler_Prefetch\\:\\:compile\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.prefetch.php
+
+		-
+			message: "#^Property Smarty_Compiler_Prefetch\\:\\:\\$optional_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.prefetch.php
+
+		-
+			message: "#^Property Smarty_Compiler_Prefetch\\:\\:\\$required_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.prefetch.php
+
+		-
+			message: "#^Method Smarty_Compiler_Preload\\:\\:compile\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.preload.php
+
+		-
+			message: "#^Property Smarty_Compiler_Preload\\:\\:\\$optional_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.preload.php
+
+		-
+			message: "#^Property Smarty_Compiler_Preload\\:\\:\\$required_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.preload.php
+
+		-
+			message: "#^Method Smarty_Compiler_Prerender\\:\\:compile\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.prerender.php
+
+		-
+			message: "#^Property Smarty_Compiler_Prerender\\:\\:\\$optional_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.prerender.php
+
+		-
+			message: "#^Property Smarty_Compiler_Prerender\\:\\:\\$required_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.prerender.php
+
+		-
+			message: "#^Method Smarty_Compiler_Timestamp\\:\\:compile\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.timestamp.php
+
+		-
+			message: "#^Cannot call method Router\\(\\) on Enlight_Controller_Front\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.url.php
+
+		-
+			message: "#^Method Smarty_Compiler_Url\\:\\:compile\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.url.php
+
+		-
+			message: "#^Property Smarty_Compiler_Url\\:\\:\\$option_flags type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.url.php
+
+		-
+			message: "#^Property Smarty_Compiler_Url\\:\\:\\$optional_attributes type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/compiler.url.php
+
+		-
+			message: "#^Cannot call method Core\\(\\) on Enlight_Plugin_PluginManager\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.action.php
+
+		-
+			message: "#^Function smarty_function_action\\(\\) has parameter \\$params with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.action.php
+
+		-
+			message: "#^Function smarty_function_action\\(\\) should return string but returns array\\|string\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.action.php
+
+		-
+			message: "#^Parameter \\#1 \\$request of method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:renderEsiTag\\(\\) expects Enlight_Controller_Request_RequestHttp, Enlight_Controller_Request_Request given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.action.php
+
+		-
+			message: "#^Parameter \\#1 \\$request of method Symfony\\\\Component\\\\HttpFoundation\\\\RequestStack\\:\\:push\\(\\) expects Symfony\\\\Component\\\\HttpFoundation\\\\Request, Enlight_Controller_Request_Request given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.action.php
+
+		-
+			message: "#^Cannot call method assign\\(\\) on string\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Template/Plugins/function.compileJavascript.php
+
+		-
+			message: "#^Function smarty_function_compileJavascript\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.compileJavascript.php
+
+		-
+			message: "#^Function smarty_function_compileJavascript\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.compileJavascript.php
+
+		-
+			message: "#^Parameter \\#2 \\$template of method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:compileJavascript\\(\\) expects Shopware\\\\Models\\\\Shop\\\\Template, Shopware\\\\Models\\\\Shop\\\\Template\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.compileJavascript.php
+
+		-
+			message: "#^Service \"shop\" is not registered in the container\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.compileJavascript.php
+
+		-
+			message: "#^Cannot call method assign\\(\\) on array\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Template/Plugins/function.compileLess.php
+
+		-
+			message: "#^Function smarty_function_compileLess\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.compileLess.php
+
+		-
+			message: "#^Function smarty_function_compileLess\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.compileLess.php
+
+		-
+			message: "#^Function smarty_function_compileLess\\(\\) has parameter \\$template with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.compileLess.php
+
+		-
+			message: "#^Parameter \\#2 \\$template of method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:compileLess\\(\\) expects Shopware\\\\Models\\\\Shop\\\\Template, Shopware\\\\Models\\\\Shop\\\\Template\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.compileLess.php
+
+		-
+			message: "#^Service \"shop\" is not registered in the container\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.compileLess.php
+
+		-
+			message: "#^Function smarty_function_controllerAction\\(\\) has parameter \\$params with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.controllerAction.php
+
+		-
+			message: "#^Function smarty_function_controllerAction\\(\\) should return string but returns string\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.controllerAction.php
+
+		-
+			message: "#^Function smarty_function_controllerName\\(\\) has parameter \\$params with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.controllerName.php
+
+		-
+			message: "#^Function smarty_function_controllerName\\(\\) should return string but returns string\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.controllerName.php
+
+		-
+			message: "#^Function smarty_function_encoding\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.encoding.php
+
+		-
+			message: "#^Function smarty_function_encoding\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.encoding.php
+
+		-
+			message: "#^Function smarty_function_encoding\\(\\) has parameter \\$smarty with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.encoding.php
+
+		-
+			message: "#^Function smarty_function_fetchContent\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.fetchContent.php
+
+		-
+			message: "#^Function smarty_function_fetchContent\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.fetchContent.php
+
+		-
+			message: "#^Cannot access property \\$smarty on string\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Template/Plugins/function.flink.php
+
+		-
+			message: "#^Cannot call method Request\\(\\) on Enlight_Controller_Front\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.flink.php
+
+		-
+			message: "#^Cannot call method getBasePath\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: engine/Library/Enlight/Template/Plugins/function.flink.php
+
+		-
+			message: "#^Cannot call method getHost\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.flink.php
+
+		-
+			message: "#^Cannot call method getSecure\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.flink.php
+
+		-
+			message: "#^Function smarty_function_flink\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.flink.php
+
+		-
+			message: "#^Service \"shop\" is not registered in the container\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.flink.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:assign\\(\\)\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.partition.php
+
+		-
+			message: "#^Function smarty_function_partition\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.partition.php
+
+		-
+			message: "#^Function smarty_function_partition\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.partition.php
+
+		-
+			message: "#^Parameter \\#2 \\$offset of function array_slice expects int, float\\|int given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.partition.php
+
+		-
+			message: "#^Parameter \\#3 \\$length of function array_slice expects int\\|null, float given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.partition.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:assign\\(\\)\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.slice.php
+
+		-
+			message: "#^Function smarty_function_slice\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.slice.php
+
+		-
+			message: "#^Function smarty_function_slice\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.slice.php
+
+		-
+			message: "#^Function smarty_function_themeTimestamp\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.themeTimestamp.php
+
+		-
+			message: "#^Function smarty_function_themeTimestamp\\(\\) has parameter \\$params with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.themeTimestamp.php
+
+		-
+			message: "#^Function smarty_function_themeTimestamp\\(\\) has parameter \\$template with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/function.themeTimestamp.php
+
+		-
+			message: "#^Function smarty_modifier_array_unset\\(\\) has parameter \\$keys with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.array_unset.php
+
+		-
+			message: "#^Function smarty_modifier_array_unset\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.array_unset.php
+
+		-
+			message: "#^Function smarty_modifier_array_unset\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.array_unset.php
+
+		-
+			message: "#^Function smarty_modifier_count\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.count.php
+
+		-
+			message: "#^Function smarty_modifier_count\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.count.php
+
+		-
+			message: "#^Cannot cast array\\|string to float\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.currency.php
+
+		-
+			message: "#^Function smarty_modifier_currency\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.currency.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, float given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.currency.php
+
+		-
+			message: "#^Parameter \\#1 \\$date of class Zend_Date constructor expects array\\|int\\|string\\|Zend_Date\\|null, DateTime\\|int\\|false given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.date.php
+
+		-
+			message: "#^Function smarty_modifier_number\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.number.php
+
+		-
+			message: "#^Function smarty_modifier_number\\(\\) has parameter \\$format with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.number.php
+
+		-
+			message: "#^Function smarty_modifier_tax\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.tax.php
+
+		-
+			message: "#^Cannot call method getTranslation\\(\\) on string\\|Zend_Locale\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.translate.php
+
+		-
+			message: "#^Function smarty_modifier_translate\\(\\) should return string\\|null but returns string\\|false\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifier.translate.php
+
+		-
+			message: "#^Function smarty_modifiercompiler_template_exists\\(\\) has parameter \\$compiler with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifiercompiler.template_exists.php
+
+		-
+			message: "#^Function smarty_modifiercompiler_template_exists\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/modifiercompiler.template_exists.php
+
+		-
+			message: "#^Argument of an invalid type array\\|string supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/resource.parent.php
+
+		-
+			message: "#^Cannot access property \\$handler on array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/resource.parent.php
+
+		-
+			message: "#^Cannot access property \\$parent on Smarty_Internal_Template\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/resource.parent.php
+
+		-
+			message: "#^Method Smarty_Resource_Parent\\:\\:populate\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/resource.parent.php
+
+		-
+			message: "#^Property Smarty_Resource_Parent\\:\\:\\$index has no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/resource.parent.php
+
+		-
+			message: "#^Property Smarty_Template_Source\\:\\:\\$components \\(array\\) does not accept Smarty_Template_Source\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/resource.parent.php
+
+		-
+			message: "#^Property Smarty_Template_Source\\:\\:\\$template \\(bool\\) does not accept Smarty_Internal_Template\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Template/Plugins/resource.parent.php
+
+		-
+			message: "#^Method Enlight_View\\:\\:__set\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View.php
+
+		-
+			message: "#^Method Enlight_View\\:\\:__set\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View.php
+
+		-
+			message: "#^Method Enlight_View\\:\\:__set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View.php
+
+		-
+			message: "#^Method Enlight_View\\:\\:addTemplateDir\\(\\) has parameter \\$path with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View.php
+
+		-
+			message: "#^Method Enlight_View\\:\\:assign\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View.php
+
+		-
+			message: "#^Method Enlight_View\\:\\:setTemplateDir\\(\\) has parameter \\$path with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View.php
+
+		-
+			message: "#^Method Enlight_View_Cache\\:\\:addCacheId\\(\\) has parameter \\$cache_id with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Cache.php
+
+		-
+			message: "#^Method Enlight_View_Cache\\:\\:setCacheId\\(\\) has parameter \\$cache_id with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Cache.php
+
+		-
+			message: "#^Method Enlight_View_Default\\:\\:addCacheId\\(\\) has parameter \\$cache_id with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Method Enlight_View_Default\\:\\:assign\\(\\) has parameter \\$spec with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Method Enlight_View_Default\\:\\:createTemplate\\(\\) should return Enlight_Template_Default but returns object\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Method Enlight_View_Default\\:\\:extendsBlock\\(\\) has parameter \\$content with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Method Enlight_View_Default\\:\\:extendsBlock\\(\\) has parameter \\$spec with no typehint specified\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Method Enlight_View_Default\\:\\:setCacheId\\(\\) has parameter \\$cache_id with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Method Enlight_View_Default\\:\\:setTemplateDir\\(\\) has parameter \\$path with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Parameter \\#1 \\$cacheId of method Enlight_Template_Default\\:\\:addCacheId\\(\\) expects null, array\\|string given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Parameter \\#1 \\$cacheId of method Enlight_Template_Default\\:\\:setCacheId\\(\\) expects null, array\\|string\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Parameter \\#3 \\$nocache of method Enlight_Template_Default\\:\\:assign\\(\\) expects bool, bool\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Parameter \\#3 \\$nocache of method Smarty_Internal_Data\\:\\:assign\\(\\) expects bool, bool\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Parameter \\#4 \\$scope of method Enlight_Template_Default\\:\\:assign\\(\\) expects bool\\|null, int\\|null given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Property Enlight_View_Default\\:\\:\\$scope \\(int\\) does not accept int\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Property Enlight_View_Default\\:\\:\\$template \\(Enlight_Template_Default\\) does not accept Enlight_Template_Default\\|null\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Property Enlight_View_Default\\:\\:\\$template \\(Enlight_Template_Default\\) does not accept object\\.$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
+			message: "#^Return type \\(Enlight_Template_Default\\) of method Enlight_View_Default\\:\\:clearAssign\\(\\) should be compatible with return type \\(Enlight_View\\) of method Enlight_View\\:\\:clearAssign\\(\\)$#"
+			count: 1
+			path: engine/Library/Enlight/View/Default.php
+
+		-
 			message: "#^Call to an undefined method Symfony\\\\Component\\\\DependencyInjection\\\\ContainerInterface\\:\\:load\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bootstrap.php
@@ -21551,27 +25706,7 @@ parameters:
 			path: engine/Shopware/Components/ContainerAwareEventManager.php
 
 		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, array\\<int, mixed\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ContainerAwareEventManager.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of method Enlight_Event_EventManager\\:\\:addListener\\(\\) expects array\\<int, object\\|string\\>\\|callback, array\\<int, mixed\\> given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/ContainerAwareEventManager.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\ContainerAwareEventManager\\:\\:\\$listenerIds type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ContainerAwareEventManager.php
-
-		-
-			message: "#^Result of && is always false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ContainerAwareEventManager.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between callback and array\\(callable\\(\\)\\: mixed, mixed\\) will always evaluate to false\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ContainerAwareEventManager.php
 
@@ -55905,11 +60040,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, array\\<int, \\$this\\(Shopware_Plugins_Core_HttpCache_Bootstrap\\)\\|string\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Parameter \\#2 \\$prefix of function http_build_query expects string, null given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
@@ -57976,11 +62106,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Plugins_Frontend_RouterRewrite_Bootstrap\\:\\:onStartDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Event_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/RouterRewrite/Bootstrap.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, array\\<int, \\$this\\(Shopware_Plugins_Frontend_RouterRewrite_Bootstrap\\)\\|string\\> given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/RouterRewrite/Bootstrap.php
 
@@ -60151,11 +64276,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @var for variable \\$collection has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CookieBundle/Services/CookieCollectorTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, array\\<int, string\\> given\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/CookieBundle/Services/CookieCollectorTest.php
 
@@ -67626,11 +71746,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\DependencyInjection\\\\ContainerTest\\:\\:testDecorationOfAliasWorks\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/DependencyInjection/ContainerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, array\\<int, mixed\\> given\\.$#"
 			count: 1
 			path: tests/Functional/Components/DependencyInjection/ContainerTest.php
 
@@ -80400,11 +84515,6 @@ parameters:
 			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$listener of method Enlight_Event_EventManager\\:\\:addListener\\(\\) expects array\\<int, object\\|string\\>\\|callback, Closure\\(Enlight_Event_EventArgs\\)\\: void given\\.$#"
-			count: 3
-			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
-
-		-
 			message: "#^Service \"alias\" is not registered in the container\\.$#"
 			count: 1
 			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
@@ -80655,11 +84765,6 @@ parameters:
 			path: tests/Unit/Components/Event/ContainerAwareEventManagerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, array\\<int, object\\|string\\|null\\> given\\.$#"
-			count: 2
-			path: tests/Unit/Components/Event/ContainerAwareEventManagerTest.php
-
-		-
 			message: "#^Service \"service\\.listener\" is not registered in the container\\.$#"
 			count: 2
 			path: tests/Unit/Components/Event/ContainerAwareEventManagerTest.php
@@ -80770,26 +84875,6 @@ parameters:
 			path: tests/Unit/Components/Event/EventManagerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_EventHandler constructor expects callback, array\\<int, \\$this\\(Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\EventManagerTest\\)\\|string\\> given\\.$#"
-			count: 4
-			path: tests/Unit/Components/Event/EventManagerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, Closure\\(Enlight_Event_EventArgs\\)\\: string given\\.$#"
-			count: 1
-			path: tests/Unit/Components/Event/EventManagerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, Closure\\(mixed\\)\\: string given\\.$#"
-			count: 7
-			path: tests/Unit/Components/Event/EventManagerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, Closure\\(mixed\\)\\: void given\\.$#"
-			count: 1
-			path: tests/Unit/Components/Event/EventManagerTest.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\EventManagerTest\\:\\:\\$eventManager has no typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Event/EventManagerTest.php
@@ -80810,11 +84895,6 @@ parameters:
 			path: tests/Unit/Components/Event/SubscriberArrayTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, Closure\\(mixed\\)\\: string given\\.$#"
-			count: 4
-			path: tests/Unit/Components/Event/SubscriberArrayTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\SubscriberConfigTest\\:\\:testAddSubscriber\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Event/SubscriberConfigTest.php
@@ -80832,11 +84912,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$options of class Enlight_Event_Subscriber_Config constructor expects null, string given\\.$#"
 			count: 1
-			path: tests/Unit/Components/Event/SubscriberConfigTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of class Enlight_Event_Handler_Default constructor expects callback, Closure\\(mixed\\)\\: string given\\.$#"
-			count: 4
 			path: tests/Unit/Components/Event/SubscriberConfigTest.php
 
 		-
@@ -81296,11 +85371,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$input1 of function array_map expects array, array\\<int, string\\>\\|false given\\.$#"
-			count: 1
-			path: tests/Unit/Components/Hook/HookManagerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$listener of method Enlight_Event_EventManager\\:\\:addListener\\(\\) expects array\\<int, object\\|string\\>\\|callback, callable given\\.$#"
 			count: 1
 			path: tests/Unit/Components/Hook/HookManagerTest.php
 
@@ -82673,4 +86743,3 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testXssFilter\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
-

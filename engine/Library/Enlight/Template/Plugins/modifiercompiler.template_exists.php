@@ -22,7 +22,7 @@
  * The first parameter of the $param array has to be the name of the template
  *
  * @param array $params
- * @param       $compiler
+ *
  * @return string
  */
 function smarty_modifiercompiler_template_exists($params, $compiler)

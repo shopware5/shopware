@@ -90,9 +90,6 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      */
     protected $requestStack;
 
-    /**
-     * @param Enlight_Event_EventManager $eventManager
-     */
     public function __construct(Enlight_Event_EventManager $eventManager)
     {
         $this->eventManager = $eventManager;
@@ -265,7 +262,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     {
         if ($plugins === null) {
             $plugins = new Enlight_Plugin_Namespace_Loader('Controller');
-            $plugins->addPrefixPath('Enlight_Controller_Plugins', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Plugins');
+            $plugins->addPrefixPath('Enlight_Controller_Plugins', \dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Plugins');
         }
         $this->plugins = $plugins;
 
@@ -284,7 +281,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      */
     public function setRouter($router)
     {
-        if (is_string($router)) {
+        if (\is_string($router)) {
             $router = new $router();
         }
         if (!$router instanceof Enlight_Controller_Router) {
@@ -308,7 +305,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      */
     public function setDispatcher($dispatcher)
     {
-        if (is_string($dispatcher)) {
+        if (\is_string($dispatcher)) {
             $dispatcher = new $dispatcher();
         }
         if (!$dispatcher instanceof Enlight_Controller_Dispatcher) {
@@ -323,15 +320,13 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     /**
      * Sets the request instance
      *
-     * @param $request
-     *
      * @throws Enlight_Exception
      *
      * @return Enlight_Controller_Front
      */
     public function setRequest($request)
     {
-        if (is_string($request)) {
+        if (\is_string($request)) {
             $request = $request::createFromGlobals();
         }
         if (!$request instanceof Enlight_Controller_Request_Request) {
@@ -345,15 +340,13 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     /**
      * Sets the response instance
      *
-     * @param $response
-     *
      * @throws Enlight_Exception
      *
      * @return Enlight_Controller_Front
      */
     public function setResponse($response)
     {
-        if (is_string($response)) {
+        if (\is_string($response)) {
             $response = new $response();
         }
         if (!$response instanceof Enlight_Controller_Response_Response) {
@@ -448,7 +441,6 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      * Setter method to set a single parameter into the invokeParams property.
      *
      * @param string $name
-     * @param mixed  $value
      *
      * @return Enlight_Controller_Front
      */
@@ -463,8 +455,6 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     /**
      * Setter method for the invokeParams property.
      *
-     * @param array $params
-     *
      * @return Enlight_Controller_Front
      */
     public function setParams(array $params)
@@ -476,10 +466,6 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
 
     /**
      * Sets a invoke param by name.
-     *
-     * @param $name
-     *
-     * @return mixed
      */
     public function getParam($name)
     {

@@ -329,7 +329,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     /**
      * Allows to set a Shopware config
      *
-     * @param string $name
+     * @param string           $name
+     * @param bool|string|null $value
      */
     protected function setConfig($name, $value)
     {

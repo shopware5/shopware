@@ -20,8 +20,10 @@
 /**
  * @category   Enlight
  * @package    Enlight_Event
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
+ *
  * @deprecated in Shopware 5.6, will be removed in 5.8. Please use `Enlight_Event_Handler_Default` or `SubscriberInterface::getSubscribedEvents` instead.
  */
 class Enlight_Event_EventHandler extends Enlight_Event_Handler_Default
@@ -35,27 +37,29 @@ class Enlight_Event_EventHandler extends Enlight_Event_Handler_Default
     }
 
     /**
-     * @return  array
+     * @return array
      */
     public function toArray()
     {
         $listener = $this->listener;
-        if (is_array($listener)) {
+        if (\is_array($listener)) {
             if ($listener[0] instanceof Enlight_Singleton) {
-                $listener[0] = get_class($listener[0]);
+                $listener[0] = \get_class($listener[0]);
             }
             $listener = implode('::', $listener);
         }
-        return array(
+
+        return [
             'name' => $this->name,
             'listener' => $listener,
-            'position' => $this->position
-        );
+            'position' => $this->position,
+        ];
     }
 
     public function setPlugin($plugin)
     {
         $this->plugin = $plugin;
+
         return $this;
     }
 

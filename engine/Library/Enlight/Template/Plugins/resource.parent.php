@@ -17,6 +17,9 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+/**
+ * Extension of Smarty_Internal_Resource_File
+ */
 class Smarty_Resource_Parent extends Smarty_Internal_Resource_File
 {
     protected $index;
@@ -26,12 +29,14 @@ class Smarty_Resource_Parent extends Smarty_Internal_Resource_File
      *
      * @param Smarty_Template_Source   $source    source object
      * @param Smarty_Internal_Template $_template template object
-     * @return string fully qualified filepath
+     *
      * @throws SmartyException if default template handler is registered but not callable
+     *
+     * @return string fully qualified filepath
      */
     protected function buildFilepath(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
     {
-        $this->index++;
+        ++$this->index;
         $file = $source->name;
         $hit = false;
 
@@ -55,12 +60,14 @@ class Smarty_Resource_Parent extends Smarty_Internal_Resource_File
      *
      * @param Smarty $smarty        Smarty instance
      * @param string $resource_name resource_name to make unique
+     *
      * @return string unique resource name
      */
     protected function buildUniqueResourceName(Smarty $smarty, $resource_name)
     {
         $resource_name .= $this->index;
-        return get_class($this) . '#' . $smarty->joined_template_dir . '#' . $resource_name;
+
+        return \get_class($this) . '#' . $smarty->joined_template_dir . '#' . $resource_name;
     }
 
     /**
@@ -69,7 +76,7 @@ class Smarty_Resource_Parent extends Smarty_Internal_Resource_File
      * @param Smarty_Template_Source   $source    source object
      * @param Smarty_Internal_Template $_template template object
      */
-    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template=null)
+    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
     {
         $filePath = $this->buildFilepath($source, $_template);
         $s = Smarty_Resource::source(null, $source->smarty, $filePath);
@@ -88,8 +95,10 @@ class Smarty_Resource_Parent extends Smarty_Internal_Resource_File
      * Load template's source from files into current template object
      *
      * @param Smarty_Template_Source $source source object
-     * @return string template source
+     *
      * @throws SmartyException if source cannot be loaded
+     *
+     * @return string template source
      */
     public function getContent(Smarty_Template_Source $source)
     {

@@ -26,7 +26,6 @@
  * This porting is in full compliance with the New BSD License
  * under which the original file is distributed.
  *
- *
  * @category   Enlight
  * @package    Enlight_Config
  */
@@ -49,7 +48,6 @@ class Enlight_Config_Writer_Ini extends Enlight_Config_Writer_FileAbstract
     /**
      * Set the nest separator
      *
-     * @param  string $filename
      * @return Enlight_Config_Writer_Ini
      */
     public function setNestSeparator($separator)
@@ -65,12 +63,14 @@ class Enlight_Config_Writer_Ini extends Enlight_Config_Writer_FileAbstract
      * If set to true, the INI file is rendered without sections completely
      * into the global namespace of the INI file.
      *
-     * @param  bool $withoutSections
+     * @param bool $withoutSections
+     *
      * @return Enlight_Config_Writer_Ini
      */
-    public function setRenderWithoutSections($withoutSections=true)
+    public function setRenderWithoutSections($withoutSections = true)
     {
         $this->_renderWithoutSections = (bool) $withoutSections;
+
         return $this;
     }
 
@@ -78,36 +78,37 @@ class Enlight_Config_Writer_Ini extends Enlight_Config_Writer_FileAbstract
      * Render a Enlight_Config_BaseConfig into a INI config string.
      *
      * @since 1.10
+     *
      * @return string
      */
     public function render()
     {
-        $iniString   = '';
-        $extends     = $this->_config->getExtends();
+        $iniString = '';
+        $extends = $this->_config->getExtends();
         $sectionName = $this->_config->getSectionName();
 
         if ($this->_renderWithoutSections == true) {
             $iniString .= $this->_addBranch($this->_config);
-        } elseif (is_string($sectionName)) {
-            $iniString .= '[' . $sectionName . ']' . "\n"
-                       .  $this->_addBranch($this->_config)
-                       .  "\n";
+        } elseif (\is_string($sectionName)) {
+            $iniString .= '[' . $sectionName . "]\n"
+                       . $this->_addBranch($this->_config)
+                       . "\n";
         } else {
             $config = $this->_sortRootElements($this->_config);
             foreach ($config as $sectionName => $data) {
                 if (!($data instanceof Enlight_Config_BaseConfig)) {
                     $iniString .= $sectionName
-                               .  ' = '
-                               .  $this->_prepareValue($data)
-                               .  "\n";
+                               . ' = '
+                               . $this->_prepareValue($data)
+                               . "\n";
                 } else {
                     if (isset($extends[$sectionName])) {
                         $sectionName .= ' : ' . $extends[$sectionName];
                     }
 
-                    $iniString .= '[' . $sectionName . ']' . "\n"
-                               .  $this->_addBranch($data)
-                               .  "\n";
+                    $iniString .= '[' . $sectionName . "]\n"
+                               . $this->_addBranch($data)
+                               . "\n";
                 }
             }
         }
@@ -118,23 +119,22 @@ class Enlight_Config_Writer_Ini extends Enlight_Config_Writer_FileAbstract
     /**
      * Add a branch to an INI string recursively
      *
-     * @param  Enlight_Config_BaseConfig $config
      * @return void
      */
-    protected function _addBranch(Enlight_Config_BaseConfig $config, $parents = array())
+    protected function _addBranch(Enlight_Config_BaseConfig $config, $parents = [])
     {
         $iniString = '';
 
         foreach ($config as $key => $value) {
-            $group = array_merge($parents, array($key));
+            $group = array_merge($parents, [$key]);
 
             if ($value instanceof Enlight_Config_BaseConfig) {
                 $iniString .= $this->_addBranch($value, $group);
             } else {
                 $iniString .= implode($this->_nestSeparator, $group)
-                           .  ' = '
-                           .  $this->_prepareValue($value)
-                           .  "\n";
+                           . ' = '
+                           . $this->_prepareValue($value)
+                           . "\n";
             }
         }
 
@@ -144,20 +144,19 @@ class Enlight_Config_Writer_Ini extends Enlight_Config_Writer_FileAbstract
     /**
      * Prepare a value for INI
      *
-     * @param  mixed $value
      * @return string
      */
     protected function _prepareValue($value)
     {
-        if (is_integer($value) || is_float($value)) {
+        if (\is_integer($value) || \is_float($value)) {
             return $value;
-        } elseif (is_bool($value)) {
-            return ($value ? 'true' : 'false');
+        } elseif (\is_bool($value)) {
+            return $value ? 'true' : 'false';
         } elseif (strpos($value, '"') === false) {
-            return '"' . $value .  '"';
-        } else {
-            return '"' . addslashes($value) .  '"';
+            return '"' . $value . '"';
         }
+
+        return '"' . addslashes($value) . '"';
     }
 
     /**
@@ -165,17 +164,19 @@ class Enlight_Config_Writer_Ini extends Enlight_Config_Writer_FileAbstract
      * on the top of config.
      *
      * @see    http://framework.zend.com/issues/browse/ZF-6289
+     *
      * @param  Enlight_Config_BaseConfig
+     *
      * @return Enlight_Config_BaseConfig
      */
     protected function _sortRootElements(Enlight_Config_BaseConfig $config)
     {
         $configArray = $config->toArray();
-        $sections = array();
+        $sections = [];
 
         // remove sections from config array
         foreach ($configArray as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $sections[$key] = $value;
                 unset($configArray[$key]);
             }

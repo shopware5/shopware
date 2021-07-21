@@ -25,6 +25,7 @@
  *
  * @category   Enlight
  * @package    Enlight_Hook
+ *
  * @copyright  Copyright (c) 2017, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -49,6 +50,7 @@ class Enlight_Hook_HookExecutionContext
      * @param string $className
      * @param string $method
      * @param string $hookType
+     *
      * @return string
      */
     public static function createHookEventName($className, $method, $hookType)
@@ -57,10 +59,7 @@ class Enlight_Hook_HookExecutionContext
     }
 
     /**
-     * @param Enlight_Hook_HookManager $hookManager
-     * @param Enlight_Hook_Proxy $subject
      * @param string $method
-     * @param array $args
      */
     public function __construct(
         Enlight_Hook_HookManager $hookManager,
@@ -83,8 +82,6 @@ class Enlight_Hook_HookExecutionContext
     /**
      * Executes this context by calling the  'before' hooks, 'replace' hooks and 'after' hooks in that order and
      * returning the args' return value.
-     *
-     * @return mixed
      */
     public function execute()
     {
@@ -122,16 +119,13 @@ class Enlight_Hook_HookExecutionContext
      * executes the listener corresponding to the current 'parentExecutionLevel'. If no listeners exist of the end of
      * the replace chain is reached (i.e. all levels have been executed), the original method is called. Finally the
      * respective return value of the listener or original method is returned.
-     *
-     * @param array $args
-     * @return mixed
      */
-    public function executeReplaceChain(array $args = array())
+    public function executeReplaceChain(array $args = [])
     {
         // Check for 'replace' hooks
         $replaceEventName = $this->getHookEventName(Enlight_Hook_HookHandler::TypeReplace);
         $listeners = $this->hookManager->getEventManager()->getListeners($replaceEventName);
-        if (count($listeners) === 0 || $this->parentExecutionLevel >= count($listeners)) {
+        if (\count($listeners) === 0 || $this->parentExecutionLevel >= \count($listeners)) {
             // No 'replace' listeners or reached the end of the execution chain, hence execute the original method
             // using a generated helper method. This allows us to call both public and protected methods.
             $returnValue = $this->args->getSubject()->__executeOriginalMethod($this->args->getMethod(), $args);
@@ -144,15 +138,16 @@ class Enlight_Hook_HookExecutionContext
         // recursive calls of this method to execute the next listeners in the cain. Finally, we reduce the level
         // again, to allow repeated calls of 'executeParent()' in the same listener to call the whole chain again.
         $currentLevel = $this->parentExecutionLevel;
-        $this->parentExecutionLevel++;
+        ++$this->parentExecutionLevel;
         $listeners[$currentLevel]->execute($this->args);
-        $this->parentExecutionLevel--;
+        --$this->parentExecutionLevel;
 
         return $this->args->getReturn();
     }
 
     /**
      * @param string $hookType
+     *
      * @return string
      */
     protected function getHookEventName($hookType)

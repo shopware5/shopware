@@ -72,8 +72,6 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
      * set into the plugin by using the Enlight_Plugin_Bootstrap::setCollection() method.
      * The name of the plugin is used as array key.
      *
-     * @param Enlight_Plugin_Bootstrap $plugin
-     *
      * @return Enlight_Plugin_PluginManager
      */
     public function registerPlugin(Enlight_Plugin_Bootstrap $plugin)
@@ -117,9 +115,6 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
 
     /**
      * Loads the plugin instance of the given plugin name.
-     *
-     * @param $name
-     * @param $throwException
      *
      * @throws Enlight_Exception
      *

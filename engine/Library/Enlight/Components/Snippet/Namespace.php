@@ -72,17 +72,14 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
      * Retrieves a value and returns $default if there is no element set.
      *
      * @param string $name
-     * @param mixed  $default
      * @param bool   $save
-     *
-     * @return mixed
      */
     public function get($name, $default = null, $save = false)
     {
         if ($this->_data === null) {
             $this->read();
         }
-        if (array_key_exists($name, $this->_data)) {
+        if (\array_key_exists($name, $this->_data)) {
             return $this->_data[$name];
         }
         if ($default == null && $this->fallback) {

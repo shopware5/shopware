@@ -68,8 +68,6 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
     /**
      * Sets the options from an array.
      *
-     * @param array $options
-     *
      * @return Enlight_Config_Adapter
      */
     public function setOptions(array $options)
@@ -107,8 +105,6 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
     /**
      * Reads a section from the data store.
      *
-     * @param Enlight_Config $config
-     *
      * @return Enlight_Config_Adapter_File
      */
     public function read(Enlight_Config $config)
@@ -127,7 +123,7 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
                     break;
                     // Section is defect
                 } catch (Exception $e) {
-                    if (!empty($section) && is_array($section)) {
+                    if (!empty($section) && \is_array($section)) {
                         // Try next section
                         array_shift($section);
                     } else {
@@ -146,8 +142,7 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
     /**
      * Saves the data changes to the data store.
      *
-     * @param Enlight_Config $config
-     * @param bool           $forceWrite
+     * @param bool $forceWrite
      *
      * @return Enlight_Config_Adapter_File
      */
@@ -165,7 +160,7 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
 
         if (!empty($section)) {
             $base = $this->readBase($filename);
-            if (is_array($section)) {
+            if (\is_array($section)) {
                 foreach (array_reverse($section) as $sectionName) {
                     if (!isset($base->$sectionName)) {
                         $base->$sectionName = [];
@@ -184,7 +179,7 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
             $base = $config;
         }
 
-        $dir = dirname($filename);
+        $dir = \dirname($filename);
         if (!file_exists($dir) || !is_writeable($dir)) {
             $old = umask(0);
             mkdir($dir, 0777, true);
@@ -220,9 +215,9 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
         $indexed = false;
 
         foreach ($this->_configDir as $key => $dir) {
-            if (is_string($key) && strpos($name, $key) === 0) {
+            if (\is_string($key) && strpos($name, $key) === 0) {
                 $indexed = true;
-                $name = substr_replace($name, '', 0, strlen($key));
+                $name = substr_replace($name, '', 0, \strlen($key));
 
                 $result = $dir . $this->_namePrefix . $name . $suffix;
                 if (file_exists($result)) {

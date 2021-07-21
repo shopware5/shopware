@@ -26,6 +26,7 @@
  *
  * @category   Enlight
  * @package    Enlight_Application
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -43,7 +44,7 @@ class Enlight_Application
 
     /**
      * @var Enlight_Application Instance of the Enlight application.
-     * Will be set in the class constructor.
+     *                          Will be set in the class constructor.
      */
     protected static $instance;
 
@@ -52,7 +53,7 @@ class Enlight_Application
         self::$instance = $this;
 
         $this->core_path = __DIR__ . DIRECTORY_SEPARATOR;
-        $this->path      = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+        $this->path = \dirname(__DIR__) . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -83,6 +84,7 @@ class Enlight_Application
      * Returns the enlight path: <projectroot>/engine/Library/Enlight/
      *
      * @param string $path
+     *
      * @return string
      */
     public function CorePath($path = null)
@@ -96,6 +98,7 @@ class Enlight_Application
      * Returns the enlight components path: <projectroot>/engine/Library/Enlight/Components/
      *
      * @param string $path
+     *
      * @return string
      */
     public function ComponentsPath($path = null)
@@ -105,11 +108,11 @@ class Enlight_Application
         return $this->normalizePath($this->core_path . 'Components' . DIRECTORY_SEPARATOR, $path);
     }
 
-
     /**
      * Returns the library path: <projectroot>/engine/Library/
      *
      * @param string $path
+     *
      * @return string
      */
     public function Path($path = null)
@@ -120,8 +123,9 @@ class Enlight_Application
     }
 
     /**
-     * @param string $basePath
+     * @param string      $basePath
      * @param string|null $path
+     *
      * @return string
      */
     private function normalizePath($basePath, $path = null)
@@ -139,8 +143,9 @@ class Enlight_Application
 /**
  * Proxy to Shopware()
  *
- * @param   Enlight_Application $newInstance
- * @return  Enlight_Application
+ * @param Enlight_Application $newInstance
+ *
+ * @return Enlight_Application
  */
 function Enlight($newInstance = null)
 {

@@ -25,27 +25,27 @@
  *
  * @category   Enlight
  * @package    Enlight_Extensions
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin_Bootstrap_Default
 {
     /**
-     * @var string Used when no file parameter is given.
+     * @var string used when no file parameter is given
      */
     protected $defaultFile = null;
 
-
     /**
-     * @var array Will be set in the response instance on pre dispatch.
+     * @var array will be set in the response instance on pre dispatch
      */
-    protected $headers = array(
-        'Content-Type'  => null,
+    protected $headers = [
+        'Content-Type' => null,
         'Cache-Control' => 'private, proxy-revalidate, max-age=2592000, s-maxage=0',
-        'Pragma'        => 'private',
-        'Expires'       => null,
-        'Last-Modified' => null
-    );
+        'Pragma' => 'private',
+        'Expires' => null,
+        'Last-Modified' => null,
+    ];
 
     /**
      * @var bool Flag if the view is already rendered
@@ -53,7 +53,7 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
     protected $render = false;
 
     /**
-     * @var Enlight_Controller_Plugins_ViewRenderer_Bootstrap Instance of the enlight view renderer.
+     * @var Enlight_Controller_Plugins_ViewRenderer_Bootstrap instance of the enlight view renderer
      */
     protected $viewRenderer;
 
@@ -66,7 +66,7 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
     {
         $event = new Enlight_Event_Handler_Default(
             'Enlight_Controller_Action_PreDispatch',
-            array($this, 'onPreDispatch'),
+            [$this, 'onPreDispatch'],
             300
         );
         $this->Application()->Events()->registerListener($event);
@@ -74,8 +74,6 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
 
     /**
      * Loads the script template, if not set.
-     *
-     * @param   Enlight_Event_EventArgs $args
      */
     public function onPreDispatch(Enlight_Event_EventArgs $args)
     {
@@ -116,20 +114,22 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
     /**
      * Sets the render flag. Loads the view renderer.
      *
-     * @param   bool $flag
-     * @return  Enlight_Controller_Plugins_ScriptRenderer_Bootstrap
+     * @param bool $flag
+     *
+     * @return Enlight_Controller_Plugins_ScriptRenderer_Bootstrap
      */
     public function setRender($flag = true)
     {
         $this->setViewRenderer();
         $this->render = $flag ? true : false;
+
         return $this;
     }
 
     /**
      * Returns the template name.
      *
-     * @return  string
+     * @return string
      */
     public function getTemplateName()
     {
@@ -147,7 +147,7 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
             $fileNames = explode('|', $fileNames);
         }
 
-        $templateNames = array();
+        $templateNames = [];
         foreach ($fileNames as $fileName) {
             // Remove unwanted characters
             $fileName = preg_replace('/[^a-z0-9\/_-]/i', '', $fileName);
@@ -169,23 +169,22 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
 
             $fileName = $this->inflectPath($moduleName, $controllerName, $fileName);
 
-            $templateNames[]  = $fileName;
+            $templateNames[] = $fileName;
         }
 
-        $count = count($templateNames);
+        $count = \count($templateNames);
         if ($count === 0) {
             return null;
         } elseif ($count === 1) {
             return $templateNames[0];
-        } else {
-            return 'snippet:string:{include file="' . implode("\"}\n{include file=\"", $templateNames) . '"}';
         }
+
+        return 'snippet:string:{include file="' . implode("\"}\n{include file=\"", $templateNames) . '"}';
     }
 
     /**
      * Sets the view renderer instance
      *
-     * @param Enlight_Controller_Plugins_ViewRenderer_Bootstrap|null $viewRenderer
      * @return Enlight_Controller_Plugins_ScriptRenderer_Bootstrap
      */
     public function setViewRenderer(Enlight_Controller_Plugins_ViewRenderer_Bootstrap $viewRenderer = null)
@@ -203,6 +202,7 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
      * @param string $module
      * @param string $controller
      * @param string $file
+     *
      * @return string
      */
     private function inflectPath($module, $controller, $file)
@@ -217,11 +217,12 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
 
     /**
      * @param string $input
+     *
      * @return string
      */
     private function camelCaseToUnderScore($input)
     {
-        $pattern = ['#(?<=(?:\p{Lu}))(\p{Lu}\p{Ll})#','#(?<=(?:\p{Ll}|\p{Nd}))(\p{Lu})#'];
+        $pattern = ['#(?<=(?:\p{Lu}))(\p{Lu}\p{Ll})#', '#(?<=(?:\p{Ll}|\p{Nd}))(\p{Lu})#'];
         $replacement = ['_\1', '_\1'];
 
         return preg_replace($pattern, $replacement, $input);

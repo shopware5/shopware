@@ -64,8 +64,6 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * The Enlight_View_Default constructor expects an instance of the Enlight_Template_Manager and set it
      * into the internal property.
-     *
-     * @param Enlight_Template_Manager $engine
      */
     public function __construct(Enlight_Template_Manager $engine)
     {
@@ -117,7 +115,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      * This function adds a template directory into the internal instance of the Enlight_Template_Manager
      *
      * @param string|string $templateDir
-     * @param null|string   $key
+     * @param string|null   $key
      *
      * @return Enlight_View_Default
      */
@@ -197,8 +195,6 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * Extends a template block by name.
      *
-     * @param        $spec
-     * @param        $content
      * @param string $mode
      *
      * @return Enlight_View_Default
@@ -229,9 +225,9 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      * If no cache or scope given, the default settings for this property will be used.
      *
      * @param array|string $spec
-     * @param mixed        $value
-     * @param bool         $nocache
-     * @param int          $scope
+     * @param mixed|null   $value
+     * @param bool|null    $nocache
+     * @param int|null     $scope
      *
      * @return \Enlight_View|\Enlight_View_Default
      */
