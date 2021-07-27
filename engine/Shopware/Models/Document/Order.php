@@ -558,7 +558,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                     $position['netto'] = round($position['price'], 2);
                     $position['price'] = Shopware()->Container()->get('shopware.cart.net_rounding')->round($position['price'], $position['tax'], 1);
                 } else {
-                    $position['netto'] = round($position['price'] / (100 + $position['tax']) * 100, 2);
+                    $position['netto'] = $position['price'] / (100 + $position['tax']) * 100;
                 }
             } elseif ($position['modus'] == 2) {
                 $ticketResult = Shopware()->Db()->fetchRow('
@@ -596,9 +596,9 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 $position['netto'] = 0;
             }
 
-            $position['amount_netto'] = $position['netto'] * $position['quantity'];
+            $position['amount_netto'] = round($position['netto'] * $position['quantity'], 2);
 
-            $position['amount'] = $position['price'] * $position['quantity'];
+            $position['amount'] = round($position['price'] * $position['quantity'], 2);
 
             $this->_amountNetto += $position['amount_netto'];
             $this->_amount += $position['amount'];
