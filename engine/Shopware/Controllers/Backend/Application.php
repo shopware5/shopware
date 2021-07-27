@@ -727,14 +727,15 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
         $builder->select($association);
         $builder->from($model, $association);
 
-        if ($search !== '') {
+        if (\is_string($search) && $search !== '') {
             $where = [];
-
             $fields = $this->getModelFields($model, $association);
+
             foreach ($fields as $field) {
-                $where[] = $field['alias'] . ' LIKE :search';
+                $where[] = $builder->expr()->like($field['alias'], ':search');
             }
-            $builder->andWhere(implode(' OR ', $where));
+
+            $builder->andWhere($builder->expr()->orX(...$where));
             $builder->setParameter('search', '%' . $search . '%');
         }
 
@@ -1231,6 +1232,16 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
 
         if (!isset($column)) {
             return;
+        }
+
+        /*
+         * The search parameter may have been set beforehand, but is now superfluous,
+         * since we're replacing the whole WHERE part in the next statement.
+         */
+        foreach ($builder->getParameters() as $key => $parameter) {
+            if ($parameter->getName() === 'search') {
+                $builder->getParameters()->remove($key);
+            }
         }
 
         $builder->where($association . '.' . $column . ' = :id')
