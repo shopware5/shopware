@@ -212,8 +212,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $values = array_values($data);
         $splice = array_splice(
             $values,
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', $limit)
+            (int) $this->Request()->getParam('start', 0),
+            (int) $this->Request()->getParam('limit', $limit)
         );
 
         $this->send($splice, \count($data));
