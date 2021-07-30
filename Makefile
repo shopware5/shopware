@@ -104,7 +104,11 @@ debug-config-test: .make.config.build.debug
 	./bin/console sw:admin:create --name="Demo" --email="demo@demo.de" --username="demo" --password="demo" --locale=de_DE -n
 	touch recovery/install/data/install.lock
 
-.make.init: clean-make-config .make.config .make.install
+.git/hooks/pre-commit:
+	mkdir -p .git/hooks
+	ln -s ../../build/gitHooks/pre-commit $@
+
+.make.init: clean-make-config .make.config .make.install .git/hooks/pre-commit
 
 .make.console.executable:
 	chmod u+x bin/console
