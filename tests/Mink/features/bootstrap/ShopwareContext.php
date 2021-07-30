@@ -31,10 +31,14 @@ use Shopware\Tests\Mink\Page\Homepage;
 
 class ShopwareContext extends SubContext
 {
-    /** @var FeatureContext */
+    /**
+     * @var FeatureContext
+     */
     protected $featureContext;
 
-    /** @BeforeScenario */
+    /**
+     * @BeforeScenario
+     */
     public function gatherContexts(BeforeScenarioScope $scope)
     {
         $environment = $scope->getEnvironment();

@@ -65,6 +65,7 @@ return (new Config())
         'no_useless_else' => true,
         'no_useless_return' => true,
         'no_superfluous_phpdoc_tags' => true,
+        'phpdoc_line_span' => true,
         'phpdoc_order' => true,
         'phpdoc_summary' => false,
         'phpdoc_var_annotation_correct_order' => true,

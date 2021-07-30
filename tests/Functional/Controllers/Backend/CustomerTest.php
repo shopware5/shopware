@@ -26,10 +26,14 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 
 class CustomerTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    /** @var \Shopware\Models\Customer\Customer */
+    /**
+     * @var \Shopware\Models\Customer\Customer
+     */
     protected $repository;
 
-    /** @var \Shopware\Components\Model\ModelManager */
+    /**
+     * @var \Shopware\Components\Model\ModelManager
+     */
     private $manager;
 
     /**

@@ -28,7 +28,9 @@ use PHPUnit\Framework\TestCase;
 
 class FilterTest extends TestCase
 {
-    /** @var \Shopware_Plugins_Frontend_InputFilter_Bootstrap */
+    /**
+     * @var \Shopware_Plugins_Frontend_InputFilter_Bootstrap
+     */
     private $inputFilter;
 
     /**

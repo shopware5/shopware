@@ -30,7 +30,9 @@ use Shopware\Models\Order\Detail as OrderDetail;
 
 class StockService implements StockServiceInterface
 {
-    /** @var ModelManager */
+    /**
+     * @var ModelManager
+     */
     protected $entityManager;
 
     public function __construct(ModelManager $entityManager)

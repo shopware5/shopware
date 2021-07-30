@@ -26,7 +26,9 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 
 class VoucherTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    /** @var \Shopware\Models\Voucher\Voucher */
+    /**
+     * @var \Shopware\Models\Voucher\Voucher
+     */
     protected $repository;
 
     /**
@@ -55,7 +57,9 @@ class VoucherTest extends \Enlight_Components_Test_Controller_TestCase
         'value' => '10',
     ];
 
-    /** @var \Shopware\Components\Model\ModelManager */
+    /**
+     * @var \Shopware\Components\Model\ModelManager
+     */
     private $manager;
 
     /**

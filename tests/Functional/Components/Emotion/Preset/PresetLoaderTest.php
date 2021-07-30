@@ -36,13 +36,19 @@ use Shopware\Components\Emotion\Preset\PresetLoader;
  */
 class PresetLoaderTest extends TestCase
 {
-    /** @var Connection */
+    /**
+     * @var Connection
+     */
     private $connection;
 
-    /** @var PresetLoader */
+    /**
+     * @var PresetLoader
+     */
     private $presetLoader;
 
-    /** @var EmotionPreset */
+    /**
+     * @var EmotionPreset
+     */
     private $presetResource;
 
     protected function setUp(): void

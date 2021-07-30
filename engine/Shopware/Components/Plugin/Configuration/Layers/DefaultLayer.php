@@ -30,7 +30,9 @@ use Shopware\Components\Plugin\Configuration\WriterException;
 
 class DefaultLayer implements ConfigurationLayerInterface
 {
-    /** @var Connection */
+    /**
+     * @var Connection
+     */
     private $connection;
 
     public function __construct(Connection $connection)

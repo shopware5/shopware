@@ -28,7 +28,9 @@ use Shopware\Models\Analytics\Repository;
 
 class AnalyticsTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    /** @var \Shopware\Models\Analytics\Repository */
+    /**
+     * @var \Shopware\Models\Analytics\Repository
+     */
     private $repository;
 
     private $userId;

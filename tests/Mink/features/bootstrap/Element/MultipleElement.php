@@ -32,10 +32,14 @@ use Shopware\Tests\Mink\Helper;
 
 abstract class MultipleElement extends Element implements \Countable, \Iterator, \Shopware\Tests\Mink\HelperSelectorInterface
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $xPath;
 
-    /** @var NodeElement[] array */
+    /**
+     * @var NodeElement[] array
+     */
     private $siblings;
 
     public function __construct(Session $session, Factory $factory)

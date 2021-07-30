@@ -68,7 +68,9 @@ class ProductFeedTest extends \Enlight_Components_Test_Controller_TestCase
         'variantExport' => '1',
     ];
 
-    /** @var \Shopware\Components\Model\ModelManager */
+    /**
+     * @var \Shopware\Components\Model\ModelManager
+     */
     private $manager;
 
     /**

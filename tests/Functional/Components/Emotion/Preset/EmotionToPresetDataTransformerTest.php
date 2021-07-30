@@ -35,10 +35,14 @@ use Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformer;
  */
 class EmotionToPresetDataTransformerTest extends TestCase
 {
-    /** @var EmotionToPresetDataTransformer */
+    /**
+     * @var EmotionToPresetDataTransformer
+     */
     private $transformer;
 
-    /** @var Connection */
+    /**
+     * @var Connection
+     */
     private $connection;
 
     protected function setUp(): void

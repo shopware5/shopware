@@ -34,10 +34,14 @@ use Shopware\Components\Emotion\Preset\PresetMetaDataInterface;
  */
 class PresetInstallerTest extends TestCase
 {
-    /** @var PresetInstaller */
+    /**
+     * @var PresetInstaller
+     */
     private $presetInstaller;
 
-    /** @var Connection */
+    /**
+     * @var Connection
+     */
     private $connection;
 
     protected function setUp(): void

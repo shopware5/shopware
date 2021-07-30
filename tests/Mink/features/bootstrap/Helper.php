@@ -38,7 +38,9 @@ class Helper
 
     private static $language;
 
-    /** @var MultipleElement */
+    /**
+     * @var MultipleElement
+     */
     private static $filterElements;
 
     public static function setCurrentLanguage($language)
