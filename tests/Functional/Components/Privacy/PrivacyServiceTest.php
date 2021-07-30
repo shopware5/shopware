@@ -36,10 +36,14 @@ class PrivacyServiceTest extends TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    /** @var Connection */
+    /**
+     * @var Connection
+     */
     private $connection;
 
-    /** @var PrivacyService */
+    /**
+     * @var PrivacyService
+     */
     private $privacyService;
 
     protected function setUp(): void

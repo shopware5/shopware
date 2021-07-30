@@ -44,7 +44,9 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
 
     private $updateMetaDescription = 'testMetaDescription';
 
-    /** @var \Shopware\Components\Model\ModelManager */
+    /**
+     * @var \Shopware\Components\Model\ModelManager
+     */
     private $manager;
 
     /**

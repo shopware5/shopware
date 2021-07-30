@@ -28,7 +28,9 @@ use Shopware\Components\Plugin\Configuration\Layers\ConfigurationLayerInterface;
 
 class Writer implements WriterInterface
 {
-    /** @var ConfigurationLayerInterface */
+    /**
+     * @var ConfigurationLayerInterface
+     */
     private $lastLayer;
 
     public function __construct(ConfigurationLayerInterface $lastLayer)

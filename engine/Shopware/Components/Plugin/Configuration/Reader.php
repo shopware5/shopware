@@ -28,7 +28,9 @@ use Shopware\Components\Plugin\Configuration\Layers\ConfigurationLayerInterface;
 
 class Reader implements ReaderInterface
 {
-    /** @var ConfigurationLayerInterface */
+    /**
+     * @var ConfigurationLayerInterface
+     */
     private $layer;
 
     public function __construct(ConfigurationLayerInterface $lastLayer)

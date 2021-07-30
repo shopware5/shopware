@@ -33,10 +33,14 @@ use Shopware\Models\Emotion\Preset;
 
 class PresetLoader implements PresetLoaderInterface
 {
-    /** @var ModelManager */
+    /**
+     * @var ModelManager
+     */
     private $modelManager;
 
-    /** @var MediaServiceInterface */
+    /**
+     * @var MediaServiceInterface
+     */
     private $mediaService;
 
     public function __construct(ModelManager $modelManager, MediaServiceInterface $mediaService)

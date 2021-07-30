@@ -31,10 +31,14 @@ use Zend_Cache_Exception;
 
 class CachedReader implements ReaderInterface
 {
-    /** @var ConfigurationLayerInterface */
+    /**
+     * @var ConfigurationLayerInterface
+     */
     private $layer;
 
-    /** @var Zend_Cache_Core */
+    /**
+     * @var Zend_Cache_Core
+     */
     private $cache;
 
     public function __construct(ConfigurationLayerInterface $lastLayer, Zend_Cache_Core $cache)

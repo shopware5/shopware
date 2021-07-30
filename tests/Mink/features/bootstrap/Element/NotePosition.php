@@ -36,7 +36,9 @@ use Shopware\Tests\Mink\HelperSelectorInterface;
  */
 class NotePosition extends CartPosition implements HelperSelectorInterface
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $selector = ['css' => 'div.note--item'];
 
     /**

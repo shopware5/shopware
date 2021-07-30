@@ -35,16 +35,24 @@ use Shopware\Components\Emotion\Preset\PresetDataSynchronizer;
  */
 class PresetDataSynchronizerTest extends TestCase
 {
-    /** @var PresetDataSynchronizer */
+    /**
+     * @var PresetDataSynchronizer
+     */
     private $synchronizerService;
 
-    /** @var EmotionPreset */
+    /**
+     * @var EmotionPreset
+     */
     private $presetResource;
 
-    /** @var Connection */
+    /**
+     * @var Connection
+     */
     private $connection;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $imageData;
 
     protected function setUp(): void

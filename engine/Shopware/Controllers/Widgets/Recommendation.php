@@ -24,13 +24,19 @@
 
 class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Action
 {
-    /** @var Shopware_Components_Config */
+    /**
+     * @var Shopware_Components_Config
+     */
     protected $config;
 
-    /** @var sArticles */
+    /**
+     * @var sArticles
+     */
     protected $articleModule;
 
-    /** @var sMarketing */
+    /**
+     * @var sMarketing
+     */
     protected $marketingModule;
 
     /**

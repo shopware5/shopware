@@ -41,13 +41,19 @@ use Shopware\Models\Plugin\Plugin;
 
 class DynamicCacheTimeServiceTest extends TestCase
 {
-    /** @var CacheTimeServiceInterface */
+    /**
+     * @var CacheTimeServiceInterface
+     */
     private $cacheTimeService;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $defaultTime;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $defaultBlogTime;
 
     /**

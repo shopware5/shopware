@@ -26,7 +26,9 @@ namespace Shopware\Tests\Controllers\Backend;
 
 class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    /** @var \Shopware\Models\Partner\Partner */
+    /**
+     * @var \Shopware\Models\Partner\Partner
+     */
     protected $repository;
 
     /**
@@ -56,7 +58,9 @@ class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
 
     private $updateStreet = 'Abbey Road';
 
-    /** @var \Shopware\Components\Model\ModelManager */
+    /**
+     * @var \Shopware\Components\Model\ModelManager
+     */
     private $manager;
 
     /**
