@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca3bc8a70284ae71c4075c09386e4b10",
+    "content-hash": "08553ccfba4f70d6131b3a0795d4189e",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -7307,24 +7307,26 @@
         },
         {
             "name": "wikimedia/less.php",
-            "version": "v3.0.0",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/less.php.git",
-                "reference": "5e2a4fba9304915c4cbf98cc9cb665a5c365c351"
+                "reference": "a486d78b9bd16b72f237fc6093aa56d69ce8bd13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/5e2a4fba9304915c4cbf98cc9cb665a5c365c351",
-                "reference": "5e2a4fba9304915c4cbf98cc9cb665a5c365c351",
+                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/a486d78b9bd16b72f237fc6093aa56d69ce8bd13",
+                "reference": "a486d78b9bd16b72f237fc6093aa56d69ce8bd13",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.9"
             },
             "require-dev": {
-                "jakub-onderka/php-parallel-lint": "1.0.0",
+                "mediawiki/mediawiki-codesniffer": "34.0.0",
                 "mediawiki/minus-x": "1.0.0",
+                "php-parallel-lint/php-console-highlighter": "0.5.0",
+                "php-parallel-lint/php-parallel-lint": "1.2.0",
                 "phpunit/phpunit": "^8.5"
             },
             "bin": [
@@ -7368,9 +7370,9 @@
             ],
             "support": {
                 "issues": "https://github.com/wikimedia/less.php/issues",
-                "source": "https://github.com/wikimedia/less.php/tree/v3.0.0"
+                "source": "https://github.com/wikimedia/less.php/tree/v3.1.0"
             },
-            "time": "2020-03-11T23:01:29+00:00"
+            "time": "2020-12-11T19:33:31+00:00"
         }
     ],
     "packages-dev": [
@@ -10987,5 +10989,5 @@
     "platform-overrides": {
         "php": "7.4.0"
     },
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

@@ -80,7 +80,7 @@
         "symfony/serializer": "~4.4.14",
         "symfony/validator": "~4.4.14",
         "symfony/web-link": "~4.4.14",
-        "wikimedia/less.php": "3.0.0"
+        "wikimedia/less.php": "3.1.0"
     },
     "replace": {
         "paragonie/random_compat": "2.*",
