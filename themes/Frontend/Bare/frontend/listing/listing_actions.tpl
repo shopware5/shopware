@@ -23,7 +23,7 @@
          class="{$class}{block name='frontend_listing_actions_class'}{/block}">
 
         {* Filter action button *}
-        {block name="frontend_listing_actions_filter"}
+        {block name="frontend_listing_actions_filter_include"}
             {include file="frontend/listing/actions/action-filter-button.tpl"}
         {/block}
 
