@@ -908,12 +908,12 @@ EOD
 
     public static function waitForOverlay(DocumentElement $page)
     {
-        $page->waitFor(2000, static function () use ($page) {
+        $page->waitFor(4000, static function () use ($page) {
             $element = null;
             try {
                 $element = $page->find('css', '.js--overlay');
 
-                return $element === null || !$element->isVisible();
+                return $element === null;
             } catch (\Exception $e) {
                 return true;
             }

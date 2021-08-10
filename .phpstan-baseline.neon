@@ -79474,17 +79474,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iAmOnTheDetailPageForArticle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iAmOnTheDetailPageForArticle\\(\\) has parameter \\$articleId with no typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iAmOnTheDetailPageForVariantOfArticle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
@@ -79499,22 +79489,12 @@ parameters:
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iCanNotSelectFrom\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iCanNotSelectFrom\\(\\) has parameter \\$configuratorGroup with no typehint specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iCanNotSelectFrom\\(\\) has parameter \\$configuratorOption with no typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iCanSelectEveryOptionOfFromTo\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
@@ -79539,32 +79519,12 @@ parameters:
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iChooseTheFollowingArticleConfiguration\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iChooseTheFollowingArticleConfiguration\\(\\) has parameter \\$configuration with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iOpenTheEvaluationForm\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iPutTheArticleTimesIntoTheBasket\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iPutTheArticleTimesIntoTheBasket\\(\\) has parameter \\$quantity with no typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
@@ -79578,10 +79538,6 @@ parameters:
 			count: 1
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iSubmitTheNotificationFormWith\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iSubmitTheNotificationFormWith\\(\\) has parameter \\$email with no typehint specified\\.$#"
@@ -79589,27 +79545,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iWriteAnEvaluation\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iWriteAnEvaluation\\(\\) has parameter \\$data with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:theNotificationPluginIsActivated\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:theNotificationPluginIsDeactivated\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:theShopOwnerActivateMyLatestEvaluation\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/DetailContext.php
 

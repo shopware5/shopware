@@ -25,6 +25,8 @@
 namespace Shopware\Tests\Mink;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\NodeElement;
+use Behat\Mink\Exception\ElementNotFoundException;
 use Shopware\Tests\Mink\Element\ArticleEvaluation;
 use Shopware\Tests\Mink\Page\Detail;
 
@@ -34,7 +36,7 @@ class DetailContext extends SubContext
      * @Given /^I am on the detail page for article (?P<articleId>\d+)$/
      * @When /^I go to the detail page for article (?P<articleId>\d+)$/
      */
-    public function iAmOnTheDetailPageForArticle($articleId)
+    public function iAmOnTheDetailPageForArticle($articleId): void
     {
         $this->getPage('Detail')->open(['articleId' => $articleId, 'number' => null]);
     }
@@ -43,7 +45,7 @@ class DetailContext extends SubContext
      * @Given /^I am on the detail page for variant "(?P<number>[^"]*)" of article (?P<articleId>\d+)$/
      * @When /^I go to the detail page for variant "(?P<number>[^"]*)" of article (?P<articleId>\d+)$/
      */
-    public function iAmOnTheDetailPageForVariantOfArticle($number, $articleId)
+    public function iAmOnTheDetailPageForVariantOfArticle($number, $articleId): void
     {
         $this->getPage('Detail')->open(['articleId' => $articleId, 'number' => $number]);
     }
@@ -52,7 +54,7 @@ class DetailContext extends SubContext
      * @When /^I put the article into the basket$/
      * @When /^I put the article "(?P<quantity>[^"]*)" times into the basket$/
      */
-    public function iPutTheArticleTimesIntoTheBasket($quantity = 1)
+    public function iPutTheArticleTimesIntoTheBasket($quantity = 1): void
     {
         /** @var Detail $page */
         $page = $this->getPage('Detail');
@@ -62,7 +64,7 @@ class DetailContext extends SubContext
     /**
      * @Given /^I should see an average customer evaluation of (?P<average>\d+) from following evaluations:$/
      */
-    public function iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations($average, TableNode $evaluations)
+    public function iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations($average, TableNode $evaluations): void
     {
         /** @var \Shopware\Tests\Mink\Page\Detail $page */
         $page = $this->getPage('Detail');
@@ -77,7 +79,7 @@ class DetailContext extends SubContext
     /**
      * @When /^I choose the following article configuration:$/
      */
-    public function iChooseTheFollowingArticleConfiguration(TableNode $configuration)
+    public function iChooseTheFollowingArticleConfiguration(TableNode $configuration): void
     {
         $configuration = $configuration->getHash();
 
@@ -87,7 +89,7 @@ class DetailContext extends SubContext
     /**
      * @Then /^I can not select "([^"]*)" from "([^"]*)"$/
      */
-    public function iCanNotSelectFrom($configuratorOption, $configuratorGroup)
+    public function iCanNotSelectFrom($configuratorOption, $configuratorGroup): void
     {
         $this->getPage('Detail')->canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup);
     }
@@ -95,7 +97,7 @@ class DetailContext extends SubContext
     /**
      * @When /^I write an evaluation:$/
      */
-    public function iWriteAnEvaluation(TableNode $data)
+    public function iWriteAnEvaluation(TableNode $data): void
     {
         $this->getPage('Detail')->writeEvaluation($data->getHash());
     }
@@ -104,7 +106,7 @@ class DetailContext extends SubContext
      * @When /^the shop owner activates my latest evaluation$/
      * @When /^the shop owner activates my latest (\d+) evaluations$/
      */
-    public function theShopOwnerActivateMyLatestEvaluation($limit = 1)
+    public function theShopOwnerActivateMyLatestEvaluation($limit = 1): void
     {
         $sql = 'UPDATE `s_articles_vote` SET `active`= 1 ORDER BY id DESC LIMIT ' . $limit;
         $this->getService('db')->exec($sql);
@@ -113,7 +115,7 @@ class DetailContext extends SubContext
     /**
      * @Given /^I can select every (\d+)\. option of "([^"]*)" from "([^"]*)" to "([^"]*)"$/
      */
-    public function iCanSelectEveryOptionOfFromTo($graduation, $select, $min, $max)
+    public function iCanSelectEveryOptionOfFromTo($graduation, $select, $min, $max): void
     {
         $this->getPage('Detail')->checkSelect($select, $min, $max, $graduation);
     }
@@ -121,7 +123,7 @@ class DetailContext extends SubContext
     /**
      * @When /^I submit the notification form with "([^"]*)"$/
      */
-    public function iSubmitTheNotificationFormWith($email)
+    public function iSubmitTheNotificationFormWith($email): void
     {
         $this->getPage('Detail')->submitNotification($email);
     }
@@ -129,7 +131,7 @@ class DetailContext extends SubContext
     /**
      * @When /^I open the evaluation form$/
      */
-    public function iOpenTheEvaluationForm()
+    public function iOpenTheEvaluationForm(): void
     {
         /** @var Detail $page */
         $page = $this->getPage('Detail');
@@ -139,7 +141,7 @@ class DetailContext extends SubContext
     /**
      * @Given /^The notification plugin is activated$/
      */
-    public function theNotificationPluginIsActivated()
+    public function theNotificationPluginIsActivated(): void
     {
         /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
         $pluginManager = $this->getService(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
@@ -150,11 +152,88 @@ class DetailContext extends SubContext
     /**
      * @Given /^The notification plugin is deactivated$/
      */
-    public function theNotificationPluginIsDeactivated()
+    public function theNotificationPluginIsDeactivated(): void
     {
         /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
         $pluginManager = $this->getService(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
         $plugin = $pluginManager->getPluginByName('Notification');
         $pluginManager->deactivatePlugin($plugin);
+    }
+
+    /**
+     * @When /^I open the comparison menu$/
+     */
+    public function iOpenTheComparisonMenu(): void
+    {
+        $page = $this->getPage('Detail');
+        $openMenu = $page->find('css', '.entry--compare');
+
+        if (!($openMenu instanceof NodeElement)) {
+            throw new ElementNotFoundException($this->getDriver(), null, 'css', '.entry--compare');
+        }
+        $openMenu->click();
+
+        Helper::waitForOverlay($this->getSession()->getPage());
+    }
+
+    /**
+     * @When I compare the current product
+     */
+    public function iCompareTheCurrentProduct(): void
+    {
+        $page = $this->getPage('Detail');
+        $doCompare = $page->find('css', '.action--compare');
+
+        if (!($doCompare instanceof NodeElement)) {
+            throw new ElementNotFoundException($this->getDriver(), null, 'css', '.action--compare');
+        }
+        $doCompare->click();
+
+        Helper::waitForOverlay($this->getSession()->getPage());
+    }
+
+    /**
+     * @When I start the comparison
+     */
+    public function iStartTheComparison(): void
+    {
+        $page = $this->getPage('Detail');
+        $startComparison = $page->find('css', '.btn--compare-start');
+
+        if (!($startComparison instanceof NodeElement)) {
+            throw new ElementNotFoundException($this->getDriver(), null, 'css', '.btn--compare-start');
+        }
+
+        $startComparison->click();
+        $startComparison->waitFor(4, function () use ($startComparison) {
+            return $startComparison->find('css', '.btn--product') !== null;
+        });
+    }
+
+    /**
+     * @When I press the button to go the product details
+     */
+    public function iPressButtonForProductDetails(): void
+    {
+        $page = $this->getPage('Detail');
+        $goDetails = $page->find('css', '.btn--product');
+
+        if (!($goDetails instanceof NodeElement)) {
+            throw new ElementNotFoundException($this->getDriver(), null, 'css', '.btn--product');
+        }
+
+        $goDetails->click();
+    }
+
+    /**
+     * @Then I should be at the detail page of compared product
+     */
+    public function iShouldSeeDetailPage(): void
+    {
+        $page = $this->getPage('Detail');
+
+        $page->waitFor(4, function () use ($page) {
+            return $page->find('xpath', '//*a[text()="Artikel mit Bewertung"]') === null;
+        });
     }
 }

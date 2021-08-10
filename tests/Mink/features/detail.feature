@@ -169,3 +169,23 @@ Feature: Detail page
         Given I am on the detail page for article 199
         Then  I should see "Dieser Artikel steht derzeit nicht zur Verfügung!"
         But   I should not see "In den Warenkorb"
+
+    @comparison
+    Scenario: I can get to the product page
+        Given I am on the detail page for article 199
+        When  I compare the current product
+        And   I am on the detail page for article 198
+
+        When  I open the comparison menu
+        And   Wait until ajax requests are done
+        Then  I should see "Vergleich starten"
+
+        When  I start the comparison
+        And   Wait until ajax requests are done
+        Then  I should see "Zum Produkt"
+
+        When  I press the button to go the product details
+        Then  I should be on the page "Detail"
+        And   I should not see "SW10197"
+
+
