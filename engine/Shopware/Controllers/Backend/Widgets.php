@@ -478,7 +478,13 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function getNoticeAction()
     {
-        $userID = $_SESSION['Shopware']['Auth']->id;
+        $userID = $_SESSION['ShopwareBackend']['Auth']->id;
+
+        if (empty($userID)) {
+            $this->View()->assign(['success' => false, 'message' => 'No user id']);
+
+            return;
+        }
 
         $noticeMsg = Shopware()->Container()->get('db')->fetchOne(
             '
@@ -499,13 +505,14 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     {
         $noticeMsg = (string) $this->Request()->getParam('notice');
 
-        $userID = $_SESSION['Shopware']['Auth']->id;
+        $userID = $_SESSION['ShopwareBackend']['Auth']->id;
 
         if (empty($userID)) {
             $this->View()->assign(['success' => false, 'message' => 'No user id']);
 
             return;
         }
+
         if (Shopware()->Container()->get('db')->fetchOne('SELECT id FROM s_plugin_widgets_notes WHERE userID = ?', [$userID])) {
             // Update
             Shopware()->Container()->get('db')->query(
