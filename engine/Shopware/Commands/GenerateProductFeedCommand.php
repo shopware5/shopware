@@ -108,13 +108,11 @@ class GenerateProductFeedCommand extends ShopwareCommand implements CompletionAw
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
-        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+        $cacheDir = $this->container->getParameter('kernel.cache_dir.product_export');
 
         if (!\is_string($cacheDir)) {
-            throw new RuntimeException('Parameter kernel.cache_dir has to be an string');
+            throw new RuntimeException('Parameter kernel.cache_dir.product_export has to be a string');
         }
-
-        $this->cacheDir = $cacheDir . '/productexport/';
 
         if (!is_dir($this->cacheDir)) {
             if (@mkdir($this->cacheDir, 0777, true) === false) {

@@ -746,6 +746,7 @@ class Kernel extends SymfonyKernel
             'kernel.debug' => $this->debug,
             'kernel.name' => $this->name,
             'kernel.cache_dir' => $this->getCacheDir(),
+            'kernel.cache_dir.product_export' => $this->getCacheDir() . '/productexport/',
             'kernel.logs_dir' => $this->getLogDir(),
             'kernel.bundles' => $bundles,
             'kernel.bundles_metadata' => $bundlesMetadata,
