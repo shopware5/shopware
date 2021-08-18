@@ -48,7 +48,6 @@ trait CustomerLoginTrait
         $session->offsetSet('sessionId', $sessionId);
         $session->offsetSet('sUserId', $customerId);
         $session->offsetSet('sUserMail', $email);
-        $session->offsetSet('sUserPassword', $password);
         $session->offsetSet('sCountry', $countryId);
         $session->offsetSet('sArea', $areaId);
         $session->offsetSet('sUserGroup', $customerGroupKey);
@@ -71,7 +70,6 @@ trait CustomerLoginTrait
         $session->offsetUnset('sessionId');
         $session->offsetUnset('sUserId');
         $session->offsetUnset('sUserMail');
-        $session->offsetUnset('sUserPassword');
         $session->offsetUnset('sUserGroup');
         $session->offsetUnset('sCountry');
         $session->offsetUnset('sArea');

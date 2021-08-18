@@ -36,25 +36,13 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class CurrentPasswordValidator extends ConstraintValidator
 {
-    /**
-     * @var \Enlight_Components_Session_Namespace
-     */
-    private $session;
+    private \Enlight_Components_Session_Namespace $session;
 
-    /**
-     * @var \Enlight_Components_Snippet_Manager
-     */
-    private $snippets;
+    private \Enlight_Components_Snippet_Manager $snippets;
 
-    /**
-     * @var Manager
-     */
-    private $passwordManager;
+    private Manager $passwordManager;
 
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    private ModelManager $modelManager;
 
     public function __construct(
         \Enlight_Components_Session_Namespace $session,
@@ -74,17 +62,28 @@ class CurrentPasswordValidator extends ConstraintValidator
      * @param mixed      $value      The value that should be validated
      * @param Constraint $constraint The constraint for the validation
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         /** @var CurrentPassword $constraint */
         if (!$constraint instanceof CurrentPassword) {
             return;
         }
 
-        $sessionPassword = $this->session->offsetGet('sUserPassword');
-        $encoderName = $this->getEncoder();
+        try {
+            /** @var Customer $user */
+            $user = $this->modelManager->find(Customer::class, $this->session->offsetGet('sUserId'));
+        } catch (\Throwable $e) {
+            $this->context
+                ->buildViolation('Could not find a customer account corresponding to the current session.')
+                ->addViolation();
 
-        if ($this->passwordManager->isPasswordValid($value, $sessionPassword, $encoderName) === false) {
+            return;
+        }
+
+        $passwordHash = $user->getPassword();
+        $encoderName = $user->getEncoderName() ?: $this->passwordManager->getDefaultPasswordEncoderName();
+
+        if (!$this->passwordManager->isPasswordValid($value, $passwordHash, $encoderName)) {
             $errorMessage = $this->snippets
                 ->getNamespace($constraint->namespace)
                 ->get($constraint->snippetKey);
@@ -94,18 +93,5 @@ class CurrentPasswordValidator extends ConstraintValidator
                 ->atPath($this->context->getPropertyPath())
                 ->addViolation();
         }
-    }
-
-    /**
-     * Get users encoder based on his session user id or return the default
-     *
-     * @return string
-     */
-    private function getEncoder()
-    {
-        /** @var Customer $user */
-        $user = $this->modelManager->find(Customer::class, $this->session->offsetGet('sUserId'));
-
-        return $user->getEncoderName() ?: $this->passwordManager->getDefaultPasswordEncoderName();
     }
 }

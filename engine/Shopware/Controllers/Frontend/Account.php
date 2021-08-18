@@ -656,7 +656,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->customerService->update($customer);
-            $this->get('session')->offsetSet('sUserPassword', $customer->getPassword());
 
             $this->redirect(['controller' => 'account', 'action' => 'profile', 'success' => true, 'section' => 'password']);
 
