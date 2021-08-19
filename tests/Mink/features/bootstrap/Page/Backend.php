@@ -35,7 +35,10 @@ class Backend extends Page
      */
     protected $path = '/backend/';
 
-    public function getXPathSelectors()
+    /**
+     * @return array<string, string|array>
+     */
+    public function getXPathSelectors(): array
     {
         return [
             'loginUsernameInput' => "//input[@name='username']",
@@ -44,7 +47,7 @@ class Backend extends Page
         ];
     }
 
-    public function login($user, $password)
+    public function login($user, $password): void
     {
         $xpath = $this->getXPathSelectors();
         $this->find('xpath', $xpath['loginUsernameInput'])->setValue($user);
@@ -55,7 +58,7 @@ class Backend extends Page
     /**
      * @param string $moduleName
      */
-    public function openModule($moduleName)
+    public function openModule($moduleName): void
     {
         $name = 'Shopware.apps.' . $moduleName;
         $this->getSession()->evaluateScript("openNewModule('$name');");
@@ -64,7 +67,7 @@ class Backend extends Page
     /**
      * @throws \Exception
      */
-    public function verifyModule()
+    public function verifyModule(): void
     {
         $selector = "document.querySelector('.x-window-header-text') !== null";
         $result = $this->getSession()->wait(self::TIMEOUT_MILLISECONDS, $selector);

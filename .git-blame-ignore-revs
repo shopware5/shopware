@@ -3,3 +3,6 @@
 
 # Enable native_function_invocation
 7aa98dceb6d50650bff35d903ecc9a3b71ccd85e
+
+# Apply more strict PHP Codestyle
+321f6f4eeb3f234a111c970b705bd330b43fb4af

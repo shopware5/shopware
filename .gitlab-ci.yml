@@ -231,6 +231,11 @@ Mink Misc:
     variables:
         MINK_TAG: misc
 
+Mink Backend:
+    extends: .mink_base
+    variables:
+        MINK_TAG: backend
+
 RIPS security:
     stage: Security
     image: php:7.4-alpine

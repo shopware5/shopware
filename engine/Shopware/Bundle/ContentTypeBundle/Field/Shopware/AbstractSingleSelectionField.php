@@ -64,7 +64,8 @@ abstract class AbstractSingleSelectionField implements FieldInterface, Resolveab
     public static function getExtjsOptions(Field $field): array
     {
         return [
-            'model' => static::$model,
+            // This needs to be slashes to not break in JSON
+            'model' => addslashes(static::$model),
             'valueField' => static::$valueField,
             'displayField' => static::$displayField,
         ];
