@@ -190,6 +190,15 @@ class User extends ModelEntity
     private $role;
 
     /**
+     * Initial the date fields
+     */
+    public function __construct()
+    {
+        $this->lastLogin = new \DateTime();
+        $this->lockedUntil = new \DateTime();
+    }
+
+    /**
      * @return int
      */
     public function getId()
