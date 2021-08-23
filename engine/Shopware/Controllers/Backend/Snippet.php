@@ -436,7 +436,10 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         chmod($filePath, 0644);
 
         if ($extension === 'xml') {
+            $entityLoaderSettingBackup = libxml_disable_entity_loader(true);
             $xml = simplexml_load_string(@file_get_contents($filePath), 'SimpleXMLElement', LIBXML_NOCDATA);
+            libxml_disable_entity_loader($entityLoaderSettingBackup);
+
             /** @var array $snippets */
             $snippets = $xml->Worksheet->Table->Row;
             $headers = $this->readXmlRow(current($snippets));
