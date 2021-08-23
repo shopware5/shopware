@@ -74674,16 +74674,6 @@ parameters:
 			path: tests/Functional/Controllers/Backend/VoucherTest.php
 
 		-
-			message: "#^Cannot call method Backend\\(\\) on Enlight_Plugin_PluginManager\\|null\\.$#"
-			count: 4
-			path: tests/Functional/Controllers/Backend/WidgetsTest.php
-
-		-
-			message: "#^Cannot call method exec\\(\\) on Enlight_Components_Db_Adapter_Pdo_Mysql\\|null\\.$#"
-			count: 3
-			path: tests/Functional/Controllers/Backend/WidgetsTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:prepareTestGetVisitors\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/WidgetsTest.php
@@ -74725,11 +74715,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:testIfNoConversionAfterEightDays\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/WidgetsTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:\\$userId has no typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/WidgetsTest.php
 

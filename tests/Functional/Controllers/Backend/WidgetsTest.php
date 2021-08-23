@@ -25,38 +25,72 @@
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Plugin_Bootstrap;
+use Enlight_Plugin_Namespace;
+use Enlight_Plugin_PluginManager;
+use PHPUnit\Framework\Constraint\Constraint;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware_Plugins_Backend_Auth_Bootstrap;
 
 class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    use DatabaseTransactionBehaviour;
+    use ContainerTrait;
 
-    private $userId;
+    private Connection $connection;
+
+    private string $userId;
+
+    /**
+     * @var Enlight_Plugin_PluginManager<Enlight_Plugin_Bootstrap>
+     */
+    private Enlight_Plugin_PluginManager $pluginManager;
+
+    private Shopware_Plugins_Backend_Auth_Bootstrap $authPlugin;
 
     public function setUp(): void
     {
         parent::setUp();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
-        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
-        $this->connection->beginTransaction();
+        $pluginManager = $this->getContainer()->get('plugin_manager');
 
-        Shopware()->Db()->exec('DELETE FROM s_statistics_visitors');
-        Shopware()->Db()->exec('DELETE FROM s_order');
-        Shopware()->Db()->exec('DELETE FROM s_user');
+        if (!($pluginManager instanceof Enlight_Plugin_PluginManager)) {
+            throw new \UnexpectedValueException(sprintf('Couldn\'t load %s', Enlight_Plugin_PluginManager::class));
+        }
+
+        $this->pluginManager = $pluginManager;
+
+        $backendPlugins = $pluginManager->get('Backend');
+
+        if (!($backendPlugins instanceof Enlight_Plugin_Namespace)) {
+            throw new \UnexpectedValueException(sprintf('Couldn\'t load %s', Enlight_Plugin_Namespace::class));
+        }
+
+        $authPlugin = $backendPlugins->get('Auth');
+
+        if (!($authPlugin instanceof Shopware_Plugins_Backend_Auth_Bootstrap)) {
+            throw new \UnexpectedValueException(sprintf('Couldn\'t load %s', Shopware_Plugins_Backend_Auth_Bootstrap::class));
+        }
+
+        $this->authPlugin = $authPlugin;
+
+        $this->authPlugin->setNoAuth();
+        $this->authPlugin->setNoAcl();
+
+        $this->connection = $this->getContainer()->get(Connection::class);
+
+        $this->connection->executeStatement('DELETE FROM s_statistics_visitors');
+        $this->connection->executeStatement('DELETE FROM s_order');
+        $this->connection->executeStatement('DELETE FROM s_user');
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
 
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
-
-        $this->connection->rollBack();
+        $this->authPlugin->setNoAuth(false);
+        $this->authPlugin->setNoAcl(false);
     }
 
     public function testConversionIsEmpty()
@@ -258,6 +292,88 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
         // First customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
         static::assertEquals($this->userId, $response['data']['customers'][0]['userID']);
         static::assertEquals($addressData['firstname'] . ' ' . $addressData['lastname'], $response['data']['customers'][0]['customer']);
+    }
+
+    /**
+     * @dataProvider backendAuthProvider
+     */
+    public function testGetNoticeChecksBackendAuth(object $auth, \Enlight_View $view): void
+    {
+        $controller = new \Shopware_Controllers_Backend_Widgets();
+        $controller->setView($view);
+
+        $_SESSION['ShopwareBackend']['Auth'] = $auth;
+
+        $controller->getNoticeAction();
+
+        unset($_SESSION);
+    }
+
+    /**
+     * @dataProvider backendAuthProvider
+     */
+    public function testSaveNoticeChecksBackendAuth(object $auth, \Enlight_View $view): void
+    {
+        $this->Request()->setParam('notice', 'bf0b9d61-8f55-4f2c-818b-9d0891178df8');
+
+        $controller = new \Shopware_Controllers_Backend_Widgets();
+        $controller->setRequest($this->Request());
+        $controller->setView($view);
+
+        $_SESSION['ShopwareBackend']['Auth'] = $auth;
+
+        $controller->saveNoticeAction();
+
+        unset($_SESSION);
+    }
+
+    /**
+     * @return \Generator<string, array>
+     */
+    public function backendAuthProvider(): \Generator
+    {
+        yield 'invalid auth' => [
+            (object) [],
+            $this->getViewMockCheckingForAssign([
+                static::callback($this->getResponseSuccessValidator(false)),
+                static::anything(),
+                static::anything(),
+                static::anything(),
+            ]),
+        ];
+
+        yield 'valid auth' => [
+            (object) ['id' => 1],
+            $this->getViewMockCheckingForAssign([
+                static::callback($this->getResponseSuccessValidator(true)),
+                static::anything(),
+                static::anything(),
+                static::anything(),
+            ]),
+        ];
+    }
+
+    /**
+     * @param array<Constraint> $arguments
+     */
+    private function getViewMockCheckingForAssign(array $arguments): \Enlight_View
+    {
+        $view = static::createMock(\Enlight_View::class);
+        $view->expects(static::once())
+            ->method('assign')
+            ->with(...$arguments);
+
+        return $view;
+    }
+
+    /**
+     * @return \Closure(array<string, mixed>): bool
+     */
+    private function getResponseSuccessValidator(bool $expectSuccess): callable
+    {
+        return static function (array $response) use ($expectSuccess): bool {
+            return $response['success'] === $expectSuccess;
+        };
     }
 
     private function prepareTestGetVisitors($addressData)
