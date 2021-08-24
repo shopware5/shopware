@@ -29,7 +29,7 @@
 //{block name="backend/product_stream/store/attribute"}
 Ext.define('Shopware.apps.ProductStream.store.Attribute', {
     extend:'Ext.data.Store',
-    fields: [ 'column', 'label' ],
+    fields: [ 'column', 'label', 'type'],
     autoLoad: false,
     pageSize: 20,
     proxy:{

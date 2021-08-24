@@ -241,6 +241,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             $columns[] = [
                 'column' => $struct->getColumnName(),
                 'label' => $struct->getLabel() ?: $struct->getColumnName(),
+                'type' => $struct->getColumnType(),
             ];
         }
 

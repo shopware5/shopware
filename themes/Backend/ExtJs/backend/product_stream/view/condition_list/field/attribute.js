@@ -175,7 +175,8 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
         var value = {
             field: this.attributeField,
             operator: this.operatorSelection.getValue(),
-            value: this.valueField.getValue()
+            value: this.valueField.getValue(),
+            type: this.type
         };
 
         if (value.operator === 'BETWEEN') {
