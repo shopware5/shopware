@@ -42155,11 +42155,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
 		-
-			message: "#^Cannot access property \\$Worksheet on SimpleXMLElement\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
 			message: "#^Cannot call method fetchAll\\(\\) on Enlight_Components_Db_Adapter_Pdo_Mysql\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Snippet.php
@@ -42330,22 +42325,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
 		-
-			message: "#^Parameter \\#1 \\$filename of class Shopware_Components_CsvIterator constructor expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function chmod expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
 			message: "#^Parameter \\#1 \\$filename of function file_exists expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function file_get_contents expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
@@ -42375,17 +42355,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
 		-
-			message: "#^Parameter \\#2 \\$new_path of function move_uploaded_file expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
 			message: "#^Parameter \\#2 \\$pieces of function implode expects array, array\\<int, string\\>\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Property Shopware_Controllers_Backend_Snippet\\:\\:\\$uploadedFilePath \\(string\\) does not accept string\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 

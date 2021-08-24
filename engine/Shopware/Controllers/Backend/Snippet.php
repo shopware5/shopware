@@ -422,6 +422,14 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         $filePath = tempnam($destPath, 'snippets_');
+        if ($filePath === false) {
+            echo json_encode([
+                'success' => false,
+                'message' => sprintf('Could not create a tmp file for %s', $filePath),
+            ]);
+
+            return;
+        }
 
         if (move_uploaded_file($_FILES['file']['tmp_name'], $filePath) === false) {
             echo json_encode([
@@ -436,9 +444,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         chmod($filePath, 0644);
 
         if ($extension === 'xml') {
-            $entityLoaderSettingBackup = libxml_disable_entity_loader(true);
-            $xml = simplexml_load_string(@file_get_contents($filePath), 'SimpleXMLElement', LIBXML_NOCDATA);
-            libxml_disable_entity_loader($entityLoaderSettingBackup);
+            $xml = $this->loadXml($filePath);
 
             /** @var array $snippets */
             $snippets = $xml->Worksheet->Table->Row;
@@ -970,5 +976,26 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         return true;
+    }
+
+    private function loadXml(string $filePath): SimpleXMLElement
+    {
+        $entityLoaderSettingBackup = null;
+
+        if (\PHP_VERSION_ID < 80000) {
+            $entityLoaderSettingBackup = libxml_disable_entity_loader(true);
+        }
+
+        $xml = simplexml_load_string(file_get_contents($filePath), 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        if ($entityLoaderSettingBackup !== null) {
+            libxml_disable_entity_loader($entityLoaderSettingBackup);
+        }
+
+        if ($xml === false) {
+            throw new \RuntimeException(sprintf('The file %s cannot be loaded', $filePath));
+        }
+
+        return $xml;
     }
 }
