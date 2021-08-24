@@ -38,8 +38,6 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->container = Shopware()->Container();
         $this->session = $this->container->get('session');
-
-        static::assertInstanceOf(\Enlight_Components_Session_Namespace::class, $this->session);
     }
 
     /**

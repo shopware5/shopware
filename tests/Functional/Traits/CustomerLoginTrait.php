@@ -32,7 +32,6 @@ trait CustomerLoginTrait
     public function loginCustomer(
         string $sessionId = 'sessionId',
         int $customerId = 1,
-        string $password = 'a256a310bc1e5db755fd392c524028a8',
         string $email = 'test@example.com',
         int $countryId = 2,
         int $areaId = 3,

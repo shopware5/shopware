@@ -4176,6 +4176,11 @@ parameters:
 			path: engine/Shopware/Bootstrap.php
 
 		-
+			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Constraint\\\\CurrentPasswordValidator\\:\\:validate\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: engine/Shopware/Bundle/AccountBundle/Constraint/CurrentPasswordValidator.php
+
+		-
 			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AccountBundle/Constraint/CustomerEmailValidator.php

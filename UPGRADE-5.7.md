@@ -2,9 +2,16 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.3
+
+[View all changes from v5.7.2...v5.7.3](https://github.com/shopware/shopware/compare/v5.7.2...v5.7.3)
+
+### Removals
+* Removed password hash from session
+
 ## 5.7.2
 
-[View all changes from v5.7.1...v5.7.2](https://github.com/shopware/shopware/compare/v5.7.1...v5.7.2)
+[View all changes from v5.7.10...v5.7.2](https://github.com/shopware/shopware/compare/v5.7.10...v5.7.2)
 
 ### Changes
 
