@@ -6,6 +6,10 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 [View all changes from v5.7.2...v5.7.3](https://github.com/shopware/shopware/compare/v5.7.2...v5.7.3)
 
+### Changes
+
+* Updated `wikimedia/less.php` to 3.1.0
+
 ### Removals
 * Removed password hash from session
 
