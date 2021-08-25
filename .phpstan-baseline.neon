@@ -42150,42 +42150,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Site.php
 
 		-
-			message: "#^Argument of an invalid type array\\|int supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Cannot call method fetchAll\\(\\) on Enlight_Components_Db_Adapter_Pdo_Mysql\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
 			message: "#^Cannot call method fetchAll\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 4
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Cannot call method fetchOne\\(\\) on Enlight_Components_Db_Adapter_Pdo_Mysql\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Cannot call method query\\(\\) on Enlight_Components_Db_Adapter_Pdo_Mysql\\|null\\.$#"
-			count: 5
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Cannot call method quote\\(\\) on Enlight_Components_Db_Adapter_Pdo_Mysql\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Cannot call method quoteInto\\(\\) on Enlight_Components_Db_Adapter_Pdo_Mysql\\|null\\.$#"
-			count: 6
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Cannot call method select\\(\\) on Enlight_Components_Db_Adapter_Pdo_Mysql\\|null\\.$#"
 			count: 4
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
@@ -42310,16 +42275,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$snippets has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Parameter \\#1 \\$data of function simplexml_load_string expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
 			message: "#^Parameter \\#1 \\$dir of function tempnam expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Snippet.php
@@ -42341,16 +42296,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$encoding of method Shopware_Controllers_Backend_Snippet\\:\\:getFormatSnippetForExport\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, array\\|int given\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Parameter \\#2 \\$keys of method Shopware_Controllers_Backend_Snippet\\:\\:readXmlRow\\(\\) expects array\\|null, array\\|int given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 

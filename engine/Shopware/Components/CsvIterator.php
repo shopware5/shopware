@@ -127,7 +127,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     }
 
     /**
-     * @return int|false|null
+     * @return array<mixed, mixed>|int|false|null
      */
     public function GetHeader()
     {
