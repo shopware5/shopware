@@ -771,7 +771,6 @@ class sAdmin implements \Enlight_Hook
             $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get('LoginFailure', 'Wrong email or password');
             $this->session->offsetUnset('sUserMail');
-            $this->session->offsetUnset('sUserPassword');
             $this->session->offsetUnset('sUserId');
         }
 
@@ -872,14 +871,11 @@ class sAdmin implements \Enlight_Hook
 
         $userId = $this->session->offsetGet('sUserId');
         $userMail = $this->session->offsetGet('sUserMail');
-        $userPassword = $this->session->offsetGet('sUserPassword');
 
         if (empty($userMail)
-            || empty($userPassword)
             || empty($userId)
         ) {
             $this->session->offsetUnset('sUserMail');
-            $this->session->offsetUnset('sUserPassword');
             $this->session->offsetUnset('sUserId');
 
             return false;
@@ -887,14 +883,13 @@ class sAdmin implements \Enlight_Hook
 
         $sql = '
             SELECT * FROM s_user
-            WHERE password = ? AND email = ? AND id = ?
+            WHERE email = ? AND id = ?
             AND UNIX_TIMESTAMP(lastlogin) >= (UNIX_TIMESTAMP(NOW())-?)
         ';
 
         $getUser = $this->db->fetchRow(
             $sql,
             [
-                $userPassword,
                 $userMail,
                 $userId,
                 (int) ini_get('session.gc_maxlifetime'),
@@ -932,7 +927,6 @@ class sAdmin implements \Enlight_Hook
             return true;
         }
         $this->session->offsetUnset('sUserMail');
-        $this->session->offsetUnset('sUserPassword');
         $this->session->offsetUnset('sUserId');
         $this->eventManager->notify(
             'Shopware_Modules_Admin_CheckUser_Failure',
@@ -3254,7 +3248,6 @@ class sAdmin implements \Enlight_Hook
         }
 
         $this->session->offsetSet('sUserMail', $email);
-        $this->session->offsetSet('sUserPassword', $hash);
         $this->session->offsetSet('sUserId', $userId);
         $this->session->offsetSet('sNotesQuantity', $this->moduleManager->Basket()->sCountNotes());
 
@@ -3632,7 +3625,6 @@ SQL;
         );
 
         $this->session->offsetUnset('sUserMail');
-        $this->session->offsetUnset('sUserPassword');
         $this->session->offsetUnset('sUserId');
 
         return $sErrorMessages;

@@ -40,7 +40,6 @@ class sAdminSGetUserDataTest extends PHPUnit\Framework\TestCase
         $this->loginCustomer(
             'f375fe1b4ad9c6f2458844226831463f',
             3,
-            '$2y$10$Z9JAOaS72cvvMfFRS2ObNui8y0LDNy4JisrN/Pd.Vb9spH95LS2g.',
             'unit@test.com',
         );
 

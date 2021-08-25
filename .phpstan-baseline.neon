@@ -62529,31 +62529,6 @@ parameters:
 			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
 
 		-
-			message: "#^Cannot access offset 'sErrorFlag' on array\\|false\\.$#"
-			count: 3
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
-			message: "#^Cannot access offset 'sErrorMessages' on array\\|false\\.$#"
-			count: 3
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
-			message: "#^Cannot access property \\$sUserId on Enlight_Components_Session_Namespace\\|null\\.$#"
-			count: 9
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
-			message: "#^Cannot call method fetchRow\\(\\) on Enlight_Components_Db_Adapter_Pdo_Mysql\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
-			message: "#^Cannot call method offsetGet\\(\\) on Shopware_Components_Config\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AccountTest\\:\\:logoutUser\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php

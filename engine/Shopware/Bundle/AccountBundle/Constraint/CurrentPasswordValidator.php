@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\AccountBundle\Constraint;
 
+use Enlight_Components_Session_Namespace as Session;
+use Enlight_Components_Snippet_Manager as SnippetManager;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Password\Manager;
-use Shopware\Models\Customer\Customer;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -36,29 +37,17 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class CurrentPasswordValidator extends ConstraintValidator
 {
-    /**
-     * @var \Enlight_Components_Session_Namespace
-     */
-    private $session;
+    private Session $session;
 
-    /**
-     * @var \Enlight_Components_Snippet_Manager
-     */
-    private $snippets;
+    private SnippetManager $snippets;
 
-    /**
-     * @var Manager
-     */
-    private $passwordManager;
+    private Manager $passwordManager;
 
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    private ModelManager $modelManager;
 
     public function __construct(
-        \Enlight_Components_Session_Namespace $session,
-        \Enlight_Components_Snippet_Manager $snippets,
+        Session $session,
+        SnippetManager $snippets,
         Manager $passwordManager,
         ModelManager $modelManager
     ) {
@@ -81,10 +70,19 @@ class CurrentPasswordValidator extends ConstraintValidator
             return;
         }
 
-        $sessionPassword = $this->session->offsetGet('sUserPassword');
-        $encoderName = $this->getEncoder();
+        $userData = $this->getUserData();
+        if ($userData === null) {
+            $this->context
+                ->buildViolation('Could not find a customer account corresponding to the current session.')
+                ->addViolation();
 
-        if ($this->passwordManager->isPasswordValid($value, $sessionPassword, $encoderName) === false) {
+            return;
+        }
+
+        $passwordHash = $userData['password'];
+        $encoderName = $userData['encoder'];
+
+        if ($this->passwordManager->isPasswordValid($value, $passwordHash, $encoderName) === false) {
             $errorMessage = $this->snippets
                 ->getNamespace($constraint->namespace)
                 ->get($constraint->snippetKey);
@@ -97,15 +95,22 @@ class CurrentPasswordValidator extends ConstraintValidator
     }
 
     /**
-     * Get users encoder based on his session user id or return the default
-     *
-     * @return string
+     * @return array{password: string, encoder: string}|null
      */
-    private function getEncoder()
+    private function getUserData(): ?array
     {
-        /** @var Customer $user */
-        $user = $this->modelManager->find(Customer::class, $this->session->offsetGet('sUserId'));
+        $userData = $this->modelManager->getConnection()->createQueryBuilder()
+            ->select(['password', 'encoder'])
+            ->from('s_user')
+            ->where('id = :sUserId')
+            ->setParameter('sUserId', $this->session->offsetGet('sUserId'))
+            ->execute()
+            ->fetch();
 
-        return $user->getEncoderName() ?: $this->passwordManager->getDefaultPasswordEncoderName();
+        if ($userData === false) {
+            return null;
+        }
+
+        return $userData;
     }
 }
