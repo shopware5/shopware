@@ -1,8 +1,17 @@
 {block name="widget_emotion_component_banner"}
+    {$dataFileInfoWidth = $Data.fileInfo.width}
+    {if $dataFileInfoWidth === null}
+        {$dataFileInfoWidth = 1}
+    {/if}
+    {$dataFileInfoHeight = $Data.fileInfo.height}
+    {if $dataFileInfoHeight === null}
+        {$dataFileInfoHeight = 1}
+    {/if}
+
     <div class="emotion--banner"
          data-coverImage="true"
-         data-width="{$Data.fileInfo.width}"
-         data-height="{$Data.fileInfo.height}"
+         data-width="{$dataFileInfoWidth}"
+         data-height="{$dataFileInfoHeight}"
          {if $Data.bannerMapping}data-bannerMapping="true"{/if}>
 
         {block name="widget_emotion_component_banner_inner"}
@@ -67,10 +76,10 @@
                                 <a href="{$mapping.link}"
                                    class="banner--mapping-link"
                                    aria-label="{$mapping.title|escape}"
-                                   style="width:{({$mapping.width} / ({$Data.fileInfo.width} / 100))|round:3}%;
-                                          height:{({$mapping.height} / ({$Data.fileInfo.height} / 100))|round:3}%;
-                                          left:{({$mapping.x} / ({$Data.fileInfo.width} / 100))|round:3}%;
-                                          top:{({$mapping.y} / ({$Data.fileInfo.height} / 100))|round:3}%"
+                                   style="width:{({$mapping.width} / ({$dataFileInfoWidth} / 100))|round:3}%;
+                                          height:{({$mapping.height} / ({$dataFileInfoHeight} / 100))|round:3}%;
+                                          left:{({$mapping.x} / ({$dataFileInfoWidth} / 100))|round:3}%;
+                                          top:{({$mapping.y} / ({$dataFileInfoHeight} / 100))|round:3}%"
                                    {if $mapping.as_tooltip && $mapping.title} title="{$mapping.title|escape}"{/if}
                                    {if $mapping.linkLocation eq "external"} target="_blank"{/if}>&nbsp;</a>
                             {/foreach}
@@ -86,4 +95,3 @@
         {/block}
     </div>
 {/block}
-
