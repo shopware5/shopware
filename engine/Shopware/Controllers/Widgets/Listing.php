@@ -190,7 +190,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     public function listingCountAction()
     {
-        if ($this->Request()->getParam('sSearch')) {
+        $searchTerm = $this->Request()->getParam('sSearch');
+        if ($searchTerm !== null) {
             $result = $this->fetchSearchListing();
             $this->setSearchResultResponse($result);
 
