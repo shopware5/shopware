@@ -12,6 +12,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Removals
 * Removed password hash from session
+* Removed xml support for the snippet importer
 
 ## 5.7.2
 

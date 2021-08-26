@@ -225,6 +225,7 @@
         </service>
 
         <service id="shopware_controllers_backend_snippet" class="Shopware_Controllers_Backend_Snippet">
+            <argument type="service" id="db" />
             <tag name="shopware.controller" module="backend" controller="snippet"/>
         </service>
 
