@@ -35,8 +35,23 @@ Feature: Search things
         When I search for "foo"
         Then I should see the no results message for keyword "foo"
 
+    @searchWithoutMinLength
+    Scenario: Search with with empty string
+        When I search for ""
+        Then I should see "Zu \"\" wurden 196 Artikel gefunden!"
+
+    @javascript @searchWithoutMinLength
+    Scenario: Search with empty string and filter afterwards
+        When I search for ""
+        Then I should see "Zu \"\" wurden 196 Artikel gefunden!"
+
+        When  I set the filter to:
+            | filter    | value |
+            | Geschmack | mild  |
+        Then I should see "Zu \"\" wurden 6 Artikel gefunden!"
+
     @javascript
-    Scenario: Infinite Scrolling is active in seach results
+    Scenario: Infinite Scrolling is active in search results
         When I search for "art"
         Then I should see "Zu \"art\" wurden 17 Artikel gefunden!"
         And  I should see 12 elements of type "ArticleBox"
