@@ -29,6 +29,9 @@ namespace Shopware\Bundle\EmotionBundle\DependencyInjection;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * @deprecated since shopware 5.7.3 and will be removed with 5.8
+ */
 class EmotionCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void

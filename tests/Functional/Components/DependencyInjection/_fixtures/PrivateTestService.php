@@ -24,21 +24,8 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SitemapBundle\DependencyInjection;
+namespace Shopware\Tests\Functional\Components\DependencyInjection\_fixtures;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
-/**
- * @deprecated since shopware 5.7.3 and will be removed with 5.8
- */
-class SitemapCompilerPass implements CompilerPassInterface
+class PrivateTestService
 {
-    public function process(ContainerBuilder $container): void
-    {
-        foreach (array_keys($container->findTaggedServiceIds('sitemap_url_provider')) as $id) {
-            $def = $container->getDefinition($id);
-            $def->setPublic(true);
-        }
-    }
 }
