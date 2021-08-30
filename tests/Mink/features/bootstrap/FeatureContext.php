@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,7 +29,6 @@ namespace Shopware\Tests\Mink;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Behat\Behat\Hook\Scope\ScenarioScope;
 use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\Exception as MinkException;
@@ -36,25 +37,29 @@ use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\CacheManager;
+use Shopware\Components\ConfigWriter;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Theme\Installer;
 
 class FeatureContext extends SubContext implements SnippetAcceptingContext
 {
     /**
-     * @var array
+     * @var string[]
      */
-    protected $dirtyConfigElements;
+    protected array $dirtyConfigElements = [];
 
-    protected static $isPrepared = false;
+    protected static bool $isPrepared = false;
 
-    protected static $lastScenarioLine = 0;
+    protected static int $lastScenarioLine = 0;
 
     /**
      * Contains tags for features which rely on account state being persistent for all the contained scenarios
      *
-     * @var array
+     * @var string[]
      */
-    protected static $doNotResetFeatureTags = [
+    protected static array $doNotResetFeatureTags = [
         'accountaddressmanagement',
         'checkoutadressmanagement',
     ];
@@ -82,7 +87,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     /**
      * @BeforeSuite
      */
-    public static function setup(BeforeSuiteScope $scope)
+    public static function setup(BeforeSuiteScope $scope): void
     {
         self::$suite = $scope->getSuite();
     }
@@ -90,7 +95,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     /**
      * @BeforeScenario
      */
-    public function before(BeforeScenarioScope $scope)
+    public function before(BeforeScenarioScope $scope): void
     {
         if (!self::$isPrepared) {
             $this->prepare();
@@ -110,9 +115,17 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     /**
      * @BeforeScenario @captchaInactive
      */
-    public function deactivateCaptchas()
+    public function deactivateCaptchas(): void
     {
         $this->changeConfigValue('captchaMethod', 'nocaptcha');
+    }
+
+    /**
+     * @BeforeScenario @searchWithoutMinLength
+     */
+    public function changeMinimumSearchLength(): void
+    {
+        $this->changeConfigValue('minsearchlenght', 0);
     }
 
     /**
@@ -120,7 +133,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
      *
      * @BeforeScenario
      */
-    public function setupWindowSize()
+    public function setupWindowSize(): void
     {
         $driver = $this->getSession()->getDriver();
         if (!$driver instanceof Selenium2Driver) {
@@ -139,7 +152,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
      *
      * @AfterStep
      */
-    public function takeScreenshotAfterFailedStep(AfterStepScope $scope)
+    public function takeScreenshotAfterFailedStep(AfterStepScope $scope): void
     {
         if ($scope->getTestResult()->getResultCode() === TestResult::FAILED) {
             $this->takeScreenshot();
@@ -150,28 +163,28 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     /**
      * Save a screenshot of the current window to the file system.
      *
-     * @param string $filename Desired filename, defaults to
-     *                         <browser_name>_<ISO 8601 date>_<randomId>.png
-     * @param string $filepath Desired filepath, defaults to
-     *                         upload_tmp_dir, falls back to sys_get_temp_dir()
+     * @param string|null $filename Desired filename, defaults to
+     *                              <browser_name>_<ISO 8601 date>_<randomId>.png
+     * @param string|null $filepath Desired filepath, defaults to
+     *                              upload_tmp_dir, falls back to sys_get_temp_dir()
      */
-    public function saveScreenshot($filename = null, $filepath = null)
+    public function saveScreenshot(?string $filename = null, ?string $filepath = null): void
     {
         // Under Cygwin, uniqid with more_entropy must be set to true.
         // No effect in other environments.
         $filename = $filename ?: sprintf('%s_%s_%s.%s', $this->getMinkParameter('browser_name'), date('c'), uniqid('', true), 'png');
-        $filepath = $filepath ? $filepath : (ini_get('upload_tmp_dir') ? ini_get('upload_tmp_dir') : sys_get_temp_dir());
+        $filepath = $filepath ?: (ini_get('upload_tmp_dir') ?: sys_get_temp_dir());
         file_put_contents($filepath . '/' . $filename, $this->getSession()->getScreenshot());
     }
 
     /**
-     * @param string $configName
+     * @param bool|int|string $value
      */
-    public function changeConfigValue($configName, $value)
+    public function changeConfigValue(string $configName, $value): void
     {
         /** @var Connection $dbal */
         $dbal = $this->getService(Connection::class);
-        $configId = $dbal->fetchColumn(
+        $configId = $dbal->fetchOne(
             'SELECT `id` FROM `s_core_config_elements` WHERE `name` = ?',
             [$configName]
         );
@@ -183,10 +196,10 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
         $this->dirtyConfigElements[] = $configId;
 
-        /** @var \Shopware\Components\ConfigWriter $configWriter */
-        $configWriter = $this->getService(\Shopware\Components\ConfigWriter::class);
+        /** @var ConfigWriter $configWriter */
+        $configWriter = $this->getService(ConfigWriter::class);
 
-        $configWriter->save($configName, $value, null, 1);
+        $configWriter->save($configName, $value);
         $configWriter->save($configName, $value, null, 2);
 
         $config = $this->getService(\Shopware_Components_Config::class);
@@ -196,9 +209,9 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     }
 
     /**
-     * @AfterScenario @captchaInactive,@configChange
+     * @AfterScenario @captchaInactive,@configChange,@searchWithoutMinLength
      */
-    public function clearConfigValues()
+    public function clearConfigValues(): void
     {
         if (!$this->dirtyConfigElements) {
             return;
@@ -216,17 +229,17 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     /**
      * @BeforeScenario @configChange
      */
-    public function clearCache(ScenarioScope $scope = null)
+    public function clearCache(): void
     {
         /** @var CacheManager $cacheManager */
-        $cacheManager = $this->getService(\Shopware\Components\CacheManager::class);
+        $cacheManager = $this->getService(CacheManager::class);
         $cacheManager->clearConfigCache();
         $cacheManager->clearTemplateCache();
         $cacheManager->clearOpCache();
         $cacheManager->clearProxyCache();
     }
 
-    public function registerErrorHandler()
+    public function registerErrorHandler(): void
     {
         error_reporting(-1);
         $errorNameMap = [
@@ -253,7 +266,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
             // No effect in other environments.
             $filename = sprintf('errors_%s_%s.%s', date('c'), uniqid('', true), 'log');
-            $filepath = $filepath . '/' . $filename;
+            $filepath .= '/' . $filename;
             file_put_contents($filepath, $errorNameMap[$errno] . ': ' . $errstr, FILE_APPEND);
 
             return true;
@@ -263,17 +276,17 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     /**
      * @BeforeScenario @noinfinitescrolling
      */
-    public static function deactivateInfiniteScrolling()
+    public static function deactivateInfiniteScrolling(): void
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $dbal = Shopware()->Container()->get(Connection::class);
 
         $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
                 INSERT INTO `s_core_templates_config_values` (`element_id`, `shop_id`, `value`)
                 VALUES (@elementId, '1', 'b:0;')
                 ON DUPLICATE KEY UPDATE `value` = 'b:0;';";
 
-        $dbal->query($sql);
+        $dbal->executeQuery($sql);
 
         self::clearTemplateCache();
     }
@@ -281,29 +294,29 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     /**
      * @AfterScenario @noinfinitescrolling
      */
-    public static function activateInfiniteScrolling()
+    public static function activateInfiniteScrolling(): void
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $dbal = Shopware()->Container()->get(Connection::class);
 
         $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
                 INSERT INTO `s_core_templates_config_values` (`element_id`, `shop_id`, `value`)
                 VALUES (@elementId, '1', 'b:1;')
                 ON DUPLICATE KEY UPDATE `value` = 'b:1;';";
 
-        $dbal->query($sql);
+        $dbal->executeQuery($sql);
 
         self::clearTemplateCache();
     }
 
-    private function prepare()
+    private function prepare(): void
     {
-        $em = $this->getService(\Shopware\Components\Model\ModelManager::class);
+        $em = $this->getService(ModelManager::class);
         $em->generateAttributeModels();
 
         //refresh s_core_templates
         $this->registerErrorHandler();
-        $this->getService(\Shopware\Components\Theme\Installer::class)->synchronize();
+        $this->getService(Installer::class)->synchronize();
         restore_error_handler();
 
         //get the template id
@@ -326,8 +339,8 @@ EOD;
 
         Helper::setCurrentLanguage('de');
 
-        /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
-        $pluginManager = $this->getService(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
+        /** @var InstallerService $pluginManager */
+        $pluginManager = $this->getService(InstallerService::class);
 
         // hack to prevent behat error handler kicking in.
         $this->registerErrorHandler();
@@ -339,7 +352,7 @@ EOD;
         $pluginManager->activatePlugin($plugin);
     }
 
-    private function reset()
+    private function reset(): void
     {
         $password = md5('shopware');
 
@@ -359,7 +372,7 @@ EOD;
         $this->getService('db')->exec($sql);
     }
 
-    private function logRequest()
+    private function logRequest(): void
     {
         $session = $this->getSession();
         $log = sprintf('Current page: %d %s', $this->getStatusCode(), $session->getCurrentUrl()) . "\n";
@@ -369,11 +382,7 @@ EOD;
         $this->saveLog($log, 'log');
     }
 
-    /**
-     * @param string $content
-     * @param string $type
-     */
-    private function saveLog($content, $type)
+    private function saveLog(string $content, string $type): void
     {
         $logDir = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
 
@@ -385,10 +394,7 @@ EOD;
         }
     }
 
-    /**
-     * @return int|null
-     */
-    private function getStatusCode()
+    private function getStatusCode(): ?int
     {
         try {
             return $this->getSession()->getStatusCode();
@@ -397,10 +403,7 @@ EOD;
         }
     }
 
-    /**
-     * @return string|null
-     */
-    private function getRequestDataLogMessage(Session $session)
+    private function getRequestDataLogMessage(Session $session): ?string
     {
         $driver = $session->getDriver();
         if (!$driver instanceof BrowserKitDriver) {
@@ -413,10 +416,7 @@ EOD;
         }
     }
 
-    /**
-     * @return string|null
-     */
-    private function getResponseHeadersLogMessage(Session $session)
+    private function getResponseHeadersLogMessage(Session $session): ?string
     {
         try {
             return "Response headers:\n" . print_r($session->getResponseHeaders(), true) . "\n";
@@ -425,10 +425,7 @@ EOD;
         }
     }
 
-    /**
-     * @return string|null
-     */
-    private function getRequestContentLogMessage(Session $session)
+    private function getRequestContentLogMessage(Session $session): ?string
     {
         try {
             return "Response content:\n" . $session->getPage()->getContent() . "\n";
@@ -437,7 +434,7 @@ EOD;
         }
     }
 
-    private function takeScreenshot()
+    private function takeScreenshot(): void
     {
         $driver = $this->getSession()->getDriver();
         if (!$driver instanceof Selenium2Driver) {
@@ -449,10 +446,10 @@ EOD;
         $this->saveScreenshot(null, $filePath);
     }
 
-    private static function clearTemplateCache()
+    private static function clearTemplateCache(): void
     {
         /** @var CacheManager $cacheManager */
-        $cacheManager = Shopware()->Container()->get(\Shopware\Components\CacheManager::class);
+        $cacheManager = Shopware()->Container()->get(CacheManager::class);
         $cacheManager->clearConfigCache();
         $cacheManager->clearTemplateCache();
         $cacheManager->clearThemeCache();

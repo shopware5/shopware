@@ -34,7 +34,7 @@
                         {/block}
 
                         {block name="frontend_listing_actions_filter_form_search"}
-                            {if $term}
+                            {if $term !== null}
                                 <input type="hidden" name="{$shortParameters['sSearch']}" value="{$term|escape}"/>
                             {/if}
                         {/block}
