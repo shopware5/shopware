@@ -27,6 +27,9 @@ namespace Shopware\Bundle\SearchBundleES\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * @deprecated since shopware 5.7.3 and will be removed with 5.8
+ */
 class ESHandlerCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void

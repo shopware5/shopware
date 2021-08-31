@@ -1835,7 +1835,11 @@ EOF;
                     $code = sprintf('(isset(%s) ? %1$s() : %s)', $factory, $code);
                 }
             } else {
-                $code = sprintf('$this->get(%s%s)', $this->doExport($id), null !== $reference ? ', '.$reference->getInvalidBehavior() : '');
+                if ($definition->isPublic()) {
+                    $code = sprintf('$this->get(%s%s)', $this->doExport($id), null !== $reference ? ', '.$reference->getInvalidBehavior() : '');
+                } else {
+                    $code = sprintf('$this->%s()', $this->generateMethodName($id));
+                }
             }
             if ($definition->isShared() && !isset($this->singleUsePrivateIds[$id])) {
                 $code = sprintf('($this->%s[%s] ?? %s)', $definition->isPublic() ? 'services' : 'privates', $this->doExport($id), $code);
