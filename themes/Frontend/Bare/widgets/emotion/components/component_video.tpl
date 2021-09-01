@@ -26,7 +26,7 @@
                 <a href="#play-video"
                    class="video--cover"
                    style="background-image: url('{link file=$Data.fallback_picture}');">
-                    <i class="video--play-icon icon--play"></i>
+                    <i class="video--play-icon icon--play"></i> 
                 </a>
             {/if}
         {/block}
@@ -37,7 +37,7 @@
                    class="video--play-btn"
                    data-playIconCls="icon--play"
                    data-pauseIconCls="icon--pause">
-                    <i class="video--play-icon icon--play"></i>
+                    <i class="video--play-icon icon--play"></i> 
                 </a>
             {/if}
         {/block}
