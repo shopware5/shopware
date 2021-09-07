@@ -75,9 +75,8 @@ class sExportTest extends PHPUnit\Framework\TestCase
         $this->template = $this->container->get('template');
 
         /** @var string $cacheDir */
-        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+        $this->cacheDir = $this->container->getParameter('kernel.cache_dir.product_export');
 
-        $this->cacheDir = $cacheDir . '/productexport/';
         $this->testDir = __DIR__ . '/fixtures/productexport/';
 
         if (!is_dir($this->cacheDir)) {
