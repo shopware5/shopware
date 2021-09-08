@@ -432,7 +432,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             $actionMethodName,
         ];
 
-        $this->Request()->setAttribute('_controller', $this->Request()->getAttribute('controllerId') . ':' . $actionMethodName);
+        $this->Request()->setAttribute('_controller', $this->Request()->getAttribute('controllerId') . '::' . $actionMethodName);
 
         try {
             return $this->container->get('argument_resolver')->getArguments($this->Request(), $controllerArray);
