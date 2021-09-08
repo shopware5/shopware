@@ -293,15 +293,20 @@ class sCategories implements \Enlight_Hook
     {
         $pathCategories = $this->repository->getPathById($id, ['id', 'name', 'blog']);
 
+        $categories = [];
+        if (!\is_array($pathCategories)) {
+            return $categories;
+        }
+
         $pathCategories = array_reverse($pathCategories);
 
-        $categories = [];
         foreach ($pathCategories as $category) {
             if ($category['id'] == $this->baseId) {
                 break;
             }
 
             $url = ($category['blog']) ? $this->blogBaseUrl : $this->baseUrl;
+
             $category['link'] = $url . $category['id'];
             $categories[] = $category;
         }
@@ -310,7 +315,7 @@ class sCategories implements \Enlight_Hook
     }
 
     /**
-     * Return a the category subtree for the given root
+     * Return a category subtree for the given root
      *
      * @param int $parentId Id of the root category, defaults to the current shop category
      * @param int $depth    Depth to use, defaults to null (unlimited depth)

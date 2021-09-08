@@ -45057,7 +45057,7 @@ parameters:
 
 		-
 			message: "#^Argument of an invalid type array\\|string supplied for foreach, only iterables are supported\\.$#"
-			count: 2
+			count: 1
 			path: engine/Shopware/Core/sCategories.php
 
 
@@ -45214,11 +45214,6 @@ parameters:
 
 		-
 			message: "#^Method sCategories\\:\\:sGetWholeCategoryTree\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sCategories.php
-
-		-
-			message: "#^Parameter \\#1 \\$input of function array_reverse expects array, array\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sCategories.php
 
