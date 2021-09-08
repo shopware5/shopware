@@ -74,7 +74,6 @@ class sExportTest extends PHPUnit\Framework\TestCase
         $this->repository = $this->container->get('models')->getRepository(ProductFeed::class);
         $this->template = $this->container->get('template');
 
-        /** @var string $cacheDir */
         $this->cacheDir = $this->container->getParameter('kernel.cache_dir.product_export');
 
         $this->testDir = __DIR__ . '/fixtures/productexport/';
