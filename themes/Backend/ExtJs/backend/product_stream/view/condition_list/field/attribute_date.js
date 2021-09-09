@@ -29,10 +29,9 @@
 //{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/condition/attribute_date"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeDate', {
-
     extend: 'Shopware.apps.ProductStream.view.condition_list.field.Attribute',
 
-    createFromField: function () {
+    createFromField: function() {
         var me = this;
 
         me.fromField = Ext.create('Ext.form.field.Date', {
@@ -43,7 +42,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeDate'
         return me.fromField;
     },
 
-    setValue: function (value) {
+    setValue: function(value) {
         var me = this;
 
         me.value = value;
@@ -60,7 +59,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeDate'
         }
     },
 
-    createToField: function () {
+    createToField: function() {
         var me = this;
 
         me.toField = Ext.create('Ext.form.field.Date', {
@@ -73,3 +72,4 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeDate'
         return me.toField;
     },
 });
+//{/block}
