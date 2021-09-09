@@ -28,10 +28,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 {
     public static $sessionId;
 
-    /**
-     * @var sOrder
-     */
-    private $module;
+    private sOrder $module;
 
     public static function setUpBeforeClass(): void
     {
@@ -691,7 +688,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     protected function createDummyOrder()
     {
-        $number = 'SW-' . uniqid(mt_rand(), true);
+        $number = 'SW-' . uniqid((string) mt_rand(), true);
         Shopware()->Db()->insert('s_order', [
             'id' => null,
             'userID' => 1,
@@ -899,7 +896,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         }
 
         $this->module->sSYSTEM->sUSERGROUPDATA = $customerGroup;
-        Shopware()->Session()->sUserGroupData = $customerGroup;
+        Shopware()->Session()->set('sUserGroupData', $customerGroup);
 
         return [
             'user' => $user,

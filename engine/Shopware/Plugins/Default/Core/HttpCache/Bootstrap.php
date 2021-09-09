@@ -23,19 +23,30 @@
  */
 
 use Doctrine\Common\EventArgs;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Proxy\Proxy;
 use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\ContainerAwareEventManager;
+use Shopware\Components\HttpCache\CacheRouteGenerationService;
+use Shopware\Components\HttpCache\CacheTimeServiceInterface;
+use Shopware\Components\HttpCache\DefaultRouteService;
 use Shopware\Components\HttpCache\Store;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Plugin\CachedConfigReader;
+use Shopware\Models\Config\Form;
+use Shopware\Models\Shop\Shop;
 use ShopwarePlugins\HttpCache\CacheControl;
 use ShopwarePlugins\HttpCache\CacheIdCollector;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 
 class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
-     * @var \Enlight_Controller_Action
+     * @var Enlight_Controller_Action
      */
     private $action;
 
@@ -169,12 +180,12 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     public function initCacheControl(Enlight_Event_EventArgs $args)
     {
         return new CacheControl(
-            $this->get(\Symfony\Component\HttpFoundation\Session\SessionInterface::class),
-            $this->get(\Shopware\Components\Plugin\CachedConfigReader::class)->getByPluginName('HttpCache'),
-            $this->get(\Shopware\Components\ContainerAwareEventManager::class),
-            $this->get(\Shopware\Components\HttpCache\DefaultRouteService::class),
-            $this->get(\Shopware\Components\HttpCache\CacheTimeServiceInterface::class),
-            $this->get(\Shopware\Components\HttpCache\CacheRouteGenerationService::class)
+            $this->get(SessionInterface::class),
+            $this->get(CachedConfigReader::class)->getByPluginName('HttpCache'),
+            $this->get(ContainerAwareEventManager::class),
+            $this->get(DefaultRouteService::class),
+            $this->get(CacheTimeServiceInterface::class),
+            $this->get(CacheRouteGenerationService::class)
         );
     }
 
@@ -188,13 +199,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
     public function afterInit()
     {
-        $this->get(\Enlight_Loader::class)->registerNamespace('ShopwarePlugins\\HttpCache', __DIR__);
+        $this->get(Enlight_Loader::class)->registerNamespace('ShopwarePlugins\\HttpCache', __DIR__);
         parent::afterInit();
     }
 
-    /**
-     * @return array
-     */
     public function getCapabilities()
     {
         return [
@@ -235,7 +243,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     {
         $form = $this->Form();
 
-        /** @var \Shopware\Models\Config\Form $parent */
+        /** @var Form $parent */
         $parent = $this->Forms()->findOneBy(['name' => 'Core']);
 
         $form->setParent($parent);
@@ -314,10 +322,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         /** @var ModelManager $em */
-        $em = $this->get(\Shopware\Components\Model\ModelManager::class);
-        $repository = $em->getRepository(\Shopware\Models\Shop\Shop::class);
+        $em = $this->get(ModelManager::class);
+        $repository = $em->getRepository(Shop::class);
 
-        /** @var Shopware\Models\Shop\Shop $shop */
+        /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $repository->findOneBy(['default' => true]);
 
         if (!$shop->getHost()) {
@@ -512,7 +520,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         $cacheCollector = $this->get('http_cache.cache_id_collector');
 
-        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $context = $this->get(ContextServiceInterface::class)->getShopContext();
 
         $this->setCacheIdHeader(
             $cacheCollector->getCacheIdsFromController($this->action, $context)
@@ -529,16 +537,14 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         /** @var CacheControl $cacheControl */
         $cacheControl = $this->get('http_cache.cache_control');
 
-        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $context = $this->get(ContextServiceInterface::class)->getShopContext();
 
-        $additions = $cacheControl->getTagsForNoCacheCookie($this->request, $context);
-        $additions = array_keys(array_flip($additions));
+        $additions = array_keys(array_flip($cacheControl->getTagsForNoCacheCookie($this->request, $context)));
         foreach ($additions as $tag) {
             $this->setNoCacheTag($tag);
         }
 
-        $removals = $cacheControl->getRemovableCacheTags($this->request, $context);
-        $removals = array_keys(array_flip($removals));
+        $removals = array_keys(array_flip($cacheControl->getRemovableCacheTags($this->request, $context)));
         foreach ($removals as $tag) {
             $this->setNoCacheTag($tag, true);
         }
@@ -628,7 +634,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         $entity = $eventArgs->get('entity');
-        if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
+        if ($entity instanceof Proxy) {
             $entityName = get_parent_class($entity);
         } else {
             $entityName = \get_class($entity);
@@ -687,8 +693,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             $this->cacheInvalidationBuffer[$cacheId] = true;
         }
 
-        /** @var \Doctrine\ORM\EntityManager $entityManager */
-        $entityManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
+        /** @var EntityManager $entityManager */
+        $entityManager = Shopware()->Container()->get(ModelManager::class);
         $entityManager->getEventManager()->addEventListener(['postFlush'], $this);
     }
 
@@ -814,7 +820,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                         ['response' => $response->getRawBody(), 'code' => $response->getStatus()]
                     );
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->get('corelogger')->error($e->getMessage(), ['exception' => $e]);
                 $success = false;
             }
@@ -879,7 +885,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         /** @var CacheControl $cacheControl */
         $cacheControl = $this->get('http_cache.cache_control');
 
-        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $context = $this->get(ContextServiceInterface::class)->getShopContext();
 
         $cacheControl->setContextCacheKey($request, $context, $response);
     }

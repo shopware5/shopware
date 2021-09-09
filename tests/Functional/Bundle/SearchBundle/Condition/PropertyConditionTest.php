@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,7 +36,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class PropertyConditionTest extends TestCase
 {
-    public function testSinglePropertyConditionWithOneValue()
+    public function testSinglePropertyConditionWithOneValue(): void
     {
         $properties = $this->helper->getProperties(3, 4);
         $values = $properties['propertyValues'];
@@ -69,7 +71,7 @@ class PropertyConditionTest extends TestCase
         );
     }
 
-    public function testSinglePropertyConditionWithTwoValues()
+    public function testSinglePropertyConditionWithTwoValues(): void
     {
         $properties = $this->helper->getProperties(3, 4);
         $values = $properties['propertyValues'];
@@ -105,7 +107,7 @@ class PropertyConditionTest extends TestCase
         );
     }
 
-    public function testSinglePropertyConditionWithThreeValues()
+    public function testSinglePropertyConditionWithThreeValues(): void
     {
         $properties = $this->helper->getProperties(3, 4);
         $values = $properties['propertyValues'];
@@ -142,7 +144,7 @@ class PropertyConditionTest extends TestCase
         );
     }
 
-    public function testTwoPropertyConditionsWithOneValue()
+    public function testTwoPropertyConditionsWithOneValue(): void
     {
         $properties = $this->helper->getProperties(3, 4);
         $values = $properties['propertyValues'];
@@ -181,7 +183,7 @@ class PropertyConditionTest extends TestCase
         );
     }
 
-    public function testTwoPropertyConditionsWithTwoValues()
+    public function testTwoPropertyConditionsWithTwoValues(): void
     {
         $properties = $this->helper->getProperties(3, 4);
         $values = $properties['propertyValues'];
@@ -222,7 +224,7 @@ class PropertyConditionTest extends TestCase
         );
     }
 
-    public function testTwoPropertyConditionsWithThreeValues()
+    public function testTwoPropertyConditionsWithThreeValues(): void
     {
         $properties = $this->helper->getProperties(3, 4);
         $values = $properties['propertyValues'];
@@ -265,6 +267,12 @@ class PropertyConditionTest extends TestCase
         );
     }
 
+    /**
+     * @param string               $number
+     * @param array<string, mixed> $properties
+     *
+     * @return array<string, mixed>
+     */
     protected function getProduct(
         $number,
         ShopContext $context,
@@ -276,7 +284,13 @@ class PropertyConditionTest extends TestCase
         return array_merge($product, $properties);
     }
 
-    private function createPropertyCombination($properties, $indexes)
+    /**
+     * @param array<string, array> $properties
+     * @param int[]                $indexes
+     *
+     * @return array<string, array>
+     */
+    private function createPropertyCombination(array $properties, array $indexes): array
     {
         $combination = $properties;
         unset($combination['all']);

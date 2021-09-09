@@ -48,14 +48,14 @@ class Shopware_Components_Acl extends Zend_Acl
     /**
      * Get all resources from database and add to acl tree
      *
-     * @return \Shopware_Components_Acl
+     * @return Shopware_Components_Acl
      */
     public function initAclResources()
     {
         $repository = $this->em->getRepository(Resource::class);
         $resources = $repository->findAll();
 
-        /** @var Shopware\Models\User\Resource $resource */
+        /** @var resource $resource */
         foreach ($resources as $resource) {
             $this->addResource($resource);
         }
@@ -66,16 +66,16 @@ class Shopware_Components_Acl extends Zend_Acl
     /**
      * Get all roles from s_core_auth_roles - check for parent role and add to tree
      *
-     * @return \Shopware_Components_Acl
+     * @return Shopware_Components_Acl
      */
     public function initAclRoles()
     {
         $repository = $this->em->getRepository(Role::class);
         $roles = $repository->findAll();
 
-        /** @var \Shopware\Models\User\Role $role */
+        /** @var Role $role */
         foreach ($roles as $role) {
-            /** @var \Shopware\Models\User\Role|null $parent */
+            /** @var Role|null $parent */
             $parent = $role->getParent();
 
             // Parent exist and not already added?
@@ -98,13 +98,13 @@ class Shopware_Components_Acl extends Zend_Acl
      * If resourceID != null AND privilegeID = null -> Module admin
      * If resourceID & privilegeID is set - Grant permission to a certain privilege of a particular module
      *
-     * @return \Shopware_Components_Acl
+     * @return Shopware_Components_Acl
      */
     public function initAclRoleConditions()
     {
         $rules = $this->em->getRepository(Rule::class)->findAll();
 
-        /** @var \Shopware\Models\User\Rule $rule */
+        /** @var Rule $rule */
         foreach ($rules as $rule) {
             $role = $rule->getRole();
 
@@ -206,7 +206,7 @@ class Shopware_Components_Acl extends Zend_Acl
     {
         $repository = $this->em->getRepository(Resource::class);
 
-        /** @var \Shopware\Models\User\Resource|null $resource */
+        /** @var resource|null $resource */
         $resource = $repository->findOneBy(['name' => $resourceName]);
         if ($resource === null) {
             return false;
@@ -231,7 +231,7 @@ class Shopware_Components_Acl extends Zend_Acl
     /**
      * Create Shopware acl tree
      */
-    private function initShopwareAclTree()
+    private function initShopwareAclTree(): void
     {
         $this->initAclResources()
             ->initAclRoles()

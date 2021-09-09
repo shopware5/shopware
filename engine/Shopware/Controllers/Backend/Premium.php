@@ -254,7 +254,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
      */
     public function validateArticleAction()
     {
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        Shopware()->Front()->Plugins()->ViewRenderer()->setNoRender();
         $value = trim($this->Request()->get('value'));
 
         // Is there a value in the textfield?

@@ -35,7 +35,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     {
         list($cachedTime, $elementId, $shopId) = $this->getCachedTime();
 
-        $cache = (int) Shopware()->Config()->routerCache;
+        $cache = (int) Shopware()->Config()->get('routerCache');
         $cache = $cache < 360 ? 86400 : $cache;
         $currentTime = date('Y-m-d H:i:s');
 
@@ -141,7 +141,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      */
     public function countCategories($shopId)
     {
-        if (empty(Shopware()->Config()->routerCategoryTemplate)) {
+        if (empty(Shopware()->Config()->get('routerCategoryTemplate'))) {
             return 0;
         }
 
@@ -297,7 +297,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     public function countStatic($shopId)
     {
         $this->registerShop($shopId);
-        $urls = Shopware()->Config()->seoStaticUrls;
+        $urls = Shopware()->Config()->get('seoStaticUrls');
 
         if (empty($urls)) {
             return 0;

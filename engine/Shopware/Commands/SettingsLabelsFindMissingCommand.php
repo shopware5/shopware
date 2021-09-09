@@ -85,7 +85,11 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dir = $this->container->get('application')->DocPath($input->getOption('target'));
+        $target = $input->getOption('target');
+        if ($target !== null && !\is_string($target)) {
+            $target = null;
+        }
+        $dir = $this->container->get('application')->DocPath($target);
         if (!file_exists($dir) || !is_writable($dir)) {
             $old = umask(0);
             if (!mkdir($dir, 0777, true) && !is_dir($dir)) {

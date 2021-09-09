@@ -22,9 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Password\Manager;
 use Shopware\Models\User\Privilege;
+use Shopware\Models\User\Repository;
 use Shopware\Models\User\Resource;
 use Shopware\Models\User\Role;
 use Shopware\Models\User\Rule;
@@ -33,7 +36,7 @@ use Shopware\Models\User\User;
 class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * @var \Shopware\Models\User\Repository
+     * @var Repository
      */
     protected $userRepository;
 
@@ -134,7 +137,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         }
         $data = $this->getUserRepository()
             ->getUserDetailQuery($id)
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         if (!$this->_isAllowed('create') && !$this->_isAllowed('update')) {
             unset($data['apiKey'], $data['sessionId']);
@@ -355,7 +358,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $userId = (int) $this->Request()->getParam('userId');
 
         try {
-            $connection = $this->container->get(\Doctrine\DBAL\Connection::class);
+            $connection = $this->container->get(Connection::class);
             $connection->executeQuery('UPDATE s_core_auth SET lockedUntil = NOW(), failedLogins = 0 WHERE id = ?', [$userId]);
         } catch (Exception $e) {
             $this->View()->assign('success', false);
@@ -374,15 +377,25 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     public function deleteUserAction()
     {
         // Get posted user
-        $userID = $this->Request()->getParam('id');
+        $userID = (int) $this->Request()->getParam('id');
         $getCurrentIdentity = $this->get('auth')->getIdentity();
 
         // Backend users shall not delete their current login
-        if ($userID == $getCurrentIdentity->id) {
+        if ($userID === (int) $getCurrentIdentity->id) {
             throw new Exception('You can not delete your current account');
         }
 
         $entity = $this->getUserRepository()->find($userID);
+        if (!$entity instanceof User) {
+            $this->View()->assign([
+                'success' => false,
+                'data' => $this->Request()->getParams(),
+                'message' => sprintf('User with ID "%s" not found', $userID),
+            ]);
+
+            return;
+        }
+
         $this->modelManager->remove($entity);
 
         // Performs all of the collected actions.
@@ -410,7 +423,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $role = $this->Request()->getParam('role');
         $resourceAdmins = [];
 
-        /** @var \Shopware\Models\User\Role|int $role */
+        /** @var Role|int $role */
         if ($role !== null && is_numeric($role)) {
             $role = $this->modelManager->find(Role::class, $role);
 
@@ -608,7 +621,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         }
 
         // Check if role exist
-        /** @var \Shopware\Models\User\Role|null $role */
+        /** @var Role|null $role */
         $role = $this->modelManager->find(Role::class, $id);
 
         if ($role === null) {
@@ -629,12 +642,12 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             $rule->setRole($role);
 
             if (isset($newRule['resourceId'])) {
-                /** @var \Shopware\Models\User\Resource $resource */
+                /** @var resource $resource */
                 $resource = Shopware()->Models()->find(Resource::class, $newRule['resourceId']);
                 $rule->setResource($resource);
             }
             if (isset($newRule['privilegeId'])) {
-                /** @var \Shopware\Models\User\Privilege $privilege */
+                /** @var Privilege $privilege */
                 $privilege = Shopware()->Models()->find(Privilege::class, $newRule['privilegeId']);
                 $rule->setPrivilege($privilege);
             } else {
@@ -681,12 +694,8 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
     /**
      * Verifies if an action name must be password confirm protected
-     *
-     * @param string $name
-     *
-     * @return bool
      */
-    private function isPasswordConfirmProtectedAction($name)
+    private function isPasswordConfirmProtectedAction(string $name): bool
     {
         return \in_array(strtolower($name), $this->getPasswordConfirmProtectedActions(), true);
     }
@@ -694,9 +703,9 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     /**
      * Returns an array of actions which must be password confirmed.
      *
-     * @return array
+     * @return string[]
      */
-    private function getPasswordConfirmProtectedActions()
+    private function getPasswordConfirmProtectedActions(): array
     {
         return [
             'deleterole',
@@ -712,10 +721,8 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
     /**
      * Helper function to get access to the user repository.
-     *
-     * @return \Shopware\Models\User\Repository
      */
-    private function getUserRepository()
+    private function getUserRepository(): Repository
     {
         if ($this->userRepository === null) {
             $this->userRepository = $this->modelManager->getRepository(User::class);
@@ -727,9 +734,9 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     /**
      * Returns all resource ids for the passed role where a rule with privilege NULL exists.
      *
-     * @return array
+     * @return int[]
      */
-    private function getResourceAdminRules(int $roleId)
+    private function getResourceAdminRules(int $roleId): array
     {
         $resources = $this->getUserRepository()
             ->getResourcesWithAdminRuleQuery($roleId)
@@ -747,9 +754,9 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      * Internal helper function which converts a resource shopware model
      * to an tree panel node with checkboxes.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getResourceNode(?Resource $resource, ?Role $role, array $resourceAdmins)
+    private function getResourceNode(?Resource $resource, ?Role $role, array $resourceAdmins): array
     {
         if (!$resource) {
             return [];
@@ -792,9 +799,9 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      * Internal helper function which converts a privilege shopware model
      * to an tree panel node with checkboxes.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getPrivilegeNode(array &$resourceNode, ?Privilege $privilege, ?Role $role)
+    private function getPrivilegeNode(array &$resourceNode, ?Privilege $privilege, ?Role $role): array
     {
         if (!$privilege) {
             return [];

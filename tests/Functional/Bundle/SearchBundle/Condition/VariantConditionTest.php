@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
@@ -33,7 +36,10 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class VariantConditionTest extends TestCase
 {
-    private $groups = [];
+    /**
+     * @var Group[]
+     */
+    private array $groups = [];
 
     protected function setUp(): void
     {
@@ -41,7 +47,7 @@ class VariantConditionTest extends TestCase
         $this->setConfig('hideNoInStock', false);
     }
 
-    public function testSingleNotExpandOption()
+    public function testSingleNotExpandOption(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -64,7 +70,7 @@ class VariantConditionTest extends TestCase
         );
     }
 
-    public function testSingleNotExpandOptionSortByPrice()
+    public function testSingleNotExpandOptionSortByPrice(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -93,7 +99,7 @@ class VariantConditionTest extends TestCase
         $this->assertSearchResultSorting($result, ['B1', 'A1']);
     }
 
-    public function testMultiNotExpandOption()
+    public function testMultiNotExpandOption(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -118,7 +124,7 @@ class VariantConditionTest extends TestCase
         );
     }
 
-    public function testMultiNotExpandOptionSortByPrice()
+    public function testMultiNotExpandOptionSortByPrice(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -149,7 +155,7 @@ class VariantConditionTest extends TestCase
         $this->assertSearchResultSorting($result, ['D2', 'A1', 'B2']);
     }
 
-    public function testSingleExpandOption()
+    public function testSingleExpandOption(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -172,7 +178,7 @@ class VariantConditionTest extends TestCase
         );
     }
 
-    public function testSingleExpandOptionSortByPrice()
+    public function testSingleExpandOptionSortByPrice(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -201,7 +207,7 @@ class VariantConditionTest extends TestCase
         $this->assertSearchResultSorting($result, ['B1', 'A2', 'A1']);
     }
 
-    public function testMultiExpandOption()
+    public function testMultiExpandOption(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -230,7 +236,7 @@ class VariantConditionTest extends TestCase
         );
     }
 
-    public function testMultiExpandOptionSortByPrice()
+    public function testMultiExpandOptionSortByPrice(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -265,7 +271,7 @@ class VariantConditionTest extends TestCase
         $this->assertSearchResultSorting($result, ['A2', 'B2', 'A3', 'A1', 'D5', 'A4', 'D6']);
     }
 
-    public function testMultiCrossExpandOption()
+    public function testMultiCrossExpandOption(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -290,7 +296,7 @@ class VariantConditionTest extends TestCase
         );
     }
 
-    public function testMultiCrossExpandOptionSortByPrice()
+    public function testMultiCrossExpandOptionSortByPrice(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -323,14 +329,8 @@ class VariantConditionTest extends TestCase
 
     /**
      * Creates and return the VariantCondition of the given options of the given group.
-     *
-     * @param array  $options
-     * @param string $groupName
-     * @param bool   $expand
-     *
-     * @return VariantCondition
      */
-    public function createCondition($options, $groupName, $expand = false)
+    public function createCondition(array $options, string $groupName, bool $expand = false): VariantCondition
     {
         $mapping = $this->mapOptions();
 
@@ -348,14 +348,14 @@ class VariantConditionTest extends TestCase
      * @param string $number
      * @param array  $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $data = []
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         $configurator = $this->helper->createConfiguratorSet($data['groups']);
@@ -393,10 +393,8 @@ class VariantConditionTest extends TestCase
 
     /**
      * Returns the mapping of group and option names to ids.
-     *
-     * @return array
      */
-    private function mapOptions()
+    private function mapOptions(): array
     {
         $mapping = [];
         foreach ($this->groups as $group) {
@@ -412,15 +410,13 @@ class VariantConditionTest extends TestCase
     /**
      * Creates the structure of the configurator.
      *
-     * @param array $expected
-     *
      * @return Group[]
      */
-    private function buildConfigurator($expected)
+    private function buildConfigurator(array $expected): array
     {
         $groups = [];
         foreach ($expected as $group => $optionNames) {
-            /* @var $allGroups Group[] */
+            /* @var Group[] $allGroups */
             foreach ($this->groups as $globalGroup) {
                 if ($globalGroup->getName() !== $group) {
                     continue;
@@ -434,7 +430,7 @@ class VariantConditionTest extends TestCase
                 }
 
                 $clone = clone $globalGroup;
-                $clone->setOptions($options);
+                $clone->setOptions(new ArrayCollection($options));
 
                 $groups[] = $clone;
             }

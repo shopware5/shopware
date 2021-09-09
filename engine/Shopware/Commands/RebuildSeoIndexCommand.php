@@ -24,8 +24,12 @@
 
 namespace Shopware\Commands;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
@@ -54,7 +58,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
     protected $categories;
 
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     protected $database;
 
@@ -64,7 +68,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
     protected $modules;
 
     /**
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $modelManager;
 
@@ -88,7 +92,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
     {
         if ($argumentName === 'shopId') {
             /** @var ModelManager $em */
-            $em = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class);
+            $em = $this->getContainer()->get(ModelManager::class);
             /** @var Repository $shopRepository */
             $shopRepository = $em->getRepository(Shop::class);
             $queryBuilder = $shopRepository->createQueryBuilder('shop');
@@ -132,9 +136,9 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->database = $this->container->get(\Doctrine\DBAL\Connection::class);
+        $this->database = $this->container->get(Connection::class);
         $this->modules = $this->container->get('modules');
-        $this->modelManager = $this->container->get(\Shopware\Components\Model\ModelManager::class);
+        $this->modelManager = $this->container->get(ModelManager::class);
         $this->seoIndex = $this->container->get('seoindex');
         $this->rewriteTable = $this->modules->RewriteTable();
         $this->events = $this->container->get('events');
@@ -150,7 +154,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
         }
 
         if (empty($shops)) {
-            /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+            /** @var QueryBuilder $query */
             $query = $this->database->createQueryBuilder();
             $shops = $query->select('id')
                 ->from('s_core_shops', 'shops')
@@ -166,15 +170,15 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
         foreach ($shops as $shopId) {
             $output->writeln('Rebuilding SEO index for shop ' . $shopId);
 
-            /** @var \Shopware\Models\Shop\Repository $repository */
-            $repository = $this->modelManager->getRepository(\Shopware\Models\Shop\Shop::class);
+            /** @var Repository $repository */
+            $repository = $this->modelManager->getRepository(Shop::class);
             $shop = $repository->getActiveById($shopId);
 
             if ($shop === null) {
                 throw new \RuntimeException('No valid shop id passed');
             }
 
-            $this->container->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+            $this->container->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
             $this->modules->Categories()->baseId = $shop->getCategory()->getId();
 
@@ -194,7 +198,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
 
             $this->seoIndex->setCachedTime($currentTime->format('Y-m-d H:i:s'), $elementId, $shopId);
 
-            $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
+            $context = $this->container->get(ContextServiceInterface::class)->createShopContext($shopId);
 
             $this->rewriteTable->sCreateRewriteTableCategories();
             $this->rewriteTable->sCreateRewriteTableCampaigns();

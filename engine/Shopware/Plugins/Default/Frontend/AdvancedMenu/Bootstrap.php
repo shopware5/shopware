@@ -23,18 +23,19 @@
  */
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Connection;
+use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
+use Shopware\Components\Compatibility\LegacyStructConverter;
+use Shopware\Components\Theme\LessDefinition;
+use Shopware\Models\Config\Element;
 
 /**
  * Shopware AdvancedMenu Plugin
  */
 class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
-    /**
-     * Install plugin method
-     *
-     * @return bool
-     */
     public function install()
     {
         $this->subscribeEvents();
@@ -43,9 +44,6 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         return true;
     }
 
-    /**
-     * @return array
-     */
     public function enable()
     {
         return [
@@ -54,9 +52,6 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         ];
     }
 
-    /**
-     * @return array
-     */
     public function disable()
     {
         return [
@@ -65,9 +60,6 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         ];
     }
 
-    /**
-     * @return array
-     */
     public function getInfo()
     {
         return [
@@ -75,22 +67,16 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         ];
     }
 
-    /**
-     * @return string
-     */
     public function getLabel()
     {
         return 'Erweitertes Menü';
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function onCollectLessFiles()
+    public function onCollectLessFiles(): ArrayCollection
     {
         $lessDir = __DIR__ . '/Views/frontend/_public/src/less/';
 
-        $less = new \Shopware\Components\Theme\LessDefinition(
+        $less = new LessDefinition(
             [],
             [
                 $lessDir . 'advanced-menu.less',
@@ -100,10 +86,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         return new ArrayCollection([$less]);
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function onCollectJavascriptFiles()
+    public function onCollectJavascriptFiles(): ArrayCollection
     {
         $jsDir = __DIR__ . '/Views/frontend/_public/src/js/';
 
@@ -112,10 +95,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         ]);
     }
 
-    /**
-     * Event listener method
-     */
-    public function onPostDispatch(Enlight_Controller_ActionEventArgs $args)
+    public function onPostDispatch(Enlight_Controller_ActionEventArgs $args): void
     {
         $config = $this->Config();
 
@@ -148,7 +128,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
      */
     public function getAdvancedMenu($category, $activeCategoryId, $depth = null)
     {
-        $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
 
         $cacheKey = sprintf(
             'Shopware_AdvancedMenu_Tree_%s_%s_%s',
@@ -163,13 +143,13 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             'config' => $this->Config(),
         ]);
 
-        $cache = Shopware()->Container()->get(\Zend_Cache_Core::class);
+        $cache = Shopware()->Container()->get(Zend_Cache_Core::class);
 
         if ($this->Config()->get('caching') && $cache->test($cacheKey)) {
             $menu = $cache->load($cacheKey, true);
         } else {
             $ids = $this->getCategoryIdsOfDepth($category, $depth);
-            $categories = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface::class)->getList($ids, $context);
+            $categories = Shopware()->Container()->get(CategoryServiceInterface::class)->getList($ids, $context);
             $categoriesArray = $this->convertCategories($categories);
             $categoryTree = $this->getCategoriesOfParent($category, $categoriesArray);
             if ($this->Config()->get('caching')) {
@@ -184,7 +164,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         return $menu;
     }
 
-    private function subscribeEvents()
+    private function subscribeEvents(): void
     {
         $this->subscribeEvent(
             'Theme_Compiler_Collect_Plugin_Less',
@@ -202,7 +182,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         );
     }
 
-    private function createForm()
+    private function createForm(): void
     {
         $form = $this->Form();
 
@@ -212,19 +192,19 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $form->setElement('checkbox', 'show', [
             'label' => 'Menü anzeigen',
             'value' => 1,
-            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+            'scope' => Element::SCOPE_SHOP,
         ]);
 
         $form->setElement('number', 'hoverDelay', [
             'label' => 'Hover Verzögerung (ms)',
             'value' => 250,
-            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+            'scope' => Element::SCOPE_SHOP,
         ]);
 
         $form->setElement('text', 'levels', [
             'label' => 'Anzahl Ebenen',
             'value' => 3,
-            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+            'scope' => Element::SCOPE_SHOP,
         ]);
 
         $form->setElement(
@@ -241,33 +221,33 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                 ],
                 'value' => 2,
                 'editable' => false,
-                'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+                'scope' => Element::SCOPE_SHOP,
             ]
         );
 
         $form->setElement('boolean', 'caching', [
             'label' => 'Caching aktivieren',
             'value' => 1,
-            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+            'scope' => Element::SCOPE_SHOP,
         ]);
 
         $form->setElement('number', 'cachetime', [
             'label' => 'Cachezeit',
             'value' => 86400,
-            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+            'scope' => Element::SCOPE_SHOP,
         ]);
 
         $form->setElement('boolean', 'includeCustomergroup', [
             'label' => 'Kundengruppen für Cache berücksichtigen:',
             'value' => 1,
             'description' => 'Falls aktiv, wird der Cache des Menüs für jede Kundengruppe separat aufgebaut. Nutzen Sie diese Option, falls Sie Kategorien für gewisse Kundengruppen ausgeschlossen haben.<br>Falls inaktiv, erhalten alle Kundengruppen das gleiche Menü aus dem Cache. Diese Einstellung ist zwar performanter, jedoch funktioniert der Kategorieausschluss nach Kundengruppen dann nicht mehr korrekt.',
-            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+            'scope' => Element::SCOPE_SHOP,
         ]);
 
         $this->translateForm();
     }
 
-    private function translateForm()
+    private function translateForm(): void
     {
         $translations = [
             'en_GB' => [
@@ -290,7 +270,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
      *
      * @return array[]
      */
-    private function setActiveFlags($categories, $actives)
+    private function setActiveFlags(array $categories, array $actives): array
     {
         foreach ($categories as &$category) {
             $category['flag'] = \in_array($category['id'], $actives);
@@ -304,15 +284,13 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     }
 
     /**
-     * @param int $categoryId
-     *
      * @throws Exception
      *
      * @return int[]
      */
-    private function getCategoryPath($categoryId)
+    private function getCategoryPath(int $categoryId): array
     {
-        $query = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        $query = Shopware()->Container()->get(Connection::class)->createQueryBuilder();
 
         $query->select('category.path')
               ->from('s_categories', 'category')
@@ -328,16 +306,13 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     }
 
     /**
-     * @param int $parentId
-     * @param int $depth
-     *
      * @throws Exception
      *
      * @return int[]
      */
-    private function getCategoryIdsOfDepth($parentId, $depth)
+    private function getCategoryIdsOfDepth(int $parentId, int $depth): array
     {
-        $query = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        $query = Shopware()->Container()->get(Connection::class)->createQueryBuilder();
         $query->select('DISTINCT category.id')
               ->from('s_categories', 'category')
               ->where('category.path LIKE :path')
@@ -353,17 +328,11 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    /**
-     * @param int   $parentId
-     * @param array $categories
-     *
-     * @return array
-     */
-    private function getCategoriesOfParent($parentId, $categories)
+    private function getCategoriesOfParent(int $parentId, array $categories): array
     {
         $result = [];
 
-        foreach ($categories as $index => $category) {
+        foreach ($categories as $category) {
             if ($category['parentId'] != $parentId) {
                 continue;
             }
@@ -378,12 +347,10 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
 
     /**
      * @param Category[] $categories
-     *
-     * @return array
      */
-    private function convertCategories($categories)
+    private function convertCategories(array $categories): array
     {
-        $converter = Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class);
+        $converter = Shopware()->Container()->get(LegacyStructConverter::class);
 
         return array_map(function (Category $category) use ($converter) {
             $data = $converter->convertCategoryStruct($category);

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,52 +24,35 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Core;
+
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Payment\Payment;
 use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 
-class sAdminTest extends PHPUnit\Framework\TestCase
+class AdminTest extends TestCase
 {
-    /**
-     * @var sAdmin
-     */
-    private $module;
+    private \sAdmin $module;
 
-    /**
-     * @var sBasket
-     */
-    private $basketModule;
+    private \sBasket $basketModule;
 
-    /**
-     * @var sSystem
-     */
-    private $systemModule;
+    private \Shopware_Components_Config $config;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private \Enlight_Components_Session_Namespace $session;
 
-    /**
-     * @var Enlight_Components_Session_Namespace The session data
-     */
-    private $session;
+    private \Shopware_Components_Snippet_Manager $snippetManager;
 
-    /**
-     * @var Shopware_Components_Snippet_Manager Snippet manager
-     */
-    private $snippetManager;
-
-    /**
-     * @var Enlight_Controller_Front
-     */
-    private $front;
+    private \Enlight_Controller_Front $front;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->clear();
-        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
+        Shopware()->Container()->get(ModelManager::class)->clear();
+        Shopware()->Front()->setRequest(new \Enlight_Controller_Request_RequestHttp());
 
         $this->module = Shopware()->Modules()->Admin();
         $this->config = Shopware()->Config();
@@ -75,22 +60,22 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->front = Shopware()->Front();
         $this->snippetManager = Shopware()->Snippets();
         $this->basketModule = Shopware()->Modules()->Basket();
-        $this->systemModule = Shopware()->System();
-        $this->systemModule->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
-        $this->systemModule->sSESSION_ID = null;
+        $systemModule = Shopware()->System();
+        $systemModule->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
+        $systemModule->sSESSION_ID = null;
         $this->session->offsetSet('sessionId', null);
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->clear();
+        Shopware()->Container()->get(ModelManager::class)->clear();
     }
 
     /**
      * @covers \sAdmin::sGetPaymentMeanById
      */
-    public function testsGetPaymentMeanById()
+    public function testsGetPaymentMeanById(): void
     {
         // Fetching non-existing payment means returns null
         static::assertEmpty($this->module->sGetPaymentMeanById(0));
@@ -129,10 +114,9 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sGetPaymentMeans
      */
-    public function testsGetPaymentMeans()
+    public function testsGetPaymentMeans(): void
     {
-        $result = $this->module->sGetPaymentMeans();
-        foreach ($result as $paymentMean) {
+        foreach ($this->module->sGetPaymentMeans() as $paymentMean) {
             static::assertArrayHasKey('id', $paymentMean);
             static::assertArrayHasKey('name', $paymentMean);
             static::assertArrayHasKey('description', $paymentMean);
@@ -141,32 +125,28 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             static::assertArrayHasKey('surchargestring', $paymentMean);
             static::assertArrayHasKey('active', $paymentMean);
             static::assertArrayHasKey('esdactive', $paymentMean);
-            static::assertTrue(\in_array((int) $paymentMean['id'], [3, 5, 6], true));
+            static::assertContains((int) $paymentMean['id'], [3, 5, 6]);
         }
     }
 
     /**
      * @covers \sAdmin::sInitiatePaymentClass
      */
-    public function testsInitiatePaymentClass()
+    public function testsInitiatePaymentClass(): void
     {
-        $payments = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment')->findAll();
+        $payments = Shopware()->Models()->getRepository(Payment::class)->findAll();
 
         foreach ($payments as $payment) {
             $paymentClass = $this->module->sInitiatePaymentClass($this->module->sGetPaymentMeanById($payment->getId()));
-            if (\is_bool($paymentClass)) {
-                static::assertFalse($paymentClass);
-            } else {
-                static::assertInstanceOf('ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod', $paymentClass);
-                Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
+            static::assertInstanceOf(BasePaymentMethod::class, $paymentClass);
+            Shopware()->Front()->setRequest(new \Enlight_Controller_Request_RequestHttp());
 
-                $requestData = Shopware()->Front()->Request()->getParams();
-                $validationResult = $paymentClass->validate($requestData);
-                static::assertTrue(\is_array($validationResult));
-                if (\count($validationResult)) {
-                    static::assertArrayHasKey('sErrorFlag', $validationResult);
-                    static::assertArrayHasKey('sErrorMessages', $validationResult);
-                }
+            $requestData = Shopware()->Front()->Request()->getParams();
+            $validationResult = $paymentClass->validate($requestData);
+            static::assertIsArray($validationResult);
+            if (\count($validationResult)) {
+                static::assertArrayHasKey('sErrorFlag', $validationResult);
+                static::assertArrayHasKey('sErrorMessages', $validationResult);
             }
         }
     }
@@ -174,7 +154,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sValidateStep3
      */
-    public function testExceptionInsValidateStep3()
+    public function testExceptionInsValidateStep3(): void
     {
         $this->expectException('Enlight_Exception');
         $this->expectExceptionMessage('sValidateStep3 #00: No payment id');
@@ -184,9 +164,9 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sValidateStep3
      */
-    public function testsValidateStep3()
+    public function testsValidateStep3(): void
     {
-        $this->front->Request()->setPost('sPayment', 2);
+        $this->getRequest()->setPost('sPayment', 2);
 
         $result = $this->module->sValidateStep3();
         static::assertArrayHasKey('checkPayment', $result);
@@ -207,9 +187,9 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sUpdateNewsletter
      */
-    public function testsUpdateNewsletter()
+    public function testsUpdateNewsletter(): void
     {
-        $email = uniqid(rand()) . 'test@foobar.com';
+        $email = uniqid((string) rand()) . 'test@foobar.com';
 
         // Test insertion
         static::assertTrue($this->module->sUpdateNewsletter(true, $email));
@@ -251,7 +231,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sUpdatePayment
      */
-    public function testsUpdatePayment()
+    public function testsUpdatePayment(): void
     {
         // Test no user id
         static::assertFalse($this->module->sUpdatePayment());
@@ -267,7 +247,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         // Setup dummy test data and test with it
-        $this->front->Request()->setPost([
+        $this->getRequest()->setPost([
             'sPayment' => 2,
         ]);
         static::assertTrue($this->module->sUpdatePayment());
@@ -282,7 +262,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sLogin
      */
-    public function testsLogin()
+    public function testsLogin(): void
     {
         // Test with no data, get error
         $result = $this->module->sLogin();
@@ -300,9 +280,9 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         static::assertArrayHasKey('password', $result['sErrorFlag']);
 
         // Test with wrong data, get error
-        $this->front->Request()->setPost([
-            'email' => uniqid(rand()) . 'test',
-            'password' => uniqid(rand()) . 'test',
+        $this->getRequest()->setPost([
+            'email' => uniqid((string) rand()) . 'test',
+            'password' => uniqid((string) rand()) . 'test',
         ]);
         $result = $this->module->sLogin();
         static::assertIsArray($result);
@@ -319,7 +299,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $customer = $this->createDummyCustomer();
 
         // Test successful login
-        $this->front->Request()->setPost([
+        $this->getRequest()->setPost([
             'email' => $customer->getEmail(),
             'password' => 'fooobar',
         ]);
@@ -340,9 +320,9 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'id = ' . $customer->getId()
         );
 
-        $this->front->Request()->setPost([
+        $this->getRequest()->setPost([
             'email' => $customer->getEmail(),
-            'passwordMD5' => uniqid(rand()),
+            'passwordMD5' => uniqid((string) rand()),
         ]);
         $result = $this->module->sLogin(true);
         static::assertIsArray($result);
@@ -357,7 +337,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         // Test correct pre-hashed password
-        $this->front->Request()->setPost([
+        $this->getRequest()->setPost([
             'email' => $customer->getEmail(),
             'passwordMD5' => md5('fooobar'),
         ]);
@@ -397,7 +377,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test brute force lockout
         Shopware()->Db()->update('s_user', ['active' => 1], 'id = ' . $customer->getId());
-        $this->front->Request()->setPost([
+        $this->getRequest()->setPost([
             'email' => $customer->getEmail(),
             'password' => 'asasasasas',
         ]);
@@ -431,7 +411,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sCheckUser
      */
-    public function testsCheckUser()
+    public function testsCheckUser(): void
     {
         $customer = $this->createDummyCustomer();
 
@@ -439,7 +419,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         static::assertFalse($this->module->sCheckUser());
 
         // Test successful login
-        $this->front->Request()->setPost([
+        $this->getRequest()->setPost([
             'email' => $customer->getEmail(),
             'password' => 'fooobar',
         ]);
@@ -474,7 +454,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sGetCountryTranslation
      */
-    public function testsGetCountryTranslation()
+    public function testsGetCountryTranslation(): void
     {
         // Backup existing data and inject demo data
         $existingData = Shopware()->Db()->fetchRow("
@@ -507,8 +487,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         }
 
         // Test loading all data, should return the test data
-        $shopId = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->getId();
-        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->setId(2);
+        $shopId = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->getId();
+        Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->setId(2);
 
         $result = $this->module->sGetCountryTranslation();
         static::assertCount(2, $result);
@@ -542,13 +522,13 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = ' . $existingDataId);
         }
 
-        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->setId($shopId);
+        Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->setId($shopId);
     }
 
     /**
      * @covers \sAdmin::sGetDispatchTranslation
      */
-    public function testsGetDispatchTranslation()
+    public function testsGetDispatchTranslation(): void
     {
         // Backup existing data and inject demo data
         $existingData = Shopware()->Db()->fetchRow("
@@ -583,8 +563,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         }
 
         // Test loading all data, should return the test data
-        $shopId = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->getId();
-        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->setId(2);
+        $shopId = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->getId();
+        Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->setId(2);
 
         $result = $this->module->sGetDispatchTranslation();
         static::assertCount(2, $result);
@@ -624,13 +604,13 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = ' . $existingDataId);
         }
 
-        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->setId($shopId);
+        Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->setId($shopId);
     }
 
     /**
      * @covers \sAdmin::sGetPaymentTranslation
      */
-    public function testsGetPaymentTranslation()
+    public function testsGetPaymentTranslation(): void
     {
         // Backup existing data and inject demo data
         $existingData = Shopware()->Db()->fetchRow("
@@ -674,8 +654,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         }
 
         // Test loading all data, should return the test data
-        $shopId = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->getId();
-        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->setId(2);
+        $shopId = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->getId();
+        Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->setId(2);
 
         $result = $this->module->sGetPaymentTranslation();
         static::assertCount(5, $result);
@@ -716,13 +696,13 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = ' . $existingDataId);
         }
 
-        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->setId($shopId);
+        Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->setId($shopId);
     }
 
     /**
      * @covers \sAdmin::sGetCountryStateTranslation
      */
-    public function testsGetCountryStateTranslation()
+    public function testsGetCountryStateTranslation(): void
     {
         // Backup existing data and inject demo data
         $existingData = Shopware()->Db()->fetchRow("
@@ -768,8 +748,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         static::assertEquals('California', $result[24]['name']);
 
         // Create a stub of a Shop for fallback.
-        $shopFallbackId = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->getFallbackId();
-        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->setFallbackId(10000);
+        $shopFallbackId = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->getFallbackId();
+        Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->setFallbackId(10000);
 
         Shopware()->Db()->insert('s_core_translations', [
             'objectkey' => 1,
@@ -805,13 +785,13 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         }
         Shopware()->Db()->delete('s_core_translations', 'objectlanguage = 10000');
 
-        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->setFallbackId($shopFallbackId);
+        Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getShop()->setFallbackId($shopFallbackId);
     }
 
     /**
      * @covers \sAdmin::sGetCountryList
      */
-    public function testsGetCountryList()
+    public function testsGetCountryList(): void
     {
         // Test with default country data
         $result = $this->module->sGetCountryList();
@@ -956,8 +936,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
     /**
      * @covers \sAdmin::sGetDownloads
+     *
+     * @return array<string, mixed>
      */
-    public function testsGetDownloads()
+    public function testsGetDownloads(): array
     {
         $customer = $this->createDummyCustomer();
         $this->session->offsetSet('sUserId', $customer->getId());
@@ -968,7 +950,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Inject demo data
         $orderData = [
-            'ordernumber' => uniqid(rand()),
+            'ordernumber' => uniqid((string) rand()),
             'userID' => $customer->getId(),
             'invoice_amount' => '37.99',
             'invoice_amount_net' => '31.92',
@@ -1087,8 +1069,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      * @covers \sAdmin::sGetOpenOrderData
      * @depends testsGetDownloads
      * @ticket SW-5653
+     *
+     * @param array<string, mixed> $demoData
      */
-    public function testsGetOpenOrderData($demoData)
+    public function testsGetOpenOrderData(array $demoData): void
     {
         $this->session->clear();
 
@@ -1096,7 +1080,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $customer = $demoData['customer'];
         $oldOrderId = $demoData['orderId'];
         $orderEsdId = $demoData['orderEsdId'];
-        $orderNumber = uniqid(rand());
+        $orderNumber = uniqid((string) rand());
 
         // Add another order to the customer
         $orderData = [
@@ -1199,7 +1183,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      * @covers \sAdmin::sGetUserByMail
      * @covers \sAdmin::sGetUserNameById
      */
-    public function testGetEmailAndUser()
+    public function testGetEmailAndUser(): void
     {
         $this->session->clear();
 
@@ -1211,11 +1195,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         static::assertEquals($customer->getEmail(), $this->module->sGetUserMailById());
 
         // Test sGetUserByMail with null and expected cases
-        static::assertNull($this->module->sGetUserByMail(uniqid(rand())));
+        static::assertNull($this->module->sGetUserByMail(uniqid((string) rand())));
         static::assertEquals($customer->getId(), $this->module->sGetUserByMail($customer->getEmail()));
 
         // Test sGetUserNameById with null and expected cases
-        static::assertEmpty($this->module->sGetUserNameById(uniqid(rand())));
+        static::assertEmpty($this->module->sGetUserNameById(uniqid((string) rand())));
         static::assertEquals(
             ['firstname' => 'Max', 'lastname' => 'Mustermann'],
             $this->module->sGetUserNameById($customer->getId())
@@ -1227,7 +1211,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sGetUserData
      */
-    public function testsGetUserDataWithoutLogin()
+    public function testsGetUserDataWithoutLogin(): void
     {
         $this->session->clear();
 
@@ -1291,13 +1275,14 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sGetUserData
      */
-    public function testsGetUserDataWithLogin()
+    public function testsGetUserDataWithLogin(): void
     {
         $customer = $this->createDummyCustomer();
         $this->session->offsetSet('sUserId', $customer->getId());
         $this->session->offsetUnset('sState');
 
         $result = $this->module->sGetUserData();
+        static::assertIsArray($result);
 
         $expectedData = [
             'billingaddress' => [
@@ -1480,7 +1465,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      * @covers \sAdmin::sRiskCURRENCIESISOIS
      * @covers \sAdmin::sRiskCURRENCIESISOISNOT
      */
-    public function testsManageRisks()
+    public function testsManageRisks(): void
     {
         $customer = $this->createDummyCustomer();
         $this->session->offsetSet('sUserId', $customer->getId());
@@ -1491,11 +1476,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         ];
         $user = $this->module->sGetUserData();
 
-        $date = new DateTime();
+        $date = new \DateTime();
 
         // Inject demo data
         $orderData = [
-            'ordernumber' => uniqid(rand()),
+            'ordernumber' => uniqid((string) rand()),
             'userID' => $customer->getId(),
             'invoice_amount' => '37.99',
             'invoice_amount_net' => '31.92',
@@ -1680,7 +1665,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         static::assertFalse($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->module->sSYSTEM->sSESSION_ID = uniqid((string) rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
@@ -2013,10 +1998,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sNewsletterSubscription
      */
-    public function testsNewsletterSubscriptionWithPostData()
+    public function testsNewsletterSubscriptionWithPostData(): void
     {
         // Test subscribe with empty post field and empty address, fail validation
-        $this->front->Request()->setPost('newsletter', '');
+        $this->getRequest()->setPost('newsletter', '');
         $result = $this->module->sNewsletterSubscription('');
         static::assertEquals(
             [
@@ -2032,12 +2017,12 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sNewsletterSubscription
      */
-    public function testsNewsletterSubscription()
+    public function testsNewsletterSubscription(): void
     {
-        $validAddress = uniqid(rand()) . '@shopware.com';
+        $validAddress = uniqid((string) rand()) . '@shopware.com';
 
         // Test unsubscribe with non existing email, fail
-        $result = $this->module->sNewsletterSubscription(uniqid(rand()) . '@shopware.com', true);
+        $result = $this->module->sNewsletterSubscription(uniqid((string) rand()) . '@shopware.com', true);
         static::assertEquals(
             [
                 'code' => 4,
@@ -2221,7 +2206,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sGetCountry
      */
-    public function testsGetCountry()
+    public function testsGetCountry(): void
     {
         // Empty argument, return false
         static::assertFalse($this->module->sGetCountry(''));
@@ -2231,6 +2216,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Valid country returns valid data
         $result = $this->module->sGetCountry('de');
+        static::assertIsArray($result);
         static::assertEquals(
             [
                 'id' => '2',
@@ -2255,7 +2241,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sGetPaymentMean
      */
-    public function testsGetPaymentmean()
+    public function testsGetPaymentmean(): void
     {
         // Empty argument, return false
         static::assertFalse($this->module->sGetPaymentMean(''));
@@ -2267,6 +2253,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $result = $this->module->sGetPaymentMean(
             Shopware()->Db()->fetchOne('SELECT id FROM s_core_paymentmeans WHERE name = "prepayment"')
         );
+        static::assertIsArray($result);
 
         static::assertEquals(
             [
@@ -2306,20 +2293,22 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sGetDispatchBasket
      */
-    public function testsGetDispatchBasket()
+    public function testsGetDispatchBasket(): void
     {
         $this->session->clear();
 
+        $this->basketModule->sDeleteBasket();
         // No basket, return false
         static::assertFalse($this->module->sGetDispatchBasket());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->module->sSYSTEM->sSESSION_ID = uniqid((string) rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
         // With the correct data, return properly formatted array
         // This is a big query function
         $result = $this->module->sGetDispatchBasket();
+        static::assertIsArray($result);
         static::assertArrayHasKey('instock', $result);
         static::assertArrayHasKey('stockmin', $result);
         static::assertArrayHasKey('laststock', $result);
@@ -2348,14 +2337,14 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sGetPremiumDispatches
      */
-    public function testsGetPremiumDispatches()
+    public function testsGetPremiumDispatches(): void
     {
         $this->session->clear();
 
         // No basket, return empty array,
         static::assertEquals([], $this->module->sGetPremiumDispatches());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->module->sSYSTEM->sSESSION_ID = uniqid((string) rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
@@ -2374,14 +2363,14 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sGetPremiumDispatchSurcharge
      */
-    public function testsGetPremiumDispatchSurcharge()
+    public function testsGetPremiumDispatchSurcharge(): void
     {
         $this->session->clear();
 
         // No basket, return false,
         static::assertFalse($this->module->sGetPremiumDispatchSurcharge(null));
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->module->sSYSTEM->sSESSION_ID = uniqid((string) rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10010');
         $fullBasket = $this->module->sGetDispatchBasket();
@@ -2393,20 +2382,19 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sAdmin::sGetPremiumShippingcosts
      */
-    public function testsGetPremiumShippingcosts()
+    public function testsGetPremiumShippingcosts(): void
     {
         // No basket, return false,
         static::assertFalse($this->module->sGetPremiumShippingcosts());
 
-        $countries = $this->module->sGetCountryList();
-        foreach ($countries as $country) {
+        foreach ($this->module->sGetCountryList() as $country) {
             if ($country['countryiso']) {
                 $germany = $country;
                 break;
             }
         }
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->module->sSYSTEM->sSESSION_ID = uniqid((string) rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10010');
 
@@ -2501,10 +2489,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $expected
-     * @param array $actual
+     * @param mixed[] $expected
+     * @param mixed[] $actual
      */
-    private function assertArray($expected, $actual)
+    private function assertArray(array $expected, array $actual): void
     {
         foreach ($expected as $key => $value) {
             static::assertArrayHasKey($key, $actual);
@@ -2520,20 +2508,20 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
     /**
      * Create dummy customer entity
-     *
-     * @return Customer
      */
-    private function createDummyCustomer()
+    private function createDummyCustomer(): Customer
     {
-        $date = new DateTime();
+        $date = new \DateTime();
         $date->modify('-8 days');
-        $lastLogin = $date->format(DateTime::ISO8601);
+        $lastLogin = $date->format(\DateTime::ISO8601);
 
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
+        $oldDate = \DateTime::createFromFormat('Y-m-d', '1986-12-20');
+        static::assertNotFalse($oldDate);
+        $birthday = $oldDate->format(\DateTime::ISO8601);
 
         $testData = [
             'password' => 'fooobar',
-            'email' => uniqid(rand()) . 'test@foobar.com',
+            'email' => uniqid((string) rand()) . 'test@foobar.com',
             'customernumber' => 'dummy customer number',
             'lastlogin' => $lastLogin,
 
@@ -2592,11 +2580,19 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     /**
      * Deletes all dummy customer entity
      */
-    private function deleteDummyCustomer(Customer $customer)
+    private function deleteDummyCustomer(Customer $customer): void
     {
         Shopware()->Db()->delete('s_user_addresses', 'user_id = ' . $customer->getId());
         Shopware()->Db()->delete('s_core_payment_data', 'user_id = ' . $customer->getId());
         Shopware()->Db()->delete('s_user_attributes', 'userID = ' . $customer->getId());
         Shopware()->Db()->delete('s_user', 'id = ' . $customer->getId());
+    }
+
+    private function getRequest(): \Enlight_Controller_Request_Request
+    {
+        $request = $this->front->Request();
+        static::assertNotNull($request);
+
+        return $request;
     }
 }

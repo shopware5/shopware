@@ -24,6 +24,13 @@
 
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
+use Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface;
+use Shopware\Components\ShopRegistrationServiceInterface;
+use Shopware\Models\Customer\Group;
+use Shopware\Models\Order\Order;
+use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop;
+
 class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
 {
     public const ARTICLE_NUMBER = 'SW10239';
@@ -203,9 +210,9 @@ class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
         $tax = $net === true ? 0 : 1;
 
         // Set net customer group
-        $defaultShop = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class)->find(1);
+        $defaultShop = Shopware()->Models()->getRepository(Shop::class)->find(1);
         $previousCustomerGroup = $defaultShop->getCustomerGroup()->getKey();
-        $netCustomerGroup = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Group::class)->findOneBy(['tax' => $tax])->getKey();
+        $netCustomerGroup = Shopware()->Models()->getRepository(Group::class)->findOneBy(['tax' => $tax])->getKey();
         static::assertNotEmpty($netCustomerGroup);
         Shopware()->Db()->query(
             'UPDATE s_user SET customergroup = ? WHERE id = 1',
@@ -246,16 +253,16 @@ class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
         $orderId = Shopware()->Db()->fetchOne(
             'SELECT id FROM s_order ORDER BY ID DESC LIMIT 1'
         );
-        /** @var \Shopware\Models\Order\Order $order */
-        $order = Shopware()->Models()->getRepository(\Shopware\Models\Order\Order::class)->find($orderId);
+        /** @var Order $order */
+        $order = Shopware()->Models()->getRepository(Order::class)->find($orderId);
 
         // Save invoiceAmounts for comparison
         $previousInvoiceAmount = $order->getInvoiceAmount();
         $previousInvoiceAmountNet = $order->getInvoiceAmountNet();
 
         // Simulate backend order save
-        /** @var \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface $calculationService */
-        $calculationService = Shopware()->Container()->get(\Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class);
+        /** @var CalculationServiceInterface $calculationService */
+        $calculationService = Shopware()->Container()->get(CalculationServiceInterface::class);
         $calculationService->recalculateOrderTotals($order);
 
         // Assert messages
@@ -298,13 +305,13 @@ class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
             'SELECT id, email, password, subshopID, language FROM s_user WHERE id = 1'
         );
 
-        /** @var \Shopware\Models\Shop\Repository $repository */
-        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
+        /** @var Repository $repository */
+        $repository = Shopware()->Models()->getRepository(Shop::class);
         $shop = $repository->getActiveById($user['language']);
 
-        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
-        Shopware()->Session()->Admin = true;
+        Shopware()->Session()->set('Admin', true);
         Shopware()->System()->_POST = [
             'email' => $user['email'],
             'passwordMD5' => $user['password'],

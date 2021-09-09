@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -38,7 +40,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class CategoryFacetTest extends TestCase
 {
-    public function testSingleProductInFacet()
+    public function testSingleProductInFacet(): void
     {
         $baseCategory = $this->helper->createCategory([
             'name' => 'firstLevel',
@@ -64,20 +66,17 @@ class CategoryFacetTest extends TestCase
 
         static::assertCount(1, $result->getFacets());
 
-        $facet = $result->getFacets();
-        $facet = $facet[0];
-
-        /* @var $facet TreeFacetResult */
-        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
+        $facet = $result->getFacets()[0];
+        static::assertInstanceOf(TreeFacetResult::class, $facet);
 
         static::assertCount(1, $facet->getValues());
 
-        /** @var TreeItem $value */
         $value = $facet->getValues()[0];
+        static::assertInstanceOf(TreeItem::class, $value);
         static::assertEquals('firstLevel', $value->getLabel());
     }
 
-    public function testMultipleCategories()
+    public function testMultipleCategories(): void
     {
         $baseCategory = $this->helper->createCategory([
             'name' => 'firstLevel',
@@ -106,11 +105,8 @@ class CategoryFacetTest extends TestCase
             [new CategoryFacet()]
         );
 
-        $facet = $result->getFacets();
-        $facet = $facet[0];
-
-        /* @var $facet TreeFacetResult */
-        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
+        $facet = $result->getFacets()[0];
+        static::assertInstanceOf(TreeFacetResult::class, $facet);
 
         static::assertCount(1, $facet->getValues());
 
@@ -122,7 +118,7 @@ class CategoryFacetTest extends TestCase
         static::assertEquals('secondLevel-2', $value->getValues()[1]->getLabel());
     }
 
-    public function testNestedCategories()
+    public function testNestedCategories(): void
     {
         $baseCategory = $this->helper->createCategory([
             'name' => 'firstLevel',
@@ -157,16 +153,13 @@ class CategoryFacetTest extends TestCase
             [new CategoryFacet(null, 4)]
         );
 
-        $facet = $result->getFacets();
-        $facet = $facet[0];
-
-        /* @var $facet TreeFacetResult */
-        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
+        $facet = $result->getFacets()[0];
+        static::assertInstanceOf(TreeFacetResult::class, $facet);
 
         static::assertCount(1, $facet->getValues());
 
-        /** @var TreeItem $value */
         $value = $facet->getValues()[0];
+        static::assertInstanceOf(TreeItem::class, $value);
         static::assertEquals('firstLevel', $value->getLabel());
 
         $value = $value->getValues()[0];
@@ -183,25 +176,18 @@ class CategoryFacetTest extends TestCase
         Category $category = null,
         $additionally = null
     ) {
+        if ($additionally !== null) {
+            static::assertInstanceOf(Category::class, $additionally);
+        }
+
         return parent::getProduct($number, $context, $additionally);
     }
 
-    /**
-     * @param array $conditions
-     */
-    protected function addCategoryBaseCondition(
-        Criteria $criteria,
-        Category $category,
-        $conditions,
-        ShopContext $context
-    ) {
-        if ($category) {
-            $criteria->addBaseCondition(
-                new CategoryCondition([$category->getId()])
-            );
-            $criteria->addCondition(
-                new CategoryCondition([$category->getId()])
-            );
-        }
+    protected function addCategoryBaseCondition(Criteria $criteria, Category $category): void
+    {
+        parent::addCategoryBaseCondition($criteria, $category);
+        $criteria->addCondition(
+            new CategoryCondition([$category->getId()])
+        );
     }
 }

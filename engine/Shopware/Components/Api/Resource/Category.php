@@ -421,10 +421,6 @@ class Category extends Resource
             return $data;
         }
 
-        if ($category->getId() === null) {
-            throw new ApiException\CustomValidationException(sprintf('Property manualSorting is only allowed on update'));
-        }
-
         $collection = [];
         $connection = $this->getManager()->getConnection();
 

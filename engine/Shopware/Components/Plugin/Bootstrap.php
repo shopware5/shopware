@@ -117,7 +117,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Install plugin method
      *
-     * @return bool|array
+     * @return bool|array<string, bool|string[]>
      */
     public function install()
     {
@@ -127,7 +127,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Uninstall plugin method
      *
-     * @return bool|array
+     * @return bool|array<string, bool|string[]>
      */
     public function uninstall()
     {
@@ -137,7 +137,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Secure uninstall plugin method
      *
-     * @return bool|array
+     * @return bool|array<string, bool|string[]>
      */
     public function secureUninstall()
     {
@@ -153,7 +153,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @param string $version
      *
-     * @return bool|array
+     * @return bool|array<string, bool|string[]>
      */
     public function update($version)
     {
@@ -167,7 +167,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Enable plugin method
      *
-     * @return bool|array
+     * @return bool|array<string, bool|string[]>
      */
     public function enable()
     {
@@ -177,7 +177,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Disable plugin method
      *
-     * @return bool|array
+     * @return bool|array<string, bool|string[]>
      */
     public function disable()
     {
@@ -553,7 +553,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
-     * Returns capabilities
+     * Returns plugin capabilities
+     *
+     * @return array<string, bool>
      */
     public function getCapabilities()
     {
@@ -624,7 +626,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Returns plugin info
      *
-     * @return array
+     * @return array<string, string|null>
      */
     public function getInfo()
     {
@@ -862,7 +864,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     protected function HttpCache()
     {
-        /** @var \Shopware_Plugins_Core_HttpCache_Bootstrap $httpCache */
         $httpCache = Shopware()->Plugins()->Core()->HttpCache();
 
         if (!$httpCache instanceof self) {
@@ -910,7 +911,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     protected function assertMinimumVersion($requiredVersion)
     {
-        $version = Shopware()->Config()->version;
+        $version = Shopware()->Config()->get('version');
 
         if ($version === '___VERSION___') {
             return true;

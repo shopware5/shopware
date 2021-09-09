@@ -193,7 +193,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
                     $basePath = $action->Front()->Router()->assemble(['sViewport' => 'index']);
                     $modules->System()->_POST['sLanguage'] = Shopware()->Shop()->getId();
-                    $modules->System()->_POST['sShopPath'] = $basePath . Shopware()->Config()->sBASEFILE;
+                    $modules->System()->_POST['sShopPath'] = $basePath . Shopware()->Config()->get('sBASEFILE');
 
                     $sql = '
                         INSERT INTO s_core_optin (datum, hash, data, type)
@@ -382,7 +382,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 continue;
             }
 
-            /** @var Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface $attributeLoader */
+            /** @var \Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface $attributeLoader */
             $attributeLoader = $this->get(\Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface::class);
             $notify['attribute'] = $attributeLoader->load('s_articles_notification_attributes', $notify['id']);
 

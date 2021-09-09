@@ -88,7 +88,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      *
      * @required
      *
-     * @var string model
+     * @var class-string model
      */
     protected $model;
 
@@ -603,7 +603,8 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
     protected function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = $this->getManager()->getRepository($this->model);
+            $repo = $this->getManager()->getRepository($this->model);
+            $this->repository = $repo;
         }
 
         return $this->repository;

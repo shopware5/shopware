@@ -91,7 +91,9 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      */
     public function setParent(\Behat\Mink\Element\Element $parent)
     {
+        \assert(\is_array($this->selector));
         $selectorType = key($this->selector);
+        \assert(\is_string($selectorType));
         $locator = $this->selector[$selectorType];
 
         $this->siblings = $parent->findAll($selectorType, $locator);

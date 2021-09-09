@@ -100,9 +100,10 @@ abstract class Enlight_View
     /**
      * Assigns a specified value to the template.
      *
-     * @param string $spec
-     * @param bool   $nocache
-     * @param int    $scope
+     * @param array<string, mixed>|string $spec
+     * @param bool                        $nocache
+     * @param int|null                    $scope
+     * @param mixed|null                  $value
      *
      * @return Enlight_View
      */

@@ -129,7 +129,7 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
-     * @param Shopware\Models\Shop\Shop $shop
+     * @param \Shopware\Models\Shop\Shop $shop
      *
      * @return Shopware_Components_Config
      */

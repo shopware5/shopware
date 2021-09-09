@@ -28,6 +28,10 @@
  *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
+ *
+ * @method Shopware_Components_Plugin_Namespace Backend()
+ * @method Shopware_Components_Plugin_Namespace Core()
+ * @method Shopware_Components_Plugin_Namespace Frontend()
  */
 abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements IteratorAggregate
 {

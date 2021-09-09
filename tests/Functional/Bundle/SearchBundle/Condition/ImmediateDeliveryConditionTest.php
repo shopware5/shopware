@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,6 +28,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -34,7 +37,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class ImmediateDeliveryConditionTest extends TestCase
 {
-    public function testNoStock()
+    public function testNoStock(): void
     {
         $condition = new ImmediateDeliveryCondition();
 
@@ -51,7 +54,7 @@ class ImmediateDeliveryConditionTest extends TestCase
         );
     }
 
-    public function testMinPurchaseEquals()
+    public function testMinPurchaseEquals(): void
     {
         $condition = new ImmediateDeliveryCondition();
 
@@ -68,7 +71,7 @@ class ImmediateDeliveryConditionTest extends TestCase
         );
     }
 
-    public function testSubVariantWithStock()
+    public function testSubVariantWithStock(): void
     {
         $condition = new ImmediateDeliveryCondition();
 
@@ -87,17 +90,17 @@ class ImmediateDeliveryConditionTest extends TestCase
     }
 
     /**
-     * @param string $number
-     * @param array  $data
+     * @param string             $number
+     * @param array<string, int> $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $data = ['inStock' => 0, 'minPurchase' => 1]
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         $product['lastStock'] = true;
@@ -111,7 +114,7 @@ class ImmediateDeliveryConditionTest extends TestCase
         ShopContext $context,
         Category $category,
         $additionally
-    ) {
+    ): Article {
         if ($additionally['createVariants'] === true) {
             $fourth = $this->getProduct('fourth', $context, $category);
             $configurator = $this->helper->getConfigurator(

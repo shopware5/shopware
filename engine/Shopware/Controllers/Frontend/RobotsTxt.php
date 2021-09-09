@@ -22,7 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\RobotsTxtGeneratorInterface;
 use Shopware\Components\Routing\Context;
+use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Frontend_RobotsTxt extends Enlight_Controller_Action
@@ -36,7 +39,7 @@ class Shopware_Controllers_Frontend_RobotsTxt extends Enlight_Controller_Action
             return $context->getBaseUrl();
         }, $routerContexts);
 
-        $robotsTxtGenerator = $this->get(\Shopware\Components\RobotsTxtGeneratorInterface::class);
+        $robotsTxtGenerator = $this->get(RobotsTxtGeneratorInterface::class);
         $baseUrls = array_unique($baseUrls);
 
         $robotsTxtGenerator->setRouterContext($routerContexts);
@@ -53,21 +56,24 @@ class Shopware_Controllers_Frontend_RobotsTxt extends Enlight_Controller_Action
      */
     private function getRouterContext(Shop $mainShop): array
     {
-        $config = $this->container->get(\Shopware_Components_Config::class);
+        $config = $this->container->get(Shopware_Components_Config::class);
 
-        /** @var \Shopware\Models\Shop\Repository $shopRepository */
-        $shopRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
+        /** @var Repository $shopRepository */
+        $shopRepository = $this->container->get(ModelManager::class)->getRepository(Shop::class);
         $context = [];
         $allShops = $mainShop->getChildren();
         $allShops[] = $mainShop;
 
         foreach ($allShops as $shop) {
-            $shop = $shopRepository->getById($shop->getId());
+            $detachedShop = $shopRepository->getById($shop->getId());
+            if ($detachedShop === null) {
+                continue;
+            }
 
             $newConfig = clone $config;
-            $newConfig->setShop($shop);
+            $newConfig->setShop($detachedShop);
 
-            $context[$shop->getId()] = Context::createFromShop($shop, $newConfig);
+            $context[$detachedShop->getId()] = Context::createFromShop($detachedShop, $newConfig);
         }
 
         return $context;

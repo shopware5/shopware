@@ -88,7 +88,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $variables['sError'] = true;
             }
 
-            if (!empty(Shopware()->Config()->CaptchaColor)) {
+            if (!empty(Shopware()->Config()->get('CaptchaColor'))) {
                 /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
                 $captchaValidator = $this->container->get('shopware.captcha.validator');
 

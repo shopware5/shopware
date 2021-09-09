@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,9 +26,11 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Sorting;
 
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -35,7 +39,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class PopularitySortingTest extends TestCase
 {
-    public function testAscendingSorting()
+    public function testAscendingSorting(): void
     {
         $sorting = new PopularitySorting();
 
@@ -53,7 +57,7 @@ class PopularitySortingTest extends TestCase
         );
     }
 
-    public function testDescendingSorting()
+    public function testDescendingSorting(): void
     {
         $sorting = new PopularitySorting(SortingInterface::SORT_DESC);
 
@@ -71,7 +75,7 @@ class PopularitySortingTest extends TestCase
         );
     }
 
-    public function testSalesEquals()
+    public function testSalesEquals(): void
     {
         $sorting = new PopularitySorting(SortingInterface::SORT_DESC);
 
@@ -95,7 +99,7 @@ class PopularitySortingTest extends TestCase
         ShopContext $context,
         Category $category,
         $sales
-    ) {
+    ): Article {
         $article = parent::createProduct(
             $number,
             $context,
@@ -122,7 +126,7 @@ class PopularitySortingTest extends TestCase
         $context = null,
         array $configs = [],
         $variantSearch = false
-    ) {
+    ): ProductNumberSearchResult {
         $result = parent::search(
             $products,
             $expectedNumbers,

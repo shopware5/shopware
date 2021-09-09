@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
+use Shopware\Components\Routing\RouterInterface;
+
 /**
  * Shopware Application
  */
@@ -57,11 +60,6 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      */
     protected $urls;
 
-    /**
-     * Install filter plugin
-     *
-     * @return bool
-     */
     public function install()
     {
         $this->subscribeEvent(
@@ -72,9 +70,6 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         return true;
     }
 
-    /**
-     * Plugin event method
-     */
     public function onFilterRender(Enlight_Event_EventArgs $args)
     {
         /** @var Enlight_Controller_Request_RequestHttp $request */
@@ -117,14 +112,14 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
     public function initConfig()
     {
         $shopConfig = Shopware()->Config();
-        self::$baseFile = $shopConfig->baseFile;
+        self::$baseFile = $shopConfig->get('baseFile');
         $this->useSecure = Shopware()->Front()->Request()->isSecure();
 
         $request = Shopware()->Front()->Request();
         $this->basePath = $request->getHttpHost() . $request->getBasePath() . '/';
         $this->basePathUrl = $request->getScheme() . '://' . $this->basePath;
 
-        $this->backLinkWhiteList = preg_replace('#\s#', '', $shopConfig->seoBackLinkWhiteList);
+        $this->backLinkWhiteList = preg_replace('#\s#', '', $shopConfig->get('seoBackLinkWhiteList'));
         $this->backLinkWhiteList = explode(',', $this->backLinkWhiteList);
 
         $hosts = $this->getShopHosts();
@@ -221,11 +216,6 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         return $src[0];
     }
 
-    /**
-     * Returns plugin capabilities
-     *
-     * @return array
-     */
     public function getCapabilities()
     {
         return [
@@ -242,8 +232,8 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      */
     protected function filterUrls($source)
     {
-        /** @var \Shopware\Components\Routing\RouterInterface $router */
-        $router = $this->get(\Shopware\Components\Routing\RouterInterface::class);
+        /** @var RouterInterface $router */
+        $router = $this->get(RouterInterface::class);
         $baseFile = preg_quote($router->getContext()->getBaseFile(), '#');
         $regex = '#<(a|form|iframe|link|img)[^<>]*(href|src|action)="(' . $baseFile . '[^"]*)".*>#Umsi';
         if (preg_match_all($regex, $source, $matches) > 0) {
@@ -278,16 +268,16 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
     /**
      * @throws Exception
      *
-     * @return array
+     * @return array<string, string>
      */
-    private function getShopHosts()
+    private function getShopHosts(): array
     {
         $shop = $this->get('shop');
         if ($shop->getMain()) {
             $shop = $shop->getMain();
         }
 
-        $shopHosts = $this->get(\Doctrine\DBAL\Connection::class)->fetchAssoc(
+        $shopHosts = $this->get(Connection::class)->fetchAssoc(
             'SELECT host, hosts FROM s_core_shops WHERE id = :id',
             [':id' => $shop->getId()]
         );
@@ -296,19 +286,16 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         if (!empty($shopHosts['hosts'])) {
             $hosts = array_merge($hosts, explode("\n", $shopHosts['hosts']));
         }
+        /** @var array<string, string> $hosts */
         $hosts = array_filter($hosts);
 
         return $hosts;
     }
 
     /**
-     * @param string $link
-     *
      * @throws SmartyException
-     *
-     * @return string
      */
-    private function handleMediaPlugin($link)
+    private function handleMediaPlugin(string $link): string
     {
         // remove beginning and end of tag {media ...}
         $link = ltrim($link, '{media ');

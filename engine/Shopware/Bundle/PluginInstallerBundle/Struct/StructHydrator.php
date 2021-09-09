@@ -435,11 +435,9 @@ class StructHydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return BasketPositionStruct[]
      */
-    private function hydrateBasketPosition($data)
+    private function hydrateBasketPosition(array $data): array
     {
         $positions = [];
         foreach ($data as $row) {
@@ -454,11 +452,9 @@ class StructHydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return DomainStruct[]
      */
-    private function hydrateBasketDomains($data)
+    private function hydrateBasketDomains(array $data): array
     {
         $domains = [];
         foreach ($data as $row) {
@@ -474,13 +470,7 @@ class StructHydrator
         return $domains;
     }
 
-    /**
-     * @param array $billing
-     * @param array $contact
-     *
-     * @return AddressStruct
-     */
-    private function hydrateBasketAddress($billing, $contact)
+    private function hydrateBasketAddress(array $billing, array $contact): AddressStruct
     {
         return new AddressStruct(
             $billing['country']['name'],
@@ -494,9 +484,9 @@ class StructHydrator
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      */
-    private function assignStoreData(PluginStruct $plugin, $data)
+    private function assignStoreData(PluginStruct $plugin, array $data): void
     {
         $plugin->setTechnicalName($data['name']);
         $plugin->setLabel($data['label']);
@@ -550,7 +540,10 @@ class StructHydrator
         }
     }
 
-    private function hydrateProducer($data)
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function hydrateProducer(array $data): ProducerStruct
     {
         $producer = new ProducerStruct();
 
@@ -568,11 +561,9 @@ class StructHydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return PictureStruct[]
      */
-    private function hydratePictures($data)
+    private function hydratePictures(array $data): array
     {
         $pictures = [];
         foreach ($data as $row) {
@@ -587,11 +578,9 @@ class StructHydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return PriceStruct[]
      */
-    private function hydratePrices($data)
+    private function hydratePrices(array $data): array
     {
         $prices = [];
         foreach ($data as $row) {
@@ -646,11 +635,9 @@ class StructHydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return CommentStruct[]
      */
-    private function hydrateComments($data)
+    private function hydrateComments(array $data): array
     {
         $comments = [];
         foreach ($data as $row) {

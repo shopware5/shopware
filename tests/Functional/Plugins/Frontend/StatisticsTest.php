@@ -103,7 +103,7 @@ class StatisticsTest extends \Enlight_Components_Test_Plugin_TestCase
           ['http://google.de/', '123', 'http://google.de/$123', true],
           ['http://google.de/', null, 'http://google.de/', true],
           ['http://google.de/', null, 'www.google.de/', false],
-          ['http://google.de/', null, 'http://' . Shopware()->Config()->Host . '/', false],
+          ['http://google.de/', null, 'http://' . Shopware()->Config()->get('Host') . '/', false],
         ];
     }
 
@@ -138,7 +138,7 @@ class StatisticsTest extends \Enlight_Components_Test_Plugin_TestCase
 
         $this->Plugin()->refreshPartner($request, $response);
 
-        static::assertEquals('test123', Shopware()->Session()->sPartner);
+        static::assertEquals('test123', Shopware()->Session()->get('sPartner'));
 
         static::assertEquals('test123', $this->getCookie($response, 'partner'));
     }
@@ -155,7 +155,7 @@ class StatisticsTest extends \Enlight_Components_Test_Plugin_TestCase
 
         $this->Plugin()->refreshPartner($request, $response);
 
-        static::assertEquals('sCampaign1', Shopware()->Session()->sPartner);
+        static::assertEquals('sCampaign1', Shopware()->Session()->get('sPartner'));
     }
 
     private function getCookie(\Enlight_Controller_Response_Response $response, $name)

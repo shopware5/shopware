@@ -32,20 +32,11 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
 class OrderedProductOfCategoryConditionHandlerTest extends TestCase
 {
-    /**
-     * @var int
-     */
-    private $categoryId;
+    private int $categoryId;
 
-    /**
-     * @var Article
-     */
-    private $sw1;
+    private Article $sw1;
 
-    /**
-     * @var Article
-     */
-    private $sw2;
+    private Article $sw2;
 
     protected function setUp(): void
     {
@@ -70,7 +61,7 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
         );
     }
 
-    public function testSingleProduct()
+    public function testSingleProduct(): void
     {
         $criteria = new Criteria();
         $criteria->addCondition(

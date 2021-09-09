@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,6 +29,9 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CategoryConditionHandler;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -36,7 +41,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class CategoryConditionTest extends TestCase
 {
-    public function testMultipleCategories()
+    public function testMultipleCategories(): void
     {
         $first = $this->helper->createCategory(['name' => 'first-category']);
         $second = $this->helper->createCategory(['name' => 'second-category']);
@@ -61,14 +66,14 @@ class CategoryConditionTest extends TestCase
 
     public function testConditionCounter(): void
     {
-        $queryFactory = Shopware()->Container()->get(\Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory::class);
-        $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $queryFactory = Shopware()->Container()->get(QueryBuilderFactory::class);
+        $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
 
         $criteria = new Criteria();
         $criteria->addBaseCondition(new CategoryCondition([1]));
         $criteria->addCondition(new CategoryCondition([2]));
 
-        /** @var \Shopware\Bundle\SearchBundleDBAL\QueryBuilder $query */
+        /** @var QueryBuilder $query */
         $query = $queryFactory->createQuery($criteria, $context);
 
         static::assertTrue($query->hasState(CategoryConditionHandler::STATE_NAME));
@@ -80,20 +85,18 @@ class CategoryConditionTest extends TestCase
         ShopContext $context,
         Category $category = null,
         $additionally = null
-    ) {
+    ): array {
+        if ($additionally !== null) {
+            static::assertInstanceOf(Category::class, $additionally);
+        }
+
         return parent::getProduct($number, $context, $additionally);
     }
 
     /**
      * Override prevents a default category condition
-     *
-     * @param array $conditions
      */
-    protected function addCategoryBaseCondition(
-        Criteria $criteria,
-        Category $category,
-        $conditions,
-        ShopContext $context
-    ) {
+    protected function addCategoryBaseCondition(Criteria $criteria, Category $category): void
+    {
     }
 }

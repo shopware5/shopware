@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -42,7 +44,7 @@ class CustomerUnlockServiceTest extends \Enlight_Components_Test_TestCase
         Shopware()->Db()->rollBack();
     }
 
-    public function testUnlockCustomer()
+    public function testUnlockCustomer(): void
     {
         Shopware()->Db()->query("INSERT INTO `s_user` (`id`, `password`, `encoder`, `email`, `active`, `accountmode`, `confirmationkey`, `paymentID`, `firstlogin`, `lastlogin`, `sessionID`, `newsletter`, `validation`, `affiliate`, `customergroup`, `paymentpreset`, `language`, `subshopID`, `referer`, `pricegroupID`, `internalcomment`, `failedlogins`, `lockeduntil`, `default_billing_address_id`, `default_shipping_address_id`, `title`, `salutation`, `firstname`, `lastname`, `birthday`, `customernumber`, `login_token`) VALUES
             (2048, 'FooBar', 'bcrypt', 'foo@bar.com', 1, 0, '', 5, '2018-05-24', '2018-05-24 15:55:32', '3pj2eudm344a5904fe3hp6nvf3', 0, '', 0, 'EK', 0, '1', 1, '', NULL, '', 0, '2018-01-01 00:00:00', 5, 5, NULL, 'mr', 'Foo', 'Bar', NULL, '20005', 'token');");

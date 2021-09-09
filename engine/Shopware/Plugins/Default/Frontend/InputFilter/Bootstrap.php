@@ -27,17 +27,21 @@
  */
 class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
+    /**
+     * @var string
+     */
     public $sqlRegex = 's_core_|s_order_|s_user|benchmark.*\(|(?:insert|replace).+into|update.+set|(?:delete|select).+from|(?:alter|rename|create|drop|truncate).+(?:database|table|procedure)|union.+select|prepare.+from.+execute|select.+into\s+(outfile|dumpfile)';
 
+    /**
+     * @var string
+     */
     public $xssRegex = 'javascript:|src\s*=|\bon[a-z]+\s*=|style\s*=|\bdata-\w+(?!\.)\b\s?=?';
 
+    /**
+     * @var string
+     */
     public $rfiRegex = '\.\./|\\0';
 
-    /**
-     * Install plugin method
-     *
-     * @return bool
-     */
     public function install()
     {
         $this->subscribeEvent(
@@ -61,7 +65,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
     }
 
     /**
-     * Event listener method
+     * @return void
      */
     public function onRouteShutdown(Enlight_Controller_EventArgs $args)
     {
@@ -73,10 +77,9 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             return;
         }
 
-        $stripTagsConf = $config->strip_tags;
+        $stripTagsConf = $config->get('strip_tags');
 
-        $intVars = ['sCategory', 'sContent', 'sCustom'];
-        foreach ($intVars as $parameter) {
+        foreach (['sCategory', 'sContent', 'sCustom'] as $parameter) {
             if (!empty($_GET[$parameter])) {
                 $_GET[$parameter] = (int) $_GET[$parameter];
             }
@@ -178,7 +181,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
      * @param string $regex
      * @param bool   $stripTags
      *
-     * @return string
+     * @return string|null
      */
     public static function filterValue($value, $regex, $stripTags = true)
     {
@@ -194,11 +197,6 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         return $value;
     }
 
-    /**
-     * Returns plugin capabilities
-     *
-     * @return array
-     */
     public function getCapabilities()
     {
         return [

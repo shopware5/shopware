@@ -94,12 +94,12 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         if (Shopware()->Container()->initialized('session')) {
             $system->_SESSION = Shopware()->Session();
             $system->sSESSION_ID = Shopware()->Session()->get('sessionId');
-            if ($request !== null && Shopware()->Session()->Bot === null) {
+            if ($request !== null && Shopware()->Session()->get('Bot') === null) {
                 /** @var Shopware_Plugins_Frontend_Statistics_Bootstrap $plugin */
                 $plugin = Shopware()->Plugins()->Frontend()->Statistics();
-                Shopware()->Session()->Bot = $plugin->checkIsBot($request->getHeader('USER_AGENT'));
+                Shopware()->Session()->set('Bot', $plugin->checkIsBot($request->getHeader('USER_AGENT')));
             }
-            $system->sBotSession = Shopware()->Session()->Bot;
+            $system->sBotSession = Shopware()->Session()->get('Bot');
         }
 
         if (Shopware()->Container()->initialized('shop')) {
@@ -108,16 +108,16 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
 
             $system->sUSERGROUP = $shop->getCustomerGroup()->getKey();
             $system->sUSERGROUPDATA = $shop->getCustomerGroup()->toArray();
-            $config->defaultCustomerGroup = $system->sUSERGROUP;
+            $config->offsetSet('defaultCustomerGroup', $system->sUSERGROUP);
 
             $config['sCURRENCY'] = $system->sCurrency['currency'];
             $config['sCURRENCYHTML'] = $system->sCurrency['symbol'];
         }
 
         if (Shopware()->Container()->initialized('session')) {
-            if (!empty(Shopware()->Session()->sUserGroup)
-                    && Shopware()->Session()->sUserGroup != $system->sUSERGROUP) {
-                $system->sUSERGROUP = Shopware()->Session()->sUserGroup;
+            if (!empty(Shopware()->Session()->get('sUserGroup'))
+                    && Shopware()->Session()->get('sUserGroup') !== $system->sUSERGROUP) {
+                $system->sUSERGROUP = Shopware()->Session()->get('sUserGroup');
                 $system->sUSERGROUPDATA = Shopware()->Db()->fetchRow('
                     SELECT * FROM s_core_customergroups
                     WHERE groupkey = ?
@@ -125,20 +125,20 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             }
             if (empty($system->sUSERGROUPDATA['tax']) && !empty($system->sUSERGROUPDATA['id'])) {
                 $config['sARTICLESOUTPUTNETTO'] = 1; //Old template
-                Shopware()->Session()->sOutputNet = true;
+                Shopware()->Session()->set('sOutputNet', true);
             } else {
-                Shopware()->Session()->sOutputNet = false;
+                Shopware()->Session()->set('sOutputNet', false);
             }
         }
 
         if ($request !== null) {
             $sPathBase = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
         } else {
-            $sPathBase = 'http://' . $config->basePath;
+            $sPathBase = 'http://' . $config->get('basePath');
         }
         $system->sPathArticleImg = $sPathBase . '/media/image/';
-        $system->sPathBanner = $sPathBase . $config->banner . '/';
-        $system->sPathStart = $sPathBase . $config->baseFile;
+        $system->sPathBanner = $sPathBase . $config->get('banner') . '/';
+        $system->sPathStart = $sPathBase . $config->get('baseFile');
 
         return $system;
     }

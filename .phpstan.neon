@@ -25,6 +25,7 @@ parameters:
     excludes_analyse:
         - %currentWorkingDirectory%/engine/Shopware/Plugins/Community
         - %currentWorkingDirectory%/engine/Shopware/Plugins/Local
+        - %currentWorkingDirectory%/engine/Shopware/Components/DependencyInjection/LegacyPhpDumper.php # is copied from Symfony. To keep it comparable, we don't change it
         - %currentWorkingDirectory%/tests/Functional/Components/DependencyInjection/LegacyPhpDumperTest.php
     ignoreErrors:
         - '#apcu_#'
@@ -34,14 +35,22 @@ parameters:
         - '#expects Shopware\\Bundle\\SearchBundle\\Condition\\[a-zA-Z]+Condition, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
         # Product/Shopcontext mixup
         - '#expects Shopware\\Bundle\\StoreFrontBundle\\Struct\\ProductContextInterface, Shopware\\Bundle\\StoreFrontBundle\\Struct\\ShopContextInterface given#'
+
         # We manually check if the class exists before instantiating / using it
         - '#PHPDoc tag \@var for variable \$payPalInstaller contains unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'
+
         - # Seem to be issues, but need tests to verify changes there
             message: '#Negated boolean expression is always false#'
             path: 'engine/Shopware/Core/sArticles.php'
         -
             message: '#Comparison operation ">=" between int<1, max> and 1 is always true#'
             path: 'engine/Shopware/Core/sArticles.php'
+        -
+            message: '#Comparison operation "<" between \(array\|float\|int\) and 0 results in an error\.#'
+            path: engine/Shopware/Core/sAdmin.php
+        -
+            message: '#Call to static method PHPUnit\\Framework\\Assert::assertIsArray\(\) with false will always evaluate to false\.#'
+            path: tests/Functional/Core/AdminTest.php
 
         - # We override the method in higher class inheritance to public method
             message: '#Call to protected method verifyPage#'
@@ -50,3 +59,22 @@ parameters:
         # Some day this should be specified
         - '#no value type specified in iterable type Enlight_Components_Snippet_Namespace#'
         - '#no value type specified in iterable type Enlight_Config#'
+        - '#no value type specified in iterable type Enlight_Event_EventArgs#'
+
+        # This method does not exists, but it does not throw an error. Needs to be checked
+        - '#Call to an undefined method Enlight_Template_Manager::setCompileId\(\)#'
+
+        # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
+        - '#Cannot call method fetchAll\(\) on Doctrine\\DBAL\\Driver\\ResultStatement\|int#'
+
+        # Remove if Doctrine PHPStan configuration is done
+        - '#Parameter \#1 \$parent of method Shopware\\Models\\Config\\Form::setParent\(\) expects Shopware\\Models\\Config\\Form\|null, object\|null given#'
+        - '#Cannot call method .*\(\) on object\|null#'
+        - '#(p|P)roperty .*::\$repository \(.*\) does not accept Doctrine\\ORM\\EntityRepository<.*>#'
+        - '#Method .*::getRepository\(\) should return .*Repository but returns Doctrine\\ORM\\EntityRepository.*#'
+        -
+            message: '#Call to an undefined method#'
+            path: engine/Shopware/Controllers/Backend/Config.php
+        -
+            message: '#Array \(array<string, Shopware\\Components\\Model\\ModelRepository>\) does not accept Doctrine\\ORM\\EntityRepository#'
+            path: engine/Shopware/Controllers/Backend/Config.php

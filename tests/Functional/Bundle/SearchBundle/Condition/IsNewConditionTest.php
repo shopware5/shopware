@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,7 +36,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class IsNewConditionTest extends TestCase
 {
-    public function testIsNew()
+    public function testIsNew(): void
     {
         $condition = new IsNewCondition();
 
@@ -54,17 +56,17 @@ class IsNewConditionTest extends TestCase
     }
 
     /**
-     * @param string $number
-     * @param array  $data
+     * @param string               $number
+     * @param array<string, mixed> $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $data = []
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         return array_merge($product, $data);

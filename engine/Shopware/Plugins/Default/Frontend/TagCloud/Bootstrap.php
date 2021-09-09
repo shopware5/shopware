@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Config\Element;
+use Shopware\Models\Config\Form;
+
 class Shopware_Plugins_Frontend_TagCloud_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public function install()
@@ -47,6 +50,9 @@ class Shopware_Plugins_Frontend_TagCloud_Bootstrap extends Shopware_Components_P
         ];
     }
 
+    /**
+     * @return void
+     */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
         $view = $args->getSubject()->View();
@@ -55,7 +61,7 @@ class Shopware_Plugins_Frontend_TagCloud_Bootstrap extends Shopware_Components_P
 
         if (!$request->isDispatched()
             || $response->isException()
-            || $request->getModuleName() != 'frontend'
+            || $request->getModuleName() !== 'frontend'
         ) {
             return;
         }
@@ -73,7 +79,7 @@ class Shopware_Plugins_Frontend_TagCloud_Bootstrap extends Shopware_Components_P
     /**
      * Translates the plugin form
      */
-    private function addForm()
+    private function addForm(): void
     {
         $form = $this->Form();
         $parent = $this->Forms()->findOneBy(['name' => 'Frontend']);
@@ -81,39 +87,39 @@ class Shopware_Plugins_Frontend_TagCloud_Bootstrap extends Shopware_Components_P
         $form->setElement('checkbox', 'show', [
             'label' => 'Tag-Cloud anzeigen',
             'value' => true,
-            'scope' => Shopware\Models\Config\Element::SCOPE_SHOP,
+            'scope' => Element::SCOPE_SHOP,
         ]);
         $form->setElement('text', 'controller', [
             'label' => 'Controller-Auswahl',
             'value' => 'index, listing',
-            'scope' => Shopware\Models\Config\Element::SCOPE_SHOP,
+            'scope' => Element::SCOPE_SHOP,
         ]);
         $form->setElement('text', 'tagCloudClass', [
             'label' => 'Name der Tag-Klasse',
             'value' => 'tag',
-            'scope' => Shopware\Models\Config\Element::SCOPE_SHOP,
+            'scope' => Element::SCOPE_SHOP,
         ]);
         $form->setElement('number', 'tagCloudMax', [
             'label' => 'Maximale Anzahl Begriffe',
             'value' => 46,
-            'scope' => Shopware\Models\Config\Element::SCOPE_SHOP,
+            'scope' => Element::SCOPE_SHOP,
         ]);
         $form->setElement('number', 'tagCloudSplit', [
             'label' => 'Anzahl der Stufen',
             'value' => 3,
-            'scope' => Shopware\Models\Config\Element::SCOPE_SHOP,
+            'scope' => Element::SCOPE_SHOP,
         ]);
         $form->setElement('number', 'tagTime', [
             'label' => 'Die berücksichtigte Zeit in Tagen',
             'value' => 30,
-            'scope' => Shopware\Models\Config\Element::SCOPE_SHOP,
+            'scope' => Element::SCOPE_SHOP,
         ]);
     }
 
     /**
      * Translates the plugin form
      */
-    private function translateForm()
+    private function translateForm(): void
     {
         $formTranslation = [
             'en_GB' => [

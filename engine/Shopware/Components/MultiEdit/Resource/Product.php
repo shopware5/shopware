@@ -169,6 +169,10 @@ class Product implements ResourceInterface
             // All models except price
             if ($prefix !== 'price') {
                 $model = $entityManager->find($entity, $primaryIdentifiers[$prefix]);
+                if ($model === null) {
+                    continue;
+                }
+
                 foreach ($fields as $field) {
                     // Do not persist non-editable fields
                     $fieldInfo = $columnInfo[ucfirst($prefix) . ucfirst($field['field'])];
@@ -190,6 +194,10 @@ class Product implements ResourceInterface
                 $priceModel = $entityManager->getRepository($entity)->findOneBy(
                     ['articleDetailsId' => $detailModel->getId(), 'customerGroupKey' => 'EK', 'from' => 1]
                 );
+                if ($priceModel === null) {
+                    continue;
+                }
+
                 foreach ($fields as $field) {
                     // Do not persist non-editable fields
                     $fieldInfo = $columnInfo[ucfirst($prefix) . ucfirst($field['field'])];
@@ -198,6 +206,9 @@ class Product implements ResourceInterface
                     }
 
                     $price = str_replace(',', '.', $field['value']);
+                    if (!\is_string($price)) {
+                        throw new \RuntimeException('Price needs to be a string');
+                    }
                     $price = $tax != 0 ? $price / $tax : 0;
                     $setter = 'set' . ucfirst($field['field']);
                     $priceModel->$setter($price);

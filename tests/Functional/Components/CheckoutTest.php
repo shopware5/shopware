@@ -254,7 +254,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
 
         Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
-        Shopware()->Session()->Admin = true;
+        Shopware()->Session()->set('Admin', true);
         Shopware()->System()->_POST = [
             'email' => $user['email'],
             'passwordMD5' => $user['password'],

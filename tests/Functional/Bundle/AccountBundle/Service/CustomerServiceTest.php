@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,6 +29,7 @@ namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\CustomerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
 
@@ -53,19 +56,14 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
     protected static $contextService;
 
     /**
-     * @var array
-     */
-    protected static $_cleanup = [];
-
-    /**
      * Set up fixtures
      */
     public static function setUpBeforeClass(): void
     {
         self::$customerService = Shopware()->Container()->get('shopware_account.customer_service');
-        self::$modelManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
-        self::$connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
-        self::$contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
+        self::$modelManager = Shopware()->Container()->get(ModelManager::class);
+        self::$connection = Shopware()->Container()->get(Connection::class);
+        self::$contextService = Shopware()->Container()->get(ContextServiceInterface::class);
 
         self::$modelManager->clear();
     }
@@ -77,19 +75,13 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
     {
         parent::tearDownAfterClass();
 
-        foreach (self::$_cleanup as $entityName => $ids) {
-            foreach ($ids as $id) {
-                self::$modelManager->remove(self::$modelManager->find($entityName, $id));
-            }
-        }
-
         self::$modelManager->flush();
         self::$modelManager->clear();
 
         Shopware()->Container()->reset('router');
     }
 
-    public function testUpdateEmail()
+    public function testUpdateEmail(): void
     {
         $newMail = 'bryan.khan@shopware.test';
 
@@ -105,9 +97,9 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         self::$customerService->update($customer);
     }
 
-    public function testUpdateExistingEmail()
+    public function testUpdateExistingEmail(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $newMail = 'test@example.com';
 
         $customer = self::$modelManager->find(Customer::class, 2);
@@ -116,9 +108,9 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         self::$customerService->update($customer);
     }
 
-    public function testUpdateProfileWithEmptyData()
+    public function testUpdateProfileWithEmptyData(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $updateData = [
             'firstname' => '',
             'lastname' => '',
@@ -131,7 +123,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         self::$customerService->update($customer);
     }
 
-    public function testUpdateProfile()
+    public function testUpdateProfile(): void
     {
         $updateData = [
             'firstname' => 'Victoria',

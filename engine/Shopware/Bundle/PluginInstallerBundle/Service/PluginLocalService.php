@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\ResultStatement;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\PluginInstallerBundle\Context\BaseRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
@@ -67,20 +66,16 @@ class PluginLocalService
      */
     public function getListing(ListingRequest $context)
     {
-        $query = $this->getQuery();
-
-        $query->andWhere("plugin.name != 'PluginManager'")
+        $query = $this->getQuery()
+            ->andWhere("plugin.name != 'PluginManager'")
             ->andWhere('plugin.capability_enable = 1');
 
         $this->addSortings($context, $query);
 
-        $query->setFirstResult($context->getOffset())
-            ->setMaxResults($context->getLimit());
-
-        $statement = $query->execute();
-        \assert($statement instanceof ResultStatement);
-
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $query->setFirstResult($context->getOffset())
+            ->setMaxResults($context->getLimit())
+            ->execute()
+            ->fetchAll(\PDO::FETCH_ASSOC);
 
         $plugins = $this->iteratePlugins($data, $context);
 
@@ -92,11 +87,12 @@ class PluginLocalService
      */
     public function getPlugin(PluginsByTechnicalNameRequest $context)
     {
-        $plugin = $this->getPlugins($context);
-        $plugin = array_shift($plugin);
-        \assert($plugin !== null);
+        $plugins = $this->getPlugins($context);
+        if ($plugins === []) {
+            throw new \RuntimeException(sprintf('Plugin "%s" not found', implode(',', $context->getTechnicalNames())));
+        }
 
-        return $plugin;
+        return array_shift($plugins);
     }
 
     /**
@@ -115,7 +111,6 @@ class PluginLocalService
             );
 
         $statement = $query->execute();
-        \assert($statement instanceof ResultStatement);
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -127,15 +122,12 @@ class PluginLocalService
      */
     public function getPluginsForUpdateCheck()
     {
-        $query = $this->connection->createQueryBuilder();
-        $query->select(['plugin.name', 'plugin.version'])
+        return $this->connection->createQueryBuilder()
+            ->select(['plugin.name', 'plugin.version'])
             ->from('s_core_plugins', 'plugin')
-            ->where('plugin.capability_update = 1');
-
-        $statement = $query->execute();
-        \assert($statement instanceof ResultStatement);
-
-        return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->where('plugin.capability_update = 1')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
     private function addSortings(ListingRequest $context, QueryBuilder $builder): void

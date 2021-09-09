@@ -51,9 +51,9 @@ class Enlight_Template_Default extends Smarty_Internal_Template
      * Assigns a smarty variable.
      *
      * @param array|string $tpl_var the template variable name(s)
-     * @param mixed        $value   the value to assign
+     * @param mixed|null   $value   the value to assign
      * @param bool         $nocache if true any output of this variable will be not cached
-     * @param bool         $scope   the scope the variable will have  (local,parent or root)
+     * @param int|null     $scope   the scope the variable will have  (local,parent or root)
      *
      * @return Enlight_Template_Default
      */

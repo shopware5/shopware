@@ -31,6 +31,7 @@ use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Components\Theme;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop;
+use Shopware\Models\Shop\Template;
 
 /**
  * The Theme\Installer class handles the theme installation.
@@ -96,7 +97,7 @@ class Installer
         $this->pathResolver = $pathResolver;
         $this->snippetWriter = $snippetWriter;
         $this->util = $util;
-        $this->repository = $entityManager->getRepository(\Shopware\Models\Shop\Template::class);
+        $this->repository = $entityManager->getRepository(Template::class);
         $this->service = $service;
         $this->snippetConfig = $snippetConfig;
     }
@@ -196,8 +197,8 @@ class Installer
                 'template' => $theme->getTemplate(),
             ]);
 
-            if (!$template instanceof Shop\Template) {
-                $template = new Shop\Template();
+            if (!$template instanceof Template) {
+                $template = new Template();
 
                 if ($plugin) {
                     $template->setPlugin($plugin);
@@ -279,7 +280,7 @@ class Installer
      *
      * The theme snippet namespace are prefixed with themes/theme-name
      */
-    private function synchronizeSnippets(Shop\Template $template)
+    private function synchronizeSnippets(Template $template)
     {
         $directory = $this->pathResolver->getSnippetDirectory($template);
 
@@ -333,7 +334,7 @@ class Installer
 
         $themes = $themes->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
 
-        /** @var Shop\Template $theme */
+        /** @var Template $theme */
         foreach ($themes as $theme) {
             $directory = $this->pathResolver->getDirectory($theme);
             if (!file_exists($directory)) {
@@ -361,12 +362,14 @@ class Installer
             $template = $this->repository->findOneBy([
                 'template' => $theme->getTemplate(),
             ]);
+            if (!$template instanceof Template) {
+                throw new \Exception(sprintf('Template of theme %s not found', $theme->getTemplate()));
+            }
 
             $parent = $this->repository->findOneBy([
                 'template' => $theme->getExtend(),
             ]);
-
-            if (!$parent instanceof Shop\Template) {
+            if (!$parent instanceof Template) {
                 throw new \Exception(sprintf('Parent %s of theme %s not found', $theme->getExtend(), $theme->getTemplate()));
             }
 

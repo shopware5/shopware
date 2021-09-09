@@ -30,20 +30,17 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class EntityTransformer implements DataTransformerInterface
 {
-    /**
-     * @var ModelManager
-     */
-    private $models;
+    private ModelManager $models;
 
     /**
-     * @var string
+     * @var class-string
      */
-    private $entityName;
+    private string $entityName;
 
     /**
-     * @param string $entityName
+     * @param class-string $entityName
      */
-    public function __construct(ModelManager $models, $entityName)
+    public function __construct(ModelManager $models, string $entityName)
     {
         $this->models = $models;
         $this->entityName = $entityName;

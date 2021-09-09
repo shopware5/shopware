@@ -457,9 +457,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $headers = $snippets->GetHeader();
 
         if (!\is_array($headers)
-            || empty($headers)
-            || !\in_array('namespace', $headers)
-            || !\in_array('name', $headers)) {
+            || !\in_array('namespace', $headers, true)
+            || !\in_array('name', $headers, true)) {
             echo json_encode([
                 'success' => false,
                 'message' => 'File not in right format',

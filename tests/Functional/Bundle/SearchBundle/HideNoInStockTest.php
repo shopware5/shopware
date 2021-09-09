@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -39,10 +41,7 @@ class HideNoInStockTest extends TestCase
     protected const LASTSTOCK_ENABLED = 'productLastStockEnabled';
     protected const LASTSTOCK_DISABLED = 'productLastStockDisabled';
 
-    /**
-     * @var array
-     */
-    private $testProducts = [];
+    private array $testProducts = [];
 
     /**
      * @var StoreFrontCriteriaFactoryInterface

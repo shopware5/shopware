@@ -22,20 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMInvalidArgumentException;
+use Shopware\Bundle\AttributeBundle\Service\DataPersister;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Form\Field;
 use Shopware\Models\Form\Form;
+use Shopware\Models\Form\Repository as FormRepository;
 
 class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * @var \Shopware\Models\Form\Repository
+     * @var FormRepository
      */
     public $repository = null;
 
     /**
      * Contains the shopware model manager
      *
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     public $manager = null;
 
@@ -71,8 +76,8 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     /**
      * Creates new form
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws OptimisticLockException
+     * @throws ORMInvalidArgumentException
      */
     public function createFormAction()
     {
@@ -95,8 +100,8 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     /**
      * Updates form
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws OptimisticLockException
+     * @throws ORMInvalidArgumentException
      */
     public function updateFormAction()
     {
@@ -106,9 +111,8 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var Form $result */
         $result = $this->getRepository()->find($id);
-        if (!$result) {
+        if (!$result instanceof Form) {
             $this->View()->assign(['success' => false, 'message' => 'Form not found']);
 
             return;
@@ -128,21 +132,17 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $this->getSingleForm($id);
     }
 
-    /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     */
     public function removeFormAction()
     {
-        if (!($id = $this->Request()->getParam('id'))) {
+        $id = (int) $this->Request()->getParam('id');
+        if ($id === 0) {
             $this->View()->assign(['success' => false, 'message' => 'No valid form Id']);
 
             return;
         }
 
-        /* @var Form $result */
         $result = $this->getRepository()->find($id);
-        if (!$result) {
+        if (!$result instanceof Form) {
             $this->View()->assign(['success' => false, 'message' => 'Form not found']);
 
             return;
@@ -157,21 +157,21 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     /**
      * Copies form
      *
-     * @throws \Exception
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws Exception
+     * @throws OptimisticLockException
+     * @throws ORMInvalidArgumentException
      */
     public function copyFormAction()
     {
-        if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(['success' => false, 'message' => 'No valid field Id']);
+        $id = (int) $this->Request()->getParam('id');
+        if ($id === 0) {
+            $this->View()->assign(['success' => false, 'message' => 'No valid form Id']);
 
             return;
         }
 
-        /* @var Form $result */
         $result = $this->getRepository()->find($id);
-        if (!$result) {
+        if (!$result instanceof Form) {
             $this->View()->assign(['success' => false, 'message' => 'Form not found']);
 
             return;
@@ -183,24 +183,22 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $this->getManager()->persist($clonedForm);
         $this->getManager()->flush();
 
-        $persister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
+        $persister = Shopware()->Container()->get(DataPersister::class);
         $persister->cloneAttribute('s_cms_support_attributes', $id, $clonedForm->getId());
 
         $this->View()->assign(['success' => true]);
     }
 
-    /**
-     * Returns fields
-     */
     public function getFieldsAction()
     {
-        if (!($id = $this->Request()->getParam('formId'))) {
-            $this->View()->assign(['success' => false, 'message' => 'No valid field Id']);
+        $id = (int) $this->Request()->getParam('formId');
+        if ($id === 0) {
+            $this->View()->assign(['success' => false, 'message' => 'No valid form Id']);
 
             return;
         }
 
-        $result = $this->getManager()->getRepository(\Shopware\Models\Form\Field::class)->findBy(
+        $result = $this->getManager()->getRepository(Field::class)->findBy(
             ['formId' => $id],
             ['position' => 'ASC']
         );
@@ -210,23 +208,17 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $this->View()->assign(['success' => true, 'data' => $resultArray, 'total' => \count($resultArray)]);
     }
 
-    /**
-     * Updates form
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     */
     public function updateFieldAction()
     {
-        if (!($id = $this->Request()->getParam('id'))) {
+        $id = (int) $this->Request()->getParam('id');
+        if ($id === 0) {
             $this->View()->assign(['success' => false, 'message' => 'No valid field Id']);
 
             return;
         }
 
-        /* @var Field $result */
-        $result = $this->getManager()->getRepository(\Shopware\Models\Form\Field::class)->find($id);
-        if (!$result) {
+        $result = $this->getManager()->getRepository(Field::class)->find($id);
+        if (!$result instanceof Field) {
             $this->View()->assign(['success' => false, 'message' => 'Field not found']);
 
             return;
@@ -242,23 +234,17 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
-    /**
-     * Creates new field
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     */
     public function createFieldAction()
     {
-        if (!($id = $this->Request()->getParam('formId'))) {
-            $this->View()->assign(['success' => false, 'message' => 'No valid field Id']);
+        $id = (int) $this->Request()->getParam('formId');
+        if ($id === 0) {
+            $this->View()->assign(['success' => false, 'message' => 'No valid form Id']);
 
             return;
         }
 
-        /** @var Form|null $form */
         $form = $this->getRepository()->find($id);
-        if (!$form) {
+        if (!$form instanceof Form) {
             $this->View()->assign(['success' => false, 'message' => 'Form not found']);
 
             return;
@@ -277,23 +263,17 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     */
     public function removeFieldAction()
     {
-        if (!($id = $this->Request()->getParam('id'))) {
+        $id = (int) $this->Request()->getParam('id');
+        if ($id === 0) {
             $this->View()->assign(['success' => false, 'message' => 'No valid field Id']);
 
             return;
         }
 
-        /* @var Field $result */
-        $result = $this->getManager()->find(\Shopware\Models\Form\Field::class, $id);
-        if (!$result) {
+        $result = $this->getManager()->find(Field::class, $id);
+        if (!$result instanceof Field) {
             $this->View()->assign(['success' => false, 'message' => 'Field not found']);
 
             return;
@@ -314,7 +294,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $positions = json_decode($data);
 
         $qb = $this->getManager()->createQueryBuilder();
-        $qb->update(\Shopware\Models\Form\Field::class, 'field')
+        $qb->update(Field::class, 'field')
             ->andWhere('field.id = :fieldId');
 
         foreach ($positions as $position => $fieldid) {
@@ -390,7 +370,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     /**
      * Internal helper function to get access to the entity manager.
      */
-    private function getManager()
+    private function getManager(): ModelManager
     {
         if ($this->manager === null) {
             $this->manager = Shopware()->Models();
@@ -401,13 +381,11 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
     /**
      * Internal helper function to get access to the form repository.
-     *
-     * @return Shopware\Models\Form\Repository
      */
-    private function getRepository()
+    private function getRepository(): FormRepository
     {
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Form\Form::class);
+            $this->repository = $this->getManager()->getRepository(Form::class);
         }
 
         return $this->repository;
@@ -415,13 +393,11 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
     /**
      * Gets a | delimited and separated shop id list
-     * and converts it into an array of ints
+     * and converts it into an array of integer
      *
-     * @param string $shopIds
-     *
-     * @return array The list of shop ids
+     * @return int[] The list of shop ids
      */
-    private function explodeShopIds($shopIds)
+    private function explodeShopIds(?string $shopIds): array
     {
         if (empty($shopIds)) {
             return [];
@@ -429,10 +405,6 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
         $explodedShopIds = explode('|', trim($shopIds, '|'));
 
-        $explodedShopIds = array_map(function ($elem) {
-            return (int) $elem;
-        }, $explodedShopIds);
-
-        return $explodedShopIds;
+        return array_map('\intval', $explodedShopIds);
     }
 }

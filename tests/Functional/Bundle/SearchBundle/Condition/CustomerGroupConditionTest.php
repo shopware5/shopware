@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -35,7 +37,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class CustomerGroupConditionTest extends TestCase
 {
-    public function testSingleCustomerGroup()
+    public function testSingleCustomerGroup(): void
     {
         $customerGroup = $this->helper->createCustomerGroup(['key' => 'CON']);
 
@@ -52,7 +54,7 @@ class CustomerGroupConditionTest extends TestCase
         );
     }
 
-    public function testMultipleCustomerGroups()
+    public function testMultipleCustomerGroups(): void
     {
         $first = $this->helper->createCustomerGroup(['key' => 'CON']);
         $second = $this->helper->createCustomerGroup(['key' => 'CON2']);
@@ -73,22 +75,24 @@ class CustomerGroupConditionTest extends TestCase
     }
 
     /**
-     * @param string  $number
-     * @param Group[] $customerGroups
+     * @param string       $number
+     * @param Group[]|null $customerGroups
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $customerGroups = null
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         $product['customerGroups'] = [];
-        foreach ($customerGroups as $customerGroup) {
-            $product['customerGroups'][] = ['id' => $customerGroup->getId()];
+        if ($customerGroups !== null) {
+            foreach ($customerGroups as $customerGroup) {
+                $product['customerGroups'][] = ['id' => $customerGroup->getId()];
+            }
         }
 
         return $product;

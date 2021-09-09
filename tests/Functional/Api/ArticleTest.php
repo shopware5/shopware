@@ -92,13 +92,13 @@ class ArticleTest extends AbstractApiTestCase
                 [
                     'value' => 'testWert',
                     'option' => [
-                        'name' => 'neueOption' . uniqid(mt_rand(), true),
+                        'name' => 'neueOption' . uniqid((string) mt_rand(), true),
                     ],
                 ],
             ],
 
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(mt_rand(), true),
+                'number' => 'swTEST' . uniqid((string) mt_rand(), true),
                 'inStock' => 15,
                 'unitId' => 1,
 
@@ -153,7 +153,7 @@ class ArticleTest extends AbstractApiTestCase
 
             'variants' => [
                 [
-                    'number' => 'swTEST.variant.' . uniqid(mt_rand(), true),
+                    'number' => 'swTEST.variant.' . uniqid((string) mt_rand(), true),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -196,7 +196,7 @@ class ArticleTest extends AbstractApiTestCase
                     ],
                 ],
                 [
-                    'number' => 'swTEST.variant.' . uniqid(mt_rand(), true),
+                    'number' => 'swTEST.variant.' . uniqid((string) mt_rand(), true),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -687,13 +687,13 @@ class ArticleTest extends AbstractApiTestCase
                   [
                       'value' => 'testWert',
                       'option' => [
-                          'name' => 'neueOption' . uniqid(mt_rand(), true),
+                          'name' => 'neueOption' . uniqid((string) mt_rand(), true),
                       ],
                   ],
               ],
 
               'mainDetail' => [
-                  'number' => 'swTEST' . uniqid(mt_rand(), true),
+                  'number' => 'swTEST' . uniqid((string) mt_rand(), true),
                   'inStock' => 15,
                   'unitId' => 1,
 

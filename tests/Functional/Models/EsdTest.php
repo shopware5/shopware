@@ -24,29 +24,29 @@
 
 namespace Shopware\Tests\Models;
 
+use Doctrine\ORM\EntityRepository;
 use Enlight_Components_Test_TestCase;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Esd;
 
 class EsdTest extends Enlight_Components_Test_TestCase
 {
     /**
-     * @var array
+     * @var array<string, string|bool|int>
      */
-    public $testData = [
+    public array $testData = [
         'file' => '../foobar.pdf',
         'hasSerials' => true,
         'notification' => true,
         'maxdownloads' => 55,
     ];
 
-    /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    protected $em;
+    protected ModelManager $em;
 
     /**
-     * @var \Shopware\Models\User\Repository
+     * @var ModelRepository|EntityRepository<Esd>
      */
     protected $repo;
 
@@ -76,10 +76,7 @@ class EsdTest extends Enlight_Components_Test_TestCase
         parent::tearDown();
     }
 
-    /**
-     * Test case
-     */
-    public function testGetterAndSetter()
+    public function testGetterAndSetter(): void
     {
         $esd = new Esd();
 
@@ -93,29 +90,24 @@ class EsdTest extends Enlight_Components_Test_TestCase
         }
     }
 
-    /**
-     * Test case
-     */
-    public function testFromArrayWorks()
+    public function testFromArrayWorks(): void
     {
         $esd = new Esd();
         $esd->fromArray($this->testData);
 
-        foreach ($this->testData as $fieldname => $value) {
-            $getMethod = 'get' . ucfirst($fieldname);
+        foreach ($this->testData as $fieldName => $value) {
+            $getMethod = 'get' . ucfirst($fieldName);
             static::assertEquals($esd->$getMethod(), $value);
         }
     }
 
-    /**
-     * Test case
-     */
-    public function testEsdShouldBePersisted()
+    public function testEsdShouldBePersisted(): void
     {
         $esd = new Esd();
 
-        $articleDetail = Shopware()->Models()->getRepository(Detail::class)->findOneBy(['active' => true]);
-        $esd->setArticleDetail($articleDetail);
+        $productVariant = Shopware()->Models()->getRepository(Detail::class)->findOneBy(['active' => true]);
+        static::assertInstanceOf(Detail::class, $productVariant);
+        $esd->setArticleDetail($productVariant);
 
         $esd->fromArray($this->testData);
 
@@ -129,24 +121,23 @@ class EsdTest extends Enlight_Components_Test_TestCase
         unset($esd);
 
         $esd = $this->repo->find($esdId);
+        static::assertInstanceOf(Esd::class, $esd);
 
-        foreach ($this->testData as $fieldname => $value) {
-            $getMethod = 'get' . ucfirst($fieldname);
+        foreach ($this->testData as $fieldName => $value) {
+            $getMethod = 'get' . ucfirst($fieldName);
             static::assertEquals($esd->$getMethod(), $value);
         }
 
         static::assertInstanceOf(\DateTime::class, $esd->getDate());
     }
 
-    /**
-     * Test case
-     */
-    public function testEsdShouldBePersistedWithCustomDateTime()
+    public function testEsdShouldBePersistedWithCustomDateTime(): void
     {
         $esd = new Esd();
 
-        $articleDetail = Shopware()->Models()->getRepository(Detail::class)->findOneBy(['active' => true]);
-        $esd->setArticleDetail($articleDetail);
+        $productVariant = Shopware()->Models()->getRepository(Detail::class)->findOneBy(['active' => true]);
+        static::assertInstanceOf(Detail::class, $productVariant);
+        $esd->setArticleDetail($productVariant);
 
         $esd->fromArray($this->testData);
 
@@ -164,6 +155,7 @@ class EsdTest extends Enlight_Components_Test_TestCase
         unset($esd);
 
         $esd = $this->repo->find($esdId);
+        static::assertInstanceOf(Esd::class, $esd);
 
         static::assertInstanceOf(\DateTime::class, $esd->getDate());
     }

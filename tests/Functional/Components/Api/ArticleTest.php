@@ -24,9 +24,11 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Random;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Category\Category;
 
@@ -67,12 +69,12 @@ class ArticleTest extends TestCase
                 [
                     'value' => 'testWert',
                     'option' => [
-                        'name' => 'neueOption' . uniqid(rand()),
+                        'name' => 'neueOption' . uniqid((string) rand()),
                     ],
                 ],
             ],
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(rand()),
+                'number' => 'swTEST' . uniqid((string) rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => [
@@ -116,7 +118,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swTEST.variant.' . uniqid(rand()),
+                    'number' => 'swTEST.variant.' . uniqid((string) rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -249,7 +251,7 @@ class ArticleTest extends TestCase
                 ['id' => 10],
             ],
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(rand()),
+                'number' => 'swTEST' . uniqid((string) rand()),
                 // create new unit
                 'unit' => [
                     'name' => 'newunit',
@@ -266,7 +268,7 @@ class ArticleTest extends TestCase
 
         $article = $this->resource->create($testData);
         // change number for second article
-        $testData['mainDetail']['number'] = 'swTEST' . uniqid(rand());
+        $testData['mainDetail']['number'] = 'swTEST' . uniqid((string) rand());
         $secondArticle = $this->resource->create($testData);
 
         static::assertInstanceOf('\Shopware\Models\Article\Article', $article);
@@ -305,7 +307,7 @@ class ArticleTest extends TestCase
             'taxId' => 1,
             'supplierId' => 1,
             'mainDetail' => [
-                'number' => 'swAttr1' . uniqid(rand(), true),
+                'number' => 'swAttr1' . uniqid((string) rand(), true),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => [
@@ -315,7 +317,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swAttr2' . uniqid(rand(), true),
+                    'number' => 'swAttr2' . uniqid((string) rand(), true),
                     'inStock' => 15,
                     'unitId' => 1,
                     'prices' => [
@@ -362,7 +364,7 @@ class ArticleTest extends TestCase
                 [
                     'value' => 'testWert',
                     'option' => [
-                        'name' => 'neueOption' . uniqid(rand()),
+                        'name' => 'neueOption' . uniqid((string) rand()),
                     ],
                 ],
             ],
@@ -378,7 +380,7 @@ class ArticleTest extends TestCase
                 ],
             ],
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(rand()),
+                'number' => 'swTEST' . uniqid((string) rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => [
@@ -422,7 +424,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swTEST.variant.' . uniqid(rand()),
+                    'number' => 'swTEST.variant.' . uniqid((string) rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -472,11 +474,11 @@ class ArticleTest extends TestCase
 
         $article = $this->resource->create($testData);
 
-        static::assertInstanceOf('\Shopware\Models\Article\Article', $article);
+        static::assertInstanceOf(ProductModel::class, $article);
         static::assertGreaterThan(0, $article->getId());
         static::assertCount(4, $article->getImages());
 
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         foreach ($article->getImages() as $image) {
             static::assertCount(4, $image->getMedia()->getThumbnails());
@@ -585,7 +587,7 @@ class ArticleTest extends TestCase
         ];
 
         $article = $this->resource->update($id, $testData);
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         static::assertInstanceOf('\Shopware\Models\Article\Article', $article);
         static::assertGreaterThan(0, $article->getId());
@@ -624,7 +626,7 @@ class ArticleTest extends TestCase
                 [
                     'value' => 'testWert',
                     'option' => [
-                        'name' => 'neueOption' . uniqid(rand()),
+                        'name' => 'neueOption' . uniqid((string) rand()),
                     ],
                 ],
             ],
@@ -634,7 +636,7 @@ class ArticleTest extends TestCase
                 ],
             ],
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(rand()),
+                'number' => 'swTEST' . uniqid((string) rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => [
@@ -679,7 +681,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swTEST.variant.' . uniqid(rand()),
+                    'number' => 'swTEST.variant.' . uniqid((string) rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -740,7 +742,7 @@ class ArticleTest extends TestCase
             '140x140',
         ];
 
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         foreach ($article->getImages() as $image) {
             $thumbnails = $image->getMedia()->getThumbnails();
@@ -789,12 +791,12 @@ class ArticleTest extends TestCase
                 [
                     'value' => 'testWert',
                     'option' => [
-                        'name' => 'neueOption' . uniqid(rand()),
+                        'name' => 'neueOption' . uniqid((string) rand()),
                     ],
                 ],
             ],
             'mainDetail' => [
-                'number' => 'swConfigSetMainTest' . uniqid(rand()),
+                'number' => 'swConfigSetMainTest' . uniqid((string) rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => [
@@ -844,7 +846,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swConfigSetMainTest.variant.' . uniqid(rand()),
+                    'number' => 'swConfigSetMainTest.variant.' . uniqid((string) rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -887,7 +889,7 @@ class ArticleTest extends TestCase
                     ],
                 ],
                 [
-                    'number' => 'swConfigSetMainTest.variant.' . uniqid(rand()),
+                    'number' => 'swConfigSetMainTest.variant.' . uniqid((string) rand()),
                     'inStock' => 18,
                     // create another new unit
                     'unit' => [
@@ -1341,7 +1343,7 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        /** @var \Shopware\Models\Article\Article $article */
+        /** @var ProductModel $article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         static::assertEquals($updated->getName(), 'Turnschuhe', "Article name don't match");
 
@@ -1470,7 +1472,7 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        /** @var \Shopware\Models\Article\Article $article */
+        /** @var ProductModel $article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         static::assertEquals($updated->getName(), 'Turnschuhe', "Article name doesn't match");
 
@@ -1616,7 +1618,7 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        /** @var \Shopware\Models\Article\Article $article */
+        /** @var ProductModel $article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         static::assertEquals($updated->getConfiguratorSet()->getType(), 2, "ConfiguratorSet.Type doesn't match");
 
@@ -1655,7 +1657,7 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        /** @var \Shopware\Models\Article\Article $article */
+        /** @var ProductModel $article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         $options = $updated->getConfiguratorSet()->getOptions();
 
@@ -1701,7 +1703,7 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        /** @var \Shopware\Models\Article\Article $article */
+        /** @var ProductModel $article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         $options = $updated->getConfiguratorSet()->getOptions();
 
@@ -1747,7 +1749,7 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        /** @var \Shopware\Models\Article\Article $article */
+        /** @var ProductModel $article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         $options = $updated->getConfiguratorSet()->getOptions();
 
@@ -1766,7 +1768,7 @@ class ArticleTest extends TestCase
     {
         $configurator = $this->getSimpleConfiguratorSet(2, 5);
         $variantOptions = $this->getVariantOptionsOfSet($configurator);
-        $variantNumber = 'swVariant' . uniqid(rand());
+        $variantNumber = 'swVariant' . uniqid((string) rand());
 
         $testData = [
             'name' => 'Testartikel',
@@ -1776,7 +1778,7 @@ class ArticleTest extends TestCase
             'taxId' => 1,
             'supplierId' => 1,
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(rand()),
+                'number' => 'swTEST' . uniqid((string) rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => [
@@ -2037,7 +2039,7 @@ class ArticleTest extends TestCase
         );
         $article = $this->resource->getOne($model->getId());
 
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         static::assertCount(\count($data['images']), $article['images']);
         foreach ($article['images'] as $image) {
@@ -2187,7 +2189,7 @@ class ArticleTest extends TestCase
     {
         $data = $this->getSimpleTestData();
 
-        $optionName = 'newOption' . uniqid(rand());
+        $optionName = 'newOption' . uniqid((string) rand());
         $properties = [
             [
                 'option' => ['name' => $optionName],
@@ -2302,7 +2304,7 @@ class ArticleTest extends TestCase
 
     public function testUpdateWithMultiplePropertiesAndNewGroup()
     {
-        $optionName = 'newOption' . uniqid(rand());
+        $optionName = 'newOption' . uniqid((string) rand());
         $properties = [
             [
                 'option' => ['name' => $optionName],
@@ -2323,7 +2325,7 @@ class ArticleTest extends TestCase
             Resource::HYDRATE_OBJECT
         );
         $article = $this->resource->create($data);
-        /** @var \Shopware\Models\Article\Article $article */
+        /** @var ProductModel $article */
         $article = $this->resource->update($article->getId(), $update);
 
         $articleId = $article->getId();
@@ -2583,7 +2585,7 @@ class ArticleTest extends TestCase
 
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
 
-        /** @var \Shopware\Models\Article\Article $article */
+        /** @var ProductModel $article */
         $article = $this->resource->getOne($article->getId());
 
         static::assertCount(2, $article->getSeoCategories());
@@ -2724,7 +2726,7 @@ class ArticleTest extends TestCase
 
     public function testCategoryAssignment()
     {
-        $number = 'CategoryAssignment' . uniqid(rand());
+        $number = 'CategoryAssignment' . uniqid((string) rand());
 
         $data = $this->getSimpleTestData();
         $data['mainDetail']['number'] = $number;
@@ -2842,7 +2844,7 @@ class ArticleTest extends TestCase
             ],
             'taxId' => 1,
             'mainDetail' => [
-                'number' => uniqid(rand()),
+                'number' => uniqid((string) rand()),
                 'active' => true,
                 'prices' => [
                     [
@@ -2893,7 +2895,7 @@ class ArticleTest extends TestCase
             'lastStock' => true,
             'variants' => [
                 [
-                    'number' => uniqid(rand()) . '.1',
+                    'number' => uniqid((string) rand()) . '.1',
                     'active' => true,
                     'prices' => [
                         [
@@ -2947,7 +2949,7 @@ class ArticleTest extends TestCase
             'active' => true,
             'taxId' => 1,
             'mainDetail' => [
-                'number' => 'withoutstock' . uniqid(rand()),
+                'number' => 'withoutstock' . uniqid((string) rand()),
                 'prices' => [
                     [
                         'customerGroupKey' => 'EK',
@@ -2989,7 +2991,7 @@ class ArticleTest extends TestCase
     {
         /** @var Shopware\Components\Model\ModelManager $entityManager */
         $entityManager = Shopware()->Models();
-        $articleRepository = $entityManager->getRepository(\Shopware\Models\Article\Article::class);
+        $articleRepository = $entityManager->getRepository(ProductModel::class);
         $detailRepository = $entityManager->getRepository(\Shopware\Models\Article\Detail::class);
         $attributeRepository = $entityManager->getRepository(\Shopware\Models\Attribute\Article::class);
 
@@ -3135,7 +3137,7 @@ class ArticleTest extends TestCase
             'descriptionLong' => 'Test descriptionLong',
             'active' => true,
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(rand()),
+                'number' => 'swTEST' . uniqid((string) rand()),
                 'prices' => [
                     [
                         'customerGroupKey' => 'EK',
@@ -3165,7 +3167,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swTEST.variant.' . uniqid(rand()),
+                    'number' => 'swTEST.variant.' . uniqid((string) rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -3231,9 +3233,11 @@ class ArticleTest extends TestCase
      * Combinations merge the result of dimensional arrays not perfectly
      * so we have to clean up the first array level.
      *
-     * @return array
+     * @param array[] $combinations
+     *
+     * @return array[]
      */
-    protected function cleanUpCombinations(array $combinations)
+    protected function cleanUpCombinations(array $combinations): array
     {
         foreach ($combinations as &$combination) {
             $combination[] = [
@@ -3408,7 +3412,7 @@ class ArticleTest extends TestCase
             'description' => 'Test description',
             'active' => true,
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(rand()),
+                'number' => 'swTEST' . uniqid((string) rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => [
@@ -3475,7 +3479,7 @@ class ArticleTest extends TestCase
     private function getSimpleVariantData()
     {
         return [
-            'number' => 'swTEST' . uniqid(rand()),
+            'number' => 'swTEST' . uniqid((string) rand()),
             'inStock' => 100,
             'unitId' => 1,
             'prices' => [
@@ -3505,7 +3509,7 @@ class ArticleTest extends TestCase
     }
 
     /**
-     * @return \Shopware\Models\Article\Article
+     * @return ProductModel
      */
     private function createConfiguratorSetProduct()
     {

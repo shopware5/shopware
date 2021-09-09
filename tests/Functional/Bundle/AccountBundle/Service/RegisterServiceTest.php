@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,9 +27,11 @@
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\ORMException;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -57,19 +61,19 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     protected static $contextService;
 
     /**
-     * @var array
+     * @var array<class-string, int[]>
      */
-    protected static $_cleanup = [];
+    protected static array $_cleanup = [];
 
     /**
      * Set up fixtures
      */
     public static function setUpBeforeClass(): void
     {
-        self::$registerService = Shopware()->Container()->get(\Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface::class);
-        self::$modelManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
-        self::$connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
-        self::$contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
+        self::$registerService = Shopware()->Container()->get(RegisterServiceInterface::class);
+        self::$modelManager = Shopware()->Container()->get(ModelManager::class);
+        self::$connection = Shopware()->Container()->get(Connection::class);
+        self::$contextService = Shopware()->Container()->get(ContextServiceInterface::class);
 
         self::$modelManager->clear();
     }
@@ -83,7 +87,9 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
 
         foreach (self::$_cleanup as $entityName => $ids) {
             foreach ($ids as $id) {
-                self::$modelManager->remove(self::$modelManager->find($entityName, $id));
+                $model = self::$modelManager->find($entityName, $id);
+                static::assertNotNull($model);
+                self::$modelManager->remove($model);
             }
         }
 
@@ -93,9 +99,9 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         Shopware()->Container()->reset('router');
     }
 
-    public function testRegisterWithEmptyData()
+    public function testRegisterWithEmptyData(): void
     {
-        $this->expectException('Doctrine\ORM\ORMException');
+        $this->expectException(ORMException::class);
         $this->expectExceptionMessage('The identifier id is missing for a query of Shopware\Models\Shop\Shop');
         $shop = new Shop();
         $customer = new Customer();
@@ -104,9 +110,9 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         self::$registerService->register($shop, $customer, $billing);
     }
 
-    public function testRegisterWithEmptyShop()
+    public function testRegisterWithEmptyShop(): void
     {
-        $this->expectException('Doctrine\ORM\ORMException');
+        $this->expectException(ORMException::class);
         $this->expectExceptionMessage('The identifier id is missing for a query of Shopware\Models\Shop\Shop');
         $shop = new Shop();
 
@@ -119,9 +125,9 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         self::$registerService->register($shop, $customer, $billing);
     }
 
-    public function testRegisterWithEmptyCustomer()
+    public function testRegisterWithEmptyCustomer(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $shop = $this->getShop();
 
         $customer = new Customer();
@@ -132,9 +138,9 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         self::$registerService->register($shop, $customer, $billing);
     }
 
-    public function testRegisterWithEmptyAddress()
+    public function testRegisterWithEmptyAddress(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $shop = $this->getShop();
 
         $customer = new Customer();
@@ -145,7 +151,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         self::$registerService->register($shop, $customer, $billing);
     }
 
-    public function testRegister()
+    public function testRegister(): int
     {
         $demoData = $this->getCustomerDemoData();
         $billingDemoData = $this->getBillingDemoData();
@@ -176,7 +182,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         return $customer->getId();
     }
 
-    public function testRegisterWithDifferentShipping()
+    public function testRegisterWithDifferentShipping(): void
     {
         $demoData = $this->getCustomerDemoData(true);
         $billingDemoData = $this->getBillingDemoData();
@@ -213,9 +219,9 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     /**
      * @depends testRegister
      */
-    public function testRegisterWithExistingEmail()
+    public function testRegisterWithExistingEmail(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $demoData = $this->getCustomerDemoData();
 
         $shop = $this->getShop();
@@ -232,24 +238,25 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     /**
      * Helper method for creating a valid customer
      *
-     * @param bool $randomEmail
-     *
-     * @return array
+     * @return array<string, string>
      */
-    private function getCustomerDemoData($randomEmail = false)
+    private function getCustomerDemoData(bool $randomEmail = false): array
     {
-        $emailPrefix = $randomEmail ? uniqid(rand()) : '';
+        $emailPrefix = $randomEmail ? uniqid((string) rand()) : '';
 
         return [
             'salutation' => 'mr',
             'firstname' => 'Albert',
             'lastname' => 'McTaggart',
             'email' => $emailPrefix . 'albert.mctaggart@shopware.test',
-            'password' => uniqid(rand()),
+            'password' => uniqid((string) rand()),
         ];
     }
 
-    private function getBillingDemoData()
+    /**
+     * @return array<string, string|Country|State>
+     */
+    private function getBillingDemoData(): array
     {
         $country = $this->createCountry();
 
@@ -265,7 +272,10 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         ];
     }
 
-    private function getShippingDemoData()
+    /**
+     * @return array<string, string|Country>
+     */
+    private function getShippingDemoData(): array
     {
         return [
             'salutation' => 'mr',
@@ -278,14 +288,11 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         ];
     }
 
-    /**
-     * @return Country
-     */
-    private function createCountry()
+    private function createCountry(): Country
     {
         $country = new Country();
 
-        $country->setName('ShopwareLand ' . uniqid(rand()));
+        $country->setName('ShopwareLand ' . uniqid((string) rand()));
         $country->setActive(true);
         $country->setDisplayStateInRegistration(1);
         $country->setForceStateInRegistration(0);
@@ -298,25 +305,19 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         return self::$modelManager->merge($country);
     }
 
-    /**
-     * @return Shop
-     */
-    private function getShop()
+    private function getShop(): Shop
     {
         return self::$contextService->createShopContext(1)->getShop();
     }
 
-    /**
-     * @return State
-     */
-    private function createState(Country $country)
+    private function createState(Country $country): State
     {
         $state = new State();
 
-        $state->setName('Shopware State ' . uniqid(rand()));
+        $state->setName('Shopware State ' . uniqid((string) rand()));
         $state->setActive(1);
         $state->setCountry($country);
-        $state->setShortCode(uniqid(rand()));
+        $state->setShortCode(uniqid((string) rand()));
 
         self::$modelManager->persist($state);
         self::$modelManager->flush($state);
@@ -326,7 +327,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         return self::$modelManager->merge($state);
     }
 
-    private function assertCustomer(array $demoData, Customer $customer)
+    private function assertCustomer(array $demoData, Customer $customer): void
     {
         static::assertEquals($demoData['salutation'], $customer->getSalutation());
         static::assertEquals($demoData['firstname'], $customer->getFirstname());
@@ -339,18 +340,17 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         static::assertNotNull($customer->getDefaultShippingAddress());
     }
 
-    /**
-     * @param bool $shipping
-     */
-    private function assertAddress(array $demoData, Customer $customer, $shipping = false)
+    private function assertAddress(array $demoData, Customer $customer, bool $shipping = false): void
     {
         $legacyAddress = $shipping ? $customer->getDefaultShippingAddress() : $customer->getDefaultBillingAddress();
         $address = $shipping ? $customer->getDefaultShippingAddress() : $customer->getDefaultBillingAddress();
+        static::assertInstanceOf(Address::class, $legacyAddress);
+        static::assertInstanceOf(Address::class, $address);
 
-        static::assertEquals($demoData['firstname'], $legacyAddress->getFirstName());
+        static::assertEquals($demoData['firstname'], $legacyAddress->getFirstname());
         static::assertEquals($demoData['firstname'], $address->getFirstname());
 
-        static::assertEquals($demoData['lastname'], $legacyAddress->getLastName());
+        static::assertEquals($demoData['lastname'], $legacyAddress->getLastname());
         static::assertEquals($demoData['lastname'], $address->getLastname());
 
         static::assertEquals($demoData['country']->getId(), $legacyAddress->getCountry()->getId());

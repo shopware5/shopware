@@ -24,6 +24,8 @@
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
+use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -39,7 +41,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     private static $modelManager;
 
     /**
-     * @var array
+     * @var array<class-string, int[]>
      */
     private static $_cleanup = [];
 
@@ -65,7 +67,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     {
         parent::setUpBeforeClass();
 
-        self::$modelManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
+        self::$modelManager = Shopware()->Container()->get(ModelManager::class);
         self::$modelManager->clear();
 
         // Register customer
@@ -73,7 +75,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $billingDemoData = self::getBillingDemoData();
         $shippingDemoData = self::getShippingDemoData();
 
-        $shop = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext(1)->getShop();
+        $shop = Shopware()->Container()->get(ContextServiceInterface::class)->createShopContext(1)->getShop();
 
         $customer = new Customer();
         $customer->fromArray($demoData);
@@ -84,7 +86,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $shipping = new Address();
         $shipping->fromArray($shippingDemoData);
 
-        $registerService = Shopware()->Container()->get(\Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface::class);
+        $registerService = Shopware()->Container()->get(RegisterServiceInterface::class);
         $registerService->register($shop, $customer, $billing, $shipping);
 
         self::$loginEmail = $demoData['email'];
@@ -103,7 +105,9 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 
         foreach (self::$_cleanup as $entityName => $ids) {
             foreach ($ids as $id) {
-                self::$modelManager->remove(self::$modelManager->find($entityName, $id));
+                $model = self::$modelManager->find($entityName, $id);
+                static::assertNotNull($model);
+                self::$modelManager->remove($model);
             }
         }
 
@@ -341,14 +345,14 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
      */
     private static function getCustomerDemoData($randomEmail = false)
     {
-        $emailPrefix = $randomEmail ? uniqid(rand()) : '';
+        $emailPrefix = $randomEmail ? uniqid((string) rand()) : '';
 
         return [
             'salutation' => 'mr',
             'firstname' => 'Albert',
             'lastname' => 'McTaggart',
             'email' => $emailPrefix . 'albert.mctaggart@shopware.test',
-            'password' => uniqid(rand()),
+            'password' => uniqid((string) rand()),
         ];
     }
 
@@ -388,7 +392,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $country = new Country();
 
-        $country->setName('ShopwareLand ' . uniqid(rand()));
+        $country->setName('ShopwareLand ' . uniqid((string) rand()));
         $country->setActive(true);
         $country->setDisplayStateInRegistration(1);
         $country->setForceStateInRegistration(0);
@@ -408,10 +412,10 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $state = new State();
 
-        $state->setName('Shopware State ' . uniqid(rand()));
+        $state->setName('Shopware State ' . uniqid((string) rand()));
         $state->setActive(1);
         $state->setCountry($country);
-        $state->setShortCode(uniqid(rand()));
+        $state->setShortCode(uniqid((string) rand()));
 
         self::$modelManager->persist($state);
         self::$modelManager->flush($state);

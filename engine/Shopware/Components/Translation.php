@@ -602,7 +602,7 @@ class Shopware_Components_Translation
      *
      * @param string $type
      *
-     * @return array|bool
+     * @return array|false
      */
     protected function getMapping($type)
     {

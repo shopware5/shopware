@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Sorting;
 
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNumberSorting;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -32,7 +35,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class ProductNumberSortingTest extends TestCase
 {
-    public function testNameSorting()
+    public function testNameSorting(): void
     {
         $sorting = new ProductNumberSorting();
 
@@ -60,7 +63,7 @@ class ProductNumberSortingTest extends TestCase
         $context = null,
         array $configs = [],
         $variantSearch = false
-    ) {
+    ): ProductNumberSearchResult {
         $result = parent::search(
             $products,
             $expectedNumbers,

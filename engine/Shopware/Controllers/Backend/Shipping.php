@@ -22,10 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Dispatch\Dispatch;
 use Shopware\Models\Dispatch\Holiday;
+use Shopware\Models\Dispatch\Repository;
 use Shopware\Models\Dispatch\ShippingCost;
 use Shopware\Models\Payment\Payment;
 
@@ -68,7 +72,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         }
 
         $query = $this->getRepository()->getShippingCostsQuery($dispatchID, $filter, $sort, $limit, $offset);
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
         $paginator = $this->getModelManager()->createPaginator($query);
         // Returns the total count of the query
@@ -80,7 +84,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         // The standard $translationComponent->translateDispatches can not be used here since the
         // name and the description may not be overridden. Both fields are edible and if the translation is
         // shown in the edit field, there is a high chance of a user saving the translation as name.
-        $translator = $this->get(\Shopware_Components_Translation::class)->getObjectTranslator('config_dispatch');
+        $translator = $this->get(Shopware_Components_Translation::class)->getObjectTranslator('config_dispatch');
         $shippingCosts = array_map(static function ($dispatchMethod) use ($translator) {
             $translatedDispatchMethod = $translator->translateObjectProperty($dispatchMethod, 'dispatch_name', 'translatedName', $dispatchMethod['name']);
 
@@ -105,7 +109,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         }
 
         $query = $this->getRepository()->getListQuery($filter, $sort, $limit, $offset);
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
         $paginator = $this->getModelManager()->createPaginator($query);
         // Returns the total count of the query
@@ -218,6 +222,9 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             // Iterate the customers and add the remove action
             foreach ($dispatches as $dispatch) {
                 $entity = $this->getRepository()->find($dispatch['id']);
+                if (!$entity instanceof Dispatch) {
+                    continue;
+                }
                 $this->getManager()->remove($entity);
                 $this->deleteCostsMatrix($entity->getId());
             }
@@ -287,7 +294,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         }
 
         $dispatch = Shopware()->Models()->find(Dispatch::class, $dispatchId);
-        if (!($dispatch instanceof \Shopware\Models\Dispatch\Dispatch)) {
+        if (!($dispatch instanceof Dispatch)) {
             $this->View()->assign(['success' => false, 'errorMsg' => 'No valid dispatch ID.']);
 
             return;
@@ -300,7 +307,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
 
         $data = [];
         foreach ($costsMatrix as $param) {
-            $shippingCostModel = new \Shopware\Models\Dispatch\ShippingCost();
+            $shippingCostModel = new ShippingCost();
             $param['dispatch'] = $dispatch;
             // Set data to model and overwrite the image field
             $shippingCostModel->fromArray($param);
@@ -379,7 +386,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     /**
      * Returns the shopware model manager
      *
-     * @return Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     protected function getManager()
     {
@@ -389,7 +396,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return Shopware\Models\Dispatch\Repository
+     * @return Repository
      */
     protected function getRepository()
     {
@@ -432,9 +439,11 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $dispatchModel = null;
         $id = (int) $this->Request()->get('id');
         if ($id > 0) {
+            /** @var Dispatch|null $dispatchModel */
             $dispatchModel = $this->getRepository()->find($id);
-        } else {
-            $dispatchModel = new Shopware\Models\Dispatch\Dispatch();
+        }
+        if ($dispatchModel === null) {
+            $dispatchModel = new Dispatch();
             $this->getManager()->persist($dispatchModel);
         }
 
@@ -450,10 +459,10 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $params['shippingFree'] = (float) str_replace(',', '.', $params['shippingFree']);
         }
 
-        $params['payments'] = new \Doctrine\Common\Collections\ArrayCollection();
-        $params['holidays'] = new \Doctrine\Common\Collections\ArrayCollection();
-        $params['countries'] = new \Doctrine\Common\Collections\ArrayCollection();
-        $params['categories'] = new \Doctrine\Common\Collections\ArrayCollection();
+        $params['payments'] = new ArrayCollection();
+        $params['holidays'] = new ArrayCollection();
+        $params['countries'] = new ArrayCollection();
+        $params['categories'] = new ArrayCollection();
 
         $params['multiShopId'] = $this->cleanData($params['multiShopId']);
         $params['customerGroupId'] = $this->cleanData($params['customerGroupId']);
@@ -500,7 +509,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 continue;
             }
             $paymentModel = $this->getManager()->find(Payment::class, $paymentMethod['id']);
-            if ($paymentModel instanceof Shopware\Models\Payment\Payment) {
+            if ($paymentModel instanceof Payment) {
                 $dispatchModel->getPayments()->add($paymentModel);
             }
         }
@@ -511,7 +520,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 continue;
             }
             $countryModel = $this->getManager()->find(Country::class, $country['id']);
-            if ($countryModel instanceof Shopware\Models\Country\Country) {
+            if ($countryModel instanceof Country) {
                 $dispatchModel->getCountries()->add($countryModel);
             }
         }
@@ -522,7 +531,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             }
 
             $categoryModel = $this->getManager()->find(Category::class, $category['id']);
-            if ($categoryModel instanceof Shopware\Models\Category\Category) {
+            if ($categoryModel instanceof Category) {
                 $dispatchModel->getCategories()->add($categoryModel);
             }
         }
@@ -533,7 +542,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             }
 
             $holidayModel = $this->getManager()->find(Holiday::class, $holiday['id']);
-            if ($holidayModel instanceof Shopware\Models\Dispatch\Holiday) {
+            if ($holidayModel instanceof Holiday) {
                 $dispatchModel->getHolidays()->add($holidayModel);
             }
         }
@@ -576,12 +585,12 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     private function deleteDispatchWithDeletedShops()
     {
         $builder = $this->getRepository()->getDispatchWithDeletedShopsQuery();
-        /** @var Shopware\Models\Dispatch\Dispatch[] $result */
+        /** @var Dispatch[] $result */
         $result = $builder->getResult();
 
-        $modelManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
+        $modelManager = Shopware()->Container()->get(ModelManager::class);
 
-        /** @var Shopware\Models\Dispatch\Dispatch $dispatch */
+        /** @var Dispatch $dispatch */
         foreach ($result as $dispatch) {
             $modelManager->remove($dispatch);
         }
@@ -636,7 +645,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             return null;
         }
 
-        if ($inputValue === 0) {
+        if ((int) $inputValue === 0) {
             return null;
         }
 

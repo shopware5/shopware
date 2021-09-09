@@ -24,7 +24,12 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
 class ListProductTest extends TestCase
@@ -55,25 +60,24 @@ class ListProductTest extends TestCase
         static::assertNotEmpty($product->getTax());
         static::assertNotEmpty($product->getUnit());
 
-        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $product);
-        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $product->getUnit());
-        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer', $product->getManufacturer());
+        static::assertInstanceOf(Unit::class, $product->getUnit());
+        static::assertInstanceOf(Manufacturer::class, $product->getManufacturer());
 
         static::assertNotEmpty($product->getPrices());
         static::assertNotEmpty($product->getPriceRules());
         foreach ($product->getPrices() as $price) {
-            static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Price', $price);
-            static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $price->getUnit());
+            static::assertInstanceOf(Price::class, $price);
+            static::assertInstanceOf(Unit::class, $price->getUnit());
             static::assertGreaterThanOrEqual(1, $price->getUnit()->getMinPurchase());
         }
 
         foreach ($product->getPriceRules() as $price) {
-            static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule', $price);
+            static::assertInstanceOf(PriceRule::class, $price);
         }
 
-        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Price', $product->getCheapestPrice());
-        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule', $product->getCheapestPriceRule());
-        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $product->getCheapestPrice()->getUnit());
+        static::assertInstanceOf(Price::class, $product->getCheapestPrice());
+        static::assertInstanceOf(PriceRule::class, $product->getCheapestPriceRule());
+        static::assertInstanceOf(Unit::class, $product->getCheapestPrice()->getUnit());
         static::assertGreaterThanOrEqual(1, $product->getCheapestPrice()->getUnit()->getMinPurchase());
 
         static::assertNotEmpty($product->getCheapestPriceRule()->getPrice());
@@ -85,14 +89,11 @@ class ListProductTest extends TestCase
         static::assertNotEmpty($product->getManufacturer()->getName());
     }
 
-    /**
-     * @param string $number
-     *
-     * @return ListProduct
-     */
-    private function getListProduct($number, ShopContext $context)
+    private function getListProduct(string $number, ShopContext $context): ListProduct
     {
-        return Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
-            ->get($number, $context);
+        $product = Shopware()->Container()->get(ListProductServiceInterface::class)->get($number, $context);
+        static::assertNotNull($product);
+
+        return $product;
     }
 }

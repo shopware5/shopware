@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,7 +26,10 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Article\Configurator\Group;
@@ -34,7 +39,10 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestContext;
 
 class VariantConditionWithCurrencyFactor extends TestCase
 {
-    private $groups = [];
+    /**
+     * @var Group[]
+     */
+    private array $groups = [];
 
     protected function setUp(): void
     {
@@ -42,7 +50,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
         $this->setConfig('hideNoInStock', false);
     }
 
-    public function testCustomerGroupDiscount()
+    public function testCustomerGroupDiscount(): void
     {
         $context = $this->getContext();
         $result = $this->getSearchResult($context);
@@ -64,7 +72,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
         );
     }
 
-    public function testExpandedCustomerGroupDiscount()
+    public function testExpandedCustomerGroupDiscount(): void
     {
         $context = $this->getContext();
         $result = $this->getSearchResult($context, true);
@@ -88,7 +96,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
         );
     }
 
-    public function testNetPrices()
+    public function testNetPrices(): void
     {
         $context = $this->getContext(false);
         $result = $this->getSearchResult($context);
@@ -110,7 +118,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
         );
     }
 
-    public function testExpandedNetPrices()
+    public function testExpandedNetPrices(): void
     {
         $context = $this->getContext(false);
         $result = $this->getSearchResult($context, true);
@@ -134,7 +142,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
         );
     }
 
-    public function testCurrencyFactor()
+    public function testCurrencyFactor(): void
     {
         $context = $this->getContext(true, 0, 1.2);
         $result = $this->getSearchResult($context);
@@ -156,7 +164,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
         );
     }
 
-    public function testExpandedCurrencyFactor()
+    public function testExpandedCurrencyFactor(): void
     {
         $context = $this->getContext(true, 0, 1.2);
         $result = $this->getSearchResult($context, true);
@@ -180,7 +188,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
         );
     }
 
-    public function testDiscountCurrencyNet()
+    public function testDiscountCurrencyNet(): void
     {
         $context = $this->getContext(false, 30, 1.2);
         $result = $this->getSearchResult($context);
@@ -202,7 +210,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
         );
     }
 
-    public function testExpandedDiscountCurrencyNet()
+    public function testExpandedDiscountCurrencyNet(): void
     {
         $context = $this->getContext(false, 30, 1.2);
         $result = $this->getSearchResult($context, true);
@@ -226,7 +234,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
         );
     }
 
-    public function testDiscountCurrencyGross()
+    public function testDiscountCurrencyGross(): void
     {
         $context = $this->getContext(true, 15, 1.44);
         $result = $this->getSearchResult($context);
@@ -248,7 +256,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
         );
     }
 
-    public function testExpandedDiscountCurrencyGross()
+    public function testExpandedDiscountCurrencyGross(): void
     {
         $context = $this->getContext(true, 15, 1.44);
         $result = $this->getSearchResult($context, true);
@@ -274,14 +282,8 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     /**
      * Creates and return the VariantCondition of the given options of the given group.
-     *
-     * @param array  $options
-     * @param string $groupName
-     * @param bool   $expand
-     *
-     * @return VariantCondition
      */
-    public function createCondition($options, $groupName, $expand = false)
+    public function createCondition(array $options, string $groupName, bool $expand = false): VariantCondition
     {
         $mapping = $this->mapOptions();
 
@@ -297,12 +299,8 @@ class VariantConditionWithCurrencyFactor extends TestCase
      * Creates the TestContext with the given configurations.
      *
      * @param bool $displayGross
-     * @param int  $discount
-     * @param int  $currencyFactor
-     *
-     * @return TestContext
      */
-    protected function getContext($displayGross = true, $discount = 20, $currencyFactor = 1)
+    protected function getContext($displayGross = true, int $discount = 20, int $currencyFactor = 1): TestContext
     {
         $tax = $this->helper->createTax();
         $customerGroup = $this->helper->createCustomerGroup(
@@ -337,14 +335,14 @@ class VariantConditionWithCurrencyFactor extends TestCase
      * @param string $number
      * @param array  $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $data = []
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         $configurator = $this->helper->createConfiguratorSet($data['groups']);
@@ -397,7 +395,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
         return $product;
     }
 
-    private function getSearchResult(TestContext $context, $expanded = false)
+    private function getSearchResult(TestContext $context, $expanded = false): ProductNumberSearchResult
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -448,10 +446,8 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     /**
      * Returns the mapping of group and option names to ids.
-     *
-     * @return array
      */
-    private function mapOptions()
+    private function mapOptions(): array
     {
         $mapping = [];
         foreach ($this->groups as $group) {
@@ -467,15 +463,13 @@ class VariantConditionWithCurrencyFactor extends TestCase
     /**
      * Creates the structure of the configurator.
      *
-     * @param array $expected
-     *
      * @return Group[]
      */
-    private function buildConfigurator($expected)
+    private function buildConfigurator(array $expected): array
     {
         $groups = [];
         foreach ($expected as $group => $optionNames) {
-            /* @var $allGroups Group[] */
+            /* @var Group[] $allGroups */
             foreach ($this->groups as $globalGroup) {
                 if ($globalGroup->getName() !== $group) {
                     continue;
@@ -489,7 +483,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
                 }
 
                 $clone = clone $globalGroup;
-                $clone->setOptions($options);
+                $clone->setOptions(new ArrayCollection($options));
 
                 $groups[] = $clone;
             }
@@ -501,20 +495,23 @@ class VariantConditionWithCurrencyFactor extends TestCase
     /**
      * Assert the cheapest and pseudo prices of the products / variants.
      *
-     * @param ListProduct[] $products
+     * @param ListProduct[]|BaseProduct[] $products
      */
-    private function assertPrices(array $products, array $prices)
+    private function assertPrices(array $products, array $prices): void
     {
         $this->assertPriceCount($products, $prices);
 
         foreach ($products as $product) {
+            static::assertInstanceOf(ListProduct::class, $product);
             $number = $product->getNumber();
+            $cheapestPrice = $product->getCheapestPrice();
+            static::assertNotNull($cheapestPrice);
             if (isset($prices['cheapestPrice'][$number])) {
-                static::assertEquals($prices['cheapestPrice'][$number], $product->getCheapestPrice()->getCalculatedPrice());
+                static::assertEquals($prices['cheapestPrice'][$number], $cheapestPrice->getCalculatedPrice());
             }
 
             if (isset($prices['pseudoPrice'][$number])) {
-                static::assertEquals($prices['pseudoPrice'][$number], $product->getCheapestPrice()->getCalculatedPseudoPrice());
+                static::assertEquals($prices['pseudoPrice'][$number], $cheapestPrice->getCalculatedPseudoPrice());
             }
         }
     }
@@ -522,12 +519,13 @@ class VariantConditionWithCurrencyFactor extends TestCase
     /**
      * Assert the counting of the cheapest and pseudo prices.
      *
-     * @param ListProduct[] $products
+     * @param BaseProduct[]        $products
+     * @param array<string, mixed> $prices
      */
     private function assertPriceCount(
         array $products,
         array $prices
-    ) {
+    ): void {
         $numbers = array_map(function (ListProduct $product) {
             return $product->getNumber();
         }, $products);

@@ -325,7 +325,12 @@ class Repository extends ModelRepository
         $builder = $this->createQueryBuilder('shop');
         $builder->where('shop.default = 1');
 
-        return $builder->getQuery()->getOneOrNullResult();
+        $shop = $builder->getQuery()->getOneOrNullResult();
+        if (!$shop instanceof Shop) {
+            throw new \RuntimeException('No default shop found. Check your shop configuration');
+        }
+
+        return $shop;
     }
 
     /**

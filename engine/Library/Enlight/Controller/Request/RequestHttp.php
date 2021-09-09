@@ -502,17 +502,19 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
         if (($value === null) && !\is_array($spec)) {
             throw new RuntimeException('Invalid value passed to setQuery(); must be either array of values or key/value pair');
         }
+
         if (($value === null) && \is_array($spec)) {
-            /** @var array $spec */
-            foreach ($spec as $key => $value) {
-                $this->setQuery($key, $value);
+            foreach ($spec as $key => $specValue) {
+                $this->setQuery($key, $specValue);
             }
 
             return $this;
         }
 
-        $_GET[(string) $spec] = $value;
-        $this->query->set((string) $spec, $value);
+        if (!\is_array($spec)) {
+            $_GET[(string) $spec] = $value;
+            $this->query->set((string) $spec, $value);
+        }
 
         return $this;
     }
@@ -560,15 +562,19 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
         if (($value === null) && !\is_array($spec)) {
             throw new RuntimeException('Invalid value passed to setPost(); must be either array of values or key/value pair');
         }
+
         if (($value === null) && \is_array($spec)) {
-            foreach ($spec as $key => $value) {
-                $this->setPost($key, $value);
+            foreach ($spec as $key => $specValue) {
+                $this->setPost($key, $specValue);
             }
 
             return $this;
         }
-        $_POST[(string) $spec] = $value;
-        $this->request->set((string) $spec, $value);
+
+        if (!\is_array($spec)) {
+            $_POST[(string) $spec] = $value;
+            $this->request->set((string) $spec, $value);
+        }
 
         return $this;
     }

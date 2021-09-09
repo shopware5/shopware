@@ -249,7 +249,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
             return;
         }
         $line = explode($this->_delimiter, $line);
-        if (empty($count)) {
+        if (empty($count) || $line === false) {
             $this->_current = $line;
 
             return;

@@ -143,10 +143,10 @@ class ErrorSubscriber implements SubscriberInterface
         $error = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
         $exceptions = $response->getException();
         $exception = $exceptions[0];
-        $error->exception = $exception;
+        $error->offsetSet('exception', $exception);
 
         // Keep a copy of the original request
-        $error->request = clone $request;
+        $error->offsetSet('request', clone $request);
 
         // Get a count of the number of exceptions encountered
         $this->exceptionCountAtFirstEncounter = \count($exceptions);

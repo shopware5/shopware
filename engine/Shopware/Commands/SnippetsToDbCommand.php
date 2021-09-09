@@ -97,7 +97,7 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var DatabaseHandler $databaseLoader */
-        $databaseLoader = $this->container->get(\Shopware\Components\Snippet\DatabaseHandler::class);
+        $databaseLoader = $this->container->get(DatabaseHandler::class);
         $force = $input->getOption('force');
 
         $rootDir = $this->container->getParameter('kernel.root_dir');
@@ -106,7 +106,12 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
             throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
         }
 
-        $sourceDir = $rootDir . '/' . $input->getOption('source') . '/';
+        $source = $input->getOption('source');
+        if (!\is_string($source)) {
+            throw new \RuntimeException('Option "source" needs to be a string');
+        }
+
+        $sourceDir = $rootDir . '/' . $source . '/';
 
         $databaseLoader->setOutput($output);
         $databaseLoader->loadToDatabase($sourceDir, $force);

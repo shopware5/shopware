@@ -26,25 +26,13 @@ namespace Shopware\Components\Check;
 
 class Requirements
 {
-    /**
-     * @var string
-     */
-    private $sourceFile;
+    private string $sourceFile;
 
-    /**
-     * @var \PDO
-     */
-    private $connection;
+    private \PDO $connection;
 
-    /**
-     * @var \Shopware_Components_Snippet_Manager
-     */
-    private $snippetManager;
+    private \Shopware_Components_Snippet_Manager $snippetManager;
 
-    /**
-     * @param string $sourceFile
-     */
-    public function __construct($sourceFile, \PDO $connection, \Shopware_Components_Snippet_Manager $snippetManager)
+    public function __construct(string $sourceFile, \PDO $connection, \Shopware_Components_Snippet_Manager $snippetManager)
     {
         if (!is_readable($sourceFile)) {
             throw new \RuntimeException(sprintf('Cannot read requirements file in %s.', $sourceFile));
@@ -110,10 +98,8 @@ class Requirements
 
     /**
      * Returns the check list
-     *
-     * @return \SimpleXMLElement
      */
-    private function runChecks()
+    private function runChecks(): \SimpleXMLElement
     {
         $xmlObject = simplexml_load_string(file_get_contents($this->sourceFile));
 
@@ -133,7 +119,7 @@ class Requirements
                 $requirement->required = $requireVersion;
                 $requirement->name = $platform;
             } else {
-                $value = $this->getRuntimeValue($name, $requirement);
+                $value = (string) $this->getRuntimeValue($name, $requirement);
                 $requirement->result = $this->compare(
                     $name,
                     $value,
@@ -184,14 +170,8 @@ class Requirements
 
     /**
      * Compares the requirement with the version
-     *
-     * @param string $name
-     * @param string $value
-     * @param string $requiredValue
-     *
-     * @return bool
      */
-    private function compare($name, $value, $requiredValue)
+    private function compare(string $name, string $value, string $requiredValue): bool
     {
         $m = 'compare' . str_replace(' ', '', ucwords(str_replace(['_', '.'], ' ', $name)));
 
@@ -216,10 +196,8 @@ class Requirements
 
     /**
      * Checks the php version
-     *
-     * @return string
      */
-    private function checkPhp()
+    private function checkPhp(): string
     {
         if (strpos(PHP_VERSION, '-')) {
             return substr(PHP_VERSION, 0, strpos(PHP_VERSION, '-'));
@@ -228,7 +206,7 @@ class Requirements
         return PHP_VERSION;
     }
 
-    private function checkMysqlStrictMode()
+    private function checkMysqlStrictMode(): bool
     {
         try {
             $sql = 'SELECT @@SESSION.sql_mode;';
@@ -246,9 +224,9 @@ class Requirements
     /**
      * Checks the mysql version
      *
-     * @return array
+     * @return array<int, string>
      */
-    private function getMysqlVersion()
+    private function getMysqlVersion(): array
     {
         $v = $this->connection->query('SELECT VERSION()')->fetchColumn();
 
@@ -257,8 +235,10 @@ class Requirements
 
     /**
      * Checks the opcache configuration if the opcache exists.
+     *
+     * @return array<int, array<string, string|int|bool>>
      */
-    private function checkOpcache()
+    private function checkOpcache(): array
     {
         if (!\extension_loaded('Zend OPcache')) {
             return [];
@@ -354,10 +334,8 @@ class Requirements
 
     /**
      * Checks the gd jpg support
-     *
-     * @return bool
      */
-    private function checkGdJpg()
+    private function checkGdJpg(): bool
     {
         if (\function_exists('gd_info')) {
             $gd = gd_info();
@@ -370,10 +348,8 @@ class Requirements
 
     /**
      * Checks the freetype support
-     *
-     * @return bool
      */
-    private function checkFreetype()
+    private function checkFreetype(): bool
     {
         if (\function_exists('gd_info')) {
             $gd = gd_info();
@@ -386,10 +362,8 @@ class Requirements
 
     /**
      * Checks the session save path config
-     *
-     * @return bool
      */
-    private function checkSessionSavePath()
+    private function checkSessionSavePath(): bool
     {
         if (\function_exists('session_save_path')) {
             return (bool) session_save_path();
@@ -421,10 +395,8 @@ class Requirements
 
     /**
      * Checks the suhosin.get.max_value_length which limits the max get parameter length.
-     *
-     * @return int
      */
-    private function checkSuhosinGetMaxValueLength()
+    private function checkSuhosinGetMaxValueLength(): int
     {
         $length = (int) ini_get('suhosin.get.max_value_length');
         if ($length === 0) {
@@ -436,10 +408,8 @@ class Requirements
 
     /**
      * Checks the include path config
-     *
-     * @return bool
      */
-    private function checkIncludePath()
+    private function checkIncludePath(): bool
     {
         if (\function_exists('set_include_path')) {
             $old = set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . DIRECTORY_SEPARATOR);
@@ -452,13 +422,8 @@ class Requirements
 
     /**
      * Compare max execution time config
-     *
-     * @param string $version
-     * @param string $required
-     *
-     * @return bool
      */
-    private function compareMaxExecutionTime($version, $required)
+    private function compareMaxExecutionTime(string $version, string $required): bool
     {
         if (!$version) {
             return true;
@@ -469,81 +434,64 @@ class Requirements
 
     /**
      * Decode php size format
-     *
-     * @param string $val
-     *
-     * @return float
      */
-    private function decodePhpSize($val)
+    private function decodePhpSize(string $val): float
     {
         $val = trim($val);
         $last = strtolower($val[\strlen($val) - 1]);
-        $val = (float) $val;
+        $phpSize = (float) $val;
         switch ($last) {
-            /* @noinspection PhpMissingBreakStatementInspection */
             case 'g':
-                $val *= 1024;
-            /* @noinspection PhpMissingBreakStatementInspection */
-            // no break
+                $phpSize *= 1024;
+                // no break
             case 'm':
-                $val *= 1024;
+                $phpSize *= 1024;
                 // no break
             case 'k':
-                $val *= 1024;
+                $phpSize *= 1024;
         }
 
-        return $val;
+        return $phpSize;
     }
 
     /**
      * Decode byte size format
-     *
-     * @param string $val
-     *
-     * @return float
      */
-    private function decodeSize($val)
+    private function decodeSize(string $val): float
     {
         $val = trim($val);
-        list($val, $last) = explode(' ', $val);
-        $val = (float) $val;
+        [$val, $last] = explode(' ', $val);
+        $size = (float) $val;
         switch (strtoupper($last)) {
-            /* @noinspection PhpMissingBreakStatementInspection */
             case 'TB':
-                $val *= 1024;
+                $size *= 1024;
                 // no break
             case 'GB':
-                $val *= 1024;
+                $size *= 1024;
                 // no break
             case 'MB':
-                $val *= 1024;
+                $size *= 1024;
                 // no break
             case 'KB':
-                $val *= 1024;
+                $size *= 1024;
         }
 
-        return $val;
+        return $size;
     }
 
     /**
      * Encode byte size format
-     *
-     * @param float $bytes
-     *
-     * @return string
      */
-    private function encodeSize($bytes)
+    private function encodeSize(float $bytes): string
     {
         $types = ['B', 'KB', 'MB', 'GB', 'TB'];
-        for ($i = 0; $bytes >= 1024 && $i < (\count($types) - 1); $bytes /= 1024, $i++);
+        for ($i = 0; $bytes >= 1024 && $i < (\count($types) - 1); $bytes /= 1024, $i++) {
+        }
 
         return round($bytes, 2) . ' ' . $types[$i];
     }
 
-    /**
-     * @return array
-     */
-    private function handleMaxCompatibleVersion(array $check)
+    private function handleMaxCompatibleVersion(array $check): array
     {
         if (version_compare($check['version'], $check['maxCompatibleVersion'], '>')) {
             $check['check'] = false;

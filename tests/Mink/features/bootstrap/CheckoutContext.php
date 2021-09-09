@@ -28,12 +28,22 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ResponseTextException;
 use Doctrine\DBAL\Connection;
+use Shopware\Components\Api\Resource\Article;
+use Shopware\Components\Api\Resource\Category;
+use Shopware\Components\Api\Resource\CustomerGroup;
+use Shopware\Components\Api\Resource\Manufacturer;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Detail as ProductVariant;
+use Shopware\Models\Price\Discount;
+use Shopware\Models\Price\Group;
+use Shopware\Tests\Mink\Element\AccountOrder;
 use Shopware\Tests\Mink\Element\CartPosition;
 use Shopware\Tests\Mink\Element\CheckoutAddressBox;
 use Shopware\Tests\Mink\Element\CheckoutAddressBoxModal;
 use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Page\Account;
 use Shopware\Tests\Mink\Page\CheckoutCart;
+use Shopware\Tests\Mink\Page\CheckoutConfirm;
 use Shopware\Tests\Mink\Page\Detail;
 
 class CheckoutContext extends SubContext
@@ -97,13 +107,13 @@ class CheckoutContext extends SubContext
         $orderNumber = $this->getPage('CheckoutConfirm')->getOrderNumber();
         $values = $positions->getHash();
 
-        /** @var \Shopware\Tests\Mink\Page\Account $page */
+        /** @var Account $page */
         $page = $this->getPage('Account');
 
         $page->open();
         Helper::clickNamedLink($page, 'myOrdersLink');
 
-        /** @var \Shopware\Tests\Mink\Element\AccountOrder $order */
+        /** @var AccountOrder $order */
         $order = $this->getMultipleElement($page, 'AccountOrder');
         $page->checkOrder($order, $orderNumber, $values);
     }
@@ -200,17 +210,16 @@ class CheckoutContext extends SubContext
      */
     public function theArticleIsAssignedToThePriceGroup($articleNumber, $priceGroupName)
     {
-        /** @var ModelManager $modelManager */
-        $modelManager = $this->getService(\Shopware\Components\Model\ModelManager::class);
+        $modelManager = $this->getService(ModelManager::class);
 
-        $priceGroup = $modelManager->getRepository('Shopware\Models\Price\Group')->findOneBy(['name' => $priceGroupName]);
-        $articleDetail = $modelManager->getRepository('Shopware\Models\Article\Detail')->findOneBy(['number' => $articleNumber]);
+        $priceGroup = $modelManager->getRepository(Group::class)->findOneBy(['name' => $priceGroupName]);
+        $productVariant = $modelManager->getRepository(ProductVariant::class)->findOneBy(['number' => $articleNumber]);
 
-        if (!$articleDetail) {
+        if ($productVariant === null) {
             Helper::throwException('Article with number "' . $articleNumber . '" was not found.');
         }
 
-        $article = $articleDetail->getArticle();
+        $article = $productVariant->getArticle();
         $article->setPriceGroupActive(true);
         $article->setPriceGroup($priceGroup);
 
@@ -223,25 +232,25 @@ class CheckoutContext extends SubContext
     public function aPriceGroupNamedThatGrantsDiscount($priceGroupName, $grantedDiscount)
     {
         /** @var ModelManager $modelManager */
-        $modelManager = $this->getService(\Shopware\Components\Model\ModelManager::class);
+        $modelManager = $this->getService(ModelManager::class);
 
-        $priceGroup = $modelManager->getRepository('Shopware\Models\Price\Group')->findOneBy(['name' => $priceGroupName]);
-        if (!$priceGroup) {
-            $priceGroup = new \Shopware\Models\Price\Group();
+        $priceGroup = $modelManager->getRepository(Group::class)->findOneBy(['name' => $priceGroupName]);
+        if ($priceGroup === null) {
+            $priceGroup = new Group();
             $priceGroup->setName($priceGroupName);
         }
 
         $grantedDiscount = (int) preg_replace('/\D/', '', $grantedDiscount);
 
-        $discount = $modelManager->getRepository('Shopware\Models\Price\Discount')
+        $discount = $modelManager->getRepository(Discount::class)
             ->findOneBy([
                 'customerGroupId' => 1,
                 'start' => 1,
                 'discount' => $grantedDiscount,
             ]);
 
-        if (!$discount) {
-            $discount = new \Shopware\Models\Price\Discount();
+        if ($discount === null) {
+            $discount = new Discount();
             $discount->setCustomerGroupId(1);
             $discount->setStart(1);
             $discount->setGroup($priceGroup);
@@ -261,8 +270,8 @@ class CheckoutContext extends SubContext
     {
         $categories = $table->getHash();
 
-        $categoryResource = new \Shopware\Components\Api\Resource\Category();
-        $categoryResource->setManager($this->getService(\Shopware\Components\Model\ModelManager::class));
+        $categoryResource = new Category();
+        $categoryResource->setManager($this->getService(ModelManager::class));
 
         foreach ($categories as $row) {
             $category = $categoryResource->getList(0, 1, [['property' => 'name', 'value' => $row['name']]]);
@@ -288,14 +297,14 @@ class CheckoutContext extends SubContext
     {
         $products = $table->getHash();
 
-        $resource = new \Shopware\Components\Api\Resource\Article();
-        $resource->setManager($this->getService(\Shopware\Components\Model\ModelManager::class));
+        $resource = new Article();
+        $resource->setManager($this->getService(ModelManager::class));
 
-        $categoryResource = new \Shopware\Components\Api\Resource\Category();
-        $categoryResource->setManager($this->getService(\Shopware\Components\Model\ModelManager::class));
+        $categoryResource = new Category();
+        $categoryResource->setManager($this->getService(ModelManager::class));
 
-        $manufacturerResource = new \Shopware\Components\Api\Resource\Manufacturer();
-        $manufacturerResource->setManager($this->getService(\Shopware\Components\Model\ModelManager::class));
+        $manufacturerResource = new Manufacturer();
+        $manufacturerResource->setManager($this->getService(ModelManager::class));
 
         foreach ($products as $row) {
             $category = $categoryResource->getList(0, 1, [['property' => 'c.name', 'value' => $row['category']]])['data'][0];
@@ -339,8 +348,8 @@ class CheckoutContext extends SubContext
     {
         $manufactures = $table->getHash();
 
-        $manufacturerResource = new \Shopware\Components\Api\Resource\Manufacturer();
-        $manufacturerResource->setManager($this->getService(\Shopware\Components\Model\ModelManager::class));
+        $manufacturerResource = new Manufacturer();
+        $manufacturerResource->setManager($this->getService(ModelManager::class));
 
         foreach ($manufactures as $row) {
             $manufacturer = $manufacturerResource->getList(0, 1, [['property' => 'supplier.name', 'value' => $row['name']]]);
@@ -362,8 +371,8 @@ class CheckoutContext extends SubContext
     {
         $groups = $table->getHash();
 
-        $groupResource = new \Shopware\Components\Api\Resource\CustomerGroup();
-        $groupResource->setManager($this->getService(\Shopware\Components\Model\ModelManager::class));
+        $groupResource = new CustomerGroup();
+        $groupResource->setManager($this->getService(ModelManager::class));
 
         foreach ($groups as $row) {
             $group = $groupResource->getList(0, 1, [['property' => 'key', 'value' => $row['key']]]);
@@ -385,18 +394,17 @@ class CheckoutContext extends SubContext
      */
     public function theArticleHasNoActivePriceGroup($articleNumber)
     {
-        /** @var ModelManager $modelManager */
-        $modelManager = $this->getService(\Shopware\Components\Model\ModelManager::class);
+        $modelManager = $this->getService(ModelManager::class);
 
-        $articleDetail = $modelManager->getRepository('Shopware\Models\Article\Detail')->findOneBy(['number' => $articleNumber]);
+        $productVariant = $modelManager->getRepository(ProductVariant::class)->findOneBy(['number' => $articleNumber]);
 
-        if (!$articleDetail) {
+        if ($productVariant === null) {
             Helper::throwException('Article with number "' . $articleNumber . '" was not found.');
         }
 
-        $article = $articleDetail->getArticle();
-        $article->setPriceGroupActive(false);
-        $article->setPriceGroup(null);
+        $product = $productVariant->getArticle();
+        $product->setPriceGroupActive(false);
+        $product->setPriceGroup(null);
 
         $modelManager->flush();
     }
@@ -406,7 +414,7 @@ class CheckoutContext extends SubContext
      */
     public function iClickTheLinkInTheAddressBoxWithTitle($linkName, $title)
     {
-        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        /** @var CheckoutConfirm $page */
         $page = $this->getPage('CheckoutConfirm');
 
         /** @var MultipleElement $checkoutAddressBoxes */
@@ -427,7 +435,7 @@ class CheckoutContext extends SubContext
      */
     public function iClickOnTheLink($linkName)
     {
-        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        /** @var CheckoutConfirm $page */
         $page = $this->getPage('CheckoutConfirm');
 
         /** @var MultipleElement $checkoutModalAddressSelections */
@@ -443,7 +451,7 @@ class CheckoutContext extends SubContext
      */
     public function iCreateTheAddress(TableNode $table)
     {
-        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        /** @var CheckoutConfirm $page */
         $page = $this->getPage('CheckoutConfirm');
         $data = $table->getHash();
 
@@ -513,7 +521,7 @@ class CheckoutContext extends SubContext
      */
     public function thereShouldBeAModalAddressbox($address)
     {
-        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        /** @var CheckoutConfirm $page */
         $page = $this->getPage('CheckoutConfirm');
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
@@ -537,7 +545,7 @@ class CheckoutContext extends SubContext
      */
     public function iClickOnModalAddressbox($buttonName, $address)
     {
-        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        /** @var CheckoutConfirm $page */
         $page = $this->getPage('CheckoutConfirm');
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
@@ -563,7 +571,7 @@ class CheckoutContext extends SubContext
      */
     public function iShouldSeeAppearInAddressboxAfterDisappeared($address, $title, $titleToDisappear)
     {
-        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        /** @var CheckoutConfirm $page */
         $page = $this->getPage('CheckoutConfirm');
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
@@ -602,7 +610,7 @@ class CheckoutContext extends SubContext
      */
     public function iChangeTheAddress(TableNode $table)
     {
-        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        /** @var CheckoutConfirm $page */
         $page = $this->getPage('CheckoutConfirm');
         $data = $table->getHash();
 
@@ -614,7 +622,7 @@ class CheckoutContext extends SubContext
      */
     public function iSetAsDefaultAfterDisappeared($address, $titleToDisappear)
     {
-        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        /** @var CheckoutConfirm $page */
         $page = $this->getPage('CheckoutConfirm');
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
@@ -652,7 +660,7 @@ class CheckoutContext extends SubContext
      */
     public function theAddressboxMustContain($title, $address)
     {
-        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        /** @var CheckoutConfirm $page */
         $page = $this->getPage('CheckoutConfirm');
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
@@ -676,7 +684,7 @@ class CheckoutContext extends SubContext
      */
     public function iClickToAddTheArticleToTheCart($locator)
     {
-        /** @var \Shopware\Tests\Mink\Page\Detail $page */
+        /** @var Detail $page */
         $page = $this->getPage('Detail');
         Helper::pressNamedButton($page, $locator);
     }
@@ -794,7 +802,7 @@ EOD;
     public static function createUserForCheckoutAddressManagementTest()
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $dbal = Shopware()->Container()->get(Connection::class);
         $sql = <<<'EOD'
 INSERT INTO `s_user`
 (`password`, `encoder`, `email`, `active`, `accountmode`, `confirmationkey`, `paymentID`, `firstlogin`, `lastlogin`, `sessionID`, `newsletter`, `validation`, `affiliate`, `customergroup`, `paymentpreset`, `language`, `subshopID`, `referer`, `pricegroupID`, `internalcomment`, `failedlogins`, `lockeduntil`, `default_billing_address_id`, `default_shipping_address_id`, `title`, `salutation`, `firstname`, `lastname`, `birthday`, `customernumber`)

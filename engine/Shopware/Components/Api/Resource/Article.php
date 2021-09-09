@@ -1078,7 +1078,7 @@ class Article extends Resource implements BatchInterface
                             $variant = $oldMain;
                         } elseif (!empty($oldMain['number'])) {
                             $oldMain = $this->getDetailRepository()->findOneBy(['number' => $oldMain['number']]);
-                            $oldMainConfiguratorOptions = $oldMain ? $oldMain->getConfiguratorOptions()->toArray() : null;
+                            $oldMainConfiguratorOptions = $oldMain instanceof Detail && $oldMain->getConfiguratorOptions() !== null ? $oldMain->getConfiguratorOptions()->toArray() : null;
                             if ($oldMain && empty($oldMainConfiguratorOptions)) {
                                 $this->getManager()->remove($oldMain);
                             }
@@ -1106,7 +1106,7 @@ class Article extends Resource implements BatchInterface
 
             if (!$oldMainVariantProcessed) {
                 $oldMain = $this->getDetailRepository()->find($oldMainId);
-                if ($oldMain) {
+                if ($oldMain instanceof Detail) {
                     $oldMain->setKind(2);
                     $variants[] = $oldMain;
                 }

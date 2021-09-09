@@ -27,9 +27,15 @@ namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Constraint\IsType;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\Service\StatisticsService;
+use Shopware\Bundle\BenchmarkBundle\StatisticsClient;
+use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Models\Benchmark\BenchmarkConfig;
+use Shopware\Tests\Functional\Bundle\BenchmarkBundle\BenchmarkTestCase;
 
-abstract class ProviderTestCase extends \Shopware\Tests\Functional\Bundle\BenchmarkBundle\BenchmarkTestCase
+abstract class ProviderTestCase extends BenchmarkTestCase
 {
     /**
      * @var BenchmarkProviderInterface
@@ -80,7 +86,7 @@ abstract class ProviderTestCase extends \Shopware\Tests\Functional\Bundle\Benchm
      */
     protected function installDemoData($dataName)
     {
-        $dbalConnection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $dbalConnection = Shopware()->Container()->get(Connection::class);
         $basicContent = $this->openDemoDataFile('basic_setup');
         $dbalConnection->exec($basicContent);
         parent::installDemoData($dataName);
@@ -91,7 +97,7 @@ abstract class ProviderTestCase extends \Shopware\Tests\Functional\Bundle\Benchm
      */
     protected function getBenchmarkData()
     {
-        return $this->getProvider()->getBenchmarkData(Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext(1));
+        return $this->getProvider()->getBenchmarkData(Shopware()->Container()->get(ContextServiceInterface::class)->createShopContext(1));
     }
 
     /**
@@ -150,7 +156,7 @@ abstract class ProviderTestCase extends \Shopware\Tests\Functional\Bundle\Benchm
      */
     protected function getShopContextByShopId($shopId)
     {
-        return Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
+        return Shopware()->Container()->get(ContextServiceInterface::class)->createShopContext($shopId);
     }
 
     protected function resetConfig()
@@ -160,14 +166,15 @@ abstract class ProviderTestCase extends \Shopware\Tests\Functional\Bundle\Benchm
         $dbalConnection->update('s_benchmark_config', ['last_order_id' => '0', 'last_customer_id' => '0', 'last_product_id' => '0'], ['1' => '1']);
     }
 
-    protected function sendStatistics($batchSize = null)
+    protected function sendStatistics(): void
     {
         Shopware()->Models()->clear();
-        $response = new \Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse(new \DateTime('now', new \DateTimeZone('UTC')), 'foo', false);
-        $client = $this->createMock(\Shopware\Bundle\BenchmarkBundle\StatisticsClient::class);
+        $response = new StatisticsResponse(new \DateTime('now', new \DateTimeZone('UTC')), 'foo', false);
+        $client = $this->createMock(StatisticsClient::class);
         $client->method('sendStatistics')->willReturn($response);
-        $service = new \Shopware\Bundle\BenchmarkBundle\Service\StatisticsService(Shopware()->Container()->get('shopware.benchmark_bundle.collector'), $client, Shopware()->Container()->get('shopware.benchmark_bundle.repository.config'), Shopware()->Container()->get('shopware_storefront.context_service'), Shopware()->Container()->get('dbal_connection'));
+        $service = new StatisticsService(Shopware()->Container()->get('shopware.benchmark_bundle.collector'), $client, Shopware()->Container()->get('shopware.benchmark_bundle.repository.config'), Shopware()->Container()->get('shopware_storefront.context_service'), Shopware()->Container()->get('dbal_connection'));
         $config = Shopware()->Container()->get('shopware.benchmark_bundle.repository.config')->findOneBy(['shopId' => 1]);
+        static::assertInstanceOf(BenchmarkConfig::class, $config);
         $service->transmit($config, $config->getBatchSize());
     }
 }

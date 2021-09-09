@@ -270,7 +270,7 @@ class DatabaseSetupCommand extends ShopwareCommand implements CompletionAwareInt
         }
 
         $path = $input->getOption('path');
-        $path = !empty($path) ? $path : '';
+        $path = \is_string($path) ? $path : '';
         if ($path === '/') {
             $path = '';
         }

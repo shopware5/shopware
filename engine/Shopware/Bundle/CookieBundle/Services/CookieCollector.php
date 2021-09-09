@@ -145,6 +145,7 @@ class CookieCollector implements CookieCollectorInterface
 
     private function sortCookies(CookieCollection $cookieCollection): CookieCollection
     {
+        /** @var \ArrayIterator<int, CookieStruct> $cookieIterator */
         $cookieIterator = $cookieCollection->getIterator();
         $cookieIterator->uasort(static function (CookieStruct $firstCookie, CookieStruct $secondCookie) {
             return strcmp($firstCookie->getLabel(), $secondCookie->getLabel());

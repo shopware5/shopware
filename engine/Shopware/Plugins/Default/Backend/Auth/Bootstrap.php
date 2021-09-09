@@ -24,6 +24,7 @@
 
 use Shopware\Components\DependencyInjection\Bridge\Db;
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Session\PdoSessionHandler;
 use Shopware\Models\Shop\Locale;
 use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
@@ -87,8 +88,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     /**
      * Register shopware auth resource
      * create pre-dispatch hook to check backend permissions
-     *
-     * @return bool
      */
     public function install()
     {
@@ -116,9 +115,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public function uninstall()
     {
         return false;
@@ -191,8 +187,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
 
     /**
      * This pre-dispatch event-hook checks backend permissions
-     *
-     * @param \Enlight_Event_EventArgs $args
      *
      * @throws Enlight_Controller_Exception
      */
@@ -268,8 +262,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      *
      * @param Zend_Auth $auth
      *
-     * @throws \Exception
-     * @throws \SmartyException
+     * @throws Exception
+     * @throws SmartyException
      */
     public function registerAclPlugin($auth)
     {
@@ -283,7 +277,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
 
         /** @var Enlight_Template_Manager $engine */
-        $engine = $container->get(\Enlight_Template_Manager::class);
+        $engine = $container->get(Enlight_Template_Manager::class);
         $engine->unregisterPlugin(
             Smarty::PLUGIN_FUNCTION,
             'acl_is_allowed'
@@ -389,11 +383,11 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
 
         if (isset($sessionOptions['save_path'])) {
-            ini_set('session.save_path', $sessionOptions['save_path']);
+            ini_set('session.save_path', (string) $sessionOptions['save_path']);
         }
 
         if (isset($sessionOptions['save_handler'])) {
-            ini_set('session.save_handler', $sessionOptions['save_handler']);
+            ini_set('session.save_handler', (string) $sessionOptions['save_handler']);
         }
 
         $session = new Enlight_Components_Session_Namespace($storage, new NamespacedAttributeBag('ShopwareBackend'));
@@ -406,9 +400,9 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * Initiate shopware auth resource
      * database adapter by default
      *
-     * @throws \Exception
-     * @throws \SmartyException
+     * @throws SmartyException
      * @throws \Enlight_Exception
+     * @throws Exception
      *
      * @return \Zend_Auth
      */
@@ -429,9 +423,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         return $resource;
     }
 
-    /**
-     * Returns capabilities
-     */
     public function getCapabilities()
     {
         return [
@@ -444,7 +435,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     /**
      * Init backend locales
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function initLocale()
     {
@@ -455,7 +446,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $locale = $this->getCurrentLocale();
         $container->get('locale')->setLocale($locale->toString());
         $container->get('snippets')->setLocale($locale);
-        $template = $container->get(\Enlight_Template_Manager::class);
+        $template = $container->get(Enlight_Template_Manager::class);
         $baseHash = $this->request->getScheme() . '://'
                   . $this->request->getHttpHost()
                   . $this->request->getBaseUrl() . '?'
@@ -471,13 +462,13 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     /**
      * Loads current user's locale or, if none exists, the default fallback
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return \Shopware\Models\Shop\Locale
+     * @return Locale
      */
     protected function getCurrentLocale()
     {
-        $modelManager = $this->get(\Shopware\Components\Model\ModelManager::class);
+        $modelManager = $this->get(ModelManager::class);
 
         if (Shopware()->Container()->initialized('backendsession')) {
             $auth = $this->get('auth');
@@ -503,11 +494,9 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * Filters and transforms the session options array
      * so it complies with the format expected by Enlight_Components_Session
      *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     *
-     * @return array
+     * @return array<string, bool|string|int>
      */
-    private function getSessionOptions()
+    private function getSessionOptions(): array
     {
         /** @var array<string, string> $options */
         $options = Shopware()->Container()->getParameter('shopware.backendsession');
@@ -528,12 +517,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         return $options;
     }
 
-    /**
-     * @throws \InvalidArgumentException
-     *
-     * @return \SessionHandlerInterface|null
-     */
-    private function createSaveHandler(Container $container)
+    private function createSaveHandler(Container $container): ?PdoSessionHandler
     {
         /** @var array<string, string> $sessionOptions */
         $sessionOptions = $container->getParameter('shopware.backendsession');

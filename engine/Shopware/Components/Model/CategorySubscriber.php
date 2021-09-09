@@ -289,7 +289,7 @@ class CategorySubscriber implements BaseEventSubscriber
         $parents = $this->getCategoryComponent()->getParentCategoryIds($parentId);
         $path = implode('|', $parents);
         if (empty($path)) {
-            $path = null;
+            $path = '';
         } else {
             $path = '|' . $path . '|';
         }

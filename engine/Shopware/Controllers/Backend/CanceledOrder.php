@@ -347,7 +347,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         // Set the template depending on the voucherId. -1 is a special Id, which defines
         // the 'Ask for Reason' question.
         if ($template === 'sCANCELEDQUESTION') {
-            $context = null;
+            $context = [];
         } else {
             $code = $this->getFreeVoucherCode($voucherId);
             if ($code === null) {
@@ -374,7 +374,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         }
 
         // Find the shop matching the order
-        $orderModel = Shopware()->Models()->find('Shopware\Models\Order\Order', $orderId);
+        $orderModel = Shopware()->Models()->find(Order::class, $orderId);
         if (!$orderModel instanceof Shopware\Models\Order\Order) {
             $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
         } else {

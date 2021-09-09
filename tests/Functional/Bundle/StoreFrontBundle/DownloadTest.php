@@ -24,26 +24,27 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ProductDownloadServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Download;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 
 class DownloadTest extends TestCase
 {
-    public function testSingleProduct()
+    public function testSingleProduct(): void
     {
         $context = $this->getContext();
         $number = 'testSingleProduct';
         $data = $this->getProduct($number, $context);
         $this->helper->createArticle($data);
 
-        $product = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)->get($number, $context);
-
-        $downloads = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ProductDownloadServiceInterface::class)->get($product, $context);
+        $product = Shopware()->Container()->get(ListProductServiceInterface::class)->get($number, $context);
+        static::assertNotNull($product);
+        $downloads = Shopware()->Container()->get(ProductDownloadServiceInterface::class)->get($product, $context);
 
         static::assertCount(2, $downloads);
 
-        /** @var Download $download */
         foreach ($downloads as $download) {
             static::assertInstanceOf(Download::class, $download);
             static::assertContains($download->getFile(), [$data['downloads'][0]['file'], $data['downloads'][1]['file']]);
@@ -52,7 +53,7 @@ class DownloadTest extends TestCase
         }
     }
 
-    public function testDownloadList()
+    public function testDownloadList(): void
     {
         $numbers = ['testDownloadList-1', 'testDownloadList-2'];
         $context = $this->getContext();
@@ -61,11 +62,8 @@ class DownloadTest extends TestCase
             $this->helper->createArticle($data);
         }
 
-        $products = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
-            ->getList($numbers, $context);
-
-        $downloads = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ProductDownloadServiceInterface::class)
-            ->getList($products, $context);
+        $products = Shopware()->Container()->get(ListProductServiceInterface::class)->getList($numbers, $context);
+        $downloads = Shopware()->Container()->get(ProductDownloadServiceInterface::class)->getList($products, $context);
 
         static::assertCount(2, $downloads);
 
@@ -79,17 +77,12 @@ class DownloadTest extends TestCase
         }
     }
 
-    /**
-     * @param string $number
-     *
-     * @return array
-     */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $additionally = null
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         $mediaImgs = Shopware()->Db()->fetchCol('SELECT path FROM s_media LIMIT 2');

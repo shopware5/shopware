@@ -28,12 +28,18 @@ use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\SearchBundle\VariantSearch;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Components\ConfigWriter;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
+use Shopware\Models\Customer\Group;
 
 abstract class TestCase extends \Enlight_Components_Test_TestCase
 {
@@ -86,7 +92,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     public function getEkCustomerGroup()
     {
         return $this->converter->convertCustomerGroup(
-            Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->find(\Shopware\Models\Customer\Group::class, 1)
+            Shopware()->Container()->get(ModelManager::class)->find(Group::class, 1)
         );
     }
 
@@ -133,7 +139,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
         $criteria = new Criteria();
 
-        $this->addCategoryBaseCondition($criteria, $category, $conditions, $context);
+        $this->addCategoryBaseCondition($criteria, $category);
 
         $this->addConditions($criteria, $conditions);
 
@@ -144,9 +150,9 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         $criteria->offset(0)->limit(4000);
 
         if ($variantSearch) {
-            $search = Shopware()->Container()->get(\Shopware\Bundle\SearchBundle\VariantSearch::class);
+            $search = Shopware()->Container()->get(VariantSearch::class);
         } else {
-            $search = Shopware()->Container()->get(\Shopware\Bundle\SearchBundle\ProductNumberSearchInterface::class);
+            $search = Shopware()->Container()->get(ProductNumberSearchInterface::class);
         }
 
         $result = $search->search($criteria, $context);
@@ -160,26 +166,17 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         return $result;
     }
 
-    /**
-     * @param array $conditions
-     */
-    protected function addCategoryBaseCondition(
-        Criteria $criteria,
-        Category $category,
-        $conditions,
-        ShopContext $context
-    ) {
-        if ($category) {
-            $criteria->addBaseCondition(
-                new CategoryCondition([$category->getId()])
-            );
-        }
+    protected function addCategoryBaseCondition(Criteria $criteria, Category $category): void
+    {
+        $criteria->addBaseCondition(
+            new CategoryCondition([$category->getId()])
+        );
     }
 
     /**
      * @param ConditionInterface[] $conditions
      */
-    protected function addConditions(Criteria $criteria, $conditions)
+    protected function addConditions(Criteria $criteria, array $conditions): void
     {
         foreach ($conditions as $condition) {
             $criteria->addCondition($condition);
@@ -189,7 +186,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     /**
      * @param FacetInterface[] $facets
      */
-    protected function addFacets(Criteria $criteria, $facets)
+    protected function addFacets(Criteria $criteria, array $facets): void
     {
         foreach ($facets as $facet) {
             $criteria->addFacet($facet);
@@ -199,7 +196,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     /**
      * @param SortingInterface[] $sortings
      */
-    protected function addSortings(Criteria $criteria, $sortings)
+    protected function addSortings(Criteria $criteria, array $sortings): void
     {
         foreach ($sortings as $sorting) {
             $criteria->addSorting($sorting);
@@ -207,8 +204,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param string $number
-     * @param array  $additionally
+     * @param string                  $number
+     * @param array<array-key, mixed> $additionally
      *
      * @return Article
      */
@@ -228,10 +225,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         return $this->helper->createArticle($data);
     }
 
-    protected function assertSearchResult(
-        ProductNumberSearchResult $result,
-        array $expectedNumbers
-    ) {
+    protected function assertSearchResult(ProductNumberSearchResult $result, array $expectedNumbers): void
+    {
         $numbers = array_map(function (BaseProduct $product) {
             return $product->getNumber();
         }, $result->getProducts());
@@ -295,10 +290,10 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param string $number
-     * @param array  $additionally
+     * @param string                                                      $number
+     * @param array<string, mixed>|bool|int|string|Category|Supplier|null $additionally
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
@@ -332,9 +327,9 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      * @param string           $name
      * @param bool|string|null $value
      */
-    protected function setConfig($name, $value)
+    protected function setConfig($name, $value): void
     {
-        Shopware()->Container()->get(\Shopware\Components\ConfigWriter::class)->save($name, $value);
+        Shopware()->Container()->get(ConfigWriter::class)->save($name, $value);
         Shopware()->Container()->get(\Zend_Cache_Core::class)->clean();
         Shopware()->Container()->get(\Shopware_Components_Config::class)->setShop(Shopware()->Shop());
     }

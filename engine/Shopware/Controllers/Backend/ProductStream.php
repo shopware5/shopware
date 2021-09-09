@@ -280,7 +280,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
      */
     private function createContext($shopId, $currencyId = null, $customerGroupKey = null)
     {
-        /** @var Shopware\Models\Shop\Repository $repo */
+        /** @var \Shopware\Models\Shop\Repository $repo */
         $repo = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
 
         $shop = $repo->getActiveById($shopId);

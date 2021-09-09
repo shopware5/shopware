@@ -24,14 +24,15 @@
 
 namespace Shopware\Tests\Plugins\Core\PaymentMethods;
 
+use Shopware\Models\Customer\PaymentData;
+use Shopware\Models\Order\Order;
+use Shopware\Models\Payment\Payment;
+use Shopware\Models\Payment\PaymentInstance;
 use ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod;
 
 class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
 {
-    /**
-     * @var SepaPaymentMethod
-     */
-    protected static $sepaPaymentMethod;
+    protected static SepaPaymentMethod $sepaPaymentMethod;
 
     protected static $sepaStatus;
 
@@ -50,9 +51,8 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
         );
 
         //SEPA needs to be active for this. Also, we need to save existing status to later restore it
-        $sepaPaymentMean = Shopware()->Models()
-            ->getRepository('\Shopware\Models\Payment\Payment')
-            ->findOneByName('Sepa');
+        $sepaPaymentMean = Shopware()->Models()->getRepository(Payment::class)->findOneBy(['name' => 'Sepa']);
+        static::assertNotNull($sepaPaymentMean);
 
         self::$sepaStatus = $sepaPaymentMean->getActive();
 
@@ -64,20 +64,21 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
 
     public static function tearDownAfterClass(): void
     {
-        Shopware()->Models()
-            ->getRepository('\Shopware\Models\Payment\Payment')
-            ->findOneByName('Sepa')
-            ->setActive(self::$sepaStatus);
+        $sepaPaymentMean = Shopware()->Models()
+            ->getRepository(Payment::class)
+            ->findOneBy(['name' => 'Sepa']);
+        static::assertNotNull($sepaPaymentMean);
+        $sepaPaymentMean->setActive(self::$sepaStatus);
 
         $paymentData = Shopware()->Models()
-            ->getRepository('\Shopware\Models\Customer\PaymentData')
+            ->getRepository(PaymentData::class)
             ->findAll();
         foreach ($paymentData as $payment) {
             Shopware()->Models()->remove($payment);
         }
 
         $paymentInstances = Shopware()->Models()
-            ->getRepository('\Shopware\Models\Payment\PaymentInstance')
+            ->getRepository(PaymentInstance::class)
             ->findAll();
         foreach ($paymentInstances as $paymentInstance) {
             Shopware()->Models()->remove($paymentInstance);
@@ -87,10 +88,10 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
         parent::tearDownAfterClass();
     }
 
-    public function testValidateEmptyGet()
+    public function testValidateEmptyGet(): void
     {
         $validationResult = self::$sepaPaymentMethod->validate([]);
-        static::assertTrue(\is_array($validationResult));
+        static::assertIsArray($validationResult);
         if (\count($validationResult)) {
             static::assertArrayHasKey('sErrorFlag', $validationResult);
             static::assertArrayHasKey('sErrorMessages', $validationResult);
@@ -100,7 +101,7 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
         }
     }
 
-    public function testValidateFaultyIban()
+    public function testValidateFaultyIban(): void
     {
         $data = [
             'sSepaIban' => 'Some Invalid Iban',
@@ -109,7 +110,7 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
         ];
 
         $validationResult = self::$sepaPaymentMethod->validate($data);
-        static::assertTrue(\is_array($validationResult));
+        static::assertIsArray($validationResult);
         if (\count($validationResult)) {
             static::assertArrayHasKey('sErrorFlag', $validationResult);
             static::assertArrayHasKey('sErrorMessages', $validationResult);
@@ -120,7 +121,7 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
         }
     }
 
-    public function testValidateCorrectData()
+    public function testValidateCorrectData(): void
     {
         $data = [
             'sSepaIban' => 'AL47 2121 1009 0000 0002 3569 8741',
@@ -129,33 +130,33 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
         ];
 
         $validationResult = self::$sepaPaymentMethod->validate($data);
-        static::assertTrue(\is_array($validationResult));
+        static::assertIsArray($validationResult);
         static::assertCount(0, $validationResult);
     }
 
     /**
      * Covers issue SW-7721
      */
-    public function testCreatePaymentInstanceWithNoPaymentData()
+    public function testCreatePaymentInstanceWithNoPaymentData(): void
     {
         $orderId = 57;
         $userId = 1;
         $paymentId = 6;
-        Shopware()->Session()->sUserId = $userId;
+        Shopware()->Session()->set('sUserId', $userId);
 
         //for now, don't test email
-        Shopware()->Config()->set('sepaSendEmail', false);
+        Shopware()->Config()->offsetSet('sepaSendEmail', false);
 
         self::$sepaPaymentMethod->createPaymentInstance($orderId, $userId, $paymentId);
 
         $paymentInstance = Shopware()->Models()
-            ->getRepository('\Shopware\Models\Payment\PaymentInstance')
+            ->getRepository(PaymentInstance::class)
             ->findOneBy(['order' => $orderId, 'customer' => $userId, 'paymentMean' => $paymentId]);
 
-        static::assertInstanceOf('Shopware\Models\Payment\PaymentInstance', $paymentInstance);
-        static::assertInstanceOf('Shopware\Models\Order\Order', $paymentInstance->getOrder());
+        static::assertInstanceOf(PaymentInstance::class, $paymentInstance);
+        static::assertInstanceOf(Order::class, $paymentInstance->getOrder());
         static::assertEquals(57, $paymentInstance->getOrder()->getId());
-        static::assertInstanceOf('Shopware\Models\Payment\Payment', $paymentInstance->getPaymentMean());
+        static::assertInstanceOf(Payment::class, $paymentInstance->getPaymentMean());
         static::assertEquals('sepa', $paymentInstance->getPaymentMean()->getName());
 
         static::assertNull($paymentInstance->getBankName());
@@ -172,7 +173,7 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
         Shopware()->Models()->flush($paymentInstance);
     }
 
-    public function testSavePaymentDataInitialEmptyData()
+    public function testSavePaymentDataInitialEmptyData(): void
     {
         self::$sepaPaymentMethod->savePaymentData(1, $this->Request());
 
@@ -186,7 +187,7 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
     /**
      * @depends testSavePaymentDataInitialEmptyData
      */
-    public function testSavePaymentDataUpdatePrevious()
+    public function testSavePaymentDataUpdatePrevious(): void
     {
         $this->Request()->setQuery([
             'sSepaIban' => 'AL47 2121 1009 0000 0002 3569 8741',
@@ -205,26 +206,26 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
         static::assertEquals(true, $lastPayment['sSepaUseBillingData']);
     }
 
-    public function testCreatePaymentInstance()
+    public function testCreatePaymentInstance(): void
     {
         $orderId = 57;
         $userId = 1;
         $paymentId = 6;
-        Shopware()->Session()->sUserId = $userId;
+        Shopware()->Session()->set('sUserId', $userId);
 
         //for now, don't test email
-        Shopware()->Config()->set('sepaSendEmail', false);
+        Shopware()->Config()->offsetSet('sepaSendEmail', false);
 
         self::$sepaPaymentMethod->createPaymentInstance($orderId, $userId, $paymentId);
 
         $paymentInstance = Shopware()->Models()
-            ->getRepository('\Shopware\Models\Payment\PaymentInstance')
+            ->getRepository(PaymentInstance::class)
             ->findOneBy(['order' => $orderId, 'customer' => $userId, 'paymentMean' => $paymentId]);
 
-        static::assertInstanceOf('Shopware\Models\Payment\PaymentInstance', $paymentInstance);
-        static::assertInstanceOf('Shopware\Models\Order\Order', $paymentInstance->getOrder());
+        static::assertInstanceOf(PaymentInstance::class, $paymentInstance);
+        static::assertInstanceOf(Order::class, $paymentInstance->getOrder());
         static::assertEquals(57, $paymentInstance->getOrder()->getId());
-        static::assertInstanceOf('Shopware\Models\Payment\Payment', $paymentInstance->getPaymentMean());
+        static::assertInstanceOf(Payment::class, $paymentInstance->getPaymentMean());
         static::assertEquals('sepa', $paymentInstance->getPaymentMean()->getName());
 
         static::assertEquals('Some Valid Bank Name', $paymentInstance->getBankName());

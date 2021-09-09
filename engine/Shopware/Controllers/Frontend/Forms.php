@@ -28,8 +28,11 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\OrderNumberValidator\Exception\InvalidOrderNumberException;
+use Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface;
+use Shopware\Components\Privacy\IpAnonymizerInterface;
 use Shopware\Components\Random;
 use Shopware\Components\Validator\EmailValidator;
+use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Form\Field;
 use Shopware\Models\Form\Form;
 
@@ -62,12 +65,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * Render form - onSubmit checkFields -
      *
-     * @throws \Exception
-     * @throws \DomainException
-     * @throws \Enlight_Exception
-     * @throws \Zend_Mail_Exception
-     * @throws \Enlight_Event_Exception
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Exception
+     * @throws DomainException
+     * @throws Enlight_Exception
+     * @throws Zend_Mail_Exception
+     * @throws Enlight_Event_Exception
+     * @throws NonUniqueResultException
      */
     public function indexAction()
     {
@@ -94,13 +97,13 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     }
 
     /**
-     * @deprecated in 5.6, will be private in 5.8
+     * @throws Enlight_Exception
+     * @throws Zend_Mail_Exception
+     * @throws Enlight_Event_Exception
+     *
+     *@deprecated in 5.6, will be private in 5.8
      *
      * Commit form via email (default) or database (ticket system)
-     *
-     * @throws \Enlight_Exception
-     * @throws \Zend_Mail_Exception
-     * @throws \Enlight_Event_Exception
      */
     public function commitForm()
     {
@@ -129,7 +132,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $receivers = explode(',', $content['email']);
         $receivers = array_map('trim', $receivers);
 
-        $mail->setFrom(Shopware()->Config()->Mail);
+        $mail->setFrom(Shopware()->Config()->get('Mail'));
         $mail->clearRecipients();
         $mail->addTo($receivers);
         $mail->setBodyText($mailBody);
@@ -145,9 +148,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * @param int $formId
      *
-     * @throws \Exception
-     * @throws \Enlight_Exception
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Enlight_Exception
+     * @throws NonUniqueResultException
+     * @throws Exception
      *
      * @return array
      */
@@ -156,7 +159,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $fields = [];
         $labels = [];
 
-        $shopId = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->getId();
+        $shopId = $this->container->get(ContextServiceInterface::class)->getShopContext()->getShop()->getId();
 
         $query = Shopware()->Models()->getRepository(Form::class)
             ->getActiveFormQuery($formId, $shopId);
@@ -164,7 +167,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $form = $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
 
         if (!$form) {
-            throw new \Enlight_Controller_Exception(
+            throw new Enlight_Controller_Exception(
                 'Form not found',
                 Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
             );
@@ -206,7 +209,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             foreach ($this->_elements as $id => $element) {
                 if ($element['name'] === 'sordernumber') {
                     try {
-                        $this->get(\Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface::class)
+                        $this->get(OrderNumberValidatorInterface::class)
                             ->validate($orderNumber);
 
                         $product = Shopware()->Modules()
@@ -218,7 +221,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                         $this->_elements[$id]['value'] = $element['value'];
                     } catch (InvalidOrderNumberException $exception) {
                         // Explicit empty catch
-                    } catch (\TypeError $exception) {
+                    } catch (TypeError $exception) {
                         // Explicit empty catch
                     }
                 }
@@ -270,7 +273,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             'metaTitle' => $form->getMetaTitle(),
             'metaDescription' => $form->getMetaDescription(),
             'metaKeywords' => $form->getMetaKeywords(),
-            'attribute' => $this->get(\Shopware\Components\Model\ModelManager::class)->toArray($form->getAttribute()),
+            'attribute' => $this->get(ModelManager::class)->toArray($form->getAttribute()),
         ];
 
         return array_merge($formData, [
@@ -472,7 +475,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      *
      * Populates $this->_postData
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -480,7 +483,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     {
         $errors = [];
 
-        /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
+        /** @var EmailValidatorInterface $emailValidator */
         $emailValidator = $this->container->get(EmailValidator::class);
 
         foreach ($elements as $element) {
@@ -575,9 +578,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     protected function translateForm(Form $form, array &$fields)
     {
-        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getContext();
+        $context = $this->get(ContextServiceInterface::class)->getContext();
 
-        $translation = $this->get(\Shopware_Components_Translation::class)->readWithFallback(
+        $translation = $this->get(Shopware_Components_Translation::class)->readWithFallback(
             $context->getShop()->getId(),
             $context->getShop()->getFallbackId(),
             'forms',
@@ -589,7 +592,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         if (!empty($form->getAttribute())) {
-            $translation = $this->get(\Shopware_Components_Translation::class)->readWithFallback(
+            $translation = $this->get(Shopware_Components_Translation::class)->readWithFallback(
                 $context->getShop()->getId(),
                 $context->getShop()->getFallbackId(),
                 's_cms_support_attributes',
@@ -609,7 +612,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $elementIds = array_keys($fields);
 
-        $fieldTranslations = $this->get(\Shopware_Components_Translation::class)->readBatchWithFallback(
+        $fieldTranslations = $this->get(Shopware_Components_Translation::class)->readBatchWithFallback(
             $context->getShop()->getId(),
             $context->getShop()->getFallbackId(),
             'forms_elements',
@@ -633,7 +636,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function renderElementNote(Enlight_View_Default $view)
     {
@@ -656,9 +659,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * @param int $formId
      *
-     * @throws \Enlight_Exception
-     * @throws \Zend_Mail_Exception
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Exception
+     * @throws Zend_Mail_Exception
+     * @throws Enlight_Event_Exception
      */
     private function handleFormPost($formId)
     {
@@ -685,14 +688,14 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      * Populates $this->_errors
      * Modifies  $this->_elements
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function checkFields()
     {
         $this->_errors = $this->_validateInput($this->Request()->getPost(), $this->_elements);
 
-        if (!empty(Shopware()->Config()->CaptchaColor)) {
-            /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
+        if (!empty(Shopware()->Config()->get('CaptchaColor'))) {
+            /** @var CaptchaValidator $captchaValidator */
             $captchaValidator = $this->container->get('shopware.captcha.validator');
 
             if (!$captchaValidator->validate($this->Request())) {
@@ -740,11 +743,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             }
         }
 
-        $ip = $this->get(\Shopware\Components\Privacy\IpAnonymizerInterface::class)->anonymize($this->Request()->getClientIp());
+        $ip = $this->get(IpAnonymizerInterface::class)->anonymize($this->Request()->getClientIp());
 
         $content = str_replace(
             ['{sIP}', '{sDateTime}', '{sShopname}'],
-            [$ip, date('d.m.Y h:i:s'), Shopware()->Config()->shopName],
+            [$ip, date('d.m.Y h:i:s'), Shopware()->Config()->get('shopName')],
             $content
         );
 

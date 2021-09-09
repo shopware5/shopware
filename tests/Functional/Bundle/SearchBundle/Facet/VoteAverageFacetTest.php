@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,8 +27,11 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
+use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -35,9 +40,9 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class VoteAverageFacetTest extends TestCase
 {
-    public function testVoteAverageFacet()
+    public function testVoteAverageFacet(): void
     {
-        $context = $this->getContext(1);
+        $context = $this->getContext();
 
         $result = $this->search(
             [
@@ -65,14 +70,13 @@ class VoteAverageFacetTest extends TestCase
             [],
             [new VoteAverageFacet()],
             [],
-            $context,
-            []
+            $context
         );
 
-        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult', $result->getFacets()[0]);
+        static::assertInstanceOf(RadioFacetResult::class, $result->getFacets()[0]);
     }
 
-    public function testVoteFacetWithoutSubshopVotes()
+    public function testVoteFacetWithoutSubshopVotes(): void
     {
         $context = $this->getContext(2);
 
@@ -94,7 +98,7 @@ class VoteAverageFacetTest extends TestCase
         static::assertEmpty($result->getFacets());
     }
 
-    public function testVoteFacetWithSubshopVotes()
+    public function testVoteFacetWithSubshopVotes(): void
     {
         $context = $this->getContext(2);
 
@@ -113,10 +117,10 @@ class VoteAverageFacetTest extends TestCase
             ['displayOnlySubShopVotes' => true]
         );
 
-        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult', $result->getFacets()[0]);
+        static::assertInstanceOf(RadioFacetResult::class, $result->getFacets()[0]);
     }
 
-    public function testVoteFacetWithNotAssignedSubShop()
+    public function testVoteFacetWithNotAssignedSubShop(): void
     {
         $context = $this->getContext(2);
 
@@ -136,15 +140,19 @@ class VoteAverageFacetTest extends TestCase
             ['displayOnlySubShopVotes' => true]
         );
 
-        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult', $result->getFacets()[0]);
+        static::assertInstanceOf(RadioFacetResult::class, $result->getFacets()[0]);
     }
 
+    /**
+     * @param string            $number
+     * @param array<int, array> $additionally
+     */
     protected function createProduct(
         $number,
         ShopContext $context,
         Category $category,
         $additionally
-    ) {
+    ): Article {
         $article = parent::createProduct(
             $number,
             $context,
@@ -162,13 +170,10 @@ class VoteAverageFacetTest extends TestCase
         return $article;
     }
 
-    /**
-     * @return Category
-     */
-    private function createCategory(Shop $shop)
+    private function createCategory(Shop $shop): Category
     {
-        $em = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
-        $category = $em->find(Category::class, $shop->getCategory()->getId());
+        $category = Shopware()->Container()->get(ModelManager::class)
+            ->find(Category::class, $shop->getCategory()->getId());
 
         return $this->helper->createCategory(['parent' => $category]);
     }

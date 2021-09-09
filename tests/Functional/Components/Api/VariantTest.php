@@ -79,7 +79,7 @@ class VariantTest extends TestCase
             'keywords' => 'test, testarticle',
 
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(rand()),
+                'number' => 'swTEST' . uniqid((string) rand()),
                 'inStock' => 15,
                 'unitId' => 1,
 
@@ -129,7 +129,7 @@ class VariantTest extends TestCase
 
             'variants' => [
                 [
-                    'number' => 'swTEST.variant.' . uniqid(rand()),
+                    'number' => 'swTEST.variant.' . uniqid((string) rand()),
                     'inStock' => 17,
                     'unitId' => 1,
 
@@ -168,7 +168,7 @@ class VariantTest extends TestCase
                     ],
                 ],
                 [
-                    'number' => 'swTEST.variant.' . uniqid(rand()),
+                    'number' => 'swTEST.variant.' . uniqid((string) rand()),
                     'inStock' => 17,
                     'unitId' => 1,
 
@@ -653,7 +653,7 @@ class VariantTest extends TestCase
             $options = $this->getVariantOptionsOfSet($configuratorSet);
 
             unset($options[0]['optionId']);
-            $name = 'New-' . uniqid(rand());
+            $name = 'New-' . uniqid((string) rand());
             $names[] = $name;
             $options[0]['option'] = $name;
             $create['configuratorOptions'] = $options;
@@ -686,7 +686,7 @@ class VariantTest extends TestCase
             'taxId' => 1,
             'supplierId' => 2,
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(rand()),
+                'number' => 'swTEST' . uniqid((string) rand()),
                 'prices' => [
                     [
                         'customerGroupKey' => 'EK',
@@ -754,7 +754,7 @@ class VariantTest extends TestCase
             'active' => true,
             'taxId' => 1,
             'mainDetail' => [
-                'number' => 'brand1' . uniqid(rand()),
+                'number' => 'brand1' . uniqid((string) rand()),
                 'inStock' => 15,
                 'active' => true,
 
@@ -786,7 +786,7 @@ class VariantTest extends TestCase
             'active' => true,
             'taxId' => 1,
             'mainDetail' => [
-                'number' => 'brand2' . uniqid(rand()),
+                'number' => 'brand2' . uniqid((string) rand()),
                 'inStock' => 15,
                 'active' => true,
 
@@ -841,7 +841,7 @@ class VariantTest extends TestCase
             'active' => true,
             'taxId' => 1,
             'mainDetail' => [
-                'number' => 'brand2' . uniqid(rand()),
+                'number' => 'brand2' . uniqid((string) rand()),
                 'inStock' => 15,
                 'active' => true,
 
@@ -919,7 +919,7 @@ class VariantTest extends TestCase
     private function getSimpleVariantData()
     {
         return [
-            'number' => 'swTEST' . uniqid(rand()),
+            'number' => 'swTEST' . uniqid((string) rand()),
             'inStock' => 100,
             'unitId' => 1,
             'prices' => [

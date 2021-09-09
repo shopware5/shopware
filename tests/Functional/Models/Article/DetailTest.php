@@ -25,19 +25,16 @@
 namespace Shopware\Tests\Models\Order;
 
 use ReflectionClass;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Repository;
 
 class DetailTest extends \Enlight_Components_Test_TestCase
 {
-    /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    protected $em;
+    protected ModelManager $em;
 
-    /**
-     * @var \Shopware\Models\Article\Repository
-     */
-    protected $repo;
+    protected Repository $repo;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -61,22 +58,25 @@ class DetailTest extends \Enlight_Components_Test_TestCase
 
     public function testValidOrderNumber(): void
     {
-        /** @var Detail $detail */
         $detail = $this->repo->find(6);
+        static::assertInstanceOf(Detail::class, $detail);
         $detail->setNumber('SW100066');
 
         $this->em->persist($detail);
         $this->em->flush($detail);
 
         $detail = $this->repo->find(6);
+        static::assertInstanceOf(Detail::class, $detail);
 
-        static::assertStringContainsString('SW100066', $detail->getNumber());
+        $detailNumber = $detail->getNumber();
+        static::assertNotNull($detailNumber);
+        static::assertStringContainsString('SW100066', $detailNumber);
     }
 
     public function testInvalidOrderNumber(): void
     {
-        /** @var Detail $detail */
         $detail = $this->repo->find(6);
+        static::assertInstanceOf(Detail::class, $detail);
         $detail->setNumber('€SW100066@1');
 
         $violations = $this->em->validate($detail);
@@ -87,8 +87,8 @@ class DetailTest extends \Enlight_Components_Test_TestCase
 
     public function testEmptyOrderNumberIsInvalid(): void
     {
-        /** @var Detail $detail */
         $detail = $this->repo->find(6);
+        static::assertInstanceOf(Detail::class, $detail);
         $detail->setNumber('');
 
         $violations = $this->em->validate($detail);
@@ -137,7 +137,7 @@ class DetailTest extends \Enlight_Components_Test_TestCase
      */
     private function internalTestChangingOrderNumberRegexIsWorking(string $regex, string $number): void
     {
-        $validator = Shopware()->Container()->get(\Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface::class);
+        $validator = Shopware()->Container()->get(OrderNumberValidatorInterface::class);
 
         $property = (new ReflectionClass(\get_class($validator)))->getProperty('pattern');
         $property->setAccessible(true);

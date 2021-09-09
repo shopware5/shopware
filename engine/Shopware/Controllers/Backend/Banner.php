@@ -22,7 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Models\Banner\Banner;
+use Shopware\Models\Banner\Repository as BannerRepository;
+use Shopware\Models\Category\Category;
 
 /**
  * This controller is used to create, update, delete and get banner data from the database.
@@ -34,24 +38,20 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     /**
      * Test repository injection variable
      *
-     * @var \Shopware\Models\Banner\Repository
+     * @var BannerRepository
      * @scope private
      */
-    public static $testRepository = null;
+    public static $testRepository;
 
     /**
      * Holds the Repository from doctrine
-     *
-     * @var \Shopware\Models\Banner\Repository
      */
-    private $repository;
+    private BannerRepository $repository;
 
     /**
      * Stores in which namespace we are in
-     *
-     * @var Enlight_Components_Snippet_Namespace
      */
-    private $namespace;
+    private Enlight_Components_Snippet_Namespace $namespace;
 
     /**
      * Reads all known categories into an array to show it in the category treepanel
@@ -68,7 +68,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             $filter[] = ['property' => 'c.parentId', 'value' => $node];
         }
 
-        $query = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class)->getListQuery(
+        $query = Shopware()->Models()->getRepository(Category::class)->getListQuery(
             $filter,
             $this->Request()->getParam('sort', []),
             $this->Request()->getParam('limit'),
@@ -220,6 +220,9 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         if (!$createMode) {
             // Load model from db
             $bannerModel = $this->repository->find($id);
+            if (!$bannerModel instanceof Banner) {
+                throw new ModelNotFoundException(Banner::class, (int) $id);
+            }
         } else {
             // Check if there are none files submitted
             if (empty($mediaManagerData)) {
@@ -240,7 +243,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         }
 
         // Strip full qualified url
-        $mediaService = $this->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = $this->get(MediaServiceInterface::class);
         $bannerModel->setImage($mediaService->normalize($bannerModel->getImage()));
 
         // Write model to db
@@ -267,7 +270,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $bannerRequestData = empty($multipleBanner) ? [['id' => $this->Request()->id]] : $multipleBanner;
         try {
             foreach ($bannerRequestData as $banner) {
-                $model = Shopware()->Models()->find(\Shopware\Models\Banner\Banner::class, $banner['id']);
+                $model = Shopware()->Models()->find(Banner::class, $banner['id']);
                 Shopware()->Models()->remove($model);
             }
             Shopware()->Models()->flush();
@@ -307,7 +310,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     {
         $cnt = 0;
         $nodes = null;
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         foreach ($banners as $banner) {
             // We have to split the datetime to date and time
@@ -335,7 +338,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      * @param string $date
      * @param string $time
      *
-     * @return \DateTime|null
+     * @return DateTime|null
      */
     private function prepareDateAndTime($date, $time)
     {
@@ -343,8 +346,8 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         if (empty($date)) {
             return null;
         }
-        $datePart = new \DateTime($date);
-        $timePart = new \DateTime($time);
+        $datePart = new DateTime($date);
+        $timePart = new DateTime($time);
         // Fill the timePart with the datePart
         return $timePart->setDate((int) $datePart->format('Y'), (int) $datePart->format('m'), (int) $datePart->format('d'));
     }

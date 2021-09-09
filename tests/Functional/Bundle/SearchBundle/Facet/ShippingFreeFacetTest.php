@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,6 +27,7 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
+use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -34,7 +37,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class ShippingFreeFacetTest extends TestCase
 {
-    public function testShippingFree()
+    public function testShippingFree(): void
     {
         $facet = new ShippingFreeFacet();
         $result = $this->search(
@@ -50,10 +53,10 @@ class ShippingFreeFacetTest extends TestCase
         );
 
         static::assertCount(1, $result->getFacets());
-        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $result->getFacets()[0]);
+        static::assertInstanceOf(BooleanFacetResult::class, $result->getFacets()[0]);
     }
 
-    public function testShippingFreeWithoutMatch()
+    public function testShippingFreeWithoutMatch(): void
     {
         $facet = new ShippingFreeFacet();
         $result = $this->search(
@@ -74,15 +77,13 @@ class ShippingFreeFacetTest extends TestCase
     /**
      * @param string $number
      * @param bool   $shippingFree
-     *
-     * @return array
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $shippingFree = true
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         $product['mainDetail']['shippingFree'] = $shippingFree;

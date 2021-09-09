@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,7 +36,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class PriceConditionTest extends TestCase
 {
-    public function testSimplePriceRange()
+    public function testSimplePriceRange(): void
     {
         $context = $this->getContext();
         $context->setFallbackCustomerGroup($this->getEkCustomerGroup());
@@ -57,7 +59,7 @@ class PriceConditionTest extends TestCase
         );
     }
 
-    public function testDecimalPriceRange()
+    public function testDecimalPriceRange(): void
     {
         $context = $this->getContext();
         $context->setFallbackCustomerGroup($this->getEkCustomerGroup());
@@ -78,7 +80,7 @@ class PriceConditionTest extends TestCase
         );
     }
 
-    public function testCustomerGroupPrices()
+    public function testCustomerGroupPrices(): void
     {
         $context = $this->getContext();
 
@@ -107,7 +109,7 @@ class PriceConditionTest extends TestCase
         );
     }
 
-    public function testPriceConditionWithCurrencyFactor()
+    public function testPriceConditionWithCurrencyFactor(): void
     {
         $context = $this->getContext();
         $context->getCurrency()->setFactor(1.3625);
@@ -131,7 +133,7 @@ class PriceConditionTest extends TestCase
         );
     }
 
-    public function testPriceGroup()
+    public function testPriceGroup(): void
     {
         $condition = new PriceCondition(18, 18);
         $context = $this->getContext();
@@ -160,7 +162,7 @@ class PriceConditionTest extends TestCase
         );
     }
 
-    public function testPriceGroupWithLastGraduation()
+    public function testPriceGroupWithLastGraduation(): void
     {
         $condition = new PriceCondition(14, 14);
         $context = $this->getContext();
@@ -190,17 +192,17 @@ class PriceConditionTest extends TestCase
     }
 
     /**
-     * @param string $number
-     * @param array  $prices
+     * @param string               $number
+     * @param array<string, mixed> $prices
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $prices = []
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         $product['mainDetail']['prices'] = [];

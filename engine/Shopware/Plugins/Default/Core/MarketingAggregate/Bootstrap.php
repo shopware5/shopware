@@ -195,7 +195,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function beforeSetLastArticle(Enlight_Event_EventArgs $arguments)
     {
-        if (Shopware()->Session()->Bot || !($this->isSimilarShownActivated())) {
+        if (Shopware()->Session()->get('Bot') || !($this->isSimilarShownActivated())) {
             return $arguments->getReturn();
         }
 
@@ -297,7 +297,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function addNewAlsoBought(Enlight_Event_EventArgs $arguments)
     {
-        if (Shopware()->Session()->Bot) {
+        if (Shopware()->Session()->get('Bot')) {
             return $arguments->getReturn();
         }
 
@@ -364,7 +364,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function incrementTopSeller(Enlight_Event_EventArgs $arguments)
     {
-        if (Shopware()->Session()->Bot || !($this->isTopSellerActivated())) {
+        if (Shopware()->Session()->get('Bot') || !($this->isTopSellerActivated())) {
             return $arguments->getReturn();
         }
 
@@ -414,7 +414,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function afterTopSellerSelected(Enlight_Event_EventArgs $arguments)
     {
-        if (Shopware()->Session()->Bot) {
+        if (Shopware()->Session()->get('Bot')) {
             return $arguments->getReturn();
         }
 

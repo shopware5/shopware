@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
@@ -34,7 +37,10 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class VariantConditionOnSaleTest extends TestCase
 {
-    private $groups = [];
+    /**
+     * @var Group[]
+     */
+    private array $groups = [];
 
     protected function setUp(): void
     {
@@ -42,7 +48,7 @@ class VariantConditionOnSaleTest extends TestCase
         $this->setConfig('hideNoInStock', true);
     }
 
-    public function testSingleNotExpandOptionSortByPrice()
+    public function testSingleNotExpandOptionSortByPrice(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -101,7 +107,7 @@ class VariantConditionOnSaleTest extends TestCase
         $this->assertSearchResultSorting($result, ['A2', 'B1', 'C1']);
     }
 
-    public function testSingleNotExpandOptionWithLastStockSortByPrice()
+    public function testSingleNotExpandOptionWithLastStockSortByPrice(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -167,7 +173,7 @@ class VariantConditionOnSaleTest extends TestCase
         $this->assertSearchResultSorting($result, ['C1', 'A2']);
     }
 
-    public function testMultiNotExpandOptionSortByPrice()
+    public function testMultiNotExpandOptionSortByPrice(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -236,7 +242,7 @@ class VariantConditionOnSaleTest extends TestCase
         $this->assertSearchResultSorting($result, ['D2', 'A4']);
     }
 
-    public function testMultiNotExpandOptionSortByPriceWithMultipleCustomerGroups()
+    public function testMultiNotExpandOptionSortByPriceWithMultipleCustomerGroups(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -301,7 +307,7 @@ class VariantConditionOnSaleTest extends TestCase
         static::assertNotEmpty($result);
     }
 
-    public function testSingleExpandOptionSortByPrice()
+    public function testSingleExpandOptionSortByPrice(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -360,7 +366,7 @@ class VariantConditionOnSaleTest extends TestCase
         $this->assertSearchResultSorting($result, ['A4', 'A1', 'B1']);
     }
 
-    public function testSingleExpandOptionWithLastStockSortByPrice()
+    public function testSingleExpandOptionWithLastStockSortByPrice(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -438,7 +444,7 @@ class VariantConditionOnSaleTest extends TestCase
         $this->assertSearchResultSorting($result, ['E2', 'D4', 'A1', 'D1', 'B1']);
     }
 
-    public function testMultiExpandOptionSortByPrice()
+    public function testMultiExpandOptionSortByPrice(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -515,7 +521,7 @@ class VariantConditionOnSaleTest extends TestCase
         $this->assertSearchResultSorting($result, ['D5', 'A2', 'A4']);
     }
 
-    public function testMultiCrossExpandOptionSortByPrice()
+    public function testMultiCrossExpandOptionSortByPrice(): void
     {
         $this->groups = $this->helper->insertConfiguratorData(
             [
@@ -585,7 +591,7 @@ class VariantConditionOnSaleTest extends TestCase
         $this->assertSearchResultSorting($result, ['D3', 'A1']);
     }
 
-    public function createCondition($options, $groupName, $expand = false)
+    public function createCondition($options, $groupName, $expand = false): VariantCondition
     {
         $mapping = $this->mapOptions();
 
@@ -603,14 +609,14 @@ class VariantConditionOnSaleTest extends TestCase
      * @param string $number
      * @param array  $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $data = []
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         $configurator = $this->helper->createConfiguratorSet($data['groups']);
@@ -668,7 +674,7 @@ class VariantConditionOnSaleTest extends TestCase
      *
      * @param ListProduct[] $products
      */
-    private function assertPrices(array $products, array $prices)
+    private function assertPrices(array $products, array $prices): void
     {
         foreach ($products as $product) {
             $number = $product->getNumber();
@@ -682,10 +688,8 @@ class VariantConditionOnSaleTest extends TestCase
 
     /**
      * Returns the mapping of group and option names to ids.
-     *
-     * @return array
      */
-    private function mapOptions()
+    private function mapOptions(): array
     {
         $mapping = [];
         foreach ($this->groups as $group) {
@@ -701,11 +705,9 @@ class VariantConditionOnSaleTest extends TestCase
     /**
      * Creates the structure of the configurator.
      *
-     * @param array $expected
-     *
      * @return Group[]
      */
-    private function buildConfigurator($expected)
+    private function buildConfigurator(array $expected): array
     {
         $groups = [];
         foreach ($expected as $group => $optionNames) {
@@ -723,7 +725,7 @@ class VariantConditionOnSaleTest extends TestCase
                 }
 
                 $clone = clone $globalGroup;
-                $clone->setOptions($options);
+                $clone->setOptions(new ArrayCollection($options));
 
                 $groups[] = $clone;
             }

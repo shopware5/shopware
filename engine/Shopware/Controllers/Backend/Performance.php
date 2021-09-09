@@ -331,7 +331,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             $findBy['form'] = $form;
         }
 
-        /** @var Shopware\Models\Config\Element $element */
+        /** @var \Shopware\Models\Config\Element $element */
         $element = $elementRepository->findOneBy($findBy);
 
         // If the element is empty, the given setting does not exists. This might be the case for some plugins

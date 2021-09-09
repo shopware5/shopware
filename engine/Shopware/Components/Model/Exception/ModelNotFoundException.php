@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,26 +24,21 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend\Mocks;
+namespace Shopware\Components\Model\Exception;
 
-class ViewMock extends \Enlight_View_Default
+class ModelNotFoundException extends \RuntimeException
 {
     /**
-     * @var string
+     * @param int|string $identifierValue
      */
-    public $template;
-
-    public function getTemplate(): string
-    {
-        return $this->template;
-    }
-
-    public function loadTemplate($template)
-    {
-        $this->template = $template;
-    }
-
-    public function assign($spec, $value = null, $nocache = null, $scope = null)
-    {
+    public function __construct(
+        string $modelClass,
+        $identifierValue,
+        string $identifier = 'id',
+        int $code = 0,
+        ?\Throwable $previous = null
+    ) {
+        $message = sprintf('Model of "%s" for %s "%s" not found', $modelClass, $identifier, (string) $identifierValue);
+        parent::__construct($message, $code, $previous);
     }
 }

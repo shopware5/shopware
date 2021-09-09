@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
+use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGenerator\UniqueIdGenerator;
 use Shopware\Components\CSRFWhitelistAware;
 use ShopwarePlugins\SwagUpdate\Components\Checks\EmotionTemplateCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\LicenseCheck;
@@ -34,6 +36,7 @@ use ShopwarePlugins\SwagUpdate\Components\Checks\WritableCheck;
 use ShopwarePlugins\SwagUpdate\Components\ExtensionMissingException;
 use ShopwarePlugins\SwagUpdate\Components\ExtJsResultMapper;
 use ShopwarePlugins\SwagUpdate\Components\FeedbackCollector;
+use ShopwarePlugins\SwagUpdate\Components\PluginCheck;
 use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
 use ShopwarePlugins\SwagUpdate\Components\Steps\ErrorResult;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
@@ -55,7 +58,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     {
         try {
             $data = $this->getCachedVersion();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             /** @var LoggerInterface $logger */
             $logger = $this->get('corelogger');
             $logger->error($e);
@@ -86,14 +89,18 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             'de',
         ];
 
+        $assignedData = [
+            'version' => $data->version,
+        ];
+
         $changeLog = $this->getLocalizedChangeLog($data, $languagePriorities);
+        if ($changeLog !== null) {
+            $assignedData['changelog'] = $changeLog['changelog'];
+        }
 
         $this->View()->assign([
             'success' => true,
-            'data' => [
-                'version' => $data->version,
-                'changelog' => $changeLog['changelog'],
-            ],
+            'data' => $assignedData,
         ]);
     }
 
@@ -118,7 +125,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $endpoint = $this->container->getParameter('shopware.store.apiEndpoint');
 
         $fileSystem = new \ShopwarePlugins\SwagUpdate\Components\FileSystem();
-        $conn = $this->get(\Doctrine\DBAL\Connection::class);
+        $conn = $this->get(Connection::class);
         $checks = [
             new RegexCheck($namespace, $userLang),
             new MySQLVersionCheck($conn, $namespace),
@@ -142,7 +149,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $version = $data->version;
 
-        $pluginCheck = new \ShopwarePlugins\SwagUpdate\Components\PluginCheck($this->container);
+        $pluginCheck = new PluginCheck($this->container);
         $result = $pluginCheck->checkInstalledPluginsAvailableForNewVersion($version);
 
         $this->View()->assign([
@@ -192,7 +199,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
             try {
                 $collector->sendData();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // ignore for now
             }
         }
@@ -246,7 +253,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $version = $this->getCachedVersion();
         $payload['version'] = $version->version;
 
-        /** @var \Enlight_Components_Session_Namespace $session */
+        /** @var Enlight_Components_Session_Namespace $session */
         $session = Shopware()->BackendSession();
         if ($session->offsetExists('update_ftp')) {
             $payload['ftp_credentials'] = $session->offsetGet('update_ftp');
@@ -259,7 +266,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $updateFilePath = $projectDir . 'files/update/update.json';
 
         if (!file_put_contents($updateFilePath, $payload)) {
-            throw new \Exception(sprintf('Could not write file %s', $updateFilePath));
+            throw new Exception(sprintf('Could not write file %s', $updateFilePath));
         }
 
         $this->redirect($base . '/recovery/update/index.php');
@@ -326,18 +333,18 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     /**
      * @param string $path the path of the directory to be iterated over
      *
-     * @return \RecursiveIteratorIterator
+     * @return RecursiveIteratorIterator
      */
     protected function createRecursiveFileIterator($path)
     {
-        $directoryIterator = new \RecursiveDirectoryIterator(
+        $directoryIterator = new RecursiveDirectoryIterator(
             $path,
-            \RecursiveDirectoryIterator::SKIP_DOTS
+            RecursiveDirectoryIterator::SKIP_DOTS
         );
 
-        return new \RecursiveIteratorIterator(
+        return new RecursiveIteratorIterator(
             $directoryIterator,
-            \RecursiveIteratorIterator::LEAVES_ONLY
+            RecursiveIteratorIterator::LEAVES_ONLY
         );
     }
 
@@ -355,7 +362,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $fs = new Filesystem();
 
-        /** @var \SplFileInfo $file */
+        /** @var SplFileInfo $file */
         foreach ($iterator as $file) {
             $sourceFile = $file->getPathname();
             $destinationFile = Shopware()->DocPath() . str_replace($fileDir, '', $file->getPathname());
@@ -404,29 +411,21 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     /**
      * Returns unique id of this shop installation.
      * If no unique id exists it will be created.
-     *
-     * @return string
      */
-    private function getUnique()
+    private function getUnique(): string
     {
-        /** @var Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGeneratorInterface $uniqueIdGenerator */
-        $uniqueIdGenerator = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGenerator\UniqueIdGenerator::class);
-
-        return $uniqueIdGenerator->getUniqueId();
+        return $this->container->get(UniqueIdGenerator::class)->getUniqueId();
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getPluginConfig()
+    private function getPluginConfig(): array
     {
         return Shopware()->Plugins()->Backend()->SwagUpdate()->Config()->toArray();
     }
 
-    /**
-     * @return string
-     */
-    private function getShopwareVersion()
+    private function getShopwareVersion(): string
     {
         $pluginConfig = $this->getPluginConfig();
 
@@ -446,13 +445,10 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         return $shopwareVersion;
     }
 
-    /**
-     * @return Version|null
-     */
-    private function getCachedVersion()
+    private function getCachedVersion(): ?Version
     {
-        /** @var \Zend_Cache_Core $cache */
-        $cache = $this->get(\Zend_Cache_Core::class);
+        /** @var Zend_Cache_Core $cache */
+        $cache = $this->get(Zend_Cache_Core::class);
         if (false === $version = $cache->load(self::CACHE_KEY)) {
             $version = $this->fetchUpdateVersion();
         }
@@ -460,10 +456,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         return $version;
     }
 
-    /**
-     * @return Version
-     */
-    private function fetchUpdateVersion()
+    private function fetchUpdateVersion(): ?Version
     {
         $shopwareVersion = $this->getShopwareVersion();
 
@@ -476,8 +469,8 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $update = $this->get('swagupdateupdatecheck');
         $result = $update->checkUpdate($shopwareVersion, $params);
 
-        /** @var \Zend_Cache_Core $cache */
-        $cache = $this->get(\Zend_Cache_Core::class);
+        /** @var Zend_Cache_Core $cache */
+        $cache = $this->get(Zend_Cache_Core::class);
         $cache->save($result, self::CACHE_KEY, [], 60);
 
         return $result;
@@ -486,7 +479,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     /**
      * @return string path to update file
      */
-    private function createDestinationFromVersion(Version $version)
+    private function createDestinationFromVersion(Version $version): string
     {
         $filename = 'update_' . $version->sha1 . '.zip';
 
@@ -500,10 +493,8 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
      * Map result object to extjs array format
      *
      * @param ValidResult|FinishResult|ErrorResult $result
-     *
-     * @return array
      */
-    private function mapResult($result)
+    private function mapResult($result): array
     {
         $mapper = new ExtJsResultMapper();
 
@@ -511,11 +502,11 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     }
 
     /**
-     * @param array $languages
+     * @param string[] $languages
      *
-     * @return string
+     * @return string[]
      */
-    private function getLocalizedChangeLog(Version $version, $languages)
+    private function getLocalizedChangeLog(Version $version, array $languages): ?array
     {
         while ($language = array_shift($languages)) {
             if (isset($version->changelog[$language])) {
@@ -526,10 +517,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         return null;
     }
 
-    /**
-     * @return string
-     */
-    private function getUserLanguage(stdClass $user)
+    private function getUserLanguage(stdClass $user): string
     {
         /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;

@@ -71,6 +71,8 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      * Contains which config file sections were loaded. This is null
      * if all sections were loaded, a string name if one section is loaded
      * and an array of string names if multiple sections were loaded.
+     *
+     * @var string[]|string|null
      */
     protected $_loadedSection;
 
@@ -303,6 +305,8 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
 
     /**
      * Returns the section name(s) loaded.
+     *
+     * @return string[]|string|null
      */
     public function getSectionName()
     {

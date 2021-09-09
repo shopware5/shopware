@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Sorting;
 
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
@@ -34,7 +37,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class ReleaseDateSortingTest extends TestCase
 {
-    public function testReleaseDateSorting()
+    public function testReleaseDateSorting(): void
     {
         $sorting = new ReleaseDateSorting();
 
@@ -53,12 +56,16 @@ class ReleaseDateSortingTest extends TestCase
         );
     }
 
+    /**
+     * @param string      $number
+     * @param string|null $releaseDate
+     */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $releaseDate = null
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         $product['added'] = $releaseDate;
@@ -76,7 +83,7 @@ class ReleaseDateSortingTest extends TestCase
         $context = null,
         array $configs = [],
         $variantSearch = false
-    ) {
+    ): ProductNumberSearchResult {
         $result = parent::search(
             $products,
             $expectedNumbers,

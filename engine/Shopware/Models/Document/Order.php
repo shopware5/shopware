@@ -311,7 +311,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         $namespace = $snippetManager->getNamespace('documents/index');
         $shippingName = $namespace->get('ShippingCosts', 'Shipping costs', true);
 
-        if ($this->_order['invoice_shipping_tax_rate'] === null) {
+        if ($this->_order['invoice_shipping_tax_rate'] === null && $this->_shipping !== null) {
             if ($this->_order['invoice_shipping_net'] != 0) {
                 // p.e. = 24.99 / 20.83 * 100 - 100 = 19.971195391 (approx. 20% VAT)
                 $approximateTaxRate = $this->_order['invoice_shipping'] / $this->_order['invoice_shipping_net'] * 100 - 100;
@@ -470,7 +470,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         foreach ($this->_positions as $position) {
             if ($position['mode'] == 0) {
                 $getTax = $position['tax_rate'];
-                if (empty($getTax)) {
+                if (empty($getTax) && $this->_shipping !== null) {
                     $position['tax'] = $this->getTaxRepository()->getTaxRateByConditions(
                         $position['taxID'],
                         $this->_shipping['country']['areaID'],
@@ -517,10 +517,10 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 if ($position['modus'] == 4 || $position['modus'] == 3) {
                     if (empty($position['tax_rate'])) {
                         // Discounts get tax from configuration
-                        if (!empty(Shopware()->Config()->sTAXAUTOMODE)) {
+                        if (!empty(Shopware()->Config()->get('sTAXAUTOMODE'))) {
                             $tax = $this->getMaxTaxRate();
                         } else {
-                            $tax = Shopware()->Config()->sDISCOUNTTAX;
+                            $tax = Shopware()->Config()->get('sDISCOUNTTAX');
                         }
                         $position['tax'] = $tax;
                     } else {
@@ -528,7 +528,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                     }
                 } elseif (empty($position['taxID'])) {
                     // Articles get tax per item configuration
-                    if (empty($position['tax_rate'])) {
+                    if (empty($position['tax_rate']) && $this->_shipping !== null) {
                         $position['tax'] = $this->getTaxRepository()->getTaxRateByConditions(
                             $position['articleTaxID'],
                             $this->_shipping['country']['areaID'],
@@ -541,7 +541,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                     }
                 } else {
                     // Bundles tax
-                    if (empty($position['tax_rate'])) {
+                    if (empty($position['tax_rate']) && $this->_shipping !== null) {
                         $position['tax'] = $this->getTaxRepository()->getTaxRateByConditions(
                             $position['taxID'],
                             $this->_shipping['country']['areaID'],
@@ -567,7 +567,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
 
                 if (empty($position['tax_rate'])) {
                     if ($ticketResult['taxconfig'] === 'default' || empty($ticketResult['taxconfig'])) {
-                        $position['tax'] = Shopware()->Config()->sVOUCHERTAX;
+                        $position['tax'] = Shopware()->Config()->get('sVOUCHERTAX');
                     // Pre 3.5.4 behaviour
                     } elseif ($ticketResult['taxconfig'] === 'auto') {
                         // Check max. used tax-rate from basket
@@ -694,26 +694,32 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             $this->_shipping = new ArrayObject($shipping, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        $this->_shipping['attributes'] = Shopware()->Db()->fetchRow('
-        SELECT * FROM s_order_shippingaddress_attributes WHERE shippingID = ?
-        ', [$this->_shipping['id']]);
+        $this->_shipping['attributes'] = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_order_shippingaddress_attributes WHERE shippingID = ?',
+            [$this->_shipping['id']]
+        );
 
         if (!$this->_shipping) {
             $this->_shipping = clone $this->_billing;
         } else {
-            if (empty($this->_shipping['countryID'])) {
+            if (empty($this->_shipping['countryID']) && $this->_billing !== null) {
                 $this->_shipping['countryID'] = $this->_billing['countryID'];
             }
-            $this->_shipping['country'] = new ArrayObject(Shopware()->Db()->fetchRow('
-            SELECT * FROM s_core_countries
-            WHERE id=?
-            ', [$this->_shipping['countryID']]), ArrayObject::ARRAY_AS_PROPS);
+            if (!isset($this->_shipping['countryID'])) {
+                throw new RuntimeException('Country ID not set in shipping address');
+            }
+            $this->_shipping['country'] = new ArrayObject(Shopware()->Db()->fetchRow(
+                'SELECT * FROM s_core_countries
+                 WHERE id=?',
+                [$this->_shipping['countryID']]), ArrayObject::ARRAY_AS_PROPS
+            );
 
             if (!empty($this->_shipping['stateID'])) {
-                $this->_shipping['state'] = new ArrayObject(Shopware()->Db()->fetchRow('
-                SELECT * FROM s_core_countries_states
-                WHERE id=?
-                ', [$this->_shipping['stateID']]), ArrayObject::ARRAY_AS_PROPS);
+                $this->_shipping['state'] = new ArrayObject(Shopware()->Db()->fetchRow(
+                    'SELECT * FROM s_core_countries_states
+                     WHERE id=?',
+                    [$this->_shipping['stateID']]), ArrayObject::ARRAY_AS_PROPS
+                );
             } else {
                 $this->_shipping['state'] = [];
             }
@@ -781,9 +787,9 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getParameters()
+    private function getParameters(): array
     {
         return [
             'positions' => $this->_positions,

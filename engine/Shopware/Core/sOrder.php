@@ -22,16 +22,23 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\AttributeBundle\Service\DataLoader;
+use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Components\Privacy\IpAnonymizerInterface;
+use Shopware\Components\ShopRegistrationServiceInterface;
+use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Shop\Shop;
+use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 
 /**
  * Deprecated Shopware Class that handles frontend orders
  */
-class sOrder implements \Enlight_Hook
+class sOrder implements Enlight_Hook
 {
     /**
      * Array with user data
@@ -114,7 +121,7 @@ class sOrder implements \Enlight_Hook
     /**
      * Pointer to sSystem object
      *
-     * @var \sSystem
+     * @var sSystem
      */
     public $sSYSTEM;
 
@@ -241,12 +248,12 @@ class sOrder implements \Enlight_Hook
         $this->db = Shopware()->Db();
         $this->eventManager = Shopware()->Events();
         $this->config = Shopware()->Config();
-        $this->numberRangeIncrementer = $container->get(\Shopware\Components\NumberRangeIncrementerInterface::class);
+        $this->numberRangeIncrementer = $container->get(NumberRangeIncrementerInterface::class);
 
-        $this->contextService = $contextService ?: Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
-        $this->attributeLoader = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class);
-        $this->attributePersister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
-        $this->modelManager = $container->get(\Shopware\Components\Model\ModelManager::class);
+        $this->contextService = $contextService ?: Shopware()->Container()->get(ContextServiceInterface::class);
+        $this->attributeLoader = Shopware()->Container()->get(DataLoader::class);
+        $this->attributePersister = Shopware()->Container()->get(DataPersister::class);
+        $this->modelManager = $container->get(ModelManager::class);
     }
 
     /**
@@ -582,7 +589,7 @@ class sOrder implements \Enlight_Hook
             $this->sUserData['additional']['user']['affiliate']
         );
 
-        $ip = Shopware()->Container()->get(\Shopware\Components\Privacy\IpAnonymizerInterface::class)
+        $ip = Shopware()->Container()->get(IpAnonymizerInterface::class)
             ->anonymize(
                 (string) Shopware()->Container()->get('request_stack')->getCurrentRequest()->getClientIp()
             );
@@ -640,14 +647,14 @@ class sOrder implements \Enlight_Hook
             $paymentData = Shopware()->Modules()->Admin()
                 ->sGetPaymentMeanById($this->getPaymentId(), Shopware()->Modules()->Admin()->sGetUserData());
             $paymentClass = Shopware()->Modules()->Admin()->sInitiatePaymentClass($paymentData);
-            if ($paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
+            if ($paymentClass instanceof BasePaymentMethod) {
                 $paymentClass->createPaymentInstance(
                     $orderID,
                     $this->sUserData['additional']['user']['id'],
                     $this->getPaymentId()
                 );
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             //Payment method code failure
         }
 
@@ -834,7 +841,7 @@ class sOrder implements \Enlight_Hook
         $confirmMailDeliveryFailed = false;
         try {
             $this->sendMail($variables);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $confirmMailDeliveryFailed = true;
             $email = $this->sUserData['additional']['user']['email'];
             $this->logOrderMailException($e, $orderNumber, $email);
@@ -943,7 +950,7 @@ class sOrder implements \Enlight_Hook
             $mail = $event->getReturn();
         }
 
-        if (!($mail instanceof \Zend_Mail)) {
+        if (!($mail instanceof Zend_Mail)) {
             $mail = Shopware()->TemplateMail()->createMail('sORDER', $context);
         }
 
@@ -959,7 +966,7 @@ class sOrder implements \Enlight_Hook
             'variables' => $variables,
         ]);
 
-        if (!($mail instanceof \Zend_Mail)) {
+        if (!($mail instanceof Zend_Mail)) {
             return;
         }
 
@@ -1087,7 +1094,11 @@ class sOrder implements \Enlight_Hook
         }
 
         if ($billingAddressId === null) {
-            $billingAddressId = $customer->getDefaultBillingAddress()->getId();
+            $defaultBillingAddress = $customer->getDefaultBillingAddress();
+            if (!$defaultBillingAddress instanceof Address) {
+                throw new RuntimeException('Customer does not have a default billing address');
+            }
+            $billingAddressId = $defaultBillingAddress->getId();
         }
 
         $attributes = $this->attributeLoader->load('s_user_addresses_attributes', $billingAddressId);
@@ -1192,9 +1203,12 @@ class sOrder implements \Enlight_Hook
 
         if ($shippingAddressId === null) {
             /** @var Customer $customer */
-            $customer = $this->modelManager->getRepository(\Shopware\Models\Customer\Customer::class)
-                ->find($address['userID']);
-            $shippingAddressId = $customer->getDefaultShippingAddress()->getId();
+            $customer = $this->modelManager->getRepository(Customer::class)->find($address['userID']);
+            $defaultShippingAddress = $customer->getDefaultShippingAddress();
+            if (!$defaultShippingAddress instanceof Address) {
+                throw new RuntimeException('Customer does not have a default billing address');
+            }
+            $shippingAddressId = $defaultShippingAddress->getId();
         }
 
         $attributes = $this->attributeLoader->load('s_user_addresses_attributes', $shippingAddressId);
@@ -1309,7 +1323,7 @@ class sOrder implements \Enlight_Hook
         $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
         // The (sub-)shop might be inactive by now, so that's why we use `getById` instead of `getActiveById`
         $shop = $repository->getById($shopId);
-        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $dispatch = Shopware()->Modules()->Admin()->sGetDispatchTranslation($dispatch);
         $payment = Shopware()->Modules()->Admin()->sGetPaymentTranslation(['id' => $order['paymentID']]);
@@ -1479,7 +1493,7 @@ class sOrder implements \Enlight_Hook
     /**
      * Setter for config
      *
-     * @param \Shopware_Components_Config $config
+     * @param Shopware_Components_Config $config
      */
     public function setConfig($config)
     {
@@ -1489,7 +1503,7 @@ class sOrder implements \Enlight_Hook
     /**
      * Getter for config
      *
-     * @return \Shopware_Components_Config
+     * @return Shopware_Components_Config
      */
     public function getConfig()
     {

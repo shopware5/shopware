@@ -159,13 +159,13 @@ class Repository extends EntityRepository implements \Enlight_Hook
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
 
+        /** @var BenchmarkConfig[] $configs */
         $configs = $this->findAll();
 
         $benchmarkShopIds = array_map(function ($config) {
-            return $config->getShopid();
+            return $config->getShopId();
         }, $configs);
 
-        /** @var BenchmarkConfig $config */
         foreach ($configs as $config) {
             if (!\in_array($config->getShopId(), $shopIds)) {
                 // Shop does not exist anymore

@@ -39,6 +39,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 abstract class Plugin extends Bundle implements SubscriberInterface
 {
@@ -203,10 +204,7 @@ abstract class Plugin extends Bundle implements SubscriberInterface
 
     private function camelCaseToUnderscore(string $string): string
     {
-        $toReplace = preg_replace('/[A-Z]/', '_$0', $string);
-        \assert(\is_string($toReplace));
-
-        return strtolower(ltrim($toReplace, '_'));
+        return (new CamelCaseToSnakeCaseNameConverter())->normalize($string);
     }
 
     private function registerFilesystems(ContainerBuilder $container): void

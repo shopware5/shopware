@@ -6,3 +6,6 @@
 
 # Apply more strict PHP Codestyle
 321f6f4eeb3f234a111c970b705bd330b43fb4af
+
+# SW-26128 - Update code style fixer rule for Enlight
+758f700576f2856e5d4e66caed6bc218cbe98348

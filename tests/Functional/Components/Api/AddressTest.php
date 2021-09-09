@@ -95,7 +95,7 @@ class AddressTest extends TestCase
     public function testUpdateShouldBeSuccessful($id)
     {
         $testData = [
-            'lastname' => uniqid(rand()) . ' new lastname',
+            'lastname' => uniqid((string) rand()) . ' new lastname',
             'zipcode' => '98765',
         ];
 

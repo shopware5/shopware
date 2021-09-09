@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -56,8 +58,8 @@ class ProductAttributeFacetTest extends TestCase
             [new ProductAttributeFacet('attr2', ProductAttributeFacet::MODE_VALUE_LIST_RESULT, 'asd', 'Test')]
         );
 
-        /** @var ValueListFacetResult $attributeFacet */
         $attributeFacet = $result->getFacets()[0];
+        static::assertInstanceOf(ValueListFacetResult::class, $attributeFacet);
         static::assertCount(2, $attributeFacet->getValues());
         static::assertSame('Test1', $attributeFacet->getValues()[0]->getLabel());
         static::assertSame('Test2', $attributeFacet->getValues()[1]->getLabel());
@@ -68,7 +70,7 @@ class ProductAttributeFacetTest extends TestCase
         ShopContext $context,
         Category $category = null,
         $attribute = ['attr1' => 10]
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
         $product['mainDetail']['attribute'] = $attribute;
 

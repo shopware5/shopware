@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,20 +26,20 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\RouterInterface;
 use Shopware\Models\Category\Category;
 
 class CoverTest extends TestCase
 {
-    public function testProductWithOneImage()
+    public function testProductWithOneImage(): void
     {
         $this->resetContext();
         $number = 'Cover-Test';
         $context = $this->getContext();
-        $data = $this->getProduct($number, $context, null, 1);
+        $data = $this->getProduct($number, $context);
         $this->helper->createArticle($data);
 
         $product = $this->helper->getListProduct($number, $context);
@@ -45,7 +47,7 @@ class CoverTest extends TestCase
         $this->assertMediaFile('sasse-korn', $product->getCover());
     }
 
-    public function testProductWithMultipleImages()
+    public function testProductWithMultipleImages(): void
     {
         $this->resetContext();
         $number = 'Cover-Test-Multiple';
@@ -59,7 +61,7 @@ class CoverTest extends TestCase
         $this->assertMediaFile('sasse-korn', $product->getCover());
     }
 
-    public function testProductList()
+    public function testProductList(): void
     {
         $this->resetContext();
         $number = 'Cover-Test-Listing';
@@ -90,7 +92,7 @@ class CoverTest extends TestCase
 
         foreach ($products as $product) {
             $expected = 'test-spachtelmasse';
-            if ($product->getNumber() == $number . '-2') {
+            if ($product->getNumber() === $number . '-2') {
                 $expected = 'sasse-korn';
             }
 
@@ -108,7 +110,7 @@ class CoverTest extends TestCase
      * Expected:
      * - Each product variant use their own variant image as cover.
      */
-    public function testVariantImages()
+    public function testVariantImages(): void
     {
         $this->resetContext();
         $number = 'Variant-Cover-Test';
@@ -124,7 +126,7 @@ class CoverTest extends TestCase
 
         foreach ($variants as $variant) {
             $expected = 'bienen_teaser';
-            if ($variant->getNumber() == $data['variants'][0]['number']) {
+            if ($variant->getNumber() === $data['variants'][0]['number']) {
                 $expected = 'sasse-korn';
             }
 
@@ -142,7 +144,7 @@ class CoverTest extends TestCase
      * Excepted:
      * - Both variants has the preview image of the global product.
      */
-    public function testForceMainImage()
+    public function testForceMainImage(): void
     {
         $this->resetContext();
         $number = 'Force-Main-Cover-Test';
@@ -172,7 +174,7 @@ class CoverTest extends TestCase
      * - Variant 1 cover => configured variant image
      * - Variant 2 cover => Main image of the product.
      */
-    public function testFallbackImage()
+    public function testFallbackImage(): void
     {
         $this->resetContext();
         $number = 'Force-Main-Cover-Test';
@@ -189,7 +191,7 @@ class CoverTest extends TestCase
 
         foreach ($variants as $variant) {
             $expected = 'bienen_teaser';
-            if ($variant->getNumber() == $data['variants'][0]['number']) {
+            if ($variant->getNumber() === $data['variants'][0]['number']) {
                 $expected = 'sasse-korn';
             }
 
@@ -197,12 +199,18 @@ class CoverTest extends TestCase
         }
     }
 
+    /**
+     * @param string $number
+     * @param int    $imageCount
+     *
+     * @return array<string, mixed>
+     */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $imageCount = 1
-    ) {
+    ): array {
         $data = parent::getProduct($number, $context, $category);
 
         $data['images'][] = $this->helper->getImageData(
@@ -217,9 +225,9 @@ class CoverTest extends TestCase
         return $data;
     }
 
-    private function assertMediaFile($expected, Struct\Media $media)
+    private function assertMediaFile(string $expected, ?Media $media): void
     {
-        static::assertInstanceOf(Media::class, $media);
+        static::assertNotNull($media);
         static::assertNotEmpty($media->getThumbnails());
         static::assertStringContainsString($expected, $media->getFile());
 
@@ -228,7 +236,10 @@ class CoverTest extends TestCase
         }
     }
 
-    private function getVariantImageProduct($number, ShopContext $context)
+    /**
+     * @return array<string, mixed>
+     */
+    private function getVariantImageProduct(string $number, ShopContext $context): array
     {
         $data = $this->getProduct($number, $context, null, 2);
 
@@ -247,10 +258,10 @@ class CoverTest extends TestCase
         return $data;
     }
 
-    private function resetContext()
+    private function resetContext(): void
     {
         // correct router context for url building
-        Shopware()->Container()->get(\Shopware\Components\Routing\RouterInterface::class)->setContext(
+        Shopware()->Container()->get(RouterInterface::class)->setContext(
             new Context(
                 'localhost',
                 Shopware()->Shop()->getBasePath(),
