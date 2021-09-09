@@ -99,9 +99,8 @@ debug-config-test: .make.config.build.debug
 	./bin/console sw:cache:clear
 	./bin/console sw:database:setup --steps=setupShop --shop-url=http://$(SW_HOST)$(SW_BASE_PATH)
 	./bin/console sw:snippets:to:db --include-plugins
-	./bin/console dbal:run-sql "INSERT INTO \`s_core_config_values\` (\`element_id\`, \`shop_id\`, \`value\`) VALUES ((SELECT \`id\` FROM \`s_core_config_elements\` WHERE \`name\` LIKE 'installationSurvey'), 1, 'b:0;');"
-	./bin/console sw:firstrunwizard:disable
 	./bin/console sw:theme:initialize
+	./bin/console sw:firstrunwizard:disable
 	./bin/console sw:admin:create --name="Demo" --email="demo@demo.de" --username="demo" --password="demo" --locale=de_DE -n
 	touch recovery/install/data/install.lock
 
