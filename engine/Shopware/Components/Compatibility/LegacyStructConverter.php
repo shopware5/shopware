@@ -753,7 +753,6 @@ class LegacyStructConverter
         foreach ($set->getGroups() as $group) {
             $values = [];
             foreach ($group->getOptions() as $option) {
-                /* @var StoreFrontBundle\Struct\Property\Option $option */
                 $values[$option->getId()] = $option->getName();
             }
 

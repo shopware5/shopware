@@ -175,47 +175,36 @@ class Theme implements Form\Interfaces\Persister
 
         switch ($class) {
             case 'Shopware\\Components\\Form\\Field\\Text':
-                /* @var Form\Field\Text $field */
                 $data += ['type' => 'theme-text-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Boolean':
-                /* @var Form\Field\Boolean $field */
                 $data += ['type' => 'theme-checkbox-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Date':
-                /* @var Form\Field\Date $field */
                 $data += ['type' => 'theme-date-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Color':
-                /* @var Form\Field\Color $field */
                 $data += ['type' => 'theme-color-picker'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Media':
-                /* @var Form\Field\Media $field */
                 $data += ['type' => 'theme-media-selection'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Number':
-                /* @var Form\Field\Number $field */
                 $data += ['type' => 'numberfield'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Em':
-                /* @var Form\Field\Number $field */
                 $data += ['type' => 'theme-em-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Percent':
-                /* @var Form\Field\Number $field */
                 $data += ['type' => 'theme-percent-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Pixel':
-                /* @var Form\Field\Number $field */
                 $data += ['type' => 'theme-pixel-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\TextArea':
-                /* @var Form\Field\Number $field */
                 $data += ['type' => 'theme-text-area-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Selection':
-                /* @var Form\Field\Selection $field */
                 $data += [
                     'type' => 'theme-select-field',
                     'selection' => $field->getStore(),

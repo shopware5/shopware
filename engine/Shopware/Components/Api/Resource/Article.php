@@ -1348,7 +1348,6 @@ class Article extends Resource implements BatchInterface
         $categories = $article->getCategories();
 
         $categoryIds = $categories->map(function ($category) {
-            /* @var Category $category */
             return $category->getId();
         });
 
@@ -1554,7 +1553,6 @@ class Article extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf('Related product by number/id "%s" not found', $property));
             }
 
-            /* @var ProductModel $relatedProduct */
             if ($relatedData['cross']) {
                 $relatedProduct->getRelated()->add($article);
             }
@@ -1615,7 +1613,6 @@ class Article extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf('Similar product by number/id "%s" not found', $property));
             }
 
-            /* @var ProductModel $similarProduct */
             if ($similarData['cross']) {
                 $similarProduct->getSimilar()->add($article);
             }

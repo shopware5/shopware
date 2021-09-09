@@ -53,7 +53,6 @@ class SearchRankingSortingHandler implements SortingHandlerInterface
             return;
         }
 
-        /* @var SearchRankingSorting $sorting */
         $query->addOrderBy('searchTable.ranking', $sorting->getDirection());
     }
 }

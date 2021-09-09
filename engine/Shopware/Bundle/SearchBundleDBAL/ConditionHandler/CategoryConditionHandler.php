@@ -69,7 +69,6 @@ class CategoryConditionHandler implements ConditionHandlerInterface
             AND {$joinName}.categoryID IN (:{$joinName})"
         );
 
-        /* @var CategoryCondition $condition */
         $query->setParameter(
             ':' . $joinName,
             $condition->getCategoryIds(),

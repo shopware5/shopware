@@ -38,7 +38,6 @@ class LastOrderSortingHandler implements SortingHandlerInterface
 
     public function handle(SortingInterface $sorting, QueryBuilder $query)
     {
-        /* @var LastOrderSorting $sorting */
         $query->addOrderBy('customer.last_order_time', $sorting->getDirection());
     }
 }

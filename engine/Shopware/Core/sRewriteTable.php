@@ -1151,7 +1151,6 @@ class sRewriteTable implements \Enlight_Hook
             return $context;
         }
 
-        /* @var Shop $shop */
         if (Shopware()->Container()->has('shop')) {
             $shop = Shopware()->Container()->get('shop');
 

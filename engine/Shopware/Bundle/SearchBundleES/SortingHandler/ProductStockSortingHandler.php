@@ -51,7 +51,6 @@ class ProductStockSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var ProductStockSorting $criteriaPart */
         $search->addSort(
             new FieldSort('stock', strtolower($criteriaPart->getDirection()), ['unmapped_type' => 'keyword'])
         );

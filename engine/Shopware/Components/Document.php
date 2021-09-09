@@ -262,7 +262,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $this->assignValues();
         }
 
-        /* @var \Shopware\Models\Shop\Template $template */
         if (!empty($this->_subshop['doc_template_id'])) {
             $template = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->find(\Shopware\Models\Shop\Template::class, $this->_subshop['doc_template_id']);
 

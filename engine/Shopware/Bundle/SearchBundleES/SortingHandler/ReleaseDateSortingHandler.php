@@ -51,7 +51,6 @@ class ReleaseDateSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var ReleaseDateSorting $criteriaPart */
         $search->addSort(
             new FieldSort('formattedCreatedAt', strtolower($criteriaPart->getDirection()), ['unmapped_type' => 'date'])
         );

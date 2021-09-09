@@ -318,7 +318,6 @@ class ModelManager extends EntityManager
         }
 
         if ($entity instanceof Proxy) {
-            /* @var Proxy $entity */
             $entity->__load();
             $className = get_parent_class($entity);
         } else {

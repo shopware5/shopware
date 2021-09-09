@@ -386,7 +386,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             $attributeLoader = $this->get(\Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface::class);
             $notify['attribute'] = $attributeLoader->load('s_articles_notification_attributes', $notify['id']);
 
-            /* @var \Shopware\Models\Shop\Shop $shop */
             $shop = $modelManager->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveById($notify['language']);
 
             // Continue if shop is inactive or deleted

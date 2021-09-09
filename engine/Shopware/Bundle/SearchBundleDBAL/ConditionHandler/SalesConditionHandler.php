@@ -63,7 +63,6 @@ class SalesConditionHandler implements ConditionHandlerInterface
         $key = ':sales' . md5(json_encode($condition));
         $query->andWhere('topSeller.sales >= ' . $key);
 
-        /* @var SalesCondition $condition */
         $query->setParameter($key, $condition->getMinSales());
     }
 }

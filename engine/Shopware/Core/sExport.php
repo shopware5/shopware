@@ -1182,7 +1182,6 @@ class sExport implements \Enlight_Hook
 
                 $configurationGroups = $this->configuratorService->getProductConfiguration($product, $context);
 
-                /* @var StoreFrontBundle\Struct\Configurator\Group $configuratorOption */
                 foreach ($configurationGroups as $configurationGroup) {
                     $option = current($configurationGroup->getOptions());
                     $row['configurator_options'][$configurationGroup->getName()] = $option->getName();

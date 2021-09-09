@@ -38,7 +38,6 @@ class CustomerGroupSortingHandler implements SortingHandlerInterface
 
     public function handle(SortingInterface $sorting, QueryBuilder $query)
     {
-        /* @var CustomerGroupSorting $sorting */
         $query->addOrderBy('customer.customer_group_name', $sorting->getDirection());
     }
 }

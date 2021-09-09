@@ -96,7 +96,7 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
         }
 
         //executed if no price condition included in search request
-        /* @var ShopContext $context */
+
         $this->loadPrices($criteria, $result, $context);
     }
 
@@ -108,7 +108,6 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
         foreach ($result->getProducts() as $product) {
             $number = $product->getNumber();
 
-            /* @var PriceRule $cheapestPriceRule */
             if (!\array_key_exists($number, $cheapestPriceData)) {
                 $cheapestPriceRule = $product->getPriceRules()[0];
                 $displayFromPrice = $product->displayFromPrice();

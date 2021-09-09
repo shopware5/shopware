@@ -22,6 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\NonUniqueResultException;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Captcha\CaptchaValidator;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\OrderNumberValidator\Exception\InvalidOrderNumberException;
 use Shopware\Components\Random;
 use Shopware\Components\Validator\EmailValidator;
@@ -153,12 +158,10 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $shopId = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->getId();
 
-        /* @var \Doctrine\ORM\Query $query */
-        $query = Shopware()->Models()->getRepository(\Shopware\Models\Form\Form::class)
+        $query = Shopware()->Models()->getRepository(Form::class)
             ->getActiveFormQuery($formId, $shopId);
 
-        /* @var Form $form */
-        $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+        $form = $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
 
         if (!$form) {
             throw new \Enlight_Controller_Exception(
@@ -176,7 +179,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             $this->getModelManager()->detach($field);
         }
 
-        /* @var Field $field */
         foreach ($form->getFields() as $field) {
             $fieldId = $field->getId();
             $this->_elements[$fieldId] = [

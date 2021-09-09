@@ -52,7 +52,6 @@ class VoteAverageConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var VoteAverageCondition $criteriaPart */
         $search->addQuery(
             new RangeQuery('voteAverage.average', [
                 'gte' => $criteriaPart->getAverage() * 2,
@@ -70,7 +69,6 @@ class VoteAverageConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var VoteAverageCondition $criteriaPart */
         $search->addPostFilter(
             new RangeQuery('voteAverage.average', [
                 'gte' => $criteriaPart->getAverage() * 2,

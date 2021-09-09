@@ -545,7 +545,7 @@ class Zend_Http_Header_SetCookie
     public function toStringMultipleHeaders(array $headers)
     {
         $headerLine = $this->toString();
-        /* @var SetCookie $header */
+
         foreach ($headers as $header) {
             if (!$header instanceof Zend_Http_Header_SetCookie) {
                 throw new Zend_Http_Header_Exception_RuntimeException(

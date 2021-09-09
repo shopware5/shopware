@@ -28,7 +28,6 @@ use Shopware\Bundle\PluginInstallerBundle\Context\DownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
-use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
@@ -282,7 +281,6 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
 
         $request = new DownloadRequest($plugin->getTechnicalName(), $version, $domain, $token);
 
-        /* @var PluginLicenceService $service */
         $this->container->get('shopware_plugininstaller.plugin_download_service')->download($request);
     }
 

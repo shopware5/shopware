@@ -59,7 +59,6 @@ class ManufacturerConditionHandler implements ConditionHandlerInterface
              AND product.supplierID IN (' . $key . ')'
         );
 
-        /* @var ManufacturerCondition $condition */
         $query->setParameter(
             $key,
             $condition->getManufacturerIds(),

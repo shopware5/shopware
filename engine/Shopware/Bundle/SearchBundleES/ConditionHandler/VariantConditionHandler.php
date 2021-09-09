@@ -76,7 +76,6 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
         if ($groupBy) {
             $search->addPostFilter(new TermQuery($groupBy, true));
 
-            /* @var VariantCondition $criteriaPart */
             $search->addPostFilter(
                 new TermsQuery(
                     'filterConfiguration.options.id',
@@ -89,7 +88,6 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
 
         $search->addPostFilter(new TermQuery('isMainVariant', true));
 
-        /* @var VariantCondition $criteriaPart */
         $search->addPostFilter(
             new TermsQuery(
                 'filterConfiguration.options.id',

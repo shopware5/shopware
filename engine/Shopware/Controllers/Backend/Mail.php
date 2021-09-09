@@ -437,7 +437,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             $this->View()->assign(['success' => false, 'message' => 'Id not found']);
         }
 
-        /* @var Attachment $attachment */
         $attachment = Shopware()->Models()->getRepository(Attachment::class)->find($attachmentId);
         if (!$attachment) {
             $this->View()->assign(['success' => false, 'message' => 'Attachment not found']);
@@ -477,7 +476,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         if ($shopId == 0) {
             $shop = null;
         } else {
-            /* @var Shop $shop */
             $shop = Shopware()->Models()->getRepository(Shop::class)->find($shopId);
             if (!$shop) {
                 $this->View()->assign(['success' => false, 'message' => 'Shop not found']);
@@ -486,7 +484,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             }
         }
 
-        /* @var Attachment $attachment */
         $attachment = Shopware()->Models()->getRepository(Attachment::class)->find($attachmentId);
         if (!$attachment) {
             $this->View()->assign(['success' => false, 'message' => 'Attachment not found']);

@@ -70,7 +70,6 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var ProductAttributeCondition $criteriaPart */
         $search->addQuery(
             $this->createQuery($criteriaPart),
             BoolQuery::FILTER
@@ -86,7 +85,6 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var ProductAttributeCondition $criteriaPart */
         $search->addPostFilter(
             $this->createQuery($criteriaPart)
         );

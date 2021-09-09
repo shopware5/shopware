@@ -389,7 +389,6 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      */
     public function save($data)
     {
-        /* @var \Shopware\Components\Model\ModelEntity $model */
         if (!empty($data['id'])) {
             $model = $this->getRepository()->find($data['id']);
         } else {

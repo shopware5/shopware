@@ -159,7 +159,6 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     public function getContent(Smarty_Template_Source $source)
     {
         foreach ($source->components as $_component) {
-            /* @var Smarty_Template_Source $content */
             $_component->content = $this->getSnippetContent($_component);
         }
         $this->snippetManager->write();

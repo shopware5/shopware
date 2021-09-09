@@ -59,7 +59,6 @@ class VariantConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /* @var VariantCondition $condition */
         $this->helper->joinVariantCondition($query, $condition);
     }
 }

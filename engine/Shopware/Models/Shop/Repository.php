@@ -404,7 +404,6 @@ class Repository extends ModelRepository
      */
     public function getQueryBuilder()
     {
-        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 
@@ -442,7 +441,6 @@ class Repository extends ModelRepository
      */
     public function getActiveQueryBuilder()
     {
-        /* @var QueryBuilder $builder */
         return $this->getQueryBuilder()
             ->where('shop.active = 1');
     }
@@ -627,7 +625,6 @@ class Repository extends ModelRepository
      */
     private function getActiveMainShopQueryBuilder()
     {
-        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 
@@ -657,7 +654,6 @@ class Repository extends ModelRepository
      */
     private function getActiveSubShopQueryBuilder()
     {
-        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 

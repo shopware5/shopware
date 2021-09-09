@@ -2234,7 +2234,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ]
         );
 
-        /* @var Shop $shop */
         $this->Response()->headers->setCookie(new Cookie('shop', (string) $shopId, 0, $shop->getBasePath()));
         $this->redirect($url);
     }
@@ -4352,7 +4351,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             // Otherwise we can return directly.
         }
 
-        /* @var string $result */
         return $result;
     }
 

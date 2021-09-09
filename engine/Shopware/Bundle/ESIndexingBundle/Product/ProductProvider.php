@@ -475,10 +475,8 @@ class ProductProvider implements ProviderInterface
                     $rule = $rules[$customerGroup];
                 }
 
-                /* @var PriceRule $rule */
                 $product->setCheapestPriceRule($rule);
 
-                /* @var ProductContextInterface $context */
                 $this->priceCalculationService->calculateProduct($product, $context);
 
                 $priceObj = $product->getCheapestUnitPrice();

@@ -38,7 +38,6 @@ class ZipCodeSortingHandler implements SortingHandlerInterface
 
     public function handle(SortingInterface $sorting, QueryBuilder $query)
     {
-        /* @var ZipCodeSorting $sorting */
         $query->addOrderBy('customer.zipcode', $sorting->getDirection());
     }
 }

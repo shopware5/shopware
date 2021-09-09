@@ -53,7 +53,6 @@ class LengthConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /* @var LengthCondition $condition */
         $this->variantHelper->joinVariants($query);
 
         $min = ':minLength' . md5(json_encode($condition));

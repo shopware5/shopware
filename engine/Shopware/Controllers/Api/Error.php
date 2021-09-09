@@ -114,7 +114,6 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
         }
 
         if ($exception instanceof ApiException\ValidationException) {
-            /* @var \Shopware\Components\Api\Exception\ValidationException $exception */
             $this->Response()->setStatusCode(400);
 
             $errors = [];

@@ -1327,7 +1327,6 @@ class sOrder implements \Enlight_Hook
             $order['payment_description'] = $payment['description'];
         }
 
-        /* @var \Shopware\Models\Mail\Mail $mailModel */
         $mailModel = $this->modelManager->getRepository(Mail::class)->findOneBy(
             ['name' => $templateName]
         );

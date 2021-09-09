@@ -68,7 +68,6 @@ class PriceSortingHandler implements SortingHandlerInterface, CriteriaAwareInter
     ) {
         $this->listingPriceSwitcher->joinPrice($query, $this->criteria, $context);
 
-        /* @var PriceSorting $sorting */
         $query->addOrderBy('listing_price.cheapest_price', $sorting->getDirection());
     }
 

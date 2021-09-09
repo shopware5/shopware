@@ -52,7 +52,6 @@ class CategoryConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var CategoryCondition $criteriaPart */
         $search->addQuery(
             new TermsQuery('categoryIds', $criteriaPart->getCategoryIds()),
             BoolQuery::FILTER
@@ -68,7 +67,6 @@ class CategoryConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var CategoryCondition $criteriaPart */
         $search->addPostFilter(
             new TermsQuery('categoryIds', $criteriaPart->getCategoryIds())
         );

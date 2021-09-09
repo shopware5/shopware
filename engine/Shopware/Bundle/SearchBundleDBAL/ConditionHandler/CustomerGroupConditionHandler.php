@@ -59,7 +59,6 @@ class CustomerGroupConditionHandler implements ConditionHandlerInterface
              AND avoidCustomerGroup.customerGroupId IN (' . $key . ')'
         );
 
-        /* @var CustomerGroupCondition $condition */
         $query->setParameter(
             $key,
             $condition->getCustomerGroupIds(),

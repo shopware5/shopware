@@ -125,19 +125,16 @@ class CategorySubscriber implements BaseEventSubscriber
         // Entity deletions
         foreach ($uow->getScheduledEntityDeletions() as $entity) {
             if ($entity instanceof Category) {
-                /* @var Category $entity */
                 $this->backlogRemoveCategory($entity->getId());
             }
 
             if ($entity instanceof Article) {
-                /* @var Article $entity */
                 $this->backlogRemoveArticle($entity->getId());
             }
         }
 
         // Entity Insertions
         foreach ($uow->getScheduledEntityInsertions() as $category) {
-            /* @var Category $category */
             if (!($category instanceof Category)) {
                 continue;
             }
@@ -150,7 +147,6 @@ class CategorySubscriber implements BaseEventSubscriber
 
         // Entity updates
         foreach ($uow->getScheduledEntityUpdates() as $category) {
-            /* @var Category $category */
             if (!($category instanceof Category)) {
                 continue;
             }
@@ -180,7 +176,6 @@ class CategorySubscriber implements BaseEventSubscriber
             $this->addPendingMove($category);
         }
 
-        /* @var \Doctrine\ORM\PersistentCollection $col */
         foreach ($uow->getScheduledCollectionDeletions() as $col) {
             if (!$col->getOwner() instanceof Article) {
                 continue;
@@ -197,7 +192,6 @@ class CategorySubscriber implements BaseEventSubscriber
             }
         }
 
-        /* @var \Doctrine\ORM\PersistentCollection $col */
         foreach ($uow->getScheduledCollectionUpdates() as $col) {
             if ($col->getOwner() instanceof Article) {
                 /** @var Article $product */
@@ -221,7 +215,6 @@ class CategorySubscriber implements BaseEventSubscriber
             }
 
             if ($col->getOwner() instanceof Category) {
-                /* @var Category $category */
                 $category = $col->getOwner();
 
                 foreach ($col->getInsertDiff() as $product) {
