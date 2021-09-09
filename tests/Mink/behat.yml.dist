@@ -20,12 +20,12 @@ default:
             browser_name: chrome
 
     gherkin:
-      filters:
-        tags: ~@knownFailing
+        filters:
+            tags: ~@knownFailing
 
     suites:
         default:
-            paths:    [ %paths.base%/features ]
+            paths: [ "%paths.base%/features" ]
             template: Responsive
             contexts:
                 - Behat\MinkExtension\Context\MinkContext
@@ -46,3 +46,4 @@ default:
                 - Shopware\Tests\Mink\ExportContext
                 - Shopware\Tests\Mink\BackendContext
                 - Shopware\Tests\Mink\BackendContentTypeManagerContext
+                - Shopware\Tests\Mink\BackendCustomRecipesContext

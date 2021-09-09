@@ -53,8 +53,10 @@ class BackendContext extends SubContext
      */
     public function iOpenTheModule(string $moduleName): void
     {
-        $this->spin(function ($context) use ($moduleName) {
-            $context->getPage('Backend')->openModule($moduleName);
+        $this->spin(function (BackendContext $context) use ($moduleName) {
+            $backendPage = $context->getPage('Backend');
+            \assert($backendPage instanceof Backend);
+            $backendPage->openModule($moduleName);
 
             return true;
         });
@@ -67,8 +69,10 @@ class BackendContext extends SubContext
     {
         $this->getPage('Backend');
 
-        $this->spin(function ($context) {
-            $context->getPage('Backend')->verifyModule();
+        $this->spin(function (BackendContext $context) {
+            $backendPage = $context->getPage('Backend');
+            \assert($backendPage instanceof Backend);
+            $backendPage->verifyModule();
 
             return true;
         });
