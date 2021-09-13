@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeWindo
                 cls: 'primary',
                 handler: function() {
                     if (me.attributeCombo.getValue()) {
-                        me.applyCallback(me.attributeCombo.getValue());
+                        me.applyCallback(me.attributeCombo.findRecordByValue(me.attributeCombo.getValue()).data);
                         me.destroy();
                     }
                 }

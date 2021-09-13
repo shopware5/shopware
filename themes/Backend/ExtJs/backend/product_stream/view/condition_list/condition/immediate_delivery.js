@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.ImmediateD
             },
             items: [{
                 xtype: 'displayfield',
-                value: '{s name="immediate_delivery/display_text"}Only products available for imediate delivery will be displyed{/s}',
+                value: '{s name="immediate_delivery/display_text"}Only products available for immediate delivery will be displayed{/s}',
             }, {
                 xtype: 'numberfield',
                 name: 'condition.' + this.getName(),

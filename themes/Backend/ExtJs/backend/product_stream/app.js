@@ -68,6 +68,7 @@ Ext.define('Shopware.apps.ProductStream', {
         'condition_list.field.Grid',
         'condition_list.field.Range',
         'condition_list.field.Attribute',
+        'condition_list.field.AttributeDate',
         'condition_list.field.Property',
         'condition_list.field.PropertyWindow',
         'condition_list.field.ReleaseDate',
@@ -80,7 +81,7 @@ Ext.define('Shopware.apps.ProductStream', {
         'condition_list.condition.Width',
         'condition_list.condition.Length',
         'condition_list.condition.Weight',
-        
+
         'selected_list.Window',
         'selected_list.Product'
     ],

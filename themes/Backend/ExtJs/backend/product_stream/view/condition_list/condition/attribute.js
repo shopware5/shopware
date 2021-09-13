@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Attribute'
             return;
         }
 
-        var field = this.createField(value.field);
+        var field = this.createField(value);
         field.setValue(value);
 
         this.updateTitle(container, value.field);
@@ -71,10 +71,20 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Attribute'
     },
 
     createField: function(attribute) {
-        return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
-            name: 'condition.' + this.getName() + '|' + attribute,
-            attributeField: attribute
-        });
+        if (attribute.type === "date"){
+            return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.AttributeDate', {
+                name: 'condition.' + this.getName() + '|' + attribute.column,
+                attributeField: attribute.column,
+                type: attribute.type
+            });
+
+        } else {
+            return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
+                name: 'condition.' + this.getName() + '|' + attribute.column,
+                attributeField: attribute.column,
+                type: attribute.type
+            });
+        }
     },
 
     updateTitle: function(container, name) {

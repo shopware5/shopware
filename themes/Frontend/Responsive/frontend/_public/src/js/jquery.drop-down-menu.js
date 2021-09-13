@@ -7,7 +7,7 @@
             activeCls: 'js--is--dropdown-active',
             preventDefault: true,
             closeOnBody: true,
-            blockedElements: '.service--link, .compare--list, .compare--entry, ' +
+            blockedElements: '.service--link, .compare--list, .compare--entry, .compare--group-list a,' +
             '.compare--link, .btn--item-delete, .compare--icon-remove, .navigation--link, ' +
             '.blocked--link'
         },
