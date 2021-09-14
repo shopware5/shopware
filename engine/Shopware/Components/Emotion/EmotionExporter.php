@@ -121,8 +121,12 @@ class EmotionExporter implements EmotionExporterInterface
 
         $zip->addEmptyDir('images');
 
-        foreach ($assets as $key => &$path) {
+        foreach ($assets as &$path) {
             $fileContent = $this->mediaService->read($path);
+            if ($fileContent === false) {
+                continue;
+            }
+
             $zipPath = 'images/' . basename($path);
 
             $zip->addFromString($zipPath, $fileContent);
@@ -139,7 +143,7 @@ class EmotionExporter implements EmotionExporterInterface
             'presetData' => json_encode($presetData),
         ];
 
-        $zip->addFromString('emotion.json', json_encode($exportData));
+        $zip->addFromString('emotion.json', json_encode($exportData, JSON_THROW_ON_ERROR));
 
         if (!$zip->close()) {
             throw new \Exception(sprintf('Could not close zip file "%s"!', $filename));

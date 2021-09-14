@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,6 +27,7 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
+use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -34,7 +37,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class SearchTermConditionTest extends TestCase
 {
-    public function testSingleMatch()
+    public function testSingleMatch(): void
     {
         $condition = new SearchTermCondition('Unit');
 
@@ -50,7 +53,7 @@ class SearchTermConditionTest extends TestCase
         );
     }
 
-    public function testMultipleMatch()
+    public function testMultipleMatch(): void
     {
         $condition = new SearchTermCondition('unit');
 
@@ -67,11 +70,11 @@ class SearchTermConditionTest extends TestCase
         );
     }
 
-    public function createProducts($products, ShopContext $context, Category $category)
+    public function createProducts($products, ShopContext $context, Category $category): array
     {
         $articles = parent::createProducts($products, $context, $category);
 
-        Shopware()->Container()->get(\Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer::class)->build();
+        Shopware()->Container()->get(SearchIndexer::class)->build();
 
         Shopware()->Container()->get(\Zend_Cache_Core::class)->clean('all', ['Shopware_Modules_Search']);
 
@@ -82,14 +85,14 @@ class SearchTermConditionTest extends TestCase
      * @param string $number
      * @param string $name
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $name = null
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
         $product['name'] = $name;
 

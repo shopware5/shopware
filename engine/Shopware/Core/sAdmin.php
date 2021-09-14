@@ -942,12 +942,11 @@ class sAdmin implements \Enlight_Hook
      * returns the provided country's translation
      * Used internally in sAdmin
      *
-     * @param array|string $country Optional array containing country data
-     *                              for translation
+     * @param array<string, mixed> $country Optional array containing country data for translation
      *
-     * @return array Translated country/ies data
+     * @return array<array-key, mixed> Translated country/ies data
      */
-    public function sGetCountryTranslation($country = '')
+    public function sGetCountryTranslation($country = [])
     {
         $languageId = $this->contextService->getShopContext()->getShop()->getId();
         $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
@@ -984,12 +983,11 @@ class sAdmin implements \Enlight_Hook
      * returns the provided shipping methods translation
      * Used internally in sAdmin
      *
-     * @param array|string $dispatch Optional array containing shipping method
-     *                               data for translation
+     * @param array<string, mixed> $dispatch Optional array containing shipping method data for translation
      *
-     * @return array Translated shipping method(s) data
+     * @return array<array-key, mixed> Translated shipping method(s) data
      */
-    public function sGetDispatchTranslation($dispatch = '')
+    public function sGetDispatchTranslation($dispatch = [])
     {
         $languageId = $this->contextService->getShopContext()->getShop()->getId();
         $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
@@ -1021,12 +1019,11 @@ class sAdmin implements \Enlight_Hook
      * returns the provided payment means translation
      * Used internally in sAdmin
      *
-     * @param array|string $payment Optional array containing payment mean
-     *                              data for translation
+     * @param array<string, mixed> $payment Optional array containing payment mean data for translation
      *
-     * @return array Translated payment mean(s) data
+     * @return array<array-key, mixed> Translated payment mean(s) data
      */
-    public function sGetPaymentTranslation($payment = '')
+    public function sGetPaymentTranslation($payment = [])
     {
         $languageId = $this->contextService->getShopContext()->getShop()->getId();
         $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
@@ -1134,7 +1131,7 @@ class sAdmin implements \Enlight_Hook
             return false;
         }
 
-        /** @var Shopware\Bundle\StoreFrontBundle\Struct\Shop $shop */
+        /** @var \Shopware\Bundle\StoreFrontBundle\Struct\Shop $shop */
         $shop = $this->contextService->getShopContext()->getShop();
         $shopUrl = 'http://' . $shop->getHost() . $shop->getUrl();
 
@@ -2533,7 +2530,7 @@ class sAdmin implements \Enlight_Hook
      * @param int $paymentID Payment mean id
      * @param int $stateId   Country state id
      *
-     * @return array|false Array with dispatch data for the basket, or false if no basket
+     * @return false|array Array with dispatch data for the basket, or false if no basket
      */
     public function sGetDispatchBasket($countryID = null, $paymentID = null, $stateId = null)
     {
@@ -4156,7 +4153,7 @@ SQL;
 
         // Percentage surcharge
         if (!empty($payment['debit_percent']) && (empty($dispatch) || $dispatch['surcharge_calculation'] != 2)) {
-            $amount = $this->db->fetchOne(
+            $amount = (float) $this->db->fetchOne(
                 'SELECT SUM(quantity*price) AS amount
                 FROM s_order_basket
                 WHERE sessionID = ? GROUP BY sessionID',

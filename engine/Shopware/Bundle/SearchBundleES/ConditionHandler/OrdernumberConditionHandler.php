@@ -52,7 +52,6 @@ class OrdernumberConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var OrdernumberCondition $criteriaPart */
         $search->addQuery(
             new TermsQuery('number.raw', $criteriaPart->getOrdernumbers()),
             BoolQuery::FILTER
@@ -68,7 +67,6 @@ class OrdernumberConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var OrdernumberCondition $criteriaPart */
         $search->addPostFilter(
             new TermsQuery('number.raw', $criteriaPart->getOrdernumbers())
         );

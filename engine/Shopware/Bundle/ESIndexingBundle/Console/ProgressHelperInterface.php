@@ -32,6 +32,8 @@ interface ProgressHelperInterface
      *
      * @param int    $count
      * @param string $label
+     *
+     * @return void
      */
     public function start($count, $label = '');
 
@@ -39,11 +41,15 @@ interface ProgressHelperInterface
      * Advance the progress with the provided value
      *
      * @param int $step
+     *
+     * @return void
      */
     public function advance($step = 1);
 
     /**
      * Finish the progress bar
+     *
+     * @return void
      */
     public function finish();
 }

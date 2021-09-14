@@ -265,26 +265,26 @@ class QueryBuilder extends BaseQueryBuilder
         /** @var array<int, mixed|null> $select */
         $select = $this->getDQLPart('select');
         if (\is_array($orderBy)) {
-            foreach ($orderBy as $order) {
-                if (!isset($order['property']) || !preg_match('#^[a-zA-Z0-9_.]+$#', $order['property'])) {
+            foreach ($orderBy as $orderByParts) {
+                if (!isset($orderByParts['property']) || !preg_match('#^[a-zA-Z0-9_.]+$#', $orderByParts['property'])) {
                     continue;
                 }
 
                 if (isset($select[0], $this->alias)
                     && $select[0]->count() === 1
-                    && strpos($order['property'], '.') === false) {
-                    $order['property'] = $this->alias . '.' . $order['property'];
+                    && strpos($orderByParts['property'], '.') === false) {
+                    $orderByParts['property'] = $this->alias . '.' . $orderByParts['property'];
                 }
 
-                if (isset($order['direction']) && $order['direction'] === 'DESC') {
-                    $order['direction'] = 'DESC';
+                if (isset($orderByParts['direction']) && $orderByParts['direction'] === 'DESC') {
+                    $orderByParts['direction'] = 'DESC';
                 } else {
-                    $order['direction'] = 'ASC';
+                    $orderByParts['direction'] = 'ASC';
                 }
 
                 parent::addOrderBy(
-                    $order['property'],
-                    $order['direction']
+                    $orderByParts['property'],
+                    $orderByParts['direction']
                 );
             }
         } else {

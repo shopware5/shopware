@@ -78,14 +78,14 @@ class UserTest extends TestCase
         $lockedUntil = $date->format(\DateTime::ISO8601);
 
         $testData = [
-            'email' => uniqid(rand()) . '@example.com',
-            'username' => 'username' . uniqid(rand()),
+            'email' => uniqid((string) rand()) . '@example.com',
+            'username' => 'username' . uniqid((string) rand()),
             'name' => 'Max Mustermann',
             'roleId' => 1,
             'localeId' => 1,
             'password' => 'fooobar',
             'encoder' => 'Bcrypt',
-            'apiKey' => uniqid(rand()),
+            'apiKey' => uniqid((string) rand()),
             'lastLogin' => $lastLogin,
             'active' => false,
             'failedLogins' => 1,
@@ -188,7 +188,7 @@ class UserTest extends TestCase
 
         $testData = [
             'email' => 'invalid',
-            'username' => 'username' . uniqid(rand()),
+            'username' => 'username' . uniqid((string) rand()),
             'name' => 'Max Mustermann',
             'role' => 'local_admins',
         ];
@@ -204,7 +204,7 @@ class UserTest extends TestCase
         $this->resource->setRole('update');
 
         $testData = [
-            'username' => 'updated' . uniqid(rand()),
+            'username' => 'updated' . uniqid((string) rand()),
             'name' => 'Max Mustermann Update',
         ];
 
@@ -287,8 +287,8 @@ class UserTest extends TestCase
         $this->resource->setRole('create');
 
         $data = [
-            'email' => __FUNCTION__ . uniqid(rand()) . '@example.com',
-            'username' => 'user' . uniqid(rand()),
+            'email' => __FUNCTION__ . uniqid((string) rand()) . '@example.com',
+            'username' => 'user' . uniqid((string) rand()),
             'name' => 'Max Mustermann',
             'password' => 'fooobar',
             'roleId' => 1,
@@ -303,8 +303,8 @@ class UserTest extends TestCase
         $this->resource->setRole('create');
 
         $data = [
-            'email' => __FUNCTION__ . uniqid(rand()) . '@example.com',
-            'username' => 'user' . uniqid(rand()),
+            'email' => __FUNCTION__ . uniqid((string) rand()) . '@example.com',
+            'username' => 'user' . uniqid((string) rand()),
             'name' => 'Max Mustermann',
             'password' => 'fooobar',
             'role' => 'local_admins',
@@ -319,8 +319,8 @@ class UserTest extends TestCase
         $this->resource->setRole('create');
 
         $data = [
-            'email' => __FUNCTION__ . uniqid(rand()) . '@example.com',
-            'username' => 'user' . uniqid(rand()),
+            'email' => __FUNCTION__ . uniqid((string) rand()) . '@example.com',
+            'username' => 'user' . uniqid((string) rand()),
             'name' => 'Max Mustermann',
             'password' => 'fooobar',
             'role' => 'local_admins',
@@ -336,8 +336,8 @@ class UserTest extends TestCase
         $this->resource->setRole('create');
 
         $data = [
-            'email' => __FUNCTION__ . uniqid(rand()) . '@example.com',
-            'username' => 'user' . uniqid(rand()),
+            'email' => __FUNCTION__ . uniqid((string) rand()) . '@example.com',
+            'username' => 'user' . uniqid((string) rand()),
             'name' => 'Max Mustermann',
             'password' => 'fooobar',
             'role' => 'local_admins',

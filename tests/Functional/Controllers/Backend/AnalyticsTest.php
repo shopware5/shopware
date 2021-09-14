@@ -790,7 +790,7 @@ class AnalyticsTest extends \Enlight_Components_Test_Controller_TestCase
 
     private function createCustomer()
     {
-        $this->customerNumber = uniqid(rand());
+        $this->customerNumber = uniqid((string) rand());
 
         Shopware()->Db()->insert(
             's_user',

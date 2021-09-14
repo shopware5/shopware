@@ -78,7 +78,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->View()->assign('sFormData', isset($this->View()->sFormData) ? $this->View()->sFormData : [], true);
         $this->View()->assign('userLoggedIn', (bool) Shopware()->Session()->offsetGet('sUserId'));
 
-        if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->sVoteName)
+        if (!empty(Shopware()->Session()->get('sUserId')) && empty($this->Request()->get('sVoteName'))
             && $this->Request()->getParam('__cache') !== null) {
             $userData = Shopware()->Modules()->Admin()->sGetUserData();
             $this->View()->assign('sFormData', [
@@ -124,10 +124,10 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $product = Shopware()->Modules()->Articles()->sGetConfiguratorImage($product);
         $product['sBundles'] = false;
 
-        if (!empty(Shopware()->Config()->InquiryID)) {
+        if (!empty(Shopware()->Config()->get('InquiryID'))) {
             $this->View()->assign('sInquiry', $this->Front()->Router()->assemble([
                 'sViewport' => 'support',
-                'sFid' => Shopware()->Config()->InquiryID,
+                'sFid' => Shopware()->Config()->get('InquiryID'),
                 'sInquiry' => 'detail',
                 'sOrdernumber' => $product['ordernumber'],
             ]));
@@ -236,7 +236,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
         if (empty($sErrorFlag)) {
             if (!empty(Shopware()->Config()->sOPTINVOTE)
-                && !$voteConfirmed && empty(Shopware()->Session()->sUserId)
+                && !$voteConfirmed && empty(Shopware()->Session()->get('sUserId'))
             ) {
                 $hash = \Shopware\Components\Random::getAlphanumericString(32);
                 $sql = '

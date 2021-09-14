@@ -88,7 +88,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
         $orderNumber = Shopware()->Db()->fetchOne($sql, [
                 $transactionId,
                 $paymentUniqueId,
-                Shopware()->Session()->sUserId,
+                Shopware()->Session()->get('sUserId'),
             ]);
 
         if (empty($orderNumber)) {
@@ -97,7 +97,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
 
             $order = Shopware()->Modules()->Order();
             $order->sUserData = $user;
-            $order->sComment = Shopware()->Session()->sComment;
+            $order->sComment = Shopware()->Session()->get('sComment');
             $order->sBasketData = $basket;
             $order->sAmount = $basket['sAmount'];
             $order->sAmountWithTax = !empty($basket['AmountWithTaxNumeric']) ? $basket['AmountWithTaxNumeric'] : $basket['AmountNumeric'];
@@ -106,7 +106,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
             $order->sShippingcostsNumeric = $basket['sShippingcostsWithTax'];
             $order->sShippingcostsNumericNet = $basket['sShippingcostsNet'];
             $order->bookingId = $transactionId;
-            $order->dispatchId = Shopware()->Session()->sDispatch;
+            $order->dispatchId = Shopware()->Session()->get('sDispatch');
             $order->sNet = empty($user['additional']['charge_vat']);
             $order->uniqueID = $paymentUniqueId;
             $order->deviceType = $this->Request()->getDeviceType();
@@ -182,8 +182,8 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      */
     public function getUser()
     {
-        if (!empty(Shopware()->Session()->sOrderVariables['sUserData'])) {
-            return Shopware()->Session()->sOrderVariables['sUserData'];
+        if (!empty(Shopware()->Session()->get('sOrderVariables')['sUserData'])) {
+            return Shopware()->Session()->get('sOrderVariables')['sUserData'];
         }
 
         return null;
@@ -196,8 +196,8 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      */
     public function getBasket()
     {
-        if (!empty(Shopware()->Session()->sOrderVariables['sBasket'])) {
-            return Shopware()->Session()->sOrderVariables['sBasket'];
+        if (!empty(Shopware()->Session()->get('sOrderVariables')['sBasket'])) {
+            return Shopware()->Session()->get('sOrderVariables')['sBasket'];
         }
 
         return null;
@@ -208,8 +208,8 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      */
     public function getOrderNumber()
     {
-        if (!empty(Shopware()->Session()->sOrderVariables['sOrderNumber'])) {
-            return Shopware()->Session()->sOrderVariables['sOrderNumber'];
+        if (!empty(Shopware()->Session()->get('sOrderVariables')['sOrderNumber'])) {
+            return Shopware()->Session()->get('sOrderVariables')['sOrderNumber'];
         }
 
         return null;

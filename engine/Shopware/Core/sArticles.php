@@ -22,11 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
@@ -36,10 +40,12 @@ use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ListingLinkRewriteService;
+use Shopware\Bundle\StoreFrontBundle\Service\ListingLinkRewriteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ProductNumberServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
@@ -47,6 +53,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Compatibility\LegacyEventManager;
 use Shopware\Components\Compatibility\LegacyStructConverter;
+use Shopware\Components\ProductStream\CriteriaFactoryInterface;
+use Shopware\Components\ProductStream\Repository;
+use Shopware\Components\ProductStream\RepositoryInterface;
 use Shopware\Components\QueryAliasMapper;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Repository as ArticleRepository;
@@ -59,7 +68,7 @@ use Shopware\Models\Media\Repository as MediaRepository;
 /**
  * Shopware Class that handle products
  */
-class sArticles implements \Enlight_Hook
+class sArticles implements Enlight_Hook
 {
     /**
      * Pointer to sSystem object
@@ -164,12 +173,12 @@ class sArticles implements \Enlight_Hook
     private $queryAliasMapper;
 
     /**
-     * @var Enlight_Controller_Front|null
+     * @var Enlight_Controller_Front
      */
     private $frontController;
 
     /**
-     * @var SearchBundle\ProductNumberSearchInterface
+     * @var ProductNumberSearchInterface
      */
     private $productNumberSearch;
 
@@ -215,25 +224,25 @@ class sArticles implements \Enlight_Hook
         $this->translationId = $translationId ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
         $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sUSERGROUPDATA['id']);
 
-        $this->config = $container->get(\Shopware_Components_Config::class);
+        $this->config = $container->get(Shopware_Components_Config::class);
         $this->db = $container->get('db');
         $this->eventManager = $container->get('events');
-        $this->contextService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
-        $this->listProductService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class);
-        $this->productService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface::class);
-        $this->productNumberSearch = $container->get(\Shopware\Bundle\SearchBundle\ProductNumberSearchInterface::class);
-        $this->configuratorService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface::class);
-        $this->propertyService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface::class);
-        $this->additionalTextService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface::class);
-        $this->searchService = $container->get(\Shopware\Bundle\SearchBundle\ProductSearchInterface::class);
+        $this->contextService = $container->get(ContextServiceInterface::class);
+        $this->listProductService = $container->get(ListProductServiceInterface::class);
+        $this->productService = $container->get(ProductServiceInterface::class);
+        $this->productNumberSearch = $container->get(ProductNumberSearchInterface::class);
+        $this->configuratorService = $container->get(ConfiguratorServiceInterface::class);
+        $this->propertyService = $container->get(PropertyServiceInterface::class);
+        $this->additionalTextService = $container->get(AdditionalTextServiceInterface::class);
+        $this->searchService = $container->get(ProductSearchInterface::class);
         $this->queryAliasMapper = $container->get(QueryAliasMapper::class);
         $this->frontController = $container->get('front');
         $this->legacyStructConverter = $container->get(LegacyStructConverter::class);
         $this->legacyEventManager = $container->get(LegacyEventManager::class);
         $this->session = $container->get('session');
-        $this->storeFrontCriteriaFactory = $container->get(\Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface::class);
-        $this->productNumberService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ProductNumberServiceInterface::class);
-        $this->listingLinkRewriteService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ListingLinkRewriteServiceInterface::class);
+        $this->storeFrontCriteriaFactory = $container->get(StoreFrontCriteriaFactoryInterface::class);
+        $this->productNumberService = $container->get(ProductNumberServiceInterface::class);
+        $this->listingLinkRewriteService = $container->get(ListingLinkRewriteServiceInterface::class);
 
         $this->productComparisons = new sArticlesComparisons($this, $container);
     }
@@ -397,7 +406,7 @@ class sArticles implements \Enlight_Hook
             $shopId = $container->get('shop')->getId();
         }
 
-        $connection = $container->get(\Doctrine\DBAL\Connection::class);
+        $connection = $container->get(Connection::class);
         $query = $connection->createQueryBuilder();
         $query->insert('s_articles_vote');
         $query->values([
@@ -1896,7 +1905,8 @@ class sArticles implements \Enlight_Hook
                         $optionVal = $option['optionnameOrig'] ? $option['optionnameOrig'] : $option['optionname'];
                         $optionVal = str_replace(['/', ' '], '', $optionVal);
                         if (!empty($option['selected'])) {
-                            $referenceImages[strtolower($groupVal . ':' . str_replace(' ', '', $optionVal))] = true;
+                            $replacedOptionVal = str_replace(' ', '', $optionVal);
+                            $referenceImages[strtolower($groupVal . ':' . $optionVal)] = true;
                         }
                     }
                 }
@@ -2090,7 +2100,7 @@ class sArticles implements \Enlight_Hook
     /**
      * @param int $categoryId
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Criteria
      */
@@ -2108,13 +2118,13 @@ class sArticles implements \Enlight_Hook
             );
         }
 
-        /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
-        $factory = Shopware()->Container()->get(\Shopware\Components\ProductStream\CriteriaFactoryInterface::class);
+        /** @var CriteriaFactoryInterface $factory */
+        $factory = Shopware()->Container()->get(CriteriaFactoryInterface::class);
         $criteria = $factory->createCriteria($request, $context);
         $criteria->limit(null);
 
-        /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
-        $streamRepository = Shopware()->Container()->get(\Shopware\Components\ProductStream\Repository::class);
+        /** @var RepositoryInterface $streamRepository */
+        $streamRepository = Shopware()->Container()->get(Repository::class);
         $streamRepository->prepareCriteria($criteria, $streamId);
 
         return $criteria;
@@ -2296,7 +2306,7 @@ class sArticles implements \Enlight_Hook
     {
         // Initial the data array
         $imageData = [];
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         if (empty($image['path'])) {
             return $imageData;
@@ -2564,7 +2574,7 @@ class sArticles implements \Enlight_Hook
             );
         }
 
-        $service = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface::class);
+        $service = Shopware()->Container()->get(VariantListingPriceServiceInterface::class);
 
         $result = new SearchBundle\ProductSearchResult(
             [$product->getNumber() => $product],
@@ -2668,7 +2678,7 @@ class sArticles implements \Enlight_Hook
      */
     private function getCurrentSelection(array $selection)
     {
-        if (empty($selection) && $this->frontController && $this->frontController->Request()->has('group')) {
+        if (empty($selection) && $this->frontController->Request()->has('group')) {
             $selection = $this->frontController->Request()->getParam('group');
         }
 

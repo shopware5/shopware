@@ -45,7 +45,7 @@ class NewsletterTest extends \Enlight_Components_Test_Plugin_TestCase
     public function testNewsletterLock(): void
     {
         $this->Front()->setParam('noViewRenderer', false);
-        Shopware()->Config()->MailCampaignsPerCall = 1;
+        Shopware()->Config()->offsetSet('MailCampaignsPerCall', 1);
 
         $this->dispatch('/backend/newsletter/cron');
         static::assertMatchesRegularExpression('#[0-9]+ Recipients fetched#', $this->Response()->getBody());

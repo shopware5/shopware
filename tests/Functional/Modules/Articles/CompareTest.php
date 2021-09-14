@@ -52,7 +52,7 @@ class CompareTest extends Enlight_Components_Test_TestCase
 
         $this->module = Shopware()->Modules()->Articles();
         $this->module->sDeleteComparisons();
-        Shopware()->Container()->get('session')->offsetSet('sessionId', uniqid(rand()));
+        Shopware()->Container()->get('session')->offsetSet('sessionId', uniqid((string) rand()));
         $sql = 'SELECT `id` FROM `s_articles` WHERE `active` =1';
         $sql = Shopware()->Db()->limit($sql, 5);
         $this->testArticleIds = Shopware()->Db()->fetchCol($sql);

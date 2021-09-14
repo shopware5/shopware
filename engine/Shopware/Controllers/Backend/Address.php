@@ -77,7 +77,6 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
      */
     public function save($data)
     {
-        /* @var AddressModel $model */
         if (!empty($data['id'])) {
             $model = $this->getRepository()->find($data['id']);
         } else {

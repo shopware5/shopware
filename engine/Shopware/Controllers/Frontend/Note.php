@@ -35,7 +35,7 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
 
     public function postDispatch()
     {
-        Shopware()->Session()->sNotesQuantity = Shopware()->Modules()->Basket()->sCountNotes();
+        Shopware()->Session()->set('sNotesQuantity', Shopware()->Modules()->Basket()->sCountNotes());
     }
 
     public function indexAction()

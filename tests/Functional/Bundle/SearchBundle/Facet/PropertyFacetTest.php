@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -36,7 +38,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class PropertyFacetTest extends TestCase
 {
-    public function testPropertyFacet()
+    public function testPropertyFacet(): void
     {
         $properties = $this->helper->getProperties(2, 3);
 
@@ -70,19 +72,17 @@ class PropertyFacetTest extends TestCase
 
         static::assertCount(1, $result->getFacets());
 
-        /** @var FacetResultGroup $facet */
         $facet = $result->getFacets()[0];
-        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup', $facet);
+        static::assertInstanceOf(FacetResultGroup::class, $facet);
 
         static::assertCount(2, $facet->getFacetResults());
         foreach ($facet->getFacetResults() as $result) {
-            /* @var $result ValueListFacetResult */
-            static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $result);
+            static::assertInstanceOf(ValueListFacetResult::class, $result);
             static::assertCount(3, $result->getValues());
         }
     }
 
-    public function testMultiplePropertySets()
+    public function testMultiplePropertySets(): void
     {
         $properties = $this->helper->getProperties(2, 3);
         $first = $this->createPropertyCombination($properties, [0, 1, 2]);
@@ -107,31 +107,41 @@ class PropertyFacetTest extends TestCase
 
         static::assertCount(1, $result->getFacets());
 
-        /** @var FacetResultGroup $facet */
         foreach ($result->getFacets() as $facet) {
-            static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup', $facet);
+            static::assertInstanceOf(FacetResultGroup::class, $facet);
 
             static::assertCount(4, $facet->getFacetResults());
             foreach ($facet->getFacetResults() as $result) {
-                /* @var $result ValueListFacetResult */
-                static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $result);
+                static::assertInstanceOf(ValueListFacetResult::class, $result);
                 static::assertCount(3, $result->getValues());
             }
         }
     }
 
+    /**
+     * @param string               $number
+     * @param array<string, mixed> $properties
+     *
+     * @return array<string, mixed>
+     */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $properties = []
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         return array_merge($product, $properties);
     }
 
-    private function createPropertyCombination($properties, $indexes)
+    /**
+     * @param array<string, array> $properties
+     * @param int[]                $indexes
+     *
+     * @return array<string, array>
+     */
+    private function createPropertyCombination(array $properties, array $indexes): array
     {
         $combination = $properties;
         unset($combination['all']);

@@ -73,7 +73,7 @@ class AuthTest extends Enlight_Components_Test_TestCase
         $adapter = new Shopware_Components_Auth_Adapter_Default(new Session(new MockArraySessionStorage()));
 
         // Prepare backend user
-        $username = 'testUser' . uniqid(rand());
+        $username = 'testUser' . uniqid((string) rand());
         $password = 'correctPassword';
         $this->createAdminUser($username, $password);
 
@@ -101,7 +101,7 @@ class AuthTest extends Enlight_Components_Test_TestCase
         $this->auth->addAdapter($adapter);
 
         // Prepare backend user
-        $username = 'testUser' . uniqid(rand());
+        $username = 'testUser' . uniqid((string) rand());
         $password = 'correctPassword';
         $this->createAdminUser($username, $password);
 
@@ -121,7 +121,7 @@ class AuthTest extends Enlight_Components_Test_TestCase
 
     protected function createAdminUser($username, $password)
     {
-        $name = uniqid(rand());
+        $name = uniqid((string) rand());
         $email = $name . '@shopware.com';
         $password = $this->encoder->encodePassword($password);
 

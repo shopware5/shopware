@@ -22,29 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\OpenSSLVerifier;
+use Shopware\Models\Config\Form;
+use ShopwarePlugins\SwagUpdate\Components\UpdateCheck;
+
 class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
-    /**
-     * @return string
-     */
     public function getVersion()
     {
         return '1.0.0';
     }
 
-    /**
-     * Returns the human readable name of the plugin
-     *
-     * @return string
-     */
     public function getLabel()
     {
         return 'Shopware Update';
     }
 
-    /**
-     * @return array
-     */
     public function install()
     {
         $this->subscribeEvent(
@@ -82,7 +75,7 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
     public function afterInit()
     {
         /** @var Enlight_Loader $loader */
-        $loader = $this->get(\Enlight_Loader::class);
+        $loader = $this->get(Enlight_Loader::class);
         $loader->registerNamespace(
             'ShopwarePlugins\\SwagUpdate',
             __DIR__ . '/'
@@ -92,8 +85,6 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
     /**
      * When index backend module was loaded, add our snippet- and template-directory
      * Also extend the template
-     *
-     * @param \Enlight_Controller_ActionEventArgs $args
      */
     public function onBackendIndexPostDispatch(Enlight_Controller_ActionEventArgs $args)
     {
@@ -116,7 +107,7 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
      */
     public function onGetSwagUpdateControllerPath(Enlight_Event_EventArgs $args)
     {
-        $this->get(\Enlight_Template_Manager::class)->addTemplateDir(
+        $this->get(Enlight_Template_Manager::class)->addTemplateDir(
             __DIR__ . '/Views/',
             'swag_update'
         );
@@ -129,19 +120,16 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
      */
     public function onInitUpdateCheck()
     {
-        return new \ShopwarePlugins\SwagUpdate\Components\UpdateCheck(
+        return new UpdateCheck(
             $this->Config()->get('update-api-endpoint'),
             $this->Config()->get('update-channel'),
             $this->Config()->get('update-verify-signature'),
-            Shopware()->Container()->get(\Shopware\Components\OpenSSLVerifier::class),
+            Shopware()->Container()->get(OpenSSLVerifier::class),
             Shopware()->Container()->get('shopware.release')
         );
     }
 
-    /**
-     * @param \Shopware\Models\Config\Form $form
-     */
-    protected function installForm(Shopware\Models\Config\Form $form)
+    protected function installForm(Form $form)
     {
         $form->setElement(
             'select',

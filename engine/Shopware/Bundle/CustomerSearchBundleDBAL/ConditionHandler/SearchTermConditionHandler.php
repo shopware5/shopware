@@ -59,7 +59,6 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
             'customer.ordered_products',
         ];
 
-        /* @var SearchTermCondition $condition */
         $terms = $this->splitTerm($condition->getTerm());
 
         foreach ($terms as $index => $term) {

@@ -30,20 +30,21 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class PluginTest extends TestCase
 {
-    public function testFilesystemRegistration()
+    public function testFilesystemRegistration(): void
     {
         $container = new ContainerBuilder();
-        $plugin = new SwagFilesystemTest(true, 'ShopwarePlugins');
 
-        $plugin->build($container);
+        (new SwagFilesystemTest(true, 'ShopwarePlugins'))->build($container);
 
-        static::assertTrue(
-            $container->has('swag_filesystem_test.filesystem.public')
-        );
+        static::assertTrue($container->has('swag_filesystem_test.filesystem.public'));
 
-        static::assertTrue(
-            $container->has('swag_filesystem_test.filesystem.private')
-        );
+        static::assertTrue($container->has('swag_filesystem_test.filesystem.private'));
+    }
+
+    public function testGetContainerPrefix(): void
+    {
+        $containerPrefix = (new SwagFilesystemTest(true, 'ShopwarePlugins'))->getContainerPrefix();
+        static::assertSame('swag_filesystem_test', $containerPrefix);
     }
 }
 

@@ -1,30 +1,22 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 
 /**
  * .git/hooks/pre-commit
- *
- * This pre-commit hooks will check for PHP errors (lint), and make sure the
- * code is PSR-2 compliant.
  */
 class PreCommitChecks
 {
-    const ALLOWED_DIRECTORIES = [
+    public const ALLOWED_DIRECTORIES = [
         'engine/Shopware',
         'engine/Library/Enlight',
         'tests',
         'recovery',
     ];
 
-    /**
-     * @var bool
-     */
-    private $error = false;
+    private bool $error = false;
 
-    /**
-     * @return int
-     */
-    public function run()
+    public function run(): int
     {
         $this->writeln();
         $this->writeln('Checking commit requirements', 0);
@@ -32,61 +24,52 @@ class PreCommitChecks
 
         if ($this->isRebase()) {
             echo 'Not on branch' . PHP_EOL;
-            return (int)0;
+
+            return 0;
         }
 
-        $this->runPhpLint($this->getCommittedFileList('php'));
-        $this->runPhpCsFixer($this->getCommittedFileList('php'));
+        $this->runPhpLint($this->getCommittedFileList());
+        $this->runPhpCsFixer($this->getCommittedFileList());
+        $this->runPHPStan($this->getCommittedFileList());
         $this->runEsLint($this->getCommittedFileList('js'));
-        $this->runVarDumpCheck($this->getCommittedFileList('php'));
+        $this->runVarDumpCheck($this->getCommittedFileList());
         $this->runMigrationCheck();
-
 
         if ($this->error) {
             $this->writeln("If you are ABSOLUTELY sure your code is correct, you can use 'git commit --no-verify' to bypass this validation", 0);
         }
 
-        exit((int)$this->error);
+        exit((int) $this->error);
     }
 
-    /**
-     * @return bool
-     */
-    public function isPHPCSFixerAvailable()
+    public function isPHPCSFixerAvailable(): bool
     {
-        $output = [];
-        $return = 0;
-        exec('command -v ./vendor/bin/php-cs-fixer >/dev/null 2>&1', $output, $return);
-        return !(bool)$return;
+        return is_executable('./vendor/bin/php-cs-fixer');
     }
 
-    public function isVarDumpCheckerAvailable()
+    private function isPHPStanAvailable(): bool
     {
-        $output = [];
-        $return = 0;
-        exec('command -v ./vendor/bin/var-dump-check >/dev/null 2>&1', $output, $return);
-        return !(bool)$return;
+        return is_executable('./vendor/bin/phpstan');
     }
 
-    /**
-     * @return bool
-     */
-    public function isESLintAvailable()
+    public function isVarDumpCheckerAvailable(): bool
     {
-        $output = [];
-        $return = 0;
-        exec('command -v ./themes/node_modules/eslint/bin/eslint.js >/dev/null 2>&1', $output, $return);
-        return !(bool)$return;
+        return is_executable('./vendor/bin/var-dump-check');
+    }
+
+    public function isESLintAvailable(): bool
+    {
+        return is_executable('./themes/node_modules/eslint/bin/eslint.js');
     }
 
     /**
      * @return string[]
      */
-    private function getCommittedFileList($extension = 'php')
+    private function getCommittedFileList($extension = 'php'): array
     {
-        exec("git diff --name-only --diff-filter=ACMRTUXB \"HEAD\" | grep -e '\.".$extension."$'", $fileList);
+        exec("git diff --name-only --diff-filter=ACMRTUXB \"HEAD\" | grep -e '\." . $extension . "$'", $fileList);
 
-        $fileList = array_filter($fileList, function($filePath) {
+        return array_filter($fileList, function ($filePath) {
             foreach (self::ALLOWED_DIRECTORIES as $dir) {
                 if (strpos($filePath, $dir) === 0) {
                     return true;
@@ -95,16 +78,9 @@ class PreCommitChecks
 
             return false;
         });
-
-        return $fileList;
     }
 
-    /**
-     * @param array $fileList
-     *
-     * @return bool
-     */
-    private function checkESLint(array $fileList = [])
+    private function checkESLint(array $fileList = []): void
     {
         $output = [];
         $return = 0;
@@ -114,7 +90,7 @@ class PreCommitChecks
             $output,
             $return
         );
-        $return = !(bool)$return;
+        $return = !(bool) $return;
 
         if (!$return) {
             $this->error = true;
@@ -128,10 +104,7 @@ class PreCommitChecks
         }
     }
 
-    /**
-     * @return bool
-     */
-    private function isRebase()
+    private function isRebase(): bool
     {
         $output = [];
         exec('git symbolic-ref --short -q HEAD', $output);
@@ -150,13 +123,14 @@ class PreCommitChecks
         $this->writeln('> find ./_sql/migrations -maxdepth 1 -type f | cut -d\/ -f4 | cut -d\- -f1 | sort | uniq -d');
         exec('find ./_sql/migrations -maxdepth 1 -type f | cut -d\/ -f4 | cut -d\- -f1 | sort | uniq -d', $output);
 
-        if (count($output)) {
+        if (\count($output)) {
             return current($output);
         }
+
         return false;
     }
 
-    private function runPhpLint(array $fileList)
+    private function runPhpLint(array $fileList): void
     {
         $this->writeln('# Checking php syntax');
         $this->writeln('> php -l');
@@ -172,15 +146,16 @@ class PreCommitChecks
         $this->writeln();
     }
 
-    private function runPhpCsFixer(array $fileList)
+    private function runPhpCsFixer(array $fileList): void
     {
         $this->writeln('# Checking php code style');
         $this->writeln('> php-cs-fixer fix -v --no-ansi --dry-run');
 
         if (!$this->isPHPCSFixerAvailable()) {
             $this->error = true;
-            $this->writeln('- php-cs-fixer is NOT installed. Please install composer with dev dependencies.', 2);
+            $this->writeln('- php-cs-fixer is NOT installed. Please run composer install including dev dependencies using `--dev` (superfluous when using composer v2).', 2);
             $this->writeln();
+
             return;
         }
 
@@ -211,7 +186,33 @@ class PreCommitChecks
         $this->writeln();
     }
 
-    private function runEsLint(array $fileList)
+    private function runPHPStan(array $fileList): void
+    {
+        $this->writeln('# Checking code with PHPStan');
+        $this->writeln('> phpstan analyse');
+        $this->writeln();
+
+        if ($fileList === []) {
+            return;
+        }
+
+        if (!$this->isPHPStanAvailable()) {
+            $this->writeln('- PHPStan is NOT installed. Please run composer install including dev dependencies using `--dev` (superfluous when using composer v2).', 2);
+            $this->writeln();
+
+            return;
+        }
+
+        exec('php -d memory_limit=4G ./vendor/bin/phpstan analyze -c .phpstan.neon --no-progress --error-format=table', $output, $return);
+        if ($return !== 0) {
+            $this->error = true;
+            $this->writeln('> PHPStan errors found');
+        }
+
+        $this->writeln();
+    }
+
+    private function runEsLint(array $fileList): void
     {
         $this->writeln('# Checking javascript code style');
         $this->writeln('> eslint.js -c themes/.eslintrc.js --ignore-path themes/.eslintignore');
@@ -219,6 +220,7 @@ class PreCommitChecks
         if (!$this->isESLintAvailable()) {
             $this->writeln('- eslint.js not found. Skipping javascript code style check.', 2);
             $this->writeln();
+
             return;
         }
 
@@ -227,14 +229,15 @@ class PreCommitChecks
         $this->writeln();
     }
 
-    private function runVarDumpCheck(array $fileList)
+    private function runVarDumpCheck(array $fileList): void
     {
         $this->writeln('# Searching for var-dumps');
 
         if (!$this->isVarDumpCheckerAvailable()) {
             $this->error = true;
-            $this->writeln('- var-dump-checker is NOT installed. Please install composer with dev dependencies.', 2);
+            $this->writeln('- var-dump-checker is NOT installed. Please run composer install including dev dependencies using `--dev` (superfluous when using composer v2).', 2);
             $this->writeln();
+
             return;
         }
 
@@ -251,9 +254,10 @@ class PreCommitChecks
         }
     }
 
-    private function runMigrationCheck()
+    private function runMigrationCheck(): void
     {
-        if (($duplicateMigrationId = $this->hasDuplicateMigrations()) !== false) {
+        $duplicateMigrationId = $this->hasDuplicateMigrations();
+        if ($duplicateMigrationId !== false) {
             $this->writeln('- Migration #' . $duplicateMigrationId . ' is duplicated.', 2);
             $this->error = true;
         }
@@ -261,14 +265,14 @@ class PreCommitChecks
         $this->writeln();
     }
 
-    private function write($output = '', $level = 1)
+    private function write($output = '', $level = 1): void
     {
         $spaces = $level * 3;
 
-        echo str_pad($output, strlen($output) + $spaces, ' ', STR_PAD_LEFT);
+        echo str_pad($output, \strlen($output) + $spaces, ' ', STR_PAD_LEFT);
     }
 
-    private function writeln($output = '', $level = 1)
+    private function writeln($output = '', $level = 1): void
     {
         $this->write($output, $level);
         echo PHP_EOL;

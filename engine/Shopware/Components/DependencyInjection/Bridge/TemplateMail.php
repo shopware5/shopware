@@ -25,6 +25,8 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Shop\Shop;
 
 class TemplateMail
 {
@@ -40,9 +42,13 @@ class TemplateMail
         );
         $mailer = new \Shopware_Components_TemplateMail();
         if ($container->initialized('shop')) {
-            $mailer->setShop($container->get('shop'));
+            $shop = $container->get('shop');
+            if (!$shop instanceof Shop) {
+                throw new \RuntimeException('Shop object not found in DI container');
+            }
+            $mailer->setShop($shop);
         }
-        $mailer->setModelManager($container->get(\Shopware\Components\Model\ModelManager::class));
+        $mailer->setModelManager($container->get(ModelManager::class));
         $mailer->setStringCompiler($stringCompiler);
 
         return $mailer;

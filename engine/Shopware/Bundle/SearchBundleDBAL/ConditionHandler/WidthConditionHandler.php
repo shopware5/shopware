@@ -53,8 +53,6 @@ class WidthConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /* @var WidthCondition $condition */
-
         $this->variantHelper->joinVariants($query);
 
         $min = ':minWidth' . md5(json_encode($condition));

@@ -79,7 +79,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
         $productFeedRepository = Shopware()->Models()->getRepository(ProductFeed::class);
         $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
         foreach ($activeFeeds as $feedModel) {
-            /** @var Shopware\Models\ProductFeed\ProductFeed $feedModel */
+            /** @var \Shopware\Models\ProductFeed\ProductFeed $feedModel */
             $fileName = $feedModel->getHash() . '_' . $feedModel->getFileName();
             $filePath = $cacheDir . $fileName;
 

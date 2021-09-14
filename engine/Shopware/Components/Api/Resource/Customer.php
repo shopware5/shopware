@@ -25,15 +25,29 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\ORM\Query\Expr\Join;
+use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
+use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
+use Shopware\Bundle\AccountBundle\Service\Validator\AddressValidatorInterface;
+use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
-use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Exception\CustomValidationException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Country\Country as CountryModel;
 use Shopware\Models\Country\State as StateModel;
 use Shopware\Models\Customer\Address as AddressModel;
 use Shopware\Models\Customer\Customer as CustomerModel;
+use Shopware\Models\Customer\Group;
 use Shopware\Models\Customer\PaymentData;
-use Shopware\Models\Shop\Repository;
+use Shopware\Models\Customer\PriceGroup;
+use Shopware\Models\Customer\Repository as CustomerRepository;
+use Shopware\Models\Payment\Payment;
+use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
 
 /**
@@ -42,11 +56,11 @@ use Shopware\Models\Shop\Shop as ShopModel;
 class Customer extends Resource
 {
     /**
-     * @return \Shopware\Models\Customer\Repository
+     * @return CustomerRepository
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository(\Shopware\Models\Customer\Customer::class);
+        return $this->getManager()->getRepository(CustomerModel::class);
     }
 
     /**
@@ -54,27 +68,27 @@ class Customer extends Resource
      *
      * @param string $number
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
      * @return int
      */
     public function getIdFromNumber($number)
     {
         if (empty($number)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['customer.id'])
-                ->from(\Shopware\Models\Customer\Customer::class, 'customer')
+                ->from(CustomerModel::class, 'customer')
                 ->where('customer.number = ?1')
                 ->setParameter(1, $number);
 
         $id = $builder->getQuery()->getOneOrNullResult();
 
         if (!$id) {
-            throw new ApiException\NotFoundException(sprintf('Customer by number %s not found', $number));
+            throw new NotFoundException(sprintf('Customer by number %s not found', $number));
         }
 
         return $id['id'];
@@ -83,10 +97,10 @@ class Customer extends Resource
     /**
      * @param string $number
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return array|\Shopware\Models\Customer\Customer
+     * @return array|CustomerModel
      */
     public function getOneByNumber($number)
     {
@@ -98,17 +112,17 @@ class Customer extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return array|\Shopware\Models\Customer\Customer
+     * @return array|CustomerModel
      */
     public function getOne($id)
     {
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         $builder = $this->getRepository()->createQueryBuilder('customer');
@@ -139,11 +153,11 @@ class Customer extends Resource
             ->where('customer.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var \Shopware\Models\Customer\Customer|null $customer */
+        /** @var CustomerModel|null $customer */
         $customer = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$customer) {
-            throw new ApiException\NotFoundException(sprintf('Customer by id %d not found', $id));
+            throw new NotFoundException(sprintf('Customer by id %d not found', $id));
         }
 
         return $customer;
@@ -182,7 +196,7 @@ class Customer extends Resource
     }
 
     /**
-     * @return \Shopware\Models\Customer\Customer
+     * @return CustomerModel
      */
     public function create(array $params)
     {
@@ -211,8 +225,8 @@ class Customer extends Resource
         $billing = $this->createAddress($params['billing']) ?: new AddressModel();
         $shipping = $this->createAddress($params['shipping']);
 
-        $registerService = $this->getContainer()->get(\Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface::class);
-        $context = $this->getContainer()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop();
+        $registerService = $this->getContainer()->get(RegisterServiceInterface::class);
+        $context = $this->getContainer()->get(ContextServiceInterface::class)->getShopContext()->getShop();
 
         $context->addAttribute('sendOptinMail', new Attribute([
             'sendOptinMail' => $params['sendOptinMail'] === true,
@@ -226,11 +240,11 @@ class Customer extends Resource
     /**
      * @param string $number
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ParameterMissingException
+     * @throws CustomValidationException
+     * @throws NotFoundException
      *
-     * @return \Shopware\Models\Customer\Customer
+     * @return CustomerModel
      */
     public function updateByNumber($number, array $params)
     {
@@ -242,24 +256,25 @@ class Customer extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws CustomValidationException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return \Shopware\Models\Customer\Customer
+     * @return CustomerModel
      */
     public function update($id, array $params)
     {
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Customer\Customer|null $customer */
+        /** @var CustomerModel|null $customer */
         $customer = $this->getRepository()->find($id);
 
         if (!$customer) {
-            throw new ApiException\NotFoundException(sprintf('Customer by id %d not found', $id));
+            throw new NotFoundException(sprintf('Customer by id %d not found', $id));
         }
 
         $this->setupContext($customer->getShop()->getId());
@@ -270,16 +285,24 @@ class Customer extends Resource
 
         $customer->fromArray($params);
 
-        $customerValidator = $this->getContainer()->get(\Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface::class);
-        $addressValidator = $this->getContainer()->get(\Shopware\Bundle\AccountBundle\Service\Validator\AddressValidatorInterface::class);
-        $addressService = $this->getContainer()->get(\Shopware\Bundle\AccountBundle\Service\AddressServiceInterface::class);
+        $customerValidator = $this->getContainer()->get(CustomerValidatorInterface::class);
+        $addressValidator = $this->getContainer()->get(AddressValidatorInterface::class);
+        $addressService = $this->getContainer()->get(AddressServiceInterface::class);
 
         $customerValidator->validate($customer);
-        $addressValidator->validate($customer->getDefaultBillingAddress());
-        $addressValidator->validate($customer->getDefaultShippingAddress());
+        $defaultBillingAddress = $customer->getDefaultBillingAddress();
+        if ($defaultBillingAddress === null) {
+            throw new CustomValidationException('Default billing address not set');
+        }
+        $defaultShippingAddress = $customer->getDefaultShippingAddress();
+        if ($defaultShippingAddress === null) {
+            throw new CustomValidationException('Default shipping address not set');
+        }
+        $addressValidator->validate($defaultBillingAddress);
+        $addressValidator->validate($defaultShippingAddress);
 
-        $addressService->update($customer->getDefaultBillingAddress());
-        $addressService->update($customer->getDefaultShippingAddress());
+        $addressService->update($defaultBillingAddress);
+        $addressService->update($defaultShippingAddress);
 
         $this->flush();
 
@@ -289,10 +312,10 @@ class Customer extends Resource
     /**
      * @param string $number
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return \Shopware\Models\Customer\Customer
+     * @return CustomerModel
      */
     public function deleteByNumber($number)
     {
@@ -304,24 +327,24 @@ class Customer extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return \Shopware\Models\Customer\Customer
+     * @return CustomerModel
      */
     public function delete($id)
     {
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Customer\Customer|null $customer */
+        /** @var CustomerModel|null $customer */
         $customer = $this->getRepository()->find($id);
 
         if (!$customer) {
-            throw new ApiException\NotFoundException(sprintf('Customer by id %d not found', $id));
+            throw new NotFoundException(sprintf('Customer by id %d not found', $id));
         }
 
         $this->getManager()->remove($customer);
@@ -345,7 +368,7 @@ class Customer extends Resource
     /**
      * @param array $data
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws CustomValidationException
      *
      * @return array
      */
@@ -356,7 +379,7 @@ class Customer extends Resource
         }
 
         if (\array_key_exists('debit', $data) && !\array_key_exists('paymentData', $data)) {
-            $debitPaymentMean = $this->getManager()->getRepository(\Shopware\Models\Payment\Payment::class)->findOneBy(['name' => 'debit']);
+            $debitPaymentMean = $this->getManager()->getRepository(Payment::class)->findOneBy(['name' => 'debit']);
 
             if ($debitPaymentMean) {
                 $data['paymentData'] = [
@@ -383,19 +406,19 @@ class Customer extends Resource
                 $paymentData = $this->getOneToManySubElement(
                     $paymentDataInstances,
                     $paymentDataData,
-                    \Shopware\Models\Customer\PaymentData::class,
+                    PaymentData::class,
                     ['id', 'paymentMeanId']
                 );
-            } catch (ApiException\CustomValidationException $cve) {
+            } catch (CustomValidationException $cve) {
                 $paymentData = new PaymentData();
                 $this->getManager()->persist($paymentData);
                 $paymentDataInstances->add($paymentData);
             }
 
             if (isset($paymentDataData['paymentMeanId'])) {
-                $paymentMean = $this->getManager()->getRepository(\Shopware\Models\Payment\Payment::class)->find($paymentDataData['paymentMeanId']);
+                $paymentMean = $this->getManager()->getRepository(Payment::class)->find($paymentDataData['paymentMeanId']);
                 if ($paymentMean === null) {
-                    throw new ApiException\CustomValidationException(sprintf('%s by %s %s not found', \Shopware\Models\Payment\Payment::class, 'id', $paymentDataData['paymentMeanId']));
+                    throw new CustomValidationException(sprintf('%s by %s %s not found', Payment::class, 'id', $paymentDataData['paymentMeanId']));
                 }
                 $paymentData->setPaymentMean($paymentMean);
                 unset($paymentDataData['paymentMeanId']);
@@ -414,7 +437,7 @@ class Customer extends Resource
     }
 
     /**
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getListQuery()
     {
@@ -422,30 +445,30 @@ class Customer extends Resource
     }
 
     /**
-     * @throws ApiException\CustomValidationException
+     * @throws CustomValidationException
      *
      * @return array
      */
     private function prepareCustomerData(array $params, CustomerModel $customer)
     {
         if (\array_key_exists('groupKey', $params)) {
-            $params['group'] = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Group::class)->findOneBy(['key' => $params['groupKey']]);
+            $params['group'] = Shopware()->Models()->getRepository(Group::class)->findOneBy(['key' => $params['groupKey']]);
             if (!$params['group']) {
-                throw new ApiException\CustomValidationException(sprintf('CustomerGroup by key %s not found', $params['groupKey']));
+                throw new CustomValidationException(sprintf('CustomerGroup by key %s not found', $params['groupKey']));
             }
         }
 
         if (\array_key_exists('shopId', $params)) {
-            $params['shop'] = Shopware()->Models()->find(\Shopware\Models\Shop\Shop::class, $params['shopId']);
+            $params['shop'] = Shopware()->Models()->find(ShopModel::class, $params['shopId']);
             if (!$params['shop']) {
-                throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $params['shopId']));
+                throw new CustomValidationException(sprintf('Shop by id %s not found', $params['shopId']));
             }
         }
 
         if (\array_key_exists('priceGroupId', $params)) {
             $priceGroupId = (int) $params['priceGroupId'];
             if ($priceGroupId > 0) {
-                $params['priceGroup'] = Shopware()->Models()->find(\Shopware\Models\Customer\PriceGroup::class, $params['priceGroupId']);
+                $params['priceGroup'] = Shopware()->Models()->find(PriceGroup::class, $params['priceGroupId']);
             } else {
                 $params['priceGroup'] = null;
             }
@@ -464,27 +487,27 @@ class Customer extends Resource
      *
      * @param int $shopId
      *
-     * @throws ApiException\CustomValidationException
+     * @throws CustomValidationException
      */
     private function setupContext($shopId = null)
     {
-        /** @var Repository $shopRepository */
-        $shopRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(ShopModel::class);
+        /** @var ShopRepository $shopRepository */
+        $shopRepository = $this->getContainer()->get(ModelManager::class)->getRepository(ShopModel::class);
 
         if ($shopId) {
             $shop = $shopRepository->getActiveById($shopId);
             if (!$shop) {
-                throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $shopId));
+                throw new CustomValidationException(sprintf('Shop by id %s not found', $shopId));
             }
         } else {
             $shop = $shopRepository->getActiveDefault();
         }
 
-        $this->getContainer()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        $this->getContainer()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
     }
 
     /**
-     * @throws ApiException\CustomValidationException
+     * @throws CustomValidationException
      *
      * @return AddressModel|null
      */
@@ -495,7 +518,7 @@ class Customer extends Resource
         }
 
         if (!$data['country']) {
-            throw new ApiException\CustomValidationException('A country is required.');
+            throw new CustomValidationException('A country is required.');
         }
 
         $data = $this->prepareAddressData($data);
@@ -515,8 +538,8 @@ class Customer extends Resource
      */
     private function prepareAddressData(array $data, $filter = false)
     {
-        $data['country'] = !empty($data['country']) ? $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(CountryModel::class, (int) $data['country']) : null;
-        $data['state'] = !empty($data['state']) ? $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(StateModel::class, $data['state']) : null;
+        $data['country'] = !empty($data['country']) ? $this->getContainer()->get(ModelManager::class)->find(CountryModel::class, (int) $data['country']) : null;
+        $data['state'] = !empty($data['state']) ? $this->getContainer()->get(ModelManager::class)->find(StateModel::class, $data['state']) : null;
 
         return $filter ? array_filter($data) : $data;
     }

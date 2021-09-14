@@ -25,6 +25,7 @@
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
+use Shopware\Models\Category\Category as CategoryModel;
 
 /**
  * Shopware Class that handles categories
@@ -113,7 +114,7 @@ class sCategories implements \Enlight_Hook
         $this->db = Shopware()->Container()->get('db');
         $this->config = Shopware()->Container()->get(\Shopware_Components_Config::class);
         $this->manager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
-        $this->repository = $this->manager->getRepository(\Shopware\Models\Category\Category::class);
+        $this->repository = $this->manager->getRepository(CategoryModel::class);
         $this->baseUrl = $this->config->get('baseFile') . '?sViewport=cat&sCategory=';
         $this->blogBaseUrl = $this->config->get('baseFile') . '?sViewport=blog&sCategory=';
         $this->baseId = (int) Shopware()->Shop()->get('parentID');
@@ -360,7 +361,7 @@ class sCategories implements \Enlight_Hook
     {
         $category = $this->repository->find($categoryId);
 
-        if (!$category) {
+        if (!$category instanceof CategoryModel) {
             return 'basic';
         }
 

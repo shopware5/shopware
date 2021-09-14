@@ -62,20 +62,20 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $orderNumber = $this->Request()->get('ordernumber');
 
             if (!$orderNumber) {
-                throw new \InvalidArgumentException('Argument ordernumber missing');
+                throw new InvalidArgumentException('Argument ordernumber missing');
             }
 
             $categoryId = (int) $this->Request()->get('categoryId');
             if (!$categoryId) {
-                throw new \InvalidArgumentException('Argument categoryId missing');
+                throw new InvalidArgumentException('Argument categoryId missing');
             }
 
             if (!$this->Request()->has('sSort')) {
-                $default = $this->get(\Shopware_Components_Config::class)->get('defaultListingSorting');
+                $default = $this->get(Shopware_Components_Config::class)->get('defaultListingSorting');
                 $this->Request()->setParam('sSort', $default);
             }
 
-            /** @var \sArticles $articleModule */
+            /** @var sArticles $articleModule */
             $articleModule = Shopware()->Modules()->Articles();
             $navigation = $articleModule->getProductNavigation($orderNumber, $categoryId, $this->Request());
 
@@ -94,11 +94,11 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $navigation['currentListing']['href'] = $linkRewriter($navigation['currentListing']['link']);
             $responseCode = 200;
             $body = json_encode($navigation, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $responseCode = 500;
             $result = ['error' => $e->getMessage()];
             $body = json_encode($result, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $responseCode = 500;
             $result = ['exception' => $e];
             $body = json_encode($result, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
@@ -184,13 +184,13 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     {
         $config = Shopware()->Plugins()->Frontend()->TagCloud()->Config();
 
-        if (empty($config->show)) {
+        if (empty($config->get('show'))) {
             return;
         }
 
         $controller = $this->Request()->getParam('sController', $this->Request()->getControllerName());
 
-        if (strpos($config->controller, $controller) !== false) {
+        if (strpos($config->get('controller'), $controller) !== false) {
             $this->View()->assign('sCloud', Shopware()->Modules()->Marketing()->sBuildTagCloud(
                 $this->Request()->getParam('sCategory')
             ));
@@ -365,7 +365,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $facetFilter->add($criteria);
 
         $criteria->setGeneratePartialFacets(
-            $this->container->get(\Shopware_Components_Config::class)->get('listingMode') === 'filter_ajax_reload'
+            $this->container->get(Shopware_Components_Config::class)->get('listingMode') === 'filter_ajax_reload'
         );
 
         if (!$this->Request()->get('loadFacets')) {
@@ -408,7 +408,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $criteria = $factory->createListingCriteria($this->Request(), $context);
 
         $criteria->setGeneratePartialFacets(
-            $this->container->get(\Shopware_Components_Config::class)->get('listingMode') === 'filter_ajax_reload'
+            $this->container->get(Shopware_Components_Config::class)->get('listingMode') === 'filter_ajax_reload'
         );
 
         if (!$this->Request()->get('loadFacets')) {
@@ -439,7 +439,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $criteria = $factory->createSearchCriteria($this->Request(), $context);
 
         $criteria->setGeneratePartialFacets(
-            $this->container->get(\Shopware_Components_Config::class)->get('listingMode') === 'filter_ajax_reload'
+            $this->container->get(Shopware_Components_Config::class)->get('listingMode') === 'filter_ajax_reload'
         );
 
         if (!$this->Request()->get('loadFacets')) {
@@ -466,7 +466,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         if ($this->Request()->has('productBoxLayout')) {
             $boxLayout = $this->Request()->get('productBoxLayout');
         } else {
-            $boxLayout = $this->get(\Shopware_Components_Config::class)->get('searchProductBoxLayout');
+            $boxLayout = $this->get(Shopware_Components_Config::class)->get('searchProductBoxLayout');
             if ($categoryId) {
                 $boxLayout = Shopware()->Modules()->Categories()->getProductBoxLayout($categoryId);
             }

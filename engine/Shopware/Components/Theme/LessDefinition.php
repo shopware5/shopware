@@ -51,7 +51,7 @@ use Shopware\Components\Theme;
  *                  __DIR__ . DIRECTORY_SEPARATOR . 'event2.less'
  *              ),
  *
- *              //import directory for less @import commands
+ *              //import directory for less `@import` commands
  *              __DIR__
  *          );
  *          return new ArrayCollection(array($less));
@@ -101,7 +101,7 @@ class LessDefinition
     /**
      * @param array       $config          contains the less variables, has to be a key value array
      * @param array       $files           contains the full file name paths
-     * @param string|null $importDirectory Full path to the import directory for less @import commands
+     * @param string|null $importDirectory Full path to the import directory for less `@import` commands
      * @param Theme|null  $theme           the corresponding theme
      */
     public function __construct(array $config = [], array $files = [], $importDirectory = null, Theme $theme = null)

@@ -68,9 +68,9 @@ class HrefLangTest extends TestCase
 
         foreach ($urls as $href) {
             if ($href->getLocale() === 'de-DE') {
-                static::assertEquals('/', parse_url($href->getLink(), PHP_URL_PATH));
+                static::assertStringEndsWith('/', (string) parse_url($href->getLink(), PHP_URL_PATH));
             } else {
-                static::assertEquals('/en/', parse_url($href->getLink(), PHP_URL_PATH));
+                static::assertStringEndsWith('/en/', (string) parse_url($href->getLink(), PHP_URL_PATH));
             }
         }
     }
@@ -85,9 +85,9 @@ class HrefLangTest extends TestCase
 
         foreach ($urls as $href) {
             if ($href->getLocale() === 'de-DE') {
-                static::assertEquals('/my-fancy-german-category/', parse_url($href->getLink(), PHP_URL_PATH));
+                static::assertStringEndsWith('/my-fancy-german-category/', (string) parse_url($href->getLink(), PHP_URL_PATH));
             } else {
-                static::assertEquals('/en/my-fancy-english-category/', parse_url($href->getLink(), PHP_URL_PATH));
+                static::assertStringEndsWith('/en/my-fancy-english-category/', (string) parse_url($href->getLink(), PHP_URL_PATH));
             }
         }
     }
@@ -102,9 +102,9 @@ class HrefLangTest extends TestCase
 
         foreach ($urls as $href) {
             if ($href->getLocale() === 'de-DE') {
-                static::assertEquals('/my-fancy-german-category/', parse_url($href->getLink(), PHP_URL_PATH));
+                static::assertStringEndsWith('/my-fancy-german-category/', (string) parse_url($href->getLink(), PHP_URL_PATH));
             } else {
-                static::assertEquals('/en/my-fancy-english-category/', parse_url($href->getLink(), PHP_URL_PATH));
+                static::assertStringEndsWith('/en/my-fancy-english-category/', (string) parse_url($href->getLink(), PHP_URL_PATH));
             }
         }
     }

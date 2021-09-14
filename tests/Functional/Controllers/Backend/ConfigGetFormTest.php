@@ -310,6 +310,7 @@ class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertLessThanOrEqual(299, $response->getHttpResponseCode());
 
         $responseBody = $response->getBody();
+        static::assertIsString($responseBody);
         $responseDataTransferObject = json_decode($responseBody);
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new \Exception('JSON parse error: ' . json_last_error_msg() . ' for request to ' . $requestUrl . ' which returned ' . $responseBody);

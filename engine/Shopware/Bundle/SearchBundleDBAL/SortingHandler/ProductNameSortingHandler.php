@@ -54,7 +54,6 @@ class ProductNameSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /* @var ProductNameSorting $sorting */
         $query->leftJoin(
             self::PRODUCT,
             's_articles_translations',

@@ -53,7 +53,7 @@ class MailTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function testCreateMail()
     {
-        $this->testData['name'] .= uniqid(rand());
+        $this->testData['name'] .= uniqid((string) rand());
 
         $this->Request()->setMethod('POST')->setPost($this->testData);
         $response = $this->dispatch('/backend/mail/createMail');

@@ -126,7 +126,7 @@ class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
          * Fill in session data into s_core_sessions_backend
          */
         $this->dispatch('/backend');
-        static::assertNotEmpty(Shopware()->BackendSession()->Auth->sessionID);
+        static::assertNotEmpty(Shopware()->BackendSession()->get('Auth')->sessionID);
 
         $this->resetRequest()
         ->resetResponse();
@@ -172,7 +172,7 @@ class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
 
         $user = $this->getUserByUsername($username);
 
-        $randomName = sprintf('RandomName_%s', md5(rand(0, time())));
+        $randomName = sprintf('RandomName_%s', md5((string) rand(0, time())));
 
         static::assertGreaterThan(0, $user['id']);
 
@@ -270,7 +270,7 @@ class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
      */
     public function testCreateRole()
     {
-        $randomRoleName = md5(uniqid(rand()));
+        $randomRoleName = md5(uniqid((string) rand()));
         $this->Request()->setParam('parentID', null);
         $this->Request()->setParam('name', $randomRoleName);
         $this->Request()->setParam('description', 'Test');

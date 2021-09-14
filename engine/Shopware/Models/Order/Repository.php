@@ -746,7 +746,7 @@ class Repository extends ModelRepository
     /**
      * @param string $term
      *
-     * @return int[]
+     * @return array<int, int|string>
      */
     private function searchOrderIds($term)
     {
@@ -810,13 +810,11 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param string $term
-     * @param string $table
-     * @param int[]  $excludedOrderIds
+     * @param array<int, int|string> $excludedOrderIds
      *
      * @return int[]
      */
-    private function searchAddressTable($term, $table, array $excludedOrderIds = [])
+    private function searchAddressTable(string $term, string $table, array $excludedOrderIds = []): array
     {
         $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
         $query->select('address.orderID');
@@ -841,13 +839,11 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param string $term
-     * @param string $table
-     * @param int[]  $excludedOrderIds
+     * @param array<int, int|string> $excludedOrderIds
      *
      * @return int[]
      */
-    private function searchDocumentsTable($term, $table, array $excludedOrderIds = [])
+    private function searchDocumentsTable(string $term, string $table, array $excludedOrderIds = []): array
     {
         $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
         $query->select('documents.orderID');

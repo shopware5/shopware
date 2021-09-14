@@ -72,7 +72,6 @@ class ManualSortingHandler implements HandlerInterface
             ],
         ]);
 
-        /* @var ManualSorting $criteriaPart */
         $search->addSort(
             $fieldSort
         );

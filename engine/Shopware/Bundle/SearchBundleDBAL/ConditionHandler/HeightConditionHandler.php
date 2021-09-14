@@ -56,7 +56,6 @@ class HeightConditionHandler implements ConditionHandlerInterface
         $min = ':minHeight' . md5(json_encode($condition));
         $max = ':maxHeight' . md5(json_encode($condition));
 
-        /* @var HeightCondition $condition */
         $this->variantHelper->joinVariants($query);
 
         if ($condition->getMinHeight() > 0) {

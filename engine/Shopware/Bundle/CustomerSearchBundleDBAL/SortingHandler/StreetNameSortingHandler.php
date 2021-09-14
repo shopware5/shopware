@@ -38,7 +38,6 @@ class StreetNameSortingHandler implements SortingHandlerInterface
 
     public function handle(SortingInterface $sorting, QueryBuilder $query)
     {
-        /* @var StreetNameSorting $sorting */
         $query->addOrderBy('customer.street', $sorting->getDirection());
     }
 }

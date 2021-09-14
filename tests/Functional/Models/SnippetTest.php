@@ -24,14 +24,17 @@
 
 namespace Shopware\Tests\Models;
 
+use Doctrine\ORM\EntityRepository;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Snippet\Snippet;
+use Shopware\Models\Snippet\SnippetRepository;
 
 class SnippetTest extends \Enlight_Components_Test_TestCase
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
-    public $testData = [
+    public array $testData = [
         'namespace' => 'unit/test/snippettestcase',
         'name' => 'ErrorIndexTitle',
         'value' => 'Fehler',
@@ -39,13 +42,10 @@ class SnippetTest extends \Enlight_Components_Test_TestCase
         'localeId' => '1',
     ];
 
-    /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    protected $em;
+    protected ModelManager $em;
 
     /**
-     * @var \Shopware\Models\User\Repository
+     * @var SnippetRepository|EntityRepository<Snippet>
      */
     protected $repo;
 
@@ -58,12 +58,9 @@ class SnippetTest extends \Enlight_Components_Test_TestCase
         parent::setUp();
 
         $this->em = Shopware()->Models();
-        $this->repo = Shopware()->Models()->getRepository('Shopware\Models\Snippet\Snippet');
+        $this->repo = Shopware()->Models()->getRepository(Snippet::class);
     }
 
-    /**
-     * Tear down
-     */
     protected function tearDown(): void
     {
         $snippet = $this->repo->findOneBy(['namespace' => 'unit/test/snippettestcase']);
@@ -75,10 +72,7 @@ class SnippetTest extends \Enlight_Components_Test_TestCase
         parent::tearDown();
     }
 
-    /**
-     * Test case
-     */
-    public function testGetterAndSetter()
+    public function testGetterAndSetter(): void
     {
         $snippet = new Snippet();
 
@@ -92,24 +86,18 @@ class SnippetTest extends \Enlight_Components_Test_TestCase
         }
     }
 
-    /**
-     * Test case
-     */
-    public function testFromArrayWorks()
+    public function testFromArrayWorks(): void
     {
         $snippet = new Snippet();
         $snippet->fromArray($this->testData);
 
-        foreach ($this->testData as $fieldname => $value) {
-            $getMethod = 'get' . ucfirst($fieldname);
+        foreach ($this->testData as $fieldName => $value) {
+            $getMethod = 'get' . ucfirst($fieldName);
             static::assertEquals($snippet->$getMethod(), $value);
         }
     }
 
-    /**
-     * Test case
-     */
-    public function testShouldBePersisted()
+    public function testShouldBePersisted(): void
     {
         $snippet = new Snippet();
         $snippet->fromArray($this->testData);
@@ -124,9 +112,10 @@ class SnippetTest extends \Enlight_Components_Test_TestCase
         unset($snippet);
 
         $snippet = $this->repo->find($snippetId);
+        static::assertInstanceOf(Snippet::class, $snippet);
 
-        foreach ($this->testData as $fieldname => $value) {
-            $getMethod = 'get' . ucfirst($fieldname);
+        foreach ($this->testData as $fieldName => $value) {
+            $getMethod = 'get' . ucfirst($fieldName);
             static::assertEquals($snippet->$getMethod(), $value);
         }
 

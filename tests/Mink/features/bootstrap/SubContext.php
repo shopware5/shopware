@@ -122,7 +122,7 @@ class SubContext extends PageObjectContext implements KernelAwareContext, MinkAw
     /**
      * @param string $id
      *
-     * @return object
+     * @return mixed Services from the container
      */
     protected function getService($id)
     {

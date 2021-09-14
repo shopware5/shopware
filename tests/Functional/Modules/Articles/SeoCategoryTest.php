@@ -85,7 +85,7 @@ class SeoCategoryTest extends \Enlight_Components_Test_Plugin_TestCase
             'description' => 'Test description',
             'active' => true,
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(rand()),
+                'number' => 'swTEST' . uniqid((string) rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => [

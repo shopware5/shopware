@@ -6,6 +6,10 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 [View all changes from v5.7.3...v5.7.4](https://github.com/shopware/shopware/compare/v5.7.3...v5.7.4)
 
+### Additions
+
+* Added PHP extension `ext-calendar` as requirement
+
 ### Breaks
 
 * In case you have extended the `frontend_listing_actions_filter` block to override the include of the button template, please extend the `frontend_listing_actions_filter_include` block from now on instead

@@ -44,7 +44,7 @@ class Shopware_Components_AlsoBought extends Enlight_Class
     {
         $sql = 'SELECT id FROM s_articles ';
         if ($limit !== null) {
-            $sql = Shopware()->Db()->limit($sql, $limit, $offset);
+            $sql = Shopware()->Db()->limit($sql, $limit, (int) $offset);
         }
 
         $articles = Shopware()->Db()->fetchCol($sql);

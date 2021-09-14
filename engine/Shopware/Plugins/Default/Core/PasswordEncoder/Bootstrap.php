@@ -23,6 +23,7 @@
  */
 
 use Shopware\Components\Password\Manager;
+use Shopware\Models\Config\Form;
 
 /*
  * @see rfc for argon2 in PHP -> https://wiki.php.net/rfc/argon2_password_hash
@@ -41,17 +42,11 @@ if (!\defined('PASSWORD_ARGON2_DEFAULT_THREADS')) {
 
 class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
-    /**
-     * @return string
-     */
     public function getVersion()
     {
         return '1.0.0-dev';
     }
 
-    /**
-     * @return array
-     */
     public function getCapabilities()
     {
         return [
@@ -61,11 +56,6 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
         ];
     }
 
-    /**
-     * Standard plugin install method to register all required components.
-     *
-     * @return bool success
-     */
     public function install()
     {
         $this->subscribeEvents();
@@ -98,12 +88,10 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     {
         $config = $this->Config();
 
-        $options = [
+        return [
             'iterations' => $config['sha256iterations'],
             'salt_len' => 22,
         ];
-
-        return $options;
     }
 
     /**
@@ -150,7 +138,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     /**
      * Crate config form elements
      */
-    protected function createForm()
+    protected function createForm(): void
     {
         $form = $this->Form();
 
@@ -215,9 +203,8 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
         ]);
 
         $form->setLabel('Passwörter');
-        $form->setParent(
-            $this->Forms()->findOneBy(['name' => 'Core'])
-        );
+        $parent = $this->Forms()->findOneBy(['name' => 'Core']);
+        $form->setParent($parent);
     }
 
     /**

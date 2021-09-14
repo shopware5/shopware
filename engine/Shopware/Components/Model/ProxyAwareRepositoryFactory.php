@@ -69,7 +69,6 @@ class ProxyAwareRepositoryFactory implements RepositoryFactory
      */
     private function createRepository(EntityManagerInterface $entityManager, $entityName)
     {
-        /* @var \Doctrine\ORM\Mapping\ClassMetadata $metadata */
         $metadata = $entityManager->getClassMetadata($entityName);
 
         /** @var string|null $repositoryClassName */

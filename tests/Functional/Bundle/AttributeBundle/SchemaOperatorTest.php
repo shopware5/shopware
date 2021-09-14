@@ -109,7 +109,7 @@ class SchemaOperatorTest extends TestCase
         $service = Shopware()->Container()->get('shopware_attribute.crud_service');
         $tableMapping = Shopware()->Container()->get('shopware_attribute.table_mapping');
         $table = 's_articles_attributes';
-        $columnName = 'attr_' . uniqid(mt_rand(), false);
+        $columnName = 'attr_' . uniqid((string) mt_rand(), false);
 
         $service->update($table, $columnName, 'bool');
         static::assertTrue($tableMapping->isTableColumn($table, $columnName));
@@ -128,7 +128,7 @@ class SchemaOperatorTest extends TestCase
         $connection = Shopware()->Container()->get('dbal_connection');
         $attributeData = [
             'table_name' => 's_articles_attributes',
-            'column_name' => 'attr_' . uniqid(mt_rand(), false),
+            'column_name' => 'attr_' . uniqid((string) mt_rand(), false),
             'column_type' => 'bool',
         ];
         $connection->insert('s_attribute_configuration', $attributeData);

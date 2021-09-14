@@ -93,7 +93,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         }
 
         $messages = $result->getMessages();
-        /* @var Zend_Date $lockedUntil */
+
         if (isset($messages['lockedUntil'])) {
             $lockedUntil = isset($messages['lockedUntil']) ? $messages['lockedUntil'] : null;
             $lockedUntil = $lockedUntil->toString(Zend_Date::ISO_8601);

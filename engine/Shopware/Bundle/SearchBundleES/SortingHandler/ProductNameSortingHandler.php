@@ -51,7 +51,6 @@ class ProductNameSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var ProductNameSorting $criteriaPart */
         $search->addSort(
             new FieldSort('name.raw', strtolower($criteriaPart->getDirection()), ['unmapped_type' => 'long'])
         );

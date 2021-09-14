@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,15 +33,9 @@ use Symfony\Component\DependencyInjection\Container;
 
 class ContainerAwareEventManagerTest extends TestCase
 {
-    /**
-     * @var Container
-     */
-    private $container;
+    private Container $container;
 
-    /**
-     * @var ContainerAwareEventManager
-     */
-    private $eventManager;
+    private ContainerAwareEventManager $eventManager;
 
     protected function setUp(): void
     {
@@ -47,7 +43,7 @@ class ContainerAwareEventManagerTest extends TestCase
         $this->eventManager = new ContainerAwareEventManager($this->container);
     }
 
-    public function testAddAListenerService()
+    public function testAddAListenerService(): void
     {
         $service = $this->createMock(Service::class);
 
@@ -65,7 +61,7 @@ class ContainerAwareEventManagerTest extends TestCase
         $this->eventManager->notify('onEvent', $eventArgs);
     }
 
-    public function testAddAListenerServiceCallMultipleTimes()
+    public function testAddAListenerServiceCallMultipleTimes(): void
     {
         $service = $this->createMock(Service::class);
 
@@ -84,7 +80,7 @@ class ContainerAwareEventManagerTest extends TestCase
         $this->eventManager->notify('onEvent', $eventArgs);
     }
 
-    public function testAddASubscriberService()
+    public function testAddASubscriberService(): void
     {
         $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
 
@@ -112,7 +108,7 @@ class ContainerAwareEventManagerTest extends TestCase
         $this->eventManager->notify('onEventNested', $eventArgs);
     }
 
-    public function testPreventDuplicateListenerService()
+    public function testPreventDuplicateListenerService(): void
     {
         $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
         $service = $this->createMock(Service::class);
@@ -130,7 +126,7 @@ class ContainerAwareEventManagerTest extends TestCase
         $this->eventManager->notify('onEvent', $eventArgs);
     }
 
-    public function testHasListenersOnLazyLoad()
+    public function testHasListenersOnLazyLoad(): void
     {
         $service = $this->createMock(Service::class);
 
@@ -147,7 +143,7 @@ class ContainerAwareEventManagerTest extends TestCase
         }
     }
 
-    public function testGetListenersOnLazyLoad()
+    public function testGetListenersOnLazyLoad(): void
     {
         $service = $this->createMock(Service::class);
         $this->container->set('service.listener', $service);
@@ -159,7 +155,7 @@ class ContainerAwareEventManagerTest extends TestCase
         static::assertCount(1, $this->eventManager->getListeners('onEvent'));
     }
 
-    public function testRemoveAfterDispatch()
+    public function testRemoveAfterDispatch(): void
     {
         $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
 
@@ -179,7 +175,7 @@ class ContainerAwareEventManagerTest extends TestCase
         static::assertFalse($this->eventManager->hasListeners('onEvent'));
     }
 
-    public function testRemoveBeforeDispatch()
+    public function testRemoveBeforeDispatch(): void
     {
         $service = $this->createMock(Service::class);
         $this->container->set('service.listener', $service);
@@ -195,13 +191,13 @@ class ContainerAwareEventManagerTest extends TestCase
 
 class Service
 {
-    public function onEvent(\Enlight_Event_EventArgs $e)
+    public function onEvent(\Enlight_Event_EventArgs $e): void
     {
     }
 }
 class SubscriberService implements SubscriberInterface
 {
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             'onEvent' => 'onEvent',
@@ -210,15 +206,15 @@ class SubscriberService implements SubscriberInterface
         ];
     }
 
-    public function onEvent(\Enlight_Event_EventArgs $e)
+    public function onEvent(\Enlight_Event_EventArgs $e): void
     {
     }
 
-    public function onEventWithPriority(\Enlight_Event_EventArgs $e)
+    public function onEventWithPriority(\Enlight_Event_EventArgs $e): void
     {
     }
 
-    public function onEventNested(\Enlight_Event_EventArgs $e)
+    public function onEventNested(\Enlight_Event_EventArgs $e): void
     {
     }
 }

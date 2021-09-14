@@ -24,7 +24,6 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Components\HttpClient\HttpClientInterface;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -187,7 +186,6 @@ abstract class StoreCommand extends ShopwareCommand
      */
     protected function completeLicensedDomain($input)
     {
-        /* @var AccountManagerService $accountManagerService */
         try {
             $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
         } catch (\Exception $e) {

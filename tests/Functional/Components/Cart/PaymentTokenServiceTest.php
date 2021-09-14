@@ -64,14 +64,17 @@ class PaymentTokenServiceTest extends \Enlight_Components_Test_Controller_TestCa
 
         $this->dispatch('/?swPaymentToken=' . $hash);
 
+        $baseUrl = $this->Request()->getBaseUrl();
         $cookies = $this->Response()->getCookies();
-        $key = session_name() . '-';
+        $key = session_name() . '-' . $baseUrl;
 
         static::assertArrayHasKey($key, $cookies);
         static::assertNotNull($this->Response()->getHeader('Location'));
         static::assertEquals(ini_get('session.cookie_path'), $cookies[$key]['path']);
 
-        $path = Shopware()->Front()->Request()->getBasePath();
+        $request = Shopware()->Front()->Request();
+        static::assertNotNull($request);
+        $path = $request->getBaseUrl();
         if ($path === '') {
             $path = '/';
         }
@@ -126,9 +129,11 @@ class PaymentTokenServiceTest extends \Enlight_Components_Test_Controller_TestCa
         $hash = $this->service->generate();
 
         $this->dispatch('/?swPaymentToken=' . $hash);
-        $cookies = $this->Response()->getCookies();
-        $key = session_name() . '-';
 
+        $baseUrl = $this->Request()->getBaseUrl();
+        $key = session_name() . '-' . $baseUrl;
+
+        $cookies = $this->Response()->getCookies();
         static::assertArrayHasKey($key, $cookies);
         static::assertNotNull($this->Response()->getHeader('Location'));
         static::assertEquals(ini_get('session.cookie_path'), $cookies[$key]['path']);

@@ -119,7 +119,7 @@ class Enlight_Config_Writer_Ini extends Enlight_Config_Writer_FileAbstract
     /**
      * Add a branch to an INI string recursively
      *
-     * @return void
+     * @return string
      */
     protected function _addBranch(Enlight_Config_BaseConfig $config, $parents = [])
     {

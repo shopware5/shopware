@@ -134,7 +134,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 
         // $count has to be set before calling Router::assemble() because it removes the FOUND_ROWS()
         $sql = 'SELECT FOUND_ROWS() as count_' . md5($sql);
-        $count = Shopware()->Db()->fetchOne($sql);
+        $count = (int) Shopware()->Db()->fetchOne($sql);
         if ($perPage !== 0) {
             $count = ceil($count / $perPage);
         } else {

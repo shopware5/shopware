@@ -192,6 +192,10 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
         $iniArray = [];
         foreach ($loaded as $key => $data) {
             $pieces = explode($this->_sectionSeparator, $key);
+            if ($pieces === false) {
+                continue;
+            }
+
             $thisSection = trim($pieces[0]);
             switch (\count($pieces)) {
                 case 1:
@@ -263,7 +267,7 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
     {
         if (strpos($key, $this->_nestSeparator) !== false) {
             $pieces = explode($this->_nestSeparator, $key, 2);
-            if (\strlen($pieces[0]) && \strlen($pieces[1])) {
+            if ($pieces !== false && \strlen($pieces[0]) && \strlen($pieces[1])) {
                 if (!isset($config[$pieces[0]])) {
                     if ($pieces[0] === '0' && !empty($config)) {
                         // convert the current values in $config into an array

@@ -235,7 +235,7 @@ class LogEntryBuilder implements LogEntryBuilderInterface
 
         foreach (array_keys($unknownRecipients) as $recipient) {
             $contact = new Contact();
-            $contact->setMailAddress($recipient);
+            $contact->setMailAddress((string) $recipient);
 
             $this->persistContact($contact);
 

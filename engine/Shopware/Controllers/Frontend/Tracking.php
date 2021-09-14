@@ -23,6 +23,8 @@
  */
 
 use Shopware\Models\Banner\Banner;
+use Shopware\Models\Tracking\Banner as TrackingBanner;
+use Shopware\Models\Tracking\Repository as TrackingRepository;
 
 class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
 {
@@ -40,7 +42,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        Shopware()->Front()->Plugins()->ViewRenderer()->setNoRender();
     }
 
     /**
@@ -55,16 +57,16 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
         if ($bannerId === null) {
             return false;
         }
-        /** @var \Shopware\Models\Banner\Repository $bannerMgn */
-        $bannerMgn = Shopware()->Models()->getRepository(Banner::class);
-        $banner = $bannerMgn->findOneBy(['id' => $bannerId]);
+
+        /** @var Banner|null $banner */
+        $banner = Shopware()->Models()->getRepository(Banner::class)->findOneBy(['id' => $bannerId]);
         if ($banner === null) {
             return false;
         }
-        /** @var \Shopware\Models\Tracking\Repository $statRepository */
-        $statRepository = Shopware()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
 
-        $bannerStatistics = $statRepository->getOrCreateBannerStatsModel($bannerId);
+        /** @var TrackingRepository $trackingRepo */
+        $trackingRepo = Shopware()->Models()->getRepository(TrackingBanner::class);
+        $bannerStatistics = $trackingRepo->getOrCreateBannerStatsModel($bannerId);
         $bannerStatistics->increaseClicks();
         Shopware()->Models()->flush($bannerStatistics);
         // Save
@@ -89,7 +91,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
         }
 
         try {
-            /** @var \Shopware\Models\Tracking\Repository $statRepository */
+            /** @var TrackingRepository $statRepository */
             $statRepository = Shopware()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
             $bannerStatistics = $statRepository->getOrCreateBannerStatsModel($bannerId);
             $bannerStatistics->increaseViews();

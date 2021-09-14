@@ -24,13 +24,14 @@
 
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Shop;
 
 class SitemapTest extends \Enlight_Components_Test_Controller_TestCase
 {
     public static function tearDownAfterClass(): void
     {
-        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop(Shopware()->Models()->getRepository(Shop::class)->getActiveDefault());
+        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop(Shopware()->Models()->getRepository(Shop::class)->getActiveDefault());
     }
 
     /**
@@ -40,7 +41,7 @@ class SitemapTest extends \Enlight_Components_Test_Controller_TestCase
      */
     public function testIndex($shopId, array $sitemapData)
     {
-        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop(Shopware()->Models()->getRepository(Shop::class)->find($shopId));
+        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop(Shopware()->Models()->getRepository(Shop::class)->find($shopId));
 
         $controller = $this->getController();
         $controller->indexAction();

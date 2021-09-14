@@ -25,11 +25,24 @@
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Configuration\ReaderInterface as ConfigurationReader;
+use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
+use Shopware\Models\Widget\Widget;
 
 /**
  * Shopware Plugin Namespace
+ *
+ * @method Shopware_Plugins_Backend_Auth_Bootstrap            Auth()
+ * @method Shopware_Plugins_Core_ControllerBase_Bootstrap     ControllerBase()
+ * @method Shopware_Plugins_Core_Cron_Bootstrap               Cron()
+ * @method Shopware_Plugins_Core_ErrorHandler_Bootstrap       ErrorHandler()
+ * @method Shopware_Plugins_Core_HttpCache_Bootstrap          HttpCache()
+ * @method Shopware_Plugins_Core_MarketingAggregate_Bootstrap MarketingAggregate()
+ * @method Shopware_Plugins_Core_PostFilter_Bootstrap         PostFilter()
+ * @method Shopware_Plugins_Frontend_Statistics_Bootstrap     Statistics()
+ * @method Shopware_Plugins_Backend_SwagUpdate_Bootstrap      SwagUpdate()
+ * @method Shopware_Plugins_Frontend_TagCloud_Bootstrap       TagCloud()
  */
 class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Config
 {
@@ -43,18 +56,16 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     protected $shop;
 
     /**
-     * @var array
+     * @var string[]
      */
-    private $pluginDirectories;
+    private array $pluginDirectories;
 
-    /**
-     * @var ConfigurationReader
-     */
-    private $configReader;
+    private ConfigurationReader $configReader;
 
     /**
      * @param string              $name
      * @param Enlight_Config|null $storage
+     * @param string[]            $pluginDirectories
      */
     public function __construct($name, $storage, array $pluginDirectories, ConfigurationReader $configReader)
     {
@@ -125,7 +136,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      * @param string         $name
      * @param Enlight_Config $config
      *
-     * @return \Shopware_Components_Plugin_Bootstrap
+     * @return Shopware_Components_Plugin_Bootstrap
      */
     public function initPlugin($name, $config)
     {
@@ -137,8 +148,8 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     /**
      * Registers a plugin in the collection.
      *
-     * @param \Enlight_Plugin_Bootstrap|\Shopware_Components_Plugin_Bootstrap $plugin
-     * @param DateTimeInterface                                               $refreshDate
+     * @param Enlight_Plugin_Bootstrap|Shopware_Components_Plugin_Bootstrap $plugin
+     * @param DateTimeInterface                                             $refreshDate
      *
      * @return Enlight_Plugin_PluginManager|Shopware_Components_Plugin_Namespace
      */
@@ -147,7 +158,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         parent::registerPlugin($plugin);
 
         if ($refreshDate === null) {
-            $refreshDate = new \DateTimeImmutable();
+            $refreshDate = new DateTimeImmutable();
         }
 
         $info = $plugin->Info();
@@ -181,7 +192,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             'refresh_date' => $refreshDate,
         ];
 
-        $connection = $this->Application()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $connection = $this->Application()->Container()->get(Connection::class);
         if (empty($id)) {
             $data['added'] = $refreshDate;
             $connection->insert(
@@ -259,9 +270,9 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
             $em->flush();
 
-            $this->Application()->Container()->get(\Shopware\Components\Snippet\DatabaseHandler::class)->loadToDatabase($bootstrap->Path() . 'Snippets/');
-            $this->Application()->Container()->get(\Shopware\Components\Snippet\DatabaseHandler::class)->loadToDatabase($bootstrap->Path() . 'snippets/');
-            $this->Application()->Container()->get(\Shopware\Components\Snippet\DatabaseHandler::class)->loadToDatabase($bootstrap->Path() . 'Resources/snippet/');
+            $this->Application()->Container()->get(DatabaseHandler::class)->loadToDatabase($bootstrap->Path() . 'Snippets/');
+            $this->Application()->Container()->get(DatabaseHandler::class)->loadToDatabase($bootstrap->Path() . 'snippets/');
+            $this->Application()->Container()->get(DatabaseHandler::class)->loadToDatabase($bootstrap->Path() . 'Resources/snippet/');
 
             // Clear proxy cache
             $this->Application()->Hooks()->getProxyFactory()->clearCache();
@@ -277,7 +288,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             return $result;
         }
 
-        /** @var Shopware\Models\Widget\Widget $widget */
+        /** @var Widget $widget */
         foreach ($plugin->getWidgets() as $widget) {
             $name = $widget->getName();
             $db->insert('s_core_acl_privileges', [
@@ -307,7 +318,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $connection = $em->getConnection();
 
         $id = $this->getPluginId($bootstrap->getName());
-        $plugin = $em->find(\Shopware\Models\Plugin\Plugin::class, $id);
+        $plugin = $em->find(Plugin::class, $id);
 
         $this->Application()->Events()->notify(
             'Shopware_Plugin_PreUninstall',
@@ -341,7 +352,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         } elseif ($capabilities['secureUninstall']) {
             $result = $bootstrap->secureUninstall();
         } else {
-            throw new \Exception('Plugin does not support secure uninstall.');
+            throw new Exception('Plugin does not support secure uninstall.');
         }
 
         $this->Application()->Events()->notify(
@@ -416,11 +427,11 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     /**
      * Registers a plugin in the collection.
      *
-     * @throws \Exception
      * @throws \Enlight_Config_Exception
      * @throws \Enlight_Event_Exception
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws Exception
      *
      * @return bool|array
      */
@@ -468,9 +479,9 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             }
             $this->Application()->Models()->flush();
 
-            $this->Application()->Container()->get(\Shopware\Components\Snippet\DatabaseHandler::class)->loadToDatabase($plugin->Path() . 'Snippets/');
-            $this->Application()->Container()->get(\Shopware\Components\Snippet\DatabaseHandler::class)->loadToDatabase($plugin->Path() . 'snippets/');
-            $this->Application()->Container()->get(\Shopware\Components\Snippet\DatabaseHandler::class)->loadToDatabase($plugin->Path() . 'Resources/snippet/');
+            $this->Application()->Container()->get(DatabaseHandler::class)->loadToDatabase($plugin->Path() . 'Snippets/');
+            $this->Application()->Container()->get(DatabaseHandler::class)->loadToDatabase($plugin->Path() . 'snippets/');
+            $this->Application()->Container()->get(DatabaseHandler::class)->loadToDatabase($plugin->Path() . 'Resources/snippet/');
 
             // Clear proxy cache
             $this->Application()->Hooks()->getProxyFactory()->clearCache();
@@ -544,7 +555,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             WHERE namespace=:namespace AND name not IN(:names)
         ';
 
-        $connection = $this->Application()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $connection = $this->Application()->Container()->get(Connection::class);
         $rows = $connection->fetchAll($sql, [
             'namespace' => $this->name,
             'names' => self::DEPRECATED_PLUGINS,
@@ -561,10 +572,10 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $plugins[$pluginName]['config'] = [];
 
             if ($plugins[$pluginName]['installationDate']) {
-                $plugins[$pluginName]['installationDate'] = new \DateTime($row['installationDate']);
+                $plugins[$pluginName]['installationDate'] = new DateTime($row['installationDate']);
             }
             if ($plugins[$pluginName]['updateDate']) {
-                $plugins[$pluginName]['updateDate'] = new \DateTime($row['updateDate']);
+                $plugins[$pluginName]['updateDate'] = new DateTime($row['updateDate']);
             }
         }
 
@@ -625,7 +636,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
              ORDER BY name, position
         ';
 
-        $connection = $this->Application()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $connection = $this->Application()->Container()->get(Connection::class);
         $listeners = $connection->fetchAll($sql, [
             'namespace' => $this->name,
             'names' => self::DEPRECATED_PLUGINS,
@@ -671,7 +682,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     private function removePluginWidgets($pluginId)
     {
         /** @var Connection $connection */
-        $connection = $this->Application()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $connection = $this->Application()->Container()->get(Connection::class);
 
         $sql = "
             DELETE widgets, views, priv
@@ -720,7 +731,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $capabilities = $bootstrap->getCapabilities();
 
         if ($capabilities['secureUninstall']) {
-            /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql $db */
+            /** @var Enlight_Components_Db_Adapter_Pdo_Mysql $db */
             $db = $this->Application()->Db();
             $id = $this->getPluginId($bootstrap->getName());
 
@@ -745,6 +756,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             return;
         }
 
-        throw new \Exception('Plugin does not support secure uninstall.');
+        throw new Exception('Plugin does not support secure uninstall.');
     }
 }

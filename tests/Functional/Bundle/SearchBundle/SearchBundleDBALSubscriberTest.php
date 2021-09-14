@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CategoryConditionHandler;
@@ -31,9 +34,9 @@ use Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandler\PopularitySortingHandler;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandler\ProductNameSortingHandler;
 
-class SearchBundleDBALSubscriberTest extends \PHPUnit\Framework\TestCase
+class SearchBundleDBALSubscriberTest extends TestCase
 {
-    public function testValidCreate()
+    public function testValidCreate(): void
     {
         $criteriaRequestHandler = $this->createMock(CoreCriteriaRequestHandler::class);
 
@@ -43,10 +46,10 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit\Framework\TestCase
             $criteriaRequestHandler,
         ]);
 
-        static::assertInstanceOf('\Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber', $subscriber);
+        static::assertInstanceOf(SearchBundleDBALSubscriber::class, $subscriber);
     }
 
-    public function testNestedArrays()
+    public function testNestedArrays(): void
     {
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Unknown handler class array detected');
@@ -57,14 +60,14 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    public function testEmptyArray()
+    public function testEmptyArray(): void
     {
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('No handlers provided in Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber');
         new SearchBundleDBALSubscriber([]);
     }
 
-    public function testInvalidClass()
+    public function testInvalidClass(): void
     {
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Unknown handler class Shopware\Bundle\SearchBundle\Condition\CategoryCondition detected');

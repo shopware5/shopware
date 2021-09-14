@@ -53,7 +53,6 @@ class ProductIdConditionHandler implements ConditionHandlerInterface
 
         $query->andWhere('variant.articleId IN (' . $key . ')');
 
-        /* @var ProductIdCondition $condition */
         $query->setParameter(
             $key,
             $condition->getProductIds(),

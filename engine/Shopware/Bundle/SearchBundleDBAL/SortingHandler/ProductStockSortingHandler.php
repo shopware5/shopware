@@ -48,7 +48,6 @@ class ProductStockSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /* @var ProductStockSorting $sorting */
         $query->addOrderBy('variant.instock', $sorting->getDirection());
     }
 }

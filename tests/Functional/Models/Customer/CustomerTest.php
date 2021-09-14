@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Models\Customer;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
@@ -36,7 +37,7 @@ use Shopware\Models\Customer\Customer;
 class CustomerTest extends TestCase
 {
     /**
-     * @var \Shopware\Bundle\AccountBundle\Service\AddressServiceInterface
+     * @var AddressServiceInterface
      */
     protected static $addressService;
 
@@ -61,7 +62,7 @@ class CustomerTest extends TestCase
     protected static $registerService;
 
     /**
-     * @var array
+     * @var array<class-string, int[]>
      */
     protected static $_cleanup = [];
 
@@ -70,11 +71,11 @@ class CustomerTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$addressService = Shopware()->Container()->get(\Shopware\Bundle\AccountBundle\Service\AddressServiceInterface::class);
-        self::$modelManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
-        self::$connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
-        self::$contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
-        self::$registerService = Shopware()->Container()->get(\Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface::class);
+        self::$addressService = Shopware()->Container()->get(AddressServiceInterface::class);
+        self::$modelManager = Shopware()->Container()->get(ModelManager::class);
+        self::$connection = Shopware()->Container()->get(Connection::class);
+        self::$contextService = Shopware()->Container()->get(ContextServiceInterface::class);
+        self::$registerService = Shopware()->Container()->get(RegisterServiceInterface::class);
 
         self::$modelManager->clear();
     }
@@ -88,7 +89,9 @@ class CustomerTest extends TestCase
 
         foreach (self::$_cleanup as $entityName => $ids) {
             foreach ($ids as $id) {
-                self::$modelManager->remove(self::$modelManager->find($entityName, $id));
+                $customer = self::$modelManager->find($entityName, $id);
+                static::assertNotNull($customer);
+                self::$modelManager->remove($customer);
             }
         }
 
@@ -126,10 +129,10 @@ class CustomerTest extends TestCase
     {
         $customer = new Customer();
 
-        $customer->setEmail(uniqid(mt_rand(), true) . 'test@foo.bar');
+        $customer->setEmail(uniqid((string) mt_rand(), true) . 'test@foo.bar');
         $customer->setActive(true);
         $customer->setLastLogin(date('Y-m-d', strtotime('-8 days')));
-        $customer->setPassword(uniqid(mt_rand(), true) . uniqid(mt_rand(), true));
+        $customer->setPassword(uniqid((string) mt_rand(), true) . uniqid((string) mt_rand(), true));
 
         $customer->setSalutation('mr');
         $customer->setFirstname('Max');
@@ -191,7 +194,7 @@ class CustomerTest extends TestCase
     {
         $country = new Country();
 
-        $country->setName('ShopwareLand' . uniqid(rand(1, 999), true));
+        $country->setName('ShopwareLand' . uniqid((string) rand(1, 999), true));
         $country->setActive(true);
         $country->setDisplayStateInRegistration(0);
         $country->setForceStateInRegistration(0);

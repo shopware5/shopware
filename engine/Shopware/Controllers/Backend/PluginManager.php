@@ -130,7 +130,6 @@ class PluginManager extends \Shopware_Controllers_Backend_ExtJs
         if ($result instanceof FinishResult) {
             $this->View()->assign(['success' => true, 'finish' => true, 'destination' => $destination]);
         } else {
-            /* @var \Shopware\Recovery\Update\Steps\ValidResult $result */
             $this->View()->assign(['success' => true, 'finish' => false, 'offset' => $result->getOffset()]);
         }
     }

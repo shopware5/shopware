@@ -59,7 +59,6 @@ class PopularitySortingHandler implements SortingHandlerInterface
             $query->addState(SalesConditionHandler::STATE_INCLUDES_TOPSELLER_TABLE);
         }
 
-        /* @var PopularitySorting $sorting */
         $query->addOrderBy('topSeller.sales', $sorting->getDirection());
     }
 }

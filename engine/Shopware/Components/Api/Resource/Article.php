@@ -1078,7 +1078,7 @@ class Article extends Resource implements BatchInterface
                             $variant = $oldMain;
                         } elseif (!empty($oldMain['number'])) {
                             $oldMain = $this->getDetailRepository()->findOneBy(['number' => $oldMain['number']]);
-                            $oldMainConfiguratorOptions = $oldMain ? $oldMain->getConfiguratorOptions()->toArray() : null;
+                            $oldMainConfiguratorOptions = $oldMain instanceof Detail && $oldMain->getConfiguratorOptions() !== null ? $oldMain->getConfiguratorOptions()->toArray() : null;
                             if ($oldMain && empty($oldMainConfiguratorOptions)) {
                                 $this->getManager()->remove($oldMain);
                             }
@@ -1106,7 +1106,7 @@ class Article extends Resource implements BatchInterface
 
             if (!$oldMainVariantProcessed) {
                 $oldMain = $this->getDetailRepository()->find($oldMainId);
-                if ($oldMain) {
+                if ($oldMain instanceof Detail) {
                     $oldMain->setKind(2);
                     $variants[] = $oldMain;
                 }
@@ -1348,7 +1348,6 @@ class Article extends Resource implements BatchInterface
         $categories = $article->getCategories();
 
         $categoryIds = $categories->map(function ($category) {
-            /* @var Category $category */
             return $category->getId();
         });
 
@@ -1554,7 +1553,6 @@ class Article extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf('Related product by number/id "%s" not found', $property));
             }
 
-            /* @var ProductModel $relatedProduct */
             if ($relatedData['cross']) {
                 $relatedProduct->getRelated()->add($article);
             }
@@ -1615,7 +1613,6 @@ class Article extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf('Similar product by number/id "%s" not found', $property));
             }
 
-            /* @var ProductModel $similarProduct */
             if ($similarData['cross']) {
                 $similarProduct->getSimilar()->add($article);
             }

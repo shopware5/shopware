@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,7 +36,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class SimilarProductConditionTest extends TestCase
 {
-    public function testSimilarProduct()
+    public function testSimilarProduct(): void
     {
         $main = $this->helper->createCategory(['name' => 'main']);
         $first = $this->helper->createCategory(['name' => 'first-category', 'parent' => $main]);
@@ -69,6 +71,10 @@ class SimilarProductConditionTest extends TestCase
         Category $category = null,
         $additionally = null
     ) {
+        if ($additionally !== null) {
+            static::assertInstanceOf(Category::class, $additionally);
+        }
+
         return parent::getProduct($number, $context, $additionally);
     }
 }

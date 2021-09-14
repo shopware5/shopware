@@ -72,7 +72,7 @@ class CartMigrationTest extends TestCase
         $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveById($user['language']);
         $shop->registerResources();
 
-        Shopware()->Session()->Admin = true;
+        Shopware()->Session()->set('Admin', true);
         Shopware()->System()->_POST = [
             'email' => $user['email'],
             'passwordMD5' => $user['password'],

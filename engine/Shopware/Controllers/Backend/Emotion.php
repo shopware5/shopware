@@ -1535,7 +1535,6 @@ EOD;
         $identifier = '';
 
         foreach ($el->getViewports() as $viewport) {
-            /* @var \Shopware\Models\Emotion\ElementViewport $viewport */
             $identifier .= $viewport->getAlias()
                 . $viewport->getStartRow()
                 . $viewport->getStartCol()

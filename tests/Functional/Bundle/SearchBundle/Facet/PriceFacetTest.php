@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,15 +31,16 @@ use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestContext;
 
 /**
  * @group elasticSearch
  */
 class PriceFacetTest extends TestCase
 {
-    public function testFacetWithCurrentCustomerGroupPrices()
+    public function testFacetWithCurrentCustomerGroupPrices(): void
     {
-        $context = $this->getTestContext(true, null);
+        $context = $this->getTestContext();
         $customerGroup = $context->getCurrentCustomerGroup();
         $fallback = $context->getFallbackCustomerGroup();
 
@@ -56,17 +59,16 @@ class PriceFacetTest extends TestCase
             $context
         );
 
-        /** @var RangeFacetResult $facet */
         $facet = $result->getFacets()[0];
-        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult', $facet);
+        static::assertInstanceOf(RangeFacetResult::class, $facet);
 
         static::assertEquals(110.00, $facet->getMin());
         static::assertEquals(120.00, $facet->getMax());
     }
 
-    public function testFacetWithFallbackCustomerGroupPrices()
+    public function testFacetWithFallbackCustomerGroupPrices(): void
     {
-        $context = $this->getTestContext(true, null);
+        $context = $this->getTestContext();
         $context->setFallbackCustomerGroup($this->getEkCustomerGroup());
         $fallback = $context->getFallbackCustomerGroup();
 
@@ -85,8 +87,8 @@ class PriceFacetTest extends TestCase
             $context
         );
 
-        /** @var RangeFacetResult $facet */
         $facet = $result->getFacets()[0];
+        static::assertInstanceOf(RangeFacetResult::class, $facet);
 
         static::assertEquals(105.00, $facet->getMin());
         static::assertEquals(130.00, $facet->getMax());
@@ -95,9 +97,9 @@ class PriceFacetTest extends TestCase
     /**
      * @group skipElasticSearch
      */
-    public function testFacetWithMixedCustomerGroupPrices()
+    public function testFacetWithMixedCustomerGroupPrices(): void
     {
-        $context = $this->getTestContext(true, null);
+        $context = $this->getTestContext();
         $customerGroup = $context->getCurrentCustomerGroup();
         $fallback = $context->getFallbackCustomerGroup();
 
@@ -115,8 +117,9 @@ class PriceFacetTest extends TestCase
             [],
             $context
         );
-        /** @var RangeFacetResult $facet */
+
         $facet = $result->getFacets()[0];
+        static::assertInstanceOf(RangeFacetResult::class, $facet);
 
         static::assertEquals(100.00, $facet->getMin());
         static::assertEquals(150.00, $facet->getMax());
@@ -125,9 +128,9 @@ class PriceFacetTest extends TestCase
     /**
      * @group skipElasticSearch
      */
-    public function testFacetWithCurrencyFactor()
+    public function testFacetWithCurrencyFactor(): void
     {
-        $context = $this->getTestContext(true, null);
+        $context = $this->getTestContext();
         $customerGroup = $context->getCurrentCustomerGroup();
         $fallback = $context->getFallbackCustomerGroup();
 
@@ -147,42 +150,42 @@ class PriceFacetTest extends TestCase
             [],
             $context
         );
-        /** @var RangeFacetResult $facet */
+
         $facet = $result->getFacets()[0];
+        static::assertInstanceOf(RangeFacetResult::class, $facet);
 
         static::assertEquals(250.00, $facet->getMin());
         static::assertEquals(375.00, $facet->getMax());
     }
 
-    protected function getTestContext($displayGross, $discount = null)
+    private function getTestContext(): TestContext
     {
-        $context = parent::getContext();
+        $context = $this->getContext();
 
-        $data = ['key' => 'BAK', 'tax' => $displayGross];
+        $data = ['key' => 'BAK', 'tax' => true];
 
         $context->setFallbackCustomerGroup(
             $this->converter->convertCustomerGroup($this->helper->createCustomerGroup($data))
         );
 
-        $context->getCurrentCustomerGroup()->setDisplayGrossPrices($displayGross);
-        $context->getCurrentCustomerGroup()->setUseDiscount($discount !== null);
-        $context->getCurrentCustomerGroup()->setPercentageDiscount($discount);
+        $context->getCurrentCustomerGroup()->setDisplayGrossPrices(true);
+        $context->getCurrentCustomerGroup()->setUseDiscount(false);
 
         return $context;
     }
 
     /**
-     * @param string $number
-     * @param array  $prices
+     * @param string             $number
+     * @param array<string, int> $prices
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $prices = []
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         if (!empty($prices)) {

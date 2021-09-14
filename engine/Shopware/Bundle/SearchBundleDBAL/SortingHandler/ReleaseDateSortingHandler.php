@@ -48,7 +48,6 @@ class ReleaseDateSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /* @var ReleaseDateSorting $sorting */
         $query->addOrderBy('product.datum', $sorting->getDirection())
             ->addOrderBy('product.changetime', $sorting->getDirection());
     }

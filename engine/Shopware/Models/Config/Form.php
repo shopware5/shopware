@@ -224,7 +224,6 @@ class Form extends ModelEntity
      */
     public function getElement($name)
     {
-        /* @var Element $value */
         foreach ($this->elements as $element) {
             if ($element->getName() === $name) {
                 return $element;
@@ -243,7 +242,6 @@ class Form extends ModelEntity
      */
     public function setElement($type, $name, $options = null)
     {
-        /* @var Element $value */
         foreach ($this->elements as $element) {
             if ($element->getName() === $name) {
                 $element->setType($type);

@@ -368,7 +368,7 @@ class DynamicCacheTimeServiceTest extends TestCase
             'mainDetail' => [
                 'active' => 1,
                 'laststock' => 1,
-                'number' => 'swTEST' . uniqid(mt_rand(), true),
+                'number' => 'swTEST' . uniqid((string) mt_rand(), true),
             ],
         ];
     }

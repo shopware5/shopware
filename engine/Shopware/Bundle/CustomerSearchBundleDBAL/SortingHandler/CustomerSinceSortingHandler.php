@@ -38,7 +38,6 @@ class CustomerSinceSortingHandler implements SortingHandlerInterface
 
     public function handle(SortingInterface $sorting, QueryBuilder $query)
     {
-        /* @var CustomerSinceSorting $sorting */
         $query->addOrderBy('customer.firstlogin', $sorting->getDirection());
     }
 }

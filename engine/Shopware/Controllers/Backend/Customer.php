@@ -22,15 +22,35 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AccountBundle\Service\CustomerUnlockServiceInterface;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\OptinServiceInterface;
 use Shopware\Components\Random;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Components\StateTranslatorService;
+use Shopware\Components\StateTranslatorServiceInterface;
+use Shopware\Components\Validator\EmailValidator;
+use Shopware\Components\Validator\EmailValidatorInterface;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Country\Repository as CountryRepository;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Group;
 use Shopware\Models\Customer\PaymentData;
+use Shopware\Models\Customer\PriceGroup;
+use Shopware\Models\Customer\Repository as CustomerRepository;
+use Shopware\Models\Dispatch\Dispatch;
+use Shopware\Models\Dispatch\Repository as DispatchRepository;
+use Shopware\Models\Order\Order;
+use Shopware\Models\Order\Repository as OrderRepository;
 use Shopware\Models\Payment\Payment;
+use Shopware\Models\Payment\Repository as PaymentRepository;
+use Shopware\Models\Shop\Repository as ShopRepository;
+use Shopware\Models\Shop\Shop;
 use Symfony\Component\HttpFoundation\Cookie;
 
 class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
@@ -39,44 +59,44 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      * Customer repository. Declared for an fast access to the customer repository.
      * Initialed in the init() function.
      *
-     * @var \Shopware\Models\Customer\Repository|null
+     * @var CustomerRepository|null
      */
     public static $repository;
 
     /**
      * Contains the shopware model manager
      *
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     public static $manager;
 
     /**
-     * @var \Shopware\Components\Model\ModelRepository
+     * @var ModelRepository
      */
     protected $groupRepository;
 
     /**
-     * @var \Shopware\Models\Shop\Repository
+     * @var ShopRepository
      */
     protected $shopRepository;
 
     /**
-     * @var \Shopware\Models\Order\Repository
+     * @var OrderRepository
      */
     protected $orderRepository;
 
     /**
-     * @var \Shopware\Models\Payment\Repository
+     * @var PaymentRepository
      */
     protected $paymentRepository;
 
     /**
-     * @var \Shopware\Models\Dispatch\Repository
+     * @var DispatchRepository
      */
     protected $dispatchRepository;
 
     /**
-     * @var \Shopware\Models\Country\Repository
+     * @var CountryRepository
      */
     protected $countryRepository;
 
@@ -132,7 +152,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $country = $this->getCountryRepository()->getCountriesQuery()->getArrayResult();
         $customerGroups = $this->getRepository()->getCustomerGroupsQuery()->getArrayResult();
 
-        /** @var \Shopware\Components\StateTranslatorServiceInterface $stateTranslator */
+        /** @var StateTranslatorServiceInterface $stateTranslator */
         $stateTranslator = $this->get('shopware.components.state_translator');
         $orderStatus = array_map(function ($orderStateItem) use ($stateTranslator) {
             return $stateTranslator->translateState(StateTranslatorService::STATE_ORDER, $orderStateItem);
@@ -143,7 +163,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }, $paymentStatus);
 
         // Translate payment and dispatch method names.
-        $translationComponent = $this->get(\Shopware_Components_Translation::class);
+        $translationComponent = $this->get(Shopware_Components_Translation::class);
         $payment = $translationComponent->translatePaymentMethods($payment);
         $dispatch = $translationComponent->translateDispatchMethods($dispatch);
 
@@ -177,7 +197,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         $data = $this->getCustomer($customerId);
-        $data['serverTime'] = new DateTime($this->get(\Doctrine\DBAL\Connection::class)->fetchColumn('SELECT NOW()'));
+        $data['serverTime'] = new DateTime($this->get(Connection::class)->fetchColumn('SELECT NOW()'));
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => 1]);
     }
@@ -238,7 +258,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function getOrderChartAction()
     {
         if (!$this->_isAllowed('read', 'order')) {
-            /** @var Enlight_Components_Snippet_Namespace $namespace */
             $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
 
             $this->View()->assign([
@@ -251,8 +270,8 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         // Customer id passed?
-        $customerId = $this->Request()->getParam('customerID');
-        if ($customerId === null || $customerId === 0) {
+        $customerId = (int) $this->Request()->getParam('customerID');
+        if ($customerId === 0) {
             $this->View()->assign(['success' => false, 'message' => 'No customer id passed']);
 
             return;
@@ -302,7 +321,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             if ($customer->getChanged() !== null) {
                 // Check whether the customer has been modified in the meantime
                 try {
-                    $changed = new \DateTime($params['changed']);
+                    $changed = new DateTime($params['changed']);
                 } catch (Exception $e) {
                     // If we have a invalid date caused by imports
                     $changed = $customer->getChanged();
@@ -348,7 +367,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
             /** @var Payment $payment */
             $payment = $this->getManager()
-                ->getRepository(\Shopware\Models\Payment\Payment::class)
+                ->getRepository(Payment::class)
                 ->find($paymentId);
             $paymentData->setPaymentMean($payment);
         }
@@ -372,7 +391,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         if (!$customer->getNumber() && Shopware()->Config()->get('shopwareManagedCustomerNumbers')) {
             /** @var NumberRangeIncrementerInterface $incrementer */
-            $incrementer = Shopware()->Container()->get(\Shopware\Components\NumberRangeIncrementerInterface::class);
+            $incrementer = Shopware()->Container()->get(NumberRangeIncrementerInterface::class);
             $customer->setNumber((string) $incrementer->increment('user'));
         }
 
@@ -397,6 +416,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         //iterate the customers and add the remove action
         foreach ($customers as $customer) {
             $entity = $this->getRepository()->find($customer['id']);
+            if ($entity === null) {
+                continue;
+            }
             $this->getManager()->remove($entity);
         }
         //Performs all of the collected actions.
@@ -413,7 +435,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function validateEmailAction()
     {
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        Shopware()->Front()->Plugins()->ViewRenderer()->setNoRender();
 
         $mail = $this->Request()->get('value');
 
@@ -425,8 +447,8 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $customer = $query->getArrayResult();
 
-        /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
-        $emailValidator = $this->container->get(\Shopware\Components\Validator\EmailValidator::class);
+        /** @var EmailValidatorInterface $emailValidator */
+        $emailValidator = $this->container->get(EmailValidator::class);
 
         if (empty($customer) && $emailValidator->isValid($mail)) {
             $this->Response()->setContent(1);
@@ -441,7 +463,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function performOrderAction()
     {
         $userId = $this->Request()->getParam('id');
-        $user = $this->get(\Doctrine\DBAL\Connection::class)->fetchAssoc(
+        $user = $this->get(Connection::class)->fetchAssoc(
             'SELECT id, email, password, subshopID, language FROM s_user WHERE id = :userId',
             [
                 ':userId' => $userId,
@@ -452,13 +474,14 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             return;
         }
 
-        /** @var Shopware\Models\Shop\Repository $repository */
-        $repository = $this->getShopRepository();
-        $shop = $repository->getActiveById($user['language']);
+        $shop = $this->getShopRepository()->getActiveById($user['language']);
+        if ($shop === null) {
+            return;
+        }
 
         session_write_close();
 
-        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        $this->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $session = $this->get('session');
         $session->clear();
@@ -467,14 +490,14 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         Shopware()->Session()->offsetSet('sessionId', $session->getId());
         Shopware()->Container()->set('sessionid', $session->getId());
 
-        Shopware()->Session()->Admin = true;
+        Shopware()->Session()->set('Admin', true);
         Shopware()->System()->_POST = [
             'email' => $user['email'],
             'passwordMD5' => $user['password'],
         ];
         Shopware()->Modules()->Admin()->sLogin(true);
 
-        $hash = $this->container->get(\Shopware\Components\OptinServiceInterface::class)->add(OptinServiceInterface::TYPE_CUSTOMER_LOGIN_FROM_BACKEND, 300, [
+        $hash = $this->container->get(OptinServiceInterface::class)->add(OptinServiceInterface::TYPE_CUSTOMER_LOGIN_FROM_BACKEND, 300, [
             'sessionId' => Shopware()->Session()->get('sessionId'),
             'shopId' => $shop->getId(),
         ]);
@@ -503,7 +526,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     {
         $hash = $this->Request()->getQuery('hash');
 
-        $optinService = $this->container->get(\Shopware\Components\OptinServiceInterface::class);
+        $optinService = $this->container->get(OptinServiceInterface::class);
 
         $data = $optinService->get(OptinServiceInterface::TYPE_CUSTOMER_LOGIN_FROM_BACKEND, $hash);
 
@@ -513,9 +536,10 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $optinService->delete(OptinServiceInterface::TYPE_CUSTOMER_LOGIN_FROM_BACKEND, $hash);
 
-        /** @var Shopware\Models\Shop\Repository $repository */
-        $repository = $this->getShopRepository();
-        $shop = $repository->getActiveById($data['shopId']);
+        $shop = $this->getShopRepository()->getActiveById($data['shopId']);
+        if ($shop === null) {
+            throw new RuntimeException('Shop not found');
+        }
 
         $path = $shop->getBasePath();
         if ($path === null || $path === '') {
@@ -551,7 +575,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * Returns the shopware model manager
      *
-     * @return Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     protected function getManager()
     {
@@ -565,12 +589,13 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return Shopware\Models\Customer\Repository
+     * @return CustomerRepository
      */
     protected function getRepository()
     {
         if (self::$repository === null) {
-            self::$repository = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Customer::class);
+            $repo = $this->getManager()->getRepository(Customer::class);
+            self::$repository = $repo;
         }
 
         return self::$repository;
@@ -590,13 +615,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
     /**
      * Helper function to get access to the shop repository.
-     *
-     * @return \Shopware\Models\Shop\Repository
      */
-    private function getShopRepository()
+    private function getShopRepository(): ShopRepository
     {
         if ($this->shopRepository === null) {
-            $this->shopRepository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
+            $this->shopRepository = $this->getManager()->getRepository(Shop::class);
         }
 
         return $this->shopRepository;
@@ -604,13 +627,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
     /**
      * Helper function to get access to the group repository.
-     *
-     * @return \Shopware\Components\Model\ModelRepository
      */
-    private function getGroupRepository()
+    private function getGroupRepository(): ModelRepository
     {
         if ($this->groupRepository === null) {
-            $this->groupRepository = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Group::class);
+            $this->groupRepository = $this->getManager()->getRepository(Group::class);
         }
 
         return $this->groupRepository;
@@ -618,13 +639,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
     /**
      * Helper function to get access to the country repository.
-     *
-     * @return \Shopware\Models\Country\Repository
      */
-    private function getCountryRepository()
+    private function getCountryRepository(): CountryRepository
     {
         if ($this->countryRepository === null) {
-            $this->countryRepository = Shopware()->Models()->getRepository('Shopware\Models\Country\Country');
+            $this->countryRepository = $this->getManager()->getRepository(Country::class);
         }
 
         return $this->countryRepository;
@@ -632,13 +651,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
     /**
      * Helper function to get access to the order repository.
-     *
-     * @return \Shopware\Models\Order\Repository
      */
-    private function getOrderRepository()
+    private function getOrderRepository(): OrderRepository
     {
         if ($this->orderRepository === null) {
-            $this->orderRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+            $this->orderRepository = $this->getManager()->getRepository(Order::class);
         }
 
         return $this->orderRepository;
@@ -646,13 +663,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
     /**
      * Helper function to get access to the payment repository.
-     *
-     * @return \Shopware\Models\Payment\Repository
      */
-    private function getPaymentRepository()
+    private function getPaymentRepository(): PaymentRepository
     {
         if ($this->paymentRepository === null) {
-            $this->paymentRepository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
+            $this->paymentRepository = $this->getManager()->getRepository(Payment::class);
         }
 
         return $this->paymentRepository;
@@ -660,13 +675,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
     /**
      * Helper function to get access to the dispatch repository.
-     *
-     * @return \Shopware\Models\Dispatch\Repository
      */
-    private function getDispatchRepository()
+    private function getDispatchRepository(): DispatchRepository
     {
         if ($this->dispatchRepository === null) {
-            $this->dispatchRepository = Shopware()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
+            $this->dispatchRepository = $this->getManager()->getRepository(Dispatch::class);
         }
 
         return $this->dispatchRepository;
@@ -677,28 +690,26 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      * If the date of the first founded order not equals with the fromDate, an empty row will be prepend.
      * If the date of the last founded order  not equals with the fromDate, an empty row will be append.
      *
-     * @param int $customerId
-     *
-     * @return array
+     * @return array[]
      */
-    private function getChartData($customerId)
+    private function getChartData(int $customerId): array
     {
         // If a from date passed, format it over the \DateTime object. Otherwise create a new date with today - 1 year
         $fromDate = $this->Request()->getParam('fromDate');
         if (empty($fromDate)) {
-            $fromDate = new \DateTime();
+            $fromDate = new DateTime();
             $fromDate->setDate((int) $fromDate->format('Y') - 1, (int) $fromDate->format('m'), (int) $fromDate->format('d'));
         } else {
-            $fromDate = new \DateTime($fromDate);
+            $fromDate = new DateTime($fromDate);
         }
         $fromDateFilter = $fromDate->format('Y-m-d');
 
         // If a to date passed, format it over the \DateTime object. Otherwise create a new date with today
         $toDate = $this->Request()->getParam('toDate');
         if (empty($toDate)) {
-            $toDate = new \DateTime();
+            $toDate = new DateTime();
         } else {
-            $toDate = new \DateTime($toDate);
+            $toDate = new DateTime($toDate);
         }
         $toDateFilter = $toDate->format('Y-m-d');
 
@@ -717,23 +728,25 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         // Select the orders from the database
         $orders = Shopware()->Db()->fetchAll($sql, [$customerId, $fromDateFilter, $toDateFilter]);
 
-        if (!empty($orders)) {
-            $first = new \DateTime($orders[0]['date']);
-            $last = new \DateTime($orders[\count($orders) - 1]['date']);
+        if ($orders === false) {
+            return [];
+        }
 
-            // To display the whole time range the user inserted, check if the date of the first order equals the fromDate parameter
-            if ($fromDate->format('Y-m') !== $first->format('Y-m')) {
-                // Create a new dummy order with amount 0 and the date the user inserted.
-                $fromDate->setDate((int) $fromDate->format('Y'), (int) $fromDate->format('m'), 1);
-                $emptyOrder = ['amount' => '0.00', 'date' => $fromDate->format('Y-m-d')];
-                array_unshift($orders, $emptyOrder);
-            }
+        $first = new DateTime($orders[0]['date']);
+        $last = new DateTime($orders[\count($orders) - 1]['date']);
 
-            // To display the whole time range the user inserted, check if the date of the last order equals the toDate parameter
-            if ($toDate->format('Y-m') !== $last->format('Y-m')) {
-                $toDate->setDate((int) $toDate->format('Y'), (int) $toDate->format('m'), 1);
-                $orders[] = ['amount' => '0.00', 'date' => $toDate->format('Y-m-d')];
-            }
+        // To display the whole time range the user inserted, check if the date of the first order equals the fromDate parameter
+        if ($fromDate->format('Y-m') !== $first->format('Y-m')) {
+            // Create a new dummy order with amount 0 and the date the user inserted.
+            $fromDate->setDate((int) $fromDate->format('Y'), (int) $fromDate->format('m'), 1);
+            $emptyOrder = ['amount' => '0.00', 'date' => $fromDate->format('Y-m-d')];
+            array_unshift($orders, $emptyOrder);
+        }
+
+        // To display the whole time range the user inserted, check if the date of the last order equals the toDate parameter
+        if ($toDate->format('Y-m') !== $last->format('Y-m')) {
+            $toDate->setDate((int) $toDate->format('Y'), (int) $toDate->format('m'), 1);
+            $orders[] = ['amount' => '0.00', 'date' => $toDate->format('Y-m-d')];
         }
 
         return $orders;
@@ -742,15 +755,13 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * Internal helper function to get a single customer
      *
-     * @param int $id
-     *
-     * @return array|mixed
+     * @return array<string, mixed>
      */
-    private function getCustomer($id)
+    private function getCustomer(int $id): array
     {
         $query = $this->getRepository()->getCustomerDetailQuery($id);
 
-        $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $data = $query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $orderInfo = [
             'orderCount' => $data['orderCount'],
@@ -765,8 +776,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $data = array_merge($orderInfo, $data[0]);
         $birthday = $data['birthday'];
 
-        /** @var \DateTimeInterface $birthday */
-        if ($birthday instanceof \DateTimeInterface) {
+        if ($birthday instanceof DateTimeInterface) {
             $data['birthday'] = $birthday->format('d.m.Y');
         }
 
@@ -775,12 +785,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $data['defaultShippingAddress']['salutationSnippet'] = $namespace->get($data['defaultShippingAddress']['salutation']);
         $data['customerStreamIds'] = $this->fetchCustomerStreams($id);
 
-        if ($data['firstLogin'] instanceof \DateTimeInterface && $data['firstLogin']->getTimestamp() < 0) {
-            $data['firstLogin'] = new \DateTime('@0');
+        if ($data['firstLogin'] instanceof DateTimeInterface && $data['firstLogin']->getTimestamp() < 0) {
+            $data['firstLogin'] = new DateTime('@0');
         }
 
-        if ($data['lastLogin'] instanceof \DateTimeInterface && $data['lastLogin']->getTimestamp() < 0) {
-            $data['lastLogin'] = new \DateTime('@0');
+        if ($data['lastLogin'] instanceof DateTimeInterface && $data['lastLogin']->getTimestamp() < 0) {
+            $data['lastLogin'] = new DateTime('@0');
         }
 
         return $data;
@@ -789,12 +799,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * Helper method to prepare the customer for saving
      *
-     * @param array                                      $params
-     * @param \Shopware\Models\Customer\PaymentData|null $paymentData
-     *
-     * @return array
+     * @param array<string, mixed> $params
      */
-    private function prepareCustomerData($params, Shopware\Models\Customer\Customer $customer, $paymentData)
+    private function prepareCustomerData(array $params, Customer $customer, ?PaymentData $paymentData): array
     {
         if (!empty($params['groupKey'])) {
             $params['group'] = $this->getGroupRepository()->findOneBy(['key' => $params['groupKey']]);
@@ -803,15 +810,13 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         if (!empty($params['languageId'])) {
-            /** @var \Shopware\Models\Shop\Repository $shopRepository */
-            $shopRepository = $this->getShopRepository();
-            $params['languageSubShop'] = $shopRepository->find($params['languageId']);
+            $params['languageSubShop'] = $this->getShopRepository()->find($params['languageId']);
         } else {
             unset($params['languageSubShop'], $params['shop']);
         }
 
         if (!empty($params['priceGroupId'])) {
-            $params['priceGroup'] = Shopware()->Models()->find('Shopware\Models\Customer\PriceGroup', $params['priceGroupId']);
+            $params['priceGroup'] = $this->getManager()->find(PriceGroup::class, $params['priceGroupId']);
         } else {
             $params['priceGroup'] = null;
         }
@@ -846,14 +851,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         return $params;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return string
-     */
-    private function fetchCustomerStreams($id)
+    private function fetchCustomerStreams(int $id): string
     {
-        $query = $this->container->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        $query = $this->container->get(Connection::class)->createQueryBuilder();
 
         $ids = $query->select(['mapping.stream_id'])
             ->from('s_customer_streams_mapping', 'mapping')

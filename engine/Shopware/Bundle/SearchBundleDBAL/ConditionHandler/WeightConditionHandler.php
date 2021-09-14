@@ -53,7 +53,6 @@ class WeightConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /* @var WeightCondition $condition */
         $this->variantHelper->joinVariants($query);
 
         $min = ':minLength' . md5(json_encode($condition));

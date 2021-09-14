@@ -76,7 +76,7 @@ class StatisticsService
     }
 
     /**
-     * @param int $batchSize
+     * @param int|null $batchSize
      *
      * @throws TransmissionNotNecessaryException
      *

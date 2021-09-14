@@ -80,7 +80,6 @@ GROUP BY vote.articleID';
              AND voteAverage.average >= :average'
         );
 
-        /* @var VoteAverageCondition $condition */
         $query->setParameter(':average', (float) $condition->getAverage());
         $query->addState(VoteAverageCondition::STATE_INCLUDES_VOTE_TABLE);
     }

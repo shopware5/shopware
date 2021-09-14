@@ -24,6 +24,7 @@
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Random;
 use Shopware\Models\Tax\Tax;
 use Shopware\Models\Voucher\Code;
@@ -302,6 +303,9 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
             }
             //edit voucher
             $voucher = $this->getVoucherRepository()->find($voucherId);
+            if (!$voucher instanceof Voucher) {
+                throw new ModelNotFoundException(Voucher::class, $voucherId);
+            }
         } else {
             if (!$this->_isAllowed('create', 'voucher')) {
                 return;

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,6 +27,7 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
+use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -34,7 +37,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class ImmediateDeliveryFacetTest extends TestCase
 {
-    public function testFacetWithNoStock()
+    public function testFacetWithNoStock(): void
     {
         $result = $this->search(
             [
@@ -48,10 +51,10 @@ class ImmediateDeliveryFacetTest extends TestCase
             [new ImmediateDeliveryFacet()]
         );
         $facet = $result->getFacets()[0];
-        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $facet);
+        static::assertInstanceOf(BooleanFacetResult::class, $facet);
     }
 
-    public function testFacetWithMinPurchase()
+    public function testFacetWithMinPurchase(): void
     {
         $result = $this->search(
             [
@@ -65,10 +68,10 @@ class ImmediateDeliveryFacetTest extends TestCase
             [new ImmediateDeliveryFacet()]
         );
         $facet = $result->getFacets()[0];
-        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $facet);
+        static::assertInstanceOf(BooleanFacetResult::class, $facet);
     }
 
-    public function testFacetWithNoData()
+    public function testFacetWithNoData(): void
     {
         $result = $this->search(
             [
@@ -85,17 +88,17 @@ class ImmediateDeliveryFacetTest extends TestCase
     }
 
     /**
-     * @param string $number
-     * @param array  $data
+     * @param string             $number
+     * @param array<string, int> $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $data = ['inStock' => 0, 'minPurchase' => 1]
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         $product['lastStock'] = true;

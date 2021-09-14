@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,7 +36,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class ProductAttributeConditionTest extends TestCase
 {
-    public function testEquals()
+    public function testEquals(): void
     {
         $condition = new ProductAttributeCondition(
             'attr1',
@@ -53,7 +55,7 @@ class ProductAttributeConditionTest extends TestCase
         );
     }
 
-    public function testContains()
+    public function testContains(): void
     {
         $condition = new ProductAttributeCondition(
             'attr1',
@@ -73,7 +75,7 @@ class ProductAttributeConditionTest extends TestCase
         );
     }
 
-    public function testEndsWith()
+    public function testEndsWith(): void
     {
         $condition = new ProductAttributeCondition(
             'attr1',
@@ -94,7 +96,7 @@ class ProductAttributeConditionTest extends TestCase
         );
     }
 
-    public function testStartsWith()
+    public function testStartsWith(): void
     {
         $condition = new ProductAttributeCondition(
             'attr1',
@@ -115,7 +117,7 @@ class ProductAttributeConditionTest extends TestCase
         );
     }
 
-    public function testInOperator()
+    public function testInOperator(): void
     {
         $condition = new ProductAttributeCondition(
             'attr1',
@@ -136,7 +138,7 @@ class ProductAttributeConditionTest extends TestCase
         );
     }
 
-    public function testNull()
+    public function testNull(): void
     {
         $condition = new ProductAttributeCondition(
             'attr1',
@@ -157,7 +159,7 @@ class ProductAttributeConditionTest extends TestCase
         );
     }
 
-    public function testNotNull()
+    public function testNotNull(): void
     {
         $condition = new ProductAttributeCondition(
             'attr1',
@@ -183,7 +185,7 @@ class ProductAttributeConditionTest extends TestCase
         ShopContext $context,
         Category $category = null,
         $attribute = ['attr1' => 10]
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
         $product['mainDetail']['attribute'] = $attribute;
 

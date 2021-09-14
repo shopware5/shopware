@@ -53,7 +53,6 @@ class OrdernumberConditionHandler implements ConditionHandlerInterface
 
         $query->andWhere('variant.ordernumber IN (' . $key . ')');
 
-        /* @var OrdernumberCondition $condition */
         $query->setParameter(
             $key,
             $condition->getOrdernumbers(),

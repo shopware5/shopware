@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,12 +26,14 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearch;
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearchRequest;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -51,7 +55,7 @@ class BatchProductNumberSearchTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $this->connection = Shopware()->Container()->get(Connection::class);
         $this->connection->beginTransaction();
         $this->batchSearch = Shopware()->Container()->get('shopware_search.batch_product_number_search');
 
@@ -68,7 +72,7 @@ class BatchProductNumberSearchTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function createProducts($products, ShopContext $context, Category $category)
+    public function createProducts($products, ShopContext $context, Category $category): array
     {
         $articles = parent::createProducts($products, $context, $category);
 
@@ -77,7 +81,7 @@ class BatchProductNumberSearchTest extends TestCase
         return $articles;
     }
 
-    public function testSearchWithMatchingProducts()
+    public function testSearchWithMatchingProducts(): void
     {
         $context = $this->getContext();
         $category = $this->helper->createCategory();
@@ -86,15 +90,13 @@ class BatchProductNumberSearchTest extends TestCase
         $request = new BatchProductNumberSearchRequest();
         $request->setProductNumbers('test-1', ['BATCH-1', 'BATCH-2']);
 
-        $result = $this->batchSearch->search($request, $context);
-
-        $products = $result->get('test-1');
+        $products = $this->batchSearch->search($request, $context)->get('test-1');
 
         static::assertCount(2, $products);
         $this->assertProductNumbersExists($products, ['BATCH-1', 'BATCH-2']);
     }
 
-    public function testSearchIncludingMissingProducts()
+    public function testSearchIncludingMissingProducts(): void
     {
         $context = $this->getContext();
         $category = $this->helper->createCategory();
@@ -112,7 +114,7 @@ class BatchProductNumberSearchTest extends TestCase
         static::assertSame([], $result->get('test-2'));
     }
 
-    public function testSearchWithCriteria()
+    public function testSearchWithCriteria(): void
     {
         $context = $this->getContext();
         $category = $this->helper->createCategory();
@@ -125,14 +127,12 @@ class BatchProductNumberSearchTest extends TestCase
         $request = new BatchProductNumberSearchRequest();
         $request->setCriteria('test-criteria-1', $criteria);
 
-        $result = $this->batchSearch->search($request, $context);
-
-        $products = $result->get('test-criteria-1');
+        $products = $this->batchSearch->search($request, $context)->get('test-criteria-1');
         static::assertCount(3, $products);
         $this->assertProductNumbersExists($products, ['BATCH-A', 'BATCH-B', 'BATCH-C']);
     }
 
-    public function testSearchWithMultipleCriteria()
+    public function testSearchWithMultipleCriteria(): void
     {
         $context = $this->getContext();
         $category = $this->helper->createCategory();
@@ -175,7 +175,7 @@ class BatchProductNumberSearchTest extends TestCase
         $this->assertProductNumbersExists($products, ['BATCH-D', 'BATCH-E', 'BATCH-F', 'BATCH-G']);
     }
 
-    public function testSearchWithMultipleCriteriaAndProductNumbers()
+    public function testSearchWithMultipleCriteriaAndProductNumbers(): void
     {
         $context = $this->getContext();
         $category = $this->helper->createCategory();
@@ -226,7 +226,7 @@ class BatchProductNumberSearchTest extends TestCase
         $this->assertProductNumbersExists($products, ['BATCH-A', 'BATCH-H', 'BATCH-J']);
     }
 
-    public function testNotExistingKeyShouldThrowException()
+    public function testNotExistingKeyShouldThrowException(): void
     {
         $context = $this->getContext();
         $request = new BatchProductNumberSearchRequest();
@@ -237,7 +237,7 @@ class BatchProductNumberSearchTest extends TestCase
         $result->get('not_existing');
     }
 
-    public function testNonMatchingProductNumbersShouldReturnEmptyArray()
+    public function testNonMatchingProductNumbersShouldReturnEmptyArray(): void
     {
         $context = $this->getContext();
         $request = new BatchProductNumberSearchRequest();
@@ -248,7 +248,7 @@ class BatchProductNumberSearchTest extends TestCase
         static::assertSame([], $result->get('test-1'));
     }
 
-    public function testNonMatchingConditionShouldReturnEmptyArray()
+    public function testNonMatchingConditionShouldReturnEmptyArray(): void
     {
         $criteria = new Criteria();
         $criteria->addCondition(new PriceCondition(99999999));
@@ -264,9 +264,10 @@ class BatchProductNumberSearchTest extends TestCase
     }
 
     /**
-     * @param string[] $numbers
+     * @param BaseProduct[] $result
+     * @param string[]      $numbers
      */
-    private function assertProductNumbersExists(array $result, array $numbers)
+    private function assertProductNumbersExists(array $result, array $numbers): void
     {
         array_walk($numbers, function ($number) use ($result) {
             static::assertArrayHasKey($number, $result, sprintf('Expected "%s" to be in [%s]', $number, implode(', ', array_keys($result))));

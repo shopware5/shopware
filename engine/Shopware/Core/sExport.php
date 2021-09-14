@@ -23,18 +23,27 @@
  */
 
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Components\Thumbnail\Manager;
+use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
+use Shopware\Models\Media\Repository;
 use Shopware\Models\Shop\Currency;
+use Shopware\Models\Shop\Repository as ShopRepository;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Class to provide product export feeds
  */
-class sExport implements \Enlight_Hook
+class sExport implements Enlight_Hook
 {
     public $sFeedID;
 
@@ -69,7 +78,7 @@ class sExport implements \Enlight_Hook
     public $sCustomergroup;
 
     /**
-     * @var \Shopware\Models\Shop\Shop
+     * @var Shop
      */
     public $shop;
 
@@ -79,12 +88,12 @@ class sExport implements \Enlight_Hook
     public $sSmarty;
 
     /**
-     * @var \Shopware\Models\Media\Repository
+     * @var Repository
      */
     protected $mediaRepository;
 
     /**
-     * @var \Shopware\Models\Media\Album
+     * @var Album
      */
     protected $articleMediaAlbum;
 
@@ -114,7 +123,7 @@ class sExport implements \Enlight_Hook
     private $config;
 
     /**
-     * @var StoreFrontBundle\Service\ConfiguratorServiceInterface
+     * @var ConfiguratorServiceInterface
      */
     private $configuratorService;
 
@@ -124,24 +133,24 @@ class sExport implements \Enlight_Hook
     private $cdnConfig;
 
     /**
-     * @param ContextServiceInterface                               $contextService
-     * @param Enlight_Components_Db_Adapter_Pdo_Mysql               $db
-     * @param Shopware_Components_Config                            $config
-     * @param StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService
+     * @param ContextServiceInterface                 $contextService
+     * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param Shopware_Components_Config              $config
+     * @param ConfiguratorServiceInterface            $configuratorService
      */
     public function __construct(
         ContextServiceInterface $contextService = null,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         Shopware_Components_Config $config = null,
-        StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService = null
+        ConfiguratorServiceInterface $configuratorService = null
     ) {
         $container = Shopware()->Container();
 
-        $this->contextService = $contextService ?: $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
-        $this->additionalTextService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface::class);
+        $this->contextService = $contextService ?: $container->get(ContextServiceInterface::class);
+        $this->additionalTextService = $container->get(AdditionalTextServiceInterface::class);
         $this->db = $db ?: $container->get('db');
-        $this->config = $config ?: $container->get(\Shopware_Components_Config::class);
-        $this->configuratorService = $configuratorService ?: $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface::class);
+        $this->config = $config ?: $container->get(Shopware_Components_Config::class);
+        $this->configuratorService = $configuratorService ?: $container->get(ConfiguratorServiceInterface::class);
         $this->cdnConfig = (array) $container->getParameter('shopware.cdn');
     }
 
@@ -214,8 +223,8 @@ class sExport implements \Enlight_Hook
     {
         $hash = $this->db->quote($this->sHash);
 
-        /** @var \Shopware\Models\Shop\Repository $shopRepository */
-        $shopRepository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
+        /** @var ShopRepository $shopRepository */
+        $shopRepository = Shopware()->Models()->getRepository(Shop::class);
 
         $sql = "
             SELECT
@@ -284,6 +293,10 @@ class sExport implements \Enlight_Hook
         }
 
         $shop = $shopRepository->getActiveById($this->sSettings['languageID']);
+        if (!$shop instanceof Shop) {
+            throw new ModelNotFoundException(Shop::class, $this->sSettings['languageID']);
+        }
+
         $this->shopData = $this->getShopData($this->sSettings['languageID']);
 
         if (empty($this->sSettings['categoryID'])) {
@@ -310,7 +323,7 @@ class sExport implements \Enlight_Hook
         /** @var Currency $currency */
         $currency = $repository->find($this->sCurrency['id']);
         $shop->setCurrency($currency);
-        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         if ($this->sCustomergroup !== false) {
             Shopware()->Container()->get('session')->offsetSet('sUserGroup', $this->sCustomergroup['groupkey']);
@@ -530,11 +543,11 @@ class sExport implements \Enlight_Hook
             return '';
         }
 
-        /** @var \Shopware\Bundle\MediaBundle\MediaServiceInterface $mediaService */
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        /** @var MediaServiceInterface $mediaService */
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         /** @var Manager $thumbnailManager */
-        $thumbnailManager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
+        $thumbnailManager = Shopware()->Container()->get(Manager::class);
 
         // If no imageSize was set, return the full image
         if ($imageSize === null) {
@@ -645,7 +658,7 @@ class sExport implements \Enlight_Hook
                     'metaTitle' => 'metaTitle',
                 ];
 
-                $attributes = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class)->getList('s_articles_attributes');
+                $attributes = Shopware()->Container()->get(CrudService::class)->getList('s_articles_attributes');
                 foreach ($attributes as $attribute) {
                     if ($attribute->isIdentifier()) {
                         continue;
@@ -1182,7 +1195,6 @@ class sExport implements \Enlight_Hook
 
                 $configurationGroups = $this->configuratorService->getProductConfiguration($product, $context);
 
-                /* @var StoreFrontBundle\Struct\Configurator\Group $configuratorOption */
                 foreach ($configurationGroups as $configurationGroup) {
                     $option = current($configurationGroup->getOptions());
                     $row['configurator_options'][$configurationGroup->getName()] = $option->getName();
@@ -1239,7 +1251,7 @@ class sExport implements \Enlight_Hook
     /**
      * @param int|string $country
      *
-     * @return bool|array
+     * @return array|false
      */
     public function sGetCountry($country)
     {
@@ -1271,7 +1283,7 @@ class sExport implements \Enlight_Hook
     /**
      * @param int|string $payment
      *
-     * @return bool|array
+     * @return array|false
      */
     public function sGetPaymentmean($payment)
     {
@@ -1837,8 +1849,10 @@ class sExport implements \Enlight_Hook
 
     /**
      * @param int|string $id
+     *
+     * @return array<string, mixed>
      */
-    private function getShopData($id)
+    private function getShopData($id): array
     {
         $sql = null;
         static $cache = [];
@@ -1891,7 +1905,7 @@ class sExport implements \Enlight_Hook
     /**
      * Helper function to get access to the media repository.
      *
-     * @return \Shopware\Models\Media\Repository
+     * @return Repository
      */
     private function getMediaRepository()
     {

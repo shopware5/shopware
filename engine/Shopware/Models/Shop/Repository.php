@@ -325,7 +325,12 @@ class Repository extends ModelRepository
         $builder = $this->createQueryBuilder('shop');
         $builder->where('shop.default = 1');
 
-        return $builder->getQuery()->getOneOrNullResult();
+        $shop = $builder->getQuery()->getOneOrNullResult();
+        if (!$shop instanceof Shop) {
+            throw new \RuntimeException('No default shop found. Check your shop configuration');
+        }
+
+        return $shop;
     }
 
     /**
@@ -404,7 +409,6 @@ class Repository extends ModelRepository
      */
     public function getQueryBuilder()
     {
-        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 
@@ -442,7 +446,6 @@ class Repository extends ModelRepository
      */
     public function getActiveQueryBuilder()
     {
-        /* @var QueryBuilder $builder */
         return $this->getQueryBuilder()
             ->where('shop.active = 1');
     }
@@ -627,7 +630,6 @@ class Repository extends ModelRepository
      */
     private function getActiveMainShopQueryBuilder()
     {
-        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 
@@ -657,7 +659,6 @@ class Repository extends ModelRepository
      */
     private function getActiveSubShopQueryBuilder()
     {
-        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 

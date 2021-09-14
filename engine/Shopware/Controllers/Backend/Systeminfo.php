@@ -115,7 +115,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
             $rows[$key]['name'] = $row['namespace'] . '/' . $row['source'] . '/' . $row['name'];
         }
 
-        array_unshift($rows, ['name' => 'Shopware', 'version' => Shopware()->Config()->Version]);
+        array_unshift($rows, ['name' => 'Shopware', 'version' => Shopware()->Config()->get('Version')]);
 
         $this->View()->assign(['success' => true, 'data' => $rows]);
     }
@@ -169,7 +169,7 @@ SQL;
      */
     public function infoAction()
     {
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        Shopware()->Front()->Plugins()->ViewRenderer()->setNoRender();
         $_COOKIE = [];
         $_REQUEST = [];
         $_SERVER['HTTP_COOKIE'] = null;

@@ -26,6 +26,9 @@ namespace Shopware\Components\Check;
 
 class MySQLVersionExtractor
 {
+    /**
+     * @return array<int, string>
+     */
     public static function extract(string $versionString): array
     {
         if (stripos($versionString, 'mariadb') === false) {

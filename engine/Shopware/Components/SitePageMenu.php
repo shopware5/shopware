@@ -62,8 +62,8 @@ class SitePageMenu
     /**
      * Returns a shop page tree for the provided shop id.
      *
-     * @param int $shopId
-     * @param int $activeId
+     * @param int      $shopId
+     * @param int|null $activeId
      *
      * @return array
      */
@@ -151,9 +151,9 @@ class SitePageMenu
     }
 
     /**
-     * @param int   $parentId
-     * @param array $sites
-     * @param int   $activeId
+     * @param int      $parentId
+     * @param array    $sites
+     * @param int|null $activeId
      *
      * @return array
      */

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,6 +32,7 @@ use Shopware\Bundle\SearchBundle\BatchProductSearch;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -53,7 +56,7 @@ class BatchProductSearchTest extends TestCase
     {
         $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
-        $this->batchProductSearch = Shopware()->Container()->get(\Shopware\Bundle\SearchBundle\BatchProductSearch::class);
+        $this->batchProductSearch = Shopware()->Container()->get(BatchProductSearch::class);
 
         parent::setUp();
     }
@@ -65,7 +68,7 @@ class BatchProductSearchTest extends TestCase
         parent::tearDown();
     }
 
-    public function createProducts($products, ShopContext $context, Category $category)
+    public function createProducts($products, ShopContext $context, Category $category): array
     {
         $articles = parent::createProducts($products, $context, $category);
 
@@ -74,7 +77,7 @@ class BatchProductSearchTest extends TestCase
         return $articles;
     }
 
-    public function testWithNumericArticleNumbers()
+    public function testWithNumericArticleNumbers(): void
     {
         $context = $this->getContext();
         $category = $this->helper->createCategory();
@@ -89,7 +92,7 @@ class BatchProductSearchTest extends TestCase
         static::assertArrayHasKey('SW10001', $result->get('test-1'));
     }
 
-    public function testWithLessProductsThanRequested()
+    public function testWithLessProductsThanRequested(): void
     {
         $context = $this->getContext();
         $category = $this->helper->createCategory();
@@ -145,12 +148,14 @@ class BatchProductSearchTest extends TestCase
     }
 
     /**
-     * @param string[] $numbers
+     * @param array<string, ListProduct|null> $result
+     * @param string[]                        $numbers
      */
-    private function assertProductNumbersExists(array $result, array $numbers)
+    private function assertProductNumbersExists(array $result, array $numbers): void
     {
         array_walk($numbers, function ($number) use ($result) {
             static::assertArrayHasKey($number, $result, sprintf('Expected "%s" to be in [%s]', $number, implode(', ', array_keys($result))));
+            static::assertNotNull($result[$number]);
             static::assertSame($number, $result[$number]->getNumber());
         });
     }

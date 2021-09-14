@@ -36,6 +36,9 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         return true;
     }
 
+    /**
+     * @return string
+     */
     public function onGetControllerPath(Enlight_Event_EventArgs $args)
     {
         return $this->Path() . 'Cron.php';
@@ -94,7 +97,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         return false;
     }
 
-    private function createForm()
+    private function createForm(): void
     {
         $form = $this->Form();
         $parent = $this->Forms()->findOneBy(['name' => 'Other']);

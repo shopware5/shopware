@@ -30,7 +30,7 @@ class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action implem
     public function init()
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        Shopware()->Front()->Plugins()->ViewRenderer()->setNoRender();
     }
 
     public function indexAction()

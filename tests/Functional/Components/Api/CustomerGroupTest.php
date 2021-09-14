@@ -26,9 +26,6 @@ namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\CustomerGroup;
 
-/**
- * @CustomerGroup  Shopware
- */
 class CustomerGroupTest extends TestCase
 {
     /**

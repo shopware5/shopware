@@ -22,7 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
+use Shopware\Components\Compatibility\LegacyStructConverter;
+use Shopware\Components\Routing\RouterInterface;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Currency;
+use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
 /**
@@ -46,13 +52,13 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return void|string
      */
     public function onRun(Enlight_Components_Cron_EventArgs $job)
     {
-        if (empty(Shopware()->Config()->voteSendCalling)) {
+        if (empty(Shopware()->Config()->get('voteSendCalling'))) {
             return;
         }
 
@@ -76,24 +82,27 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 continue;
             }
 
-            /** @var Shopware\Models\Shop\Repository $repository */
+            /** @var Repository $repository */
             $repository = Shopware()->Models()->getRepository(Shop::class);
 
             $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
             $shop = $repository->getActiveById($shopId);
+            if ($shop === null) {
+                continue;
+            }
 
-            /** @var Shopware\Models\Shop\Currency $repository */
+            /** @var Currency $repository */
             $repository = Shopware()->Models()->getRepository(Currency::class);
             $shop->setCurrency($repository->find($order['currencyID']));
-            $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+            $this->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
             foreach ($orderPositions[$orderId] as &$position) {
-                $position['link'] = $this->get(\Shopware\Components\Routing\RouterInterface::class)->assemble([
+                $position['link'] = $this->get(RouterInterface::class)->assemble([
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position['articleID'],
                 ]);
 
-                $position['link_rating_tab'] = $this->get(\Shopware\Components\Routing\RouterInterface::class)->assemble([
+                $position['link_rating_tab'] = $this->get(RouterInterface::class)->assemble([
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position['articleID'],
                     'jumpTab' => 'rating',
@@ -149,16 +158,16 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         $shopPositionImages = [];
 
         foreach ($shopPositions as $shopId => $positions) {
-            $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
+            $context = $this->get(ContextServiceInterface::class)->createShopContext($shopId);
 
-            $shopPositionImages[$shopId] = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::class)->getCovers(
+            $shopPositionImages[$shopId] = $this->get(MediaServiceInterface::class)->getCovers(
                 $positions,
                 $context
             );
 
             $shopPositionImages[$shopId] = array_map(
                 function ($mediaStruct) {
-                    return $this->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertMediaStruct($mediaStruct);
+                    return $this->get(LegacyStructConverter::class)->convertMediaStruct($mediaStruct);
                 },
                 $shopPositionImages[$shopId]
             );
@@ -352,7 +361,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 o.language as language
             FROM s_order_details as d
             LEFT JOIN s_core_tax as t
-            ON t.id = d.taxID                        
+            ON t.id = d.taxID
             LEFT JOIN s_articles_details ad
             ON d.articleordernumber = ad.ordernumber
             LEFT JOIN s_order o

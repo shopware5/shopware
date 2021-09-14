@@ -54,7 +54,7 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
         $view->assign('sBasketQuantity', isset($this->session->sBasketQuantity) ? $this->session->sBasketQuantity : 0);
         $view->assign('sBasketAmount', isset($this->session->sBasketAmount) ? $this->session->sBasketAmount : 0);
         $view->assign('sNotesQuantity', isset($this->session->sNotesQuantity) ? $this->session->sNotesQuantity : $this->module->sCountNotes());
-        $view->assign('sUserLoggedIn', !empty(Shopware()->Session()->sUserId));
+        $view->assign('sUserLoggedIn', !empty(Shopware()->Session()->get('sUserId')));
         $view->assign('sOneTimeAccount', $this->session->sOneTimeAccount);
     }
 }

@@ -88,6 +88,7 @@ class OrderListProductService extends TestCase
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getContext();
 
         $productData = Shopware()->Container()->get('modules')->Articles()->sGetPromotionById('fix', 0, $someProductNumber);
+        static::assertIsArray($productData);
         $products = Shopware()->Container()->get(OrderListProductServiceInterface::class)->getList([$someProductNumber], $context);
         $newProduct = array_shift($products);
 

@@ -308,7 +308,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      */
     public function getTemplatesAction()
     {
-        $config = Shopware()->Config()->blogdetailtemplates;
+        $config = Shopware()->Config()->get('blogdetailtemplates');
         $data = [];
         foreach (explode(';', $config) as $path) {
             if (!empty($path)) {
@@ -591,7 +591,6 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      */
     private function prepareAuthorAssociatedData($data)
     {
-        /* @var \Shopware\Models\User\User $author */
         if (!empty($data['authorId'])) {
             $data['author'] = $this->getManager()->find(\Shopware\Models\User\User::class, $data['authorId']);
         } else {

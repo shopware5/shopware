@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
@@ -54,7 +53,6 @@ class SearchTermLogger implements SearchTermLoggerInterface
             return;
         }
 
-        /* @var SearchTermCondition $condition */
         $condition = $criteria->getCondition('search');
 
         $now = new \DateTime();

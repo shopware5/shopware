@@ -37,7 +37,7 @@ class ShopwareEnvironmentProcessor
      */
     public function __invoke(array $record)
     {
-        if (Shopware()->Front() && $request = Shopware()->Front()->Request()) {
+        if ($request = Shopware()->Front()->Request()) {
             $record['extra']['request'] = [
                 'uri' => $request->getRequestUri(),
                 'method' => $request->getMethod(),
@@ -56,13 +56,9 @@ class ShopwareEnvironmentProcessor
         }
 
         if (Shopware()->Container()->has('shop')) {
-            if ($session = Shopware()->Session()) {
-                $record['extra']['session'] = $session;
-            }
-            if ($shop = Shopware()->Shop()) {
-                $record['extra']['shopId'] = Shopware()->Shop()->getId() ?: null;
-                $record['extra']['shopName'] = Shopware()->Shop()->getName() ?: null;
-            }
+            $record['extra']['session'] = Shopware()->Session();
+            $record['extra']['shopId'] = Shopware()->Shop()->getId() ?: null;
+            $record['extra']['shopName'] = Shopware()->Shop()->getName() ?: null;
         } else {
             $record['extra']['shop'] = 'No shop data available';
         }

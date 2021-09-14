@@ -98,7 +98,7 @@ class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
             'description' => 'Test description',
             'active' => true,
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(rand()),
+                'number' => 'swTEST' . uniqid((string) rand()),
                 'inStock' => 15,
                 'lastStock' => true,
                 'unitId' => 1,

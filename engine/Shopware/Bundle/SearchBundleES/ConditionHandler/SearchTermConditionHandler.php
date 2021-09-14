@@ -61,7 +61,6 @@ class SearchTermConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /* @var SearchTermCondition $criteriaPart */
         $search->addQuery(
             $this->queryBuilder->buildQuery($context, $criteriaPart->getTerm())
         );

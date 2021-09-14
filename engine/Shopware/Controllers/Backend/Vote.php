@@ -119,7 +119,7 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
     }
 
     /**
-     * @param int[] $shopIds
+     * @param array<int, int|string> $shopIds
      *
      * @return array indexed by id
      */

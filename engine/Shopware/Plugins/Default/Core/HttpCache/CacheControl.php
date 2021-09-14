@@ -202,7 +202,7 @@ class CacheControl
     /**
      * Returns a list of tags which has to be added to the no cache cookie
      *
-     * @return \string[]
+     * @return string[]
      */
     public function getTagsForNoCacheCookie(Request $request, ShopContextInterface $context)
     {
@@ -237,7 +237,7 @@ class CacheControl
     /**
      * Returns a list of tags which has to be deleted from the no cache cookie
      *
-     * @return \string[]
+     * @return string[]
      */
     public function getRemovableCacheTags(Request $request, ShopContextInterface $context)
     {

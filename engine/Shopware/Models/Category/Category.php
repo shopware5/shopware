@@ -396,7 +396,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getId()
     {

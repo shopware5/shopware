@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,6 +29,8 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -35,10 +39,10 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class VoteAverageConditionTest extends TestCase
 {
-    public function testVoteAverageCondition()
+    public function testVoteAverageCondition(): void
     {
         $condition = new VoteAverageCondition(3);
-        $context = $this->getContext(1);
+        $context = $this->getContext();
 
         $this->search(
             [
@@ -60,7 +64,7 @@ class VoteAverageConditionTest extends TestCase
         );
     }
 
-    public function testSubShopVotes()
+    public function testSubShopVotes(): void
     {
         $condition = new VoteAverageCondition(3);
         $context = $this->getContext(2);
@@ -90,7 +94,7 @@ class VoteAverageConditionTest extends TestCase
         );
     }
 
-    public function testMixedVotes()
+    public function testMixedVotes(): void
     {
         $condition = new VoteAverageCondition(4.5);
         $context = $this->getContext(2);
@@ -121,7 +125,7 @@ class VoteAverageConditionTest extends TestCase
         );
     }
 
-    public function testMixedVotesWithDisabledConfig()
+    public function testMixedVotesWithDisabledConfig(): void
     {
         $condition = new VoteAverageCondition(4);
         $context = $this->getContext(2);
@@ -152,12 +156,16 @@ class VoteAverageConditionTest extends TestCase
         );
     }
 
+    /**
+     * @param string            $number
+     * @param array<int, array> $additionally
+     */
     protected function createProduct(
         $number,
         ShopContext $context,
         Category $category,
         $additionally
-    ) {
+    ): Article {
         $article = parent::createProduct(
             $number,
             $context,
@@ -175,13 +183,10 @@ class VoteAverageConditionTest extends TestCase
         return $article;
     }
 
-    /**
-     * @return Category
-     */
-    private function createCategory(Shop $shop)
+    private function createCategory(Shop $shop): Category
     {
-        $em = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
-        $category = $em->find(Category::class, $shop->getCategory()->getId());
+        $category = Shopware()->Container()->get(ModelManager::class)
+            ->find(Category::class, $shop->getCategory()->getId());
 
         return $this->helper->createCategory(['parent' => $category]);
     }

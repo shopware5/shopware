@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,7 +36,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class ShippingFreeConditionTest extends TestCase
 {
-    public function testShippingFree()
+    public function testShippingFree(): void
     {
         $condition = new ShippingFreeCondition();
         $this->search(
@@ -53,14 +55,14 @@ class ShippingFreeConditionTest extends TestCase
      * @param string $number
      * @param bool   $shippingFree
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $shippingFree = true
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         $product['mainDetail']['shippingFree'] = $shippingFree;

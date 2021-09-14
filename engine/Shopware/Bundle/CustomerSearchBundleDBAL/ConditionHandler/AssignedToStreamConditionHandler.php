@@ -40,7 +40,6 @@ class AssignedToStreamConditionHandler implements ConditionHandlerInterface
     {
         $query->innerJoin('customer', 's_customer_streams_mapping', 'mapping', 'mapping.customer_id = customer.id AND mapping.stream_id = :streamId');
 
-        /* @var AssignedToStreamCondition $condition */
         $query->setParameter(':streamId', $condition->getStreamId());
     }
 }

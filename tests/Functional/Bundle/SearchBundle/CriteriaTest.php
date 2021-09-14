@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -35,7 +37,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class CriteriaTest extends TestCase
 {
-    public function testUniqueCondition()
+    public function testUniqueCondition(): void
     {
         $criteria = new Criteria();
 
@@ -44,7 +46,7 @@ class CriteriaTest extends TestCase
         static::assertCount(1, $criteria->getConditions());
     }
 
-    public function testUniqueFacet()
+    public function testUniqueFacet(): void
     {
         $criteria = new Criteria();
         $criteria->addFacet(new PriceFacet());
@@ -52,7 +54,7 @@ class CriteriaTest extends TestCase
         static::assertCount(1, $criteria->getFacets());
     }
 
-    public function testUniqueSorting()
+    public function testUniqueSorting(): void
     {
         $criteria = new Criteria();
         $criteria->addSorting(new PriceSorting());
@@ -60,7 +62,7 @@ class CriteriaTest extends TestCase
         static::assertCount(1, $criteria->getSortings());
     }
 
-    public function testIndexedSorting()
+    public function testIndexedSorting(): void
     {
         /** @var SortingInterface[] $sortings */
         $sortings = [
@@ -80,7 +82,7 @@ class CriteriaTest extends TestCase
         }
     }
 
-    public function testConditionOverwrite()
+    public function testConditionOverwrite(): void
     {
         $criteria = new Criteria();
 
@@ -92,7 +94,7 @@ class CriteriaTest extends TestCase
         static::assertCount(1, $criteria->getConditions());
         $condition = $criteria->getCondition($condition->getName());
 
-        static::assertInstanceOf('Shopware\Bundle\SearchBundle\Condition\CategoryCondition', $condition);
+        static::assertInstanceOf(CategoryCondition::class, $condition);
 
         /* @var CategoryCondition $condition */
         static::assertEquals([3], $condition->getCategoryIds());

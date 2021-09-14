@@ -378,11 +378,11 @@ abstract class Resource implements ContainerAwareInterface
 
         $resource->setManager($this->getManager());
 
-        if ($this->getAcl()) {
+        if ($this->getAcl() !== null) {
             $resource->setAcl($this->getAcl());
         }
 
-        if ($this->getRole()) {
+        if ($this->getRole() !== null) {
             $resource->setRole($this->getRole());
         }
 
@@ -462,7 +462,7 @@ abstract class Resource implements ContainerAwareInterface
      * Helper function to execute different `findOneBy` statements with different conditions
      * until a passed entity instance found.
      *
-     * @param string $entity
+     * @param class-string $entity
      *
      * @throws Exception
      *
@@ -542,9 +542,9 @@ abstract class Resource implements ContainerAwareInterface
      * In case that the `findOneBy`-statement finds no entity, the function throws an exception.
      * Otherwise the item will be added to the collection and returned.
      *
-     * @param array  $data
-     * @param string $entityType
-     * @param array  $conditions
+     * @param array        $data
+     * @param class-string $entityType
+     * @param array        $conditions
      *
      * @throws ApiException\CustomValidationException
      *

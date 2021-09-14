@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -35,7 +37,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class ManufacturerConditionTest extends TestCase
 {
-    public function testSingleManufacturer()
+    public function testSingleManufacturer(): void
     {
         $manufacturer = $this->helper->createManufacturer();
         $condition = new ManufacturerCondition([$manufacturer->getId()]);
@@ -52,7 +54,7 @@ class ManufacturerConditionTest extends TestCase
         );
     }
 
-    public function testMultipleManufacturers()
+    public function testMultipleManufacturers(): void
     {
         $manufacturer = $this->helper->createManufacturer();
         $second = $this->helper->createManufacturer();
@@ -75,17 +77,17 @@ class ManufacturerConditionTest extends TestCase
     }
 
     /**
-     * @param string   $number
-     * @param Supplier $manufacturer
+     * @param string        $number
+     * @param Supplier|null $manufacturer
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
         $manufacturer = null
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         if ($manufacturer) {

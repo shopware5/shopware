@@ -67,12 +67,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
     public function shopMenuAction(): void
     {
         $shop = Shopware()->Shop();
-
-        if ($shop === null) {
-            throw new RuntimeException('Shop needs to be set to call this action');
-        }
-
-        $main = DetachedShop::createFromShop($shop->getMain() !== null ? $shop->getMain() : $shop);
+        $main = DetachedShop::createFromShop($shop->getMain() ?? $shop);
 
         $this->View()->assign('shop', $shop);
         if (!$this->Request()->getParam('hideCurrency', false)) {

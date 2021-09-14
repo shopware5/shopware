@@ -308,7 +308,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
     public function ajaxValidateEmailAction()
     {
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        Shopware()->Front()->Plugins()->ViewRenderer()->setNoRender();
 
         $data = $this->getPostData();
         $customerForm = $this->createCustomerForm($data['register']['personal']);
@@ -325,7 +325,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
     public function ajaxValidatePasswordAction()
     {
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        Shopware()->Front()->Plugins()->ViewRenderer()->setNoRender();
 
         $data = $this->getPostData();
         $customerForm = $this->createCustomerForm($data['register']['personal']);

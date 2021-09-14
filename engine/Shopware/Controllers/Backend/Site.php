@@ -22,6 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Site\Group;
+use Shopware\Models\Site\Repository;
 use Shopware\Models\Site\Site;
 
 class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_ExtJs
@@ -29,12 +34,12 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     /**
      * Entity Manager
      *
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $manager;
 
     /**
-     * @var \Shopware\Models\Site\Repository
+     * @var Repository
      */
     protected $siteRepository;
 
@@ -77,7 +82,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     public function createGroupAction()
     {
         $manager = $this->getManager();
-        $repository = $manager->getRepository(\Shopware\Models\Site\Group::class);
+        $repository = $manager->getRepository(Group::class);
         $data = $this->Request()->getPost();
         $data = isset($data[0]) ? array_pop($data) : $data;
 
@@ -116,7 +121,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         // Check if key exists
         $model = $repository->findOneBy(['key' => $key]);
         if ($model === null) {
-            $model = new \Shopware\Models\Site\Group();
+            $model = new Group();
             $model->setKey($key);
         } else {
             $this->View()->assign([
@@ -143,14 +148,14 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     public function deleteGroupAction()
     {
         $manager = $this->getManager();
-        $repository = $manager->getRepository(\Shopware\Models\Site\Group::class);
+        $repository = $manager->getRepository(Group::class);
 
         $data = $this->Request()->getPost();
         $data = isset($data[0]) ? array_pop($data) : $data;
 
         $key = empty($data['templateVar']) ? null : $data['templateVar'];
 
-        /** @var \Shopware\Models\Site\Group $model */
+        /** @var Group $model */
         $model = $repository->findOneBy(['key' => $key]);
         if ($model !== null) {
             $manager->remove($model);
@@ -213,7 +218,9 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             try {
                 //remove site
                 $model = $this->getSiteRepository()->find($siteId);
-                $this->getManager()->remove($model);
+                if ($model !== null) {
+                    $this->getManager()->remove($model);
+                }
 
                 $this->getManager()->flush();
 
@@ -261,6 +268,9 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
                 }
 
                 $site = $this->getSiteRepository()->find($siteId);
+                if (!$site instanceof Site) {
+                    throw new ModelNotFoundException(Site::class, $siteId);
+                }
             } else {
                 if (!$this->_isAllowed('createSite', 'site')) {
                     $this->View()->assign(['success' => false, 'message' => 'Permission denied.']);
@@ -280,7 +290,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
 
             $data = $this->getSiteRepository()
                 ->getSiteQuery($site->getId())
-                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+                ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
             $this->View()->assign(['success' => true, 'data' => $data]);
         } catch (Exception $e) {
@@ -371,12 +381,12 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     /**
      * Helper function to get access to the site repository.
      *
-     * @return \Shopware\Models\Site\Repository
+     * @return Repository
      */
     private function getSiteRepository()
     {
         if ($this->siteRepository === null) {
-            $this->siteRepository = Shopware()->Models()->getRepository(\Shopware\Models\Site\Site::class);
+            $this->siteRepository = Shopware()->Models()->getRepository(Site::class);
         }
 
         return $this->siteRepository;

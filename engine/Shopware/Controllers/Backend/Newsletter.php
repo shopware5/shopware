@@ -23,8 +23,12 @@
  */
 
 use Shopware\Bundle\MailBundle\Service\Filter\NewsletterMailFilter;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Routing\RouterInterface;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Components\Validator\EmailValidator;
+use Shopware\Models\Plugin\Plugin;
 use Symfony\Component\HttpFoundation\Response;
 
 class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action implements CSRFWhitelistAware
@@ -37,7 +41,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     public function init()
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        Shopware()->Front()->Plugins()->ViewRenderer()->setNoRender();
     }
 
     /**
@@ -221,7 +225,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $from = $template->fetch('string:' . $mailing['sendermail'], $template);
         $fromName = $template->fetch('string:' . $mailing['sendername'], $template);
 
-        /** @var \Enlight_Components_Mail $mail */
+        /** @var Enlight_Components_Mail $mail */
         $mail = clone Shopware()->Container()->get('mail');
         $mail->setFrom($from, $fromName);
 
@@ -388,15 +392,15 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             ->setBasePath($shop->getBasePath())
             ->setBaseUrl($shop->getBasePath());
 
-        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        $this->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
-        Shopware()->Session()->sUserGroup = $mailing['customergroup'];
+        Shopware()->Session()->set('sUserGroup', $mailing['customergroup']);
         $sql = 'SELECT * FROM s_core_customergroups WHERE groupkey=?';
-        Shopware()->Session()->sUserGroupData = Shopware()->Db()->fetchRow($sql, [$mailing['customergroup']]);
+        Shopware()->Session()->set('sUserGroupData', Shopware()->Db()->fetchRow($sql, [$mailing['customergroup']]));
 
-        Shopware()->Container()->get(\Shopware\Components\Routing\RouterInterface::class)->setGlobalParam('module', 'frontend');
-        Shopware()->Config()->DontAttachSession = true;
-        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->initializeShopContext();
+        Shopware()->Container()->get(RouterInterface::class)->setGlobalParam('module', 'frontend');
+        Shopware()->Config()->offsetSet('DontAttachSession', true);
+        Shopware()->Container()->get(ContextServiceInterface::class)->initializeShopContext();
 
         return $mailing;
     }
@@ -426,7 +430,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             false
         );
 
-        $user = $this->getMailingUserByEmail(Shopware()->Config()->Mail);
+        $user = $this->getMailingUserByEmail(Shopware()->Config()->get('Mail'));
         $template->assign('sUser', $user, true);
         $hash = $this->createHash((int) $user['mailaddressID'], (int) $mailing['id']);
         $template->assign('sCampaignHash', $hash, true);
@@ -434,7 +438,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $template->assign('sVoucher', $this->getMailingVoucher($mailing['id']), true);
         $template->assign('sCampaign', $this->getMailingDetails($mailing['id']), true);
         $template->assign('sConfig', Shopware()->Config());
-        $template->assign('sBasefile', Shopware()->Config()->BaseFile);
+        $template->assign('sBasefile', Shopware()->Config()->get('BaseFile'));
         $template->assign('theme', $config);
 
         $templatePath = 'newsletter/index/' . $mailing['template'];
@@ -598,7 +602,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             $customerGroups = '1=2';
         }
 
-        $limit = !empty(Shopware()->Config()->MailCampaignsPerCall) ? (int) Shopware()->Config()->MailCampaignsPerCall : 1000;
+        $limit = !empty(Shopware()->Config()->get('MailCampaignsPerCall')) ? (int) Shopware()->Config()->get('MailCampaignsPerCall') : 1000;
         $limit = max(1, $limit);
 
         $customerStreams = '1=2';
@@ -813,7 +817,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         $track = 'sPartner=sCampaign' . (int) $mailingID;
-        $host = preg_quote(Shopware()->Config()->BasePath, '#');
+        $host = preg_quote(Shopware()->Config()->get('BasePath'), '#');
         $pattern = '#href="(https?://' . $host . '[^<]*[?][^<]+)"#Umsi';
         $source = preg_replace($pattern, 'href="$1&' . $track . '"', $source);
         $pattern = '#href="(https?://' . $host . '[^?<]*)"#Umsi';
@@ -858,8 +862,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             return null;
         }
 
-        /** @var \Shopware\Models\Plugin\Plugin|null $plugin */
-        $plugin = Shopware()->Models()->find(\Shopware\Models\Plugin\Plugin::class, $pluginBootstrap->getId());
+        /** @var Plugin|null $plugin */
+        $plugin = Shopware()->Models()->find(Plugin::class, $pluginBootstrap->getId());
         if (!$plugin) {
             return null;
         }

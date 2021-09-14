@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\SitePageMenu;
 
 /**
@@ -29,11 +30,6 @@ use Shopware\Components\SitePageMenu;
  */
 class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
-    /**
-     * Install plugin method
-     *
-     * @return bool
-     */
     public function install()
     {
         $this->subscribeEvent(
@@ -82,12 +78,12 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         $view->assign('sCategoryCurrent', $this->getCategoryCurrent($view->sCategoryStart));
         $view->assign('sCategories', $this->getCategories($view->sCategoryCurrent));
         $view->assign('sMainCategories', $view->sCategories);
-        $view->assign('sOutputNet', Shopware()->Session()->sOutputNet);
+        $view->assign('sOutputNet', Shopware()->Session()->get('sOutputNet'));
 
         $activePage = isset($view->sCustomPage['id']) ? $view->sCustomPage['id'] : null;
         $view->assign('sMenu', $this->getMenu($shop->getId(), $activePage));
 
-        $view->assign('sShopname', Shopware()->Config()->shopName);
+        $view->assign('sShopname', Shopware()->Config()->get('shopName'));
     }
 
     /**
@@ -143,7 +139,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     public function getMenu($shopId = null, $activePageId = null)
     {
         if ($shopId === null) {
-            $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+            $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
             $shopId = $context->getShop()->getId();
         }
 
@@ -155,6 +151,8 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
 
     /**
      * Return box campaigns items
+     *
+     * @deprecated Will be removed in 5.8 without replacement
      *
      * @param int $parentId
      *
@@ -180,11 +178,6 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         return $campaigns;
     }
 
-    /**
-     * Returns capabilities
-     *
-     * @return array
-     */
     public function getCapabilities()
     {
         return [
