@@ -1243,12 +1243,17 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $orderModel = $this->getManager()->getRepository(Document::class)->findBy(['hash' => $this->Request()->getParam('id')]);
         $orderModel = $this->getManager()->toArray($orderModel);
-        $orderId = $orderModel[0]['documentId'];
+
+        $fileName = $this->container->get('events')->filter(
+            'Shopware_Controllers_Order_OpenPdf_FilterName',
+            $orderModel[0]['documentId'],
+            ['data' => $orderModel[0]]
+        );
 
         $response = $this->Response();
         $response->headers->set('cache-control', 'public', true);
         $response->headers->set('content-description', 'File Transfer');
-        $response->headers->set('content-disposition', 'attachment; filename=' . $orderId . '.pdf');
+        $response->headers->set('content-disposition', 'attachment; filename=' . $fileName . '.pdf');
         $response->headers->set('content-type', 'application/pdf');
         $response->headers->set('content-transfer-encoding', 'binary');
         $response->headers->set('content-length', $filesystem->getSize($file));
