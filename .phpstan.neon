@@ -59,6 +59,8 @@ parameters:
         # Some day this should be specified
         - '#no value type specified in iterable type Enlight_Components_Snippet_Namespace#'
         - '#no value type specified in iterable type Enlight_Config#'
+        - '#no value type specified in iterable type Enlight_Plugin_PluginCollection#'
+        - '#no value type specified in iterable type Enlight_Plugin_PluginManager#'
         - '#no value type specified in iterable type Enlight_Event_EventArgs#'
 
         # This method does not exists, but it does not throw an error. Needs to be checked
@@ -68,7 +70,6 @@ parameters:
         - '#Cannot call method fetchAll\(\) on Doctrine\\DBAL\\Driver\\ResultStatement\|int#'
 
         # Remove if Doctrine PHPStan configuration is done
-        - '#Parameter \#1 \$parent of method Shopware\\Models\\Config\\Form::setParent\(\) expects Shopware\\Models\\Config\\Form\|null, object\|null given#'
         - '#Cannot call method .*\(\) on object\|null#'
         - '#(p|P)roperty .*::\$repository \(.*\) does not accept Doctrine\\ORM\\EntityRepository<.*>#'
         - '#Method .*::getRepository\(\) should return .*Repository but returns Doctrine\\ORM\\EntityRepository.*#'

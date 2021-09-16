@@ -49,7 +49,9 @@ class Enlight_Plugin_Bootstrap_Config extends Enlight_Plugin_Bootstrap
     public function Config()
     {
         if ($this->config === null
-          && $this->collection instanceof Enlight_Plugin_Namespace_Config) {
+            && $this->collection instanceof Enlight_Plugin_Namespace_Config
+            && \is_string($this->getName())
+        ) {
             $this->config = $this->collection->getConfig($this->getName());
         }
 

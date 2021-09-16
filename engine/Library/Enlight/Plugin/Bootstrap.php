@@ -31,7 +31,7 @@
 abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
 {
     /**
-     * @var string contains the name of the plugin
+     * @var string|null contains the name of the plugin
      */
     protected $name;
 
@@ -62,7 +62,7 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
     /**
      * Getter method for the plugin name property.
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {

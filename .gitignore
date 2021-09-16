@@ -70,6 +70,8 @@ Thumbs.db
 /files/documents/*
 !/files/documents/.htaccess
 /files/downloads/*
+/files/import_cron
+/files/import_export
 
 # Snippet exports
 /snippetsExport/
