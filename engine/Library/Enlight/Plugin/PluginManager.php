@@ -31,6 +31,11 @@
  *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
+ *
+ * @method Shopware_Components_Plugin_Namespace Backend()
+ * @method Shopware_Components_Plugin_Namespace Controller()
+ * @method Shopware_Components_Plugin_Namespace Core()
+ * @method Shopware_Components_Plugin_Namespace Frontend()
  */
 class Enlight_Plugin_PluginManager extends Enlight_Plugin_PluginCollection
 {

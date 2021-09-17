@@ -17,7 +17,6 @@
     },
     "require": {
         "php": "^7.4 || ^8.0",
-        "ext-calendar": "*",
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-date": "*",

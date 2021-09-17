@@ -109,6 +109,25 @@ SQL;
 
     private function getEasterDateForYear(int $year): string
     {
-        return date('Y-m-d', easter_date($year));
+        if (\function_exists('easter_date')) {
+            return date('Y-m-d', easter_date($year));
+        }
+
+        return date('Y-m-d', (int) mktime(0, 0, 0, 3, 21 + $this->getEasterDays($year), $year));
+    }
+
+    private function getEasterDays(int $year): int
+    {
+        $G = $year % 19;
+        $C = (int) ($year / 100);
+        $H = (int) ($C - (int) ($C / 4) - (int) ((8 * $C + 13) / 25) + 19 * $G + 15) % 30;
+        $I = (int) $H - (int) ($H / 28) * (1 - (int) ($H / 28) * (int) (29 / ($H + 1)) * ((int) (21 - $G) / 11));
+        $J = ($year + (int) ($year / 4) + $I + 2 - $C + (int) ($C / 4)) % 7;
+        $L = $I - $J;
+        $month = 3 + (int) (($L + 40) / 44);
+        $day = (int) ($L + 28 - 31 * ((int) ($month / 4)));
+        $E = mktime(0, 0, 0, $month, $day, $year) - mktime(0, 0, 0, 3, 21, $year);
+
+        return (int) round($E / (60 * 60 * 24));
     }
 }

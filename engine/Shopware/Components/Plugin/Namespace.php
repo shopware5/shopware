@@ -23,7 +23,6 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Configuration\ReaderInterface as ConfigurationReader;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Models\Plugin\Plugin;
@@ -43,6 +42,7 @@ use Shopware\Models\Widget\Widget;
  * @method Shopware_Plugins_Frontend_Statistics_Bootstrap     Statistics()
  * @method Shopware_Plugins_Backend_SwagUpdate_Bootstrap      SwagUpdate()
  * @method Shopware_Plugins_Frontend_TagCloud_Bootstrap       TagCloud()
+ * @method Enlight_Controller_Plugins_ViewRenderer_Bootstrap  ViewRenderer()
  */
 class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Config
 {
@@ -161,6 +161,10 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $refreshDate = new DateTimeImmutable();
         }
 
+        if (!\is_string($plugin->getName())) {
+            throw new RuntimeException('Plugin name not initialized correctly');
+        }
+
         $info = $plugin->Info();
         $capabilities = $plugin->getCapabilities();
         $id = $this->getPluginId($plugin->getName());
@@ -174,17 +178,17 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             'namespace' => $this->getName(),
             'name' => $plugin->getName(),
             'label' => isset($info['label']) && \is_string($info['label']) ? $info['label'] : $plugin->getName(),
-            'version' => isset($info['version']) ? $info['version'] : '1.0.0',
-            'author' => isset($info['author']) ? $info['author'] : 'shopware AG',
-            'copyright' => isset($info['copyright']) ? $info['copyright'] : 'Copyright © 2012, shopware AG',
-            'description' => isset($info['description']) ? $info['description'] : null,
-            'license' => isset($info['license']) ? $info['license'] : null,
-            'support' => isset($info['support']) ? $info['support'] : null,
-            'link' => isset($info['link']) ? $info['link'] : null,
-            'source' => isset($info['source']) ? $info['source'] : 'Default',
-            'update_date' => isset($info['updateDate']) ? $info['updateDate'] : null,
-            'update_version' => isset($info['updateVersion']) ? $info['updateVersion'] : null,
-            'update_source' => isset($info['updateSource']) ? $info['updateSource'] : null,
+            'version' => $info['version'] ?? '1.0.0',
+            'author' => $info['author'] ?? 'shopware AG',
+            'copyright' => $info['copyright'] ?? 'Copyright © 2012, shopware AG',
+            'description' => $info['description'] ?? null,
+            'license' => $info['license'] ?? null,
+            'support' => $info['support'] ?? null,
+            'link' => $info['link'] ?? null,
+            'source' => $info['source'] ?? 'Default',
+            'update_date' => $info['updateDate'] ?? null,
+            'update_version' => $info['updateVersion'] ?? null,
+            'update_source' => $info['updateSource'] ?? null,
             'capability_update' => !empty($capabilities['update']),
             'capability_install' => !empty($capabilities['install']),
             'capability_enable' => !empty($capabilities['enable']),
@@ -230,7 +234,10 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     {
         $this->reloadStorage();
 
-        /** @var ModelManager $em */
+        if (!\is_string($bootstrap->getName())) {
+            throw new RuntimeException('Plugin name not initialized correctly');
+        }
+
         $em = $this->Application()->Models();
         $id = $this->getPluginId($bootstrap->getName());
         $plugin = $em->find(Plugin::class, $id);
@@ -288,7 +295,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             return $result;
         }
 
-        /** @var Widget $widget */
         foreach ($plugin->getWidgets() as $widget) {
             $name = $widget->getName();
             $db->insert('s_core_acl_privileges', [
@@ -312,11 +318,13 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     public function uninstallPlugin(Shopware_Components_Plugin_Bootstrap $bootstrap, $removeData = true)
     {
-        /** @var ModelManager $em */
         $em = $this->Application()->Models();
 
         $connection = $em->getConnection();
 
+        if (!\is_string($bootstrap->getName())) {
+            throw new RuntimeException('Plugin name not initialized correctly');
+        }
         $id = $this->getPluginId($bootstrap->getName());
         $plugin = $em->find(Plugin::class, $id);
 
@@ -439,6 +447,9 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     {
         $this->reloadStorage();
 
+        if (!\is_string($plugin->getName())) {
+            throw new RuntimeException('Plugin name not initialized correctly');
+        }
         $name = $plugin->getName();
         $oldVersion = $this->getInfo($name, 'version');
         $newInfo = $plugin->getInfo();
@@ -681,7 +692,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     private function removePluginWidgets($pluginId)
     {
-        /** @var Connection $connection */
         $connection = $this->Application()->Container()->get(Connection::class);
 
         $sql = "
@@ -714,7 +724,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         }
 
         if ($removeData) {
-            /** @var ModelManager $em */
             $em = $this->Application()->Models();
             $form = $bootstrap->Form();
 
@@ -730,8 +739,10 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
         $capabilities = $bootstrap->getCapabilities();
 
+        if (!\is_string($bootstrap->getName())) {
+            throw new RuntimeException('Plugin name not initialized correctly');
+        }
         if ($capabilities['secureUninstall']) {
-            /** @var Enlight_Components_Db_Adapter_Pdo_Mysql $db */
             $db = $this->Application()->Db();
             $id = $this->getPluginId($bootstrap->getName());
 

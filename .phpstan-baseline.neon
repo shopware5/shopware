@@ -2816,11 +2816,6 @@ parameters:
 			path: engine/Library/Enlight/Loader.php
 
 		-
-			message: "#^Method Enlight_Plugin_Bootstrap\\:\\:Collection\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Bootstrap.php
-
-		-
 			message: "#^Method Enlight_Plugin_Bootstrap\\:\\:afterInit\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Bootstrap.php
@@ -2831,17 +2826,7 @@ parameters:
 			path: engine/Library/Enlight/Plugin/Bootstrap.php
 
 		-
-			message: "#^Method Enlight_Plugin_Bootstrap\\:\\:setCollection\\(\\) has parameter \\$collection with no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Bootstrap.php
-
-		-
 			message: "#^Property Enlight_Plugin_Bootstrap\\:\\:\\$collection \\(Enlight_Plugin_PluginCollection\\) does not accept Enlight_Plugin_PluginCollection\\|null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Bootstrap.php
-
-		-
-			message: "#^Property Enlight_Plugin_Bootstrap\\:\\:\\$collection type has no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Bootstrap.php
 
@@ -2876,32 +2861,7 @@ parameters:
 			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
 
 		-
-			message: "#^Method Enlight_Plugin_Bootstrap_Default\\:\\:__construct\\(\\) has parameter \\$collection with no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Bootstrap/Default.php
-
-		-
-			message: "#^Method Enlight_Plugin_Namespace\\:\\:Manager\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace.php
-
-		-
-			message: "#^Method Enlight_Plugin_Namespace\\:\\:setManager\\(\\) has parameter \\$manager with no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace.php
-
-		-
-			message: "#^Method Enlight_Plugin_Namespace\\:\\:setManager\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace.php
-
-		-
 			message: "#^Property Enlight_Plugin_Namespace\\:\\:\\$manager \\(Enlight_Plugin_PluginManager\\) does not accept Enlight_Plugin_PluginCollection\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace.php
-
-		-
-			message: "#^Property Enlight_Plugin_Namespace\\:\\:\\$manager type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Namespace.php
 
@@ -2927,11 +2887,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:initStorage\\(\\) should return Enlight_Config but return statement is missing\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace/Config.php
-
-		-
-			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:load\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Namespace/Config.php
 
@@ -3001,11 +2956,6 @@ parameters:
 			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
 
 		-
-			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:load\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
-
-		-
 			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:load\\(\\) should return Enlight_Plugin_PluginCollection but return statement is missing\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
@@ -3061,22 +3011,7 @@ parameters:
 			path: engine/Library/Enlight/Plugin/PluginCollection.php
 
 		-
-			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:load\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginCollection\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/PluginCollection.php
-
-		-
-			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:registerPlugin\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/PluginCollection.php
-
-		-
 			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:registerPlugin\\(\\) should return Enlight_Plugin_PluginManager but returns \\$this\\(Enlight_Plugin_PluginCollection\\)\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/PluginCollection.php
-
-		-
-			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:reset\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/PluginCollection.php
 
@@ -3092,16 +3027,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Plugin_PluginManager\\:\\:registerNamespace\\(\\) has parameter \\$namespace with no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/PluginManager.php
-
-		-
-			message: "#^Method Enlight_Plugin_PluginManager\\:\\:registerNamespace\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/PluginManager.php
-
-		-
-			message: "#^Method Enlight_Plugin_PluginManager\\:\\:setApplication\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/PluginManager.php
 
@@ -11217,11 +11142,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\LegacyPluginInstaller\\:\\:\\$pluginDirectories type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginInstaller.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\LegacyPluginInstaller\\:\\:\\$plugins type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginInstaller.php
 
@@ -24971,11 +24891,6 @@ parameters:
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Front.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$plugins has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Front.php
-
-		-
 			message: "#^Cannot call method getLocale\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Locale.php
@@ -25007,11 +24922,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Plugins\\:\\:factory\\(\\) has parameter \\$pluginDirectories with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Plugins.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Plugins\\:\\:factory\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Plugins.php
 
@@ -27596,11 +27506,6 @@ parameters:
 			path: engine/Shopware/Components/License/Service/LicenseServiceSubscriber.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\License\\\\Service\\\\LicenseServiceSubscriber\\:\\:\\$plugins type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
-			count: 1
-			path: engine/Shopware/Components/License/Service/LicenseServiceSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\License\\\\Service\\\\LicenseUnpackServiceInterface\\:\\:readLicenseInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/License/Service/LicenseUnpackServiceInterface.php
@@ -29385,38 +29290,8 @@ parameters:
 			path: engine/Shopware/Components/Plugin.php
 
 		-
-			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$description\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$label\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$name\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$path\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$source\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Bootstrap.php
-
-		-
 			message: "#^Call to an undefined method Enlight_Plugin_Namespace_Config\\:\\:getPluginId\\(\\)\\.$#"
 			count: 1
-			path: engine/Shopware/Components/Plugin/Bootstrap.php
-
-		-
-			message: "#^Cannot access property \\$capabilities on Enlight_Config\\|null\\.$#"
-			count: 6
 			path: engine/Shopware/Components/Plugin/Bootstrap.php
 
 		-
@@ -29431,11 +29306,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Components_Plugin_Bootstrap\\:\\:Config\\(\\) should return Enlight_Config but returns array\\|Enlight_Config\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Components_Plugin_Bootstrap\\:\\:Info\\(\\) should return Enlight_Config but returns Enlight_Config\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/Bootstrap.php
 
@@ -29921,11 +29791,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Components_Plugin_Namespace\\:\\:loadListeners\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Namespace.php
-
-		-
-			message: "#^Method Shopware_Components_Plugin_Namespace\\:\\:registerPlugin\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\|Shopware_Components_Plugin_Namespace\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/Namespace.php
 
@@ -31026,11 +30891,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @var for variable \\$pluginNamespace has no value type specified in iterable type Shopware_Components_Plugin_Namespace\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ShopRegistrationService.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$plugins has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ShopRegistrationService.php
 
@@ -57700,11 +57560,6 @@ parameters:
 			message: "#^Method Shopware_Plugins_Frontend_TagCloud_Bootstrap\\:\\:getInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/TagCloud/Bootstrap.php
-
-		-
-			message: "#^Method Shopware\\:\\:Plugins\\(\\) return type has no value type specified in iterable type Enlight_Plugin_PluginManager\\.$#"
-			count: 1
-			path: engine/Shopware/Shopware.php
 
 		-
 			message: "#^Method Shopware\\:\\:System\\(\\) should return sSystem but returns object\\|null\\.$#"
