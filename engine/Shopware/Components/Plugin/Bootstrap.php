@@ -55,7 +55,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     protected $plugin;
 
     /**
-     * @var Form
+     * @var Form|null
      */
     protected $form;
 
@@ -244,6 +244,10 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             $this->form = $this->initForm();
         }
 
+        if ($this->form === null) {
+            throw new RuntimeException('Plugin form was not initialized correctly');
+        }
+
         return $this->form;
     }
 
@@ -252,17 +256,11 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         if ($this->form === null && $this->getName() !== null) {
             $formRepository = $this->Forms();
             $form = $formRepository->findOneBy(['name' => $this->getName()]);
-            if (!$form instanceof Form) {
-                throw new ModelNotFoundException(Form::class, $this->getName(), 'name');
-            }
             $this->form = $form;
         }
         if ($this->form === null && $this->getId() !== null) {
             $formRepository = $this->Forms();
             $form = $formRepository->findOneBy(['pluginId' => $this->getId()]);
-            if (!$form instanceof Form) {
-                throw new ModelNotFoundException(Form::class, $this->getId(), 'pluginId');
-            }
             $this->form = $form;
         }
 
