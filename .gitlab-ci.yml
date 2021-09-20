@@ -28,7 +28,6 @@ default:
     before_script:
         - sed -i -e "s;__ROOT__;$CI_PROJECT_DIR;g" /etc/nginx/sites-enabled/shopware.conf
         - /usr/bin/supervisord -c /etc/supervisord.conf &>/dev/null &
-        - apk add --no-cache sudo make
         # https://gitlab.com/gitlab-org/gitlab-foss/-/issues/27921#note_38132416
         - eval export DB_USER DB_PASSWORD DB_HOST DB_PORT DB_NAME SW_HOST SW_BASE_PATH ELASTICSEARCH_HOST
 
@@ -37,11 +36,20 @@ default:
 PHP analyze:
     stage: Static analysis
     script:
-        - sudo -E -u www-data make init
-        - sudo -E -u www-data make check-code
+        - make init
+        - make check-code
     services:
         -   name: mysql:5.7
             alias: mysql
+
+JavaScript analyze:
+    stage: Static analysis
+    image: node:alpine
+    before_script:
+        - apk add --no-cache make bash
+    script:
+        - make install-theme-depencencies
+        - make check-js-code
 
 Code Coverage:
     stage: Static analysis
@@ -121,7 +129,7 @@ MySQL 8.0:
     services:
         -   name: mysql:8.0.19
             alias: mysql
-            command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password", "--sql-require-primary-key=ON"]
+            command: [ "mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password", "--sql-require-primary-key=ON" ]
 
 MariaDB 10.1:
     extends: .phpunit_base
@@ -145,7 +153,7 @@ Elasticsearch 7:
     services:
         -   name: mysql:8.0.19
             alias: mysql
-            command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
+            command: [ "mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password" ]
         -   name: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
             alias: elasticsearch
             command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
@@ -176,6 +184,7 @@ Elasticsearch 7:
         reports:
             junit: build/artifacts/mink/*.xml
     script:
+        - apk add --no-cache sudo
         - export SW_HOST=$(hostname -i)
         - make init
         - make prepare-mink
@@ -188,7 +197,7 @@ Elasticsearch 7:
             alias: smtp
         -   name: mysql:8.0.19
             alias: mysql
-            command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
+            command: [ "mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password" ]
 
 
 Mink Account:
@@ -239,7 +248,7 @@ Mink Backend:
 RIPS security:
     stage: Security
     image: php:7.4-alpine
-    before_script: []
+    before_script: [ ]
     only:
         variables:
             - $RIPS_SCAN == "1"
