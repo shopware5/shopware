@@ -48,9 +48,9 @@ Ext.define('Shopware.apps.UserManager.model.UserDetail', {
         'apiKey',
         'failedlogins',
         'password',
-        { name: 'extendedEditor', type: 'boolean'},
-        { name: 'disabledCache', type: 'boolean'},
-        { name: 'lockedUntil', type: 'date'},
+        { name: 'extendedEditor', type: 'boolean' },
+        { name: 'disabledCache', type: 'boolean' },
+        { name: 'lockedUntil', type: 'date' },
         {
             name: 'locked',
             type: 'boolean',

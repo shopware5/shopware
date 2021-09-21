@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Article.store.CategoryTree', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.TreeStore',
+    extend: 'Ext.data.TreeStore',
 
     /**
      * Defines the id of the root node. To get the first level of shopware categories
@@ -64,12 +64,12 @@ Ext.define('Shopware.apps.Article.store.CategoryTree', {
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -82,10 +82,10 @@ Ext.define('Shopware.apps.Article.store.CategoryTree', {
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

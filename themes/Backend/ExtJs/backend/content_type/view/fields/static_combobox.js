@@ -32,8 +32,8 @@ Ext.define('Shopware.apps.{$controllerName}.view.fields.StaticCombobox', {
         this.valueField = 'id';
         this.store = Ext.create('Ext.data.Store', {
             fields: [
-                { name: 'id', type: 'string'},
-                { name: 'name', type: 'string'}
+                { name: 'id', type: 'string' },
+                { name: 'name', type: 'string' }
             ],
             data: this.store
         });

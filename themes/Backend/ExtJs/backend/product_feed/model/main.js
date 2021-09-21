@@ -39,41 +39,41 @@ Ext.define('Shopware.apps.ProductFeed.model.Main', {
     * Extends the standard ExtJS 4
     * @string
     */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
     * The fields used for this model
     * @array
     */
-    fields : [
+    fields: [
         //{block name="backend/product_feed/model/main/fields"}{/block}
-        { name : 'id', type : 'int' },
-        { name : 'active', type : 'boolean' },
-        { name : 'name', type : 'string' },
-        { name : 'fileName', type : 'string' },
-        { name : 'hash', type : 'string' },
-        { name : 'countArticles', type : 'int' },
-        { name : 'lastExport', type : 'date' }
+        { name: 'id', type: 'int' },
+        { name: 'active', type: 'boolean' },
+        { name: 'name', type: 'string' },
+        { name: 'fileName', type: 'string' },
+        { name: 'hash', type: 'string' },
+        { name: 'countArticles', type: 'int' },
+        { name: 'lastExport', type: 'date' }
     ],
     /**
     * If the name of the field is 'id' extjs assumes autmagical that
     * this field is an unique identifier.
     */
-    idProperty : 'id',
+    idProperty: 'id',
     /**
     * Configure the data communication
     * @object
     */
-    proxy : {
-        type : 'ajax',
-        api:{
-            read:   '{url action=getFeeds}',
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url action=getFeeds}',
             create: '{url action=createFeed}',
             update: '{url action=updateFeed}',
-            destroy:'{url action=deleteFeed}'
+            destroy: '{url action=deleteFeed}'
         },
-        reader : {
-            type : 'json',
-            root : 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty: 'totalCount'
         }
     }

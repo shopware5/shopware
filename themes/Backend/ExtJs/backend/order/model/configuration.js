@@ -40,36 +40,36 @@ Ext.define('Shopware.apps.Order.model.Configuration', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/order/model/configuration/fields"}{/block}
-        { name: 'orderId', type:'int' },
+        { name: 'orderId', type: 'int' },
 
         // todo dateFields needs type 'date', but if used the dates in the created documents are formatted improperly
         { name: 'deliveryDate' },
         { name: 'displayDate' },
-        { name: 'vatId', type:'string' },
-        { name: 'invoiceNumber', type:'string' },
-        { name: 'documentType', type:'int' },
-        { name: 'docComment', type:'string' },
-        { name: 'voucher', type:'int', useNull: true },
-        { name: 'taxFree', type:'int' }
+        { name: 'vatId', type: 'string' },
+        { name: 'invoiceNumber', type: 'string' },
+        { name: 'documentType', type: 'int' },
+        { name: 'docComment', type: 'string' },
+        { name: 'voucher', type: 'int', useNull: true },
+        { name: 'taxFree', type: 'int' }
     ],
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -77,18 +77,18 @@ Ext.define('Shopware.apps.Order.model.Configuration', {
          * @object
          */
 
-        api:{
-            create:'{url action="createDocument" targetField=documents}'
+        api: {
+            create: '{url action="createDocument" targetField=documents}'
         },
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 

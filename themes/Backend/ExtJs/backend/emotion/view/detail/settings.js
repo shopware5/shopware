@@ -490,7 +490,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             'name': 'device'
         }, {
             'inputValue': '1',
-            'boxLabel' : me.snippets.fields.deviceTabletLandscapeLabel,
+            'boxLabel': me.snippets.fields.deviceTabletLandscapeLabel,
             'checked': 1,
             'name': 'device'
         }, {

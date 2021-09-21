@@ -39,7 +39,7 @@
              *
              * @type {String}
              */
-            'eventName': 'click',
+            eventName: 'click',
 
             /**
              * The ajax url that the request should be send to.
@@ -48,7 +48,7 @@
              *
              * @type {String}
              */
-            'addArticleUrl': window.controller['ajax_add_article'],
+            addArticleUrl: window.controller['ajax_add_article'],
 
             /**
              * Default value that is used for the per-page amount when the current device is not mapped.
@@ -56,21 +56,21 @@
              *
              * @type {Number}
              */
-            'sliderPerPageDefault': 3,
+            sliderPerPageDefault: 3,
 
             /**
              * Whether or not the modal box should be shown.
              *
              * @type {Boolean}
              */
-            'showModal': true,
+            showModal: true,
 
             /**
              * Selector for the product slider in the add article modal box.
              *
              * @type {String}
              */
-            'productSliderSelector': '.js--modal .product-slider'
+            productSliderSelector: '.js--modal .product-slider'
         },
 
         /**
@@ -119,7 +119,7 @@
 
             if (opts.showModal) {
                 $.loadingIndicator.open({
-                    'openOverlay': true
+                    openOverlay: true
                 });
             }
 

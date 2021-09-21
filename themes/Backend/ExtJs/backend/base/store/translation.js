@@ -37,19 +37,19 @@ Ext.define('Shopware.apps.Base.store.Translation', {
 
     alternateClassName: 'Shopware.store.Translation',
     storeId: 'base.Translation',
-    model : 'Shopware.apps.Base.model.Shop',
+    model: 'Shopware.apps.Base.model.Shop',
     pageSize: 1000,
 
     remoteSort: true,
     remoteFilter: true,
 
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
         url: '{url action=getShops}',
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     },
 

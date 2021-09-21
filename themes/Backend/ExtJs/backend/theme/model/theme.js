@@ -44,30 +44,30 @@ Ext.define('Shopware.apps.Theme.model.Theme', {
     },
 
     fields: [
-        { name : 'id', type: 'int', useNull: true },
-        { name : 'name', type: 'string' },
-        { name : 'template', type: 'string' },
-        { name : 'description', type: 'string' },
-        { name : 'author', type: 'string' },
-        { name : 'path', type: 'string' },
-        { name : 'license', type: 'string' },
-        { name : 'screen', type: 'string' },
-        { name : 'esi', type: 'boolean' },
-        { name : 'emotion', type: 'boolean' },
-        { name : 'style', type: 'boolean' },
-        { name : 'version', type: 'int' },
-        { name : 'pluginId', type: 'int' },
+        { name: 'id', type: 'int', useNull: true },
+        { name: 'name', type: 'string' },
+        { name: 'template', type: 'string' },
+        { name: 'description', type: 'string' },
+        { name: 'author', type: 'string' },
+        { name: 'path', type: 'string' },
+        { name: 'license', type: 'string' },
+        { name: 'screen', type: 'string' },
+        { name: 'esi', type: 'boolean' },
+        { name: 'emotion', type: 'boolean' },
+        { name: 'style', type: 'boolean' },
+        { name: 'version', type: 'int' },
+        { name: 'pluginId', type: 'int' },
 
-        { name : 'themeInfo', type: 'string' },
+        { name: 'themeInfo', type: 'string' },
 
-        { name : 'parentId', type: 'int', useNull: true, defaultValue: null },
+        { name: 'parentId', type: 'int', useNull: true, defaultValue: null },
 
-        { name : 'screen', type: 'string' },
-        { name : 'hasConfig', type: 'int' },
-        { name : 'hasConfigSet', type: 'boolean' },
+        { name: 'screen', type: 'string' },
+        { name: 'hasConfig', type: 'int' },
+        { name: 'hasConfigSet', type: 'boolean' },
 
-        { name : 'enabled', type: 'boolean', defaultValue: false },
-        { name : 'preview', type: 'boolean', defaultValue: false }
+        { name: 'enabled', type: 'boolean', defaultValue: false },
+        { name: 'preview', type: 'boolean', defaultValue: false }
     ],
 
     associations: [

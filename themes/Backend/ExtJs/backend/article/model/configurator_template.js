@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Article.model.ConfiguratorTemplate', {
         { name: 'maxPurchase', type: 'int', useNull: true },
         { name: 'unitId', type: 'int', useNull: true },
         { name: 'purchaseUnit', type: 'float', useNull: true },
-        { name: 'referenceUnit', type: 'float', useNull: true},
+        { name: 'referenceUnit', type: 'float', useNull: true },
         { name: 'packUnit', type: 'string', useNull: true },
         { name: 'purchasePrice', type: 'float', useNull: false }
     ],

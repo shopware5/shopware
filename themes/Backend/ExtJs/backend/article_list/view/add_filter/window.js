@@ -211,7 +211,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
             text: '{s name="cancel"}Cancel{/s}',
             scope: me,
             cls: 'secondary',
-            handler:function () {
+            handler: function () {
                 me.down('form').getForm().reset();
                 me.down('grid').getStore().removeAll();
                 // Make sure, that the dropdown is hidden, when the window is closed

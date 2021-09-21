@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
      *
      * @object
      */
-    snippets:{
+    snippets: {
         album: '{s name="selection/album"}Album{/s}',
         searchText: '{s name="selection/search_text"}Search...{/s}',
         applySelection: '{s name="selection/apply_selection"}Apply Selection{/s}'

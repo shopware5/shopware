@@ -28,7 +28,7 @@
              * @property enabled
              * @type {Boolean}
              */
-            'enabled': true,
+            enabled: true,
 
             /**
              * Event name(s) used for registering the events to navigate
@@ -36,7 +36,7 @@
              * @property eventName
              * @type {String}
              */
-            'eventName': 'click',
+            eventName: 'click',
 
             /**
              * Selector for a single navigation
@@ -44,7 +44,7 @@
              * @property sidebarCategorySelector
              * @type {String}
              */
-            'sidebarCategorySelector': '.sidebar--navigation',
+            sidebarCategorySelector: '.sidebar--navigation',
 
             /**
              * Selector for the back buttons.
@@ -52,7 +52,7 @@
              * @property backwardsSelector
              * @type {String}
              */
-            'backwardsSelector': '.link--go-back',
+            backwardsSelector: '.link--go-back',
 
             /**
              * Selector for the forward buttons.
@@ -60,7 +60,7 @@
              * @property forwardSelector
              * @type {String}
              */
-            'forwardsSelector': '.link--go-forward',
+            forwardsSelector: '.link--go-forward',
 
             /**
              * Selector for the main menu buttons.
@@ -68,7 +68,7 @@
              * @property mainMenuSelector
              * @type {String}
              */
-            'mainMenuSelector': '.link--go-main',
+            mainMenuSelector: '.link--go-main',
 
             /**
              * ID of the root category ID of the current shop.
@@ -78,7 +78,7 @@
              * @property mainCategoryId
              * @type {Number}
              */
-            'mainCategoryId': null,
+            mainCategoryId: null,
 
             /**
              * Category ID of the current page.
@@ -87,7 +87,7 @@
              * @property categoryId
              * @type {Number}
              */
-            'categoryId': null,
+            categoryId: null,
 
             /**
              * URL to get the current navigation slide.
@@ -96,7 +96,7 @@
              * @property fetchUrl
              * @type {String}
              */
-            'fetchUrl': '',
+            fetchUrl: '',
 
             /**
              * Selector for a overlay navigation slide.
@@ -104,7 +104,7 @@
              * @property overlaySelector
              * @type {String}
              */
-            'overlaySelector': '.offcanvas--overlay',
+            overlaySelector: '.offcanvas--overlay',
 
             /**
              * Selector for the whole sidebar itself.
@@ -112,7 +112,7 @@
              * @property sidebarMainSelector
              * @type {String}
              */
-            'sidebarMainSelector': '.sidebar-main',
+            sidebarMainSelector: '.sidebar-main',
 
             /**
              * Selector for the mobile navigation.
@@ -120,7 +120,7 @@
              * @property mobileNavigationSelector
              * @type {String}
              */
-            'mobileNavigationSelector': '.navigation--smartphone',
+            mobileNavigationSelector: '.navigation--smartphone',
 
             /**
              * Loading class for the ajax calls.
@@ -130,7 +130,7 @@
              * @property loadingClass
              * @type {String}
              */
-            'loadingClass': 'sidebar--ajax-loader',
+            loadingClass: 'sidebar--ajax-loader',
 
             /**
              * Class that determines the existing slides to remove
@@ -139,7 +139,7 @@
              * @property backSlideClass
              * @type {String}
              */
-            'backSlideClass': 'background',
+            backSlideClass: 'background',
 
             /**
              * Selector for the right navigation icon.
@@ -148,7 +148,7 @@
              * @property iconRightSelector
              * @type {String}
              */
-            'iconRightSelector': '.is--icon-right',
+            iconRightSelector: '.is--icon-right',
 
             /**
              * Class that will be appended to the main sidebar to
@@ -157,7 +157,7 @@
              * @property disableScrollingClass
              * @type {String}
              */
-            'disableScrollingClass': 'is--inactive',
+            disableScrollingClass: 'is--inactive',
 
             /**
              * Speed of the slide animations in milliseconds.
@@ -165,7 +165,7 @@
              * @property animationSpeedIn
              * @type {Number}
              */
-            'animationSpeedIn': 450,
+            animationSpeedIn: 450,
 
             /**
              * Speed of the slide animations in milliseconds.
@@ -173,7 +173,7 @@
              * @property animationSpeedOut
              * @type {Number}
              */
-            'animationSpeedOut': 300,
+            animationSpeedOut: 300,
 
             /**
              * Easing function for sliding a slide into the viewport.
@@ -181,7 +181,7 @@
              * @property easingIn
              * @type {String}
              */
-            'easingIn': 'cubic-bezier(.3,0,.15,1)',
+            easingIn: 'cubic-bezier(.3,0,.15,1)',
 
             /**
              * Easing function for sliding a slide out of the viewport.
@@ -189,7 +189,7 @@
              * @property easingOut
              * @type {String}
              */
-            'easingOut': 'cubic-bezier(.02, .01, .47, 1)',
+            easingOut: 'cubic-bezier(.02, .01, .47, 1)',
 
             /**
              * The animation easing used when transitions are not supported.
@@ -197,7 +197,7 @@
              * @property easingFallback
              * @type {String}
              */
-            'easingFallback': 'swing'
+            easingFallback: 'swing'
         },
 
         /**
@@ -259,7 +259,7 @@
              * @type {jQuery}
              */
             me.$loadingIcon = $('<div>', {
-                'class': opts.loadingClass
+                class: opts.loadingClass
             });
 
             /**
@@ -337,7 +337,7 @@
 
             $sidebar.on(me.getEventName(eventName), opts.mainMenuSelector, $.proxy(me.onClickMainMenuButton, me));
 
-            $.publish('plugin/swSubCategoryNav/onRegisterEvents', [ me ]);
+            $.publish('plugin/swSubCategoryNav/onRegisterEvents', [me]);
         },
 
         /**
@@ -364,7 +364,7 @@
 
             me.inProgress = true;
 
-            $.publish('plugin/swSubCategoryNav/onClickBackButton', [ me, event ]);
+            $.publish('plugin/swSubCategoryNav/onClickBackButton', [me, event]);
 
             // Decide if there is a parent group or main sidebar
             if (!url || (parentId === me.opts.mainCategoryId && url.indexOf('getCategory') !== -1)) {
@@ -396,7 +396,7 @@
 
             me.inProgress = true;
 
-            $.publish('plugin/swSubCategoryNav/onClickForwardButton', [ me, event ]);
+            $.publish('plugin/swSubCategoryNav/onClickForwardButton', [me, event]);
 
             // Disable scrolling on main menu
             me.$sidebar.addClass(me.opts.disableScrollingClass);
@@ -423,7 +423,7 @@
 
             me.inProgress = true;
 
-            $.publish('plugin/swSubCategoryNav/onClickMainMenuButton', [ me, event ]);
+            $.publish('plugin/swSubCategoryNav/onClickMainMenuButton', [me, event]);
 
             me.slideToMainMenu();
         },
@@ -440,11 +440,11 @@
         loadTemplate: function (url, callback, $loadingTarget) {
             var me = this;
 
-            $.publish('plugin/swSubCategoryNav/onLoadTemplateBefore', [ me ]);
+            $.publish('plugin/swSubCategoryNav/onLoadTemplateBefore', [me]);
 
             if (!$loadingTarget) {
                 $.get(url, function (template) {
-                    $.publish('plugin/swSubCategoryNav/onLoadTemplate', [ me ]);
+                    $.publish('plugin/swSubCategoryNav/onLoadTemplate', [me]);
 
                     callback.call(me, template);
                 });
@@ -460,7 +460,7 @@
             $.get(url, function (template) {
                 me.$loadingIcon.hide();
 
-                $.publish('plugin/swSubCategoryNav/onLoadTemplate', [ me ]);
+                $.publish('plugin/swSubCategoryNav/onLoadTemplate', [me]);
 
                 callback.call(me, template);
             });
@@ -479,7 +479,7 @@
                 $overlays,
                 $slide;
 
-            $.publish('plugin/swSubCategoryNav/onSlideOutBefore', [ me ]);
+            $.publish('plugin/swSubCategoryNav/onSlideOutBefore', [me]);
 
             me.$sidebar.append(template);
 
@@ -491,12 +491,12 @@
 
             $slide = $overlays.not('.' + opts.backSlideClass);
 
-            $slide[me.slideFunction]({ 'left': 280 }, opts.animationSpeedOut, me.easingEffectOut, function () {
+            $slide[me.slideFunction]({ left: 280 }, opts.animationSpeedOut, me.easingEffectOut, function () {
                 $slide.remove();
 
                 me.inProgress = false;
 
-                $.publish('plugin/swSubCategoryNav/onSlideOut', [ me ]);
+                $.publish('plugin/swSubCategoryNav/onSlideOut', [me]);
             });
         },
 
@@ -516,7 +516,7 @@
                 $slide,
                 $el;
 
-            $.publish('plugin/swSubCategoryNav/onSlideInBefore', [ me ]);
+            $.publish('plugin/swSubCategoryNav/onSlideInBefore', [me]);
 
             // hide main menu
             me.$sidebar.scrollTop(0);
@@ -526,11 +526,11 @@
             $overlays = $(opts.overlaySelector);
 
             $slide = $overlays.not('.' + opts.backSlideClass).css({
-                'left': 280,
-                'display': 'block'
+                left: 280,
+                display: 'block'
             });
 
-            $slide[me.slideFunction]({ 'left': 0 }, opts.animationSpeedIn, me.easingEffectIn, function () {
+            $slide[me.slideFunction]({ left: 0 }, opts.animationSpeedIn, me.easingEffectIn, function () {
                 // remove background layer
                 $overlays.each(function (i, el) {
                     $el = $(el);
@@ -551,7 +551,7 @@
 
                 me.inProgress = false;
 
-                $.publish('plugin/swSubCategoryNav/onSlideIn', [ me ]);
+                $.publish('plugin/swSubCategoryNav/onSlideIn', [me]);
             });
         },
 
@@ -567,7 +567,7 @@
                 opts = me.opts,
                 $overlay = $(opts.overlaySelector);
 
-            $.publish('plugin/swSubCategoryNav/onSlideToMainMenuBefore', [ me ]);
+            $.publish('plugin/swSubCategoryNav/onSlideToMainMenuBefore', [me]);
 
             // make the main menu visible
             me.$sidebarWrapper.css('display', 'block');
@@ -575,7 +575,7 @@
             // fade in arrow icons
             me.$sidebarWrapper.find(me.opts.iconRightSelector).fadeIn('slow');
 
-            $overlay[me.slideFunction]({ 'left': 280 }, opts.animationSpeedOut, me.easingEffectOut, function () {
+            $overlay[me.slideFunction]({ left: 280 }, opts.animationSpeedOut, me.easingEffectOut, function () {
                 $overlay.remove();
 
                 // enable scrolling on main menu
@@ -583,7 +583,7 @@
 
                 me.inProgress = false;
 
-                $.publish('plugin/swSubCategoryNav/onSlideToMainMenu', [ me ]);
+                $.publish('plugin/swSubCategoryNav/onSlideToMainMenu', [me]);
             });
         },
 

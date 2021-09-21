@@ -38,12 +38,12 @@ Ext.define('Shopware.apps.Shipping.store.CategoryTree', {
      * Parent Object
      * @string
      */
-    extend : 'Ext.data.TreeStore',
+    extend: 'Ext.data.TreeStore',
     /**
      * Store to use
      * @string
      */
-    alias : 'store.category',
+    alias: 'store.category',
     /**
      * USe remote filtering
      * @boolean
@@ -53,40 +53,40 @@ Ext.define('Shopware.apps.Shipping.store.CategoryTree', {
      * Do not load the data on your own
      * @boolean
      */
-    autoLoad : false,
+    autoLoad: false,
     /**
      * Default page size is 30 items
      * @integer
      */
-    pageSize : 30,
+    pageSize: 30,
     /**
      * Model to use for this store
      * @string
      */
-    model : 'Shopware.apps.Banner.model.Category',
+    model: 'Shopware.apps.Banner.model.Category',
     /**
      * Proxy config object.
      * @object
      */
-    proxy : {
-        type : 'ajax',
+    proxy: {
+        type: 'ajax',
          /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        api : {
-            read : '{url controller=category action=getList}',
-            create : '{url controller=category action=createCategory}',
-            update : '{url controller=category action=updateCategory}',
-            destroy : '{url controller=category action=deleteCategory}'
+        api: {
+            read: '{url controller=category action=getList}',
+            create: '{url controller=category action=createCategory}',
+            update: '{url controller=category action=updateCategory}',
+            destroy: '{url controller=category action=deleteCategory}'
         },
         /**
          * Configure the data reader
          * @object
          */
-        reader : {
-            type : 'json',
+        reader: {
+            type: 'json',
             root: 'data'
         }
     }

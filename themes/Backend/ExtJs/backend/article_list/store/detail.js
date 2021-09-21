@@ -58,30 +58,30 @@ Ext.define('Shopware.apps.ArticleList.store.Detail', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.ArticleList.model.Detail',
+    model: 'Shopware.apps.ArticleList.model.Detail',
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        url:'{url controller="ArticleList" action="filter"}',
+        url: '{url controller="ArticleList" action="filter"}',
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

@@ -94,9 +94,9 @@ Ext.define('Shopware.apps.Config.view.base.Property', {
     getTopBar: function () {
         var me = this;
         return [{
-            iconCls:'sprite-plus-circle-frame',
-            text:'{s name="property_table/add_text"}Add entry{/s}',
-            action:'add'
+            iconCls: 'sprite-plus-circle-frame',
+            text: '{s name="property_table/add_text"}Add entry{/s}',
+            action: 'add'
         }];
     }
 });

@@ -41,20 +41,20 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
     /**
      * all references to get the elements by the applicable selector
      */
-    refs:[
-        { ref:'grid', selector:'voucher-voucher-list' },
-        { ref:'codesGrid', selector:'voucher-code-list' },
-        { ref:'formModusComboBox', selector:'voucher-voucher-base_configuration combobox[name=modus]' },
-        { ref:'textFieldVoucherCode', selector:'voucher-voucher-base_configuration textfield[name=voucherCode]' },
-        { ref:'hiddenFieldId', selector:'voucher-voucher-base_configuration hidden[name=id]' },
-        { ref:'voucherBaseConfiguration', selector:'window voucher-voucher-base_configuration' },
-        { ref:'numberFieldRedeemablePerCustomer', selector:'voucher-voucher-base_configuration numberfield[name=numOrder]' },
-        { ref:'numberFieldVoucherCount', selector:'voucher-voucher-base_configuration numberfield[name=numberOfUnits]' },
-        { ref:'attributeForm', selector:'voucher-voucher-window shopware-attribute-form' }
+    refs: [
+        { ref: 'grid', selector: 'voucher-voucher-list' },
+        { ref: 'codesGrid', selector: 'voucher-code-list' },
+        { ref: 'formModusComboBox', selector: 'voucher-voucher-base_configuration combobox[name=modus]' },
+        { ref: 'textFieldVoucherCode', selector: 'voucher-voucher-base_configuration textfield[name=voucherCode]' },
+        { ref: 'hiddenFieldId', selector: 'voucher-voucher-base_configuration hidden[name=id]' },
+        { ref: 'voucherBaseConfiguration', selector: 'window voucher-voucher-base_configuration' },
+        { ref: 'numberFieldRedeemablePerCustomer', selector: 'voucher-voucher-base_configuration numberfield[name=numOrder]' },
+        { ref: 'numberFieldVoucherCount', selector: 'voucher-voucher-base_configuration numberfield[name=numberOfUnits]' },
+        { ref: 'attributeForm', selector: 'voucher-voucher-window shopware-attribute-form' }
     ],
 
     /**
@@ -81,18 +81,18 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({
-            'voucher-voucher-list button[action=add]':{
-                click:me.onCreateVoucher
+            'voucher-voucher-list button[action=add]': {
+                click: me.onCreateVoucher
             },
-            'voucher-voucher-list textfield[action=searchVoucher]':{
-                change:me.onSearchVoucher
+            'voucher-voucher-list textfield[action=searchVoucher]': {
+                change: me.onSearchVoucher
             },
-            'voucher-voucher-list button[action=deleteVoucher]':{
-                click:me.onDeleteMultipleVouchers
+            'voucher-voucher-list button[action=deleteVoucher]': {
+                click: me.onDeleteMultipleVouchers
             },
             'voucher-voucher-list': {
                 deleteColumn: me.onDeleteSingleVoucher,
@@ -100,10 +100,10 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
                 duplicateColumn: me.onDuplicateVoucher
             },
             'voucher-voucher-base_configuration combobox[name=modus]': {
-                select:me.onSelectModus
+                select: me.onSelectModus
             },
-            'voucher-voucher-window':{
-                beforeclose:me.onBeforeCloseBaseConfigurationWindow
+            'voucher-voucher-window': {
+                beforeclose: me.onBeforeCloseBaseConfigurationWindow
             },
             'voucher-voucher-base_configuration button[action=save]': {
                 click: me.onSaveVoucher
@@ -117,14 +117,14 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
      * @param [object] store - the voucher detail store
      * @return void
      */
-    onCreateVoucher:function () {
+    onCreateVoucher: function () {
         var me = this,
             store = me.getStore('Detail'),
             model = Ext.create('Shopware.apps.Voucher.model.Detail');
 
         //reset the store to create a new voucher
         store.getProxy().extraParams = {
-            voucherID:''
+            voucherID: ''
         };
         me.getView('voucher.Window').create({
             record: model,
@@ -143,7 +143,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
      * @param [integer] rowIndex - The row number
      * @return void
      */
-    onEditVoucher:function (view, rowIndex) {
+    onEditVoucher: function (view, rowIndex) {
         var me = this,
             record = me.getStore('List').getAt(rowIndex);
 
@@ -164,8 +164,8 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
         };
 
         store.load({
-            scope:this,
-            callback:function (records, operation, success) {
+            scope: this,
+            callback: function (records, operation, success) {
                 var record = records[0],
                     mode = record.data.modus;
 
@@ -192,18 +192,18 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
      * @param [integer] rowIndex - The row number
      * @return void
      */
-    onDuplicateVoucher:function (view, rowIndex) {
+    onDuplicateVoucher: function (view, rowIndex) {
         var me = this,
             store = me.getStore('Detail'),
             record = me.getStore('List').getAt(rowIndex);
 
         store.getProxy().extraParams = {
-            voucherID:record.data.id
+            voucherID: record.data.id
         };
 
         store.load({
-            scope:this,
-            callback:function (records, operation, success) {
+            scope: this,
+            callback: function (records, operation, success) {
                 var record = records[0],
                     mode = record.data.modus;
 
@@ -216,7 +216,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
                 record.data.id = '';
 
                 store.getProxy().extraParams = {
-                    voucherID:''
+                    voucherID: ''
                 };
 
                 me.getView('voucher.Window').create({
@@ -236,7 +236,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
      * @param value
      * @return void
      */
-    onSearchVoucher:function (field, value) {
+    onSearchVoucher: function (field, value) {
         var me = this,
             searchString = Ext.String.trim(value),
             store = me.getStore('List');
@@ -252,7 +252,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
      * @param [integer] rowIndex - Position of the event
      * @return void
      */
-    onDeleteSingleVoucher:function (grid, rowIndex) {
+    onDeleteSingleVoucher: function (grid, rowIndex) {
         var me = this,
                 store = grid.getStore(),
                 voucherGrid = me.getGrid(),
@@ -292,7 +292,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
      *
      * @return void
      */
-    onDeleteMultipleVouchers:function () {
+    onDeleteMultipleVouchers: function () {
         var me = this,
                 grid = me.getGrid(),
                 sm = grid.getSelectionModel(),
@@ -383,7 +383,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
      * @param [object] btn - pressed Ext.button.Button
      * @return void
      */
-    onBeforeCloseBaseConfigurationWindow:function () {
+    onBeforeCloseBaseConfigurationWindow: function () {
         this.getStore("List").load();
     },
     /**
@@ -393,7 +393,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
      * @param combo
      * @param selectedRecords
      */
-    onSelectModus:function (combo, selectedRecords) {
+    onSelectModus: function (combo, selectedRecords) {
         var me = this,
             selectedRecord = selectedRecords[0],
             mode = selectedRecord.data.id;

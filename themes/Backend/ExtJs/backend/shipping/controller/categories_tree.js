@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend : 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Creates the necessary event listener for this
@@ -49,14 +49,14 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
      *
      * @return void
      */
-    init : function () {
+    init: function () {
         var me = this;
         /**
          * Makes sure that all checked nodes will expand
          */
         me.control({
-             'shipping-view-edit-categories-tree':{
-                afterrender : me.onAfterRender
+             'shipping-view-edit-categories-tree': {
+                afterrender: me.onAfterRender
             }
         });
 
@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
      * @param { Shopware.apps.Shipping.view.edit.CategoriesTree } categoryPanel
      * @return void
      */
-    onAfterRender : function(categoryPanel) {
+    onAfterRender: function(categoryPanel) {
         var tree = categoryPanel.treeSelect,
             win = tree.up('window'),
             form = win.down('form').getForm(),
@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
         });
 
         Ext.Ajax.request({
-            url:'{url controller="Category" action="getIdPath"}',
+            url: '{url controller="Category" action="getIdPath"}',
             params: { 'categoryIds[]': ids },
             success: function(result) {
                 if(!result.responseText) {

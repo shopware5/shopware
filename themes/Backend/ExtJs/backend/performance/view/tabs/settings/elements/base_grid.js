@@ -123,14 +123,14 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
         });
 
         return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
-            items:[
+            dock: 'top',
+            items: [
                 textField,
                 {
-                    iconCls:'sprite-plus-circle-frame',
-                    text:'{s name="grid/addEntry"}Add entry{/s}',
+                    iconCls: 'sprite-plus-circle-frame',
+                    text: '{s name="grid/addEntry"}Add entry{/s}',
                     cls: 'secondary small',
-                    action:'add-entry',
+                    action: 'add-entry',
                     handler: function() {
                         var record = Ext.create('Shopware.apps.Performance.model.KeyValue'),
                             field = textField,

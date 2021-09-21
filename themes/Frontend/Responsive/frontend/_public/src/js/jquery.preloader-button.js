@@ -31,7 +31,7 @@
             me.opts.checkFormIsValid = me.opts.checkFormIsValid && me.checkForValiditySupport();
             me._on(me.$el, 'click', $.proxy(me.onShowPreloader, me));
 
-            $.publish('plugin/swPreloaderButton/onRegisterEvents', [ me ]);
+            $.publish('plugin/swPreloaderButton/onRegisterEvents', [me]);
         },
 
         /**
@@ -45,7 +45,7 @@
                 element = document.createElement('input'),
                 valid = (typeof element.validity === 'object');
 
-            $.publish('plugin/swPreloaderButton/onCheckForValiditySupport', [ me, valid ]);
+            $.publish('plugin/swPreloaderButton/onCheckForValiditySupport', [me, valid]);
 
             return valid;
         },
@@ -73,7 +73,7 @@
             window.setTimeout(function() {
                 me.$el.html(me.$el.text() + '<div class="' + me.opts.loaderCls + '"></div>').attr('disabled', 'disabled');
 
-                $.publish('plugin/swPreloaderButton/onShowPreloader', [ me ]);
+                $.publish('plugin/swPreloaderButton/onShowPreloader', [me]);
             }, 25);
         },
 

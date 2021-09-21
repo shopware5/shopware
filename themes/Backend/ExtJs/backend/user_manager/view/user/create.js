@@ -37,12 +37,12 @@
 //{block name="backend/user_manager/view/user/create"}
 Ext.define('Shopware.apps.UserManager.view.user.Create', {
     extend: 'Enlight.app.Window',
-    alias : 'widget.usermanager-user-create',
-    title : '{s name="create_user/title"}Add/edit user{/s}',
+    alias: 'widget.usermanager-user-create',
+    title: '{s name="create_user/title"}Add/edit user{/s}',
     layout: 'fit',
     autoShow: true,
-    autoScroll:true,
-    width       : 700,
+    autoScroll: true,
+    width: 700,
     height: '90%',
     modal: true,
     apiKeyField: null,
@@ -129,15 +129,15 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
         });
 
         this.formPanel = Ext.create('Ext.form.Panel', {
-            border      : false,
-            layout      : 'anchor',
-            autoScroll:true,
+            border: false,
+            layout: 'anchor',
+            autoScroll: true,
             name: 'main-form',
-            bodyPadding : 10,
-            defaults    : {
+            bodyPadding: 10,
+            defaults: {
                 labelWidth: 155
             },
-            items : [
+            items: [
                 this.getLoginFieldset(),
                 this.getApiFieldset(),
                 this.getUserBaseFieldset(),
@@ -155,8 +155,8 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
         return Ext.create('Ext.form.FieldSet',
         {
             title: 'Login',
-            bodyPadding : 10,
-            defaults    : {
+            bodyPadding: 10,
+            defaults: {
                 labelWidth: 155
             },
             items: [{
@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                                anchor: '100%',
                                uncheckedValue: 0,
 
-                               inputValue:1,
+                               inputValue: 1,
                                supportText: '{s name="create_user/enabled_info"}Enable or disable this account{/s}'
                            }
                        ]
@@ -294,12 +294,12 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
      * Creates the container for the password field and the generateApiKey button.
      * @return [Ext.container.Container] - Contains the text field and the button
      */
-    getApiKeyContainer:function () {
+    getApiKeyContainer: function () {
         var me = this;
 
         //create the password generation button
         me.apiKeyButton = Ext.create('Ext.button.Button', {
-            iconCls:'sprite-license-key',
+            iconCls: 'sprite-license-key',
             tooltip: '{s name="create_user/generate_api_key"}Generate API-Key{/s}',
             width: 24,
             /**
@@ -313,7 +313,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
         });
 
         me.apiKeyField = Ext.create('Ext.form.field.Text', {
-            name:'apiKey',
+            name: 'apiKey',
             labelWidth: 75,
             flex: 1,
             allowBlank: false,
@@ -327,7 +327,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                 type: 'hbox',
                 pack: 'start'
             },
-            items:[ me.apiKeyField, me.apiKeyButton ]
+            items: [ me.apiKeyField, me.apiKeyButton ]
         });
     },
 
@@ -405,8 +405,8 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
         return Ext.create('Ext.form.FieldSet',
         {
             title: '{s name="create_user/main_data"}Main data{/s}',
-            bodyPadding : 10,
-            defaults    : {
+            bodyPadding: 10,
+            defaults: {
                 labelWidth: 155
             },
             items: [{
@@ -449,36 +449,36 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                        columnWidth: 0.5,
                        items: [
                            {
-                               xtype:'combobox',
-                               triggerAction:'all',
-                               name:'localeId',
+                               xtype: 'combobox',
+                               triggerAction: 'all',
+                               name: 'localeId',
                                fieldLabel: '{s name="create_user/language"}Default language{/s}',
-                               store:this.localeStore,
-                               valueField:'id',
-                               displayField:'name',
+                               store: this.localeStore,
+                               valueField: 'id',
+                               displayField: 'name',
                                queryMode: 'local',
                                mode: 'local',
-                               required:true,
-                               editable:false,
-                               forceSelection:true,
+                               required: true,
+                               editable: false,
+                               forceSelection: true,
                                listConfig: {
                                  action: 'locale'
                                }
 
                            },
                            {
-                              xtype:'combobox',
-                              triggerAction:'all',
-                              name:'roleId',
+                              xtype: 'combobox',
+                              triggerAction: 'all',
+                              name: 'roleId',
                               fieldLabel: '{s name="create_user/role"}Member of role{/s}',
                               store: this.roleStore,
-                              valueField:'id',
-                              displayField:'name',
+                              valueField: 'id',
+                              displayField: 'name',
                               mode: 'local',
                               queryMode: 'local',
-                              required:true,
-                              editable:false,
-                              allowBlank:false,
+                              required: true,
+                              editable: false,
+                              allowBlank: false,
                               listConfig: {
                                action: 'role'
                               }
@@ -498,8 +498,8 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
         return Ext.create('Ext.form.FieldSet',
                 {
                     title: '{s name="create_user/individual_user_options"}Individual user options{/s}',
-                    bodyPadding : 10,
-                    defaults    : {
+                    bodyPadding: 10,
+                    defaults: {
                         labelWidth: 155
                     },
                     items: [{

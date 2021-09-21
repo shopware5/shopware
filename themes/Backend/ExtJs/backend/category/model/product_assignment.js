@@ -27,12 +27,12 @@ Ext.define('Shopware.apps.Category.model.ProductAssignment', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * Configure the data communication
      * @object
      */
-    fields:[
+    fields: [
         //{block name="backend/category/model/product_assignment/fields"}{/block}
         { name: 'articleId', type: 'integer' },
         { name: 'name', type: 'string' },

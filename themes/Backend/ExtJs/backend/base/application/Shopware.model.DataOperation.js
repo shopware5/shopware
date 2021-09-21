@@ -4,11 +4,11 @@
 
 Ext.define('Shopware.model.DataOperation', {
 
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     phantom: true,
 
-    fields:[
+    fields: [
         { name: 'success', type: 'boolean' },
         { name: 'request' },
         { name: 'error', type: 'string' },

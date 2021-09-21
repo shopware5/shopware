@@ -60,7 +60,7 @@
             me.setFieldValueFromStorage();
             me.registerEvents();
 
-            $.publish('plugin/swStorageField/init', [ me ]);
+            $.publish('plugin/swStorageField/init', [me]);
         },
 
         getStorageKey: function () {
@@ -70,12 +70,11 @@
 
             if (me.opts.storageKeyName !== null) {
                 key += me.opts.storageKeyName.toLowerCase();
-
             } else if (fieldName && fieldName.length) {
                 key += fieldName.toLowerCase();
             }
 
-            $.publish('plugin/swStorageField/getStorageKey', [ me, key ]);
+            $.publish('plugin/swStorageField/getStorageKey', [me, key]);
 
             return key;
         },
@@ -89,7 +88,7 @@
                 $form = $(me.$el.attr('data-selector')).parents('form');
             }
 
-            $.publish('plugin/swStorageField/getParentForm', [ me, $form ]);
+            $.publish('plugin/swStorageField/getParentForm', [me, $form]);
 
             return ($form.length > 0) ? $form : null;
         },
@@ -100,14 +99,14 @@
 
             if (value && value.length) {
                 me.$el.val(value);
-                
+
                 // When the field is just a pseudo field also fill the original field.
                 if (me.$el.is('[data-selector]')) {
                     $(me.$el.attr('data-selector')).val(value);
                 }
             }
 
-            $.publish('plugin/swStorageField/setFieldValueFromStorage', [ me ]);
+            $.publish('plugin/swStorageField/setFieldValueFromStorage', [me]);
         },
 
         registerEvents: function () {
@@ -119,7 +118,7 @@
                 me._on(me.$form, 'submit', $.proxy(me.onFormSubmit, me));
             }
 
-            $.publish('plugin/swStorageField/onRegisterEvents', [ me ]);
+            $.publish('plugin/swStorageField/onRegisterEvents', [me]);
         },
 
         storeValue: function () {
@@ -128,7 +127,7 @@
 
             me.storage.setItem(me.storageKey, value);
 
-            $.publish('plugin/swStorageField/storeValue', [ me ]);
+            $.publish('plugin/swStorageField/storeValue', [me]);
         },
 
         onFormSubmit: function () {
@@ -136,7 +135,7 @@
 
             me.storage.removeItem(me.storageKey);
 
-            $.publish('plugin/swStorageField/onFormSubmit', [ me ]);
+            $.publish('plugin/swStorageField/onFormSubmit', [me]);
         },
 
         destroy: function() {
@@ -145,5 +144,4 @@
             me._destroy();
         }
     });
-
 })(jQuery, window);

@@ -38,14 +38,14 @@ Ext.define('Shopware.apps.Notification.controller.Notification', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Initialize the notification controller and listens and controls the listed events
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({
@@ -55,11 +55,11 @@ Ext.define('Shopware.apps.Notification.controller.Notification', {
             'notification-notification-customer': {
                 openCustomerAccount: me.onOpenCustomerAccount
             },
-            'notification-notification-article textfield[action=searchArticle]':{
-                change:me.onSearchArticle
+            'notification-notification-article textfield[action=searchArticle]': {
+                change: me.onSearchArticle
             },
-            'notification-notification-customer textfield[action=searchCustomer]':{
-                change:me.onSearchCustomer
+            'notification-notification-customer textfield[action=searchCustomer]': {
+                change: me.onSearchCustomer
             }
         });
     },
@@ -71,14 +71,14 @@ Ext.define('Shopware.apps.Notification.controller.Notification', {
      * @param [integer] rowIndex - The row number
      * @return void
      */
-    onShowCustomers:function (view, rowIndex) {
+    onShowCustomers: function (view, rowIndex) {
         var me = this,
             customerStore = me.subApplication.customerStore,
             record = me.subApplication.articleStore.getAt(rowIndex);
 
         // use extraParams to not separately filter for the article order number
         customerStore.getProxy().extraParams = {
-            orderNumber:record.get("number")
+            orderNumber: record.get("number")
         };
         customerStore.load();
     },
@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Notification.controller.Notification', {
      * @param rowIndex
      * @return void
      */
-    onOpenCustomerAccount:function (view, rowIndex) {
+    onOpenCustomerAccount: function (view, rowIndex) {
         var me = this;
         var record = me.subApplication.customerStore.getAt(rowIndex);
         Shopware.app.Application.addSubApplication({
@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.Notification.controller.Notification', {
      * @param value
      * @return void
      */
-    onSearchArticle:function (field, value) {
+    onSearchArticle: function (field, value) {
         var me = this,
             searchString = Ext.String.trim(value),
             store = me.subApplication.articleStore;
@@ -126,7 +126,7 @@ Ext.define('Shopware.apps.Notification.controller.Notification', {
      * @param value
      * @return void
      */
-    onSearchCustomer:function (field, value) {
+    onSearchCustomer: function (field, value) {
         var me = this,
             searchString = Ext.String.trim(value),
             store = me.subApplication.customerStore;

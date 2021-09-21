@@ -39,12 +39,12 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.first-run-wizard-finish',
+    alias: 'widget.first-run-wizard-finish',
 
     /**
      * Name attribute used to generate event names
      */
-    name:'finish',
+    name: 'finish',
 
     initComponent: function() {
         var me = this;

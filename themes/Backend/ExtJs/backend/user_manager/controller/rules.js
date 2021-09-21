@@ -61,24 +61,24 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
      * @object
      */
     snippets: {
-        successTitle:'{s name="message/resource/delete_success_message"}Successful{/s}',
-        errorTitle:'{s name="message/privilege/save_error_title"}Error{/s}',
-        errorMessage:'{s name="message/privilege/save_error_message"}An error has occurred while saving:{/s}',
+        successTitle: '{s name="message/resource/delete_success_message"}Successful{/s}',
+        errorTitle: '{s name="message/privilege/save_error_title"}Error{/s}',
+        errorMessage: '{s name="message/privilege/save_error_message"}An error has occurred while saving:{/s}',
 
         resourceDelete: {
-            successMessage:'{s name="message/resource/delete_success_title"}Resource has been removed{/s}'
+            successMessage: '{s name="message/resource/delete_success_title"}Resource has been removed{/s}'
         },
         privilegeDelete: {
-            successMessage:'{s name="message/privilege/delete_success_title"}Privilege has been removed{/s}'
+            successMessage: '{s name="message/privilege/delete_success_title"}Privilege has been removed{/s}'
         },
         resourceSave: {
-            successMessage:'{s name="message/resource/save_success_title"}Resource has been saved{/s}'
+            successMessage: '{s name="message/resource/save_success_title"}Resource has been saved{/s}'
         },
         privilegeSave: {
-            successMessage:'{s name="message/privilege/save_success_title"}Privilege has been saved{/s}'
+            successMessage: '{s name="message/privilege/save_success_title"}Privilege has been saved{/s}'
         },
         roleSave: {
-            successMessage:'{s name="message/role/save_success_title"}Role privileges have been saved{/s}'
+            successMessage: '{s name="message/role/save_success_title"}Role privileges have been saved{/s}'
         },
 
         growlMessage: '{s name="growlMessage"}User Management{/s}'

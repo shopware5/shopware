@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Index', {
      * sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * Enables our bulk loading technique.
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Index', {
      * Required controllers for module (subapplication)
      * @array
      */
-    controllers:[
+    controllers: [
         'Main',
         'Widgets',
         'ErrorReporter',

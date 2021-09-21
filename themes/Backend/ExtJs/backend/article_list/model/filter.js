@@ -51,9 +51,9 @@ Ext.define('Shopware.apps.ArticleList.model.Filter', {
         { name: 'isFavorite', type: 'boolean' },
         { name: 'isSimple', type: 'boolean' },
         {
-            name : 'groupName',
+            name: 'groupName',
             type: 'string',
-            convert : function(value, record) {
+            convert: function(value, record) {
                 return record.get('isFavorite') ? '{s name="group_favorite"}Favorite{/s}' : '{s name="group_filter"}Filter{/s}';
             }
         }
@@ -63,13 +63,13 @@ Ext.define('Shopware.apps.ArticleList.model.Filter', {
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          *
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -88,10 +88,10 @@ Ext.define('Shopware.apps.ArticleList.model.Filter', {
          *
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

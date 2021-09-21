@@ -37,38 +37,38 @@ Ext.define('Shopware.apps.Emotion.store.Library', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Emotion.model.Component',
+    model: 'Shopware.apps.Emotion.model.Component',
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        url:'{url action="library"}',
+        url: '{url action="library"}',
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

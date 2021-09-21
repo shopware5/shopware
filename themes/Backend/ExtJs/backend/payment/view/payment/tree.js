@@ -37,11 +37,11 @@
  */
 //{block name="backend/payment/view/payment/tree"}
 Ext.define('Shopware.apps.Payment.view.payment.Tree', {
-    extend : 'Ext.tree.Panel',
-    alias : 'widget.payment-main-tree',
-    autoShow : true,
+    extend: 'Ext.tree.Panel',
+    alias: 'widget.payment-main-tree',
+    autoShow: true,
     region: 'west',
-    name:  'tree',
+    name: 'tree',
     flex: 0.3,
     rootVisible: false,
     useArrows: false,

@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
      * The parent class that this class extends.
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Class property which holds the main application if it is created
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
     snippets: {
         additional: {
-            title:'{s name="detail/additional_fields/title"}Additional fields{/s}'
+            title: '{s name="detail/additional_fields/title"}Additional fields{/s}'
         },
         generateNeeded: {
             title: '{s name="detail/needGenerate/title"}Duplicate article{/s}',
@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
     refs: [
         { ref: 'variantListing', selector: 'article-detail-window article-variant-list' },
         { ref: 'variantTab', selector: 'article-detail-window container[name=variant-tab]' },
-        { ref: 'mediaInfo', selector:'article-detail-window article-image-info' },
+        { ref: 'mediaInfo', selector: 'article-detail-window article-image-info' },
         { ref: 'esdListing', selector: 'article-detail-window article-esd-list' },
         { ref: 'esdTab', selector: 'article-detail-window container[name=esd-tab]' },
         { ref: 'propertiesTab', selector: 'article-detail-window article-properties-panel' },

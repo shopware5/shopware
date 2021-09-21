@@ -3,27 +3,27 @@
         {
             state: 'xs',
             enter: 0,
-            exit: 29.9375   // 479px
+            exit: 29.9375 // 479px
         },
         {
             state: 's',
-            enter: 30,      // 480px
-            exit: 47.9375   // 767px
+            enter: 30, // 480px
+            exit: 47.9375 // 767px
         },
         {
             state: 'm',
-            enter: 48,      // 768px
-            exit: 63.9375   // 1023px
+            enter: 48, // 768px
+            exit: 63.9375 // 1023px
         },
         {
             state: 'l',
-            enter: 64,      // 1024px
-            exit: 78.6875   // 1259px
+            enter: 64, // 1024px
+            exit: 78.6875 // 1259px
         },
         {
             state: 'xl',
-            enter: 78.75,   // 1260px
-            exit: 322.5     // 5160px
+            enter: 78.75, // 1260px
+            exit: 322.5 // 5160px
         }
     ]);
 
@@ -78,7 +78,7 @@
             contentSelector: '.tab--content'
         }, ['xs'])
         .addPlugin('.tab-menu--cross-selling .tab--header', 'swCollapsePanel', {
-            'contentSiblingSelector': '.tab--content'
+            contentSiblingSelector: '.tab--content'
         }, ['xs', 's'])
         .addPlugin('body', 'swAjaxProductNavigation')
         .addPlugin('*[data-collapse-panel="true"]', 'swCollapsePanel')
@@ -126,7 +126,7 @@
         .addPlugin('*[data-address-selection="true"]', 'swAddressSelection')
         .addPlugin('*[data-address-editor="true"]', 'swAddressEditor')
         .addPlugin('*[data-cookie-permission="true"]', 'swCookiePermission')
-        .addPlugin('.navigation--entry.entry--account.with-slt', 'swDropdownMenu', [ 'm', 'l', 'xl' ])
+        .addPlugin('.navigation--entry.entry--account.with-slt', 'swDropdownMenu', ['m', 'l', 'xl'])
         .addPlugin('*[data-storage-field="true"]', 'swStorageField')
         .addPlugin('*[data-notification-message-close="true"]', 'swNotificationMessageClose')
         .addPlugin('*[data-cookie-consent-manager="true"]', 'swCookieConsentManager')
@@ -140,22 +140,22 @@
 
         // Create the no cookies notification message
         function createNoCookiesNoticeBox(message) {
-            $('<div/>', { 'class': 'alert is--warning no--cookies' }).append(
-                $('<div/>', {'class': 'alert--icon'}).append(
-                    $('<i/>', {'class': 'icon--element icon--warning'})
+            $('<div/>', { class: 'alert is--warning no--cookies' }).append(
+                $('<div/>', { class: 'alert--icon' }).append(
+                    $('<i/>', { class: 'icon--element icon--warning' })
                 )
             ).append(
                 $('<div/>', {
-                    'class': 'alert--content',
-                    'html': message
+                    class: 'alert--content',
+                    html: message
                 }).append(
                     $('<a/>', {
-                        'class': 'close--alert',
-                        'html': '✕'
+                        class: 'close--alert',
+                        html: '✕'
                     })
-                    .on('click', function () {
-                        $(this).closest('.no--cookies').hide();
-                    })
+                        .on('click', function () {
+                            $(this).closest('.no--cookies').hide();
+                        })
                 )
             ).appendTo('.page-wrap');
         }
@@ -217,7 +217,7 @@
                         $cartQuantity.addClass('is--hidden');
                     }
 
-                    $.publish('plugin/swResponsive/onCartRefreshSuccess', [ cart ]);
+                    $.publish('plugin/swResponsive/onCartRefreshSuccess', [cart]);
                 }
             });
         }

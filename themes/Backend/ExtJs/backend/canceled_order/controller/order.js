@@ -41,12 +41,12 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
 
     refs: [
         { ref: 'orderGrid', selector: 'canceled-order-tabs-order-orders' },
-        { ref: 'orderPositionGrid', selector:'canceled-order-view-order-position' },
-        { ref: 'detailView', selector : 'canceled-order-view-order-detail' }
+        { ref: 'orderPositionGrid', selector: 'canceled-order-view-order-position' },
+        { ref: 'detailView', selector: 'canceled-order-view-order-detail' }
     ],
 
-    snippets : {
-        deleteOrder : {
+    snippets: {
+        deleteOrder: {
             title: '{s name="deleteOrder/title"}Are you sure?{/s}',
             message: '{s name="deleteOrder/message"}Do you want to delete these order(s)?{/s}'
         },
@@ -82,8 +82,7 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
                 deleteOrder: me.onDeleteOrder,
                 openOrder: me.onOpenOrder,
                 convertOrder: me.onConvertOrder,
-//                itemClicked : me.onShowDetails,
-                selectionchange : me.onSelectionChange
+                selectionchange: me.onSelectionChange
             },
             'canceled-order-view-order-detail': {
                 sendVoucher: me.onSendVoucher,
@@ -403,7 +402,7 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
         Shopware.app.Application.addSubApplication({
             name: 'Shopware.apps.Order',
             params: {
-                orderId:record.get('id')
+                orderId: record.get('id')
             }
         });
     },

@@ -88,16 +88,16 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
         duplicateTitle: '{s name="message_duplicate_title"}Duplicate template{/s}',
         duplicateMessage: '{s name="message_duplicate_message"}Are you sure you want to duplicate the selected template?{/s}',
 
-        duplicateSuccessfullTitle :'{s name="message_duplicate_successfull_title"}Successful{/s}',
+        duplicateSuccessfullTitle: '{s name="message_duplicate_successfull_title"}Successful{/s}',
         duplicateSuccessfullMessage: '{s name="message_duplicate_successfull_message"}The email template has been duplicated.{/s}',
 
         multipleDeleteTitle: '{s name="message_delete_multiple_title"}Delete selected templates{/s}',
         multipleDeleteMessage: '{s name="message_delete_multiple_message"}Are you sure you want to delete all selected templates?{/s}',
 
-        sendmailSuccessfullTitle :'{s name="message_sendmail_successfull_title"}Successful{/s}',
+        sendmailSuccessfullTitle: '{s name="message_sendmail_successfull_title"}Successful{/s}',
         sendmailSuccessfullMessage: '{s name="message_sendmail_successfull_message"}Email has been sent.{/s}',
 
-        sendmailFailureTitle :'{s name="message_sendmail_failure_title"}Failure{/s}',
+        sendmailFailureTitle: '{s name="message_sendmail_failure_title"}Failure{/s}',
         sendmailFailureMessage: '{s name="message_sendmail_failure_message"}Email could not be sent. Errormessage:{/s}',
 
         growlMessage: '{s name="growlMessage"}Mail{/s}'
@@ -121,38 +121,38 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
 
         me.control({
             'mail-main-navigation': {
-                itemclick:       me.onItemClick,
+                itemclick: me.onItemClick,
                 beforeitemclick: me.onBeforeItemClick,
-                beforeselect:    me.onBeforeSelect,
-                checkchange:     me.onCheckChange
+                beforeselect: me.onBeforeSelect,
+                checkchange: me.onCheckChange
             },
 
-            'mail-main-window button[action=mail-window-add]' : {
+            'mail-main-window button[action=mail-window-add]': {
                 click: me.onAddMail
             },
 
-            'mail-main-window button[action=mail-window-copy]' : {
+            'mail-main-window button[action=mail-window-copy]': {
                 click: me.onCopyMail
             },
 
-            'mail-main-window button[action=mail-window-delete]' : {
+            'mail-main-window button[action=mail-window-delete]': {
                 click: me.onDelete
             },
 
-            'mail-main-window button[action=mail-window-reset]' : {
+            'mail-main-window button[action=mail-window-reset]': {
                 click: me.onReset
             },
 
-            'mail-main-window button[action=mail-window-save]' : {
+            'mail-main-window button[action=mail-window-save]': {
                 click: me.onSave
             },
 
-            'mail-main-window textfield[action=search]' : {
+            'mail-main-window textfield[action=search]': {
                 change: me.onSearch
             },
 
             'mail-main-form': {
-                dirtychange:    me.onDirtyChange
+                dirtychange: me.onDirtyChange
             },
 
             'mail-main-form tabpanel': {
@@ -160,13 +160,13 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
             },
 
             'mail-main-contentEditor': {
-                showPreview:  me.onShowPreview,
+                showPreview: me.onShowPreview,
                 sendTestMail: me.onSendTestMail
             }
         });
 
         me.mainWindow = me.getView('main.Window').create({
-            treeStore:       me.getStore('Tree'),
+            treeStore: me.getStore('Tree'),
             attachmentStore: me.getStore('Attachment')
         });
 
@@ -390,7 +390,7 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
                     }
 
                     Ext.create('Enlight.app.Window', {
-                        title : '{s name="title"}Email templates{/s}',
+                        title: '{s name="title"}Email templates{/s}',
                         autoScroll: true,
                         subApplication: me.subApplication,
                         subApp: me.subApplication,

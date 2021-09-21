@@ -35,7 +35,7 @@
              * @property wrapSelector
              * @type {String}
              */
-            'wrapSelector': '.page-wrap',
+            wrapSelector: '.page-wrap',
 
             /**
              * Whether or not the wrapper should be moved.
@@ -43,7 +43,7 @@
              * @property moveWrapper
              * @type {Boolean}
              */
-            'moveWrapper': false,
+            moveWrapper: false,
 
             /**
              * Selector of the off-canvas element
@@ -51,7 +51,7 @@
              * @property offCanvasSelector
              * @type {String}
              */
-            'offCanvasSelector': '.sidebar-main',
+            offCanvasSelector: '.sidebar-main',
 
             /**
              * Selector for an additional button to close the menu
@@ -59,7 +59,7 @@
              * @property closeButtonSelector
              * @type {String}
              */
-            'closeButtonSelector': '.entry--close-off-canvas',
+            closeButtonSelector: '.entry--close-off-canvas',
 
             /**
              * Animation direction, `fromLeft` (default) and `fromRight` are possible
@@ -67,7 +67,7 @@
              * @property direction
              * @type {String}
              */
-            'direction': 'fromLeft',
+            direction: 'fromLeft',
 
             /**
              * Additional class for the off-canvas menu for necessary styling
@@ -75,7 +75,7 @@
              * @property offCanvasElementCls
              * @type {String}
              */
-            'offCanvasElementCls': 'off-canvas',
+            offCanvasElementCls: 'off-canvas',
 
             /**
              * Class which should be added when the menu will be opened on the left side
@@ -83,7 +83,7 @@
              * @property leftMenuCls
              * @type {String}
              */
-            'leftMenuCls': 'is--left',
+            leftMenuCls: 'is--left',
 
             /**
              * Class which should be added when the menu will be opened on the right side
@@ -91,7 +91,7 @@
              * @property rightMenuCls
              * @type {String}
              */
-            'rightMenuCls': 'is--right',
+            rightMenuCls: 'is--right',
 
             /**
              * Class which indicates if the off-canvas menu is visible
@@ -99,7 +99,7 @@
              * @property activeMenuCls
              * @type {String}
              */
-            'activeMenuCls': 'is--active',
+            activeMenuCls: 'is--active',
 
             /**
              * Class which indicates if the off-canvas menu is visible
@@ -107,7 +107,7 @@
              * @property openClass
              * @type {String}
              */
-            'openClass': 'is--open',
+            openClass: 'is--open',
 
             /**
              * Flag whether to show the offcanvas menu in full screen or not.
@@ -115,7 +115,7 @@
              * @property fullscreen
              * @type {Boolean}
              */
-            'fullscreen': false,
+            fullscreen: false,
 
             /**
              * Class which sets the canvas to full screen
@@ -123,7 +123,7 @@
              * @property fullscreenCls
              * @type {String}
              */
-            'fullscreenCls': 'is--full-screen',
+            fullscreenCls: 'is--full-screen',
 
             /**
              * When this flag is set to true, the off canvas menu
@@ -132,7 +132,7 @@
              * @property disableTransitions
              * @type {Boolean}
              */
-            'disableTransitions': false,
+            disableTransitions: false,
 
             /**
              * The class that will be applied to the off canvas menu
@@ -141,7 +141,7 @@
              * @property disableTransitionCls
              * @type {String}
              */
-            'disableTransitionCls': 'no--transitions',
+            disableTransitionCls: 'no--transitions',
 
             /**
              * The mode in which the off canvas menu should be showing.
@@ -153,14 +153,14 @@
              *
              * @type {String}
              */
-            'mode': 'local',
+            mode: 'local',
 
             /**
              * The URL that will be called when the menu is in 'ajax' mode.
              *
              * @type {String}
              */
-            'ajaxURL': '',
+            ajaxURL: '',
 
             /**
              * If this is set to true, the plugin will search its content container for an element matching the
@@ -168,14 +168,14 @@
              *
              * @type {Boolean}
              */
-            'autoOpen': false,
+            autoOpen: false,
 
             /**
              * The selector used to automatically open the offcanvas menu.
              *
              * @type {String}
              */
-            'autoOpenSelector': ''
+            autoOpenSelector: ''
         },
 
         /**
@@ -202,7 +202,7 @@
 
             if (opts.mode === 'ajax') {
                 $offCanvas = me.$offCanvas = $('<div>', {
-                    'class': opts.offCanvasElementCls
+                    class: opts.offCanvasElementCls
                 }).appendTo('body');
             } else {
                 $offCanvas = me.$offCanvas = $(opts.offCanvasSelector);
@@ -251,7 +251,7 @@
                 $.subscribe(me.getEventName('plugin/swOffcanvasMenu/onInit'), $.proxy(me.onAutoOpen, me));
             }
 
-            $.publish('plugin/swOffcanvasMenu/onRegisterEvents', [ me ]);
+            $.publish('plugin/swOffcanvasMenu/onRegisterEvents', [me]);
         },
 
         /**
@@ -287,7 +287,7 @@
 
             me.openMenu();
 
-            $.publish('plugin/swOffcanvasMenu/onClickElement', [ me, event ]);
+            $.publish('plugin/swOffcanvasMenu/onClickElement', [me, event]);
         },
 
         /**
@@ -308,7 +308,7 @@
                 window.history.back();
             }
 
-            $.publish('plugin/swOffcanvasMenu/onClickCloseButton', [ me, event ]);
+            $.publish('plugin/swOffcanvasMenu/onClickCloseButton', [me, event]);
         },
 
         /**
@@ -337,7 +337,7 @@
             }
             me.isOpened = true;
 
-            $.publish('plugin/swOffcanvasMenu/onBeforeOpenMenu', [ me ]);
+            $.publish('plugin/swOffcanvasMenu/onBeforeOpenMenu', [me]);
 
             $html.addClass('no--scroll');
 
@@ -357,7 +357,7 @@
 
             window.history.pushState('offcanvas-open', '');
 
-            $.publish('plugin/swOffcanvasMenu/onOpenMenu', [ me ]);
+            $.publish('plugin/swOffcanvasMenu/onOpenMenu', [me]);
 
             if (opts.mode === 'ajax' && opts.ajaxURL) {
                 $.ajax({
@@ -396,7 +396,7 @@
 
             me.$offCanvas.removeClass(opts.openClass);
 
-            $.publish('plugin/swOffcanvasMenu/onCloseMenu', [ me ]);
+            $.publish('plugin/swOffcanvasMenu/onCloseMenu', [me]);
         },
 
         /**

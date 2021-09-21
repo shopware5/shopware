@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Base.store.PositionStatus', {
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Base.model.PositionStatus',
+    model: 'Shopware.apps.Base.model.PositionStatus',
     alternateClassName: 'Shopware.store.PositionStatus',
     storeId: 'base.PositionStatus',
     pageSize: 1000,
@@ -56,24 +56,24 @@ Ext.define('Shopware.apps.Base.store.PositionStatus', {
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        url:'{url action="getDetailStatus"}',
+        url: '{url action="getDetailStatus"}',
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
+        reader: {
             type: 'json',
             root: 'data',
             totalProperty: 'total'

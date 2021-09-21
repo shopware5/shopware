@@ -104,7 +104,7 @@ Ext.define('Shopware.apps.Feedback.view.preview.Window', {
         me.dockedItems = [{
             xtype: 'toolbar',
             dock: 'bottom',
-            items:[me.checkbox, '->', me.cancelButton, me.issueTrackerButton]
+            items: [me.checkbox, '->', me.cancelButton, me.issueTrackerButton]
         }];
 
         me.callParent(arguments);

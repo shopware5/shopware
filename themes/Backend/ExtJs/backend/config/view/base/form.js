@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Config.view.base.Form', {
             items.push({
                 iconCls: 'sprite-minus-circle-frame',
                 action: 'delete',
-                tooltip:'{s name="form/delete_tooltip"}Delete (ALT + DELETE){/s}',
+                tooltip: '{s name="form/delete_tooltip"}Delete (ALT + DELETE){/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('delete', me, record);
                 },

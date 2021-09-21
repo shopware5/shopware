@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
      * Define that the billing field set is an extension of the Ext.form.FieldSet
      * @string
      */
-    extend:'Ext.form.FieldSet',
+    extend: 'Ext.form.FieldSet',
 
     /**
      * The Ext.container.Container.layout for the fieldset's immediate child items.
@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-settings-field-set',
+    alias: 'widget.article-settings-field-set',
     /**
      * Set css class for this component
      * @string
@@ -67,9 +67,9 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
-        title:'{s name="detail/settings/title"}Settings{/s}',
-        supplierNumber:'{s name="detail/settings/supplier_number"}Supplier number{/s}',
+    snippets: {
+        title: '{s name="detail/settings/title"}Settings{/s}',
+        supplierNumber: '{s name="detail/settings/supplier_number"}Supplier number{/s}',
         avoidCustomerGroups: {
             label: '{s name="detail/settings/avoid_customer_groups_label"}Avoid customer groups{/s}',
             support: '{s name="detail/settings/avoid_customer_groups_support"}Here you have the opportunity to deactivate the article for different customer groups.{/s}'
@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this,
             mainWindow = me.subApp.articleWindow;
 
@@ -133,41 +133,41 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
      *
      * @return array Contains the left and right container
      */
-    createElements:function () {
+    createElements: function () {
         var leftContainer, rightContainer, me = this, bottomContainer;
 
         bottomContainer = Ext.create('Ext.container.Container', {
-            columnWidth:1,
+            columnWidth: 1,
             defaults: {
                 labelWidth: 155,
                 anchor: '100%'
             },
             layout: 'anchor',
-            border:false,
+            border: false,
             items: me.createBottomElements()
         });
 
         leftContainer = Ext.create('Ext.container.Container', {
-            columnWidth:0.5,
+            columnWidth: 0.5,
             defaults: {
                 labelWidth: 155,
                 anchor: '100%'
             },
             padding: '0 20 0 0',
             layout: 'anchor',
-            border:false,
-            items:me.createLeftElements()
+            border: false,
+            items: me.createLeftElements()
         });
 
         rightContainer = Ext.create('Ext.container.Container', {
-            columnWidth:0.5,
+            columnWidth: 0.5,
             layout: 'anchor',
             defaults: {
                 labelWidth: 155,
                 anchor: '100%'
             },
-            border:false,
-            items:me.createRightElements()
+            border: false,
+            items: me.createRightElements()
         });
 
         return [ leftContainer, rightContainer, bottomContainer ] ;
@@ -281,21 +281,21 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
                 fieldLabel: me.snippets.shippingFree.field,
                 boxLabel: me.snippets.shippingFree.box,
                 inputValue: true,
-                uncheckedValue:false
+                uncheckedValue: false
             }, {
                 xtype: 'checkboxfield',
                 name: 'highlight',
                 fieldLabel: me.snippets.highlight.field,
                 boxLabel: me.snippets.highlight.box,
                 inputValue: true,
-                uncheckedValue:false
+                uncheckedValue: false
             }, {
                 xtype: 'checkboxfield',
                 name: 'lastStock',
                 fieldLabel: me.snippets.onSale.field,
                 boxLabel: me.snippets.onSale.box,
                 inputValue: true,
-                uncheckedValue:false
+                uncheckedValue: false
             }, {
                 xtype: 'textfield',
                 name: 'mainDetail[ean]',

@@ -75,30 +75,30 @@ Ext.define('Shopware.apps.Base.store.User', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.Base.model.User',
+    model: 'Shopware.apps.Base.model.User',
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        url:'{url action="getUsers"}',
+        url: '{url action="getUsers"}',
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Partner.store.StatisticList', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Auto load the store after the component
      * is initialized
@@ -57,16 +57,16 @@ Ext.define('Shopware.apps.Partner.store.StatisticList', {
      */
     remoteSort: true,
 
-    remoteFilter : true,
+    remoteFilter: true,
     /**
      * Amount of data loaded at once
      * @integer
      */
-    pageSize:10,
+    pageSize: 10,
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Partner.model.StatisticList'
+    model: 'Shopware.apps.Partner.model.StatisticList'
 });
 //{/block}

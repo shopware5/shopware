@@ -49,8 +49,8 @@
  * });
  */
 Ext.define('Shopware.form.field.ComboTree', {
-    extend:'Ext.form.Picker',
-    alias:'widget.combotree',
+    extend: 'Ext.form.Picker',
+    alias: 'widget.combotree',
     requires: [ 'Ext.tree.Panel' ],
     matchFieldWidth: false,
 
@@ -73,13 +73,13 @@ Ext.define('Shopware.form.field.ComboTree', {
      *
      * @return Ext.tree.Panel
      */
-    createPicker:function () {
+    createPicker: function () {
         var me = this;
 
         var treeConfig = Ext.apply({
             floating: true,
             hidden: true,
-            width:me.bodyEl.getWidth(),
+            width: me.bodyEl.getWidth(),
             store: me.store,
             displayField: 'name',
             useArrows: true,
@@ -87,9 +87,9 @@ Ext.define('Shopware.form.field.ComboTree', {
             autoScroll: true,
             queryMode: 'remote',
             height: 300,
-            listeners:{
-                scope:me,
-                itemclick:me.onItemClick
+            listeners: {
+                scope: me,
+                itemclick: me.onItemClick
             },
             flex: 1,
             root: {
@@ -113,7 +113,7 @@ Ext.define('Shopware.form.field.ComboTree', {
      * @param e
      * @param eOpts
      */
-    onItemClick:function(view, record, item, index, e, eOpts){
+    onItemClick: function(view, record, item, index, e, eOpts){
         this.setFieldValue(record.data.id, record.data.name);
         this.fireEvent('select', this, record.data.name);
         this.collapse();
@@ -153,7 +153,7 @@ Ext.define('Shopware.form.field.ComboTree', {
      *
      * @param value
      */
-    setValue:function(value){
+    setValue: function(value){
         var me = this,
             inputEl = me.inputEl;
 
@@ -173,7 +173,7 @@ Ext.define('Shopware.form.field.ComboTree', {
      * sets the RawValue
      * @param value
      */
-    setRawValue:function(value){
+    setRawValue: function(value){
         this.inputEl.dom.value = value==null?"":value;
     },
 
@@ -181,7 +181,7 @@ Ext.define('Shopware.form.field.ComboTree', {
      * get the Value
      * @return Ext.value
      */
-    getValue:function(){
+    getValue: function(){
         return this.value;
     },
 
@@ -189,7 +189,7 @@ Ext.define('Shopware.form.field.ComboTree', {
      * get the RawValue
      * @return Ext.value
      */
-    getRawValue:function(){
+    getRawValue: function(){
         if(this.inputEl){
             return this.inputEl.dom.value;
         }

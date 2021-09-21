@@ -38,8 +38,8 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
 
     extend: 'Ext.app.Controller',
 
-    refs:[
-        { ref:'recipientGrid', selector:'newsletter-manager-tabs-recipients' }
+    refs: [
+        { ref: 'recipientGrid', selector: 'newsletter-manager-tabs-recipients' }
     ],
 
     snippets: {

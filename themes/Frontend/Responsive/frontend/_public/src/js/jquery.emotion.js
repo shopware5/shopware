@@ -40,11 +40,11 @@
              * @type {object}
              */
             deviceTypes: {
-                'xl': '0',
-                'l': '1',
-                'm': '2',
-                's': '3',
-                'xs': '4'
+                xl: '0',
+                l: '1',
+                m: '2',
+                s: '3',
+                xs: '4'
             },
 
             /**
@@ -108,7 +108,7 @@
 
             StateManager.on('resize', $.proxy(me.onDeviceChange, me));
 
-            $.publish('plugin/swEmotionLoader/onRegisterEvents', [ me ]);
+            $.publish('plugin/swEmotionLoader/onRegisterEvents', [me]);
         },
 
         /**
@@ -119,7 +119,7 @@
 
             me.loadEmotion();
 
-            $.publish('plugin/swEmotionLoader/onDeviceChange', [ me ]);
+            $.publish('plugin/swEmotionLoader/onDeviceChange', [me]);
         },
 
         /**
@@ -184,7 +184,7 @@
                         me.isLoading = false;
                         me.$overlay.remove();
 
-                        $.publish('plugin/swEmotionLoader/onLoadEmotionLoaded', [ me ]);
+                        $.publish('plugin/swEmotionLoader/onLoadEmotionLoaded', [me]);
 
                         if (!response.length) {
                             me.hideEmotion();
@@ -193,7 +193,7 @@
 
                         me.initEmotion(response);
 
-                        $.publish('plugin/swEmotionLoader/onLoadEmotionFinished', [ me ]);
+                        $.publish('plugin/swEmotionLoader/onLoadEmotionFinished', [me]);
                     }
                 });
             } else {
@@ -204,7 +204,7 @@
                 me.initEmotion();
             }
 
-            $.publish('plugin/swEmotionLoader/onLoadEmotion', [ me ]);
+            $.publish('plugin/swEmotionLoader/onLoadEmotion', [me]);
         },
 
         /**
@@ -229,7 +229,7 @@
 
             me.$emotion.swEmotion();
 
-            $.publish('plugin/swEmotionLoader/onInitEmotion', [ me, html ]);
+            $.publish('plugin/swEmotionLoader/onInitEmotion', [me, html]);
         },
 
         /**
@@ -240,7 +240,7 @@
 
             me.$el.css('display', 'block');
 
-            $.publish('plugin/swEmotionLoader/onShowEmotion', [ me ]);
+            $.publish('plugin/swEmotionLoader/onShowEmotion', [me]);
         },
 
         /**
@@ -251,7 +251,7 @@
 
             me.$el.css('display', 'none');
 
-            $.publish('plugin/swEmotionLoader/onHideEmotion', [ me ]);
+            $.publish('plugin/swEmotionLoader/onHideEmotion', [me]);
         },
 
         /**
@@ -473,7 +473,7 @@
 
             window.picturefill();
 
-            $.publish('plugin/swEmotion/onInitElements', [ me ]);
+            $.publish('plugin/swEmotion/onInitElements', [me]);
         },
 
         /**
@@ -486,7 +486,7 @@
             me.$contentMain.addClass('is--fullscreen');
             me.$wrapper.addClass('is--fullscreen');
 
-            $.publish('plugin/swEmotion/onInitFullscreen', [ me ]);
+            $.publish('plugin/swEmotion/onInitFullscreen', [me]);
         },
 
         /**
@@ -499,7 +499,7 @@
             me.$contentMain.removeClass('is--fullscreen');
             me.$wrapper.removeClass('is--fullscreen');
 
-            $.publish('plugin/swEmotion/onRemoveFullscreen', [ me, showSidebar ]);
+            $.publish('plugin/swEmotion/onRemoveFullscreen', [me, showSidebar]);
         },
 
         /**
@@ -513,7 +513,7 @@
              */
             me.initFluidGrid();
 
-            $.publish('plugin/swEmotion/onInitMasonryGrid', [ me ]);
+            $.publish('plugin/swEmotion/onInitMasonryGrid', [me]);
         },
 
         /**
@@ -525,7 +525,7 @@
             me.setElementHeights();
             me.setElementPositions();
 
-            $.publish('plugin/swEmotion/onInitFluidGrid', [ me ]);
+            $.publish('plugin/swEmotion/onInitFluidGrid', [me]);
         },
 
         /**
@@ -547,7 +547,7 @@
 
             me.scale();
 
-            $.publish('plugin/swEmotion/onInitScaleGrid', [ me ]);
+            $.publish('plugin/swEmotion/onInitScaleGrid', [me]);
         },
 
         /**
@@ -557,7 +557,7 @@
             var me = this,
                 r, c, rowCls, colCls, element, elementCols, lastCol = 0,
                 colExp = new RegExp(' col' + me.clsPrefix + '-(\\d)', 'i'),
-                hiddenElements = $('<div>', { 'class': 'hidden-elements' }),
+                hiddenElements = $('<div>', { class: 'hidden-elements' }),
                 rows = [];
 
             // Save hidden elements in new element for later use
@@ -565,7 +565,7 @@
 
             // Iterate through all rows and create wrapper elements for each row
             for (r = 1; r <= me.rows; r++) {
-                rows[r] = $('<div>', { 'class': 'emotion--row row--' + r });
+                rows[r] = $('<div>', { class: 'emotion--row row--' + r });
                 lastCol = 0;
 
                 // Iterate through each column of the row and add the corresponding elements to the row
@@ -600,7 +600,7 @@
                 me.$el.append($row);
             });
 
-            $.publish('plugin/swEmotion/onInitRowsGrid', [ me, rows, hiddenElements ]);
+            $.publish('plugin/swEmotion/onInitRowsGrid', [me, rows, hiddenElements]);
         },
 
         /**
@@ -616,7 +616,7 @@
                 $.subscribe(me.getEventName('plugin/swEmotionLoader/onHideEmotion'), $.proxy(me.onHide, me));
             }
 
-            $.publish('plugin/swEmotion/onRegisterEvents', [ me ]);
+            $.publish('plugin/swEmotion/onRegisterEvents', [me]);
         },
 
         /**
@@ -646,7 +646,7 @@
 
             me.currentState = state;
 
-            $.publish('plugin/swEmotion/onResize', [ me, me.currentState ]);
+            $.publish('plugin/swEmotion/onResize', [me, me.currentState]);
         },
 
         onShow: function(event, emotion) {
@@ -656,7 +656,7 @@
                 me.initFullscreen();
             }
 
-            $.publish('plugin/swEmotion/onShow', [ me, event, emotion ]);
+            $.publish('plugin/swEmotion/onShow', [me, event, emotion]);
         },
 
         onHide: function(event, emotion) {
@@ -666,7 +666,7 @@
                 me.removeFullscreen();
             }
 
-            $.publish('plugin/swEmotion/onHide', [ me, event, emotion ]);
+            $.publish('plugin/swEmotion/onHide', [me, event, emotion]);
         },
 
         /**
@@ -679,7 +679,7 @@
                 'margin-left': -me.remSpacing + 'rem'
             });
 
-            $.publish('plugin/swEmotion/onSetContainerSpacing', [ me ]);
+            $.publish('plugin/swEmotion/onSetContainerSpacing', [me]);
         },
 
         /**
@@ -693,7 +693,7 @@
                 me.$elements.filter('.start-row' + me.clsPrefix + '-' + i).css('top', top + '%');
             }
 
-            $.publish('plugin/swEmotion/onSetElementPositions', [ me ]);
+            $.publish('plugin/swEmotion/onSetElementPositions', [me]);
         },
 
         /**
@@ -707,7 +707,7 @@
                 me.$elements.filter('.row' + me.clsPrefix + '-' + i).css('height', height + '%');
             }
 
-            $.publish('plugin/swEmotion/onSetElementHeights', [ me ]);
+            $.publish('plugin/swEmotion/onSetElementHeights', [me]);
         },
 
         /**
@@ -722,16 +722,16 @@
                 wrapperHeight = width / ratio;
 
             $.extend(containerStyle, {
-                'MsTransform': 'scale(' + factor + ') translateX(' + -me.remSpacing + 'rem)',
-                'OTransform': 'scale(' + factor + ') translateX(' + -me.remSpacing + 'rem)',
-                'MozTransform': 'scale(' + factor + ') translateX(' + -me.remSpacing + 'rem)',
-                'webkitTransform': 'scale(' + factor + ') translateX(' + -me.remSpacing + 'rem)',
-                'transform': 'scale(' + factor + ') translateX(' + -me.remSpacing + 'rem)'
+                MsTransform: 'scale(' + factor + ') translateX(' + -me.remSpacing + 'rem)',
+                OTransform: 'scale(' + factor + ') translateX(' + -me.remSpacing + 'rem)',
+                MozTransform: 'scale(' + factor + ') translateX(' + -me.remSpacing + 'rem)',
+                webkitTransform: 'scale(' + factor + ') translateX(' + -me.remSpacing + 'rem)',
+                transform: 'scale(' + factor + ') translateX(' + -me.remSpacing + 'rem)'
             });
 
             me.$wrapper.css('height', wrapperHeight);
 
-            $.publish('plugin/swEmotion/onScale', [ me, width, factor, wrapperHeight ]);
+            $.publish('plugin/swEmotion/onScale', [me, width, factor, wrapperHeight]);
         },
 
         /**
@@ -747,7 +747,7 @@
 
             me.bufferedCall = window.setTimeout($.proxy(func, me), bufferTime);
 
-            $.publish('plugin/swEmotion/onBuffer', [ me, me.bufferedCall, func, bufferTime ]);
+            $.publish('plugin/swEmotion/onBuffer', [me, me.bufferedCall, func, bufferTime]);
         },
 
         /**
@@ -825,7 +825,7 @@
 
             me._on(me.$el, 'emotionResize', $.proxy(me.resizeBanner, me));
 
-            $.publish('plugin/swEmotionBanner/onRegisterEvents', [ me ]);
+            $.publish('plugin/swEmotionBanner/onRegisterEvents', [me]);
         },
 
         /**
@@ -842,17 +842,17 @@
                 bannerHeight = orientation ? '100%' : containerWidth / me.imageRatio;
 
             me.$container.css({
-                'width': bannerWidth,
-                'height': bannerHeight
+                width: bannerWidth,
+                height: bannerHeight
             });
 
             if (me._hasPictureElement) {
                 me.$image.css({
-                    'width': bannerWidth
+                    width: bannerWidth
                 });
             }
 
-            $.publish('plugin/swEmotionBanner/onResizeBanner', [ me ]);
+            $.publish('plugin/swEmotionBanner/onResizeBanner', [me]);
         },
 
         /**
@@ -998,7 +998,7 @@
             me._on(me.$videoCover, 'click', $.proxy(me.onPlayClick, me));
             me._on(me.$playBtn, 'click', $.proxy(me.onPlayClick, me));
 
-            $.publish('plugin/swEmotionVideo/onRegisterEvents', [ me ]);
+            $.publish('plugin/swEmotionVideo/onRegisterEvents', [me]);
         },
 
         /**
@@ -1014,7 +1014,7 @@
 
             me.resizeVideo();
 
-            $.publish('plugin/swEmotionVideo/onLoadMeta', [ me, event ]);
+            $.publish('plugin/swEmotionVideo/onLoadMeta', [me, event]);
         },
 
         /**
@@ -1028,7 +1028,7 @@
                 me.$playBtnIcon.addClass(me.opts.pauseIconCls).removeClass(me.opts.playIconCls);
             }
 
-            $.publish('plugin/swEmotionVideo/onCanPlay', [ me, event ]);
+            $.publish('plugin/swEmotionVideo/onCanPlay', [me, event]);
         },
 
         /**
@@ -1039,7 +1039,7 @@
 
             me.$videoCover.hide();
 
-            $.publish('plugin/swEmotionVideo/onVideoPlay', [ me, event ]);
+            $.publish('plugin/swEmotionVideo/onVideoPlay', [me, event]);
         },
 
         /**
@@ -1051,7 +1051,7 @@
 
             me.$playBtnIcon.removeClass(me.opts.pauseIconCls).addClass(me.opts.playIconCls);
 
-            $.publish('plugin/swEmotionVideo/onVideoEnded', [ me, event ]);
+            $.publish('plugin/swEmotionVideo/onVideoEnded', [me, event]);
         },
 
         /**
@@ -1065,7 +1065,7 @@
 
             (me.player.paused) ? me.playVideo() : me.stopVideo();
 
-            $.publish('plugin/swEmotionVideo/onPlayClick', [ me, event ]);
+            $.publish('plugin/swEmotionVideo/onPlayClick', [me, event]);
         },
 
         /**
@@ -1077,7 +1077,7 @@
             me.$playBtnIcon.addClass(me.opts.pauseIconCls).removeClass(me.opts.playIconCls);
             me.player.play();
 
-            $.publish('plugin/swEmotionVideo/onPlayVideo', [ me ]);
+            $.publish('plugin/swEmotionVideo/onPlayVideo', [me]);
         },
 
         /**
@@ -1089,7 +1089,7 @@
             me.$playBtnIcon.removeClass(me.opts.pauseIconCls).addClass(me.opts.playIconCls);
             me.player.pause();
 
-            $.publish('plugin/swEmotionVideo/onStopVideo', [ me ]);
+            $.publish('plugin/swEmotionVideo/onStopVideo', [me]);
         },
 
         /**
@@ -1138,7 +1138,7 @@
                 }
             }
 
-            $.publish('plugin/swEmotionVideo/onResizeVideo', [ me ]);
+            $.publish('plugin/swEmotionVideo/onResizeVideo', [me]);
         },
 
         /**
@@ -1161,7 +1161,7 @@
                 'transform-origin': origin
             });
 
-            $.publish('plugin/swEmotionVideo/onSetScaleOrigin', [ me, x, y ]);
+            $.publish('plugin/swEmotionVideo/onSetScaleOrigin', [me, x, y]);
         },
 
         /**
@@ -1174,14 +1174,14 @@
                 videoElementStyle = me.player.style;
 
             $.extend(videoElementStyle, {
-                'MsTransform': transformation,
-                'OTransform': transformation,
-                'MozTransform': transformation,
-                'webkitTransform': transformation,
-                'transform': transformation
+                MsTransform: transformation,
+                OTransform: transformation,
+                MozTransform: transformation,
+                webkitTransform: transformation,
+                transform: transformation
             });
 
-            $.publish('plugin/swEmotionVideo/onTransformVideo', [ me, transformation ]);
+            $.publish('plugin/swEmotionVideo/onTransformVideo', [me, transformation]);
         },
 
         /**

@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
                 xtype: 'button',
                 iconCls: 'sprite-filter',
                 text: me.snippets.filter.button,
-                tooltip : me.snippets.filter.tooltip,
+                tooltip: me.snippets.filter.tooltip,
                 handler: function(button) {
                     me.fireEvent('filter', me.fromDate.getValue(), me.toDate.getValue());
                 }
@@ -135,13 +135,13 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
         var me = this;
 
         return {
-            xtype : 'textfield',
-            name : 'searchfield',
-            action : 'searchSupplier',
+            xtype: 'textfield',
+            name: 'searchfield',
+            action: 'searchSupplier',
             width: 170,
             cls: 'searchfield',
-            enableKeyEvents : true,
-            emptyText : '{s name="search_empty"}Search...{/s}',
+            enableKeyEvents: true,
+            emptyText: '{s name="search_empty"}Search...{/s}',
             checkChangeBuffer: 700,
             listeners: {
                 scope: me,

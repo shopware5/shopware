@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.UserManager.model.User', {
         'active',
         'admin',
         'failedlogins',
-        { name: 'lastLogin', type: 'date'}
+        { name: 'lastLogin', type: 'date' }
     ],
     proxy: {
         type: 'ajax',

@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
                 iconCls: 'sprite-minus-circle',
                 cls: 'delete',
                 tooltip: '{s name="roleslist/colactiondelete"}{/s}',
-                handler:function (view, rowIndex, colIndex, item) {
+                handler: function (view, rowIndex, colIndex, item) {
                     me.fireEvent('deleteRole', view, rowIndex, colIndex, item);
                 },
                 getClass: function(value, metaData, record) {

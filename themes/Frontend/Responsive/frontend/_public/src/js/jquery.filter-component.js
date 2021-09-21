@@ -14,7 +14,7 @@
      */
     var specialComponents = {
 
-        'value': {
+        value: {
             updateFacet: function(data) {
                 var me = this;
 
@@ -62,7 +62,7 @@
                     var $el = $(event.currentTarget);
                     if ($el.is(':checked')) {
                         me.$inputs.not($el).attr('disabled', 'disabled').parent().addClass('is--disabled');
-                        
+
                         /**
                          * set timeout to be able to see the change before the dropdown is closed
                          */
@@ -90,7 +90,7 @@
             }
         },
 
-        'radio': {
+        radio: {
             compOpts: {
                 radioInputSelector: 'input[type="radio"]'
             },
@@ -216,7 +216,7 @@
         /**
          * Range-Slider component
          */
-        'range': {
+        range: {
 
             compOpts: {
                 rangeSliderSelector: '*[data-range-slider="true"]'
@@ -274,7 +274,7 @@
             }
         },
 
-        'date': {
+        date: {
 
             compOpts: {
                 datePickerSelector: '*[data-datepicker="true"]'
@@ -320,7 +320,7 @@
                     }
                 }
 
-                $.publish('plugin/swFilterComponent/onChange', [ me, event ]);
+                $.publish('plugin/swFilterComponent/onChange', [me, event]);
             },
 
             triggerChange: function (event) {
@@ -443,7 +443,7 @@
         /**
          * Rating component
          */
-        'rating': {
+        rating: {
 
             compOpts: {
                 starInputSelector: '.filter-panel--star-rating input'
@@ -586,7 +586,7 @@
         onUpdateFacets: function(event, plugin, response) {
             var me = this;
 
-            if (!response.hasOwnProperty('facets')) {
+            if (!Object.prototype.hasOwnProperty.call(response, 'facets')) {
                 return;
             }
             var facet = me.getFacet(response.facets, me.facetName);
@@ -604,7 +604,7 @@
 
             me.registerComponentEvents();
 
-            $.publish('plugin/swFilterComponent/onInitComponent', [ me ]);
+            $.publish('plugin/swFilterComponent/onInitComponent', [me]);
         },
 
         /**
@@ -617,7 +617,7 @@
                 me._on(me.$title, 'click', $.proxy(me.toggleCollapse, me, true));
             }
 
-            $.publish('plugin/swFilterComponent/onRegisterEvents', [ me ]);
+            $.publish('plugin/swFilterComponent/onRegisterEvents', [me]);
         },
 
         /**
@@ -629,7 +629,7 @@
 
             me._on(me.$inputs, 'change', $.proxy(me.onChange, me));
 
-            $.publish('plugin/swFilterComponent/onRegisterComponentEvents', [ me ]);
+            $.publish('plugin/swFilterComponent/onRegisterComponentEvents', [me]);
         },
 
         /**
@@ -646,7 +646,7 @@
 
             me.$el.trigger('onChange', [me, $el]);
 
-            $.publish('plugin/swFilterComponent/onChange', [ me, event ]);
+            $.publish('plugin/swFilterComponent/onChange', [me, event]);
         },
 
         /**
@@ -672,7 +672,7 @@
 
             me.$el.addClass(me.opts.collapseCls);
 
-            $.publish('plugin/swFilterComponent/onOpen', [ me ]);
+            $.publish('plugin/swFilterComponent/onOpen', [me]);
         },
 
         /**
@@ -683,7 +683,7 @@
 
             me.$el.removeClass(me.opts.collapseCls);
 
-            $.publish('plugin/swFilterComponent/onClose', [ me ]);
+            $.publish('plugin/swFilterComponent/onClose', [me]);
         },
 
         /**
@@ -704,7 +704,7 @@
                 me.close();
             }
 
-            $.publish('plugin/swFilterComponent/onToggleCollapse', [ me, shouldOpen ]);
+            $.publish('plugin/swFilterComponent/onToggleCollapse', [me, shouldOpen]);
         },
 
         /**
@@ -1012,7 +1012,7 @@
                 return [];
             }
 
-            if (data.hasOwnProperty('values')) {
+            if (Object.prototype.hasOwnProperty.call(data, 'values')) {
                 return data.values;
             }
 

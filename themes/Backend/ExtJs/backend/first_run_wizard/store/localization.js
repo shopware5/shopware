@@ -34,7 +34,7 @@
 
 Ext.define('Shopware.apps.FirstRunWizard.store.Localization', {
     extend: 'Ext.data.Store',
-    model : 'Shopware.apps.FirstRunWizard.model.Localization',
+    model: 'Shopware.apps.FirstRunWizard.model.Localization',
     proxy: {
         type: 'ajax',
         url: '{url action=getLocalizations controller=FirstRunWizardPluginManager}',

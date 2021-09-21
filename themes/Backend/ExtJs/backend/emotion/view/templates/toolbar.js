@@ -89,8 +89,8 @@ Ext.define('Shopware.apps.Emotion.view.templates.Toolbar', {
             emptyText: me.snippets.searchField,
             cls: 'searchfield',
             width: 200,
-            enableKeyEvents:true,
-            checkChangeBuffer:500,
+            enableKeyEvents: true,
+            checkChangeBuffer: 500,
             listeners: {
                 change: function(field, value) {
                     me.fireEvent('searchGrids', value);

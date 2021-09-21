@@ -42,8 +42,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
 
     border: false,
 
-    snippets : {
-        columns : {
+    snippets: {
+        columns: {
             mail: '{s name="columns/mailAddress"}Mail address{/s}',
             senderName: '{s name="columns/senderName"}Sender\'s name{/s}',
             actions: '{s name="columns/actions"}Actions{/s}'
@@ -89,12 +89,12 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
      *
      * @return Ext.selection.CheckboxModel
      */
-    getGridSelModel : function() {
+    getGridSelModel: function() {
         var me = this;
         return Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
+            listeners: {
                 // Unlocks the delete button if the user has checked at least one checkbox
-                selectionchange:function (sm, selections) {
+                selectionchange: function (sm, selections) {
                     me.deleteSenderButton.setDisabled(selections.length === 0);
                 }
             }
@@ -131,9 +131,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
             },
             {
                 header: me.snippets.columns.actions,
-                xtype : 'actioncolumn',
-                width : 80,
-                items : me.getActionColumn()
+                xtype: 'actioncolumn',
+                width: 80,
+                items: me.getActionColumn()
             }
         ];
     },
@@ -144,15 +144,15 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
      *
      * @return Array of buttons
      */
-    getActionColumn : function() {
+    getActionColumn: function() {
         var me = this;
 
         return [
             /*{if {acl_is_allowed privilege=delete}}*/
             {
-                iconCls:'sprite-minus-circle-frame',
-                action:'delete',
-                tooltip:'{s name="action/delete"}Delete{/s}',
+                iconCls: 'sprite-minus-circle-frame',
+                action: 'delete',
+                tooltip: '{s name="action/delete"}Delete{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('deleteSender', [record]);
                 }
@@ -160,9 +160,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
             /*{/if}*/
             /*{if {acl_is_allowed privilege=write}}*/
             {
-                iconCls:'sprite-pencil',
-                action:'view',
-                tooltip:'{s name="action/edit"}Edit mail{/s}',
+                iconCls: 'sprite-pencil',
+                action: 'view',
+                tooltip: '{s name="action/edit"}Edit mail{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('editSender', record);
                 }

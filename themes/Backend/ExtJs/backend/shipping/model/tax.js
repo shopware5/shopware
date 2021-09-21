@@ -38,6 +38,6 @@ Ext.define('Shopware.apps.Shipping.model.Tax', {
      * Extends the default extjs 4 model
      * @string
      */
-    extend : 'Shopware.apps.Base.model.Tax'
+    extend: 'Shopware.apps.Base.model.Tax'
 });
 //{/block}

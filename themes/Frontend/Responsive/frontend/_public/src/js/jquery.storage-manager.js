@@ -84,7 +84,7 @@
 
         // test for safari's "QUOTA_EXCEEDED_ERR: DOM Exception 22" issue.
         for (p in storage) {
-            if (!storage.hasOwnProperty(p)) {
+            if (!Object.prototype.hasOwnProperty.call(storage, p)) {
                 continue;
             }
 

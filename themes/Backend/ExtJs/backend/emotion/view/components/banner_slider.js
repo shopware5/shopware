@@ -164,7 +164,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
             header: '&#009868;',
             width: 24,
             hideable: false,
-            renderer : me.renderSorthandleColumn
+            renderer: me.renderSorthandleColumn
         }, {
             dataIndex: 'path',
             header: snippets.path,

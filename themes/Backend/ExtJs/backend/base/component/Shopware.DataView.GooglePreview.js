@@ -51,7 +51,7 @@ Ext.define('Shopware.DataView.GooglePreview',
     /**
      * Based on Ext.panel.Panel
      */
-    extend:'Ext.container.Container',
+    extend: 'Ext.container.Container',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets
@@ -89,7 +89,7 @@ Ext.define('Shopware.DataView.GooglePreview',
     /**
      * support text under the preview
      */
-    supportText:'',
+    supportText: '',
 
     /**
      * The button text
@@ -99,18 +99,18 @@ Ext.define('Shopware.DataView.GooglePreview',
     /**
      * standard layout
      */
-    layout:{
-        type:'vbox'
+    layout: {
+        type: 'vbox'
     },
 
     /**
      * Init the component
      */
-    initComponent : function() {
+    initComponent: function() {
         var me = this;
         me.fieldSet = Ext.create('Ext.form.FieldSet', {
-            layout:'anchor',
-            padding:10,
+            layout: 'anchor',
+            padding: 10,
             width: '100%',
             title: me.fieldSetTitle,
             items: [ me.createPreviewView() ]
@@ -119,8 +119,8 @@ Ext.define('Shopware.DataView.GooglePreview',
         me.refreshButton = Ext.create('Ext.Button', {
             text: me.refreshButtonText,
             cls: 'primary',
-            scope:me,
-            handler:function () {
+            scope: me,
+            handler: function () {
                 me.refreshView();
             }
         });

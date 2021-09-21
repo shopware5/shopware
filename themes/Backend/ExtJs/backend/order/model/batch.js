@@ -42,8 +42,8 @@ Ext.define('Shopware.apps.Order.model.Batch', {
      */
     fields: [
         //{block name="backend/order/model/batch/fields"}{/block}
-        { name : 'success', type: 'bool', default: null },
-        { name : 'errorMessage', type: 'string', useNull: true, default: null }
+        { name: 'success', type: 'bool', default: null },
+        { name: 'errorMessage', type: 'string', useNull: true, default: null }
     ],
 });
 //{/block}

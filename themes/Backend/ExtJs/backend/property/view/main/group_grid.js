@@ -42,12 +42,12 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
      * @object
      */
     snippets: {
-        columnName:          '{s name="group/column_name"}Name{/s}',
-        columnFilterable:    '{s name="group/column_filterable"}Filterable{/s}',
+        columnName: '{s name="group/column_name"}Name{/s}',
+        columnFilterable: '{s name="group/column_filterable"}Filterable{/s}',
         tooltipDeleteGroup: '{s name="group/tooltip_delete_value"}Delete group{/s}',
-        buttonAddGroup:     '{s name="group/button_add_group"}Add group{/s}',
-        search:             '{s name="group/empty_text_search"}Search...{/s}',
-        dragText:            '{s name="group/drag_text"}Drag and drop to reorganize{/s}'
+        buttonAddGroup: '{s name="group/button_add_group"}Add group{/s}',
+        search: '{s name="group/empty_text_search"}Search...{/s}',
+        dragText: '{s name="group/drag_text"}Drag and drop to reorganize{/s}'
     },
 
     /**
@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the delete icon in the
@@ -213,9 +213,9 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
     getPagingBar: function () {
         var me = this;
         return Ext.create('Ext.toolbar.Paging', {
-            store:me.store,
-            dock:'bottom',
-            displayInfo:true
+            store: me.store,
+            dock: 'bottom',
+            displayInfo: true
         });
 
     },

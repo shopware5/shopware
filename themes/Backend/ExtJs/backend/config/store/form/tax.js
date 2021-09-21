@@ -30,7 +30,7 @@
 //{block name="backend/config/store/form/tax"}
 Ext.define('Shopware.apps.Config.store.form.Tax', {
     extend: 'Ext.data.Store',
-    model : 'Shopware.apps.Config.model.form.Tax',
+    model: 'Shopware.apps.Config.model.form.Tax',
     remoteSort: true,
     remoteFilter: true,
     pageSize: 20,

@@ -97,7 +97,7 @@
 
             me._on(me.$el, 'click', $.proxy(me.onClick, me));
 
-            $.publish('plugin/swAddressEditor/onRegisterEvents', [ me ]);
+            $.publish('plugin/swAddressEditor/onRegisterEvents', [me]);
         },
 
         /**
@@ -110,7 +110,7 @@
 
             event.preventDefault();
 
-            $.publish('plugin/swAddressEditor/onBeforeClick', [ me, me.opts.id ]);
+            $.publish('plugin/swAddressEditor/onBeforeClick', [me, me.opts.id]);
 
             if (me.opts.id) {
                 me.open(me.opts.id);
@@ -118,7 +118,7 @@
                 me.open();
             }
 
-            $.publish('plugin/swAddressEditor/onAfterClick', [ me, me.opts.id ]);
+            $.publish('plugin/swAddressEditor/onAfterClick', [me, me.opts.id]);
         },
 
         /**
@@ -149,13 +149,13 @@
             $.modal.close();
             $.loadingIndicator.open();
 
-            $.publish('plugin/swAddressEditor/onBeforeOpen', [ me, requestData ]);
+            $.publish('plugin/swAddressEditor/onBeforeOpen', [me, requestData]);
 
             // Ajax request to fetch available addresses
             $.ajax({
-                'url': window.controller['ajax_address_editor'],
-                'data': requestData,
-                'success': function(data) {
+                url: window.controller['ajax_address_editor'],
+                data: requestData,
+                success: function(data) {
                     $.loadingIndicator.close(function() {
                         $.subscribe(me.getEventName('plugin/swModal/onOpen'), $.proxy(me._onSetContent, me));
 
@@ -171,11 +171,11 @@
                         $.unsubscribe(me.getEventName('plugin/swModal/onOpen'));
                     });
 
-                    $.publish('plugin/swAddressEditor/onAddressFetchSuccess', [ me, data ]);
+                    $.publish('plugin/swAddressEditor/onAddressFetchSuccess', [me, data]);
                 }
             });
 
-            $.publish('plugin/swAddressEditor/onAfterOpen', [ me ]);
+            $.publish('plugin/swAddressEditor/onAfterOpen', [me]);
         },
 
         /**
@@ -201,7 +201,7 @@
                 .addPlugin('div[data-register="true"]', 'swRegister')
                 .addPlugin('*[data-preloader-button="true"]', 'swPreloaderButton');
 
-            $.publish('plugin/swAddressEditor/onRegisterPlugins', [ this ]);
+            $.publish('plugin/swAddressEditor/onRegisterPlugins', [this]);
         },
 
         /**
@@ -217,7 +217,7 @@
                 $submitButtons = $modal._$content.find(me.opts.submitButtonSelector),
                 $actionInput = $modal._$content.find('input[name=saveAction]');
 
-            $.publish('plugin/swAddressEditor/onBeforeBindButtonAction', [ me, $modal ]);
+            $.publish('plugin/swAddressEditor/onBeforeBindButtonAction', [me, $modal]);
 
             // hook into submit button click to eventually update the saveAction value bound to data-value
             $submitButtons.on('click', function(event) {
@@ -247,7 +247,7 @@
                         actionData[this.name] = this.value;
                     });
 
-                    $.publish('plugin/swAddressEditor/onBeforeSave', [ me, actionData ]);
+                    $.publish('plugin/swAddressEditor/onBeforeSave', [me, actionData]);
 
                     // send data to api endpoint
                     $.ajax({
@@ -260,7 +260,7 @@
                     });
                 });
 
-            $.publish('plugin/swAddressEditor/onAfterBindButtonAction', [ me, $modal ]);
+            $.publish('plugin/swAddressEditor/onAfterBindButtonAction', [me, $modal]);
         },
 
         /**
@@ -269,7 +269,7 @@
         onSave: function($modal, response) {
             var me = this;
 
-            $.publish('plugin/swAddressEditor/onAfterSave', [ me, $modal, response ]);
+            $.publish('plugin/swAddressEditor/onAfterSave', [me, $modal, response]);
 
             if (response.success === true) {
                 if (me.opts.showSelectionOnClose) {

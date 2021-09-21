@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.RiskManagement.model.Areas', {
         reader: {
             type: 'json',
             root: 'data',
-            totalProperty:'total'
+            totalProperty: 'total'
         }
     }
 });

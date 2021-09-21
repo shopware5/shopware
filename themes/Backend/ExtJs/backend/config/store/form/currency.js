@@ -28,7 +28,7 @@
 //{block name="backend/config/store/form/currency"}
 Ext.define('Shopware.apps.Config.store.form.Currency', {
     extend: 'Ext.data.Store',
-    model:'Shopware.apps.Config.model.form.Currency',
+    model: 'Shopware.apps.Config.model.form.Currency',
     remoteSort: true,
     remoteFilter: true,
     pageSize: 20,

@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Notification.controller.Main', {
      * Required stores for sub-application
      * @array
      */
-    stores:[ 'Article' ],
+    stores: [ 'Article' ],
 
 
     /**

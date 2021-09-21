@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     refs: [
         { ref: 'mainWindow', selector: 'payment-main-window' },
@@ -62,21 +62,21 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
      * specific controller and opens a new Ext.window.Window
      * @return void
      */
-    init:function(){
+    init: function(){
         var me = this;
 
         me.control({
-            'payment-main-window payment-main-tree':{
-                itemclick:me.onItemClick
+            'payment-main-window payment-main-tree': {
+                itemclick: me.onItemClick
             },
-            'payment-main-window':{
-                savePayment:me.onSavePayment,
-                changeTab:me.onChangeTab
+            'payment-main-window': {
+                savePayment: me.onSavePayment,
+                changeTab: me.onChangeTab
             },
 
-            'payment-main-tree':{
+            'payment-main-tree': {
                 deletePayment: me.onDeletePayment,
-                createPayment:me.onCreatePayment
+                createPayment: me.onCreatePayment
             }
 
         });
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
 
         if(selection[0].data.source == 1){
             selection[0].destroy({
-                callback:function(data, operation){
+                callback: function(data, operation){
                     var records = operation.getRecords(),
                         record = records[0],
                         rawData = record.getProxy().getReader().rawData;
@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
      * @param oldTab Contains the old tab, which was opened before the new tab
      * @param formPanel Contains the general formpanel
      */
-    onChangeTab:function(tabPanel, newTab, oldTab, formPanel){
+    onChangeTab: function(tabPanel, newTab, oldTab, formPanel){
         var grid = newTab.items.items[0],
             record = formPanel.getRecord(),
             recordStore;
@@ -165,7 +165,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
      * Is fired, when the "create"-button is pressed
      * @param btn Contains the create-button
      */
-    onCreatePayment:function(btn){
+    onCreatePayment: function(btn){
         var win = btn.up('window'),
             tabPanel = win.down('tabpanel'),
             formPanel = win.down('form'),
@@ -193,7 +193,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
      * @param subShopGrid Contains the grid with all subShops
      * @param surchargeGrid Contains the grid with all surcharges
      */
-    onSavePayment:function(generalForm, countryGrid, subShopGrid, surchargeGrid){
+    onSavePayment: function(generalForm, countryGrid, subShopGrid, surchargeGrid){
         var record = generalForm.getRecord(),
             win = generalForm.up('window'),
             tree = win.down('treepanel'),
@@ -291,7 +291,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
      * @param [Ext.view.View] view
      * @param [Ext.data.Model] record The clicked record
      */
-    onItemClick:function(view, record) {
+    onItemClick: function(view, record) {
         var win = view.up('window'),
             tabPanel = win.tabPanel,
             form = win.generalForm,

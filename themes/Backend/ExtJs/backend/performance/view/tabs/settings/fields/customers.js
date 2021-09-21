@@ -38,13 +38,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
      * Define that the base field set is an extension of the "Base" fieldSet
      * @string
      */
-    extend:'Shopware.apps.Performance.view.tabs.settings.fields.Base',
+    extend: 'Shopware.apps.Performance.view.tabs.settings.fields.Base',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-customers',
+    alias: 'widget.performance-tabs-settings-customers',
 
     /**
      * Description of the fieldSet
@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
      * want to create a new customer or edit an existing customer
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = me.getItems();
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                         title: '{s name="fieldset/also/buildIndex"}Kunden kauften auch Index neu aufbauen{/s}'
                     },
                     {
-                        fieldLabel:  '{s name="fieldset/customers/also_bought/show"}Kunden kauften auch im Frontend anzeigen{/s}',
+                        fieldLabel: '{s name="fieldset/customers/also_bought/show"}Kunden kauften auch im Frontend anzeigen{/s}',
                         name: 'customer[alsoBoughtShow]',
                         xtype: 'checkbox',
                         uncheckedValue: false,

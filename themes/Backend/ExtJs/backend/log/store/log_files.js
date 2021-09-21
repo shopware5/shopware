@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Log.store.LogFiles', {
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Log.model.LogFile',
+    model: 'Shopware.apps.Log.model.LogFile',
 
     pageSize: 10
 });

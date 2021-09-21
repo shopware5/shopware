@@ -32,9 +32,9 @@
  */
 //{block name="backend/config/model/form/price_group"}
 Ext.define('Shopware.apps.Config.model.form.PriceGroup', {
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
-    fields:[
+    fields: [
         //{block name="backend/config/model/form/price_group/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' }

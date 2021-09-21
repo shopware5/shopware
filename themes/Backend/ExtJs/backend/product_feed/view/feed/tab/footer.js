@@ -36,9 +36,9 @@
  */
 //{block name="backend/product_feed/view/feed/tab/footer"}
 Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Footer', {
-    extend:  'Shopware.apps.ProductFeed.view.feed.tab.Body',
-    alias:'widget.product_feed-feed-tab-footer',
-    title:'{s name="tab/title/footer"}Footer{/s}',
+    extend: 'Shopware.apps.ProductFeed.view.feed.tab.Body',
+    alias: 'widget.product_feed-feed-tab-footer',
+    title: '{s name="tab/title/footer"}Footer{/s}',
     fieldName: 'footer'
 });
 //{/block}

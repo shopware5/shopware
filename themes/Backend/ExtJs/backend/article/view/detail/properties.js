@@ -50,8 +50,8 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
      */
     layout: {
         type: 'vbox',
-        align : 'stretch',
-        pack  : 'start'
+        align: 'stretch',
+        pack: 'start'
     },
 
     /**
@@ -72,13 +72,13 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
-        title:'{s name="detail/properties/title"}Properties{/s}',
-        notice:'{s name="detail/properties/notice"}To configure an article property, please select a suitable property group via the selection box. Hereafter, a grid with all property values will be displayed. To change the values as well, you can click on the second grid column and modify the value via combo box (multiple selection possible).{/s}',
-        property:'{s name="detail/properties/property"}Select property{/s}',
-        name:'{s name="detail/properties/name_column"}Property{/s}',
-        value:'{s name="detail/properties/value_column"}Values{/s}',
-        empty:'{s name="empty"}Please select...{/s}',
+    snippets: {
+        title: '{s name="detail/properties/title"}Properties{/s}',
+        notice: '{s name="detail/properties/notice"}To configure an article property, please select a suitable property group via the selection box. Hereafter, a grid with all property values will be displayed. To change the values as well, you can click on the second grid column and modify the value via combo box (multiple selection possible).{/s}',
+        property: '{s name="detail/properties/property"}Select property{/s}',
+        name: '{s name="detail/properties/name_column"}Property{/s}',
+        value: '{s name="detail/properties/value_column"}Values{/s}',
+        empty: '{s name="empty"}Please select...{/s}',
         comboset_label: '{s name="detail/properties/comboset_label"}Choose set{/s}',
         combogroup_label: '{s name="detail/properties/combogroup_label"}Assign properties{/s}',
         button_text: '{s name="detail/properties/button_text"}Create{/s}',
@@ -104,7 +104,7 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this,
             mainWindow = me.subApp.articleWindow;
 

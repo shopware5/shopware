@@ -38,13 +38,13 @@ Ext.define('Shopware.apps.ProductStream.model.Stream', {
 
     fields: [
         //{block name="backend/product_stream/model/stream/fields"}{/block}
-        { name : 'id', type: 'int', useNull: true },
-        { name : 'name', type: 'string', useNull: false },
-        { name : 'description', type: 'string', useNull: false },
-        { name : 'type', type: 'int', defaultValue: 1 },
-        { name : 'sorting' },
-        { name : 'sortingId', type: 'int', useNull: true },
-        { name : 'conditions', useNull: false }
+        { name: 'id', type: 'int', useNull: true },
+        { name: 'name', type: 'string', useNull: false },
+        { name: 'description', type: 'string', useNull: false },
+        { name: 'type', type: 'int', defaultValue: 1 },
+        { name: 'sorting' },
+        { name: 'sortingId', type: 'int', useNull: true },
+        { name: 'conditions', useNull: false }
     ]
 });
 //{/block}

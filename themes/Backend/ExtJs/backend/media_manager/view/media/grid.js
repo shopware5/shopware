@@ -153,7 +153,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
             renderer: me.pixelRenderer
         }, {
             dataIndex: 'height',
-            header:  me.snippets.column.height,
+            header: me.snippets.column.height,
             hidden: true,
             flex: 1,
             renderer: me.pixelRenderer

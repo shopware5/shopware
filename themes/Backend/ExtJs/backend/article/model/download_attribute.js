@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Article.model.DownloadAttribute', {
     fields: [
         //{block name="backend/article/model/download_attribute/fields"}{/block}
         { name: 'id', type: 'int' },
-        { name: 'articleDownloadId', type: 'int', useNull : true }
+        { name: 'articleDownloadId', type: 'int', useNull: true }
     ]
 
 });

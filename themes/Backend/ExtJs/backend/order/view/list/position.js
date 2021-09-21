@@ -47,19 +47,19 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.order-position-grid',
+    alias: 'widget.order-position-grid',
 
     /**
      * Set css class
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'order-position-grid',
+    cls: Ext.baseCSSPrefix + 'order-position-grid',
 
     /**
      * Min heighht of the component
@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
      * The view needs to be scrollable
      * @string
      */
-    autoScroll:true,
+    autoScroll: true,
 
     /**
      * Contains all snippets for the component
@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.registerEvents();
         me.columns = me.getColumns();
@@ -142,35 +142,35 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
      *
      * @return [array] grid columns
      */
-    getColumns:function () {
+    getColumns: function () {
         var me = this;
 
         var columns = [
             {
                 header: me.snippets.articleNumber,
                 dataIndex: 'articleNumber',
-                flex:2
+                flex: 2
             },
             {
                 header: me.snippets.articleName,
                 dataIndex: 'articleName',
-                flex:2
+                flex: 2
             },
             {
                 header: me.snippets.quantity,
                 dataIndex: 'quantity',
-                flex:1
+                flex: 1
             },
             {
                 header: me.snippets.price,
                 dataIndex: 'price',
-                flex:1,
+                flex: 1,
                 renderer: me.priceColumn
             },
             {
                 header: me.snippets.total,
                 dataIndex: 'total',
-                flex:1,
+                flex: 1,
                 renderer: me.totalColumn
             },
             {
@@ -182,32 +182,32 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
             {
                 header: me.snippets.tax,
                 dataIndex: 'taxId',
-                flex:1,
+                flex: 1,
                 renderer: me.taxRenderer
             },
             {
                 header: me.snippets.inStock,
                 dataIndex: 'inStock',
-                flex:1
+                flex: 1
             },
             {
                 /**
                  * Special column type which provides
                  * clickable icons in each row
                  */
-                xtype:'actioncolumn',
-                width:90,
-                items:[
+                xtype: 'actioncolumn',
+                width: 90,
+                items: [
                     /*{if {acl_is_allowed privilege=update}}*/
                         {
-                            iconCls:'sprite-minus-circle-frame',
-                            action:'deletePosition',
+                            iconCls: 'sprite-minus-circle-frame',
+                            action: 'deletePosition',
                             tooltip: me.snippets.deletePosition,
                             /**
                              * Add button handler to fire the deleteOrder event which is handled
                              * in the list controller.
                              */
-                            handler:function (view, rowIndex, colIndex, item) {
+                            handler: function (view, rowIndex, colIndex, item) {
                                 var store = view.getStore(),
                                     record = store.getAt(rowIndex);
 
@@ -216,14 +216,14 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
                         },
                     /*{/if}*/
                     {
-                        iconCls:'sprite-inbox',
-                        action:'openArticle',
+                        iconCls: 'sprite-inbox',
+                        action: 'openArticle',
                         tooltip: me.snippets.openArticle,
                         /**
                          * Add button handler to fire the openCustomer event which is handled
                          * in the list controller.
                          */
-                        handler:function (view, rowIndex, colIndex, item) {
+                        handler: function (view, rowIndex, colIndex, item) {
                             var store = view.getStore(),
                                 record = store.getAt(rowIndex);
 
@@ -277,7 +277,7 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
      * @param [string] - The price value
      * @return [string] - The passed value, formatted with Ext.util.Format.currency()
      */
-    priceColumn:function (value) {
+    priceColumn: function (value) {
         if ( value === Ext.undefined ) {
             return value;
         }

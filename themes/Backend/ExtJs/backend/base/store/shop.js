@@ -37,19 +37,19 @@ Ext.define('Shopware.apps.Base.store.Shop', {
 
     alternateClassName: 'Shopware.store.Shop',
     storeId: 'base.Shop',
-    model : 'Shopware.apps.Base.model.Shop',
+    model: 'Shopware.apps.Base.model.Shop',
     pageSize: 1000,
 
     remoteSort: true,
     remoteFilter: true,
 
-    proxy:{
+    proxy: {
         type: 'ajax',
         url: '{url action=getShops}',
         reader: {
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     },
 

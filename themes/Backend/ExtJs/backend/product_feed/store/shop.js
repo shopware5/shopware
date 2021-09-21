@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.ProductFeed.store.Shop', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.ProductFeed.model.Shop'
+    model: 'Shopware.apps.ProductFeed.model.Shop'
 
 });
 //{/block}

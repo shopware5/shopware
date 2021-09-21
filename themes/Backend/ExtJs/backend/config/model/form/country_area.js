@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Config.model.form.CountryArea', {
     extend: 'Ext.data.Model',
     fields: [
         //{block name="backend/config/model/form/country_area/fields"}{/block}
-        { name: 'id', type:'int' },
+        { name: 'id', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'active', type: 'boolean' }
     ]

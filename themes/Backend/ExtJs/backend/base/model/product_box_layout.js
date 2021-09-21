@@ -38,19 +38,19 @@ Ext.define('Shopware.apps.Base.model.ProductBoxLayout', {
     /**
      * Defines an alternate name for this class.
      */
-    alternateClassName:'Shopware.model.ProductBoxLayout',
+    alternateClassName: 'Shopware.model.ProductBoxLayout',
 
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/product_box_layout"}{/block}
         { name: 'key', type: 'string' },
         { name: 'label', type: 'string' },

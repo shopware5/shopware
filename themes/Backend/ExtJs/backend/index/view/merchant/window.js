@@ -29,7 +29,7 @@
 //{block name="backend/index/view/merchant/window"}
 Ext.define('Shopware.apps.Index.view.merchant.Window', {
     extend: 'Enlight.app.Window',
-    alias : 'widget.merchant-window',
+    alias: 'widget.merchant-window',
     width: 600,
     height: 500,
     stateful: true,

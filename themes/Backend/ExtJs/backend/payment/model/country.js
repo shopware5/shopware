@@ -40,27 +40,27 @@ Ext.define('Shopware.apps.Payment.model.Country', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.apps.Base.model.Country',
+    extend: 'Shopware.apps.Base.model.Country',
 
     /**
      * The fields used for this model
      * @array
      */
      //todo@ps paymentId
-    fields:[
+    fields: [
         //{block name="backend/payment/model/country/fields"}{/block}
         { name: 'surcharge', type: 'double' },
         { name: 'payment', type: 'int' }
     ],
 
-    proxy :
+    proxy:
     {
-        type : 'ajax',
-        api : {
-            read : '{url controller=payment action=getCountries}'
+        type: 'ajax',
+        api: {
+            read: '{url controller=payment action=getCountries}'
         },
-        reader : {
-            type : 'json',
+        reader: {
+            type: 'json',
             root: 'data'
         }
     }

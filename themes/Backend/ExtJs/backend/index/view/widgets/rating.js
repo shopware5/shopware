@@ -169,7 +169,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Rating', {
             xtype: 'actioncolumn',
             width: 80,
             items: [{
-                iconCls:'sprite-pencil',
+                iconCls: 'sprite-pencil',
                 tooltip: me.snippets.tooltips.rating,
                 handler: function(view, rowIndex, colIndex, item, event, record) {
                     Shopware.app.Application.addSubApplication({
@@ -189,7 +189,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Rating', {
      * @param [string] - The order time value
      * @return [string] - The passed value, formatted with Ext.util.Format.date()
      */
-    dateColumn:function (value) {
+    dateColumn: function (value) {
         if ( value === Ext.undefined ) {
             return value;
         }

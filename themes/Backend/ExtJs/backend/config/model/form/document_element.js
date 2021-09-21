@@ -32,7 +32,7 @@
  */
 //{block name="backend/config/model/form/document_element"}
 Ext.define('Shopware.apps.Config.model.form.DocumentElement', {
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     fields: [
         //{block name="backend/config/model/form/document_element/fields"}{/block}

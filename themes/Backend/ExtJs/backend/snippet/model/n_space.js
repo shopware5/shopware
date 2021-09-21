@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Snippet.model.NSpace', {
      *
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/snippet/model/nspace/fields"}{/block}
         { name: 'id', type: 'string' },
         { name: 'namespace', type: 'string' }

@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Base.model.Locale', {
      * unique id
      * @int
      */
-    idProperty : 'id',
+    idProperty: 'id',
 
     /**
     * The fields used for this model
@@ -59,13 +59,13 @@ Ext.define('Shopware.apps.Base.model.Locale', {
     */
     fields: [
         //{block name="backend/base/model/locale/fields"}{/block}
-        { name : 'id', type : 'int' },
+        { name: 'id', type: 'int' },
         { name: 'name', type: 'string', convert: function(v, record) {
             return record.data.language + ' (' + record.data.territory + ')';
         } },
-        { name: 'language', type : 'string' },
-        { name: 'territory', type : 'string' },
-        { name: 'locale', type : 'string' }
+        { name: 'language', type: 'string' },
+        { name: 'territory', type: 'string' },
+        { name: 'locale', type: 'string' }
     ]
 });
 //{/block}

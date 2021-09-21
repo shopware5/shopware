@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Supplier.store.Supplier', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend : 'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Store ID for easy access to this store
      *
@@ -51,12 +51,12 @@ Ext.define('Shopware.apps.Supplier.store.Supplier', {
      * is initialized
      * @boolean
      */
-    autoLoad : false,
+    autoLoad: false,
     /**
      * Amount of data loaded at once
      * @integer
      */
-    pageSize : 30,
+    pageSize: 30,
     /**
      * enables the remote filter system
      * @boolen
@@ -66,12 +66,12 @@ Ext.define('Shopware.apps.Supplier.store.Supplier', {
      * Enables the remote sorting system
      * @boolean
      */
-    remoteSort : true,
+    remoteSort: true,
 
     /**
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Supplier.model.Supplier'
+    model: 'Shopware.apps.Supplier.model.Supplier'
 });
 //{/block}

@@ -39,12 +39,12 @@ Ext.define('Shopware.apps.Supplier', {
      * sub-application behavior and the event bus
      * @string
      */
-    extend : 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
     /**
      * The name of the module. Used for internal purpose
      * @string
      */
-    name : 'Shopware.apps.Supplier',
+    name: 'Shopware.apps.Supplier',
     /**
      * Sets the loading path for the sub-application.
      *
@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Supplier', {
      * controller (server-side)
      * @string
      */
-    loadPath:'{url controller="supplier" action=load}',
+    loadPath: '{url controller="supplier" action=load}',
     /**
      * Enables the Shopware bulk loading system
      * @boolean
@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.Supplier', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers : [ 'Main' ],
+    controllers: [ 'Main' ],
 
     /**
      * Requires views for sub-application
@@ -78,12 +78,12 @@ Ext.define('Shopware.apps.Supplier', {
     * Required stores for controller
     * @array
     */
-   stores : [ 'Supplier' ],
+   stores: [ 'Supplier' ],
    /**
     * Required models for controller
     * @array
     */
-   models : ['Supplier'],
+   models: ['Supplier'],
     /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.

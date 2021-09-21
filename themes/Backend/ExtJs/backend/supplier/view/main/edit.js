@@ -37,20 +37,20 @@
  */
 //{block name="backend/supplier/view/main/edit"}
 Ext.define('Shopware.apps.Supplier.view.main.Edit', {
-    extend : 'Enlight.app.Window',
-    alias : 'widget.supplier-main-edit',
-    layout : 'fit',
-    title : '{s name="title"}Supplier - edit{/s}',
-    width : '80%',
-    height : '90%',
-    stateful : true,
-    stateId : 'shopware-supplier-edit',
+    extend: 'Enlight.app.Window',
+    alias: 'widget.supplier-main-edit',
+    layout: 'fit',
+    title: '{s name="title"}Supplier - edit{/s}',
+    width: '80%',
+    height: '90%',
+    stateful: true,
+    stateId: 'shopware-supplier-edit',
 
     /**
      * Initialize the component
      * @return void
      */
-    initComponent : function () {
+    initComponent: function () {
         var me = this,
             oldTitle = me.title;
 
@@ -85,21 +85,21 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
      *
      * @return array of buttons
      */
-    getButtons : function()
+    getButtons: function()
     {
         var me = this;
         return  ['->',
             {
-                text :  '{s name="cancel"}Cancel{/s}',
+                text: '{s name="cancel"}Cancel{/s}',
                 cls: 'secondary',
-                scope : me,
-                handler : me.destroy
+                scope: me,
+                handler: me.destroy
             },
             {
-                text : '{s name="save"}Save{/s}',
-                action : 'saveSupplier',
-                scale : 'large',
-                cls : 'primary',
+                text: '{s name="save"}Save{/s}',
+                action: 'saveSupplier',
+                scale: 'large',
+                cls: 'primary',
                 formBind: true
             }
         ];
@@ -109,18 +109,18 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
      *
      * @return Ext.buttonButton
      */
-    getDeleteButton : function() {
+    getDeleteButton: function() {
         var me = this;
 
         return {
-            xtype   : 'button',
+            xtype: 'button',
             cls: 'small secondary',
-            name    : 'deleteLogo',
-            scope   : me,
-            text    : '{s name="delete_logo"}Delete Logo{/s}',
-            action  : 'deleteLogo',
-            scale   : 'small',
-            style   : 'float: right; margin: 0 35px 10px 0'
+            name: 'deleteLogo',
+            scope: me,
+            text: '{s name="delete_logo"}Delete Logo{/s}',
+            action: 'deleteLogo',
+            scale: 'small',
+            style: 'float: right; margin: 0 35px 10px 0'
         };
     },
 
@@ -131,7 +131,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
      *
      *  @return Ext.form.Panel
      */
-    getInfoForm : function()
+    getInfoForm: function()
     {
         var me = this,
             logoArray = [];
@@ -144,16 +144,16 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
         }
 
         me.formPanel = Ext.create('Ext.form.Panel', {
-            collapsible : false,
-            split       : false,
-            region      : 'center',
-            width       : '100%',
-            id          : 'supplierFormPanel',
-            defaults : {
-                anchor      : '100%'
+            collapsible: false,
+            split: false,
+            region: 'center',
+            width: '100%',
+            id: 'supplierFormPanel',
+            defaults: {
+                anchor: '100%'
             },
-            bodyPadding : 10,
-            border : 0,
+            bodyPadding: 10,
+            border: 0,
             autoScroll: true,
             plugins: [{
                 ptype: 'translation',
@@ -162,41 +162,41 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
                 translationMerge: false,
                 translationKey: null
             }],
-            items : [
+            items: [
                 Ext.create('Ext.form.FieldSet', {
-                    alias:'widget.supplier-base-field-set',
+                    alias: 'widget.supplier-base-field-set',
                     cls: Ext.baseCSSPrefix + 'supplier-base-field-set',
-                    title : '{s name="panel_base"}Basic information{/s}',
+                    title: '{s name="panel_base"}Basic information{/s}',
                     layout: 'form',
-                    items : [
+                    items: [
                         {
-                            xtype : 'container',
-                            layout : 'column',
-                            border : 1,
-                            items : [
+                            xtype: 'container',
+                            layout: 'column',
+                            border: 1,
+                            items: [
                                 {
-                                    xtype       : 'container',
-                                    layout      : 'anchor',
-                                    columnWidth : 0.8,
-                                    defaults : {
-                                        labelWidth  : 155
+                                    xtype: 'container',
+                                    layout: 'anchor',
+                                    columnWidth: 0.8,
+                                    defaults: {
+                                        labelWidth: 155
                                     },
-                                    items : me.topForm
+                                    items: me.topForm
                                 },
                                 {
-                                    xtype : 'container',
-                                    layout : 'anchor',
-                                    columnWidth : 0.2,
-                                    items : logoArray
+                                    xtype: 'container',
+                                    layout: 'anchor',
+                                    columnWidth: 0.2,
+                                    items: logoArray
                                 },
                                 {
-                                    xtype : 'container',
-                                    layout : 'anchor',
-                                    columnWidth : 1,
-                                    defaults : {
-                                        anchor : '100%'
+                                    xtype: 'container',
+                                    layout: 'anchor',
+                                    columnWidth: 1,
+                                    defaults: {
+                                        anchor: '100%'
                                     },
-                                    items : [
+                                    items: [
                                         me.htmlEditor,
                                         me.dropZone
                                     ]
@@ -207,31 +207,31 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
                     ]
                 }),
                 Ext.create('Ext.form.FieldSet', {
-                    alias:'widget.supplier-seo-field-set',
+                    alias: 'widget.supplier-seo-field-set',
                     cls: Ext.baseCSSPrefix + 'supplier-seo-field-set',
                     collapsible: true,
                     collapsed: true,
-                    defaults : {
-                        labelWidth  : 155,
-                        anchor      : '100%'
+                    defaults: {
+                        labelWidth: 155,
+                        anchor: '100%'
                     },
-                    title : '{s name="panel_seo"}SEO information{/s}',
-                    items : [
+                    title: '{s name="panel_seo"}SEO information{/s}',
+                    items: [
                         {
-                            xtype       : 'textfield',
-                            name        : 'metaDescription',
+                            xtype: 'textfield',
+                            name: 'metaDescription',
                             translatable: true,
-                            fieldLabel  : '{s name="seo_meta_description"}Description{/s}',
-                            supportText : '{s name="seo_meta_description_support"}Description meta tag{/s}',
-                            allowBlank  : true
+                            fieldLabel: '{s name="seo_meta_description"}Description{/s}',
+                            supportText: '{s name="seo_meta_description_support"}Description meta tag{/s}',
+                            allowBlank: true
                         },
                         {
-                            xtype       : 'textfield',
-                            name        : 'metaKeywords',
+                            xtype: 'textfield',
+                            name: 'metaKeywords',
                             translatable: true,
-                            fieldLabel  : '{s name="seo_meta_keywords"}Keywords{/s}',
-                            supportText : '{s name="seo_meta_keywords_support"}Keywords meta tag{/s}',
-                            allowBlank  : true
+                            fieldLabel: '{s name="seo_meta_keywords"}Keywords{/s}',
+                            supportText: '{s name="seo_meta_keywords_support"}Keywords meta tag{/s}',
+                            allowBlank: true
                         }
                     ]
                 })
@@ -252,25 +252,25 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
      *
      * @return Ext.form.field.HtmlEditor
      */
-    getHtmlField : function()
+    getHtmlField: function()
     {
         return Ext.create('Shopware.form.field.TinyMCE', {
-            name : 'description',
+            name: 'description',
             translatable: true,
-            fieldLabel : '{s name="description"}Description{/s}',
-            labelWidth  : 155
+            fieldLabel: '{s name="description"}Description{/s}',
+            labelWidth: 155
         });
     },
     /**
      * Returns a set of hidden fields
      * @return array of hidden fields
      */
-    getHiddenFields : function()
+    getHiddenFields: function()
     {
         return [{
-            xtype : 'hidden',
-            name : 'image',
-            fieldLabel : 'image'
+            xtype: 'hidden',
+            name: 'image',
+            fieldLabel: 'image'
         }];
     },
 
@@ -279,31 +279,31 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
      *
      * @return array of form fields
      */
-    getFormTopPart : function() {
+    getFormTopPart: function() {
         return [
             {
-                xtype : 'textfield',
-                name : 'name',
-                allowBlank  : false,
-                anchor : '95%',
-                fieldLabel  : '{s name="name"}Supplier name{/s}',
-                supportText : '{s name="name_support"}Name of the supplier e.g. Shopware AG{/s}'
+                xtype: 'textfield',
+                name: 'name',
+                allowBlank: false,
+                anchor: '95%',
+                fieldLabel: '{s name="name"}Supplier name{/s}',
+                supportText: '{s name="name_support"}Name of the supplier e.g. Shopware AG{/s}'
             },
             {
-                xtype       : 'textfield',
-                name        : 'metaTitle',
-                translatable : true,
-                anchor : '95%',
-                fieldLabel  : '{s name="seo_meta_title"}Page title{/s}',
-                supportText : '{s name="seo_meta_title_support"}Page title in the supplier page{/s}'
+                xtype: 'textfield',
+                name: 'metaTitle',
+                translatable: true,
+                anchor: '95%',
+                fieldLabel: '{s name="seo_meta_title"}Page title{/s}',
+                supportText: '{s name="seo_meta_title_support"}Page title in the supplier page{/s}'
             },
             {
-                xtype : 'textfield',
-                vtype : 'url',
-                name : 'link',
-                anchor : '95%',
-                fieldLabel  : '{s name="link"}URL{/s}',
-                supportText : '{s name="link_support"}Link to suppliers website{/s}'
+                xtype: 'textfield',
+                vtype: 'url',
+                name: 'link',
+                anchor: '95%',
+                fieldLabel: '{s name="link"}URL{/s}',
+                supportText: '{s name="link_support"}Link to suppliers website{/s}'
             }
         ];
     },
@@ -312,15 +312,15 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
      *
      * @return Shopware.MediaManager.MediaSelection
      */
-    getDropZone : function()
+    getDropZone: function()
     {
         return Ext.create('Shopware.MediaManager.MediaSelection', {
-            fieldLabel      : '{s name="form_logo"}Logo{/s}',
-            name            : 'media-manager-selection',
-            supportText     : '{s name="logo_support"}Supplier logo selection via Media Manager. The selection is limited to one media.{/s}',
-            multiSelect     : false,
+            fieldLabel: '{s name="form_logo"}Logo{/s}',
+            name: 'media-manager-selection',
+            supportText: '{s name="logo_support"}Supplier logo selection via Media Manager. The selection is limited to one media.{/s}',
+            multiSelect: false,
             albumId: -12, // Default supplier albumId
-            labelWidth  : 155
+            labelWidth: 155
         });
     },
 
@@ -329,18 +329,18 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
      *
      * @return Ext.Img
      */
-    getLogo : function() {
+    getLogo: function() {
         var me = this,
             imageUrl = me.record.get('image'),
             image = Ext.create('Ext.Img', {
-                    src         : imageUrl,
-                    maxWidth    : 120,
-                    width       : 120,
-                    maxHeight   : 80,
-                    margin      : '0 auto',
-                    name        : 'image',
-                    itemId      : 'supplierFormPanelLogo',
-                    style       : 'height: 80px; width: 120px;'
+                    src: imageUrl,
+                    maxWidth: 120,
+                    width: 120,
+                    maxHeight: 80,
+                    margin: '0 auto',
+                    name: 'image',
+                    itemId: 'supplierFormPanelLogo',
+                    style: 'height: 80px; width: 120px;'
                 }
             );
 

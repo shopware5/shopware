@@ -34,12 +34,12 @@
  */
 //{block name="backend/index/view/menu"}
 Ext.define('Shopware.apps.Index.view.Menu', {
-    extend:'Ext.toolbar.Toolbar',
-    alias:'widget.mainmenu',
-    alternateClassName:'Shopware.Menu',
+    extend: 'Ext.toolbar.Toolbar',
+    alias: 'widget.mainmenu',
+    alternateClassName: 'Shopware.Menu',
     cls: 'shopware-menu',
-    dock:'top',
-    height:40,
+    dock: 'top',
+    height: 40,
     width: Ext.Element.getViewportWidth(),
 
     /**
@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Index.view.Menu', {
                     me.insert(0, Ext.decode(response.responseText));
                     me.add({ xtype: 'tbfill' }, {
                         xtype: 'container',
-                        cls  : 'x-main-logo-container',
+                        cls: 'x-main-logo-container',
                         width: 23,
                         height: 17
                     });
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Index.view.Menu', {
 
         me.add({ xtype: 'tbfill' }, {
             xtype: 'container',
-            cls  : 'x-main-logo-container',
+            cls: 'x-main-logo-container',
             width: 23, height: 17
         });
 

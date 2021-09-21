@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Tax.store.Rules', {
     extend: 'Ext.data.Store',
     autoLoad: false,
     pageSize: 30,
-    model : 'Shopware.apps.Tax.model.Rules',
+    model: 'Shopware.apps.Tax.model.Rules',
     listeners: {
         /**
          * Loop through each rule and check if any default rule is defined

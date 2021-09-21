@@ -57,8 +57,8 @@ Ext.define('Shopware.apps.Emotion.model.EmotionElement', {
     ],
 
     associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Component', name: 'getComponent', associationKey: 'component'},
-        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Viewport', name: 'getViewports', associationKey: 'viewports'}
+        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Component', name: 'getComponent', associationKey: 'component' },
+        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Viewport', name: 'getViewports', associationKey: 'viewports' }
     ]
 });
 //{/block}

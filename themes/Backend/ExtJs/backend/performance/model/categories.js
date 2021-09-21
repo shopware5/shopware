@@ -37,18 +37,18 @@ Ext.define('Shopware.apps.Performance.model.Categories', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Contains the model fields
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/performance/model/categories/fields"}{/block}
-        { name:'id', type:'int' },
-        { name: 'articlesperpage', type: 'int'},
-        { name: 'orderbydefault', type: 'string'},
-        { name: 'moveBatchModeEnabled', type: 'bool'}
+        { name: 'id', type: 'int' },
+        { name: 'articlesperpage', type: 'int' },
+        { name: 'orderbydefault', type: 'string' },
+        { name: 'moveBatchModeEnabled', type: 'bool' }
     ]
 });
 //{/block}

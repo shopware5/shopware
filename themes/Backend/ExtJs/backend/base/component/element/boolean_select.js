@@ -31,8 +31,8 @@
 
 //{block name="backend/base/component/element/boolean_select"}
 Ext.define('Shopware.apps.Base.view.element.BooleanSelect', {
-    extend:'Ext.form.field.ComboBox',
-    alias:[
+    extend: 'Ext.form.field.ComboBox',
+    alias: [
         'widget.base-element-boolean-select',
         'widget.config-element-boolean-select'
     ],

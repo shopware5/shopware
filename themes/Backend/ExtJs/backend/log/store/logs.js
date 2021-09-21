@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Log.store.Logs', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.Log.model.Log',
+    model: 'Shopware.apps.Log.model.Log',
 
     // Default sorting for the store
     sortOnLoad: true,

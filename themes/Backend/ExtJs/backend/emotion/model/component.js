@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Emotion.model.Component', {
     ],
 
     associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Field', name: 'getFields', associationKey: 'fields'}
+        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Field', name: 'getFields', associationKey: 'fields' }
     ]
 
 });

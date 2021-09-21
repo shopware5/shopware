@@ -134,9 +134,9 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         var me = this;
 
         return Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
+            listeners: {
                 // Unlocks the save button if the user has checked at least one checkbox
-                selectionchange:function (sm, selections) {
+                selectionchange: function (sm, selections) {
                     me.fireEvent('selectionChange', selections);
                 }
             }
@@ -257,7 +257,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 /*{if {acl_is_allowed privilege=delete}}*/
                 {
                     iconCls: 'sprite-minus-circle',
-                    tooltip:'{s name="list/action_column/delete"}Delete shopping world{/s}',
+                    tooltip: '{s name="list/action_column/delete"}Delete shopping world{/s}',
                     handler: function (view, rowIndex, colIndex, item, opts, record) {
                         me.fireEvent('deleteemotion', record);
                     }
@@ -266,7 +266,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 /*{if {acl_is_allowed privilege=update}}*/
                 {
                     iconCls: 'sprite-pencil',
-                    tooltip:'{s name="list/action_column/edit"}Edit shopping world{/s}',
+                    tooltip: '{s name="list/action_column/edit"}Edit shopping world{/s}',
                     handler: function(view, rowIndex, colIndex) {
                         me.fireEvent('editemotion', me, view, rowIndex, colIndex);
                     }
@@ -274,7 +274,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 /*{/if}*/
                 {
                     iconCls: 'sprite-globe--arrow',
-                    tooltip:'{s name="list/action_column/preview"}Preview shopping world{/s}',
+                    tooltip: '{s name="list/action_column/preview"}Preview shopping world{/s}',
                     handler: function(view, rowIndex) {
                         var listStore = view.getStore(),
                             emotionId = listStore.getAt(rowIndex).get('id');
@@ -284,7 +284,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 },
                 {
                     iconCls: 'sprite-drive-download',
-                    tooltip:'{s name="list/action_column/export"}Export shopping world{/s}',
+                    tooltip: '{s name="list/action_column/export"}Export shopping world{/s}',
                     handler: function(view, rowIndex) {
                         var listStore = view.getStore(),
                             emotionId = listStore.getAt(rowIndex).get('id');

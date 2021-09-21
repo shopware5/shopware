@@ -23,6 +23,6 @@
 
 //{block name="backend/site/store/shop"}
 Ext.define('Shopware.apps.Site.store.Shop', {
-    extend : 'Shopware.apps.Base.store.ShopLanguage'
+    extend: 'Shopware.apps.Base.store.ShopLanguage'
 });
 //{/block}

@@ -36,9 +36,9 @@
  */
 //{block name="backend/product_feed/view/feed/tab/category"}
 Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Category', {
-    extend:'Ext.container.Container',
-    alias:'widget.product_feed-feed-tab-category',
-    title:'{s name="tab/title/category"}Blocked categories{/s}',
+    extend: 'Ext.container.Container',
+    alias: 'widget.product_feed-feed-tab-category',
+    title: '{s name="tab/title/category"}Blocked categories{/s}',
     padding: 10,
     cls: 'shopware-toolbar',
     layout: 'anchor',
@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Category', {
      * Initialize the controller and defines the necessary default configuration
      * @return void
      */
-    initComponent : function() {
+    initComponent: function() {
         var me = this,
             ids = [];
         if(me.record && me.record.getCategoriesStore) {
@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Category', {
             ids.push('0');
         }
         me.availableCategoriesTree.getProxy().extraParams = {
-            'preselected[]' : ids
+            'preselected[]': ids
         };
         var tree = me.getTreeSelect(ids, me.availableCategoriesTree);
 
@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Category', {
      * @param ids array of integers
      * @return Ext.tree.Panel
      */
-    getTreeSelect : function(ids, store) {
+    getTreeSelect: function(ids, store) {
         return Ext.create('Ext.tree.Panel', {
             name: 'categoryIds',
             store: store,

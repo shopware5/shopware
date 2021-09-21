@@ -10,7 +10,7 @@
              *
              * @type {String}
              */
-            'ajaxCartURL': window.controller['ajax_cart'],
+            ajaxCartURL: window.controller['ajax_cart'],
 
             /**
              * Selector for the trigger element.
@@ -18,49 +18,49 @@
              *
              * @type {String}
              */
-            'triggerElSelector': '.navigation--entry.entry--cart',
+            triggerElSelector: '.navigation--entry.entry--cart',
 
             /**
              * Selector for the elements item container.
              *
              * @type {String}
              */
-            'itemContainerSelector': '.item--container',
+            itemContainerSelector: '.item--container',
 
             /**
              * Selector for the remove button of single items.
              *
              * @type {String}
              */
-            'removeItemSelector': '.action--remove',
+            removeItemSelector: '.action--remove',
 
             /**
              * Selector for the offcanvas close button.
              *
              * @type {String}
              */
-            'offcanvasCloseElSelector': '.close--off-canvas',
+            offcanvasCloseElSelector: '.close--off-canvas',
 
             /**
              * Class for the loading indicator icon.
              *
              * @type {String}
              */
-            'loadingIconClass': 'icon--loading-indicator',
+            loadingIconClass: 'icon--loading-indicator',
 
             /**
              * Class that will be used for the loading icon wrapper.
              *
              * @type {String}
              */
-            'loadingIconWrapperClass': 'ajax--cart',
+            loadingIconWrapperClass: 'ajax--cart',
 
             /**
              * Class that will be applied to the main plugin element when the menu opens.
              *
              * @type {String}
              */
-            'activeClass': 'is--shown',
+            activeClass: 'is--shown',
 
             /**
              * Mode of displaying the cart.
@@ -68,12 +68,12 @@
              *
              * @type {String} displayMode
              */
-            'displayMode': 'collapsible',
+            displayMode: 'collapsible',
 
             /**
              * @type {String} shippingCalculatorOptions
              */
-            'shippingCalculatorOptions': '.table--shipping-costs select'
+            shippingCalculatorOptions: '.table--shipping-costs select'
         },
 
         /**
@@ -130,7 +130,7 @@
              * @type {jQuery}
              */
             me._$loadingIcon = $('<i>', {
-                'class': opts.loadingIconClass
+                class: opts.loadingIconClass
             });
 
             /**
@@ -145,8 +145,8 @@
             // if the display mode is "offcanvas", call the offcanvas plugin.
             if (me.isDisplayMode('offcanvas')) {
                 me._$triggerEl.swOffcanvasMenu({
-                    'offCanvasSelector': me.$el,
-                    'direction': 'fromRight'
+                    offCanvasSelector: me.$el,
+                    direction: 'fromRight'
                 });
             }
 
@@ -388,8 +388,8 @@
          */
         showLoadingIndicator: function () {
             this.$el.html($('<div>', {
-                'class': this.opts.loadingIconWrapperClass,
-                'html': this._$loadingIcon.clone()
+                class: this.opts.loadingIconWrapperClass,
+                html: this._$loadingIcon.clone()
             }));
 
             $.publish('plugin/swCollapseCart/onShowLoadingIndicator', [this]);
@@ -554,7 +554,6 @@
                     $.publish('plugin/swCollapseCart/onShippingCalculationChangeFinished', [this]);
                 }
             });
-
         },
 
         /**

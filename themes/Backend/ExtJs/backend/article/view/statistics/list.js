@@ -63,15 +63,15 @@ Ext.define('Shopware.apps.Article.view.statistics.List', {
      */
     snippets: {
         title: '{s name="statistic/title"}Overview{/s}',
-        columns:{
+        columns: {
             date: '{s name="statistic/list/column/date"}Date{/s}',
             revenue: '{s name="statistic/list/column/revenue"}Revenue{/s}',
             orders: '{s name="statistic/list/column/orders"}Orders{/s}'
         },
-        toolbar:{
-            from:'{s name="statistic/list/toolbar/from"}From{/s}',
-            to:'{s name="statistic/list/toolbar/to"}To{/s}',
-            filter:'{s name="statistic/list/toolbar/filter"}Filter{/s}'
+        toolbar: {
+            from: '{s name="statistic/list/toolbar/from"}From{/s}',
+            to: '{s name="statistic/list/toolbar/to"}To{/s}',
+            filter: '{s name="statistic/list/toolbar/filter"}Filter{/s}'
         }
     },
 
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Article.view.statistics.List', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
                 /**
                  * Event will be fired when the user clicks the delete button in the toolbar or
@@ -172,7 +172,7 @@ Ext.define('Shopware.apps.Article.view.statistics.List', {
         var filterButton = Ext.create('Ext.button.Button', {
             text: me.snippets.toolbar.filter,
             cls: 'small secondary',
-            scope : this,
+            scope: this,
             handler: function() {
                 me.fireEvent('dateChange', me.fromDate.getValue(), me.toDate.getValue());
             }

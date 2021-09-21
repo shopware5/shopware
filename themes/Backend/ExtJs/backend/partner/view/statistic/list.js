@@ -36,18 +36,18 @@
  */
 //{block name="backend/partner/view/statistic/list"}
 Ext.define('Shopware.apps.Partner.view.statistic.List', {
-    extend:'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
     border: false,
-    alias:'widget.partner-statistic-list',
-    region:'center',
-    autoScroll:true,
-    store:'List',
-    ui:'shopware-ui',
+    alias: 'widget.partner-statistic-list',
+    region: 'center',
+    autoScroll: true,
+    store: 'List',
+    ui: 'shopware-ui',
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.store = me.listStore;
         me.columns = me.getColumns();
@@ -63,40 +63,40 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
      *
      * @return [array] grid columns
      */
-    getColumns:function () {
+    getColumns: function () {
         var me = this;
 
         var columnsData = [
             {
-                header:'{s name="statistic/list/column/ordertime"}Order time{/s}',
-                dataIndex:'orderTime',
+                header: '{s name="statistic/list/column/ordertime"}Order time{/s}',
+                dataIndex: 'orderTime',
                 xtype: 'datecolumn',
-                flex:1
+                flex: 1
             },
             {
-                header:'{s name="statistic/list/column/ordernumber"}Order number{/s}',
-                dataIndex:'number',
-                flex:1
+                header: '{s name="statistic/list/column/ordernumber"}Order number{/s}',
+                dataIndex: 'number',
+                flex: 1
             },
             {
-                header:'{s name="statistic/list/column/net_turnover"}Net turnover{/s}',
-                dataIndex:'netTurnOver',
+                header: '{s name="statistic/list/column/net_turnover"}Net turnover{/s}',
+                dataIndex: 'netTurnOver',
                 xtype: 'numbercolumn',
                 summaryType: 'sum',
                 summaryRenderer: function(value, summaryData, dataIndex) {
                     return me.summaryRenderer(me, value, summaryData, dataIndex);
                 } ,
-                flex:1
+                flex: 1
             },
             {
-                header:'{s name="statistic/list/column/provision"}Provision{/s}',
-                dataIndex:'provision',
+                header: '{s name="statistic/list/column/provision"}Provision{/s}',
+                dataIndex: 'provision',
                 xtype: 'numbercolumn',
                 summaryType: 'sum',
                 summaryRenderer: function(value, summaryData, dataIndex) {
                     return me.summaryRenderer(me, value, summaryData, dataIndex);
                 } ,
-                flex:1
+                flex: 1
             }
         ];
         return columnsData;
@@ -131,29 +131,29 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
                 actionColumnData = [];
 
         actionColumnData.push({
-            iconCls:'sprite-pencil',
-            cls:'editBtn',
-            tooltip:'{s name="list/action_column/edit"}Edit partner{/s}',
-            handler:function (view, rowIndex, colIndex, item) {
+            iconCls: 'sprite-pencil',
+            cls: 'editBtn',
+            tooltip: '{s name="list/action_column/edit"}Edit partner{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('editColumn', view, rowIndex, colIndex, item);
             }
         });
 
         actionColumnData.push({
-            iconCls:'sprite-minus-circle-frame',
-            action:'delete',
-            cls:'delete',
-            tooltip:'{s name="list/action_column/delete"}Delete partner{/s}',
-            handler:function (view, rowIndex, colIndex, item) {
+            iconCls: 'sprite-minus-circle-frame',
+            action: 'delete',
+            cls: 'delete',
+            tooltip: '{s name="list/action_column/delete"}Delete partner{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
             }
         });
 
         actionColumnData.push({
-            iconCls:'sprite-chart-up-color',
-            cls:'chart-up-color',
-            tooltip:'{s name="list/action_column/statistic"}Statistics{/s}',
-            handler:function (view, rowIndex, colIndex, item) {
+            iconCls: 'sprite-chart-up-color',
+            cls: 'chart-up-color',
+            tooltip: '{s name="list/action_column/statistic"}Statistics{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('statistic', view, rowIndex, colIndex, item);
             }
         });
@@ -168,9 +168,9 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
     getPagingBar: function () {
         var me = this;
         return Ext.create('Ext.toolbar.Paging', {
-            store:me.listStore,
-            dock:'bottom',
-            displayInfo:true
+            store: me.listStore,
+            dock: 'bottom',
+            displayInfo: true
         });
 
     },

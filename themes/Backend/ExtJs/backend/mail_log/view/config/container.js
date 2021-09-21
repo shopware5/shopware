@@ -3,7 +3,7 @@
 Ext.define('Shopware.apps.MailLog.view.config.Container', {
 
     extend: 'Ext.container.Container',
-    alias:'widget.mail_log-config-tab-container',
+    alias: 'widget.mail_log-config-tab-container',
     layout: 'fit',
 
     initComponent: function () {

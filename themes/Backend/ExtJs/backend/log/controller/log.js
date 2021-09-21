@@ -53,13 +53,13 @@ Ext.define('Shopware.apps.Log.controller.Log', {
         var me = this;
 
         me.control({
-            'log-main-list':{
+            'log-main-list': {
                 deleteColumn: me.onDeleteSingleLog,
                 openLog: me.onViewLog,
                 searchLog: me.onSearchLog
             },
 
-            'log-main-list button[action=deleteMultipleLogs]':{
+            'log-main-list button[action=deleteMultipleLogs]': {
                 click: me.onDeleteMultipleLogs
             }
         });

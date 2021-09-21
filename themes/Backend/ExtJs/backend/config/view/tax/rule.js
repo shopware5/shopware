@@ -29,8 +29,8 @@
 
 //{block name="backend/config/view/tax/rule"}
 Ext.define('Shopware.apps.Config.view.tax.Rule', {
-    extend:'Shopware.apps.Config.view.base.Property',
-    alias:'widget.config-tax-rule',
+    extend: 'Shopware.apps.Config.view.base.Property',
+    alias: 'widget.config-tax-rule',
 
     title: '{s name="tax/rules/title"}Tax rules{/s}',
     name: 'rules',
@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
         },{
             header: '{s name="tax/rules/area_header"}Area{/s}',
             dataIndex: 'areaId',
-            flex:1,
+            flex: 1,
             editor: {
                 xtype: 'config-element-select',
                 queryMode: 'local',
@@ -75,16 +75,16 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
             },
             renderer: me.onComboRenderer
         },{
-            header:'{s name="tax/rules/country_header"}Country{/s}',
-            dataIndex:'countryId',
-            flex:1,
+            header: '{s name="tax/rules/country_header"}Country{/s}',
+            dataIndex: 'countryId',
+            flex: 1,
             editor: {
                 xtype: 'config-element-select',
                 queryMode: 'local',
                 queryCaching: true,
                 store: countryStore,
-                displayField:'name',
-                valueField:'id',
+                displayField: 'name',
+                valueField: 'id',
                 emptyText: '{s name="tax/rules/select_empty_text"}All{/s}',
                 matchFieldWidth: false,
                 listConfig: {
@@ -93,16 +93,16 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
             },
             renderer: me.onComboRenderer
         },{
-            header:'{s name="tax/rules/state_header"}State{/s}',
-            dataIndex:'stateId',
-            flex:1,
+            header: '{s name="tax/rules/state_header"}State{/s}',
+            dataIndex: 'stateId',
+            flex: 1,
             editor: {
                 xtype: 'config-element-select',
                 queryMode: 'local',
                 queryCaching: true,
                 store: stateStore,
-                displayField:'name',
-                valueField:'id',
+                displayField: 'name',
+                valueField: 'id',
                 emptyText: '{s name="tax/rules/select_empty_text"}All{/s}',
                 matchFieldWidth: false,
                 listConfig: {
@@ -111,14 +111,14 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
             },
             renderer: me.onComboRenderer
         },{
-            header:'{s name="tax/rules/tax_header"}Tax{/s}',
-            dataIndex:'tax',
-            flex:1,
-            xtype:'numbercolumn', format:'00.00',
-            editor:{
-                xtype:'numberfield',
-                allowBlank:false,
-                decimalPrecision:2
+            header: '{s name="tax/rules/tax_header"}Tax{/s}',
+            dataIndex: 'tax',
+            flex: 1,
+            xtype: 'numbercolumn', format: '00.00',
+            editor: {
+                xtype: 'numberfield',
+                allowBlank: false,
+                decimalPrecision: 2
             }
         }, me.getActionColumn()];
     },
@@ -214,7 +214,7 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
     getTopBar: function () {
         var me = this,
             topBar = me.callParent();
-        me.addButton = Ext.apply(topBar[0],{ disabled:true });
+        me.addButton = Ext.apply(topBar[0],{ disabled: true });
 
         topBar.push({
             xtype: 'config-element-select',

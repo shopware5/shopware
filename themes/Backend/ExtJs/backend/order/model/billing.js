@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Order.model.Billing', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.apps.Base.model.BillingAddress',
+    extend: 'Shopware.apps.Base.model.BillingAddress',
     /**
      * One or more BelongsTo associations for this model.
      * @string
@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Order.model.Billing', {
     fields: [
         //{block name="backend/order/model/billing/fields"}{/block}
         { name: 'orderId', type: 'int' },
-        { name: 'stateId', type:'int', useNull: true }
+        { name: 'stateId', type: 'int', useNull: true }
     ]
 });
 //{/block}

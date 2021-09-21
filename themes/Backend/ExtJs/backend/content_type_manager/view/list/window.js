@@ -28,7 +28,7 @@ Ext.define('Shopware.apps.ContentTypeManager.view.list.Window', {
     alias: 'widget.content-type-manager-list-window',
     height: 600,
     width: 1000,
-    title : '{s name="list/title"}{/s}',
+    title: '{s name="list/title"}{/s}',
     autoShow: true,
 
     configure: function() {

@@ -52,12 +52,12 @@ Ext.define('Shopware.apps.Article.model.EsdFile', {
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -68,11 +68,11 @@ Ext.define('Shopware.apps.Article.model.EsdFile', {
             read: '{url action="getEsdFiles"}'
         },
 
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total',
-            messageProperty : 'message'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total',
+            messageProperty: 'message'
         }
     }
 

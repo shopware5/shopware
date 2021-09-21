@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Mail.model.Attachment', {
      *
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/mail/model/attachment/fields"}{/block}
         { name: 'id',          type: 'int' },
         { name: 'filename',    type: 'string' },

@@ -38,14 +38,14 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
      * CSS selectors
      */
     refs: [
-        { ref:'grid', selector:'multi-edit-main-grid' },
-        { ref:'simpleGrid', selector:'multi-edit-add-filter-grid' },
-        { ref:'navigationGrid', selector:'multi-edit-navigation-grid' },
-        { ref:'runButton', selector:'query-field button[name=run-button]' },
-        { ref:'simpleRunButton', selector:'multi-edit-add-filter-grid button[name=run-button-simple]' },
-        { ref:'tabPanel', selector:'multi-edit-add-filter-window tabpanel[name=filter-tab-panel]' },
-        { ref:'queryField', selector:'query-field' },
-        { ref:'filterCombo', selector:'query-field combo[name=filterString]' }
+        { ref: 'grid', selector: 'multi-edit-main-grid' },
+        { ref: 'simpleGrid', selector: 'multi-edit-add-filter-grid' },
+        { ref: 'navigationGrid', selector: 'multi-edit-navigation-grid' },
+        { ref: 'runButton', selector: 'query-field button[name=run-button]' },
+        { ref: 'simpleRunButton', selector: 'multi-edit-add-filter-grid button[name=run-button-simple]' },
+        { ref: 'tabPanel', selector: 'multi-edit-add-filter-window tabpanel[name=filter-tab-panel]' },
+        { ref: 'queryField', selector: 'query-field' },
+        { ref: 'filterCombo', selector: 'query-field combo[name=filterString]' }
     ],
 
     /**
@@ -428,7 +428,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
         var me = this;
 
         me.columnStore = Ext.create('Ext.data.Store', {
-            model : 'Shopware.apps.ArticleList.model.Operator'
+            model: 'Shopware.apps.ArticleList.model.Operator'
         });
 
         Ext.each(Object.keys(me.filterableColumns), function(attribute) {
@@ -436,7 +436,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
         });
 
         me.operatorStore = Ext.create('Ext.data.Store', {
-            model : 'Shopware.apps.ArticleList.model.Operator'
+            model: 'Shopware.apps.ArticleList.model.Operator'
         });
     },
 

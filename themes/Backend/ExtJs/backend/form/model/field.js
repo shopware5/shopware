@@ -43,24 +43,24 @@ Ext.define('Shopware.apps.Form.model.Field', {
      * The fields used for this model
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/form/model/field/fields"}{/block}
-        { name : 'id',       type : 'int' },
-        { name : 'name',     type : 'string' },
-        { name : 'label',    type : 'string' },
-        { name : 'typ',      type : 'string' },
-        { name : 'class',    type : 'string' },
-        { name : 'value',    type : 'string' },
-        { name : 'note',     type : 'string' },
-        { name : 'errorMsg', type : 'string' },
-        { name : 'required', type : 'bool' },
-        { name : 'position', type : 'int' }
+        { name: 'id',       type: 'int' },
+        { name: 'name',     type: 'string' },
+        { name: 'label',    type: 'string' },
+        { name: 'typ',      type: 'string' },
+        { name: 'class',    type: 'string' },
+        { name: 'value',    type: 'string' },
+        { name: 'note',     type: 'string' },
+        { name: 'errorMsg', type: 'string' },
+        { name: 'required', type: 'bool' },
+        { name: 'position', type: 'int' }
     ],
 
     validations: [
-        { field: 'name',  type: 'presence'},
-        { field: 'label', type: 'presence'},
-        { field: 'name',  type: 'presence'}
+        { field: 'name',  type: 'presence' },
+        { field: 'label', type: 'presence' },
+        { field: 'name',  type: 'presence' }
     ],
 
     /**

@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Order.view.batch.Window', {
      *
      * @type { String }
      */
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     /**
      * Set base css class prefix and module individual css class for css styling
      *
@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Order.view.batch.Window', {
      *
      * @type { String }
      */
-    alias:'widget.order-batch-window',
+    alias: 'widget.order-batch-window',
     /**
      * Define window width
      *
@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Order.view.batch.Window', {
      *
      * @type { String }
      */
-    height:'90%',
+    height: '90%',
 
     /**
      * @type { Boolean }
@@ -76,23 +76,23 @@ Ext.define('Shopware.apps.Order.view.batch.Window', {
      *
      * @type { Boolean }
      */
-    footerButton:false,
+    footerButton: false,
     /**
      * As the window has two possible modes (expert and normal), stateful property might result in problems
      * depending on mode the user chooses
      *
      * @type { Boolean }
      */
-    stateful:false,
+    stateful: false,
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId:'shopware-order-batch-window',
+    stateId: 'shopware-order-batch-window',
 
     /**
      * @type { String }
      */
-    title:'{s name="window_title"}Batch processing{/s}',
+    title: '{s name="window_title"}Batch processing{/s}',
 
     /**
      * Set layout for this component to hbox

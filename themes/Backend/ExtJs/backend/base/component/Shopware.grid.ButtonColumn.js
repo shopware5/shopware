@@ -35,7 +35,7 @@ Ext.define('Ext.ux.ButtonColumnMenuItem', {
 Ext.define('Ext.ux.ButtonColumn', {
     extend: 'Ext.grid.column.Column',
     alias: ['widget.buttoncolumn'],
-    requires:['Ext.button.Button'],
+    requires: ['Ext.button.Button'],
 
     /* @cfg { String }  buttonText
      * If defined, will be button text ,otherwise underlying store value will be used
@@ -106,7 +106,7 @@ Ext.define('Ext.ux.ButtonColumn', {
      */
     menuAlign: 'tl-bl?',
 
-    extMinor:Ext.getVersion().getMinor(),
+    extMinor: Ext.getVersion().getMinor(),
 
     sortable: false,
 
@@ -184,13 +184,13 @@ Ext.define('Ext.ux.ButtonColumn', {
     getTemplateArgs: function () {
         var me = this;
         return {
-            id:Ext.id(),
-            href:false,
-            type:'button',
+            id: Ext.id(),
+            href: false,
+            type: 'button',
             /*Need empty values to avoid XTemplate undefined error
              */
-            glyph:'',
-            iconUrl:'',
+            glyph: '',
+            iconUrl: '',
             baseCls: me.baseCls,
             splitCls: me.getSplitCls(),
             btnCls: me.extMinor === 1 ? me.getBtnCls() :''

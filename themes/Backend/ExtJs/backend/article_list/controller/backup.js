@@ -35,8 +35,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
     extend: 'Ext.app.Controller',
 
     refs: [
-        { ref:'mainGrid', selector:'multi-edit-main-grid' },
-        { ref:'backupGrid', selector:'multi-edit-backup-grid' }
+        { ref: 'mainGrid', selector: 'multi-edit-main-grid' },
+        { ref: 'backupGrid', selector: 'multi-edit-backup-grid' }
     ],
 
     /**
@@ -174,13 +174,13 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
         var me = this;
 
         me.progressWindow = Ext.MessageBox.show({
-            title        : '{s name="restoringTitle"}Restoring the backup{/s}',
-            msg          : '{s name="restoringMessage"}Currently restoring the selected backup.{/s}',
-            width        : 500,
-            progress     : true,
-            closable     : false,
-            buttons      : Ext.MessageBox.CANCEL,
-            fn           : function(buttonId, text, opt) {
+            title: '{s name="restoringTitle"}Restoring the backup{/s}',
+            msg: '{s name="restoringMessage"}Currently restoring the selected backup.{/s}',
+            width: 500,
+            progress: true,
+            closable: false,
+            buttons: Ext.MessageBox.CANCEL,
+            fn: function(buttonId, text, opt) {
 
                 if (buttonId !== 'cancel') {
                     return;
@@ -219,7 +219,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
         Ext.Ajax.request({
             url: '{url controller="ArticleList" action = "restore"}',
             timeout: 4000000,
-            params : {
+            params: {
                 resource: 'product',
                 id: config.id,
                 offset: offset

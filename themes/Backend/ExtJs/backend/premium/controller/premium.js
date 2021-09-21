@@ -49,22 +49,22 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
         var me = this;
 
         me.control({
-            'premium-main-list textfield[action=searchPremiumArticle]':{
+            'premium-main-list textfield[action=searchPremiumArticle]': {
                 fieldchange: me.onSearch
             },
             //The add-button on the toolbar
-            'premium-main-list button[action=add]':{
+            'premium-main-list button[action=add]': {
                 click: me.onOpenCreateWindow
             },
             //The delete-button on the toolbar
-            'premium-main-list button[action=deleteMultipleArticles]':{
+            'premium-main-list button[action=deleteMultipleArticles]': {
                 click: me.onDeleteMultipleArticles
             },
             // The save-button from the create-window
             'window button[action=savePremium]': {
                 click: me.onCreatePremium
             },
-            'premium-main-list':{
+            'premium-main-list': {
                 deleteColumn: me.onDeleteSingleArticle,
                 editColumn: me.onOpenEditWindow
             }
@@ -89,12 +89,12 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
      * @param [int] rowIndex Contains the row-index
      * @return void
      */
-    onOpenEditWindow : function (view, item, rowIndex) {
+    onOpenEditWindow: function (view, item, rowIndex) {
         var store = this.subApplication.premiumStore,
             record = store.getAt(rowIndex);
 
         //Create edit-window
-        this.getView('premium.Detail').create({ record : record, mainStore : store });
+        this.getView('premium.Detail').create({ record: record, mainStore: store });
     },
 
     /**

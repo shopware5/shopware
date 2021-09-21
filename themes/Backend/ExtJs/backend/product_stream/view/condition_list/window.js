@@ -31,7 +31,7 @@
 Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.product-stream-detail-window',
-    title : '{s name="detail_window_title"}Product stream details{/s}',
+    title: '{s name="detail_window_title"}Product stream details{/s}',
     height: '90%',
     width: '90%',
     layout: 'fit',
@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
         });
 
         container = Ext.create('Ext.container.Container', {
-            layout: { type: 'vbox', align: 'stretch'},
+            layout: { type: 'vbox', align: 'stretch' },
             flex: 1,
             padding: 10,
             title: '{s name="configuration_title"}{/s}',

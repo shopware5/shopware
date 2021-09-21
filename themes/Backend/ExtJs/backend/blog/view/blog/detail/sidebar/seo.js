@@ -38,16 +38,16 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
      * Define that the billing field set is an extension of the Ext.form.FieldSet
      * @string
      */
-    extend:'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.blog-blog-detail-sidebar-seo',
+    alias: 'widget.blog-blog-detail-sidebar-seo',
 
     bodyPadding: 10,
     autoScroll: true,
-    border:false,
+    border: false,
     /**
      * Helper property which contains the name of the add event which fired when the user
      * clicks the button of the form panel
@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.registerEvents();
         me.title = '{s name="detail/sidebar/seo/title"}Search Engine Optimization{/s}';
@@ -132,9 +132,9 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
         return Ext.create('Ext.form.FieldSet', {
             layout: 'anchor',
             padding: 10,
-            title:'{s name="detail/sidebar/seo/field_set/on_page/title"}On-Page Optimization{/s}',
+            title: '{s name="detail/sidebar/seo/field_set/on_page/title"}On-Page Optimization{/s}',
             defaults: {
-                xtype:'textfield',
+                xtype: 'textfield',
                 anchor: '100%'
             },
             items: me.createFormItems()
@@ -190,7 +190,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
     createPreviewFieldSet: function () {
         var me = this;
         return {
-            xtype:'googlepreview',
+            xtype: 'googlepreview',
             fieldSetTitle: '{s name="detail/sidebar/seo/field_set/preview/title"}Preview{/s}',
             viewData: me.detailRecord,
             titleField: me.metaTitle,

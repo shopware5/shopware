@@ -97,9 +97,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
         var me = this;
 
         return me.previewElement = Ext.create('Ext.Component', {
-            autoEl : {
-                tag : 'iframe',
-                src : src,
+            autoEl: {
+                tag: 'iframe',
+                src: src,
                 style: {
                     height: 'auto',
                     width: width + 'px'

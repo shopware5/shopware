@@ -25,6 +25,7 @@ clear-cache: .make.console.executable
 	./bin/console sw:cache:clear
 
 check-code: check-phpstan check-php-cs-fixer
+check-js-code: check-eslint-frontend check-eslint-backend
 
 check-php-cs-fixer:
 	./vendor/bin/php-cs-fixer fix --dry-run -v
@@ -36,6 +37,25 @@ fix-code-style:
 
 check-phpstan:
 	php -d memory_limit=4G ./vendor/bin/phpstan analyze -c .phpstan.neon --no-progress --error-format=table
+
+check-eslint-frontend:
+	npm run lint --prefix ./themes
+
+fix-eslint-frontend:
+	npm run fix --prefix ./themes
+
+check-eslint-backend:
+	npm run lintBackend --prefix ./themes
+
+fix-eslint-backend:
+	npm run fixBackend --prefix ./themes
+
+install-theme-depencencies:
+	npm install --prefix ./themes
+
+frontend-watch: clear-cache
+	./bin/console sw:theme:dump:configuration
+	npm run watch --prefix ./themes
 
 prepare-mink: .make.config.build.mink
 	./bin/console sw:rebuild:seo:index

@@ -46,12 +46,12 @@ Ext.define('Shopware.apps.Category.store.CustomerGroups', {
      * is initialized
      * @boolean
      */
-    autoLoad : false,
+    autoLoad: false,
     /**
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Base.model.CustomerGroup',
+    model: 'Shopware.apps.Base.model.CustomerGroup',
 
     pageSize: 20,
     /**

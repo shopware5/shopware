@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Banner', {
      * sub-application behavior and the event bus
      * @string
      */
-    extend : 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * The name of the module. Used for internal purpose
@@ -61,24 +61,24 @@ Ext.define('Shopware.apps.Banner', {
      * controller (server-side)
      * @string
      */
-    loadPath : '{url action=load}',
+    loadPath: '{url action=load}',
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers : [ 'Main' ],
+    controllers: [ 'Main' ],
     /**
      * Used views here to improve bulk loading
      */
-    views : [
+    views: [
         'Main',
         'main.Panel',
         'main.BannerFormAdd',
         'main.BannerForm'
     ],
 
-    stores : [ 'Category', 'Banner' ],
-    models : [ 'BannerDetail' ],
+    stores: [ 'Category', 'Banner' ],
+    models: [ 'BannerDetail' ],
 
     /**
      * Returns the main application window for this is expected

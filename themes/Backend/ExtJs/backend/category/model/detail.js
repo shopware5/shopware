@@ -41,27 +41,27 @@ Ext.define('Shopware.apps.Category.model.Detail', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.model.Category',
+    extend: 'Shopware.model.Category',
     /**
      * Configure the data communication
      * @object
      */
-    fields:[
+    fields: [
         // {block name="backend/category/model/detail/fields"}{/block}
-        { name : 'id', type: 'integer', useNull:true },
-        { name : 'parentId', type: 'integer' },
-        { name : 'streamId', type: 'integer', useNull:true, defaultValue: null },
-        { name : 'name', type: 'string' },
-        { name : 'position', type: 'integer', useNull:true, defaultValue: null},
-        { name : 'metaKeywords', type: 'string', useNull:true, defaultValue: null },
-        { name : 'metaTitle', type: 'string', useNull:true, defaultValue: null },
-        { name : 'metaDescription', type: 'string', useNull:true, defaultValue: null },
-        { name : 'cmsHeadline', type: 'string', useNull:true, defaultValue: null },
-        { name : 'cmsText', type: 'string', useNull:true, defaultValue: null },
+        { name: 'id', type: 'integer', useNull: true },
+        { name: 'parentId', type: 'integer' },
+        { name: 'streamId', type: 'integer', useNull: true, defaultValue: null },
+        { name: 'name', type: 'string' },
+        { name: 'position', type: 'integer', useNull: true, defaultValue: null },
+        { name: 'metaKeywords', type: 'string', useNull: true, defaultValue: null },
+        { name: 'metaTitle', type: 'string', useNull: true, defaultValue: null },
+        { name: 'metaDescription', type: 'string', useNull: true, defaultValue: null },
+        { name: 'cmsHeadline', type: 'string', useNull: true, defaultValue: null },
+        { name: 'cmsText', type: 'string', useNull: true, defaultValue: null },
         {
-            name : 'template',
+            name: 'template',
             type: 'string',
-            useNull:true,
+            useNull: true,
             defaultValue: null,
             convert: function(v, record) {
                 if (v == null) {
@@ -76,40 +76,40 @@ Ext.define('Shopware.apps.Category.model.Detail', {
                 return v;
             }
         },
-        { name : 'productBoxLayout', type: 'string', useNull:true, defaultValue: null },
-        { name : 'active', type: 'boolean' },
-        { name : 'blog', type: 'boolean' },
-        { name : 'external', type: 'string' , useNull:true, defaultValue: null},
-        { name : 'externalTarget', type: 'string', defaultValue: '' },
-        { name : 'hideFilter', type: 'boolean' },
-        { name : 'hideTop', type: 'boolean' },
-        { name : 'imagePath', type: 'string' , useNull:true, defaultValue: null},
-        { name : 'hideSortings', type: 'boolean' },
-        { name : 'sortingIds', type: 'string' },
-        { name : 'facetIds', type: 'string' },
-        { name : 'shops', type: 'auto' },
+        { name: 'productBoxLayout', type: 'string', useNull: true, defaultValue: null },
+        { name: 'active', type: 'boolean' },
+        { name: 'blog', type: 'boolean' },
+        { name: 'external', type: 'string' , useNull: true, defaultValue: null },
+        { name: 'externalTarget', type: 'string', defaultValue: '' },
+        { name: 'hideFilter', type: 'boolean' },
+        { name: 'hideTop', type: 'boolean' },
+        { name: 'imagePath', type: 'string' , useNull: true, defaultValue: null },
+        { name: 'hideSortings', type: 'boolean' },
+        { name: 'sortingIds', type: 'string' },
+        { name: 'facetIds', type: 'string' },
+        { name: 'shops', type: 'auto' },
     ],
 
-    proxy : {
-        type : 'ajax',
+    proxy: {
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        api : {
-            read : '{url controller=category action=getDetail}',
-            create  : '{url controller=category action=createDetail}',
-            update  : '{url controller=category action=updateDetail}'
+        api: {
+            read: '{url controller=category action=getDetail}',
+            create: '{url controller=category action=createDetail}',
+            update: '{url controller=category action=updateDetail}'
 
         },
         /**
          * Configure the data reader
          * @object
          */
-        reader : {
-            type : 'json',
+        reader: {
+            type: 'json',
             root: 'data'
         }
     },
@@ -117,18 +117,18 @@ Ext.define('Shopware.apps.Category.model.Detail', {
      * Define the associations of the category model
      * @array
      */
-    associations:[
+    associations: [
         {
-            type:'hasMany',
-            model:'Shopware.apps.Category.model.Emotion',
-            name:'getEmotion',
-            associationKey:'emotion'
+            type: 'hasMany',
+            model: 'Shopware.apps.Category.model.Emotion',
+            name: 'getEmotion',
+            associationKey: 'emotion'
         },
         {
-            type:'hasMany',
-            model:'Shopware.apps.Base.model.CustomerGroup',
-            name:'getCustomerGroups',
-            associationKey:'customerGroups'
+            type: 'hasMany',
+            model: 'Shopware.apps.Base.model.CustomerGroup',
+            name: 'getCustomerGroups',
+            associationKey: 'customerGroups'
         }
     ]
 });

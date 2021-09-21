@@ -36,29 +36,29 @@
  */
 //{block name="backend/shipping/view/edit/default/form_right"}
 Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
-    extend      :'Ext.container.Container',
+    extend: 'Ext.container.Container',
     /**
      * Title of the right form
      * @string
      */
-    title       : '{s name="right_title"}Config{/s}',
+    title: '{s name="right_title"}Config{/s}',
     /**
      * Alias
      * @string
      */
-    alias       : 'widget.shipping-top-right-form',
+    alias: 'widget.shipping-top-right-form',
 
     /**
      * Disable the collapsible possibility
      * @boolean
      */
-    collapsible : false,
+    collapsible: false,
 
     /**
      * Disable the split possibility
      * @boolean
      */
-    split       : false,
+    split: false,
     /**
      * Translation table containing
      *  - 0 = Always
@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
      *  - 3 = Display as basket item
      * @Array of Objects
      */
-    dispatchSurchargeCalculationData : null,
+    dispatchSurchargeCalculationData: null,
 
     /**
      * Translation table containing
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
      *  - 3 = Reduction type
      * @Array of Objects
      */
-    dispatchTypeData : null,
+    dispatchTypeData: null,
 
     /**
      * Translation table containing
@@ -87,53 +87,53 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
      *  - 3 = Own calculation
      * @Array of Objects
      */
-    dispatchCalculationData : null,
+    dispatchCalculationData: null,
 
     /**
      * Default column width
      * @float
      */
-    columnWidth : 0.49,
+    columnWidth: 0.49,
 
     /**
      * Layout Anchor
      * @string
      */
-    layout      : 'anchor',
+    layout: 'anchor',
 
     /**
      * Height of the component
      * @string
      */
-    height      : '275px',
+    height: '275px',
 
     /**
      * Some default values
      * todo@stp Move this to CSS please :)
      * @object
      */
-    defaults    : {
-        labelStyle  : 'font-weight: 700; text-align: left;',
-        xtype       : 'combo',
+    defaults: {
+        labelStyle: 'font-weight: 700; text-align: left;',
+        xtype: 'combo',
         anchor: '100%',
-        labelWidth:130,
-        minWidth:250
+        labelWidth: 130,
+        minWidth: 250
     },
     /**
      * Padding
      * @integer
      */
-    bodyPadding     : 5,
+    bodyPadding: 5,
     /**
      * Set border to zero
      * @integer
      */
-    border      : 0,
+    border: 0,
 
     /**
      * Array of form elements
      */
-    items       : [],
+    items: [],
 
     margin: '0 0 0 10',
 
@@ -142,39 +142,39 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
      *
      * @Shopware.apps.Base.store.CustomerGroup
      */
-    customerGroupStore : null,
+    customerGroupStore: null,
 
     /**
      * Contains the calculation field.
      * @Ext.form.ComboBox
      */
-    calculationField : null,
+    calculationField: null,
 
     /**
      * Contains the type combo box
      * @Ext.Form.ComboBox
      */
-    typeField : null,
+    typeField: null,
 
     /**
      * Keeps all known Shops
      *
      * @Shopware.apps.Base.store.Shop
      */
-    shopStore : Ext.create('Shopware.apps.Base.store.Shop'),
+    shopStore: Ext.create('Shopware.apps.Base.store.Shop'),
 
     /**
      * Keeps all known tax codes
      *
      * @Shopware.apps.Base.store.Tax
      */
-    taxStore : Ext.create('Shopware.apps.Base.store.Tax'),
+    taxStore: Ext.create('Shopware.apps.Base.store.Tax'),
 
     /**
      * Initialize the Shopware.apps.Supplier.view.main.List and defines the necessary
      * default configuration
      */
-    initComponent : function() {
+    initComponent: function() {
         var me = this;
 
         me.shopStore.load();
@@ -228,30 +228,30 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
      * Returns a hugh array of Form Elements
      * @array
      */
-    getFormElements : function() {
+    getFormElements: function() {
         var me = this;
         return [
             {
-                name        : 'multiShopId',
-                emptyText   : '{s name="right_empty_text_shop"}All Shops{/s}',
-                fieldLabel  : '{s name="right_shop"}Shop{/s}',
-                store       :  me.shopStore,
-                valueField  : 'id',
+                name: 'multiShopId',
+                emptyText: '{s name="right_empty_text_shop"}All Shops{/s}',
+                fieldLabel: '{s name="right_shop"}Shop{/s}',
+                store: me.shopStore,
+                valueField: 'id',
                 displayField: 'name',
-                editable    : true,
-                allowBlank  : true,
-                queryMode : 'local',
-                emptyText:'{s name="right_empty_text_shop"}All Shops{/s}',
+                editable: true,
+                allowBlank: true,
+                queryMode: 'local',
+                emptyText: '{s name="right_empty_text_shop"}All Shops{/s}',
             }, {
-                name        : 'customerGroupId',
-                emptyText   : '{s name="right_empty_text_customer_group"}All groups{/s}',
-                fieldLabel  : '{s name="right_customer_group"}Customer Group{/s}',
-                store       :  me.customerGroupStore,
-                valueField  : 'id',
+                name: 'customerGroupId',
+                emptyText: '{s name="right_empty_text_customer_group"}All groups{/s}',
+                fieldLabel: '{s name="right_customer_group"}Customer Group{/s}',
+                store: me.customerGroupStore,
+                valueField: 'id',
                 displayField: 'name',
-                editable    : true,
-                allowBlank  : true,
-                queryMode : 'local',
+                editable: true,
+                allowBlank: true,
+                queryMode: 'local',
                 emptyText: '{s name="right_empty_text_customer_group"}All groups{/s}',
             },
             me.getCalculationField(),
@@ -259,7 +259,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
                 xtype: 'numberfield',
                 fieldLabel: '{s name="right_shipping_free"}Shipping free from{/s}',
                 name: 'shippingFree',
-                decimalPrecision : 2,
+                decimalPrecision: 2,
                 allowNegative: false,
                 minValue: 0,
                 emptyText: '{s name="right_shipping_free_emptyText"}Never{/s}',
@@ -274,17 +274,17 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
             me.getTypeField(),
             me.getSurchargeField(),
             {
-                name        : 'taxCalculation',
-                emptyText   : '{s name="right_empty_tax"}Highest tax{/s}',
-                fieldLabel  : '{s name="right_tax"}Tax{/s}',
-                store       : me.taxStore,
-                valueField  : 'id',
+                name: 'taxCalculation',
+                emptyText: '{s name="right_empty_tax"}Highest tax{/s}',
+                fieldLabel: '{s name="right_tax"}Tax{/s}',
+                store: me.taxStore,
+                valueField: 'id',
                 displayField: 'name',
-                editable    : true,
-                allowBlank  : true,
-                style       : 'width: 100%',
-                selectOnFocus   : false,
-                triggerAction   : 'all',
+                editable: true,
+                allowBlank: true,
+                style: 'width: 100%',
+                selectOnFocus: false,
+                triggerAction: 'all',
                 helpText: '{s name="right_empty_tax_help"}{/s}',
                 listeners: {
                     change: function(field, value) {
@@ -296,28 +296,28 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
 
     },
 
-    getTypeField : function() {
+    getTypeField: function() {
         var me = this;
 
         me.typeField = {
-            name        : 'type',
-            hiddenName  : 'type',
-            emptyText   : '{s name="right_choose"}Choose...{/s}',
-            value       : 0,
-            fieldLabel  : '{s name="right_dispatch_type"}Dispatch type{/s}',
-            valueField  : 'type',
-            editable    : false,
-            store       : new Ext.data.SimpleStore({
-               fields  : ['type', 'name'],
-               data    :this.dispatchTypeData
+            name: 'type',
+            hiddenName: 'type',
+            emptyText: '{s name="right_choose"}Choose...{/s}',
+            value: 0,
+            fieldLabel: '{s name="right_dispatch_type"}Dispatch type{/s}',
+            valueField: 'type',
+            editable: false,
+            store: new Ext.data.SimpleStore({
+               fields: ['type', 'name'],
+               data: this.dispatchTypeData
             }),
-            displayField:'name',
+            displayField: 'name',
             mode: 'local',
-            selectOnFocus:true,
+            selectOnFocus: true,
             allowBlank: false,
             typeAhead: false,
             triggerAction: 'all',
-            forceSelection : true,
+            forceSelection: true,
             listeners: {
                 scope: me,
                 change: function(el, value, oldValue) {
@@ -332,28 +332,28 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
      * Returns the field which contains the calculation combo box
      * @return Ext.form.ComboBox
      */
-    getCalculationField : function() {
+    getCalculationField: function() {
         var me = this,
             defaultConfig;
 
         defaultConfig = {
-            name        : 'calculation',
-            hiddenName   : 'calculation',
-            emptyText   : '{s name="right_choose"}Choose...{/s}',
-            fieldLabel  : '{s name="right_dispatch_calculation"}Calculate dispatch costs based on{/s}',
-            valueField  : 'calculation',
-            editable    : false,
-            store       : new Ext.data.SimpleStore({
-                fields  : ['calculation', 'name'],
-                data    : me.dispatchCalculationData
+            name: 'calculation',
+            hiddenName: 'calculation',
+            emptyText: '{s name="right_choose"}Choose...{/s}',
+            fieldLabel: '{s name="right_dispatch_calculation"}Calculate dispatch costs based on{/s}',
+            valueField: 'calculation',
+            editable: false,
+            store: new Ext.data.SimpleStore({
+                fields: ['calculation', 'name'],
+                data: me.dispatchCalculationData
             }),
-            displayField:'name',
+            displayField: 'name',
             mode: 'local',
-            selectOnFocus:true,
+            selectOnFocus: true,
             allowBlank: false,
             typeAhead: false,
             triggerAction: 'all',
-            forceSelection : true,
+            forceSelection: true,
 
             listeners: {
                 scope: me,
@@ -371,27 +371,27 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
      * Returns the field which contains the calculation combo box
      * @return Ext.form.ComboBox
      */
-    getSurchargeField : function() {
+    getSurchargeField: function() {
         var me = this,
             defaultConfig;
         defaultConfig = {
-                name        : 'surchargeCalculation',
-                hiddenName  : 'surchargeCalculation',
-                emptyText   : '{s name="right_choose"}Choose...{/s}',
-                fieldLabel  : '{s name="right_surcharge"}Surcharge type{/s}',
-                valueField  : 'surchargeCalculation',
-                editable    : false,
-                store       : new Ext.data.SimpleStore({
-                   fields  : ['surchargeCalculation', 'name'],
-                   data    :this.dispatchSurchargeCalculationData
+                name: 'surchargeCalculation',
+                hiddenName: 'surchargeCalculation',
+                emptyText: '{s name="right_choose"}Choose...{/s}',
+                fieldLabel: '{s name="right_surcharge"}Surcharge type{/s}',
+                valueField: 'surchargeCalculation',
+                editable: false,
+                store: new Ext.data.SimpleStore({
+                   fields: ['surchargeCalculation', 'name'],
+                   data: this.dispatchSurchargeCalculationData
                 }),
-                displayField:'name',
+                displayField: 'name',
                 mode: 'local',
-                selectOnFocus:true,
+                selectOnFocus: true,
                 allowBlank: false,
                 typeAhead: false,
                 triggerAction: 'all',
-                forceSelection : true
+                forceSelection: true
             };
         defaultConfig = Ext.apply(defaultConfig, me.defaults);
 

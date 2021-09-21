@@ -35,13 +35,13 @@
  */
 //{block name="backend/blog/view/vote/info_panel"}
 Ext.define('Shopware.apps.Blog.view.blog.detail.comments.InfoPanel', {
-    extend : 'Ext.form.Panel',
-    alias : 'widget.blog-blog-detail-comments-info_panel',
-    autoShow : true,
-    name:  'infopanel',
+    extend: 'Ext.form.Panel',
+    alias: 'widget.blog-blog-detail-comments-info_panel',
+    autoShow: true,
+    name: 'infopanel',
     cls: 'detail-view',
     region: 'east',
-    style:'background: #FFFFFF !important',
+    style: 'background: #FFFFFF !important',
     split: true,
     bodyPadding: 10,
     title: '{s name="blog/detail/comments/info_panel/title"}More information{/s}',

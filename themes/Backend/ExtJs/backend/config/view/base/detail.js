@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Config.view.base.Detail', {
         },{
             text: '{s name="detail/save_text"}Save{/s}',
             cls: 'primary',
-            tooltip:'{s name="detail/save_tooltip"}Save (CTRL + S){/s}',
+            tooltip: '{s name="detail/save_tooltip"}Save (CTRL + S){/s}',
             action: 'save'
         }];
     },

@@ -26,7 +26,7 @@
 Ext.define('Shopware.apps.ContentTypeManager.view.detail.Window', {
     extend: 'Shopware.window.Detail',
     alias: 'widget.content-type-manager-detail-window',
-    title : '{s name="detail/title"}{/s}',
+    title: '{s name="detail/title"}{/s}',
     height: 700,
     width: 1000,
 

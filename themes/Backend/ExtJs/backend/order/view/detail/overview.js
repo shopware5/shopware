@@ -583,15 +583,15 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
     createLeftDetailElements: function () {
         var me = this, fields;
         fields = [
-            { name: 'shop[name]', fieldLabel: me.snippets.details.shop},
-            { name: 'locale[name]', fieldLabel: me.snippets.details.language},
-            { name: 'orderTime', fieldLabel: me.snippets.details.orderTime},
-            { name: 'number', fieldLabel: me.snippets.details.number},
-            { name: 'currency', fieldLabel: me.snippets.details.currency},
-            { name: 'invoiceAmount', fieldLabel: me.snippets.details.amount, renderer: me.renderInvoiceAmount},
-            { name: 'dispatch[name]', fieldLabel: me.snippets.details.dispatch},
-            { name: 'partnerId', fieldLabel: me.snippets.details.partnerId},
-            { name: 'customerEmail', fieldLabel: me.snippets.details.customerEmail, allowHtml: true, renderer: me.renderCustomerEmail}
+            { name: 'shop[name]', fieldLabel: me.snippets.details.shop },
+            { name: 'locale[name]', fieldLabel: me.snippets.details.language },
+            { name: 'orderTime', fieldLabel: me.snippets.details.orderTime },
+            { name: 'number', fieldLabel: me.snippets.details.number },
+            { name: 'currency', fieldLabel: me.snippets.details.currency },
+            { name: 'invoiceAmount', fieldLabel: me.snippets.details.amount, renderer: me.renderInvoiceAmount },
+            { name: 'dispatch[name]', fieldLabel: me.snippets.details.dispatch },
+            { name: 'partnerId', fieldLabel: me.snippets.details.partnerId },
+            { name: 'customerEmail', fieldLabel: me.snippets.details.customerEmail, allowHtml: true, renderer: me.renderCustomerEmail }
         ];
         if (me.record.get('currencyFactor') !== 1) {
             fields.push({
@@ -634,10 +634,10 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
         var me = this;
 
         return [
-            { name: 'referer', fieldLabel: me.snippets.details.referer},
-            { name: 'remoteAddressConverted', fieldLabel: me.snippets.details.remoteAddress},
-            { name: 'deviceTypeHuman', fieldLabel: me.snippets.details.deviceType},
-            { name: 'changed', fieldLabel: me.snippets.details.changed},
+            { name: 'referer', fieldLabel: me.snippets.details.referer },
+            { name: 'remoteAddressConverted', fieldLabel: me.snippets.details.remoteAddress },
+            { name: 'deviceTypeHuman', fieldLabel: me.snippets.details.deviceType },
+            { name: 'changed', fieldLabel: me.snippets.details.changed },
             me.createCustomerButton()
         ];
     },
@@ -651,7 +651,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
         var me = this;
         return {
             disabled: !me.record.getCustomer().first(),
-            action:'openCustomer',
+            action: 'openCustomer',
             xtype: 'button',
             cls: 'primary',
             text: me.snippets.openCustomer,

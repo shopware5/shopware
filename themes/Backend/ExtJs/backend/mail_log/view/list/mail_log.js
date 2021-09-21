@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.MailLog.view.list.MailLog', {
         return items;
     },
 
-    dateColumnRenderer:function (value) {
+    dateColumnRenderer: function (value) {
         return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
     },
 

@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
                 rotate: {
                     degrees: 315
                 },
-                renderer:function (value) {
+                renderer: function (value) {
                     return Ext.util.Format.date(value);
                 }
             }

@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
             function () {
                 me.initAjaxRequest(
                     '{url controller=PluginInstaller action=activatePlugin}',
-                    { technicalName: me.pluginName},
+                    { technicalName: me.pluginName },
                     me.snippets.activateFailed,
                     Ext.bind(me.compileTheme, me)
                 );

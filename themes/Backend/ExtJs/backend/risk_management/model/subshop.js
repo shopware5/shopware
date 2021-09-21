@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.RiskManagement.model.Subshop', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
     * Configure the data communication
     * @object
@@ -64,12 +64,12 @@ Ext.define('Shopware.apps.RiskManagement.model.Subshop', {
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/risk_management/model/shop/fields"}{/block}
-        { name:'id', type:'int' },
-        { name:'localeId', type:'int' },
-        { name:'categoryId', type:'int' },
-        { name:'name', type:'string' }
+        { name: 'id', type: 'int' },
+        { name: 'localeId', type: 'int' },
+        { name: 'categoryId', type: 'int' },
+        { name: 'name', type: 'string' }
     ]
 });
 

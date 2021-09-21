@@ -36,7 +36,7 @@
 //{block name="backend/newsletter_manager/view/main/window"}
 Ext.define('Shopware.apps.NewsletterManager.view.main.Window', {
     extend: 'Enlight.app.Window',
-    alias : 'widget.newsletter-manager-main-window',
+    alias: 'widget.newsletter-manager-main-window',
     layout: 'fit',
     width: 860,
     height: '90%',
@@ -81,11 +81,11 @@ Ext.define('Shopware.apps.NewsletterManager.view.main.Window', {
         var me = this;
 
         return [{
-            xtype:'newsletter-manager-tabs-overview',
+            xtype: 'newsletter-manager-tabs-overview',
             store: me.mailingStore
         },
         {
-            xtype:'newsletter-manager-tabs-admin',
+            xtype: 'newsletter-manager-tabs-admin',
             senderStore: me.senderStore,
             recipientStore: me.recipientStore,
             recipientGroupStore: me.recipientGroupStore,

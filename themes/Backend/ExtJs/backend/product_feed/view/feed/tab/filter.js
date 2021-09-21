@@ -36,25 +36,25 @@
  */
 //{block name="backend/product_feed/view/feed/tab/filter"}
 Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Filter', {
-    extend:'Ext.container.Container',
-    alias:'widget.product_feed-feed-tab-filter',
-    title:'{s name="tab/title/filter"}Further filters{/s}',
+    extend: 'Ext.container.Container',
+    alias: 'widget.product_feed-feed-tab-filter',
+    title: '{s name="tab/title/filter"}Further filters{/s}',
     border: 0,
     layout: 'anchor',
     padding: 10,
     cls: 'shopware-toolbar product-feed--tab-filter',
-    defaults:{
-        anchor:'100%',
-        labelStyle:'font-weight: 700;',
+    defaults: {
+        anchor: '100%',
+        labelStyle: 'font-weight: 700;',
         labelWidth: 150,
-        xtype:'numberfield'
+        xtype: 'numberfield'
     },
 
     /**
      * Initialize the Shopware.apps.ProductFeed.view.feed.tab.Footer and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.items = me.getItems();
         me.callParent(arguments);
@@ -62,50 +62,50 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Filter', {
     /**
      * creates all fields for the tab
      */
-    getItems:function () {
+    getItems: function () {
         return [
             {
-                fieldLabel:'{s name="tab/filter/field/price_less"}Price higher than{/s}',
-                name:'priceFilter',
-                hideTrigger:true,
-                keyNavEnabled:false,
-                mouseWheelEnabled:false
+                fieldLabel: '{s name="tab/filter/field/price_less"}Price higher than{/s}',
+                name: 'priceFilter',
+                hideTrigger: true,
+                keyNavEnabled: false,
+                mouseWheelEnabled: false
             },
             {
-                fieldLabel:'{s name="tab/filter/field/instock_less"}Stock larger than{/s}',
-                name:'instockFilter',
-                hideTrigger:true,
-                allowDecimals:false,
-                keyNavEnabled:false,
-                mouseWheelEnabled:false
+                fieldLabel: '{s name="tab/filter/field/instock_less"}Stock larger than{/s}',
+                name: 'instockFilter',
+                hideTrigger: true,
+                allowDecimals: false,
+                keyNavEnabled: false,
+                mouseWheelEnabled: false
             },
             {
-                fieldLabel:'{s name="tab/filter/field/max_article_count"}Max. number of articles{/s}',
-                name:'countFilter',
-                hideTrigger:true,
-                allowDecimals:false,
-                keyNavEnabled:false,
-                mouseWheelEnabled:false
+                fieldLabel: '{s name="tab/filter/field/max_article_count"}Max. number of articles{/s}',
+                name: 'countFilter',
+                hideTrigger: true,
+                allowDecimals: false,
+                keyNavEnabled: false,
+                mouseWheelEnabled: false
             },
             {
-                xtype:'checkbox',
-                fieldLabel:'{s name="tab/filter/field/instock_under_inventory"}Stock under minimum inventory{/s}',
-                inputValue:1,
-                uncheckedValue:0,
-                name:'stockMinFilter'
+                xtype: 'checkbox',
+                fieldLabel: '{s name="tab/filter/field/instock_under_inventory"}Stock under minimum inventory{/s}',
+                inputValue: 1,
+                uncheckedValue: 0,
+                name: 'stockMinFilter'
             },
             {
-                xtype:'checkbox',
-                fieldLabel:'{s name="tab/filter/field/only_active_articles"}Activated articles only{/s}',
-                inputValue:1,
-                uncheckedValue:0,
-                name:'activeFilter'
+                xtype: 'checkbox',
+                fieldLabel: '{s name="tab/filter/field/only_active_articles"}Activated articles only{/s}',
+                inputValue: 1,
+                uncheckedValue: 0,
+                name: 'activeFilter'
             },
             {
                 xtype: 'codemirrorfield',
-                fieldLabel:'{s name="tab/filter/field/own_filter"}Own filters{/s}',
+                fieldLabel: '{s name="tab/filter/field/own_filter"}Own filters{/s}',
                 mode: 'sql',
-                anchor:'100%',
+                anchor: '100%',
                 height: 80,
                 name: 'ownFilter',
                 /*{if !{acl_is_allowed privilege=sqli}}*/
@@ -114,11 +114,11 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Filter', {
                 /*{/if}*/
             },
             {
-                xtype:'checkbox',
-                fieldLabel:'{s name="tab/filter/field/only_image_articles"}Articles with images only{/s}',
-                inputValue:1,
-                uncheckedValue:0,
-                name:'imageFilter'
+                xtype: 'checkbox',
+                fieldLabel: '{s name="tab/filter/field/only_image_articles"}Articles with images only{/s}',
+                inputValue: 1,
+                uncheckedValue: 0,
+                name: 'imageFilter'
             }
         ];
     }

@@ -41,39 +41,39 @@ Ext.define('Shopware.apps.Category.model.Tree', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.model.Category',
+    extend: 'Shopware.model.Category',
     /**
      * Configure the data communication
      * @object
      */
-    fields:[
+    fields: [
         // {block name="backend/category/model/tree/fields"}{/block}
-        { name : 'id', type: 'integer', useNull:true },
-        { name : 'parentId', type: 'integer' },
-        { name : 'name', type: 'string' },
-        { name : 'position', type: 'integer', useNull:true, defaultValue: null},
-        { name : 'previousId', type: 'integer', useNull:true, defaultValue: null}
+        { name: 'id', type: 'integer', useNull: true },
+        { name: 'parentId', type: 'integer' },
+        { name: 'name', type: 'string' },
+        { name: 'position', type: 'integer', useNull: true, defaultValue: null },
+        { name: 'previousId', type: 'integer', useNull: true, defaultValue: null }
     ],
-    proxy : {
-        type : 'ajax',
+    proxy: {
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        api : {
-            read : '{url controller=category action=getList}',
-            create  : '{url controller=category action=createDetail}',
-            update  : '{url controller=category action=moveTreeItem}',
-            destroy : '{url controller=category action=delete}'
+        api: {
+            read: '{url controller=category action=getList}',
+            create: '{url controller=category action=createDetail}',
+            update: '{url controller=category action=moveTreeItem}',
+            destroy: '{url controller=category action=delete}'
         },
         /**
          * Configure the data reader
          * @object
          */
-        reader : {
-            type : 'json',
+        reader: {
+            type: 'json',
             root: 'data'
         }
     }

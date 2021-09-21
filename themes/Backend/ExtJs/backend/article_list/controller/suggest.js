@@ -46,13 +46,13 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
     parser: null,
 
     refs: [
-        { ref:'batchEditButton', selector:'multiedit-main-window button[name=batchEdit]' },
-        { ref:'runButton', selector:'query-field button[name=run-button]' },
-        { ref:'simpleRunButton', selector:'multi-edit-add-filter-grid button[name=run-button-simple]' },
-        { ref:'statusLabel', selector:'query-field label[name=status-label]' },
-        { ref:'statusLabelSimple', selector:'multi-edit-add-filter-grid label[name=status-label-simple]' },
-        { ref:'filterCombo', selector:'query-field combo[name=filterString]' },
-        { ref:'mainWindow', selector:'shopware-multiedit-main-window' }
+        { ref: 'batchEditButton', selector: 'multiedit-main-window button[name=batchEdit]' },
+        { ref: 'runButton', selector: 'query-field button[name=run-button]' },
+        { ref: 'simpleRunButton', selector: 'multi-edit-add-filter-grid button[name=run-button-simple]' },
+        { ref: 'statusLabel', selector: 'query-field label[name=status-label]' },
+        { ref: 'statusLabelSimple', selector: 'multi-edit-add-filter-grid label[name=status-label-simple]' },
+        { ref: 'filterCombo', selector: 'query-field combo[name=filterString]' },
+        { ref: 'mainWindow', selector: 'shopware-multiedit-main-window' }
     ],
 
     /**
@@ -120,7 +120,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
 
         Ext.Ajax.request({
             url: '{url controller="ArticleList" action = "getGrammar"}',
-            params : {
+            params: {
                 resource: 'product'
             },
             method: 'GET',
@@ -345,7 +345,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
             me.subApplication.articleStore.loadPage(1, { callback: function () {
                 me.getController('BatchProcess').updateBatchProcessWindow();
                 mainWindow.setWindowTitle(name);
-            }});
+            } });
             batchEditButton.enable();
             return true;
         } else {

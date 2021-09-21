@@ -32,7 +32,7 @@
 //{block name="backend/vote/view/list/extension/filter"}
 Ext.define('Shopware.apps.Vote.view.list.extensions.Filter', {
     extend: 'Shopware.listing.FilterPanel',
-    alias:  'widget.vote-listing-filter-panel',
+    alias: 'widget.vote-listing-filter-panel',
     width: 390,
 
     configure: function() {

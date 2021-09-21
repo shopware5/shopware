@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.Facet', {
         me.formPanel = Ext.create('Ext.form.Panel', {
             flex: 1,
             border: false,
-            layout:  {
+            layout: {
                 type: 'vbox',
                 align: 'stretch'
             },

@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Form.view.main.List', {
      */
     getGridSelModel: function () {
         return Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
+            listeners: {
                 selectionchange: function (sm, selections) {
                     var owner = this.view.ownerCt,
                         btn = owner.down('button[action=delete]');
@@ -162,7 +162,7 @@ Ext.define('Shopware.apps.Form.view.main.List', {
     getToolbar: function() {
         return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'top',
-            ui : 'shopware-ui',
+            ui: 'shopware-ui',
             items: [
 
             /*{if {acl_is_allowed privilege=createupdate}}*/
@@ -175,22 +175,22 @@ Ext.define('Shopware.apps.Form.view.main.List', {
 
             /*{if {acl_is_allowed privilege=delete}}*/
             {
-                iconCls:'sprite-minus-circle-frame',
+                iconCls: 'sprite-minus-circle-frame',
                 text: '{s name="toolbar_delete"}Delete all selected{/s}',
                 disabled: true,
-                action:'delete'
+                action: 'delete'
             },
             /*{/if}*/
 
             '->', {
-                xtype : 'textfield',
-                name : 'searchfield',
-                action : 'searchForms',
+                xtype: 'textfield',
+                name: 'searchfield',
+                action: 'searchForms',
                 width: 170,
                 cls: 'searchfield',
                 enableKeyEvents: true,
                 checkChangeBuffer: 500,
-                emptyText : '{s name="toolbar_search"}Search...{/s}'
+                emptyText: '{s name="toolbar_search"}Search...{/s}'
             }, {
                 xtype: 'tbspacer',
                 width: 6

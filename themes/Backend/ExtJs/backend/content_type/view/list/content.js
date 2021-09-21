@@ -24,7 +24,7 @@
 // {block name="backend/content_type/view/list/content"}
 Ext.define('Shopware.apps.{$controllerName}.view.list.Content', {
     extend: 'Shopware.grid.Panel',
-    alias:  'widget.{$controllerName}-listing-grid',
+    alias: 'widget.{$controllerName}-listing-grid',
     region: 'center',
 
     /**

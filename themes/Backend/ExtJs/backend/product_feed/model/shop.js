@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.ProductFeed.model.Shop', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
     * Configure the data communication
     * @object
@@ -68,10 +68,10 @@ Ext.define('Shopware.apps.ProductFeed.model.Shop', {
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/product_feed/model/shop/fields"}{/block}
-        { name:'id', type:'int' },
-        { name:'name', type:'string' }
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' }
     ]
 });
 

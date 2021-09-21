@@ -199,7 +199,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Orders', {
      * @param [string] - The order time value
      * @return [string] - The passed value, formatted with Ext.util.Format.date()
      */
-    dateColumn:function (value, metaData, record) {
+    dateColumn: function (value, metaData, record) {
         if ( value === Ext.undefined ) {
             return value;
         }

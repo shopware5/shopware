@@ -39,38 +39,38 @@ Ext.define('Shopware.apps.Article.store.Batch', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Article.model.Batch',
+    model: 'Shopware.apps.Article.model.Batch',
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        url:'{url action="loadStores"}',
+        url: '{url action="loadStores"}',
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

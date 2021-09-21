@@ -37,27 +37,27 @@ Ext.define('Shopware.apps.Article.view.image.NewRule', {
      * Define that the order main window is an extension of the enlight application window
      * @string
      */
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     /**
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'article-image-rule-window',
+    cls: Ext.baseCSSPrefix + 'article-image-rule-window',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-image-rule-window',
+    alias: 'widget.article-image-rule-window',
     /**
      * Set no border for the window
      * @boolean
      */
-    border:false,
+    border: false,
     /**
      * True to automatically show the component upon creation.
      * @boolean
      */
-    autoShow:true,
+    autoShow: true,
     /**
      * Set border layout for the window
      * @string
@@ -72,23 +72,23 @@ Ext.define('Shopware.apps.Article.view.image.NewRule', {
      * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.
      * @boolean
      */
-    maximizable:true,
+    maximizable: true,
 
     /**
      * True to display the 'minimize' tool button and allow the user to minimize the window, false to hide the button and disallow minimizing the window.
      * @boolean
      */
-    minimizable:true,
+    minimizable: true,
 
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
-    stateful:true,
+    stateful: true,
 
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId:'shopware-article-image-rule-window',
+    stateId: 'shopware-article-image-rule-window',
 
 
     /**

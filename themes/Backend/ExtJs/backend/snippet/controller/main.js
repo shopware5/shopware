@@ -101,13 +101,13 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
 
         me.control({
             'snippet-main-navigation': {
-                select:          me.onSelect,
+                select: me.onSelect,
                 deleteNamespace: me.onDeleteNamespace
             },
 
             'snippet-main-grid': {
-                edit:         me.onEdit,
-                beforeedit:   me.onBeforeEdit,
+                edit: me.onEdit,
+                beforeedit: me.onBeforeEdit,
                 deleteSingle: me.onDeleteSingle,
                 editSelectedSnippets: me.onOpenEditSnippetWindow,
                 translateSnippet: me.onTranslate
@@ -180,8 +180,8 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
                             me.subApplication.userConfig = config;
 
                             me.mainWindow = me.getView('main.Window').create({
-                                nSpaceStore:     me.getStore('NSpace'),
-                                snippetStore:    me.getStore('Snippet'),
+                                nSpaceStore: me.getStore('NSpace'),
+                                snippetStore: me.getStore('Snippet'),
                                 shoplocaleStore: localeStore
                             });
                             me.subApplication.setAppWindow(me.mainWindow);
@@ -293,7 +293,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         me.getStore('Snippet').add(record)
 
         me.getStore('Snippet').sync({
-            success : function() {
+            success: function() {
                 Shopware.Notification.createGrowlMessage(me.snippets.createSuccessTitle, me.snippets.createSuccessMessage, me.snippets.growlMessage);
             },
             failure: function() {
@@ -351,7 +351,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         store.getProxy().batchActions = !newRecords;
 
         store.sync({
-            success : function() {
+            success: function() {
                 Shopware.Notification.createGrowlMessage(me.snippets.saveSuccessTitle, me.snippets.saveSuccessMessage, me.snippets.growlMessage);
                 me.getStore('Snippet').reload();
             },
@@ -408,7 +408,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         store.getProxy().batchActions = !newRecords;
 
         store.sync({
-            success : function() {
+            success: function() {
                 Shopware.Notification.createGrowlMessage(me.snippets.saveSuccessTitle, me.snippets.saveSuccessMessage, me.snippets.growlMessage);
                 me.getStore('Snippet').reload();
             },
@@ -488,8 +488,8 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         }
 
         me.getView('main.CreateForm').create({
-            defaultLocaleId:  shoplocale.get('localeId'),
-            defaultShopId:    shoplocale.get('shopId'),
+            defaultLocaleId: shoplocale.get('localeId'),
+            defaultShopId: shoplocale.get('shopId'),
             defaultNamespace: defaultNamespace
         }).show();
     },

@@ -41,12 +41,12 @@ Ext.define('Shopware.apps.Category', {
      * sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
     /**
      * The name of the module. Used for internal purpose
      * @string
      */
-    name:'Shopware.apps.Category',
+    name: 'Shopware.apps.Category',
     /**
      * Sets the loading path for the sub-application.
      *
@@ -59,13 +59,13 @@ Ext.define('Shopware.apps.Category', {
      * PHP Controller to use for the bulk loading
      * @string
      */
-    loadPath:'{url action=load}',
+    loadPath: '{url action=load}',
 
     /**
      * Required stores for sub-application
      * @array
      */
-    stores:[ 'Detail', 'Tree', 'Template', 'CustomerGroups', 'AvailableProducts', 'AssignedProducts', 'CategoryPath', 'ManualSorting' ],
+    stores: [ 'Detail', 'Tree', 'Template', 'CustomerGroups', 'AvailableProducts', 'AssignedProducts', 'CategoryPath', 'ManualSorting' ],
     /**
      * Required views for this sub-application
      * @array
@@ -90,13 +90,13 @@ Ext.define('Shopware.apps.Category', {
      * Required models for sub-application
      * @array
      */
-    models:[ 'Detail','Tree', 'Template', 'Emotion', 'ProductAssignment', 'ManualSorting' ],
+    models: [ 'Detail','Tree', 'Template', 'Emotion', 'ProductAssignment', 'ManualSorting' ],
 
     /**
      * Required controllers for sub-application
      * @array
      */
-    controllers:[
+    controllers: [
         'Main',
         'Tree',
         'Settings',

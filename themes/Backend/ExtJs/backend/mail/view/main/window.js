@@ -35,8 +35,8 @@
 //{block name="backend/mail/view/main/window"}
 Ext.define('Shopware.apps.Mail.view.main.Window', {
     extend: 'Enlight.app.Window',
-    alias : 'widget.mail-main-window',
-    title : '{s name="title"}Email templates{/s}',
+    alias: 'widget.mail-main-window',
+    title: '{s name="title"}Email templates{/s}',
     layout: 'border',
     width: '70%',
     height: '90%',
@@ -120,14 +120,14 @@ Ext.define('Shopware.apps.Mail.view.main.Window', {
         items.push('->');
 
         items.push({
-            xtype : 'textfield',
-            name : 'searchfield',
-            action : 'search',
+            xtype: 'textfield',
+            name: 'searchfield',
+            action: 'search',
             width: 170,
             cls: 'searchfield',
-            enableKeyEvents : true,
+            enableKeyEvents: true,
             checkChangeBuffer: 300,
-            emptyText : '{s name="toolbar_search"}Search...{/s}'
+            emptyText: '{s name="toolbar_search"}Search...{/s}'
         });
 
         items.push({

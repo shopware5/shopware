@@ -35,10 +35,10 @@
 
 //{block name="backend/payment/store/countries"}
 Ext.define('Shopware.apps.Payment.store.Countries', {
-    extend : 'Ext.data.Store',
-    autoLoad : false,
-    pageSize : 30,
-    model : 'Shopware.apps.Payment.model.Country',
+    extend: 'Ext.data.Store',
+    autoLoad: false,
+    pageSize: 30,
+    model: 'Shopware.apps.Payment.model.Country',
 
     remoteSort: true,
     sorters: [

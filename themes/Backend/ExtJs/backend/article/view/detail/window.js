@@ -44,63 +44,63 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * Define that the order main window is an extension of the enlight application window
      * @string
      */
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     /**
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'article-detail-window',
+    cls: Ext.baseCSSPrefix + 'article-detail-window',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-detail-window',
+    alias: 'widget.article-detail-window',
     /**
      * Set no border for the window
      * @boolean
      */
-    border:false,
+    border: false,
     /**
      * True to automatically show the component upon creation.
      * @boolean
      */
-    autoShow:true,
+    autoShow: true,
     /**
      * Set border layout for the window
      * @string
      */
-    layout:'fit',
+    layout: 'fit',
     /**
      * Define window width
      * @integer
      */
-    width:'80%',
+    width: '80%',
     /**
      * Define window height
      * @integer
      */
-    height:'90%',
+    height: '90%',
     /**
      * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.
      * @boolean
      */
-    maximizable:true,
+    maximizable: true,
 
     /**
      * True to display the 'minimize' tool button and allow the user to minimize the window, false to hide the button and disallow minimizing the window.
      * @boolean
      */
-    minimizable:true,
+    minimizable: true,
 
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
-    stateful:false,
+    stateful: false,
 
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId:'shopware-article-detail-window',
+    stateId: 'shopware-article-detail-window',
 
     /**
      * Contains all snippets for the component
@@ -109,29 +109,29 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     snippets: {
         titleGeneral: '{s name="window_title_general"}Product details{/s}',
         titleNew: '{s name="window_title"}Article details: new article{/s}',
-        titleEdit:'{s name="window_title_edit"}Article details : [0]{/s}',
-        formTab:'{s name="base_data"}Base data{/s}',
-        categoryTab:'{s name="category_data"}Categories{/s}',
-        imageTab:'{s name="image_tab"}Images{/s}',
-        propertyTab:'{s name="property_tab"}Properties{/s}',
-        variantTab:'{s name="variant_tab"}Variants{/s}',
-        configuratorTab:'{s name="configurator_tab"}Configurator{/s}',
-        linkTab:'{s name="link_tab"}Links{/s}',
-        downloadTab:'{s name="download_tab"}Downloads{/s}',
-        crossSellingTab:'{s name="cross_selling_tab"}Cross-Selling{/s}',
-        esdTab:'{s name="esd_tab"}ESD{/s}',
-        statisticTab:'{s name="statistic_tab"}Statistics{/s}',
+        titleEdit: '{s name="window_title_edit"}Article details : [0]{/s}',
+        formTab: '{s name="base_data"}Base data{/s}',
+        categoryTab: '{s name="category_data"}Categories{/s}',
+        imageTab: '{s name="image_tab"}Images{/s}',
+        propertyTab: '{s name="property_tab"}Properties{/s}',
+        variantTab: '{s name="variant_tab"}Variants{/s}',
+        configuratorTab: '{s name="configurator_tab"}Configurator{/s}',
+        linkTab: '{s name="link_tab"}Links{/s}',
+        downloadTab: '{s name="download_tab"}Downloads{/s}',
+        crossSellingTab: '{s name="cross_selling_tab"}Cross-Selling{/s}',
+        esdTab: '{s name="esd_tab"}ESD{/s}',
+        statisticTab: '{s name="statistic_tab"}Statistics{/s}',
         resourcesTab: '{s name="resources_tab"}Resources{/s}',
-        save:'{s name="save_button"}Save article{/s}',
-        cancel:'{s name="cancel_button"}Cancel{/s}',
-        categoryNotice:'{s name="category/category_notice"}Please select the category to which the product <strong>[0]</strong> is supposed to be assigned.{/s}',
-        categoryNoticeTitle:'{s name="category/category_assignment"}Assign categories{/s}',
+        save: '{s name="save_button"}Save article{/s}',
+        cancel: '{s name="cancel_button"}Cancel{/s}',
+        categoryNotice: '{s name="category/category_notice"}Please select the category to which the product <strong>[0]</strong> is supposed to be assigned.{/s}',
+        categoryNoticeTitle: '{s name="category/category_assignment"}Assign categories{/s}',
         invalidPlugin: '{s name="window_invalid_plugin"}The plugin [0] is not compatible with Shopware 4.1. Please uninstall the plugin or contact the provider regarding for a compatible version.{/s}',
         descriptions: {
-            title:'{s name="detail/description/title"}Description{/s}'
+            title: '{s name="detail/description/title"}Description{/s}'
         },
         meta: {
-            title:'{s name="detail/meta/title"}meta information{/s}',
+            title: '{s name="detail/meta/title"}meta information{/s}',
             metaTitle: {
                 label: '{s name="detail/meta/meta_title_label"}Title{/s}',
                 support: '{s name="detail/meta/meta_title_support"}Meta-Title for search engines{/s}'
@@ -146,16 +146,16 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             }
         },
         additional: {
-            title:'{s name="detail/additional_fields/title"}Additional fields{/s}',
-            comment:'{s name="detail/additional_fields/comment"}Comment{/s}',
+            title: '{s name="detail/additional_fields/title"}Additional fields{/s}',
+            comment: '{s name="detail/additional_fields/comment"}Comment{/s}',
         },
         basePrice: {
-            title:'{s name="detail/base_price/title"}Base price calculation{/s}',
-            content:'{s name="detail/base_price/content"}Content{/s}',
-            unit:'{s name="detail/base_price/unit"}Unit{/s}',
-            basicUnit:'{s name="detail/base_price/basic_unit"}Basic unit{/s}',
-            packingUnit:'{s name="detail/base_price/packing_unit"}Packing unit{/s}',
-            empty:'{s name="empty"}Please select...{/s}'
+            title: '{s name="detail/base_price/title"}Base price calculation{/s}',
+            content: '{s name="detail/base_price/content"}Content{/s}',
+            unit: '{s name="detail/base_price/unit"}Unit{/s}',
+            basicUnit: '{s name="detail/base_price/basic_unit"}Basic unit{/s}',
+            packingUnit: '{s name="detail/base_price/packing_unit"}Packing unit{/s}',
+            empty: '{s name="empty"}Please select...{/s}'
         },
         variant: {
             listing: '{s name="variant/listing_tab"}Listing{/s}',
@@ -186,7 +186,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.bbar = me.createToolbar();
         me.registerEvents();
@@ -384,7 +384,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         var me = this;
 
         me.detailForm = Ext.create('Ext.form.Panel', {
-            region:'center',
+            region: 'center',
             name: 'detail-form',
             bodyPadding: 10,
             autoScroll: true,
@@ -482,7 +482,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             fieldLabel: me.snippets.basePrice.unit,
             emptyText: me.snippets.basePrice.empty,
             displayField: 'name',
-            editable:false,
+            editable: false,
             valueField: 'id',
             labelWidth: 155,
             anchor: '100%',
@@ -615,14 +615,14 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         me.categoryDropZone = Ext.create('Shopware.apps.Article.view.category.DropZone', {
             height: 120,
-            autoScroll:true,
+            autoScroll: true,
             margin: 10
         });
 
         me.categoryList = Ext.create('Shopware.apps.Article.view.category.List', {
             article: me.article,
             flex: 1,
-            autoScroll:true,
+            autoScroll: true,
             margin: 10
         });
 
@@ -631,7 +631,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             bodyPadding: 10,
             name: 'category-tab',
             plain: true,
-            autoScroll:true,
+            autoScroll: true,
             layout: {
                 align: 'stretch',
                 type: 'vbox'
@@ -690,7 +690,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         //create the save button which fire the save event, the save event is handled in the detail controller.
         me.saveButton = Ext.create('Ext.button.Button', {
-            cls:'primary',
+            cls: 'primary',
             name: 'save-article-button',
             text: me.snippets.save,
             handler: function() {

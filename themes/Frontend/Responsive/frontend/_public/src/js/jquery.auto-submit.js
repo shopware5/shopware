@@ -35,7 +35,7 @@
              * @property loadingindicator
              * @type {Boolean}
              */
-            'loadingindicator': true
+            loadingindicator: true
         },
 
         /**
@@ -56,7 +56,7 @@
             // Will be automatically removed when destroy() is called.
             me._on(me.$el, 'change', $.proxy(me.onChangeSelection, me));
 
-            $.publish('plugin/swAutoSubmit/onRegisterEvents', [ me ]);
+            $.publish('plugin/swAutoSubmit/onRegisterEvents', [me]);
         },
 
         onChangeSelection: function () {
@@ -68,7 +68,7 @@
                 });
             }
 
-            $.publish('plugin/swAutoSubmit/onChangeSelection', [ me ]);
+            $.publish('plugin/swAutoSubmit/onChangeSelection', [me]);
             me.$form.submit();
         }
     });

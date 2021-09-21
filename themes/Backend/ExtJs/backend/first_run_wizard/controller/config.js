@@ -34,7 +34,7 @@
 
 Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
 
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     refs: [
         { ref: 'configPanel', selector: 'first-run-wizard-config' }
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
         },
         waitTitle: '{s name="config/waitTitle"}Saving configuration settings{/s}',
         waitMessage: '{s name="config/waitMessage"}This process might take a few seconds{/s}',
-        growlMessage:'{s name="config/growlMessage"}First run wizard{/s}'
+        growlMessage: '{s name="config/growlMessage"}First run wizard{/s}'
     },
 
     init: function () {

@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Base.model.Shop', {
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/shop/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'default', type: 'boolean' },

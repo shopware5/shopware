@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Article.model.PropertyGroup', {
     ],
 
     associations: [
-        { type:'hasMany', model:'Shopware.apps.Article.model.PropertyOption', name:'getOptions', associationKey:'options' }
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.PropertyOption', name: 'getOptions', associationKey: 'options' }
     ]
 });
 //{/block}

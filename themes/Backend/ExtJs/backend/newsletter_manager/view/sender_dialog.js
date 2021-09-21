@@ -37,7 +37,7 @@
 //{block name="backend/newsletter_manager/view/sender_dialog"}
 Ext.define('Shopware.apps.NewsletterManager.view.SenderDialog', {
     extend: 'Enlight.app.Window',
-    alias : 'widget.newsletter-manager-sender_dialog',
+    alias: 'widget.newsletter-manager-sender_dialog',
     layout: 'fit',
     width: 300,
     height: 150,

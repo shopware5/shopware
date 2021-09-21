@@ -36,23 +36,23 @@ Ext.define('Shopware.apps.Article.store.MediaMapping', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     autoLoad: false,
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Article.model.Media',
+    model: 'Shopware.apps.Article.model.Media',
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -63,10 +63,10 @@ Ext.define('Shopware.apps.Article.store.MediaMapping', {
              create: '{url action="saveMediaMapping"}',
              update: '{url action="saveMediaMapping"}'
         },
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

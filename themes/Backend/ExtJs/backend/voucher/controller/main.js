@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Voucher.controller.Main', {
      * Required stores for sub-application
      * @array
      */
-    stores:[ 'List'],
+    stores: [ 'List'],
 
     /**
      * Creates the necessary event listener for this

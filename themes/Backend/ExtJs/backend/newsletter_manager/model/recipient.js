@@ -86,10 +86,10 @@ Ext.define('Shopware.apps.NewsletterManager.model.Recipient', {
      * One order has a customer, many details, billing- & shipping address and a payment information.
      * @array
      */
-    associations:[
-        { type:'hasMany', model:'Shopware.apps.NewsletterManager.model.NewsletterGroup', name:'getGroup', associationKey:'newsletterGroup' },
-        { type:'hasMany', model:'Shopware.apps.NewsletterManager.model.Mailing', name:'getLastNewsletter', associationKey:'lastNewsletter' },
-        { type:'hasMany', model:'Shopware.apps.Base.model.Customer', name:'getCustomer', associationKey:'customer' }
+    associations: [
+        { type: 'hasMany', model: 'Shopware.apps.NewsletterManager.model.NewsletterGroup', name: 'getGroup', associationKey: 'newsletterGroup' },
+        { type: 'hasMany', model: 'Shopware.apps.NewsletterManager.model.Mailing', name: 'getLastNewsletter', associationKey: 'lastNewsletter' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Customer', name: 'getCustomer', associationKey: 'customer' }
     ]
 
 });

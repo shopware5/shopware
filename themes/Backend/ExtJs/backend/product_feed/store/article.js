@@ -46,12 +46,12 @@ Ext.define('Shopware.apps.ProductFeed.store.Article', {
      * is initialized
      * @boolean
      */
-    autoLoad : false,
+    autoLoad: false,
     /**
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Base.model.Article',
+    model: 'Shopware.apps.Base.model.Article',
 
     /**
      * Configure the data communication

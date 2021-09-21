@@ -83,7 +83,7 @@
             $.subscribe(me.getEventName('plugin/swImageSlider/onClick'), $.proxy(me.stopZoom, me));
             $.subscribe(me.getEventName('plugin/swImageSlider/onLightbox'), $.proxy(me.stopZoom, me));
 
-            $.publish('plugin/swImageZoom/onRegisterEvents', [ me ]);
+            $.publish('plugin/swImageZoom/onRegisterEvents', [me]);
         },
 
         /**
@@ -94,8 +94,8 @@
         createLensElement: function() {
             var me = this,
                 $el = $('<div>', {
-                    'class': me.opts.lensCls,
-                    'html': '&nbsp;'
+                    class: me.opts.lensCls,
+                    html: '&nbsp;'
                 }).appendTo(me.$container);
 
             $.publish('plugin/swImageZoom/onCreateLensElement', [me, $el]);
@@ -112,7 +112,7 @@
         createFlyoutElement: function() {
             var me = this,
                 $el = $('<div>', {
-                    'class': me.opts.flyoutCls
+                    class: me.opts.flyoutCls
                 }).appendTo(me.$el);
 
             $.publish('plugin/swImageZoom/onCreateFlyoutElement', [me, $el]);
@@ -135,7 +135,7 @@
             }
 
             $el = $('<div>', {
-                'class': me.opts.titleContainerCls
+                class: me.opts.titleContainerCls
             }).appendTo(me.$flyout);
 
             $.publish('plugin/swImageZoom/onCreateTitleContainer', [me, $el]);
@@ -203,8 +203,8 @@
             }
 
             me.$lens.css({
-                'width': me.lensWidth,
-                'height': me.lensHeight
+                width: me.lensWidth,
+                height: me.lensHeight
             });
 
             $.publish('plugin/swImageZoom/onSetLensSize', [me, me.$lens, factor]);
@@ -221,8 +221,8 @@
             var me = this;
 
             me.$lens.css({
-                'top': y,
-                'left': x
+                top: y,
+                left: x
             });
 
             $.publish('plugin/swImageZoom/onSetLensPosition', [me, me.$lens, x, y]);

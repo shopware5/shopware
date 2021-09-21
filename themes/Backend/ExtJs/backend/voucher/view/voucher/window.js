@@ -43,13 +43,13 @@ Ext.define('Shopware.apps.Voucher.view.voucher.Window', {
     autoShow: true,
     layout: 'border',
     height: '90%',
-    autoScroll:true,
+    autoScroll: true,
     width: '80%',
     /**
      * Display no footer button for the detail window
      * @boolean
      */
-    footerButton:false,
+    footerButton: false,
 
     /**
      * Initializes the component and builds up the main interface
@@ -60,9 +60,9 @@ Ext.define('Shopware.apps.Voucher.view.voucher.Window', {
         var me = this;
         me.items = [
             {
-                xtype:'tabpanel',
-                region:'center',
-                items:me.getTabs()
+                xtype: 'tabpanel',
+                region: 'center',
+                items: me.getTabs()
             }
         ];
         me.callParent(arguments);
@@ -76,17 +76,17 @@ Ext.define('Shopware.apps.Voucher.view.voucher.Window', {
      * Can contains additionally an second tab which displays the customer orders and a chart which
      * displays the orders grouped by the order year and month
      */
-    getTabs:function () {
+    getTabs: function () {
         return [
             {
-                xtype:'voucher-voucher-base_configuration',
-                record:this.record,
+                xtype: 'voucher-voucher-base_configuration',
+                record: this.record,
                 taxStore: this.taxStore
             },
             {
-                xtype:'voucher-code-list',
+                xtype: 'voucher-code-list',
                 codeStore: this.codeStore,
-                disabled:true
+                disabled: true
             }
         ];
     },

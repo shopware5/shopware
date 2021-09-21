@@ -28,7 +28,7 @@
 //{block name="backend/config/store/form/locale"}
 Ext.define('Shopware.apps.Config.store.form.Locale', {
     extend: 'Ext.data.Store',
-    model:'Shopware.apps.Config.model.form.Locale',
+    model: 'Shopware.apps.Config.model.form.Locale',
     remoteSort: true,
     remoteFilter: true,
     pageSize: 20,

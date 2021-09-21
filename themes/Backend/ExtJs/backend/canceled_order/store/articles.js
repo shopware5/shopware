@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.CanceledOrder.store.Articles', {
     extend: 'Ext.data.Store',
     // Do not load data, when not explicitly requested
     autoLoad: false,
-    model : 'Shopware.apps.CanceledOrder.model.Articles',
+    model: 'Shopware.apps.CanceledOrder.model.Articles',
     remoteFilter: true,
     remoteSort: true,
     /**
@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.CanceledOrder.store.Articles', {
         reader: {
             type: 'json',
             root: 'data',
-            totalProperty:'total'
+            totalProperty: 'total'
         }
     }
 });

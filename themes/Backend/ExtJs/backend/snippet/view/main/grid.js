@@ -47,18 +47,18 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
      * @object
      */
     snippets: {
-        tooltipTranslateSnippet:   '{s name="tooltip_translate_snippet"}Translate this snippet{/s}',
+        tooltipTranslateSnippet: '{s name="tooltip_translate_snippet"}Translate this snippet{/s}',
         tooltipDeleteSnippet: '{s name="tooltip_delete_snippet"}Delete this snippet{/s}',
 
         columnNamespace: '{s name="column_namespace"}Namespace{/s}',
-        columnName:      '{s name="column_name"}Name{/s}',
-        columnValue:     '{s name="column_value"}Value{/s}',
+        columnName: '{s name="column_name"}Name{/s}',
+        columnValue: '{s name="column_value"}Value{/s}',
 
-        buttonFilterEmpty:  '{s name="button_filter_empty"}Show only empty snippets{/s}',
+        buttonFilterEmpty: '{s name="button_filter_empty"}Show only empty snippets{/s}',
         buttonEditSelected: '{s name="button_edit_selected"}Edit selected snippets{/s}',
-        buttonAddSnippet:   '{s name="button_add_snippet"}Add snippet{/s}',
+        buttonAddSnippet: '{s name="button_add_snippet"}Add snippet{/s}',
 
-        emptyTextSearch:   '{s name="empty_text_search"}search...{/s}'
+        emptyTextSearch: '{s name="empty_text_search"}search...{/s}'
     },
 
     /**
@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the delete icon in the
@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
 
         me.listeners = {
             beforeactivate: me.onBeforeActivate,
-            beforeedit:     me.onBeforeEdit
+            beforeedit: me.onBeforeEdit
         };
 
         me.editor   = me.getRowEditorPlugin();
@@ -207,7 +207,7 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
             cls: 'deleteBtn',
             hideMode: 'display',
             iconCls: 'sprite-minus-circle-frame',
-            tooltip:  me.snippets.tooltipDeleteSnippet,
+            tooltip: me.snippets.tooltipDeleteSnippet,
             handler: function(grid, rowIndex, colIndex) {
                 me.fireEvent('deleteSingle', grid, rowIndex, colIndex);
             },
@@ -220,7 +220,7 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
         /*{/if}*/
 
         var columns = [{
-            header:  me.snippets.columnNamespace,
+            header: me.snippets.columnNamespace,
             dataIndex: 'namespace',
             flex: 1,
             editor: {
@@ -285,7 +285,7 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
     getPagingbar: function () {
         return Ext.create('Ext.toolbar.Paging', {
             store: this.store,
-            dock:'bottom',
+            dock: 'bottom',
             displayInfo: true
         });
     },
@@ -304,7 +304,7 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
             xtype: 'button',
             text: me.snippets.buttonFilterEmpty,
             enableToggle: true,
-            action : 'filterEmpty',
+            action: 'filterEmpty',
             iconCls: 'sprite-blue-document-template'
         });
 
@@ -344,14 +344,14 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
         });
 
         buttons.push({
-            xtype : 'textfield',
-            name : 'searchfield',
-            action : 'search',
+            xtype: 'textfield',
+            name: 'searchfield',
+            action: 'search',
             width: 170,
             cls: 'searchfield',
             enableKeyEvents: true,
             checkChangeBuffer: 500,
-            emptyText : me.snippets.emptyTextSearch
+            emptyText: me.snippets.emptyTextSearch
         });
 
         buttons.push({

@@ -37,6 +37,6 @@ Ext.define('Shopware.apps.Property.store.Set', {
     clearOnLoad: false,
     autoLoad: true,
     remoteFilter: true,
-    model : 'Shopware.apps.Property.model.Set'
+    model: 'Shopware.apps.Property.model.Set'
 });
 //{/block}

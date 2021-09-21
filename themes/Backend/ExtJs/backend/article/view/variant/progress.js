@@ -45,60 +45,60 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
      * Define that the order main window is an extension of the enlight application window
      * @string
      */
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     /**
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'article-variant-progress-window',
+    cls: Ext.baseCSSPrefix + 'article-variant-progress-window',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-variant-progress-window',
+    alias: 'widget.article-variant-progress-window',
     /**
      * Set no border for the window
      * @boolean
      */
-    border:false,
+    border: false,
     /**
      * True to automatically show the component upon creation.
      * @boolean
      */
-    autoShow:true,
+    autoShow: true,
     /**
      * Set border layout for the window
      * @string
      */
-    layout:'anchor',
+    layout: 'anchor',
     /**
      * Define window width
      * @integer
      */
-    width:420,
+    width: 420,
     /**
      * Define window height
      * @integer
      */
-    height:255,
+    height: 255,
     /**
      * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.
      * @boolean
      */
-    maximizable:false,
+    maximizable: false,
 
     /**
      * True to display the 'minimize' tool button and allow the user to minimize the window, false to hide the button and disallow minimizing the window.
      * @boolean
      */
-    minimizable:false,
+    minimizable: false,
 
     footerButton: true,
 
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
-    stateful:true,
+    stateful: true,
 
     modal: true,
 
@@ -113,7 +113,7 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId:'shopware-article-variant-progress-window',
+    stateId: 'shopware-article-variant-progress-window',
 
     /**
      * Contains all snippets for the component
@@ -121,7 +121,7 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
      */
     snippets: {
         growlMessage: '{s name="growl_message"}Article{/s}',
-        title:'{s name="progress/title"}Variant generation{/s}',
+        title: '{s name="progress/title"}Variant generation{/s}',
         process: '{s name="progress/message"}[0] of [1] variants created...{/s}',
         errorMessage: '{s name="progress/error_message"}An error has occurred while generate the article variants:{/s}',
         errorTitle: '{s name="progress/error_title"}Error{/s}',
@@ -144,7 +144,7 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.items = me.createItems();
         me.title = me.snippets.title;
@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
             displayField: 'name',
             value: defaultValue,
             store: new Ext.data.SimpleStore({
-                fields:['id', 'name'],
+                fields: ['id', 'name'],
                 data: [
                     [1, me.snippets.types.overrideType],
                     [2, me.snippets.types.mergeType]

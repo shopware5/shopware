@@ -23,7 +23,7 @@
 
 // {block name="backend/content_type_manager/store/type"}
 Ext.define('Shopware.apps.ContentTypeManager.store.Type', {
-    extend:'Shopware.store.Listing',
+    extend: 'Shopware.store.Listing',
     groupField: 'groupingState',
     pageSize: 9999,
     remoteSort: false,

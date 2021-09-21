@@ -24,7 +24,7 @@
 //{block name="backend/base/store/custom_sorting"}
 
 Ext.define('Shopware.apps.Base.store.CustomSorting', {
-    extend:'Shopware.store.Listing',
+    extend: 'Shopware.store.Listing',
 
     sorters: [{
         property: 'position',

@@ -34,12 +34,12 @@ Ext.define('Shopware.apps.Premium', {
      * sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
     /**
      * The name of the module. Used for internal purpose
      * @string
      */
-    name:'Shopware.apps.Premium',
+    name: 'Shopware.apps.Premium',
     /**
      * Sets the loading path for the sub-application.
      *
@@ -47,35 +47,35 @@ Ext.define('Shopware.apps.Premium', {
      * controller (server-side)
      * @string
      */
-    loadPath:'{url controller="premium" action=load}',
+    loadPath: '{url controller="premium" action=load}',
     /**
      * Enable bulk loading
      * @boolean
      */
-    bulkLoad:true,
+    bulkLoad: true,
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers:['Premium', 'Main'],
+    controllers: ['Premium', 'Main'],
 
     /**
      * Required views for controller
      * @array
      */
-    views:['premium.List', 'premium.Detail', 'main.Window'],
+    views: ['premium.List', 'premium.Detail', 'main.Window'],
 
     /**
      * Required stores for controller
      * @array
      */
-    stores:['Premiums', 'Subshops'],
+    stores: ['Premiums', 'Subshops'],
 
     /**
      * Required models for controller
      * @array
      */
-    models:['Premium', 'Subshop'],
+    models: ['Premium', 'Subshop'],
     /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.
@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Premium', {
      * @private
      * @return [object] mainWindow - the main application window based on Enlight.app.Window
      */
-    launch:function () {
+    launch: function () {
         var me = this,
             mainController = me.getController('Main');
 

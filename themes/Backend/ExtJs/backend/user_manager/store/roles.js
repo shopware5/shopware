@@ -36,6 +36,6 @@
 Ext.define('Shopware.apps.UserManager.store.Roles', {
     extend: 'Ext.data.Store',
     pageSize: 30,
-    model : 'Shopware.apps.UserManager.model.Roles'
+    model: 'Shopware.apps.UserManager.model.Roles'
 });
 //{/block}

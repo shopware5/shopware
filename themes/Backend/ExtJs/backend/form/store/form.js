@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Form.store.Form', {
     extend: 'Ext.data.Store',
     autoLoad: true,
     pageSize: 25,
-    model : 'Shopware.apps.Form.model.Form',
+    model: 'Shopware.apps.Form.model.Form',
     remoteSort: true,
     remoteFilter: true
 });

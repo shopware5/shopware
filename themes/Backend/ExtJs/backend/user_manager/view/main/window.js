@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.UserManager.view.main.Window', {
     width: '85%',
     stateful: true,
     stateId: 'user-manager-main-window',
-    snippets:{
+    snippets: {
         navigation: {
             userList: '{s name="navigation/navigation_usermanager"}{/s}',
             roleList: '{s name="navigation/navigation_rolemanager"}{/s}',

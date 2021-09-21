@@ -59,11 +59,11 @@ Ext.define('Shopware.apps.Base.model.Category', {
      */
     fields: [
         //{block name="backend/base/model/category/fields"}{/block}
-        { name: 'id', type:'int' },
-        { name: 'parent', type:'int' },
-        { name: 'name', type:'string' },
-        { name: 'position', type:'int' },
-        { name: 'active', type:'boolean', defaultValue: true },
+        { name: 'id', type: 'int' },
+        { name: 'parent', type: 'int' },
+        { name: 'name', type: 'string' },
+        { name: 'position', type: 'int' },
+        { name: 'active', type: 'boolean', defaultValue: true },
         { name: 'childrenCount', type: 'int' },
 
         // Some tree fields

@@ -37,20 +37,20 @@
  */
 //{block name="backend/payment/view/payment/formpanel"}
 Ext.define('Shopware.apps.Payment.view.payment.FormPanel', {
-    extend : 'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
     autoShow: true,
-    alias : 'widget.payment-main-formpanel',
+    alias: 'widget.payment-main-formpanel',
     region: 'center',
     layout: 'anchor',
     autoScroll: true,
     bodyPadding: '10px',
-    name:  'formpanel',
+    name: 'formpanel',
     preventHeader: true,
     border: 0,
-    defaults:{
-        labelStyle:'font-weight: 700; text-align: right;',
-        labelWidth:130,
-        anchor:'100%'
+    defaults: {
+        labelStyle: 'font-weight: 700; text-align: right;',
+        labelWidth: 130,
+        anchor: '100%'
     },
     plugins: [{
         pluginId: 'translation',

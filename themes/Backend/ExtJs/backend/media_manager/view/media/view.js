@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         noMediaFound: '{s name="noMediaFound"}No Media found{/s}',
         uploadDataDragDrop: '{s name="uploadDataDragDrop"}Upload your Data via <strong>Drag & Drop</strong> here{/s}',
         noAdditionalInfo: '{s name="noAdditionalInfo"}No additional informations found{/s}',
-        moreInfoTitle:'{s name="moreInfoTitle"}More information{/s}',
+        moreInfoTitle: '{s name="moreInfoTitle"}More information{/s}',
         previewSize: '{s name="previewSizeFieldLabel"}Preview size{/s}',
         mediaInfo: {
             name: '{s name="mediaInfo/name"}Name:{/s}',
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             vector: '{s name="formatTypes/vector"}-vector{/s}',
             unknown: '{s name="formatTypes/unknown"}unknown file{/s}'
         },
-        fieldsText:{
+        fieldsText: {
             searchField: '{s name="fieldsText/searchField"}Search media...{/s}',
             deleteButton: '{s name="fieldsText/deleteButton"}delete marked file(s){/s}',
             addButton: '{s name="fieldsText/addButton"}add more files{/s}',
@@ -481,7 +481,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             cls: Ext.baseCSSPrefix + 'more-info',
             style: 'background: #fff',
             collapsible: true,
-            autoScroll:true,
+            autoScroll: true,
             region: 'east',
             width: 210,
             items: [ me.infoView, me.attributeButton ]
@@ -528,9 +528,9 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 fileInputConfig: {
                     buttonOnly: true,
                     width: 190,
-                    buttonText : me.snippets.fieldsText.addButton,
-                    buttonConfig : {
-                        iconCls:'sprite-plus-circle'
+                    buttonText: me.snippets.fieldsText.addButton,
+                    buttonConfig: {
+                        iconCls: 'sprite-plus-circle'
                     }
                 }
             });
@@ -538,7 +538,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             me.addBtn = Ext.create('Ext.form.field.File', {
                 buttonOnly: true,
                 width: 190,
-                buttonText : me.snippets.fieldsText.addButton,
+                buttonText: me.snippets.fieldsText.addButton,
                 listeners: {
                     scope: this,
 
@@ -552,8 +552,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                         btn.fileInputEl.dom.multiple = true;
                     }
                 },
-                buttonConfig : {
-                    iconCls:'sprite-plus-circle'
+                buttonConfig: {
+                    iconCls: 'sprite-plus-circle'
                 }
             });
         }
@@ -571,7 +571,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         /*{if {acl_is_allowed privilege=update}}*/
         me.replaceButton = Ext.create('Ext.button.Button', {
             text: '{s name="replace/media/button/text"}{/s}',
-            iconCls:'sprite-blue-document-convert',
+            iconCls: 'sprite-blue-document-convert',
             disabled: true,
             handler: Ext.bind(me.onClickReplaceButton, me)
         });
@@ -594,7 +594,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         if(this.createDeleteButton) {
             this.deleteBtn = Ext.create('Ext.button.Button', {
                 text: me.snippets.fieldsText.deleteButton,
-                iconCls:'sprite-minus-circle-frame',
+                iconCls: 'sprite-minus-circle-frame',
                 action: 'mediamanager-media-view-delete',
                 disabled: true
             });

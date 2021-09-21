@@ -29,7 +29,7 @@
 Ext.define('Shopware.apps.ProductStream', {
     extend: 'Enlight.app.SubApplication',
 
-    name:'Shopware.apps.ProductStream',
+    name: 'Shopware.apps.ProductStream',
 
     loadPath: '{url action=load}',
     bulkLoad: true,

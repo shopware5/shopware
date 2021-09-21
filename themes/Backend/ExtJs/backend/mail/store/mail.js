@@ -35,6 +35,6 @@ Ext.define('Shopware.apps.Mail.store.Mail', {
     extend: 'Ext.data.Store',
     batch: true,
     clearOnLoad: false,
-    model : 'Shopware.apps.Mail.model.Mail'
+    model: 'Shopware.apps.Mail.model.Mail'
 });
 //{/block}

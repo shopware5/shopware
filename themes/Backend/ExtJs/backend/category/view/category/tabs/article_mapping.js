@@ -41,13 +41,13 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
     * Parent Element Ext.container.Container
     * @string
     */
-    extend:'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
 
     /**
      * Register the alias for this class.
      * @string
      */
-    alias:'widget.category-category-tabs-article_mapping',
+    alias: 'widget.category-category-tabs-article_mapping',
 
     /**
      * Base class of the component
@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      * Display the the contents of this tab immediately
      * @boolean
      */
-    autoShow : true,
+    autoShow: true,
 
     /**
      * Layout configuration
@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
      *
      * @returns { Void }
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.fromGrid = me.createFromGrid();
         me.buttonContainer = me.createActionButtons();
@@ -206,7 +206,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
 
         return Ext.create('Ext.container.Container', {
             margins: '0 4',
-            items:  me.actionButtons,
+            items: me.actionButtons,
             width: 22,
             layout: {
                 type: 'vbox',

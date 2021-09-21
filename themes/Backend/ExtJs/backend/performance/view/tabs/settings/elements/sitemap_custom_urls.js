@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.SitemapCustomU
     /**
      * @return { Ext.selection.CheckboxModel }
      */
-    createSelectionModel : function() {
+    createSelectionModel: function() {
         var me = this;
 
         return Ext.create('Ext.selection.CheckboxModel', {

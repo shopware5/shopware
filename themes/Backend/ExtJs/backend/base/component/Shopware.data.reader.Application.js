@@ -31,9 +31,9 @@
 Ext.define('Shopware.data.reader.Application', {
     extend: 'Ext.data.reader.Json',
     alternateClassName: 'Ext.data.ApplicationReader',
-    alias : 'reader.application',
+    alias: 'reader.application',
 
-    extractData : function(root) {
+    extractData: function(root) {
         var me = this,
             records = [],
             Model   = me.model,

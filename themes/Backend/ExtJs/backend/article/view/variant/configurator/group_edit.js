@@ -42,29 +42,29 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
      * Define that the order main window is an extension of the enlight application window
      * @string
      */
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
 
     /**
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'article-group-window',
+    cls: Ext.baseCSSPrefix + 'article-group-window',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-group-window',
+    alias: 'widget.article-group-window',
     /**
      * Set no border for the window
      * @boolean
      */
-    border:false,
+    border: false,
     /**
      * True to automatically show the component upon creation.
      * @boolean
      */
-    autoShow:false,
+    autoShow: false,
 
     width: 940,
     footerButton: false,
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
     stateful: true,
     autoScroll: true,
     layout: 'fit',
-    stateId:'shopware-article-group-window',
+    stateId: 'shopware-article-group-window',
 
     /**
      * Contains all snippets for the component
@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
         nameField: '{s name="variant/configurator/group_edit/name_field"}Group name{/s}',
         description: {
             label: '{s name="variant/configurator/group_edit/description_label"}Description{/s}',
-            support:  '{s name="variant/configurator/group_edit/description_support"}Displayed in store front as group description{/s}'
+            support: '{s name="variant/configurator/group_edit/description_support"}Displayed in store front as group description{/s}'
         }
     },
 
@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.registerEvents();
         me.items = me.createItems();
@@ -201,7 +201,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
                 { xtype: 'tbfill' },
                 {
                     xtype: 'button',
-                    cls:'primary',
+                    cls: 'primary',
                     text: me.snippets.save,
                     handler: function() {
                         me.fireEvent('saveGroup', me.record, me.formPanel, me);

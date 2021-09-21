@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Base.model.Template', {
      * unique id
      * @int
      */
-    idProperty : 'id',
+    idProperty: 'id',
 
     /**
     * The fields used for this model
@@ -56,9 +56,9 @@ Ext.define('Shopware.apps.Base.model.Template', {
     */
     fields: [
         //{block name="backend/base/model/template/fields"}{/block}
-        { name: 'id', type : 'int' },
+        { name: 'id', type: 'int' },
         { name: 'name', type: 'string' },
-        { name: 'template', type : 'string' }
+        { name: 'template', type: 'string' }
     ]
 });
 //{/block}

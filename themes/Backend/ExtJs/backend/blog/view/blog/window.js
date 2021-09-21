@@ -45,9 +45,9 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
      * Define window height
      * @integer
      */
-    height:'90%',
+    height: '90%',
     width: '80%',
-    modal:false,
+    modal: false,
     layout: {
         type: 'fit'
     },
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
      * Display no footer button for the detail window
      * @boolean
      */
-    footerButton:false,
+    footerButton: false,
 
     /**
      * Initializes the component and builds up the main interface
@@ -71,9 +71,9 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
 
         me.items = [
             {
-                xtype:'tabpanel',
-                region:'center',
-                items:me.getTabs()
+                xtype: 'tabpanel',
+                region: 'center',
+                items: me.getTabs()
             }
         ];
 
@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
      *
      * The second tab contains a list of all blog comments
      */
-    getTabs:function () {
+    getTabs: function () {
         var me = this;
         return [
             me.formPanel,
@@ -139,7 +139,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
             },
             border: 0,
             bodyPadding: 10,
-            title:'{s name="detail_general/title"}General Settings{/s}',
+            title: '{s name="detail_general/title"}General Settings{/s}',
             plugins: [{
                 ptype: 'translation',
                 translationType: 'blog'
@@ -183,18 +183,18 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
         var me = this;
         return ['->',
             {
-                text:'{s name="detail_general/button/cancel"}Cancel{/s}',
+                text: '{s name="detail_general/button/cancel"}Cancel{/s}',
                 cls: 'secondary',
-                scope:me,
-                handler:function () {
+                scope: me,
+                handler: function () {
                     this.destroy();
                 }
             }
         /* {if {acl_is_allowed privilege=create}} */
             ,{
-                text:'{s name="detail_general/button/save"}Save{/s}',
-                action:'save',
-                cls:'primary'
+                text: '{s name="detail_general/button/save"}Save{/s}',
+                action: 'save',
+                cls: 'primary'
             }
         /* {/if} */
         ];

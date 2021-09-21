@@ -45,14 +45,14 @@ Ext.define('Shopware.apps.Notification.model.Customer', {
      *
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/notification/model/customer/fields"}{/block}
-        { name:'id', type:'int' },
-        { name:'mail', type:'string' },
-        { name:'name', type:'string' },
-        { name:'date', type:'date' },
-        { name:'notified', type:'int' },
-        { name:'customerId', type:'int' }
+        { name: 'id', type: 'int' },
+        { name: 'mail', type: 'string' },
+        { name: 'name', type: 'string' },
+        { name: 'date', type: 'date' },
+        { name: 'notified', type: 'int' },
+        { name: 'customerId', type: 'int' }
     ],
 
     /**
@@ -75,9 +75,9 @@ Ext.define('Shopware.apps.Notification.model.Customer', {
          * Configure the data reader
          * @object
          */
-        reader : {
-            type : 'json',
-            root : 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty: 'totalCount'
         }
     }

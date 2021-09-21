@@ -188,7 +188,7 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             },
                             store: countryStore,
                             xtype: 'pagingcombobox',
-                            valueField:'id',
+                            valueField: 'id',
                             displayField: 'name'
                         },
                         stateId: {

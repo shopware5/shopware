@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Theme.view.settings.Settings', {
                     title: '{s name="compiler_configuration"}Compiler configuration{/s}',
                     padding: 15,
                     layout: 'anchor',
-                    flex:1,
+                    flex: 1,
                     fields: {
                         forceCompile: {
                             fieldLabel: '{s name="force_compile_field"}Disable compiler caching{/s}',

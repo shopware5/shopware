@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Mail.view.main.Info', {
     collapsed: true,
     collapsible: true,
     title: '{s name="title"}Information on variables{/s}',
-    autoScroll:true,
+    autoScroll: true,
     width: 260,
     alias: 'widget.mail-main-info',
 
@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Mail.view.main.Info', {
      * Returns an array of strings.
      * @return array of string
      */
-    getTemplate : function() {
+    getTemplate: function() {
         return [
             '{literal}',
             '<pre style="margin: 10px">',

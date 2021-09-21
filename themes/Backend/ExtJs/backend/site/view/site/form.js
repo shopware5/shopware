@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
         me.saveButton = Ext.create('Ext.button.Button',{
             text: '{s name="formLinkFieldSaveButtonText"}Save{/s}',
             action: 'onSaveSite',
-            cls:'primary'
+            cls: 'primary'
         });
         /*{if not {acl_is_allowed privilege=createSite}}*/
         me.saveButton.disable();
@@ -141,7 +141,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 emptyText: '{s name="formContentFieldDescriptionEmptyText"}Page name{/s}',
                 name: 'description',
                 allowBlank: false,
-                anchor:'100%',
+                anchor: '100%',
                 translatable: true,
                 translationName: 'description'
             },
@@ -151,13 +151,13 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 inputValue: true,
                 uncheckedValue: false,
                 name: 'active',
-                anchor:'100%'
+                anchor: '100%'
             },
             {
                 fieldLabel: '{s name="formContentFieldHtmlEditorLabel"}Content{/s}',
                 xtype: 'tinymce',
                 name: 'html',
-                anchor:'100%',
+                anchor: '100%',
                 height: 300,
                 translatable: true,
                 translationName: 'html'
@@ -178,20 +178,20 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 fieldLabel: '{s name="formLinkFieldAddressLabel"}Link-Address{/s}',
                 xtype: 'textfield',
                 name: 'link',
-                anchor:'100%',
+                anchor: '100%',
                 translatable: true,
                 translationName: 'link'
             },
             {
                 fieldLabel: '{s name="formLinkFieldTargetLabel"}Link-Target{/s}',
                 xtype: 'combo',
-                mode:'local',
+                mode: 'local',
                 name: 'target',
-                valueField:'target',
-                displayField:'target',
-                anchor:'100%',
+                valueField: 'target',
+                displayField: 'target',
+                anchor: '100%',
                 store: new Ext.data.SimpleStore({
-                    fields:['target'],
+                    fields: ['target'],
                     data: data
                 })
             },
@@ -207,56 +207,56 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                fieldLabel: '{s name="formSettingsFieldPositionLabel"}Position{/s}',
                xtype: 'textfield',
                name: 'position',
-               anchor:'100%'
+               anchor: '100%'
             },
             {
                fieldLabel: '{s name="formSettingsFieldEmbedCodeLabel"}Embed-Code{/s}',
                xtype: 'textfield',
                name: 'embedCode',
                readOnly: true,
-               anchor:'100%'
+               anchor: '100%'
             },
             {
                 fieldLabel: '{s name="formSettingsFieldTplVariableLabel_1"}Tpl. Variable 1{/s}',
                 xtype: 'textfield',
                 name: 'tpl1variable',
-                anchor:'100%'
+                anchor: '100%'
             },
             {
                 fieldLabel: '{s name="formSettingsFieldTplPathLabel_1"}Tpl. Path 1{/s}',
                 xtype: 'textfield',
                 name: 'tpl1path',
-                anchor:'100%'
+                anchor: '100%'
             },
             {
                fieldLabel: '{s name="formSettingsFieldTplVariableLabel_2"}Tpl. Variable 2{/s}',
                xtype: 'textfield',
                name: 'tpl2variable',
-               anchor:'100%'
+               anchor: '100%'
             },
             {
                fieldLabel: '{s name="formSettingsFieldTplPathLabel_2"}Tpl. Path 2{/s}',
                xtype: 'textfield',
                name: 'tpl2path',
-               anchor:'100%'
+               anchor: '100%'
             },
             {
                 fieldLabel: '{s name="formSettingsFieldTplVariableLabel_3"}Tpl. Variable 3{/s}',
                 xtype: 'textfield',
                 name: 'tpl3variable',
-                anchor:'100%'
+                anchor: '100%'
             },
             {
                 fieldLabel: '{s name="formSettingsFieldTplPathLabel_3"}Tpl. Path 3{/s}',
                 xtype: 'textfield',
                 name: 'tpl3path',
-                anchor:'100%'
+                anchor: '100%'
             },
             {
                 fieldLabel: '{s name="formSettingsFieldSEOTitle"}SEO Title{/s}',
                 xtype: 'textfield',
                 name: 'pageTitle',
-                anchor:'100%',
+                anchor: '100%',
                 translatable: true,
                 translationName: 'page_title'
             },
@@ -264,7 +264,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 fieldLabel: '{s name="formSettingsFieldMetaKeywords"}Meta-Keywords{/s}',
                 xtype: 'textfield',
                 name: 'metaKeywords',
-                anchor:'100%',
+                anchor: '100%',
                 translatable: true,
                 translationName: 'meta_keywords'
             },
@@ -272,7 +272,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 fieldLabel: '{s name="formSettingsFieldMetaDescription"}Meta-Description{/s}',
                 xtype: 'textfield',
                 name: 'metaDescription',
-                anchor:'100%',
+                anchor: '100%',
                 translatable: true,
                 translationName: 'meta_description'
             }
@@ -285,24 +285,24 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
         return {
             name: 'grouping',
             margin: '0 0 0 160',
-            xtype:'ddselector',
+            xtype: 'ddselector',
             fromTitle: '{s name="site/ddselector/fromTitle"}Groups{/s}',
             toTitle: '{s name="site/ddselector/toTitle"}Assigned groups{/s}',
             dataIndex: 'groupName',
             fromStore: me.groupStore,
-            buttons:[ 'add','remove' ],
+            buttons: [ 'add','remove' ],
             gridHeight: 125,
             selectedItems: me.selectedStore,
             buttonsText: {
                 add: "Add",
                 remove: "Remove"
             },
-            fromColumns :[{
+            fromColumns: [{
                 text: 'name',
                 flex: 1,
                 dataIndex: 'groupName'
             }],
-            toColumns :[{
+            toColumns: [{
                 text: 'name',
                 flex: 1,
                 dataIndex: 'groupName'
@@ -318,7 +318,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
             helpText: '{s name="site/shop_selector/helper"}If set, limits shop page visibility to the configured shops. If this shop page links to another page, that page might still be accessible.{/s}',
             allowSorting: false,
             height: 130,
-            anchor:  '100%',
+            anchor: '100%',
             labelWidth: 155,
             store: selectionFactory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop"),
             searchStore: selectionFactory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop")

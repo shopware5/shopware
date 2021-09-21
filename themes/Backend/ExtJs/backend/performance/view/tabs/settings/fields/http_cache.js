@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
      * want to create a new customer or edit an existing customer
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = me.getItems();
@@ -71,7 +71,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
                 title: '{s name="fieldset/information"}Information{/s}',
                 items: [
                     me.createDescriptionContainer('{s name="fieldset/cache/info"}{/s}')
-                ]},
+                ]
+            },
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
@@ -84,7 +85,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
                         title: '{s name="button/title/http_cache/warmUp"}Warm up http cache{/s}'
                     },
                     me.createDescriptionContainer('{s name="fieldset/cache_warmer/info"}{/s}')
-                ]},
+                ]
+            },
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
@@ -129,7 +131,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
                         xtype: 'performance-tabs-settings-elements-no-cache',
                         height: 250
                     }
-                ]}
+                ]
+            }
         ];
     }
 });

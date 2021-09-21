@@ -36,11 +36,11 @@ Ext.define('Shopware.apps.Article.store.Serial', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
     autoLoad: false,
 
-    batch:true,
+    batch: true,
 
     remoteFilter: true,
     remoteSort: true,
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Article.store.Serial', {
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Article.model.Serial',
+    model: 'Shopware.apps.Article.model.Serial',
 
     /**
      * Configure the data communication
@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Article.store.Serial', {
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -73,10 +73,10 @@ Ext.define('Shopware.apps.Article.store.Serial', {
             destroy: '{url action="deleteSerials" targetField=details}'
         },
 
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

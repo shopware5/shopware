@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.Listing', {
         return {
             width: 24,
             hideable: false,
-            renderer : me.renderSorthandleColumn
+            renderer: me.renderSorthandleColumn
         };
     },
 

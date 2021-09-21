@@ -42,28 +42,28 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
      * Define that the order main window is an extension of the enlight application window
      * @string
      */
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     /**
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'article-configurator-dependency-window',
+    cls: Ext.baseCSSPrefix + 'article-configurator-dependency-window',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-configurator-dependency-window',
+    alias: 'widget.article-configurator-dependency-window',
     /**
      * Set no border for the window
      * @boolean
      */
-    border:false,
+    border: false,
     /**
      * True to automatically show the component upon creation.
      * @boolean
      */
-    autoShow:true,
-    autoScroll:true,
+    autoShow: true,
+    autoScroll: true,
     footerButton: false,
     minimizable: false,
     maximizable: false,
@@ -72,18 +72,18 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
      * Set border layout for the window
      * @string
      */
-    layout:'fit',
+    layout: 'fit',
     bodyPadding: 8,
     /**
      * Define window width
      * @integer
      */
-    width:900,
+    width: 900,
     /**
      * Define window height
      * @integer
      */
-    height:450,
+    height: 450,
 
     /**
      * Contains all snippets for the component
@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.items = [ me.createItems() ];
         me.callParent(arguments);

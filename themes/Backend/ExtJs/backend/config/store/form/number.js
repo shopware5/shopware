@@ -28,7 +28,7 @@
 //{block name="backend/config/store/form/number"}
 Ext.define('Shopware.apps.Config.store.form.Number', {
     extend: 'Ext.data.Store',
-    model:'Shopware.apps.Config.model.form.Number',
+    model: 'Shopware.apps.Config.model.form.Number',
     remoteSort: true,
     remoteFilter: true,
     pageSize: 20,

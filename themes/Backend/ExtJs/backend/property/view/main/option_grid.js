@@ -41,8 +41,8 @@ Ext.define('Shopware.apps.Property.view.main.OptionGrid', {
      * @object
      */
     snippets: {
-        columnOption:        '{s name="option/column_option"}Option{/s}',
-        buttonAddOption:     '{s name="option/button_add_option"}Add option{/s}',
+        columnOption: '{s name="option/column_option"}Option{/s}',
+        buttonAddOption: '{s name="option/button_add_option"}Add option{/s}',
         tooltipDeleteOption: '{s name="option/tooltip_delete_option"}Delete this option{/s}'
     },
 
@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Property.view.main.OptionGrid', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the delete icon in the

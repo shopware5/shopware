@@ -35,9 +35,9 @@
 //{namespace name="backend/article/view/main"}
 //{block name="backend/article/view/category/seo"}
 Ext.define('Shopware.apps.Article.view.category.Seo', {
-    extend:'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
 
-    alias:'widget.article-category-seo-list',
+    alias: 'widget.article-category-seo-list',
 
     cls: Ext.baseCSSPrefix + 'category-seo-list',
 

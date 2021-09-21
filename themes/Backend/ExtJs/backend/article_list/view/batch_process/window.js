@@ -150,7 +150,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
             text: '{s name="close"}Close{/s}',
             scope: me,
             cls: 'secondary',
-            handler:function () {
+            handler: function () {
                 me.destroy();
             }
         });

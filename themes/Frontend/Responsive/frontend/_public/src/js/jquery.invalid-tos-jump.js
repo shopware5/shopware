@@ -46,7 +46,7 @@
         jumpToInvalid: function () {
             var me = this;
 
-            window.scroll(0, me.$el.offset().top - (window.innerHeight/2));
+            window.scroll(0, me.$el.offset().top - (window.innerHeight / 2));
             me.$jumpLabel.addClass(me.opts.errorClass);
         }
     });

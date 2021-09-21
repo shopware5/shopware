@@ -55,7 +55,7 @@
             onClose: $.noop,
 
             /** @string String representing the events which should trigger a close */
-            events: [ 'click', 'touchstart', 'MSPointerDown' ].join('.overlay') + '.overlay',
+            events: ['click', 'touchstart', 'MSPointerDown'].join('.overlay') + '.overlay',
 
             /** @boolean Shall the overlay be scrollable or not e.g. the page in the background would scroll */
             isScrollable: false,
@@ -195,7 +195,7 @@
         _generateOverlay: function() {
             var me = this,
                 $overlay = $('<div>', {
-                    'class': [
+                    class: [
                         me.options.overlayCls, 'theme--' + me.options.theme
                     ].join(' ')
                 });

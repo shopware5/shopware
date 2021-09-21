@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Visitors', {
     remoteSort: true,
     fields: [
         'name',
-        { name: 'datum', type: 'date', dateFormat:'Y-m-d' },
+        { name: 'datum', type: 'date', dateFormat: 'Y-m-d' },
         { name: 'desktopImpressions', type: 'int' },
         { name: 'tabletImpressions', type: 'int' },
         { name: 'mobileImpressions', type: 'int' },

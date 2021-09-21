@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Order.model.ReceiptAttribute', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * Extends the models fields with the order id field.
      * @array

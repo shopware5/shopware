@@ -41,12 +41,12 @@ Ext.define('Shopware.apps.Blog', {
      * sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
     /**
      * The name of the module. Used for internal purpose
      * @string
      */
-    name:'Shopware.apps.Blog',
+    name: 'Shopware.apps.Blog',
     /**
      * Sets the loading path for the sub-application.
      *
@@ -56,19 +56,19 @@ Ext.define('Shopware.apps.Blog', {
      */
     bulkLoad: true,
 
-    loadPath:'{url action=load}',
+    loadPath: '{url action=load}',
 
     /**
      * Required stores for controller
      * @array
      */
-    stores:[ 'List', 'Tree', 'Detail', 'CategoryPath', 'Template', 'Comment' ],
+    stores: [ 'List', 'Tree', 'Detail', 'CategoryPath', 'Template', 'Comment' ],
 
     /**
      * Required views for controller
      * @array
      */
-    views:[
+    views: [
         'main.Window',
         'blog.List',
         'blog.Tree',
@@ -86,12 +86,12 @@ Ext.define('Shopware.apps.Blog', {
      * Requires models for sub-application
      * @array
      */
-    models:[ 'Main', 'Tree', 'Detail', 'Template', 'Media', 'AssignedArticles', 'Comment' ],
+    models: [ 'Main', 'Tree', 'Detail', 'Template', 'Media', 'AssignedArticles', 'Comment' ],
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers:[ 'Main', 'Blog', 'Media', 'Comment' ],
+    controllers: [ 'Main', 'Blog', 'Media', 'Comment' ],
 
     /**
      * Returns the main application window for this is expected

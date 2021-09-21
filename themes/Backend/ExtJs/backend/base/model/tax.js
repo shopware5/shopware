@@ -38,29 +38,29 @@ Ext.define('Shopware.apps.Base.model.Tax', {
     /**
      * Defines an alternate name for this class.
      */
-    alternateClassName:'Shopware.model.Tax',
+    alternateClassName: 'Shopware.model.Tax',
 
     /**
      * Extends the standard ExtJS Model
      * @string
      */
-    extend : 'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * unique id
      * @int
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/base/model/tax/fields"}{/block}
-        { name : 'id',  type: 'integer' },
-        { name : 'tax',type: 'float' },
-        { name : 'name',type: 'string' }
+        { name: 'id',  type: 'integer' },
+        { name: 'tax',type: 'float' },
+        { name: 'name',type: 'string' }
     ]
 });
 //{/block}

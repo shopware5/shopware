@@ -35,6 +35,6 @@ Ext.define('Shopware.apps.Mail.store.Attachment', {
     extend: 'Ext.data.TreeStore',
     batch: true,
     clearOnLoad: false,
-    model : 'Shopware.apps.Mail.model.Attachment'
+    model: 'Shopware.apps.Mail.model.Attachment'
 });
 //{/block}

@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Property.store.SetAssign', {
     extend: 'Ext.data.Store',
     autoLoad: false,
-    model : 'Shopware.apps.Property.model.Group',
+    model: 'Shopware.apps.Property.model.Group',
     remoteSort: true,
     remoteFilter: true,
 
@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Property.store.SetAssign', {
          * @object
          */
         api: {
-            read:    '{url controller="property" action="getSetAssigns"}'
+            read: '{url controller="property" action="getSetAssigns"}'
         },
 
 

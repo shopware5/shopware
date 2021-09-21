@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Systeminfo', {
     * sub-application behavior and the event bus
     * @string
     */
-    extend : 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
     /**
     * The name of the module. Used for internal purpose
     * @string
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Systeminfo', {
     * controller (server-side)
     * @string
     */
-    loadPath : '{url controller="systeminfo" action=load}',
+    loadPath: '{url controller="systeminfo" action=load}',
     /**
      * Enable bulk loading
      * @boolean
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Systeminfo', {
     * Requires controllers for sub-application
     * @array
     */
-    controllers : [ 'Systeminfo', 'Main' ],
+    controllers: [ 'Systeminfo', 'Main' ],
 
     /**
      * Returns the main application window for this is expected
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Systeminfo', {
      * @private
      * @return [object] mainWindow - the main application window based on Enlight.app.Window
      */
-    launch:function () {
+    launch: function () {
         var me = this,
             mainController = me.getController('Main');
 

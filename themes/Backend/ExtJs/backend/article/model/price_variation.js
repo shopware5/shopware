@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Article.model.PriceVariation', {
         { name: 'option_names' },
         { name: 'isGross', type: 'integer' },
         { name: 'variation', type: 'float' },
-        { name: 'configuratorSetId', type: 'integer'}
+        { name: 'configuratorSetId', type: 'integer' }
     ],
 
     /**
@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Article.model.PriceVariation', {
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -74,10 +74,10 @@ Ext.define('Shopware.apps.Article.model.PriceVariation', {
             destroy: '{url controller="ArticlePriceVariation" action="deletePriceVariation"}'
         },
 
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     },
 

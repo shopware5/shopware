@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Emotion', {
      * controller (server-side)
      * @string
      */
-    loadPath:'{url action=load}',
+    loadPath: '{url action=load}',
 
     /**
      * Enables our bulk loading technique.

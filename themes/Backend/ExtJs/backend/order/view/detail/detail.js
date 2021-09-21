@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
             me.createShopContainer(),
             me.billingForm,
             me.shippingForm,
-            Ext.create('Shopware.apps.Order.view.detail.Debit', { record: me.record, paymentsStore: me.paymentsStore}),
+            Ext.create('Shopware.apps.Order.view.detail.Debit', { record: me.record, paymentsStore: me.paymentsStore }),
             Ext.create('Shopware.apps.Order.view.detail.Dispatch', {
                 record: me.record,
                 dispatchesStore: me.dispatchesStore

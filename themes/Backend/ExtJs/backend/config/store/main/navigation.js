@@ -32,18 +32,18 @@
  */
 //{block name="backend/config/store/main/navigation"}
 Ext.define('Shopware.apps.Config.store.main.Navigation', {
-    extend:'Ext.data.TreeStore',
-    model:'Shopware.apps.Config.model.main.Navigation',
+    extend: 'Ext.data.TreeStore',
+    model: 'Shopware.apps.Config.model.main.Navigation',
     root: {
         id: 'root',
         expanded: true
     },
-    proxy:{
-        type:'ajax',
-        url:'{url action=getNavigation}',
-        reader:{
-            type:'json',
-            root:'data'
+    proxy: {
+        type: 'ajax',
+        url: '{url action=getNavigation}',
+        reader: {
+            type: 'json',
+            root: 'data'
         }
     }
 });

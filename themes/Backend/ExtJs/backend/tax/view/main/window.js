@@ -40,72 +40,72 @@ Ext.define('Shopware.apps.Tax.view.main.Window', {
      * Define that the customer main window is an extension of the enlight application window
      * @string
      */
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     /**
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'tax-list-window',
+    cls: Ext.baseCSSPrefix + 'tax-list-window',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.tax-list-main-window',
+    alias: 'widget.tax-list-main-window',
     /**
      * Set no border for the window
      * @boolean
      */
-    border:false,
+    border: false,
     /**
      * True to automatically show the component upon creation.
      * @boolean
      */
-    autoShow:true,
+    autoShow: true,
     /**
      * Set border layout for the window
      * @string
      */
-    layout:'border',
+    layout: 'border',
     /**
      * Define window width
      * @integer
      */
-    width:1024,
+    width: 1024,
     /**
      * Define window height
      * @integer
      */
-    height:500,
+    height: 500,
     /**
      * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.
      * @boolean
      */
-    maximizable:true,
+    maximizable: true,
     /**
      * True to display the 'minimize' tool button and allow the user to minimize the window, false to hide the button and disallow minimizing the window.
      * @boolean
      */
-    minimizable:true,
+    minimizable: true,
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
-    stateful:true,
+    stateful: true,
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId:'shopware-tax-main-window',
+    stateId: 'shopware-tax-main-window',
     /**
      * Set window title which is displayed in the window header
      * @string
      */
-    title:'{s name="window_title"}Tax{/s}',
+    title: '{s name="window_title"}Tax{/s}',
 
     /**
      * Initializes the component and builds up the main interface
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         var notice = Shopware.Notification.createBlockMessage('The new tax rules configuration has not yet been considered in the frontend.', 'error');

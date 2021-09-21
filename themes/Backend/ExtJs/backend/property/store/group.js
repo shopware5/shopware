@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Property.store.Group', {
     extend: 'Ext.data.Store',
     autoLoad: false,
-    model : 'Shopware.apps.Property.model.Group',
+    model: 'Shopware.apps.Property.model.Group',
     remoteFilter: true
 });
 //{/block}

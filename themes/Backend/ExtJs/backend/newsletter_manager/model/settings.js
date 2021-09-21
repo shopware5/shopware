@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.NewsletterManager.model.Settings', {
         { name: 'languageId', type: 'int',  defaultValue: 1 },
         { name: 'recipients', type: 'int', defaultValue: 0 },
         { name: 'dispatch', type: 'int', defaultValue: 1 },
-        { name: 'content', type: 'string'},
+        { name: 'content', type: 'string' },
 
         { name: 'senderName', type: 'string' },
         { name: 'senderMail', type: 'string' },

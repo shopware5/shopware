@@ -34,17 +34,17 @@
  */
 //{block name="backend/supplier/view/main"}
 Ext.define('Shopware.apps.Supplier.view.Main', {
-    extend : 'Enlight.app.Window',
-    layout : 'border',
-    alias : 'widget.supplierGrid',
-    width : 800,
-    height : '90%',
-    maximizable : true,
+    extend: 'Enlight.app.Window',
+    layout: 'border',
+    alias: 'widget.supplierGrid',
+    width: 800,
+    height: '90%',
+    maximizable: true,
     minimizable: true,
-    stateful : true,
-    stateId : 'suppliersList',
-    border : 0,
-    title : '{s name="window_title"}Supplier management{/s}',
+    stateful: true,
+    stateId: 'suppliersList',
+    border: 0,
+    title: '{s name="window_title"}Supplier management{/s}',
 
     initComponent: function() {
         var me = this;

@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
     alias: 'widget.newsletter-manager-newsletter-editor',
     title: '{s name="title/Editor"}Newsletter Editor{/s}',
     layout: 'fit',
-    autoScroll:true,
+    autoScroll: true,
     defaults: {
         bodyBorder: 0
     },
@@ -104,7 +104,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
                     xtype: 'button',
                     id: 'sendMail',
                     name: 'sendMail',
-                    iconCls:'sprite-mail-send',
+                    iconCls: 'sprite-mail-send',
                     text: '{s name="sendTestMail"}Send testmail{/s}',
                     handler: function() {
                         me.fireEvent('sendTestMail', me.form);
@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
         var me = this;
 
         me.tinyMce = Ext.create('Shopware.form.field.TinyMCE', {
-            name : 'content',
+            name: 'content',
             // Workaround for the tinyMCE height bug
             margin: '0 0 27 0 ',
             height: 457,

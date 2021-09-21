@@ -41,21 +41,21 @@ Ext.define('Shopware.apps.Category.model.Template', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * If the name of the field is 'id' extjs assumes automatically that
      * this field is an unique identifier.
      * @integer
      */
-    idProperty : 'template',
+    idProperty: 'template',
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         // {block name="backend/category/model/template/fields"}{/block}
-        { name : 'template', type: 'string' },
-        { name : 'name', type: 'string' }
+        { name: 'template', type: 'string' },
+        { name: 'name', type: 'string' }
     ]
 });
 

@@ -38,22 +38,22 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend : 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
 
     /**
      * Some references to get a better grip of the single elements
      */
-    refs   : [
-        { ref : 'costsGrid', selector : 'shipping-view-edit-costs-matrix' },
-        { ref : 'rightForm', selector : 'shipping-top-right-form' }
+    refs: [
+        { ref: 'costsGrid', selector: 'shipping-view-edit-costs-matrix' },
+        { ref: 'rightForm', selector: 'shipping-top-right-form' }
     ],
     /**
      * Keeps the current config for the grid.
      * The config is based on the dispatch calculation
      * @object
      */
-    currentConfig : null,
+    currentConfig: null,
 
     /**
      * Creates the necessary event listener for this
@@ -61,19 +61,19 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      * to display the sub-application
      * @return void
      */
-    init : function () {
+    init: function () {
         var me = this;
         me.control({
-            'shipping-view-edit-costs-matrix' : {
+            'shipping-view-edit-costs-matrix': {
 
                 /**
                  * Checks the new entry
                  */
-                'beforeedit' : me.onEditStart,
+                'beforeedit': me.onEditStart,
                 /*
                  * Handles the edit event
                  */
-                'edit' :  me.onCostMatrixEdit,
+                'edit': me.onCostMatrixEdit,
 
                 /**
                  * will fire the delete event
@@ -81,10 +81,10 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                  * - rowIndex
                  * - record
                  */
-                'deleteCostsMatrixEntry' : me.onDeleteCostsMatrixEntry
+                'deleteCostsMatrixEntry': me.onDeleteCostsMatrixEntry
             },
-            'shipping-view-edit-costs-matrix actioncolumn' : {
-                render : function (view) {
+            'shipping-view-edit-costs-matrix actioncolumn': {
+                render: function (view) {
                     view.scope = this;
                     view.handler = this.handleActionColumn;
                 }
@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      * @param [object] item - The item that has been clicked
      * @return void
      */
-    handleActionColumn : function (view, rowIndex, colIndex, item) {
+    handleActionColumn: function (view, rowIndex, colIndex, item) {
         var me = this.scope;
 
         switch (item.iconCls) {
@@ -122,7 +122,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      * @param options
      * @return void
      */
-    onEditStart : function(obj, options) {
+    onEditStart: function(obj, options) {
         var me = this,
             column = options.column,
             editor = column.getEditor(),
@@ -145,7 +145,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      * @param [object] options
      * @return boolean
      */
-    onCostMatrixEdit :   function(editor, options) {
+    onCostMatrixEdit: function(editor, options) {
          var rec = options.record,
              me = this,
              field = options.field,
@@ -225,11 +225,11 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                     var costsMatrixModel = me.getModel('Costsmatrix').create();
                     costsMatrixModel.set(record.data);
                     costsMatrixModel.destroy({
-                        success : function () {
+                        success: function () {
                             store.load();
                             Shopware.Msg.createGrowlMessage('','{s name="dialog_success"}Costs entry has been deleted successfully{/s}', '{s name="title"}{/s}')
                         },
-                        failure : function () {
+                        failure: function () {
                             Shopware.Msg.createGrowlMessage('', '{s name="dialog_error"}An error occurred while deleting the costs entry{/s}', '{s name="title"}{/s}');
                         }
                     });
@@ -245,7 +245,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      * @param Ext.data.Store store
      * @return void
      */
-    addCostsMatrixEntry : function(from, store) {
+    addCostsMatrixEntry: function(from, store) {
         var me = this,
         last = store.getCount(),
         lastEntry = store.getAt(last-1),
@@ -253,14 +253,14 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
         // Create a model instance
         var newCosts =  Ext.create('Shopware.apps.Shipping.model.Costsmatrix', {
             from: from,
-            value : 0,
-            factor : 0,
+            value: 0,
+            factor: 0,
             dispatchId: lastEntry.get('dispatchId')
         });
         // Add the new record at the end
         store.insert(last, newCosts);
     },
-    getCalculationField : function() {
+    getCalculationField: function() {
         return this.getRightForm().calculationField;
     }
 });

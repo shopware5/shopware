@@ -24,7 +24,7 @@
 //{block name="backend/base/store/custom_facet"}
 
 Ext.define('Shopware.apps.Base.store.CustomFacet', {
-    extend:'Shopware.store.Listing',
+    extend: 'Shopware.store.Listing',
 
     sorters: [{
         property: 'position',

@@ -46,8 +46,8 @@ Ext.define('Shopware.apps.Payment.view.main.Window', {
     height: '90%',
     width: 925,
 
-    stateful:true,
-    stateId:'shopware-payment-window',
+    stateful: true,
+    stateId: 'shopware-payment-window',
 
     /**
      * Initializes the component and builds up the main interface

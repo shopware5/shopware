@@ -39,21 +39,21 @@
  */
 //{block name="backend/blog/view/blog/detail/comments/grid"}
 Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
-    extend:'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
     border: false,
-    alias:'widget.blog-blog-detail-comments-grid',
-    region:'center',
-    autoScroll:true,
-    store:'List',
-    ui:'shopware-ui',
+    alias: 'widget.blog-blog-detail-comments-grid',
+    region: 'center',
+    autoScroll: true,
+    store: 'List',
+    ui: 'shopware-ui',
     split: true,
-    selType:'cellmodel',
+    selType: 'cellmodel',
 
     /**
      * Initialize the Shopware.apps.Blog.view.blog.detail.comments and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.selModel = me.getGridSelModel();
 
@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
                 /**
                  * Event will be fired when the user clicks the delete icon in the
@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
      *
      * @return [array] grid columns
      */
-    getColumns:function () {
+    getColumns: function () {
         var me = this;
 
         return [
@@ -172,25 +172,25 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
 
 
         actionColumnData.push({
-            iconCls:'sprite-plus-circle',
-            cls:'addBtn',
-            tooltip:'{s name="detail/main/comments/action_column/add"}Accept comment{/s}',
+            iconCls: 'sprite-plus-circle',
+            cls: 'addBtn',
+            tooltip: '{s name="detail/main/comments/action_column/add"}Accept comment{/s}',
             getClass: function(value, metadata, record) {
                 if (record.get('active')) {
                     return 'x-hidden';
                 }
             },
-            handler:function (view, rowIndex, colIndex, item) {
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('acceptBlogComment', view, rowIndex, colIndex, item);
             }
         });
 
         actionColumnData.push({
-            iconCls:'sprite-minus-circle-frame',
-            action:'delete',
-            cls:'delete',
-            tooltip:'{s name="detail/main/comments/action_column/delete"}Deleted comment{/s}',
-            handler:function (view, rowIndex, colIndex, item) {
+            iconCls: 'sprite-minus-circle-frame',
+            action: 'delete',
+            cls: 'delete',
+            tooltip: '{s name="detail/main/comments/action_column/delete"}Deleted comment{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('deleteBlogComment', view, rowIndex, colIndex, item);
             }
         });
@@ -207,9 +207,9 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
     getPagingBar: function () {
         var me = this;
         return Ext.create('Ext.toolbar.Paging', {
-            store:me.commentStore,
-            dock:'bottom',
-            displayInfo:true
+            store: me.commentStore,
+            dock: 'bottom',
+            displayInfo: true
         });
 
     },
@@ -218,12 +218,12 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
      *
      * @return [Ext.selection.CheckboxModel] grid selection model
      */
-    getGridSelModel:function () {
+    getGridSelModel: function () {
         var me = this,
             selModel = Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
+            listeners: {
                 // Unlocks the delete button if the user has checked at least one checkbox
-                selectionchange:function (sm, selections) {
+                selectionchange: function (sm, selections) {
                     me.fireEvent('selectionChange', sm, selections);
 
                 }
@@ -237,7 +237,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
      *
      * @param value
      */
-    titleRenderer:function (value) {
+    titleRenderer: function (value) {
         return Ext.String.format('{literal}<strong style="font-weight: 700">{0}</strong>{/literal}', value);
     },
 

@@ -29,13 +29,13 @@ Ext.define('Shopware.apps.ArticleList', {
      * The name of the module. Used for internal purpose
      * @string
      */
-    name:'Shopware.apps.ArticleList',
+    name: 'Shopware.apps.ArticleList',
 
     /**
      * Extends from our special controller, which handles the sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * Enable bulk loading

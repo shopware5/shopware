@@ -130,7 +130,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Main', {
         var me = this;
 
         return {
-            xtype:'canceled-order-tabs-baskets-overview',
+            xtype: 'canceled-order-tabs-baskets-overview',
             store: me.store
         };
     }

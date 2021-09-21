@@ -48,8 +48,8 @@ Ext.define('Shopware.apps.RiskManagement.view.main.Window', {
     height: '90%',
     width: 925,
 
-    stateful:true,
-    stateId:'shopware-risk_management-window',
+    stateful: true,
+    stateId: 'shopware-risk_management-window',
 
     /**
      * Initializes the component and builds up the main interface

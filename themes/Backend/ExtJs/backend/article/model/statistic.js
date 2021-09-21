@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Article.model.Statistic', {
         //{block name="backend/article/model/statistic/fields"}{/block}
         { name: 'name' },
         { name: 'groupdate' },
-        { name: 'month',  type: 'integer'},
+        { name: 'month',  type: 'integer' },
         { name: 'revenue', type: 'float' },
         { name: 'orders', type: 'integer' },
         { name: 'date', type: 'date', dateFormat: 'Y-m-d' }

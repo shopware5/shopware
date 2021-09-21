@@ -44,37 +44,37 @@ Ext.define('Shopware.apps.Base.model.Customer', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/customer/fields"}{/block}
-        { name:'id', type:'int' },
-        { name:'groupKey', type:'string' },
-        { name:'email', type:'string' },
-        { name:'active', type:'boolean' },
-        { name:'accountMode', type:'int' },
-        { name:'confirmationKey', type:'string' },
-        { name:'paymentId', type:'int', useNull: true },
-        { name:'firstLogin', type:'date' },
-        { name:'lastLogin', type:'date' },
-        { name:'newsletter', type:'int' },
-        { name:'validation', type:'int' },
-        { name:'languageId', type:'int' },
-        { name:'shopId', type:'int', useNull: true },
-        { name:'priceGroupId', type:'int' },
-        { name:'internalComment', type:'string' },
-        { name:'failedLogins', type:'int' },
-        { name:'referer', type:'string' },
-        { name:'firstname', type:'string' },
-        { name:'lastname', type:'string' },
-        { name:'birthday', type:'date', useNull: true },
-        { name:'customernumber', type:'int' },
-        { name:'default_billing_address_id', type:'int', useNull: true },
-        { name:'default_shipping_address_id', type:'int', useNull: true }
+        { name: 'id', type: 'int' },
+        { name: 'groupKey', type: 'string' },
+        { name: 'email', type: 'string' },
+        { name: 'active', type: 'boolean' },
+        { name: 'accountMode', type: 'int' },
+        { name: 'confirmationKey', type: 'string' },
+        { name: 'paymentId', type: 'int', useNull: true },
+        { name: 'firstLogin', type: 'date' },
+        { name: 'lastLogin', type: 'date' },
+        { name: 'newsletter', type: 'int' },
+        { name: 'validation', type: 'int' },
+        { name: 'languageId', type: 'int' },
+        { name: 'shopId', type: 'int', useNull: true },
+        { name: 'priceGroupId', type: 'int' },
+        { name: 'internalComment', type: 'string' },
+        { name: 'failedLogins', type: 'int' },
+        { name: 'referer', type: 'string' },
+        { name: 'firstname', type: 'string' },
+        { name: 'lastname', type: 'string' },
+        { name: 'birthday', type: 'date', useNull: true },
+        { name: 'customernumber', type: 'int' },
+        { name: 'default_billing_address_id', type: 'int', useNull: true },
+        { name: 'default_shipping_address_id', type: 'int', useNull: true }
     ]
 
 });

@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Property.model.Set', {
      *
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/property/model/set/fields"}{/block}
         { name: 'id',         type: 'integer' },
         { name: 'name',       type: 'string' },
@@ -67,9 +67,9 @@ Ext.define('Shopware.apps.Property.model.Set', {
          * @object
          */
         api: {
-            read:    '{url controller="property" action="getSets"}',
-            create:  '{url controller="property" action="createSet"}',
-            update:  '{url controller="property" action="updateSet"}',
+            read: '{url controller="property" action="getSets"}',
+            create: '{url controller="property" action="createSet"}',
+            update: '{url controller="property" action="updateSet"}',
             destroy: '{url controller="property" action="deleteSet"}'
         },
         /**

@@ -37,12 +37,12 @@ Ext.define('Shopware.apps.Category.store.Tree', {
     /**
      * Define that this component is an extension of the Ext.data.TreeStore
      */
-    extend : 'Ext.data.TreeStore',
+    extend: 'Ext.data.TreeStore',
 
     /**
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Category.model.Tree'
+    model: 'Shopware.apps.Category.model.Tree'
 });
 //{/block}

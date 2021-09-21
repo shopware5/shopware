@@ -59,9 +59,9 @@
 
             $.subscribe(me.getEventName('plugin/swPanelAutoResizer/onAfterSetHeight'), $.proxy(me._onAfterSetHeight, me));
 
-            $.publish('plugin/swPanelAutoResizer/onInit', [ me ]);
+            $.publish('plugin/swPanelAutoResizer/onInit', [me]);
             me.update();
-            $.publish('plugin/swPanelAutoResizer/onAfterInit', [ me ]);
+            $.publish('plugin/swPanelAutoResizer/onAfterInit', [me]);
         },
 
         /**
@@ -124,12 +124,12 @@
             }
 
             me._resizeTimeout = window.setTimeout(function() {
-                $.publish('plugin/swPanelAutoResizer/onUpdate', [ me ]);
+                $.publish('plugin/swPanelAutoResizer/onUpdate', [me]);
 
                 me._calculateColumns();
                 me.resize();
 
-                $.publish('plugin/swPanelAutoResizer/afterUpdate', [ me ]);
+                $.publish('plugin/swPanelAutoResizer/afterUpdate', [me]);
             }, 150);
         },
 
@@ -146,7 +146,7 @@
                 itemHeight = 0,
                 height = 0;
 
-            $.publish('plugin/swPanelAutoResizer/onGetMaxHeight', [ me ]);
+            $.publish('plugin/swPanelAutoResizer/onGetMaxHeight', [me]);
 
             // set heights to auto to recalculate the actual content height
             $elements.each(function(index, childElement) {
@@ -164,7 +164,7 @@
                 height = opts.maxHeight;
             }
 
-            $.publish('plugin/swPanelAutoResizer/onAfterGetMaxHeight', [ me, height ]);
+            $.publish('plugin/swPanelAutoResizer/onAfterGetMaxHeight', [me, height]);
 
             return height;
         },
@@ -182,13 +182,13 @@
                 return;
             }
 
-            $.publish('plugin/swPanelAutoResizer/onSetHeight', [ me ]);
+            $.publish('plugin/swPanelAutoResizer/onSetHeight', [me]);
 
             $.each($elements, function(index, childElement) {
                 $(childElement).height(height);
             });
 
-            $.publish('plugin/swPanelAutoResizer/onAfterSetHeight', [ me ]);
+            $.publish('plugin/swPanelAutoResizer/onAfterSetHeight', [me]);
         },
 
         /**
@@ -211,7 +211,7 @@
                 return;
             }
 
-            $.publish('plugin/swPanelAutoResizer/onResize', [ me, selector ]);
+            $.publish('plugin/swPanelAutoResizer/onResize', [me, selector]);
 
             if (me._columns > 1) {
                 for (i; i < childrenCount; i += me._columns) {
@@ -230,7 +230,7 @@
 
             me._centerModal();
 
-            $.publish('plugin/swPanelAutoResizer/onAfterResize', [ me, selector ]);
+            $.publish('plugin/swPanelAutoResizer/onAfterResize', [me, selector]);
         },
 
         /**

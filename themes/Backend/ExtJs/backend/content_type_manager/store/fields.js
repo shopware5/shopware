@@ -23,7 +23,7 @@
 
 // {block name="backend/content_type_manager/store/fields"}
 Ext.define('Shopware.apps.ContentTypeManager.store.Fields', {
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     autoLoad: true,
     remoteSort: false,
 

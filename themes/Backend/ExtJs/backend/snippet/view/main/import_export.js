@@ -40,13 +40,13 @@ Ext.define('Shopware.apps.Snippet.view.main.ImportExport', {
      * @object
      */
     snippets: {
-        title:                  '{s name="title"}Import / Export Snippets{/s}',
-        buttonChooseFile:       '{s name="button_choose_file"}Choose File{/s}',
-        emptyTextChooseFile:    '{s name="empty_text_choose_file"}Please choose a file..{/s}',
-        messageUploadFile:      '{s name="message_upload_file"}Uploading your file...{/s}',
-        buttonStartImport:      '{s name="button_start_import"}Start Import{/s}',
-        buttonExport:           '{s name="button_export"}Export{/s}',
-        fieldFile:              '{s name="field_file"}File{/s}'
+        title: '{s name="title"}Import / Export Snippets{/s}',
+        buttonChooseFile: '{s name="button_choose_file"}Choose File{/s}',
+        emptyTextChooseFile: '{s name="empty_text_choose_file"}Please choose a file..{/s}',
+        messageUploadFile: '{s name="message_upload_file"}Uploading your file...{/s}',
+        buttonStartImport: '{s name="button_start_import"}Start Import{/s}',
+        buttonExport: '{s name="button_export"}Export{/s}',
+        fieldFile: '{s name="field_file"}File{/s}'
     },
 
     /**
@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Snippet.view.main.ImportExport', {
                 fieldLabel: me.snippets.fieldFile,
                 allowBlank: false,
                 anchor: '100%',
-                buttonConfig : {
+                buttonConfig: {
                     iconCls: 'sprite-inbox-upload',
                     cls: 'small secondary'
                 }

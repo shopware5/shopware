@@ -39,52 +39,52 @@ Ext.define('Shopware.apps.Voucher.model.Main', {
     * Extends the standard ExtJS 4
     * @string
     */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
     * The fields used for this model
     * @array
     */
-    fields : [
+    fields: [
         //{block name="backend/voucher/model/main/fields"}{/block}
-        { name : 'id', type : 'int' },
-        { name : 'description', type : 'string' },
-        { name : 'voucherCode', type : 'string' },
-        { name : 'modus', type : 'string' },
-        { name : 'numberOfUnits', type : 'int' },
-        { name : 'value', type : 'double' },
-        { name : 'validFrom', type : 'date'},
-        { name : 'validTo', type : 'date'},
-        { name : 'percental', type : 'int' },
-        { name : 'checkedIn', type : 'int' }
+        { name: 'id', type: 'int' },
+        { name: 'description', type: 'string' },
+        { name: 'voucherCode', type: 'string' },
+        { name: 'modus', type: 'string' },
+        { name: 'numberOfUnits', type: 'int' },
+        { name: 'value', type: 'double' },
+        { name: 'validFrom', type: 'date' },
+        { name: 'validTo', type: 'date' },
+        { name: 'percental', type: 'int' },
+        { name: 'checkedIn', type: 'int' }
     ],
     /**
     * If the name of the field is 'id' extjs assumes autmagical that
     * this field is an unique identifier.
     */
-    idProperty : 'id',
+    idProperty: 'id',
     /**
     * Configure the data communication
     * @object
     */
-    proxy : {
-        type : 'ajax',
-        api:{
-            read:   '{url action=getVoucher}',
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url action=getVoucher}',
             create: '{url action=createVoucher}',
             update: '{url action=updateVoucher}',
-            destroy:'{url action=deleteVoucher targetField=vouchers}'
+            destroy: '{url action=deleteVoucher targetField=vouchers}'
         },
-        reader : {
-            type : 'json',
-            root : 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty: 'totalCount'
         }
     },
     /**
     * Rules to validate the input at the frontend side.
     */
-    validations : [
-        { field : 'description', type : 'length', min : 5 }
+    validations: [
+        { field: 'description', type: 'length', min: 5 }
     ]
 });
 //{/block}

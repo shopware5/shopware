@@ -32,7 +32,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
     initComponent: function() {
         var me = this;
 
-        me.operatorStore =  Ext.create('Shopware.apps.ArticleList.store.Operator').load({ params: { resource: 'product' }});
+        me.operatorStore =  Ext.create('Shopware.apps.ArticleList.store.Operator').load({ params: { resource: 'product' } });
 
         me.tbar = me.getToolbar();
         me.columns = me.getColumns();
@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
                 text: '{s name="add"}Add{/s}',
                 action: 'addRow',
                 name: 'addRow',
-                iconCls:'sprite-plus-circle-frame',
+                iconCls: 'sprite-plus-circle-frame',
                 handler: function() {
                     me.fireEvent('addRow');
                 }
@@ -125,12 +125,12 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
                 allowEmpty: false,
                 editable: false,
                 listeners: {
-                    'select': { fn:function(combo, records, e) {
+                    'select': { fn: function(combo, records, e) {
                         me.setOperatorsForCurrentRecord(records[0], me.operatorStore);
                         me.fireEvent('setEditor', me.columns[2], records[0]);
                     }, scope: this },
                     beforequery: function(e) {
-                        e.combo.store.getProxy().extraParams = { resource: 'product'};
+                        e.combo.store.getProxy().extraParams = { resource: 'product' };
                     }
                 }
             },

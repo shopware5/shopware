@@ -34,19 +34,19 @@ Ext.define('Shopware.apps.Category.model.ManualSorting', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * Configure the data communication
      * @object
      */
-    fields:[
+    fields: [
         //{block name="backend/category/model/manual_sorting/fields"}{/block}
-        { name : 'id', type: 'int' },
-        { name : 'active', type: 'boolean' },
-        { name : 'name', type: 'string' },
-        { name : 'thumbnail', type: 'string', useNull: true, defaultValue: null },
-        { name : 'position', type: 'int', useNull: true, defaultValue: null },
-        { name : 'price', type: 'string' },
+        { name: 'id', type: 'int' },
+        { name: 'active', type: 'boolean' },
+        { name: 'name', type: 'string' },
+        { name: 'thumbnail', type: 'string', useNull: true, defaultValue: null },
+        { name: 'position', type: 'int', useNull: true, defaultValue: null },
+        { name: 'price', type: 'string' },
     ]
 });
 //{/block}

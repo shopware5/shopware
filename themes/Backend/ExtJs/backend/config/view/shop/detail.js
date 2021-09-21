@@ -81,9 +81,9 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             fieldLabel: '{s name="shop/detail/shop_type_label"}Shop type{/s}',
             helpText: '{s name="shop/detail/shop_type_help"}A sub shop is available via an extra url, a language shop holds the translation for a sub shop or the default shop{/s}',
             store: me.createTypeStore(),
-            valueField : 'type',
-            displayField : 'label',
-            listeners:{
+            valueField: 'type',
+            displayField: 'label',
+            listeners: {
                 scope: me,
                 change: function(select, value) {
                     var form = select.up('form'),

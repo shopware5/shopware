@@ -35,8 +35,8 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
     extend: 'Ext.app.Controller',
 
     refs: [
-        { ref:'grid', selector:'multi-edit-main-grid' },
-        { ref:'showVariantsCheckbox', selector:'multi-edit-category-tree checkbox[name=displayVariants]' }
+        { ref: 'grid', selector: 'multi-edit-main-grid' },
+        { ref: 'showVariantsCheckbox', selector: 'multi-edit-category-tree checkbox[name=displayVariants]' }
     ],
 
     /**

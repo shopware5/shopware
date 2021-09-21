@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Property.store.Option', {
     extend: 'Ext.data.Store',
     autoLoad: false,
-    model : 'Shopware.apps.Property.model.Option',
+    model: 'Shopware.apps.Property.model.Option',
     remoteSort: false,
     remoteFilter: false
 });

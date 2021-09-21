@@ -31,8 +31,8 @@
 //{block name="backend/property/view/main/window"}
 Ext.define('Shopware.apps.Property.view.main.Window', {
     extend: 'Enlight.app.Window',
-    alias : 'widget.property-main-window',
-    title : '{s name="title"}Article properties{/s}',
+    alias: 'widget.property-main-window',
+    title: '{s name="title"}Article properties{/s}',
     width: '70%',
     height: '50%',
     minHeight: 400,
@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Property.view.main.Window', {
                 items: [{
                     xtype: 'property-main-setGrid',
                     setStore: me.setStore,
-                    region:'west',
+                    region: 'west',
                     split: true,
                     flex: 3
                 }, {
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Property.view.main.Window', {
                     xtype: 'property-main-setAssignGrid',
                     setAssignStore: me.setAssignStore,
                     split: true,
-                    region:'center',
+                    region: 'center',
                     flex: 2
                 }, {
                     xtype: 'splitter'
@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.Property.view.main.Window', {
                     xtype: 'property-main-groupGrid',
                     groupStore: me.groupStore,
                     split: true,
-                    region:'west',
+                    region: 'west',
                     flex: 3
                 }, {
                     xtype: 'splitter'
@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Property.view.main.Window', {
                     optionStore: me.optionStore,
                     split: true,
                     flex: 2,
-                    region:'center',
+                    region: 'center',
                     disabled: true
                 }]
             }

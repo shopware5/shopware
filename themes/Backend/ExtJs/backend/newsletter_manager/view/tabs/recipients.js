@@ -42,8 +42,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
 
     border: false,
 
-    snippets : {
-        columns : {
+    snippets: {
+        columns: {
             mail: '{s name="columns/mailAddress"}Mail address{/s}',
             group: '{s name="columns/group"}Group{/s}',
             actions: '{s name="columns/actions"}Actions{/s}',
@@ -155,12 +155,12 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
      *
      * @return Ext.selection.CheckboxModel
      */
-    getGridSelModel : function() {
+    getGridSelModel: function() {
         var me = this;
         return Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
+            listeners: {
                 // Unlocks the delete button if the user has checked at least one checkbox
-                selectionchange:function (sm, selections) {
+                selectionchange: function (sm, selections) {
                     me.deleteRecipientButton.setDisabled(selections.length == 0);
                 }
             }
@@ -207,7 +207,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
                     allowBlank: true,
                     valueField: 'id',
                     displayField: 'name',
-                    store : me.newsletterGroupStore,
+                    store: me.newsletterGroupStore,
                     editable: false
 
                 }
@@ -250,9 +250,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
             },
             {
                 header: me.snippets.columns.actions,
-                xtype : 'actioncolumn',
-                width : 60,
-                items : me.getActionColumn()
+                xtype: 'actioncolumn',
+                width: 60,
+                items: me.getActionColumn()
             }
         ];
     },
@@ -326,14 +326,14 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
      *
      * @return Array of buttons
      */
-    getActionColumn : function() {
+    getActionColumn: function() {
         var me = this;
 
         return [
             {
-                iconCls:'sprite-user--plus',
-                action:'view',
-                tooltip:'{s name="action/showCustomer"}Show customer{/s}',
+                iconCls: 'sprite-user--plus',
+                action: 'view',
+                tooltip: '{s name="action/showCustomer"}Show customer{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('showCustomer', record);
                 },
@@ -391,8 +391,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
                 me.deleteRecipientButton,
                 '->',
                 {
-                    xtype    : 'textfield',
-                    name     : 'searchfield',
+                    xtype: 'textfield',
+                    name: 'searchfield',
                     emptyText: '{s name="searchfield"}Search{/s}',
                     cls: 'searchfield',
                     checkChangeBuffer: 700,

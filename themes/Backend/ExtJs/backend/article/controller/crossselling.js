@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Article.controller.Crossselling', {
      * @params  - The main controller can handle a orderId parameter to open the order detail page directly
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({

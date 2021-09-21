@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
      * The parent class that this class extends.
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     refs: [
         { ref: 'mainWindow', selector: 'article-detail-window' },
@@ -126,7 +126,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
         me.control({
             'article-variant-progress-window': {
@@ -520,8 +520,8 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             Ext.MessageBox.confirm(me.snippets.messages.warningTitle, me.snippets.messages.loadSetWarning, function (response) {
                 if ( response === 'yes' ) {
                     Ext.Ajax.request({
-                        url:'{url controller="Article" action="deleteAllVariants"}',
-                        params:{
+                        url: '{url controller="Article" action="deleteAllVariants"}',
+                        params: {
                             articleId: me.subApplication.article.get('id')
                         },
                         success: function(record, operation) {
@@ -961,7 +961,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             configurator = me.getConfigurator();
 
         var oldGroups = Ext.create('Ext.data.Store', {
-            model:'Shopware.apps.Article.model.ConfiguratorGroup'
+            model: 'Shopware.apps.Article.model.ConfiguratorGroup'
         });
 
         if (article.getConfiguratorSet() instanceof Ext.data.Store &&
@@ -972,12 +972,12 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
 
         //first we create a new store for the activated groups
         var activeGroups = Ext.create('Ext.data.Store', {
-            model:'Shopware.apps.Article.model.ConfiguratorGroup'
+            model: 'Shopware.apps.Article.model.ConfiguratorGroup'
         });
 
         //now we create a new model as data container
         var model = Ext.create('Shopware.apps.Article.model.Configurator', {
-            articleId:article.get('id')
+            articleId: article.get('id')
         });
 
         //then we have to iterate the configurator groups to filter all active groups
@@ -1186,17 +1186,17 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             }
             if ( record.get('id') > 0 ) {
                 record.destroy({
-                    success:function (record, operation) {
+                    success: function (record, operation) {
                         message = Ext.String.format(me.snippets.success.groupRemove, name);
                         Shopware.Notification.createGrowlMessage(me.snippets.success.title, message, me.snippets.growlMessage);
                         groupListing.getStore().remove(record);
                         var store = Ext.create('Ext.data.Store', {
-                            fields:['id']
+                            fields: ['id']
                         });
                         optionListing.reconfigure(store);
                         optionListing.setDisabled(true);
                     },
-                    failure:function (record, operation) {
+                    failure: function (record, operation) {
                         var rawData = record.getProxy().getReader().rawData,
                             articles = rawData.articles;
 
@@ -1247,14 +1247,14 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             }
             if ( record.get('id') > 0 ) {
                 record.destroy({
-                    success:function (record, operation) {
+                    success: function (record, operation) {
                         message = Ext.String.format(me.snippets.success.optionRemove, name);
                         Shopware.Notification.createGrowlMessage(me.snippets.success.title, message, me.snippets.growlMessage);
 
                         optionListing.getStore().remove(record);
                         groupListing.reconfigure(groupListing.getStore());
                     },
-                    failure:function (record, operation) {
+                    failure: function (record, operation) {
                         var rawData = record.getProxy().getReader().rawData,
                                 articles = rawData.articles;
 

@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Creates the necessary event listener for this
@@ -49,15 +49,15 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({
-            'partner-statistic-window datefield':{
-                change:me.onChangeDate
+            'partner-statistic-window datefield': {
+                change: me.onChangeDate
             },
-            'partner-statistic-window button[action=downloadStatistic]':{
-                click:me.onDownloadStatistic
+            'partner-statistic-window button[action=downloadStatistic]': {
+                click: me.onDownloadStatistic
             }
         });
     },
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
      * @param [Ext.Date] - The new value
      * @return void
      */
-    onChangeDate:function (field, value) {
+    onChangeDate: function (field, value) {
         var me = this,
         extraParams = null;
         if ( Ext.typeOf(value) != 'date' ) {
@@ -83,18 +83,18 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
 
         if(field.name == "toDate") {
             extraParams = {
-                partnerId:chartStore.getProxy().extraParams.partnerId,
-                toDate:value,
-                fromDate:chartStore.getProxy().extraParams.fromDate
+                partnerId: chartStore.getProxy().extraParams.partnerId,
+                toDate: value,
+                fromDate: chartStore.getProxy().extraParams.fromDate
             };
             chartStore.getProxy().extraParams = extraParams;
             listStore.getProxy().extraParams = extraParams;
         }
         else {
             extraParams = {
-                partnerId:chartStore.getProxy().extraParams.partnerId,
-                toDate:chartStore.getProxy().extraParams.toDate,
-                fromDate:value
+                partnerId: chartStore.getProxy().extraParams.partnerId,
+                toDate: chartStore.getProxy().extraParams.toDate,
+                fromDate: value
             };
             chartStore.getProxy().extraParams = extraParams;
             listStore.getProxy().extraParams = extraParams;
@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
      *
      * @return void
      */
-    onDownloadStatistic:function () {
+    onDownloadStatistic: function () {
         var me = this;
         var listStore = me.subApplication.statisticListStore,
         partnerId = listStore.getProxy().extraParams.partnerId,
@@ -137,7 +137,7 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
      *
      * @param date
      */
-    convertDate:function(date){
+    convertDate: function(date){
         var day = (date.getDate() < 10) ? "0" + date.getDate() : date.getDate();
         var month = (date.getMonth() +1 < 10) ? "0" + (date.getMonth() +1) : date.getMonth() +1;
         var year = date.getFullYear();

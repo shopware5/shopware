@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Article.model.ConfiguratorOption', {
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different

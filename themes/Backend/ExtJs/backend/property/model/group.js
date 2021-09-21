@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Property.model.Group', {
      *
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/property/model/Group/fields"}{/block}
         { name: 'id',         type: 'integer' },
         { name: 'name',       type: 'string' },
@@ -67,9 +67,9 @@ Ext.define('Shopware.apps.Property.model.Group', {
          * @object
          */
         api: {
-            read:    '{url controller="property" action="getGroups"}',
-            create:  '{url controller="property" action="createGroup"}',
-            update:  '{url controller="property" action="updateGroup"}',
+            read: '{url controller="property" action="getGroups"}',
+            create: '{url controller="property" action="createGroup"}',
+            update: '{url controller="property" action="updateGroup"}',
             destroy: '{url controller="property" action="deleteGroup"}'
         },
 

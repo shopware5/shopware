@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.LinkTarget', {
             displayField: 'label',
             store: Ext.create('Ext.data.Store', {
                 fields: ['value', 'label'],
-                data : [
+                data: [
                     { 'value': '_top', 'label': me.snippets.targetTopLabel },
                     { 'value': '_blank', 'label': me.snippets.targetBlankLabel }
                 ]

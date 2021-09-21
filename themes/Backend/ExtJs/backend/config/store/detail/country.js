@@ -28,7 +28,7 @@
 //{block name="backend/config/store/detail/country"}
 Ext.define('Shopware.apps.Config.store.detail.Country', {
     extend: 'Ext.data.Store',
-    model:'Shopware.apps.Config.model.form.Country',
+    model: 'Shopware.apps.Config.model.form.Country',
     remoteSort: true,
     remoteFilter: true,
     pageSize: 20,

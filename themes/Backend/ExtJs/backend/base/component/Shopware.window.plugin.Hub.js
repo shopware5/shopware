@@ -176,7 +176,7 @@ Ext.define('Shopware.window.plugin.Hud', {
                 }
             },
 
-            updateIndexes : function(startIndex, endIndex) {
+            updateIndexes: function(startIndex, endIndex) {
                 var ns = this.all.elements,
                     records = this.store.getRange(),
                     tmpRecords = [],

@@ -42,19 +42,19 @@ Ext.define('Shopware.apps.Order.view.batch.List', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
     */
-    alias:'widget.batch-list',
+    alias: 'widget.batch-list',
 
     /**
      * Set css class
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'order-batch-grid',
+    cls: Ext.baseCSSPrefix + 'order-batch-grid',
 
     minHeight: 150,
     /**
@@ -70,21 +70,21 @@ Ext.define('Shopware.apps.Order.view.batch.List', {
      * bars automatically when necessary, false to clip any overflowing content.
      * @string
      */
-    autoScroll:true,
+    autoScroll: true,
 
     /**
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
+    snippets: {
         title: '{s name="column/number"}Order number{/s}',
         columns: {
-            number:'{s name="column/number"}Order number{/s}',
-            customer:'{s name="column/customer"}Customer{/s}',
-            orderStatus:'{s name="column/order_status"}Order Status{/s}',
-            paymentStatus:'{s name="column/payment_status"}Payment Status{/s}',
-            sent:'{s name="column/email_sent"}Email has been sent{/s}',
-            orderTime:'{s name="column/order_time"}Order time{/s}',
+            number: '{s name="column/number"}Order number{/s}',
+            customer: '{s name="column/customer"}Customer{/s}',
+            orderStatus: '{s name="column/order_status"}Order Status{/s}',
+            paymentStatus: '{s name="column/payment_status"}Payment Status{/s}',
+            sent: '{s name="column/email_sent"}Email has been sent{/s}',
+            orderTime: '{s name="column/order_time"}Order time{/s}',
             mailGenerated: '{s name="column/mail_generated"}Mail has been generated{/s}'
         }
     },
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Order.view.batch.List', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.columns = me.getColumns();
@@ -117,38 +117,38 @@ Ext.define('Shopware.apps.Order.view.batch.List', {
             {
                 header: me.snippets.columns.number,
                 dataIndex: 'number',
-                flex:1
+                flex: 1
             },
             {
                 header: me.snippets.columns.orderTime,
                 xtype: 'datecolumn',
                 dataIndex: 'orderTime',
-                flex:1
+                flex: 1
             },
             {
                 header: me.snippets.columns.orderStatus,
                 dataIndex: 'orderStatus',
-                flex:1,
+                flex: 1,
                 renderer: me.orderStatusColumn
             },
             {
                 header: me.snippets.columns.paymentStatus,
                 dataIndex: 'paymentStatus',
-                flex:1,
+                flex: 1,
                 renderer: me.paymentStatusColumn
             },
             {
                 xtype: 'booleancolumn',
                 header: me.snippets.columns.mailGenerated,
                 dataIndex: 'mailGenerated',
-                flex:1,
+                flex: 1,
                 renderer: me.mailColumn
             },
             {
                 xtype: 'booleancolumn',
                 header: me.snippets.columns.sent,
                 dataIndex: 'sent',
-                flex:1,
+                flex: 1,
                 renderer: me.sentColumn
             }
         ]

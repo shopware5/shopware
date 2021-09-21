@@ -38,43 +38,43 @@ Ext.define('Shopware.apps.Order.store.Order', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
     /**
      * Auto load the store after the component is initialized
      * @boolean
      */
-    autoLoad:false,
+    autoLoad: false,
 
     /**
      * Enable remote sort.
      * @boolean
      */
-    remoteSort:true,
+    remoteSort: true,
 
     /**
      * Enable remote filtering
      * @boolean
      */
-    remoteFilter:true,
+    remoteFilter: true,
 
     /**
      * Amount of data loaded at once
      * @integer
      */
-    pageSize:20,
+    pageSize: 20,
 
     /**
      * to upload all selected items in one request
      * @boolean
      */
-    batch:true,
+    batch: true,
 
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Order.model.Order',
+    model: 'Shopware.apps.Order.model.Order',
 
     /**
      * Default sorters

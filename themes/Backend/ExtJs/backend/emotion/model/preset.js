@@ -70,12 +70,12 @@ Ext.define('Shopware.apps.Emotion.model.Preset', {
         return this.get('assetsImported') && this.get('pluginsInstalled');
     },
 
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -92,10 +92,10 @@ Ext.define('Shopware.apps.Emotion.model.Preset', {
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 

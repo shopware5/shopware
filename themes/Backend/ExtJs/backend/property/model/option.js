@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Property.model.Option', {
      *
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/property/model/option/fields"}{/block}
         { name: 'id', type: 'integer' },
         { name: 'mediaId', type: 'integer' },
@@ -64,9 +64,9 @@ Ext.define('Shopware.apps.Property.model.Option', {
          * @object
          */
         api: {
-            read:    '{url controller="property" action="getOptions"}',
-            create:  '{url controller="property" action="createOption"}',
-            update:  '{url controller="property" action="updateOption"}',
+            read: '{url controller="property" action="getOptions"}',
+            create: '{url controller="property" action="createOption"}',
+            update: '{url controller="property" action="updateOption"}',
             destroy: '{url controller="property" action="deleteOption"}'
         },
 

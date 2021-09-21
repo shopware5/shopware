@@ -82,12 +82,12 @@
             $el.addClass(opts.pluginClass);
 
             $el.swOffcanvasMenu({
-                'direction': 'fromRight',
-                'offCanvasSelector': selector,
-                'fullscreen': opts.fullscreen,
-                'closeButtonSelector': opts.closeButtonSelector,
-                'autoOpen': opts.autoOpen,
-                'autoOpenSelector': opts.autoOpenSelector
+                direction: 'fromRight',
+                offCanvasSelector: selector,
+                fullscreen: opts.fullscreen,
+                closeButtonSelector: opts.closeButtonSelector,
+                autoOpen: opts.autoOpen,
+                autoOpenSelector: opts.autoOpenSelector
             });
         },
 

@@ -33,21 +33,21 @@
  * todo@all: Documentation
  */
 Ext.define('Shopware.apps.Base.store.Tax', {
-    extend : 'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
     alternateClassName: 'Shopware.store.Tax',
     storeId: 'base.Tax',
-    model : 'Shopware.apps.Base.model.Tax',
+    model: 'Shopware.apps.Base.model.Tax',
     pageSize: 1000,
     remoteFilter: true,
 
-    proxy:{
-        type:'ajax',
-        url:'{url action="getTaxes"}',
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+    proxy: {
+        type: 'ajax',
+        url: '{url action="getTaxes"}',
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

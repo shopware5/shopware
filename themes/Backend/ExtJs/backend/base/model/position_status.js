@@ -54,17 +54,17 @@ Ext.define('Shopware.apps.Base.model.PositionStatus', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/order/model/status/fields"}{/block}
-        { name:'id', type: 'int' },
+        { name: 'id', type: 'int' },
         {
-            name:'description',
+            name: 'description',
             type: 'string',
             convert: function(value, record) {
                 var snippet = value;

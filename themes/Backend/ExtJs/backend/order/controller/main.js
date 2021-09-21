@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Order.controller.Main', {
      * The parent class that this class extends.
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Class property which holds the main application if it is created
@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Order.controller.Main', {
      * @params orderId - The main controller can handle a orderId parameter to open the order detail page directly
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         if (me.subApplication && me.subApplication.params && Ext.isNumeric(me.subApplication.params.orderId)) {
@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Order.controller.Main', {
             var store = me.subApplication.getStore('Order');
             store.getProxy().extraParams.orderID = me.subApplication.params.orderId;
             store.load({
-                callback:function (records) {
+                callback: function (records) {
                     store.getProxy().extraParams.orderID = null;
                     var order = records[0];
                     me.showOrder(order);
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Order.controller.Main', {
         } else {
             var listStore = Ext.create('Shopware.apps.Order.store.ListBatch');
             listStore.load({
-                callback:function (records) {
+                callback: function (records) {
                     var record = records[0];
                     var stores = me.getAssociationStores(record);
                     //open the order listing window
@@ -177,7 +177,7 @@ Ext.define('Shopware.apps.Order.controller.Main', {
                         statusStore: Ext.create('Shopware.store.PositionStatus').load(),
                         historyStore: historyStore.load(),
                         orderStatusStore: me.orderStatusStore,
-                        paymentStatusStore:  me.paymentStatusStore,
+                        paymentStatusStore: me.paymentStatusStore,
                         shopsStore: me.shopsStore,
                         countriesStore: me.countriesStore,
                         paymentsStore: me.paymentsStore,

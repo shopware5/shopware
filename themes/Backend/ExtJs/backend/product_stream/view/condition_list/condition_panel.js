@@ -33,7 +33,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
     cls: 'shopware-form',
     alias: 'widget.product-stream-condition-panel',
     autoScroll: true,
-    layout: { type: 'vbox', align: 'stretch'},
+    layout: { type: 'vbox', align: 'stretch' },
     bodyPadding: '10 20',
     conditions: [],
 

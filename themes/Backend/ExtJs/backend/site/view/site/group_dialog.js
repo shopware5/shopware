@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Site.view.site.GroupDialog', {
         },
         items: [{
             fieldLabel: '{s name="createGroupWindowDescription"}Description{/s}',
-            name:  'description'
+            name: 'description'
         }, {
             fieldLabel: '{s name="createGroupWindowTemplateVar"}Template variable{/s}',
             name: 'templateVar'

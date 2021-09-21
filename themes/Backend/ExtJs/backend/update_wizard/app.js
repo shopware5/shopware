@@ -5,7 +5,7 @@
 Ext.define('Shopware.apps.UpdateWizard', {
     extend: 'Enlight.app.SubApplication',
 
-    name:'Shopware.apps.UpdateWizard',
+    name: 'Shopware.apps.UpdateWizard',
 
     loadPath: '{url controller=UpdateWizard action=load}',
     bulkLoad: true,

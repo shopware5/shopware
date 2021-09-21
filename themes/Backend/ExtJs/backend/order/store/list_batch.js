@@ -40,17 +40,17 @@ Ext.define('Shopware.apps.Order.store.ListBatch', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * to upload all selected items in one request
      * @boolean
      */
-    batch:true,
+    batch: true,
     autoLoad: false,
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Order.model.ListBatch'
+    model: 'Shopware.apps.Order.model.ListBatch'
 });
 //{/block}

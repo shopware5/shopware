@@ -44,8 +44,8 @@ Ext.define('Shopware.apps.Premium.view.main.Window', {
     height: '90%',
     width: 925,
 
-    stateful:true,
-    stateId:'shopware-premiums-window',
+    stateful: true,
+    stateId: 'shopware-premiums-window',
 
     /**
      * Initializes the component and builds up the main interface

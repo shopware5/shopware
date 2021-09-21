@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.ArticleList.view.QueryField', {
         return [{
             xtype: 'fieldset',
             title: '{s name="addFilter/queryTitle"}Your query{/s}',
-            defaults : {
+            defaults: {
                 margin: '0 0 10 0'
             },
             items: [
@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.ArticleList.view.QueryField', {
                 'afterrender': { fn: function () {
                     me.combo.inputEl.dom.spellcheck = false;
                 }, scope: this },
-                'focus': { fn: me.comboChangeCallback, scope: this},
+                'focus': { fn: me.comboChangeCallback, scope: this },
                 'change': { fn: me.comboChangeCallback, scope: this }
             }
         });

@@ -32,7 +32,7 @@ Ext.define('Shopware.grid.Searchable', {
     /**
      * Will be filled later with the loaded stores for the entity + identifier combinations.
      */
-    savedStores : {},
+    savedStores: {},
 
     /**
      * Will be filled at runtime with an `Ext.button.Button` for the top toolbar.
@@ -418,7 +418,7 @@ Ext.define('Shopware.grid.Searchable', {
     /**
      * @return { Ext.selection.CheckboxModel }
      */
-    createSelectionModel : function() {
+    createSelectionModel: function() {
         var me = this;
 
         return Ext.create('Ext.selection.CheckboxModel', {

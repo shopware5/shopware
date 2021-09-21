@@ -24,7 +24,7 @@
 // {namespace name="backend/content_type_manager/main"}
 // {block name="backend/content_type_manager/store/robots"}
 Ext.define('Shopware.apps.ContentTypeManager.store.Robots', {
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     autoLoad: false,
     remoteSort: false,
     remoteFilter: false,

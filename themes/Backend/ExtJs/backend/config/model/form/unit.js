@@ -32,13 +32,13 @@
  */
 //{block name="backend/config/model/form/unit"}
 Ext.define('Shopware.apps.Config.model.form.Unit', {
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     fields: [
         //{block name="backend/config/model/form/unit/fields"}{/block}
-        { name: 'id', type:'int' },
-        { name: 'name', type:'string' },
-        { name: 'unit', type:'string' }
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' },
+        { name: 'unit', type: 'string' }
     ]
 });
 //{/block}

@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Article.model.Esd', {
         { name: 'name' },
         { name: 'additionalText', type: 'string', useNull: true, defaultValue: null },
         { name: 'date', type: 'date' },
-        { name: 'hasSerials', type: 'boolean'},
+        { name: 'hasSerials', type: 'boolean' },
         { name: 'serialsUsed', type: 'int' },
         { name: 'serialsTotal', type: 'int' },
         { name: 'downloads', type: 'int' },
@@ -59,12 +59,12 @@ Ext.define('Shopware.apps.Article.model.Esd', {
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -78,10 +78,10 @@ Ext.define('Shopware.apps.Article.model.Esd', {
             destroy: '{url action="deleteEsd" targetField=details}'
         },
 
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

@@ -41,13 +41,13 @@ Ext.define('Shopware.apps.Category.store.ManualSorting', {
      * is initialized
      * @boolean
      */
-    autoLoad : false,
+    autoLoad: false,
 
     /**
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Category.model.ManualSorting',
+    model: 'Shopware.apps.Category.model.ManualSorting',
 
     /**
      * Batch size

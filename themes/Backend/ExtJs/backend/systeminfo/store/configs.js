@@ -53,6 +53,6 @@ Ext.define('Shopware.apps.Systeminfo.store.Configs', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.Systeminfo.model.Config'
+    model: 'Shopware.apps.Systeminfo.model.Config'
 });
 //{/block}

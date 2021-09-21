@@ -39,14 +39,14 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.first-run-wizard-config',
+    alias: 'widget.first-run-wizard-config',
 
     cls: 'first-run-wizard-config',
 
     /**
      * Name attribute used to generate event names
      */
-    name:'config',
+    name: 'config',
 
     snippets: {
         buttons: {
@@ -140,10 +140,10 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
             cls: Ext.baseCSSPrefix + 'base-field-set',
             title: me.snippets.themeSettings.title,
             defaults: {
-                anchor:'95%',
-                labelWidth:150,
-                minWidth:250,
-                xtype:'textfield'
+                anchor: '95%',
+                labelWidth: 150,
+                minWidth: 250,
+                xtype: 'textfield'
             },
             items: [
                 me.themeBrandPrimaryColor,
@@ -192,10 +192,10 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
             cls: Ext.baseCSSPrefix + 'base-field-set',
             title: me.snippets.shopSettings.title,
             defaults: {
-                anchor:'95%',
-                labelWidth:150,
-                minWidth:250,
-                xtype:'textfield'
+                anchor: '95%',
+                labelWidth: 150,
+                minWidth: 250,
+                xtype: 'textfield'
             },
             items: [
                 me.shopNameField,

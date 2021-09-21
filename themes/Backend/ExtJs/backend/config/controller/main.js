@@ -52,12 +52,12 @@ Ext.define('Shopware.apps.Config.controller.Main', {
         'element.CustomFacetGrid'
     ],
 
-    stores:[
+    stores: [
         'main.Navigation',
         'main.Form'
     ],
 
-    models:[
+    models: [
         'main.Form', 'main.Navigation',
         'main.Element' , 'main.Value',
         'main.ElementTranslation', 'main.FormTranslation'
@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
 
         if(me.action) {
             me.formStore.load({
-                filters : [{
+                filters: [{
                     property: Ext.isNumeric(me.action) ? 'id' : 'name',
                     value: me.action
                 }]
@@ -166,7 +166,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
         panel.setLoading('Loading ' + record.get('label') + '...');
 
         me.formStore.load({
-            filters : [{
+            filters: [{
                 property: 'id',
                 value: record.data.id
             }]
@@ -180,7 +180,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
             store.load();
         } else {
             store.load({
-                filters : [{
+                filters: [{
                     property: 'search',
                     value: '%' + value + '%'
                 }]
@@ -218,14 +218,14 @@ Ext.define('Shopware.apps.Config.controller.Main', {
 
         form.store.add(form);
         form.store.sync({
-            success :function (records, operation) {
+            success: function (records, operation) {
                 var template = new Ext.Template('{s name="form/message/save_form_success"}Form „[name]“ has been saved.{/s}'),
                     message = template.applyTemplate({
                         name: form.data.label || form.data.name
                     });
                 Shopware.Notification.createGrowlMessage(title, message, win.title);
             },
-            failure:function (batch) {
+            failure: function (batch) {
                 var template = new Ext.Template('{s name="form/message/save_form_error"}Form „[name]“ could not be saved.{/s}'),
                     message = template.applyTemplate({
                         name: form.data.label || form.data.name

@@ -36,9 +36,9 @@
  */
 //{block name="backend/product_feed/view/feed/tab/body"}
 Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Body', {
-    extend:'Ext.container.Container',
-    alias:'widget.product_feed-feed-tab-body',
-    title:'{s name="tab/title/body"}Body{/s}',
+    extend: 'Ext.container.Container',
+    alias: 'widget.product_feed-feed-tab-body',
+    title: '{s name="tab/title/body"}Body{/s}',
     border: 0,
     padding: 10,
     cls: 'shopware-toolbar',
@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Body', {
      * Initialize the Shopware.apps.ProductFeed.view.feed.tab.Footer and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = me.getItems();
@@ -58,13 +58,13 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Body', {
     /**
      * creates all fields for the tab
      */
-    getItems:function () {
+    getItems: function () {
         var me = this;
         return [
             {
                 xtype: 'codemirrorfield',
                 mode: 'smarty',
-                anchor:'100%',
+                anchor: '100%',
                 name: me.fieldName,
             }
         ];

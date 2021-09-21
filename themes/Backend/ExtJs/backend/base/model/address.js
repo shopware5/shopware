@@ -44,27 +44,27 @@ Ext.define('Shopware.apps.Base.model.Address', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/address/fields"}{/block}
-        { name:'salutation', type:'string' },
-        { name:'company', type:'string' },
-        { name:'department', type:'string' },
-        { name:'firstName', type:'string' },
-        { name:'title', type:'string' },
-        { name:'lastName', type:'string' },
-        { name:'street', type:'string' },
-        { name:'zipCode', type:'string' },
-        { name:'city', type:'string' },
-        { name:'additionalAddressLine1', type:'string' },
-        { name:'additionalAddressLine2', type:'string' },
-        { name:'salutationSnippet', type:'string' },
-        { name:'countryId', type:'int', useNull: true }
+        { name: 'salutation', type: 'string' },
+        { name: 'company', type: 'string' },
+        { name: 'department', type: 'string' },
+        { name: 'firstName', type: 'string' },
+        { name: 'title', type: 'string' },
+        { name: 'lastName', type: 'string' },
+        { name: 'street', type: 'string' },
+        { name: 'zipCode', type: 'string' },
+        { name: 'city', type: 'string' },
+        { name: 'additionalAddressLine1', type: 'string' },
+        { name: 'additionalAddressLine2', type: 'string' },
+        { name: 'salutationSnippet', type: 'string' },
+        { name: 'countryId', type: 'int', useNull: true }
     ]
 
 });

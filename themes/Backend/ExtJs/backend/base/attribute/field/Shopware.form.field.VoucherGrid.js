@@ -39,7 +39,7 @@ Ext.define('Shopware.form.field.VoucherGrid', {
             { dataIndex: 'description', flex: 2 },
             { dataIndex: 'voucherCode', flex: 1 },
             { dataIndex: 'mode', flex: 1, renderer: me.modeRenderer },
-            { dataIndex: 'numOrder', flex: 1, renderer: me.orderedRenderer},
+            { dataIndex: 'numOrder', flex: 1, renderer: me.orderedRenderer },
             { dataIndex: 'value', flex: 1, renderer: me.valueRenderer },
             me.createActionColumn()
         ];

@@ -42,26 +42,26 @@ Ext.define('Shopware.apps.UserManager.model.Rules', {
        * unique id. If the model is a resource (type=resource) the id is equals to the resource id.
        * If the model is a privilege (type=privilege) the unique id is concat with resourceID_privilegeID
        */
-       { name: 'id', type: 'int'},
+       { name: 'id', type: 'int' },
 
       /**
        * Internal helper id which contains the id of the doctrine model
        */
-       { name: 'helperId', type: 'int'},
-       { name: 'name',     type: 'string'},
+       { name: 'helperId', type: 'int' },
+       { name: 'name',     type: 'string' },
 
        /**
         * Internal helper property to differentiate between a privilege and resource model
         */
-       { name: 'type',     type: 'string'},
-       { name: 'pluginID', type: 'string'},
+       { name: 'type',     type: 'string' },
+       { name: 'pluginID', type: 'string' },
 
        /**
         * The following fields are helper fields to assign the resources a
         */
-       { name: 'resourceId',  type: 'int'},
-       { name: 'privilegeId', type: 'int'},
-       { name: 'roleId',      type: 'int'},
+       { name: 'resourceId',  type: 'int' },
+       { name: 'privilegeId', type: 'int' },
+       { name: 'roleId',      type: 'int' },
        /**
         * Helper field for required privileges
         */

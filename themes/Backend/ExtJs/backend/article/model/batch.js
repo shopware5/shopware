@@ -58,39 +58,39 @@ Ext.define('Shopware.apps.Article.model.Batch', {
      * One order has a customer, many details, billing- & shipping address and a payment information.
      * @array
      */
-    associations:[
+    associations: [
         //association for the article data
-        { type:'hasMany', model:'Shopware.apps.Article.model.Article', name:'getArticle', associationKey:'article' },
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.Article', name: 'getArticle', associationKey: 'article' },
 
         //global data for the detail form. Used for example for combo boxes.
-        { type:'hasMany', model:'Shopware.apps.Base.model.CustomerGroup', name:'getCustomerGroups', associationKey:'customerGroups' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.CustomerGroup', name: 'getCustomerGroups', associationKey: 'customerGroups' },
 
         //association for all defined sub shops in the shop
-        { type:'hasMany', model:'Shopware.apps.Base.model.Shop', name:'getShops', associationKey:'shops' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Shop', name: 'getShops', associationKey: 'shops' },
 
         //association for all defined taxes in the shop
-        { type:'hasMany', model:'Shopware.apps.Base.model.Tax', name:'getTaxes', associationKey:'taxes' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Tax', name: 'getTaxes', associationKey: 'taxes' },
 
         //association for all defined article suppliers in the shop
-        { type:'hasMany', model:'Shopware.apps.Base.model.Supplier', name:'getSuppliers', associationKey:'suppliers' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Supplier', name: 'getSuppliers', associationKey: 'suppliers' },
 
         //association for all defined templates in the shop
-        { type:'hasMany', model:'Shopware.apps.Article.model.Template', name:'getTemplates', associationKey:'templates' },
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.Template', name: 'getTemplates', associationKey: 'templates' },
 
         //association for all defined units in the shop
-        { type:'hasMany', model:'Shopware.apps.Article.model.Unit', name:'getUnits', associationKey:'units' },
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.Unit', name: 'getUnits', associationKey: 'units' },
 
         //association for all defined property groups in the shop
-        { type:'hasMany', model:'Shopware.apps.Article.model.PropertyGroup', name:'getProperties', associationKey:'properties' },
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.PropertyGroup', name: 'getProperties', associationKey: 'properties' },
 
         //association for all defined categories in the shop
-        { type:'hasMany', model:'Shopware.apps.Article.model.Category', name:'getCategories', associationKey:'categories' },
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.Category', name: 'getCategories', associationKey: 'categories' },
 
         //association for all defined configurator groups in the shop
-        { type:'hasMany', model:'Shopware.apps.Article.model.ConfiguratorGroup', name:'getConfiguratorGroups', associationKey:'configuratorGroups' },
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.ConfiguratorGroup', name: 'getConfiguratorGroups', associationKey: 'configuratorGroups' },
 
         //association for all defined price groups in the shop
-        { type:'hasMany', model:'Shopware.apps.Article.model.PriceGroup', name:'getPriceGroups', associationKey:'priceGroups' },
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.PriceGroup', name: 'getPriceGroups', associationKey: 'priceGroups' },
     ]
 });
 //{/block}

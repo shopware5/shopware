@@ -36,24 +36,24 @@
  */
 //{block name="backend/product_feed/view/feed/tab/format"}
 Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Format', {
-    extend:'Ext.container.Container',
-    alias:'widget.product_feed-feed-tab-format',
-    title:'{s name="tab/title/format"}Format{/s}',
+    extend: 'Ext.container.Container',
+    alias: 'widget.product_feed-feed-tab-format',
+    title: '{s name="tab/title/format"}Format{/s}',
     border: 0,
     padding: 10,
     cls: 'shopware-toolbar',
     layout: 'anchor',
-    defaults:{
-        anchor:'100%',
-        labelStyle:'font-weight: 700;',
-        xtype:'combobox'
+    defaults: {
+        anchor: '100%',
+        labelStyle: 'font-weight: 700;',
+        xtype: 'combobox'
     },
     //Data for the Format Comboboxes
-    encoding:[
+    encoding: [
         [1, 'ISO-8859-1'],
         [2, 'UTF-8']
     ],
-    fileFormat:[
+    fileFormat: [
         [1, '{s name="detail_format/field/file_format_csv"}CSV{/s}'],
         [2, '{s name="detail_format/field/file_format_txt_tab"}TXT with tab delimiter{/s}'],
         [3, '{s name="detail_format/field/file_format_XML"}XML{/s}'],
@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Format', {
      * Initialize the Shopware.apps.ProductFeed.view.feed.detail and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = me.getItems();
@@ -73,31 +73,31 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Format', {
     /**
      * creates all fields for the general form on the left side
      */
-    getItems:function () {
+    getItems: function () {
         var me = this;
         return [
             {
-                name:'encodingId',
-                fieldLabel:'{s name="detail_format/field/encoding"}Encoding{/s}',
-                store:new Ext.data.SimpleStore({
-                    fields:['id', 'text'], data:me.encoding
+                name: 'encodingId',
+                fieldLabel: '{s name="detail_format/field/encoding"}Encoding{/s}',
+                store: new Ext.data.SimpleStore({
+                    fields: ['id', 'text'], data: me.encoding
                 }),
-                valueField:'id',
-                displayField:'text',
-                value:1,
-                mode:'local',
+                valueField: 'id',
+                displayField: 'text',
+                value: 1,
+                mode: 'local',
                 editable: false
             },
             {
-                name:'formatId',
-                fieldLabel:'{s name="detail_format/field/file_format"}File format{/s}',
-                store:new Ext.data.SimpleStore({
-                    fields:['id', 'text'], data:me.fileFormat
+                name: 'formatId',
+                fieldLabel: '{s name="detail_format/field/file_format"}File format{/s}',
+                store: new Ext.data.SimpleStore({
+                    fields: ['id', 'text'], data: me.fileFormat
                 }),
-                valueField:'id',
-                displayField:'text',
-                value:1,
-                mode:'local',
+                valueField: 'id',
+                displayField: 'text',
+                value: 1,
+                mode: 'local',
                 editable: false
             }
         ];

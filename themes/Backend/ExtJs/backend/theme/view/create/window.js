@@ -36,7 +36,7 @@
 Ext.define('Shopware.apps.Theme.view.create.Window', {
     extend: 'Shopware.window.Detail',
     alias: 'widget.theme-create-window',
-    title : '{s name="create_window"}Create new theme{/s}',
+    title: '{s name="create_window"}Create new theme{/s}',
     height: 500,
     width: 560
 });

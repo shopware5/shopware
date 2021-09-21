@@ -54,21 +54,21 @@ Ext.define('Shopware.apps.Order.model.Position', {
      */
     fields: [
         //{block name="backend/order/model/position/fields"}{/block}
-        { name: 'id', type:'int' },
-        { name: 'orderId', type:'int' },
-        { name: 'mode', type:'int' },
-        { name: 'articleId', type:'int' },
-        { name: 'articleDetailId', type:'int', useNull: true, default: null},
-        { name: 'articleNumber', type:'string' },
-        { name: 'articleName', type:'string' },
-        { name: 'quantity', type:'int' },
-        { name: 'statusId', type:'int' },
-        { name: 'statusDescription', type:'string' },
-        { name: 'price', type:'float' },
-        { name: 'taxId', type:'int' },
-        { name: 'taxRate', type:'float' },
-        { name: 'taxDescription', type:'string' },
-        { name: 'inStock', type:'int' },
+        { name: 'id', type: 'int' },
+        { name: 'orderId', type: 'int' },
+        { name: 'mode', type: 'int' },
+        { name: 'articleId', type: 'int' },
+        { name: 'articleDetailId', type: 'int', useNull: true, default: null },
+        { name: 'articleNumber', type: 'string' },
+        { name: 'articleName', type: 'string' },
+        { name: 'quantity', type: 'int' },
+        { name: 'statusId', type: 'int' },
+        { name: 'statusDescription', type: 'string' },
+        { name: 'price', type: 'float' },
+        { name: 'taxId', type: 'int' },
+        { name: 'taxRate', type: 'float' },
+        { name: 'taxDescription', type: 'string' },
+        { name: 'inStock', type: 'int' },
         {
             name: 'total',
             type: 'float',
@@ -108,9 +108,9 @@ Ext.define('Shopware.apps.Order.model.Position', {
          * @object
          */
         reader: {
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

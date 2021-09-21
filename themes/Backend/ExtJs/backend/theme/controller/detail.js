@@ -139,7 +139,7 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
                 me.getView('detail.Window').create({
                     configLayout: me.createThemeConfiguration(record, shop),
                     theme: record,
-                    shop:  shop
+                    shop: shop
                 }).show();
             }
         });

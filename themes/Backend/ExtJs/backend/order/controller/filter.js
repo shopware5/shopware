@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Order.controller.Filter', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * A template method that is called when your application boots.
@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Order.controller.Filter', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({

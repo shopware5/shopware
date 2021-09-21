@@ -39,55 +39,55 @@ Ext.define('Shopware.apps.Supplier.model.Supplier', {
      * Extends the standard ExtJS 4
      * @string
      */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/supplier/model/supplier/fields"}{/block}
-        { name : 'id', type : 'int' },
-        { name : 'name', type : 'string' },
-        { name : 'count', type : 'int' },
-        { name : 'image', type : 'string' },
-        { name : 'media-manager-selection', type: 'string' },
-        { name : 'link', type : 'string'},
-        { name : 'description', type : 'string' },
-        { name : 'metaTitle', type : 'string' },
-        { name : 'metaDescription', type : 'string' },
-        { name : 'metaKeywords', type : 'string' },
-        { name : 'articleCounter', type : 'int' }
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' },
+        { name: 'count', type: 'int' },
+        { name: 'image', type: 'string' },
+        { name: 'media-manager-selection', type: 'string' },
+        { name: 'link', type: 'string' },
+        { name: 'description', type: 'string' },
+        { name: 'metaTitle', type: 'string' },
+        { name: 'metaDescription', type: 'string' },
+        { name: 'metaKeywords', type: 'string' },
+        { name: 'articleCounter', type: 'int' }
     ],
     /**
      * If the name of the field is 'id' extjs assumes autmagical that
      * this field is an unique identifier.
      * @integer
      */
-    idProperty : 'id',
+    idProperty: 'id',
     /**
      * Configure the data communication
      * @object
      */
-    proxy : {
-        type : 'ajax',
-        api : {
-            read : '{url controller="supplier" action="getSuppliers"}',
-            create : '{url controller="supplier" action="createSupplier"}',
-            update : '{url controller="supplier" action="updateSupplier"}',
-            destroy : '{url controller="supplier" action="deleteSupplier"}'
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="supplier" action="getSuppliers"}',
+            create: '{url controller="supplier" action="createSupplier"}',
+            update: '{url controller="supplier" action="updateSupplier"}',
+            destroy: '{url controller="supplier" action="deleteSupplier"}'
         },
-        reader : {
-            type : 'json',
-            root : 'data'
+        reader: {
+            type: 'json',
+            root: 'data'
         }
     },
     /**
      * Rules to validate the input at the frontend side.
      * @array of objects
      */
-    validations : [
-        { field : 'name', type : 'length', min : 1 }
+    validations: [
+        { field: 'name', type: 'length', min: 1 }
     ]
 });
 //{/block}

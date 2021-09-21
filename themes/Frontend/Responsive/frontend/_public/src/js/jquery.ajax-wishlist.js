@@ -182,9 +182,9 @@
 
             // Initial state don't has the badge, so we need to create it
             this.$counter = $('<span>', {
-                'class': 'badge notes--quantity',
-                'html': count,
-                'css': {'opacity': 0}
+                class: 'badge notes--quantity',
+                html: count,
+                css: { opacity: 0 }
             }).appendTo($btn.find('a'));
 
             if (!$.support.transition) {
@@ -193,7 +193,7 @@
 
             // Show it with a nice transition
             this.$counter[animate]({
-                'opacity': 1
+                opacity: 1
             }, 500);
 
             $.publish('plugin/swAjaxWishlist/onUpdateCounter', [this, this.$counter, count]);

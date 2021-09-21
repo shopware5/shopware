@@ -53,20 +53,20 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
      *
      * @object
      */
-    refs:[
-        { ref:'mainWindow', selector:'site-mainWindow' },
-        { ref:'confirmationBox', selector:'site-confirmationBox' },
-        { ref:'detailForm', selector:'site-form' },
-        { ref:'attributeForm', selector: 'site-mainWindow shopware-attribute-form' },
-        { ref:'navigationTree', selector:'site-tree' },
+    refs: [
+        { ref: 'mainWindow', selector: 'site-mainWindow' },
+        { ref: 'confirmationBox', selector: 'site-confirmationBox' },
+        { ref: 'detailForm', selector: 'site-form' },
+        { ref: 'attributeForm', selector: 'site-mainWindow shopware-attribute-form' },
+        { ref: 'navigationTree', selector: 'site-tree' },
         /*{if {acl_is_allowed privilege=deleteGroup}}*/
-        { ref:'deleteGroupButton', selector:'site-tree button[action=onDeleteGroup]' },
+        { ref: 'deleteGroupButton', selector: 'site-tree button[action=onDeleteGroup]' },
         /*{/if}*/
-        { ref:'saveSiteButton', selector:'site-form button[action=onSaveSite]' },
+        { ref: 'saveSiteButton', selector: 'site-form button[action=onSaveSite]' },
         /*{if {acl_is_allowed privilege=deleteSite}}*/
-        { ref:'deleteSiteButton', selector:'site-mainWindow button[action=onDeleteSite]' },
+        { ref: 'deleteSiteButton', selector: 'site-mainWindow button[action=onDeleteSite]' },
         /*{/if}*/
-        { ref:'groupSelector', selector:'site-form itemselector[name=grouping]' }
+        { ref: 'groupSelector', selector: 'site-form itemselector[name=grouping]' }
     ],
 
     /**
@@ -215,8 +215,8 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
         Ext.Msg.confirm('{s name="onDeleteGroupConfirmationBoxCaption"}Delete this group?{/s}', Ext.String.format('{s name="onDeleteGroupConfirmationBoxText"}Are you sure you want to delete the group \'[0]\'?{/s}', groupName), function(btn){
             if (btn == 'yes'){
                 Ext.Ajax.request({
-                    url : '{url action=deleteGroup}',
-                    scope:this,
+                    url: '{url action=deleteGroup}',
+                    scope: this,
                     params: {
                         templateVar: templateVariable
                     },
@@ -262,7 +262,7 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
             templateVar = dialogWindow.down('textfield[name=templateVar]').getValue();
             //send ajax request containing groupName and templateVariable
             Ext.Ajax.request({
-                url : '{url action=createGroup}',
+                url: '{url action=createGroup}',
                 scope: me,
                 params: {
                     groupName: groupName,

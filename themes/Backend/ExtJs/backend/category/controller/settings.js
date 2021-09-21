@@ -62,8 +62,8 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
     init: function() {
         var me = this;
         me.control({
-            'category-category-tabs-settings':{
-                recordloaded : me.onRecordLoaded
+            'category-category-tabs-settings': {
+                recordloaded: me.onRecordLoaded
             },
         });
     },
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
      * @param record [Ext.data.Model]
      * @return void
      */
-    onRecordLoaded : function(record, treeRecord) {
+    onRecordLoaded: function(record, treeRecord) {
         var me = this,
             form = me.getSettingsForm(),
             store = form.templateComboBox.getStore(),
@@ -141,7 +141,7 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
      *
      * @return void
      */
-    enableForm : function() {
+    enableForm: function() {
         var me   = this,
             form = me.getSettingsForm();
         form.defaultSettings.enable();
@@ -156,7 +156,7 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
      *
      * @return void
      */
-    disableForm : function() {
+    disableForm: function() {
         var me   = this,
             form = me.getSettingsForm();
         form.defaultSettings.disable();

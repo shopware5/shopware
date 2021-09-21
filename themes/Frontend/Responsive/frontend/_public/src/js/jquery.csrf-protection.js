@@ -73,9 +73,9 @@
             var me = this;
 
             return $('<input>', {
-                'type': 'hidden',
-                'name': '__csrf_token',
-                'value': me.getToken()
+                type: 'hidden',
+                name: '__csrf_token',
+                value: me.getToken()
             });
         },
 
@@ -85,7 +85,7 @@
          */
         addTokenField: function(formElement) {
             formElement.append(CSRF.createTokenField());
-            $.publish('plugin/swCsrfProtection/addTokenField', [ this, formElement ]);
+            $.publish('plugin/swCsrfProtection/addTokenField', [this, formElement]);
         },
 
         /**
@@ -120,7 +120,7 @@
                 }
             });
 
-            $.publish('plugin/swCsrfProtection/updateForms', [ this, formElements ]);
+            $.publish('plugin/swCsrfProtection/updateForms', [this, formElements]);
         },
 
         /**
@@ -132,7 +132,7 @@
             $(document).ajaxSend($.proxy(me._ajaxBeforeSend, me));
             $(document).ajaxComplete($.proxy(me._ajaxAfterSend, me));
 
-            $.publish('plugin/swCsrfProtection/setupAjax', [ me, me.getToken() ]);
+            $.publish('plugin/swCsrfProtection/setupAjax', [me, me.getToken()]);
         },
 
         /**
@@ -157,7 +157,7 @@
         _ajaxBeforeSend: function(event, request, settings) {
             settings = settings || {};
 
-            if (settings.hasOwnProperty('ignoreCSRFHeader') || settings.ignoreCSRFHeader === true || !this.isLocalLink(settings.url)) {
+            if (Object.prototype.hasOwnProperty.call(settings, 'ignoreCSRFHeader') || settings.ignoreCSRFHeader === true || !this.isLocalLink(settings.url)) {
                 return;
             }
 
@@ -175,7 +175,7 @@
                     url: window.csrfConfig.generateUrl,
                     success: function(response, status, xhr) {
                         me.saveToken(xhr.getResponseHeader('x-csrf-token'));
-                        $.publish('plugin/swCsrfProtection/requestToken', [ me, me.getToken() ]);
+                        $.publish('plugin/swCsrfProtection/requestToken', [me, me.getToken()]);
                         me.afterInit();
                     }
                 });
@@ -216,7 +216,7 @@
             me.updateForms();
             me.setupAjax();
 
-            $.publish('plugin/swCsrfProtection/init', [ me ]);
+            $.publish('plugin/swCsrfProtection/init', [me]);
         },
 
         /**

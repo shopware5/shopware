@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     refs: [
         { ref: 'orderList', selector: 'order-list' },
@@ -51,9 +51,9 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
     ],
 
     snippets: {
-        successTitle:'{s name="message/save/success_title"}Successful{/s}',
-        failureTitle:'{s name="message/save/error_title"}Error{/s}',
-        warningTitle:'{s name="message/save/warning_title"}Warning{/s}',
+        successTitle: '{s name="message/save/success_title"}Successful{/s}',
+        failureTitle: '{s name="message/save/error_title"}Error{/s}',
+        warningTitle: '{s name="message/save/warning_title"}Warning{/s}',
         internalComment: {
             successMessage: '{s name="message/internal_comment/success"}Internal comment has been saved successfully for order [0]{/s}',
             failureMessage: '{s name="message/internal_comment/failure"}An error has occurred while saving the internal comment for order [0].{/s}'
@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({
@@ -138,7 +138,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                 updateForms: me.onUpdateDetailPage
             },
             'order-detail-window order-detail-panel order-debit-field-set': {
-                changePayment:me.onChangePayment
+                changePayment: me.onChangePayment
             },
             'order-detail-window order-detail-panel order-dispatch-field-set': {
                 changeDispatch: me.onChangeDispatch
@@ -193,7 +193,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         Shopware.app.Application.addSubApplication({
                             name: 'Shopware.apps.Order',
                             params: {
-                                orderId:record.get('id')
+                                orderId: record.get('id')
                             }
                         });
                         window.destroy();
@@ -308,7 +308,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             params: {
                 changed: order.get('changed') ? order.get('changed').toISOString() : null,
             },
-            callback:function (data, operation) {
+            callback: function (data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;
@@ -431,7 +431,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                 changed: order.get('changed') ? order.get('changed').toISOString() : null,
             };
             store.sync({
-                callback:function (batch, operation) {
+                callback: function (batch, operation) {
                     var rawData = batch.proxy.getReader().rawData;
 
                     if ( rawData.success === true ) {
@@ -477,14 +477,14 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * @param [object] container - The field container which contains the debit account fields
      * @return void
      */
-    onChangePayment:function (value, container) {
+    onChangePayment: function (value, container) {
         if ( value !== 2 ) {
             if (container.getEl()) {
                 container.getEl().fadeOut({
-                    opacity:0,
-                    easing:'easeOut',
-                    duration:500,
-                    callback:function () {
+                    opacity: 0,
+                    easing: 'easeOut',
+                    duration: 500,
+                    callback: function () {
                         container.hide();
                     }
                 });
@@ -495,9 +495,9 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             container.show();
             if (container.getEl()) {
                 container.getEl().fadeIn({
-                    opacity:1,
-                    easing:'easeOut',
-                    duration:500
+                    opacity: 1,
+                    easing: 'easeOut',
+                    duration: 500
                 });
             }
         }
@@ -752,7 +752,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         errorMessage = Ext.String.format(errorMessage, order.get('number'));
 
         order.save({
-            callback:function (data, operation) {
+            callback: function (data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;

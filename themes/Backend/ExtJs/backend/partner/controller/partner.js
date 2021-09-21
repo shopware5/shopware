@@ -40,14 +40,14 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * all references to get the elements by the applicable selector
      */
-    refs:[
-        { ref:'detailWindow', selector:'partner-partner-window' },
-        { ref:'attributeForm', selector:'partner-partner-window shopware-attribute-form' }
+    refs: [
+        { ref: 'detailWindow', selector: 'partner-partner-window' },
+        { ref: 'attributeForm', selector: 'partner-partner-window shopware-attribute-form' }
     ],
 
     /**
@@ -66,8 +66,8 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
         onSaveChangesError: '{s name="message/on_save_changes_error"}There was an error while saving your changes.{/s}',
         confirmDeleteSingleItem: '{s name="message/confirm_delete_single_item"}Delete this item{/s}',
         confirmDeleteSingle: '{s name="message/confirm_delete_single"}Are you sure you want to delete this item? ([0]){/s}',
-        deleteSingleItemSuccess : '{s name="tree/delete_success"}Item has been deleted{/s}',
-        deleteSingleItemFailure : '{s name="tree/delete_failure"}Item could not be deleted{/s}',
+        deleteSingleItemSuccess: '{s name="tree/delete_success"}Item has been deleted{/s}',
+        deleteSingleItemFailure: '{s name="tree/delete_failure"}Item could not be deleted{/s}',
         mappedToCustomer: '{s name="message/mappedToCustomer"}Linked to:{/s}',
         growlMessage: '{s name="window/main_title"}Affiliate program{/s}'
     },
@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({
@@ -88,14 +88,14 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
                 editColumn: me.onEditItem,
                 statistic: me.onShowStatistic
             },
-            'partner-partner-list button[action=add]':{
-                click:me.onAdd
+            'partner-partner-list button[action=add]': {
+                click: me.onAdd
             },
-            'partner-partner-window button[action=save]':{
-                click:me.onSave
+            'partner-partner-window button[action=save]': {
+                click: me.onSave
             },
-            'partner-partner-detail':{
-                mapCustomerAccount:me.mapCustomerAccount
+            'partner-partner-detail': {
+                mapCustomerAccount: me.mapCustomerAccount
             }
         });
     },
@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
      *
      * @return void
      */
-    onAdd:function () {
+    onAdd: function () {
         var me = this,
             model = Ext.create('Shopware.apps.Partner.model.Detail');
         //reset the detail Record
@@ -127,13 +127,13 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
      * @param [integer] rowIndex - The row number
      * @return void
      */
-    onEditItem:function (view, rowIndex) {
+    onEditItem: function (view, rowIndex) {
         var me = this,
             store = me.subApplication.detailStore,
             record = me.subApplication.listStore.getAt(rowIndex);
 
         store.load({
-            filters : [{
+            filters: [{
                 property: 'id',
                 value: record.get("id")
             }],
@@ -156,7 +156,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
      *
      * @return void
      */
-    onShowStatistic:function (view, rowIndex) {
+    onShowStatistic: function (view, rowIndex) {
         var me = this,
         record = me.subApplication.listStore.getAt(rowIndex);
         //reset the detail Record
@@ -178,7 +178,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
      * @param [integer] rowIndex - Position of the event
      * @return void
      */
-    onDeleteSingleItem:function (grid, rowIndex) {
+    onDeleteSingleItem: function (grid, rowIndex) {
         var me = this,
             store = me.subApplication.listStore,
             record = store.getAt(rowIndex);
@@ -190,7 +190,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
                 return false;
             }
             record.destroy({
-                callback:function (data, operation) {
+                callback: function (data, operation) {
                     var records = operation.getRecords(),
                         record = records[0],
                         rawData = record.getProxy().getReader().rawData;
@@ -257,11 +257,11 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
     mapCustomerAccount: function (field, newValue) {
         var me = this;
             Ext.Ajax.request({
-                url:'{url action="mapCustomerAccount"}',
-                params:{
+                url: '{url action="mapCustomerAccount"}',
+                params: {
                     mapCustomerAccountValue: newValue
                 },
-                success:function (response) {
+                success: function (response) {
                     var supportTextEl = field.up().items.items[1];
                     if (response.length !== 0) {
                         var mappingData = response.responseText.split("|"),
@@ -288,7 +288,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
      * @param [object] btn - pressed Ext.button.Button
      * @return void
      */
-    onBeforeCloseWindow:function () {
+    onBeforeCloseWindow: function () {
         this.subApplication.listStore.load();
     }
 });

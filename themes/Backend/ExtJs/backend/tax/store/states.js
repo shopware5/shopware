@@ -37,6 +37,6 @@ Ext.define('Shopware.apps.Tax.store.States', {
     extend: 'Ext.data.Store',
     autoLoad: false,
     pageSize: 30,
-    model : 'Shopware.apps.Tax.model.States'
+    model: 'Shopware.apps.Tax.model.States'
 });
 //{/block}

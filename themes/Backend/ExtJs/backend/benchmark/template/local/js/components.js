@@ -17,7 +17,7 @@
             },
             methods: {
                 compStyle: function (payment) {
-                    var graphSize = `${Math.round((180 / 100) * payment)}`;
+                    var graphSize = Math.round((180 / 100) * payment);
                     var opacity = payment / 100;
 
                     if (opacity < 0.2) {
@@ -67,7 +67,7 @@
             },
             methods: {
                 compStyle: function (shipment) {
-                    var graphSize = `${Math.round((180 / 100) * shipment)}`,
+                    var graphSize = Math.round((180 / 100) * shipment),
                         opacity = shipment / 100;
 
                     if (opacity < 0.2) {

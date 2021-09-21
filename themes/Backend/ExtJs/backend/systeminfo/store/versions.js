@@ -51,6 +51,6 @@ Ext.define('Shopware.apps.Systeminfo.store.Versions', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.Systeminfo.model.Version'
+    model: 'Shopware.apps.Systeminfo.model.Version'
 });
 //{/block}

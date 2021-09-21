@@ -37,34 +37,34 @@
  */
 //{block name="backend/supplier/view/main/toolbar"}
 Ext.define('Shopware.apps.Supplier.view.main.Toolbar', {
-    extend : 'Ext.toolbar.Toolbar',
-    alias : 'widget.supplier-main-toolbar',
+    extend: 'Ext.toolbar.Toolbar',
+    alias: 'widget.supplier-main-toolbar',
     ui: 'shopware-ui',
-    items : [
+    items: [
         /*{if {acl_is_allowed privilege=create}}*/
         {
-            iconCls : 'sprite-plus-circle-frame',
-            text : '{s name="add"}Add{/s}',
-            action : 'addSupplier'
+            iconCls: 'sprite-plus-circle-frame',
+            text: '{s name="add"}Add{/s}',
+            action: 'addSupplier'
         },
         /*{/if}*/
         /*{if {acl_is_allowed privilege=delete}}*/
         {
-            iconCls : 'sprite-minus-circle-frame',
-            text : '{s name="delete"}Delete selected suppliers{/s}',
-            disabled : true,
-            action : 'deleteSupplier'
+            iconCls: 'sprite-minus-circle-frame',
+            text: '{s name="delete"}Delete selected suppliers{/s}',
+            disabled: true,
+            action: 'deleteSupplier'
         },
         /*{/if}*/
         '->',
         {
-            xtype : 'textfield',
-            name : 'searchfield',
-            action : 'searchSupplier',
+            xtype: 'textfield',
+            name: 'searchfield',
+            action: 'searchSupplier',
             width: 170,
             cls: 'searchfield',
-            enableKeyEvents : true,
-            emptyText : '{s name="search_empty"}Search...{/s}'
+            enableKeyEvents: true,
+            emptyText: '{s name="search_empty"}Search...{/s}'
         }, {
             xtype: 'tbspacer',
             width: 6

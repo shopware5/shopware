@@ -32,11 +32,11 @@
  */
 //{block name="backend/config/model/form/shop"}
 Ext.define('Shopware.apps.Config.model.form.Shop', {
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     fields: [
         //{block name="backend/config/model/form/shop/fields"}{/block}
-        { name: 'id', type:'int', useNull: true, defaultValue: null },
+        { name: 'id', type: 'int', useNull: true, defaultValue: null },
         { name: 'typeSwitch',  persist: false, convert: function(v, record) {
 
             // The default value determines if a newly created shop is either a subshop (sub) or a language shop (lang).
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Config.model.form.Shop', {
 
             // The shop type is internally determined by the presence/absence of the mainId
             return record.raw && record.raw.main && record.raw.main.id ? 'lang' : 'sub';
-        }},
+        } },
         { name: 'name', type: 'string' },
         { name: 'title', type: 'string', useNull: true },
         { name: 'position', type: 'int' },

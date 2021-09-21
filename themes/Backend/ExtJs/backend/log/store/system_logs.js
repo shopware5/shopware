@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Log.store.SystemLogs', {
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Log.model.SystemLog',
+    model: 'Shopware.apps.Log.model.SystemLog',
     remoteSort: true,
     remoteFilter: true,
     pageSize: 25

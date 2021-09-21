@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Config.view.form.Widget', {
             dataIndex: 'label',
             text: 'Label',
             flex: 1,
-            sortable:false
+            sortable: false
         }, {
             dataIndex: 'column',
             text: 'Column',

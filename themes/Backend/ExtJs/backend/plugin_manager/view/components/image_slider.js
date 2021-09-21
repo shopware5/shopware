@@ -282,14 +282,14 @@ Ext.define('Shopware.apps.PluginManager.view.components.ImageSlider', {
         if (direction == 1) {
             current = slider.getLayout().getActiveItem();
             current.getEl().slideOut('l', {
-                duration : 500
+                duration: 500
             });
 
             next = slider.getLayout().getNext();
             if (next === false) next = slider.items.items[0];
 
             next.getEl().slideIn('r', {
-                duration : 500,
+                duration: 500,
                 callback: function() {
                     slider.getLayout().setActiveItem(next);
                     me.running = false;
@@ -302,7 +302,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.ImageSlider', {
         } else {
             current = slider.getLayout().getActiveItem();
             current.getEl().slideOut('r', {
-                duration : 500
+                duration: 500
             });
 
             next = slider.getLayout().getPrev();
@@ -312,7 +312,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.ImageSlider', {
             }
 
             next.getEl().slideIn('l', {
-                duration : 500,
+                duration: 500,
                 callback: function() {
                     slider.getLayout().setActiveItem(next);
                     me.running = false;

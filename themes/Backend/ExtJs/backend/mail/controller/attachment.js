@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Mail.controller.Attachment', {
      * Contains all snippets for the controller
      * @object
      */
-    snippets:{
+    snippets: {
         multipleDeleteTitle: '{s name="message_delete_multiple_title"}Delete selected attachments{/s}',
         multipleDeleteMessage: '{s name="message_delete_multiple_content"}[0] attachments have been selected. Are you sure you want to delete all selected attachments?{/s}',
 
@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Mail.controller.Attachment', {
 
         me.control({
             'mail-main-attachments': {
-                checkchange:    me.onCheckChange,
+                checkchange: me.onCheckChange,
                 onDeleteSingle: me.onDeleteSingle
             },
 
@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.Mail.controller.Attachment', {
                 drop: me.onDrop
             },
 
-            'mail-main-attachments button[action=main-attachments-delete]' : {
+            'mail-main-attachments button[action=main-attachments-delete]': {
                 click: me.onDelete
             }
         });

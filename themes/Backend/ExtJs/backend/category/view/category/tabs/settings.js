@@ -41,14 +41,14 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @string
      */
-    extend:'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
 
     /**
      * Register the alias for this class.
      *
      * @string
      */
-    alias:'widget.category-category-tabs-settings',
+    alias: 'widget.category-category-tabs-settings',
 
     cls: 'shopware-form',
 
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      * Title of this tab
      * @string
      */
-    title:'{s name="tabs/settings_title"}Settings{/s}',
+    title: '{s name="tabs/settings_title"}Settings{/s}',
 
     /**
      * Specifies the border for this component. The border can be a single numeric
@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @boolean
      */
-    autoShow : true,
+    autoShow: true,
 
     /**
      * enable auto scroll
@@ -101,57 +101,57 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @object
      */
-    snippets : {
-        noticeText : '{s name="view/settings_notice"}To move a category, simply click and drag it to the desired position.<br/><br/>Right clicking in the menu to the left enables you to add or delete subcategories.{/s}',
-        emotionNotice : '{s name="view/settings_emotion_notice"}An emotion is linked to this category{/s}',
+    snippets: {
+        noticeText: '{s name="view/settings_notice"}To move a category, simply click and drag it to the desired position.<br/><br/>Right clicking in the menu to the left enables you to add or delete subcategories.{/s}',
+        emotionNotice: '{s name="view/settings_emotion_notice"}An emotion is linked to this category{/s}',
 
-        createSubCategoryTitle : '{s name="view/settings_create_category_title"}Create sub category{/s}',
-        createSubCategoryLabel : '{s name="view/settings_create_category_label"}Sub category{/s}',
+        createSubCategoryTitle: '{s name="view/settings_create_category_title"}Create sub category{/s}',
+        createSubCategoryLabel: '{s name="view/settings_create_category_label"}Sub category{/s}',
         createSubCategoryButton: '{s name="view/settings_create_category_button"}Create sub category{/s}',
 
-        defaultSettingsTitleEmpty : '{s name="view/settings_default_settings_title_empty"}Default settings{/s}',
-        defaultSettingsTitle : '{s name="view/settings_default_settings_title"}Default Settings - Category: [0] (System-ID: [1]){/s}',
+        defaultSettingsTitleEmpty: '{s name="view/settings_default_settings_title_empty"}Default settings{/s}',
+        defaultSettingsTitle: '{s name="view/settings_default_settings_title"}Default Settings - Category: [0] (System-ID: [1]){/s}',
 
-        defaultSettingsCategoryLabel : '{s name="view/settings_default_settings_category_label"}Category{/s}',
-        defaultSettingsActiveLabel : '{s name="view/settings_default_settings_active_label"}Active{/s}',
-        defaultSettingsBlogLabel : '{s name="view/settings_default_settings_blog_label"}Blog category{/s}',
+        defaultSettingsCategoryLabel: '{s name="view/settings_default_settings_category_label"}Category{/s}',
+        defaultSettingsActiveLabel: '{s name="view/settings_default_settings_active_label"}Active{/s}',
+        defaultSettingsBlogLabel: '{s name="view/settings_default_settings_blog_label"}Blog category{/s}',
 
-        defaultSettingsNameLabel : '{s name="view/settings_default_settings_name_label"}Description{/s}',
-        defaultSettingsLinkExternalPageLabel : '{s name="view/settings_default_settings_link_external_page_label"}Link to an external site{/s}',
-        defaultSettingsLinkExternalPageHelp : '{s name="view/settings_default_settings_link_external_page_help"}The URL must begin with: http://{/s}',
-        defaultSettingsLinkExternalPageTarget : '{s name="view/settings_default_settings_link_external_page_target"}Target for external site{/s}',
-        defaultSettingsLinkExternalPageTargetSelf : '{s name="view/settings_default_settings_link_external_page_target_self"}Same window (default){/s}',
-        defaultSettingsLinkExternalPageTargetBlank : '{s name="view/settings_default_settings_link_external_page_target_blank"}New window{/s}',
+        defaultSettingsNameLabel: '{s name="view/settings_default_settings_name_label"}Description{/s}',
+        defaultSettingsLinkExternalPageLabel: '{s name="view/settings_default_settings_link_external_page_label"}Link to an external site{/s}',
+        defaultSettingsLinkExternalPageHelp: '{s name="view/settings_default_settings_link_external_page_help"}The URL must begin with: http://{/s}',
+        defaultSettingsLinkExternalPageTarget: '{s name="view/settings_default_settings_link_external_page_target"}Target for external site{/s}',
+        defaultSettingsLinkExternalPageTargetSelf: '{s name="view/settings_default_settings_link_external_page_target_self"}Same window (default){/s}',
+        defaultSettingsLinkExternalPageTargetBlank: '{s name="view/settings_default_settings_link_external_page_target_blank"}New window{/s}',
 
-        defaultSettingsImageLabel : '{s name="view/settings_default_settings_image_label"}Image{/s}',
-        defaultSettingsImageButtonText : '{s name="view/settings_default_settings_image_button_text"}Select an image{/s}',
-        defaultSettingsImageSupportText : '{s name="view/settings_default_settings_image_support_text"}You can use this image for individual template changes. This includes, for instance, the illustration of your category.{/s}',
-        errorMessageWrongFileTypeTitle : '{s name="view/error_message_wrong_file_type_title"}Wrong file type{/s}',
-        errorMessageWrongFileType : '{s name="view/error_message_wrong_file_type"}Wrong file type selected.{/s}',
+        defaultSettingsImageLabel: '{s name="view/settings_default_settings_image_label"}Image{/s}',
+        defaultSettingsImageButtonText: '{s name="view/settings_default_settings_image_button_text"}Select an image{/s}',
+        defaultSettingsImageSupportText: '{s name="view/settings_default_settings_image_support_text"}You can use this image for individual template changes. This includes, for instance, the illustration of your category.{/s}',
+        errorMessageWrongFileTypeTitle: '{s name="view/error_message_wrong_file_type_title"}Wrong file type{/s}',
+        errorMessageWrongFileType: '{s name="view/error_message_wrong_file_type"}Wrong file type selected.{/s}',
 
-        defaultSettingsTemplateLabel : '{s name="view/settings_default_settings_template_label"}Individual layout{/s}',
+        defaultSettingsTemplateLabel: '{s name="view/settings_default_settings_template_label"}Individual layout{/s}',
         defaultSettingsTemplateLabelStandard: '{s name="view/settings_default_settings_template_standard"}Standard{/s}',
         defaultSettingsTemplateNotAvailable: '{s name="view/settings_default_settings_template_not_available"}Not available{/s}',
-        defaultSettingsHideTopLabel : '{s name="view/settings_default_settings_no_top_navigation_label"}Do NOT show in top navigation.{/s}',
-        defaultSettingsNoDesignSwitchLabel : '{s name="view/settings_default_settings_no_design_switch_label"}Do NOT switch design.{/s}',
+        defaultSettingsHideTopLabel: '{s name="view/settings_default_settings_no_top_navigation_label"}Do NOT show in top navigation.{/s}',
+        defaultSettingsNoDesignSwitchLabel: '{s name="view/settings_default_settings_no_design_switch_label"}Do NOT switch design.{/s}',
 
         defaultSettingsProductLayoutLabel: '{s name="view/settings_default_settings_box_layout_label"}Product layout{/s}',
         defaultSettingsProductLayoutHelp: '{s name="view/settings_default_settings_box_layout_help"}Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.{/s}',
         defaultSettingsProductStream: '{s name="view/settings_default_settings_box_stream_label"}Product stream{/s}',
         defaultSettingsProductStreamHelp: '{s name="view/settings_default_settings_box_stream_help"}If a product stream is selected, the items from the stream will be used instead of the assigned ones. Subcategories do not inherit items from product streams.{/s}',
 
-        cmsTitle : '{s name="view/settings_cms_title"}CMS functions{/s}',
-        cmsHeaderLabel : '{s name="view/settings_cms_header_label"}Header{/s}',
-        cmsTextLabel : '{s name="view/settings_cms_text_label"}Text{/s}',
+        cmsTitle: '{s name="view/settings_cms_title"}CMS functions{/s}',
+        cmsHeaderLabel: '{s name="view/settings_cms_header_label"}Header{/s}',
+        cmsTextLabel: '{s name="view/settings_cms_text_label"}Text{/s}',
 
-        metaGroupTitle : '{s name="view/settings_meta_description_title"}Meta information{/s}',
-        metaTitle : '{s name="view/settings_meta_title_label"}Meta title{/s}',
-        metaDescription : '{s name="view/settings_meta_description_label"}Meta description{/s}',
-        metaKeywords : '{s name="view/settings_meta_keywords_label"}Meta keywords{/s}',
+        metaGroupTitle: '{s name="view/settings_meta_description_title"}Meta information{/s}',
+        metaTitle: '{s name="view/settings_meta_title_label"}Meta title{/s}',
+        metaDescription: '{s name="view/settings_meta_description_label"}Meta description{/s}',
+        metaKeywords: '{s name="view/settings_meta_keywords_label"}Meta keywords{/s}',
 
-        attribute_title : '{s name="view/settings_attribute_title"}Free text fields{/s}',
+        attribute_title: '{s name="view/settings_attribute_title"}Free text fields{/s}',
 
-        categorySave : '{s name="view/settings_save"}Save category{/s}',
+        categorySave: '{s name="view/settings_save"}Save category{/s}',
 
         growlMessage: '{s name="window/main_title"}Category{/s}'
     },
@@ -164,41 +164,41 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @object [Ext.form.FieldSet]
      */
-    createCategory  : null,
+    createCategory: null,
 
     /**
      * Form part containing the form with the default category settings
      * @object [Ext.form.FieldSet]
      */
-    defaultSettings : null,
+    defaultSettings: null,
 
     /**
      * From part containing the form with CMS related settings
      *
      * @object [Ext.form.FieldSet]
      */
-    cmsSettings     : null,
+    cmsSettings: null,
 
     /**
      * Form part containing the form with the metadata settings
      *
      * @object [Ext.form.FieldSet]
      */
-    metaInfo        : null,
+    metaInfo: null,
 
     /**
      * Form part containing the form for the six customizable fields
      *
      * @object [Ext.form.FieldSet]
      */
-    attributes       : null,
+    attributes: null,
 
     /**
      * Default field attributes
      */
     defaults: {
-        anchor : '100%',
-        labelWidth:155
+        anchor: '100%',
+        labelWidth: 155
     },
 
     plugins: [{
@@ -210,7 +210,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      * Initialize the Shopware.apps.Category.view.category.tabs.Settings and defines the necessary
      * default configuration
      */
-    initComponent:function ()
+    initComponent: function ()
     {
         var me = this;
         me.items = me.getItems();
@@ -224,7 +224,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return array of form elements
      */
-    getItems:function ()
+    getItems: function ()
     {
         var me = this;
         me.emotionNotice        = me.createEmotionNoticeContainer();
@@ -285,12 +285,12 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return Ext.container.Container
      */
-    getNotice : function()
+    getNotice: function()
     {
         var me = this;
         return {
             xtype: 'container',
-            html : me.snippets.noticeText,
+            html: me.snippets.noticeText,
             cls: Ext.baseCSSPrefix + 'global-notice-text'
         }
     },
@@ -304,14 +304,14 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return Ext.form.FieldSet
      */
-    getCreateCategory : function()
+    getCreateCategory: function()
     {
         var me =  this,
             addSubCategoryItems = [];
 
         /*{if {acl_is_allowed privilege=create}}*/
         addSubCategoryItems.push(Ext.create('Ext.button.Button',{
-            text : me.snippets.createSubCategoryButton,
+            text: me.snippets.createSubCategoryButton,
             action: 'addCategory',
             cls: 'small primary',
             flex: 1
@@ -320,13 +320,13 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         return Ext.create('Ext.form.FieldSet',{
             title: me.snippets.createSubCategoryTitle,
             anchor: '100%',
-            defaults : me.defaults,
-            disabled : true,
-            items : [
+            defaults: me.defaults,
+            disabled: true,
+            items: [
                 {
-                    xtype : 'textfield',
-                    fieldLabel : me.snippets.createSubCategoryLabel,
-                    name : 'newCategoryName'
+                    xtype: 'textfield',
+                    fieldLabel: me.snippets.createSubCategoryLabel,
+                    name: 'newCategoryName'
                 }, {
                     xtype: 'container',
                     items: addSubCategoryItems
@@ -349,14 +349,14 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return Ext.form.FieldSet
      */
-    getDefaultFormField:function () {
+    getDefaultFormField: function () {
         var me = this;
         return Ext.create('Ext.form.FieldSet', {
-            title:me.snippets.defaultSettingsTitleEmpty,
-            anchor:'100%',
-            defaults:me.defaults,
-            disabled:true,
-            items:me.getDefaultSettingItems()
+            title: me.snippets.defaultSettingsTitleEmpty,
+            anchor: '100%',
+            defaults: me.defaults,
+            disabled: true,
+            items: me.getDefaultSettingItems()
         });
     },
 
@@ -365,19 +365,19 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return { Array }
      */
-    getDefaultSettingItems:function () {
+    getDefaultSettingItems: function () {
         var me = this;
         // Create the template combo box and register it in the local namespace to
         // gain access from the outside.
         me.templateComboBox = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel:me.snippets.defaultSettingsTemplateLabel,
-            store:me.templateStore,
-            labelWidth:155,
-            valueField:'template',
-            displayField:'name',
-            editable:true,
-            allowBlank:true,
-            name:'template',
+            fieldLabel: me.snippets.defaultSettingsTemplateLabel,
+            store: me.templateStore,
+            labelWidth: 155,
+            valueField: 'template',
+            displayField: 'name',
+            editable: true,
+            allowBlank: true,
+            name: 'template',
             queryMode: 'local',
             helpText: '{s name="template_selection_help"}{/s}'
         });
@@ -411,24 +411,24 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
         return [
             {
-                xtype:'checkboxgroup',
-                columns:2,
-                defaultType:'checkboxfield',
-                margin:'3 0 0 0',
-                defaults:Ext.applyIf({
-                    inputValue:true,
-                    uncheckedValue:false
+                xtype: 'checkboxgroup',
+                columns: 2,
+                defaultType: 'checkboxfield',
+                margin: '3 0 0 0',
+                defaults: Ext.applyIf({
+                    inputValue: true,
+                    uncheckedValue: false
                 }, me.defaults ),
-                items:[
+                items: [
                     {
-                        boxLabel:me.snippets.defaultSettingsActiveLabel,
-                        name:'active',
-                        dataIndex:'active'
+                        boxLabel: me.snippets.defaultSettingsActiveLabel,
+                        name: 'active',
+                        dataIndex: 'active'
                     },
                     {
-                        boxLabel:me.snippets.defaultSettingsBlogLabel,
-                        name:'blog',
-                        dataIndex:'blog',
+                        boxLabel: me.snippets.defaultSettingsBlogLabel,
+                        name: 'blog',
+                        dataIndex: 'blog',
                         listeners: {
                             change: function (element, value) {
                                 me.shopSelector.setDisabled(!value)
@@ -438,22 +438,22 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 ]
             },
             {
-                xtype:'textfield',
-                fieldLabel:me.snippets.defaultSettingsNameLabel,
-                dataIndex:'name',
+                xtype: 'textfield',
+                fieldLabel: me.snippets.defaultSettingsNameLabel,
+                dataIndex: 'name',
                 translationName: 'description',
                 translatable: true,
-                name:'name'
+                name: 'name'
             },
             me.templateComboBox,
             me.productLayoutField,
             me.streamSelection,
             {
-                xtype:'textfield',
-                fieldLabel:me.snippets.defaultSettingsLinkExternalPageLabel,
-                helpText:me.snippets.defaultSettingsLinkExternalPageHelp,
-                dataIndex:'external',
-                name:'external',
+                xtype: 'textfield',
+                fieldLabel: me.snippets.defaultSettingsLinkExternalPageLabel,
+                helpText: me.snippets.defaultSettingsLinkExternalPageHelp,
+                dataIndex: 'external',
+                name: 'external',
                 translatable: true,
                 translationName: 'external',
             },
@@ -479,28 +479,28 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 translationName: 'externalTarget'
             },
             {
-                xtype:'shopware-media-field',
-                fieldLabel:me.snippets.defaultSettingsImageLabel,
-                buttonText:me.snippets.defaultSettingsImageButtonText,
-                name:'imagePath',
-                readOnly:false,
-                valueField:'id',
-                supportText:me.snippets.defaultSettingsImageSupportText,
-                multiSelect:false,
-                anchor:'100%',
+                xtype: 'shopware-media-field',
+                fieldLabel: me.snippets.defaultSettingsImageLabel,
+                buttonText: me.snippets.defaultSettingsImageButtonText,
+                name: 'imagePath',
+                readOnly: false,
+                valueField: 'id',
+                supportText: me.snippets.defaultSettingsImageSupportText,
+                multiSelect: false,
+                anchor: '100%',
                 removeBackground: true,
-                validTypes:me.getAllowedExtensions(),
-                validTypeErrorFunction:me.getExtensionErrorCallback(),
+                validTypes: me.getAllowedExtensions(),
+                validTypeErrorFunction: me.getExtensionErrorCallback(),
                 translatable: true,
             },
             {
-                xtype:'checkboxgroup',
-                columns:2,
-                defaultType:'checkboxfield',
-                margin:'15 0 0 0',
-                defaults:Ext.applyIf({
-                    inputValue:true,
-                    uncheckedValue:false
+                xtype: 'checkboxgroup',
+                columns: 2,
+                defaultType: 'checkboxfield',
+                margin: '15 0 0 0',
+                defaults: Ext.applyIf({
+                    inputValue: true,
+                    uncheckedValue: false
                 }, me.defaults),
                 items: me.getSettingsCheckboxes()
             },
@@ -538,14 +538,14 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return { Array }
      */
-    getSettingsCheckboxes : function()
+    getSettingsCheckboxes: function()
     {
         var me = this;
         return [
             {
-                boxLabel:me.snippets.defaultSettingsHideTopLabel,
-                name:'hideTop',
-                dataIndex:'hideTop'
+                boxLabel: me.snippets.defaultSettingsHideTopLabel,
+                name: 'hideTop',
+                dataIndex: 'hideTop'
             }
         ];
     },
@@ -559,26 +559,26 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return Ext.form.FieldSet
      */
-    getCmsSettings : function()
+    getCmsSettings: function()
     {
         var me = this;
         return Ext.create('Ext.form.FieldSet',{
             title: me.snippets.cmsTitle,
             anchor: '100%',
-            defaults : me.defaults,
-            disabled : true,
-            items : [
+            defaults: me.defaults,
+            disabled: true,
+            items: [
                 {
-                    xtype : 'textfield',
-                    fieldLabel : me.snippets.cmsHeaderLabel,
-                    name : 'cmsHeadline',
+                    xtype: 'textfield',
+                    fieldLabel: me.snippets.cmsHeaderLabel,
+                    name: 'cmsHeadline',
                     translatable: true,
                     translationName: 'cmsheadline'
                 } , {
-                    xtype : 'tinymce',
-                    fieldLabel : me.snippets.cmsTextLabel,
+                    xtype: 'tinymce',
+                    fieldLabel: me.snippets.cmsTextLabel,
                     height: 100,
-                    name : 'cmsText',
+                    name: 'cmsText',
                     translatable: true,
                     translationName: 'cmstext'
                 }
@@ -594,30 +594,30 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return Ext.form.FieldSet
      */
-    getMetaInfo : function()
+    getMetaInfo: function()
     {
         var me = this;
         return Ext.create('Ext.form.FieldSet',{
             title: me.snippets.metaGroupTitle,
             anchor: '100%',
-            defaults : me.defaults,
-            disabled : true,
-            items : [{
-                xtype : 'textfield',
-                fieldLabel  : me.snippets.metaTitle,
-                name : 'metaTitle',
+            defaults: me.defaults,
+            disabled: true,
+            items: [{
+                xtype: 'textfield',
+                fieldLabel: me.snippets.metaTitle,
+                name: 'metaTitle',
                 translatable: true,
                 translationName: 'metatitle'
             },{
-                xtype : 'textareafield',
-                fieldLabel  : me.snippets.metaDescription,
-                name : 'metaDescription',
+                xtype: 'textareafield',
+                fieldLabel: me.snippets.metaDescription,
+                name: 'metaDescription',
                 translatable: true,
                 translationName: 'metadescription'
             }, {
-                xtype : 'textfield',
-                fieldLabel : me.snippets.metaKeywords,
-                name : 'metaKeywords',
+                xtype: 'textfield',
+                fieldLabel: me.snippets.metaKeywords,
+                name: 'metaKeywords',
                 translatable: true,
                 translationName: 'metakeywords'
             }
@@ -631,7 +631,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return Ext.form.FieldSet
      */
-    getAttributes : function() {
+    getAttributes: function() {
         var me = this;
 
         me.attributeForm = Ext.create('Shopware.attribute.Form', {
@@ -646,14 +646,14 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return string
      */
-    getExtensionErrorCallback :  function() {
+    getExtensionErrorCallback: function() {
         return 'onExtensionError';
     },
 
     /**
      * Helper method to show an error if the user selected an wrong file type
      */
-    onExtensionError : function() {
+    onExtensionError: function() {
         var me = this;
         Shopware.Notification.createGrowlMessage(me.snippets.errorMessageWrongFileTypeTitle, me.snippets.errorMessageWrongFileType, me.snippets.growlMessage);
     },
@@ -663,7 +663,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return array of strings
      */
-    getAllowedExtensions : function() {
+    getAllowedExtensions: function() {
         return [ 'gif', 'png', 'jpeg', 'jpg', 'svg' ]
     }
 });

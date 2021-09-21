@@ -38,25 +38,25 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend : 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Some references to get a better grip of the single elements
      */
-    refs   : [
-        { ref : 'costsGrid', selector : 'shipping-view-edit-costs-matrix' },
-        { ref : 'selectedPaymentGrid', selector : 'shipping-view-edit-payment-means-right-grid' },
-        { ref : 'selectedCountryGrid', selector : 'shipping-view-edit-country-right-grid' },
-        { ref : 'categoryDataBox', selector : 'shipping-view-edit-categories-boxselect' },
-        { ref : 'categoryTree', selector : 'shipping-view-edit-categories-tree' },
-        { ref : 'advancedForm', selector : 'shipping-view-edit-advanced' },
-        { ref : 'attributeForm', selector: 'shopware-shipping-edit-panel shopware-attribute-form' }
+    refs: [
+        { ref: 'costsGrid', selector: 'shipping-view-edit-costs-matrix' },
+        { ref: 'selectedPaymentGrid', selector: 'shipping-view-edit-payment-means-right-grid' },
+        { ref: 'selectedCountryGrid', selector: 'shipping-view-edit-country-right-grid' },
+        { ref: 'categoryDataBox', selector: 'shipping-view-edit-categories-boxselect' },
+        { ref: 'categoryTree', selector: 'shipping-view-edit-categories-tree' },
+        { ref: 'advancedForm', selector: 'shipping-view-edit-advanced' },
+        { ref: 'attributeForm', selector: 'shopware-shipping-edit-panel shopware-attribute-form' }
     ],
     /**
      * Translations
      */
     messages: {
-        warning : '{s name="dialog_reset_cost_matrix"}Be aware that the current costs matrix will be erased, if the dispatch type is changed.<br>Do you want stil want change the dispatch type?{/s}'
+        warning: '{s name="dialog_reset_cost_matrix"}Be aware that the current costs matrix will be erased, if the dispatch type is changed.<br>Do you want stil want change the dispatch type?{/s}'
     },
 
     /**
@@ -64,16 +64,16 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
      * specific controller and opens a new Ext.window.Window
      * to display the sub-application
      */
-    init : function () {
+    init: function () {
         var me = this;
         me.control({
             'shipping-top-right-form': {
                 'calculationFieldChange': me.onCalculationChange,
-                'typeFieldChange' :  me.onDispatchTypeChange
+                'typeFieldChange': me.onDispatchTypeChange
             },
 
-            'button[action=saveDispatch]' : {
-                'click' : me.onDispatchSave
+            'button[action=saveDispatch]': {
+                'click': me.onDispatchSave
             }
         });
 
@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
      * @param button
      * @param event
      */
-    onDispatchSave : function(button, event) {
+    onDispatchSave: function(button, event) {
         var me = this,
             win = button.up('window'),
             form = me.getMainFormData(button),
@@ -112,8 +112,8 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
         // just update the category selection if the tab has been rendered
         if (me.getCategoryTree().rendered) {
             record['getCategoriesStore']  = Ext.create('Ext.data.Store', {
-                model : 'Shopware.apps.Base.model.Category',
-                data : categoryComponent.getView().getChecked()
+                model: 'Shopware.apps.Base.model.Category',
+                data: categoryComponent.getView().getChecked()
             });
         }
 
@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
      * Collects the data from the main form
      * @return array
      */
-    getMainFormData : function(button, event) {
+    getMainFormData: function(button, event) {
 
         var win = button.up('window'),
             form = win.down('form');
@@ -164,7 +164,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
      * Collects the data from the category form
      * @return Array
      */
-    getCategoryData : function() {
+    getCategoryData: function() {
         return this.getCategoryTree().treeSelect;
     },
 
@@ -172,7 +172,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
      * Collects the data from the advanced
      * @return
      */
-    getAdvancedFormData : function() {
+    getAdvancedFormData: function() {
         var me = this;
         return me.getAdvancedForm().getForm();
     },
@@ -183,7 +183,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
      * @param [object] value
      * @param [object] oldValue
      */
-    onCalculationChange : function(el, value, oldValue) {
+    onCalculationChange: function(el, value, oldValue) {
         var me = this,
             mainController = me.getController('Main');
 
@@ -211,7 +211,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
                 mainController.currentConfig = me.currentConfig;
                 costsMatrixStore.removeAll();
                 costsMatrixStore.add(Ext.create('Shopware.apps.Shipping.model.Costsmatrix', {
-                    'dispatchId' :  me.dispatchId
+                    'dispatchId': me.dispatchId
                 }));
                 var gridColumns = costsMatrixGrid.getColumns();
                 Ext.each(gridColumns, function(column){
@@ -282,7 +282,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
             costsMatrixStore = costsGrid.getStore();
 
         costsMatrixStore.getProxy().extraParams = {
-            dispatchId : dispatchId,
+            dispatchId: dispatchId,
             minChange: me.currentConfig.minChange
         };
         // clean the whole grid - to avoid headaches during updates, we build everything from scratch

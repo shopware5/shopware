@@ -41,10 +41,10 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
                 text: '{s name="fieldset/buttons/refresh"}Refresh{/s}',
                 cls: 'secondary',
                 scope: me,
-                handler:function () {
+                handler: function () {
                     me.refreshCacheData();
-                }}
-            )
+                }
+            })
         ];
 
         Ext.applyIf(me, {

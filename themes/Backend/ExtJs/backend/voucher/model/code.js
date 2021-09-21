@@ -39,42 +39,42 @@ Ext.define('Shopware.apps.Voucher.model.Code', {
     * Extends the standard ExtJS 4
     * @string
     */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
     * The fields used for this model
     * @array
     */
-    fields : [
+    fields: [
     //{block name="backend/voucher/model/code/fields"}{/block}
-        { name : 'id', type : 'int' },
-        { name : 'voucherID', type : 'int' },
-        { name : 'number', type : 'string' },
-        { name : 'code', type : 'string' },
-        { name : 'firstName', type : 'string' },
-        { name : 'lastName', type : 'string' },
-        { name : 'customerId', type : 'int' },
-        { name : 'cashed', type : 'boolean' }
+        { name: 'id', type: 'int' },
+        { name: 'voucherID', type: 'int' },
+        { name: 'number', type: 'string' },
+        { name: 'code', type: 'string' },
+        { name: 'firstName', type: 'string' },
+        { name: 'lastName', type: 'string' },
+        { name: 'customerId', type: 'int' },
+        { name: 'cashed', type: 'boolean' }
     ],
     /**
     * If the name of the field is 'id' extjs assumes autmagical that
     * this field is an unique identifier.
     */
-    idProperty : 'id',
+    idProperty: 'id',
     /**
     * Configure the data communication
     * @object
     */
-    proxy : {
-        type : 'ajax',
-        api:{
-            read:   '{url controller="voucher" action="getVoucherCodes"}',
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="voucher" action="getVoucherCodes"}',
             create: '{url controller="voucher" action="createVoucherCodes"}',
             update: '{url controller="voucher" action="updateVoucherCodes"}'
         },
-        reader : {
-            type : 'json',
-            root : 'data',
-            totalProperty:'totalCount'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'totalCount'
         }
     }
 });

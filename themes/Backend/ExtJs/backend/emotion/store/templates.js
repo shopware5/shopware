@@ -36,32 +36,32 @@ Ext.define('Shopware.apps.Emotion.store.Templates', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Emotion.model.Template',
+    model: 'Shopware.apps.Emotion.model.Template',
     /**
      * Amount of data loaded at once
      * @integer
      */
-    pageSize:20,
+    pageSize: 20,
     /**
      * to upload all selected items in one request
      * @boolean
      */
-    batch:true,
+    batch: true,
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -77,10 +77,10 @@ Ext.define('Shopware.apps.Emotion.store.Templates', {
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

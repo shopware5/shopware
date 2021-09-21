@@ -41,12 +41,12 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
      * Define that the category drop zone is an extension of the Ext.panel.Panel
      * @string
      */
-    extend:'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-image-info',
+    alias: 'widget.article-image-info',
     /**
      * Set css class for this component
      * @string
@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
         align: 'stretch'
     },
 
-    autoScroll:true,
+    autoScroll: true,
     /**
      * Defaults for the panel items
      * @object
@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
+    snippets: {
         title: '{s name="image/info/title"}Image options{/s}',
         imageTitle: '{s name="image/info/image_title"}Title{/s}',
     },
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.title = me.snippets.title;
         me.thumbnail = me.createThumbnail();
@@ -161,7 +161,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             tpl: me.createInfoPanelTemplate(),
             margin: '0 0 10',
             itemSelector: '.copy-image-path',
-            autoScroll:true,
+            autoScroll: true,
             height: 300,
             renderData: []
         });
@@ -230,7 +230,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             bodyStyle: {
                 background: 'transparent'
             },
-            autoScroll:true,
+            autoScroll: true,
             defaults: {
                 labelWidth: 90,
                 anchor: '100%',

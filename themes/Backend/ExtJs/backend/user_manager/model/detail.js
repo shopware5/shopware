@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.UserManager.model.Detail', {
      * Define the associations of the detail model.
      * @array
      */
-    associations:[
+    associations: [
         { type: 'hasMany', model: 'Shopware.apps.UserManager.model.Privilege',  name: 'getPrivilege', associationKey: 'privileges' }
     ]
 });

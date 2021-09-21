@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Form.controller.Main', {
                 click: me.onDeleteMultipleForms
             },
 
-            'form-main-formgrid textfield[action=searchForms]' : {
+            'form-main-formgrid textfield[action=searchForms]': {
                 change: me.onSearch
             },
 

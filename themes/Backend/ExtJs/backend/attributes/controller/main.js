@@ -49,11 +49,11 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
 
         me.control({
             'attributes-listing': {
-                'display-table-columns':             me.loadListing,
+                'display-table-columns': me.loadListing,
                 'attributeconfig-selection-changed': me.displayColumn,
-                'delete-attribute-column':           me.onDeleteClick,
-                'attributeconfig-add-item':          me.displayNewColumn,
-                'generate-model':                    me.onGenerateClick
+                'delete-attribute-column': me.onDeleteClick,
+                'attributeconfig-add-item': me.displayNewColumn,
+                'generate-model': me.onGenerateClick
             },
             'attributes-detail': {
                 'reset-column': me.onResetClick

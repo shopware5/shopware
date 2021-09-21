@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Article.controller.PriceVariation', {
      * The parent class that this class extends.
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     snippets: {
         growlMessage: '{s name="growl_message"}Article{/s}',
@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Article.controller.PriceVariation', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
         me.control({
             //global event of the configurator tab

@@ -35,8 +35,8 @@ Ext.define('Shopware.apps.ArticleList.controller.CategoryFilter', {
     extend: 'Ext.app.Controller',
 
     refs: [
-        { ref:'mainGrid', selector:'multi-edit-main-grid' },
-        { ref:'categoryTree', selector:'multi-edit-category-tree' }
+        { ref: 'mainGrid', selector: 'multi-edit-main-grid' },
+        { ref: 'categoryTree', selector: 'multi-edit-category-tree' }
     ],
 
     /**

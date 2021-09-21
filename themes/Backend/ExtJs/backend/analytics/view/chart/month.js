@@ -48,9 +48,9 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
                 position: 'bottom',
                 fields: ['normal'],
                 title: '{s name="chart/month/titleBottom"}Month{/s}',
-                step:[ Ext.Date.MONTH, 1 ],
+                step: [ Ext.Date.MONTH, 1 ],
                 label: {
-                    renderer:function (value) {
+                    renderer: function (value) {
                         var myDate = Ext.Date.add(new Date(value), Ext.Date.DAY, 4);
                         return Ext.util.Format.date(myDate, 'M, Y');
                     },

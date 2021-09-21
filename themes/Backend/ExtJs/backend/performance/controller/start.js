@@ -150,11 +150,11 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
 
         Ext.Ajax.request({
             url: '{url controller=Cache action=clearCache}?cache=Config',
-            params:{
-              'cache[config]'   : 'on',
-              'cache[template]' : 'on',
-              'cache[search]'   : 'on',
-              'cache[router]'   : 'on'
+            params: {
+              'cache[config]': 'on',
+              'cache[template]': 'on',
+              'cache[search]': 'on',
+              'cache[router]': 'on'
             },
             success: function () {
                 me.reloadInfoStore();

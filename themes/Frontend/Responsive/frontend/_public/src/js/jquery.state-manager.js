@@ -443,7 +443,7 @@
             me._browserDetection();
             me._setDeviceCookie();
             $($.proxy(me.initQueuedPlugins, me, true));
-            $.publish('StateManager/onInit', [ me ]);
+            $.publish('StateManager/onInit', [me]);
             return me;
         },
 
@@ -617,8 +617,8 @@
 
             if ((listener.state === me._currentState || listener.state === '*') && typeof enterFn === 'function') {
                 enterFn({
-                    'exiting': me._previousState,
-                    'entering': me._currentState
+                    exiting: me._previousState,
+                    entering: me._currentState
                 });
             }
 
@@ -973,8 +973,8 @@
             return me
                 .trigger('exitBreakpoint', previousState)
                 .trigger('changeBreakpoint', {
-                    'entering': currentState,
-                    'exiting': previousState
+                    entering: currentState,
+                    exiting: previousState
                 })
                 .trigger('enterBreakpoint', currentState)
                 ._switchListener(previousState, currentState)
@@ -994,8 +994,8 @@
                 previousListeners = me._getBreakpointListeners(fromState),
                 currentListeners = me._getBreakpointListeners(toState),
                 eventObj = {
-                    'exiting': fromState,
-                    'entering': toState
+                    exiting: fromState,
+                    entering: toState
                 },
                 callFn,
                 len,
@@ -1384,7 +1384,7 @@
          */
         _getScrollBarSize: (function () {
             var cache;
-            var getSize = function(){
+            var getSize = function() {
                 var $el = $('<div>', {
                         css: {
                             width: 100,

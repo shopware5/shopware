@@ -53,10 +53,10 @@ Ext.define('Shopware.apps.Feedback.view.survey.Window', {
         var me = this;
 
         me.items = [{
-            xtype : "component",
-            autoEl : {
-                tag : "iframe",
-                src : Ext.String.format('https://api.shopware.com/survey/[0]/firstinstallation', Ext.userLanguage !== 'de' ? 'en' : Ext.userLanguage)
+            xtype: "component",
+            autoEl: {
+                tag: "iframe",
+                src: Ext.String.format('https://api.shopware.com/survey/[0]/firstinstallation', Ext.userLanguage !== 'de' ? 'en' : Ext.userLanguage)
             }
         }];
 
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Feedback.view.survey.Window', {
         me.dockedItems = [{
             xtype: 'toolbar',
             dock: 'bottom',
-            items:[me.checkbox, '->', me.cancelButton]
+            items: [me.checkbox, '->', me.cancelButton]
         }];
 
         me.callParent(arguments);

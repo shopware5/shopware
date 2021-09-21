@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.ProductFeed.model.Category', {
      * Extends the default extjs 4 model
      * @string
      */
-    extend : 'Shopware.apps.Base.model.Category',
+    extend: 'Shopware.apps.Base.model.Category',
     /**
      * Defined items used by that model
      *
@@ -46,17 +46,17 @@ Ext.define('Shopware.apps.ProductFeed.model.Category', {
      *
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/product_feed/model/category/fields"}{/block}
-        { name : 'checked',  type: 'boolean' }
+        { name: 'checked',  type: 'boolean' }
     ],
-    proxy : {
-        type : 'ajax',
-        api : {
-            read : '{url controller=category action=getList}'
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller=category action=getList}'
         },
-        reader : {
-            type : 'json',
+        reader: {
+            type: 'json',
             root: 'data'
         }
     }

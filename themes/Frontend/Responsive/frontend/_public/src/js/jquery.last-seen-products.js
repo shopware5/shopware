@@ -187,7 +187,7 @@
 
             me.productSlider.initSlider();
 
-            $.publish('plugin/swLastSeenProducts/onCreateProductList', [ me ]);
+            $.publish('plugin/swLastSeenProducts/onCreateProductList', [me]);
         },
 
         /**
@@ -200,15 +200,15 @@
         createTemplate: function (article) {
             var me = this,
                 $template = $('<div>', {
-                    'class': me.opts.itemCls,
-                    'html': [
+                    class: me.opts.itemCls,
+                    html: [
                         me.createProductImage(article),
                         me.createProductTitle(article)
                     ],
                     'data-ordernumber': article.orderNumber
                 });
 
-            $.publish('plugin/swLastSeenProducts/onCreateTemplate', [ me, $template, article ]);
+            $.publish('plugin/swLastSeenProducts/onCreateTemplate', [me, $template, article]);
 
             return $template;
         },
@@ -223,14 +223,14 @@
         createProductTitle: function (data) {
             var me = this,
                 $title = $('<a>', {
-                    'rel': 'nofollow',
-                    'class': me.opts.titleCls,
-                    'title': data.articleName,
-                    'href': data.linkDetailsRewritten,
-                    'html': data.articleName
+                    rel: 'nofollow',
+                    class: me.opts.titleCls,
+                    title: data.articleName,
+                    href: data.linkDetailsRewritten,
+                    html: data.articleName
                 });
 
-            $.publish('plugin/swLastSeenProducts/onCreateProductTitle', [ me, $title, data ]);
+            $.publish('plugin/swLastSeenProducts/onCreateProductTitle', [me, $title, data]);
 
             return $title;
         },
@@ -252,13 +252,13 @@
                 srcSet;
 
             element = $('<a>', {
-                'class': me.opts.imageCls,
-                'href': data.linkDetailsRewritten,
-                'title': data.articleName
+                class: me.opts.imageCls,
+                href: data.linkDetailsRewritten,
+                title: data.articleName
             });
 
-            imageEl = $('<span>', { 'class': 'image--element' }).appendTo(element);
-            imageMedia = $('<span>', { 'class': 'image--media' }).appendTo(imageEl);
+            imageEl = $('<span>', { class: 'image--element' }).appendTo(element);
+            imageMedia = $('<span>', { class: 'image--media' }).appendTo(imageEl);
 
             if (image) {
                 srcSet = image.sourceSet;
@@ -267,12 +267,12 @@
             }
 
             $('<img>', {
-                'srcset': srcSet,
-                'alt': data.articleName,
-                'title': data.articleName
+                srcset: srcSet,
+                alt: data.articleName,
+                title: data.articleName
             }).appendTo(imageMedia);
 
-            $.publish('plugin/swLastSeenProducts/onCreateProductImage', [ me, element, data ]);
+            $.publish('plugin/swLastSeenProducts/onCreateProductImage', [me, element, data]);
 
             return element;
         },
@@ -331,7 +331,7 @@
 
             me.storage.setItem(itemKey, JSON.stringify(products));
 
-            $.publish('plugin/swLastSeenProducts/onCollectProduct', [ me, newProduct ]);
+            $.publish('plugin/swLastSeenProducts/onCollectProduct', [me, newProduct]);
         },
 
         /**
@@ -361,7 +361,7 @@
                 param[0] = decodeURIComponent(param[0]);
                 param[1] = decodeURIComponent(param[1]);
 
-                if (param[0].length && param[1].length && !queryParams.hasOwnProperty(param[0])) {
+                if (param[0].length && param[1].length && !Object.prototype.hasOwnProperty.call(queryParams, param[0])) {
                     queryParams[param[0]] = param[1];
                 }
             });

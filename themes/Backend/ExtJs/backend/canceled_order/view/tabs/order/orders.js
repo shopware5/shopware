@@ -41,8 +41,8 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
 
     border: false,
 
-    snippets : {
-        columns : {
+    snippets: {
+        columns: {
             orderTime: '{s name="columns/orderDate"}Date{/s}',
             amount: '{s name="columns/amount"}Amount{/s}',
             contact: '{s name="columns/contact"}Contact{/s}',
@@ -77,13 +77,13 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
      *
      * @return Ext.selection.CheckboxModel
      */
-    getGridSelModel : function() {
+    getGridSelModel: function() {
         var me = this;
         /*{if {acl_is_allowed privilege=delete}}*/
         return Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
+            listeners: {
                 // Unlocks the save button if the user has checked at least one checkbox
-                selectionchange:function (sm, selections) {
+                selectionchange: function (sm, selections) {
                     me.deleteSelectedOrdersButton.setDisabled(selections.length == 0);
                 }
             }
@@ -146,9 +146,9 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
                 renderer: me.deviceTypeRenderer
             },
             {
-                xtype : 'actioncolumn',
-                width : 80,
-                items : me.getActionColumn()
+                xtype: 'actioncolumn',
+                width: 80,
+                items: me.getActionColumn()
             }
         ];
     },
@@ -279,15 +279,15 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
      *
      * @return Array of buttons
      */
-    getActionColumn : function() {
+    getActionColumn: function() {
         var me = this;
 
         return [
             /*{if {acl_is_allowed privilege=delete}}*/
             {
-                iconCls : 'sprite-minus-circle-frame',
-                action : 'delete',
-                tooltip : '{s name="order_delete_tooltip"}Delete{/s}',
+                iconCls: 'sprite-minus-circle-frame',
+                action: 'delete',
+                tooltip: '{s name="order_delete_tooltip"}Delete{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     var records = [record];
                     me.fireEvent('deleteOrder', records);
@@ -295,9 +295,9 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
             },
             /*{/if}*/
             {
-                iconCls:'sprite-arrow-circle',
-                action:'convert',
-                tooltip:'{s name="order_details_convert"}Convert to regular order{/s}',
+                iconCls: 'sprite-arrow-circle',
+                action: 'convert',
+                tooltip: '{s name="order_details_convert"}Convert to regular order{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('convertOrder', record);
                 }
@@ -317,7 +317,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
 
         me.deleteSelectedOrdersButton =Ext.create('Ext.button.Button', {
             text: '{s name="order_delete_button"}Delete selected orders{/s}',
-            iconCls : 'sprite-minus-circle-frame',
+            iconCls: 'sprite-minus-circle-frame',
             disabled: true,
             handler: function(){
                 var selectionModel = me.getSelectionModel(),

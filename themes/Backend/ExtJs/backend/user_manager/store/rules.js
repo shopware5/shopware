@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.UserManager.store.Rules', {
      * Enable remote filtering
      * @boolean
      */
-    remoteFilter:true,
-    model : 'Shopware.apps.UserManager.model.Rules'
+    remoteFilter: true,
+    model: 'Shopware.apps.UserManager.model.Rules'
 });
 //{/block}

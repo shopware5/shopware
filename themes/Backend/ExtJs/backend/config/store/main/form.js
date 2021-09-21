@@ -33,7 +33,7 @@
 //{block name="backend/config/store/main/form"}
 Ext.define('Shopware.apps.Config.store.main.Form', {
     extend: 'Ext.data.Store',
-    model:'Shopware.apps.Config.model.main.Form',
+    model: 'Shopware.apps.Config.model.main.Form',
     proxy: {
         type: 'ajax',
         url: '{url action=getForm}',

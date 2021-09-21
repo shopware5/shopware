@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Base.store.Payment', {
 
     alternateClassName: 'Shopware.store.Payment',
     storeId: 'base.Payment',
-    model : 'Shopware.apps.Base.model.Payment',
+    model: 'Shopware.apps.Base.model.Payment',
     pageSize: 1000,
     remoteFilter: true,
     sorters: [{
@@ -45,10 +45,10 @@ Ext.define('Shopware.apps.Base.store.Payment', {
         direction: 'ASC'
     }],
 
-    proxy:{
-        type:'ajax',
-        url:'{url action="getPayments"}',
-        reader:{
+    proxy: {
+        type: 'ajax',
+        url: '{url action="getPayments"}',
+        reader: {
             type: 'json',
             root: 'data',
             totalProperty: 'total'

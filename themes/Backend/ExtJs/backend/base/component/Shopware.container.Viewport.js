@@ -167,7 +167,7 @@ Ext.define('Shopware.container.Viewport',
      * @public
      * @return void
      */
-    initComponent : function() {
+    initComponent: function() {
         var me = this,
             html = Ext.fly(document.body.parentNode),
             el;
@@ -328,7 +328,7 @@ Ext.define('Shopware.container.Viewport',
      * @param [integer] w - new width of the viewport
      * @param [integer] h - new height of the viewport
      */
-    fireResize : function(w, h) {
+    fireResize: function(w, h) {
         var me = this;
         // setSize is the single entry point to layouts
         me.el.setSize(w * (me.getDesktopCount() || 1), h);

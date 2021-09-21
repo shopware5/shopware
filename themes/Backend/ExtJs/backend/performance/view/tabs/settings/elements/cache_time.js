@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
                 flex: 2,
                 editor: {
                     allowBlank: false,
-                    enableKeyEvents:true
+                    enableKeyEvents: true
                 }
             },
             {
@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
                 editable: true,
                 editor: {
                     allowBlank: false,
-                    enableKeyEvents:true,
+                    enableKeyEvents: true,
                     xtype: 'numberfield'
                 }
             },

@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Base.view.element.SelectTree', {
     valueField: 'id',
     displayField: 'name',
 
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         if(me.store) {
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Base.view.element.SelectTree', {
      *
      * @param value
      */
-    setValue:function (value) {
+    setValue: function (value) {
         var me = this,
             store = me.store;
 

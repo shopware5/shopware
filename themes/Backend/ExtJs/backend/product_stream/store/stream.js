@@ -28,7 +28,7 @@
  */
 //{block name="backend/product_stream/store/stream"}
 Ext.define('Shopware.apps.ProductStream.store.Stream', {
-    extend:'Shopware.store.Listing',
+    extend: 'Shopware.store.Listing',
     groupField: 'type',
 
     configure: function() {

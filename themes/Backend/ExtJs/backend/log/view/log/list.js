@@ -111,10 +111,10 @@ Ext.define('Shopware.apps.Log.view.log.List', {
                 '->',
                 {
                     xtype: 'textfield',
-                    cls : 'searchfield',
-                    width : 170,
-                    emptyText : '{s name="toolbar/search"}Search...{/s}',
-                    enableKeyEvents : true,
+                    cls: 'searchfield',
+                    width: 170,
+                    emptyText: '{s name="toolbar/search"}Search...{/s}',
+                    enableKeyEvents: true,
                     checkChangeBuffer: 500,
                     listeners: {
                         change: function (field, value) {
@@ -177,19 +177,19 @@ Ext.define('Shopware.apps.Log.view.log.List', {
             items: [
                 /*{if {acl_is_allowed privilege=delete}}*/
                 {
-                    iconCls:'sprite-minus-circle',
-                    action:'deleteColumn',
+                    iconCls: 'sprite-minus-circle',
+                    action: 'deleteColumn',
                     tooltip: '{s name="grid/actioncolumn/buttonTooltip"}Delete log{/s}',
-                    handler:function (view, rowIndex) {
+                    handler: function (view, rowIndex) {
                         me.fireEvent('deleteColumn', rowIndex);
                     }
                 },
                 /*{/if}*/
                 {
-                    iconCls:'sprite-magnifier',
-                    action:'openLog',
+                    iconCls: 'sprite-magnifier',
+                    action: 'openLog',
                     tooltip: '{s name="grid/open_log"}Open log{/s}',
-                    handler:function (view, rowIndex, colIndex, item, event, record) {
+                    handler: function (view, rowIndex, colIndex, item, event, record) {
                         me.fireEvent('openLog', record);
                     }
                 }
@@ -215,7 +215,7 @@ Ext.define('Shopware.apps.Log.view.log.List', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the delete icon in the

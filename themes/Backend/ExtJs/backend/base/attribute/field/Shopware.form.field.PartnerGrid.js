@@ -43,7 +43,7 @@ Ext.define('Shopware.form.field.PartnerGrid', {
         return [
             me.createSortingColumn(),
             activeColumn,
-            { dataIndex: 'idCode'},
+            { dataIndex: 'idCode' },
             { dataIndex: 'company', flex: 1 },
             { dataIndex: 'email', flex: 1 },
             me.createActionColumn()

@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Article.view.resources.Downloads', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
+    snippets: {
         title: '{s name="resources/downloads/field_set"}Downloads{/s}',
         notice: '{s name="resources/downloads/notice"}Optionally, add additional downloads (e.g. pdf files).{/s}',
         name: '{s name="resources/downloads/name"}Name{/s}',

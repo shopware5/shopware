@@ -118,7 +118,7 @@ Ext.define('Shopware.color.Window', {
         var me = this;
 
         me.applyButton = Ext.create('Ext.button.Button', {
-            text:  '{s name="color_window_apply"}Apply{/s}',
+            text: '{s name="color_window_apply"}Apply{/s}',
             cls: 'primary small',
             handler: function () {
                 me.fireEvent('apply-color', me, me.selectedColorField.getValue());

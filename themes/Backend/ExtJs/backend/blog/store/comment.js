@@ -38,13 +38,13 @@ Ext.define('Shopware.apps.Blog.store.Comment', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Auto load the store after the component
      * is initialized
      * @boolean
      */
-    autoLoad:false,
+    autoLoad: false,
 
     /**
      * to upload all selected items in one request
@@ -73,6 +73,6 @@ Ext.define('Shopware.apps.Blog.store.Comment', {
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Blog.model.Comment'
+    model: 'Shopware.apps.Blog.model.Comment'
 });
 //{/block}

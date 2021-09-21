@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Article.model.Mapping', {
 
     ],
     associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Article.model.Detail', name: 'getDetails', associationKey: 'variants'}
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.Detail', name: 'getDetails', associationKey: 'variants' }
     ],
 
     proxy: {
@@ -62,9 +62,9 @@ Ext.define('Shopware.apps.Article.model.Mapping', {
         api: {
             create: '{url action="acceptMainData"}'
         },
-        reader:{
-            type:'json',
-            root:'data'
+        reader: {
+            type: 'json',
+            root: 'data'
         }
     }
 });

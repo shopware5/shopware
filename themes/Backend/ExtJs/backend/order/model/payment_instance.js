@@ -36,9 +36,9 @@ Ext.define('Shopware.apps.Order.model.PaymentInstance', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * One or more BelongsTo associations for this model.
@@ -46,21 +46,21 @@ Ext.define('Shopware.apps.Order.model.PaymentInstance', {
      */
     belongsTo: 'Shopware.apps.Order.model.Order',
 
-    fields:[
+    fields: [
         //{block name="backend/order/model/payment_instance/fields"}{/block}
-        { name:'id', type: 'int' },
-        { name:'firstname', type: 'string' },
-        { name:'lastname', type: 'string' },
-        { name:'address', type: 'string' },
-        { name:'zipcode', type: 'string' },
-        { name:'city', type: 'string' },
-        { name:'accountNumber', type: 'string' },
-        { name:'accountHolder', type: 'string' },
-        { name:'bankName', type: 'string' },
-        { name:'bankCode', type: 'string' },
-        { name:'bic', type: 'string' },
-        { name:'iban', type: 'string' },
-        { name:'amount', type: 'string' }
+        { name: 'id', type: 'int' },
+        { name: 'firstname', type: 'string' },
+        { name: 'lastname', type: 'string' },
+        { name: 'address', type: 'string' },
+        { name: 'zipcode', type: 'string' },
+        { name: 'city', type: 'string' },
+        { name: 'accountNumber', type: 'string' },
+        { name: 'accountHolder', type: 'string' },
+        { name: 'bankName', type: 'string' },
+        { name: 'bankCode', type: 'string' },
+        { name: 'bic', type: 'string' },
+        { name: 'iban', type: 'string' },
+        { name: 'amount', type: 'string' }
     ]
 });
 //{/block}

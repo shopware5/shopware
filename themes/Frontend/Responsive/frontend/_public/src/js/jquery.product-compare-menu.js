@@ -60,7 +60,7 @@
             // On delete single product item from comparison
             me._on(me.opts.deleteCompareItemSelector, 'touchstart click', $.proxy(me.onDeleteItem, me));
 
-            $.publish('plugin/swProductCompareMenu/onRegisterEvents', [ me ]);
+            $.publish('plugin/swProductCompareMenu/onRegisterEvents', [me]);
         },
 
         /**
@@ -81,14 +81,14 @@
                 closeOnClick: false
             });
 
-            $.publish('plugin/swProductCompareMenu/onStartCompareBefore', [ me ]);
+            $.publish('plugin/swProductCompareMenu/onStartCompareBefore', [me]);
 
             // Load compare modal before opening modal box
             $.ajax({
                 url: modalUrl,
                 dataType: 'html',
                 success: function(template) {
-                    $.publish('plugin/swProductCompareMenu/onStartCompareSuccess', [ me, template ]);
+                    $.publish('plugin/swProductCompareMenu/onStartCompareSuccess', [me, template]);
 
                     $.loadingIndicator.close(function() {
                         $.modal.open(template, {
@@ -129,12 +129,12 @@
 
                             $(rowSelector).height(maximumHeight);
                         }
-                        $.publish('plugin/swProductCompareMenu/onStartCompareFinished', [ me, template ]);
+                        $.publish('plugin/swProductCompareMenu/onStartCompareFinished', [me, template]);
                     });
                 }
             });
 
-            $.publish('plugin/swProductCompareMenu/onStartCompare', [ me ]);
+            $.publish('plugin/swProductCompareMenu/onStartCompare', [me]);
         },
 
         /**
@@ -165,11 +165,11 @@
                 success: function () {
                     $menu.empty().addClass(me.opts.hiddenCls);
 
-                    $.publish('plugin/swProductCompareMenu/onDeleteCompareSuccess', [ me ]);
+                    $.publish('plugin/swProductCompareMenu/onDeleteCompareSuccess', [me]);
                 }
             });
 
-            $.publish('plugin/swProductCompareMenu/onDeleteCompare', [ me ]);
+            $.publish('plugin/swProductCompareMenu/onDeleteCompare', [me]);
         },
 
         /**
@@ -208,7 +208,7 @@
                     url: deleteUrl,
                     dataType: 'html',
                     success: function (response) {
-                        $.publish('plugin/swProductCompareMenu/onDeleteItemSuccess', [ me, response ]);
+                        $.publish('plugin/swProductCompareMenu/onDeleteItemSuccess', [me, response]);
                     }
                 });
             } else {
@@ -222,12 +222,12 @@
                         // Reload compare menu plugin
                         $('*[data-product-compare-menu="true"]').swProductCompareMenu();
 
-                        $.publish('plugin/swProductCompareMenu/onDeleteItemSuccess', [ me, response ]);
+                        $.publish('plugin/swProductCompareMenu/onDeleteItemSuccess', [me, response]);
                     }
                 });
             }
 
-            $.publish('plugin/swProductCompareMenu/onDeleteItem', [ me, event, deleteUrl ]);
+            $.publish('plugin/swProductCompareMenu/onDeleteItem', [me, event, deleteUrl]);
         },
 
         /** Destroys the plugin */

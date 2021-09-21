@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Base.store.Captcha', {
     storeId: 'base.Captcha',
     model: 'Shopware.apps.Base.model.Captcha',
 
-    proxy:{
+    proxy: {
         type: 'ajax',
         url: '{url action="getAvailableCaptchas"}',
         reader: {

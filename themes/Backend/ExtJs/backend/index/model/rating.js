@@ -32,7 +32,7 @@ Ext.define('Shopware.apps.Index.model.Rating', {
         { name: 'headline' },
         { name: 'comment' },
         { name: 'points' },
-        { name: 'datum', type: 'date', dateFormat:'Y-m-d H:i:s' },
+        { name: 'datum', type: 'date', dateFormat: 'Y-m-d H:i:s' },
         { name: 'email' },
         { name: 'productTitle' }
     ]

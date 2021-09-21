@@ -38,13 +38,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.MultiRequestBu
      * Extend from our base grid
      * @string
      */
-    extend:'Ext.container.Container',
+    extend: 'Ext.container.Container',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-multi-request-button',
+    alias: 'widget.performance-multi-request-button',
 
     /**
      * Event and title needs to be passed as config params

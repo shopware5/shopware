@@ -78,10 +78,10 @@ Ext.define('Shopware.apps.Log.view.log.Detail', {
             items: [
                 '->',
                 {
-                    text : me.snippets.close,
-                    scope : this,
+                    text: me.snippets.close,
+                    scope: this,
                     cls: 'secondary',
-                    handler : me.destroy
+                    handler: me.destroy
                 }
             ]
         }];

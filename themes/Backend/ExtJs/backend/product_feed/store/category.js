@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.ProductFeed.store.Category', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend : 'Ext.data.TreeStore',
+    extend: 'Ext.data.TreeStore',
 
     remoteFilter: true,
     /**
@@ -46,11 +46,11 @@ Ext.define('Shopware.apps.ProductFeed.store.Category', {
      * is initialized
      * @boolean
      */
-    autoLoad : false,
+    autoLoad: false,
     /**
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.ProductFeed.model.Category'
+    model: 'Shopware.apps.ProductFeed.model.Category'
 });
 //{/block}

@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Mail.model.Mail', {
      *
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/mail/model/mail/fields"}{/block}
         { name: 'id',          type: 'int' },
         { name: 'name',        type: 'string' },
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Mail.model.Mail', {
         Ext.Ajax.request({
             url: '{url controller="mail" action="copyMail"}',
             method: 'POST',
-            params : { id : this.data.id },
+            params: { id: this.data.id },
             success: function(response, opts) {
                 if(typeof callback !== 'function') {
                     return false;
