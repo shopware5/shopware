@@ -64,31 +64,41 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Attribute'
         var field = this.createField(value);
         field.setValue(value);
 
-        this.updateTitle(container, value.field);
+        this.updateTitle(container, value);
         container.fixToggleTool();
 
         return field;
     },
 
     createField: function(attribute) {
-        if (attribute.type === "date"){
-            return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.AttributeDate', {
-                name: 'condition.' + this.getName() + '|' + attribute.column,
-                attributeField: attribute.column,
-                type: attribute.type
-            });
-
-        } else {
-            return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
-                name: 'condition.' + this.getName() + '|' + attribute.column,
-                attributeField: attribute.column,
-                type: attribute.type
-            });
+        switch (attribute.type) {
+            case "date":
+                return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.AttributeDate', {
+                    name: 'condition.' + this.getName() + '|' + attribute.column,
+                    attributeField: attribute.column,
+                    type: attribute.type
+                });
+            case "datetime":
+                return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.AttributeDateTime', {
+                    name: 'condition.' + this.getName() + '|' + attribute.column,
+                    attributeField: attribute.column,
+                    type: attribute.type
+                });
+            default:
+                return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
+                    name: 'condition.' + this.getName() + '|' + attribute.column,
+                    attributeField: attribute.column,
+                    type: attribute.type
+                });
         }
     },
 
     updateTitle: function(container, name) {
-        container.setTitle(this.getLabel() + ': ' + name);
+        if(name.column !== undefined) {
+            container.setTitle(this.getLabel() + ': ' + name.column);
+        } else {
+            container.setTitle(this.getLabel() + ': ' + name.field);
+        }
     }
 });
 //{/block}

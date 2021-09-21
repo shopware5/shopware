@@ -28,13 +28,13 @@
  */
 //{namespace name="backend/product_stream/main"}
 //{block name="backend/product_stream/view/condition_list/condition/attribute_date"}
-Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeDate', {
+Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeDateTime', {
     extend: 'Shopware.apps.ProductStream.view.condition_list.field.Attribute',
 
     createFromField: function() {
         var me = this;
 
-        me.fromField = Ext.create('Ext.form.field.Date', {
+        me.fromField = Ext.create('Shopware.apps.Base.view.element.DateTime', {
             fieldLabel: '{s name="attribute/from_text"}From{/s}',
             flex: 1
         });
@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeDate'
     createValueField: function () {
         var me = this;
 
-        me.valueField = Ext.create('Shopware.apps.Base.view.element.Date', {
+        me.valueField = Ext.create('Shopware.apps.Base.view.element.DateTime', {
             fieldLabel: '{s name="value"}Value{/s}',
         });
 
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeDate'
     createToField: function() {
         var me = this;
 
-        me.toField = Ext.create('Ext.form.field.Date', {
+        me.toField = Ext.create('Shopware.apps.Base.view.element.DateTime', {
             labelWidth: 50,
             fieldLabel: '{s name="attribute/to_text"}to{/s}',
             padding: '0 0 0 10',
