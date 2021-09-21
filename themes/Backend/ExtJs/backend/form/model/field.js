@@ -58,9 +58,9 @@ Ext.define('Shopware.apps.Form.model.Field', {
     ],
 
     validations: [
-        { field: 'name',  type: 'presence'},
-        { field: 'label', type: 'presence'},
-        { field: 'name',  type: 'presence'}
+        { field: 'name',  type: 'presence' },
+        { field: 'label', type: 'presence' },
+        { field: 'name',  type: 'presence' }
     ],
 
     /**

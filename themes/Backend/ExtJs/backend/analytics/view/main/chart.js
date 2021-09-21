@@ -127,9 +127,9 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
             }
 
             // Data for chart
-            dataChart[dataChart.length] = { name: shop.data.name, data: value};
+            dataChart[dataChart.length] = { name: shop.data.name, data: value };
             // Data for table
-            dataTable[dataTable.length] = { name: shop.data.name, data: value};
+            dataTable[dataTable.length] = { name: shop.data.name, data: value };
 
         });
         // Load data with plain values into pie chart

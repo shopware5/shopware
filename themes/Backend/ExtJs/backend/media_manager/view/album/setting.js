@@ -202,24 +202,24 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
     createIconSelection: function () {
         var me = this;
         var icons = [
-            { boxLabel: '<span class="sprite-inbox-document-folder"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-folder'},
-            { boxLabel: '<span class="sprite-inbox-document-text"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-text'},
-            { boxLabel: '<span class="sprite-inbox-document-music"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-music'},
-            { boxLabel: '<span class="sprite-inbox-film"></span>', name: 'iconCls', inputValue: 'sprite-inbox-film'},
-            { boxLabel: '<span class="sprite-inbox-document-image"></span>', name: 'iconCls',inputValue: 'sprite-inbox-document-image'},
-            { boxLabel: '<span class="sprite-images-stack"></span>', name: 'iconCls', inputValue: 'sprite-images-stack'},
-            { boxLabel: '<span class="sprite-pictures"></span>', name: 'iconCls', inputValue: 'sprite-pictures'},
-            { boxLabel: '<span class="sprite-films"></span>', name: 'iconCls', inputValue: 'sprite-films'},
-            { boxLabel: '<span class="sprite-music-beam"></span>', name: 'iconCls', inputValue: 'sprite-music-beam'},
-            { boxLabel: '<span class="sprite-blue-document-pdf-text"></span>', name: 'iconCls', inputValue: 'sprite-blue-document-pdf-text'},
-            { boxLabel: '<span class="sprite-box"></span>', name: 'iconCls', inputValue: 'sprite-box'},
-            { boxLabel: '<span class="sprite-target"></span>', name: 'iconCls', inputValue: 'sprite-target'},
-            { boxLabel: '<span class="sprite-globe-green"></span>', name: 'iconCls', inputValue: 'sprite-globe-green'},
-            { boxLabel: '<span class="sprite-inbox"></span>', name: 'iconCls', inputValue: 'sprite-inbox'},
-            { boxLabel: '<span class="sprite-leaf"></span>', name: 'iconCls', inputValue: 'sprite-leaf'},
-            { boxLabel: '<span class="sprite-store"></span>', name: 'iconCls', inputValue: 'sprite-store'},
-            { boxLabel: '<span class="sprite-hard-hat"></span>', name: 'iconCls', inputValue: 'sprite-hard-hat'},
-            { boxLabel: '<span class="sprite-sd-memory-card"></span>', name: 'iconCls', inputValue: 'sprite-sd-memory-card'}
+            { boxLabel: '<span class="sprite-inbox-document-folder"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-folder' },
+            { boxLabel: '<span class="sprite-inbox-document-text"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-text' },
+            { boxLabel: '<span class="sprite-inbox-document-music"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-music' },
+            { boxLabel: '<span class="sprite-inbox-film"></span>', name: 'iconCls', inputValue: 'sprite-inbox-film' },
+            { boxLabel: '<span class="sprite-inbox-document-image"></span>', name: 'iconCls',inputValue: 'sprite-inbox-document-image' },
+            { boxLabel: '<span class="sprite-images-stack"></span>', name: 'iconCls', inputValue: 'sprite-images-stack' },
+            { boxLabel: '<span class="sprite-pictures"></span>', name: 'iconCls', inputValue: 'sprite-pictures' },
+            { boxLabel: '<span class="sprite-films"></span>', name: 'iconCls', inputValue: 'sprite-films' },
+            { boxLabel: '<span class="sprite-music-beam"></span>', name: 'iconCls', inputValue: 'sprite-music-beam' },
+            { boxLabel: '<span class="sprite-blue-document-pdf-text"></span>', name: 'iconCls', inputValue: 'sprite-blue-document-pdf-text' },
+            { boxLabel: '<span class="sprite-box"></span>', name: 'iconCls', inputValue: 'sprite-box' },
+            { boxLabel: '<span class="sprite-target"></span>', name: 'iconCls', inputValue: 'sprite-target' },
+            { boxLabel: '<span class="sprite-globe-green"></span>', name: 'iconCls', inputValue: 'sprite-globe-green' },
+            { boxLabel: '<span class="sprite-inbox"></span>', name: 'iconCls', inputValue: 'sprite-inbox' },
+            { boxLabel: '<span class="sprite-leaf"></span>', name: 'iconCls', inputValue: 'sprite-leaf' },
+            { boxLabel: '<span class="sprite-store"></span>', name: 'iconCls', inputValue: 'sprite-store' },
+            { boxLabel: '<span class="sprite-hard-hat"></span>', name: 'iconCls', inputValue: 'sprite-hard-hat' },
+            { boxLabel: '<span class="sprite-sd-memory-card"></span>', name: 'iconCls', inputValue: 'sprite-sd-memory-card' }
         ];
 
         // Iterate each icon to set it active

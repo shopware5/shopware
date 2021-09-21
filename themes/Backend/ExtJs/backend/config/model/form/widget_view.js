@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Config.model.form.WidgetView', {
         }, useNull: true },
         { name: 'label', type: 'string' },
         { name: 'column', type: 'int' },
-        { name: 'position', type: 'int'}
+        { name: 'position', type: 'int' }
     ]
 });
 //{/block}

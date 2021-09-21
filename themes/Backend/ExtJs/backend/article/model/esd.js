@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Article.model.Esd', {
         { name: 'name' },
         { name: 'additionalText', type: 'string', useNull: true, defaultValue: null },
         { name: 'date', type: 'date' },
-        { name: 'hasSerials', type: 'boolean'},
+        { name: 'hasSerials', type: 'boolean' },
         { name: 'serialsUsed', type: 'int' },
         { name: 'serialsTotal', type: 'int' },
         { name: 'downloads', type: 'int' },

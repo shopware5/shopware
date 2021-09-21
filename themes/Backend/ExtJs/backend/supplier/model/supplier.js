@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Supplier.model.Supplier', {
         { name : 'count', type : 'int' },
         { name : 'image', type : 'string' },
         { name : 'media-manager-selection', type: 'string' },
-        { name : 'link', type : 'string'},
+        { name : 'link', type : 'string' },
         { name : 'description', type : 'string' },
         { name : 'metaTitle', type : 'string' },
         { name : 'metaDescription', type : 'string' },

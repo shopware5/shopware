@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Config.model.form.Shop', {
 
             // The shop type is internally determined by the presence/absence of the mainId
             return record.raw && record.raw.main && record.raw.main.id ? 'lang' : 'sub';
-        }},
+        } },
         { name: 'name', type: 'string' },
         { name: 'title', type: 'string', useNull: true },
         { name: 'position', type: 'int' },

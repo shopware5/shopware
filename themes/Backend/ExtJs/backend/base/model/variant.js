@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Base.model.Variant', {
         { name: 'name', type: 'string' },
         { name: 'articleId', type: 'int' },
         { name: 'additionalText', type: 'string' },
-        { name: 'supplierName', type: 'string'},
+        { name: 'supplierName', type: 'string' },
         { name: 'supplierId', type: 'int' },
         { name: 'ordernumber', type: 'string' },
         { name: 'inStock', type: 'string' },

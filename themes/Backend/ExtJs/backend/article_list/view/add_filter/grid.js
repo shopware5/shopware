@@ -261,8 +261,8 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
             extend: 'Ext.data.Model',
             fields: [
                 { name: 'id' },
-                { name: 'title'},
-                { name: 'addQuotes', defaultValue: false}
+                { name: 'title' },
+                { name: 'addQuotes', defaultValue: false }
             ]
         });
 
@@ -294,7 +294,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
                     var attribute = e.combo.ownerCt.form._fields.items[0].rawValue;
                     var operator = e.combo.ownerCt.form._fields.items[1].rawValue;
 
-                    e.combo.store.getProxy().extraParams = { resource: 'product', attribute: attribute, operator: operator};
+                    e.combo.store.getProxy().extraParams = { resource: 'product', attribute: attribute, operator: operator };
                 }
             }
         });

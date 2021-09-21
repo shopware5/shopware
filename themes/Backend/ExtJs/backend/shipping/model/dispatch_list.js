@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Shipping.model.DispatchList', {
         { name : 'description' },
         { name : 'translatedDescription', type : 'string' },
         { name : 'comment' },
-        { name : 'active'},
+        { name : 'active' },
         { name : 'position' },
         { name : 'calculation' },
         { name : 'surchargeCalculation' },
@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Shipping.model.DispatchList', {
         { name : 'bindWeightTo', type: 'float' },
         { name : 'bindPriceFrom',type: 'float' },
         { name : 'bindPriceTo', type: 'float' },
-        { name : 'statusLink' , useNull:true, defaultValue: null},
+        { name : 'statusLink' , useNull:true, defaultValue: null },
         { name : 'bindSql', useNull:true, defaultValue: null },
         { name : 'calculationSql', useNull:true, defaultValue: null },
 

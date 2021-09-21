@@ -47,9 +47,9 @@ Ext.define('Shopware.apps.UserManager.model.Privilege', {
      */
     fields: [
         //{block name="backend/user_manager/model/privilege/fields"}{/block}
-        { name: 'id', type: 'int'},
-        { name: 'name', type: 'string'},
-        { name: 'resourceId', type: 'int'}
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' },
+        { name: 'resourceId', type: 'int' }
     ],
 
     /**

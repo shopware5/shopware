@@ -123,7 +123,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
             items: [
                 me.freezeUpDate,
                 me.freezeUpTime
-            ]}
+            ] }
         );
 
         return me.freezeUpContainer;

@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Blog.model.Detail', {
         { name : 'active', type : 'boolean' },
         { name : 'authorId', type : 'int', useNull: true },
         { name : 'categoryId', type : 'int', useNull: true  },
-        { name : 'tags', type : 'string'},
+        { name : 'tags', type : 'string' },
         { name : 'metaTitle', type : 'string' },
         { name : 'metaKeyWords', type : 'string' },
         { name : 'metaDescription', type : 'string' },

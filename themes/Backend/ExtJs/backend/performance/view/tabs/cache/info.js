@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
                 scope: me,
                 handler:function () {
                     me.refreshCacheData();
-                }}
+                } }
             )
         ];
 

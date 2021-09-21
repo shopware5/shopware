@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
                         countryStore.filter(
                             Ext.create('Ext.util.Filter', { filterFn: function(item) {
                                 return item["data"]["areaId"] == newValue || item["data"]["areaId"] == 0;
-                            }, root: 'data'})
+                            }, root: 'data' })
                         );
 
                         this.countryCombo.setRawValue(0);
@@ -132,7 +132,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
                        stateStore.filter(
                            Ext.create('Ext.util.Filter', { filterFn: function(item) {
                                return item["data"]["countryId"] == newValue || item["data"]["countryId"] == 0;
-                           }, root: 'data'})
+                           }, root: 'data' })
                        );
 
                        // The field has changed

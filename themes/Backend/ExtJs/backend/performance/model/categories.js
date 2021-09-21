@@ -46,9 +46,9 @@ Ext.define('Shopware.apps.Performance.model.Categories', {
     fields:[
         //{block name="backend/performance/model/categories/fields"}{/block}
         { name:'id', type:'int' },
-        { name: 'articlesperpage', type: 'int'},
-        { name: 'orderbydefault', type: 'string'},
-        { name: 'moveBatchModeEnabled', type: 'bool'}
+        { name: 'articlesperpage', type: 'int' },
+        { name: 'orderbydefault', type: 'string' },
+        { name: 'moveBatchModeEnabled', type: 'bool' }
     ]
 });
 //{/block}

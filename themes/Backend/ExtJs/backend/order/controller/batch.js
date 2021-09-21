@@ -45,14 +45,14 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * All references to get the elements by the applicable selector
      */
     refs: [
-        { ref: 'orderListGrid', selector: 'order-list-main-window order-list'},
-        { ref: 'batchWindow', selector: 'order-batch-window'},
-        { ref: 'batchList', selector: 'order-batch-window batch-list'},
-        { ref: 'settingsPanel', selector: 'order-batch-window batch-settings-panel'},
-        { ref: 'progressBar', selector: 'order-progress-window progressbar'},
-        { ref: 'progressWindow', selector: 'order-progress-window'},
-        { ref: 'closeButton', selector: 'order-progress-window button[action=closeWindow]'},
-        { ref: 'cancelButton', selector: 'order-progress-window button[action=cancel]'}
+        { ref: 'orderListGrid', selector: 'order-list-main-window order-list' },
+        { ref: 'batchWindow', selector: 'order-batch-window' },
+        { ref: 'batchList', selector: 'order-batch-window batch-list' },
+        { ref: 'settingsPanel', selector: 'order-batch-window batch-settings-panel' },
+        { ref: 'progressBar', selector: 'order-progress-window progressbar' },
+        { ref: 'progressWindow', selector: 'order-progress-window' },
+        { ref: 'closeButton', selector: 'order-progress-window button[action=closeWindow]' },
+        { ref: 'cancelButton', selector: 'order-progress-window button[action=cancel]' }
     ],
 
     /**

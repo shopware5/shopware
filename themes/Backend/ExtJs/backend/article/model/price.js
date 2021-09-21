@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Article.model.Price', {
         { name: 'customerGroupKey', type: 'string' }
     ],
     associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Base.model.CustomerGroup', name: 'getCustomerGroup', associationKey: 'customerGroup'}
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.CustomerGroup', name: 'getCustomerGroup', associationKey: 'customerGroup' }
     ]
 
 });

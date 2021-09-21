@@ -7,7 +7,7 @@
  * Released under the MIT license
  * https://github.com/chartjs/Chart.js/blob/master/LICENSE.md
  */
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Chart = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Chart = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={ exports:{} };t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({ 1:[function(require,module,exports){
 
     },{}],2:[function(require,module,exports){
         /* MIT license */
@@ -232,7 +232,7 @@
             reverseNames[colorNames[name]] = name;
         }
 
-    },{"6":6}],3:[function(require,module,exports){
+    },{ "6":6 }],3:[function(require,module,exports){
         /* MIT license */
         var convert = require(5);
         var string = require(2);
@@ -719,7 +719,7 @@
 
         module.exports = Color;
 
-    },{"2":2,"5":5}],4:[function(require,module,exports){
+    },{ "2":2,"5":5 }],4:[function(require,module,exports){
         /* MIT license */
 
         module.exports = {
@@ -1512,7 +1512,7 @@
         });
 
         module.exports = convert;
-    },{"4":4}],6:[function(require,module,exports){
+    },{ "4":4 }],6:[function(require,module,exports){
         'use strict'
 
         module.exports = {
@@ -1746,7 +1746,7 @@
          */
         Chart.canvasHelpers = Chart.helpers.canvas;
 
-    },{"10":10,"11":11,"12":12,"13":13,"14":14,"15":15,"16":16,"17":17,"18":18,"19":19,"20":20,"21":21,"22":22,"23":23,"24":24,"25":25,"26":26,"27":27,"28":28,"29":29,"30":30,"31":31,"32":32,"33":33,"35":35,"40":40,"45":45,"48":48,"49":49,"50":50,"51":51,"52":52,"53":53,"54":54,"55":55,"56":56,"57":57,"8":8,"9":9}],8:[function(require,module,exports){
+    },{ "10":10,"11":11,"12":12,"13":13,"14":14,"15":15,"16":16,"17":17,"18":18,"19":19,"20":20,"21":21,"22":22,"23":23,"24":24,"25":25,"26":26,"27":27,"28":28,"29":29,"30":30,"31":31,"32":32,"33":33,"35":35,"40":40,"45":45,"48":48,"49":49,"50":50,"51":51,"52":52,"53":53,"54":54,"55":55,"56":56,"57":57,"8":8,"9":9 }],8:[function(require,module,exports){
         'use strict';
 
         module.exports = function(Chart) {
@@ -2256,7 +2256,7 @@
             });
         };
 
-    },{"25":25,"40":40,"45":45}],16:[function(require,module,exports){
+    },{ "25":25,"40":40,"45":45 }],16:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -2438,7 +2438,7 @@
             });
         };
 
-    },{"25":25,"40":40,"45":45}],17:[function(require,module,exports){
+    },{ "25":25,"40":40,"45":45 }],17:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -2594,7 +2594,7 @@
                     var availableWidth = chartArea.right - chartArea.left - arcOpts.borderWidth;
                     var availableHeight = chartArea.bottom - chartArea.top - arcOpts.borderWidth;
                     var minSize = Math.min(availableWidth, availableHeight);
-                    var offset = {x: 0, y: 0};
+                    var offset = { x: 0, y: 0 };
                     var meta = me.getMeta();
                     var cutoutPercentage = opts.cutoutPercentage;
                     var circumference = opts.circumference;
@@ -2604,18 +2604,18 @@
                         var startAngle = opts.rotation % (Math.PI * 2.0);
                         startAngle += Math.PI * 2.0 * (startAngle >= Math.PI ? -1 : startAngle < -Math.PI ? 1 : 0);
                         var endAngle = startAngle + circumference;
-                        var start = {x: Math.cos(startAngle), y: Math.sin(startAngle)};
-                        var end = {x: Math.cos(endAngle), y: Math.sin(endAngle)};
+                        var start = { x: Math.cos(startAngle), y: Math.sin(startAngle) };
+                        var end = { x: Math.cos(endAngle), y: Math.sin(endAngle) };
                         var contains0 = (startAngle <= 0 && endAngle >= 0) || (startAngle <= Math.PI * 2.0 && Math.PI * 2.0 <= endAngle);
                         var contains90 = (startAngle <= Math.PI * 0.5 && Math.PI * 0.5 <= endAngle) || (startAngle <= Math.PI * 2.5 && Math.PI * 2.5 <= endAngle);
                         var contains180 = (startAngle <= -Math.PI && -Math.PI <= endAngle) || (startAngle <= Math.PI && Math.PI <= endAngle);
                         var contains270 = (startAngle <= -Math.PI * 0.5 && -Math.PI * 0.5 <= endAngle) || (startAngle <= Math.PI * 1.5 && Math.PI * 1.5 <= endAngle);
                         var cutout = cutoutPercentage / 100.0;
-                        var min = {x: contains180 ? -1 : Math.min(start.x * (start.x < 0 ? 1 : cutout), end.x * (end.x < 0 ? 1 : cutout)), y: contains270 ? -1 : Math.min(start.y * (start.y < 0 ? 1 : cutout), end.y * (end.y < 0 ? 1 : cutout))};
-                        var max = {x: contains0 ? 1 : Math.max(start.x * (start.x > 0 ? 1 : cutout), end.x * (end.x > 0 ? 1 : cutout)), y: contains90 ? 1 : Math.max(start.y * (start.y > 0 ? 1 : cutout), end.y * (end.y > 0 ? 1 : cutout))};
-                        var size = {width: (max.x - min.x) * 0.5, height: (max.y - min.y) * 0.5};
+                        var min = { x: contains180 ? -1 : Math.min(start.x * (start.x < 0 ? 1 : cutout), end.x * (end.x < 0 ? 1 : cutout)), y: contains270 ? -1 : Math.min(start.y * (start.y < 0 ? 1 : cutout), end.y * (end.y < 0 ? 1 : cutout)) };
+                        var max = { x: contains0 ? 1 : Math.max(start.x * (start.x > 0 ? 1 : cutout), end.x * (end.x > 0 ? 1 : cutout)), y: contains90 ? 1 : Math.max(start.y * (start.y > 0 ? 1 : cutout), end.y * (end.y > 0 ? 1 : cutout)) };
+                        var size = { width: (max.x - min.x) * 0.5, height: (max.y - min.y) * 0.5 };
                         minSize = Math.min(availableWidth / size.width, availableHeight / size.height);
-                        offset = {x: (max.x + min.x) * -0.5, y: (max.y + min.y) * -0.5};
+                        offset = { x: (max.x + min.x) * -0.5, y: (max.y + min.y) * -0.5 };
                     }
 
                     chart.borderWidth = me.getMaxBorderWidth(meta.data);
@@ -2739,7 +2739,7 @@
             });
         };
 
-    },{"25":25,"40":40,"45":45}],18:[function(require,module,exports){
+    },{ "25":25,"40":40,"45":45 }],18:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -3074,7 +3074,7 @@
             });
         };
 
-    },{"25":25,"40":40,"45":45}],19:[function(require,module,exports){
+    },{ "25":25,"40":40,"45":45 }],19:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -3298,7 +3298,7 @@
             });
         };
 
-    },{"25":25,"40":40,"45":45}],20:[function(require,module,exports){
+    },{ "25":25,"40":40,"45":45 }],20:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -3468,7 +3468,7 @@
             });
         };
 
-    },{"25":25,"40":40,"45":45}],21:[function(require,module,exports){
+    },{ "25":25,"40":40,"45":45 }],21:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -3512,7 +3512,7 @@
 
         };
 
-    },{"25":25}],22:[function(require,module,exports){
+    },{ "25":25 }],22:[function(require,module,exports){
         /* global window: false */
         'use strict';
 
@@ -3686,7 +3686,7 @@
 
         };
 
-    },{"25":25,"26":26,"45":45}],23:[function(require,module,exports){
+    },{ "25":25,"26":26,"45":45 }],23:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -3878,7 +3878,7 @@
 
                     if (!silent) {
                         // Notify any plugins about the resize
-                        var newSize = {width: newWidth, height: newHeight};
+                        var newSize = { width: newWidth, height: newHeight };
                         plugins.notify(me, 'resize', [newSize]);
 
                         // Notify of resize
@@ -3921,10 +3921,10 @@
                     if (options.scales) {
                         items = items.concat(
                                 (options.scales.xAxes || []).map(function(xAxisOptions) {
-                                    return {options: xAxisOptions, dtype: 'category', dposition: 'bottom'};
+                                    return { options: xAxisOptions, dtype: 'category', dposition: 'bottom' };
                                 }),
                                 (options.scales.yAxes || []).map(function(yAxisOptions) {
-                                    return {options: yAxisOptions, dtype: 'linear', dposition: 'left'};
+                                    return { options: yAxisOptions, dtype: 'linear', dposition: 'left' };
                                 })
                         );
                     }
@@ -4186,7 +4186,7 @@
                         me.draw();
 
                         // See https://github.com/chartjs/Chart.js/issues/3781
-                        onComplete(new Chart.Animation({numSteps: 0, chart: me}));
+                        onComplete(new Chart.Animation({ numSteps: 0, chart: me }));
                     }
 
                     return me;
@@ -4291,11 +4291,11 @@
                 },
 
                 getElementsAtEvent: function(e) {
-                    return Interaction.modes.label(this, e, {intersect: true});
+                    return Interaction.modes.label(this, e, { intersect: true });
                 },
 
                 getElementsAtXAxis: function(e) {
-                    return Interaction.modes['x-axis'](this, e, {intersect: true});
+                    return Interaction.modes['x-axis'](this, e, { intersect: true });
                 },
 
                 getElementsAtEventForMode: function(e, mode, options) {
@@ -4308,7 +4308,7 @@
                 },
 
                 getDatasetAtEvent: function(e) {
-                    return Interaction.modes.dataset(this, e, {intersect: true});
+                    return Interaction.modes.dataset(this, e, { intersect: true });
                 },
 
                 getDatasetMeta: function(datasetIndex) {
@@ -4564,7 +4564,7 @@
             Chart.Controller = Chart;
         };
 
-    },{"25":25,"28":28,"45":45,"48":48}],24:[function(require,module,exports){
+    },{ "25":25,"28":28,"45":45,"48":48 }],24:[function(require,module,exports){
         'use strict';
 
         var helpers = require(45);
@@ -4896,7 +4896,7 @@
             Chart.DatasetController.extend = helpers.inherits;
         };
 
-    },{"45":45}],25:[function(require,module,exports){
+    },{ "45":45 }],25:[function(require,module,exports){
         'use strict';
 
         var helpers = require(45);
@@ -4910,7 +4910,7 @@
             }
         };
 
-    },{"45":45}],26:[function(require,module,exports){
+    },{ "45":45 }],26:[function(require,module,exports){
         'use strict';
 
         var color = require(3);
@@ -5027,7 +5027,7 @@
 
         module.exports = Element;
 
-    },{"3":3,"45":45}],27:[function(require,module,exports){
+    },{ "3":3,"45":45 }],27:[function(require,module,exports){
         /* global window: false */
         /* global document: false */
         'use strict';
@@ -5664,7 +5664,7 @@
             };
         };
 
-    },{"25":25,"3":3,"45":45}],28:[function(require,module,exports){
+    },{ "25":25,"3":3,"45":45 }],28:[function(require,module,exports){
         'use strict';
 
         var helpers = require(45);
@@ -5882,7 +5882,7 @@
                  * @private
                  */
                 'x-axis': function(chart, e) {
-                    return indexMode(chart, e, {intersect: true});
+                    return indexMode(chart, e, { intersect: true });
                 },
 
                 /**
@@ -5996,7 +5996,7 @@
             }
         };
 
-    },{"45":45}],29:[function(require,module,exports){
+    },{ "45":45 }],29:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -6047,7 +6047,7 @@
             return Chart;
         };
 
-    },{"25":25}],30:[function(require,module,exports){
+    },{ "25":25 }],30:[function(require,module,exports){
         'use strict';
 
         var helpers = require(45);
@@ -6471,7 +6471,7 @@
             };
         };
 
-    },{"45":45}],31:[function(require,module,exports){
+    },{ "45":45 }],31:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -6847,7 +6847,7 @@
             Chart.PluginBase = Element.extend({});
         };
 
-    },{"25":25,"26":26,"45":45}],32:[function(require,module,exports){
+    },{ "25":25,"26":26,"45":45 }],32:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -7774,7 +7774,7 @@
             });
         };
 
-    },{"25":25,"26":26,"34":34,"45":45}],33:[function(require,module,exports){
+    },{ "25":25,"26":26,"34":34,"45":45 }],33:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -7821,7 +7821,7 @@
             };
         };
 
-    },{"25":25,"45":45}],34:[function(require,module,exports){
+    },{ "25":25,"45":45 }],34:[function(require,module,exports){
         'use strict';
 
         var helpers = require(45);
@@ -8027,7 +8027,7 @@
             }
         };
 
-    },{"45":45}],35:[function(require,module,exports){
+    },{ "45":45 }],35:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -8664,7 +8664,7 @@
                             x1 = tmp;
                         }
                     }
-                    return {x1: x1, x2: x2, x3: x3, y1: y1, y2: y2, y3: y3};
+                    return { x1: x1, x2: x2, x3: x3, y1: y1, y2: y2, y3: y3 };
                 },
                 drawTitle: function(pt, vm, ctx, opacity) {
                     var title = vm.title;
@@ -8974,7 +8974,7 @@
             };
         };
 
-    },{"25":25,"26":26,"45":45}],36:[function(require,module,exports){
+    },{ "25":25,"26":26,"45":45 }],36:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -9005,7 +9005,7 @@
                 var vm = this._view;
 
                 if (vm) {
-                    var pointRelativePosition = helpers.getAngleFromPoint(vm, {x: chartX, y: chartY});
+                    var pointRelativePosition = helpers.getAngleFromPoint(vm, { x: chartX, y: chartY });
                     var	angle = pointRelativePosition.angle;
                     var distance = pointRelativePosition.distance;
 
@@ -9083,7 +9083,7 @@
             }
         });
 
-    },{"25":25,"26":26,"45":45}],37:[function(require,module,exports){
+    },{ "25":25,"26":26,"45":45 }],37:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -9176,7 +9176,7 @@
             }
         });
 
-    },{"25":25,"26":26,"45":45}],38:[function(require,module,exports){
+    },{ "25":25,"26":26,"45":45 }],38:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -9284,7 +9284,7 @@
             }
         });
 
-    },{"25":25,"26":26,"45":45}],39:[function(require,module,exports){
+    },{ "25":25,"26":26,"45":45 }],39:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -9486,7 +9486,7 @@
                     y = vm.y;
                 }
 
-                return {x: x, y: y};
+                return { x: x, y: y };
             },
 
             getArea: function() {
@@ -9503,7 +9503,7 @@
             }
         });
 
-    },{"25":25,"26":26}],40:[function(require,module,exports){
+    },{ "25":25,"26":26 }],40:[function(require,module,exports){
         'use strict';
 
         module.exports = {};
@@ -9512,7 +9512,7 @@
         module.exports.Point = require(38);
         module.exports.Rectangle = require(39);
 
-    },{"36":36,"37":37,"38":38,"39":39}],41:[function(require,module,exports){
+    },{ "36":36,"37":37,"38":38,"39":39 }],41:[function(require,module,exports){
         'use strict';
 
         var helpers = require(42);
@@ -9728,7 +9728,7 @@
             ctx.closePath();
         };
 
-    },{"42":42}],42:[function(require,module,exports){
+    },{ "42":42 }],42:[function(require,module,exports){
         'use strict';
 
         /**
@@ -9980,7 +9980,7 @@
              * @returns {Object} The `target` object.
              */
             mergeIf: function(target, source) {
-                return helpers.merge(target, source, {merger: helpers._mergerIf});
+                return helpers.merge(target, source, { merger: helpers._mergerIf });
             }
         };
 
@@ -10279,7 +10279,7 @@
          */
         helpers.easingEffects = effects;
 
-    },{"42":42}],44:[function(require,module,exports){
+    },{ "42":42 }],44:[function(require,module,exports){
         'use strict';
 
         var helpers = require(42);
@@ -10377,7 +10377,7 @@
             }
         };
 
-    },{"42":42}],45:[function(require,module,exports){
+    },{ "42":42 }],45:[function(require,module,exports){
         'use strict';
 
         module.exports = require(42);
@@ -10385,7 +10385,7 @@
         module.exports.canvas = require(41);
         module.exports.options = require(44);
 
-    },{"41":41,"42":42,"43":43,"44":44}],46:[function(require,module,exports){
+    },{ "41":41,"42":42,"43":43,"44":44 }],46:[function(require,module,exports){
         /**
          * Platform fallback implementation (minimal).
          * @see https://github.com/chartjs/Chart.js/pull/4591#issuecomment-319575939
@@ -10526,7 +10526,7 @@
 
 // Default passive to true as expected by Chrome for 'touchstart' and 'touchend' events.
 // https://github.com/chartjs/Chart.js/issues/4287
-        var eventListenerOptions = supportsEventListenerOptions ? {passive: true} : false;
+        var eventListenerOptions = supportsEventListenerOptions ? { passive: true } : false;
 
         function addEventListener(node, type, listener) {
             node.addEventListener(type, listener, eventListenerOptions);
@@ -10854,7 +10854,7 @@
          */
         helpers.removeEvent = removeEventListener;
 
-    },{"45":45}],48:[function(require,module,exports){
+    },{ "45":45 }],48:[function(require,module,exports){
         'use strict';
 
         var helpers = require(45);
@@ -10930,7 +10930,7 @@
          * @prop {Number} y - The mouse y position, relative to the canvas (null for incompatible events)
          */
 
-    },{"45":45,"46":46,"47":47}],49:[function(require,module,exports){
+    },{ "45":45,"46":46,"47":47 }],49:[function(require,module,exports){
         /**
          * Plugin based on discussion from the following Chart.js issues:
          * @see https://github.com/chartjs/Chart.js/issues/2380#issuecomment-279961569
@@ -11253,7 +11253,7 @@
             };
         };
 
-    },{"25":25,"40":40,"45":45}],50:[function(require,module,exports){
+    },{ "25":25,"40":40,"45":45 }],50:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -11822,7 +11822,7 @@
             };
         };
 
-    },{"25":25,"26":26,"45":45}],51:[function(require,module,exports){
+    },{ "25":25,"26":26,"45":45 }],51:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -12067,7 +12067,7 @@
             };
         };
 
-    },{"25":25,"26":26,"45":45}],52:[function(require,module,exports){
+    },{ "25":25,"26":26,"45":45 }],52:[function(require,module,exports){
         'use strict';
 
         module.exports = function(Chart) {
@@ -12396,7 +12396,7 @@
 
         };
 
-    },{"25":25,"34":34,"45":45}],54:[function(require,module,exports){
+    },{ "25":25,"34":34,"45":45 }],54:[function(require,module,exports){
         'use strict';
 
         var helpers = require(45);
@@ -12530,7 +12530,7 @@
             });
         };
 
-    },{"34":34,"45":45}],55:[function(require,module,exports){
+    },{ "34":34,"45":45 }],55:[function(require,module,exports){
         'use strict';
 
         var helpers = require(45);
@@ -12776,7 +12776,7 @@
 
         };
 
-    },{"34":34,"45":45}],56:[function(require,module,exports){
+    },{ "34":34,"45":45 }],56:[function(require,module,exports){
         'use strict';
 
         var defaults = require(25);
@@ -13308,7 +13308,7 @@
 
         };
 
-    },{"25":25,"34":34,"45":45}],57:[function(require,module,exports){
+    },{ "25":25,"34":34,"45":45 }],57:[function(require,module,exports){
         /* global window: false */
         'use strict';
 
@@ -13409,8 +13409,8 @@
         function buildLookupTable(timestamps, min, max, distribution) {
             if (distribution === 'linear' || !timestamps.length) {
                 return [
-                    {time: min, pos: 0},
-                    {time: max, pos: 1}
+                    { time: min, pos: 0 },
+                    { time: max, pos: 1 }
                 ];
             }
 
@@ -13434,7 +13434,7 @@
 
                 // only add points that breaks the scale linearity
                 if (prev === undefined || next === undefined || Math.round((next + prev) / 2) !== curr) {
-                    table.push({time: curr, pos: i / (ilen - 1)});
+                    table.push({ time: curr, pos: i / (ilen - 1) });
                 }
             }
 
@@ -13454,18 +13454,18 @@
 
                 if (!i0) {
                     // given value is outside table (before first item)
-                    return {lo: null, hi: i1};
+                    return { lo: null, hi: i1 };
                 } else if (i1[key] < value) {
                     lo = mid + 1;
                 } else if (i0[key] > value) {
                     hi = mid - 1;
                 } else {
-                    return {lo: i0, hi: i1};
+                    return { lo: i0, hi: i1 };
                 }
             }
 
             // given value is outside table (after last item)
-            return {lo: i1, hi: null};
+            return { lo: i1, hi: null };
         }
 
         /**
@@ -13671,7 +13671,7 @@
                 }
             }
 
-            return {left: left, right: right};
+            return { left: left, right: right };
         }
 
         function ticksFromTimestamps(values, majorUnit) {
@@ -14044,5 +14044,5 @@
             Chart.scaleService.registerScaleType('time', TimeScale, defaultConfig);
         };
 
-    },{"1":1,"25":25,"45":45}]},{},[7])(7)
+    },{ "1":1,"25":25,"45":45 }] },{},[7])(7)
 });

@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Article.model.PriceVariation', {
         { name: 'option_names' },
         { name: 'isGross', type: 'integer' },
         { name: 'variation', type: 'float' },
-        { name: 'configuratorSetId', type: 'integer'}
+        { name: 'configuratorSetId', type: 'integer' }
     ],
 
     /**

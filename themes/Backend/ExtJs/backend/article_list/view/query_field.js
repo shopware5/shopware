@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.ArticleList.view.QueryField', {
                 'afterrender': { fn: function () {
                     me.combo.inputEl.dom.spellcheck = false;
                 }, scope: this },
-                'focus': { fn: me.comboChangeCallback, scope: this},
+                'focus': { fn: me.comboChangeCallback, scope: this },
                 'change': { fn: me.comboChangeCallback, scope: this }
             }
         });

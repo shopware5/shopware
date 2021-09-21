@@ -136,7 +136,7 @@ Ext.define('Shopware.apps.Emotion.view.translation.Window', {
                     editor: {
                         xtype: 'combo',
                         store: Ext.create('Ext.data.Store', {
-                            fields: ['shop', { name: 'id', type: 'int'} ],
+                            fields: ['shop', { name: 'id', type: 'int' } ],
                             proxy: {
                                 type: 'memory',
                                 reader: {

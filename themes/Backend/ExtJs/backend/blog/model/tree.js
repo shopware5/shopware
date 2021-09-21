@@ -50,9 +50,9 @@ Ext.define('Shopware.apps.Blog.model.Tree', {
         // {block name="backend/blog/model/tree/fields"}{/block}
         { name : 'id', type: 'integer', useNull:true },
         { name : 'parentId', type: 'integer' },
-        { name : 'name', type: 'string'},
-        { name : 'blog', type: 'boolean'},
-        { name : 'position', type: 'integer', useNull:true, defaultValue: null}
+        { name : 'name', type: 'string' },
+        { name : 'blog', type: 'boolean' },
+        { name : 'position', type: 'integer', useNull:true, defaultValue: null }
     ],
     proxy : {
         type : 'ajax',

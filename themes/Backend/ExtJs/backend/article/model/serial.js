@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Article.model.Serial', {
         //{block name="backend/article/model/serial/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'serialnumber' },
-        { name: 'customerId'},
+        { name: 'customerId' },
         { name: 'customerEmail' },
         { name: 'accountMode', type: 'int' },
         { name: 'date' }

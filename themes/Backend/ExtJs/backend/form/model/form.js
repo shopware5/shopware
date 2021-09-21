@@ -81,14 +81,14 @@ Ext.define('Shopware.apps.Form.model.Form', {
     ],
 
     validations: [
-        { field: 'name',  type: 'presence'},
-        { field: 'email',  type: 'presence'},
-        { field: 'emailSubject',  type: 'presence'},
-        { field: 'emailTemplate', type: 'presence'}
+        { field: 'name',  type: 'presence' },
+        { field: 'email',  type: 'presence' },
+        { field: 'emailSubject',  type: 'presence' },
+        { field: 'emailTemplate', type: 'presence' }
     ],
 
     associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Form.model.Field', name: 'getFields', associationKey: 'fields'}
+        { type: 'hasMany', model: 'Shopware.apps.Form.model.Field', name: 'getFields', associationKey: 'fields' }
     ],
 
     /**

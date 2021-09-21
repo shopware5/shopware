@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Order.model.Order', {
         { name : 'changed', type: 'date', dateFormat: 'c' },
         { name : 'number', type: 'string' },
         { name : 'customerId', type: 'int' },
-        { name : 'customerEmail', type: 'string'},
+        { name : 'customerEmail', type: 'string' },
         { name : 'invoiceAmountNet', type: 'float' },
         { name : 'invoiceShippingNet', type: 'float' },
         { name : 'status', type: 'int' },

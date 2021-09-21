@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Property',
         var store = Ext.create('Shopware.store.Search', {
             fields: [
                 { name: 'id', type: 'int' },
-                { name: 'name', type: 'string', mapping: 'value'}
+                { name: 'name', type: 'string', mapping: 'value' }
             ],
             configure: function() {
                 return { entity: "Shopware\\Models\\Property\\Value" }

@@ -312,7 +312,7 @@ Ext.define('Lexer', {
         // Check for open braces
         } else if (me.braceCounter != 0) {
             return {
-                expectation: { message: '{s name="lexer/closingBrace"}closing brace{/s}', rule: ')'},
+                expectation: { message: '{s name="lexer/closingBrace"}closing brace{/s}', rule: ')' },
                 lastValidToken: tokenType,
                 currentToken: '{s name="lexer/end"}END{/s}',
                 success: false
@@ -381,7 +381,7 @@ Ext.define('Lexer', {
         // First token
         if (token == 0 && tokenType != 'values') {
             me.setSuggestion(Object.keys(me.grammar.attributes).concat(Object.keys(me.grammar.nullaryOperators)));
-            return { rules: 'expression', message: '{s name="lexer/expressionOrAttribute"}expression or attribute{/s}'}
+            return { rules: 'expression', message: '{s name="lexer/expressionOrAttribute"}expression or attribute{/s}' }
         }
 
         /**
@@ -390,15 +390,15 @@ Ext.define('Lexer', {
         if (me.inList) {
             if (token == ',' || token == '(') {
                 me.setSuggestion('value');
-                return { rules: me.grammar.values, message: '{s name="lexer/value"}Value{/s}'}
+                return { rules: me.grammar.values, message: '{s name="lexer/value"}Value{/s}' }
             }
             if (token == 'IN' || token == 'NOT IN') {
                 me.setSuggestion(['(']);
-                return { rules: '(', message: '{s name="lexer/openingBrace"}({/s}'}
+                return { rules: '(', message: '{s name="lexer/openingBrace"}({/s}' }
             }
             if (tokenType == 'values') {
                 me.setSuggestion([',', ')']);
-                return { rules: [',', ')'], message: '{s name="lexer/commaOrBrace"}, OR ){/s}'}
+                return { rules: [',', ')'], message: '{s name="lexer/commaOrBrace"}, OR ){/s}' }
             }
         }
 
@@ -408,7 +408,7 @@ Ext.define('Lexer', {
          */
         if (tokenType == "boolOperators") {
             me.setSuggestion(Object.keys(me.grammar.attributes).concat(Object.keys(me.grammar.nullaryOperators)));
-            return { rules: 'expression', message: '{s name="lexer/expression"}Expression{/s}'}
+            return { rules: 'expression', message: '{s name="lexer/expression"}Expression{/s}' }
         }
 
         /**
@@ -423,13 +423,13 @@ Ext.define('Lexer', {
          */
         if (tokenType == "subOperators" && token != ')') {
             me.setSuggestion(Object.keys(me.grammar.attributes).concat(Object.keys(me.grammar.nullaryOperators)));
-            return { rules: 'expression', message: '{s name="lexer/expression"}Expression{/s}'}
+            return { rules: 'expression', message: '{s name="lexer/expression"}Expression{/s}' }
         } else if (tokenType == "subOperators" && token == ")" && me.braceCounter == 0) {
             me.setSuggestion(me.grammar.boolOperators);
-            return { rules: 'boolOperators', message: '{s name="lexer/boolOperators"}boolOperators{/s}'}
+            return { rules: 'boolOperators', message: '{s name="lexer/boolOperators"}boolOperators{/s}' }
         } else if (tokenType == "subOperators" && token == ")" && me.braceCounter != 0) {
             me.setSuggestion(me.grammar.boolOperators.concat([')']));
-            return { rules: me.grammar.boolOperators.concat([')']), message: '{s name="lexer/boolOperatorsOrBrace"}boolOperators or ){/s}'};
+            return { rules: me.grammar.boolOperators.concat([')']), message: '{s name="lexer/boolOperatorsOrBrace"}boolOperators or ){/s}' };
         }
 
         /**
@@ -441,10 +441,10 @@ Ext.define('Lexer', {
          */
         if ((tokenType == 'unaryOperators' || tokenType == 'nullaryOperators' || tokenType == 'values') && me.braceCounter == 0) {
             me.setSuggestion(me.grammar.boolOperators);
-            return { rules: 'boolOperators', message: '{s name="lexer/boolOperators"}boolOperators{/s}'}
+            return { rules: 'boolOperators', message: '{s name="lexer/boolOperators"}boolOperators{/s}' }
         } else if (tokenType == 'nullaryOperators' || tokenType == 'unaryOperators' || tokenType == 'values') {
             me.setSuggestion(me.grammar.boolOperators.concat([')']));
-            return { rules: me.grammar.boolOperators.concat([')']), message: '{s name="lexer/boolOperatorsOrBrace"}boolOperators or ){/s}'};
+            return { rules: me.grammar.boolOperators.concat([')']), message: '{s name="lexer/boolOperatorsOrBrace"}boolOperators or ){/s}' };
         }
 
 
@@ -454,7 +454,7 @@ Ext.define('Lexer', {
          */
         if (tokenType == 'binaryOperators') {
             me.setSuggestion('value');
-            return { rules: me.grammar[tokenType][token], message: '{s name="lexer/value"}Value{/s}'}
+            return { rules: me.grammar[tokenType][token], message: '{s name="lexer/value"}Value{/s}' }
         }
 
         /**
@@ -463,7 +463,7 @@ Ext.define('Lexer', {
          */
         if (tokenType == 'attribute') {
             me.setSuggestion(me.grammar.attributes[token]);
-            return { rules: me.grammar.attributes[token], message: '{s name="lexer/onOfThese"}one of these: {/s}: ' + me.grammar.attributes[token].join(",")}
+            return { rules: me.grammar.attributes[token], message: '{s name="lexer/onOfThese"}one of these: {/s}: ' + me.grammar.attributes[token].join(",") }
         }
 
         /**

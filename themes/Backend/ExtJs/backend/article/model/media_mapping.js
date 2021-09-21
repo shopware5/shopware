@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Article.model.MediaMapping', {
 
     ],
     associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Article.model.MediaMappingRule', name: 'getRules', associationKey: 'rules'}
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.MediaMappingRule', name: 'getRules', associationKey: 'rules' }
     ]
 });
 //{/block}

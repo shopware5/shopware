@@ -66,8 +66,8 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
             extend: 'Ext.data.Model',
             fields: [
                 { name: 'id' },
-                { name: 'title'},
-                { name: 'addQuotes', defaultValue: true}
+                { name: 'title' },
+                { name: 'addQuotes', defaultValue: true }
             ]
         });
 

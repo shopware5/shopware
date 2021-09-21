@@ -150,7 +150,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
 
         me.createQueueWindow();
 
-        return { operations: operations, filterArray: filterArray}
+        return { operations: operations, filterArray: filterArray }
     },
 
     /**
@@ -626,7 +626,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
             return me.subApplication.batchProcessWindow;
         } else {
             me.subApplication.batchProcessWindow = me.getView('BatchProcess.Window').create({
-                editableColumnsStore: Ext.create('Shopware.apps.ArticleList.store.EditableColumns').load({ params: { resource: 'product' }})
+                editableColumnsStore: Ext.create('Shopware.apps.ArticleList.store.EditableColumns').load({ params: { resource: 'product' } })
             });
             me.subApplication.batchProcessWindow.title = me.setWindowTitle();
         }

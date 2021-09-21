@@ -134,7 +134,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
                         boxLabel: '{s name="form/items/router"}Index SEO-URLs{/s}',
                         supportText: '{s name="form/items/router/support"}Cache for SEO-Routes and index{/s}'
                     }
-                ]}
+                ] }
         ];
     }
 });

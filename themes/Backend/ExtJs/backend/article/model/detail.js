@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Article.model.Detail', {
         { name: 'active', type: 'int' },
         { name: 'inStock', type: 'int', defaultValue: 0 },
         { name: 'stockMin', type: 'int' },
-        { name: 'lastStock', type: 'boolean'},
+        { name: 'lastStock', type: 'boolean' },
 
         { name: 'ean', type: 'string', useNull: true },
         { name: 'weight', type: 'float', useNull: true },
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Article.model.Detail', {
         { name: 'maxPurchase', type: 'int', useNull: true },
         { name: 'unitId', type: 'int', useNull: true },
         { name: 'purchaseUnit', type: 'float', useNull: true },
-        { name: 'referenceUnit', type: 'float', useNull: true},
+        { name: 'referenceUnit', type: 'float', useNull: true },
         { name: 'packUnit', type: 'string', useNull: true },
         { name: 'purchasePrice', type: 'float', useNull: false },
         {

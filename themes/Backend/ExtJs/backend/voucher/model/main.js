@@ -52,8 +52,8 @@ Ext.define('Shopware.apps.Voucher.model.Main', {
         { name : 'modus', type : 'string' },
         { name : 'numberOfUnits', type : 'int' },
         { name : 'value', type : 'double' },
-        { name : 'validFrom', type : 'date'},
-        { name : 'validTo', type : 'date'},
+        { name : 'validFrom', type : 'date' },
+        { name : 'validTo', type : 'date' },
         { name : 'percental', type : 'int' },
         { name : 'checkedIn', type : 'int' }
     ],

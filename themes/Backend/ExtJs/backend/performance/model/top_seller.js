@@ -46,11 +46,11 @@ Ext.define('Shopware.apps.Performance.model.TopSeller', {
     fields:[
         //{block name="backend/performance/model/top_seller/fields"}{/block}
         { name:'id', type:'int' },
-        { name: 'topSellerActive', type: 'bool'},
-        { name: 'topSellerValidationTime', type: 'int'},
-        { name: 'chartinterval', type: 'int'},
-        { name: 'topSellerRefreshStrategy', type: 'int'},
-        { name: 'topSellerPseudoSales', type: 'bool'}
+        { name: 'topSellerActive', type: 'bool' },
+        { name: 'topSellerValidationTime', type: 'int' },
+        { name: 'chartinterval', type: 'int' },
+        { name: 'topSellerRefreshStrategy', type: 'int' },
+        { name: 'topSellerPseudoSales', type: 'bool' }
     ]
 
 });

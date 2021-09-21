@@ -345,7 +345,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
             me.subApplication.articleStore.loadPage(1, { callback: function () {
                 me.getController('BatchProcess').updateBatchProcessWindow();
                 mainWindow.setWindowTitle(name);
-            }});
+            } });
             batchEditButton.enable();
             return true;
         } else {
