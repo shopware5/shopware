@@ -224,22 +224,22 @@
             $list.children().addClass(opts.itemClass);
 
             me.$leftArrow = $('<div>', {
-                'html': $('<span>', {
-                    'class': opts.arrowContentClass,
-                    'html': opts.leftArrowContent
+                html: $('<span>', {
+                    class: opts.arrowContentClass,
+                    html: opts.leftArrowContent
                 }),
-                'class': opts.leftArrowClass
+                class: opts.leftArrowClass
             }).appendTo($el);
 
             me.$rightArrow = $('<div>', {
-                'html': $('<span>', {
-                    'class': opts.arrowContentClass,
-                    'html': opts.rightArrowContent
+                html: $('<span>', {
+                    class: opts.arrowContentClass,
+                    html: opts.rightArrowContent
                 }),
-                'class': opts.rightArrowClass
+                class: opts.rightArrowClass
             }).appendTo($el);
 
-            $.publish('plugin/swMenuScroller/onInitTemplate', [ me ]);
+            $.publish('plugin/swMenuScroller/onInitTemplate', [me]);
         },
 
         /**
@@ -256,15 +256,15 @@
             if (this.opts.disableScrollBarUpdate) {
                 return;
             }
-            
+
             offset = me.scrollBarOffset = Math.min(Math.abs($list[0].scrollHeight - $list.height()) * -1, me.scrollBarOffset);
 
             $list.css({
-                'bottom': offset,
+                bottom: offset,
                 'margin-top': offset
             });
 
-            $.publish('plugin/swMenuScroller/onUpdateScrollBarOffset', [ me, offset ]);
+            $.publish('plugin/swMenuScroller/onUpdateScrollBarOffset', [me, offset]);
         },
 
         /**
@@ -284,7 +284,7 @@
 
             me._on(me.$list, 'scroll', $.proxy(me.updateButtons, me));
 
-            $.publish('plugin/swMenuScroller/onRegisterEvents', [ me ]);
+            $.publish('plugin/swMenuScroller/onRegisterEvents', [me]);
         },
 
         /**
@@ -308,7 +308,7 @@
 
             me.updateButtons();
 
-            $.publish('plugin/swMenuScroller/onUpdateResize', [ me ]);
+            $.publish('plugin/swMenuScroller/onUpdateResize', [me]);
         },
 
         /**
@@ -326,7 +326,7 @@
 
             me.addOffset(me.scrollStep * -1);
 
-            $.publish('plugin/swMenuScroller/onLeftArrowClick', [ me ]);
+            $.publish('plugin/swMenuScroller/onLeftArrowClick', [me]);
         },
 
         /**
@@ -344,7 +344,7 @@
 
             me.addOffset(me.scrollStep);
 
-            $.publish('plugin/swMenuScroller/onRightArrowClick', [ me ]);
+            $.publish('plugin/swMenuScroller/onRightArrowClick', [me]);
         },
 
         /**
@@ -376,10 +376,10 @@
 
             if (animate !== false) {
                 $list.stop(true).animate({
-                    'scrollLeft': newPos
+                    scrollLeft: newPos
                 }, opts.animationSpeed, $.proxy(me.updateButtons, me));
 
-                $.publish('plugin/swMenuScroller/onSetOffset', [ me, offset, animate ]);
+                $.publish('plugin/swMenuScroller/onSetOffset', [me, offset, animate]);
                 return;
             }
 
@@ -387,7 +387,7 @@
 
             me.updateButtons();
 
-            $.publish('plugin/swMenuScroller/onSetOffset', [ me, offset, animate ]);
+            $.publish('plugin/swMenuScroller/onSetOffset', [me, offset, animate]);
         },
 
         /**
@@ -406,7 +406,7 @@
             me.$leftArrow.toggle(scrollLeft > 0);
             me.$rightArrow.toggle(listWidth > elWidth && scrollLeft < (listWidth - elWidth));
 
-            $.publish('plugin/swMenuScroller/onUpdateButtons', [ me, me.$leftArrow, me.$rightArrow ]);
+            $.publish('plugin/swMenuScroller/onUpdateButtons', [me, me.$leftArrow, me.$rightArrow]);
         },
 
         /**
@@ -432,7 +432,7 @@
 
             me.setOffset(newPos, false);
 
-            $.publish('plugin/swMenuScroller/onJumpToElement', [ me, $el, newPos ]);
+            $.publish('plugin/swMenuScroller/onJumpToElement', [me, $el, newPos]);
         },
 
         /**
@@ -451,7 +451,7 @@
             me.$list.removeClass(opts.listClass);
 
             me.$list.css({
-                'bottom': '',
+                bottom: '',
                 'margin-top': ''
             });
 

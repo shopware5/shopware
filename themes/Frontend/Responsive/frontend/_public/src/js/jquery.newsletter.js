@@ -16,7 +16,7 @@
 
             formSelector: 'form',
 
-            submitButtonSelector: 'button[type=submit]',
+            submitButtonSelector: 'button[type=submit]'
         },
 
         init: function () {
@@ -34,7 +34,7 @@
 
             me._on(me.$form, 'submit', $.proxy(me.submit, me));
 
-            $.publish('plugin/swNewsletter/onRegisterEvents', [ me ]);
+            $.publish('plugin/swNewsletter/onRegisterEvents', [me]);
 
             me.$checkMail.trigger('change');
         },
@@ -64,7 +64,7 @@
                 }
             }
 
-            $.publish('plugin/swNewsletter/onRefreshAction', [ me ]);
+            $.publish('plugin/swNewsletter/onRefreshAction', [me]);
         },
 
         submit: function() {

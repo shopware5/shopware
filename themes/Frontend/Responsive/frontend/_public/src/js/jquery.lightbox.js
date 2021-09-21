@@ -56,8 +56,8 @@
                     .attr('height', size.height);
 
                 me.modal = $.modal.open(me.content, {
-                    'width': size.width,
-                    'height': size.height
+                    width: size.width,
+                    height: size.height
                 });
 
                 $(window).on('resize.lightbox', function() {
@@ -79,7 +79,7 @@
 
             me.image.src = imageURL;
 
-            $.publish('plugin/swLightbox/onOpen', [ me ]);
+            $.publish('plugin/swLightbox/onOpen', [me]);
         },
 
         /**
@@ -91,14 +91,14 @@
         createContent: function(imageURL) {
             var me = this,
                 content = $('<div>', {
-                    'class': 'lightbox--container',
-                    'html': $('<img>', {
-                        'src': imageURL,
-                        'class': 'lightbox--image'
+                    class: 'lightbox--container',
+                    html: $('<img>', {
+                        src: imageURL,
+                        class: 'lightbox--image'
                     })
                 });
 
-            $.publish('plugin/swLightbox/onCreateContent', [ me, content, imageURL ]);
+            $.publish('plugin/swLightbox/onCreateContent', [me, content, imageURL]);
 
             return content;
         },
@@ -120,7 +120,7 @@
             me.modal.setWidth(size.width);
             me.modal.setHeight(size.height);
 
-            $.publish('plugin/swLightbox/onSetSize', [ me, width, height ]);
+            $.publish('plugin/swLightbox/onSetSize', [me, width, height]);
         },
 
         /**
@@ -149,11 +149,11 @@
             }
 
             size = {
-                'width': width,
-                'height': height
+                width: width,
+                height: height
             };
 
-            $.publish('plugin/swLightbox/onGetOptimizedSize', [ me, size ]);
+            $.publish('plugin/swLightbox/onGetOptimizedSize', [me, size]);
 
             return size;
         },

@@ -39,7 +39,7 @@
              * @property offcanvasContent
              * @type {String}
              */
-            'offcanvasContent': '.teaser--text-long',
+            offcanvasContent: '.teaser--text-long',
 
             /**
              * Short description which will be displayed if viewport match plugin configuration
@@ -47,7 +47,7 @@
              * @property shortDescription
              * @type {String}
              */
-            'shortDescription': '.teaser--text-short',
+            shortDescription: '.teaser--text-short',
 
             /**
              * Off canvas trigger element
@@ -55,7 +55,7 @@
              * @property offcanvasTrigger
              * @type {String}
              */
-            'offcanvasTrigger': '.text--offcanvas-link',
+            offcanvasTrigger: '.text--offcanvas-link',
 
             /**
              * off canvas container
@@ -63,7 +63,7 @@
              * @property offCanvasSelector
              * @type {String}
              */
-            'offCanvasSelector': '.teaser--text-offcanvas',
+            offCanvasSelector: '.teaser--text-offcanvas',
 
             /**
              * off canvas close button
@@ -71,13 +71,13 @@
              * @property offCanvasCloseSelector
              * @type {String}
              */
-            'offCanvasCloseSelector': '.close--off-canvas',
+            offCanvasCloseSelector: '.close--off-canvas',
 
             /**
              * off canvas direction type
              * @type {String} (fromLeft | fromRight)
              */
-            'offCanvasDirection': 'fromRight',
+            offCanvasDirection: 'fromRight',
 
             /**
              * hidden class for hiding long description
@@ -85,7 +85,7 @@
              * @property hiddenCls
              * @type {String}
              */
-            'hiddenCls': 'is--hidden'
+            hiddenCls: 'is--hidden'
         },
 
         /**
@@ -107,9 +107,9 @@
             me._$offcanvasTrigger = $el.find(opts.offcanvasTrigger);
 
             me._$offcanvasTrigger.swOffcanvasMenu({
-                'offCanvasSelector': opts.offCanvasSelector,
-                'closeButtonSelector': opts.offCanvasCloseSelector,
-                'direction': opts.offCanvasDirection
+                offCanvasSelector: opts.offCanvasSelector,
+                closeButtonSelector: opts.offCanvasCloseSelector,
+                direction: opts.offCanvasDirection
             });
         },
 

@@ -76,7 +76,7 @@
 
             me._on(me.$el, 'touchstart click', $.proxy(me.onClickElement, me));
 
-            $.publish('plugin/swScrollAnimate/onRegisterEvents', [ me ]);
+            $.publish('plugin/swScrollAnimate/onRegisterEvents', [me]);
         },
 
         /**
@@ -92,7 +92,7 @@
             var me = this,
                 opts = me.opts;
 
-            $.publish('plugin/swScrollAnimate/onClickElement', [ me, event ]);
+            $.publish('plugin/swScrollAnimate/onClickElement', [me, event]);
 
             if (me.$targetEl) {
                 me.scrollToElement(me.$targetEl);
@@ -117,7 +117,7 @@
                 return;
             }
 
-            $.publish('plugin/swScrollAnimate/onScrollToElement', [ me, $targetEl, offset ]);
+            $.publish('plugin/swScrollAnimate/onScrollToElement', [me, $targetEl, offset]);
 
             me.scrollToPosition($targetEl.offset().top + ~~(offset));
         },
@@ -139,11 +139,11 @@
                 me.opts.animationSpeed,
                 me.opts.easing,
                 function() {
-                    $.publish('plugin/swScrollAnimate/onScrollEnd', [ me, position ]);
+                    $.publish('plugin/swScrollAnimate/onScrollEnd', [me, position]);
                 }
             );
 
-            $.publish('plugin/swScrollAnimate/onScrollToPosition', [ me, position ]);
+            $.publish('plugin/swScrollAnimate/onScrollToPosition', [me, position]);
         },
 
         /**

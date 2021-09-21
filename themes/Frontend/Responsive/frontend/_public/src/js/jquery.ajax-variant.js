@@ -90,7 +90,7 @@
 
             values.template = 'ajax';
 
-            if (stateObj.params.hasOwnProperty('c')) {
+            if (Object.prototype.hasOwnProperty.call(stateObj.params, 'c')) {
                 values.c = stateObj.params.c;
             }
 
@@ -154,7 +154,7 @@
         pushState: function(stateObj, ordernumber) {
             var location = stateObj.location + '?number=' + ordernumber;
 
-            if (stateObj.params.hasOwnProperty('c')) {
+            if (Object.prototype.hasOwnProperty.call(stateObj.params, 'c')) {
                 location += '&c=' + stateObj.params.c;
             }
 
@@ -170,7 +170,7 @@
         onPopState: function (event) {
             var state = event.originalEvent.state;
 
-            if (!state || !state.hasOwnProperty('type') || state.type !== 'sw-ajax-variants') {
+            if (!state || !Object.prototype.hasOwnProperty.call(state, 'type') || state.type !== 'sw-ajax-variants') {
                 return;
             }
 
@@ -246,7 +246,7 @@
             $.each(urlParams, function (i, param) {
                 param = param.split('=');
 
-                if (param[0].length && param[1] && param[1].length && !params.hasOwnProperty(param[0])) {
+                if (param[0].length && param[1] && param[1].length && !Object.prototype.hasOwnProperty.call(params, param[0])) {
                     params[decodeURIComponent(param[0])] = decodeURIComponent(param[1]);
                 }
             });

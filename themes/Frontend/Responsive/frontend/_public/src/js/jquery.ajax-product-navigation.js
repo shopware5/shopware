@@ -177,7 +177,7 @@
             queryParts = urlParts[1].split('&');
 
             for (p in queryParts) {
-                if (!queryParts.hasOwnProperty(p)) {
+                if (!Object.prototype.hasOwnProperty.call(queryParts, p)) {
                     continue;
                 }
 
@@ -189,7 +189,7 @@
                 params[key] = $.isNumeric(value) ? parseFloat(value) : value;
             }
 
-            $.publish('plugin/swAjaxProductNavigation/onParseQueryString', [ this, url, params ]);
+            $.publish('plugin/swAjaxProductNavigation/onParseQueryString', [this, url, params]);
 
             return params;
         },
@@ -205,7 +205,7 @@
             var me = this,
                 state = JSON.parse(me.storage.getItem('lastProductState')) || {};
 
-            $.publish('plugin/swAjaxProductNavigation/onGetProductState', [ me, state ]);
+            $.publish('plugin/swAjaxProductNavigation/onGetProductState', [me, state]);
 
             return state;
         },
@@ -223,7 +223,7 @@
 
             me.storage.setItem('lastProductState', JSON.stringify(params));
 
-            $.publish('plugin/swAjaxProductNavigation/onSetProductState', [ me, params ]);
+            $.publish('plugin/swAjaxProductNavigation/onSetProductState', [me, params]);
         },
 
         /**
@@ -237,7 +237,7 @@
 
             me.storage.removeItem('lastProductState');
 
-            $.publish('plugin/swAjaxProductNavigation/onClearProductState', [ me ]);
+            $.publish('plugin/swAjaxProductNavigation/onClearProductState', [me]);
         },
 
         /**
@@ -252,7 +252,7 @@
 
             me.$el.on(me.getEventName('click'), selectors, $.proxy(me.onClickProductInListing, me));
 
-            $.publish('plugin/swAjaxProductNavigation/onRegisterEventsListing', [ me ]);
+            $.publish('plugin/swAjaxProductNavigation/onRegisterEventsListing', [me]);
         },
 
         /**
@@ -270,11 +270,11 @@
                 params = me.parseQueryString(location.href);
 
             me.setProductState($.extend({}, params, {
-                'categoryId': ~~($parent.attr('data-category-id')),
-                'ordernumber': $parent.attr('data-ordernumber')
+                categoryId: ~~($parent.attr('data-category-id')),
+                ordernumber: $parent.attr('data-ordernumber')
             }));
 
-            $.publish('plugin/swAjaxProductNavigation/onClickProductInListing', [ me, event ]);
+            $.publish('plugin/swAjaxProductNavigation/onClickProductInListing', [me, event]);
         },
 
         /**
@@ -291,7 +291,7 @@
             me._on(me.$prevButton, 'click', $.proxy(me.onArrowClick, me));
             me._on(me.$nextButton, 'click', $.proxy(me.onArrowClick, me));
 
-            $.publish('plugin/swAjaxProductNavigation/onRegisterEventsDetail', [ me ]);
+            $.publish('plugin/swAjaxProductNavigation/onRegisterEventsDetail', [me]);
         },
 
         /**
@@ -307,7 +307,7 @@
                 me.setProductState(me.productState);
             }
 
-            $.publish('plugin/swAjaxProductNavigation/onArrowClick', [ me, event ]);
+            $.publish('plugin/swAjaxProductNavigation/onArrowClick', [me, event]);
         },
 
         /**
@@ -348,7 +348,7 @@
             $prevBtn[(prevBtnImage !== 'none' && remainingSpacePrev >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
             $nextBtn[(nextBtnImage !== 'none' && remainingSpaceNext >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
 
-            $.publish('plugin/swAjaxProductNavigation/onCheckPossibleSliding', [ me ]);
+            $.publish('plugin/swAjaxProductNavigation/onCheckPossibleSliding', [me]);
         },
 
         /**
@@ -365,8 +365,8 @@
             var me = this,
                 url = me.$productDetails.attr('data-product-navigation'),
                 params = $.extend({}, me.productState, {
-                    'ordernumber': me.orderNumber,
-                    'categoryId': me.categoryId
+                    ordernumber: me.orderNumber,
+                    categoryId: me.categoryId
                 });
 
             if ($.isEmptyObject(params) || !url || !url.length) {
@@ -374,14 +374,14 @@
             }
 
             $.ajax({
-                'url': url,
-                'data': params,
-                'method': 'GET',
-                'dataType': 'json',
-                'success': $.proxy(me.onProductNavigationLoaded, me)
+                url: url,
+                data: params,
+                method: 'GET',
+                dataType: 'json',
+                success: $.proxy(me.onProductNavigationLoaded, me)
             });
 
-            $.publish('plugin/swAjaxProductNavigation/onGetProductNavigation', [ me ]);
+            $.publish('plugin/swAjaxProductNavigation/onGetProductNavigation', [me]);
         },
 
         /**
@@ -405,7 +405,7 @@
                     opacity: 1
                 };
 
-            $.publish('plugin/swAjaxProductNavigation/onProductNavigationLoaded', [ me, response ]);
+            $.publish('plugin/swAjaxProductNavigation/onProductNavigationLoaded', [me, response]);
 
             if (listing && listing.href) {
                 me.$backButton.attr('href', listing.href);
@@ -455,7 +455,7 @@
 
             me.checkPossibleSliding();
 
-            $.publish('plugin/swAjaxProductNavigation/onProductNavigationFinished', [ me, response ]);
+            $.publish('plugin/swAjaxProductNavigation/onProductNavigationFinished', [me, response]);
         },
 
         /**

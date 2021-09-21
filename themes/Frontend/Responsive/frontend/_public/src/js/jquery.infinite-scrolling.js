@@ -36,52 +36,52 @@
         defaults: {
 
             /** @bool enabled - enable or disable infinite scrolling plugin */
-            'enabled': true,
+            enabled: true,
 
             /** @string event - default "scroll" will be used for triggering this plugin */
-            'eventName': 'scroll',
+            eventName: 'scroll',
 
             /** @int categoryId - category id is used for generating ajax request */
-            'categoryId': 0,
+            categoryId: 0,
 
             /** @string pagingSelector - listing paging selector **/
-            'pagingSelector': '.listing--paging',
+            pagingSelector: '.listing--paging',
 
             /** @string productBoxSelector - selector for single product boxes **/
-            'productBoxSelector': '.product--box',
+            productBoxSelector: '.product--box',
 
             /** @string defaultPerPageSelector - default per page selector which will be removed **/
-            'defaultPerPageSelector': '.action--per-page',
+            defaultPerPageSelector: '.action--per-page',
 
             /** @string defaultChangeLayoutSelector - default change layout select which will get a new margin **/
-            'defaultChangeLayoutSelector': '.action--change-layout',
+            defaultChangeLayoutSelector: '.action--change-layout',
 
             /** @int threshold - after this threshold is reached, auto fetching is disabled and the "load more" button is shown. */
-            'threshold': 3,
+            threshold: 3,
 
             /** @string loadMoreCls - this class will be used for fetching further data by button. */
-            'loadMoreCls': 'js--load-more',
+            loadMoreCls: 'js--load-more',
 
             /** @string loadPreviousCls - this class will be used for fetching previous data by button. */
-            'loadPreviousCls': 'js--load-previous',
+            loadPreviousCls: 'js--load-previous',
 
             /** @string loadBtnCls - this class will be used for load more or previous button */
-            'loadBtnCls': 'btn is--primary is--icon-right',
+            loadBtnCls: 'btn is--primary is--icon-right',
 
             /** @string loadMoreSnippet - this snippet will be printed inside the load more button */
-            'loadMoreSnippet': 'Weitere Artikel laden',
+            loadMoreSnippet: 'Weitere Artikel laden',
 
             /** @string loadPreviousSnippet - this snippet will be printed inside the load previous button */
-            'loadPreviousSnippet': 'Vorherige Artikel laden',
+            loadPreviousSnippet: 'Vorherige Artikel laden',
 
             /** @string listingContainerSelector - will be used for prepending and appending the load previous and load more button */
-            'listingContainerSelector': '.listing--container',
+            listingContainerSelector: '.listing--container',
 
             /** @string pagingBottomSelector - this class will be used for removing the bottom paging bar if infinite scrolling is enabled */
-            'pagingBottomSelector': '.listing--bottom-paging',
+            pagingBottomSelector: '.listing--bottom-paging',
 
             /** @string listingActionsWrapper - this class will be cloned and used as a actions wrapper for the load more and previous button */
-            'listingActionsWrapper': 'infinite--actions',
+            listingActionsWrapper: 'infinite--actions',
 
             /** @string ajaxUrl - this string will be used as url for the ajax-call to load the articles */
             ajaxUrl: window.controller.ajax_listing || null,
@@ -145,11 +145,11 @@
 
             // Prepare top and bottom actions containers
             me.$buttonWrapperTop = $('<div>', {
-                'class': me.opts.listingActionsWrapper
+                class: me.opts.listingActionsWrapper
             });
 
             me.$buttonWrapperBottom = $('<div>', {
-                'class': me.opts.listingActionsWrapper
+                class: me.opts.listingActionsWrapper
             });
 
             // append load more button
@@ -161,8 +161,8 @@
 
             // Ajax configuration
             me.ajax = {
-                'url': me.opts.ajaxUrl,
-                'params': parseQueryString(window.location.href)
+                url: me.opts.ajaxUrl,
+                params: parseQueryString(window.location.href)
             };
 
             me.params = parseQueryString(window.location.href);
@@ -213,7 +213,7 @@
             // on load previous button event for manually fetching previous pages
             me.$delegateContainer.on(me.getEventName('click'), '.' + me.opts.loadPreviousCls, $.proxy(me.onLoadPrevious, me));
 
-            $.publish('plugin/swInfiniteScrolling/onRegisterEvents', [ me ]);
+            $.publish('plugin/swInfiniteScrolling/onRegisterEvents', [me]);
         },
 
         update: function () {
@@ -222,7 +222,7 @@
             // disable infinite scrolling, because listing container is not visible
             me.opts.enabled = me.$el.is(':visible');
 
-            $.publish('plugin/swInfiniteScrolling/onUpdate', [ me ]);
+            $.publish('plugin/swInfiniteScrolling/onUpdate', [me]);
         },
 
         /**
@@ -299,7 +299,7 @@
                 history.pushState('data', '', me.currentPushState);
             }
 
-            $.publish('plugin/swInfiniteScrolling/onScrolling', [ me ]);
+            $.publish('plugin/swInfiniteScrolling/onScrolling', [me]);
         },
 
         /**
@@ -346,14 +346,14 @@
                 me.params.c = me.opts.categoryId;
             }
 
-            $.publish('plugin/swInfiniteScrolling/onBeforeFetchNewPage', [ me ]);
+            $.publish('plugin/swInfiniteScrolling/onBeforeFetchNewPage', [me]);
 
             $.publish(
                 'action/fetchListing',
                 [me.params, false, true, $.proxy(me.appendListing, me)]
             );
 
-            $.publish('plugin/swInfiniteScrolling/onFetchNewPage', [ me ]);
+            $.publish('plugin/swInfiniteScrolling/onFetchNewPage', [me]);
         },
 
         generateButton: function(buttonType) {
@@ -362,11 +362,11 @@
                 cls = (type == 'previous') ? me.opts.loadPreviousCls : me.opts.loadMoreCls,
                 snippet = (type == 'previous') ? me.opts.loadPreviousSnippet : me.opts.loadMoreSnippet,
                 $button = $('<a>', {
-                    'class': me.opts.loadBtnCls + ' ' + cls,
-                    'html': snippet + ' <i class="icon--cw is--large"></i>'
+                    class: me.opts.loadBtnCls + ' ' + cls,
+                    html: snippet + ' <i class="icon--cw is--large"></i>'
                 });
 
-            $.publish('plugin/swInfiniteScrolling/onLoadMore', [ me, $button, buttonType ]);
+            $.publish('plugin/swInfiniteScrolling/onLoadMore', [me, $button, buttonType]);
 
             return $button;
         },
@@ -395,7 +395,7 @@
             // fetching new page
             me.fetchNewPage();
 
-            $.publish('plugin/swInfiniteScrolling/onLoadMore', [ me, event ]);
+            $.publish('plugin/swInfiniteScrolling/onLoadMore', [me, event]);
         },
 
         /**
@@ -410,7 +410,7 @@
             // append load previous button
             me.$buttonWrapperTop.html(button);
 
-            $.publish('plugin/swInfiniteScrolling/onShowLoadPrevious', [ me, button ]);
+            $.publish('plugin/swInfiniteScrolling/onShowLoadPrevious', [me, button]);
         },
 
         /**
@@ -441,7 +441,7 @@
 
             tmpParams[me.opts.pageShortParameter] = tmpParams[me.opts.pageShortParameter] - 1;
 
-            $.publish('plugin/swInfiniteScrolling/onBeforeFetchPreviousPage', [ me ]);
+            $.publish('plugin/swInfiniteScrolling/onBeforeFetchPreviousPage', [me]);
 
             me.previousLoadPage = tmpParams[me.opts.pageShortParameter];
 
@@ -459,7 +459,7 @@
                 [tmpParams, false, true, callback]
             );
 
-            $.publish('plugin/swInfiniteScrolling/onLoadPrevious', [ me, event ]);
+            $.publish('plugin/swInfiniteScrolling/onLoadPrevious', [me, event]);
         },
 
         /**
@@ -470,7 +470,7 @@
 
             template = response.listing.trim();
 
-            $.publish('plugin/swInfiniteScrolling/onFetchNewPageLoaded', [ me, template ]);
+            $.publish('plugin/swInfiniteScrolling/onFetchNewPageLoaded', [me, template]);
 
             // cancel if no data provided
             if (!template) {
@@ -498,7 +498,7 @@
                 me.isFinished = true;
             }
 
-            $.publish('plugin/swInfiniteScrolling/onFetchNewPageFinished', [ me, template ]);
+            $.publish('plugin/swInfiniteScrolling/onFetchNewPageFinished', [me, template]);
         },
 
         /**
@@ -520,7 +520,7 @@
             // enable loading for further pages
             me.isLoading = false;
 
-            $.publish('plugin/swInfiniteScrolling/onLoadPreviousFinished', [ me, response.listing ]);
+            $.publish('plugin/swInfiniteScrolling/onLoadPreviousFinished', [me, response.listing]);
         },
 
         /**
@@ -537,9 +537,9 @@
             }
 
             $indicator = $('<div>', {
-                'class': 'js--loading-indicator indicator--relative',
-                'html': $('<i>', {
-                    'class': 'icon--default'
+                class: 'js--loading-indicator indicator--relative',
+                html: $('<i>', {
+                    class: 'icon--default'
                 })
             });
 
@@ -549,7 +549,7 @@
                 me.$el.parent().before($indicator);
             }
 
-            $.publish('plugin/swInfiniteScrolling/onOpenLoadingIndicator', [ me, $indicator ]);
+            $.publish('plugin/swInfiniteScrolling/onOpenLoadingIndicator', [me, $indicator]);
         },
 
         /**
@@ -567,7 +567,7 @@
 
             $indicator.remove();
 
-            $.publish('plugin/swInfiniteScrolling/onCloseLoadingIndicator', [ me ]);
+            $.publish('plugin/swInfiniteScrolling/onCloseLoadingIndicator', [me]);
         },
 
         /**

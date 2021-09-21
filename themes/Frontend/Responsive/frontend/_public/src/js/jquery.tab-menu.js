@@ -14,7 +14,7 @@
              * @property pluginClass
              * @type {String}
              */
-            'pluginClass': 'js--tab-menu',
+            pluginClass: 'js--tab-menu',
 
             /**
              * Selector for the tab navigation list
@@ -22,7 +22,7 @@
              * @property tabContainerSelector
              * @type {String}
              */
-            'tabContainerSelector': '.tab--navigation',
+            tabContainerSelector: '.tab--navigation',
 
             /**
              * Selector for a tab navigation item
@@ -30,7 +30,7 @@
              * @property tabSelector
              * @type {String}
              */
-            'tabSelector': '.tab--link',
+            tabSelector: '.tab--link',
 
             /**
              * Selector for the tab content list
@@ -38,7 +38,7 @@
              * @property containerListSelector
              * @type {String}
              */
-            'containerListSelector': '.tab--container-list',
+            containerListSelector: '.tab--container-list',
 
             /**
              * Selector for the tab container in a tab container list.
@@ -46,7 +46,7 @@
              * @property containerSelector
              * @type {String}
              */
-            'containerSelector': '.tab--container',
+            containerSelector: '.tab--container',
 
             /**
              * Selector for the content element inside a tab container.
@@ -54,7 +54,7 @@
              * @property contentSelector
              * @type {String}
              */
-            'contentSelector': '.tab--content',
+            contentSelector: '.tab--content',
 
             /**
              * Class that will be applied to a content container and
@@ -63,7 +63,7 @@
              * @property hasContentClass
              * @type {String}
              */
-            'hasContentClass': 'has--content',
+            hasContentClass: 'has--content',
 
             /**
              * Class that should be set on an active tab navigation item
@@ -71,7 +71,7 @@
              * @property activeTabClass
              * @type {String}
              */
-            'activeTabClass': 'is--active',
+            activeTabClass: 'is--active',
 
             /**
              * Class that should be set on an active tab content item
@@ -79,7 +79,7 @@
              * @property activeContainerClass
              * @type {String}
              */
-            'activeContainerClass': 'is--active',
+            activeContainerClass: 'is--active',
 
             /**
              * Starting index of the tabs
@@ -87,7 +87,7 @@
              * @property startIndex
              * @type {Number}
              */
-            'startIndex': -1,
+            startIndex: -1,
 
             /**
              * This option can make the tab menu container horizontally
@@ -97,7 +97,7 @@
              * @property scrollable
              * @type {Boolean}
              */
-            'scrollable': false
+            scrollable: false
         },
 
         /**
@@ -171,7 +171,7 @@
                 me._on(el, 'click touchstart', $.proxy(me.changeTab, me, i));
             });
 
-            $.publish('plugin/swTabMenu/onRegisterEvents', [ me ]);
+            $.publish('plugin/swTabMenu/onRegisterEvents', [me]);
         },
 
         /**
@@ -226,10 +226,10 @@
             }
 
             if (tabId !== undefined) {
-                $.publish('onShowContent-' + tabId, [ me, index ]);
+                $.publish('onShowContent-' + tabId, [me, index]);
             }
 
-            $.publish('plugin/swTabMenu/onChangeTab', [ me, index ]);
+            $.publish('plugin/swTabMenu/onChangeTab', [me, index]);
         },
 
         /**

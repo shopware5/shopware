@@ -108,11 +108,11 @@
                 me.$loader.fadeIn(me.options.animationSpeed, function () {
                     deferred.resolve(elements);
                     callback.call(scope, elements);
-                    $.publish('plugin/swLoadingIndicator/onOpenFinished', [ me, elements ]);
+                    $.publish('plugin/swLoadingIndicator/onOpenFinished', [me, elements]);
                 });
             }, me.options.delay);
 
-            $.publish('plugin/swLoadingIndicator/onOpen', [ me, elements ]);
+            $.publish('plugin/swLoadingIndicator/onOpen', [me, elements]);
 
             return deferred;
         },
@@ -159,10 +159,10 @@
 
                 deferred.resolve(me);
                 callback.call(scope);
-                $.publish('plugin/swLoadingIndicator/onCloseFinished', [ me ]);
+                $.publish('plugin/swLoadingIndicator/onCloseFinished', [me]);
             });
 
-            $.publish('plugin/swLoadingIndicator/onClose', [ me ]);
+            $.publish('plugin/swLoadingIndicator/onClose', [me]);
 
             return deferred;
         },
@@ -198,9 +198,9 @@
             var me = this, loader;
 
             loader = $('<div>', {
-                'class': me.options.loaderCls
+                class: me.options.loaderCls
             }).append($('<div>', {
-                'class': me.options.iconCls
+                class: me.options.iconCls
             }));
 
             return loader;
@@ -311,7 +311,7 @@
             elements = $target.data('__loadingIndicator');
 
             // The element doesn't has a loading indicator assigned to the elements in-memory data
-            if (!elements || !elements.hasOwnProperty('loader')) {
+            if (!elements || !Object.prototype.hasOwnProperty.call(elements, 'loader')) {
                 deferred.reject(new Error('Element does not contains a loading indicator.'));
                 return deferred;
             }

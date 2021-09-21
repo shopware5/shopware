@@ -130,9 +130,9 @@
              * @type {Object}
              */
             keyMap: {
-                'UP': 38,
-                'DOWN': 40,
-                'ENTER': 13
+                UP: 38,
+                DOWN: 40,
+                ENTER: 13
             }
         },
 
@@ -291,7 +291,7 @@
                 }
             });
 
-            $.publish('plugin/swSearch/onRegisterEvents', [ me ]);
+            $.publish('plugin/swSearch/onRegisterEvents', [me]);
         },
 
         /**
@@ -309,7 +309,7 @@
                 keyCode = event.which,
                 navKeyPressed = opts.keyBoardNavigation && (keyCode === keyMap.UP || keyCode === keyMap.DOWN || keyCode === keyMap.ENTER);
 
-            $.publish('plugin/swSearch/onKeyDown', [ me, event ]);
+            $.publish('plugin/swSearch/onKeyDown', [me, event]);
 
             if (navKeyPressed && me.$results.hasClass(opts.activeCls)) {
                 me.onKeyboardNavigation(keyCode);
@@ -333,7 +333,7 @@
                 term = me.$searchField.val() + '',
                 timeout = me.keyupTimeout;
 
-            $.publish('plugin/swSearch/onKeyUp', [ me, event ]);
+            $.publish('plugin/swSearch/onKeyUp', [me, event]);
 
             if (timeout) {
                 window.clearTimeout(timeout);
@@ -387,7 +387,7 @@
 
             me.lastSearchTerm = $.trim(searchTerm);
 
-            $.publish('plugin/swSearch/onSearchRequest', [ me, searchTerm ]);
+            $.publish('plugin/swSearch/onSearchRequest', [me, searchTerm]);
 
             if (me.lastSearchAjax) {
                 me.lastSearchAjax.abort();
@@ -402,12 +402,12 @@
                 url: me.requestURL,
                 dataType: 'html',
                 data: {
-                    'sSearch': me.lastSearchTerm
+                    sSearch: me.lastSearchTerm
                 },
-                'success': function (response) {
+                success: function (response) {
                     me.showResult(response);
 
-                    $.publish('plugin/swSearch/onSearchResponse', [ me, searchTerm, response ]);
+                    $.publish('plugin/swSearch/onSearchResponse', [me, searchTerm, response]);
                 }
             });
         },
@@ -432,7 +432,7 @@
 
             picturefill();
 
-            $.publish('plugin/swSearch/onShowResult', [ me ]);
+            $.publish('plugin/swSearch/onShowResult', [me]);
         },
 
         /**
@@ -446,7 +446,7 @@
 
             me.$results.removeClass(me.opts.activeCls).hide().empty();
 
-            $.publish('plugin/swSearch/onCloseResult', [ me ]);
+            $.publish('plugin/swSearch/onCloseResult', [me]);
         },
 
         /**
@@ -488,7 +488,7 @@
                 $selected = $results.find('.' + activeClass),
                 $resultItems;
 
-            $.publish('plugin/swSearch/onKeyboardNavigation', [ me, keyCode ]);
+            $.publish('plugin/swSearch/onKeyboardNavigation', [me, keyCode]);
 
             if (keyCode === keyMap.UP || keyCode === keyMap.DOWN) {
                 $resultItems = $results.find(opts.resultItemSelector);
@@ -538,7 +538,7 @@
                 $el = me.$el,
                 opts = me.opts;
 
-            $.publish('plugin/swSearch/onClickSearchEntry', [ me, event ]);
+            $.publish('plugin/swSearch/onClickSearchEntry', [me, event]);
 
             if (!StateManager.isCurrentState('xs')) {
                 return;
@@ -570,7 +570,7 @@
 
             me.$searchField.focus();
 
-            $.publish('plugin/swSearch/onOpenMobileSearch', [ me ]);
+            $.publish('plugin/swSearch/onOpenMobileSearch', [me]);
         },
 
         /**
@@ -591,7 +591,7 @@
 
             me.$searchField.blur();
 
-            $.publish('plugin/swSearch/onCloseMobileSearch', [ me ]);
+            $.publish('plugin/swSearch/onCloseMobileSearch', [me]);
 
             me.closeResult();
         },
@@ -604,7 +604,7 @@
                 opts = me.opts,
                 activeClass = opts.activeCls;
 
-            $.publish('plugin/swSearch/onSelectFirstResultItem', [ me, resultItems ]);
+            $.publish('plugin/swSearch/onSelectFirstResultItem', [me, resultItems]);
 
             resultItems.first().addClass(activeClass);
         },
@@ -617,7 +617,7 @@
                 opts = me.opts,
                 activeClass = opts.activeCls;
 
-            $.publish('plugin/swSearch/onSelectLastResultItem', [ me, resultItems ]);
+            $.publish('plugin/swSearch/onSelectLastResultItem', [me, resultItems]);
 
             resultItems.last().addClass(activeClass);
         },
@@ -635,7 +635,7 @@
                 activeClass = opts.activeCls,
                 $nextSibling;
 
-            $.publish('plugin/swSearch/onSelectNextResultItem', [ me, keyCode ]);
+            $.publish('plugin/swSearch/onSelectNextResultItem', [me, keyCode]);
 
             $nextSibling = $selected[(keyCode === keyMap.DOWN) ? 'next' : 'prev'](opts.resultItemSelector);
             if ($nextSibling.length) {
@@ -654,7 +654,7 @@
             var me = this,
                 opts = me.opts;
 
-            $.publish('plugin/swSearch/onPressEnter', [ me, $selected ]);
+            $.publish('plugin/swSearch/onPressEnter', [me, $selected]);
 
             if ($selected.length) {
                 window.location.href = $selected.find(opts.resultLinkSelector).attr('href');

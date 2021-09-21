@@ -36,9 +36,9 @@
             return !value ? value : value === 'true' || (
                 value === 'false' ? false
                     : value === 'null' ? null
-                    : numberRegex.test(value) ? +value
-                    : objectRegex.test(value) ? JSON.parse(value)
-                    : value
+                        : numberRegex.test(value) ? +value
+                            : objectRegex.test(value) ? JSON.parse(value)
+                                : value
             );
         } catch (e) {
             return value;
@@ -93,7 +93,7 @@
         // Call the init method of the plugin
         me.init(element, options);
 
-        $.publish('plugin/' + name + '/onInit', [ me ]);
+        $.publish('plugin/' + name + '/onInit', [me]);
     }
 
     PluginBase.prototype = {
@@ -163,7 +163,7 @@
 
             me.$el.removeData('plugin_' + name);
 
-            $.publish('plugin/' + name + '/onDestroy', [ me ]);
+            $.publish('plugin/' + name + '/onDestroy', [me]);
 
             return me;
         },
@@ -182,11 +182,11 @@
                 event = me.getEventName(arguments[1]),
                 args = Array.prototype.slice.call(arguments, 2);
 
-            me._events.push({ 'el': $el, 'event': event });
+            me._events.push({ el: $el, event: event });
             args.unshift(event);
             $el.on.apply($el, args);
 
-            $.publish('plugin/' + me._name + '/onRegisterEvent', [ $el, event ]);
+            $.publish('plugin/' + me._name + '/onRegisterEvent', [$el, event]);
 
             return me;
         },
@@ -222,7 +222,7 @@
                 delete events[id];
             });
 
-            $.publish('plugin/' + me._name + '/onRemoveEvent', [ $element, event ]);
+            $.publish('plugin/' + me._name + '/onRemoveEvent', [$element, event]);
 
             return me;
         },
@@ -319,7 +319,7 @@
                 return true;
             });
 
-            $.publish('plugin/' + me._name + '/onDataAttributes', [ me.$el, me.opts ]);
+            $.publish('plugin/' + me._name + '/onDataAttributes', [me.$el, me.opts]);
 
             return me.opts;
         },

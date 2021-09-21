@@ -124,16 +124,16 @@
             $.modal.close();
             $.loadingIndicator.open();
 
-            $.publish('plugin/swAddressSelection/onBeforeAddressFetch', [ me ]);
+            $.publish('plugin/swAddressSelection/onBeforeAddressFetch', [me]);
 
             // Ajax request to fetch available addresses
             $.ajax({
-                'url': window.controller['ajax_address_selection'],
-                'data': {
+                url: window.controller['ajax_address_selection'],
+                data: {
                     id: me.opts.id,
                     extraData: extraData
                 },
-                'success': function(data) {
+                success: function(data) {
                     $.loadingIndicator.close(function() {
                         $.subscribe(me.getEventName('plugin/swModal/onOpen'), $.proxy(me._onSetContent, me));
 
@@ -147,7 +147,7 @@
                         $.unsubscribe(me.getEventName('plugin/swModal/onOpen'));
                     });
 
-                    $.publish('plugin/swAddressSelection/onAddressFetchSuccess', [ me, data ]);
+                    $.publish('plugin/swAddressSelection/onAddressFetchSuccess', [me, data]);
                 }
             });
         },
@@ -176,7 +176,7 @@
                 .addPlugin('*[data-address-editor="true"]', 'swAddressEditor')
                 .addPlugin('*[data-preloader-button="true"]', 'swPreloaderButton');
 
-            $.publish('plugin/swAddressSelection/onRegisterPlugins', [ this ]);
+            $.publish('plugin/swAddressSelection/onRegisterPlugins', [this]);
         },
 
         /**
@@ -190,7 +190,7 @@
         _bindButtonAction: function($modal) {
             var me = this;
 
-            $.publish('plugin/swAddressSelection/onBeforeBindButtonAction', [ me, $modal ]);
+            $.publish('plugin/swAddressSelection/onBeforeBindButtonAction', [me, $modal]);
 
             $modal._$content
                 .find(me.opts.formSelector)
@@ -199,7 +199,7 @@
 
                     event.preventDefault();
 
-                    $.publish('plugin/swAddressSelection/onBeforeSave', [ me, $target ]);
+                    $.publish('plugin/swAddressSelection/onBeforeSave', [me, $target]);
 
                     // send data to api endpoint
                     $.ajax({
@@ -212,7 +212,7 @@
                     });
                 });
 
-            $.publish('plugin/swAddressSelection/onAfterBindButtonAction', [ me, $modal ]);
+            $.publish('plugin/swAddressSelection/onAfterBindButtonAction', [me, $modal]);
         },
 
         /**
@@ -221,7 +221,7 @@
         onSave: function($modal, response) {
             var me = this;
 
-            $.publish('plugin/swAddressSelection/onAfterSave', [ me, $modal, response ]);
+            $.publish('plugin/swAddressSelection/onAfterSave', [me, $modal, response]);
 
             window.location.reload();
         }
@@ -255,7 +255,7 @@
 
             me._on(me.$el, 'click', $.proxy(me.onClick, me));
 
-            $.publish('plugin/swAddressSelection/onRegisterEvents', [ me ]);
+            $.publish('plugin/swAddressSelection/onRegisterEvents', [me]);
         },
 
         /**

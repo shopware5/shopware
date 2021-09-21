@@ -24,13 +24,13 @@
         defaults: {
 
             /** @property {String} Basic class name for the wrapper element. */
-            'baseCls': 'js--fancy-select select-field',
+            baseCls: 'js--fancy-select select-field',
 
             /** @property {String} The selector for the polyfill check. */
-            'polyfillSelector': '.js--fancy-select, .select-field',
+            polyfillSelector: '.js--fancy-select, .select-field',
 
             /** @property {boolean} Copy all CSS classes to the wrapper element. */
-            'compatibility': true
+            compatibility: true
         },
 
         init: function () {
@@ -53,7 +53,7 @@
             }
 
             $wrapEl = $('<div>', {
-                'class': me.opts.baseCls
+                class: me.opts.baseCls
             });
 
             if (me.opts.compatibility) {
@@ -62,7 +62,7 @@
 
             me.$wrapEl = me.$el.wrap($wrapEl);
 
-            $.publish('plugin/swSelectboxReplacement/onCreateTemplate', [ me, me.$wrapEl ]);
+            $.publish('plugin/swSelectboxReplacement/onCreateTemplate', [me, me.$wrapEl]);
 
             return me.$wrapEl;
         }

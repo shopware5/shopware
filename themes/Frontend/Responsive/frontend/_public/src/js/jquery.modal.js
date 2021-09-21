@@ -326,7 +326,7 @@
 
             $html.addClass('no--scroll');
 
-            $.publish('plugin/swModal/onOpen', [ me ]);
+            $.publish('plugin/swModal/onOpen', [me]);
 
             return me;
         },
@@ -364,7 +364,7 @@
                 });
             }
 
-            $.publish('plugin/swModal/onClose', [ me ]);
+            $.publish('plugin/swModal/onClose', [me]);
 
             return me;
         },
@@ -397,7 +397,7 @@
 
             $modalBox.stop(true).transition(css, opts.duration, opts.animation, callback);
 
-            $.publish('plugin/swModal/onSetTransition', [ me, css, opts ]);
+            $.publish('plugin/swModal/onSetTransition', [me, css, opts]);
         },
 
         /**
@@ -412,7 +412,7 @@
 
             me._$title.html(title);
 
-            $.publish('plugin/swModal/onSetTitle', [ me, title ]);
+            $.publish('plugin/swModal/onSetTitle', [me, title]);
         },
 
         /**
@@ -440,7 +440,7 @@
                 picturefill();
             }
 
-            $.publish('plugin/swModal/onSetContent', [ me ]);
+            $.publish('plugin/swModal/onSetContent', [me]);
         },
 
         /**
@@ -456,7 +456,7 @@
 
             me._$modalBox.css('width', (typeof width === 'string' && !(/^\d+$/.test(width))) ? width : parseInt(width, 10));
 
-            $.publish('plugin/swModal/onSetWidth', [ me ]);
+            $.publish('plugin/swModal/onSetWidth', [me]);
         },
 
         /**
@@ -482,7 +482,7 @@
             }
 
             me._$modalBox.css('height', height);
-            $.publish('plugin/swModal/onSetHeight', [ me ]);
+            $.publish('plugin/swModal/onSetHeight', [me]);
         },
 
         /**
@@ -503,7 +503,7 @@
             height = (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : window.parseInt(height, 10);
 
             me._$modalBox.css('max-height', height);
-            $.publish('plugin/swModal/onSetMaxHeight', [ me ]);
+            $.publish('plugin/swModal/onSetMaxHeight', [me]);
         },
 
         /**
@@ -517,28 +517,28 @@
             var me = this;
 
             me._$modalBox = $('<div>', {
-                'class': 'js--modal'
+                class: 'js--modal'
             });
 
             me._$header = $('<div>', {
-                'class': 'header'
+                class: 'header'
             }).appendTo(me._$modalBox);
 
             me._$title = $('<div>', {
-                'class': 'title'
+                class: 'title'
             }).appendTo(me._$header);
 
             me._$content = $('<div>', {
-                'class': 'content'
+                class: 'content'
             }).appendTo(me._$modalBox);
 
             me._$closeButton = $('<div>', {
-                'class': 'btn icon--cross is--small btn--grey modal--close'
+                class: 'btn icon--cross is--small btn--grey modal--close'
             }).appendTo(me._$modalBox);
 
             $('body').append(me._$modalBox);
 
-            $.publish('plugin/swModal/onInit', [ me ]);
+            $.publish('plugin/swModal/onInit', [me]);
         },
 
         /**
@@ -566,7 +566,7 @@
                 }
             });
 
-            $.publish('plugin/swModal/onRegisterEvents', [ me ]);
+            $.publish('plugin/swModal/onRegisterEvents', [me]);
         },
 
         /**
@@ -593,7 +593,7 @@
                 }
             }
 
-            $.publish('plugin/swModal/onKeyDown', [ me, event, keyCode ]);
+            $.publish('plugin/swModal/onKeyDown', [me, event, keyCode]);
         },
 
         /**
@@ -610,7 +610,7 @@
                 me.center();
             }
 
-            $.publish('plugin/swModal/onWindowResize', [ me, event ]);
+            $.publish('plugin/swModal/onWindowResize', [me, event]);
         },
 
         /**
@@ -626,7 +626,7 @@
 
             $modalBox.css('top', (windowHeight - $modalBox.height()) / 2);
 
-            $.publish('plugin/swModal/onCenter', [ me ]);
+            $.publish('plugin/swModal/onCenter', [me]);
         },
 
         /**
@@ -645,7 +645,7 @@
 
             me.close();
 
-            $.publish('plugin/swModal/onOverlayClick', [ me ]);
+            $.publish('plugin/swModal/onOverlayClick', [me]);
         },
 
         /**
@@ -668,13 +668,13 @@
             me._$closeButton = null;
 
             for (p in me.options) {
-                if (!me.options.hasOwnProperty(p)) {
+                if (!Object.prototype.hasOwnProperty.call(me.options, p)) {
                     continue;
                 }
                 delete me.options[p];
             }
 
-            StateManager.off('resize', me.onWindowResize, [ me ]);
+            StateManager.off('resize', me.onWindowResize, [me]);
         }
     };
 
@@ -741,7 +741,7 @@
 
             $.subscribe(me.getEventName('plugin/swModal/onClose'), $.proxy(me.onClose, me));
 
-            $.publish('plugin/swModalbox/onRegisterEvents', [ me ]);
+            $.publish('plugin/swModalbox/onRegisterEvents', [me]);
         },
 
         /**
@@ -762,7 +762,7 @@
 
             me._isOpened = true;
 
-            $.publish('plugin/swModalbox/onClick', [ me, event ]);
+            $.publish('plugin/swModalbox/onClick', [me, event]);
         },
 
         /**
@@ -776,7 +776,7 @@
 
             me._isOpened = false;
 
-            $.publish('plugin/swModalbox/onClose', [ me ]);
+            $.publish('plugin/swModalbox/onClose', [me]);
         },
 
         /**

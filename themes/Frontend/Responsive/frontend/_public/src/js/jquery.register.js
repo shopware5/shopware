@@ -277,7 +277,7 @@
             me._on(me.$submitBtn, 'click', $.proxy(me.onSubmitBtn, me));
             me._on(me.$billingCountrySelect, 'change', $.proxy(me.onBillingCountryChange, me));
 
-            $.publish('plugin/swRegister/onRegisterEvents', [ me ]);
+            $.publish('plugin/swRegister/onRegisterEvents', [me]);
         },
 
         /**
@@ -307,7 +307,7 @@
                 $fieldSet.find('input, select, textarea').attr('disabled', 'disabled');
             }
 
-            $.publish('plugin/swRegister/onCheckType', [ me, hideCompanyFields ]);
+            $.publish('plugin/swRegister/onCheckType', [me, hideCompanyFields]);
         },
 
         /**
@@ -331,7 +331,7 @@
 
             $fieldSet[classMethod](opts.hiddenClass);
 
-            $.publish('plugin/swRegister/onCheckSkipAccount', [ me, isChecked ]);
+            $.publish('plugin/swRegister/onCheckSkipAccount', [me, isChecked]);
         },
 
         /**
@@ -355,7 +355,7 @@
 
             $fieldSet[classMethod](opts.hiddenClass);
 
-            $.publish('plugin/swRegister/onCheckChangeShipping', [ me, isChecked ]);
+            $.publish('plugin/swRegister/onCheckChangeShipping', [me, isChecked]);
         },
 
         /**
@@ -373,7 +373,7 @@
                 addressType = $select.attr('data-address-type'),
                 $stateContainers;
 
-            $.publish('plugin/swRegister/onCountryChangedBefore', [ me, event, countryId, addressType ]);
+            $.publish('plugin/swRegister/onCountryChangedBefore', [me, event, countryId, addressType]);
 
             me.resetStateSelections(addressType);
 
@@ -392,7 +392,7 @@
                 $select.prop('disabled', false);
             }
 
-            $.publish('plugin/swRegister/onCountryChanged', [ me, event, countryId, addressType ]);
+            $.publish('plugin/swRegister/onCountryChanged', [me, event, countryId, addressType]);
         },
 
         /**
@@ -458,7 +458,7 @@
                 $fieldSet[((isChecked) ? 'removeClass' : 'addClass')](hiddenClass);
             });
 
-            $.publish('plugin/swRegister/onPaymentChanged', [ me ]);
+            $.publish('plugin/swRegister/onPaymentChanged', [me]);
         },
 
         onBillingCountryChange: function () {
@@ -470,7 +470,7 @@
 
             if (showAlert) {
                 targetAlert.removeClass('is--hidden');
-                targetAlert.find('.alert--content').html(text.replace('[COUNTRY]', label))
+                targetAlert.find('.alert--content').html(text.replace('[COUNTRY]', label));
             } else {
                 targetAlert.addClass('is--hidden');
             }
@@ -496,7 +496,7 @@
                 }
             });
 
-            $.publish('plugin/swRegister/onSubmitButton', [ me ]);
+            $.publish('plugin/swRegister/onSubmitButton', [me]);
         },
 
         /**
@@ -550,7 +550,7 @@
                 me.setFieldAsSuccess($el);
             }
 
-            $.publish('plugin/swRegister/onValidateInput', [ me, event, action ]);
+            $.publish('plugin/swRegister/onValidateInput', [me, event, action]);
         },
 
         /**
@@ -563,11 +563,11 @@
          */
         setHtmlRequired: function ($elements) {
             $elements.attr({
-                'required': 'required',
+                required: 'required',
                 'aria-required': 'true'
             });
 
-            $.publish('plugin/swRegister/onSetHtmlRequired', [ this, $elements ]);
+            $.publish('plugin/swRegister/onSetHtmlRequired', [this, $elements]);
         },
 
         /**
@@ -582,7 +582,7 @@
                 .prop('required', false)
                 .prop('aria-required', false);
 
-            $.publish('plugin/swRegister/onRemoveHtmlRequired', [ this, $inputs ]);
+            $.publish('plugin/swRegister/onRemoveHtmlRequired', [this, $inputs]);
         },
 
         /**
@@ -597,7 +597,7 @@
 
             $el.addClass(me.opts.errorClass);
 
-            $.publish('plugin/swRegister/onSetFieldAsError', [ me, $el ]);
+            $.publish('plugin/swRegister/onSetFieldAsError', [me, $el]);
         },
 
         /**
@@ -612,7 +612,7 @@
 
             $el.removeClass(me.opts.errorClass);
 
-            $.publish('plugin/swRegister/onSetFieldAsSuccess', [ me, $el ]);
+            $.publish('plugin/swRegister/onSetFieldAsSuccess', [me, $el]);
         },
 
         /**
@@ -632,14 +632,14 @@
                 return;
             }
 
-            $.publish('plugin/swRegister/onValidateBefore', [ me, data, URL ]);
+            $.publish('plugin/swRegister/onValidateBefore', [me, data, URL]);
 
             $.ajax({
-                'data': data,
-                'type': 'post',
-                'dataType': 'json',
-                'url': URL,
-                'success': $.proxy(me.onValidateSuccess, me, action, $input)
+                data: data,
+                type: 'post',
+                dataType: 'json',
+                url: URL,
+                success: $.proxy(me.onValidateSuccess, me, action, $input)
             });
         },
 
@@ -704,15 +704,15 @@
 
             if (errorMessages && errorMessages.length) {
                 $('<div>', {
-                    'html': '<p>' + errorMessages.join('<br/>') + '</p>',
-                    'id': action + '--message',
-                    'class': me.opts.errorMessageClass
+                    html: '<p>' + errorMessages.join('<br/>') + '</p>',
+                    id: action + '--message',
+                    class: me.opts.errorMessageClass
                 }).insertAfter($input);
 
                 me.setFieldAsError($input);
             }
 
-            $.publish('plugin/swRegister/onValidateSuccess', [ me, $input ]);
+            $.publish('plugin/swRegister/onValidateSuccess', [me, $input]);
         },
 
         /**
@@ -744,7 +744,7 @@
                 me.setFieldAsSuccess($input);
             }
 
-            $.publish('plugin/swRegister/onUpdateFields', [ me, flags ]);
+            $.publish('plugin/swRegister/onUpdateFields', [me, flags]);
         },
 
         /**

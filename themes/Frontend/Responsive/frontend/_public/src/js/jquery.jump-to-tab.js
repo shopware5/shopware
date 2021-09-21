@@ -62,7 +62,7 @@
 
             me.$el.on(me.getEventName('click touchstart'), me.opts.btnJumpSelectors.join(', '), $.proxy(me.onJumpToTab, me));
 
-            $.publish('plugin/swJumpToTab/onRegisterEvents', [ me ]);
+            $.publish('plugin/swJumpToTab/onRegisterEvents', [me]);
         },
 
         onJumpToTab: function (event) {
@@ -70,7 +70,7 @@
                 $tab = $('[data-tabName="rating"]'),
                 index = $tab.index() || 1;
 
-            if(event.timeStamp < me.lastClick + 10) {
+            if (event.timeStamp < me.lastClick + 10) {
                 return;
             }
             me.lastClick = event.timeStamp;
@@ -79,7 +79,7 @@
 
             me.jumpToTab(index, $tab);
 
-            $.publish('plugin/swJumpToTab/onClick', [ me, event ]);
+            $.publish('plugin/swJumpToTab/onClick', [me, event]);
         },
 
         jumpToTab: function (tabIndex, jumpTo) {
@@ -90,7 +90,7 @@
                 me.tabMenuProduct.changeTab(tabIndex);
             }
 
-            $.publish('plugin/swJumpToTab/onChangeTab', [ me, tabIndex, jumpTo ]);
+            $.publish('plugin/swJumpToTab/onChangeTab', [me, tabIndex, jumpTo]);
 
             if (!jumpTo || !jumpTo.length) {
                 return;
@@ -100,7 +100,7 @@
                 scrollTop: $(jumpTo).offset().top
             }, 0);
 
-            $.publish('plugin/swJumpToTab/onJumpToTab', [ me, tabIndex, jumpTo ]);
+            $.publish('plugin/swJumpToTab/onJumpToTab', [me, tabIndex, jumpTo]);
         },
 
         /**

@@ -32,7 +32,7 @@
             /**
              * Position the calendar inside the wrapper and next to the input element.
              */
-            'static': false,
+            static: false,
 
             /**
              * Enables week numbers
@@ -188,7 +188,7 @@
             me.initFlatpickr();
             me.registerEvents();
 
-            $.publish('plugin/swDatePicker/onInit', [ me ]);
+            $.publish('plugin/swDatePicker/onInit', [me]);
         },
 
         /**
@@ -246,7 +246,7 @@
                 me.setEndInputVal();
             }
 
-            $.publish('plugin/swDatePicker/onInitFlatpickr', [ me, me.flatpickr, config ]);
+            $.publish('plugin/swDatePicker/onInitFlatpickr', [me, me.flatpickr, config]);
         },
 
         registerEvents: function () {
@@ -268,7 +268,7 @@
             $.subscribe(me.getEventName('plugin/swOffcanvasMenu/onCloseMenu'), $.proxy(me.close, me));
             $.subscribe(me.getEventName('plugin/swOffcanvasMenu/onBeforeOpenMenu'), $.proxy(me.close, me));
 
-            $.publish('plugin/swDatePicker/onRegisterEvents', [ me ]);
+            $.publish('plugin/swDatePicker/onRegisterEvents', [me]);
         },
 
         open: function () {
@@ -288,7 +288,7 @@
 
             me.flatpickr.clear();
 
-            $.publish('plugin/swDatePicker/onInputClear', [ me ]);
+            $.publish('plugin/swDatePicker/onInputClear', [me]);
         },
 
         /**
@@ -303,7 +303,7 @@
                 return false;
             }
 
-            $.publish('plugin/swDatePicker/onInputChange', [ me ]);
+            $.publish('plugin/swDatePicker/onInputChange', [me]);
         },
 
         /**
@@ -318,13 +318,13 @@
 
             me.setDatePickerValFromInputs();
 
-            $.publish('plugin/swDatePicker/onRangeInputClear', [ me ]);
+            $.publish('plugin/swDatePicker/onRangeInputClear', [me]);
         },
 
         onPickerReady: function () {
             var me = this;
 
-            $.publish('plugin/swDatePicker/onPickerReady', [ me ]);
+            $.publish('plugin/swDatePicker/onPickerReady', [me]);
         },
 
         onPickerChange: function () {
@@ -342,7 +342,7 @@
                 me.$el.val(me.convertMultiSeparator(me.$el.val()));
             }
 
-            $.publish('plugin/swDatePicker/onPickerChange', [ me ]);
+            $.publish('plugin/swDatePicker/onPickerChange', [me]);
         },
 
         onPickerOpen: function () {
@@ -350,7 +350,7 @@
 
             me.currentValue = me.$el.val();
 
-            $.publish('plugin/swDatePicker/onPickerOpen', [ me ]);
+            $.publish('plugin/swDatePicker/onPickerOpen', [me]);
         },
 
         onPickerClose: function () {
@@ -365,7 +365,7 @@
 
             me.$el.parent().find('input.flatpickr-input').blur();
 
-            $.publish('plugin/swDatePicker/onPickerClose', [ me ]);
+            $.publish('plugin/swDatePicker/onPickerClose', [me]);
         },
 
         setStartInputVal: function (value) {
@@ -390,7 +390,7 @@
                 }
             }
 
-            $.publish('plugin/swDatePicker/onSetStartInputVal', [ me ]);
+            $.publish('plugin/swDatePicker/onSetStartInputVal', [me]);
         },
 
         setEndInputVal: function (value) {
@@ -415,7 +415,7 @@
                 }
             }
 
-            $.publish('plugin/swDatePicker/onSetEndInputVal', [ me ]);
+            $.publish('plugin/swDatePicker/onSetEndInputVal', [me]);
         },
 
         setDatePickerValFromInputs: function () {
@@ -432,7 +432,7 @@
 
             me.flatpickr.setDate(values);
 
-            $.publish('plugin/swDatePicker/onSetDatePickerValFromInputs', [ me ]);
+            $.publish('plugin/swDatePicker/onSetDatePickerValFromInputs', [me]);
         },
 
         getRangeStartValue: function () {
@@ -442,7 +442,7 @@
                 return null;
             }
 
-            $.publish('plugin/swDatePicker/onGetRangeStartValue', [ me ]);
+            $.publish('plugin/swDatePicker/onGetRangeStartValue', [me]);
 
             return me.$rangeStartInput.val();
         },
@@ -454,7 +454,7 @@
                 return null;
             }
 
-            $.publish('plugin/swDatePicker/onGetRangeEndValue', [ me ]);
+            $.publish('plugin/swDatePicker/onGetRangeEndValue', [me]);
 
             return me.$rangeEndInput.val();
         },
@@ -467,7 +467,7 @@
 
             me.suspended = true;
 
-            $.publish('plugin/swDatePicker/onSuspendEvents', [ me ]);
+            $.publish('plugin/swDatePicker/onSuspendEvents', [me]);
         },
 
         /**
@@ -478,7 +478,7 @@
 
             me.suspended = false;
 
-            $.publish('plugin/swDatePicker/onResumeEvents', [ me ]);
+            $.publish('plugin/swDatePicker/onResumeEvents', [me]);
         },
 
         /**
@@ -493,7 +493,7 @@
 
             var convertValue = value.split('; ').join(me.opts.multiDateSeparator);
 
-            $.publish('plugin/swDatePicker/onConvertMultiSeparator', [ me, convertValue ]);
+            $.publish('plugin/swDatePicker/onConvertMultiSeparator', [me, convertValue]);
 
             return convertValue;
         },
@@ -510,7 +510,7 @@
 
             var convertValue = value.split(me.opts.multiDateSeparator).join('; ');
 
-            $.publish('plugin/swDatePicker/onConvertMultiSeparatorToFlatpickr', [ me, convertValue ]);
+            $.publish('plugin/swDatePicker/onConvertMultiSeparatorToFlatpickr', [me, convertValue]);
 
             return convertValue;
         },
@@ -526,7 +526,7 @@
 
             var formattedDate = me.flatpickr.formatDate(date, dateFormat);
 
-            $.publish('plugin/swDatePicker/onFormatDate', [ me, formattedDate, dateFormat, date ]);
+            $.publish('plugin/swDatePicker/onFormatDate', [me, formattedDate, dateFormat, date]);
 
             return formattedDate;
         },
@@ -541,7 +541,7 @@
 
             me._destroy();
 
-            $.publish('plugin/swDatePicker/onDestroy', [ me ]);
+            $.publish('plugin/swDatePicker/onDestroy', [me]);
         }
 
     });

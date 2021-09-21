@@ -16,14 +16,14 @@
         groupKeys = Object.keys(cookiePreferences.groups);
 
         $.each(groupKeys, function (groupIndex, groupKey) {
-            if (!cookiePreferences.groups.hasOwnProperty(groupKey)) {
+            if (!Object.prototype.hasOwnProperty.call(cookiePreferences.groups, groupKey)) {
                 return;
             }
 
             cookieKeys = Object.keys(cookiePreferences.groups[groupKey].cookies);
 
             $.each(cookieKeys, function (cookieIndex, cookieKey) {
-                if (!cookiePreferences.groups[groupKey].cookies.hasOwnProperty(cookieKey)) {
+                if (!Object.prototype.hasOwnProperty.call(cookiePreferences.groups[groupKey].cookies, cookieKey)) {
                     return;
                 }
 
@@ -281,7 +281,7 @@
 
                 uniqueNames.push(groupName);
 
-                if (!preferences['groups'].hasOwnProperty(groupName)) {
+                if (!Object.prototype.hasOwnProperty.call(preferences['groups'], groupName)) {
                     preferences['groups'][groupName] = {
                         name: groupName,
                         cookies: {}
@@ -296,7 +296,7 @@
 
                     uniqueNames.push(cookieName);
 
-                    if (!preferences['groups'][groupName].cookies.hasOwnProperty(cookieName)) {
+                    if (!Object.prototype.hasOwnProperty.call(preferences['groups'][groupName].cookies, cookieName)) {
                         preferences['groups'][groupName].cookies[cookieName] = {
                             name: cookieName
                         };
@@ -455,6 +455,8 @@
     });
 })(jQuery, window, location);
 
+// Removing this function call, would probably be a breaking change
+// eslint-disable-next-line no-unused-vars
 function openCookieConsentManager () {
     var plugin = $('*[data-cookie-consent-manager="true"]').data('plugin_swCookieConsentManager');
     plugin.openConsentManager();

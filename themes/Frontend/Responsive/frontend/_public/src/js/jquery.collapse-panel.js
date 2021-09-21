@@ -128,7 +128,7 @@
                 }
             });
 
-            $.publish('plugin/swCollapsePanel/onRegisterEvents', [ me ]);
+            $.publish('plugin/swCollapsePanel/onRegisterEvents', [me]);
         },
 
         /**
@@ -146,7 +146,7 @@
                 me.openPanel();
             }
 
-            $.publish('plugin/swCollapsePanel/onToggleCollapse', [ me ]);
+            $.publish('plugin/swCollapsePanel/onToggleCollapse', [me]);
         },
 
         /**
@@ -169,7 +169,7 @@
             }
 
             $targetEl.finish().slideDown(opts.animationSpeed, function () {
-                $.publish('plugin/swCollapsePanel/onOpen', [ me ]);
+                $.publish('plugin/swCollapsePanel/onOpen', [me]);
             }).addClass(opts.collapsedStateCls);
 
             if (opts.closeSiblings) {
@@ -180,10 +180,10 @@
             }
 
             if (tabId !== undefined) {
-                $.publish('onShowContent-' + tabId, [ me ]);
+                $.publish('onShowContent-' + tabId, [me]);
             }
 
-            $.publish('plugin/swCollapsePanel/onOpenPanel', [ me ]);
+            $.publish('plugin/swCollapsePanel/onOpenPanel', [me]);
         },
 
         /**
@@ -204,10 +204,10 @@
 
             me.$targetEl.finish().slideUp(opts.animationSpeed, function() {
                 me.$targetEl.removeClass(opts.collapsedStateCls);
-                $.publish('plugin/swCollapsePanel/onClose', [ me ]);
+                $.publish('plugin/swCollapsePanel/onClose', [me]);
             });
 
-            $.publish('plugin/swCollapsePanel/onClosePanel', [ me ]);
+            $.publish('plugin/swCollapsePanel/onClosePanel', [me]);
         },
 
         handleHashParameter: function () {

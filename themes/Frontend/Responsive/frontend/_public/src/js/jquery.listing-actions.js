@@ -974,7 +974,7 @@
             var formData = this.$filterForm.serializeArray();
 
             $.each(formData, function (index, item) {
-                if (!params.hasOwnProperty(item.name)) {
+                if (!Object.prototype.hasOwnProperty.call(params, item.name)) {
                     if (!item.value || (typeof item.value === 'string' && item.value.length <= 0)) {
                         return;
                     }
@@ -1152,7 +1152,7 @@
                 listing = this.$listing,
                 pages;
 
-            if (!response.hasOwnProperty('listing')) {
+            if (!Object.prototype.hasOwnProperty.call(response, 'listing')) {
                 listing.removeClass(this.opts.isLoadingCls);
                 return;
             }
