@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Premium.store.Subshops', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.Premium.model.Subshop',
+    model: 'Shopware.apps.Premium.model.Subshop',
 
     /**
      * A config object containing one or more event handlers to be added to this object during initialization
@@ -77,8 +77,8 @@ Ext.define('Shopware.apps.Premium.store.Subshops', {
          */
         load: function(store) {
             var defaultSubShop = Ext.create('Shopware.apps.Premium.model.Subshop',{
-                id : 0,
-                name : '{s name="premium/subShop/comboBox_general"}Universally valid{/s}'
+                id: 0,
+                name: '{s name="premium/subShop/comboBox_general"}Universally valid{/s}'
             });
 
             store.insert(0,defaultSubShop);

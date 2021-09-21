@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.PropertyWindow
         });
 
         me.notice = Ext.create('Ext.container.Container', {
-            html:  '{s name="property/input_text"}Please select a property group{/s}',
+            html: '{s name="property/input_text"}Please select a property group{/s}',
             height: 40
         });
 

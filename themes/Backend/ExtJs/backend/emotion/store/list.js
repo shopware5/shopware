@@ -37,32 +37,32 @@ Ext.define('Shopware.apps.Emotion.store.List', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Emotion.model.Emotion',
+    model: 'Shopware.apps.Emotion.model.Emotion',
     /**
      * Enable remote sort.
      * @boolean
      */
-    remoteSort:true,
+    remoteSort: true,
     /**
      * Enable remote filtering
      * @boolean
      */
-    remoteFilter:true,
+    remoteFilter: true,
     /**
      * Amount of data loaded at once
      * @integer
      */
-    pageSize:50,
+    pageSize: 50,
     /**
      * to upload all selected items in one request
      * @boolean
      */
-    batch:true,
+    batch: true,
 
     groupers: [{
         property: 'emotionGroup',
@@ -73,12 +73,12 @@ Ext.define('Shopware.apps.Emotion.store.List', {
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -94,10 +94,10 @@ Ext.define('Shopware.apps.Emotion.store.List', {
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

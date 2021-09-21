@@ -36,8 +36,8 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Position', {
     collapsible: true,
     alias: 'widget.canceled-order-view-order-position',
 
-    snippets : {
-        columns : {
+    snippets: {
+        columns: {
             articleNumber: '{s name="columns/position/number"}Articlenumber{/s}',
             articleName: '{s name="columns/position/name"}Articlename{/s}',
             articleQuantity: '{s name="columns/position/quantity"}Quantity{/s}',
@@ -101,14 +101,14 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Position', {
                 renderer: me.priceColumn
             },
             {
-                xtype:'actioncolumn',
-                width:90,
-                items:[
+                xtype: 'actioncolumn',
+                width: 90,
+                items: [
                     {
-                        iconCls:'sprite-inbox',
-                        action:'openArticle',
+                        iconCls: 'sprite-inbox',
+                        action: 'openArticle',
                         tooltip: me.snippets.openArticle,
-                        handler:function (view, rowIndex) {
+                        handler: function (view, rowIndex) {
                             var store = view.getStore(),
                                 record = store.getAt(rowIndex);
 
@@ -130,7 +130,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Position', {
      * @param [string] - The price value
      * @return [string] - The passed value, formatted with Ext.util.Format.currency()
      */
-    priceColumn:function (value) {
+    priceColumn: function (value) {
         if ( value === Ext.undefined ) {
             return value;
         }

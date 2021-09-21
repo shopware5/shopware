@@ -40,50 +40,50 @@ Ext.define('Shopware.apps.Order.view.detail.Window', {
      * Define that the order main window is an extension of the enlight application window
      * @string
      */
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     /**
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'order-detail-window',
+    cls: Ext.baseCSSPrefix + 'order-detail-window',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.order-detail-window',
+    alias: 'widget.order-detail-window',
     /**
      * Set no border for the window
      * @boolean
      */
-    border:false,
+    border: false,
     /**
      * True to automatically show the component upon creation.
      * @boolean
      */
-    autoShow:true,
+    autoShow: true,
     /**
      * Set fit layout for the window
      * @string
      */
-    layout:'fit',
+    layout: 'fit',
     /**
      * Define window width
      * @integer
      */
-    width:900,
+    width: 900,
     /**
      * Define window height
      * @integer
      */
-    height:'90%',
+    height: '90%',
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
-    stateful:true,
+    stateful: true,
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId:'shopware-order-detail-window',
+    stateId: 'shopware-order-detail-window',
     /**
      * Contains all snippets for this component
      */
@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Order.view.detail.Window', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         //add the order list grid panel and set the store
@@ -130,7 +130,7 @@ Ext.define('Shopware.apps.Order.view.detail.Window', {
                     title: me.snippets.overview,
                     record: me.record,
                     orderStatusStore: me.orderStatusStore,
-                    paymentStatusStore:  me.paymentStatusStore
+                    paymentStatusStore: me.paymentStatusStore
                 }), Ext.create('Shopware.apps.Order.view.detail.Detail',{
                     title: me.snippets.details,
                     record: me.record,
@@ -154,7 +154,7 @@ Ext.define('Shopware.apps.Order.view.detail.Window', {
                     historyStore: me.historyStore,
                     record: me.record,
                     orderStatusStore: me.orderStatusStore,
-                    paymentStatusStore:  me.paymentStatusStore
+                    paymentStatusStore: me.paymentStatusStore
                 })
             ]
         });

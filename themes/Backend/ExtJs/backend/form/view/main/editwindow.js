@@ -35,28 +35,28 @@
 //{block name="backend/form/view/main/editwindow"}
 Ext.define('Shopware.apps.Form.view.main.Editwindow', {
     extend: 'Enlight.app.Window',
-    alias : 'widget.form-main-editwindow',
+    alias: 'widget.form-main-editwindow',
 
     /*{if {acl_is_allowed privilege=createupdate}}*/
-    title : '{s name="title_edit"}Forms - Edit{/s}',
+    title: '{s name="title_edit"}Forms - Edit{/s}',
     /*{else}*/
-    title : '{s name="title_details"}Form details{/s}',
+    title: '{s name="title_details"}Form details{/s}',
     /*{/if}*/
 
     layout: 'fit',
-    height : '90%',
+    height: '90%',
     width: 860,
 
     /**
      * Initialize the component
      * @return void
      */
-    initComponent : function () {
+    initComponent: function () {
         var me = this;
 
         me.items = [{
-            xtype:'tabpanel',
-            items:[{
+            xtype: 'tabpanel',
+            items: [{
                     xtype: 'form-main-formpanel',
                     record: me.formRecord,
                     shopStore: me.shopStore

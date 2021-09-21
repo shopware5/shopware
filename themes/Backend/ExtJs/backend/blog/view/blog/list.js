@@ -39,19 +39,19 @@
  */
 //{block name="backend/blog/view/blog/list"}
 Ext.define('Shopware.apps.Blog.view.blog.List', {
-    extend:'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
     border: false,
-    alias:'widget.blog-blog-list',
-    region:'center',
-    autoScroll:true,
-    store:'List',
-    ui:'shopware-ui',
-    selType:'cellmodel',
+    alias: 'widget.blog-blog-list',
+    region: 'center',
+    autoScroll: true,
+    store: 'List',
+    ui: 'shopware-ui',
+    selType: 'cellmodel',
     /**
      * Initialize the Shopware.apps.Blog.view.blog.List and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.registerEvents();
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
                 /**
                  * Event will be fired when the user clicks the delete icon in the
@@ -117,44 +117,44 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
      *
      * @return [array] grid columns
      */
-    getColumns:function () {
+    getColumns: function () {
         var me = this;
 
         var columnsData = [
             {
-                header:'{s name="list/column/title"}Title{/s}',
-                dataIndex:'title',
+                header: '{s name="list/column/title"}Title{/s}',
+                dataIndex: 'title',
                 renderer: me.titleRenderer,
-                flex:6
+                flex: 6
             },
             {
-                header:'{s name="list/column/number_of_comments"}Pending comments{/s}',
-                dataIndex:'numberOfComments',
+                header: '{s name="list/column/number_of_comments"}Pending comments{/s}',
+                dataIndex: 'numberOfComments',
                 renderer: me.greenRenderer,
-                flex:3
+                flex: 3
             },
             {
-                header:'{s name="list/column/views"}Views{/s}',
-                dataIndex:'views',
+                header: '{s name="list/column/views"}Views{/s}',
+                dataIndex: 'views',
                 renderer: me.greenRenderer,
-                flex:1
+                flex: 1
             },
             {
-                header:'{s name="list/column/date"}Display at{/s}',
-                dataIndex:'displayDate',
+                header: '{s name="list/column/date"}Display at{/s}',
+                dataIndex: 'displayDate',
                 renderer: me.dateRenderer,
-                flex:3
+                flex: 3
             },
             {
-                header:'{s name="list/column/active"}Active{/s}',
-                dataIndex:'active',
+                header: '{s name="list/column/active"}Active{/s}',
+                dataIndex: 'active',
                 renderer: me.activeColumnRenderer,
-                flex:1
+                flex: 1
             },
             {
-                xtype:'actioncolumn',
-                width:90,
-                items:me.getActionColumnItems()
+                xtype: 'actioncolumn',
+                width: 90,
+                items: me.getActionColumnItems()
             }
         ];
         return columnsData;
@@ -170,29 +170,29 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
 
 
         actionColumnData.push({
-            iconCls:'sprite-pencil',
-            cls:'editBtn',
-            tooltip:'{s name="list/action_column/edit"}Edit this blog article{/s}',
-            handler:function (view, rowIndex, colIndex, item) {
+            iconCls: 'sprite-pencil',
+            cls: 'editBtn',
+            tooltip: '{s name="list/action_column/edit"}Edit this blog article{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('editBlogArticle', view, rowIndex, colIndex, item);
             }
         });
 
         actionColumnData.push({
-            iconCls:'sprite-minus-circle-frame',
-            action:'delete',
-            cls:'delete',
-            tooltip:'{s name="list/action_column/delete"}Delete this blog article{/s}',
-            handler:function (view, rowIndex, colIndex, item) {
+            iconCls: 'sprite-minus-circle-frame',
+            action: 'delete',
+            cls: 'delete',
+            tooltip: '{s name="list/action_column/delete"}Delete this blog article{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('deleteBlogArticle', view, rowIndex, colIndex, item);
             }
         });
 
         actionColumnData.push({
-            iconCls:'sprite-blue-document-copy',
-            cls:'duplicate',
-            tooltip:'{s name="list/action_column/duplicate"}Duplicate this blog{/s}',
-            handler:function (view, rowIndex, colIndex, item) {
+            iconCls: 'sprite-blue-document-copy',
+            cls: 'duplicate',
+            tooltip: '{s name="list/action_column/duplicate"}Duplicate this blog{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('duplicateColumn', view, rowIndex, colIndex, item);
             }
 
@@ -205,41 +205,41 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
      *
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
-    getToolbar:function () {
+    getToolbar: function () {
         return Ext.create('Ext.toolbar.Toolbar',
             {
-                dock:'top',
-                ui:'shopware-ui',
-                items:[
+                dock: 'top',
+                ui: 'shopware-ui',
+                items: [
             /* {if {acl_is_allowed privilege=create}} */
                     {
-                        iconCls:'sprite-plus-circle',
-                        text:'{s name="list/button/add"}Add blog article{/s}',
-                        action:'add'
+                        iconCls: 'sprite-plus-circle',
+                        text: '{s name="list/button/add"}Add blog article{/s}',
+                        action: 'add'
                     },
             /* {/if} */
             /* {if {acl_is_allowed privilege=delete}} */
                     {
 
-                        iconCls:'sprite-minus-circle-frame',
-                        text:'{s name="list/button/delete"}Delete selected blog articles{/s}',
-                        disabled:true,
-                        action:'deleteBlogArticles'
+                        iconCls: 'sprite-minus-circle-frame',
+                        text: '{s name="list/button/delete"}Delete selected blog articles{/s}',
+                        disabled: true,
+                        action: 'deleteBlogArticles'
 
                     },
             /* {/if} */
                     '->',
                     {
-                        xtype:'textfield',
-                        name:'searchfield',
-                        action:'searchBlogArticles',
-                        width:170,
+                        xtype: 'textfield',
+                        name: 'searchfield',
+                        action: 'searchBlogArticles',
+                        width: 170,
                         cls: 'searchfield',
-                        enableKeyEvents:true,
+                        enableKeyEvents: true,
                         checkChangeBuffer: 500,
-                        emptyText:'{s name="list/field/search"}Search...{/s}'
+                        emptyText: '{s name="list/field/search"}Search...{/s}'
                     },
-                    { xtype:'tbspacer', width:6 }
+                    { xtype: 'tbspacer', width: 6 }
                 ]
             });
     },
@@ -252,9 +252,9 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
     getPagingBar: function () {
         var me = this;
         return Ext.create('Ext.toolbar.Paging', {
-            store:me.listStore,
-            dock:'bottom',
-            displayInfo:true
+            store: me.listStore,
+            dock: 'bottom',
+            displayInfo: true
         });
 
     },
@@ -263,11 +263,11 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
      *
      * @return [Ext.selection.CheckboxModel] grid selection model
      */
-    getGridSelModel:function () {
+    getGridSelModel: function () {
         var selModel = Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
+            listeners: {
                 // Unlocks the delete button if the user has checked at least one checkbox
-                selectionchange:function (sm, selections) {
+                selectionchange: function (sm, selections) {
                     var owner = this.view.ownerCt,
                     btn = owner.down('button[action=deleteBlogArticles]');
                     btn.setDisabled(!selections.length);
@@ -291,7 +291,7 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
      *
      * @param value
      */
-    titleRenderer:function (value) {
+    titleRenderer: function (value) {
         return Ext.String.format('{literal}<strong style="font-weight: 700">{0}</strong>{/literal}', value);
     },
 

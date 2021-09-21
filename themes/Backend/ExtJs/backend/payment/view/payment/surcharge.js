@@ -66,10 +66,10 @@ Ext.define('Shopware.apps.Payment.view.payment.Surcharge', {
     */
     autoScroll: true,
 
-    selType:'cellmodel',
-    plugins:[
+    selType: 'cellmodel',
+    plugins: [
         Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit:1
+            clicksToEdit: 1
         })
     ],
 
@@ -96,14 +96,14 @@ Ext.define('Shopware.apps.Payment.view.payment.Surcharge', {
             header: '{s name="column_countrySurcharge_surcharge"}Surcharge (in %){/s}',
             flex: 1,
             dataIndex: 'surcharge',
-            editor:{
-                xtype:'numberfield',
+            editor: {
+                xtype: 'numberfield',
                 //disables the buttons for the numberfield
                 allowBlank: true,
                 readOnly: false,
-                hideTrigger:true,
-                keyNavEnabled:false,
-                mouseWheelEnabled:false
+                hideTrigger: true,
+                keyNavEnabled: false,
+                mouseWheelEnabled: false
             }
         }];
         return columns;

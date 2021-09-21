@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.Emotion.view.components.ManufacturerSlider', {
             valueField: 'id',
             pageSize: 15,       // SW-4341 without pageSize being set no pagination is shown
             labelWidth: 155,
-            minChars:0,
+            minChars: 0,
             displayField: 'name',
             store: me.searchStore,
             listeners: {
@@ -167,7 +167,7 @@ Ext.define('Shopware.apps.Emotion.view.components.ManufacturerSlider', {
             header: '&#009868;',
             width: 24,
             hideable: false,
-            renderer : me.renderSorthandleColumn
+            renderer: me.renderSorthandleColumn
         }, {
             dataIndex: 'name',
             header: snippets.name,

@@ -104,14 +104,14 @@ Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
     /**
      * @string
      */
-    title:  '{s name="batch/title"}Move category{/s}',
+    title: '{s name="batch/title"}Move category{/s}',
 
     /**
      * Contains all snippets for the component
      * @object
      */
     snippets: {
-        close:  '{s name="batch/close"}Close window{/s}'
+        close: '{s name="batch/close"}Close window{/s}'
     },
 
     /**
@@ -177,7 +177,7 @@ Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
             animate: true,
             margin: '0 0 15',
             style: 'border-width: 1px !important;',
-            cls:'left-align'
+            cls: 'left-align'
         });
     },
 

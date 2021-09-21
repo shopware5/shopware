@@ -26,7 +26,7 @@
 Ext.define('Shopware.apps.ContentTypeManager.view.field.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.content-type-manager-field-window',
-    title : '{s name="field/title"}{/s}',
+    title: '{s name="field/title"}{/s}',
     height: 600,
     width: 1000,
     autoShow: true,

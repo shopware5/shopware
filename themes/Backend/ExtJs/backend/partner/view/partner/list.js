@@ -36,18 +36,18 @@
  */
 //{block name="backend/partner/view/partner/list"}
 Ext.define('Shopware.apps.Partner.view.partner.List', {
-    extend:'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
     border: false,
-    alias:'widget.partner-partner-list',
-    region:'center',
-    autoScroll:true,
-    store:'List',
-    ui:'shopware-ui',
+    alias: 'widget.partner-partner-list',
+    region: 'center',
+    autoScroll: true,
+    store: 'List',
+    ui: 'shopware-ui',
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.registerEvents();
@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
 
                 /**
@@ -111,49 +111,49 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
      *
      * @return [array] grid columns
      */
-    getColumns:function () {
+    getColumns: function () {
         var me = this;
 
         var columnsData = [
             {
-                header:'{s name="list/column/company"}Company{/s}',
-                dataIndex:'company',
-                flex:1
+                header: '{s name="list/column/company"}Company{/s}',
+                dataIndex: 'company',
+                flex: 1
             },
             {
-                header:'{s name="list/column/registered"}Registered{/s}',
-                dataIndex:'date',
+                header: '{s name="list/column/registered"}Registered{/s}',
+                dataIndex: 'date',
                 xtype: 'datecolumn',
-                flex:1
+                flex: 1
             },
             {
-                header:'{s name="list/column/active"}Active{/s}',
-                dataIndex:'active',
+                header: '{s name="list/column/active"}Active{/s}',
+                dataIndex: 'active',
                 renderer: me.activeRenderer,
-                flex:1
+                flex: 1
             },
             {
-                header:'{s name="list/column/monthly_amount"}Monthly turnover{/s}',
-                dataIndex:'monthlyAmount',
+                header: '{s name="list/column/monthly_amount"}Monthly turnover{/s}',
+                dataIndex: 'monthlyAmount',
                 xtype: 'numbercolumn',
-                flex:1
+                flex: 1
             },
             {
-                header:'{s name="list/column/yearly_amount"}Yearly turnover{/s}',
-                dataIndex:'yearlyAmount',
+                header: '{s name="list/column/yearly_amount"}Yearly turnover{/s}',
+                dataIndex: 'yearlyAmount',
                 xtype: 'numbercolumn',
-                flex:1
+                flex: 1
             },
             {
-                header:'{s name="list/column/partner_link"}Partner link{/s}',
-                dataIndex:'idCode',
+                header: '{s name="list/column/partner_link"}Partner link{/s}',
+                dataIndex: 'idCode',
                 renderer: me.partnerLinkRenderer,
-                flex:1
+                flex: 1
             },
             {
-                xtype:'actioncolumn',
-                width:130,
-                items:me.getActionColumnItems()
+                xtype: 'actioncolumn',
+                width: 130,
+                items: me.getActionColumnItems()
             }
         ];
         return columnsData;
@@ -165,7 +165,7 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
      * @param value
      * @return { String }
      */
-    activeRenderer : function(value) {
+    activeRenderer: function(value) {
         if(value) {
             return '<span style="font-weight: 700; color:green;">{s name="list/active_value/yes"}Yes{/s}</span>';
         }
@@ -178,7 +178,7 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
      * @param value
      * @return { String }
      */
-    partnerLinkRenderer : function(value) {
+    partnerLinkRenderer: function(value) {
         return '<a href="{url controller=partner action=redirectToPartnerLink}' + '?sPartner='+ value + '" target="_blank">' + 'link' + '</a>';
     },
     /**
@@ -192,10 +192,10 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
 
             /*{if {acl_is_allowed privilege=update}}*/
             actionColumnData.push({
-                iconCls:'sprite-pencil',
-                cls:'editBtn',
-                tooltip:'{s name="list/action_column/edit"}Edit partner{/s}',
-                handler:function (view, rowIndex, colIndex, item) {
+                iconCls: 'sprite-pencil',
+                cls: 'editBtn',
+                tooltip: '{s name="list/action_column/edit"}Edit partner{/s}',
+                handler: function (view, rowIndex, colIndex, item) {
                     me.fireEvent('editColumn', view, rowIndex, colIndex, item);
                 }
             });
@@ -203,11 +203,11 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
 
             /*{if {acl_is_allowed privilege=delete}}*/
             actionColumnData.push({
-               iconCls:'sprite-minus-circle-frame',
-               action:'delete',
-               cls:'delete',
-               tooltip:'{s name="list/action_column/delete"}Delete partner{/s}',
-               handler:function (view, rowIndex, colIndex, item) {
+               iconCls: 'sprite-minus-circle-frame',
+               action: 'delete',
+               cls: 'delete',
+               tooltip: '{s name="list/action_column/delete"}Delete partner{/s}',
+               handler: function (view, rowIndex, colIndex, item) {
                    me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
                }
             });
@@ -215,10 +215,10 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
 
             /*{if {acl_is_allowed privilege=statistic}}*/
             actionColumnData.push({
-                iconCls:'sprite-partner-stats',
-                cls:'chart-up-color',
-                tooltip:'{s name="list/action_column/statistic"}Statistics{/s}',
-                handler:function (view, rowIndex, colIndex, item) {
+                iconCls: 'sprite-partner-stats',
+                cls: 'chart-up-color',
+                tooltip: '{s name="list/action_column/statistic"}Statistics{/s}',
+                handler: function (view, rowIndex, colIndex, item) {
                     me.fireEvent('statistic', view, rowIndex, colIndex, item);
                 }
             });
@@ -230,17 +230,17 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
      *
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
-    getToolbar:function () {
+    getToolbar: function () {
         return Ext.create('Ext.toolbar.Toolbar',
             {
-                dock:'top',
-                ui:'shopware-ui',
-                items:[
+                dock: 'top',
+                ui: 'shopware-ui',
+                items: [
                     /*{if {acl_is_allowed privilege=create}}*/
                     {
-                        iconCls:'sprite-plus-circle',
-                        text:'{s name="list/button/add"}Add{/s}',
-                        action:'add'
+                        iconCls: 'sprite-plus-circle',
+                        text: '{s name="list/button/add"}Add{/s}',
+                        action: 'add'
                     }
                     /*{/if}*/
                 ]
@@ -255,9 +255,9 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
     getPagingBar: function () {
         var me = this;
         return Ext.create('Ext.toolbar.Paging', {
-            store:me.listStore,
-            dock:'bottom',
-            displayInfo:true
+            store: me.listStore,
+            dock: 'bottom',
+            displayInfo: true
         });
 
     }

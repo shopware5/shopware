@@ -38,36 +38,36 @@ Ext.define('Shopware.apps.Partner.model.StatisticList', {
     * Extends the standard ExtJS 4
     * @string
     */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
     * The fields used for this model
     * @array
     */
-    fields : [
+    fields: [
         //{block name="backend/partner/model/statisticList/fields"}{/block}
-        { name : 'id', type : 'int' },
-        { name : 'number', type : 'string' },
-        { name : 'netTurnOver', type : 'float' },
-        { name : 'provision', type : 'float' },
-        { name : 'orderTime', type : 'date' }
+        { name: 'id', type: 'int' },
+        { name: 'number', type: 'string' },
+        { name: 'netTurnOver', type: 'float' },
+        { name: 'provision', type: 'float' },
+        { name: 'orderTime', type: 'date' }
     ],
     /**
     * If the name of the field is 'id' extjs assumes autmagical that
     * this field is an unique identifier.
     */
-    idProperty : 'id',
+    idProperty: 'id',
     /**
     * Configure the data communication
     * @object
     */
-    proxy : {
-        type : 'ajax',
-        api:{
-            read:   '{url action=getStatisticList}'
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url action=getStatisticList}'
         },
-        reader : {
-            type : 'json',
-            root : 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty: 'totalCount'
         }
     }

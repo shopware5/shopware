@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Config.view.form.CronJob', {
         return [{
             xtype: 'hidden',
             name: 'pluginId',
-            listeners:{
+            listeners: {
                 change: function(field, value) {
                     var form = field.up('form'),
                         hideFields = form.query('[isReadOnlyField]');

@@ -63,8 +63,8 @@ Ext.define('Shopware.apps.Config.view.base.Table', {
     getPagingToolbar: function() {
         return Ext.create('Ext.toolbar.Paging', {
             store: this.store,
-            dock:'bottom',
-            displayInfo:true
+            dock: 'bottom',
+            displayInfo: true
         });
     },
 
@@ -87,30 +87,30 @@ Ext.define('Shopware.apps.Config.view.base.Table', {
         };
     },
 
-    getTopBar:function () {
+    getTopBar: function () {
         var me = this;
         var items = [];
         if(me.addable) {
             items.push({
-                iconCls:'sprite-plus-circle-frame',
-                text:'{s name="table/add_text"}Add entry{/s}',
-                tooltip:'{s name="table/add_tooltip"}Add (ALT + INSERT){/s}',
-                action:'add'
+                iconCls: 'sprite-plus-circle-frame',
+                text: '{s name="table/add_text"}Add entry{/s}',
+                tooltip: '{s name="table/add_tooltip"}Add (ALT + INSERT){/s}',
+                action: 'add'
             });
         }
         if(me.deletable) {
             items.push({
-                iconCls:'sprite-minus-circle-frame',
-                text:'{s name="table/delete_text"}Delete entry{/s}',
-                tooltip:'{s name="table/delete_tooltip"}Delete (ALT + DELETE){/s}',
-                disabled:true,
-                action:'delete'
+                iconCls: 'sprite-minus-circle-frame',
+                text: '{s name="table/delete_text"}Delete entry{/s}',
+                tooltip: '{s name="table/delete_tooltip"}Delete (ALT + DELETE){/s}',
+                disabled: true,
+                action: 'delete'
             });
         }
         items.push('->', {
-            xtype:'config-base-search'
+            xtype: 'config-base-search'
         }, {
-            xtype:'tbspacer', width:6
+            xtype: 'tbspacer', width: 6
         });
         return items;
     }

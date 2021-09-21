@@ -38,16 +38,16 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
      * Define that the billing field set is an extension of the Ext.form.FieldSet
      * @string
      */
-    extend:'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.blog-blog-detail-sidebar-assigned_articles',
+    alias: 'widget.blog-blog-detail-sidebar-assigned_articles',
 
     bodyPadding: 10,
     autoScroll: true,
-    border:false,
+    border: false,
     /**
      * Helper property which contains the name of the add event which fired when the user
      * clicks the button of the form panel
@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.title = '{s name="detail/sidebar/assigned_articles/title"}Assigned Articles{/s}';
         me.items = me.createElements();
@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
         return Ext.create('Ext.form.FieldSet', {
             layout: 'anchor',
             padding: 10,
-            title:'{s name="detail/sidebar/assigned_articles/field_set/title"}Assign article{/s}',
+            title: '{s name="detail/sidebar/assigned_articles/field_set/title"}Assign article{/s}',
             defaults: {
                 labelWidth: 120,
                 anchor: '100%'

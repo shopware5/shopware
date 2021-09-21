@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Article.model.MediaAttribute', {
     fields: [
         //{block name="backend/article/model/media_attribute/fields"}{/block}
         { name: 'id', type: 'int' },
-        { name: 'articleImageId', type: 'int', useNull : true },
+        { name: 'articleImageId', type: 'int', useNull: true },
         { name: 'attribute1', type: 'string' },
         { name: 'attribute2', type: 'string' },
         { name: 'attribute3', type: 'string' }

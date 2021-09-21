@@ -32,11 +32,11 @@ Ext.define('Shopware.apps.Config.view.base.Search', {
     extend: 'Ext.form.field.Text',
     alias: 'widget.config-base-search',
 
-    name:'searchfield',
-    cls:'searchfield',
-    width:100,
-    emptyText:'{s name="search/empty_text"}Search...{/s}',
-    enableKeyEvents:true,
-    checkChangeBuffer:500
+    name: 'searchfield',
+    cls: 'searchfield',
+    width: 100,
+    emptyText: '{s name="search/empty_text"}Search...{/s}',
+    enableKeyEvents: true,
+    checkChangeBuffer: 500
 });
 //{/block}

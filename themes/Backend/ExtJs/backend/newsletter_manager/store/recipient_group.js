@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.NewsletterManager.store.RecipientGroup', {
     extend: 'Ext.data.Store',
     // Do not load data, when not explicitly requested
     autoLoad: false,
-    model : 'Shopware.apps.NewsletterManager.model.RecipientGroup',
+    model: 'Shopware.apps.NewsletterManager.model.RecipientGroup',
     remoteFilter: true,
     remoteSort: true,
     groupField: 'isCustomerGroup',
@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.NewsletterManager.store.RecipientGroup', {
         reader: {
             type: 'json',
             root: 'data',
-            totalProperty:'total'
+            totalProperty: 'total'
         }
     }
 });

@@ -28,17 +28,17 @@
  */
 //{block name="backend/product_stream/store/attribute"}
 Ext.define('Shopware.apps.ProductStream.store.Attribute', {
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     fields: [ 'column', 'label', 'type'],
     autoLoad: false,
     pageSize: 20,
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
         url: '{url controller=ProductStream action=getAttributes}',
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

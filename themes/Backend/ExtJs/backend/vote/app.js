@@ -31,7 +31,7 @@
 Ext.define('Shopware.apps.Vote', {
     extend: 'Enlight.app.SubApplication',
 
-    name:'Shopware.apps.Vote',
+    name: 'Shopware.apps.Vote',
 
     loadPath: '{url action=load}',
     bulkLoad: true,

@@ -193,7 +193,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     /**
      * Disable border of the window
      */
-    border:false,
+    border: false,
 
     /**
      * The initComponent template method is an important initialization step for a Component.
@@ -348,11 +348,11 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         me.settingsForm = Ext.create('Ext.form.Panel', {
             layout: {
                 type: 'vbox',
-                align : 'stretch',
-                pack  : 'start',
+                align: 'stretch',
+                pack: 'start',
             },
             padding: 10,
-            bodyStyle : 'background:none',
+            bodyStyle: 'background:none',
             border: 0,
             items: [
                 me.createSettingsInfoText(),
@@ -779,8 +779,8 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
 
         Ext.Ajax.request({
             url: '{url controller=Cache action=clearCache cache=Config}',
-            params:{
-                'cache[http]'   : 'on',
+            params: {
+                'cache[http]': 'on',
             },
             success: function () {
                 me.fireEvent('startHttpCacheWarmUp', me);

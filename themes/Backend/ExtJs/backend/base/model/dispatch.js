@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Base.model.Dispatch', {
      * unique id
      * @int
      */
-    idProperty : 'id',
+    idProperty: 'id',
 
     /**
     * The fields used for this model
@@ -59,12 +59,12 @@ Ext.define('Shopware.apps.Base.model.Dispatch', {
     */
     fields: [
         //{block name="backend/base/model/dispatch/fields"}{/block}
-        { name : 'id', type : 'int' },
-        { name : 'name', type : 'string' },
-        { name : 'type', type : 'int' },
-        { name : 'comment', type : 'string' },
-        { name : 'active', type : 'int' },
-        { name : 'position', type : 'int' }
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' },
+        { name: 'type', type: 'int' },
+        { name: 'comment', type: 'string' },
+        { name: 'active', type: 'int' },
+        { name: 'position', type: 'int' }
     ]
 });
 //{/block}

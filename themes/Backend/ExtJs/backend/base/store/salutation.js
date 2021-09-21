@@ -39,13 +39,13 @@ Ext.define('Shopware.apps.Base.store.Salutation', {
         { name: 'label', type: 'string' }
     ],
 
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
         url: '{url controller=Base action=getSalutations}',
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     },
 

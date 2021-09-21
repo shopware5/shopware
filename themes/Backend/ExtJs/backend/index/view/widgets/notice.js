@@ -97,8 +97,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Notice', {
             url: '{url controller=widgets action=saveNotice}',
             layout: {
                 type: 'vbox',
-                align : 'stretch',
-                pack  : 'start'
+                align: 'stretch',
+                pack: 'start'
             },
             items: [ me.textArea ]
         });

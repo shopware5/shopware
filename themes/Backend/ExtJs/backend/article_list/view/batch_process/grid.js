@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
                 text: '{s name="add"}Add{/s}',
                 action: 'addRow',
                 name: 'addRow',
-                iconCls:'sprite-plus-circle-frame',
+                iconCls: 'sprite-plus-circle-frame',
                 handler: function() {
                     me.fireEvent('addRow');
                 }
@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
                 allowEmpty: false,
                 editable: false,
                 listeners: {
-                    'select': { fn:function(combo, records, e) {
+                    'select': { fn: function(combo, records, e) {
                         me.setOperatorsForCurrentRecord(records[0], me.operatorStore);
                         me.fireEvent('setEditor', me.columns[2], records[0]);
                     }, scope: this },

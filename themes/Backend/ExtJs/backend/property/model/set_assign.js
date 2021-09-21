@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Property.model.SetAssign', {
      *
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/property/model/set_assign/fields"}{/block}
         { name: 'id', type: 'integer' },
         { name: 'optionId', type: 'integer' },

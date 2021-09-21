@@ -38,23 +38,23 @@ Ext.define('Shopware.apps.Shipping.model.Dispatch', {
      * Extends the standard ExtJS 4
      * @string
      */
-    extend : 'Shopware.apps.Shipping.model.DispatchList',
+    extend: 'Shopware.apps.Shipping.model.DispatchList',
      /**
      * Configure the data communication
      * @object
      */
-    proxy : {
-        type : 'ajax',
-        api : {
-            read    : '{url controller="shipping" action="getShippingCosts"}',
-            create  : '{url controller="shipping" action="createDispatch"}',
-            update  : '{url controller="shipping" action="updateDispatch"}',
-            destroy : '{url controller="shipping" action="delete"  targetField=dispatches}'
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="shipping" action="getShippingCosts"}',
+            create: '{url controller="shipping" action="createDispatch"}',
+            update: '{url controller="shipping" action="updateDispatch"}',
+            destroy: '{url controller="shipping" action="delete"  targetField=dispatches}'
         },
 
-        reader : {
-            type : 'json',
-            root : 'data'
+        reader: {
+            type: 'json',
+            root: 'data'
         }
     },
 
@@ -63,29 +63,29 @@ Ext.define('Shopware.apps.Shipping.model.Dispatch', {
      * One dispatch has one or many allowed means of payment, blocked categories, allowed countries and holidays
      * @array
      */
-    associations:[
+    associations: [
         {
-            type:'hasMany',
-            model:'Shopware.apps.Base.model.Payment',
-            name:'getPayments',
-            associationKey:'payments'
+            type: 'hasMany',
+            model: 'Shopware.apps.Base.model.Payment',
+            name: 'getPayments',
+            associationKey: 'payments'
         },
         {
-            type:'hasMany',
-            model:'Shopware.apps.Base.model.Category',
-            name:'getCategories',
-            associationKey:'categories'
+            type: 'hasMany',
+            model: 'Shopware.apps.Base.model.Category',
+            name: 'getCategories',
+            associationKey: 'categories'
         },
         {
-            type:'hasMany',
-            model:'Shopware.apps.Base.model.Country',
-            name:'getCountries',
-            associationKey:'countries'
+            type: 'hasMany',
+            model: 'Shopware.apps.Base.model.Country',
+            name: 'getCountries',
+            associationKey: 'countries'
         } , {
-            type:'hasMany',
-            model:'Shopware.apps.Shipping.model.Holiday',
-            name:'getHolidays',
-            associationKey:'holidays'
+            type: 'hasMany',
+            model: 'Shopware.apps.Shipping.model.Holiday',
+            name: 'getHolidays',
+            associationKey: 'holidays'
         }
     ]
 });

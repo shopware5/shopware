@@ -207,8 +207,8 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
                 xtype: 'fieldset',
                 title: '{s name="fieldset_settings"}Template settings{/s}',
                 defaultType: 'textfield',
-                autoScroll:true,
-                flex:1,
+                autoScroll: true,
+                flex: 1,
                 defaults: {
                     /*{if !{acl_is_allowed privilege=create} && !{acl_is_allowed privilege=update}}*/
                     readOnly: true,

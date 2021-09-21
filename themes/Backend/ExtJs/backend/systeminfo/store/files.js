@@ -52,6 +52,6 @@ Ext.define('Shopware.apps.Systeminfo.store.Files', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.Systeminfo.model.File'
+    model: 'Shopware.apps.Systeminfo.model.File'
 });
 //{/block}

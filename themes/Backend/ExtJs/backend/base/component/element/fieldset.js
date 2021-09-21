@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Base.view.element.Fieldset', {
      * @public
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.callParent(arguments);

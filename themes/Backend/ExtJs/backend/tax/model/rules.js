@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Tax.model.Rules', {
         reader: {
             type: 'json',
             root: 'data',
-            totalProperty:'total'
+            totalProperty: 'total'
         }
     }
 });

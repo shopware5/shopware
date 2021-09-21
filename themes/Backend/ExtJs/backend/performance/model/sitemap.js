@@ -45,9 +45,9 @@ Ext.define('Shopware.apps.Performance.model.Sitemap', {
      */
     fields: [
         //{block name="backend/performance/model/sitemap/fields"}{/block}
-        { name: 'sitemapRefreshStrategy', type:'int' },
-        { name: 'sitemapRefreshTime', type:'int' },
-        { name: 'sitemapLastRefresh', type:'int' },
+        { name: 'sitemapRefreshStrategy', type: 'int' },
+        { name: 'sitemapRefreshTime', type: 'int' },
+        { name: 'sitemapLastRefresh', type: 'int' },
     ],
 
     associations: [

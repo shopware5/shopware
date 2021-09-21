@@ -56,6 +56,6 @@ Ext.define('Shopware.apps.RiskManagement.store.Rules', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.RiskManagement.model.Rule'
+    model: 'Shopware.apps.RiskManagement.model.Rule'
 });
 //{/block}

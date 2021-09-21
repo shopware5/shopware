@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         configButton: '{s name="image/list/config_button"}Open configuration{/s}',
         attributeButton: '{s name="image/list/attribute_button"}Edit attributes{/s}',
         downloadButton: '{s name="image/list/download_button"}Download image{/s}',
-        mainImage:'{s name="image/list/main_image"}Preview{/s}'
+        mainImage: '{s name="image/list/main_image"}Preview{/s}'
     },
 
     dragOverCls: 'drag-over',
@@ -296,7 +296,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
                 },
 
                 //On entry into a target node, highlight that node.
-                onNodeEnter : function(target, dd, e, data){
+                onNodeEnter: function(target, dd, e, data){
                     var record = me.dataView.getRecord(target);
                     if (record !== data.draggedRecord) {
                         Ext.fly(target).addCls(me.dragOverCls);
@@ -304,13 +304,13 @@ Ext.define('Shopware.apps.Article.view.image.List', {
                 },
 
                 //On exit from a target node, unhighlight that node.
-                onNodeOut : function(target, dd, e, data){
+                onNodeOut: function(target, dd, e, data){
                     Ext.fly(target).removeCls(me.dragOverCls);
                 },
 
                 //While over a target node, return the default drop allowed class which
                 //places a "tick" icon into the drag proxy.
-                onNodeOver : function(target, dd, e, data){
+                onNodeOver: function(target, dd, e, data){
                     return (data.draggedRecord instanceof Ext.data.Model);
                 },
 
@@ -319,7 +319,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
                 //In this case, it is a Record in the GridPanel's Store.
                 //We can use the data set up by the DragZone's getDragData method to read
                 //any data we decided to attach in the DragZone's getDragData method.
-                onNodeDrop : function(target, dd, e, data){
+                onNodeDrop: function(target, dd, e, data){
                     var record = me.dataView.getRecord(target);
                     me.fireEvent('mediaMoved', me.mediaStore, data.draggedRecord, record)
                 }
@@ -361,7 +361,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
             text: me.snippets.removeButton,
             action: 'removeImage',
             disabled: true,
-            iconCls:'sprite-minus-circle-frame',
+            iconCls: 'sprite-minus-circle-frame',
             handler: function() {
                 me.fireEvent('removeImage');
             }
@@ -371,7 +371,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         me.configButton = Ext.create('Ext.button.Button', {
             text: me.snippets.configButton,
             disabled: true,
-            iconCls:'sprite-gear',
+            iconCls: 'sprite-gear',
             handler: function() {
                 me.fireEvent('openImageMapping');
             }
@@ -381,7 +381,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         me.downloadButton = Ext.create('Ext.button.Button', {
             text: me.snippets.downloadButton,
             disabled: true,
-            iconCls:'sprite-drive-download',
+            iconCls: 'sprite-drive-download',
             handler: function() {
                 if (me.dataView.getSelectionModel().selected && me.dataView.getSelectionModel().selected.first()) {
                     me.fireEvent('download', me.dataView.getSelectionModel().selected.first());

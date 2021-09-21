@@ -43,6 +43,6 @@ Ext.define('Shopware.apps.UserManager.store.Detail', {
     /**
      * Defines which model the store used.
      */
-    model : 'Shopware.apps.UserManager.model.Detail'
+    model: 'Shopware.apps.UserManager.model.Detail'
 });
 //{/block}

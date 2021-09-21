@@ -42,8 +42,8 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
     alias: 'widget.systeminfo-main-window',
     autoShow: true,
     layout: 'fit',
-    stateful:true,
-    stateId:'shopware-systeminfo-window',
+    stateful: true,
+    stateId: 'shopware-systeminfo-window',
     height: '90%',
     width: 925,
     overflow: 'hidden',
@@ -82,28 +82,28 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
                     xtype: 'container',
                     overflowY: 'scroll',
                     title: '{s name="window/tabpanel/path_tab/title"}Shopware-Paths{/s}',
-                    items:[{
+                    items: [{
                         xtype: 'systeminfo-main-pathlist'
                     }]
                 },{
                     xtype: 'container',
                     overflowY: 'scroll',
                     title: '{s name="window/tabpanel/file_tab/title"}Shopware-Files{/s}',
-                    items:[{
+                    items: [{
                         xtype: 'systeminfo-main-filelist'
                     }]
                 },{
                     xtype: 'container',
                     overflowY: 'scroll',
                     title: '{s name="window/tabpanel/version_tab/title"}Version-info{/s}',
-                    items:[{
+                    items: [{
                         xtype: 'systeminfo-main-versionlist'
                     }]
                 },{
                     xtype: 'container',
                     layout: 'fit',
                     title: '{s name="window/tabpanel/optimizer_tab/title"}Optimizer{/s}',
-                    items:[{
+                    items: [{
                         xtype: 'systeminfo-main-optimizerlist'
                     }]
                 },{
@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
                     layout: 'fit',
                     overflowY: 'hidden',
                     title: '{s name="window/tabpanel/info_tab/title"}PHP-Info{/s}',
-                    items:[{
+                    items: [{
                         xtype: 'systeminfo-main-phpinfo'
                     }]
                 }

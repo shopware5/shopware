@@ -7,8 +7,8 @@ Ext.define('Shopware.apps.MailLog.view.detail.MailLog', {
     contentFieldGenerated: false,
     layout: {
         type: 'vbox',
-        align : 'stretch',
-        pack  : 'start',
+        align: 'stretch',
+        pack: 'start',
     },
     mixins: {
         form: 'Shopware.apps.MailLog.view.detail.FormMixin',

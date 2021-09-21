@@ -282,7 +282,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
             displayField: 'name',
             forceSelection: true,
             editable: false,
-            allowBlank:false,
+            allowBlank: false,
             labelWidth: 50,
             emptyText: me.snippets.role.empty,
             fieldLabel: me.snippets.role.label,
@@ -302,9 +302,9 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         /* {if {acl_is_allowed privilege=update}} */
         me.saveRoleButton = Ext.create('Ext.button.Button', {
             text: me.snippets.saveRole,
-            disabled:true,
+            disabled: true,
             name: 'saveRolePrivileges',
-            iconCls:'sprite-disk',
+            iconCls: 'sprite-disk',
             handler: function() {
                 me.fireEvent('saveRolePrivileges', me.store, me.roleCombo.getValue(), me.getChecked());
             }
@@ -318,7 +318,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         /* {if {acl_is_allowed privilege=create}} */
         me.addResourceButton = Ext.create('Ext.button.Button', {
             text: me.snippets.addResource,
-            iconCls:'sprite-plus-circle-frame',
+            iconCls: 'sprite-plus-circle-frame',
             handler: function() {
                 me.fireEvent('addResource', me.store);
             }
@@ -333,7 +333,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         /* {if {acl_is_allowed privilege=create}} */
         me.addPrivilegeButton = Ext.create('Ext.button.Button', {
             text: me.snippets.addPrivilege,
-            iconCls:'sprite-plus-circle-frame',
+            iconCls: 'sprite-plus-circle-frame',
             disabled: true,
             handler: function() {
                 var selected = me.selModel.selected;
@@ -349,12 +349,12 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         /* {/if} */
 
         return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
+            dock: 'top',
             ui: 'shopware-ui',
             items: [
                 me.roleCombo,
         /* {if {acl_is_allowed privilege=update}} */
-                { xtype:'tbspacer', width:6 },
+                { xtype: 'tbspacer', width: 6 },
                 me.saveRoleButton,
         /* {/if} */
         /* {if {acl_is_allowed privilege=create}} */
@@ -386,14 +386,14 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
             width: 50,
             text: me.snippets.columns.action,
             items: [{
-                iconCls:'sprite-minus-circle-frame',
-                action:'deleteNode',
+                iconCls: 'sprite-minus-circle-frame',
+                action: 'deleteNode',
                 tooltip: '{s name="rules/column/action_delete"}{/s}',
                 /**
                  * Remove button handler to fire the deletePrivilege or deleteResource event which is handled
                  * in the rules controller.
                  */
-                handler:function (view, rowIndex, colIndex, item, opts, record) {
+                handler: function (view, rowIndex, colIndex, item, opts, record) {
                     if (record.get('type') === 'privilege') {
                         me.fireEvent('deletePrivilege', record, me.store);
                     } else {

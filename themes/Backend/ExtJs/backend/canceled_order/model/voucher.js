@@ -45,8 +45,8 @@ Ext.define('Shopware.apps.CanceledOrder.model.Voucher', {
      */
     fields: [
         //{block name="backend/canceled_order/model/voucher/fields"}{/block}
-        { name: 'id', type:'int' },
-        { name: 'description', type:'string' },
+        { name: 'id', type: 'int' },
+        { name: 'description', type: 'string' },
         { name: 'percental', type: 'int' },
         {
             name: 'value',

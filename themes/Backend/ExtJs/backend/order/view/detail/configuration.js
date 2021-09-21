@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.order-configuration-panel',
+    alias: 'widget.order-configuration-panel',
 
     /**
      * Default configuration for the left and right container
@@ -70,23 +70,23 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
+    snippets: {
         vatId: {
             label: '{s name="configuration/vat_id_label"}Customer VAT ID{/s}',
             empty: '{s name="configuration/vat_id_empty"}Not filed{/s}'
         },
-        documentType:  '{s name="configuration/document_type"}Document type{/s}',
+        documentType: '{s name="configuration/document_type"}Document type{/s}',
         comment: {
-            label:  '{s name="configuration/comment_label"}Document comment{/s}',
-            support:  '{s name="configuration/comment_support"}Changes are not saved permanently{/s}'
+            label: '{s name="configuration/comment_label"}Document comment{/s}',
+            support: '{s name="configuration/comment_support"}Changes are not saved permanently{/s}'
         },
-        voucher:  '{s name="configuration/voucher"}Voucher{/s}',
-        taxFree:  '{s name="configuration/tax_free"}Tax free{/s}',
-        invoiceNumber:  '{s name="configuration/invoice_number"}Invoice number{/s}',
-        deliveryDate:  '{s name="configuration/delivery_date"}Delivery date{/s}',
-        displayDate:  '{s name="configuration/display_date"}Displayed date{/s}',
+        voucher: '{s name="configuration/voucher"}Voucher{/s}',
+        taxFree: '{s name="configuration/tax_free"}Tax free{/s}',
+        invoiceNumber: '{s name="configuration/invoice_number"}Invoice number{/s}',
+        deliveryDate: '{s name="configuration/delivery_date"}Delivery date{/s}',
+        displayDate: '{s name="configuration/display_date"}Displayed date{/s}',
         buttons: {
-            preview:  '{s name="configuration/preview"}Preview{/s}',
+            preview: '{s name="configuration/preview"}Preview{/s}',
             reset: '{s name="configuration/reset"}Reset settings{/s}',
             create: '{s name="configuration/create"}Create document{/s}'
         },
@@ -203,8 +203,8 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
                     xtype: 'checkbox',
                     fieldLabel: me.snippets.taxFree,
                     name: 'taxFree',
-                    uncheckedValue:0,
-                    inputValue:1
+                    uncheckedValue: 0,
+                    inputValue: 1
                 }
             ]
         });
@@ -280,7 +280,7 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
         me.createButton = Ext.create('Ext.button.Button', {
             text: me.snippets.buttons.create,
             action: 'create-document',
-            cls:'primary',
+            cls: 'primary',
             handler: function() {
                 var config = Ext.create('Shopware.apps.Order.model.Configuration');
 

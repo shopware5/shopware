@@ -40,13 +40,13 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Articles', {
     alias: 'widget.canceled-order-tabs-baskets-articles',
     title: '{s name="baskets/Articles"}Articles{/s}',
 
-    snippets : {
-        columns : {
+    snippets: {
+        columns: {
             ordernumber: '{s name="columns/orderNumber"}Ordernumber{/s}',
             article: '{s name="columns/article"}Article{/s}',
             number: '{s name="columns/number"}Number{/s}'
         },
-        tooltip : {
+        tooltip: {
             edit: '{s name="article/edit"}Edit{/s}'
         }
     },
@@ -96,9 +96,9 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Articles', {
                 flex: 1
             },
             {
-                xtype : 'actioncolumn',
-                width : 60,
-                items : me.getActionColumn()
+                xtype: 'actioncolumn',
+                width: 60,
+                items: me.getActionColumn()
             }
         ]
     },
@@ -108,14 +108,14 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Articles', {
      *
      * @return Array of buttons
      */
-    getActionColumn : function() {
+    getActionColumn: function() {
         var me = this;
 
         return [
             {
-                iconCls:'sprite-inbox',
-                action:'edit',
-                tooltip:me.snippets.tooltip.edit,
+                iconCls: 'sprite-inbox',
+                action: 'edit',
+                tooltip: me.snippets.tooltip.edit,
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('openArticle', record);
                 }

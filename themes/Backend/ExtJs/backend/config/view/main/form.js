@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
     /**
      *
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         Ext.applyIf(me, {

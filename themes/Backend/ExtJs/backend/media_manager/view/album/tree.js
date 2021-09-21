@@ -57,9 +57,9 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
         }
     },
 
-    snippets:{
-        tree:{
-            columns:{
+    snippets: {
+        tree: {
+            columns: {
                 album: '{s name="tree/columns/album"}Album{/s}',
                 files: '{s name="tree/columns/files"}Files{/s}',
                 action: '{s name="tree/columns/action"}Action{/s}',
@@ -424,7 +424,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
                 return event.getTarget(treeView.itemSelector);
             },
 
-            onNodeDrop : function(target, dd, e, data) {
+            onNodeDrop: function(target, dd, e, data) {
                 var node = treeView.getRecord(target),
                     models = data.mediaModels,
                     store;

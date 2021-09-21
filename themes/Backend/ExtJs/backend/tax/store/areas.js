@@ -37,6 +37,6 @@ Ext.define('Shopware.apps.Tax.store.Areas', {
     extend: 'Ext.data.Store',
     autoLoad: false,
     pageSize: 30,
-    model : 'Shopware.apps.Tax.model.Areas'
+    model: 'Shopware.apps.Tax.model.Areas'
 });
 //{/block}

@@ -34,49 +34,49 @@
  */
 //{block name="backend/shipping/view/main"}
 Ext.define('Shopware.apps.Shipping.view.Main', {
-    extend      : 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
 
     /**
      * Layout to use
      * @string
      */
-    layout      : 'fit',
+    layout: 'fit',
 
     /**
      * Alias for the main window
      * @string
      */
-    alias       : 'widget.dispatchGrid',
+    alias: 'widget.dispatchGrid',
 
     /**
      * Width to use
      * @integer
      */
-    width       : 990,
+    width: 990,
 
     /**
      * Hight
      * @integer
      */
-    height      : 480,
+    height: 480,
 
     /**
      * Allow state store
      * @boolean
      */
-    stateful    : true,
+    stateful: true,
 
     /**
      * Define state store id
      * @string
      */
-    stateId     : 'dispatchList',
+    stateId: 'dispatchList',
 
     /**
      * Name of the window
      * @string
      */
-    title       : '{s name="title"}Shipping costs management{/s}',
+    title: '{s name="title"}Shipping costs management{/s}',
     /**
      * @return void
      */

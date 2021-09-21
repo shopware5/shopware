@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
         Ext.Ajax.request({
             url: '{url controller="CoreLicense" action="loadSavedLicense"}',
             method: 'GET',
-            async  : false,
+            async: false,
             success: function(result){
                 me.savedLicenseData = Ext.decode(result.responseText);
             }

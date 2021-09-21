@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Translation.view.main.Form',
      * Form elements
      * @array
      */
-    items : [],
+    items: [],
 
     /**
      * Initializes the component and builds up the main interface

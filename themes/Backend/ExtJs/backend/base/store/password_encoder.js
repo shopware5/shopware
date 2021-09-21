@@ -33,15 +33,15 @@ Ext.define('Shopware.apps.Base.store.PasswordEncoder', {
 
     alternateClassName: 'Shopware.store.PasswordEncoder',
     storeId: 'base.PasswordEncoder',
-    model : 'Shopware.apps.Base.model.PasswordEncoder',
+    model: 'Shopware.apps.Base.model.PasswordEncoder',
 
-    proxy:{
-        type:'ajax',
-        url:'{url action="getAvailableHashes"}',
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+    proxy: {
+        type: 'ajax',
+        url: '{url action="getAvailableHashes"}',
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 }).create();

@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.NewsletterManager.model.Mailing', {
         api: {
             create: '{url action="createNewsletter"}',
             update: '{url action="updateNewsletter"}',
-            destroy:'{url action="deleteNewsletter"}'
+            destroy: '{url action="deleteNewsletter"}'
         },
 
         /**
@@ -95,15 +95,15 @@ Ext.define('Shopware.apps.NewsletterManager.model.Mailing', {
      * Define the associations of the mailing model.
      * @array
      */
-    associations:[
+    associations: [
         // Addresses which have already received this mail
 //        { type:'hasMany', model:'Shopware.apps.NewsletterManager.model.Recipient', name:'getAddresses', associationKey:'addresses' },
         // Container elements
-        { type:'hasMany', model:'Shopware.apps.NewsletterManager.model.Container', name:'getContainers', associationKey:'containers' },
+        { type: 'hasMany', model: 'Shopware.apps.NewsletterManager.model.Container', name: 'getContainers', associationKey: 'containers' },
         // Groups which this newsletter addresses
-        { type:'hasMany', model:'Shopware.apps.NewsletterManager.model.RecipientGroup', name:'getGroups', associationKey:'groups' },
+        { type: 'hasMany', model: 'Shopware.apps.NewsletterManager.model.RecipientGroup', name: 'getGroups', associationKey: 'groups' },
         // Orders which made after reading this mail
-        { type:'hasMany', model:'Shopware.apps.Base.model.Order', name:'getOrders', associationKey:'orders' }
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Order', name: 'getOrders', associationKey: 'orders' }
     ]
 
 });

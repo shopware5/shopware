@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Base.store.Locale', {
         'Shopware.apps.Base.store.Locales'
     ],
     storeId: 'base.Locale',
-    model : 'Shopware.apps.Base.model.Locale',
+    model: 'Shopware.apps.Base.model.Locale',
     pageSize: 1000,
     remoteFilter: true,
 

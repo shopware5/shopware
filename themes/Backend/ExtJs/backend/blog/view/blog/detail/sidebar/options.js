@@ -34,8 +34,8 @@
  */
 //{block name="backend/blog/view/blog/detail/sidebar/options"}
 Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
-    extend:'Ext.panel.Panel',
-    alias:'widget.blog-blog-detail-sidebar-options',
+    extend: 'Ext.panel.Panel',
+    alias: 'widget.blog-blog-detail-sidebar-options',
     border: 0,
     bodyPadding: 10,
     autoScroll: true,
@@ -49,24 +49,24 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
      * Initialize the Shopware.apps.Blog.view.blog.detail.sidebar.options and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.registerEvents();
         me.propertiesPanel = Ext.create('Ext.panel.Panel', {
-            title:'{s name="detail/sidebar/options/panel/properties"}Blog article properties{/s}',
+            title: '{s name="detail/sidebar/options/panel/properties"}Blog article properties{/s}',
             margin: '0 0 10 0',
             layout: {
                 type: 'anchor'
             },
             bodyPadding: 10,
-            region:'north',
+            region: 'north',
             closable: false,
             scrollable: true,
             split: true,
             autoScroll: true,
             collapsible: false,
-            defaults:{
+            defaults: {
                 labelWidth: 100,
                 anchor: '100%',
                 labelStyle: 'font-weight: 700;',
@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
      *
      * @return bool
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user select an image in the listing.
@@ -145,7 +145,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
      *
      * @return [Array] computed form
      */
-    createOptionsForm:function () {
+    createOptionsForm: function () {
         var me = this;
         return [
             {
@@ -155,48 +155,48 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
                 fieldLabel: '{s name="detail/sidebar/options/field/template"}Template{/s}',
                 store: me.templateStore.load(),
                 valueField: 'id',
-                submitValue : true,
+                submitValue: true,
                 emptyText: '{s name="detail/sidebar/options/field/template/empty_text"}Standard{/s}',
                 displayField: 'name'
             },
             {
-                xtype:'datefield',
-                fieldLabel:'{s name="detail/sidebar/options/field/displayDate"}Display date{/s}',
-                allowBlank:false,
+                xtype: 'datefield',
+                fieldLabel: '{s name="detail/sidebar/options/field/displayDate"}Display date{/s}',
+                allowBlank: false,
                 submitFormat: 'd.m.Y',
-                required:true,
-                name:'displayDate'
+                required: true,
+                name: 'displayDate'
             },
             {
-                xtype:'timefield',
-                fieldLabel:'{s name="detail/sidebar/options/field/displayTime"}Display time{/s}',
-                allowBlank:false,
+                xtype: 'timefield',
+                fieldLabel: '{s name="detail/sidebar/options/field/displayTime"}Display time{/s}',
+                allowBlank: false,
                 submitFormat: 'H:i',
-                required:true,
-                name:'displayTime'
+                required: true,
+                name: 'displayTime'
             },
             {
-                xtype:'combobox',
-                name:'categoryId',
-                fieldLabel:'{s name="detail/sidebar/options/field/category"}Category{/s}',
+                xtype: 'combobox',
+                name: 'categoryId',
+                fieldLabel: '{s name="detail/sidebar/options/field/category"}Category{/s}',
                 store: me.categoryPathStore.load(),
-                valueField:'id',
-                editable:false,
-                allowBlank:false,
-                forceSelection:true,
-                required:true,
-                displayField:'name'
+                valueField: 'id',
+                editable: false,
+                allowBlank: false,
+                forceSelection: true,
+                required: true,
+                displayField: 'name'
             },
             {
-                xtype:'boxselect',
-                name:'tags',
-                fieldLabel:'{s name="detail/sidebar/options/field/tags"}Tags{/s}',
-                store:[],
-                queryMode:'local',
+                xtype: 'boxselect',
+                name: 'tags',
+                fieldLabel: '{s name="detail/sidebar/options/field/tags"}Tags{/s}',
+                store: [],
+                queryMode: 'local',
                 forceSelection: false,
                 createNewOnEnter: true,
                 createNewOnBlur: true,
-                displayField:'name',
+                displayField: 'name',
                 valueField: 'id'
             }
         ]
@@ -216,9 +216,9 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
             buttonText: '{s name="detail/sidebar/options/button/select_image"}Select images{/s}',
             name: 'media-manager-selection',
             multiSelect: true,
-            flex:1,
-            buttonConfig : {
-                width:100
+            flex: 1,
+            buttonConfig: {
+                width: 100
             },
             validTypes: me.getAllowedExtensions()
         });
@@ -233,7 +233,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
      * Method to set the allowed file extension for the media manager
      * @return []
      */
-    getAllowedExtensions : function() {
+    getAllowedExtensions: function() {
         return [ 'gif', 'png', 'jpeg', 'jpg', 'svg' ]
     },
 
@@ -274,8 +274,8 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
             name: 'image-listing',
             emptyText: 'No Media found',
             multiSelect: true,
-            autoScroll:true,
-            flex:5,
+            autoScroll: true,
+            flex: 5,
             store: me.mediaStore,
             tpl: me.createMediaViewTemplate()
         });
@@ -312,10 +312,10 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
 
         // The remove button, removes the selected item from the image listing.
         me.removeButton = Ext.create('Ext.button.Button', {
-            text:'{s name="detail/sidebar/options/button/delete_image"}Remove selected images{/s}',
+            text: '{s name="detail/sidebar/options/button/delete_image"}Remove selected images{/s}',
             action: 'removeImage',
             disabled: true,
-            iconCls:'sprite-minus-circle-frame',
+            iconCls: 'sprite-minus-circle-frame',
             handler: function() {
                 me.fireEvent('removeImage');
             }
@@ -324,7 +324,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
         return Ext.create('Ext.toolbar.Toolbar', {
             items: [
                 me.previewButton,
-                { xtype:'tbspacer', width: 12 },
+                { xtype: 'tbspacer', width: 12 },
                 me.removeButton
             ]
         });

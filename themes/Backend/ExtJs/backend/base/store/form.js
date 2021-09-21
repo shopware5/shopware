@@ -32,7 +32,7 @@ Ext.define('Shopware.apps.Base.store.Form', {
     alternateClassName: 'Shopware.store.Form',
     storeId: 'base.Form',
 
-    model:'Shopware.apps.Base.model.Form',
+    model: 'Shopware.apps.Base.model.Form',
     proxy: {
         type: 'ajax',
         url: '{url controller=config action=getForm}',

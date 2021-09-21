@@ -39,44 +39,44 @@ Ext.define('Shopware.apps.Blog.model.Detail', {
     * Extends the standard ExtJS 4
     * @string
     */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
     * The fields used for this model
     * @array
     */
-    fields : [
+    fields: [
         //{block name="backend/blog/model/detail/fields"}{/block}
-        { name : 'id', type : 'int', useNull: true, defaultValue: null },
-        { name : 'title', type : 'string' },
-        { name : 'shortDescription', type : 'string' },
-        { name : 'description', type : 'string' },
-        { name : 'template', type : 'string' },
-        { name : 'active', type : 'boolean' },
-        { name : 'authorId', type : 'int', useNull: true },
-        { name : 'categoryId', type : 'int', useNull: true  },
-        { name : 'tags', type : 'string' },
-        { name : 'metaTitle', type : 'string' },
-        { name : 'metaKeyWords', type : 'string' },
-        { name : 'metaDescription', type : 'string' },
-        { name : 'displayDate', type: 'date', dateFormat: 'd.m.Y' },
-        { name : 'displayTime', type: 'date', dateFormat: 'H:i' },
-        { name : 'shopIds', type: 'string' },
+        { name: 'id', type: 'int', useNull: true, defaultValue: null },
+        { name: 'title', type: 'string' },
+        { name: 'shortDescription', type: 'string' },
+        { name: 'description', type: 'string' },
+        { name: 'template', type: 'string' },
+        { name: 'active', type: 'boolean' },
+        { name: 'authorId', type: 'int', useNull: true },
+        { name: 'categoryId', type: 'int', useNull: true  },
+        { name: 'tags', type: 'string' },
+        { name: 'metaTitle', type: 'string' },
+        { name: 'metaKeyWords', type: 'string' },
+        { name: 'metaDescription', type: 'string' },
+        { name: 'displayDate', type: 'date', dateFormat: 'd.m.Y' },
+        { name: 'displayTime', type: 'date', dateFormat: 'H:i' },
+        { name: 'shopIds', type: 'string' },
     ],
 
     /**
     * Configure the data communication
     * @object
     */
-    proxy : {
-        type : 'ajax',
-        api:{
-            read:   '{url action=getDetail}',
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url action=getDetail}',
             create: '{url action=saveBlogArticle}',
             update: '{url action=saveBlogArticle}'
         },
-        reader : {
-            type : 'json',
-            root : 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty: 'totalCount'
         }
     },

@@ -38,11 +38,11 @@ Ext.define('Shopware.apps.Order.store.Voucher', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Order.model.Voucher'
+    model: 'Shopware.apps.Order.model.Voucher'
 });
 //{/block}

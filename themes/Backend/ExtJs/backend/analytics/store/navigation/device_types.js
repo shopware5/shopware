@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.DeviceTypes', {
     fields: [
         { name: 'deviceType', type: 'string' },
         {
-            name : 'deviceTypeHuman',
+            name: 'deviceTypeHuman',
             type: 'string',
             convert: function(value, record) {
                 var deviceType = record.get('deviceType');

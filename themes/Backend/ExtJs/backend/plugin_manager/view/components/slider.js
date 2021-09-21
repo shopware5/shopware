@@ -36,8 +36,8 @@ Ext.define('Shopware.apps.PluginManager.view.list.Slider', {
     rotationSpeed: 500,
     itemWidth: 150,
     itemHeight: 185,
-    headline : '',
-    itemTemplate : '',
+    headline: '',
+    itemTemplate: '',
     loadMask: false,
 
     initComponent: function() {

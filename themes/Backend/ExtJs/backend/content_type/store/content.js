@@ -23,7 +23,7 @@
 
 // {block name="backend/content_type/store/content"}
 Ext.define('Shopware.apps.{$controllerName}.store.Content', {
-    extend:'Shopware.store.Listing',
+    extend: 'Shopware.store.Listing',
 
     sorters: [
         {

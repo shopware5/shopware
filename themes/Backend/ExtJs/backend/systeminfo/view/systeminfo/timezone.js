@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Timezone', {
         me.items = block;
 
         Ext.Ajax.request({
-            url:'{url controller="Systeminfo" action="getTimezone"}',
+            url: '{url controller="Systeminfo" action="getTimezone"}',
             success: function (record) {
                 var decodedResponse = Ext.JSON.decode(record.responseText),
                     snippet = '';

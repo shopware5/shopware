@@ -195,7 +195,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
             xtype: 'actioncolumn',
             width: 85,
             items: [{
-                iconCls:'sprite-user--arrow',
+                iconCls: 'sprite-user--arrow',
                 tooltip: me.snippets.tooltips.customer,
                 handler: function(view, rowIndex, colIndex, item, event, record) {
 
@@ -240,7 +240,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
      * @param [string] - The order time value
      * @return [string] - The passed value, formatted with Ext.util.Format.date()
      */
-    dateColumn:function (value, metaData, record) {
+    dateColumn: function (value, metaData, record) {
         if ( value === Ext.undefined ) {
             return value;
         }

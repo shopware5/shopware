@@ -34,7 +34,7 @@
 //{block name="backend/theme/store/config_sets"}
 
 Ext.define('Shopware.apps.Theme.store.ConfigSets', {
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     model: 'Shopware.apps.Theme.model.Theme',
 
     proxy: {

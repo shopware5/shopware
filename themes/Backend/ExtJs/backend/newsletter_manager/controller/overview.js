@@ -178,7 +178,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
             customerGroupStore: me.subApplication.customerGroupStore,        // available customer groups
             shopStore: me.subApplication.shopStore,
             customerStreamStore: me.subApplication.customerStreamStore,
-            dispatchStore:  me.getStore('MailDispatch'),
+            dispatchStore: me.getStore('MailDispatch'),
             title: Ext.String.format('{s name="newsletterWindowEditTitle"}{/s}', record.get('subject')),
             record: record
         });
@@ -240,7 +240,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
             customerGroupStore: me.subApplication.customerGroupStore,        // available customer groups
             shopStore: me.subApplication.shopStore,
             customerStreamStore: me.subApplication.customerStreamStore,
-            dispatchStore:  me.getStore('MailDispatch')
+            dispatchStore: me.getStore('MailDispatch')
         });
 
         var editor = me.getNewsletterEditor(), form = me.getNewsletterSettings();

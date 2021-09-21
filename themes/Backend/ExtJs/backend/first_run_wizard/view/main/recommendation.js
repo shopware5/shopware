@@ -39,12 +39,12 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Recommendation', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.first-run-wizard-recommendation',
+    alias: 'widget.first-run-wizard-recommendation',
 
     /**
      * Name attribute used to generate event names
      */
-    name:'recommendation',
+    name: 'recommendation',
 
     overflowY: 'auto',
 

@@ -37,14 +37,14 @@ Ext.define('Shopware.apps.Base.store.PaymentStatus', {
 
     alternateClassName: 'Shopware.store.PaymentStatus',
     storeId: 'base.PaymentStatus',
-    model : 'Shopware.apps.Base.model.PaymentStatus',
+    model: 'Shopware.apps.Base.model.PaymentStatus',
     pageSize: 1000,
     autoLoad: false,
     remoteFilter: true,
-    proxy:{
-        type:'ajax',
-        url:'{url action="getPaymentStatus"}',
-        reader:{
+    proxy: {
+        type: 'ajax',
+        url: '{url action="getPaymentStatus"}',
+        reader: {
             type: 'json',
             root: 'data',
             totalProperty: 'total'

@@ -57,9 +57,9 @@ Ext.define('Shopware.apps.NewsletterManager.model.Container', {
      * Define the associations of the mailing model.
      * @array
      */
-    associations:[
+    associations: [
         // Right now only text containers are supported, therefore only a text-association is implemented
-        { type:'hasMany', model:'Shopware.apps.NewsletterManager.model.ContainerTypeText', name:'getText', associationKey:'text' }
+        { type: 'hasMany', model: 'Shopware.apps.NewsletterManager.model.ContainerTypeText', name: 'getText', associationKey: 'text' }
     ]
 
 });

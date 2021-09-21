@@ -36,37 +36,37 @@ Ext.define('Shopware.apps.Article.store.Dependency', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     autoLoad: false,
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Article.model.Dependency',
+    model: 'Shopware.apps.Article.model.Dependency',
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        api:{
-            create:'{url action="saveConfiguratorDependency"}',
-            update:'{url action="saveConfiguratorDependency"}'
+        api: {
+            create: '{url action="saveConfiguratorDependency"}',
+            update: '{url action="saveConfiguratorDependency"}'
         },
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 

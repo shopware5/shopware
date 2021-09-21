@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Order.store.Configuration', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Enable batch processing
      */
@@ -47,6 +47,6 @@ Ext.define('Shopware.apps.Order.store.Configuration', {
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Order.model.Configuration'
+    model: 'Shopware.apps.Order.model.Configuration'
 });
 //{/block}

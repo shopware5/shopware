@@ -43,9 +43,9 @@ Ext.define('Shopware.apps.Theme.model.Settings', {
             proxy: {
                 type: 'ajax',
                 api: {
-                    detail:  '{url controller="base" action="loadSettings"}',
-                    create:  '{url controller="base" action="saveSettings"}',
-                    update:  '{url controller="base" action="saveSettings"}'
+                    detail: '{url controller="base" action="loadSettings"}',
+                    create: '{url controller="base" action="saveSettings"}',
+                    update: '{url controller="base" action="saveSettings"}'
                 },
                 reader: {
                     type: 'json',

@@ -35,8 +35,8 @@
 //{block name="backend/overview/view/main/window"}
 Ext.define('Shopware.apps.Overview.view.main.Window', {
     extend: 'Enlight.app.Window',
-    alias : 'widget.overview-main-window',
-    title : '{s name="title"}Overview{/s}',
+    alias: 'widget.overview-main-window',
+    title: '{s name="title"}Overview{/s}',
     layout: 'fit',
     width: 800,
     height: '90%',

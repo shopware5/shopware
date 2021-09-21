@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 Ext.define('Shopware.apps.Base.view.element.DateTime', {
-    extend:'Ext.form.FieldContainer',
+    extend: 'Ext.form.FieldContainer',
     alias: [
         'widget.base-element-datetime',
         'widget.config-element-datetime'
@@ -38,8 +38,8 @@ Ext.define('Shopware.apps.Base.view.element.DateTime', {
     },
     layout: 'fit',
     timePosition: 'right', // valid values:'below', 'right'
-    dateCfg:{},
-    timeCfg:{},
+    dateCfg: {},
+    timeCfg: {},
     allowBlank: true,
 
     initComponent: function() {
@@ -119,7 +119,7 @@ Ext.define('Shopware.apps.Base.view.element.DateTime', {
     },
 
     // Handle tab events
-    onSpecialKey:function(cmp, e) {
+    onSpecialKey: function(cmp, e) {
         var key = e.getKey();
         if (key === e.TAB) {
             if (cmp == this.dateField) {

@@ -51,6 +51,6 @@ Ext.define('Shopware.apps.Systeminfo.store.Paths', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.Systeminfo.model.Path'
+    model: 'Shopware.apps.Systeminfo.model.Path'
 });
 //{/block}

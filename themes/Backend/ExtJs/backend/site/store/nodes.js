@@ -29,7 +29,7 @@
 
 //{block name="backend/site/store/nodes"}
 Ext.define('Shopware.apps.Site.store.Nodes', {
-    extend : 'Ext.data.TreeStore',
+    extend: 'Ext.data.TreeStore',
     model: 'Shopware.apps.Site.model.Nodes'
 });
 //{/block}

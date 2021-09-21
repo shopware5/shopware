@@ -40,12 +40,12 @@ Ext.define('Shopware.apps.ProductFeed', {
      * sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
     /**
      * The name of the module. Used for internal purpose
      * @string
      */
-    name:'Shopware.apps.ProductFeed',
+    name: 'Shopware.apps.ProductFeed',
     /**
      * Sets the loading path for the sub-application.
      *
@@ -55,19 +55,19 @@ Ext.define('Shopware.apps.ProductFeed', {
      */
     bulkLoad: true,
 
-    loadPath:'{url action=load}',
+    loadPath: '{url action=load}',
 
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers:[ 'Main', 'Feed' ],
+    controllers: [ 'Main', 'Feed' ],
 
     /**
      * Requires models for sub-application
      * @array
      */
-    models:['Detail','Main','Category','CategoryForComboTree', 'Shop'],
+    models: ['Detail','Main','Category','CategoryForComboTree', 'Shop'],
 
     /**
      * Required views for this sub-application
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.ProductFeed', {
      * Required stores for sub-application
      * @array
      */
-    stores:[ 'List', 'Detail', 'Category', 'Supplier', 'Article', 'CategoryForComboTree', 'Shop'],
+    stores: [ 'List', 'Detail', 'Category', 'Supplier', 'Article', 'CategoryForComboTree', 'Shop'],
 
 
     /**

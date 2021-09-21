@@ -47,13 +47,13 @@ Ext.define('Shopware.apps.Order.model.OrderHistory', {
     */
     fields: [
        //{block name="backend/order/model/history/fields"}{/block}
-        { name : 'id', type: 'int' },
-        { name : 'userName', type: 'string' },
-        { name : 'changeDate', type: 'date' },
-        { name : 'prevOrderStatusId', type: 'int' },
-        { name : 'currentOrderStatusId', type: 'int' },
-        { name : 'prevPaymentStatusId', type: 'int' },
-        { name : 'currentPaymentStatusId', type: 'int' }
+        { name: 'id', type: 'int' },
+        { name: 'userName', type: 'string' },
+        { name: 'changeDate', type: 'date' },
+        { name: 'prevOrderStatusId', type: 'int' },
+        { name: 'currentOrderStatusId', type: 'int' },
+        { name: 'prevPaymentStatusId', type: 'int' },
+        { name: 'currentPaymentStatusId', type: 'int' }
     ]
 });
 //{/block}

@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.NewsletterManager.model.Sender', {
         api: {
             create: '{url action="createSender"}',
             update: '{url action="updateSender"}',
-            destroy:'{url action="deleteSender"}'
+            destroy: '{url action="deleteSender"}'
         },
 
         /**

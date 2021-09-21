@@ -32,16 +32,16 @@ Ext.define('Shopware.apps.ProductStream.store.SelectedProducts', {
     model: 'Shopware.apps.Base.model.Article',
     autoLoad: false,
     pageSize: 25,
-    proxy:{
+    proxy: {
         type: 'ajax',
         url: '{url controller=ProductStream action=loadSelectedProducts}',
         extraParams: {
             streamId: null
         },
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

@@ -43,9 +43,9 @@ Ext.define('Shopware.apps.Property.view.main.SetAssignGrid', {
      * @object
      */
     snippets: {
-        columnName:          '{s name="set/assign/column_name"}Name{/s}',
+        columnName: '{s name="set/assign/column_name"}Name{/s}',
         tooltipDeleteAssignment: '{s name="set/assign/tooltip_delete_value"}Delete assignment{/s}',
-        dragText:            '{s name="set/assign/drag_text"}Drag and drop to reorganize{/s}'
+        dragText: '{s name="set/assign/drag_text"}Drag and drop to reorganize{/s}'
     },
 
     /**
@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Property.view.main.SetAssignGrid', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the delete icon in the
@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.Property.view.main.SetAssignGrid', {
         return Ext.create('Ext.toolbar.Toolbar', {
             ui: 'shopware-ui',
             items: [
-                { xtype:'tbspacer', height:30 }
+                { xtype: 'tbspacer', height: 30 }
             ]
         });
     }

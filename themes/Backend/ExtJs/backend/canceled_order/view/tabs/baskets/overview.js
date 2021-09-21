@@ -40,8 +40,8 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Overview', {
     alias: 'widget.canceled-order-tabs-baskets-overview',
     title: '{s name="baskets/Overview"}Overview{/s}',
 
-    snippets : {
-        columns : {
+    snippets: {
+        columns: {
             time: '{s name="columns/date"}Date{/s}',
             price: '{s name="columns/amount"}Total amount{/s}',
             average: '{s name="columns/averageItemValue"}Ø Price per unit{/s}',

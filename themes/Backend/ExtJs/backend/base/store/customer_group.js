@@ -37,17 +37,17 @@ Ext.define('Shopware.apps.Base.store.CustomerGroup', {
 
     alternateClassName: 'Shopware.store.CustomerGroup',
     storeId: 'base.CustomerGroup',
-    model : 'Shopware.apps.Base.model.CustomerGroup',
+    model: 'Shopware.apps.Base.model.CustomerGroup',
     pageSize: 1000,
     remoteFilter: true,
 
-    proxy:{
-        type:'ajax',
-        url:'{url controller="base" action="getCustomerGroups"}',
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+    proxy: {
+        type: 'ajax',
+        url: '{url controller="base" action="getCustomerGroups"}',
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 }).create();

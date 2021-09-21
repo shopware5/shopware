@@ -37,17 +37,17 @@ Ext.define('Shopware.apps.Base.store.CountryState', {
 
     alternateClassName: 'Shopware.store.CountryState',
     storeId: 'base.CountryState',
-    model : 'Shopware.apps.Base.model.CountryState',
+    model: 'Shopware.apps.Base.model.CountryState',
     pageSize: 1000,
     remoteFilter: true,
 
-    proxy:{
-        type:'ajax',
-        url:'{url controller="base" action="getCountryStates"}',
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+    proxy: {
+        type: 'ajax',
+        url: '{url controller="base" action="getCountryStates"}',
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 }).create();

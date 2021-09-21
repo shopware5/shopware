@@ -620,9 +620,9 @@ Ext.define('Shopware.global.ErrorReporter', {
         return {
             xtype: 'container',
             title: me.snippets.response.name,
-            layout : {
-                type  : 'vbox',
-                align : 'stretch'
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
             },
             items: [
                 {

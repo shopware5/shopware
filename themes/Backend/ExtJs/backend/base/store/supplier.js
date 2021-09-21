@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Base.store.Supplier', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.Base.model.Supplier',
+    model: 'Shopware.apps.Base.model.Supplier',
 
    /**
     * Configure the data communication

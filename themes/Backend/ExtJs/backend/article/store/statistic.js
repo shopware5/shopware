@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Article.store.Statistic', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
     autoLoad: false,
 
@@ -44,18 +44,18 @@ Ext.define('Shopware.apps.Article.store.Statistic', {
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Article.model.Statistic',
+    model: 'Shopware.apps.Article.model.Statistic',
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -66,10 +66,10 @@ Ext.define('Shopware.apps.Article.store.Statistic', {
             read: '{url action="getStatistic"}'
         },
 
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

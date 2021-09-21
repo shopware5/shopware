@@ -41,13 +41,13 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
      * Define that the additional information is an Ext.panel.Panel extension
      * @string
      */
-    extend:'Ext.panel.Panel',
+    extend: 'Ext.panel.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.order-list-filter',
+    alias: 'widget.order-list-filter',
 
     /**
      * An optional extra CSS class that will be added to this component's Element.
@@ -63,8 +63,8 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
-        title:'{s name="filter/title"}Filter options{/s}',
+    snippets: {
+        title: '{s name="filter/title"}Filter options{/s}',
         from: '{s name="filter/from"}From{/s}',
         to: '{s name="filter/to"}To{/s}',
         orderState: '{s name="filter/orderState"}Order status{/s}',
@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         document: {
             title: '{s name="document/title"}Documents{/s}',
             date: '{s name="document/date"}Date{/s}',
-            name:  '{s name="document/name"}Name{/s}'
+            name: '{s name="document/name"}Name{/s}'
         }
     },
 
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
      * Component event which is fired when the component is initials.
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.registerEvents();
         me.items = [ me.createFieldContainer() ];
@@ -156,11 +156,11 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         me.filterForm = Ext.create('Ext.form.Panel', {
             border: false,
             cls: Ext.baseCSSPrefix + 'filter-form',
-            defaults:{
-                anchor:'98%',
-                labelWidth:155,
-                minWidth:250,
-                xtype:'pagingcombo',
+            defaults: {
+                anchor: '98%',
+                labelWidth: 155,
+                minWidth: 250,
+                xtype: 'pagingcombo',
                 style: 'box-shadow: none;',
                 labelStyle: 'font-weight:700;'
             },

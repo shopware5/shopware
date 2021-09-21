@@ -33,37 +33,37 @@ Ext.define('Shopware.apps.CanceledOrder.model.Position', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Unique identifier field
      * @string
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/canceled_order/model/position/fields"}{/block}
-        { name: 'id', type:'int' },
-        { name: 'orderId', type:'int' },
-        { name: 'mode', type:'int' },
-        { name: 'articleId', type:'int' },
-        { name: 'articleNumber', type:'string' },
-        { name: 'articleName', type:'string' },
-        { name: 'quantity', type:'int' },
-        { name: 'statusId', type:'int' },
-        { name: 'statusDescription', type:'string' },
-        { name: 'price', type:'float' },
-        { name: 'taxId', type:'int' },
-        { name: 'taxRate', type:'float' },
-        { name: 'taxDescription', type:'string' },
-        { name: 'inStock', type:'int' },
+        { name: 'id', type: 'int' },
+        { name: 'orderId', type: 'int' },
+        { name: 'mode', type: 'int' },
+        { name: 'articleId', type: 'int' },
+        { name: 'articleNumber', type: 'string' },
+        { name: 'articleName', type: 'string' },
+        { name: 'quantity', type: 'int' },
+        { name: 'statusId', type: 'int' },
+        { name: 'statusDescription', type: 'string' },
+        { name: 'price', type: 'float' },
+        { name: 'taxId', type: 'int' },
+        { name: 'taxRate', type: 'float' },
+        { name: 'taxDescription', type: 'string' },
+        { name: 'inStock', type: 'int' },
         {
             name: 'total',
-            type:'float',
+            type: 'float',
             convert: function(value, record) {
                 if (!Ext.isNumeric(record.get('price'))) {
                     return record.get('price');

@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.ArticleList.controller.SplitView', {
     },
 
     refs: [
-        { ref:'sidebar', selector:'multi-edit-sidebar' },
+        { ref: 'sidebar', selector: 'multi-edit-sidebar' },
     ],
 
     /**

@@ -41,13 +41,13 @@ Ext.define('Shopware.apps.Order.view.detail.Communication', {
      * Define that the additional information is an Ext.panel.Panel extension
      * @string
      */
-    extend:'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.order-communication-panel',
+    alias: 'widget.order-communication-panel',
 
     /**
      * An optional extra CSS class that will be added to this component's Element.
@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Order.view.detail.Communication', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
+    snippets: {
         title: '{s name="communication/window_title"}Communication{/s}',
         internal: {
             title: '{s name="communication/internal/title"}Internal communication{/s}',
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Order.view.detail.Communication', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.registerEvents();
@@ -150,7 +150,7 @@ Ext.define('Shopware.apps.Order.view.detail.Communication', {
                 labelStyle: 'font-weight: 700;'
             },
             layout: 'anchor',
-            minWidth:250,
+            minWidth: 250,
             items: me.createInternalElements()
         });
     },
@@ -169,7 +169,7 @@ Ext.define('Shopware.apps.Order.view.detail.Communication', {
                 labelStyle: 'font-weight: 700;'
             },
             layout: 'anchor',
-            minWidth:250,
+            minWidth: 250,
             items: me.createExternalElements()
         });
     },

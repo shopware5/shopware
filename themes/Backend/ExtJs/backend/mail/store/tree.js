@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Mail.store.Tree', {
     extend: 'Ext.data.TreeStore',
     batch: true,
     clearOnLoad: false,
-    model : 'Shopware.apps.Mail.model.Mail',
+    model: 'Shopware.apps.Mail.model.Mail',
 
     toRestore: [],
 

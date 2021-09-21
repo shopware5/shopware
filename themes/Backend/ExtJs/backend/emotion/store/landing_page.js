@@ -28,16 +28,16 @@
  */
 
 Ext.define('Shopware.apps.Emotion.store.LandingPage', {
-    extend:'Ext.data.Store',
-    model:'Shopware.apps.Emotion.model.Emotion',
-    proxy:{
-        type:'ajax',
+    extend: 'Ext.data.Store',
+    model: 'Shopware.apps.Emotion.model.Emotion',
+    proxy: {
+        type: 'ajax',
 
         url: '{url controller="Emotion" action="getMasterLandingPages"}',
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

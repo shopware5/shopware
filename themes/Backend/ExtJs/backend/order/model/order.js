@@ -47,36 +47,36 @@ Ext.define('Shopware.apps.Order.model.Order', {
     */
     fields: [
         //{block name="backend/order/model/order/fields"}{/block}
-        { name : 'id', type: 'int' },
-        { name : 'changed', type: 'date', dateFormat: 'c' },
-        { name : 'number', type: 'string' },
-        { name : 'customerId', type: 'int' },
-        { name : 'customerEmail', type: 'string' },
-        { name : 'invoiceAmountNet', type: 'float' },
-        { name : 'invoiceShippingNet', type: 'float' },
-        { name : 'status', type: 'int' },
-        { name : 'cleared', type: 'int' },
-        { name : 'paymentId', type: 'int' },
-        { name : 'transactionId', type: 'string' },
-        { name : 'comment', type: 'string' },
-        { name : 'customerComment', type: 'string' },
-        { name : 'internalComment', type: 'string' },
-        { name : 'net', type: 'int' },
-        { name : 'taxFree', type: 'int' },
-        { name : 'partnerId', type: 'string' },
-        { name : 'temporaryId', type: 'string' },
-        { name : 'referer', type: 'string' },
-        { name : 'clearedDate', type: 'date', dateFormat: 'd.m.Y' },
-        { name : 'trackingCode', type: 'string' },
-        { name : 'languageIso', type: 'string' },
-        { name : 'dispatchId', type: 'int' },
-        { name : 'currency', type: 'string' },
-        { name : 'currencyFactor', type: 'float' },
-        { name : 'shopId', type: 'int' },
-        { name : 'remoteAddress', type: 'string' },
-        { name : 'deviceType', type: 'string' },
+        { name: 'id', type: 'int' },
+        { name: 'changed', type: 'date', dateFormat: 'c' },
+        { name: 'number', type: 'string' },
+        { name: 'customerId', type: 'int' },
+        { name: 'customerEmail', type: 'string' },
+        { name: 'invoiceAmountNet', type: 'float' },
+        { name: 'invoiceShippingNet', type: 'float' },
+        { name: 'status', type: 'int' },
+        { name: 'cleared', type: 'int' },
+        { name: 'paymentId', type: 'int' },
+        { name: 'transactionId', type: 'string' },
+        { name: 'comment', type: 'string' },
+        { name: 'customerComment', type: 'string' },
+        { name: 'internalComment', type: 'string' },
+        { name: 'net', type: 'int' },
+        { name: 'taxFree', type: 'int' },
+        { name: 'partnerId', type: 'string' },
+        { name: 'temporaryId', type: 'string' },
+        { name: 'referer', type: 'string' },
+        { name: 'clearedDate', type: 'date', dateFormat: 'd.m.Y' },
+        { name: 'trackingCode', type: 'string' },
+        { name: 'languageIso', type: 'string' },
+        { name: 'dispatchId', type: 'int' },
+        { name: 'currency', type: 'string' },
+        { name: 'currencyFactor', type: 'float' },
+        { name: 'shopId', type: 'int' },
+        { name: 'remoteAddress', type: 'string' },
+        { name: 'deviceType', type: 'string' },
         {
-            name : 'deviceTypeHuman',
+            name: 'deviceTypeHuman',
             type: 'string',
             convert: function(value, record) {
                 var deviceType = record.get('deviceType');
@@ -88,14 +88,14 @@ Ext.define('Shopware.apps.Order.model.Order', {
                 }
             }
         },
-        { name : 'referer', type: 'string' },
-        { name : 'partnerId', type: 'string' },
-        { name : 'invoiceAmount', type: 'float' },
-        { name : 'invoiceShipping', type: 'float' },
-        { name : 'invoiceShippingTaxRate', type: 'float' },
-        { name : 'orderTime', type: 'date' },
+        { name: 'referer', type: 'string' },
+        { name: 'partnerId', type: 'string' },
+        { name: 'invoiceAmount', type: 'float' },
+        { name: 'invoiceShipping', type: 'float' },
+        { name: 'invoiceShippingTaxRate', type: 'float' },
+        { name: 'orderTime', type: 'date' },
         {
-            name : 'invoiceShippingEuro',
+            name: 'invoiceShippingEuro',
             type: 'float',
             convert: function(value, record) {
                 var factor = record.get('currencyFactor');
@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.Order.model.Order', {
             }
         },
         {
-            name : 'invoiceAmountEuro',
+            name: 'invoiceAmountEuro',
             type: 'float',
             convert: function(value, record) {
                 var factor = record.get('currencyFactor');
@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.Order.model.Order', {
             }
         },
         {
-            name : 'remoteAddressConverted',
+            name: 'remoteAddressConverted',
             type: 'string',
             /**
              * Used the convert function because the displayfield don't give an options
@@ -154,10 +154,10 @@ Ext.define('Shopware.apps.Order.model.Order', {
          * @object
          */
         api: {
-            read:'{url action="getList"}',
+            read: '{url action="getList"}',
             create: '{url action="save"}',
             update: '{url action="save"}',
-            destroy:'{url action="delete"}'
+            destroy: '{url action="delete"}'
         },
 
         /**
@@ -178,21 +178,21 @@ Ext.define('Shopware.apps.Order.model.Order', {
      * One order has a customer, many details, billing- & shipping address and a payment information.
      * @array
      */
-    associations:[
-        { type:'hasMany', model:'Shopware.apps.Base.model.Customer', name:'getCustomer', associationKey:'customer' },
-        { type:'hasMany', model:'Shopware.apps.Order.model.Debit', name:'getDebit', associationKey:'debit' },
-        { type:'hasMany', model:'Shopware.apps.Order.model.PaymentInstance', name:'getPaymentInstances', associationKey:'paymentInstances' },
-        { type:'hasMany', model:'Shopware.apps.Base.model.Shop', name:'getShop', associationKey:'shop' },
-        { type:'hasMany', model:'Shopware.apps.Order.model.Dispatch', name:'getDispatch', associationKey:'dispatch' },
-        { type:'hasMany', model:'Shopware.apps.Base.model.PaymentStatus', name:'getPaymentStatus', associationKey:'paymentStatus' },
-        { type:'hasMany', model:'Shopware.apps.Base.model.OrderStatus', name:'getOrderStatus', associationKey:'orderStatus' },
-        { type:'hasMany', model:'Shopware.apps.Order.model.Billing', name:'getBilling', associationKey:'billing' },
-        { type:'hasMany', model:'Shopware.apps.Order.model.Shipping', name:'getShipping', associationKey:'shipping' },
-        { type:'hasMany', model:'Shopware.apps.Order.model.Payment', name:'getPayment', associationKey:'payment' },
-        { type:'hasMany', model:'Shopware.apps.Order.model.Receipt', name:'getReceipt', associationKey:'documents' },
-        { type:'hasMany', model:'Shopware.apps.Order.model.Mail', name:'getMail', associationKey:'mail' },
-        { type:'hasMany', model:'Shopware.apps.Order.model.Position', name:'getPositions', associationKey:'details' },
-        { type:'hasMany', model:'Shopware.apps.Base.model.Locale', name:'getLocale', associationKey:'locale' }
+    associations: [
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Customer', name: 'getCustomer', associationKey: 'customer' },
+        { type: 'hasMany', model: 'Shopware.apps.Order.model.Debit', name: 'getDebit', associationKey: 'debit' },
+        { type: 'hasMany', model: 'Shopware.apps.Order.model.PaymentInstance', name: 'getPaymentInstances', associationKey: 'paymentInstances' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Shop', name: 'getShop', associationKey: 'shop' },
+        { type: 'hasMany', model: 'Shopware.apps.Order.model.Dispatch', name: 'getDispatch', associationKey: 'dispatch' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.PaymentStatus', name: 'getPaymentStatus', associationKey: 'paymentStatus' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.OrderStatus', name: 'getOrderStatus', associationKey: 'orderStatus' },
+        { type: 'hasMany', model: 'Shopware.apps.Order.model.Billing', name: 'getBilling', associationKey: 'billing' },
+        { type: 'hasMany', model: 'Shopware.apps.Order.model.Shipping', name: 'getShipping', associationKey: 'shipping' },
+        { type: 'hasMany', model: 'Shopware.apps.Order.model.Payment', name: 'getPayment', associationKey: 'payment' },
+        { type: 'hasMany', model: 'Shopware.apps.Order.model.Receipt', name: 'getReceipt', associationKey: 'documents' },
+        { type: 'hasMany', model: 'Shopware.apps.Order.model.Mail', name: 'getMail', associationKey: 'mail' },
+        { type: 'hasMany', model: 'Shopware.apps.Order.model.Position', name: 'getPositions', associationKey: 'details' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Locale', name: 'getLocale', associationKey: 'locale' }
     ]
 
 });

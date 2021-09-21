@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Config.view.main.Fieldset', {
     /**
      *
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         Ext.applyIf(me, {

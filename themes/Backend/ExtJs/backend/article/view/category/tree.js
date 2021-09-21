@@ -39,12 +39,12 @@ Ext.define('Shopware.apps.Article.view.category.Tree', {
      * Define that the billing field set is an extension of the Ext.form.FieldSet
      * @string
      */
-    extend:'Ext.tree.Panel',
+    extend: 'Ext.tree.Panel',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-category-tree',
+    alias: 'widget.article-category-tree',
     /**
      * Set css class for this component
      * @string
@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Article.view.category.Tree', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
+    snippets: {
         title: '{s name="category/tree/title"}Category{/s}',
         tooltip: '{s name="category/tree/tooltip"}Add category{/s}'
     },
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Article.view.category.Tree', {
         plugins: {
             ptype: 'treeviewdragdrop',
             ddGroup: 'Category',
-            dragText : '{s name="category/tree/drag_text"}[0] selected node [1]{/s}',
+            dragText: '{s name="category/tree/drag_text"}[0] selected node [1]{/s}',
             enableDrop: true,
             copy: true
         }
@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.Article.view.category.Tree', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.title = me.snippets.title;
         me.columns = me.getColumns();

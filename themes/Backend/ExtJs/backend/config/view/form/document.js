@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
                 labelWidth: 250,
                 xtype: 'textfield'
             },
-            items:[{
+            items: [{
                 name: 'id',
                 fieldLabel: '{s name="document/detail/id_label"}ID{/s}',
                 hidden: true
@@ -210,11 +210,11 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
                 labelWidth: 250,
                 xtype: 'textfield'
             },
-            items:[{
+            items: [{
                 xtype: 'config-element-button',
                 text: '{s name="document/detail/applyconfig_label"}Use the element-config for all forms{/s}',
                 width: '100%',
-                style :{
+                style: {
                     'margin-bottom': '10px'
                 },
                 handler: function(){
@@ -241,7 +241,7 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
                 }
             },{
                 xtype: 'combo',
-                queryMode:'local',
+                queryMode: 'local',
                 forceSelection: true,
                 valueField: 'id',
                 displayField: 'name',

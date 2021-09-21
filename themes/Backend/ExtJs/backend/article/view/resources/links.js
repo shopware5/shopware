@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Article.view.resources.Links', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
+    snippets: {
         title: '{s name="resources/links/field_set"}Links{/s}',
         notice: '{s name="resources/links/notice"}Optionally, add additional references (e.g. to the supplier).{/s}',
         name: '{s name="resources/links/name"}Name{/s}',
@@ -165,7 +165,7 @@ Ext.define('Shopware.apps.Article.view.resources.Links', {
                     allowBlank: true
                 }, {
                     xtype: 'textfield',
-                    name:'link',
+                    name: 'link',
                     fieldLabel: me.snippets.link,
                     allowBlank: false,
                     vtype: 'url'

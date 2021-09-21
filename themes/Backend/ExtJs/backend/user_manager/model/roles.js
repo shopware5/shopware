@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.UserManager.model.Roles', {
         reader: {
             type: 'json',
             root: 'data',
-            totalProperty:'total'
+            totalProperty: 'total'
         }
     }
 });

@@ -51,6 +51,6 @@ Ext.define('Shopware.apps.Systeminfo.store.Optimizers', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.Systeminfo.model.Optimizer'
+    model: 'Shopware.apps.Systeminfo.model.Optimizer'
 });
 //{/block}

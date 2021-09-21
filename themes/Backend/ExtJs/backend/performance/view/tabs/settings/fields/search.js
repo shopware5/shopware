@@ -38,13 +38,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
      * Define that the base field set is an extension of the "Base" fieldSet
      * @string
      */
-    extend:'Shopware.apps.Performance.view.tabs.settings.fields.Base',
+    extend: 'Shopware.apps.Performance.view.tabs.settings.fields.Base',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-search',
+    alias: 'widget.performance-tabs-settings-search',
 
     /**
      * Description of the fieldSet
@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
      * want to create a new customer or edit an existing customer
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = me.getItems();
@@ -117,14 +117,14 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
                         minValue: 3600
                     },
                     {
-                        fieldLabel:  '{s name="fieldset/search/trace_search"}Trace search requests{/s}',
+                        fieldLabel: '{s name="fieldset/search/trace_search"}Trace search requests{/s}',
                         name: 'search[traceSearch]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel:  '{s name="fieldset/search/last_update"}Last index update{/s}',
+                        fieldLabel: '{s name="fieldset/search/last_update"}Last index update{/s}',
                         name: 'search[fuzzysearchlastupdate]',
                         xtype: 'displayfield',
                         renderer: function(value) {

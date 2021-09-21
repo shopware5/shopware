@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Config.model.form.Widget', {
         //{block name="backend/config/model/form/widget/fields"}{/block}
         { name: 'id', type: 'int' },
         {
-            name:'label',
+            name: 'label',
             type: 'string',
             convert: function(value, record) {
                 var snippet = value;

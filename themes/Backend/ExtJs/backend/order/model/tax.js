@@ -39,29 +39,29 @@ Ext.define('Shopware.apps.Order.model.Tax', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/order/model/tax/fields"}{/block}
-        { name: 'id', type:'int' },
-        { name: 'tax', type:'float' },
-        { name: 'name', type:'string' }
+        { name: 'id', type: 'int' },
+        { name: 'tax', type: 'float' },
+        { name: 'name', type: 'string' }
     ],
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Specific urls to call on CRUD action methods "create", "read", "update" and "destroy".
@@ -75,10 +75,10 @@ Ext.define('Shopware.apps.Order.model.Tax', {
          * a config object or just a valid Reader type name (e.g. 'json', 'xml').
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 

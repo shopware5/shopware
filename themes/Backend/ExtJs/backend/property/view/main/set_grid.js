@@ -42,20 +42,20 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
      * @object
      */
     snippets: {
-        columnGroup:      '{s name="set/column_set"}Group{/s}',
+        columnGroup: '{s name="set/column_set"}Group{/s}',
         columnComparable: '{s name="set/column_comparable"}Comparable{/s}',
-        columnSort:       '{s name="set/column_sort"}Sort{/s}',
-        columnPosition:   '{s name="set/column_position"}Position{/s}',
+        columnSort: '{s name="set/column_sort"}Sort{/s}',
+        columnPosition: '{s name="set/column_position"}Position{/s}',
 
         buttonAddSet: '{s name="set/button_add_set"}Add set{/s}',
 
-        tooltipDeleteGroup:           '{s name="set/tooltip_delete_set"}Delete set{/s}',
+        tooltipDeleteGroup: '{s name="set/tooltip_delete_set"}Delete set{/s}',
         tooltipRemoveOptionFromGroup: '{s name="set/tooltip_remove_option_from_set"}Remove option from set{/s}',
 
-        comboSortModeAlphabetical:  '{s name="set/cobo_sort_mode_alphabetical"}Alphabetical{/s}',
-        comboSortModeNumeric:       '{s name="set/cobo_sort_mode_numeric"}Numeric{/s}',
-        comboSortModePosition:      '{s name="set/cobo_sort_mode_postition"}Position{/s}',
-        search:                     '{s name="set/empty_text_search"}Search...{/s}'
+        comboSortModeAlphabetical: '{s name="set/cobo_sort_mode_alphabetical"}Alphabetical{/s}',
+        comboSortModeNumeric: '{s name="set/cobo_sort_mode_numeric"}Numeric{/s}',
+        comboSortModePosition: '{s name="set/cobo_sort_mode_postition"}Position{/s}',
+        search: '{s name="set/empty_text_search"}Search...{/s}'
     },
 
     /**
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
 
         me.sortModeEditor = Ext.create('Ext.form.field.ComboBox', {
             store: new Ext.data.SimpleStore({
-                fields:['id', 'label'],
+                fields: ['id', 'label'],
                 data: [
                     [0, me.snippets.comboSortModeAlphabetical],
                     [1, me.snippets.comboSortModeNumeric],
@@ -273,9 +273,9 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
     getPagingBar: function () {
         var me = this;
         return Ext.create('Ext.toolbar.Paging', {
-            store:me.store,
-            dock:'bottom',
-            displayInfo:true
+            store: me.store,
+            dock: 'bottom',
+            displayInfo: true
         });
 
     },

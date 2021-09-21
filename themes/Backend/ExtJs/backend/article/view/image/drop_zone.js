@@ -42,12 +42,12 @@ Ext.define('Shopware.apps.Article.view.image.DropZone', {
      * Define that the category drop zone is an extension of the Ext.panel.Panel
      * @string
      */
-    extend:'Ext.container.Container',
+    extend: 'Ext.container.Container',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-image-drop-zone',
+    alias: 'widget.article-image-drop-zone',
     /**
      * Set css class for this component
      * @string
@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Article.view.image.DropZone', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.mediaDropZone = me.createMediaDropZone();
         me.items = [ me.mediaDropZone ];
@@ -119,7 +119,7 @@ Ext.define('Shopware.apps.Article.view.image.DropZone', {
             defaultConfig = {
             requestURL: '{url controller="mediaManager" action="upload"}?albumID=-1',
             showInput: false,
-            padding:0,
+            padding: 0,
             checkSize: false,
             checkType: false,
             checkAmount: false,

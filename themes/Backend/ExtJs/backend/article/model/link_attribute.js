@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Article.model.LinkAttribute', {
     fields: [
         //{block name="backend/article/model/link_attribute/fields"}{/block}
         { name: 'id', type: 'int' },
-        { name: 'articleLinkId', type: 'int', useNull : true }
+        { name: 'articleLinkId', type: 'int', useNull: true }
     ]
 
 });

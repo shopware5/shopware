@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Window', {
      * Display no footer button for the detail window
      * @boolean
      */
-    footerButton:false,
+    footerButton: false,
     width: 925,
 
     /**
@@ -80,14 +80,14 @@ Ext.define('Shopware.apps.Partner.view.partner.Window', {
         return Ext.create('Ext.form.Panel', {
             layout: {
                 type: 'vbox',
-                align : 'stretch'
+                align: 'stretch'
             },
             defaults: { flex: 1 },
             unstyled: true,
             items: [{
-                xtype:'partner-partner-detail',
+                xtype: 'partner-partner-detail',
                 record: me.record,
-                style:'padding: 10px'
+                style: 'padding: 10px'
             }]
         });
     },
@@ -98,17 +98,17 @@ Ext.define('Shopware.apps.Partner.view.partner.Window', {
         var me = this;
         return ['->',
             {
-                text:'{s name="detail_general/button/cancel"}Cancel{/s}',
+                text: '{s name="detail_general/button/cancel"}Cancel{/s}',
                 cls: 'secondary',
-                scope:me,
-                handler:function () {
+                scope: me,
+                handler: function () {
                     this.destroy();
                 }
             },
             {
-                text:'{s name="detail_general/button/save"}Save{/s}',
-                action:'save',
-                cls:'primary'
+                text: '{s name="detail_general/button/save"}Save{/s}',
+                action: 'save',
+                cls: 'primary'
             }
         ];
     }

@@ -28,7 +28,7 @@
 Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.theme-config-set-window',
-    title : '{s name="config_sets"}Configuration sets{/s}',
+    title: '{s name="config_sets"}Configuration sets{/s}',
     width: 600,
     height: 250,
     layout: {

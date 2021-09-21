@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Main', {
         bodyBorder: 0
     },
 
-    snippets :  {
+    snippets: {
         sidebar: {
             title: '{s name="order/sideBar/title"}Details{/s}'
         }
@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Main', {
         var me = this;
         return [
             {
-                xtype:'canceled-order-tabs-order-orders',
+                xtype: 'canceled-order-tabs-order-orders',
                 store: me.canceledOrderStore,
                 internalTitle: 'orders'
             },
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Main', {
                 canceledOrderVoucher: me.canceledOrderVoucher
             },
             {
-                xtype:'canceled-order-view-order-position',
+                xtype: 'canceled-order-view-order-position',
                 internalTitle: 'orders'
             }
         ];

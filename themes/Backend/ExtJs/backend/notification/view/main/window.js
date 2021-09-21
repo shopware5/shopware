@@ -37,10 +37,10 @@
 //{block name="backend/notification/view/main/window"}
 Ext.define('Shopware.apps.Notification.view.main.Window', {
     extend: 'Enlight.app.Window',
-    alias : 'widget.notification-main-window',
-    title : '{s name="title"}Notification{/s}',
-    layout:{
-        type:'border'
+    alias: 'widget.notification-main-window',
+    title: '{s name="title"}Notification{/s}',
+    layout: {
+        type: 'border'
     },
     width: 950,
     height: '90%',
@@ -48,9 +48,9 @@ Ext.define('Shopware.apps.Notification.view.main.Window', {
     stateful: true,
     stateId: 'shopware-notification-main-window',
     defaults: {
-        layout:'fit',
+        layout: 'fit',
         border: false,
-        split:true
+        split: true
     },
 
     /**
@@ -75,15 +75,15 @@ Ext.define('Shopware.apps.Notification.view.main.Window', {
         var me = this;
         return Ext.create('Ext.panel.Panel', {
             title: '{s name="notification/article/panel/title"}Articles with notifications{/s}',
-            items:[
+            items: [
                 {
-                    xtype:'notification-notification-article',
-                    articleStore:me.articleStore
+                    xtype: 'notification-notification-article',
+                    articleStore: me.articleStore
                 }
             ],
-            layout:'fit',
+            layout: 'fit',
             border: false,
-            split:true,
+            split: true,
             region: 'center'
         });
     },
@@ -98,17 +98,17 @@ Ext.define('Shopware.apps.Notification.view.main.Window', {
         var me = this;
         return Ext.create('Ext.panel.Panel', {
             title: '{s name="notification/customer/panel/title"}Customer registered for Notification{/s}',
-            items:[
+            items: [
                 {
-                    xtype:'notification-notification-customer',
-                    customerStore:me.customerStore
+                    xtype: 'notification-notification-customer',
+                    customerStore: me.customerStore
                 }
             ],
-            layout:'fit',
+            layout: 'fit',
             border: false,
-            split:true,
+            split: true,
             region: 'east',
-            width:475
+            width: 475
         });
     }
 });

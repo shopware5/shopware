@@ -34,9 +34,9 @@ Ext.define('Shopware.apps.Site.model.Groups', {
     root: 'groups',
     fields: [
         //{block name="backend/site/model/groups/fields"}{/block}
-        { name : 'id', type: 'int' },
-        { name : 'templateVariable', type: 'string', mapping: 'key' },
-        { name : 'groupName', type: 'string', mapping: 'name' }
+        { name: 'id', type: 'int' },
+        { name: 'templateVariable', type: 'string', mapping: 'key' },
+        { name: 'groupName', type: 'string', mapping: 'name' }
     ],
 
     proxy: {

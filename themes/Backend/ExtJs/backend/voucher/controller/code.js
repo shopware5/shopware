@@ -41,16 +41,16 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
     /**
      * all references to get the elements by the applicable selector
      */
-    refs:[
-        { ref:'voucherBaseConfiguration', selector:'window voucher-voucher-base_configuration' },
-        { ref:'codePatternField', selector:'voucher-code-list textfield[name=patternField]' },
-        { ref:'progressBar', selector:'voucher-code-progress-window progressbar' },
-        { ref:'progressBarWindow', selector:'voucher-code-progress-window' },
-        { ref:'voucherCodeGrid', selector:'voucher-code-list' }
+    refs: [
+        { ref: 'voucherBaseConfiguration', selector: 'window voucher-voucher-base_configuration' },
+        { ref: 'codePatternField', selector: 'voucher-code-list textfield[name=patternField]' },
+        { ref: 'progressBar', selector: 'voucher-code-progress-window progressbar' },
+        { ref: 'progressBarWindow', selector: 'voucher-code-progress-window' },
+        { ref: 'voucherCodeGrid', selector: 'voucher-code-list' }
     ],
     /**
      * Contains all snippets for the controller
@@ -67,23 +67,23 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
         me.control({
-            'voucher-code-list button[action=generateCodes]':{
-                click:me.onGenerateCodes
+            'voucher-code-list button[action=generateCodes]': {
+                click: me.onGenerateCodes
             },
-            'voucher-code-list button[action=downloadCodes]':{
-                click:me.onDownloadCodes
+            'voucher-code-list button[action=downloadCodes]': {
+                click: me.onDownloadCodes
             },
-            'voucher-code-list textfield[action=searchVoucherCode]':{
-                change:me.onSearchVoucherCode
+            'voucher-code-list textfield[action=searchVoucherCode]': {
+                change: me.onSearchVoucherCode
             },
-            'voucher-voucher-window tabpanel':{
-                tabchange:me.onChangeTab
+            'voucher-voucher-window tabpanel': {
+                tabchange: me.onChangeTab
             },
-            'voucher-code-list':{
-                openCustomerAccount:me.onOpenCustomerAccount,
+            'voucher-code-list': {
+                openCustomerAccount: me.onOpenCustomerAccount,
                 edit: me.onEditCode
             }
         });
@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
      *
      * @return void
      */
-    onGenerateCodes:function () {
+    onGenerateCodes: function () {
         var me = this,
             countCodes = me.getVoucherCodeGrid().getStore().data.items.length,
             codePatternField = me.getCodePatternField(),
@@ -121,7 +121,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
      *
      * @return void
      */
-    onDownloadCodes:function () {
+    onDownloadCodes: function () {
         var me = this;
         var form = me.getVoucherBaseConfiguration().getForm(),
             record = form.getRecord();
@@ -134,7 +134,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
      * @param codePattern | this is the based codePattern to generate the voucher code with
      * @return void
      */
-    generateCodes:function(codePattern){
+    generateCodes: function(codePattern){
         var me = this,
             form = me.getVoucherBaseConfiguration().getForm(),
             values = form.getValues(),
@@ -167,7 +167,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
      * @param deletePreviousVoucherCodes
      * @param overAllTimeToGenerate
      */
-    batchProcessing:function(voucherId, codePattern, numberOfCodesToGenerate, numberOfAllCodes, deletePreviousVoucherCodes, overAllTimeToGenerate){
+    batchProcessing: function(voucherId, codePattern, numberOfCodesToGenerate, numberOfAllCodes, deletePreviousVoucherCodes, overAllTimeToGenerate){
         var me = this,
             progressBar = me.getProgressBar(),
             startTime = new Date().getTime(),
@@ -176,14 +176,14 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
 
         numberOfCodesToGenerate = numberOfCodesToGenerate > 50000 ? 50000 : numberOfCodesToGenerate;
         Ext.Ajax.request({
-            url:'{url action="createVoucherCodes"}',
-            params:{
+            url: '{url action="createVoucherCodes"}',
+            params: {
                 voucherId: voucherId,
                 numberOfUnits: numberOfCodesToGenerate,
                 deletePreviousVoucherCodes: deletePreviousVoucherCodes,
                 codePattern: codePattern
             },
-            success:function (record) {
+            success: function (record) {
                 var status = Ext.decode(record.responseText);
                 if (status.success) {
                     var cycleTime =  (new Date().getTime() - startTime) / 1000;
@@ -227,7 +227,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
      * @param newCard
      * @return void
      */
-    onChangeTab:function (tabPanel, newCard) {
+    onChangeTab: function (tabPanel, newCard) {
         var me = this;
 
         //only on the code panel
@@ -237,7 +237,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                 formRecord = me.getVoucherBaseConfiguration().getForm().getRecord();
 
             store.getProxy().extraParams = {
-                voucherID:formRecord.data.id
+                voucherID: formRecord.data.id
             };
 
             store.load({
@@ -260,7 +260,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
      * @param value
      * @return void
      */
-    onSearchVoucherCode:function (field, value) {
+    onSearchVoucherCode: function (field, value) {
 
         var me = this,
             searchString = Ext.String.trim(value),
@@ -276,7 +276,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
      * @param value
      * @return void
      */
-    onOpenCustomerAccount:function (view, rowIndex) {
+    onOpenCustomerAccount: function (view, rowIndex) {
         var me = this;
         var record = me.subApplication.getStore('Code').getAt(rowIndex);
         Shopware.app.Application.addSubApplication({

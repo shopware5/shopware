@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
      */
     extend: 'Enlight.app.SubWindow',
 
-    alias : 'widget.theme-cache-warm-up-window',
+    alias: 'widget.theme-cache-warm-up-window',
 
     /**
      * Window title
@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
             text: me.snippets.loading,
             margin: '0 0 15',
             style: 'border-width: 1px !important;',
-            cls:'left-align'
+            cls: 'left-align'
         });
     },
 

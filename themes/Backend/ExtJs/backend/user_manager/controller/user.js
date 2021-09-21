@@ -47,12 +47,12 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
      * Contains all snippets for the controller
      * @object
      */
-    snippets:{
-        form:{
+    snippets: {
+        form: {
             errorTitle: '{s name="message/password/form/error_title"}Error saving the form{/s}',
             errorMessage: '{s name="message/password/form/error_message"}The field -[0]- is not valid{/s}'
         },
-        growlMessage:'{s name="message/growlMessage"}User manager{/s}',
+        growlMessage: '{s name="message/growlMessage"}User manager{/s}',
         unlock: {
             successTitle: '{s name="create_user/unlock/success_title"}Success{/s}',
             successText: '{s name="create_user/unlock/success_text"}Successfully unlocked the user.{/s}',
@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
                 deleteUser: me.onDeleteUser,
                 deleteUsers: me.onDeleteUsers
             },
-            'usermanager-user-list textfield[action=searchUser]':{
+            'usermanager-user-list textfield[action=searchUser]': {
                 change: me.onSearchUser
             }
         });
@@ -104,7 +104,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
      * @param value
      * @return void
      */
-    onSearchUser:function (field, value) {
+    onSearchUser: function (field, value) {
         var me = this,
             searchString = Ext.String.trim(value),
             store = me.subApplication.getStore('User');
@@ -251,11 +251,11 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
 
             Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
                 record.destroy({
-                    success : function () {
+                    success: function () {
                         userStore.load();
                         Shopware.Notification.createGrowlMessage('{s name="user/Success"}Successful{/s}', '{s name="user/deletedSuccessfully"}User has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
                     },
-                    failure : function () {
+                    failure: function () {
                         Shopware.Notification.createGrowlMessage('{s name="user/Error"}Error{/s}', '{s name="user/deletedError"}An error has occurred while deleting the user{/s}', '{s name="user/userManager"}User Manager{/s}');
                     }
                 });
@@ -298,7 +298,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
 
         me.getStore('UserDetail').load({
             id: record.data.id,
-            callback:function (records) {
+            callback: function (records) {
                 me.getView('user.Create').create({
                     record: records[0],
                     edit: true

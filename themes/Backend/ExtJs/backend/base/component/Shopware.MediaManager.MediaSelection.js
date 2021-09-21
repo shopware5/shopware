@@ -346,7 +346,7 @@ Ext.define('Shopware.MediaManager.MediaSelection',
      *
      * @return void
      */
-    reset : function(){
+    reset: function(){
         var me = this;
 
         if (me.rendered) {

@@ -35,10 +35,10 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
     extend: 'Ext.app.Controller',
 
     refs: [
-        { ref:'navigationGrid', selector:'multi-edit-navigation-grid' },
-        { ref:'mainGrid', selector:'multi-edit-main-grid' },
-        { ref:'batchWindow', selector:'multi-edit-batch-process-window' },
-        { ref:'batchGrid', selector:'multi-edit-batch-process-grid' }
+        { ref: 'navigationGrid', selector: 'multi-edit-navigation-grid' },
+        { ref: 'mainGrid', selector: 'multi-edit-main-grid' },
+        { ref: 'batchWindow', selector: 'multi-edit-batch-process-window' },
+        { ref: 'batchGrid', selector: 'multi-edit-batch-process-grid' }
     ],
 
     /**
@@ -160,13 +160,13 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
         var me = this;
 
         me.progressWindow = Ext.MessageBox.show({
-            title        : '{s name="creatingQueue"}Creating queue for bulk changes{/s}',
-            msg          : '{s name="importPendingMessageQueue"}In this step the filtered products are calculated. Additionally a backup will be created, if configured. Depending one the amount of products and the server speed, this might take a while.{/s}',
-            width        : 500,
-            progress     : true,
-            closable     : false,
-            buttons      : Ext.MessageBox.CANCEL,
-            fn           : function(buttonId, text, opt) {
+            title: '{s name="creatingQueue"}Creating queue for bulk changes{/s}',
+            msg: '{s name="importPendingMessageQueue"}In this step the filtered products are calculated. Additionally a backup will be created, if configured. Depending one the amount of products and the server speed, this might take a while.{/s}',
+            width: 500,
+            progress: true,
+            closable: false,
+            buttons: Ext.MessageBox.CANCEL,
+            fn: function(buttonId, text, opt) {
 
                 if (buttonId !== 'cancel') {
                     return;
@@ -194,13 +194,13 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
         var me = this;
 
         me.progressWindow = Ext.MessageBox.show({
-            title        : '{s name="creatingBatchWindow"}Batch-changing products{/s}',
-            msg          : '{s name="importPendingMessageBatch"}In this step your changes will be applied to the filtered products. This is quite fast in most cases. If not, try to disable cache invalidation in the ArticleList plugin configuration.{/s}',
-            width        : 500,
-            progress     : true,
-            closable     : false,
-            buttons      : Ext.MessageBox.CANCEL,
-            fn           : function(buttonId, text, opt) {
+            title: '{s name="creatingBatchWindow"}Batch-changing products{/s}',
+            msg: '{s name="importPendingMessageBatch"}In this step your changes will be applied to the filtered products. This is quite fast in most cases. If not, try to disable cache invalidation in the ArticleList plugin configuration.{/s}',
+            width: 500,
+            progress: true,
+            closable: false,
+            buttons: Ext.MessageBox.CANCEL,
+            fn: function(buttonId, text, opt) {
 
                 if (buttonId !== 'cancel') {
                     return;
@@ -245,7 +245,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
             type: 'POST',
             url: '{url controller="ArticleList" action = "createQueue"}',
             timeout: 4000000,
-            params : {
+            params: {
                 resource: 'product',
                 operations: Ext.JSON.encode(config.operations),
                 filterArray: config.filterArray,
@@ -365,7 +365,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
         Ext.Ajax.request({
             url: '{url controller="ArticleList" action = "batch"}',
             timeout: 4000000,
-            params : {
+            params: {
                 resource: 'product',
                 limit: 200,
                 queueId: queueId
@@ -591,13 +591,13 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
 
                     case 'date':
                         return new Ext.form.DateField({
-                            disabled : false,
+                            disabled: false,
                             format: 'Y-m-d'
                         });
 
                     case 'datetime':
                         return new Ext.form.DateField({
-                            disabled : false,
+                            disabled: false,
                             format: 'Y-m-d H:i:s'
                         });
 

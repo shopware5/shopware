@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.CanceledOrder.store.Voucher', {
     extend: 'Ext.data.Store',
     // Do not load data, when not explicitly requested
     autoLoad: false,
-    model : 'Shopware.apps.CanceledOrder.model.Voucher',
+    model: 'Shopware.apps.CanceledOrder.model.Voucher',
 
     /**
      * Configure the data communication
@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.CanceledOrder.store.Voucher', {
         reader: {
             type: 'json',
             root: 'data',
-            totalProperty:'total'
+            totalProperty: 'total'
         }
     }
 });

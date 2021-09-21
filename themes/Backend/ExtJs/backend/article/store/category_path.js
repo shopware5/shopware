@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Article.store.CategoryPath', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
     /**
      * Fields of the store records
@@ -56,12 +56,12 @@ Ext.define('Shopware.apps.Article.store.CategoryPath', {
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -74,10 +74,10 @@ Ext.define('Shopware.apps.Article.store.CategoryPath', {
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

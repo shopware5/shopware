@@ -36,38 +36,38 @@ Ext.define('Shopware.apps.Article.store.Variation', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Article.model.PriceVariation',
+    model: 'Shopware.apps.Article.model.PriceVariation',
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        api:{
+        api: {
             read: '{url controller="ArticlePriceVariation" action="getPriceVariations"}',
             destroy: '{url controller="ArticlePriceVariation" action="deletePriceVariation"}'
         },
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

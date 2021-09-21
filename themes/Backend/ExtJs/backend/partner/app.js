@@ -41,12 +41,12 @@ Ext.define('Shopware.apps.Partner', {
      * sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
     /**
      * The name of the module. Used for internal purpose
      * @string
      */
-    name:'Shopware.apps.Partner',
+    name: 'Shopware.apps.Partner',
     /**
      * Sets the loading path for the sub-application.
      *
@@ -63,31 +63,31 @@ Ext.define('Shopware.apps.Partner', {
     * controller (server-side)
     * @string
     */
-    loadPath:'{url action=load}',
+    loadPath: '{url action=load}',
 
     /**
      * Required stores for controller
      * @array
      */
-    stores:[ 'List', 'Detail', 'StatisticList', 'StatisticChart' ],
+    stores: [ 'List', 'Detail', 'StatisticList', 'StatisticChart' ],
 
     /**
      * Required views for controller
      * @array
      */
-    views:['main.Window', 'partner.List', 'partner.Window', 'partner.Detail', 'statistic.Window', 'statistic.List', 'statistic.Chart'],
+    views: ['main.Window', 'partner.List', 'partner.Window', 'partner.Detail', 'statistic.Window', 'statistic.List', 'statistic.Chart'],
 
 
     /**
      * Requires models for sub-application
      * @array
      */
-    models:['Main', 'Detail', 'StatisticList', 'StatisticChart'],
+    models: ['Main', 'Detail', 'StatisticList', 'StatisticChart'],
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers:['Partner', 'Statistic', 'Main'],
+    controllers: ['Partner', 'Statistic', 'Main'],
 
     /**
      * Returns the main application window for this is expected

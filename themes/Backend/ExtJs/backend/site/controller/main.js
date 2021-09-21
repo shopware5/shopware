@@ -53,14 +53,14 @@ Ext.define('Shopware.apps.Site.controller.Main', {
      *
      * @object
      */
-    refs:[
-        { ref:'mainWindow', selector:'site-mainWindow' },
-        { ref:'confirmationBox', selector:'site-confirmationBox' },
-        { ref:'detailForm', selector:'site-form' },
-        { ref:'parentIdField', selector:'site-form hidden[name=parentId]' },
-        { ref:'navigationTree', selector:'site-tree' },
-        { ref:'deleteSiteButton', selector:'site-mainWindow button[action=onDeleteSite]' },
-        { ref:'saveSiteButton', selector:'site-form button[action=onSaveSite]' }
+    refs: [
+        { ref: 'mainWindow', selector: 'site-mainWindow' },
+        { ref: 'confirmationBox', selector: 'site-confirmationBox' },
+        { ref: 'detailForm', selector: 'site-form' },
+        { ref: 'parentIdField', selector: 'site-form hidden[name=parentId]' },
+        { ref: 'navigationTree', selector: 'site-tree' },
+        { ref: 'deleteSiteButton', selector: 'site-mainWindow button[action=onDeleteSite]' },
+        { ref: 'saveSiteButton', selector: 'site-form button[action=onSaveSite]' }
     ],
 
     /**
@@ -165,7 +165,7 @@ Ext.define('Shopware.apps.Site.controller.Main', {
         Ext.Msg.confirm('{s name="onDeleteSiteConfirmationBoxCaption"}Delete site?{/s}', Ext.String.format('{s name="onDeleteSiteConfirmationBoxText"}Are you sure you want to delete \'[0]\'?{/s}', siteName), function(btn){
             if (btn === 'yes'){
                 Ext.Ajax.request({
-                    url : '{url action=deleteSite}',
+                    url: '{url action=deleteSite}',
                     scope: me,
                     params: {
                         siteId: siteId

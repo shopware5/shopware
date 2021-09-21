@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Article.model.PropertyOption', {
     ],
 
     associations: [
-        { type:'hasMany', model:'Shopware.apps.Article.model.PropertyValue', name:'getValues', associationKey:'values' }
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.PropertyValue', name: 'getValues', associationKey: 'values' }
     ]
 
 });

@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.first-run-wizard-localization-switcher',
+    alias: 'widget.first-run-wizard-localization-switcher',
 
     /**
      * Define window width
@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.LocalizationSwitcher', {
     snippets: {
         title: '{s name="localization_switcher/content/title"}Choose language{/s}',
         message: '{s name="localization_switcher/content/message"}If you installed a translation plugin, you can now reload the backend in that language.{/s}',
-        continue:'{s name="localization_switcher/continue"}Continue in English{/s}'
+        continue: '{s name="localization_switcher/continue"}Continue in English{/s}'
     },
 
     batchSize: 200,

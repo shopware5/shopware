@@ -44,13 +44,13 @@ Ext.define('Shopware.apps.Base.model.Captcha', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/captcha/fields"}{/block}
         { name: 'id', type: 'string' },
         { name: 'displayname', type: 'string' }

@@ -28,7 +28,7 @@
 Ext.define('Shopware.apps.Theme.view.settings.Window', {
     extend: 'Shopware.window.Detail',
     alias: 'widget.theme-settings-window',
-    title : '{s name="settings_window"}System configuration{/s}',
+    title: '{s name="settings_window"}System configuration{/s}',
     height: 365,
     width: 344,
     modal: true

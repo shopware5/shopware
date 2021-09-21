@@ -30,10 +30,10 @@
  */
 //{block name="backend/base/store/page_not_found_destination_options"}
 Ext.define('Shopware.apps.Base.store.PageNotFoundDestinationOptions', {
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
     alternateClassName: 'Shopware.store.PageNotFoundDestinationOptions',
-    model:'Shopware.apps.Base.model.PageNotFoundDestinationOptions',
+    model: 'Shopware.apps.Base.model.PageNotFoundDestinationOptions',
     storeId: 'base.PageNotFoundDestinationOptions',
 
     /**
@@ -41,13 +41,13 @@ Ext.define('Shopware.apps.Base.store.PageNotFoundDestinationOptions', {
      */
     remoteFilter: true,
 
-    proxy:{
-        type:'ajax',
-        url:'{url action="getPageNotFoundDestinationOptions"}',
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+    proxy: {
+        type: 'ajax',
+        url: '{url action="getPageNotFoundDestinationOptions"}',
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 }).create();

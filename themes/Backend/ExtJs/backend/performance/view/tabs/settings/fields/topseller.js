@@ -38,13 +38,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
      * Define that the base field set is an extension of the "Base" fieldSet
      * @string
      */
-    extend:'Shopware.apps.Performance.view.tabs.settings.fields.Base',
+    extend: 'Shopware.apps.Performance.view.tabs.settings.fields.Base',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-topseller',
+    alias: 'widget.performance-tabs-settings-topseller',
 
     /**
      * Description of the fieldSet
@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
      * want to create a new customer or edit an existing customer
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = me.getItems();

@@ -34,12 +34,12 @@
  */
 //{block name="backend/voucher/view/code/progress"}
 Ext.define('Shopware.apps.Voucher.view.code.Progress', {
-    extend:'Enlight.app.Window',
-    alias:'widget.voucher-code-progress-window',
-    width:550,
-    height:80,
-    footerButton:false,
-    stateful:true,
+    extend: 'Enlight.app.Window',
+    alias: 'widget.voucher-code-progress-window',
+    width: 550,
+    height: 80,
+    footerButton: false,
+    stateful: true,
     autoShow: true,
     layout: {
         align: 'stretch',
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Voucher.view.code.Progress', {
             animate: true,
             margin: '0 0 15',
             style: 'border-width: 1px !important;',
-            cls:'left-align'
+            cls: 'left-align'
         });
     }
 

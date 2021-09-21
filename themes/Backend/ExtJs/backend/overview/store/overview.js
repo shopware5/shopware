@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Overview.store.Overview', {
     extend: 'Ext.data.Store',
     autoLoad: false,
-    model : 'Shopware.apps.Overview.model.Overview',
+    model: 'Shopware.apps.Overview.model.Overview',
     remoteSort: false,
     remoteFilter: false
 });

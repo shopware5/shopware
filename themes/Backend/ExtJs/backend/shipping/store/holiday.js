@@ -38,23 +38,23 @@ Ext.define('Shopware.apps.Shipping.store.Holiday', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend : 'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Auto load the store after the component
      * is initialized
      * @boolean
      */
-    autoLoad : false,
+    autoLoad: false,
     /**
      * Amount of data loaded at once
      * @integer
      */
-    pageSize : 30,
+    pageSize: 30,
     /**
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Shipping.model.Holiday',
+    model: 'Shopware.apps.Shipping.model.Holiday',
      /**
      * enables the remote filter system
      * @boolen
@@ -64,19 +64,19 @@ Ext.define('Shopware.apps.Shipping.store.Holiday', {
      * Configure the data communication
      * @object
      */
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        url:'{url controller="shipping" action="getHolidays"}',
+        url: '{url controller="shipping" action="getHolidays"}',
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
+        reader: {
             type: 'json',
             root: 'data',
             totalProperty: 'total'

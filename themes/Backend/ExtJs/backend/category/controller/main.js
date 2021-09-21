@@ -64,16 +64,16 @@ Ext.define('Shopware.apps.Category.controller.Main', {
      * Default root node ID
      * @integer
      */
-    defaultRootNodeId : 1,
+    defaultRootNodeId: 1,
 
     /**
      * Translations
      * @Object
      */
-    snippets : {
-        onSaveChangesSuccess    : '{s name="settings/save_success"}Changes have been saved successfully.{/s}',
-        onSaveChangesError      : '{s name="settings/save_error"}An error has occurred while saving the changes.{/s}',
-        growlMessage            : '{s name="window/main_title"}{/s}'
+    snippets: {
+        onSaveChangesSuccess: '{s name="settings/save_success"}Changes have been saved successfully.{/s}',
+        onSaveChangesError: '{s name="settings/save_error"}An error has occurred while saving the changes.{/s}',
+        growlMessage: '{s name="window/main_title"}{/s}'
     },
 
     /**
@@ -98,14 +98,14 @@ Ext.define('Shopware.apps.Category.controller.Main', {
         me.subApplication.assignedProductsStore = me.subApplication.getStore('AssignedProducts');
 
         me.subApplication.treeStore.getProxy().extraParams = {
-            node:me.defaultRootNodeId
+            node: me.defaultRootNodeId
         };
         me.subApplication.treeStore.load();
         me.subApplication.templateStore.load();
 
         me.mainWindow = me.getView('main.Window').create({
-            templateStore:me.subApplication.templateStore,
-            treeStore:me.subApplication.treeStore
+            templateStore: me.subApplication.templateStore,
+            treeStore: me.subApplication.treeStore
         });
 
         me.control({
@@ -113,8 +113,8 @@ Ext.define('Shopware.apps.Category.controller.Main', {
                 'saveCategory': me.saveCategory
             },
             // Save button
-            'category-main-window':{
-                'saveDetail' : me.onSaveSettings
+            'category-main-window': {
+                'saveDetail': me.onSaveSettings
             }
         });
     },

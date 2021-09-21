@@ -41,24 +41,24 @@ Ext.define('Shopware.apps.Order.view.list.Navigation', {
      * Define that the additional information is an Ext.panel.Panel extension
      * @string
      */
-    extend:'Ext.container.Container',
+    extend: 'Ext.container.Container',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.order-list-navigation',
+    alias: 'widget.order-list-navigation',
 
     /**
      * Set border layout for the panel content
      * @string
      */
-    layout:'anchor',
+    layout: 'anchor',
     /**
      * Set css class for this component
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'order-list-navigation',
+    cls: Ext.baseCSSPrefix + 'order-list-navigation',
 
     /**
      * Sets the width of the panel
@@ -70,20 +70,20 @@ Ext.define('Shopware.apps.Order.view.list.Navigation', {
      * Initialed the info panel is collapsed
      * @boolean
      */
-    collapsed:false,
+    collapsed: false,
 
     /**
      * Define that the info panel can be collapsed
      * @boolean
      */
-    collapsible:true,
+    collapsible: true,
 
     /**
      * Contains all snippets for the view component
      * @object
      */
     snippets: {
-        title:'{s name="navigation_title"}Navigation options{/s}'
+        title: '{s name="navigation_title"}Navigation options{/s}'
     },
 
     /**
@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.Order.view.list.Navigation', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = me.getPanels();

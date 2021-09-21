@@ -343,7 +343,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         store.remove(selected);
         store.getProxy().batchActions = false;
         store.sync({
-            callback : function() {
+            callback: function() {
                 mediaView.setLoading(false);
                 store.load({
                     callback: function() {

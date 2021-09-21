@@ -45,24 +45,24 @@ Ext.define('Shopware.apps.Base.model.PaymentStatus', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * unique id
      * @int
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/payment_status/fields"}{/block}
-        { name:'id', type: 'int' },
-        { name:'name', type: 'string' },
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' },
         {
-            name:'description',
+            name: 'description',
             type: 'string',
             convert: function(value, record) {
                 if (value) {

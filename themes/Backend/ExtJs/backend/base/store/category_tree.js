@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Base.store.CategoryTree', {
     /**
      * Define that this component is an extension of the Ext.data.TreeStore
      */
-    extend : 'Ext.data.TreeStore',
+    extend: 'Ext.data.TreeStore',
 
     /**
      * Define unique store id to create the store by the store manager
@@ -60,30 +60,30 @@ Ext.define('Shopware.apps.Base.store.CategoryTree', {
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Base.model.Category',
+    model: 'Shopware.apps.Base.model.Category',
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy : {
-        type : 'ajax',
+    proxy: {
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        api : {
-            read : '{url controller=category action=getList}'
+        api: {
+            read: '{url controller=category action=getList}'
         },
 
         /**
          * Configure the data reader
          * @object
          */
-        reader : {
-            type : 'json',
+        reader: {
+            type: 'json',
             root: 'data'
         }
     }

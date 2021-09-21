@@ -40,8 +40,8 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Viewports', {
     alias: 'widget.canceled-order-tabs-baskets-viewports',
     title: '{s name="baskets/exitPages"}Exit Pages{/s}',
 
-    snippets : {
-        columns : {
+    snippets: {
+        columns: {
             percentage: '{s name="viewportPercentage"}Percent{/s}',
             total: '{s name="viewportTotal"}Total{/s}',
             name: '{s name="viewportName"}Name{/s}'

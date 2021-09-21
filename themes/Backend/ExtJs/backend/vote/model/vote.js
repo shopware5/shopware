@@ -40,8 +40,8 @@ Ext.define('Shopware.apps.Vote.model.Vote', {
 
     fields: [
         //{block name="backend/vote/model/vote/fields"}{/block}
-        { name: 'id', type : 'int' },
-        { name: 'active', type : 'boolean' },
+        { name: 'id', type: 'int' },
+        { name: 'active', type: 'boolean' },
         { name: 'shopId', type: 'int', useNull: true },
         { name: 'articleId', type: 'int' },
         { name: 'points', type: 'float' },
@@ -51,8 +51,8 @@ Ext.define('Shopware.apps.Vote.model.Vote', {
         { name: 'headline', type: 'string' },
         { name: 'comment', type: 'string' },
         { name: 'answer', type: 'string' },
-        { name: 'answer_date', type : 'date', useNull: true },
-        { name: 'datum', type : 'date' },
+        { name: 'answer_date', type: 'date', useNull: true },
+        { name: 'datum', type: 'date' },
         {
             name: 'articleName',
             type: 'string',

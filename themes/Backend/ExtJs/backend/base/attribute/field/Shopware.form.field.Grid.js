@@ -218,7 +218,7 @@ Ext.define('Shopware.form.field.Grid', {
             hidden: me.readOnly,
             width: 24,
             hideable: false,
-            renderer : me.renderSorthandleColumn
+            renderer: me.renderSorthandleColumn
         };
     },
 

@@ -53,12 +53,12 @@ Ext.define('Shopware.apps.Emotion.model.Template', {
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -76,8 +76,8 @@ Ext.define('Shopware.apps.Emotion.model.Template', {
          * @object
          */
         reader: {
-            type:'json',
-            root:'data'
+            type: 'json',
+            root: 'data'
         }
     }
 });

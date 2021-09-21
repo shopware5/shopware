@@ -40,21 +40,21 @@ Ext.define('Shopware.apps.Order.model.Voucher', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/order/model/voucher/fields"}{/block}
-        { name: 'id', type:'int' },
-        { name: 'description', type:'string' },
-        { name: 'voucherCode', type:'string' },
-        { name: 'value', type:'float' },
-        { name: 'minimumCharge', type:'float' },
+        { name: 'id', type: 'int' },
+        { name: 'description', type: 'string' },
+        { name: 'voucherCode', type: 'string' },
+        { name: 'value', type: 'float' },
+        { name: 'minimumCharge', type: 'float' },
         {
             name: 'display',
-            type:'string',
+            type: 'string',
             convert: function(value, record) {
                 if (!Ext.isNumeric(record.get('value'))) {
                     return record.get('description');
@@ -70,19 +70,19 @@ Ext.define('Shopware.apps.Order.model.Voucher', {
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Specific urls to call on CRUD action methods "create", "read", "update" and "destroy".
          * @object
          */
-        api:{
-            read:'{url action="getVouchers"}'
+        api: {
+            read: '{url action="getVouchers"}'
         },
 
         /**
@@ -91,9 +91,9 @@ Ext.define('Shopware.apps.Order.model.Voucher', {
          * a config object or just a valid Reader type name (e.g. 'json', 'xml').
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data'
+        reader: {
+            type: 'json',
+            root: 'data'
         }
     }
 });

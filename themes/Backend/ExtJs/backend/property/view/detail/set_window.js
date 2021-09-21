@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Property.view.detail.SetWindow', {
         displayField: 'label',
         valueField: 'id',
         store: new Ext.data.SimpleStore({
-            fields:['id', 'label'],
+            fields: ['id', 'label'],
             data: [
                 [0, '{s name="set/cobo_sort_mode_alphabetical"}{/s}'],
                 [1, '{s name="set/cobo_sort_mode_numeric"}{/s}'],

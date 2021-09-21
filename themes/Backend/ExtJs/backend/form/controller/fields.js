@@ -166,7 +166,7 @@ Ext.define('Shopware.apps.Form.controller.Fields', {
             url: '{url controller="form" action="changeFieldPosition"}',
             method: 'POST',
             params: {
-                data : JSON.stringify(orderedItems)
+                data: JSON.stringify(orderedItems)
             }
         });
     },

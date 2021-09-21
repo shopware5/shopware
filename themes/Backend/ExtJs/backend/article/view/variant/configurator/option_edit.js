@@ -42,27 +42,27 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
      * Define that the order main window is an extension of the enlight application window
      * @string
      */
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     /**
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'article-option-window',
+    cls: Ext.baseCSSPrefix + 'article-option-window',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-option-window',
+    alias: 'widget.article-option-window',
     /**
      * Set no border for the window
      * @boolean
      */
-    border:false,
+    border: false,
     /**
      * True to automatically show the component upon creation.
      * @boolean
      */
-    autoShow:false,
+    autoShow: false,
 
     width: 940,
     modal: true,
@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
     autoScroll: true,
     layout: 'fit',
     footerButton: false,
-    stateId:'shopware-article-option-window',
+    stateId: 'shopware-article-option-window',
 
     /**
      * Contains all snippets for the component
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.registerEvents();
         me.items = me.createItems();
@@ -190,7 +190,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
                 { xtype: 'tbfill' },
                 {
                     xtype: 'button',
-                    cls:'primary',
+                    cls: 'primary',
                     text: me.snippets.save,
                     handler: function() {
                         me.fireEvent('saveOption', me.record, me.formPanel, me);

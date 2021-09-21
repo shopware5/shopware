@@ -40,32 +40,32 @@ Ext.define('Shopware.apps.Article', {
      * The name of the module. Used for internal purpose
      * @string
      */
-    name:'Shopware.apps.Article',
+    name: 'Shopware.apps.Article',
 
     /**
      * Extends from our special controller, which handles the sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * Enable bulk loading
      * @boolean
      */
-    bulkLoad:true,
+    bulkLoad: true,
 
     /**
      * Sets the loading path for the sub-application.
      *
      * @string
      */
-    loadPath:'{url action=load}',
+    loadPath: '{url action=load}',
 
     /**
      * Array of views to require from AppName.view namespace.
      * @array
      */
-    views:[
+    views: [
         'detail.Toolbar',
         'detail.Window',
         'detail.Settings',
@@ -113,7 +113,7 @@ Ext.define('Shopware.apps.Article', {
      * Array of stores to require from AppName.store namespace.
      * @array
      */
-    stores:[
+    stores: [
         'Batch',
         'Detail',
         'CategoryPath',

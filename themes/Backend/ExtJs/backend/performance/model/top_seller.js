@@ -37,15 +37,15 @@ Ext.define('Shopware.apps.Performance.model.TopSeller', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Contains the model fields
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/performance/model/top_seller/fields"}{/block}
-        { name:'id', type:'int' },
+        { name: 'id', type: 'int' },
         { name: 'topSellerActive', type: 'bool' },
         { name: 'topSellerValidationTime', type: 'int' },
         { name: 'chartinterval', type: 'int' },

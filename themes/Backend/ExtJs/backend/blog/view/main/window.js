@@ -41,17 +41,17 @@ Ext.define('Shopware.apps.Blog.view.main.Window', {
     alias: 'widget.blog-main-window',
     border: false,
     autoShow: true,
-    layout:'fit',
+    layout: 'fit',
     /**
      * Define window width
      * @integer
      */
-    width:'60%',
+    width: '60%',
     /**
      * Define window height
      * @integer
      */
-    height:'90%',
+    height: '90%',
 
     /**
      * Initializes the component and builds up the main interface
@@ -62,10 +62,10 @@ Ext.define('Shopware.apps.Blog.view.main.Window', {
         var me = this;
         me.items = [
             {
-                xtype:'blog-blog-list', listStore:me.listStore
+                xtype: 'blog-blog-list', listStore: me.listStore
             },
             {
-                xtype:'blog-blog-tree', treeStore:me.treeStore
+                xtype: 'blog-blog-tree', treeStore: me.treeStore
             }
         ];
 

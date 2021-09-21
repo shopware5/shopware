@@ -55,16 +55,16 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
     init: function() {
         var me = this;
         me.control({
-            'risk_management-main-panel':{
+            'risk_management-main-panel': {
                 onChangePayment: me.onChangePayment
             },
-            'risk_management-main-container button[action=delete]':{
+            'risk_management-main-container button[action=delete]': {
                 'click': me.onDelete
             },
-            'risk_management-main-container button[action=saveRules]':{
+            'risk_management-main-container button[action=saveRules]': {
                 'click': me.onSaveRules
             },
-            'risk_management-main-container':{
+            'risk_management-main-container': {
                 onChangeRisk: me.onChangeRisk
             }
         });

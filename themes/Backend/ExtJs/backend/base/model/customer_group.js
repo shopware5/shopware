@@ -45,19 +45,19 @@ Ext.define('Shopware.apps.Base.model.CustomerGroup', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * unique id
      * @int
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/customer_group/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'key', type: 'string' },
@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Base.model.CustomerGroup', {
         { name: 'tax', type: 'boolean', defaultValue: true },
         { name: 'taxInput', type: 'boolean', defaultValue: true },
         { name: 'mode', type: 'boolean' },
-        { name: 'discount', type: 'float', useNull:true }
+        { name: 'discount', type: 'float', useNull: true }
     ]
 });
 //{/block}

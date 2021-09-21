@@ -106,9 +106,9 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
      * @object
      */
     snippets: {
-        cancel:'{s name="progress/cancel"}Cancel process{/s}',
-        start:'{s name="progress/start"}Start process{/s}',
-        close:'{s name="progress/close"}Close window{/s}'
+        cancel: '{s name="progress/cancel"}Cancel process{/s}',
+        start: '{s name="progress/start"}Start process{/s}',
+        close: '{s name="progress/close"}Close window{/s}'
     },
 
     batchSize: 200,
@@ -163,7 +163,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
                 fields: [
                     { name: 'batchSize',  type: 'int' }
                 ],
-                data : [
+                data: [
                     { batchSize: '1' },
                     { batchSize: '5' },
                     { batchSize: '10' },
@@ -195,7 +195,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
             animate: true,
             margin: '0 0 15',
             style: 'border-width: 1px !important;',
-            cls:'left-align'
+            cls: 'left-align'
         });
 
         return me.progressBar;

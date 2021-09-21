@@ -44,19 +44,19 @@ Ext.define('Shopware.apps.Base.model.Country', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * unique id
      * @int
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/country/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' },

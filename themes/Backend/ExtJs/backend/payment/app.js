@@ -34,7 +34,7 @@ Ext.define('Shopware.apps.Payment', {
     * sub-application behavior and the event bus
     * @string
     */
-    extend : 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
     /**
     * The name of the module. Used for internal purpose
     * @string
@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Payment', {
     * controller (server-side)
     * @string
     */
-    loadPath : '{url controller="payment" action=load}',
+    loadPath: '{url controller="payment" action=load}',
 
     /**
      * Enable bulk loading
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Payment', {
     * Requires controllers for sub-application
     * @array
     */
-    controllers : [ 'Payment', 'Main' ],
+    controllers: [ 'Payment', 'Main' ],
         /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.
@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Payment', {
      * @private
      * @return [object] mainWindow - the main application window based on Enlight.app.Window
      */
-    launch:function () {
+    launch: function () {
         var me = this,
             mainController = me.getController('Main');
 

@@ -45,63 +45,63 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
      * Define that the order main window is an extension of the enlight application window
      * @string
      */
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     /**
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'article-configurator-template-window',
+    cls: Ext.baseCSSPrefix + 'article-configurator-template-window',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-configurator-template-window',
+    alias: 'widget.article-configurator-template-window',
     /**
      * Set no border for the window
      * @boolean
      */
-    border:false,
+    border: false,
     /**
      * True to automatically show the component upon creation.
      * @boolean
      */
-    autoShow:true,
+    autoShow: true,
     /**
      * Set border layout for the window
      * @string
      */
-    layout:'fit',
+    layout: 'fit',
     /**
      * Define window width
      * @integer
      */
-    width:900,
+    width: 900,
     /**
      * Define window height
      * @integer
      */
-    height:600,
+    height: 600,
     /**
      * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.
      * @boolean
      */
-    maximizable:true,
+    maximizable: true,
 
     /**
      * True to display the 'minimize' tool button and allow the user to minimize the window, false to hide the button and disallow minimizing the window.
      * @boolean
      */
-    minimizable:true,
+    minimizable: true,
 
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
-    stateful:true,
+    stateful: true,
 
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId:'shopware-article-variant-detail-window',
+    stateId: 'shopware-article-variant-detail-window',
 
     /**
      * Contains all snippets for the component
@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
      */
     snippets: {
         baseFieldSet: {
-            title:'{s name="detail/base/title_new"}Head data{/s}',
+            title: '{s name="detail/base/title_new"}Head data{/s}',
             number: '{s name="detail/base/number"}Article number{/s}',
             active: '{s name="detail/base/active"}Active{/s}',
             activeBox: '{s name="detail/base/active_box"}Article will be displayed in store front{/s}',
@@ -118,16 +118,16 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
             purchasePrice: '{s name="detail/base/purchase_price"}Purchase price{/s}'
         },
         basePrice: {
-            title:'{s name="detail/base_price/title"}Base price calculation{/s}',
-            content:'{s name="detail/base_price/content"}Content{/s}',
-            unit:'{s name="detail/base_price/unit"}Unit{/s}',
-            basicUnit:'{s name="detail/base_price/basic_unit"}Basic unit{/s}',
-            packingUnit:'{s name="detail/base_price/packing_unit"}Packing unit{/s}',
-            empty:'{s name="empty"}Please select...{/s}'
+            title: '{s name="detail/base_price/title"}Base price calculation{/s}',
+            content: '{s name="detail/base_price/content"}Content{/s}',
+            unit: '{s name="detail/base_price/unit"}Unit{/s}',
+            basicUnit: '{s name="detail/base_price/basic_unit"}Basic unit{/s}',
+            packingUnit: '{s name="detail/base_price/packing_unit"}Packing unit{/s}',
+            empty: '{s name="empty"}Please select...{/s}'
         },
         settings: {
-            title:'{s name="detail/settings/title"}Settings{/s}',
-            supplierNumber:'{s name="detail/settings/supplier_number"}Supplier number{/s}',
+            title: '{s name="detail/settings/title"}Settings{/s}',
+            supplierNumber: '{s name="detail/settings/supplier_number"}Supplier number{/s}',
             weight: '{s name="detail/settings/weight_bw"}Weight (bw){/s}',
             deliveryTime: '{s name="detail/settings/delivery_time"}Delivery time (days){/s}',
             stock: '{s name="detail/settings/stock"}Stock{/s}',
@@ -148,13 +148,13 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
             minimumOrder: '{s name="detail/settings/minimum_order"}Minimum order{/s}'
         },
         additional: {
-            title:'{s name="detail/additional_fields/title"}Additional fields{/s}',
-            comment:'{s name="detail/additional_fields/comment"}Comment{/s}',
+            title: '{s name="detail/additional_fields/title"}Additional fields{/s}',
+            comment: '{s name="detail/additional_fields/comment"}Comment{/s}',
         },
-        data:'{s name="variant/list/toolbar/data"}Apply standard data{/s}',
-        save:'{s name="detail/save_button"}Save article{/s}',
-        cancel:'{s name="detail/cancel_button"}Cancel{/s}',
-        title:'{s name="detail/configurator_template"}Configurator Template{/s}'
+        data: '{s name="variant/list/toolbar/data"}Apply standard data{/s}',
+        save: '{s name="detail/save_button"}Save article{/s}',
+        cancel: '{s name="detail/cancel_button"}Cancel{/s}',
+        title: '{s name="detail/configurator_template"}Configurator Template{/s}'
     },
 
     /**
@@ -167,7 +167,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this, mainWindow;
         me.items = me.createItems();
         me.dockedItems = [ me.createToolbar() ];
@@ -225,7 +225,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
         var me = this;
 
         me.saveButton = Ext.create('Ext.button.Button', {
-            cls:'primary',
+            cls: 'primary',
             text: me.snippets.save,
             handler: function() {
                 me.fireEvent('saveTemplate', me, me.formPanel, me.record);
@@ -358,7 +358,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
                 fieldLabel: me.snippets.baseFieldSet.active,
                 boxLabel: me.snippets.baseFieldSet.activeBox,
                 inputValue: true,
-                uncheckedValue:false
+                uncheckedValue: false
             }, {
                 xtype: 'numberfield',
                 name: 'purchasePrice',
@@ -463,14 +463,14 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
         var me = this;
 
         return Ext.create('Ext.container.Container', {
-            columnWidth:0.5,
+            columnWidth: 0.5,
             defaults: {
                 labelWidth: 155,
                 anchor: '100%'
             },
             padding: '0 20 0 0',
             layout: 'anchor',
-            border:false,
+            border: false,
             items: [{
                 xtype: 'textfield',
                 name: 'supplierNumber',
@@ -519,7 +519,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
         var me = this;
 
         return Ext.create('Ext.container.Container', {
-            columnWidth:0.5,
+            columnWidth: 0.5,
             defaults: {
                 labelWidth: 155,
                 anchor: '100%',
@@ -527,7 +527,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
             },
             padding: '0 20 0 0',
             layout: 'anchor',
-            border:false,
+            border: false,
             items: [{
                 xtype: 'textfield',
                 name: 'shippingTime',
@@ -539,14 +539,14 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
                 fieldLabel: me.snippets.settings.shippingFree.field,
                 boxLabel: me.snippets.settings.shippingFree.box,
                 inputValue: true,
-                uncheckedValue:false
+                uncheckedValue: false
             }, {
                 xtype: 'checkboxfield',
                 name: 'lastStock',
                 fieldLabel: me.snippets.settings.inStock,
                 boxLabel: me.snippets.settings.inStockBox,
                 inputValue: true,
-                uncheckedValue:false
+                uncheckedValue: false
             }, {
                 xtype: 'textfield',
                 name: 'ean',

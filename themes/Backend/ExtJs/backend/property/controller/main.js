@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      */
     snippets: {
         // Delete option
-        deleteOptionConfirmTitle:   '{s name="message/delete_option_confirm_title"}Delete selected option{/s}',
+        deleteOptionConfirmTitle: '{s name="message/delete_option_confirm_title"}Delete selected option{/s}',
         deleteOptionConfirmMessage: '{s name="message/delete_option_confirm_message"}Are you sure you want to delete the selected option?{/s}',
 
         deleteOptionSuccessTitle: '{s name="message/delete_option_success_message"}Successfully{/s}',
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         deleteOptionErrorMessage: '{s name="message/delete_option_error_message"}An error has occurred.{/s}',
 
         // Delete group
-        deleteGroupConfirmTitle:   '{s name="message/delete_group_confirm_title"}Delete selected Group{/s}',
+        deleteGroupConfirmTitle: '{s name="message/delete_group_confirm_title"}Delete selected Group{/s}',
         deleteGroupConfirmMessage: '{s name="message/delete_group_confirm_message"}Are you sure you want to delete the selected group?{/s}',
 
         deleteGroupSuccessTitle: '{s name="message/delete_group_success_message"}Successfully{/s}',
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         deleteGroupErrorMessage: '{s name="message/delete_group_error_message"}An error has occurred.{/s}',
 
         // Delete set
-        deleteSetConfirmTitle:   '{s name="message/delete_group_confirm_title"}Delete selected Group{/s}',
+        deleteSetConfirmTitle: '{s name="message/delete_group_confirm_title"}Delete selected Group{/s}',
         deleteSetConfirmMessage: '{s name="message/delete_group_confirm_message"}Are you sure you want to delete the selected group?{/s}',
 
         deleteSetSuccessTitle: '{s name="message/delete_group_success_message"}Successfully{/s}',
@@ -280,7 +280,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             method: 'POST',
             params: {
                 setId: setId,
-                data : Ext.encode(orderedItems)
+                data: Ext.encode(orderedItems)
             },
             success: function(response, opts) {
                 Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.groupSuccessfulSorted, me.snippets.growlMessage);
@@ -312,7 +312,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             url: '{url controller="property" action="changeGroupPosition"}',
             method: 'POST',
             params: {
-                data : Ext.encode(orderedItems)
+                data: Ext.encode(orderedItems)
             }
         });
     },
@@ -351,7 +351,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             url: '{url controller="property" action="changeOptionPosition"}',
             method: 'POST',
             params: {
-                data : Ext.encode(orderedItems)
+                data: Ext.encode(orderedItems)
             },
             success: function(response, opts) {
                 if(showSuccessMessage) {
@@ -692,7 +692,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      * @param value
      * @return void
      */
-    onSearchGroups:function (field, value) {
+    onSearchGroups: function (field, value) {
         var me = this,
             searchString = Ext.String.trim(value),
             store = me.subApplication.groupStore;
@@ -709,7 +709,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      * @param value
      * @return void
      */
-    onSearchSets:function (field, value) {
+    onSearchSets: function (field, value) {
         var me = this,
             searchString = Ext.String.trim(value),
             store = me.subApplication.setStore;

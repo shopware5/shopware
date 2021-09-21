@@ -38,32 +38,32 @@ Ext.define('Shopware.apps.Shipping.model.Holiday', {
      * Extends the standard ExtJS 4
      * @string
      */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * The fields used for this model
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/shipping/model/holiday/fields"}{/block}
-        { name : 'id',  type: 'integer' },
-        { name : 'name',type: 'string' }
+        { name: 'id',  type: 'integer' },
+        { name: 'name',type: 'string' }
     ],
     /**
      * If the name of the field is 'id' extjs assumes autmagical that
      * this field is an unique identifier.
      */
-    idProperty : 'id',
+    idProperty: 'id',
     /**
      * Rules to validate the input at the frontend side.
      */
-    validations : [
-        { field : 'name', type : 'length', min : 1 }
+    validations: [
+        { field: 'name', type: 'length', min: 1 }
     ],
     /**
      * Define that the holiday model belongs to the Dispatch model, which
      * means the holiday model data will be loaded over the dispatch.associations
      * @string
      */
-    belongsTo:'Shopware.apps.Shipping.model.Dispatch'
+    belongsTo: 'Shopware.apps.Shipping.model.Dispatch'
 });
 //{/block}

@@ -37,6 +37,6 @@ Ext.define('Shopware.apps.UserManager.store.User', {
     extend: 'Ext.data.Store',
     groupField: 'groupname',
     pageSize: 30,
-    model : 'Shopware.apps.UserManager.model.User'
+    model: 'Shopware.apps.UserManager.model.User'
 });
 //{/block}

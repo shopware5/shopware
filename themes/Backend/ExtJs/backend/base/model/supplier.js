@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Base.model.Supplier', {
      * unique id
      * @int
      */
-    idProperty : 'id',
+    idProperty: 'id',
 
     /**
     * The fields used for this model
@@ -59,11 +59,11 @@ Ext.define('Shopware.apps.Base.model.Supplier', {
     */
     fields: [
         //{block name="backend/base/model/supplier/fields"}{/block}
-        { name : 'id', type : 'int' },
-        { name : 'name', type : 'string' },
-        { name : 'image', type : 'string' },
-        { name : 'link', type : 'string' },
-        { name : 'description', type : 'string' }
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' },
+        { name: 'image', type: 'string' },
+        { name: 'link', type: 'string' },
+        { name: 'description', type: 'string' }
     ]
 });
 //{/block}

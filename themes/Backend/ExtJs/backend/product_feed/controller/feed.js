@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Required sub-controller for this controller
@@ -53,12 +53,12 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
     /**
      * all references to get the elements by the applicable selector
      */
-    refs:[
-        { ref:'productFeedWindow', selector:'product_feed-feed-window' },
-        { ref:'productFeedSaveButton', selector:'product_feed-feed-window button[action=save]' },
-        { ref:'productFeedUpdateButton', selector:'product_feed-feed-window button[action=update]' },
-        { ref:'categoryTree', selector : 'product_feed-feed-tab-category treepanel' },
-        { ref:'attributeForm', selector: 'product_feed-feed-window shopware-attribute-form' }
+    refs: [
+        { ref: 'productFeedWindow', selector: 'product_feed-feed-window' },
+        { ref: 'productFeedSaveButton', selector: 'product_feed-feed-window button[action=save]' },
+        { ref: 'productFeedUpdateButton', selector: 'product_feed-feed-window button[action=update]' },
+        { ref: 'categoryTree', selector: 'product_feed-feed-tab-category treepanel' },
+        { ref: 'attributeForm', selector: 'product_feed-feed-window shopware-attribute-form' }
     ],
 
     /**
@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({
@@ -92,23 +92,23 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                 duplicateColumn: me.onDuplicateItem,
                 executeFeed: me.onExecuteFeed
             },
-            'product_feed-feed-list button[action=add]':{
-                click:me.onCreateFeed
+            'product_feed-feed-list button[action=add]': {
+                click: me.onCreateFeed
             },
-            'product_feed-feed-tab-supplier textfield[action=searchSupplier]':{
-                change:me.onSearchSupplier
+            'product_feed-feed-tab-supplier textfield[action=searchSupplier]': {
+                change: me.onSearchSupplier
             },
-            'product_feed-feed-tab-article textfield[action=searchArticles]':{
-                change:me.onSearchArticle
+            'product_feed-feed-tab-article textfield[action=searchArticles]': {
+                change: me.onSearchArticle
             },
-            'product_feed-feed-window button[action=save]':{
-                click:me.onSave
+            'product_feed-feed-window button[action=save]': {
+                click: me.onSave
             },
-            'product_feed-feed-window button[action=update]':{
-                click:me.onUpdate
+            'product_feed-feed-window button[action=update]': {
+                click: me.onUpdate
             },
-            'product_feed-feed-window':{
-                beforeclose:me.onBeforeCloseWindow
+            'product_feed-feed-window': {
+                beforeclose: me.onBeforeCloseWindow
             }
         });
     },
@@ -120,7 +120,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      * @param [object] store - the feed detail store
      * @return void
      */
-    onCreateFeed:function () {
+    onCreateFeed: function () {
 
         var me = this,
             model = Ext.create('Shopware.apps.ProductFeed.model.Detail');
@@ -150,17 +150,17 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      * @param [integer] rowIndex - The row number
      * @return void
      */
-    onEditItem:function (view, rowIndex) {
+    onEditItem: function (view, rowIndex) {
         var me = this,
             store = me.subApplication.detailStore,
             record = me.subApplication.listStore.getAt(rowIndex);
 
         store.getProxy().extraParams = {
-            feedId:record.get("id")
+            feedId: record.get("id")
         };
         store.load({
-            scope:this,
-            callback:function (records) {
+            scope: this,
+            callback: function (records) {
                 me.detailRecord = records[0];
                 me.getView('feed.Window').create({
                     record: me.detailRecord,
@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      * @param [integer] rowIndex - The row number
      * @return void
      */
-    onExecuteFeed:function (view, rowIndex) {
+    onExecuteFeed: function (view, rowIndex) {
         var me = this,
             record = me.getStore('List').getAt(rowIndex);
             window.open(
@@ -203,17 +203,17 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      * @param [integer] rowIndex - The row number
      * @return void
      */
-    onDuplicateItem:function (view, rowIndex) {
+    onDuplicateItem: function (view, rowIndex) {
         var me = this,
                 store = me.subApplication.detailStore,
                 record = me.subApplication.listStore.getAt(rowIndex);
 
         store.getProxy().extraParams = {
-            feedId:record.get("id")
+            feedId: record.get("id")
         };
         store.load({
-            scope:this,
-            callback:function (records) {
+            scope: this,
+            callback: function (records) {
                 me.detailRecord = records[0];
                 me.detailRecord.set("hash",me.createRandomHash());
                 me.detailRecord.data.id = '';
@@ -240,7 +240,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      * @param [integer] rowIndex - Position of the event
      * @return void
      */
-    onDeleteSingleItem:function (grid, rowIndex) {
+    onDeleteSingleItem: function (grid, rowIndex) {
         var me = this,
             store = grid.getStore(),
             record = store.getAt(rowIndex);
@@ -274,7 +274,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      * @param value
      * @return void
      */
-    onSearchSupplier:function (field, value) {
+    onSearchSupplier: function (field, value) {
         var me = this,
             searchString = Ext.String.trim(value),
             store = me.getStore('Supplier');
@@ -289,7 +289,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      * @param value
      * @return void
      */
-    onSearchArticle:function (field, value) {
+    onSearchArticle: function (field, value) {
         var me = this,
             searchString = Ext.String.trim(value),
             store = me.getStore('Article');
@@ -377,7 +377,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         }
         //expand tree
         Ext.Ajax.request({
-            url:'{url controller="Category" action="getIdPath"}',
+            url: '{url controller="Category" action="getIdPath"}',
             params: { 'categoryIds[]': ids },
             success: function(result){
                 if(!result.responseText) {
@@ -407,7 +407,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      * @param [object] btn - pressed Ext.button.Button
      * @return void
      */
-    onBeforeCloseWindow:function () {
+    onBeforeCloseWindow: function () {
         this.getStore("List").load();
     },
 
@@ -416,7 +416,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      *
      * @return string
      */
-    createRandomHash:function () {
+    createRandomHash: function () {
         var chars = "abcdef1234567890",
             pass = "";
         for (var x = 0; x < 32; x++) {

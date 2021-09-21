@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Feedback', {
      * controller (server-side)
      * @string
      */
-    loadPath:'{url action=load}',
+    loadPath: '{url action=load}',
 
     /**
      * Enables our bulk loading technique.

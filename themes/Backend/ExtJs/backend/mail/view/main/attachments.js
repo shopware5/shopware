@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.Mail.view.main.Attachments', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the delete icon in the

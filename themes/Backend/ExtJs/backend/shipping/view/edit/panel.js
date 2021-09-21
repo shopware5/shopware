@@ -38,18 +38,18 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      * Extends the Enlight.app.Window
      * @string
      */
-    extend : 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     /**
      * Alias
      * @string
      */
-    alias : 'widget.shopware-shipping-edit-panel',
+    alias: 'widget.shopware-shipping-edit-panel',
 
     /**
      * Layout is border
      * @string
      */
-    layout : {
+    layout: {
         type: 'vbox',
         align: 'stretch'
     },
@@ -58,52 +58,52 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      * Title of the Edit Window
      * @string
      */
-    title : '{s name="dispatch_costs_edit_title"}Shipping costs{/s}',
+    title: '{s name="dispatch_costs_edit_title"}Shipping costs{/s}',
 
     /**
      * Use stateful
      * @boolean
      */
-    stateful : true,
+    stateful: true,
     /**
      * Id used for the stateful
      * @string
      */
-    stateId : 'shopware-shipping-edit',
+    stateId: 'shopware-shipping-edit',
     /**
      * Width of the window
      * @string
      */
-    width       : 990,
+    width: 990,
 
     /**
      * Height of the window
      * @string
      */
-    height      : '90%',
+    height: '90%',
     /**
      * Scroll if necessary
      * @boolean
      */
-    autoScroll : false,
+    autoScroll: false,
     /**
      * Property which holds the defaults settings for the different form pieces.
      * todo@stp Please move this to CSS
      * @object
      */
     formDefaults: {
-        labelStyle  : 'font-weight: 700; text-align: right;',
-        anchor      : '100%',
-        xtype       : 'textfield',
-        labelWidth  : 80,
-        minWidth    : 250
+        labelStyle: 'font-weight: 700; text-align: right;',
+        anchor: '100%',
+        xtype: 'textfield',
+        labelWidth: 80,
+        minWidth: 250
     },
 
     /**
      * Translation Object
      * @object
      */
-    dispatchCalculationData : [
+    dispatchCalculationData: [
         [0, '{s name="dispatch_calculation_data_weight"}Weight{/s}'],
         [1, '{s name="dispatch_calculation_data_price"}Price{/s}'],
         [2, '{s name="dispatch_calculation_data_count"}Number of articles{/s}'],
@@ -113,7 +113,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      * Translation Object
      * @object
      */
-    dispatchTypeData : [
+    dispatchTypeData: [
         [0, '{s name="dispatch_type_data_default"}Default shipping type{/s}'],
         [1, '{s name="dispatch_type_data_alternative"}Alternate shipping type{/s}'],
         [2, '{s name="dispatch_type_data_charge"}Surcharge type{/s}'],
@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      * Translation Object
      * @object
      */
-    dispatchSurchargeCalculationData : [
+    dispatchSurchargeCalculationData: [
         [0, '{s name="dispatch_surcharge_data_always"}Always charge{/s}'],
         [1, '{s name="dispatch_surcharge_data_weight"}Exclude articles free of shipping costs{/s}'],
         [2, '{s name="dispatch_surcharge_data_never"}Never{/s}'],
@@ -188,12 +188,12 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
             height: 300,
             layout: 'column',
             bodyPadding: 10,
-            defaults : {
-                labelStyle  : 'font-weight: 700; text-align: right;',
-                anchor      : '100%',
-                xtype       : 'textfield',
-                labelWidth  : 80,
-                minWidth    : 250
+            defaults: {
+                labelStyle: 'font-weight: 700; text-align: right;',
+                anchor: '100%',
+                xtype: 'textfield',
+                labelWidth: 80,
+                minWidth: 250
             },
             items: [{
                 xtype: 'shipping-top-left-form'
@@ -207,19 +207,19 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
 
         return Ext.create('Ext.form.Panel', {
             bodyPadding: 8,
-            autoScroll:true,
+            autoScroll: true,
             region: 'center',
             /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
-            plugins:[
+            plugins: [
                 {
                     // Includes the default translation plugin
-                    ptype:'translation',
-                    translationType:'config_dispatch',
+                    ptype: 'translation',
+                    translationType: 'config_dispatch',
                     translationMerge: true
                 }
             ],
             /*{/if}*/
-            items:[fieldSet]
+            items: [fieldSet]
         });
     },
     /**
@@ -262,7 +262,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      *
      * @return Shopware.apps.Shipping.view.edit.Advanced
      */
-    createAdvancedTab : function() {
+    createAdvancedTab: function() {
         this.availableHolidays.load();
 
         return Ext.create('Shopware.apps.Shipping.view.edit.Advanced',{
@@ -326,18 +326,18 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      * Creates and returns the default action button - save and cancel
      * @array of buttons
      */
-    createActionButtons:function () {
+    createActionButtons: function () {
         var me = this;
 
         return ['->', {
-            text:'{s name="default_cancel"}Cancel{/s}',
+            text: '{s name="default_cancel"}Cancel{/s}',
             scope: me,
             cls: 'secondary',
             handler: me.destroy
         }, {
-            text:'{s name="default_save"}Save{/s}',
-            action:'saveDispatch',
-            cls:'primary'
+            text: '{s name="default_save"}Save{/s}',
+            action: 'saveDispatch',
+            cls: 'primary'
         }];
 
     }

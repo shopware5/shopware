@@ -122,7 +122,7 @@ Ext.define('Shopware.apps.Index.view.Footer', {
 
         // Create tooltip
         tip = Ext.create('Ext.tip.ToolTip', {
-            target:  logoutBtn,
+            target: logoutBtn,
             shadow: false,
             ui: 'shopware-ui',
             cls: 'logout-tooltip',

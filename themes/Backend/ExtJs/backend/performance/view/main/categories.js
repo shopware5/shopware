@@ -106,10 +106,10 @@ Ext.define('Shopware.apps.Performance.view.main.Categories', {
      * @object
      */
     snippets: {
-        title:'{s name="progress/title"}Fix category tree{/s}',
-        cancel:'{s name="progress/cancel"}Cancel process{/s}',
-        start:'{s name="progress/start"}Start process{/s}',
-        close:'{s name="progress/close"}Close window{/s}'
+        title: '{s name="progress/title"}Fix category tree{/s}',
+        cancel: '{s name="progress/cancel"}Cancel process{/s}',
+        start: '{s name="progress/start"}Start process{/s}',
+        close: '{s name="progress/close"}Close window{/s}'
     },
 
     /**
@@ -153,7 +153,7 @@ Ext.define('Shopware.apps.Performance.view.main.Categories', {
             animate: true,
             margin: '0 0 15',
             style: 'border-width: 1px !important;',
-            cls:'left-align'
+            cls: 'left-align'
         });
     },
 

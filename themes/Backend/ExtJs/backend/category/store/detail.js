@@ -38,23 +38,23 @@ Ext.define('Shopware.apps.Category.store.Detail', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Auto load the store after the component
      * is initialized
      * @boolean
      */
-    autoLoad:false,
+    autoLoad: false,
 
     /**
      * to upload all selected items in one request
      * @boolean
      */
-    batch:true,
+    batch: true,
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Category.model.Detail'
+    model: 'Shopware.apps.Category.model.Detail'
 });
 //{/block}

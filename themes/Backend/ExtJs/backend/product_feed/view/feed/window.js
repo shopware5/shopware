@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
      * Display no footer button for the detail window
      * @boolean
      */
-    footerButton:false,
+    footerButton: false,
     width: 925,
 
     /**
@@ -93,34 +93,34 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
             flex: 1,
             items: [
                 {
-                    xtype:'product_feed-feed-tab-format'
+                    xtype: 'product_feed-feed-tab-format'
                 },
                 {
-                    xtype:'product_feed-feed-tab-header'
+                    xtype: 'product_feed-feed-tab-header'
                 },
                 {
-                    xtype:'product_feed-feed-tab-body'
+                    xtype: 'product_feed-feed-tab-body'
                 },
                 {
-                    xtype:'product_feed-feed-tab-footer'
+                    xtype: 'product_feed-feed-tab-footer'
                 },
                 {
-                    xtype:'product_feed-feed-tab-category',
+                    xtype: 'product_feed-feed-tab-category',
                     availableCategoriesTree: me.availableCategoriesTree,
                     record: me.record
                 },
                 {
-                    xtype:'product_feed-feed-tab-supplier',
+                    xtype: 'product_feed-feed-tab-supplier',
                     supplierStore: me.supplierStore,
                     record: me.record
                 },
                 {
-                    xtype:'product_feed-feed-tab-article',
+                    xtype: 'product_feed-feed-tab-article',
                     articleStore: me.articleStore,
                     record: me.record
                 },
                 {
-                    xtype:'product_feed-feed-tab-filter'
+                    xtype: 'product_feed-feed-tab-filter'
                 }
             ]
         });
@@ -137,18 +137,18 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
         return Ext.create('Ext.form.Panel', {
             layout: {
                 type: 'vbox',
-                align : 'stretch'
+                align: 'stretch'
             },
             defaults: { flex: 1 },
             unstyled: true,
             items: [
                 {
-                    xtype:'product_feed-feed-detail',
+                    xtype: 'product_feed-feed-detail',
                     record: me.record,
                     comboTreeCategoryStore: me.comboTreeCategoryStore,
                     shopStore: me.shopStore,
                     availableCategoriesTree: me.availableCategoriesTree,
-                    style:'padding: 10px'
+                    style: 'padding: 10px'
                 },
                 me.tabPanel
             ]
@@ -161,24 +161,24 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
         var me = this;
         return ['->',
             {
-                text:'{s name="detail_general/button/cancel"}Cancel{/s}',
-                scope:me,
+                text: '{s name="detail_general/button/cancel"}Cancel{/s}',
+                scope: me,
                 cls: 'secondary',
-                handler:function () {
+                handler: function () {
                     this.destroy();
                 }
             },
             {
-                text:'{s name="detail_general/button/save"}Save{/s}',
-                action:'update',
-                disabled:true,
-                cls:'primary'
+                text: '{s name="detail_general/button/save"}Save{/s}',
+                action: 'update',
+                disabled: true,
+                cls: 'primary'
             },
             {
-                text:'{s name="detail_general/button/save_and_close"}Save and Close{/s}',
-                action:'save',
-                disabled:true,
-                cls:'primary'
+                text: '{s name="detail_general/button/save_and_close"}Save and Close{/s}',
+                action: 'save',
+                disabled: true,
+                cls: 'primary'
             }
         ];
     }

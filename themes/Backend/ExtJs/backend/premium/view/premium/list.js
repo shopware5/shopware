@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
 
                 /**
@@ -161,7 +161,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
             action: 'delete',
             cls: 'delete',
             tooltip: '{s name="column/actioncolumn/delete"}Delete article{/s}',
-            handler:function (view, rowIndex, colIndex, item) {
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('deleteColumn', view, rowIndex,  item, colIndex);
             }
         }));
@@ -172,7 +172,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
             iconCls: 'sprite-pencil',
             cls: 'editBtn',
             tooltip: '{s name="column/actioncolumn/edit"}Edit article{/s}',
-            handler:function (view, rowIndex, colIndex, item) {
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('editColumn', view, item, rowIndex, colIndex);
             }
         }));
@@ -222,12 +222,12 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
     getToolbar: function(){
 
         var searchField = Ext.create('Ext.form.field.Text',{
-            name : 'searchfield',
-            cls : 'searchfield',
-            action : 'searchPremiumArticle',
-            width : 170,
-            enableKeyEvents : true,
-            emptyText : '{s name="toolbar/search"}Search...{/s}',
+            name: 'searchfield',
+            cls: 'searchfield',
+            action: 'searchPremiumArticle',
+            width: 170,
+            enableKeyEvents: true,
+            emptyText: '{s name="toolbar/search"}Search...{/s}',
             listeners: {
                 buffer: 500,
                 keyup: function() {

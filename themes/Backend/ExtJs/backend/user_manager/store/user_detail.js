@@ -37,6 +37,6 @@ Ext.define('Shopware.apps.UserManager.store.UserDetail', {
     extend: 'Ext.data.Store',
     autoLoad: false,
     pageSize: 30,
-    model : 'Shopware.apps.UserManager.model.UserDetail'
+    model: 'Shopware.apps.UserManager.model.UserDetail'
 });
 //{/block}

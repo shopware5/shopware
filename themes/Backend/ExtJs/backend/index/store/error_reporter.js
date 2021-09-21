@@ -30,5 +30,5 @@ Ext.define('Shopware.apps.Index.store.ErrorReporter', {
     extend: 'Ext.data.Store',
     autoLoad: true,
     pageSize: 30,
-    model : 'Shopware.apps.Index.model.ErrorReporter'
+    model: 'Shopware.apps.Index.model.ErrorReporter'
 });

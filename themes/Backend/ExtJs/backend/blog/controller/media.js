@@ -39,13 +39,13 @@ Ext.define('Shopware.apps.Blog.controller.Media', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * All references to get the elements by the applicable selector
      */
-    refs:[
-        { ref:'mediaList', selector:'blog-blog-detail-sidebar-options dataview[name=image-listing]' }
+    refs: [
+        { ref: 'mediaList', selector: 'blog-blog-detail-sidebar-options dataview[name=image-listing]' }
     ],
 
     /**
@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Blog.controller.Media', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
         me.control({
             'blog-blog-detail-sidebar-options mediaselectionfield': {

@@ -39,55 +39,55 @@ Ext.define('Shopware.apps.Shipping.view.edit.CategoriesTree', {
      /**
      * Based on Ext.form.Panel
      */
-    extend : 'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
     /**
      * Alias for easy creation
      * @string
      */
-    alias : 'widget.shipping-view-edit-categories-tree',
+    alias: 'widget.shipping-view-edit-categories-tree',
 
     /**
      * Name of this view
      * @string
      */
-    name : 'shipping-view-edit-categories-tree',
+    name: 'shipping-view-edit-categories-tree',
     /**
      * Title as shown in the tab from the panel
      * @string
      */
-    title : '{s name="category_selection_tab_title"}Lock this category.{/s}',
+    title: '{s name="category_selection_tab_title"}Lock this category.{/s}',
     /**
      * Display the the contents of this tab immediately
      * @boolean
      */
-    autoShow : true,
+    autoShow: true,
     /**
      * Use the full height
      * @string
      */
-    height : '200px',
+    height: '200px',
     /**
      * No borders
      * @integer
      */
-    border : 0,
+    border: 0,
     /**
      * Autoscrolling enabled
      * @boolean
      */
-    autoScroll : true,
+    autoScroll: true,
 
     /**
      * Country tree
      * @Ext.tree.Panel
      */
-    treeSelect : null,
+    treeSelect: null,
 
     /**
      * Initialize the controller and defines the necessary default configuration
      * @return void
      */
-    initComponent : function() {
+    initComponent: function() {
         var me = this,
             lockedCategoriesStore =  me.record.getCategories(),
             ids = [];
@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.CategoriesTree', {
         }
 
         me.availableCategoriesTree.getProxy().extraParams = {
-            'preselected[]' : ids
+            'preselected[]': ids
         };
 
         me.items = [ me.getTreeSelect(ids, me.availableCategoriesTree) ];
@@ -116,12 +116,12 @@ Ext.define('Shopware.apps.Shipping.view.edit.CategoriesTree', {
      * @param { Ext.data.Store } store
      * @return { Ext.tree.Panel }
      */
-    getTreeSelect : function(ids, store) {
+    getTreeSelect: function(ids, store) {
         var me = this;
 
         me.treeSelect = Ext.create('Ext.tree.Panel', {
             name: 'treeselect',
-            store:  store,
+            store: store,
             rootVisible: false,
             useArrows: true,
             autoscroll: true,

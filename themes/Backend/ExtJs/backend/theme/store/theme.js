@@ -34,7 +34,7 @@
 //{block name="backend/theme/store/theme"}
 
 Ext.define('Shopware.apps.Theme.store.Theme', {
-    extend:'Shopware.store.Listing',
+    extend: 'Shopware.store.Listing',
     model: 'Shopware.apps.Theme.model.Theme',
 
     groupField: 'version',

@@ -36,7 +36,7 @@
 Ext.define('Shopware.apps.Theme', {
     extend: 'Enlight.app.SubApplication',
 
-    name:'Shopware.apps.Theme',
+    name: 'Shopware.apps.Theme',
 
     loadPath: '{url action=load}',
     bulkLoad: true,

@@ -177,7 +177,7 @@ Ext.define('Shopware.form.field.ColorField', {
      * @public
      * @return [object] helpIcon - DOM element
      */
-    createHelp:function () {
+    createHelp: function () {
         var me = this,
             helpIcon = new Ext.Element(document.createElement('span')),
             row = new Ext.Element(document.createElement('td'));
@@ -187,11 +187,11 @@ Ext.define('Shopware.form.field.ColorField', {
         helpIcon.appendTo(row);
 
         Ext.tip.QuickTipManager.register({
-            target:helpIcon,
+            target: helpIcon,
             cls: Ext.baseCSSPrefix + 'form-tooltip',
-            title:(me.helpTitle) ? me.helpTitle : '',
-            text:me.helpText,
-            width:(me.helpWidth) ? me.helpWidth : 225,
+            title: (me.helpTitle) ? me.helpTitle : '',
+            text: me.helpText,
+            width: (me.helpWidth) ? me.helpWidth : 225,
             anchorToTarget: true,
             anchor: 'right',
             anchorSize: {
@@ -215,7 +215,7 @@ Ext.define('Shopware.form.field.ColorField', {
      * @public
      * @return [object] supportText - DOM element
      */
-    createSupport:function () {
+    createSupport: function () {
         var me = this,
             row = new Ext.Element(document.createElement('tr')),
             fillCell = new Ext.Element(document.createElement('td')),

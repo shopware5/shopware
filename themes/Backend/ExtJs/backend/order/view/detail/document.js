@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Order.view.detail.Document', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.order-document-panel',
+    alias: 'widget.order-document-panel',
 
     /**
      * An optional extra CSS class that will be added to this component's Element.
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Order.view.detail.Document', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
+    snippets: {
         title: '{s name="document/window_title"}Documents{/s}',
         gridTitle: '{s name="document/grid_title"}Generated documents{/s}'
     },
@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Order.view.detail.Document', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = [

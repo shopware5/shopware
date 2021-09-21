@@ -99,7 +99,7 @@
             .startAngle(-0.05);
 
         pathForeground = svg.append('path')
-            .datum({ endAngle:0 })
+            .datum({ endAngle: 0 })
             .attr({
                 d: arcForeground
             })
@@ -132,7 +132,7 @@
         svg.append('text')
             .attr({
                 'font-size': '15px',
-                transform:'translate(5,' + (-outerRadius + 23) + ')',
+                transform: 'translate(5,' + (-outerRadius + 23) + ')',
                 style: 'fill: #FFFFFF;'
             })
             .html(value);

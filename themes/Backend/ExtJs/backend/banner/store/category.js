@@ -37,17 +37,17 @@
  */
 //{block name="backend/banner/store/category"}
 Ext.define('Shopware.apps.Banner.store.Category', {
-    extend : 'Shopware.store.CategoryTree',
-    alias : 'store.category',
-    autoLoad : false,
-    pageSize : 30,
-    proxy : {
-        type : 'ajax',
-        api : {
-            read : '{url controller=banner action=getList}'
+    extend: 'Shopware.store.CategoryTree',
+    alias: 'store.category',
+    autoLoad: false,
+    pageSize: 30,
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller=banner action=getList}'
         },
-        reader : {
-            type : 'json',
+        reader: {
+            type: 'json',
             root: 'data'
         }
     }

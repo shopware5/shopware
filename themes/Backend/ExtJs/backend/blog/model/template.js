@@ -37,33 +37,33 @@ Ext.define('Shopware.apps.Blog.model.Template', {
     * Extends the standard ExtJS 4
     * @string
     */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
     * The fields used for this model
     * @array
     */
-    fields : [
+    fields: [
         //{block name="backend/blog/model/template/fields"}{/block}
-        { name : 'id', type : 'string' },
-        { name : 'name', type : 'string' }
+        { name: 'id', type: 'string' },
+        { name: 'name', type: 'string' }
     ],
     /**
     * If the name of the field is 'id' extjs assumes autmagical that
     * this field is an unique identifier.
     */
-    idProperty : 'id',
+    idProperty: 'id',
     /**
     * Configure the data communication
     * @object
     */
-    proxy : {
-        type : 'ajax',
-        api:{
-            read:   '{url action=getTemplates}'
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url action=getTemplates}'
         },
-        reader : {
-            type : 'json',
-            root : 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty: 'totalCount'
         }
     }

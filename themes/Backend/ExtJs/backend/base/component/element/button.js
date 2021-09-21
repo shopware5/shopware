@@ -34,7 +34,7 @@ Ext.define('Shopware.apps.Base.view.element.Button', {
         'widget.config-element-button',
         'widget.config-element-controllerbutton'
     ],
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         // Add support of open action button

@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Log.model.Log', {
         'text',
         {   name: 'date',
             type: 'date',
-            dateFormat:'Y-m-d'
+            dateFormat: 'Y-m-d'
         },
         'user',
         'ip_address',

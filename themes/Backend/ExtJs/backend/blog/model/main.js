@@ -39,36 +39,36 @@ Ext.define('Shopware.apps.Blog.model.Main', {
     * Extends the standard ExtJS 4
     * @string
     */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
     * The fields used for this model
     * @array
     */
-    fields : [
+    fields: [
         //{block name="backend/blog/model/main/fields"}{/block}
-        { name : 'id', type : 'int' },
-        { name : 'title', type : 'string' },
-        { name : 'shortDescription', type : 'string' },
-        { name : 'description', type : 'string' },
-        { name : 'active', type : 'boolean' },
-        { name : 'views', type : 'int' },
-        { name : 'displayDate', type : 'date' },
-        { name : 'numberOfComments', type : 'int' }
+        { name: 'id', type: 'int' },
+        { name: 'title', type: 'string' },
+        { name: 'shortDescription', type: 'string' },
+        { name: 'description', type: 'string' },
+        { name: 'active', type: 'boolean' },
+        { name: 'views', type: 'int' },
+        { name: 'displayDate', type: 'date' },
+        { name: 'numberOfComments', type: 'int' }
     ],
 
     /**
     * Configure the data communication
     * @object
     */
-    proxy : {
-        type : 'ajax',
-        api:{
-            read:   '{url action=getList}',
-            destroy:'{url action=deleteBlogArticle targetField=blogArticles}'
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url action=getList}',
+            destroy: '{url action=deleteBlogArticle targetField=blogArticles}'
         },
-        reader : {
-            type : 'json',
-            root : 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty: 'totalCount'
         }
     }

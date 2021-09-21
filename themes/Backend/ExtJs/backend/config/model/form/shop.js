@@ -32,11 +32,11 @@
  */
 //{block name="backend/config/model/form/shop"}
 Ext.define('Shopware.apps.Config.model.form.Shop', {
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     fields: [
         //{block name="backend/config/model/form/shop/fields"}{/block}
-        { name: 'id', type:'int', useNull: true, defaultValue: null },
+        { name: 'id', type: 'int', useNull: true, defaultValue: null },
         { name: 'typeSwitch',  persist: false, convert: function(v, record) {
 
             // The default value determines if a newly created shop is either a subshop (sub) or a language shop (lang).

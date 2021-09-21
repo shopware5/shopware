@@ -54,14 +54,14 @@ Ext.define('Shopware.apps.Order.view.detail.Dispatch', {
      * @object
      */
     snippets: {
-        title:'{s name="dispatch/title"}Dispatch data{/s}',
-        dispatchMethod:'{s name="dispatch/fields/dispatch_method"}Dispatch method{/s}'
+        title: '{s name="dispatch/title"}Dispatch data{/s}',
+        dispatchMethod: '{s name="dispatch/fields/dispatch_method"}Dispatch method{/s}'
     },
 
     /**
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.title = me.snippets.title;

@@ -25,7 +25,7 @@
 Ext.define('Shopware.apps.ContentTypeManager', {
     extend: 'Enlight.app.SubApplication',
 
-    name:'Shopware.apps.ContentTypeManager',
+    name: 'Shopware.apps.ContentTypeManager',
 
     loadPath: '{url action=load}',
     bulkLoad: true,

@@ -38,11 +38,11 @@ Ext.define('Shopware.apps.Shipping.store.Costsmatrix', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend : 'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * An alias name for easy access
      */
-    alias  : 'store.shippingCostsmatrix',
+    alias: 'store.shippingCostsmatrix',
     /**
      * StoreId für StoreManager.lookup / Ext.getStore
      * Needs to be specified explicitly here, as the store is
@@ -56,24 +56,24 @@ Ext.define('Shopware.apps.Shipping.store.Costsmatrix', {
      * is initialized
      * @boolean
      */
-    autoLoad : false,
+    autoLoad: false,
 
     /**
      * Amount of data loaded at once
      * @integer
      */
-    pageSize : 30,
+    pageSize: 30,
 
     /**
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Shipping.model.Costsmatrix',
+    model: 'Shopware.apps.Shipping.model.Costsmatrix',
 
     /**
      * to upload all selected items in one request
      * @boolean
      */
-    batch:true
+    batch: true
 });
 //{/block}

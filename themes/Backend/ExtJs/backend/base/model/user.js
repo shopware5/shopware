@@ -39,38 +39,38 @@ Ext.define('Shopware.apps.Base.model.User', {
     /**
      * Defines an alternate name for this class.
      */
-    alternateClassName:'Shopware.model.User',
+    alternateClassName: 'Shopware.model.User',
 
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * unique id
      * @int
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/user/fields"}{/block}
-        { name:'id', type:'int' },
-        { name:'roleId', type:'int' },
-        { name:'username', type:'string' },
-        { name:'password', type:'string' },
-        { name:'localeId', type:'int' },
-        { name:'sessionId', type:'string' },
-        { name:'lastLogin', type:'date' },
-        { name:'name', type:'string' },
-        { name:'email', type:'string' },
-        { name:'active', type:'int' },
-        { name:'failedLogins', type:'int' },
-        { name:'lockedUntil', type:'date' }
+        { name: 'id', type: 'int' },
+        { name: 'roleId', type: 'int' },
+        { name: 'username', type: 'string' },
+        { name: 'password', type: 'string' },
+        { name: 'localeId', type: 'int' },
+        { name: 'sessionId', type: 'string' },
+        { name: 'lastLogin', type: 'date' },
+        { name: 'name', type: 'string' },
+        { name: 'email', type: 'string' },
+        { name: 'active', type: 'int' },
+        { name: 'failedLogins', type: 'int' },
+        { name: 'lockedUntil', type: 'date' }
     ]
 });
 //{/block}

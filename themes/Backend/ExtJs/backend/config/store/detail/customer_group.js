@@ -28,7 +28,7 @@
 //{block name="backend/config/store/detail/customer_group"}
 Ext.define('Shopware.apps.Config.store.detail.CustomerGroup', {
     extend: 'Ext.data.Store',
-    model:'Shopware.apps.Config.model.form.CustomerGroup',
+    model: 'Shopware.apps.Config.model.form.CustomerGroup',
     remoteSort: true,
     remoteFilter: true,
     pageSize: 20,

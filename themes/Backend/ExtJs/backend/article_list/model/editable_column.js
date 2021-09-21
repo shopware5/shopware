@@ -48,10 +48,10 @@ Ext.define('Shopware.apps.ArticleList.model.EditableColumn', {
 
     associations: [
         {
-           type:'hasMany',
-           model:'Shopware.apps.ArticleList.model.Operator',
-           name:'getOperators',
-           associationKey:'operators'
+           type: 'hasMany',
+           model: 'Shopware.apps.ArticleList.model.Operator',
+           name: 'getOperators',
+           associationKey: 'operators'
        }
    ]
 });

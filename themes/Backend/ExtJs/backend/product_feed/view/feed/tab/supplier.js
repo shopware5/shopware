@@ -36,9 +36,9 @@
  */
 //{block name="backend/product_feed/view/feed/tab/supplier"}
 Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Supplier', {
-    extend:'Ext.container.Container',
-    alias:'widget.product_feed-feed-tab-supplier',
-    title:'{s name="tab/title/supplier"}Supplier filter{/s}',
+    extend: 'Ext.container.Container',
+    alias: 'widget.product_feed-feed-tab-supplier',
+    title: '{s name="tab/title/supplier"}Supplier filter{/s}',
     border: 0,
     padding: 10,
     cls: 'shopware-toolbar',
@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Supplier', {
      * Initialize the Shopware.apps.ProductFeed.view.feed.tab.Footer and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.items = me.getItems();
         me.callParent(arguments);
@@ -56,14 +56,14 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Supplier', {
     /**
      * creates all fields for the tab
      */
-    getItems:function () {
+    getItems: function () {
         var me = this;
         return [{
-            xtype:'ddselector',
+            xtype: 'ddselector',
             fromTitle: '{s name="tab/title/supplier_available"}Available suppliers{/s}',
             toTitle: '{s name="tab/title/supplier_chosen"}Blocked suppliers{/s}',
             fromStore: me.supplierStore,
-            buttons:[ 'add','remove' ],
+            buttons: [ 'add','remove' ],
             gridHeight: 270,
             selectedItems: me.record.getSuppliers(),
             fromFieldDockedItems: [ me.getToolbar() ],
@@ -78,23 +78,23 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Supplier', {
      *
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
-    getToolbar:function () {
+    getToolbar: function () {
         return Ext.create('Ext.toolbar.Toolbar', {
-                    dock:'top',
-                    ui:'shopware-ui',
-                    items:[
+                    dock: 'top',
+                    ui: 'shopware-ui',
+                    items: [
                         '->',
                         {
-                            xtype:'textfield',
-                            name:'searchfield',
-                            action:'searchSupplier',
-                            width:170,
-                            cls:'searchfield',
-                            enableKeyEvents:true,
-                            checkChangeBuffer:500,
-                            emptyText:'{s name="tab/supplier/search"}Search...{/s}'
+                            xtype: 'textfield',
+                            name: 'searchfield',
+                            action: 'searchSupplier',
+                            width: 170,
+                            cls: 'searchfield',
+                            enableKeyEvents: true,
+                            checkChangeBuffer: 500,
+                            emptyText: '{s name="tab/supplier/search"}Search...{/s}'
                         },
-                        { xtype:'tbspacer', width:6 }
+                        { xtype: 'tbspacer', width: 6 }
                     ]
                 }
         );

@@ -40,17 +40,17 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * All references to get the elements by the applicable selector
      */
-    refs:[
-        { ref:'grid', selector:'blog-blog-list' },
-        { ref:'detailWindow', selector:'blog-blog-window' },
-        { ref:'optionsPanel', selector:'blog-blog-detail-sidebar-options' },
-        { ref:'commentPanel', selector:'blog-blog-detail-comments' },
-        { ref:'attributeForm', selector: 'blog-blog-window shopware-attribute-form' }
+    refs: [
+        { ref: 'grid', selector: 'blog-blog-list' },
+        { ref: 'detailWindow', selector: 'blog-blog-window' },
+        { ref: 'optionsPanel', selector: 'blog-blog-detail-sidebar-options' },
+        { ref: 'commentPanel', selector: 'blog-blog-detail-comments' },
+        { ref: 'attributeForm', selector: 'blog-blog-window shopware-attribute-form' }
     ],
 
     /**
@@ -85,22 +85,22 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({
-            'blog-blog-tree':{
+            'blog-blog-tree': {
                 // event will be fired if an tree item is clicked
                 'itemclick': me.onItemClick
             },
-            'blog-blog-list button[action=add]':{
-                click:me.onCreateBlogArticle
+            'blog-blog-list button[action=add]': {
+                click: me.onCreateBlogArticle
             },
-            'blog-blog-list textfield[action=searchBlogArticles]':{
-                change:me.onSearchBlog
+            'blog-blog-list textfield[action=searchBlogArticles]': {
+                change: me.onSearchBlog
             },
-            'blog-blog-list button[action=deleteBlogArticles]':{
-                click:me.onDeleteMultipleBlogArticles
+            'blog-blog-list button[action=deleteBlogArticles]': {
+                click: me.onDeleteMultipleBlogArticles
             },
             'blog-blog-list': {
                 deleteBlogArticle: me.onDeleteSingleBlogArticle,
@@ -129,7 +129,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      * @event editSettings
      * @return void
      */
-    onItemClick:function (view, record) {
+    onItemClick: function (view, record) {
         var me = this,
             listStore = me.subApplication.listStore;
             me.selectedCategoryRecord = record;
@@ -145,7 +145,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      *
      * @return void
      */
-    onCreateBlogArticle:function () {
+    onCreateBlogArticle: function () {
         var me = this,
             model = Ext.create('Shopware.apps.Blog.model.Detail');
 
@@ -172,14 +172,14 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      * @param { integer } rowIndex - The row number
      * @return void
      */
-    onEditItem:function (view, rowIndex) {
+    onEditItem: function (view, rowIndex) {
         var me = this,
             store = me.subApplication.detailStore,
             record = me.subApplication.listStore.getAt(rowIndex),
             commentStore = me.subApplication.commentStore;
 
         store.load({
-            filters : [{
+            filters: [{
                 property: 'id',
                 value: record.get("id")
             }],
@@ -189,7 +189,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
                 }
                 me.detailRecord = records[0];
                 commentStore.getProxy().extraParams = {
-                    blogId:record.get("id")
+                    blogId: record.get("id")
                 };
 
                 me.getView('blog.Window').create({
@@ -213,14 +213,14 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      * @param { integer} rowIndex - The row number
      * @return void
      */
-    onDuplicateBlogArticle:function (view, rowIndex) {
+    onDuplicateBlogArticle: function (view, rowIndex) {
         var me = this,
             store = me.subApplication.detailStore,
             record = me.subApplication.listStore.getAt(rowIndex),
             id = record.get("id");
 
         store.load({
-            filters : [{
+            filters: [{
                 property: 'id',
                 value: id
             }],
@@ -250,7 +250,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      * @param value
      * @return void
      */
-    onSearchBlog:function (field, value) {
+    onSearchBlog: function (field, value) {
         var me = this,
             searchString = Ext.String.trim(value),
             store = me.subApplication.listStore;
@@ -267,7 +267,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      * @param { integer } rowIndex - Position of the event
      * @return void
      */
-    onDeleteSingleBlogArticle:function (grid, rowIndex) {
+    onDeleteSingleBlogArticle: function (grid, rowIndex) {
         var me = this,
                 store = me.subApplication.listStore,
                 record = store.getAt(rowIndex);
@@ -280,7 +280,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
                 return false;
             }
             record.destroy({
-                callback:function (data, operation) {
+                callback: function (data, operation) {
                     var records = operation.getRecords(),
                             record = records[0],
                             rawData = record.getProxy().getReader().rawData;
@@ -302,7 +302,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      *
      * @return void
      */
-    onDeleteMultipleBlogArticles:function () {
+    onDeleteMultipleBlogArticles: function () {
         var me = this,
                 grid = me.getGrid(),
                 sm = grid.getSelectionModel(),
@@ -381,7 +381,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      *
      * @param record
      */
-    onOpenArticleModule:function (record) {
+    onOpenArticleModule: function (record) {
         var me = this;
         Shopware.app.Application.addSubApplication({
             name: 'Shopware.apps.Article',

@@ -53,7 +53,7 @@ Ext.define('Shopware.DragAndDropSelector',
     /**
      * Based on Ext.panel.Panel
      */
-    extend:'Ext.container.Container',
+    extend: 'Ext.container.Container',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets
@@ -135,7 +135,7 @@ Ext.define('Shopware.DragAndDropSelector',
     /**
      * default columns for the from grid
      */
-    fromColumns :[{
+    fromColumns: [{
         text: 'name',
         flex: 1,
         dataIndex: 'name'
@@ -144,7 +144,7 @@ Ext.define('Shopware.DragAndDropSelector',
     /**
      * default columns for the to grid
      */
-    toColumns :[{
+    toColumns: [{
         text: 'name',
         flex: 1,
         dataIndex: 'name'
@@ -169,8 +169,8 @@ Ext.define('Shopware.DragAndDropSelector',
     /**
      * standard layout
      */
-    layout:{
-        type:'hbox',
+    layout: {
+        type: 'hbox',
         align: 'stretch'
     },
 
@@ -198,7 +198,7 @@ Ext.define('Shopware.DragAndDropSelector',
     /**
      * Init the component
      */
-    initComponent : function() {
+    initComponent: function() {
         var me = this;
         me.toStore = me.selectedItems;
 
@@ -209,7 +209,7 @@ Ext.define('Shopware.DragAndDropSelector',
         var config = {
             title: me.fromTitle,
             store: me.fromStore,
-            columns :me.fromColumns,
+            columns: me.fromColumns,
             dockedItems: me.fromFieldDockedItems,
             border: false,
             viewConfig: {
@@ -236,9 +236,9 @@ Ext.define('Shopware.DragAndDropSelector',
         me.fromField = me.createGrid(config);
 
         me.toField = me.createGrid({
-            title : me.toTitle,
-            store : me.toStore,
-            columns : me.toColumns,
+            title: me.toTitle,
+            store: me.toStore,
+            columns: me.toColumns,
             dockedItems: me.toFieldDockedItems,
             border: false,
             viewConfig: {
@@ -269,7 +269,7 @@ Ext.define('Shopware.DragAndDropSelector',
      *
      * @return Ext.container.Container
      */
-    getMiddleButtons : function() {
+    getMiddleButtons: function() {
         var me = this;
         return Ext.create('Ext.container.Container',{
             margins: '0 4',
@@ -311,7 +311,7 @@ Ext.define('Shopware.DragAndDropSelector',
     createGrid: function(config) {
         var me = this;
         var defaultConfig = {
-            stripeRows : true,
+            stripeRows: true,
             multiSelect: true,
             hideHeaders: me.hideHeaders,
             height: me.gridHeight,
@@ -352,7 +352,7 @@ Ext.define('Shopware.DragAndDropSelector',
      * Event listener on add button click
      * Moves the selected Items from grid to grid
      */
-    onAddBtnClick : function() {
+    onAddBtnClick: function() {
         var me = this,
             fromList = me.fromField,
             selected = this.getSelections(fromList);
@@ -371,7 +371,7 @@ Ext.define('Shopware.DragAndDropSelector',
      * Event listener on Remove button click
      * Moves the selected Items from grid to grid
      */
-    onRemoveBtnClick : function() {
+    onRemoveBtnClick: function() {
         var me = this,
             toList = me.toField,
             selected = me.getSelections(toList);

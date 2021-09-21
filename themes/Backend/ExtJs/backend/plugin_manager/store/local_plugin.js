@@ -29,7 +29,7 @@
 
 //{block name="backend/plugin_manager/store/local_plugin"}
 Ext.define('Shopware.apps.PluginManager.store.LocalPlugin', {
-    extend:'Shopware.store.Listing',
+    extend: 'Shopware.store.Listing',
 
     pageSize: 20000,
 

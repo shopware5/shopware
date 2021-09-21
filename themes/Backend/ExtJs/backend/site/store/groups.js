@@ -29,7 +29,7 @@
 
 //{block name="backend/site/store/groups"}
 Ext.define('Shopware.apps.Site.store.Groups', {
-    extend : 'Ext.data.Store',
+    extend: 'Ext.data.Store',
     model: 'Shopware.apps.Site.model.Groups',
     autoLoad: false
 });

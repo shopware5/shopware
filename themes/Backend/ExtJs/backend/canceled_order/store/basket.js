@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.CanceledOrder.store.Basket', {
     extend: 'Ext.data.Store',
     // Do not load data, when not explicitly requested
     autoLoad: false,
-    model : 'Shopware.apps.CanceledOrder.model.Basket',
+    model: 'Shopware.apps.CanceledOrder.model.Basket',
     remoteFilter: true,
     remoteSort: true,
     groupField: 'groupDate',
@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.CanceledOrder.store.Basket', {
         reader: {
             type: 'json',
             root: 'data',
-            totalProperty:'total'
+            totalProperty: 'total'
         }
     }
 });

@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.CanceledOrder.store.Statistic', {
     extend: 'Ext.data.Store',
     // Do not load data, when not explicitly requested
     autoLoad: false,
-    model : 'Shopware.apps.CanceledOrder.model.Statistic',
+    model: 'Shopware.apps.CanceledOrder.model.Statistic',
 
     /**
      * Configure the data communication
@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.CanceledOrder.store.Statistic', {
         reader: {
             type: 'json',
             root: 'data',
-            totalProperty:'total'
+            totalProperty: 'total'
         }
     }
 });

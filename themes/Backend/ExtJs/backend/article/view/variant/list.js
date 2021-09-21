@@ -39,35 +39,35 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
     */
-    alias:'widget.article-variant-list',
+    alias: 'widget.article-variant-list',
 
     /**
      * Set css class
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'article-variant-list',
+    cls: Ext.baseCSSPrefix + 'article-variant-list',
 
     /**
      * The view needs to be scrollable
      * @string
      */
-    autoScroll:true,
+    autoScroll: true,
 
     /**
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
+    snippets: {
         regexNumberValidation: '{s name="detail/base/regex_number_validation"}The inserted article number contains illegal characters!{/s}',
-        columns:{
-            number:'{s name="variant/list/column/number"}Order number{/s}',
-            stock:'{s name="variant/list/column/stock"}Stock{/s}',
+        columns: {
+            number: '{s name="variant/list/column/number"}Order number{/s}',
+            stock: '{s name="variant/list/column/stock"}Stock{/s}',
             price: {
                 header: '{s name="variant/list/column/price"}Price{/s}',
                 undefined: '{s name="variant/list/column/price_undefined"}Undefined{/s}',
@@ -82,12 +82,12 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             remove: '{s name="variant/list/column/remove"}Remove variant{/s}',
             edit: '{s name="variant/list/column/edit"}Edit variant{/s}'
         },
-        toolbar:{
-            add:'{s name="variant/list/toolbar/button_add"}Add{/s}',
-            remove:'{s name="variant/list/toolbar/button_delete"}Delete all selected{/s}',
-            search:'{s name="variant/list/toolbar/search_empty_text"}Search...{/s}',
-            data:'{s name="variant/list/toolbar/data"}Apply standard data{/s}',
-            save:'{s name="variant/list/toolbar/save"}Save changes{/s}',
+        toolbar: {
+            add: '{s name="variant/list/toolbar/button_add"}Add{/s}',
+            remove: '{s name="variant/list/toolbar/button_delete"}Delete all selected{/s}',
+            search: '{s name="variant/list/toolbar/search_empty_text"}Search...{/s}',
+            data: '{s name="variant/list/toolbar/data"}Apply standard data{/s}',
+            save: '{s name="variant/list/toolbar/save"}Save changes{/s}',
             orderNumber: {
                 field: '{s name="variant/list/toolbar/order_field"}Apply standard prices{/s}',
                 button: '{s name="variant/list/toolbar/order_button"}Regenerate order numbers{/s}',
@@ -113,7 +113,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this,
             mainWindow = me.subApp.articleWindow;
 
@@ -274,7 +274,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the delete button in the toolbar or
@@ -418,22 +418,22 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 /**
                  * Special column type which provides clickable icons in each row
                  */
-                xtype:'actioncolumn',
-                width:70,
-                items:[
+                xtype: 'actioncolumn',
+                width: 70,
+                items: [
                     {
-                        iconCls:'sprite-minus-circle-frame',
-                        action:'deleteVariant',
-                        tooltip:me.snippets.columns.remove,
+                        iconCls: 'sprite-minus-circle-frame',
+                        action: 'deleteVariant',
+                        tooltip: me.snippets.columns.remove,
                         handler: function (view, rowIndex, colIndex, item, opts, record) {
                             var records = [ record ];
                             me.fireEvent('deleteVariant', records);
                         }
                     } , {
-                        iconCls:'sprite-pencil',
-                        action:'editVariant',
-                        tooltip:me.snippets.columns.edit,
-                        handler:function (view, rowIndex, colIndex, item, opts, record) {
+                        iconCls: 'sprite-pencil',
+                        action: 'editVariant',
+                        tooltip: me.snippets.columns.edit,
+                        handler: function (view, rowIndex, colIndex, item, opts, record) {
                             me.fireEvent('editVariant', record);
                         }
                     }
@@ -445,7 +445,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             header: me.snippets.columns.number,
             dataIndex: 'details.number',
             sortable: true,
-            flex:1,
+            flex: 1,
             align: 'left',
             renderer: me.numberColumnRenderer,
             editor: {
@@ -589,14 +589,14 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      *
      * @return [Ext.selection.CheckboxModel] grid selection model
      */
-    getGridSelModel:function () {
+    getGridSelModel: function () {
         var me = this;
 
         return Ext.create('Ext.selection.CheckboxModel', {
             checkOnly: true,
-            listeners:{
+            listeners: {
                 // Unlocks the save button if the user has checked at least one checkbox
-                selectionchange:function (sm, selections) {
+                selectionchange: function (sm, selections) {
                     if (me.deleteButton !== null) {
                         me.deleteButton.setDisabled(selections.length === 0);
                     }
@@ -610,7 +610,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      *
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
-    getToolbar:function () {
+    getToolbar: function () {
         var me = this;
 
         // Creates the delete button for mass deletion of variants
@@ -630,7 +630,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
 
         // Creates the price button to apply the standard prices of the main article on all variants.
         me.applyDataButton = Ext.create('Ext.button.Button', {
-            iconCls:'sprite-money--arrow',
+            iconCls: 'sprite-money--arrow',
             text: me.snippets.toolbar.data,
             action: 'applyData',
             handler: function() {
@@ -659,12 +659,12 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
 
         // Creates the search field to filter the listing.
         me.searchField = Ext.create('Ext.form.field.Text', {
-            name:'searchfield',
-            cls:'searchfield',
-            width:170,
-            emptyText:me.snippets.toolbar.search,
-            enableKeyEvents:true,
-            checkChangeBuffer:500,
+            name: 'searchfield',
+            cls: 'searchfield',
+            width: 170,
+            emptyText: me.snippets.toolbar.search,
+            enableKeyEvents: true,
+            checkChangeBuffer: 500,
             listeners: {
                 change: function(field, value) {
                     me.fireEvent('searchVariants', value);
@@ -673,24 +673,24 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
         });
 
         return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
+            dock: 'top',
             ui: 'shopware-ui',
             cls: 'shopware-toolbar',
-            items:[
+            items: [
                 me.deleteButton,
-                { xtype:'tbspacer', width: 6 },
+                { xtype: 'tbspacer', width: 6 },
                 { xtype: 'tbseparator' },
-                { xtype:'tbspacer', width: 6 },
+                { xtype: 'tbspacer', width: 6 },
                 me.applyDataButton,
-                { xtype:'tbspacer', width: 6 },
+                { xtype: 'tbspacer', width: 6 },
                 { xtype: 'tbseparator' },
-                { xtype:'tbspacer', width: 6 },
+                { xtype: 'tbspacer', width: 6 },
                 me.orderNumberField,
-                { xtype:'tbspacer', width: 6 },
+                { xtype: 'tbspacer', width: 6 },
                 me.orderNumberButton,
                 '->',
                 me.searchField,
-                { xtype:'tbspacer', width:6 }
+                { xtype: 'tbspacer', width: 6 }
             ]
         });
     },
@@ -700,7 +700,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      *
      * @return { Ext.toolbar.Paging } The paging toolbar for the customer grid
      */
-    getPagingBar:function () {
+    getPagingBar: function () {
         var me = this,
             productSnippet = me.snippets.paging.pageSize;
 
@@ -731,8 +731,8 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
 
         var pagingBar = Ext.create('Ext.toolbar.Paging', {
             store: me.store,
-            dock:'bottom',
-            displayInfo:true
+            dock: 'bottom',
+            displayInfo: true
         });
 
         pagingBar.insert(pagingBar.items.length - 2, [ { xtype: 'tbspacer', width: 6 }, pageSize ]);

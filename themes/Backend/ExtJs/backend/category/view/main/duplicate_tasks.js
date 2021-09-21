@@ -104,14 +104,14 @@ Ext.define('Shopware.apps.Category.view.main.DuplicateTasks', {
     /**
      * @string
      */
-    title:  '{s name="batch/duplicate/title"}Duplicate category tree{/s}',
+    title: '{s name="batch/duplicate/title"}Duplicate category tree{/s}',
 
     /**
      * Contains all snippets for the component
      * @object
      */
     snippets: {
-        close:  '{s name="batch/cancel"}Cancel{/s}'
+        close: '{s name="batch/cancel"}Cancel{/s}'
     },
 
     /**
@@ -175,7 +175,7 @@ Ext.define('Shopware.apps.Category.view.main.DuplicateTasks', {
             animate: true,
             margin: '0 0 15',
             style: 'border-width: 1px !important;',
-            cls:'left-align'
+            cls: 'left-align'
         });
     },
 

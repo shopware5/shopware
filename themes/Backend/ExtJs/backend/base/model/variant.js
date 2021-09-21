@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Base.model.Variant', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * The fields used for this model

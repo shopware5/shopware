@@ -40,12 +40,12 @@ Ext.define('Shopware.apps.Category.store.Template', {
      * Parent Object
      * @string
      */
-    extend : 'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Store to use
      * @string
      */
-    alias : 'store.template',
+    alias: 'store.template',
     /**
      * USe remote filtering
      * @boolean
@@ -55,38 +55,38 @@ Ext.define('Shopware.apps.Category.store.Template', {
      * Defines if the store is loaded from the start or not
      * @boolean
      */
-    autoLoad : false,
+    autoLoad: false,
     /**
      * Default page size is 30 items
      * @integer
      */
-    pageSize : 30,
+    pageSize: 30,
     /**
      * Model to use for this store
      * @string
      */
-    model : 'Shopware.apps.Category.model.Template',
+    model: 'Shopware.apps.Category.model.Template',
 
     /**
      * Proxy config object.
      * @object
      */
-    proxy : {
-        type : 'ajax',
+    proxy: {
+        type: 'ajax',
          /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        api : {
-            read : '{url controller=category action=getTemplateSettings}'
+        api: {
+            read: '{url controller=category action=getTemplateSettings}'
         },
         /**
          * Configure the data reader
          * @object
          */
-        reader : {
-            type : 'json',
+        reader: {
+            type: 'json',
             root: 'data'
         }
     }

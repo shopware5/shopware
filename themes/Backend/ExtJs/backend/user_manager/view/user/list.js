@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
             action: 'deleteUser',
             cls: 'delete',
             tooltip: '{s name="list_users/deletetooltip"}Delete this user{/s}',
-            handler:function (view, rowIndex, colIndex, item) {
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('deleteUser', view, rowIndex, colIndex, item);
             }
         });
@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
             cls: 'editBtn',
             action: 'editUser',
             tooltip: '{s name="list_users/edittooltip"}Edit this user{/s}',
-            handler:function (view, rowIndex, colIndex, item) {
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('editUser', view, rowIndex, colIndex, item);
         } });
         /* {/if} */
@@ -158,14 +158,14 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
         /* {/if} */
 
         tbButtons.push('->', {
-            xtype:'textfield',
-            name:'searchfield',
-            action:'searchUser',
-            width:170,
+            xtype: 'textfield',
+            name: 'searchfield',
+            action: 'searchUser',
+            width: 170,
             cls: 'searchfield',
-            enableKeyEvents:true,
+            enableKeyEvents: true,
             checkChangeBuffer: 500,
-            emptyText:'{s name="list_users/field/search"}{/s}'
+            emptyText: '{s name="list_users/field/search"}{/s}'
         });
 
         // Row grouping
@@ -188,7 +188,7 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
         me.callParent();
     },
 
-    registerEvents:function () {
+    registerEvents: function () {
         var me = this;
 
             me.addEvents(

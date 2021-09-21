@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         'variantFilter.ExpandGroupsHiddenField'
     ],
 
-    stores:[
+    stores: [
         'form.Shop',
         'form.Currency',
         'form.Locale',
@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         'base.SearchTable'
     ],
 
-    models:[
+    models: [
         'form.Shop',
         'form.Currency',
         'form.Locale',
@@ -432,12 +432,12 @@ Ext.define('Shopware.apps.Config.controller.Form', {
             title = me.messages.saveEntryTitle;
 
         formStore.sync({
-            success :function (records, operation) {
+            success: function (records, operation) {
                 message = me.messages.saveEntrySuccess;
                 me.createGrowlMessage(record, title, message);
                 store.load();
             },
-            failure:function (batch) {
+            failure: function (batch) {
                 message = me.messages.saveEntryError;
                 if(batch.proxy.reader.rawData.message) {
                     message += '<br />' + batch.proxy.reader.rawData.message;
@@ -513,7 +513,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         }
         if(record && formStore) {
             formStore.load({
-                filters : [{
+                filters: [{
                     property: 'id',
                     value: record.data.id
                 }],

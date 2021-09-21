@@ -53,16 +53,16 @@ Ext.define('Shopware.apps.Site.controller.Form', {
      *
      * @object
      */
-    refs:[
-        { ref:'mainWindow', selector:'site-mainWindow' },
-        { ref:'confirmationBox', selector:'site-confirmationBox' },
-        { ref:'detailForm', selector:'site-form' },
-        { ref:'navigationTree', selector:'site-tree' },
-        { ref:'itemSelector', selector:'site-form itemselector' },
-        { ref:'navigationTree', selector:'site-tree' },
-        { ref:'attributeForm', selector: 'site-mainWindow shopware-attribute-form' },
-        { ref:'parentIdField', selector:'site-form hidden[name=parentId]' },
-        { ref:'helperIdField', selector:'site-form hidden[name=helperId]' }
+    refs: [
+        { ref: 'mainWindow', selector: 'site-mainWindow' },
+        { ref: 'confirmationBox', selector: 'site-confirmationBox' },
+        { ref: 'detailForm', selector: 'site-form' },
+        { ref: 'navigationTree', selector: 'site-tree' },
+        { ref: 'itemSelector', selector: 'site-form itemselector' },
+        { ref: 'navigationTree', selector: 'site-tree' },
+        { ref: 'attributeForm', selector: 'site-mainWindow shopware-attribute-form' },
+        { ref: 'parentIdField', selector: 'site-form hidden[name=parentId]' },
+        { ref: 'helperIdField', selector: 'site-form hidden[name=helperId]' }
     ],
 
     /**

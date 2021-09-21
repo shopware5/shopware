@@ -37,6 +37,6 @@ Ext.define('Shopware.apps.Tax.store.Groups', {
     extend: 'Ext.data.TreeStore',
     autoLoad: true,
     pageSize: 30,
-    model : 'Shopware.apps.Tax.model.Groups'
+    model: 'Shopware.apps.Tax.model.Groups'
 });
 //{/block}

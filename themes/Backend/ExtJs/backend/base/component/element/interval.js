@@ -29,8 +29,8 @@
  * @author shopware AG
  */
 Ext.define('Shopware.apps.Base.view.element.Interval', {
-    extend:'Ext.form.field.ComboBox',
-    alias:[
+    extend: 'Ext.form.field.ComboBox',
+    alias: [
         'widget.base-element-interval',
         'widget.config-element-interval'
     ],
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Base.view.element.Interval', {
         [604800, '{s name="element/interval/1_week"}1 Week (604800 Sec.){/s}']
     ],
 
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.callParent(arguments);

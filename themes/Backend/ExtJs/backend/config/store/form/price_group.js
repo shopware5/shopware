@@ -28,7 +28,7 @@
 //{block name="backend/config/store/form/price_group"}
 Ext.define('Shopware.apps.Config.store.form.PriceGroup', {
     extend: 'Ext.data.Store',
-    model:'Shopware.apps.Config.model.form.PriceGroup',
+    model: 'Shopware.apps.Config.model.form.PriceGroup',
     remoteFilter: true,
     proxy: {
         type: 'ajax',

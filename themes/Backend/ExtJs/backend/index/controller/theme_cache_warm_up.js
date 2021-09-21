@@ -219,7 +219,7 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
             url: '{url controller=Cache action=clearCache}',
             method: 'POST',
             params: {
-                'cache[http]' : 'on'
+                'cache[http]': 'on'
             },
             timeout: 4000000,
             success: function(response) {

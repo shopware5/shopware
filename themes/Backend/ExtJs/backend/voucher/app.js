@@ -38,12 +38,12 @@ Ext.define('Shopware.apps.Voucher', {
      * sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
     /**
      * The name of the module. Used for internal purpose
      * @string
      */
-    name:'Shopware.apps.Voucher',
+    name: 'Shopware.apps.Voucher',
     /**
      * Sets the loading path for the sub-application.
      *
@@ -53,31 +53,31 @@ Ext.define('Shopware.apps.Voucher', {
      */
     bulkLoad: true,
 
-    loadPath:'{url action=load}',
+    loadPath: '{url action=load}',
 
     /**
      * Required stores for controller
      * @array
      */
-    stores:[ 'List', 'Detail', 'Code', 'Tax'],
+    stores: [ 'List', 'Detail', 'Code', 'Tax'],
 
     /**
      * Required views for controller
      * @array
      */
-    views:[ 'voucher.List', 'voucher.Window', 'voucher.BaseConfiguration', 'main.Window', 'code.List', 'code.Progress' ],
+    views: [ 'voucher.List', 'voucher.Window', 'voucher.BaseConfiguration', 'main.Window', 'code.List', 'code.Progress' ],
 
 
     /**
      * Requires models for sub-application
      * @array
      */
-    models:['Code','Detail','Main','Tax'],
+    models: ['Code','Detail','Main','Tax'],
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers:['Voucher','Main','Code'],
+    controllers: ['Voucher','Main','Code'],
 
     /**
      * Returns the main application window for this is expected

@@ -42,53 +42,53 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Sets', {
      * Define that the order main window is an extension of the enlight application window
      * @string
      */
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     /**
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'article-sets-window',
+    cls: Ext.baseCSSPrefix + 'article-sets-window',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-sets-window',
+    alias: 'widget.article-sets-window',
     /**
      * Set no border for the window
      * @boolean
      */
-    border:false,
+    border: false,
     /**
      * True to automatically show the component upon creation.
      * @boolean
      */
-    autoShow:false,
+    autoShow: false,
     /**
      * Set border layout for the window
      * @string
      */
-    layout:'fit',
+    layout: 'fit',
     /**
      * Define window width
      * @integer
      */
-    width:300,
+    width: 300,
     /**
      * Define window height
      * @integer
      */
-    height:200,
+    height: 200,
 
 
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
-    stateful:true,
+    stateful: true,
 
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId:'shopware-article-sets-window',
+    stateId: 'shopware-article-sets-window',
     footerButton: false,
     minimizable: false,
     maximizable: false,
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Sets', {
         save: '{s name="variant/configurator/sets/save"}Save{/s}',
         load: '{s name="variant/configurator/sets/load"}Load{/s}',
         sets: '{s name="variant/configurator/sets/set_combo"}Configurator set{/s}',
-        empty:'{s name="empty"}Please select...{/s}',
+        empty: '{s name="empty"}Please select...{/s}',
         cancel: '{s name="variant/configurator/sets/cancel"}Cancel{/s}',
         publicField: '{s name="variant/configurator/sets/public_field"}Mark the set as public{/s}',
         setName: '{s name="variant/configurator/set/set_name"}Name of the configurator set{/s}'
@@ -119,7 +119,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Sets', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.registerEvents();
         if (me.mode === 'save') {
@@ -178,7 +178,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Sets', {
         var publicCheckBox = Ext.create('Ext.form.field.Checkbox', {
             name: 'public',
             inputValue: true,
-            uncheckedValue:false,
+            uncheckedValue: false,
             fieldLabel: me.snippets.publicField
         });
         var nameField = Ext.create('Ext.form.field.Text', {
@@ -258,7 +258,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Sets', {
                 { xtype: 'tbfill' },
                 {
                     xtype: 'button',
-                    cls:'primary',
+                    cls: 'primary',
                     text: text,
                     handler: function() {
                         if (me.mode === 'save') {

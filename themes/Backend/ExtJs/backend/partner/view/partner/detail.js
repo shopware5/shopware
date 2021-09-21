@@ -38,11 +38,11 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
     alias: 'widget.partner-partner-detail',
     border: 0,
     title: '{s name="partner/configuration/title"}Partner configuration{/s}',
-    partnerId:0,
+    partnerId: 0,
     autoScroll: true,
 
     //Text for the ModusCombobox
-    cookieLifeTimeGrading:[
+    cookieLifeTimeGrading: [
         [0, '{s name="detail_general/life_time_grading/none"}None (0 Sec.){/s}'],
         [900, '{s name="detail_general/mode_combo_box/fifteen_minutes"}15 Minutes (900 Sec.){/s}'],
         [1800, '{s name="detail_general/mode_combo_box/thirty_minutes"}30 Minutes (1800 Sec.){/s}'],
@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
      * Initialize the Shopware.apps.Partner.view.partner.detail and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.registerEvents();
@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
             defaults: {
                 columnWidth: 0.5
             },
-            items:me.createGeneralForm()
+            items: me.createGeneralForm()
         });
 
         me.partnerFieldset = Ext.create('Ext.form.FieldSet', {
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
             defaults: {
                 columnWidth: 0.5
             },
-            items:me.createPartnerForm()
+            items: me.createPartnerForm()
         });
 
         me.attributeForm = Ext.create('Shopware.attribute.Form', {
@@ -115,7 +115,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
                 /**
                  * Event will be fired when the user changes the customer-account field
@@ -138,29 +138,29 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
      *
      * @return [Array] computed form
      */
-    createGeneralForm:function () {
+    createGeneralForm: function () {
         var leftContainer, rightContainer, me = this;
 
         leftContainer = Ext.create('Ext.container.Container', {
-            defaults:{
-                labelWidth:180,
-                minWidth:250,
+            defaults: {
+                labelWidth: 180,
+                minWidth: 250,
                 width: 400,
                 labelStyle: 'font-weight: 700;',
                 xtype: 'textfield'
             },
-            items:me.createGeneralFormLeft()
+            items: me.createGeneralFormLeft()
         });
 
         rightContainer = Ext.create('Ext.container.Container', {
-            defaults:{
-                labelWidth:180,
-                minWidth:250,
+            defaults: {
+                labelWidth: 180,
+                minWidth: 250,
                 width: 400,
                 labelStyle: 'font-weight: 700;',
                 xtype: 'textfield'
             },
-            items:me.createGeneralFormRight()
+            items: me.createGeneralFormRight()
         });
 
         return [ leftContainer, rightContainer ];
@@ -175,7 +175,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
         var leftContainer, rightContainer, me = this;
 
         leftContainer = Ext.create('Ext.container.Container', {
-            defaults:{
+            defaults: {
                 labelWidth: 180,
                 minWidth: 250,
                 width: 400,
@@ -186,7 +186,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
         });
 
         rightContainer = Ext.create('Ext.container.Container', {
-            defaults:{
+            defaults: {
                 labelWidth: 180,
                 minWidth: 250,
                 width: 400,
@@ -203,7 +203,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
     /**
      * Creates all fields for the general form on the left side
      */
-    createGeneralFormLeft:function () {
+    createGeneralFormLeft: function () {
         var me = this;
         var customerStore = Ext.create('Shopware.attribute.SelectionFactory').createEntitySearchStore('Shopware\\Models\\Customer\\Customer');
 
@@ -254,7 +254,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
     /**
      * Creates all fields for the general form on the left side
      */
-    createGeneralFormRight:function () {
+    createGeneralFormRight: function () {
         var me = this;
 
         return [
@@ -277,7 +277,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
                 name: 'cookieLifeTime',
                 fieldLabel: '{s name="detail_general/field/cookieLifeTime"}Cookie lifetime(Sec.){/s}',
                 store: new Ext.data.SimpleStore({
-                    fields: ['id', 'text'], data:me.cookieLifeTimeGrading
+                    fields: ['id', 'text'], data: me.cookieLifeTimeGrading
                 }),
                 valueField: 'id',
                 displayField: 'text',
@@ -289,7 +289,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
     /**
      * Creates all fields for the general form on the right side
      */
-    createPartnerFormLeft:function () {
+    createPartnerFormLeft: function () {
         return [
             {
                 fieldLabel: '{s name="detail_general/field/company"}Company{/s}',
@@ -320,7 +320,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
     /**
      * Creates all fields for the general form on the right side
      */
-    createPartnerFormRight:function () {
+    createPartnerFormRight: function () {
         return [
             {
                 fieldLabel: '{s name="detail_general/field/phone"}Phone{/s}',

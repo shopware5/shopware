@@ -38,13 +38,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.ThemeCache', {
      * Define that the base field set is an extension of the "Base" fieldSet
      * @string
      */
-    extend:'Shopware.apps.Performance.view.tabs.settings.fields.Base',
+    extend: 'Shopware.apps.Performance.view.tabs.settings.fields.Base',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-theme-cache',
+    alias: 'widget.performance-tabs-settings-theme-cache',
 
     /**
      * Description of the fieldSet
@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.ThemeCache', {
      * want to create a new customer or edit an existing customer
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = me.getItems();
@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.ThemeCache', {
                         text: '{s name="fieldset/theme/warmup"}Warm up theme cache{/s}',
                         cls: 'primary',
                         scope: me,
-                        handler:function () {
+                        handler: function () {
                             Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request', null, true);
                         }
                     })

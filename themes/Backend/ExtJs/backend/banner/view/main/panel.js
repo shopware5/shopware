@@ -38,7 +38,7 @@
 //{block name="backend/banner/view/main/panel"}
 Ext.define('Shopware.apps.Banner.view.main.Panel', {
     extend: 'Ext.container.Container',
-    alias : 'widget.banner-view-main-panel',
+    alias: 'widget.banner-view-main-panel',
     layout: 'border',
     style: 'background: #fff',
 
@@ -46,14 +46,14 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
      * Dummy category id - will be set later
      * @integer
      */
-    categoryId:0,
+    categoryId: 0,
 
     /**
      * Initialize the view.main.List and defines the necessary
      * default configuration
      * @return void
      */
-    initComponent : function () {
+    initComponent: function () {
         var me = this;
 
         me.categoryTree = me.getCategoryTree();
@@ -68,33 +68,33 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
      *
      * @return Ext.toolbar.Toolbar
      */
-    getBannerToolbar : function() {
+    getBannerToolbar: function() {
         return Ext.create('Ext.toolbar.Toolbar', {
             region: 'north',
             ui: 'shopware-ui',
             items: [
                 /*{if {acl_is_allowed privilege=create}}*/
                 {
-                    iconCls : 'sprite-plus-circle',
-                    text : '{s name="view/main_add"}Add{/s}',
-                    action : 'addBanner',
-                    disabled : true
+                    iconCls: 'sprite-plus-circle',
+                    text: '{s name="view/main_add"}Add{/s}',
+                    action: 'addBanner',
+                    disabled: true
                 },
                 /* {/if} */
                 /*{if {acl_is_allowed privilege=delete}}*/
                 {
-                    iconCls : 'sprite-minus-circle',
-                    text : '{s name="view/main_delete"}Delete{/s}',
-                    disabled : true,
-                    action : 'deleteBanner'
+                    iconCls: 'sprite-minus-circle',
+                    text: '{s name="view/main_delete"}Delete{/s}',
+                    disabled: true,
+                    action: 'deleteBanner'
                 },
                 /* {/if} */
                 /*{if {acl_is_allowed privilege=update}}*/
                 {
-                    iconCls : 'sprite-pencil',
-                    text : '{s name="view/main_edit"}Edit{/s}',
-                    disabled : true,
-                    action : 'editBanner'
+                    iconCls: 'sprite-pencil',
+                    text: '{s name="view/main_edit"}Edit{/s}',
+                    disabled: true,
+                    action: 'editBanner'
                 }
                 /*{/if}*/
             ]
@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
      *
      * @return Ext.Panel
      */
-    getBannerList : function() {
+    getBannerList: function() {
         var me = this;
 
         me.dataView = Ext.create('Ext.view.View', {
@@ -126,11 +126,11 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
             *
             * @param data
             */
-             prepareData : function(data) {
+             prepareData: function(data) {
                 Ext.apply(data, {
-                    description : Ext.util.Format.ellipsis(data.description, 27),
-                    img         : data.image,
-                   id           : data.id
+                    description: Ext.util.Format.ellipsis(data.description, 27),
+                    img: data.image,
+                   id: data.id
                 });
                 return data;
             }
@@ -150,7 +150,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
      *
      * @return array of strings
      */
-    getBannerListTemplate : function() {
+    getBannerListTemplate: function() {
         var basePath = '';
         return [
             '<tpl for=".">',
@@ -168,7 +168,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
      *
      * @return Ext.tree.Panel
      */
-    getCategoryTree : function() {
+    getCategoryTree: function() {
         return Ext.create('Ext.tree.Panel', {
             title: '{s name="view/tree_title"}Catergories{/s}',
             collapsible: true,

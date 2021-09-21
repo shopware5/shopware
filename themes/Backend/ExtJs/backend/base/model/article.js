@@ -41,38 +41,38 @@ Ext.define('Shopware.apps.Base.model.Article', {
     /**
      * Defines an alternate name for this class.
      */
-    alternateClassName:'Shopware.model.Article',
+    alternateClassName: 'Shopware.model.Article',
 
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * unique id
      * @int
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/article/fields"}{/block}
-        { name:'id', type:'int' },
-        { name:'number', type:'string' },
-        { name:'name', type:'string' },
-        { name:'description', type:'string' },
-        { name:'supplierName', type:'string' },
-        { name:'supplierId', type:'int' },
-        { name:'active', type:'int' },
-        { name:'detailId', type:'int' },
-        { name:'changeTime', type:'date' },
-        { name:'inStock', type:'int' },
+        { name: 'id', type: 'int' },
+        { name: 'number', type: 'string' },
+        { name: 'name', type: 'string' },
+        { name: 'description', type: 'string' },
+        { name: 'supplierName', type: 'string' },
+        { name: 'supplierId', type: 'int' },
+        { name: 'active', type: 'int' },
+        { name: 'detailId', type: 'int' },
+        { name: 'changeTime', type: 'date' },
+        { name: 'inStock', type: 'int' },
 
-        { name:'label', type:'string' }
+        { name: 'label', type: 'string' }
     ]
 });
 //{/block}

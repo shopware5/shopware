@@ -38,13 +38,13 @@
 Ext.define('Shopware.apps.Notification.view.notification.Article', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.notification-notification-article',
-    autoScroll:true,
-    ui:'shopware-ui',
+    autoScroll: true,
+    ui: 'shopware-ui',
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.registerEvents();
@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
                 /**
                  * Event will be fired when the user clicks the user icon in the
@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
      *
      * @return [array] grid columns
      */
-    getColumns:function () {
+    getColumns: function () {
         var me = this;
 
         var columnsData = [
@@ -117,10 +117,10 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
                 flex: 1
             },
             {
-                xtype:'actioncolumn',
-                width:30,
-                align:'center',
-                items:me.getActionColumnItems()
+                xtype: 'actioncolumn',
+                width: 30,
+                align: 'center',
+                items: me.getActionColumnItems()
             }
         ];
         return columnsData;
@@ -132,24 +132,24 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
      *
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
-    getToolbar:function () {
+    getToolbar: function () {
         return Ext.create('Ext.toolbar.Toolbar',
                 {
-                    dock:'top',
-                    ui:'shopware-ui',
-                    items:[
+                    dock: 'top',
+                    ui: 'shopware-ui',
+                    items: [
                         '->',
                         {
-                            xtype:'textfield',
-                            name:'searchField',
-                            action:'searchArticle',
-                            width:170,
-                            cls:'searchfield',
-                            enableKeyEvents:true,
-                            checkChangeBuffer:500,
-                            emptyText:'{s name="list/field/search_article"}Search...{/s}'
+                            xtype: 'textfield',
+                            name: 'searchField',
+                            action: 'searchArticle',
+                            width: 170,
+                            cls: 'searchfield',
+                            enableKeyEvents: true,
+                            checkChangeBuffer: 500,
+                            emptyText: '{s name="list/field/search_article"}Search...{/s}'
                         },
-                        { xtype:'tbspacer', width:6 }
+                        { xtype: 'tbspacer', width: 6 }
                     ]
                 });
     },
@@ -162,9 +162,9 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
     getPagingBar: function () {
         var me = this;
         return Ext.create('Ext.toolbar.Paging', {
-            store:me.articleStore,
-            dock:'bottom',
-            displayInfo:true
+            store: me.articleStore,
+            dock: 'bottom',
+            displayInfo: true
         });
 
     },
@@ -179,10 +179,10 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
                 actionColumnData = [];
 
         actionColumnData.push({
-            iconCls:'sprite-users',
-            cls:'users',
-            tooltip:'{s name="list/action_column/users"}Show notification customers{/s}',
-            handler:function (view, rowIndex, colIndex, item) {
+            iconCls: 'sprite-users',
+            cls: 'users',
+            tooltip: '{s name="list/action_column/users"}Show notification customers{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('showCustomers', view, rowIndex, colIndex, item);
             }
         });

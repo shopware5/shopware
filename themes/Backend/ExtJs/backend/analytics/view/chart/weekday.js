@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
                 fields: ['date'],
                 title: '{s name="chart/weekday/titleBottom"}Weekday{/s}',
                 label: {
-                    renderer:function (value) {
+                    renderer: function (value) {
                         return Ext.util.Format.date(value, 'l');
                     }
                 }

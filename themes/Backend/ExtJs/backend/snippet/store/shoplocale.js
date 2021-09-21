@@ -29,6 +29,6 @@ Ext.define('Shopware.apps.Snippet.store.Shoplocale', {
     extend: 'Ext.data.Store',
     batch: true,
     autoLoad: false,
-    model : 'Shopware.apps.Snippet.model.Shoplocale'
+    model: 'Shopware.apps.Snippet.model.Shoplocale'
 });
 //{/block}

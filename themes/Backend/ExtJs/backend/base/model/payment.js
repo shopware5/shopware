@@ -46,28 +46,28 @@ Ext.define('Shopware.apps.Base.model.Payment', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * unique id
      * @int
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/payment/fields"}{/block}
-        { name:'id', type: 'int' },
-        { name:'name', type: 'string' },
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' },
         // No need for a snippet matcher anymore.
         // All payments are translated on the server which thereby enabling custom
         // payments methods to be translated as well.
-        { name:'description', type: 'string' },
-        { name:'position', type: 'int' },
-        { name:'active', type: 'boolean' }
+        { name: 'description', type: 'string' },
+        { name: 'position', type: 'int' },
+        { name: 'active', type: 'boolean' }
     ]
 });
 //{/block}

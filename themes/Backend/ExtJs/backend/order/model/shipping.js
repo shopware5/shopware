@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Order.model.Shipping', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.apps.Base.model.Address',
+    extend: 'Shopware.apps.Base.model.Address',
 
     /**
      * One or more BelongsTo associations for this model.

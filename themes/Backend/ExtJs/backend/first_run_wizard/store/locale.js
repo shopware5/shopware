@@ -34,7 +34,7 @@
 
 Ext.define('Shopware.apps.FirstRunWizard.store.Locale', {
     extend: 'Ext.data.Store',
-    model : 'Shopware.apps.FirstRunWizard.model.Locale',
+    model: 'Shopware.apps.FirstRunWizard.model.Locale',
     proxy: {
         type: 'ajax',
         url: '{url action=getAlternativeLocales}',

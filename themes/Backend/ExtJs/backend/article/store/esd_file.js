@@ -36,14 +36,14 @@ Ext.define('Shopware.apps.Article.store.EsdFile', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
 
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Article.model.EsdFile',
+    model: 'Shopware.apps.Article.model.EsdFile',
 
     /**
      * Disable auto loading for this store

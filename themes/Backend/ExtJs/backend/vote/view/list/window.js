@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Vote.view.list.Window', {
     alias: 'widget.vote-list-window',
     height: '90%',
     width: '80%',
-    title : '{s name="window_title"}Vote listing{/s}',
+    title: '{s name="window_title"}Vote listing{/s}',
 
     configure: function() {
         return {

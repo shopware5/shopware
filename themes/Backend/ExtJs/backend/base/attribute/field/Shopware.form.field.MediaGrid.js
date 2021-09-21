@@ -98,7 +98,7 @@ Ext.define('Shopware.form.field.MediaGrid', {
         }
     },
 
-    createHelp:function (text) {
+    createHelp: function (text) {
         var icon = Ext.create('Ext.Component', {
             html: '<span style="margin-top: 4px !important;" class="'+Ext.baseCSSPrefix + 'form-help-icon'+'"></span>',
             width: 24,

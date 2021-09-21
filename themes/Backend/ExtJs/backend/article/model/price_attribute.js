@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Article.model.PriceAttribute', {
     fields: [
         //{block name="backend/article/model/price_attribute/fields"}{/block}
         { name: 'id', type: 'int' },
-        { name: 'articlePriceId', type: 'int', useNull : true }
+        { name: 'articlePriceId', type: 'int', useNull: true }
     ]
 
 });

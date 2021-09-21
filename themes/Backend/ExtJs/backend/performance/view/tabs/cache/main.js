@@ -35,9 +35,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
     alias: 'widget.performance-tabs-cache-main',
     title: '{s name="tabs/cache/title"}Cache{/s}',
 
-    layout:'vbox',
+    layout: 'vbox',
 
-    defaults:  {
+    defaults: {
         width: '100%'
     },
 

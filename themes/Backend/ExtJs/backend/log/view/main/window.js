@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Log.view.main.Window', {
     width: 925,
 
     stateful: true,
-    stateId:'shopware-log-window',
+    stateId: 'shopware-log-window',
 
     /**
      * Initializes the component and builds up the main interface

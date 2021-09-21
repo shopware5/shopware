@@ -37,6 +37,6 @@ Ext.define('Shopware.apps.Tax.store.Countries', {
     extend: 'Ext.data.Store',
     autoLoad: false,
     pageSize: 30,
-    model : 'Shopware.apps.Tax.model.Countries'
+    model: 'Shopware.apps.Tax.model.Countries'
 });
 //{/block}

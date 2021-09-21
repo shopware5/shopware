@@ -47,13 +47,13 @@ Ext.define('Shopware.apps.Category.store.AssignedProducts', {
      * is initialized
      * @boolean
      */
-    autoLoad : false,
+    autoLoad: false,
 
     /**
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Category.model.ProductAssignment',
+    model: 'Shopware.apps.Category.model.ProductAssignment',
 
     /**
      * Batch size

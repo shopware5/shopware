@@ -41,36 +41,36 @@ Ext.define('Shopware.apps.Blog.model.Tree', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.model.Category',
+    extend: 'Shopware.model.Category',
     /**
      * Configure the data communication
      * @object
      */
-    fields:[
+    fields: [
         // {block name="backend/blog/model/tree/fields"}{/block}
-        { name : 'id', type: 'integer', useNull:true },
-        { name : 'parentId', type: 'integer' },
-        { name : 'name', type: 'string' },
-        { name : 'blog', type: 'boolean' },
-        { name : 'position', type: 'integer', useNull:true, defaultValue: null }
+        { name: 'id', type: 'integer', useNull: true },
+        { name: 'parentId', type: 'integer' },
+        { name: 'name', type: 'string' },
+        { name: 'blog', type: 'boolean' },
+        { name: 'position', type: 'integer', useNull: true, defaultValue: null }
     ],
-    proxy : {
-        type : 'ajax',
+    proxy: {
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        api : {
-            read : '{url controller=blog action=getBlogCategories}'
+        api: {
+            read: '{url controller=blog action=getBlogCategories}'
         },
         /**
          * Configure the data reader
          * @object
          */
-        reader : {
-            type : 'json',
+        reader: {
+            type: 'json',
             root: 'data'
         }
     }

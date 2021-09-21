@@ -29,8 +29,8 @@
 //{namespace name="backend/attributes/main"}
 //{block name="backend/attributes/app"}
 Ext.define('Shopware.apps.Attributes', {
-    name:'Shopware.apps.Attributes',
-    extend:'Enlight.app.SubApplication',
+    name: 'Shopware.apps.Attributes',
+    extend: 'Enlight.app.SubApplication',
     bulkLoad: true,
     loadPath: '{url action=load}',
 

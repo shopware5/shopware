@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
      * @object
      */
     systemTexts: {
-        'productSearch':'{s name="detail/sidebar/similar/article_search"}Article{/s}',
+        'productSearch': '{s name="detail/sidebar/similar/article_search"}Article{/s}',
         'crossField': '{s name="detail/sidebar/similar/assignment_field"}Assignment{/s}',
         'crossBox': '{s name="detail/sidebar/similar/assignment_box"}Assign each other{/s}',
         'delete': '{s name="detail/sidebar/similar/delete"}Remove entry{/s}',

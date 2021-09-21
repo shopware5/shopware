@@ -38,12 +38,12 @@ Ext.define('Shopware.apps.Shipping.model.CategoryTree', {
      * Extends the default extjs 4 model
      * @string
      */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
      /**
      * Set an alias to make the handling a bit easier
       * @string
      */
-    alias : 'model.categorymodel',
+    alias: 'model.categorymodel',
     /**
      * Defined items used by that model
      *
@@ -51,13 +51,13 @@ Ext.define('Shopware.apps.Shipping.model.CategoryTree', {
      *
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/shipping/model/category_tree/fields"}{/block}
-        { name : 'text',     type: 'string' },
-        { name : 'id',       type: 'int' },
-        { name : 'parentId', type: 'int' },
-        { name : 'cls',      type: 'string' },
-        { name : 'checked',  type: 'string' }
+        { name: 'text',     type: 'string' },
+        { name: 'id',       type: 'int' },
+        { name: 'parentId', type: 'int' },
+        { name: 'cls',      type: 'string' },
+        { name: 'checked',  type: 'string' }
     ]
 });
 //{/block}

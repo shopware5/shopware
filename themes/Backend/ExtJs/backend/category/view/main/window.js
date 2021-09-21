@@ -94,18 +94,18 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      * @boolean
      */
-    stateful:true,
+    stateful: true,
 
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId:'shopware-category-main-window',
+    stateId: 'shopware-category-main-window',
 
     /**
      * Containing the tabs with the overview and the settings
      * @array of Ext.tab.Panel
      */
-    tabPanel : null,
+    tabPanel: null,
 
     /**
      * Masks the viewport when the window is visible.
@@ -144,9 +144,9 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
 
         me.items = [
             {
-                xtype:'category-category-tree',
+                xtype: 'category-category-tree',
                 split: true,
-                store:me.treeStore
+                store: me.treeStore
             },
             me.formPanel
         ];
@@ -164,17 +164,17 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
      * @public
      * @return Array of components
      */
-    getTabs:function () {
+    getTabs: function () {
         var me = this;
 
         me.articleMappingContainer = Ext.create('Ext.panel.Panel', {
-            title:'{s name="tabs/article_mapping/title"}Article-Mapping{/s}',
+            title: '{s name="tabs/article_mapping/title"}Article-Mapping{/s}',
             disabled: true,
             layout: 'fit'
         });
 
         me.categoryRestrictionContainer = Ext.create('Ext.panel.Panel', {
-            title:'{s name="tabs/restrict_category/title"}Restrict Category{/s}',
+            title: '{s name="tabs/restrict_category/title"}Restrict Category{/s}',
             disabled: true,
             layout: 'fit'
         });
@@ -189,8 +189,8 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
 
         return [
             {
-                xtype:'category-category-tabs-settings',
-                templateStore : me.templateStore
+                xtype: 'category-category-tabs-settings',
+                templateStore: me.templateStore
             },
             me.articleMappingContainer,
             me.categoryRestrictionContainer,
@@ -205,7 +205,7 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
      * @public
      * @return Array of docked items
      */
-    getDockedItems : function() {
+    getDockedItems: function() {
         var me = this,
             menu = ['->'];
         /* {if {acl_is_allowed privilege=update}} */
@@ -213,7 +213,7 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
             text: '{s name="main/window/button/save"}Save{/s}',
             action: 'saveDetail',
             disabled: true,
-            cls:'primary',
+            cls: 'primary',
             handler: function() {
                 me.fireEvent('saveDetail', me);
             }
@@ -221,11 +221,11 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
         /* {/if} */
 
         return [{
-            xtype:'toolbar',
+            xtype: 'toolbar',
             cls: 'shopware-toolbar',
-            dock:'bottom',
+            dock: 'bottom',
             ui: 'shopware-ui',
-            items : menu
+            items: menu
         }]
     }
 });

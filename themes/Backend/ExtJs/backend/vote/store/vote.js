@@ -29,7 +29,7 @@
 
 //{block name="backend/vote/store/vote"}
 Ext.define('Shopware.apps.Vote.store.Vote', {
-    extend:'Shopware.store.Listing',
+    extend: 'Shopware.store.Listing',
     model: 'Shopware.apps.Vote.model.Vote',
     configure: function() {
         return { controller: 'Vote' };

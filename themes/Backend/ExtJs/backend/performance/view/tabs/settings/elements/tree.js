@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.Tree', {
      * Register the alias for this class.
      * @string
      */
-    alias : 'widget.performance-tabs-settings-tree',
+    alias: 'widget.performance-tabs-settings-tree',
 
     /**
      * True to make the panel collapsible and have an expand/collapse toggle
@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.Tree', {
      */
     collapsible: false,
 
-    region   : 'west',
+    region: 'west',
 
     /**
      * False to hide the root node.
@@ -71,12 +71,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.Tree', {
      * @integer
      */
     width: 220,
-    rootNodeName : 'Shopware',
+    rootNodeName: 'Shopware',
 
      /**
      * Initialize the controller and defines the necessary default configuration
      */
-    initComponent : function() {
+    initComponent: function() {
         var me = this;
 
         me.selModel = Ext.create('Ext.selection.RowModel', {

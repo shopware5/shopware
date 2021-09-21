@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Order.model.Debit', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * Extends the models fields with the order id field.
      * @array
@@ -45,10 +45,10 @@ Ext.define('Shopware.apps.Order.model.Debit', {
         //{block name="backend/order/model/debit/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'customerId', type: 'int', useNull: true },
-        { name: 'account', type:'string' },
-        { name: 'bankCode', type:'string' },
-        { name: 'bankName', type:'string' },
-        { name: 'accountHolder', type:'string' }
+        { name: 'account', type: 'string' },
+        { name: 'bankCode', type: 'string' },
+        { name: 'bankName', type: 'string' },
+        { name: 'accountHolder', type: 'string' }
     ]
 });
 //{/block}

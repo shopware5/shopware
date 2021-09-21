@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Detail', {
      * Returns an array of strings. See ExtJS Templates
      * @return array of string
      */
-    getTemplate : function() {
+    getTemplate: function() {
         return [
             '{literal}',
                 // Check if we're having a logo

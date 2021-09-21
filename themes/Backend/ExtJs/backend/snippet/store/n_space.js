@@ -29,6 +29,6 @@ Ext.define('Shopware.apps.Snippet.store.NSpace', {
     extend: 'Ext.data.TreeStore',
     batch: true,
     clearOnLoad: false,
-    model : 'Shopware.apps.Snippet.model.NSpace'
+    model: 'Shopware.apps.Snippet.model.NSpace'
 });
 //{/block}

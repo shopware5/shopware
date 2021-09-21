@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.MediaManager', {
      * controller (server-side)
      * @string
      */
-    loadPath:'{url action=load}',
+    loadPath: '{url action=load}',
 
     /**
      * The name of the module. Used for internal purpose
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.MediaManager', {
      * Required stores for sub-application
      * @array
      */
-    stores:['Album', 'Media'],
+    stores: ['Album', 'Media'],
 
     /**
      * Returns the main application window for this is expected

@@ -62,21 +62,21 @@ Ext.define('Shopware.apps.Article.view.esd.Serials', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
-        title:'{s name="esd/serials/title"}Serialnumber Administration{/s}',
-        columns:{
-            serial:'{s name="esd/serials/column/serial"}Serialnumber{/s}',
-            assignedCustomer:'{s name="esd/serials/column/assigned_customer"}Assigned Customer{/s}',
-            assignedDate:'{s name="esd/serialsals/column/assigned_date"}Assigned at{/s}',
+    snippets: {
+        title: '{s name="esd/serials/title"}Serialnumber Administration{/s}',
+        columns: {
+            serial: '{s name="esd/serials/column/serial"}Serialnumber{/s}',
+            assignedCustomer: '{s name="esd/serials/column/assigned_customer"}Assigned Customer{/s}',
+            assignedDate: '{s name="esd/serialsals/column/assigned_date"}Assigned at{/s}',
 
             remove: '{s name="esd/serials/column/remove"}Delete serial{/s}',
             openCustomer: '{s name="esd/serials/column/open_customer"}Open Customer{/s}',
             guest: '{s name="esd/serials/column/guest"}Guest{/s}'
         },
-        toolbar:{
-            add:'{s name="esd/serials/toolbar/button_add"}Add Serials{/s}',
-            remove:'{s name="esd/serials/toolbar/button_delete"}Delete selected{/s}',
-            search:'{s name="esd/serials/toolbar/search_empty_text"}Search...{/s}',
+        toolbar: {
+            add: '{s name="esd/serials/toolbar/button_add"}Add Serials{/s}',
+            remove: '{s name="esd/serials/toolbar/button_delete"}Delete selected{/s}',
+            search: '{s name="esd/serials/toolbar/search_empty_text"}Search...{/s}',
             removeUnused: '{s name="esd/serials/toolbar/button_delete_unused"}Delete not assigned Serials{/s}'
         }
     },
@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.Article.view.esd.Serials', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the delete button
@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.Article.view.esd.Serials', {
                     {
                         iconCls: 'sprite-user--arrow',
                         action: 'openCustomer',
-                        tooltip:  me.snippets.columns.openCustomer,
+                        tooltip: me.snippets.columns.openCustomer,
                         handler: function (view, rowIndex, colIndex, item, opts, record) {
                             me.fireEvent('openCustomer', record);
                         },
@@ -214,7 +214,7 @@ Ext.define('Shopware.apps.Article.view.esd.Serials', {
         var me = this;
 
         return Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
+            listeners: {
                 // Unlocks the delete button if the user has checked at least one checkbox
                 selectionchange: function(sm, selections) {
                     me.deleteButton.setDisabled(selections.length === 0);
@@ -250,7 +250,7 @@ Ext.define('Shopware.apps.Article.view.esd.Serials', {
             cls: 'searchfield',
             width: 170,
             emptyText: me.snippets.toolbar.search,
-            enableKeyEvents:true,
+            enableKeyEvents: true,
             checkChangeBuffer: 500,
             listeners: {
                 change: function(field, value) {
@@ -266,7 +266,7 @@ Ext.define('Shopware.apps.Article.view.esd.Serials', {
                 {
                     xtype: 'button',
                     text: me.snippets.toolbar.add,
-                    iconCls:'sprite-plus-circle-frame',
+                    iconCls: 'sprite-plus-circle-frame',
                     handler: function() {
                         me.fireEvent('addSerials');
                     }

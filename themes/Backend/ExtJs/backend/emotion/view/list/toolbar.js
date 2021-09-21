@@ -53,8 +53,8 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
             emptyText: '{s name="toolbar/search_emotion"}{/s}',
             cls: 'searchfield',
             width: 200,
-            enableKeyEvents:true,
-            checkChangeBuffer:500,
+            enableKeyEvents: true,
+            checkChangeBuffer: 500,
             listeners: {
                 change: function(field, value) {
                     me.fireEvent('searchEmotions', value);
@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
         me.filefield = Ext.create('Ext.form.field.File', {
             name: 'emotionfile',
             buttonOnly: true,
-            buttonConfig : {
+            buttonConfig: {
                 iconCls: 'sprite-import'
             },
             buttonText: '{s name="toolbar/import_emotion"}{/s}',

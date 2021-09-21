@@ -34,7 +34,7 @@ Ext.define('Shopware.apps.Site', {
     * sub-application behavior and the event bus
     * @string
     */
-    extend : 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
     * The name of the module. Used for internal purpose

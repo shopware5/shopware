@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.ProductFeed.model.CategoryForComboTree', {
      * Extends the default extjs 4 model
      * @string
      */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * Defined items used by that model
      *
@@ -46,20 +46,20 @@ Ext.define('Shopware.apps.ProductFeed.model.CategoryForComboTree', {
      *
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/product_feed/model/category_for_combo_tree/fields"}{/block}
-        { name : 'name',     type: 'string' },
-        { name : 'id',       type: 'int' },
-        { name : 'parentId', type: 'int' },
-        { name : 'cls',      type: 'string' }
+        { name: 'name',     type: 'string' },
+        { name: 'id',       type: 'int' },
+        { name: 'parentId', type: 'int' },
+        { name: 'cls',      type: 'string' }
     ],
-    proxy : {
-        type : 'ajax',
-        api : {
-            read : '{url controller=category action=getList}'
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller=category action=getList}'
         },
-        reader : {
-            type : 'json',
+        reader: {
+            type: 'json',
             root: 'data'
         }
     }

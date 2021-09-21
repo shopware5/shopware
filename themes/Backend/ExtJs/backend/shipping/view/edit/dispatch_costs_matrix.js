@@ -36,28 +36,28 @@
  */
 //{block name="backend/shipping/view/edit/dispatch_costs_matrix"}
 Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
-    extend : 'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
     /**
      * Alias Name
      * @string
      */
-    alias:'widget.shipping-view-edit-costs-matrix',
+    alias: 'widget.shipping-view-edit-costs-matrix',
     /**
      * Name
      * @string
      */
-    name : 'shipping-view-edit-costs-matrix',
+    name: 'shipping-view-edit-costs-matrix',
 
     /**
      * Title of the tab
      * @string
      */
-    title : '{s name="title"}Shipping costs{/s}',
+    title: '{s name="title"}Shipping costs{/s}',
     /**
      * Border width
      * @integer
      */
-    border : 0,
+    border: 0,
     /**
      * Height
      * @integer
@@ -83,14 +83,14 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
      * What Edit mode is enabeld (rowEdit or cellEdit)
      * @boolean
      */
-    editMode : null,
+    editMode: null,
 
     /**
      * Initialize the Shopware.apps.Supplier.view.main.List and defines the necessary
      * default configuration
      * @return void
      */
-    initComponent : function() {
+    initComponent: function() {
         var me = this;
 
         me.editMode = me.getEditingMode();
@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
         // check for emtpy stores (e.g. create scenario)
         if(me.store.getCount() == 0) {
             me.store.add(Ext.create('Shopware.apps.Shipping.model.Costsmatrix', {
-                'dispatchId' :  me.dispatchId
+                'dispatchId': me.dispatchId
             }));
         }
         me.callParent(arguments);
@@ -122,15 +122,15 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
      * Return the Column Model
      * @return array
      */
-    getColumns : function() {
+    getColumns: function() {
         var me = this;
         return [
             {
-                header      : '{s name="from"}From{/s}',
-                dataIndex   : 'from',
-                name        : 'from',
+                header: '{s name="from"}From{/s}',
+                dataIndex: 'from',
+                name: 'from',
                 flex: 1,
-                sortable : false,
+                sortable: false,
                 editor: {
                     xtype: 'numberfield',
                     allowBlank: false,
@@ -138,11 +138,11 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
                 }
             },
             {
-                header      : '{s name="to"}To{/s}',
-                dataIndex   : 'to',
+                header: '{s name="to"}To{/s}',
+                dataIndex: 'to',
                 flex: 2,
-                sortable : false,
-                renderer : me.onToRender,
+                sortable: false,
+                renderer: me.onToRender,
                 editor: {
                     xtype: 'numberfield',
                     allowBlank: false,
@@ -150,23 +150,23 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
                 }
             },
             {
-                header      : '{s name="deliver_costs"}Shipping costs{/s}',
-                dataIndex   : 'value',
+                header: '{s name="deliver_costs"}Shipping costs{/s}',
+                dataIndex: 'value',
                 flex: 2,
-                sortable : false,
-                renderer : me.onRenderZeroValueEmptyReturn,
+                sortable: false,
+                renderer: me.onRenderZeroValueEmptyReturn,
                 editor: {
                    xtype: 'numberfield',
                    allowBlank: false
                 }
             },
             {
-                format      : '0.00',
-                header      : '{s name="factor"}Factor(%){/s}',
-                dataIndex   : 'factor',
+                format: '0.00',
+                header: '{s name="factor"}Factor(%){/s}',
+                dataIndex: 'factor',
                 flex: 2,
-                sortable : false,
-                renderer : me.onRenderZeroValueEmptyReturn,
+                sortable: false,
+                renderer: me.onRenderZeroValueEmptyReturn,
                 editor: {
                    xtype: 'numberfield',
                    allowBlank: false
@@ -174,14 +174,14 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
             },
             {
                 header: '',
-                xtype : 'actioncolumn',
-                width : 60,
+                xtype: 'actioncolumn',
+                width: 60,
                 /* {if {acl_is_allowed privilege=delete}} */
                 items: [{
-                    iconCls : 'sprite-minus-circle-frame',
-                    action  : 'deleteCostsMatrixEntry',
+                    iconCls: 'sprite-minus-circle-frame',
+                    action: 'deleteCostsMatrixEntry',
                     //cls     : 'dispatchDelete',
-                    tooltip : '{s name="grid_delete_tooltip"}Delete these shipping costs.{/s}',
+                    tooltip: '{s name="grid_delete_tooltip"}Delete these shipping costs.{/s}',
                     renderer: me.onActionRender,
                     getClass: function(value, metadata, record) {
                         if (record.data.to > 0)  {
@@ -204,7 +204,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
      * @param rec
      * @param row
      */
-    onActionRender : function(val, meta, rec, row) {
+    onActionRender: function(val, meta, rec, row) {
         var me = this;
         /* {if {acl_is_allowed privilege=delete}} */
         if(rec.get('to') == '') {
@@ -226,7 +226,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
      * When ever the value is zero we display unlimited
      * @param value
      */
-    onToRender : function(value) {
+    onToRender: function(value) {
         if (value == 0) {
             return '{s name="unlimited"}unlimited{/s}';
         }
@@ -236,7 +236,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
      * When ever the value is zero display nothing at all.
      * @param value
      */
-    onRenderZeroValueEmptyReturn : function(value) {
+    onRenderZeroValueEmptyReturn: function(value) {
         var me = this;
         if (value == 0) {
             return '';
@@ -253,7 +253,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
         me.fireEvent('addCostsMatrixEntry', editorMode, me);
     },
 
-    registerEvents : function() {
+    registerEvents: function() {
         var me = this;
         me.addEvents(
             /**

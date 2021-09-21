@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Base.store.Template', {
 
     alternateClassName: 'Shopware.store.Template',
     storeId: 'base.Template',
-    model : 'Shopware.apps.Base.model.Template',
+    model: 'Shopware.apps.Base.model.Template',
     pageSize: 1000,
 
     proxy: {

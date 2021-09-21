@@ -31,11 +31,11 @@ Ext.define('Shopware.apps.ProductStream.model.Product', {
     extend: 'Ext.data.Model',
     fields: [
         //{block name="backend/product_stream/model/product/fields"}{/block}
-        { name : 'id', type: 'int', useNull: true },
-        { name : 'number', type: 'string' },
-        { name : 'name', type: 'string' },
-        { name : 'stock', type: 'int' },
-        { name : 'cheapestPrice' }
+        { name: 'id', type: 'int', useNull: true },
+        { name: 'number', type: 'string' },
+        { name: 'name', type: 'string' },
+        { name: 'stock', type: 'int' },
+        { name: 'cheapestPrice' }
     ]
 });
 //{/block}

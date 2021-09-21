@@ -64,6 +64,6 @@ Ext.define('Shopware.apps.RiskManagement.store.Subshops', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.RiskManagement.model.Subshop'
+    model: 'Shopware.apps.RiskManagement.model.Subshop'
 });
 //{/block}

@@ -142,8 +142,8 @@ Ext.define('Shopware.apps.ArticleList.view.Backup.Grid', {
 
         var pagingBar = Ext.create('Ext.toolbar.Paging', {
             store: me.store,
-            dock:'bottom',
-            displayInfo:true
+            dock: 'bottom',
+            displayInfo: true
         });
 
         return pagingBar;

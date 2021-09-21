@@ -157,7 +157,7 @@ Ext.define('Shopware.ModuleManager', {
         // Set up the window
         config = Ext.apply({ }, args);
         config.tools = [{
-            type:'refresh',
+            type: 'refresh',
             handler: function(event, tool, comp) {
                 var ownerCt = comp.ownerCt;
                 ownerCt.setLoading(true);

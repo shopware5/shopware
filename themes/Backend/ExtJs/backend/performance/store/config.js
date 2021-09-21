@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Performance.store.Config', {
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Performance.store.Config', {
          * Configure the data reader
          * @object
          */
-        reader:{
+        reader: {
             type: 'json',
             root: 'data',
             totalProperty: 'total'

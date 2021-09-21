@@ -97,22 +97,22 @@ Ext.define('Shopware.apps.Category.controller.MultiRequest', {
         configs.push({
             progress: window.rebuildCategoryProgress,
             requestUrl: '{url controller="Category" action="rebuildCategoryPath"}',
-            initUrl:    '{url controller="Category" action="getRebuildCategoryPathCount"}',
-            snippet:    '{s name="batch/progress/rebuildCategoryPath"}Rebuild category path [0] of [1]{/s}'
+            initUrl: '{url controller="Category" action="getRebuildCategoryPathCount"}',
+            snippet: '{s name="batch/progress/rebuildCategoryPath"}Rebuild category path [0] of [1]{/s}'
         });
 
         configs.push({
             progress: window.removeOldAssignmentsProgress,
             requestUrl: '{url controller="Category" action="removeOldAssignments"}',
-            initUrl:    '{url controller="Category" action="getRemoveOldAssignmentsCount"}',
-            snippet:    '{s name="batch/progress/removeOldAssignments"}Remove old assignments [0] of [1]{/s}'
+            initUrl: '{url controller="Category" action="getRemoveOldAssignmentsCount"}',
+            snippet: '{s name="batch/progress/removeOldAssignments"}Remove old assignments [0] of [1]{/s}'
         });
 
         configs.push({
             progress: window.rebuildAssignmentsProgress,
             requestUrl: '{url controller="Category" action="rebuildAssignments"}',
-            initUrl:    '{url controller="Category" action="getRebuildAssignmentsCount"}',
-            snippet:    '{s name="batch/progress/rebuildAssignments"}Rebuild assignments [0] of [1]{/s}'
+            initUrl: '{url controller="Category" action="getRebuildAssignmentsCount"}',
+            snippet: '{s name="batch/progress/rebuildAssignments"}Rebuild assignments [0] of [1]{/s}'
         });
 
         var currentConfig = configs.shift();

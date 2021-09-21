@@ -32,7 +32,7 @@
  */
 Ext.define('Shopware.apps.UserManager.store.Locale', {
     extend: 'Ext.data.Store',
-    model : 'Shopware.apps.UserManager.model.Locale',
+    model: 'Shopware.apps.UserManager.model.Locale',
     proxy: {
         type: 'ajax',
         url: '{url controller=login action=getLocales}',

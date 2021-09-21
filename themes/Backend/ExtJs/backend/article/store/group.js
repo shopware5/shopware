@@ -36,24 +36,24 @@ Ext.define('Shopware.apps.Article.store.Group', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
     autoLoad: false,
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Article.model.ConfiguratorGroup',
+    model: 'Shopware.apps.Article.model.ConfiguratorGroup',
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -64,10 +64,10 @@ Ext.define('Shopware.apps.Article.store.Group', {
              create: '{url action="saveConfiguratorGroup"}',
              destroy: '{url action="deleteConfiguratorGroup"}'
          },
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 

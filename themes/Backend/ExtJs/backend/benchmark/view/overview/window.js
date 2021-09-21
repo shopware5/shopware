@@ -27,7 +27,7 @@ Ext.define('Shopware.apps.Benchmark.view.overview.Window', {
             me.dockedItems = [{
                 xtype: 'toolbar',
                 dock: 'bottom',
-                items:[me.checkbox, '->', me.cancelButton]
+                items: [me.checkbox, '->', me.cancelButton]
             }];
         }
 

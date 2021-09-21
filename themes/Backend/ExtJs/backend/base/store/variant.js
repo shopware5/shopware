@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Base.store.Variant', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.Base.model.Variant',
+    model: 'Shopware.apps.Base.model.Variant',
 
     /**
      * Define how much rows loaded with one request
@@ -70,24 +70,24 @@ Ext.define('Shopware.apps.Base.store.Variant', {
      * Configure the data communication
      * @object
      */
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        url:'{url action="getVariants"}',
+        url: '{url action="getVariants"}',
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

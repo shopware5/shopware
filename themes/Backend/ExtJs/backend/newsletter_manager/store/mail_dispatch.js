@@ -38,12 +38,12 @@
 Ext.define('Shopware.apps.NewsletterManager.store.MailDispatch', {
     extend: 'Ext.data.Store',
     // Do not load data, when not explicitly requested
-    model : 'Shopware.apps.NewsletterManager.model.MailDispatch',
+    model: 'Shopware.apps.NewsletterManager.model.MailDispatch',
     autoLoad: true,
 
-    data : [
-        { id:'1', name:'{s name="htmlPlaintext"}HTML + Plaintext{/s}' },
-        { id:'2', name:'{s name="plaintext"}Plaintext{/s}' }
+    data: [
+        { id: '1', name: '{s name="htmlPlaintext"}HTML + Plaintext{/s}' },
+        { id: '2', name: '{s name="plaintext"}Plaintext{/s}' }
     ]
 
 

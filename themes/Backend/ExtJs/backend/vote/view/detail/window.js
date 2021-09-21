@@ -33,7 +33,7 @@
 Ext.define('Shopware.apps.Vote.view.detail.Window', {
     extend: 'Shopware.window.Detail',
     alias: 'widget.vote-detail-window',
-    title : '{s name="detail_window_title"}Vote details{/s}',
+    title: '{s name="detail_window_title"}Vote details{/s}',
     width: 720,
     minWidth: 400
 });

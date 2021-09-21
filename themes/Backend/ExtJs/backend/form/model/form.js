@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Form.model.Form', {
         Ext.Ajax.request({
             url: '{url controller="form" action="copyForm"}',
             method: 'POST',
-            params : { id : this.data.id },
+            params: { id: this.data.id },
             success: function(response, opts) {
                 if(typeof callback !== 'function') {
                     return false;
@@ -64,20 +64,20 @@ Ext.define('Shopware.apps.Form.model.Form', {
      *
      * @array
      */
-    fields : [
+    fields: [
         //{block name="backend/form/model/form/fields"}{/block}
-        { name : 'id',    type : 'int' },
-        { name : 'active', type: 'boolean', defaultValue: true },
-        { name : 'name',  type : 'string' },
-        { name : 'email', type : 'email' },
-        { name : 'emailSubject', type : 'string' },
-        { name : 'emailTemplate', type : 'string' },
-        { name : 'text', type : 'string' },
-        { name : 'text2', type : 'string' },
-        { name : 'shopIds' },
-        { name : 'metaTitle', type : 'string' },
-        { name : 'metaKeywords', type : 'string' },
-        { name : 'metaDescription', type : 'string' }
+        { name: 'id',    type: 'int' },
+        { name: 'active', type: 'boolean', defaultValue: true },
+        { name: 'name',  type: 'string' },
+        { name: 'email', type: 'email' },
+        { name: 'emailSubject', type: 'string' },
+        { name: 'emailTemplate', type: 'string' },
+        { name: 'text', type: 'string' },
+        { name: 'text2', type: 'string' },
+        { name: 'shopIds' },
+        { name: 'metaTitle', type: 'string' },
+        { name: 'metaKeywords', type: 'string' },
+        { name: 'metaDescription', type: 'string' }
     ],
 
     validations: [

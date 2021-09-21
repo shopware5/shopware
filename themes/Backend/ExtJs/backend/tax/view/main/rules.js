@@ -38,7 +38,7 @@
 Ext.define('Shopware.apps.Tax.view.main.Rules', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.tax-rules',
-    autoScroll:true,
+    autoScroll: true,
     disabled: true,
     autoHeight: true,
     selType: 'rowmodel',
@@ -123,7 +123,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
                 valueField: 'id',
                 emptyText: 'All',
                 valueNotFoundText: 'All',
-                editable:false,
+                editable: false,
                 listeners: {
                    'change': function (field,newValue,oldValue,options){
                        var stateStore = this.stateStore;
@@ -218,7 +218,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
            header: '{s name="ruleslist/coltax"}Tax{/s}',
            dataIndex: 'tax',
            flex: 1,
-           xtype: 'numbercolumn', format:'00.00',
+           xtype: 'numbercolumn', format: '00.00',
            editor: {
                 xtype: 'numberfield',
                 allowBlank: false,
@@ -232,7 +232,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
                 iconCls: 'sprite-minus-circle',
                 cls: 'delete',
                 tooltip: '{s name="ruleslist/colactiondelete"}Delete this rule{/s}',
-                handler:function (view, rowIndex, colIndex, item) {
+                handler: function (view, rowIndex, colIndex, item) {
                     me.fireEvent('deleteRule', view, rowIndex, colIndex, item);
                 }
             }]

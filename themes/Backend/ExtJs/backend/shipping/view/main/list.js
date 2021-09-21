@@ -40,18 +40,18 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * Parent Class
      * @String
      */
-    extend : 'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
     /**
      * Alias
      * @string
      */
-    alias : 'widget.shipping-list',
+    alias: 'widget.shipping-list',
 
     /**
      * Enables autoscrolling
      * @boolean
      */
-    autoScroll : true,
+    autoScroll: true,
 
     /**
      * Text to display on empty entries
@@ -73,18 +73,18 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * USe statfull
      * @boolean
      */
-    stateful : true,
+    stateful: true,
     /**
      * Id to store the state
      * @string
      */
-    stateId : 'shopware-shipping-list',
+    stateId: 'shopware-shipping-list',
 
     /**
      * Initialize the Shopware.apps.Supplier.view.main.List and defines the necessary
      * default configuration
      */
-    initComponent : function() {
+    initComponent: function() {
         var me = this;
 
         me.store = me.dispatchStore;
@@ -97,67 +97,67 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
         me.columns = [
             {
                 header: '{s name="grid_name"}Name{/s}',
-                dataIndex : 'dispatch.name',
+                dataIndex: 'dispatch.name',
                 renderer: me.nameColumn,
                 width: 125
             },
             {
-                header:'{s name="grid_internal_comment"}Internal comment{/s}',
-                dataIndex:'dispatch.comment',
-                renderer : me.commentColumn,
-                flex:1
+                header: '{s name="grid_internal_comment"}Internal comment{/s}',
+                dataIndex: 'dispatch.comment',
+                renderer: me.commentColumn,
+                flex: 1
             },
             {
-                header:'{s name="grid_active"}Active{/s}',
+                header: '{s name="grid_active"}Active{/s}',
                 xtype: 'booleancolumn',
-                dataIndex:'dispatch.active',
-                width:50,
-                renderer:me.activeColumn
+                dataIndex: 'dispatch.active',
+                width: 50,
+                renderer: me.activeColumn
             },
             {
-                header:'{s name="grid_type"}Type{/s}',
-                dataIndex:'dispatch.type',
-                renderer:me.typeColumn,
-                width:120
+                header: '{s name="grid_type"}Type{/s}',
+                dataIndex: 'dispatch.type',
+                renderer: me.typeColumn,
+                width: 120
             },
             {
-                header:'{s name="grid_shop"}Shop{/s}',
-                dataIndex:'dispatch.multiShopId',
-                renderer:me.multishopIdColumn,
-                width:120
+                header: '{s name="grid_shop"}Shop{/s}',
+                dataIndex: 'dispatch.multiShopId',
+                renderer: me.multishopIdColumn,
+                width: 120
             },
             {
-                header:'{s name="grid_customer_group"}Customer group{/s}',
-                dataIndex:'dispatch.customerGroupId',
-                renderer:me.customerGroupColumn,
-                width:120
+                header: '{s name="grid_customer_group"}Customer group{/s}',
+                dataIndex: 'dispatch.customerGroupId',
+                renderer: me.customerGroupColumn,
+                width: 120
             },
             {
                 header: '',
-                xtype : 'actioncolumn',
-                width : 80,
-                items : [
+                xtype: 'actioncolumn',
+                width: 80,
+                items: [
                      /* {if {acl_is_allowed privilege=delete}} */
                     {
-                        iconCls : 'sprite-minus-circle-frame',
-                        action  : 'delete',
-                        cls     : 'dispatchDelete',
-                        tooltip : '{s name="grid_delete_tooltip"}Delete this dispatch costs.{/s}'
+                        iconCls: 'sprite-minus-circle-frame',
+                        action: 'delete',
+                        cls: 'dispatchDelete',
+                        tooltip: '{s name="grid_delete_tooltip"}Delete this dispatch costs.{/s}'
                     },
                     /* {/if} */
                     /* {if {acl_is_allowed privilege=update}} */
                     {
-                        iconCls : 'sprite-pencil',
-                        cls     : 'editButton',
-                        tooltip : '{s name="grid_edit_tooltip"}Edit these shipping costs{/s}'
+                        iconCls: 'sprite-pencil',
+                        cls: 'editButton',
+                        tooltip: '{s name="grid_edit_tooltip"}Edit these shipping costs{/s}'
                     },
                     /* {/if} */
                      /* {if {acl_is_allowed privilege=create}} */
                     {
-                        iconCls :'sprite-blue-document-copy',
-                        cls     :'cloneButton',
-                        tooltip :'{s name="grid_clone_tooltip"}Duplicate these shipping costs{/s}',
-                        style   : 'width: 16px; height: 16px'
+                        iconCls: 'sprite-blue-document-copy',
+                        cls: 'cloneButton',
+                        tooltip: '{s name="grid_clone_tooltip"}Duplicate these shipping costs{/s}',
+                        style: 'width: 16px; height: 16px'
                     }
                     /* {/if} */
                 ]
@@ -175,26 +175,26 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
         var me = this;
 
         return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
+            dock: 'top',
             ui: 'shopware-ui',
             /**
              * Contains two buttons one for add one for delete.
              * @array
              */
-            items : [
+            items: [
                 /*{if {acl_is_allowed privilege=delete}}*/
                 {
-                    iconCls : 'sprite-plus-circle',
-                    text : '{s name="grid_add"}Add{/s}',
-                    action : 'addShipping'
+                    iconCls: 'sprite-plus-circle',
+                    text: '{s name="grid_add"}Add{/s}',
+                    action: 'addShipping'
                 },
                 /* {/if} */
                 /*{if {acl_is_allowed privilege=delete}}*/
                 {
-                    iconCls : 'sprite-minus-circle',
-                    text : '{s name="grid_delete"}Delete{/s}',
-                    disabled : true,
-                    action : 'deleteShipping'
+                    iconCls: 'sprite-minus-circle',
+                    text: '{s name="grid_delete"}Delete{/s}',
+                    disabled: true,
+                    action: 'deleteShipping'
                 }
                 /* {/if} */
             ]
@@ -205,11 +205,11 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * Creates the pagingbar for the position grid.
      * @return Ext.toolbar.Pagingbar
      */
-    getPagingbar : function() {
+    getPagingbar: function() {
         var me = this;
         return  {
             xtype: 'pagingtoolbar',
-            displayInfo : true,
+            displayInfo: true,
             store: me.store
         };
     },
@@ -242,7 +242,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * @param [object] metaData - Meta data for this column
      * @param [object] record - current record
      */
-    multishopIdColumn : function(value, obj, record) {
+    multishopIdColumn: function(value, obj, record) {
         var me = this,
             shop = me.shopStore.findRecord('id', record.get('multiShopId'));
 
@@ -259,7 +259,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * @param [object] metaData - Meta data for this column
      * @param [object] record - current record
      */
-    customerGroupColumn : function(value, metaData, record) {
+    customerGroupColumn: function(value, metaData, record) {
         var me = this,
             customerGroupStore = me.customerGroupStore;
 
@@ -277,7 +277,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * @param [object] metaData - Meta data for this column
      * @param [object] record - current record
      */
-    nameColumn : function (value, metaData, record) {
+    nameColumn: function (value, metaData, record) {
         // Show the translated name in the list
         return Ext.String.format('{literal}<strong style="font-weight: 700">{0}</strong>{/literal}', record.get('translatedName'));
     },
@@ -289,7 +289,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * @param [object] metaData - Meta data for this column
      * @param [object] record - current record
      */
-    commentColumn : function (value, metaData, record) {
+    commentColumn: function (value, metaData, record) {
         // Show the comment in the overview
         return record.get('comment');
     },
@@ -300,7 +300,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * @param [object] metaData - Meta data for this column
      * @param [object] record - current record
      */
-    activeColumn : function (value, metaData, record) {
+    activeColumn: function (value, metaData, record) {
         if(record.get('active') == 0) {
             return '{s name="grid_active_false_label"}Inactive{/s}';
         }

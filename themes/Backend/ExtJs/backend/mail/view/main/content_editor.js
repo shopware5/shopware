@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the show preview button

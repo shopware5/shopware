@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Order.model.Payment', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.apps.Base.model.Payment',
+    extend: 'Shopware.apps.Base.model.Payment',
 
     /**
      * One or more BelongsTo associations for this model.

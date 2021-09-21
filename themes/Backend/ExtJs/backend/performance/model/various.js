@@ -37,15 +37,15 @@ Ext.define('Shopware.apps.Performance.model.Various', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Contains the model fields
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/performance/model/various/fields"}{/block}
-        { name:'id', type:'int' },
+        { name: 'id', type: 'int' },
         { name: 'disableShopwareStatistics', type: 'bool' },
         { name: 'LastArticles:lastarticles_show', type: 'bool' },
         { name: 'LastArticles:lastarticlestoshow', type: 'int' },

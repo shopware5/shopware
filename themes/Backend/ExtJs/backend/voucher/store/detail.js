@@ -38,13 +38,13 @@ Ext.define('Shopware.apps.Voucher.store.Detail', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Auto load the store after the component
      * is initialized
      * @boolean
      */
-    autoLoad:false,
+    autoLoad: false,
 
     /**
      * sets remote sorting true
@@ -52,16 +52,16 @@ Ext.define('Shopware.apps.Voucher.store.Detail', {
      */
     remoteSort: true,
 
-    remoteFilter : true,
+    remoteFilter: true,
     /**
      * Amount of data loaded at once
      * @integer
      */
-    pageSize:30,
+    pageSize: 30,
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Voucher.model.Detail'
+    model: 'Shopware.apps.Voucher.model.Detail'
 });
 //{/block}

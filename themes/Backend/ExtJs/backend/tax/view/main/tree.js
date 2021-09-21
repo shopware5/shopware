@@ -38,7 +38,7 @@
 
 Ext.define('Shopware.apps.Tax.view.main.Tree', {
     extend: 'Ext.tree.Panel',
-    alias : 'widget.tax-tree',
+    alias: 'widget.tax-tree',
     rootVisible: false,
     width: 250,
 

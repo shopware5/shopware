@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
     /**
      * Init the component, load items
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         Ext.applyIf(me, {

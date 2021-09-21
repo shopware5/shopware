@@ -39,39 +39,39 @@ Ext.define('Shopware.apps.Partner.model.Main', {
     * Extends the standard ExtJS 4
     * @string
     */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
     * The fields used for this model
     * @array
     */
-    fields : [
+    fields: [
         //{block name="backend/partner/model/main/fields"}{/block}
-        { name : 'id', type : 'int' },
-        { name : 'company', type : 'string' },
-        { name : 'date', type : 'date' },
-        { name : 'active', type : 'int' },
-        { name : 'idCode', type : 'string' },
-        { name : 'monthlyAmount', type : 'float' },
-        { name : 'yearlyAmount', type : 'float' }
+        { name: 'id', type: 'int' },
+        { name: 'company', type: 'string' },
+        { name: 'date', type: 'date' },
+        { name: 'active', type: 'int' },
+        { name: 'idCode', type: 'string' },
+        { name: 'monthlyAmount', type: 'float' },
+        { name: 'yearlyAmount', type: 'float' }
     ],
     /**
     * If the name of the field is 'id' extjs assumes autmagical that
     * this field is an unique identifier.
     */
-    idProperty : 'id',
+    idProperty: 'id',
     /**
     * Configure the data communication
     * @object
     */
-    proxy : {
-        type : 'ajax',
-        api:{
-            read:   '{url action=getList}',
-            destroy:'{url action=deletePartner}'
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url action=getList}',
+            destroy: '{url action=deletePartner}'
         },
-        reader : {
-            type : 'json',
-            root : 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty: 'totalCount'
         }
     }

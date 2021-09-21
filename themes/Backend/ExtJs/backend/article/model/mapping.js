@@ -62,9 +62,9 @@ Ext.define('Shopware.apps.Article.model.Mapping', {
         api: {
             create: '{url action="acceptMainData"}'
         },
-        reader:{
-            type:'json',
-            root:'data'
+        reader: {
+            type: 'json',
+            root: 'data'
         }
     }
 });

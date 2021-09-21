@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      * Register the alias for this class.
      * @string
      */
-    alias : 'widget.category-category-tree',
+    alias: 'widget.category-category-tree',
     /**
      * True to make the panel collapsible and have an expand/collapse toggle
      * Tool added into the header tool button area.
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      */
     collapsible: false,
 
-    region   : 'west',
+    region: 'west',
     /**
      * The Store the tree should use as its data source.
      * @string
@@ -95,31 +95,31 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      * Translations
      * @object
      */
-    snippets : {
+    snippets: {
         // Grid headers
-        columnCategoryHeader : '{s name="view/category_column_title"}Catergories{/s}',
-        columnActionHeader : '{s name="view/action_column_title"}Action{/s}',
-        columnArticleHeader : '{s name="view/articles_column_title"}Articles{/s}',
+        columnCategoryHeader: '{s name="view/category_column_title"}Catergories{/s}',
+        columnActionHeader: '{s name="view/action_column_title"}Action{/s}',
+        columnArticleHeader: '{s name="view/articles_column_title"}Articles{/s}',
         // Context menu
-        contextAddSubCategory : '{s name="view/context_add_category"}Add new{/s}',
-        contextDuplicateSubCategory : '{s name="view/context_duplicate_category"}Duplicate{/s}',
-        contextDeleteSubCategory : '{s name="view/context_delete_category"}Delete{/s}',
-        contextReloadTree : '{s name="view/context_reload_tree"}Reload{/s}',
+        contextAddSubCategory: '{s name="view/context_add_category"}Add new{/s}',
+        contextDuplicateSubCategory: '{s name="view/context_duplicate_category"}Duplicate{/s}',
+        contextDeleteSubCategory: '{s name="view/context_delete_category"}Delete{/s}',
+        contextReloadTree: '{s name="view/context_reload_tree"}Reload{/s}',
 
-        treeAdd : '{s name="view/tree_add"}Add new{/s}',
-        treeDuplicate : '{s name="view/tree_duplicate"}Duplicate{/s}',
-        treeDelete : '{s name="view/tree_delete"}Delete{/s}'
+        treeAdd: '{s name="view/tree_add"}Add new{/s}',
+        treeDuplicate: '{s name="view/tree_duplicate"}Duplicate{/s}',
+        treeDelete: '{s name="view/tree_delete"}Delete{/s}'
     },
     /**
      * Name of the root node. We have to show the root node in order to move a subcategory under the root.
      * @string
      */
-    rootNodeName : 'Shopware',
+    rootNodeName: 'Shopware',
 
      /**
      * Initialize the controller and defines the necessary default configuration
      */
-    initComponent : function() {
+    initComponent: function() {
         var me = this;
         me.registerEvents();
         me.columns = me.createColumns();
@@ -165,7 +165,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      * @param [object] event - The fired Ext.EventObject
      * @return void
      */
-    onOpenItemContextMenu : function(view, record, item, index, event) {
+    onOpenItemContextMenu: function(view, record, item, index, event) {
         event.preventDefault(true);
         var me = this,
             nodeId = ~~(1 * record.get('id')),
@@ -221,29 +221,29 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      * @param [object] event - The fired Ext.EventObject
      * @return void
      */
-     onOpenContainerContextMenu : function(view, event) {
+     onOpenContainerContextMenu: function(view, event) {
          event.preventDefault(true);
          var me = this,
              menuElements = [];
          /* {if {acl_is_allowed privilege=create}} */
          menuElements.push({
-             text:me.snippets.contextAddSubCategory,
+             text: me.snippets.contextAddSubCategory,
              iconCls: 'sprite-plus-circle',
-             handler:function () {
+             handler: function () {
                  me.fireEvent('addSubCategory');
              }
          });
          /* {/if} */
          menuElements.push({
-             text:me.snippets.contextReloadTree,
-             iconCls:'sprite-arrow-circle-315',
-             handler:function () {
+             text: me.snippets.contextReloadTree,
+             iconCls: 'sprite-arrow-circle-315',
+             handler: function () {
                  me.fireEvent('reload', me, view);
              }
          });
 
          var menu = Ext.create('Ext.menu.Menu', {
-             items:menuElements
+             items: menuElements
          });
          menu.showAt(event.getPageX(), event.getPageY());
     },
@@ -253,35 +253,35 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      *
      * @return [array]
      */
-    createMenu : function()
+    createMenu: function()
     {
         var me   = this,
             menu = [];
         /* {if {acl_is_allowed privilege=create}} */
         menu.push({
-            text   : me.snippets.treeAdd,
+            text: me.snippets.treeAdd,
             iconCls: 'sprite-plus-circle',
-            action : 'addCategory',
-            cls    : 'addBtn small secondary'
+            action: 'addCategory',
+            cls: 'addBtn small secondary'
         });
         menu.push( '->');
         /* {/if} */
         /* {if {acl_is_allowed privilege=create}} */
         menu.push({
-            text     : me.snippets.treeDuplicate,
-            iconCls  : 'sprite-document-copy',
-            action   : 'duplicateCategory',
-            disabled : true,
-            cls      : 'small secondary'
+            text: me.snippets.treeDuplicate,
+            iconCls: 'sprite-document-copy',
+            action: 'duplicateCategory',
+            disabled: true,
+            cls: 'small secondary'
         });
         /* {/if} */
         /* {if {acl_is_allowed privilege=delete}} */
         menu.push({
-            text     : me.snippets.treeDelete,
-            iconCls  : 'sprite-minus-circle',
-            action   : 'deleteCategory',
-            disabled : true,
-            cls      : 'deleteBtn small secondary'
+            text: me.snippets.treeDelete,
+            iconCls: 'sprite-minus-circle',
+            action: 'deleteCategory',
+            disabled: true,
+            cls: 'deleteBtn small secondary'
         });
         /* {/if} */
 
@@ -290,9 +290,9 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
             width: 5
         });
         return [{
-            xtype:'toolbar',
-            dock:'bottom',
-            items:menu,
+            xtype: 'toolbar',
+            dock: 'bottom',
+            items: menu,
             cls: Ext.baseCSSPrefix + 'tree-toolbar'
         }]
     },
@@ -301,13 +301,13 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      *
      * @return [array] columns - generated columns
      */
-    createColumns : function() {
+    createColumns: function() {
         var me = this,
             columns = [{
                 xtype: 'treecolumn',
                 text: me.snippets.columnCategoryHeader,
                 sortable: false,
-                flex:1,
+                flex: 1,
                 renderer: me.categoryFolderRenderer,
                 dataIndex: 'text'
             }];
@@ -320,7 +320,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      *
      * @return void
      */
-    registerEvents : function() {
+    registerEvents: function() {
         this.addEvents(
 
             /**

@@ -66,8 +66,8 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Detail', {
             padding: 10,
             layout: {
                 type: 'vbox',
-                align : 'stretch',
-                pack  : 'start'
+                align: 'stretch',
+                pack: 'start'
             },
             items: [
                 me.createInfoText(),

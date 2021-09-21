@@ -36,26 +36,26 @@
  */
 //{block name="backend/voucher/view/code/list"}
 Ext.define('Shopware.apps.Voucher.view.code.List', {
-    extend:'Ext.grid.Panel',
-    title:'{s name="detail_codes/win_title/code"}Individual voucher codes{/s}',
-    border:false,
-    alias:'widget.voucher-code-list',
-    region:'center',
-    autoScroll:true,
-    store:'Codes',
-    ui:'shopware-ui',
+    extend: 'Ext.grid.Panel',
+    title: '{s name="detail_codes/win_title/code"}Individual voucher codes{/s}',
+    border: false,
+    alias: 'widget.voucher-code-list',
+    region: 'center',
+    autoScroll: true,
+    store: 'Codes',
+    ui: 'shopware-ui',
     //to select text like the voucher code
-    selType:'cellmodel',
-    plugins:[
+    selType: 'cellmodel',
+    plugins: [
         Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit:1
+            clicksToEdit: 1
         })
     ],
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.registerEvents();
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
                 /**
                  * Event will be fired when the user clicks the delete icon in the
@@ -94,62 +94,62 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
      *
      * @return Array
      */
-    getColumns:function () {
+    getColumns: function () {
         var me = this;
 
         // Define the columns and renderers
         return [
             {
-                header:'{s name="detail_codes/column/code"}Code{/s}',
-                dataIndex:'code',
-                flex:1,
-                editor:{
-                    xtype:'textfield',
-                    allowBlank:false,
-                    readOnly:true
+                header: '{s name="detail_codes/column/code"}Code{/s}',
+                dataIndex: 'code',
+                flex: 1,
+                editor: {
+                    xtype: 'textfield',
+                    allowBlank: false,
+                    readOnly: true
                 }
             },
             {
-                header:'{s name="detail_codes/column/cashed"}Redeemed{/s}',
-                dataIndex:'cashed',
-                flex:1,
-                renderer:me.cashedRenderer,
+                header: '{s name="detail_codes/column/cashed"}Redeemed{/s}',
+                dataIndex: 'cashed',
+                flex: 1,
+                renderer: me.cashedRenderer,
                 editor: me.createRedeemedEditor()
             },
             {
-                header:'{s name="detail_codes/column/customer_number"}Customer number{/s}',
-                dataIndex:'number',
-                flex:1,
-                editor:{
-                    xtype:'textfield',
-                    allowBlank:false,
-                    readOnly:true
+                header: '{s name="detail_codes/column/customer_number"}Customer number{/s}',
+                dataIndex: 'number',
+                flex: 1,
+                editor: {
+                    xtype: 'textfield',
+                    allowBlank: false,
+                    readOnly: true
                 }
             },
             {
-                header:'{s name="detail_codes/column/first_name"}First name{/s}',
-                dataIndex:'firstName',
-                flex:1
+                header: '{s name="detail_codes/column/first_name"}First name{/s}',
+                dataIndex: 'firstName',
+                flex: 1
             },
             {
-                header:'{s name="detail_codes/column/last_name"}Last name{/s}',
-                dataIndex:'lastName',
-                flex:1
+                header: '{s name="detail_codes/column/last_name"}Last name{/s}',
+                dataIndex: 'lastName',
+                flex: 1
             },
             {
-                xtype:'actioncolumn',
-                width:60,
-                align:'center',
-                items:[{
-                    iconCls:'x-action-col-icon sprite-user--pencil',
-                    cls:'sprite-user--pencil',
-                    tooltip:'{s name="list/action_column/link_customer"}To customer account{/s}',
+                xtype: 'actioncolumn',
+                width: 60,
+                align: 'center',
+                items: [{
+                    iconCls: 'x-action-col-icon sprite-user--pencil',
+                    cls: 'sprite-user--pencil',
+                    tooltip: '{s name="list/action_column/link_customer"}To customer account{/s}',
                     getClass: function(value, metadata, record) {
                         if (!record.get("customerId")) {
                             return 'x-hidden';
                         }
                     },
-                    handler:function (view, rowIndex, colIndex, item) {
+                    handler: function (view, rowIndex, colIndex, item) {
                         me.fireEvent('openCustomerAccount', view, rowIndex, colIndex, item);
                     }
                 }]
@@ -165,7 +165,7 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
     createRedeemedEditor: function() {
         return Ext.create('Ext.form.field.Checkbox', {
             store: new Ext.data.SimpleStore({
-                fields:[
+                fields: [
                     'id',
                     'name'
                 ],
@@ -184,52 +184,52 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
      *
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
-    getToolbar:function () {
+    getToolbar: function () {
         return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
-            id:'voucherCodeToolbar',
-            alias:'voucherCodeToolbar',
-            ui:'shopware-ui',
-            items:[
+            dock: 'top',
+            id: 'voucherCodeToolbar',
+            alias: 'voucherCodeToolbar',
+            ui: 'shopware-ui',
+            items: [
 
                 {
                     /*{if {acl_is_allowed privilege=generate}}*/
-                    iconCls:'sprite-plus-circle',
-                    text:'{s name="detail_codes/button/create_new_codes"}Create new codes{/s}',
-                    action:'generateCodes'
+                    iconCls: 'sprite-plus-circle',
+                    text: '{s name="detail_codes/button/create_new_codes"}Create new codes{/s}',
+                    action: 'generateCodes'
                     /*{/if}*/
                 },
                 {
                     /*{if {acl_is_allowed privilege=generate}}*/
-                    xtype:'textfield',
-                    name:'patternField',
-                    width:200,
-                    helpText:'{s name="detail_codes/helptext/voucher_code_pattern"}Optional you can enter your desired voucher code format. The Pattern %s generates a word character and the pattern %d a number. Make sure your code pattern is complex enough.{/s}',
-                    stripCharsRe:/\\/,
-                    emptyText:'{s name="detail_codes/emptytext/voucher_code_pattern"}Voucher code pattern...{/s}'
+                    xtype: 'textfield',
+                    name: 'patternField',
+                    width: 200,
+                    helpText: '{s name="detail_codes/helptext/voucher_code_pattern"}Optional you can enter your desired voucher code format. The Pattern %s generates a word character and the pattern %d a number. Make sure your code pattern is complex enough.{/s}',
+                    stripCharsRe: /\\/,
+                    emptyText: '{s name="detail_codes/emptytext/voucher_code_pattern"}Voucher code pattern...{/s}'
                     /*{/if}*/
                 },
                 '-',
                 {
                     /*{if {acl_is_allowed privilege=export}}*/
-                    iconCls:'sprite-drive-download',
-                    text:'{s name="detail_codes/button/download_codes"}Download codes{/s}',
-                    action:'downloadCodes',
+                    iconCls: 'sprite-drive-download',
+                    text: '{s name="detail_codes/button/download_codes"}Download codes{/s}',
+                    action: 'downloadCodes',
                     disabled: true
                     /*{/if}*/
                 },
                 '->',
                 {
-                    xtype:'textfield',
-                    name:'searchfield',
-                    action:'searchVoucherCode',
-                    width:170,
-                    cls:'searchfield',
-                    enableKeyEvents:true,
-                    checkChangeBuffer:500,
-                    emptyText:'{s name="detail_codes/field/search"}Search...{/s}'
+                    xtype: 'textfield',
+                    name: 'searchfield',
+                    action: 'searchVoucherCode',
+                    width: 170,
+                    cls: 'searchfield',
+                    enableKeyEvents: true,
+                    checkChangeBuffer: 500,
+                    emptyText: '{s name="detail_codes/field/search"}Search...{/s}'
                 },
-                { xtype:'tbspacer', width:6 }
+                { xtype: 'tbspacer', width: 6 }
             ]
         });
     },
@@ -239,12 +239,12 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
      *
      * @return Ext.toolbar.Paging The paging toolbar for the customer grid
      */
-    getPagingBar:function () {
+    getPagingBar: function () {
         var me = this;
         return Ext.create('Ext.toolbar.Paging', {
-            store:me.codeStore,
-            dock:'bottom',
-            displayInfo:true
+            store: me.codeStore,
+            dock: 'bottom',
+            displayInfo: true
         });
 
     },
@@ -253,7 +253,7 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
      *
      * @param value
      */
-    cashedRenderer:function (value) {
+    cashedRenderer: function (value) {
         if(value==1){
              return '{s name="list/render_value/cashed/yes"}Yes{/s}';
          }

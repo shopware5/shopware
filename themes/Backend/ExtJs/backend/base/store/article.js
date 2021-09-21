@@ -74,30 +74,30 @@ Ext.define('Shopware.apps.Base.store.Article', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.Base.model.Article',
+    model: 'Shopware.apps.Base.model.Article',
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        url:'{url controller="base" action="getArticles"}',
+        url: '{url controller="base" action="getArticles"}',
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

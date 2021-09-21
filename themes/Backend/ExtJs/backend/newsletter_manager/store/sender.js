@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.NewsletterManager.store.Sender', {
     extend: 'Ext.data.Store',
     // Do not load data, when not explicitly requested
     autoLoad: false,
-    model : 'Shopware.apps.NewsletterManager.model.Sender',
+    model: 'Shopware.apps.NewsletterManager.model.Sender',
     remoteFilter: true,
     remoteSort: true,
     /**
@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.NewsletterManager.store.Sender', {
         reader: {
             type: 'json',
             root: 'data',
-            totalProperty:'total'
+            totalProperty: 'total'
         }
     }
 });

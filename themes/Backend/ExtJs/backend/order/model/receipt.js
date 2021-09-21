@@ -40,36 +40,36 @@ Ext.define('Shopware.apps.Order.model.Receipt', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Unique identifier field
      * @string
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/order/model/receipt/fields"}{/block}
-        { name: 'id', type:'int' },
-        { name: 'date', type:'date' },
-        { name: 'typeId', type:'int' },
-        { name: 'customerId', type:'int' },
-        { name: 'orderId', type:'int' },
-        { name: 'amount', type:'float' },
-        { name: 'documentId', type:'string' },
-        { name: 'hash', type:'string' },
-        { name: 'typeName', type:'string' },
-        { name: 'active', type:'boolean', defaultValue: false }
+        { name: 'id', type: 'int' },
+        { name: 'date', type: 'date' },
+        { name: 'typeId', type: 'int' },
+        { name: 'customerId', type: 'int' },
+        { name: 'orderId', type: 'int' },
+        { name: 'amount', type: 'float' },
+        { name: 'documentId', type: 'string' },
+        { name: 'hash', type: 'string' },
+        { name: 'typeName', type: 'string' },
+        { name: 'active', type: 'boolean', defaultValue: false }
     ],
     /**
      * @array
      */
-    associations:[
-        { type:'hasMany', model:'Shopware.apps.Base.model.DocType', name:'getDocType', associationKey:'type' }
+    associations: [
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.DocType', name: 'getDocType', associationKey: 'type' }
     ]
 
 });

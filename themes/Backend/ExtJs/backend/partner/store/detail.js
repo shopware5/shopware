@@ -38,14 +38,14 @@ Ext.define('Shopware.apps.Partner.store.Detail', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
     /**
      * Auto load the store after the component
      * is initialized
      * @boolean
      */
-    autoLoad:false,
+    autoLoad: false,
 
     /**
      * to upload all selected items in one request
@@ -65,12 +65,12 @@ Ext.define('Shopware.apps.Partner.store.Detail', {
      * Amount of data loaded at once
      * @integer
      */
-    pageSize:30,
+    pageSize: 30,
 
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Partner.model.Detail'
+    model: 'Shopware.apps.Partner.model.Detail'
 });
 //{/block}

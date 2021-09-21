@@ -651,7 +651,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
         var me = this;
         return {
             disabled: !me.record.getCustomer().first(),
-            action:'openCustomer',
+            action: 'openCustomer',
             xtype: 'button',
             cls: 'primary',
             text: me.snippets.openCustomer,

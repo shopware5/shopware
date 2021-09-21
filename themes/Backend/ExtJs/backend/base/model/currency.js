@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Base.model.Currency', {
      * unique id
      * @int
      */
-    idProperty : 'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
@@ -56,9 +56,9 @@ Ext.define('Shopware.apps.Base.model.Currency', {
      */
     fields: [
         //{block name="backend/base/model/currency/fields"}{/block}
-        { name : 'id', type : 'int' },
-        { name : 'name', type : 'string' },
-        { name : 'currency', type : 'string' }
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' },
+        { name: 'currency', type: 'string' }
     ]
 });
 //{/block}

@@ -65,7 +65,7 @@ Ext.define('Shopware.form.PasswordStrengthMeter', {
      *
      * @param { Object } e Private function
      */
-    updateMeter : function(val) {
+    updateMeter: function(val) {
         var me = this, maxWidth, score, scoreWidth,
             objMeter = me.el.down('.' + Ext.baseCSSPrefix + 'form-strengthmeter'),
             scoreBar = me.el.down('.' + Ext.baseCSSPrefix + 'form-strengthmeter-scorebar');

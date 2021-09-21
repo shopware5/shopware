@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.Statistics', {
         var grid = Ext.create('Ext.grid.Panel', {
             flex: 30,
             store: me.store,
-            columns : me.getColumns()
+            columns: me.getColumns()
         });
 
         return grid;

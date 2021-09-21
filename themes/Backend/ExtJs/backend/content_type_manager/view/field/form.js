@@ -32,7 +32,7 @@ Ext.define('Shopware.apps.ContentTypeManager.view.field.Form', {
     },
     border: 0,
     autoScroll: true,
-    bodyStyle : 'background:none',
+    bodyStyle: 'background:none',
 
     initComponent: function() {
         this.handlers = this.registerHandlers();

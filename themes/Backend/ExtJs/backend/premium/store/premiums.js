@@ -55,6 +55,6 @@ Ext.define('Shopware.apps.Premium.store.Premiums', {
     * Define the used model for this store
     * @string
     */
-    model : 'Shopware.apps.Premium.model.Premium'
+    model: 'Shopware.apps.Premium.model.Premium'
 });
 //{/block}

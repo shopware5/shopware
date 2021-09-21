@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
      * want to create a new customer or edit an existing customer
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = me.getItems();

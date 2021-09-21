@@ -25,7 +25,7 @@
 Ext.define('Shopware.apps.{$controllerName}', {
     extend: 'Enlight.app.SubApplication',
 
-    name:'Shopware.apps.{$controllerName}',
+    name: 'Shopware.apps.{$controllerName}',
 
     loadPath: '{url action=load}',
     bulkLoad: true,

@@ -43,13 +43,13 @@ Ext.define('Shopware.apps.Config.controller.Document', {
         'form.Document'
     ],
 
-    stores:[
+    stores: [
         'form.Document',
         'detail.Document',
         'form.Number'
     ],
 
-    models:[
+    models: [
         'form.Document',
         'form.DocumentElement'
     ],

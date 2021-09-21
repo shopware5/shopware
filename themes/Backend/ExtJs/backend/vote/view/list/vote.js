@@ -32,7 +32,7 @@
 //{block name="backend/vote/view/list/vote"}
 Ext.define('Shopware.apps.Vote.view.list.Vote', {
     extend: 'Shopware.grid.Panel',
-    alias:  'widget.vote-listing-grid',
+    alias: 'widget.vote-listing-grid',
     region: 'center',
     mixins: {
         helper: 'Shopware.apps.Vote.view.PointHelper'

@@ -35,10 +35,10 @@ Ext.define('Shopware.apps.ArticleList.controller.List', {
     extend: 'Ext.app.Controller',
 
     refs: [
-        { ref:'grid', selector:'multi-edit-main-grid' },
-        { ref:'pagingToolBar', selector:'multi-edit-main-grid pagingtoolbar' },
-        { ref:'queryField', selector:'query-field' },
-        { ref:'navigationGrid', selector:'multi-edit-navigation-grid' }
+        { ref: 'grid', selector: 'multi-edit-main-grid' },
+        { ref: 'pagingToolBar', selector: 'multi-edit-main-grid pagingtoolbar' },
+        { ref: 'queryField', selector: 'query-field' },
+        { ref: 'navigationGrid', selector: 'multi-edit-navigation-grid' }
     ],
 
 

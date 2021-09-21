@@ -49,6 +49,6 @@ Ext.define('Shopware.apps.Form.store.Field', {
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.Form.model.Field'
+    model: 'Shopware.apps.Form.model.Field'
 });
 //{/block}

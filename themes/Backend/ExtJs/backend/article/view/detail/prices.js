@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
      * Define that the billing field set is an extension of the Ext.form.FieldSet
      * @string
      */
-    extend:'Ext.form.FieldSet',
+    extend: 'Ext.form.FieldSet',
     /**
      * The Ext.container.Container.layout for the fieldset's immediate child items.
      * @object
@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-prices-field-set',
+    alias: 'widget.article-prices-field-set',
     /**
      * Set css class for this component
      * @string
@@ -61,12 +61,12 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
-        title:'{s name="detail/prices/title"}Prices{/s}',
-        any:'{s name="detail/prices/any"}Arbitrary{/s}',
+    snippets: {
+        title: '{s name="detail/prices/title"}Prices{/s}',
+        any: '{s name="detail/prices/any"}Arbitrary{/s}',
         grid: {
-            titleGross:'{s name="detail/price/title_gross"}[0] Gross{/s}',
-            titleNet:'{s name="detail/price/title_net"}[0] Net{/s}',
+            titleGross: '{s name="detail/price/title_gross"}[0] Gross{/s}',
+            titleNet: '{s name="detail/price/title_net"}[0] Net{/s}',
             columns: {
                 from: '{s name="detail/price/from"}From{/s}',
                 to: '{s name="detail/price/to"}To{/s}',
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 pseudoPrice: '{s name="detail/price/pseudo_price"}Pseudo price{/s}',
                 percentPseudo: '{s name="detail/price/percent_pseudo_price"}Savings vs. pseudo price{/s}'
             },
-            any:'{s name="detail/price/any"}Arbitrary{/s}'
+            any: '{s name="detail/price/any"}Arbitrary{/s}'
         }
     },
 
@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this,
             mainWindow = me.subApp.articleWindow;
 
@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
             height: 150,
             activeTab: 0,
             plain: true,
-            items : tabs,
+            items: tabs,
             listeners: {
                 beforetabchange: function(panel, newTab, oldTab) {
                     me.fireEvent('priceTabChanged', oldTab, newTab, me.priceStore, me.customerGroupStore)
@@ -213,7 +213,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
         }
         title = Ext.String.format(title, customerGroup.get('name'));
         return Ext.create('Ext.grid.Panel', {
-            alias:'widget.article-price-grid',
+            alias: 'widget.article-price-grid',
             cls: Ext.baseCSSPrefix + 'article-price-grid',
             height: 100,
             sortableColumns: false,

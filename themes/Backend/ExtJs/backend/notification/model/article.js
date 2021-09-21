@@ -46,12 +46,12 @@ Ext.define('Shopware.apps.Notification.model.Article', {
      *
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/notification/model/article/fields"}{/block}
-        { name:'name', type:'string' },
-        { name:'number', type:'string' },
-        { name:'registered', type:'int' },
-        { name:'notNotified', type:'int' }
+        { name: 'name', type: 'string' },
+        { name: 'number', type: 'string' },
+        { name: 'registered', type: 'int' },
+        { name: 'notNotified', type: 'int' }
     ],
 
     /**
@@ -74,9 +74,9 @@ Ext.define('Shopware.apps.Notification.model.Article', {
          * Configure the data reader
          * @object
          */
-        reader : {
-            type : 'json',
-            root : 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty: 'totalCount'
         }
     }

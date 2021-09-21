@@ -114,7 +114,7 @@ Ext.define('Shopware.form.PluginPanel',
         // Prepare form store and load the form record
         me.formStore.on('load', me.onLoadForm, me, { single: true });
         me.formStore.load({
-            filters : [{
+            filters: [{
                 property: 'id',
                 value: me.formId
             }]
@@ -394,7 +394,7 @@ Ext.define('Shopware.form.PluginPanel',
 
         form.store.add(form);
         form.store.sync({
-            success :function (records, operation) {
+            success: function (records, operation) {
                 var template = new Ext.Template(me.snippets.saveFormSuccess),
                     message = template.applyTemplate({
                         name: form.data.label || form.data.name
@@ -407,7 +407,7 @@ Ext.define('Shopware.form.PluginPanel',
                     callback.apply(me, records, operation);
                 }
             },
-            failure:function (records, operation) {
+            failure: function (records, operation) {
                 var template = new Ext.Template(me.snippets.saveFormError),
                     message = template.applyTemplate({
                         name: form.data.label || form.data.name

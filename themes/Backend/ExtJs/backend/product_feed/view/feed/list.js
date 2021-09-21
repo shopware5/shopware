@@ -36,18 +36,18 @@
  */
 //{block name="backend/product_feed/view/feed/list"}
 Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
-    extend:'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
     border: false,
-    alias:'widget.product_feed-feed-list',
-    region:'center',
-    autoScroll:true,
-    store:'List',
-    ui:'shopware-ui',
+    alias: 'widget.product_feed-feed-list',
+    region: 'center',
+    autoScroll: true,
+    store: 'List',
+    ui: 'shopware-ui',
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
      * default configuration
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.registerEvents();
@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
 
                 /**
@@ -124,48 +124,48 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
      *
      * @return [array] grid columns
      */
-    getColumns:function () {
+    getColumns: function () {
         var me = this;
 
         var columnsData = [
             {
-                header:'{s name="list/column/title"}Title{/s}',
-                dataIndex:'name',
-                flex:1
+                header: '{s name="list/column/title"}Title{/s}',
+                dataIndex: 'name',
+                flex: 1
             },
             {
                 header: '{s name="list/column/active"}Active{/s}',
                 dataIndex: 'active',
                 width: 50,
-                renderer:me.activeColumnRenderer
+                renderer: me.activeColumnRenderer
             },
             {
-                header:'{s name="list/column/file_name"}File name{/s}',
-                dataIndex:'fileName',
-                renderer:me.fileNameRenderer,
-                flex:1
+                header: '{s name="list/column/file_name"}File name{/s}',
+                dataIndex: 'fileName',
+                renderer: me.fileNameRenderer,
+                flex: 1
             },
             {
-                header:'{s name="list/column/count_articles"}Number of articles{/s}',
-                dataIndex:'countArticles',
-                flex:1
+                header: '{s name="list/column/count_articles"}Number of articles{/s}',
+                dataIndex: 'countArticles',
+                flex: 1
             },
             {
-                header:'{s name="list/column/last_export"}Last export{/s}',
-                dataIndex:'lastExport',
-                flex:1,
-                renderer :  me.onDateRenderer
+                header: '{s name="list/column/last_export"}Last export{/s}',
+                dataIndex: 'lastExport',
+                flex: 1,
+                renderer: me.onDateRenderer
             },
             {
-                xtype:'actioncolumn',
-                width:110,
-                items:me.getActionColumnItems()
+                xtype: 'actioncolumn',
+                width: 110,
+                items: me.getActionColumnItems()
             }
         ];
         return columnsData;
     },
 
-    onDateRenderer : function(value) {
+    onDateRenderer: function(value) {
         if(!value) {
             return;
         }
@@ -182,10 +182,10 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
 
             /*{if {acl_is_allowed privilege=update}}*/
             actionColumnData.push({
-                iconCls:'sprite-pencil',
-                cls:'editBtn',
-                tooltip:'{s name="list/action_column/edit"}Edit this product feed{/s}',
-                handler:function (view, rowIndex, colIndex, item) {
+                iconCls: 'sprite-pencil',
+                cls: 'editBtn',
+                tooltip: '{s name="list/action_column/edit"}Edit this product feed{/s}',
+                handler: function (view, rowIndex, colIndex, item) {
                     me.fireEvent('editColumn', view, rowIndex, colIndex, item);
                 }
             });
@@ -193,11 +193,11 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
 
             /*{if {acl_is_allowed privilege=delete}}*/
             actionColumnData.push({
-               iconCls:'sprite-minus-circle-frame',
-               action:'delete',
-               cls:'delete',
-               tooltip:'{s name="list/action_column/delete"}Delete this feed{/s}',
-               handler:function (view, rowIndex, colIndex, item) {
+               iconCls: 'sprite-minus-circle-frame',
+               action: 'delete',
+               cls: 'delete',
+               tooltip: '{s name="list/action_column/delete"}Delete this feed{/s}',
+               handler: function (view, rowIndex, colIndex, item) {
                    me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
                }
             });
@@ -205,10 +205,10 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
 
             /*{if {acl_is_allowed privilege=create}}*/
             actionColumnData.push({
-                iconCls:'sprite-blue-document-copy',
-                cls:'duplicate',
-                tooltip:'{s name="list/action_column/duplicate"}Duplicate this feed{/s}',
-                handler:function (view, rowIndex, colIndex, item) {
+                iconCls: 'sprite-blue-document-copy',
+                cls: 'duplicate',
+                tooltip: '{s name="list/action_column/duplicate"}Duplicate this feed{/s}',
+                handler: function (view, rowIndex, colIndex, item) {
                     me.fireEvent('duplicateColumn', view, rowIndex, colIndex, item);
                 }
 
@@ -217,10 +217,10 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
 
             /*{if {acl_is_allowed privilege=generate}}*/
             actionColumnData.push({
-                iconCls:'sprite-lightning',
-                cls:'arrow-lightning',
-                tooltip:'{s name="list/action_column/execute"}Execute feed{/s}',
-                handler:function (view, rowIndex, colIndex, item) {
+                iconCls: 'sprite-lightning',
+                cls: 'arrow-lightning',
+                tooltip: '{s name="list/action_column/execute"}Execute feed{/s}',
+                handler: function (view, rowIndex, colIndex, item) {
                     me.fireEvent('executeFeed', view, rowIndex, colIndex, item);
                 }
             });
@@ -232,17 +232,17 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
      *
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
-    getToolbar:function () {
+    getToolbar: function () {
         return Ext.create('Ext.toolbar.Toolbar',
             {
-                dock:'top',
-                ui:'shopware-ui',
-                items:[
+                dock: 'top',
+                ui: 'shopware-ui',
+                items: [
                     /*{if {acl_is_allowed privilege=create}}*/
                     {
-                        iconCls:'sprite-plus-circle',
-                        text:'{s name="list/button/add"}Add{/s}',
-                        action:'add'
+                        iconCls: 'sprite-plus-circle',
+                        text: '{s name="list/button/add"}Add{/s}',
+                        action: 'add'
                     }
                     /*{/if}*/
                 ]
@@ -257,9 +257,9 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
     getPagingBar: function () {
         var me = this;
         return Ext.create('Ext.toolbar.Paging', {
-            store:me.listStore,
-            dock:'bottom',
-            displayInfo:true
+            store: me.listStore,
+            dock: 'bottom',
+            displayInfo: true
         });
 
     },
@@ -270,7 +270,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
      * @param [string] - The order time value
      * @return [string] - The passed value
      */
-    fileNameRenderer:function (value, p, record) {
+    fileNameRenderer: function (value, p, record) {
         /*{if {acl_is_allowed privilege=generate}}*/
         return '<a href="{url controller=export}' + '/index/'+record.get('fileName')+
                 '?feedID='+record.get('id')+'&hash='+ record.get('hash') + '" target="_blank">' + value + '</a>';

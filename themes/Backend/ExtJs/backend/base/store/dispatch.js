@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Base.store.Dispatch', {
 
     alternateClassName: 'Shopware.store.Dispatch',
     storeId: 'base.Dispatch',
-    model : 'Shopware.apps.Base.model.Dispatch',
+    model: 'Shopware.apps.Base.model.Dispatch',
     pageSize: 1000,
     remoteFilter: true,
     sorters: [{

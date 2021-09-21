@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Article.store.Esd', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
     autoLoad: false,
 
@@ -47,6 +47,6 @@ Ext.define('Shopware.apps.Article.store.Esd', {
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Article.model.Esd'
+    model: 'Shopware.apps.Article.model.Esd'
 });
 //{/block}

@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Month', {
     remoteSort: true,
     fields: [
         { name: 'date', type: 'date', dateFormat: 'timestamp' },
-        { name: 'normal', type: 'date', dateFormat:'Y-m-d' },
+        { name: 'normal', type: 'date', dateFormat: 'Y-m-d' },
         { name: 'turnover', type: 'float' },
         { name: 'orderCount', type: 'int' },
         'displayDate'

@@ -36,7 +36,7 @@
 Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.form-main-fieldgrid',
-    title : '{s name="title_fields"}Fields{/s}',
+    title: '{s name="title_fields"}Fields{/s}',
     autoScroll: true,
     selType: 'rowmodel',
     sortableColumns: false,
@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             header: '&#009868;',
             width: 24,
             hideable: false,
-            renderer : me.renderSorthandleColumn,
+            renderer: me.renderSorthandleColumn,
         },
         /*{/if}*/
         {
@@ -217,12 +217,12 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             flex: 1,
             hideable: false,
             editor: {
-                xtype:'textfield'
+                xtype: 'textfield'
             },
             translationEditor: {
                 name: 'value',
                 fieldLabel: '{s name="column_value"}Value{/s}',
-                xtype:'textfield'
+                xtype: 'textfield'
             }
         }, {
             header: '{s name="column_note"}Note{/s}',
@@ -231,12 +231,12 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             flex: 1,
             hideable: false,
             editor: {
-                xtype:'textfield'
+                xtype: 'textfield'
             },
             translationEditor: {
                 name: 'note',
                 fieldLabel: '{s name="column_note"}Note{/s}',
-                xtype:'textfield'
+                xtype: 'textfield'
             }
         }, {
             header: '{s name="column_errormsg"}Error Message{/s}',
@@ -245,12 +245,12 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             flex: 1,
             hideable: false,
             editor: {
-                xtype:'textfield'
+                xtype: 'textfield'
             },
             translationEditor: {
                 fieldLabel: '{s name="column_errormsg"}Error Message{/s}',
                 name: 'error_msg',
-                xtype:'textfield',
+                xtype: 'textfield',
             }
         }, {
             xtype: 'booleancolumn',
@@ -301,7 +301,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
      */
     getTypComboStore: function() {
         return new Ext.data.SimpleStore({
-            fields:['id', 'label'],
+            fields: ['id', 'label'],
             data: [
                 ['text', 'Text'],
                 ['text2', 'Text2'],
@@ -321,7 +321,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
      */
     getClassComboStore: function() {
         return new Ext.data.SimpleStore({
-            fields:['id', 'label'],
+            fields: ['id', 'label'],
             data: [
                 ['normal', 'normal'],
                 ['strasse;nr', 'strasse;nr'],
@@ -370,7 +370,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
     getPagingbar: function () {
         return Ext.create('Ext.toolbar.Paging', {
             store: this.store,
-            dock:'bottom',
+            dock: 'bottom',
             displayInfo: true
         });
     },

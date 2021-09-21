@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
                 url: '{url controller="ArticleList" action="getValues"}',
                 reader: {
                     type: 'json',
-                    root:'data',
+                    root: 'data',
                     totalProperty: 'total'
                 }
             }
@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
 
         me.expand();
         me.store.clearFilter(true);
-        me.store.filter({ id: 'filter', anyMatch:true, property: 'title', value: token ? token.replace('"', "") : '' });
+        me.store.filter({ id: 'filter', anyMatch: true, property: 'title', value: token ? token.replace('"', "") : '' });
     },
 
 

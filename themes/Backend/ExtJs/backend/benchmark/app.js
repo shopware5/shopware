@@ -25,7 +25,7 @@
 //{block name="backend/benchmark/app"}
 Ext.define('Shopware.apps.Benchmark', {
     name: 'Shopware.apps.Benchmark',
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
     bulkLoad: true,
     loadPath: '{url action=load}',
 

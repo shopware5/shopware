@@ -45,20 +45,20 @@ Ext.define('Shopware.apps.Base.model.BillingAddress', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.apps.Base.model.Address',
+    extend: 'Shopware.apps.Base.model.Address',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/billing_address/fields"}{/block}
         /**
          * the number field is an alias for the customer number
          */
-        { name:'number', type:'string' },
-        { name:'phone', type:'string' },
-        { name:'vatId', type:'string' }
+        { name: 'number', type: 'string' },
+        { name: 'phone', type: 'string' },
+        { name: 'vatId', type: 'string' }
     ]
 
 });

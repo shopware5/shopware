@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Partner.controller.Main', {
      * Required stores for sub-application
      * @array
      */
-    stores:[ 'List', 'Detail'],
+    stores: [ 'List', 'Detail'],
 
 
     /**

@@ -149,8 +149,8 @@ Ext.define('Shopware.apps.Emotion.view.templates.List', {
         var me = this;
 
         return Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
-                selectionchange:function (sm, selections) {
+            listeners: {
+                selectionchange: function (sm, selections) {
                     me.fireEvent('selectionChange', selections);
                 }
             }

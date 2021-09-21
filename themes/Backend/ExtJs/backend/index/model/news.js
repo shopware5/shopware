@@ -26,7 +26,7 @@ Ext.define('Shopware.apps.Index.model.News', {
     extend: 'Ext.data.Model',
     fields: [
         //{block name="backend/index/model/news/fields"}{/block}
-        { name: 'pubDate', type: 'date', dateFormat:'Y-m-dTH:i:s' },
+        { name: 'pubDate', type: 'date', dateFormat: 'Y-m-dTH:i:s' },
         { name: 'title' },
         { name: 'link' },
         { name: 'linkHash' },

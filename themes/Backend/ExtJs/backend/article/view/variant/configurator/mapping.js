@@ -114,7 +114,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.registerEvents();
         me.title = me.snippets.title;
@@ -202,7 +202,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
                 { xtype: 'tbfill' },
                 {
                     xtype: 'button',
-                    cls:'primary',
+                    cls: 'primary',
                     text: me.snippets.save,
                     handler: function() {
                         me.fireEvent('acceptBaseData', me);

@@ -37,9 +37,9 @@ Ext.define('Shopware.apps.Tax.model.Groups', {
     extend: 'Ext.data.Model',
     fields: [
         //{block name="backend/tax/model/groups/fields"}{/block}
-          { name : 'id', type: 'string' },
-          { name : 'text', type: 'string' },
-          { name : 'databaseId', type: 'string' }
+          { name: 'id', type: 'string' },
+          { name: 'text', type: 'string' },
+          { name: 'databaseId', type: 'string' }
     ],
     proxy: {
         type: 'ajax',
@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Tax.model.Groups', {
         reader: {
             type: 'json',
             root: 'data',
-            totalProperty:'total'
+            totalProperty: 'total'
         }
     }
 });

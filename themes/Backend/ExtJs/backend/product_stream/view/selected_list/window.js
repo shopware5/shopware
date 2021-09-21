@@ -31,7 +31,7 @@
 Ext.define('Shopware.apps.ProductStream.view.selected_list.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.product-stream-selected-list-window',
-    title : '{s name="detail_window_title"}Product stream details{/s}',
+    title: '{s name="detail_window_title"}Product stream details{/s}',
     height: '90%',
     width: '90%',
     layout: 'fit',

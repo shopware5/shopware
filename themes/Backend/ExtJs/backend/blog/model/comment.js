@@ -39,42 +39,42 @@ Ext.define('Shopware.apps.Blog.model.Comment', {
     * Extends the standard ExtJS 4
     * @string
     */
-    extend : 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
     * The fields used for this model
     * @array
     */
-    fields : [
+    fields: [
         //{block name="backend/blog/model/comment/fields"}{/block}
-        { name : 'id', type : 'int' },
-        { name : 'name', type : 'string' },
-        { name : 'headline', type : 'string' },
-        { name : 'content', type : 'string' },
-        { name : 'creationDate', type : 'date' },
-        { name : 'active', type : 'boolean' },
-        { name : 'points', type : 'float' },
-        { name : 'eMail', type : 'string' },
-        { name : 'shopId', type : 'int', useNull: true },
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' },
+        { name: 'headline', type: 'string' },
+        { name: 'content', type: 'string' },
+        { name: 'creationDate', type: 'date' },
+        { name: 'active', type: 'boolean' },
+        { name: 'points', type: 'float' },
+        { name: 'eMail', type: 'string' },
+        { name: 'shopId', type: 'int', useNull: true },
     ],
     /**
     * If the name of the field is 'id' extjs assumes autmagical that
     * this field is an unique identifier.
     */
-    idProperty : 'id',
+    idProperty: 'id',
     /**
     * Configure the data communication
     * @object
     */
-    proxy : {
-        type : 'ajax',
-        api:{
-            read:   '{url action=getBlogComments}',
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url action=getBlogComments}',
             update: '{url action=updateBlogComment targetField=blogComments}',
-            destroy:'{url action=deleteBlogComment targetField=blogComments}'
+            destroy: '{url action=deleteBlogComment targetField=blogComments}'
         },
-        reader : {
-            type : 'json',
-            root : 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty: 'totalCount'
         }
     }

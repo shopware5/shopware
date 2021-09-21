@@ -93,9 +93,9 @@ Ext.define('Shopware.apps.Config.view.main.Navigation', {
         }];
     },
 
-    getTopBar:function () {
+    getTopBar: function () {
         return [ { xtype: 'tbspacer', width: 22 }, {
-            xtype:'config-base-search',
+            xtype: 'config-base-search',
             width: 165
         }];
     }

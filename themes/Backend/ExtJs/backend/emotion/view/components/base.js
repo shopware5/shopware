@@ -148,22 +148,22 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
             }
 
             constructedItem = {
-                xtype           : xtype,
-                helpText        : helpText || '',
-                fieldLabel      : fieldLabel || '',
-                fieldId         : item.get('id'),
-                valueType       : item.get('valueType'),
-                queryMode       : 'remote',
-                name            : item.get('name') || '',
-                displayField    : item.get('displayField'),
-                valueField      : item.get('valueField'),
-                checkedValue    : true,
-                uncheckedValue  : false,
-                supportText     : supportText || '',
-                allowBlank      : (item.get('allowBlank') ? true : false),
-                value           : item.get('defaultValue') || '',
-                boxLabel        : boxLabel,
-                translatable    : item.get('translatable')
+                xtype: xtype,
+                helpText: helpText || '',
+                fieldLabel: fieldLabel || '',
+                fieldId: item.get('id'),
+                valueType: item.get('valueType'),
+                queryMode: 'remote',
+                name: item.get('name') || '',
+                displayField: item.get('displayField'),
+                valueField: item.get('valueField'),
+                checkedValue: true,
+                uncheckedValue: false,
+                supportText: supportText || '',
+                allowBlank: (item.get('allowBlank') ? true : false),
+                value: item.get('defaultValue') || '',
+                boxLabel: boxLabel,
+                translatable: item.get('translatable')
             };
 
             if (item.get('store')) {
@@ -189,10 +189,10 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
             } else if(xtype === 'radiofield') {
                 if (!radios[constructedItem.name]) {
                     radios[constructedItem.name] = {
-                        xtype     : 'radiogroup',
+                        xtype: 'radiogroup',
                         fieldLabel: constructedItem.fieldLabel,
-                        columns   : 2,
-                        items     : []
+                        columns: 2,
+                        items: []
                     };
                     items = me.pushItemToElements(radios[constructedItem.name], items);
                 }

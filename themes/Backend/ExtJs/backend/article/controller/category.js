@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Article.controller.Category', {
      * The parent class that this class extends.
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Contains all snippets for the component.
@@ -56,10 +56,10 @@ Ext.define('Shopware.apps.Article.controller.Category', {
      * Set component references for easy access
      * @array
      */
-    refs:[
-        { ref:'categoryTree', selector:'article-detail-window article-category-drop-zone' },
-        { ref:'categoryDropZone', selector:'article-detail-window article-category-tree' },
-        { ref:'categoryGrid', selector:'article-detail-window article-category-list' }
+    refs: [
+        { ref: 'categoryTree', selector: 'article-detail-window article-category-drop-zone' },
+        { ref: 'categoryDropZone', selector: 'article-detail-window article-category-tree' },
+        { ref: 'categoryGrid', selector: 'article-detail-window article-category-list' }
     ],
 
     /**
@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Article.controller.Category', {
      * @params orderId - The main controller can handle a orderId parameter to open the order detail page directly
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({

@@ -37,11 +37,11 @@
  */
 //{block name="backend/supplier/view/main/list"}
 Ext.define('Shopware.apps.Supplier.view.main.List', {
-    extend : 'Ext.grid.Panel',
-    alias : 'widget.supplier-main-list',
-    autoScroll : true,
-    stateful : true,
-    stateId : 'shopware-supplier-list',
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.supplier-main-list',
+    autoScroll: true,
+    stateful: true,
+    stateId: 'shopware-supplier-list',
 
     /**
      * Initialize the Shopware.apps.Supplier.view.main.List and defines the necessary
@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
      *
      * @return void
      */
-    initComponent : function () {
+    initComponent: function () {
         var me = this;
 
         me.store = me.supplierStore;
@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
      *
      * @return Ext.selection.CheckboxModel
      */
-    getSelModel : function() {
+    getSelModel: function() {
         return Ext.create('Ext.selection.CheckboxModel');
     },
 
@@ -78,37 +78,37 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
      *
      * @return array of grid columns
      */
-    getGridColumns : function() {
+    getGridColumns: function() {
         var me = this;
         return [
             {
-                header : '{s name="grid_name"}Name{/s}',
-                dataIndex : 'name',
-                renderer : me.nameColumn,
+                header: '{s name="grid_name"}Name{/s}',
+                dataIndex: 'name',
+                renderer: me.nameColumn,
                 width: 125
             },
             {
-                header : '{s name="grid_articlecounter"}Article{/s}',
-                dataIndex : 'articleCounter',
-                width : 50,
-                renderer : me.articleCountColumn
+                header: '{s name="grid_articlecounter"}Article{/s}',
+                dataIndex: 'articleCounter',
+                width: 50,
+                renderer: me.articleCountColumn
             },
             {
-                header : '{s name="grid_link"}URL{/s}',
-                dataIndex : 'link',
+                header: '{s name="grid_link"}URL{/s}',
+                dataIndex: 'link',
                 width: 150,
-                renderer : me.urlColumn
+                renderer: me.urlColumn
             },
             {
-                header : '{s name="grid_description"}Description{/s}',
-                dataIndex : 'description',
-                flex : 1,
-                renderer : me.descriptionColumn
+                header: '{s name="grid_description"}Description{/s}',
+                dataIndex: 'description',
+                flex: 1,
+                renderer: me.descriptionColumn
             },
             {
-                xtype : 'actioncolumn',
-                width : 60,
-                items : me.getActionColumn()
+                xtype: 'actioncolumn',
+                width: 60,
+                items: me.getActionColumn()
             }
         ];
     },
@@ -118,20 +118,20 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
      *
      * @return Array of buttons
      */
-    getActionColumn : function() {
+    getActionColumn: function() {
         return [
             /*{if {acl_is_allowed privilege=delete}}*/
             {
-                iconCls : 'sprite-minus-circle-frame',
-                action : 'delete',
-                tooltip : '{s name="grid_delete_tooltip"}Delete this supplier{/s}'
+                iconCls: 'sprite-minus-circle-frame',
+                action: 'delete',
+                tooltip: '{s name="grid_delete_tooltip"}Delete this supplier{/s}'
             },
             /*{/if}*/
             /*{if {acl_is_allowed privilege=update}}*/
             {
-                iconCls : 'sprite-pencil',
-                action : 'edit',
-                tooltip : '{s name="grid_edit_tooltip"}Edit this supplier{/s}'
+                iconCls: 'sprite-pencil',
+                action: 'edit',
+                tooltip: '{s name="grid_edit_tooltip"}Edit this supplier{/s}'
             }
             /*{/if}*/
         ];
@@ -205,7 +205,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
      * @param [string] value - An URI to the supplier homepage
      * @return String
      */
-    urlColumn : function (value) {
+    urlColumn: function (value) {
         return Ext.String.format('{literal}<a h'+'ref="{0}" target="_blank">{1}</a>{/literal}', value, value);
     },
 
@@ -215,7 +215,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
      * @param [string] value - Name of the supplier
      * @return String
      */
-    nameColumn : function (value) {
+    nameColumn: function (value) {
         return Ext.String.format('{literal}<strong style="font-weight: 700">{0}</strong>{/literal}', value);
     },
 
@@ -225,7 +225,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
      * @param [integer] value - Count of how many articles are associated with this supplier
      * @return integer
      */
-    articleCountColumn : function (value) {
+    articleCountColumn: function (value) {
         return  value;
     },
 
@@ -235,7 +235,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
      * @param [string] value - HTML Text containing the description of the supplier
      * @return string
      */
-    descriptionColumn : function (value) {
+    descriptionColumn: function (value) {
         value = Ext.util.Format.ellipsis(value, 40);
         value = Ext.util.Format.htmlEncode(value);
         return value;

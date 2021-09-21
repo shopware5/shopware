@@ -39,12 +39,12 @@ Ext.define('Shopware.apps.Base.model.DocType', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/order/model/type/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'key', type: 'string' },

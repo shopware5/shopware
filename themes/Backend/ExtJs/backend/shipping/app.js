@@ -39,12 +39,12 @@ Ext.define('Shopware.apps.Shipping', {
      * sub-application behavior and the event bus
      * @string
      */
-    extend : 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
     /**
      * The name of the module. Used for internal purpose
      * @string
      */
-    name : 'Shopware.apps.Shipping',
+    name: 'Shopware.apps.Shipping',
     /**
      * Sets the loading path for the sub-application.
      *
@@ -57,13 +57,13 @@ Ext.define('Shopware.apps.Shipping', {
     /**
      * Where to get the files
      */
-    loadPath:'{url controller="shipping" action=load}',
+    loadPath: '{url controller="shipping" action=load}',
 
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers : [
+    controllers: [
         'Main',
         'CostsMatrix',
         'DefaultForm',
@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Shipping', {
      * Required stores
      * @array
      */
-    stores : [
+    stores: [
         'Costsmatrix',
         'Dispatch',
         'Holiday',
@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.Shipping', {
      * Required views
      * @array
      */
-    views : [
+    views: [
         'edit.DispatchCostsMatrix',
         'edit.PaymentMeans',
         'edit.CategoriesTree',
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Shipping', {
      * Required Models
      * @array
      */
-    models : [
+    models: [
         'Costsmatrix',
         'Dispatch',
         'DispatchList',

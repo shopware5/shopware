@@ -37,19 +37,19 @@ Ext.define('Shopware.apps.Performance.model.Check', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Contains the model fields
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/performance/model/description/fields"}{/block}
-        { name:'id', type:'int' },
-        { name:'name', type:'string' },
-        { name:'value', type:'string' },
-        { name:'valid', type:'int' },
-        { name:'description', type:'string' }
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' },
+        { name: 'value', type: 'string' },
+        { name: 'valid', type: 'int' },
+        { name: 'description', type: 'string' }
     ]
 
 });

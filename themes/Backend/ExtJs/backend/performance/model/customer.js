@@ -37,21 +37,21 @@ Ext.define('Shopware.apps.Performance.model.Customer', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Contains the model fields
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/performance/model/customer/fields"}{/block}
-        { name:'id', type:'int' },
+        { name: 'id', type: 'int' },
 
-        { name:'similarRefreshStrategy', type:'int' },
-        { name:'alsoBoughtShow', type:'bool' },
-        { name:'similarViewedShow', type:'bool' },
-        { name:'similarValidationTime', type:'int' },
-        { name:'similarActive', type:'bool' }
+        { name: 'similarRefreshStrategy', type: 'int' },
+        { name: 'alsoBoughtShow', type: 'bool' },
+        { name: 'similarViewedShow', type: 'bool' },
+        { name: 'similarValidationTime', type: 'int' },
+        { name: 'similarActive', type: 'bool' }
     ]
 
 });

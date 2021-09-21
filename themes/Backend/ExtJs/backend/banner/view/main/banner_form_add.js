@@ -37,13 +37,13 @@
  */
 //{block name="backend/banner/view/main/banner_form_add"}
 Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
-    extend      : 'Enlight.app.Window',
-    alias       : 'widget.BannerFormAdd',
-    cls         : 'addWindow',
-    autoShow    : true,
-    border      : 0,
+    extend: 'Enlight.app.Window',
+    alias: 'widget.BannerFormAdd',
+    cls: 'addWindow',
+    autoShow: true,
+    border: 0,
     title: '{s name="form_add/title"}Create a new banner for category: [0]{/s}',
-    height : 510,
+    height: 510,
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -83,21 +83,21 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
 
         // Description field
         descField = Ext.create('Ext.form.field.Text', {
-            name        : 'description',
-            anchor      : '100%',
-            allowBlank  : false,
+            name: 'description',
+            anchor: '100%',
+            allowBlank: false,
             labelWidth: 155,
-            fieldLabel  : '{s name="form_add/description"}Description{/s}',
-            supportText : '{s name="form_add/description_support"}Description of the banner e.g. Jackets-Winter-Special2013{/s}'
+            fieldLabel: '{s name="form_add/description"}Description{/s}',
+            supportText: '{s name="form_add/description_support"}Description of the banner e.g. Jackets-Winter-Special2013{/s}'
         });
 
         // Link field
         linkField = Ext.create('Ext.form.field.Text', {
-            name        : 'link',
-            anchor      : '100%',
+            name: 'link',
+            anchor: '100%',
             labelWidth: 155,
-            fieldLabel  : '{s name="form_add/link"}Link{/s}',
-            supportText : '{s name="form_add/link_support"}Link which will be called up if the banner has been clicked.{/s}'
+            fieldLabel: '{s name="form_add/link"}Link{/s}',
+            supportText: '{s name="form_add/link_support"}Link which will be called up if the banner has been clicked.{/s}'
         });
 
         var store = Ext.create('Ext.data.Store', {
@@ -109,13 +109,13 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
         });
 
         me.linkTarget = Ext.create('Ext.form.field.ComboBox', {
-            name:'linkTarget',
-            fieldLabel:'{s name="form_add/link_target/field"}Link target{/s}',
+            name: 'linkTarget',
+            fieldLabel: '{s name="form_add/link_target/field"}Link target{/s}',
             store: store,
-            valueField:'value',
+            valueField: 'value',
             labelWidth: 155,
-            displayField:'display',
-            editable:false
+            displayField: 'display',
+            editable: false
         });
 
         // Get timing containers
@@ -124,15 +124,15 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
 
         // Media selection field
         dropZone = Ext.create('Shopware.MediaManager.MediaSelection', {
-            fieldLabel      : '{s name="form_add/banner"}Banner{/s}',
+            fieldLabel: '{s name="form_add/banner"}Banner{/s}',
             labelWidth: 155,
-            name            : 'media-manager-selection',
-            supportText     : '{s name="form_add/banner_support"}Banner image selection via the Media Manager. The selection is limited to one media.{/s}',
-            multiSelect     : false,
-            anchor          : '100%',
-            allowBlank  : false,
-            validTypes      : me.getAllowedExtensions(),
-            validTypeErrorFunction : me.getExtensionErrorCallback()
+            name: 'media-manager-selection',
+            supportText: '{s name="form_add/banner_support"}Banner image selection via the Media Manager. The selection is limited to one media.{/s}',
+            multiSelect: false,
+            anchor: '100%',
+            allowBlank: false,
+            validTypes: me.getAllowedExtensions(),
+            validTypeErrorFunction: me.getExtensionErrorCallback()
         });
 
         me.attributeForm = Ext.create('Shopware.attribute.Form', {
@@ -142,13 +142,13 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
 
         // Actual form panel
         me.formPanel = Ext.create('Ext.form.Panel', {
-            border      : false,
+            border: false,
             layout: 'anchor',
-            bodyPadding : 10,
+            bodyPadding: 10,
             flex: 1,
             autoScroll: true,
-            defaults    : { anchor: '100%' },
-            items       : [ descField, linkField, me.linkTarget, validFrom, validUntil, dropZone, me.attributeForm ]
+            defaults: { anchor: '100%' },
+            items: [ descField, linkField, me.linkTarget, validFrom, validUntil, dropZone, me.attributeForm ]
         });
         me.formPanel.add(me.createHiddenFields());
 
@@ -159,11 +159,11 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
      *
      * @return string
      */
-    getExtensionErrorCallback :  function() {
+    getExtensionErrorCallback: function() {
         return 'onExtensionError';
     },
 
-    onExtensionError : function() {
+    onExtensionError: function() {
         Shopware.Msg.createGrowlMessage('','{s name="extension_error"}Incorrect MIME Type{/s}','{s name="main_title"}{/s}');
     },
 
@@ -171,7 +171,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
      * Method to set the allowed file extension for the media manager
      * @return []
      */
-    getAllowedExtensions : function() {
+    getAllowedExtensions: function() {
         return [ 'gif', 'png', 'jpeg', 'jpg', 'svg' ]
     },
 
@@ -185,15 +185,15 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
         var me = this;
 
         return [{
-            xtype   : 'hidden',
-            name    : 'id'
+            xtype: 'hidden',
+            name: 'id'
         }, {
-            xtype   : 'hidden',
-            name    : 'image'
+            xtype: 'hidden',
+            name: 'image'
         }, {
-            xtype   : 'hidden',
-            name    : 'categoryId',
-            value   : me.categoryId
+            xtype: 'hidden',
+            name: 'categoryId',
+            value: me.categoryId
         }];
     },
 
@@ -207,14 +207,14 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
 
         me.validFromField = Ext.create('Ext.form.field.Date', {
                 submitFormat: 'd.m.Y',
-                fieldLabel  : '{s name="form_add/from_label"}Active from{/s}',
-                name        : 'validFromDate',
-                supportText : '{s name="form_add/from_support"}Format: dd.mm.jjjj{/s}',
-                columnWidth : .6,
+                fieldLabel: '{s name="form_add/from_label"}Active from{/s}',
+                name: 'validFromDate',
+                supportText: '{s name="form_add/from_support"}Format: dd.mm.jjjj{/s}',
+                columnWidth: .6,
                 labelWidth: 155,
-                minValue    : new Date(),
-                value       : new Date(),
-                allowBlank  : true,
+                minValue: new Date(),
+                value: new Date(),
+                allowBlank: true,
                 listeners: {
                     change: function(field, newValue) {
                         me.validToField.setMinValue(newValue);
@@ -224,18 +224,18 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
         );
 
         return Ext.create('Ext.container.Container', {
-            layout      : 'column',
-            anchor      : '100%',
-            items   : [
+            layout: 'column',
+            anchor: '100%',
+            items: [
                 ,me.validFromField,
             {
-                margin      : '0 0 0 10',
+                margin: '0 0 0 10',
                 submitFormat: 'H:i',
-                xtype       : 'timefield',
-                name        : 'validFromTime',
-                supportText : '{s name="form_add/from_time_support"}Format: hh:mm{/s}',
-                columnWidth : .4,
-                minDate     : new Date()
+                xtype: 'timefield',
+                name: 'validFromTime',
+                supportText: '{s name="form_add/from_time_support"}Format: hh:mm{/s}',
+                columnWidth: .4,
+                minDate: new Date()
             }]
         })
     },
@@ -250,12 +250,12 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
 
         me.validToField = Ext.create('Ext.form.field.Date', {
             submitFormat: 'd.m.Y',
-            fieldLabel  : '{s name="form_add/to_date_label"}Active till{/s}',
-            name        : 'validToDate',
+            fieldLabel: '{s name="form_add/to_date_label"}Active till{/s}',
+            name: 'validToDate',
             labelWidth: 155,
-            supportText : '{s name="form_add/to_date_support"}Format jjjj.mm.tt{/s}',
-            columnWidth : .60,
-            allowBlank  : true,
+            supportText: '{s name="form_add/to_date_support"}Format jjjj.mm.tt{/s}',
+            columnWidth: .60,
+            allowBlank: true,
             listeners: {
                 change: function(field, newValue) {
                     me.validFromField.setMaxValue(newValue);
@@ -264,17 +264,17 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
         });
 
         return Ext.create('Ext.container.Container', {
-            layout      : 'column',
-            anchor      : '100%',
-            items       : [
+            layout: 'column',
+            anchor: '100%',
+            items: [
                 me.validToField,
             {
-                margin      : '0 0 0 10',
-                xtype       : 'timefield',
-                name        : 'validToTime',
+                margin: '0 0 0 10',
+                xtype: 'timefield',
+                name: 'validToTime',
                 submitFormat: 'H:i',
-                supportText : '{s name="form_add/to_time_support"}Format: hh:mm{/s}',
-                columnWidth : .40
+                supportText: '{s name="form_add/to_time_support"}Format: hh:mm{/s}',
+                columnWidth: .40
             }]
         })
     },
@@ -288,13 +288,13 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
         var me = this;
 
         return ['->', {
-            text    : '{s name="form_add/cancel"}Cancel{/s}',
+            text: '{s name="form_add/cancel"}Cancel{/s}',
             cls: 'secondary',
-            scope       : me,
-            handler     : me.destroy
+            scope: me,
+            handler: me.destroy
         }, {
-            text    : '{s name="form_add/save"}Save{/s}',
-            action  : 'addBannerSave',
+            text: '{s name="form_add/save"}Save{/s}',
+            action: 'addBannerSave',
             cls: 'primary'
         }];
     }

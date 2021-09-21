@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Country', {
     /**
      * Initialize the controller and defines the necessary default configuration
      */
-    initComponent : function() {
+    initComponent: function() {
         var me = this,
             ids = [];
 
@@ -145,12 +145,12 @@ Ext.define('Shopware.apps.Shipping.view.edit.Country', {
         var me = this;
         return [
             {
-                xtype:'ddselector',
+                xtype: 'ddselector',
                 fromStore: me.availableCountries,
                 buttons: ['add', 'remove'],
-                gridHeight:200,
+                gridHeight: 200,
                 selectedItems: me.usedCountriesStore,
-                fromFieldDockedItems:[],
+                fromFieldDockedItems: [],
 
                 /**
                  * FromTitle which holds Title on the Left Side

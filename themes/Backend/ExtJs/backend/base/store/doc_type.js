@@ -35,14 +35,14 @@ Ext.define('Shopware.apps.Base.store.DocType', {
 
     alternateClassName: 'Shopware.store.DocType',
     storeId: 'base.DocType',
-    model : 'Shopware.apps.Base.model.DocType',
+    model: 'Shopware.apps.Base.model.DocType',
     pageSize: 1000,
     remoteFilter: true,
 
-    proxy:{
-        type:'ajax',
-        url:'{url action="getDocTypes"}',
-        reader:{
+    proxy: {
+        type: 'ajax',
+        url: '{url action="getDocTypes"}',
+        reader: {
             type: 'json',
             root: 'data',
             totalProperty: 'total'

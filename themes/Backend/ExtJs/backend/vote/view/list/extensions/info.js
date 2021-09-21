@@ -32,7 +32,7 @@
 //{block name="backend/vote/view/list/extensions/info"}
 Ext.define('Shopware.apps.Vote.view.list.extensions.Info', {
     extend: 'Shopware.listing.InfoPanel',
-    alias:  'widget.vote-listing-info-panel',
+    alias: 'widget.vote-listing-info-panel',
     width: 320,
     mixins: {
         helper: 'Shopware.apps.Vote.view.PointHelper'
