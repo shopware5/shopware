@@ -126,7 +126,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                         uncheckedValue: false,
                         inputValue: true
                     }
-                ] }
+                ]
+            }
         ];
     }
 

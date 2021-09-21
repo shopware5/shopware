@@ -16,5 +16,6 @@ module.exports = {
     },
     rules: {
         'key-spacing': 2,
+        'object-curly-newline': ['error', {'consistent': true}]
     }
 };

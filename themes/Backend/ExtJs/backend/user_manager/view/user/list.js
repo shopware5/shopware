@@ -103,7 +103,8 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
             tooltip: '{s name="list_users/edittooltip"}Edit this user{/s}',
             handler: function (view, rowIndex, colIndex, item) {
                 me.fireEvent('editUser', view, rowIndex, colIndex, item);
-        } });
+            }
+        });
         /* {/if} */
 
         me.dockedItems = me.createDockedToolBar();

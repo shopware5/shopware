@@ -139,7 +139,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
                         uncheckedValue: false,
                         inputValue: true
                     }
-                ] }
+                ]
+            }
         ];
     }
 
