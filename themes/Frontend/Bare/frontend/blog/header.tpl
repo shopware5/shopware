@@ -60,12 +60,12 @@
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
-    {* Count of available product pages *}
-    {$pages = ceil($sNumberArticles / $sPerPage)}
+    {* @deprecated: variable $pages will be removed with the next minor update v5.8.0. Use $sNumberPages instead. *}
+    {$pages = $sNumberPages}
 
     {if $sArticle}
         <link rel="canonical" href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" />
-    {elseif {config name="seoIndexPaginationLinks"} && $pages > 1}
+    {elseif {config name="seoIndexPaginationLinks"} && $sNumberPages > 1}
 
         {* Previous rel tag *}
         {if $sPage > 1}
@@ -74,7 +74,7 @@
         {/if}
 
         {* Next rel tag *}
-        {if $pages >= $sPage + 1}
+        {if $sNumberPages >= $sPage + 1}
             {$sCategoryContent.canonicalParams.sPage = $sPage + 1}
             <link rel="next" href="{url params = $sCategoryContent.canonicalParams}">
         {/if}
