@@ -19,3 +19,5 @@ Backend/ExtJs/backend/benchmark/template/local/vendor/js/chart.js
 
 # Ignored because of the Smarty syntax which is invalid JavaScript
 Backend/ExtJs/backend/article/view/detail/base.js
+Backend/ExtJs/backend/article/view/variant/list.js
+Backend/ExtJs/backend/article/view/variant/detail.js
