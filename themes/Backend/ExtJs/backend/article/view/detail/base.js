@@ -183,7 +183,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             name: 'mainDetail[number]',
             dataIndex: 'mainDetail[number]',
             fieldLabel: me.snippets.number,
-            regex: new RegExp('{$orderNumberRegex}'),
+            regex: new RegExp({$orderNumberRegex}),
             regexText: me.snippets.regexNumberValidation,
             allowBlank: false,
             enableKeyEvents: true,

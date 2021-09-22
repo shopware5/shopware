@@ -16,3 +16,8 @@ Backend/ExtJs/backend/base/bootstrap.js
 Backend/ExtJs/backend/base/component/Shopware.form.field.TinyMCE.js
 Backend/ExtJs/backend/base/component/Shopware.global.ErrorReporter.js
 Backend/ExtJs/backend/benchmark/template/local/vendor/js/chart.js
+
+# Ignored because of the Smarty syntax which is invalid JavaScript
+Backend/ExtJs/backend/article/view/detail/base.js
+Backend/ExtJs/backend/article/view/variant/list.js
+Backend/ExtJs/backend/article/view/variant/detail.js

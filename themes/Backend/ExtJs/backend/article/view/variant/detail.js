@@ -394,6 +394,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
                 fieldLabel: me.snippets.baseFieldSet.number,
                 allowBlank: false,
                 enableKeyEvents: true,
+                regex: new RegExp({$orderNumberRegex}),
                 checkChangeBuffer: 700,
                 vtype: 'remote',
                 validationUrl: '{url action="validateNumber"}',
