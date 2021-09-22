@@ -450,7 +450,8 @@ class Shopware_Components_Translation
 
         // Save the translated objects
         foreach ($orders as &$order) {
-            $orderDocuments = $order['documents'];
+            $orderDocuments = \is_array($order['documents']) ? $order['documents'] : [];
+
             for ($documentCounter = 0, $orderDocumentsCount = \count($orderDocuments); $documentCounter < $orderDocumentsCount; ++$documentCounter) {
                 $type = $orderDocuments[$documentCounter]['type'];
                 $order['documents'][$documentCounter]['type'] = $translatedDocumentTypes[$type['id']];
