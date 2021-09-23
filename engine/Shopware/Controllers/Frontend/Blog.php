@@ -38,6 +38,8 @@ use Shopware\Models\Category\Repository as CategoryRepository;
 use Shopware\Models\CommentConfirm\CommentConfirm;
 use Shopware\Models\CommentConfirm\Repository as CommentConfirmRepository;
 use Shopware\Models\Shop\Shop;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Frontend Controller for the blog article listing and the detail page.
@@ -157,17 +159,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             throw new Enlight_Controller_Exception('Blog category missing, non-existent or invalid for the current shop', 404);
         }
 
-        $session = $this->get('session');
-
-        // PerPage
-        if (!empty($this->Request()->getParam('sPerPage'))) {
-            $session->offsetSet('sPerPage', (int) $this->Request()->getParam('sPerPage'));
-        }
-
-        $perPage = (int) $session->offsetGet('sPerPage');
-        if (empty($perPage)) {
-            $perPage = (int) $this->get('config')->get('articlesPerPage');
-        }
+        $perPage = $this->getPerPage($this->Request(), $this->container->get('session'));
 
         $filter = $this->createFilter($filterDate, $filterAuthor, $filterTags);
 
@@ -262,6 +254,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             'sFilterTags' => $this->getTagsFilterData($blogCategoryIds, $filter, $shopId),
             'sCategoryInfo' => $categoryContent,
             'sBlogArticles' => $blogArticles,
+            'sNumberPages' => (int) ceil($totalResult / $perPage),
         ];
 
         $filters = [
@@ -368,7 +361,12 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         $breadcrumb[] = ['link' => $blogDetailLink, 'name' => $blogArticleData['title']];
 
-        $this->View()->assign(['sBreadcrumb' => $breadcrumb, 'sArticle' => $blogArticleData, 'rand' => Random::getAlphanumericString(32)]);
+        $this->View()->assign([
+            'sBreadcrumb' => $breadcrumb,
+            'sArticle' => $blogArticleData,
+            'rand' => Random::getAlphanumericString(32),
+            'sNumberPages' => 1,
+        ]);
     }
 
     /**
@@ -724,5 +722,24 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         return $data;
+    }
+
+    private function getPerPage(Request $request, SessionInterface $session): int
+    {
+        if (!empty($request->attributes->get('sPerPage'))) {
+            $session->set('sPerPage', (int) $request->attributes->get('sPerPage'));
+        }
+
+        $perPage = (int) $session->get('sPerPage');
+
+        if ($perPage < 1) {
+            $perPage = (int) $this->container->get('config')->get('articlesPerPage');
+        }
+
+        if ($perPage < 1) {
+            return 1;
+        }
+
+        return $perPage;
     }
 }

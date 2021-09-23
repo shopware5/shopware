@@ -17,10 +17,17 @@ variables:
     SW_BASE_PATH: ""
     ELASTICSEARCH_HOST: elasticsearch
 
+workflow:
+    rules:
+        - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+        - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
+          when: never
+        - if: '$CI_COMMIT_BRANCH'
+
 stages:
     - Static analysis
     - Unit
-    - E2E
+    - End-to-end testing
     - Security
 
 default:
@@ -173,8 +180,7 @@ Elasticsearch 7:
 
 .mink_base:
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.4
-    stage: E2E
+    stage: End-to-end testing
     artifacts:
         when: always
         expire_in: 1 week
@@ -199,51 +205,16 @@ Elasticsearch 7:
             alias: mysql
             command: [ "mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password" ]
 
-
-Mink Account:
+Mink:
     extends: .mink_base
-    variables:
-        MINK_TAG: account
-
-Mink Checkout:
-    extends: .mink_base
-    variables:
-        MINK_TAG: checkout1
-
-Mink Checkout 2:
-    extends: .mink_base
-    variables:
-        MINK_TAG: checkout2
-
-Mink Detail:
-    extends: .mink_base
-    variables:
-        MINK_TAG: detail
-
-Mink Listing:
-    extends: .mink_base
-    variables:
-        MINK_TAG: listing
-
-Mink Note:
-    extends: .mink_base
-    variables:
-        MINK_TAG: note
-
-Mink Sitemap:
-    extends: .mink_base
-    variables:
-        MINK_TAG: sitemap
-
-Mink Misc:
-    extends: .mink_base
-    variables:
-        MINK_TAG: misc
-
-Mink Backend:
-    extends: .mink_base
-    variables:
-        MINK_TAG: backend
+    image: "gitlab.shopware.com:5005/shopware/5/product/image/continuous:$IMAGE_TAG"
+    parallel:
+      matrix:
+        - IMAGE_TAG: [ '7.4', '8.0' ]
+          MINK_TAG: [ 'account', 'checkout1', 'checkout2', 'detail', 'listing', 'note', 'sitemap', 'misc', 'backend' ]
+    rules:
+        - if: '$CI_PIPELINE_SOURCE == "schedule"'
+        - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $IMAGE_TAG != "8.0"'
 
 RIPS security:
     stage: Security
