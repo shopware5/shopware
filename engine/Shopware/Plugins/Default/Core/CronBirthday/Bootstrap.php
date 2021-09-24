@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\ShopRegistrationServiceInterface;
+use Shopware\Models\Shop\Shop;
+
 class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public function install()
@@ -128,11 +131,10 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
                 continue;
             }
 
-            /** @var \Shopware\Models\Shop\Repository $repository */
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+            $repository = Shopware()->Models()->getRepository(Shop::class);
             $shopId = is_numeric($user['language']) ? $user['language'] : $user['subshopID'];
             $shop = $repository->getActiveById($shopId);
-            $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+            $this->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
             //language subshopID
             $context = [

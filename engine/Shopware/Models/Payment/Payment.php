@@ -28,7 +28,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Attribute\Payment as PaymentAttribute;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Customer\PaymentData;
 use Shopware\Models\Plugin\Plugin;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware payment model represents a single payment type.
@@ -51,7 +54,7 @@ use Shopware\Models\Plugin\Plugin;
 class Payment extends ModelEntity
 {
     /**
-     * @var ArrayCollection<\Shopware\Models\Country\Country>
+     * @var ArrayCollection<Country>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Country\Country", inversedBy="payments")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
@@ -75,7 +78,7 @@ class Payment extends ModelEntity
     protected $attribute;
 
     /**
-     * @var Plugin
+     * @var Plugin|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="payments")
      * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
@@ -83,14 +86,14 @@ class Payment extends ModelEntity
     protected $plugin;
 
     /**
-     * @var ArrayCollection<\Shopware\Models\Payment\PaymentInstance>
+     * @var ArrayCollection<PaymentInstance>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="paymentMean")
      */
     protected $paymentInstances;
 
     /**
-     * @var ArrayCollection<\Shopware\Models\Customer\PaymentData>
+     * @var ArrayCollection<PaymentData>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="paymentMean")
      */
@@ -159,14 +162,14 @@ class Payment extends ModelEntity
      *
      * @ORM\Column(name="debit_percent", type="float", nullable=false)
      */
-    private $debitPercent = 0;
+    private $debitPercent = 0.0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="surcharge", type="float", nullable=false)
      */
-    private $surcharge = 0;
+    private $surcharge = 0.0;
 
     /**
      * @var string
@@ -239,7 +242,7 @@ class Payment extends ModelEntity
     private $source;
 
     /**
-     * @var ArrayCollection<\Shopware\Models\Shop\Shop>
+     * @var ArrayCollection<Shop>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinTable(name="s_core_paymentmeans_subshops",
@@ -254,7 +257,7 @@ class Payment extends ModelEntity
     private $shops;
 
     /**
-     * @var ArrayCollection<\Shopware\Models\Payment\RuleSet>
+     * @var ArrayCollection<RuleSet>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\RuleSet", mappedBy="payment")
      * @ORM\JoinColumn(name="id", referencedColumnName="paymentID")
@@ -706,7 +709,7 @@ class Payment extends ModelEntity
     /**
      * Gets the countries related to the payment
      *
-     * @return ArrayCollection<\Shopware\Models\Country\Country>
+     * @return ArrayCollection<Country>
      */
     public function getCountries()
     {
@@ -716,7 +719,7 @@ class Payment extends ModelEntity
     /**
      * Sets the countries related to the payment
      *
-     * @param ArrayCollection<\Shopware\Models\Country\Country> $countries
+     * @param ArrayCollection<Country> $countries
      *
      * @return Payment
      */
@@ -730,7 +733,7 @@ class Payment extends ModelEntity
     /**
      * Gets the shops related to the payment
      *
-     * @return ArrayCollection<\Shopware\Models\Shop\Shop>
+     * @return ArrayCollection<Shop>
      */
     public function getShops()
     {
@@ -740,7 +743,7 @@ class Payment extends ModelEntity
     /**
      * Sets the shops related to the payment
      *
-     * @param ArrayCollection<\Shopware\Models\Shop\Shop> $shops
+     * @param ArrayCollection<Shop> $shops
      *
      * @return Payment
      */
@@ -778,7 +781,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Payment\RuleSet>
+     * @return ArrayCollection<RuleSet>
      */
     public function getRuleSets()
     {
@@ -786,7 +789,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<\Shopware\Models\Payment\RuleSet> $ruleSets
+     * @param ArrayCollection<RuleSet> $ruleSets
      *
      * @return Payment
      */
@@ -816,7 +819,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @return Plugin
+     * @return Plugin|null
      */
     public function getPlugin()
     {
@@ -824,7 +827,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @param Plugin $plugin
+     * @param Plugin|null $plugin
      */
     public function setPlugin($plugin)
     {
@@ -832,7 +835,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<\Shopware\Models\Payment\PaymentInstance> $paymentInstances
+     * @param ArrayCollection<PaymentInstance> $paymentInstances
      */
     public function setPaymentInstances($paymentInstances)
     {
@@ -840,7 +843,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Payment\PaymentInstance>
+     * @return ArrayCollection<PaymentInstance>
      */
     public function getPaymentInstances()
     {
@@ -848,7 +851,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<\Shopware\Models\Customer\PaymentData> $paymentData
+     * @param ArrayCollection<PaymentData> $paymentData
      */
     public function setPaymentData($paymentData)
     {
@@ -856,7 +859,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Customer\PaymentData>
+     * @return ArrayCollection<PaymentData>
      */
     public function getPaymentData()
     {

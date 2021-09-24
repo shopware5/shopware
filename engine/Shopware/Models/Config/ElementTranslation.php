@@ -26,6 +26,7 @@ namespace Shopware\Models\Config;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Shop\Locale;
 
 /**
  * @ORM\Table(name="s_core_config_element_translations")
@@ -34,20 +35,20 @@ use Shopware\Components\Model\ModelEntity;
 class ElementTranslation extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Config\Element
+     * @var Element
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Config\Element", inversedBy="translations")
-     * @ORM\JoinColumn(name="element_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="element_id", referencedColumnName="id", nullable=false)
      */
     protected $element;
 
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Shop\Locale
+     * @var Locale
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale")
-     * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="locale_id", referencedColumnName="id", nullable=false)
      */
     protected $locale;
 
@@ -137,7 +138,7 @@ class ElementTranslation extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Config\Element
+     * @return Element
      */
     public function getElement()
     {
@@ -145,7 +146,7 @@ class ElementTranslation extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Config\Element $element
+     * @param Element $element
      *
      * @return ElementTranslation
      */
@@ -157,7 +158,7 @@ class ElementTranslation extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Locale $locale
+     * @param Locale $locale
      */
     public function setLocale($locale)
     {
@@ -165,7 +166,7 @@ class ElementTranslation extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Locale
+     * @return Locale
      */
     public function getLocale()
     {

@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Customer;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Attribute\CustomerGroup;
@@ -51,7 +52,7 @@ class Group extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Customer\Discount>
+     * @var ArrayCollection<Discount>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Discount", mappedBy="group", orphanRemoval=true, cascade={"persist"})
      */
@@ -69,7 +70,7 @@ class Group extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Customer\Customer>
+     * @var ArrayCollection<Customer>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Customer", mappedBy="group")
      */
@@ -145,7 +146,7 @@ class Group extends ModelEntity
      *
      * @ORM\Column(name="discount", type="float", nullable=false)
      */
-    private $discount = 0;
+    private $discount = 0.0;
 
     /**
      * Contains the minimum value of an order for this customer group.
@@ -155,7 +156,7 @@ class Group extends ModelEntity
      *
      * @ORM\Column(name="minimumorder", type="float", nullable=false)
      */
-    private $minimumOrder = 0;
+    private $minimumOrder = 0.0;
 
     /**
      * Contains the minimum surcharge value of an order for this customer group.
@@ -165,11 +166,11 @@ class Group extends ModelEntity
      *
      * @ORM\Column(name="minimumordersurcharge", type="float", nullable=false)
      */
-    private $minimumOrderSurcharge = 0;
+    private $minimumOrderSurcharge = 0.0;
 
     public function __construct()
     {
-        $this->discounts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->discounts = new ArrayCollection();
     }
 
     /**
@@ -394,7 +395,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<Discount>
+     * @return ArrayCollection<Discount>
      */
     public function getDiscounts()
     {
@@ -402,7 +403,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Customer\Discount> $discounts
+     * @param ArrayCollection<Discount> $discounts
      */
     public function setDiscounts($discounts)
     {
@@ -418,7 +419,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Attribute\CustomerGroup>|null $attribute
+     * @param ArrayCollection<CustomerGroup>|null $attribute
      *
      * @return Group
      */

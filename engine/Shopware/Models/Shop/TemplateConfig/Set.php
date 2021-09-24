@@ -78,7 +78,7 @@ class Set extends ModelEntity
      *     targetEntity="Shopware\Models\Shop\Template",
      *     inversedBy="configSets"
      * )
-     * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="template_id", referencedColumnName="id", nullable=false)
      */
     protected $template;
 

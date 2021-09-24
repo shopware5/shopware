@@ -40,7 +40,7 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
      */
     public function getArticlePriceVariations($configuratorSetId)
     {
-        $variationRules = Shopware()->Models()
+        $variationRules = $this->get('models')
             ->getRepository(Article::class)
             ->getConfiguratorPriceVariationsQuery($configuratorSetId)
             ->getArrayResult();
@@ -94,7 +94,7 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
             $data = $this->Request()->getPost();
 
             /** @var PriceVariation $priceVariation */
-            $priceVariation = Shopware()->Models()
+            $priceVariation = $this->get('models')
                 ->getRepository(PriceVariation::class)
                 ->find($data['id']);
 
@@ -103,13 +103,13 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
             $priceVariation->fromArray($data);
 
             /** @var Set $configuratorSet */
-            $configuratorSet = Shopware()->Models()
+            $configuratorSet = $this->get('models')
                 ->getRepository(Set::class)
                 ->find($data['configuratorSetId']);
             $priceVariation->setConfiguratorSet($configuratorSet);
 
-            Shopware()->Models()->persist($priceVariation);
-            Shopware()->Models()->flush();
+            $this->get('models')->persist($priceVariation);
+            $this->get('models')->flush();
 
             $data['id'] = $priceVariation->getId();
             $data = $this->explodePriceVariation($data);
@@ -138,12 +138,12 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
 
             foreach ($postData as $data) {
                 /** @var PriceVariation $priceVariation */
-                $priceVariation = Shopware()->Models()
+                $priceVariation = $this->get('models')
                     ->getRepository(PriceVariation::class)
                     ->find($data['id']);
 
-                Shopware()->Models()->remove($priceVariation);
-                Shopware()->Models()->flush();
+                $this->get('models')->remove($priceVariation);
+                $this->get('models')->flush();
 
                 $this->View()->assign([
                     'success' => true,
@@ -193,7 +193,7 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
 
         $optionIds = explode('|', trim($variation['options'], '|'));
 
-        $options = Shopware()->Models()
+        $options = $this->get('models')
             ->getRepository(Article::class)
             ->getAllConfiguratorOptionsIndexedByIdQuery(['options.id' => $optionIds])
             ->getResult();

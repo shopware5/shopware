@@ -24,6 +24,9 @@
 
 use Shopware\Models\Search\CustomFacet;
 
+/**
+ * @extends Shopware_Controllers_Backend_Application<CustomFacet>
+ */
 class Shopware_Controllers_Backend_CustomFacet extends Shopware_Controllers_Backend_Application
 {
     protected $model = CustomFacet::class;

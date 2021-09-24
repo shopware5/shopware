@@ -822,6 +822,7 @@ class Helper
         ?Currency $currency = null
     ): TestContext {
         if ($currency === null) {
+            \assert($shop->getCurrency() instanceof Currency);
             $currency = $this->converter->convertCurrency($shop->getCurrency());
         } else {
             $currency = $this->converter->convertCurrency($currency);

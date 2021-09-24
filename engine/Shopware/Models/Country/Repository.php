@@ -26,6 +26,9 @@ namespace Shopware\Models\Country;
 
 use Shopware\Components\Model\ModelRepository;
 
+/**
+ * @extends ModelRepository<Country>
+ */
 class Repository extends ModelRepository
 {
     /**

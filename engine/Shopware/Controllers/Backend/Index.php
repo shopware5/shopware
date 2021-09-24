@@ -22,7 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\ShopwareReleaseStruct;
+use Shopware\Models\Menu\Menu;
 
 class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
@@ -127,7 +131,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $firstRunWizardEnabled = $this->isFirstRunWizardEnabled($identity);
         $sbpLogin = 0;
         if ($firstRunWizardEnabled) {
-            /** @var \Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct $tokenData */
+            /** @var AccessTokenStruct $tokenData */
             $tokenData = Shopware()->BackendSession()->get('accessToken');
 
             $sbpLogin = (int) (!empty($tokenData) && $tokenData->getExpire() >= new DateTime('+30 seconds'));
@@ -137,9 +141,9 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $this->View()->assign('installationSurvey', $this->checkForInstallationSurveyNecessity($identity), true);
 
         /** @var Shopware_Components_Config $config */
-        $config = $this->get(\Shopware_Components_Config::class);
+        $config = $this->get(Shopware_Components_Config::class);
 
-        /** @var \Shopware\Components\ShopwareReleaseStruct $shopwareRelease */
+        /** @var ShopwareReleaseStruct $shopwareRelease */
         $shopwareRelease = $this->container->get('shopware.release');
 
         $this->View()->assign('SHOPWARE_VERSION', $shopwareRelease->getVersion());
@@ -173,7 +177,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
             return;
         }
 
-        $localeRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)
+        $localeRepository = $this->container->get(ModelManager::class)
             ->getRepository(Shopware\Models\Shop\Locale::class);
 
         $locale = $localeRepository->find($localeId);
@@ -219,9 +223,9 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     {
         $auth = $this->auth->checkAuth();
         if ($auth === null) {
-            throw new \Enlight_Controller_Exception('Unauthorized', 401);
+            throw new Enlight_Controller_Exception('Unauthorized', 401);
         }
-        /** @var \Shopware\Components\ShopwareReleaseStruct $shopwareRelease */
+        /** @var ShopwareReleaseStruct $shopwareRelease */
         $shopwareRelease = $this->container->get('shopware.release');
 
         $this->View()->assign('SHOPWARE_VERSION', $shopwareRelease->getVersion());
@@ -237,11 +241,10 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     public function menuAction()
     {
         if ($this->auth->checkAuth() === null) {
-            throw new \Enlight_Controller_Exception('Unauthorized', 401);
+            throw new Enlight_Controller_Exception('Unauthorized', 401);
         }
 
-        /** @var \Shopware\Models\Menu\Repository $menu */
-        $menu = Shopware()->Models()->getRepository(\Shopware\Models\Menu\Menu::class);
+        $menu = $this->get('models')->getRepository(Menu::class);
         $nodes = $menu->createQueryBuilder('m')
             ->select('m')
             ->leftJoin('m.plugin', 'p')
@@ -268,7 +271,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     {
         // Only admins can see the wizard
         if ($identity->role->getAdmin()) {
-            return $this->container->get(\Shopware_Components_Config::class)->get('firstRunWizardEnabled', false);
+            return $this->container->get(Shopware_Components_Config::class)->get('firstRunWizardEnabled', false);
         }
 
         return false;
@@ -315,12 +318,12 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         if ($this->checkIsFeedbackRequired() || !$identity->role->getAdmin()) {
             return false;
         }
-        $installationSurvey = $this->container->get(\Shopware_Components_Config::class)->get('installationSurvey', false);
-        $installationDate = \DateTime::createFromFormat('Y-m-d H:i', $this->container->get(\Shopware_Components_Config::class)->get('installationDate'));
+        $installationSurvey = $this->container->get(Shopware_Components_Config::class)->get('installationSurvey', false);
+        $installationDate = DateTime::createFromFormat('Y-m-d H:i', $this->container->get(Shopware_Components_Config::class)->get('installationDate'));
         if (!$installationSurvey || !$installationDate) {
             return false;
         }
-        $interval = $installationDate->diff(new \DateTime());
+        $interval = $installationDate->diff(new DateTime());
 
         return $interval->days >= self::MIN_DAYS_INSTALLATION_SURVEY;
     }
@@ -330,19 +333,18 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      */
     private function isBIOverviewEnabled()
     {
-        if (!$this->get(\Shopware_Components_Config::class)->get('benchmarkTeaser')) {
+        if (!$this->get(Shopware_Components_Config::class)->get('benchmarkTeaser')) {
             return false;
         }
 
-        /** @var \Shopware\Models\Benchmark\Repository $configRepository */
         $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
         $shopwareVersionText = $this->container->getParameter('shopware.release.version_text');
 
         $waitingOver = true;
-        $installationDate = \DateTime::createFromFormat('Y-m-d H:i', $this->container->get(\Shopware_Components_Config::class)->get('installationDate'));
+        $installationDate = DateTime::createFromFormat('Y-m-d H:i', $this->container->get(Shopware_Components_Config::class)->get('installationDate'));
         if ($installationDate) {
-            $interval = $installationDate->diff(new \DateTime());
+            $interval = $installationDate->diff(new DateTime());
 
             if ($interval->days < self::MIN_DAYS_BI_TEASER) {
                 $waitingOver = false;
@@ -352,12 +354,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         return $waitingOver && $shopwareVersionText !== '___VERSION_TEXT___' && $configRepository->getConfigsCount() === 0;
     }
 
-    /**
-     * @return bool
-     */
-    private function isBIActive()
+    private function isBIActive(): bool
     {
-        /** @var \Shopware\Models\Benchmark\Repository $configRepository */
         $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
         $validShopCount = \count($configRepository->getValidShops());

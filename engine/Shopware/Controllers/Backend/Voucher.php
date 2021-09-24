@@ -450,7 +450,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     private function getVoucherRepository()
     {
         if ($this->voucherRepository === null) {
-            $this->voucherRepository = Shopware()->Models()->getRepository(Voucher::class);
+            $this->voucherRepository = $this->get('models')->getRepository(Voucher::class);
         }
 
         return $this->voucherRepository;
@@ -464,7 +464,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = $this->get('models');
         }
 
         return $this->manager;

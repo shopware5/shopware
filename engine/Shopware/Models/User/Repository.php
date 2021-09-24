@@ -33,6 +33,8 @@ use Shopware\Components\Model\QueryBuilder;
  * The customer model repository is responsible to load all customer data.
  * It supports the standard functions like findAll or findBy and extends the standard repository for
  * some specific functions to return the model data as array.
+ *
+ * @extends ModelRepository<User>
  */
 class Repository extends ModelRepository
 {

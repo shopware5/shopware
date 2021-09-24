@@ -28,7 +28,6 @@ use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\Routing\RouterInterface;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Currency;
-use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
 /**
@@ -82,7 +81,6 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 continue;
             }
 
-            /** @var Repository $repository */
             $repository = Shopware()->Models()->getRepository(Shop::class);
 
             $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
@@ -91,7 +89,6 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 continue;
             }
 
-            /** @var Currency $repository */
             $repository = Shopware()->Models()->getRepository(Currency::class);
             $shop->setCurrency($repository->find($order['currencyID']));
             $this->get(ShopRegistrationServiceInterface::class)->registerShop($shop);

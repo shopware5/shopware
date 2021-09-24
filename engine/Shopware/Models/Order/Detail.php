@@ -27,6 +27,8 @@ namespace Shopware\Models\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Article\Detail as ArticleDetail;
+use Shopware\Models\Attribute\OrderDetail;
+use Shopware\Models\Tax\Tax;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -49,37 +51,37 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Detail extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Order\Order
+     * @var Order
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="details")
-     * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="orderID", referencedColumnName="id", nullable=false)
      */
     protected $order;
 
     /**
-     * @var \Shopware\Models\Order\Status
+     * @var Status
      *
      * @Assert\NotBlank()
      *
-     * @var \Shopware\Models\Order\Status
+     * @var Status
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\DetailStatus")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
+     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=false)
      */
     protected $status;
 
     /**
-     * @var \Shopware\Models\Tax\Tax
+     * @var Tax|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Tax\Tax")
-     * @ORM\JoinColumn(name="taxID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="taxID", referencedColumnName="id", nullable=true)
      */
     protected $tax;
 
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\OrderDetail|null
+     * @var OrderDetail|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderDetail", mappedBy="orderDetail", orphanRemoval=true, cascade={"persist"})
      */
@@ -88,7 +90,7 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Order\Esd
+     * @var Esd|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Esd", mappedBy="orderDetail")
      */
@@ -529,7 +531,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Order\DetailStatus $status
+     * @param DetailStatus $status
      */
     public function setStatus($status)
     {
@@ -537,7 +539,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Tax\Tax|null
+     * @return Tax|null
      */
     public function getTax()
     {
@@ -545,7 +547,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Tax\Tax $tax
+     * @param Tax|null $tax
      */
     public function setTax($tax)
     {
@@ -553,7 +555,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\OrderDetail|null
+     * @return OrderDetail|null
      */
     public function getAttribute()
     {
@@ -561,17 +563,17 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\OrderDetail|array|null $attribute
+     * @param OrderDetail|array|null $attribute
      *
-     * @return \Shopware\Models\Order\Detail
+     * @return Detail
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\OrderDetail::class, 'attribute', 'orderDetail');
+        return $this->setOneToOne($attribute, OrderDetail::class, 'attribute', 'orderDetail');
     }
 
     /**
-     * @param \Shopware\Models\Order\Esd $esd
+     * @param Esd|null $esd
      */
     public function setEsd($esd)
     {
@@ -579,7 +581,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Order\Esd
+     * @return Esd|null
      */
     public function getEsd()
     {

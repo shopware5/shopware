@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,11 +24,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Models\Order;
+namespace Shopware\Tests\Functional\Models\Order;
 
 class StatusTest extends \Enlight_Components_Test_TestCase
 {
-    public function testStatusIsPersistableViaOrm()
+    public function testStatusIsPersistableViaOrm(): void
     {
         $order = new \Shopware\Models\Order\Status();
         $order->setId(123456789);

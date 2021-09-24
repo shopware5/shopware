@@ -37,7 +37,7 @@ class ElementViewport extends ModelEntity
      * @var \Shopware\Models\Emotion\Element
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Element", inversedBy="viewports")
-     * @ORM\JoinColumn(name="elementID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="elementID", referencedColumnName="id", nullable=false)
      */
     protected $element;
 
@@ -45,7 +45,7 @@ class ElementViewport extends ModelEntity
      * @var \Shopware\Models\Emotion\Emotion
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Emotion")
-     * @ORM\JoinColumn(name="emotionID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="emotionID", referencedColumnName="id", nullable=false)
      */
     protected $emotion;
 

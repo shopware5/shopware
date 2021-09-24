@@ -25,10 +25,12 @@
 use Shopware\Bundle\MailBundle\Service\Filter\NewsletterMailFilter;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Routing\RouterInterface;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Components\Validator\EmailValidator;
 use Shopware\Models\Plugin\Plugin;
+use Shopware\Models\Shop\Shop;
 use Symfony\Component\HttpFoundation\Response;
 
 class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action implements CSRFWhitelistAware
@@ -384,11 +386,14 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         if (empty($mailing)) {
             return null;
         }
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $this->get('models')->getRepository(Shop::class);
         $shop = $repository->getActiveById($mailing['languageID']);
+        if ($shop === null) {
+            throw new ModelNotFoundException(Shop::class, $mailing['languageID']);
+        }
 
         $this->Request()
-            ->setHttpHost($shop->getHost())
+            ->setHttpHost((string) $shop->getHost())
             ->setBasePath($shop->getBasePath())
             ->setBaseUrl($shop->getBasePath());
 
@@ -863,7 +868,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         }
 
         /** @var Plugin|null $plugin */
-        $plugin = Shopware()->Models()->find(Plugin::class, $pluginBootstrap->getId());
+        $plugin = $this->get('models')->find(Plugin::class, $pluginBootstrap->getId());
         if (!$plugin) {
             return null;
         }

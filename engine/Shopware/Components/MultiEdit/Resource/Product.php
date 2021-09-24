@@ -190,7 +190,7 @@ class Product implements ResourceInterface
             } else {
                 $detailModel = $entityManager->find(Detail::class, $primaryIdentifiers['detail']);
                 // store net prices
-                $tax = $detailModel->getArticle()->getTax()->getTax() / 100 + 1;
+                $tax = (float) $detailModel->getArticle()->getTax()->getTax() / 100 + 1;
                 $priceModel = $entityManager->getRepository($entity)->findOneBy(
                     ['articleDetailsId' => $detailModel->getId(), 'customerGroupKey' => 'EK', 'from' => 1]
                 );

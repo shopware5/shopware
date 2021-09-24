@@ -150,7 +150,7 @@ class History extends ModelEntity
      * @var \Shopware\Models\Order\Order
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="history")
-     * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="orderID", referencedColumnName="id", nullable=false)
      */
     private $order;
 

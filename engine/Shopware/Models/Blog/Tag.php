@@ -38,7 +38,7 @@ class Tag extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Blog\Blog|null
+     * @var Blog|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Blog\Blog", inversedBy="tags")
      * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
@@ -99,7 +99,7 @@ class Tag extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Blog\Blog|null
+     * @return Blog|null
      */
     public function getBlog()
     {
@@ -107,7 +107,7 @@ class Tag extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Blog\Blog $blog
+     * @param Blog $blog
      */
     public function setBlog($blog)
     {

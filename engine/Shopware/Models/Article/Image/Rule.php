@@ -41,7 +41,7 @@ class Rule extends ModelEntity
      * @var \Shopware\Models\Article\Image\Mapping
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Image\Mapping", inversedBy="rules")
-     * @ORM\JoinColumn(name="mapping_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="mapping_id", referencedColumnName="id", nullable=false)
      */
     protected $mapping;
 
@@ -51,7 +51,7 @@ class Rule extends ModelEntity
      * @var \Shopware\Models\Article\Configurator\Option
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Option")
-     * @ORM\JoinColumn(name="option_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="option_id", referencedColumnName="id", nullable=false)
      */
     protected $option;
 

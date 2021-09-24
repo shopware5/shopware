@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,17 +24,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Models;
+namespace Shopware\Tests\Functional\Models;
 
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Mail\Mail;
+use Shopware\Models\Mail\Repository;
 use Shopware\Models\Order\Status;
 
 class MailTest extends \Enlight_Components_Test_TestCase
 {
     /**
-     * @var array
+     * @var array<string, mixed>
      */
-    public $testData = [
+    public array $testData = [
         'name' => 'Testmail123',
         'fromMail' => 'Shopware Demoshop',
         'fromName' => 'test@example.com',
@@ -54,23 +58,17 @@ class MailTest extends \Enlight_Components_Test_TestCase
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
-    public $translation = [
+    public array $translation = [
         'fromMail' => 'Shopware Demoshop EN',
         'subject' => 'Test Email Subject EN',
         'content' => 'Plaintext Content Example EN',
     ];
 
-    /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    protected $em;
+    protected ModelManager $em;
 
-    /**
-     * @var \Shopware\Models\User\Repository
-     */
-    protected $repo;
+    protected Repository $repo;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -81,8 +79,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
         parent::setUp();
 
         $this->em = Shopware()->Models();
-        $this->repo = Shopware()->Models()
-                                ->getRepository(Mail::class);
+        $this->repo = Shopware()->Models()->getRepository(Mail::class);
     }
 
     /**
@@ -102,7 +99,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
     /**
      * Testcase
      */
-    public function testGetterAndSetter()
+    public function testGetterAndSetter(): void
     {
         $mail = new Mail();
 
@@ -124,7 +121,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
     /**
      * Testcase
      */
-    public function testFromArrayWorks()
+    public function testFromArrayWorks(): void
     {
         $mail = new Mail();
         $mail->fromArray($this->testData);
@@ -145,7 +142,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
      *
      * @depends testFromArrayWorks
      */
-    public function testTranslationWorks()
+    public function testTranslationWorks(): void
     {
         $mail = new Mail();
         $mail->fromArray($this->testData);
@@ -167,7 +164,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
     /**
      * Testcase
      */
-    public function testMailShouldBePersisted()
+    public function testMailShouldBePersisted(): void
     {
         $mail = new Mail();
         $mail->fromArray($this->testData);
@@ -197,7 +194,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
     /**
      * Testcase
      */
-    public function testGetAttachmentShouldReturnEmptyArrayInitial()
+    public function testGetAttachmentShouldReturnEmptyArrayInitial(): void
     {
         $mail = new Mail();
         static::assertEquals($mail->getAttachments(), []);
@@ -206,7 +203,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
     /**
      * Testcase
      */
-    public function testGetStateShouldReturnNullInitial()
+    public function testGetStateShouldReturnNullInitial(): void
     {
         $mail = new Mail();
         static::assertEquals($mail->getStatus(), null);
@@ -215,7 +212,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
     /**
      * Testcase
      */
-    public function testMailtypeShouldBeUserInitial()
+    public function testMailtypeShouldBeUserInitial(): void
     {
         $mail = new Mail();
 
@@ -225,7 +222,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
     /**
      * Test OrderState Mail
      */
-    public function testSetStateShouldSetMailtypeToState()
+    public function testSetStateShouldSetMailtypeToState(): void
     {
         $statusMock = $this->createMock(Status::class);
 
@@ -242,7 +239,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
     /**
      * Test User Mail
      */
-    public function testShouldReturnCorrectMailTypeIfTypeIsUser()
+    public function testShouldReturnCorrectMailTypeIfTypeIsUser(): void
     {
         $mail = new Mail();
         $mail->setMailtype(Mail::MAILTYPE_USER);
@@ -256,7 +253,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
     /**
      * Test System Mail
      */
-    public function testShouldReturnCorrectMailTypeIfTypeIsSystem()
+    public function testShouldReturnCorrectMailTypeIfTypeIsSystem(): void
     {
         $mail = new Mail();
         $mail->setMailtype(Mail::MAILTYPE_SYSTEM);
@@ -270,7 +267,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
     /**
      * Test OrderState Mail
      */
-    public function testShouldReturnCorrectMailTypeIfTypeIsOrderState()
+    public function testShouldReturnCorrectMailTypeIfTypeIsOrderState(): void
     {
         $statusMock = $this->createMock(Status::class);
 
@@ -291,7 +288,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
     /**
      * Test PaymentState Mail
      */
-    public function testShouldReturnCorrectMailTypeIfTypeIsPaymentState()
+    public function testShouldReturnCorrectMailTypeIfTypeIsPaymentState(): void
     {
         $statusMock = $this->createMock(Status::class);
 
@@ -312,7 +309,7 @@ class MailTest extends \Enlight_Components_Test_TestCase
     /**
      * @covers \Shopware\Models\Mail\Mail::arrayGetPath
      */
-    public function testArrayGetPath()
+    public function testArrayGetPath(): void
     {
         $input = [
             'sShop' => 'Shopware',

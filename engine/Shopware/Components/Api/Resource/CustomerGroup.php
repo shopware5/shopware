@@ -28,9 +28,9 @@ use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Exception\ValidationException;
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Customer\Discount;
 use Shopware\Models\Customer\Group;
-use Shopware\Models\Customer\Repository;
 
 /**
  * CustomerGroup API Resource
@@ -38,7 +38,7 @@ use Shopware\Models\Customer\Repository;
 class CustomerGroup extends Resource
 {
     /**
-     * @return Repository
+     * @return ModelRepository<Group>
      */
     public function getRepository()
     {

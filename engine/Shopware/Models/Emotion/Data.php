@@ -26,6 +26,8 @@ namespace Shopware\Models\Emotion;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Emotion\Library\Component;
+use Shopware\Models\Emotion\Library\Field;
 
 /**
  * @ORM\Entity()
@@ -34,34 +36,34 @@ use Shopware\Components\Model\ModelEntity;
 class Data extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Emotion\Element
+     * @var Element
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Element", inversedBy="data")
-     * @ORM\JoinColumn(name="elementID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="elementID", referencedColumnName="id", nullable=false)
      */
     protected $element;
 
     /**
-     * @var \Shopware\Models\Emotion\Emotion
+     * @var Emotion
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Emotion")
-     * @ORM\JoinColumn(name="emotionID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="emotionID", referencedColumnName="id", nullable=false)
      */
     protected $emotion;
 
     /**
-     * @var \Shopware\Models\Emotion\Library\Component
+     * @var Component
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Emotion\Library\Component")
-     * @ORM\JoinColumn(name="componentID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="componentID", referencedColumnName="id", nullable=false)
      */
     protected $component;
 
     /**
-     * @var \Shopware\Models\Emotion\Library\Field
+     * @var Field
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Emotion\Library\Field")
-     * @ORM\JoinColumn(name="fieldID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="fieldID", referencedColumnName="id", nullable=false)
      */
     protected $field;
 
@@ -79,7 +81,7 @@ class Data extends ModelEntity
     /**
      * Contains the id of the emotion
      *
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="emotionID", type="integer", nullable=false)
      */
@@ -88,7 +90,7 @@ class Data extends ModelEntity
     /**
      * Contains the name of the emotion.
      *
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="elementID", type="integer", nullable=false)
      */
@@ -119,10 +121,7 @@ class Data extends ModelEntity
 
     public function __clone()
     {
-        $this->id = null;
-        $this->emotionId = null;
-        $this->elementId = null;
-        $this->fieldId = null;
+        unset($this->id, $this->emotionId, $this->elementId, $this->fieldId);
     }
 
     /**
@@ -142,7 +141,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @param string $elementId
+     * @param int $elementId
      */
     public function setElementId($elementId)
     {
@@ -150,7 +149,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getElementId()
     {
@@ -182,7 +181,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @param string $value
+     * @param string|null $value
      */
     public function setValue($value)
     {
@@ -198,7 +197,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Emotion\Library\Field
+     * @return Field
      */
     public function getField()
     {
@@ -206,7 +205,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Emotion\Library\Field $field
+     * @param Field $field
      */
     public function setField($field)
     {
@@ -214,7 +213,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Emotion\Library\Component
+     * @return Component
      */
     public function getComponent()
     {
@@ -222,7 +221,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Emotion\Library\Component $component
+     * @param Component $component
      */
     public function setComponent($component)
     {
@@ -238,7 +237,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Emotion\Element $element
+     * @param Element $element
      */
     public function setElement($element)
     {
@@ -246,7 +245,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getEmotionId()
     {
@@ -254,7 +253,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @param string $emotionId
+     * @param int $emotionId
      */
     public function setEmotionId($emotionId)
     {
@@ -262,7 +261,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Emotion\Emotion
+     * @return Emotion
      */
     public function getEmotion()
     {
@@ -270,7 +269,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Emotion\Emotion $emotion
+     * @param Emotion $emotion
      */
     public function setEmotion($emotion)
     {

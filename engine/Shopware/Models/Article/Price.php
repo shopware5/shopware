@@ -41,7 +41,7 @@ class Price extends LazyFetchModelEntity
      * @var Detail
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="prices")
-     * @ORM\JoinColumn(name="articledetailsID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="articledetailsID", referencedColumnName="id", nullable=false)
      * @ORM\OrderBy({"customerGroupKey" = "ASC", "from" = "ASC"})
      */
     protected $detail;
@@ -61,7 +61,7 @@ class Price extends LazyFetchModelEntity
      * @var Article
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Article")
-     * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="articleID", referencedColumnName="id", nullable=false)
      */
     protected $article;
 
@@ -89,9 +89,9 @@ class Price extends LazyFetchModelEntity
     private $articleDetailsId;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="pricegroup", type="string", length=15, nullable=false)
+     * @ORM\Column(name="pricegroup", type="string", length=15, nullable=true)
      */
     private $customerGroupKey = '';
 
@@ -103,9 +103,9 @@ class Price extends LazyFetchModelEntity
     private $from = 1;
 
     /**
-     * @var int|string|null
+     * @var string
      *
-     * @ORM\Column(name="`to`", type="string", nullable=true)
+     * @ORM\Column(name="`to`", type="string", nullable=false)
      */
     private $to = 'beliebig';
 
@@ -114,27 +114,27 @@ class Price extends LazyFetchModelEntity
      *
      * @ORM\Column(name="price", type="float", nullable=false)
      */
-    private $price = 0;
+    private $price = 0.0;
 
     /**
-     * @var float
+     * @var float|null
      *
-     * @ORM\Column(name="pseudoprice", type="float", nullable=false)
+     * @ORM\Column(name="pseudoprice", type="float", nullable=true)
      */
-    private $pseudoPrice = 0;
+    private $pseudoPrice = 0.0;
 
     /**
-     * @var float
+     * @var string|null
      *
-     * @ORM\Column(name="percent", type="float", nullable=false)
+     * @ORM\Column(name="percent", type="decimal", precision=10, scale=2, nullable=true)
      */
-    private $percent = 0;
+    private $percent = '0.0';
 
     /**
-     * @var CustomerGroup
+     * @var CustomerGroup|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Customer\Group")
-     * @ORM\JoinColumn(name="pricegroup", referencedColumnName="groupkey")
+     * @ORM\JoinColumn(name="pricegroup", referencedColumnName="groupkey", nullable=true)
      */
     private $customerGroup;
 
@@ -167,7 +167,7 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @param CustomerGroup $customerGroup
+     * @param CustomerGroup|null $customerGroup
      *
      * @return Price
      */
@@ -179,14 +179,11 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @return CustomerGroup
+     * @return CustomerGroup|null
      */
     public function getCustomerGroup()
     {
-        /** @var CustomerGroup $return */
-        $return = $this->fetchLazy($this->customerGroup, ['key' => $this->customerGroupKey]);
-
-        return $return;
+        return $this->fetchLazy($this->customerGroup, ['key' => $this->customerGroupKey]);
     }
 
     /**
@@ -219,13 +216,13 @@ class Price extends LazyFetchModelEntity
         if ($to === null) {
             $to = 'beliebig';
         }
-        $this->to = $to;
+        $this->to = (string) $to;
 
         return $this;
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
     public function getTo()
     {
@@ -277,7 +274,7 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @param float $pseudoPrice
+     * @param float|null $pseudoPrice
      *
      * @return Price
      */
@@ -289,7 +286,7 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getPseudoPrice()
     {
@@ -297,7 +294,7 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @param float $percent
+     * @param string|null $percent
      *
      * @return Price
      */
@@ -309,7 +306,7 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @return float
+     * @return string|null
      */
     public function getPercent()
     {

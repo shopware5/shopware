@@ -27,6 +27,7 @@ namespace Shopware\Models\Article;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Models\Attribute\ArticleNotification as ProductNotificationAttribute;
+use Shopware\Models\Customer\Customer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -44,20 +45,20 @@ class Notification extends LazyFetchModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Detail
+     * @var Detail
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="notifications")
-     * @ORM\JoinColumn(name="ordernumber", referencedColumnName="ordernumber")
+     * @ORM\JoinColumn(name="ordernumber", referencedColumnName="ordernumber", nullable=false)
      */
     protected $articleDetail;
 
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Customer\Customer
+     * @var Customer
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Customer", inversedBy="notifications")
-     * @ORM\JoinColumn(name="mail", referencedColumnName="email")
+     * @ORM\JoinColumn(name="mail", referencedColumnName="email", nullable=false)
      */
     protected $customer;
 
@@ -244,22 +245,22 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function getArticleDetail()
     {
-        /** @var \Shopware\Models\Article\Detail $return */
+        /** @var Detail $return */
         $return = $this->fetchLazy($this->articleDetail, ['number' => $this->articleNumber]);
 
         return $return;
     }
 
     /**
-     * @return \Shopware\Models\Customer\Customer
+     * @return Customer
      */
     public function getCustomer()
     {
-        /** @var \Shopware\Models\Customer\Customer $return */
+        /** @var Customer $return */
         $return = $this->fetchLazy($this->customer, ['email' => $this->mail]);
 
         return $return;

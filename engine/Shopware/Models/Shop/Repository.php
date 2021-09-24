@@ -29,6 +29,9 @@ use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
+/**
+ * @extends ModelRepository<Shop>
+ */
 class Repository extends ModelRepository
 {
     /**

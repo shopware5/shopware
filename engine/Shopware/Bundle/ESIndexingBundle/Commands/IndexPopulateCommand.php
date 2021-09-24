@@ -25,10 +25,13 @@
 namespace Shopware\Bundle\ESIndexingBundle\Commands;
 
 use Shopware\Bundle\ESIndexingBundle\Console\ConsoleProgressHelper;
+use Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface;
+use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Commands\ShopwareCommand;
-use Shopware\Models\Shop\Repository;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop as ShopModel;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
@@ -44,8 +47,7 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
     public function completeOptionValues($optionName, CompletionContext $context)
     {
         if ($optionName === 'shopId') {
-            /** @var Repository $shopRepository */
-            $shopRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(ShopModel::class);
+            $shopRepository = $this->getContainer()->get(ModelManager::class)->getRepository(ShopModel::class);
             $queryBuilder = $shopRepository->createQueryBuilder('shop');
 
             if (is_numeric($context->getCurrentWord())) {
@@ -96,10 +98,10 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
             $shops = [];
 
             foreach ($input->getOption('shopId') as $shopId) {
-                $shops[] = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface::class)->get($shopId);
+                $shops[] = $this->container->get(ShopGatewayInterface::class)->get($shopId);
             }
         } else {
-            $shops = $this->container->get(\Shopware\Bundle\ESIndexingBundle\IdentifierSelector::class)->getShops();
+            $shops = $this->container->get(IdentifierSelector::class)->getShops();
         }
 
         /** @var ShopIndexerInterface $indexer */
@@ -107,7 +109,7 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
 
         $helper = new ConsoleProgressHelper($output);
 
-        $evaluation = $this->container->get(\Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface::class);
+        $evaluation = $this->container->get(EvaluationHelperInterface::class);
         $evaluation->setOutput($output)
             ->setActive(!$input->getOption('no-evaluation'))
             ->setStopOnError($input->getOption('stop-on-error'));

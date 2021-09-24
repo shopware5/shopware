@@ -71,7 +71,6 @@ class ProxyAwareRepositoryFactory implements RepositoryFactory
     {
         $metadata = $entityManager->getClassMetadata($entityName);
 
-        /** @var string|null $repositoryClassName */
         $repositoryClassName = $metadata->customRepositoryClassName;
         if ($repositoryClassName === null) {
             $repositoryClassName = $entityManager->getConfiguration()->getDefaultRepositoryClassName();

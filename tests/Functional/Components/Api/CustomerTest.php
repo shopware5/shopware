@@ -24,6 +24,8 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Doctrine\DBAL\Connection;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Api\Resource\Customer;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Random;
@@ -39,7 +41,7 @@ class CustomerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->exec('UPDATE s_core_countries SET allow_shipping = 0 WHERE id = 25');
+        Shopware()->Container()->get(Connection::class)->exec('UPDATE s_core_countries SET allow_shipping = 0 WHERE id = 25');
     }
 
     /**
@@ -447,7 +449,7 @@ class CustomerTest extends TestCase
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Musterstraße 123',
-                'zipcode' => 12345,
+                'zipcode' => '12345',
                 'city' => 'Musterhausen',
                 'country' => '2',
             ],
@@ -458,7 +460,7 @@ class CustomerTest extends TestCase
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Musterstraße 123',
-                'zipcode' => 12345,
+                'zipcode' => '12345',
                 'city' => 'Musterhausen',
                 'country' => '2',
             ],
@@ -520,7 +522,7 @@ class CustomerTest extends TestCase
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Musterstraße 123',
-                'zipcode' => 12345,
+                'zipcode' => '12345',
                 'city' => 'Musterhausen',
                 'country' => '2',
             ],
@@ -531,7 +533,7 @@ class CustomerTest extends TestCase
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Musterstraße 123',
-                'zipcode' => 12345,
+                'zipcode' => '12345',
                 'city' => 'Musterhausen',
                 'country' => '2',
             ],
@@ -591,7 +593,7 @@ class CustomerTest extends TestCase
 
     public function testCreateCustomerWithDefaultShopCustomerGroup()
     {
-        $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext(1);
+        $context = Shopware()->Container()->get(ContextServiceInterface::class)->createShopContext(1);
         $data = [
             'shopId' => 1,
             'password' => 'fooobar',

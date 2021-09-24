@@ -26,6 +26,7 @@ namespace Shopware\Models\Newsletter\ContainerType;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Newsletter\Container;
 
 /**
  * Shopware text model represents a banner container type.
@@ -39,10 +40,10 @@ class Banner extends ModelEntity
      * OWNING SIDE
      * Owning side of relation between container type 'article' and parent container
      *
-     * @var \Shopware\Models\Newsletter\Container|null
+     * @var Container
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="banner")
-     * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="parentID", referencedColumnName="id", nullable=false)
      */
     protected $container;
 
@@ -60,9 +61,9 @@ class Banner extends ModelEntity
     /**
      * ID of the container this model belongs to
      *
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
+     * @ORM\Column(name="parentID", type="integer", length=11, nullable=false)
      */
     private $containerId = null;
 
@@ -165,7 +166,7 @@ class Banner extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Newsletter\Container $container
+     * @param Container $container
      */
     public function setContainer($container)
     {
@@ -174,7 +175,7 @@ class Banner extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\Container|null
+     * @return Container
      */
     public function getContainer()
     {

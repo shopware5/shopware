@@ -27,7 +27,6 @@ namespace Shopware\Commands;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Locale;
@@ -183,7 +182,6 @@ abstract class ShopwareCommand extends Command implements ContainerAwareInterfac
             return [];
         }
 
-        /** @var ModelRepository $repository */
         $repository = $em->getRepository($modelClass);
         $queryBuilder = $repository->createQueryBuilder($alias);
 

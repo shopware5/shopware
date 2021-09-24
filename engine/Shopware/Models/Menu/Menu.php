@@ -27,6 +27,7 @@ namespace Shopware\Models\Menu;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Plugin\Plugin;
 
 /**
  * Shopware Model Menu
@@ -51,9 +52,9 @@ class Menu extends ModelEntity
     public $onclick;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="class", type="string", length=255, nullable=false)
+     * @ORM\Column(name="class", type="string", length=255, nullable=true)
      */
     public $class;
 
@@ -79,7 +80,7 @@ class Menu extends ModelEntity
     public $shortcut;
 
     /**
-     * @var \Shopware\Models\Plugin\Plugin|null
+     * @var Plugin|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="menuItems")
      * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
@@ -132,7 +133,7 @@ class Menu extends ModelEntity
     private $parent;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<Menu>
+     * @var ArrayCollection<Menu>
      *
      * @ORM\OneToMany(targetEntity="Menu", mappedBy="parent", cascade={"all"}))
      * @ORM\OrderBy({"position" = "ASC"})
@@ -140,7 +141,7 @@ class Menu extends ModelEntity
     private $children;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="content_type", type="string", length=255, nullable=true)
      */
@@ -192,7 +193,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getClass()
     {
@@ -200,7 +201,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @param string $class
+     * @param string|null $class
      */
     public function setClass($class)
     {
@@ -353,7 +354,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Plugin\Plugin|null
+     * @return Plugin|null
      */
     public function getPlugin()
     {
@@ -361,19 +362,19 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Plugin\Plugin|null $plugin
+     * @param Plugin|null $plugin
      */
     public function setPlugin($plugin)
     {
         $this->plugin = $plugin;
     }
 
-    public function getContentType(): string
+    public function getContentType(): ?string
     {
         return $this->contentType;
     }
 
-    public function setContentType(string $contentType)
+    public function setContentType(?string $contentType)
     {
         $this->contentType = $contentType;
 

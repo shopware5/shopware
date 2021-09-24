@@ -26,6 +26,7 @@ namespace Shopware\Models\Article;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Vote Model
@@ -43,15 +44,15 @@ class Vote extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Article
+     * @var Article
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="votes", cascade={"persist"})
-     * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="articleID", referencedColumnName="id", nullable=false)
      */
     protected $article;
 
     /**
-     * @var \Shopware\Models\Shop\Shop
+     * @var Shop|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
@@ -117,7 +118,7 @@ class Vote extends ModelEntity
     private $datum;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
@@ -283,7 +284,7 @@ class Vote extends ModelEntity
      * Sets the vote activation-status
      * 1 = accepted, 0 = not accepted yet
      *
-     * @param int $active
+     * @param bool $active
      *
      * @return Vote
      */
@@ -298,7 +299,7 @@ class Vote extends ModelEntity
      * Gets the activation-status of the vote
      * 1 = accepted, 0 = not accepted yet
      *
-     * @return int
+     * @return bool
      */
     public function getActive()
     {
@@ -384,7 +385,7 @@ class Vote extends ModelEntity
      * OWNING SIDE
      * of the association between votes and article
      *
-     * @return \Shopware\Models\Article\Article
+     * @return Article
      */
     public function getArticle()
     {
@@ -392,9 +393,9 @@ class Vote extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Article|array $article
+     * @param Article|array $article
      *
-     * @return \Shopware\Models\Article\Vote
+     * @return Vote
      */
     public function setArticle($article)
     {
@@ -404,7 +405,7 @@ class Vote extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop|null
+     * @return Shop|null
      */
     public function getShop()
     {
@@ -412,7 +413,7 @@ class Vote extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Shop|null $shop
+     * @param Shop|null $shop
      */
     public function setShop($shop)
     {

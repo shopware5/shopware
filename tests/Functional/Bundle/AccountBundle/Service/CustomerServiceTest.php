@@ -55,9 +55,6 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
      */
     protected static $contextService;
 
-    /**
-     * Set up fixtures
-     */
     public static function setUpBeforeClass(): void
     {
         self::$customerService = Shopware()->Container()->get('shopware_account.customer_service');
@@ -86,6 +83,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         $newMail = 'bryan.khan@shopware.test';
 
         $customer = self::$modelManager->find(Customer::class, 2);
+        static::assertNotNull($customer);
         $customer->setEmail($newMail);
 
         self::$customerService->update($customer);
@@ -103,6 +101,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         $newMail = 'test@example.com';
 
         $customer = self::$modelManager->find(Customer::class, 2);
+        static::assertNotNull($customer);
         $customer->setEmail($newMail);
 
         self::$customerService->update($customer);
@@ -118,6 +117,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         ];
 
         $customer = self::$modelManager->find(Customer::class, 2);
+        static::assertNotNull($customer);
         $customer->fromArray($updateData);
 
         self::$customerService->update($customer);
@@ -133,6 +133,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         ];
 
         $customer = self::$modelManager->find(Customer::class, 2);
+        static::assertNotNull($customer);
         $customer->fromArray($updateData);
 
         self::$customerService->update($customer);
@@ -140,6 +141,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         static::assertEquals($updateData['salutation'], $customer->getSalutation());
         static::assertEquals($updateData['firstname'], $customer->getFirstname());
         static::assertEquals($updateData['lastname'], $customer->getLastname());
+        static::assertNotNull($customer->getBirthday());
         static::assertEquals($updateData['birthday'], $customer->getBirthday()->format('Y-m-d'));
     }
 }

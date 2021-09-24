@@ -29,9 +29,7 @@ use Doctrine\ORM\Query\Parameter;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Customer\Customer;
-use Shopware\Models\Customer\Repository as CustomerRepository;
 use Shopware\Models\Partner\Partner;
-use Shopware\Models\Partner\Repository;
 use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
@@ -73,11 +71,10 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             // Order data
             $order = (array) $this->Request()->getParam('sort', []);
 
-            /** @var Repository $repository */
-            $repository = Shopware()->Models()->getRepository(Partner::class);
+            $repository = $this->get('models')->getRepository(Partner::class);
             $dataQuery = $repository->getListQuery($order, $offset, $limit);
 
-            $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
+            $totalCount = $this->get('models')->getQueryCount($dataQuery);
             $data = $dataQuery->getArrayResult();
 
             $this->View()->assign(['success' => true, 'data' => $data, 'totalCount' => $totalCount]);
@@ -102,8 +99,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             $fromDate = $this->getFromDate();
             $toDate = $this->getToDate();
 
-            /** @var Repository $repository */
-            $repository = Shopware()->Models()->getRepository(Partner::class);
+            $repository = $this->get('models')->getRepository(Partner::class);
             $dataQuery = $repository->getStatisticListQuery($order, $offset, $limit, $partnerId, false, $fromDate, $toDate);
 
             $totalCount = $this->getStatisticListTotalCount($dataQuery);
@@ -132,11 +128,9 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
      */
     public function getDetailAction()
     {
-        /** @var array $filter */
         $filter = $this->Request()->getParam('filter', []);
 
-        /** @var Repository $repository */
-        $repository = Shopware()->Models()->getRepository(Partner::class);
+        $repository = $this->get('models')->getRepository(Partner::class);
 
         $dataQuery = $repository->getDetailQuery($filter);
         $data = $dataQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
@@ -154,8 +148,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $fromDate = $this->getFromDate();
         $toDate = $this->getToDate();
 
-        /** @var Repository $repository */
-        $repository = Shopware()->Models()->getRepository(Partner::class);
+        $repository = $this->get('models')->getRepository(Partner::class);
 
         // Get the information of the partner chart
         $dataQuery = $repository->getStatisticChartQuery($partnerId, $fromDate, $toDate);
@@ -175,7 +168,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
         if (!empty($id)) {
             // Edit Data
-            $partnerModel = Shopware()->Models()->getRepository(Partner::class)->find($id);
+            $partnerModel = $this->get('models')->getRepository(Partner::class)->find($id);
         } else {
             // New Data
             $partnerModel = new Partner();
@@ -185,11 +178,10 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $partnerModel->fromArray($params);
 
         try {
-            Shopware()->Models()->persist($partnerModel);
-            Shopware()->Models()->flush();
+            $this->get('models')->persist($partnerModel);
+            $this->get('models')->flush();
 
-            /** @var Repository $repository */
-            $repository = Shopware()->Models()->getRepository(Partner::class);
+            $repository = $this->get('models')->getRepository(Partner::class);
 
             $filter = [['property' => 'id', 'value' => $partnerModel->getId()]];
             $dataQuery = $repository->getDetailQuery($filter);
@@ -208,9 +200,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     {
         $mapCustomerAccountValue = $this->Request()->request->getInt('mapCustomerAccountValue');
 
-        /** @var CustomerRepository $repository */
         $repository = $this->getModelManager()->getRepository(Customer::class);
-        /** @var Customer|null $customer */
         $customer = $repository->find($mapCustomerAccountValue);
 
         if (!$customer) {
@@ -234,9 +224,9 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     {
         try {
             /** @var Partner $model */
-            $model = Shopware()->Models()->getRepository(Partner::class)->find($this->Request()->id);
-            Shopware()->Models()->remove($model);
-            Shopware()->Models()->flush();
+            $model = $this->get('models')->getRepository(Partner::class)->find($this->Request()->id);
+            $this->get('models')->remove($model);
+            $this->get('models')->flush();
             $this->View()->assign(['success' => true, 'data' => $this->Request()->getParams()]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
@@ -251,8 +241,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $trackingCode = $this->Request()->value;
         $partnerId = (int) $this->Request()->param;
 
-        /** @var Repository $repository */
-        $repository = Shopware()->Models()->getRepository(Partner::class);
+        $repository = $this->get('models')->getRepository(Partner::class);
         $foundPartner = $repository->getValidateTrackingCodeQuery($trackingCode, $partnerId);
         $foundPartnerArray = $foundPartner->getArrayResult();
         echo empty($foundPartnerArray);
@@ -266,8 +255,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $this->Front()->Plugins()->Json()->setRenderer(false);
         $partnerId = (int) $this->Request()->partnerId;
 
-        /** @var Repository $repository */
-        $repository = Shopware()->Models()->getRepository(Partner::class);
+        $repository = $this->get('models')->getRepository(Partner::class);
         $dataQuery = $repository->getStatisticListQuery(null, null, null, $partnerId, false, $this->getFromDate(), $this->getToDate());
         $resultArray = $dataQuery->getArrayResult();
 
@@ -297,7 +285,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     {
         $partnerId = $this->Request()->getParam('sPartner');
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $this->get('models')->getRepository(Shop::class);
         $shop = $repository->getActiveDefault();
 
         if (!$shop instanceof Shop) {
@@ -358,7 +346,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         }
 
         $dataQuery->setParameters($countParameters);
-        $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
+        $totalCount = $this->get('models')->getQueryCount($dataQuery);
         $dataQuery->setParameters($originalParameters);
 
         return $totalCount;

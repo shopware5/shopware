@@ -24,14 +24,12 @@
 
 use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkDataResult;
 use Shopware\Components\CacheManager;
-use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
 class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backend_ExtJs
 {
     public function getShopConfigsAction()
     {
         try {
-            /** @var BenchmarkRepository $benchmarkRepository */
             $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
             $benchmarkRepository->synchronizeShops();
 
@@ -47,7 +45,6 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
     public function saveIndustryAction()
     {
         try {
-            /** @var BenchmarkRepository $benchmarkRepository */
             $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
             $benchmarkConfig = $benchmarkRepository->getConfigForShop($this->request->getParam('shopId'));
@@ -64,7 +61,6 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
     public function setActiveAction()
     {
         try {
-            /** @var BenchmarkRepository $benchmarkRepository */
             $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
             $benchmarkConfig = $benchmarkRepository->getConfigForShop($this->request->getParam('shopId'));
@@ -81,7 +77,6 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
     public function saveTypeAction()
     {
         try {
-            /** @var BenchmarkRepository $benchmarkRepository */
             $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
             $benchmarkConfig = $benchmarkRepository->getConfigForShop($this->request->getParam('shopId'));

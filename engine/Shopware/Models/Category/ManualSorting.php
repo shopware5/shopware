@@ -49,7 +49,7 @@ class ManualSorting extends ModelEntity
      * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
      */
     protected $category;
 
@@ -80,7 +80,7 @@ class ManualSorting extends ModelEntity
      * @var Product
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false)
      */
     protected $product;
 

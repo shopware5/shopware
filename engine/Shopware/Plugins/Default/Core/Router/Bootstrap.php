@@ -27,8 +27,8 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
+use Shopware\Models\Shop\Currency;
 use Shopware\Models\Shop\DetachedShop;
-use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -216,7 +216,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         if ($cookieKey === 'shop' && $this->shouldRedirect($request, $shop)) {
-            /** @var \Shopware\Models\Shop\Repository $repository */
             $repository = $this->get(ModelManager::class)->getRepository(Shop::class);
 
             $newShop = $repository->getActiveById($cookieValue);
@@ -275,18 +274,18 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $session = $this->get('session');
 
         if ($cookieKey !== null) {
-            $session->$cookieKey = $cookieValue;
+            $session->set($cookieKey, $cookieValue);
         }
 
         // Refresh basket on currency change
-        if (isset($session->sBasketCurrency) && $shop->getCurrency()->getId() != $session->sBasketCurrency) {
+        if ($session->has('sBasketCurrency') && $shop->getCurrency()->getId() != $session->get('sBasketCurrency')) {
             Shopware()->Modules()->Basket()->sRefreshBasket();
         }
 
         // Upgrade template
-        if (isset($session->template) && !empty($session->Admin)) {
+        if ($session->has('template') && !empty($session->get('Admin'))) {
             $repository = $this->get(ModelManager::class)->getRepository(Template::class);
-            $template = $session->template;
+            $template = $session->get('template');
             $template = $repository->findOneBy(['template' => $template]);
 
             $this->get(Enlight_Template_Manager::class)->setTemplateDir([]);
@@ -314,7 +313,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
      */
     protected function getShopByRequest(Request $request)
     {
-        /** @var Repository $repository */
         $repository = $this->get(ModelManager::class)->getRepository(Shop::class);
 
         $shop = null;
@@ -352,7 +350,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         // Remove baseUrl from request url
         $url = $request->getRequestUri();
 
-        /** @var Repository $repository */
         $repository = $this->get(ModelManager::class)->getRepository(Shop::class);
         $requestShop = $repository->getActiveShopByRequestAsArray($request);
         if ($requestShop && strpos($url, $requestShop['base_url']) === 0) {
@@ -433,7 +430,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $requestUri = substr($requestUri, 0, $pos);
         }
 
-        /** @var Repository $repository */
         $repository = $this->get(ModelManager::class)->getRepository(Shop::class);
         $requestShop = $repository->getActiveShopByRequestAsArray($request);
 

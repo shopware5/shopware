@@ -27,6 +27,7 @@ namespace Shopware\Bundle\MediaBundle\Commands;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\ORMException;
 use Shopware\Commands\ShopwareCommand;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Media\Media;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -87,10 +88,8 @@ class MediaCleanupCommand extends ShopwareCommand
      */
     private function handleCleanup(SymfonyStyle $io)
     {
-        /** @var \Shopware\Components\Model\ModelManager $em */
-        $em = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class);
+        $em = $this->getContainer()->get(ModelManager::class);
 
-        /** @var \Shopware\Models\Media\Repository $repository */
         $repository = $em->getRepository(Media::class);
 
         $query = $repository->getAlbumMediaQuery(-13);

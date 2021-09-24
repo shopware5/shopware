@@ -28,7 +28,7 @@ namespace Shopware\Bundle\OrderBundle\Service;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Models\Article\Detail as ArticleDetail;
+use Shopware\Models\Article\Detail as ProductVariant;
 use Shopware\Models\Attribute\Order as OrderAttributes;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Dispatch\Dispatch;
@@ -171,17 +171,15 @@ class StockServiceTest extends TestCase
         $modelManager = Shopware()->Container()->get('models');
         $detail = new Detail();
 
-        $repository = $modelManager->getRepository(ArticleDetail::class);
-        $articleDetail = $repository->findOneBy(['number' => $ordernumber]);
-        static::assertNotNull($articleDetail);
+        $articleDetail = $modelManager->getRepository(ProductVariant::class)->findOneBy(['number' => $ordernumber]);
+        static::assertInstanceOf(ProductVariant::class, $articleDetail);
         $article = $articleDetail->getArticle();
 
         $tax = $modelManager->find(Tax::class, 1);
-        static::assertNotNull($tax);
+        static::assertInstanceOf(Tax::class, $tax);
         $detail->setTax($tax);
 
-        $taxRate = $tax->getTax();
-        static::assertNotNull($taxRate);
+        $taxRate = (float) $tax->getTax();
         $detail->setTaxRate($taxRate);
         $detail->setEsdArticle(0);
 
@@ -216,6 +214,7 @@ class StockServiceTest extends TestCase
         $paymentInstance->setOrder($orderModel);
         $paymentInstance->setCreatedAt($orderModel->getOrderTime());
         $paymentInstance->setCustomer($orderModel->getCustomer());
+        static::assertNotNull($orderModel->getBilling());
         $paymentInstance->setFirstName($orderModel->getBilling()->getFirstName());
         $paymentInstance->setLastName($orderModel->getBilling()->getLastName());
         $paymentInstance->setAddress($orderModel->getBilling()->getStreet());

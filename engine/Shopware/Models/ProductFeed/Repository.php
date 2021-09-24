@@ -33,6 +33,8 @@ use Shopware\Components\Model\QueryBuilder;
  * The ProductFeed model repository is responsible to load all feed data.
  * It supports the standard functions like findAll or findBy and extends the standard repository for
  * some specific functions to return the model data as array.
+ *
+ * @extends ModelRepository<ProductFeed>
  */
 class Repository extends ModelRepository
 {

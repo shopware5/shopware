@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Attribute\Country as CountryAttribute;
+use Shopware\Models\Payment\Payment;
 
 /**
  * Shopware country model represents a single country.
@@ -53,7 +54,7 @@ class Country extends ModelEntity
      * The area property is the owning side of the association between area and countries.
      * The association is joined over the area id field and the areaID field of the country.
      *
-     * @var Area
+     * @var Area|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Area", inversedBy="countries")
      * @ORM\JoinColumn(name="areaID", referencedColumnName="id")
@@ -65,7 +66,7 @@ class Country extends ModelEntity
      * The countries property is the inverse side of the association between area and countries.
      * The association is joined over the area id field and the areaID field of the country.
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<State>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Country\State", mappedBy="country", orphanRemoval=true, cascade={"persist"})
      */
@@ -90,72 +91,72 @@ class Country extends ModelEntity
     private $id;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="countryname", type="string", length=255, nullable=false)
+     * @ORM\Column(name="countryname", type="string", length=255, nullable=true)
      */
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="countryiso", type="string", length=255, nullable=false)
+     * @ORM\Column(name="countryiso", type="string", length=255, nullable=true)
      */
     private $iso;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="countryen", type="string", length=70, nullable=false)
+     * @ORM\Column(name="countryen", type="string", length=70, nullable=true)
      */
     private $isoName;
 
     /**
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(name="position", type="integer", nullable=false)
+     * @ORM\Column(name="position", type="integer", nullable=true)
      */
     private $position;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="notice", type="text", nullable=false)
+     * @ORM\Column(name="notice", type="text", nullable=true)
      */
     private $description;
 
     /**
-     * @var int
+     * @var bool|null
      *
-     * @ORM\Column(name="taxfree", type="integer", nullable=false)
+     * @ORM\Column(name="taxfree", type="boolean", nullable=true)
      */
     private $taxFree;
 
     /**
-     * @var int
+     * @var bool|null
      *
-     * @ORM\Column(name="taxfree_ustid", type="integer", nullable=false)
+     * @ORM\Column(name="taxfree_ustid", type="boolean", nullable=true)
      */
     private $taxFreeUstId;
 
     /**
-     * @var int
+     * @var bool|null
      *
-     * @ORM\Column(name="taxfree_ustid_checked", type="integer", nullable=false)
+     * @ORM\Column(name="taxfree_ustid_checked", type="boolean", nullable=true)
      */
     private $taxFreeUstIdChecked;
 
     /**
-     * @var bool
+     * @var bool|null
      *
-     * @ORM\Column(name="active", type="boolean", nullable=false)
+     * @ORM\Column(name="active", type="boolean", nullable=true)
      */
     private $active;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="iso3", type="string", length=3, nullable=false)
+     * @ORM\Column(name="iso3", type="string", length=3, nullable=true)
      */
     private $iso3;
 
@@ -181,20 +182,20 @@ class Country extends ModelEntity
     private $allowShipping = true;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<Payment>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Payment\Payment", mappedBy="countries")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
-     *     joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id", nullable=false)}
      * )
      */
     private $payments;
 
     /**
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(name="areaID", type="integer", nullable=false)
+     * @ORM\Column(name="areaID", type="integer", nullable=true)
      */
     private $areaId;
 
@@ -213,7 +214,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      *
      * @return Country
      */
@@ -225,7 +226,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -233,7 +234,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param string $iso
+     * @param string|null $iso
      *
      * @return Country
      */
@@ -245,7 +246,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getIso()
     {
@@ -253,7 +254,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param string $isoName
+     * @param string|null $isoName
      *
      * @return Country
      */
@@ -265,7 +266,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getIsoName()
     {
@@ -273,7 +274,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param int $position
+     * @param int|null $position
      *
      * @return Country
      */
@@ -285,7 +286,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPosition()
     {
@@ -293,7 +294,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      *
      * @return Country
      */
@@ -305,7 +306,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -313,7 +314,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param int $taxFree
+     * @param bool|null $taxFree
      *
      * @return Country
      */
@@ -325,7 +326,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool|null
      */
     public function getTaxFree()
     {
@@ -333,7 +334,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param int $taxFreeUstId
+     * @param bool|null $taxFreeUstId
      *
      * @return Country
      */
@@ -345,7 +346,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool|null
      */
     public function getTaxFreeUstId()
     {
@@ -353,7 +354,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param int $taxFreeUstIdChecked
+     * @param bool|null $taxFreeUstIdChecked
      *
      * @return Country
      */
@@ -365,7 +366,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool|null
      */
     public function getTaxFreeUstIdChecked()
     {
@@ -373,7 +374,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param bool $active
+     * @param bool|null $active
      *
      * @return Country
      */
@@ -385,7 +386,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function getActive()
     {
@@ -393,7 +394,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param string $iso3
+     * @param string|null $iso3
      *
      * @return Country
      */
@@ -405,7 +406,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getIso3()
     {
@@ -431,7 +432,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<State>
      */
     public function getStates()
     {
@@ -439,7 +440,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param State[]|null $states
+     * @param ArrayCollection<int, State>|State[]|null $states
      *
      * @return Country
      */
@@ -460,7 +461,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param Area|array $area
+     * @param Area|null $area
      *
      * @return Country
      */
@@ -472,7 +473,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<Payment>
      */
     public function getPayments()
     {
@@ -480,7 +481,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection $payments
+     * @param ArrayCollection<Payment> $payments
      *
      * @return Country
      */

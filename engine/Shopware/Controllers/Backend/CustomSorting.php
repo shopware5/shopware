@@ -24,6 +24,9 @@
 
 use Shopware\Models\Search\CustomSorting;
 
+/**
+ * @extends Shopware_Controllers_Backend_Application<CustomSorting>
+ */
 class Shopware_Controllers_Backend_CustomSorting extends Shopware_Controllers_Backend_Application
 {
     protected $model = CustomSorting::class;

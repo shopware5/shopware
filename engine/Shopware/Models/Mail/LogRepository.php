@@ -31,6 +31,9 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
 use Shopware\Components\Model\ModelRepository;
 
+/**
+ * @extends ModelRepository<Log>
+ */
 class LogRepository extends ModelRepository implements LogRepositoryInterface
 {
     public const MIN_DATE = '2019-01-01T00:00:00+0000';

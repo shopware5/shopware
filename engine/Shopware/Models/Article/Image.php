@@ -40,7 +40,7 @@ class Image extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var Article
+     * @var Article|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="images")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
@@ -63,7 +63,7 @@ class Image extends ModelEntity
      * rule sets which contains the configured configurator options.
      * Based on the image mapping, the variant images will be extended from the main image of the article.
      *
-     * @var ArrayCollection<\Shopware\Models\Article\Image\Mapping>
+     * @var ArrayCollection<Mapping>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image\Mapping", mappedBy="image", orphanRemoval=true, cascade={"persist"})
      */
@@ -72,7 +72,7 @@ class Image extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var Detail
+     * @var Detail|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="images")
      * @ORM\JoinColumn(name="article_detail_id", referencedColumnName="id")
@@ -82,7 +82,7 @@ class Image extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Media\Media|null
+     * @var Media|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="articles")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
@@ -350,7 +350,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param Article $article
+     * @param Article|null $article
      */
     public function setArticle($article)
     {

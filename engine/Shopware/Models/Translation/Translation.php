@@ -39,7 +39,7 @@ class Translation extends ModelEntity
      * @var Shop
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
-     * @ORM\JoinColumn(name="objectlanguage", referencedColumnName="id")
+     * @ORM\JoinColumn(name="objectlanguage", referencedColumnName="id", nullable=false)
      */
     protected $shop;
 
@@ -86,6 +86,13 @@ class Translation extends ModelEntity
      * @ORM\Column(name="objectlanguage", type="integer", nullable=false)
      */
     private $shopId;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="dirty", type="integer", nullable=true)
+     */
+    private $dirty;
 
     /**
      * @param string $data
@@ -170,5 +177,15 @@ class Translation extends ModelEntity
     public function setShopId($shopId)
     {
         $this->shopId = $shopId;
+    }
+
+    public function getDirty(): ?int
+    {
+        return $this->dirty;
+    }
+
+    public function setDirty(?int $dirty): void
+    {
+        $this->dirty = $dirty;
     }
 }

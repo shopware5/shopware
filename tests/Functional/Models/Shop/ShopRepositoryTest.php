@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,21 +24,25 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Models;
+namespace Shopware\Tests\Functional\Models\Shop;
 
 use Shopware\Models\Order\Order;
+use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
 class ShopRepositoryTest extends \Enlight_Components_Test_Controller_TestCase
 {
+    private Repository $shopRepository;
+
     /**
-     * @var \Shopware\Models\Shop\Repository
+     * @var array<string, mixed>
      */
-    private $shopRepository;
+    private array $mainShop;
 
-    private $mainShop;
-
-    private $mainShopBackup;
+    /**
+     * @var array<string, mixed>
+     */
+    private array $mainShopBackup;
 
     public function setUp(): void
     {
@@ -89,7 +95,7 @@ class ShopRepositoryTest extends \Enlight_Components_Test_Controller_TestCase
      * @ticket SW-7774
      * @ticket SW-6768
      */
-    public function testGetActiveByRequest()
+    public function testGetActiveByRequest(): void
     {
         // Tests copied for SW-6768
         $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en', 'testShop3');
@@ -137,23 +143,19 @@ class ShopRepositoryTest extends \Enlight_Components_Test_Controller_TestCase
 
         // Tests for secure
         $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/us', 'testShop4', true);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/us', 'testShop4', false);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/us', 'testShop4');
         $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/ukfoooo', 'testShop3', true);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/ukfoooo', 'testShop3', false);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/ukfoooo', 'testShop3');
         $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk', 'testShop2', true);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk', 'testShop2', false);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk', 'testShop2');
         $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk/things', 'testShop2', true);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk/things', 'testShop2', false);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk/things', 'testShop2');
     }
 
     /**
      * helper method to call the getActiveByRequest Method with different params
-     *
-     * @param string $url
-     * @param string $shopName
-     * @param bool   $secure
      */
-    public function callGetActiveShopByRequest($url, $shopName, $secure = false)
+    public function callGetActiveShopByRequest(string $url, string $shopName, bool $secure = false): void
     {
         $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setHttpHost($this->mainShop['host']);
@@ -166,7 +168,10 @@ class ShopRepositoryTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals($shopName, $shop->getName());
     }
 
-    public function getMultiShopLocationTestData()
+    /**
+     * @return array<string[]>
+     */
+    public function getMultiShopLocationTestData(): array
     {
         return [
             ['test.in', 'fr.test.in'],
@@ -180,7 +185,7 @@ class ShopRepositoryTest extends \Enlight_Components_Test_Controller_TestCase
      * @dataProvider getMultiShopLocationTestData
      * @ticket SW-4858
      */
-    public function testMultiShopLocation($host, $alias)
+    public function testMultiShopLocation(string $host, string $alias): void
     {
         Shopware()->Container()->reset('template');
 
@@ -223,15 +228,15 @@ class ShopRepositoryTest extends \Enlight_Components_Test_Controller_TestCase
      * Tests the shop duplication bug caused by the detaching the shop entity
      * in the obsolete Shopware\Models\Shop\Repository::fixActive()
      */
-    public function testShopDuplication()
+    public function testShopDuplication(): void
     {
-        // Get inital number of shops
+        // Get initial number of shops
         $numberOfShopsBefore = Shopware()->Db()->fetchOne('SELECT count(*) FROM s_core_shops');
 
         // Load arbitrary order
         $order = Shopware()->Models()->getRepository(Order::class)->find(57);
 
-        // Modify order entitiy to trigger an update action, when the entity is flushed to the database
+        // Modify order entity to trigger an update action, when the entity is flushed to the database
         $order->setComment('Dummy');
 
         // Send order status mail to customer, this will invoke the fixActive()-method
@@ -255,7 +260,7 @@ class ShopRepositoryTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Test Shopware\Models\Shop\Repository::getById() and getActiveById()
      */
-    public function testRetrieveInactiveSubshop()
+    public function testRetrieveInactiveSubshop(): void
     {
         // Create test shops
         $sql = "

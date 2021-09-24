@@ -40,14 +40,14 @@ class Value extends ModelEntity
      *     targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
      *     inversedBy="values"
      * )
-     * @ORM\JoinColumn(name="element_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="element_id", referencedColumnName="id", nullable=false)
      */
     protected $element;
 
     /**
      * @var Shop
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
-     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id", nullable=false)
      */
     protected $shop;
 

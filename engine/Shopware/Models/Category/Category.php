@@ -1101,7 +1101,7 @@ class Category extends ModelEntity
     /**
      * @param string $shops
      *
-     * @return $this
+     * @return Category
      */
     public function setShops($shops)
     {
@@ -1120,8 +1120,6 @@ class Category extends ModelEntity
 
     /**
      * @param ManualSorting[]|null $manualSorting
-     *
-     * @return $this
      */
     public function setManualSorting(?array $manualSorting): Category
     {

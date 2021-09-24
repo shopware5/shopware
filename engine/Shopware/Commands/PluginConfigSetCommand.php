@@ -26,9 +26,7 @@ namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Plugin\Plugin;
-use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
@@ -58,7 +56,6 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
         if ($argumentName === 'plugin') {
-            /** @var ModelRepository $repository */
             $repository = $this->getContainer()->get(ModelManager::class)->getRepository(Plugin::class);
             $queryBuilder = $repository->createQueryBuilder('plugin');
             $result = $queryBuilder->andWhere($queryBuilder->expr()->eq('plugin.capabilityEnable', 'true'))
@@ -67,9 +64,10 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
                 ->getArrayResult();
 
             return array_column($result, 'name');
-        } elseif ($argumentName === 'key') {
+        }
+
+        if ($argumentName === 'key') {
             $pluginName = $context->getWordAtIndex($context->getWordIndex() - 1);
-            /** @var InstallerService $pluginManager */
             $pluginManager = $this->container->get(InstallerService::class);
             try {
                 $plugin = $pluginManager->getPluginByName($pluginName);
@@ -77,13 +75,10 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
                 return [];
             }
 
-            /** @var Repository $shopRepository */
             $shopRepository = $this->getContainer()->get(ModelManager::class)->getRepository(Shop::class);
 
-            /** @var Shop[] $shops */
             $shops = $shopRepository->findAll();
 
-            /** @var string[] $result */
             $result = [];
 
             foreach ($shops as $shop) {
@@ -97,7 +92,9 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
             }
 
             return $result;
-        } elseif ($argumentName === 'value') {
+        }
+
+        if ($argumentName === 'value') {
             if (stripos('true', $context->getCurrentWord()) === 0) {
                 return ['true'];
             }

@@ -27,6 +27,9 @@ use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Customer\Customer;
 
+/**
+ * @extends Shopware_Controllers_Backend_Application<Customer>
+ */
 class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controllers_Backend_Application
 {
     protected $model = Customer::class;

@@ -47,12 +47,12 @@ class Value extends ModelEntity
      * @var Element
      *
      * @ORM\ManyToOne(targetEntity="Element", inversedBy="values")
-     * @ORM\JoinColumn(name="element_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="element_id", referencedColumnName="id", nullable=false)
      */
     private $element;
 
     /**
-     * @var Shop
+     * @var Shop|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
@@ -60,16 +60,16 @@ class Value extends ModelEntity
     private $shop;
 
     /**
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(name="shop_id", type="integer", nullable=false)
+     * @ORM\Column(name="shop_id", type="integer", nullable=true)
      */
     private $shopId;
 
     /**
-     * @var string|null
+     * @var array<array-key, mixed>|bool|float|int|string|null
      *
-     * @ORM\Column(name="value", type="object", nullable=true)
+     * @ORM\Column(name="value", type="object", nullable=false)
      */
     private $value;
 
@@ -102,7 +102,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @param Shop $shop
+     * @param Shop|null $shop
      *
      * @return Value
      */
@@ -114,19 +114,19 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return Shop
+     * @return Shop|null
      */
     public function getShop()
     {
         return $this->shop;
     }
 
-    public function getShopId(): int
+    public function getShopId(): ?int
     {
         return $this->shopId;
     }
 
-    public function setShopId(int $shopId): self
+    public function setShopId(?int $shopId): self
     {
         $this->shopId = $shopId;
 
@@ -134,6 +134,8 @@ class Value extends ModelEntity
     }
 
     /**
+     * @param array<array-key, mixed>|bool|float|int|string|null $value
+     *
      * @return Value
      */
     public function setValue($value)
@@ -144,7 +146,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return mixed|null
+     * @return array<array-key, mixed>|bool|float|int|string|null
      */
     public function getValue()
     {

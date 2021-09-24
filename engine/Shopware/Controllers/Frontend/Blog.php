@@ -28,6 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Compatibility\LegacyStructConverter;
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Random;
 use Shopware\Components\Validator\EmailValidator;
 use Shopware\Models\Blog\Blog;
@@ -54,7 +55,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     protected $repository;
 
     /**
-     * @var BlogRepository
+     * @var ModelRepository<Comment>
      */
     protected $blogCommentRepository;
 
@@ -91,7 +92,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository(Blog::class);
+            $this->repository = $this->get('models')->getRepository(Blog::class);
         }
 
         return $this->repository;
@@ -100,12 +101,12 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Helper Method to get access to the blog comment repository.
      *
-     * @return BlogRepository
+     * @return ModelRepository<Comment>
      */
     public function getBlogCommentRepository()
     {
         if ($this->blogCommentRepository === null) {
-            $this->blogCommentRepository = Shopware()->Models()->getRepository(Comment::class);
+            $this->blogCommentRepository = $this->get('models')->getRepository(Comment::class);
         }
 
         return $this->blogCommentRepository;
@@ -119,7 +120,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getCategoryRepository()
     {
         if ($this->categoryRepository === null) {
-            $this->categoryRepository = Shopware()->Models()->getRepository(Category::class);
+            $this->categoryRepository = $this->get('models')->getRepository(Category::class);
         }
 
         return $this->categoryRepository;
@@ -133,7 +134,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getCommentConfirmRepository()
     {
         if ($this->commentConfirmRepository === null) {
-            $this->commentConfirmRepository = Shopware()->Models()->getRepository(CommentConfirm::class);
+            $this->commentConfirmRepository = $this->get('models')->getRepository(CommentConfirm::class);
         }
 
         return $this->commentConfirmRepository;
@@ -395,8 +396,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $commentData = unserialize($getComment->getData(), ['allowed_classes' => false]);
 
                     // Delete the data in the s_core_optin table. We don't need it anymore
-                    Shopware()->Models()->remove($getComment);
-                    Shopware()->Models()->flush();
+                    $this->get('models')->remove($getComment);
+                    $this->get('models')->flush();
 
                     $this->sSaveComment($commentData, $blogArticleId);
 
@@ -447,8 +448,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $blogCommentModel->setHash($hash);
                     $blogCommentModel->setData(serialize($this->Request()->getPost()));
 
-                    Shopware()->Models()->persist($blogCommentModel);
-                    Shopware()->Models()->flush();
+                    $this->get('models')->persist($blogCommentModel);
+                    $this->get('models')->flush();
 
                     $link = $this->Front()->Router()->assemble(['sViewport' => 'blog', 'action' => 'rating', 'blogArticle' => $blogArticleId, 'sConfirmation' => $hash]);
 
@@ -585,8 +586,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogCommentModel->setPoints($commentData['points']);
         $blogCommentModel->setShop($shop);
 
-        Shopware()->Models()->persist($blogCommentModel);
-        Shopware()->Models()->flush();
+        $this->get('models')->persist($blogCommentModel);
+        $this->get('models')->flush();
     }
 
     /**

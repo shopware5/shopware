@@ -22,25 +22,35 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
+use Shopware\Bundle\ContentTypeBundle\Services\FrontendTypeTranslatorInterface;
+use Shopware\Bundle\ContentTypeBundle\Services\RepositoryInterface;
+use Shopware\Bundle\ContentTypeBundle\Services\TypeProvider;
 use Shopware\Bundle\ContentTypeBundle\Structs\Criteria;
 use Shopware\Bundle\ContentTypeBundle\Structs\Type;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\MemoryLimit;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Slug\SlugInterface;
 use Shopware\Models\Article\Supplier;
+use Shopware\Models\Blog\Blog;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Emotion\Emotion;
+use Shopware\Models\Form\Form;
 use Shopware\Models\Shop\Shop;
+use Shopware\Models\Site\Site;
 
 /**
  * Deprecated Shopware Class that handles url rewrites
  */
-class sRewriteTable implements \Enlight_Hook
+class sRewriteTable implements Enlight_Hook
 {
     /**
-     * @var \sSystem
+     * @var sSystem
      */
     public $sSYSTEM;
 
@@ -126,7 +136,7 @@ class sRewriteTable implements \Enlight_Hook
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
      * @param Shopware_Components_Config              $config
      * @param ModelManager                            $modelManager
-     * @param \sSystem                                $systemModule
+     * @param sSystem                                 $systemModule
      * @param Enlight_Template_Manager                $template
      * @param Shopware_Components_Modules             $moduleManager
      * @param SlugInterface                           $slug
@@ -134,7 +144,7 @@ class sRewriteTable implements \Enlight_Hook
      * @param ShopPageServiceInterface                $shopPageService
      * @param Shopware_Components_Translation         $translationComponent
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
@@ -155,10 +165,10 @@ class sRewriteTable implements \Enlight_Hook
         $this->template = $template ?: Shopware()->Template();
         $this->moduleManager = $moduleManager ?: Shopware()->Modules();
         $this->slug = $slug ?: Shopware()->Container()->get('shopware.slug');
-        $this->contextService = $contextService ?: Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
+        $this->contextService = $contextService ?: Shopware()->Container()->get(ContextServiceInterface::class);
         $this->shopPageService = $shopPageService ?: Shopware()->Container()
             ->get('shopware_storefront.shop_page_service');
-        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(Shopware_Components_Translation::class);
     }
 
     /**
@@ -194,7 +204,7 @@ class sRewriteTable implements \Enlight_Hook
     /**
      * Sets up the environment for seo url calculation
      *
-     * @throws \SmartyException
+     * @throws SmartyException
      */
     public function baseSetup()
     {
@@ -230,10 +240,10 @@ class sRewriteTable implements \Enlight_Hook
      *
      * @param string $lastUpdate
      *
-     * @throws \Exception
-     * @throws \SmartyException
+     * @throws SmartyException
      * @throws \Enlight_Event_Exception
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Zend_Db_Adapter_Exception
+     * @throws Exception
      *
      * @return string
      */
@@ -259,7 +269,7 @@ class sRewriteTable implements \Enlight_Hook
     /**
      * Cleanup the rewrite table from non-existing resources.
      *
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Zend_Db_Adapter_Exception
      */
     public function sCreateRewriteTableCleanup()
     {
@@ -363,7 +373,7 @@ class sRewriteTable implements \Enlight_Hook
         }
 
         $parentId = Shopware()->Shop()->getCategory()->getId();
-        $categories = $this->modelManager->getRepository(\Shopware\Models\Category\Category::class)
+        $categories = $this->modelManager->getRepository(Category::class)
             ->getActiveChildrenList($parentId);
 
         if (isset($offset, $limit)) {
@@ -399,8 +409,8 @@ class sRewriteTable implements \Enlight_Hook
      * @param int    $limit
      * @param int    $offset
      *
+     * @throws Zend_Db_Adapter_Exception
      * @throws \Enlight_Event_Exception
-     * @throws \Zend_Db_Adapter_Exception
      *
      * @return string
      */
@@ -528,7 +538,7 @@ class sRewriteTable implements \Enlight_Hook
      */
     public function sCreateRewriteTableBlog($offset = null, $limit = null, ShopContextInterface $context = null)
     {
-        $query = $this->modelManager->getRepository(\Shopware\Models\Category\Category::class)
+        $query = $this->modelManager->getRepository(Category::class)
             ->getBlogCategoriesByParentQuery(Shopware()->Shop()->get('parentID'));
         $blogCategories = $query->getArrayResult();
 
@@ -542,9 +552,9 @@ class sRewriteTable implements \Enlight_Hook
             $context = $this->contextService->getShopContext();
         }
 
-        $blogArticlesQuery = $this->modelManager->getRepository(\Shopware\Models\Blog\Blog::class)
+        $blogArticlesQuery = $this->modelManager->getRepository(Blog::class)
             ->getListQuery($blogCategoryIds, $offset, $limit);
-        $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $blogArticlesQuery->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
         $blogArticles = $blogArticlesQuery->getArrayResult();
 
         $routerBlogTemplate = $this->config->get('routerBlogTemplate');
@@ -585,7 +595,7 @@ class sRewriteTable implements \Enlight_Hook
         }
 
         $ids = $this->getManufacturerIds($offset, $limit);
-        $manufacturers = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface::class)
+        $manufacturers = Shopware()->Container()->get(ManufacturerServiceInterface::class)
             ->getList($ids, $context);
 
         $seoSupplierRouteTemplate = $this->config->get('seoSupplierRouteTemplate');
@@ -606,12 +616,11 @@ class sRewriteTable implements \Enlight_Hook
      * @param int|null $offset
      * @param int|null $limit
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function sCreateRewriteTableCampaigns($offset = null, $limit = null)
     {
-        /** @var \Shopware\Models\Emotion\Repository $repo */
-        $repo = $this->modelManager->getRepository(\Shopware\Models\Emotion\Emotion::class);
+        $repo = $this->modelManager->getRepository(Emotion::class);
         $queryBuilder = $repo->getListQueryBuilder();
 
         $languageId = Shopware()->Shop()->getId();
@@ -683,7 +692,7 @@ class sRewriteTable implements \Enlight_Hook
      * @param int $offset
      * @param int $limit
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function sCreateRewriteTableContent($offset = null, $limit = null, ShopContextInterface $context = null)
     {
@@ -700,7 +709,7 @@ class sRewriteTable implements \Enlight_Hook
             return;
         }
 
-        $translator = Shopware()->Container()->get(\Shopware\Bundle\ContentTypeBundle\Services\FrontendTypeTranslatorInterface::class);
+        $translator = Shopware()->Container()->get(FrontendTypeTranslatorInterface::class);
         $type = $translator->translate($type);
 
         // insert controller, itself
@@ -711,10 +720,10 @@ class sRewriteTable implements \Enlight_Hook
 
     public function createContentTypeUrls(ShopContextInterface $context): void
     {
-        $translator = Shopware()->Container()->get(\Shopware\Bundle\ContentTypeBundle\Services\FrontendTypeTranslatorInterface::class);
+        $translator = Shopware()->Container()->get(FrontendTypeTranslatorInterface::class);
 
         /** @var Type $type */
-        foreach (Shopware()->Container()->get(\Shopware\Bundle\ContentTypeBundle\Services\TypeProvider::class)->getTypes() as $type) {
+        foreach (Shopware()->Container()->get(TypeProvider::class)->getTypes() as $type) {
             if (!$type->isShowInFrontend()) {
                 continue;
             }
@@ -728,7 +737,7 @@ class sRewriteTable implements \Enlight_Hook
 
             $typeArray = json_decode(json_encode($type), true);
 
-            /** @var \Shopware\Bundle\ContentTypeBundle\Services\RepositoryInterface $repository */
+            /** @var RepositoryInterface $repository */
             $repository = Shopware()->Container()->get('shopware.bundle.content_type.' . $type->getInternalName());
 
             $criteria = new Criteria();
@@ -793,7 +802,7 @@ class sRewriteTable implements \Enlight_Hook
     {
         $parts = [];
         if (!empty($params['supplierID'])) {
-            $parts[] = $this->modelManager->getRepository(\Shopware\Models\Article\Supplier::class)
+            $parts[] = $this->modelManager->getRepository(Supplier::class)
                 ->find($params['supplierID'])->getName();
         }
         if (empty($params['separator'])) {
@@ -847,12 +856,13 @@ class sRewriteTable implements \Enlight_Hook
      */
     public function sCategoryPath($categoryId)
     {
-        $parts = $this->modelManager->getRepository(\Shopware\Models\Category\Category::class)
-            ->getPathById($categoryId);
+        $parts = $this->modelManager->getRepository(Category::class)->getPathById($categoryId);
+        if (\is_string($parts)) {
+            return [$parts];
+        }
         $level = Shopware()->Shop()->getCategory()->getLevel() ?: 1;
-        $parts = \array_slice($parts, $level);
 
-        return $parts;
+        return \array_slice($parts, $level);
     }
 
     /**
@@ -979,14 +989,14 @@ class sRewriteTable implements \Enlight_Hook
      * @param int                  $limit
      * @param ShopContextInterface $context
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function insertFormUrls($offset, $limit, ShopContextInterface $context = null)
     {
         $context = $this->createFallbackContext($context);
         $shopId = $context->getShop()->getId();
 
-        $formListData = $this->modelManager->getRepository(\Shopware\Models\Form\Form::class)
+        $formListData = $this->modelManager->getRepository(Form::class)
             ->getListQueryBuilder([], [])
             ->andWhere('(form.shopIds LIKE :shopId OR form.shopIds IS NULL)')
             ->setFirstResult($offset)
@@ -1033,14 +1043,14 @@ class sRewriteTable implements \Enlight_Hook
      *
      * @throws Exception
      * @throws SmartyException
-     * @throws \Zend_Db_Statement_Exception
+     * @throws Zend_Db_Statement_Exception
      */
     private function insertStaticPageUrls($offset, $limit, ShopContextInterface $context = null)
     {
         $context = $this->createFallbackContext($context);
         $shopId = $context->getShop()->getId();
 
-        $sitesData = $this->modelManager->getRepository(\Shopware\Models\Site\Site::class)
+        $sitesData = $this->modelManager->getRepository(Site::class)
             ->getSitesWithoutLinkQuery($shopId, $offset, $limit)
             ->getArrayResult();
 
@@ -1119,7 +1129,7 @@ class sRewriteTable implements \Enlight_Hook
      * @param int|null $offset
      * @param int|null $limit
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -1141,7 +1151,7 @@ class sRewriteTable implements \Enlight_Hook
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return ShopContextInterface
      */
@@ -1168,7 +1178,7 @@ class sRewriteTable implements \Enlight_Hook
      * @param string $path
      * @param int    $shopId
      *
-     * @throws \Zend_Db_Statement_Exception
+     * @throws Zend_Db_Statement_Exception
      *
      * @return bool
      */
@@ -1213,7 +1223,7 @@ class sRewriteTable implements \Enlight_Hook
         // First match is the whole org_path
         $formId = (int) array_pop($matches);
 
-        $formRepository = $this->modelManager->getRepository(\Shopware\Models\Form\Form::class);
+        $formRepository = $this->modelManager->getRepository(Form::class);
         $form = $formRepository->find($formId);
 
         if (!$form) {
@@ -1232,7 +1242,7 @@ class sRewriteTable implements \Enlight_Hook
         // First match is the whole org_path
         $siteId = (int) array_pop($matches);
 
-        $siteRepository = $this->modelManager->getRepository(\Shopware\Models\Site\Site::class);
+        $siteRepository = $this->modelManager->getRepository(Site::class);
         $site = $siteRepository->find($siteId);
 
         if (!$site) {

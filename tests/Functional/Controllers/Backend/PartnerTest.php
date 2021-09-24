@@ -24,19 +24,21 @@
 
 namespace Shopware\Tests\Controllers\Backend;
 
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Partner\Partner;
+use Shopware\Models\Partner\Repository;
+
 class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * @var \Shopware\Models\Partner\Partner
+     * @var Repository
      */
     protected $repository;
 
     /**
      * dummy data
-     *
-     * @var array
      */
-    private $dummyData = [
+    private array $dummyData = [
         'idCode' => '31337',
         'date' => '02.07.2013',
         'company' => 'phpUnitTestCompany',
@@ -56,12 +58,9 @@ class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
         'active' => '1',
     ];
 
-    private $updateStreet = 'Abbey Road';
+    private string $updateStreet = 'Abbey Road';
 
-    /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    private $manager;
+    private ModelManager $manager;
 
     /**
      * Cleaning up testData
@@ -80,7 +79,7 @@ class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
         parent::setUp();
 
         $this->manager = Shopware()->Models();
-        $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Partner\Partner::class);
+        $this->repository = Shopware()->Models()->getRepository(Partner::class);
 
         // disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -256,11 +255,11 @@ class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Creates the dummy data
      *
-     * @return \Shopware\Models\Partner\Partner
+     * @return Partner
      */
     private function getDummyData()
     {
-        $dummyModel = new \Shopware\Models\Partner\Partner();
+        $dummyModel = new Partner();
         $dummyData = $this->dummyData;
         $dummyModel->fromArray($dummyData);
 
@@ -270,7 +269,7 @@ class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * helper method to create the dummy object
      *
-     * @return \Shopware\Models\Partner\Partner
+     * @return Partner
      */
     private function createDummy()
     {

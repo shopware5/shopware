@@ -28,7 +28,8 @@ use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop as ShopStruct;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Password\Manager;
@@ -37,6 +38,7 @@ use Shopware\Components\Routing\Context;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Group;
+use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware_Components_Config;
 
 class RegisterService implements RegisterServiceInterface
@@ -98,7 +100,7 @@ class RegisterService implements RegisterServiceInterface
      * @throws \Exception
      */
     public function register(
-        Shop $shop,
+        ShopStruct $shop,
         Customer $customer,
         Address $billing,
         Address $shipping = null
@@ -152,7 +154,7 @@ class RegisterService implements RegisterServiceInterface
         ]);
     }
 
-    private function saveCustomer(Shop $shop, Customer $customer): void
+    private function saveCustomer(ShopStruct $shop, Customer $customer): void
     {
         if ($customer->getValidation() !== ContextService::FALLBACK_CUSTOMER_GROUP) {
             $customer->setCustomerType(Customer::CUSTOMER_TYPE_BUSINESS);
@@ -191,13 +193,17 @@ class RegisterService implements RegisterServiceInterface
             $customer->setPaymentId($this->config->get('defaultPayment'));
         }
 
-        /** @var \Shopware\Models\Shop\Shop $subShop */
-        $subShop = $this->modelManager->find(\Shopware\Models\Shop\Shop::class, $shop->getId());
+        $subShop = $this->modelManager->find(ShopModel::class, $shop->getId());
+        if (!$subShop instanceof ShopModel) {
+            throw new ModelNotFoundException(ShopModel::class, $shop->getId());
+        }
         $customer->setLanguageSubShop($subShop);
 
         if ($customer->getGroup() === null) {
-            /** @var Group $customerGroup */
-            $customerGroup = $this->modelManager->find(\Shopware\Models\Customer\Group::class, $subShop->getCustomerGroup()->getId());
+            $customerGroup = $this->modelManager->find(Group::class, $subShop->getCustomerGroup()->getId());
+            if (!$customerGroup instanceof Group) {
+                throw new ModelNotFoundException(Group::class, $subShop->getCustomerGroup()->getId());
+            }
             $customer->setGroup($customerGroup);
         }
 
@@ -222,14 +228,18 @@ class RegisterService implements RegisterServiceInterface
         return (int) $this->connection->fetchColumn('SELECT id FROM s_emarketing_partner WHERE idcode = ?', [$customer->getAffiliate()]);
     }
 
-    private function doubleOptInVerificationMail(Shop $shop, Customer $customer, string $hash): void
+    private function doubleOptInVerificationMail(ShopStruct $shop, Customer $customer, string $hash): void
     {
         $container = Shopware()->Container();
         $router = Shopware()->Front()->Router();
 
+        $shopModel = $this->modelManager->getRepository(ShopModel::class)->getById($shop->getId());
+        if ($shopModel === null) {
+            throw new ModelNotFoundException(ShopModel::class, $shop->getId());
+        }
         $router->setContext(
             Context::createFromShop(
-                $this->modelManager->getRepository(\Shopware\Models\Shop\Shop::class)->getById($shop->getId()),
+                $shopModel,
                 $this->config
             )
         );

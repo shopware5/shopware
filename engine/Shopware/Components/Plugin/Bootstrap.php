@@ -228,7 +228,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
-     * @return EntityRepository<Form>
+     * @return ModelRepository<Form>
      */
     final public function Forms(): EntityRepository
     {
@@ -295,6 +295,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         return $item;
     }
 
+    /**
+     * @return ModelRepository<Payment>
+     */
     final public function Payments(): ModelRepository
     {
         return Shopware()->Models()->getRepository(Payment::class);
@@ -342,13 +345,15 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         if (\is_string($options)) {
             $options = ['template' => $options];
         }
-        $template = $this->Payments()->findOneBy(['template' => $options['template']]);
+
+        $template = $this->get('models')->getRepository(Template::class)->findOneBy(['template' => $options['template']]);
         if (!$template instanceof Template) {
             $template = new Template();
             if (!isset($options['name'])) {
                 $options['name'] = ucfirst($options['template']);
             }
         }
+
         $template->fromArray($options);
         $plugin = $this->Plugin();
         $plugin->getTemplates()->add($template);

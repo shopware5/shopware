@@ -22,16 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\EmotionBundle\Service\EmotionServiceInterface;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
+use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory;
+use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
-use Shopware\Components\ProductStream\RepositoryInterface;
+use Shopware\Components\Compatibility\LegacyStructConverter;
+use Shopware\Components\Emotion\DeviceConfiguration;
+use Shopware\Components\ProductStream\Repository;
 
 class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 {
@@ -42,8 +48,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     public function indexAction()
     {
         /** @var ShopContext $shopContext */
-        $shopContext = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
-        $emotionService = $this->container->get(\Shopware\Bundle\EmotionBundle\Service\EmotionServiceInterface::class);
+        $shopContext = $this->container->get(ContextServiceInterface::class)->getShopContext();
+        $emotionService = $this->container->get(EmotionServiceInterface::class);
 
         $emotionIds = [(int) $this->Request()->getParam('emotionId')];
 
@@ -115,7 +121,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     {
         $emotionId = (int) $this->Request()->getParam('emotionId');
 
-        $emotion = $this->get(\Shopware\Components\Emotion\DeviceConfiguration::class)->getById($emotionId);
+        $emotion = $this->get(DeviceConfiguration::class)->getById($emotionId);
 
         // The user can preview the emotion for every device.
         $emotion['devices'] = '0,1,2,3,4';
@@ -182,9 +188,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     private function getProductSliderData($category, $offset, $limit, $sort = null)
     {
         /** @var ShopContext $context */
-        $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
         /** @var StoreFrontCriteriaFactory $factory */
-        $factory = Shopware()->Container()->get(\Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface::class);
+        $factory = Shopware()->Container()->get(StoreFrontCriteriaFactoryInterface::class);
         $criteria = $factory->createBaseCriteria([$category], $context);
 
         $criteria->offset($offset)
@@ -206,8 +212,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         }
 
         /** @var ProductSearchResult $result */
-        $result = Shopware()->Container()->get(\Shopware\Bundle\SearchBundle\ProductSearchInterface::class)->search($criteria, $context);
-        $data = Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertListProductStructList($result->getProducts());
+        $result = Shopware()->Container()->get(ProductSearchInterface::class)->search($criteria, $context);
+        $data = Shopware()->Container()->get(LegacyStructConverter::class)->convertListProductStructList($result->getProducts());
 
         $count = $result->getTotalCount();
         if ($limit !== 0) {
@@ -232,21 +238,19 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getProductStream($productStreamId, $offset = 0, $limit = 100)
     {
-        $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
-        $factory = Shopware()->Container()->get(\Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface::class);
+        $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
+        $factory = Shopware()->Container()->get(StoreFrontCriteriaFactoryInterface::class);
 
         $category = $context->getShop()->getCategory()->getId();
         $criteria = $factory->createBaseCriteria([$category], $context);
         $criteria->offset($offset)
                  ->limit($limit);
 
-        /** @var RepositoryInterface $streamRepository */
-        $streamRepository = $this->get(\Shopware\Components\ProductStream\Repository::class);
+        $streamRepository = $this->get(Repository::class);
         $streamRepository->prepareCriteria($criteria, $productStreamId);
 
-        /** @var ProductSearchResult $result */
-        $result = Shopware()->Container()->get(\Shopware\Bundle\SearchBundle\ProductSearchInterface::class)->search($criteria, $context);
-        $data = Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertListProductStructList($result->getProducts());
+        $result = Shopware()->Container()->get(ProductSearchInterface::class)->search($criteria, $context);
+        $data = Shopware()->Container()->get(LegacyStructConverter::class)->convertListProductStructList($result->getProducts());
 
         $count = $result->getTotalCount();
 

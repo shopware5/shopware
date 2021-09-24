@@ -166,9 +166,9 @@ class Field extends ModelEntity
     private $translatable;
 
     /**
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(name="position", type="integer", nullable=false)
+     * @ORM\Column(name="position", type="integer", nullable=true)
      */
     private $position;
 
@@ -177,10 +177,10 @@ class Field extends ModelEntity
      * which can be configured in the backend emotion module.
      * The assigned library component contains the data definition for the grid element.
      *
-     * @var \Shopware\Models\Emotion\Library\Component
+     * @var Component
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Library\Component", inversedBy="fields")
-     * @ORM\JoinColumn(name="componentID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="componentID", referencedColumnName="id", nullable=false)
      */
     private $component;
 
@@ -301,7 +301,7 @@ class Field extends ModelEntity
      * which can be configured in the backend emotion module.
      * The assigned library component contains the data definition for the grid element.
      *
-     * @return \Shopware\Models\Emotion\Library\Component
+     * @return Component
      */
     public function getComponent()
     {
@@ -313,7 +313,7 @@ class Field extends ModelEntity
      * which can be configured in the backend emotion module.
      * The assigned library component contains the data definition for the grid element.
      *
-     * @param \Shopware\Models\Emotion\Library\Component $component
+     * @param Component $component
      */
     public function setComponent($component)
     {
@@ -449,7 +449,7 @@ class Field extends ModelEntity
     }
 
     /**
-     * @param int $position
+     * @param int|null $position
      */
     public function setPosition($position)
     {
@@ -457,7 +457,7 @@ class Field extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPosition()
     {

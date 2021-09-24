@@ -26,6 +26,7 @@ namespace Shopware\Models\Widget;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\User\User;
 
 /**
  * @ORM\Table(name="s_core_widget_views")
@@ -46,22 +47,22 @@ class View extends ModelEntity
      * @var Widget
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Widget\Widget", inversedBy="views")
-     * @ORM\JoinColumn(name="widget_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="widget_id", referencedColumnName="id", nullable=false)
      */
     private $widget;
 
     /**
-     * @var \Shopware\Models\User\User|null
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\User\User")
-     * @ORM\JoinColumn(name="auth_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="auth_id", referencedColumnName="id", nullable=false)
      */
     private $auth;
 
     /**
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(name="auth_id", type="integer", nullable=true)
+     * @ORM\Column(name="auth_id", type="integer", nullable=false)
      */
     private $authId;
 
@@ -111,7 +112,7 @@ class View extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\User\User|null
+     * @return User
      */
     public function getAuth()
     {
@@ -119,7 +120,7 @@ class View extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\User\User $auth
+     * @param User $auth
      */
     public function setAuth($auth)
     {
@@ -159,7 +160,7 @@ class View extends ModelEntity
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getAuthId()
     {

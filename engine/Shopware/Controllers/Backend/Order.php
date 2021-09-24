@@ -33,7 +33,6 @@ use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Random;
 use Shopware\Components\StateTranslatorService;
@@ -53,6 +52,7 @@ use Shopware\Models\Order\Billing;
 use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\DetailStatus;
 use Shopware\Models\Order\Document\Document;
+use Shopware\Models\Order\Document\Repository as OrderDocumentRepository;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Order\Repository as OrderRepository;
 use Shopware\Models\Order\Shipping;
@@ -110,7 +110,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Contains the dynamic receipt repository
      *
-     * @var ModelRepository
+     * @var OrderDocumentRepository
      */
     public static $documentRepository;
 
@@ -1302,7 +1302,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     protected function getManager()
     {
         if (self::$manager === null) {
-            self::$manager = Shopware()->Models();
+            self::$manager = $this->get('models');
         }
 
         return self::$manager;
@@ -1379,11 +1379,11 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
+     * @return OrderDocumentRepository
+     *
      * @deprecated in 5.6, will be removed in 5.7 without a replacement
      *
      * Helper function to get access on the static declared repository
-     *
-     * @return ModelRepository
      */
     protected function getDocumentRepository()
     {
@@ -1946,7 +1946,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $tax = $this->getManager()->find(Tax::class, $data['taxId']);
             if ($tax instanceof Tax) {
                 $data['tax'] = $tax;
-                $data['taxRate'] = $tax->getTax();
+                $data['taxRate'] = (float) $tax->getTax();
             }
         } else {
             unset($data['tax']);

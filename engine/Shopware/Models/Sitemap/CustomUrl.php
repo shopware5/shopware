@@ -73,7 +73,7 @@ class CustomUrl extends ModelEntity
     private $lastMod;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="shop_id", type="integer", nullable=true)
      */

@@ -26,6 +26,7 @@ namespace Shopware\Models\Blog;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Media\Media as MediaModel;
 
 /**
  * @ORM\Entity()
@@ -39,17 +40,17 @@ class Media extends ModelEntity
      * @var Blog
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Blog\Blog", inversedBy="media")
-     * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="blog_id", referencedColumnName="id", nullable=false)
      */
     protected $blog;
 
     /**
      * OWNING SIDE
      *
-     * @var Media
+     * @var MediaModel
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="blogMedia")
-     * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", nullable=false)
      */
     protected $media;
 
@@ -77,7 +78,7 @@ class Media extends ModelEntity
     private $mediaId;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="preview", type="boolean", nullable=false)
      */
@@ -92,7 +93,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public function getPreview()
     {
@@ -100,7 +101,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @param int $preview
+     * @param bool $preview
      */
     public function setPreview($preview)
     {
@@ -108,7 +109,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Blog\Blog
+     * @return Blog
      */
     public function getBlog()
     {
@@ -116,7 +117,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Blog\Blog $blog
+     * @param Blog $blog
      */
     public function setBlog($blog)
     {
@@ -124,7 +125,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Blog\Media
+     * @return MediaModel
      */
     public function getMedia()
     {
@@ -132,7 +133,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Blog\Media $media
+     * @param MediaModel $media
      */
     public function setMedia($media)
     {

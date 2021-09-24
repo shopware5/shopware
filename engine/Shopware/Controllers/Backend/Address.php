@@ -32,6 +32,9 @@ use Shopware\Models\Customer\Address as AddressModel;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * @extends Shopware_Controllers_Backend_Application<AddressModel>
+ */
 class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_Application
 {
     protected $model = AddressModel::class;

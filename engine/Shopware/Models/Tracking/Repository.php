@@ -30,6 +30,8 @@ use Shopware\Components\Model\ModelRepository;
 
 /**
  * Shopware Tracking Model
+ *
+ * @extends ModelRepository<ArticleImpression|Banner>
  */
 class Repository extends ModelRepository
 {

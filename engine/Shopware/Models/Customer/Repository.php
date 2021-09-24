@@ -35,6 +35,8 @@ use Shopware\Models\Order\Order;
  * The customer model repository is responsible to load all customer data.
  * It supports the standard functions like findAll or findBy and extends the standard repository for
  * some specific functions to return the model data as array.
+ *
+ * @extends ModelRepository<Customer>
  */
 class Repository extends ModelRepository
 {
@@ -203,7 +205,9 @@ class Repository extends ModelRepository
         $builder->andWhere('orders.status NOT IN (:stati)');
         $builder->setParameter(':stati', [-1, 4], Connection::PARAM_INT_ARRAY);
 
-        $this->addOrderBy($builder, $orderBy);
+        if (\is_array($orderBy)) {
+            $this->addOrderBy($builder, $orderBy);
+        }
 
         return $builder;
     }

@@ -13,6 +13,10 @@ parameters:
         container_xml_path: 'var/cache/production____REVISION___/container.xml'
         console_application_loader: tests/phpstan-console-application.php
 
+    doctrine:
+        repositoryClass: Shopware\Components\Model\ModelRepository
+        objectManagerLoader: tests/phpstan-doctrine-model-manager.php
+
     scanDirectories:
         - %currentWorkingDirectory%/var/cache/production____REVISION___/doctrine
         - %currentWorkingDirectory%/var/cache/production____REVISION___/proxies
@@ -62,6 +66,7 @@ parameters:
         - '#no value type specified in iterable type Enlight_Plugin_PluginCollection#'
         - '#no value type specified in iterable type Enlight_Plugin_PluginManager#'
         - '#no value type specified in iterable type Enlight_Event_EventArgs#'
+        - '#no value type specified in iterable type Doctrine\\#'
 
         # This method does not exists, but it does not throw an error. Needs to be checked
         - '#Call to an undefined method Enlight_Template_Manager::setCompileId\(\)#'
@@ -69,13 +74,11 @@ parameters:
         # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
         - '#Cannot call method fetchAll\(\) on Doctrine\\DBAL\\Driver\\ResultStatement\|int#'
 
-        # Remove if Doctrine PHPStan configuration is done
-        - '#Cannot call method .*\(\) on object\|null#'
-        - '#(p|P)roperty .*::\$repository \(.*\) does not accept Doctrine\\ORM\\EntityRepository<.*>#'
-        - '#Method .*::getRepository\(\) should return .*Repository but returns Doctrine\\ORM\\EntityRepository.*#'
-        -
-            message: '#Call to an undefined method#'
+        - # This property contains many different repositories, so we do not specify the type
+            message: '#with generic class Shopware\\Components\\Model\\ModelRepository does not specify its types: TEntityClass#'
             path: engine/Shopware/Controllers/Backend/Config.php
-        -
-            message: '#Array \(array<string, Shopware\\Components\\Model\\ModelRepository>\) does not accept Doctrine\\ORM\\EntityRepository#'
-            path: engine/Shopware/Controllers/Backend/Config.php
+        - # The config stores values as serialized strings, but the getter of the models return the actual type like bool or int
+            message: '#::\$value type mapping mismatch: database|property can contain #'
+            paths:
+                - engine/Shopware/Models/Config/Element.php
+                - engine/Shopware/Models/Config/Value.php

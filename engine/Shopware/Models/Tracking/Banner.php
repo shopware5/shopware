@@ -72,16 +72,16 @@ class Banner extends ModelEntity
     /**
      * ID of the banner which should be tracked
      *
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(name="bannerID", type="integer", nullable=true)
+     * @ORM\Column(name="bannerID", type="integer", nullable=false)
      */
     private $bannerId;
 
     /**
      * Accumulated number of clicks
      *
-     * @var int|null
+     * @var int
      *
      * @ORM\Column(name="clicks", type="integer", nullable=false)
      */
@@ -90,7 +90,7 @@ class Banner extends ModelEntity
     /**
      * Accumulated number of views
      *
-     * @var int|null
+     * @var int
      *
      * @ORM\Column(name="views", type="integer", nullable=false)
      */
@@ -136,7 +136,7 @@ class Banner extends ModelEntity
     /**
      * Returns the ID of the banner which should be tracked.
      *
-     * @return int|null
+     * @return int
      */
     public function getBannerId()
     {

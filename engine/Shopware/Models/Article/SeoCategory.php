@@ -26,6 +26,8 @@ namespace Shopware\Models\Article;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Article SeoCategory Model
@@ -36,26 +38,26 @@ use Shopware\Components\Model\ModelEntity;
 class SeoCategory extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Shop\Shop
+     * @var Shop
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
-     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id", nullable=false)
      */
     protected $shop;
 
     /**
-     * @var \Shopware\Models\Article\Article
+     * @var Article
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="seoCategories")
-     * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="article_id", referencedColumnName="id", nullable=false)
      */
     protected $article;
 
     /**
-     * @var \Shopware\Models\Category\Category
+     * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
      */
     protected $category;
 
@@ -98,7 +100,7 @@ class SeoCategory extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Article $article
+     * @param Article $article
      */
     public function setArticle($article)
     {
@@ -106,7 +108,7 @@ class SeoCategory extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Article
+     * @return Article
      */
     public function getArticle()
     {
@@ -114,7 +116,7 @@ class SeoCategory extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Category\Category $category
+     * @param Category $category
      */
     public function setCategory($category)
     {
@@ -122,7 +124,7 @@ class SeoCategory extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Category\Category
+     * @return Category
      */
     public function getCategory()
     {
@@ -130,7 +132,7 @@ class SeoCategory extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Shop $shop
+     * @param Shop $shop
      */
     public function setShop($shop)
     {
@@ -138,7 +140,7 @@ class SeoCategory extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop|null
+     * @return Shop|null
      */
     public function getShop()
     {

@@ -27,6 +27,9 @@ namespace Shopware\Models\Form;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
+/**
+ * @extends ModelRepository<Form>
+ */
 class Repository extends ModelRepository
 {
     /**

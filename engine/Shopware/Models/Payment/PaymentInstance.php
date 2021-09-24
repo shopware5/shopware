@@ -26,6 +26,8 @@ namespace Shopware\Models\Payment;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Customer\Customer;
+use Shopware\Models\Order\Order;
 
 /**
  * Shopware payment model represents a single payment transaction.
@@ -42,14 +44,14 @@ use Shopware\Components\Model\ModelEntity;
 class PaymentInstance extends ModelEntity
 {
     /**
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(name="order_id", type="integer")
+     * @ORM\Column(name="order_id", type="integer", nullable=true)
      */
     protected $orderId;
 
     /**
-     * @var \Shopware\Models\Payment\Payment
+     * @var Payment|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Payment\Payment", inversedBy="paymentInstances")
      * @ORM\JoinColumn(name="payment_mean_id", referencedColumnName="id")
@@ -57,7 +59,7 @@ class PaymentInstance extends ModelEntity
     protected $paymentMean;
 
     /**
-     * @var \Shopware\Models\Order\Order
+     * @var Order|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Order\Order", inversedBy="paymentInstances")
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
@@ -65,7 +67,7 @@ class PaymentInstance extends ModelEntity
     protected $order;
 
     /**
-     * @var \Shopware\Models\Customer\Customer
+     * @var Customer|null
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer", inversedBy="paymentInstances")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
@@ -150,9 +152,9 @@ class PaymentInstance extends ModelEntity
     protected $iban;
 
     /**
-     * @var float
+     * @var string|null
      *
-     * @ORM\Column(name="amount", type="decimal", precision=20, scale=4)
+     * @ORM\Column(name="amount", type="decimal", precision=20, scale=4, nullable=true)
      */
     protected $amount;
 
@@ -268,7 +270,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Customer\Customer $customer
+     * @param Customer|null $customer
      */
     public function setCustomer($customer)
     {
@@ -276,7 +278,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Customer\Customer
+     * @return Customer|null
      */
     public function getCustomer()
     {
@@ -332,7 +334,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Order\Order $order
+     * @param Order|null $order
      */
     public function setOrder($order)
     {
@@ -340,7 +342,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Order\Order
+     * @return Order|null
      */
     public function getOrder()
     {
@@ -348,7 +350,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Payment\Payment $paymentMean
+     * @param Payment|null $paymentMean
      */
     public function setPaymentMean($paymentMean)
     {
@@ -356,7 +358,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Payment\Payment
+     * @return Payment|null
      */
     public function getPaymentMean()
     {
@@ -380,18 +382,25 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @param float $amount
+     * @param float|null $amount
      */
     public function setAmount($amount)
     {
+        if ($amount !== null) {
+            $amount = (string) $amount;
+        }
         $this->amount = $amount;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getAmount()
     {
+        if ($this->amount !== null) {
+            return (float) $this->amount;
+        }
+
         return $this->amount;
     }
 

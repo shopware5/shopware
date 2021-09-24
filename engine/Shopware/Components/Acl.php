@@ -25,7 +25,7 @@
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\User\Privilege;
-use Shopware\Models\User\Resource;
+use Shopware\Models\User\Resource as UserResource;
 use Shopware\Models\User\Role;
 use Shopware\Models\User\Rule;
 
@@ -52,10 +52,10 @@ class Shopware_Components_Acl extends Zend_Acl
      */
     public function initAclResources()
     {
-        $repository = $this->em->getRepository(Resource::class);
+        $repository = $this->em->getRepository(UserResource::class);
         $resources = $repository->findAll();
 
-        /** @var resource $resource */
+        /** @var UserResource $resource */
         foreach ($resources as $resource) {
             $this->addResource($resource);
         }
@@ -132,7 +132,7 @@ class Shopware_Components_Acl extends Zend_Acl
      */
     public function hasResourceInDatabase($resourceName)
     {
-        $repository = $this->em->getRepository(Resource::class);
+        $repository = $this->em->getRepository(UserResource::class);
         $resource = $repository->findOneBy(['name' => $resourceName]);
 
         return !empty($resource);
@@ -155,7 +155,7 @@ class Shopware_Components_Acl extends Zend_Acl
             throw new Enlight_Exception(sprintf('Resource "%s" already exists', $resourceName));
         }
 
-        $resource = new Resource();
+        $resource = new UserResource();
         $resource->setName($resourceName);
         $resource->setPluginId($pluginID);
 
@@ -204,9 +204,9 @@ class Shopware_Components_Acl extends Zend_Acl
      */
     public function deleteResource($resourceName)
     {
-        $repository = $this->em->getRepository(Resource::class);
+        $repository = $this->em->getRepository(UserResource::class);
 
-        /** @var resource|null $resource */
+        /** @var UserResource|null $resource */
         $resource = $repository->findOneBy(['name' => $resourceName]);
         if ($resource === null) {
             return false;

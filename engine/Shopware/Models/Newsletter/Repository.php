@@ -28,6 +28,8 @@ use Shopware\Components\Model\ModelRepository;
 
 /**
  * Repository for the mailing model
+ *
+ * @extends ModelRepository<Newsletter|Address>
  */
 class Repository extends ModelRepository
 {

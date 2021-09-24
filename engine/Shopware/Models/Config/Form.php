@@ -46,7 +46,7 @@ class Form extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection<\Shopware\Models\Config\FormTranslation>
+     * @var ArrayCollection<FormTranslation>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Config\FormTranslation", mappedBy="form", cascade={"all"})
      */
@@ -91,9 +91,9 @@ class Form extends ModelEntity
     private $label;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="description", type="string", nullable=false)
+     * @ORM\Column(name="description", type="string", nullable=true)
      */
     private $description;
 
@@ -120,7 +120,7 @@ class Form extends ModelEntity
     private $elements;
 
     /**
-     * @var ArrayCollection<Element>
+     * @var ArrayCollection<Form>
      *
      * @ORM\OneToMany(targetEntity="Form", mappedBy="parent", cascade={"all"}))
      * @ORM\OrderBy({"position" = "ASC"})
@@ -182,7 +182,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      *
      * @return Form
      */
@@ -194,7 +194,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -345,7 +345,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<Element>
+     * @return ArrayCollection<Form>
      */
     public function getChildren()
     {
@@ -353,7 +353,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<Element> $children
+     * @param ArrayCollection<Form> $children
      */
     public function setChildren($children)
     {

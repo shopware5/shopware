@@ -41,12 +41,12 @@ class FormSynchronizer
     private $em;
 
     /**
-     * @var ModelRepository
+     * @var ModelRepository<Form>
      */
     private $formRepository;
 
     /**
-     * @var ModelRepository
+     * @var ModelRepository<Locale>
      */
     private $localeRepository;
 

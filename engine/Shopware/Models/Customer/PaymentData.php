@@ -26,6 +26,7 @@ namespace Shopware\Models\Customer;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Payment\Payment;
 
 /**
  * Shopware payment model represents a payment method information.
@@ -42,25 +43,25 @@ use Shopware\Components\Model\ModelEntity;
 class PaymentData extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Payment\Payment
+     * @var Payment
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Payment\Payment", inversedBy="paymentData")
-     * @ORM\JoinColumn(name="payment_mean_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="payment_mean_id", referencedColumnName="id", nullable=false)
      */
     protected $paymentMean;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="payment_mean_id", type="integer")
+     * @ORM\Column(name="payment_mean_id", type="integer", nullable=false)
      */
     protected $paymentMeanId;
 
     /**
-     * @var \Shopware\Models\Customer\Customer
+     * @var Customer
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer", inversedBy="paymentData")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected $customer;
 
@@ -193,7 +194,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Customer\Customer $customer
+     * @param Customer $customer
      */
     public function setCustomer($customer)
     {
@@ -201,7 +202,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Customer\Customer
+     * @return Customer
      */
     public function getCustomer()
     {
@@ -225,7 +226,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Payment\Payment $paymentMean
+     * @param Payment $paymentMean
      */
     public function setPaymentMean($paymentMean)
     {
@@ -233,7 +234,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Payment\Payment
+     * @return Payment
      */
     public function getPaymentMean()
     {

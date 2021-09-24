@@ -25,12 +25,11 @@
 namespace Shopware\Commands;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\ContainerAwareEventManager;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
-use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
@@ -91,9 +90,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
         if ($argumentName === 'shopId') {
-            /** @var ModelManager $em */
             $em = $this->getContainer()->get(ModelManager::class);
-            /** @var Repository $shopRepository */
             $shopRepository = $em->getRepository(Shop::class);
             $queryBuilder = $shopRepository->createQueryBuilder('shop');
 
@@ -154,7 +151,6 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
         }
 
         if (empty($shops)) {
-            /** @var QueryBuilder $query */
             $query = $this->database->createQueryBuilder();
             $shops = $query->select('id')
                 ->from('s_core_shops', 'shops')
@@ -170,19 +166,18 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
         foreach ($shops as $shopId) {
             $output->writeln('Rebuilding SEO index for shop ' . $shopId);
 
-            /** @var Repository $repository */
             $repository = $this->modelManager->getRepository(Shop::class);
             $shop = $repository->getActiveById($shopId);
 
             if ($shop === null) {
-                throw new \RuntimeException('No valid shop id passed');
+                throw new ModelNotFoundException(Shop::class, $shopId);
             }
 
             $this->container->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
             $this->modules->Categories()->baseId = $shop->getCategory()->getId();
 
-            list($cachedTime, $elementId, $shopId) = $this->seoIndex->getCachedTime();
+            [, $elementId, $shopId] = $this->seoIndex->getCachedTime();
 
             $this->seoIndex->setCachedTime($currentTime->format('Y-m-d H:i:s'), $elementId, $shopId);
             $this->rewriteTable->baseSetup();

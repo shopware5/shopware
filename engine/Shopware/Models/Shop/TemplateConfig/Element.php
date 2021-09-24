@@ -39,7 +39,7 @@ class Element extends ModelEntity
      * @var Template
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Template", inversedBy="elements")
-     * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="template_id", referencedColumnName="id", nullable=false)
      */
     protected $template;
 
@@ -77,9 +77,9 @@ class Element extends ModelEntity
     protected $position = 0;
 
     /**
-     * @var array
+     * @var array|null
      *
-     * @ORM\Column(name="default_value", type="array", nullable=false)
+     * @ORM\Column(name="default_value", type="array", nullable=true)
      */
     protected $defaultValue;
 
@@ -119,9 +119,9 @@ class Element extends ModelEntity
     protected $lessCompatible = true;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="attributes", type="array", nullable=false)
+     * @ORM\Column(name="attributes", type="array", nullable=true)
      */
     protected $attributes;
 
@@ -129,7 +129,7 @@ class Element extends ModelEntity
      * @var Layout
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\TemplateConfig\Layout", inversedBy="elements")
-     * @ORM\JoinColumn(name="container_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="container_id", referencedColumnName="id", nullable=false)
      */
     protected $container;
 
@@ -242,7 +242,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param array $defaultValue
+     * @param array|null $defaultValue
      */
     public function setDefaultValue($defaultValue)
     {
@@ -250,7 +250,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return array
+     * @return array|null
      */
     public function getDefaultValue()
     {
@@ -374,7 +374,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getAttributes()
     {
@@ -382,7 +382,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param string $attributes
+     * @param string|null $attributes
      */
     public function setAttributes($attributes)
     {

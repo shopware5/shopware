@@ -26,12 +26,11 @@ namespace Shopware\Commands;
 
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
-use Shopware\Models\Media\Repository;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -73,8 +72,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
     public function completeOptionValues($optionName, CompletionContext $context)
     {
         if ($optionName === 'albumid') {
-            /** @var ModelRepository $albumRepository */
-            $albumRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Album::class);
+            $albumRepository = $this->getContainer()->get(ModelManager::class)->getRepository(Album::class);
 
             $queryBuilder = $albumRepository->createQueryBuilder('alb')
                 ->innerJoin('alb.settings', 'settings', Join::WITH, 'settings.createThumbnails = 1');
@@ -133,7 +131,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
         $this->output = $output;
         $this->force = (bool) $input->getOption('force');
         $this->errors = [];
-        $this->generator = $this->getContainer()->get(\Shopware\Components\Thumbnail\Manager::class);
+        $this->generator = $this->getContainer()->get(Manager::class);
 
         $albumId = (int) $input->getOption('albumid');
 
@@ -154,12 +152,12 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
     protected function getMediaAlbums($albumId)
     {
         /** @var ModelManager $em */
-        $em = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class);
+        $em = $this->getContainer()->get(ModelManager::class);
 
         $builder = $em->createQueryBuilder();
         $builder
             ->select(['album', 'settings'])
-            ->from(\Shopware\Models\Media\Album::class, 'album')
+            ->from(Album::class, 'album')
             ->innerJoin('album.settings', 'settings', 'WITH', 'settings.createThumbnails = 1');
 
         if (!empty($albumId)) {
@@ -193,10 +191,8 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
     {
         $this->output->writeln("Generating Thumbnails for Album {$album->getName()} (ID: {$album->getId()})");
 
-        /** @var ModelManager */
-        $em = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class);
+        $em = $this->getContainer()->get(ModelManager::class);
 
-        /** @var Repository */
         $repository = $em->getRepository(Media::class);
 
         $query = $repository->getAlbumMediaQuery($album->getId());
@@ -232,7 +228,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
     private function createMediaThumbnails(Media $media)
     {
         if (!$this->imageExists($media)) {
-            throw new \Exception(sprintf('Base image file "%s" does not exist', $media->getPath()));
+            throw new Exception(sprintf('Base image file "%s" does not exist', $media->getPath()));
         }
 
         $thumbnails = $media->getThumbnailFilePaths();
@@ -254,7 +250,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
      */
     private function thumbnailExists($thumbnailPath)
     {
-        $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = $this->container->get(MediaServiceInterface::class);
         $projectDir = $this->container->getParameter('shopware.app.rootDir');
 
         if (!\is_string($projectDir)) {
@@ -271,7 +267,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
      */
     private function imageExists(Media $media)
     {
-        $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = $this->container->get(MediaServiceInterface::class);
         $projectDir = $this->container->getParameter('shopware.app.rootDir');
 
         if (!\is_string($projectDir)) {

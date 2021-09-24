@@ -255,7 +255,7 @@ class SubscriptionService
 
         $default = $repo->getActiveDefault();
 
-        return $default->getHost();
+        return (string) $default->getHost();
     }
 
     /**

@@ -52,14 +52,14 @@ class ExcludedUrl extends ModelEntity
     private $resource;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="identifier", type="string", nullable=true)
      */
     private $identifier;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="shop_id", type="integer", nullable=true)
      */

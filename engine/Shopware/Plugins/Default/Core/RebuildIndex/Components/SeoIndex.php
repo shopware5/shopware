@@ -22,6 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\Query;
+use Shopware\Bundle\ContentTypeBundle\Services\TypeProvider;
+use Shopware\Components\ShopRegistrationServiceInterface;
+use Shopware\Models\Article\Supplier;
+use Shopware\Models\Blog\Blog;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Emotion\Emotion;
+use Shopware\Models\Shop\Shop;
+
 class Shopware_Components_SeoIndex extends Enlight_Class
 {
     /**
@@ -29,7 +40,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      *
      * This method ist used, if the SEO index needs to be build in *one* request - e.g. CronJob or Live
      *
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Zend_Db_Adapter_Exception
      */
     public function refreshSeoIndex()
     {
@@ -91,7 +102,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      * @param int    $elementId
      * @param int    $shopId
      *
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Zend_Db_Adapter_Exception
      */
     public function setCachedTime($resultTime, $elementId, $shopId)
     {
@@ -113,16 +124,15 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      *
      * @param int $shopId
      *
-     * @return \Shopware\Models\Shop\Shop
+     * @return Shop
      */
     public function registerShop($shopId)
     {
-        /** @var \Shopware\Models\Shop\Repository $repository */
-        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
+        $repository = Shopware()->Models()->getRepository(Shop::class);
 
         $shop = $repository->getById($shopId);
 
-        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         return $shop;
     }
@@ -159,8 +169,8 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      *
      * @param int $shopId
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      *
      * @return int
      */
@@ -169,8 +179,8 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         $this->registerShop($shopId);
 
         // Get blog categories
-        /** @var \Doctrine\ORM\Query $query */
-        $query = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class)->getBlogCategoriesByParentQuery(Shopware()->Shop()->get('parentID'));
+        /** @var Query $query */
+        $query = Shopware()->Models()->getRepository(Category::class)->getBlogCategoriesByParentQuery(Shopware()->Shop()->get('parentID'));
         $blogCategories = $query->getArrayResult();
 
         // Get list of blogCategory ids
@@ -180,9 +190,9 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         }
 
         // Count total number of associated blog articles
-        $builder = Shopware()->Models()->getRepository(\Shopware\Models\Blog\Blog::class)->getListQueryBuilder(
+        $builder = Shopware()->Models()->getRepository(Blog::class)->getListQueryBuilder(
             $blogCategoryIds,
-            null
+            []
         );
         $numResults = $builder->select('COUNT(blog)')
             ->getQuery()
@@ -244,8 +254,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      */
     public function countEmotions()
     {
-        /** @var \Shopware\Models\Emotion\Repository $repo */
-        $repo = Shopware()->Models()->getRepository(\Shopware\Models\Emotion\Emotion::class);
+        $repo = Shopware()->Models()->getRepository(Emotion::class);
         $builder = $repo->getListingQuery();
 
         $builder
@@ -322,8 +331,8 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      *
      * @param int $shopId
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      *
      * @return int
      */
@@ -334,7 +343,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             return 0;
         }
 
-        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Supplier::class);
+        $repository = Shopware()->Models()->getRepository(Supplier::class);
 
         $numResults = $repository->getFriendlyUrlSuppliersCountQueryBuilder()->getQuery()->getSingleScalarResult();
 
@@ -343,6 +352,6 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
     public function countContentTypes(): int
     {
-        return (int) \count(Shopware()->Container()->get(\Shopware\Bundle\ContentTypeBundle\Services\TypeProvider::class)->getTypes());
+        return (int) \count(Shopware()->Container()->get(TypeProvider::class)->getTypes());
     }
 }

@@ -58,7 +58,7 @@ class CalculationService implements CalculationServiceInterface
 
             // Additional tax checks required for sw-2238, sw-2903 and sw-3164
             if ($tax && $tax->getId() !== 0 && $tax->getId() !== null && $tax->getTax() !== null) {
-                $taxValue = $tax->getTax();
+                $taxValue = (float) $tax->getTax();
             }
 
             if ($order->getNet()) {

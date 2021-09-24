@@ -17,6 +17,7 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use Shopware\Bundle\ContentTypeBundle\Services\RepositoryInterface;
 use Shopware\Bundle\ContentTypeBundle\Structs\Criteria;
 
 function smarty_function_fetchContent(array $parameters, Enlight_Template_Default $template)
@@ -45,7 +46,7 @@ function smarty_function_fetchContent(array $parameters, Enlight_Template_Defaul
         $parameters['filter'] = [];
     }
 
-    /** @var \Shopware\Bundle\ContentTypeBundle\Services\RepositoryInterface $service */
+    /** @var RepositoryInterface $service */
     $service = Shopware()->Container()->get('shopware.bundle.content_type.' . $parameters['type']);
 
     $criteria = new Criteria();

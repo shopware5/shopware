@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Components\Cart;
 
 use Enlight_Controller_Request_RequestHttp;
 use PHPUnit\Framework\TestCase;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware\Tests\Functional\Traits\FixtureBehaviour;
@@ -70,7 +71,8 @@ class CartMigrationTest extends TestCase
         );
 
         $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveById($user['language']);
-        $shop->registerResources();
+        static::assertNotNull($shop);
+        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerResources($shop);
 
         Shopware()->Session()->set('Admin', true);
         Shopware()->System()->_POST = [

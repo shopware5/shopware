@@ -26,6 +26,7 @@ namespace Shopware\Models\MultiEdit;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Detail;
 
 /**
  * Shopware SwagMultiEdit Plugin - QueueArticle Model
@@ -38,20 +39,20 @@ class QueueArticle extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Detail
+     * @var Detail
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
-     * @ORM\JoinColumn(name="detail_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="detail_id", referencedColumnName="id", nullable=false)
      */
     protected $detail;
 
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\MultiEdit\Queue
+     * @var Queue
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\MultiEdit\Queue", inversedBy="articleDetails")
-     * @ORM\JoinColumn(name="queue_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="queue_id", referencedColumnName="id", nullable=false)
      */
     protected $queue;
 
@@ -81,7 +82,7 @@ class QueueArticle extends ModelEntity
     private $queueId;
 
     /**
-     * @param \Shopware\Models\Article\Detail $detail
+     * @param Detail $detail
      */
     public function setDetail($detail)
     {
@@ -89,7 +90,7 @@ class QueueArticle extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function getDetail()
     {
@@ -97,7 +98,7 @@ class QueueArticle extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\MultiEdit\Queue $queue
+     * @param Queue $queue
      */
     public function setQueue($queue)
     {
@@ -105,7 +106,7 @@ class QueueArticle extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\MultiEdit\Queue
+     * @return Queue
      */
     public function getQueue()
     {

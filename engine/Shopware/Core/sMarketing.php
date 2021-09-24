@@ -22,13 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
+use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Models\Banner\Banner;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Tracking\Banner as TrackingBanner;
 
 /**
  * Deprecated Shopware Class that handles marketing related functions
  */
-class sMarketing implements \Enlight_Hook
+class sMarketing implements Enlight_Hook
 {
     /**
      * Pointer to Shopware-Core-public functions
@@ -55,17 +64,17 @@ class sMarketing implements \Enlight_Hook
     public $customerGroupId;
 
     /**
-     * @var \Shopware\Models\Category\Category
+     * @var Category
      */
     private $category;
 
     /**
-     * @var StoreFrontBundle\Service\ContextServiceInterface
+     * @var ContextServiceInterface
      */
     private $contextService;
 
     /**
-     * @var StoreFrontBundle\Service\AdditionalTextServiceInterface
+     * @var AdditionalTextServiceInterface
      */
     private $additionalTextService;
 
@@ -75,8 +84,8 @@ class sMarketing implements \Enlight_Hook
     private $db;
 
     public function __construct(
-        StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
-        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
+        ContextServiceInterface $contextService = null,
+        AdditionalTextServiceInterface $additionalTextService = null
     ) {
         $this->category = Shopware()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
@@ -86,11 +95,11 @@ class sMarketing implements \Enlight_Hook
         $this->additionalTextService = $additionalTextService;
 
         if ($this->contextService == null) {
-            $this->contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
+            $this->contextService = Shopware()->Container()->get(ContextServiceInterface::class);
         }
 
         if ($this->additionalTextService == null) {
-            $this->additionalTextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface::class);
+            $this->additionalTextService = Shopware()->Container()->get(AdditionalTextServiceInterface::class);
         }
 
         $this->db = Shopware()->Db();
@@ -245,14 +254,14 @@ class sMarketing implements \Enlight_Hook
         }
 
         $images = array_column($getBanners, 'image');
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         array_walk($images, function (&$image) use ($mediaService) {
             $image = $mediaService->normalize($image);
         });
 
         $mediaIds = $this->getMediaIdsOfPath($images);
-        $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
         $medias = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::class)->getList($mediaIds, $context);
 
         foreach ($getBanners as &$getAffectedBanners) {
@@ -266,12 +275,11 @@ class sMarketing implements \Enlight_Hook
 
             $media = $this->getMediaByPath($medias, $getAffectedBanners['image']);
             if ($media !== null) {
-                $media = Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertMediaStruct($media);
+                $media = Shopware()->Container()->get(LegacyStructConverter::class)->convertMediaStruct($media);
                 $getAffectedBanners['media'] = $media;
             }
 
-            /** @var \Shopware\Models\Tracking\Repository $statRepository */
-            $statRepository = Shopware()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
+            $statRepository = Shopware()->Models()->getRepository(TrackingBanner::class);
             $bannerStatistics = $statRepository->getOrCreateBannerStatsModel($getAffectedBanners['id']);
             $bannerStatistics->increaseViews();
             Shopware()->Models()->persist($bannerStatistics);
@@ -660,7 +668,7 @@ SQL;
         );
 
         $getCampaignContainers = $this->db->fetchAll($sql);
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         foreach ($getCampaignContainers as $campaignKey => $campaignValue) {
             switch ($campaignValue['type']) {
@@ -724,14 +732,14 @@ SQL;
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Media[] $media
-     * @param string                          $path
+     * @param Media[] $media
+     * @param string  $path
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media|null
+     * @return Media|null
      */
     private function getMediaByPath($media, $path)
     {
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
         foreach ($media as $single) {
             if ($mediaService->normalize($single->getFile()) == $path) {
                 return $single;
@@ -810,8 +818,8 @@ SQL;
      */
     private function sGetMailCampaignsProducts($products)
     {
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $contextService */
-        $contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
+        /** @var ContextServiceInterface $contextService */
+        $contextService = Shopware()->Container()->get(ContextServiceInterface::class);
         $categoryId = $contextService->getShopContext()->getShop()->getCategory()->getId();
 
         $productData = [];
@@ -832,12 +840,12 @@ SQL;
      */
     private function getMediaIdsOfPath($images)
     {
-        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        /** @var QueryBuilder $query */
+        $query = Shopware()->Container()->get(Connection::class)->createQueryBuilder();
         $query->select(['media.id'])
             ->from('s_media', 'media')
             ->where('media.path IN (:path)')
-            ->setParameter(':path', $images, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY);
+            ->setParameter(':path', $images, Connection::PARAM_STR_ARRAY);
 
         $statement = $query->execute();
 

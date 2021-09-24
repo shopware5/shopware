@@ -23,20 +23,16 @@
  */
 
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Repository as ProductRepository;
 use Shopware\Models\Premium\Premium;
 use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * @var \Shopware\Components\Model\ModelRepository
+     * @var ProductRepository
      */
     protected $articleDetailRepository;
-
-    /**
-     * @var Shopware\Models\Premium\Repository
-     */
-    private $repository;
 
     public function initAcl()
     {
@@ -59,7 +55,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
     public function getSubShopsAction()
     {
         //load shop repository
-        $repository = Shopware()->Models()->getRepository(Shop::class);
+        $repository = $this->get('models')->getRepository(Shop::class);
 
         $builder = $repository->createQueryBuilder('shops');
         $builder->select([
@@ -85,7 +81,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
      */
     public function getPremiumArticlesAction()
     {
-        $this->repository = Shopware()->Models()->getRepository(Premium::class);
+        $repository = $this->get('models')->getRepository(Premium::class);
 
         $start = $this->Request()->get('start');
         $limit = $this->Request()->get('limit');
@@ -100,11 +96,11 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             $filter = $filter[\count($filter) - 1];
             $filterValue = $filter['value'];
 
-            $query = $this->repository->getBackendPremiumListQuery($start, $limit, $order, $filterValue);
-            $totalResult = Shopware()->Models()->getQueryCount($query);
+            $query = $repository->getBackendPremiumListQuery($start, $limit, $order, $filterValue);
+            $totalResult = $this->get('models')->getQueryCount($query);
         } else {
-            $query = $this->repository->getBackendPremiumListQuery($start, $limit, $order);
-            $totalResult = Shopware()->Models()->getQueryCount($query);
+            $query = $repository->getBackendPremiumListQuery($start, $limit, $order);
+            $totalResult = $this->get('models')->getQueryCount($query);
         }
 
         try {
@@ -145,7 +141,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
 
             //find the shop-model by using the subShopId
             /** @var Shop $shop */
-            $shop = Shopware()->Models()->find(Shop::class, $params['shopId']);
+            $shop = $this->get('models')->find(Shop::class, $params['shopId']);
             $premiumModel->setShop($shop);
 
             /** @var Detail $productVariant */
@@ -153,9 +149,9 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             $premiumModel->setArticleDetail($productVariant);
 
             //If the product is already set as a premium-product
-            $repository = Shopware()->Models()->getRepository(Premium::class);
+            $repository = $this->get('models')->getRepository(Premium::class);
             $result = $repository->findByOrderNumber($params['orderNumber']);
-            $result = Shopware()->Models()->toArray($result);
+            $result = $this->get('models')->toArray($result);
 
             if (!empty($result) && $params['shopId'] == $result[0]['shopId']) {
                 $this->View()->assign(['success' => false, 'errorMsg' => 'The product already is a premium-product.']);
@@ -164,10 +160,10 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             }
 
             //saves the model
-            Shopware()->Models()->persist($premiumModel);
-            Shopware()->Models()->flush();
+            $this->get('models')->persist($premiumModel);
+            $this->get('models')->flush();
 
-            $data = Shopware()->Models()->toArray($premiumModel);
+            $data = $this->get('models')->toArray($premiumModel);
 
             $this->View()->assign(['success' => true, 'data' => $data]);
         } catch (Exception $e) {
@@ -188,7 +184,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         }
 
         $params = $this->Request()->getParams();
-        $premiumModel = Shopware()->Models()->find(Premium::class, $params['id']);
+        $premiumModel = $this->get('models')->find(Premium::class, $params['id']);
 
         try {
             if (empty($params['orderNumberExport'])) {
@@ -199,8 +195,8 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
 
             $premiumModel->fromArray($params);
 
-            Shopware()->Models()->persist($premiumModel);
-            Shopware()->Models()->flush();
+            $this->get('models')->persist($premiumModel);
+            $this->get('models')->flush();
 
             $this->View()->assign(['success' => true, 'data' => $params]);
         } catch (Exception $e) {
@@ -219,7 +215,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
 
                 return;
             }
-            $repository = Shopware()->Models()->getRepository(Premium::class);
+            $repository = $this->get('models')->getRepository(Premium::class);
 
             $params = $this->Request()->getParams();
             unset($params['module'], $params['controller'], $params['action'], $params['_dc']);
@@ -230,18 +226,18 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
                     $id = $values['id'];
                     /** @var Premium $model */
                     $model = $repository->find($id);
-                    Shopware()->Models()->remove($model);
-                    Shopware()->Models()->flush();
-                    $data[] = Shopware()->Models()->toArray($model);
+                    $this->get('models')->remove($model);
+                    $this->get('models')->flush();
+                    $data[] = $this->get('models')->toArray($model);
                 }
             } else {
                 $id = $this->Request()->get('id');
                 /** @var Premium $model */
                 $model = $repository->find($id);
 
-                Shopware()->Models()->remove($model);
-                Shopware()->Models()->flush();
-                $data = Shopware()->Models()->toArray($model);
+                $this->get('models')->remove($model);
+                $this->get('models')->flush();
+                $data = $this->get('models')->toArray($model);
             }
             $this->View()->assign(['success' => true, 'data' => $data]);
         } catch (Exception $e) {
@@ -263,18 +259,18 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         }
 
         // If the product exists
-        $repository = Shopware()->Models()->getRepository(Detail::class);
-        $result = $repository->findByNumber($value);
+        $repository = $this->get('models')->getRepository(Detail::class);
+        $result = $repository->findOneBy(['number' => $value]);
 
-        if (!$result[0]) {
+        if ($result === null) {
             return;
         }
 
         // If the product is already set as a premium-product
-        $repository = Shopware()->Models()->getRepository(Premium::class);
-        $result = $repository->findByOrderNumber($value);
+        $repository = $this->get('models')->getRepository(Premium::class);
+        $result = $repository->findOneBy(['orderNumber' => $value]);
 
-        if ($result[0]) {
+        if ($result instanceof Premium) {
             return;
         }
 
@@ -284,12 +280,12 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
     /**
      * Helper function to get access to the articleDetail repository.
      *
-     * @return \Shopware\Components\Model\ModelRepository
+     * @return ProductRepository
      */
     private function getArticleDetailRepository()
     {
         if ($this->articleDetailRepository === null) {
-            $this->articleDetailRepository = Shopware()->Models()->getRepository(Detail::class);
+            $this->articleDetailRepository = $this->get('models')->getRepository(Detail::class);
         }
 
         return $this->articleDetailRepository;

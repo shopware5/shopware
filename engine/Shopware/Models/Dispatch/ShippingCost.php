@@ -50,10 +50,10 @@ class ShippingCost extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Dispatch\Dispatch
+     * @var Dispatch
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Dispatch\Dispatch", inversedBy="costsMatrix", cascade={"persist"})
-     * @ORM\JoinColumn(name="dispatchID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="dispatchID", referencedColumnName="id", nullable=false)
      */
     protected $dispatch;
 
@@ -71,27 +71,27 @@ class ShippingCost extends ModelEntity
     /**
      * Start price.
      *
-     * @var float
+     * @var string
      *
-     * @ORM\Column(name="`from`", type="decimal", nullable=false)
+     * @ORM\Column(name="`from`", type="decimal", precision=10, scale=3, nullable=false)
      */
     private $from;
 
     /**
      * Price for this entry
      *
-     * @var float
+     * @var string
      *
-     * @ORM\Column(name="value", type="decimal", nullable=false)
+     * @ORM\Column(name="value", type="decimal", precision=10, scale=2, nullable=false)
      */
     private $value;
 
     /**
      * Multiplicand for this entry
      *
-     * @var float
+     * @var string
      *
-     * @ORM\Column(name="factor", type="decimal", nullable=false)
+     * @ORM\Column(name="factor", type="decimal", precision=10, scale=2, nullable=false)
      */
     private $factor;
 
@@ -113,7 +113,7 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * @param float $from
+     * @param string $from
      *
      * @return ShippingCost
      */
@@ -125,7 +125,7 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getFrom()
     {
@@ -133,7 +133,7 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * @param float $value
+     * @param string $value
      *
      * @return ShippingCost
      */
@@ -145,7 +145,7 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getValue()
     {
@@ -153,7 +153,7 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * @param float $factor
+     * @param string $factor
      *
      * @return ShippingCost
      */
@@ -165,7 +165,7 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getFactor()
     {
@@ -176,7 +176,7 @@ class ShippingCost extends ModelEntity
      * OWNING SIDE
      * of the association between costsMatrix and dispatch
      *
-     * @return \Shopware\Models\Dispatch\Dispatch
+     * @return Dispatch
      */
     public function getDispatch()
     {
@@ -184,7 +184,7 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Dispatch\Dispatch|array $dispatch
+     * @param Dispatch|array $dispatch
      */
     public function setDispatch($dispatch)
     {

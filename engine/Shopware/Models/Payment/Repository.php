@@ -31,6 +31,8 @@ use Shopware\Components\Model\QueryBuilder;
  * Shopware Payment Model
  *
  * The repository builds the query to read the payments.
+ *
+ * @extends ModelRepository<Payment>
  */
 class Repository extends ModelRepository
 {

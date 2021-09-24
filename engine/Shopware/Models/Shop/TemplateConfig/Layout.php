@@ -27,6 +27,7 @@ namespace Shopware\Models\Shop\TemplateConfig;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Shop\Template;
 
 /**
  * @ORM\Table(name="s_core_templates_config_layout")
@@ -56,13 +57,13 @@ class Layout extends ModelEntity
     protected $templateId;
 
     /**
-     * @var \Shopware\Models\Shop\Template
+     * @var Template
      *
      * @ORM\ManyToOne(
      *     targetEntity="Shopware\Models\Shop\Template",
      *     inversedBy="layouts"
      * )
-     * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="template_id", referencedColumnName="id", nullable=false)
      */
     protected $template;
 
@@ -82,16 +83,16 @@ class Layout extends ModelEntity
     protected $parent;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column()
+     * @ORM\Column(name="title", type="string", nullable=true)
      */
     protected $title;
 
     /**
-     * @var string[]
+     * @var string[]|null
      *
-     * @ORM\Column(name="attributes", type="array", nullable=false)
+     * @ORM\Column(name="attributes", type="array", nullable=true)
      */
     protected $attributes;
 
@@ -126,7 +127,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $children
+     * @param ArrayCollection $children
      */
     public function setChildren($children)
     {
@@ -134,7 +135,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getChildren()
     {
@@ -150,7 +151,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\TemplateConfig\Layout|null $parent
+     * @param Layout|null $parent
      */
     public function setParent($parent)
     {
@@ -158,7 +159,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\TemplateConfig\Layout|null
+     * @return Layout|null
      */
     public function getParent()
     {
@@ -182,7 +183,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Template $template
+     * @param Template $template
      */
     public function setTemplate($template)
     {
@@ -190,7 +191,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Template
+     * @return Template
      */
     public function getTemplate()
     {
@@ -198,7 +199,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getTitle()
     {
@@ -206,7 +207,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param string $title
+     * @param string|null $title
      */
     public function setTitle($title)
     {
@@ -246,7 +247,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getElements()
     {
@@ -254,7 +255,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $elements
+     * @param ArrayCollection $elements
      */
     public function setElements($elements)
     {
@@ -262,7 +263,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return string[]
+     * @return string[]|null
      */
     public function getAttributes()
     {

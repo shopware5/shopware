@@ -27,7 +27,6 @@ namespace Shopware\Bundle\BenchmarkBundle\Commands;
 use Shopware\Bundle\BenchmarkBundle\Exception\TransmissionNotNecessaryException;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Models\Benchmark\BenchmarkConfig;
-use Shopware\Models\Benchmark\Repository;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -64,7 +63,6 @@ class SendStatisticsCommand extends ShopwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Repository $benchmarkRepository */
         $benchmarkRepository = $this->getContainer()->get('shopware.benchmark_bundle.repository.config');
         $statisticsService = $this->getContainer()->get('shopware.benchmark_bundle.statistics_transmission');
 

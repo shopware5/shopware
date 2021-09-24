@@ -22,9 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Article\Article as Product;
+use Shopware\Models\Article\Repository as ProductRepository;
 use Shopware\Models\Blog\Blog;
+use Shopware\Models\Blog\Comment;
 use Shopware\Models\Blog\Media;
+use Shopware\Models\Blog\Repository as BlogRepository;
 use Shopware\Models\Blog\Tag;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Category\Repository as CategoryRepository;
+use Shopware\Models\User\User;
 
 /**
  * Backend Controller for the blog backend module.
@@ -36,27 +47,27 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     /**
      * Entity Manager
      *
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $manager;
 
     /**
-     * @var \Shopware\Models\Blog\Repository
+     * @var BlogRepository
      */
     protected $blogRepository;
 
     /**
-     * @var \Shopware\Models\Blog\Repository
+     * @var ModelRepository<Comment>
      */
     protected $blogCommentRepository;
 
     /**
-     * @var \Shopware\Models\Category\Repository
+     * @var CategoryRepository
      */
     protected $categoryRepository;
 
     /**
-     * @var \Shopware\Models\Article\Repository
+     * @var ProductRepository
      */
     protected $articleRepository;
 
@@ -72,7 +83,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         if ($this->categoryRepository === null) {
-            $this->categoryRepository = $this->getManager()->getRepository(\Shopware\Models\Category\Category::class);
+            $this->categoryRepository = $this->getManager()->getRepository(Category::class);
         }
 
         return $this->categoryRepository;
@@ -83,14 +94,14 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      *
      * Helper Method to get access to the article repository.
      *
-     * @return \Shopware\Models\Article\Repository
+     * @return ProductRepository
      */
     public function getArticleRepository()
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         if ($this->articleRepository === null) {
-            $this->articleRepository = $this->getManager()->getRepository(\Shopware\Models\Article\Article::class);
+            $this->articleRepository = $this->getManager()->getRepository(Product::class);
         }
 
         return $this->articleRepository;
@@ -108,7 +119,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         if ($this->blogRepository === null) {
-            $this->blogRepository = $this->getManager()->getRepository(\Shopware\Models\Blog\Blog::class);
+            $this->blogRepository = $this->getManager()->getRepository(Blog::class);
         }
 
         return $this->blogRepository;
@@ -119,14 +130,14 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      *
      * Helper Method to get access to the blog comment repository.
      *
-     * @return Shopware\Models\Blog\Repository
+     * @return ModelRepository<Comment>
      */
     public function getBlogCommentRepository()
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         if ($this->blogCommentRepository === null) {
-            $this->blogCommentRepository = $this->getManager()->getRepository(\Shopware\Models\Blog\Comment::class);
+            $this->blogCommentRepository = $this->getManager()->getRepository(Comment::class);
         }
 
         return $this->blogCommentRepository;
@@ -154,7 +165,6 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             $blogCategoryIds = $this->getBlogCategoryListIds($blogCategories);
             $blogCategoryIds[] = $categoryId;
 
-            /** @var \Shopware\Models\Blog\Repository $repository */
             $repository = $this->getRepository();
             $dataQuery = $repository->getBackendListQuery($blogCategoryIds, $filter, $order, $offset, $limit);
 
@@ -235,12 +245,11 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             $this->getManager()->persist($blogModel);
             $this->getManager()->flush();
 
-            /** @var \Shopware\Models\Blog\Repository $repository */
             $repository = $this->getManager()->getRepository(Blog::class);
 
             $filter = [['property' => 'id', 'value' => $blogModel->getId()]];
             $dataQuery = $repository->getBackendDetailQuery($filter);
-            $data = $dataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $data = $dataQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
             $this->View()->assign(['success' => true, 'data' => $data]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
@@ -254,11 +263,11 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     {
         /** @var array $filter */
         $filter = $this->Request()->getParam('filter', []);
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         $data = $this->getRepository()
             ->getBackendDetailQuery($filter)
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         foreach ($data['media'] as $key => $media) {
             unset($data['media'][$key]['media']);
@@ -268,7 +277,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
 
         $data['tags'] = $this->flatBlogTags($data['tags']);
 
-        if ($data['displayDate'] instanceof \DateTime) {
+        if ($data['displayDate'] instanceof DateTime) {
             $data['displayTime'] = $data['displayDate']->format('H:i');
             $data['displayDate'] = $data['displayDate']->format('d.m.Y');
         } else {
@@ -350,7 +359,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         $blogArticleRequestData = empty($multipleBlogArticles) ? [['id' => $this->Request()->getParam('id')]] : $multipleBlogArticles;
         try {
             foreach ($blogArticleRequestData as $blogArticle) {
-                /** @var \Shopware\Models\Blog\Blog $model */
+                /** @var Blog $model */
                 $model = $this->getRepository()->find($blogArticle['id']);
                 $this->getManager()->remove($model);
             }
@@ -370,7 +379,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         $blogCommentRequestData = empty($multipleBlogComments) ? [['id' => $this->Request()->getParam('id')]] : $multipleBlogComments;
         try {
             foreach ($blogCommentRequestData as $blogComment) {
-                /** @var \Shopware\Models\Blog\Comment $model */
+                /** @var Comment $model */
                 $model = $this->getBlogCommentRepository()->find($blogComment['id']);
                 $this->getManager()->remove($model);
             }
@@ -392,7 +401,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         $blogCommentRequestData = empty($multipleBlogComments) ? [['id' => $this->Request()->getParam('id')]] : $multipleBlogComments;
         try {
             foreach ($blogCommentRequestData as $blogComment) {
-                /** @var \Shopware\Models\Blog\Comment $model */
+                /** @var Comment $model */
                 $model = $this->getBlogCommentRepository()->find($blogComment['id']);
                 $model->setActive(true);
             }
@@ -413,7 +422,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
 
         try {
             foreach ($blogCommentRequestData as $blogComment) {
-                /** @var \Shopware\Models\Blog\Comment $model */
+                /** @var Comment $model */
                 $model = $this->getBlogCommentRepository()->find($blogComment['id']);
                 $model->fromArray($blogComment);
             }
@@ -459,8 +468,8 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     /**
      * This method loads prepares the tag associated data for saving it directly to the blog model
      *
-     * @param array                      $data
-     * @param \Shopware\Models\Blog\Blog $blogModel
+     * @param array $data
+     * @param Blog  $blogModel
      */
     protected function prepareTagAssociatedData($data, $blogModel)
     {
@@ -514,12 +523,12 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     /**
      * Internal helper function to get access to the entity manager.
      *
-     * @return \Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = $this->get('models');
         }
 
         return $this->manager;
@@ -573,7 +582,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             if (empty($assignedArticleData['id'])) {
                 continue;
             }
-            /** @var \Shopware\Models\Article\Article $assignedArticle */
+            /** @var Product $assignedArticle */
             $assignedArticle = $this->getArticleRepository()->find($assignedArticleData['id']);
             $assignedArticlesRequestData[] = $assignedArticle;
         }
@@ -592,7 +601,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     private function prepareAuthorAssociatedData($data)
     {
         if (!empty($data['authorId'])) {
-            $data['author'] = $this->getManager()->find(\Shopware\Models\User\User::class, $data['authorId']);
+            $data['author'] = $this->getManager()->find(User::class, $data['authorId']);
         } else {
             $data['author'] = null;
         }

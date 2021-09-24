@@ -27,6 +27,9 @@ namespace Shopware\Models\Mail;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
+/**
+ * @extends ModelRepository<Mail>
+ */
 class Repository extends ModelRepository
 {
     /**

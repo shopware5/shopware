@@ -24,13 +24,13 @@
 
 namespace Shopware\Models\Benchmark;
 
-use Doctrine\ORM\EntityRepository;
 use Ramsey\Uuid\Uuid;
+use Shopware\Components\Model\ModelRepository;
 
 /**
- * Repository
+ * @extends ModelRepository<BenchmarkConfig>
  */
-class Repository extends EntityRepository implements \Enlight_Hook
+class Repository extends ModelRepository
 {
     /**
      * @param int $shopId

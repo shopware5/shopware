@@ -101,7 +101,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      * @throws Zend_Mail_Exception
      * @throws Enlight_Event_Exception
      *
-     *@deprecated in 5.6, will be private in 5.8
+     * @deprecated in 5.6, will be private in 5.8
      *
      * Commit form via email (default) or database (ticket system)
      */
@@ -161,7 +161,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $shopId = $this->container->get(ContextServiceInterface::class)->getShopContext()->getShop()->getId();
 
-        $query = Shopware()->Models()->getRepository(Form::class)
+        $query = $this->get('models')->getRepository(Form::class)
             ->getActiveFormQuery($formId, $shopId);
 
         $form = $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);

@@ -26,6 +26,7 @@ namespace Shopware\Components\Model;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Persistence\Proxy;
 
 /**
  * @ORM\MappedSuperclass()
@@ -33,6 +34,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class LazyFetchModelEntity extends ModelEntity
 {
+    /**
+     * @var EntityManager|null
+     */
     private static $em;
 
     public static function setEntityManager(EntityManager $em)
@@ -47,31 +51,33 @@ abstract class LazyFetchModelEntity extends ModelEntity
      */
     public function isProxy($object)
     {
-        return $object instanceof \Doctrine\ORM\Proxy\Proxy;
+        return $object instanceof Proxy;
     }
 
     /**
-     * @param object        $object
+     * @template TModel of object
+     *
+     * @param TModel|null   $object
      * @param array         $condition
      * @param EntityManager $em
      *
      * @throws \Exception
      *
-     * @return object|null
+     * @return TModel|null
      */
     public function fetchLazy($object, $condition, EntityManager $em = null)
     {
-        if (!$this->isProxy($object) || $object->__isInitialized() || !$this->getId()) {
+        if (!$object instanceof Proxy || $object->__isInitialized() || !$this->getId() || !method_exists($object, 'getId')) {
             return $object;
         }
 
-        if ($this->isProxy($object) && $object->getId()) {
+        if ($object->getId()) {
             $object->__load();
 
             return $object;
         }
 
-        if ($em == null) {
+        if ($em === null) {
             $em = self::$em;
         }
 
@@ -79,6 +85,7 @@ abstract class LazyFetchModelEntity extends ModelEntity
             throw new \Exception('Lazy fetch class not supported.');
         }
 
+        /** @var class-string<TModel> $class */
         $class = get_parent_class($object);
 
         return $em->getRepository($class)->findOneBy($condition);

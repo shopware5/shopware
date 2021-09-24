@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\SitePageMenu;
+use Shopware\Models\Shop\Locale as ShopLocale;
 
 /**
  * Shopware ControllerBase Plugin
@@ -72,6 +73,9 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         $view->assign('sUserLoggedIn', $view->sUserLoggedIn ?: false);
 
         $view->assign('Shop', $shop);
+        if (!$shop->getLocale() instanceof ShopLocale) {
+            throw new RuntimeException('Shop does not have a locale set');
+        }
         $view->assign('Locale', $shop->getLocale()->getLocale());
 
         $view->assign('sCategoryStart', $shop->getCategory()->getId());

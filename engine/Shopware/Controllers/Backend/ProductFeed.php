@@ -55,15 +55,14 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     public function getFeedsAction()
     {
         try {
-            /** @var Repository $repository */
-            $repository = Shopware()->Models()->getRepository(ProductFeed::class);
+            $repository = $this->get('models')->getRepository(ProductFeed::class);
             $dataQuery = $repository->getListQuery(
                 $this->Request()->getParam('sort', []),
                 $this->Request()->getParam('start'),
                 $this->Request()->getParam('limit')
             );
 
-            $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
+            $totalCount = $this->get('models')->getQueryCount($dataQuery);
             $feeds = $dataQuery->getArrayResult();
 
             $this->View()->assign(['success' => true, 'data' => $feeds, 'totalCount' => $totalCount]);
@@ -95,7 +94,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
 
         $dataQuery = $this->getArticleRepository()
                           ->getSuppliersWithExcludedIdsQuery($usedIds, $filter, $offset, $limit);
-        $total = Shopware()->Models()->getQueryCount($dataQuery);
+        $total = $this->get('models')->getQueryCount($dataQuery);
 
         $data = $dataQuery->getArrayResult();
 
@@ -129,7 +128,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
 
         $dataQuery = $this->getArticleRepository()
                           ->getArticlesWithExcludedIdsQuery($usedIds, $filter, $offset, $limit);
-        $total = Shopware()->Models()->getQueryCount($dataQuery);
+        $total = $this->get('models')->getQueryCount($dataQuery);
         $data = $dataQuery->getArrayResult();
 
         // Return the data and total count
@@ -149,7 +148,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         if (!empty($feedId)) {
             // Edit Product Feed
             /** @var ProductFeed $productFeed */
-            $productFeed = Shopware()->Models()->getRepository(ProductFeed::class)->find($feedId);
+            $productFeed = $this->get('models')->getRepository(ProductFeed::class)->find($feedId);
             // Clear all previous associations
             $productFeed->getCategories()->clear();
             $productFeed->getSuppliers()->clear();
@@ -218,8 +217,8 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $productFeed->setCacheRefreshed('2000-01-01');
 
         try {
-            Shopware()->Models()->persist($productFeed);
-            Shopware()->Models()->flush();
+            $this->get('models')->persist($productFeed);
+            $this->get('models')->flush();
 
             $data = $this->getFeed($productFeed->getId());
             $this->View()->assign(['success' => true, 'data' => $data]);
@@ -235,9 +234,9 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     {
         try {
             /** @var ProductFeed $model */
-            $model = Shopware()->Models()->getRepository(ProductFeed::class)->find($this->Request()->id);
-            Shopware()->Models()->remove($model);
-            Shopware()->Models()->flush();
+            $model = $this->get('models')->getRepository(ProductFeed::class)->find($this->Request()->id);
+            $this->get('models')->remove($model);
+            $this->get('models')->flush();
             $this->View()->assign(['success' => true, 'data' => $this->Request()->getParams()]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
@@ -259,7 +258,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $collection = new ArrayCollection();
         if (!empty($params[$paramString])) {
             foreach ($params[$paramString] as $param) {
-                $model = Shopware()->Models()->find($modelName, $param['id']);
+                $model = $this->get('models')->find($modelName, $param['id']);
                 $collection->add($model);
             }
         }
@@ -296,7 +295,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     private function getShopRepository()
     {
         if ($this->shopRepository === null) {
-            $this->shopRepository = Shopware()->Models()->getRepository(Shop::class);
+            $this->shopRepository = $this->get('models')->getRepository(Shop::class);
         }
 
         return $this->shopRepository;
@@ -310,7 +309,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     private function getArticleRepository()
     {
         if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository(Article::class);
+            $this->articleRepository = $this->get('models')->getRepository(Article::class);
         }
 
         return $this->articleRepository;
@@ -323,8 +322,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
      */
     private function getFeed($id)
     {
-        /** @var Repository $repository */
-        $repository = Shopware()->Models()->getRepository(ProductFeed::class);
+        $repository = $this->get('models')->getRepository(ProductFeed::class);
         $dataQuery = $repository->getDetailQuery($id);
         $feed = $dataQuery->getArrayResult();
 

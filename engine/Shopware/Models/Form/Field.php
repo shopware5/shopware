@@ -50,10 +50,10 @@ class Field extends ModelEntity
     /**
      * The associated form
      *
-     * @var \Shopware\Models\Form\Form
+     * @var Form
      *
      * @ORM\ManyToOne(targetEntity="Form", inversedBy="fields")
-     * @ORM\JoinColumn(name="supportID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="supportID", referencedColumnName="id", nullable=false)
      */
     protected $form;
 
@@ -177,9 +177,7 @@ class Field extends ModelEntity
     /**
      * Set the associated form
      *
-     * @param \Shopware\Models\Form\Form $form
-     *
-     * @return \Shopware\Models\Form\Field
+     * @return Field
      */
     public function setForm(Form $form)
     {
@@ -213,7 +211,7 @@ class Field extends ModelEntity
      *
      * @param string $errorMsg
      *
-     * @return \Shopware\Models\Form\Field
+     * @return Field
      */
     public function setErrorMsg($errorMsg)
     {
@@ -237,7 +235,7 @@ class Field extends ModelEntity
      *
      * @param string $name
      *
-     * @return \Shopware\Models\Form\Field
+     * @return Field
      */
     public function setName($name)
     {
@@ -261,7 +259,7 @@ class Field extends ModelEntity
      *
      * @param string $note
      *
-     * @return \Shopware\Models\Form\Field
+     * @return Field
      */
     public function setNote($note)
     {
@@ -285,7 +283,7 @@ class Field extends ModelEntity
      *
      * @param string $typ
      *
-     * @return \Shopware\Models\Form\Field
+     * @return Field
      */
     public function setTyp($typ)
     {
@@ -309,7 +307,7 @@ class Field extends ModelEntity
      *
      * @param int $required
      *
-     * @return \Shopware\Models\Form\Field
+     * @return Field
      */
     public function setRequired($required)
     {
@@ -333,7 +331,7 @@ class Field extends ModelEntity
      *
      * @param string $label
      *
-     * @return \Shopware\Models\Form\Field
+     * @return Field
      */
     public function setLabel($label)
     {
@@ -357,7 +355,7 @@ class Field extends ModelEntity
      *
      * @param string $class
      *
-     * @return \Shopware\Models\Form\Field
+     * @return Field
      */
     public function setClass($class)
     {
@@ -381,7 +379,7 @@ class Field extends ModelEntity
      *
      * @param string $value
      *
-     * @return \Shopware\Models\Form\Field
+     * @return Field
      */
     public function setValue($value)
     {
@@ -405,7 +403,7 @@ class Field extends ModelEntity
      *
      * @param int $position
      *
-     * @return \Shopware\Models\Form\Field
+     * @return Field
      */
     public function setPosition($position)
     {
@@ -437,7 +435,7 @@ class Field extends ModelEntity
     /**
      * @param string $ticketTask
      *
-     * @return \Shopware\Models\Form\Field
+     * @return Field
      */
     public function setTicketTask($ticketTask)
     {

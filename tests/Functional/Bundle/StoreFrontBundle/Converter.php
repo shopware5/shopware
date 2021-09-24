@@ -37,6 +37,7 @@ use Shopware\Models\Customer\Group as CustomerGroupModel;
 use Shopware\Models\Price\Group as PriceGroupModel;
 use Shopware\Models\Shop\Currency as CurrencyModel;
 use Shopware\Models\Shop\Locale as LocaleModel;
+use Shopware\Models\Shop\Locale as ShopLocale;
 use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware\Models\Tax\Tax as TaxModel;
 
@@ -46,7 +47,7 @@ class Converter
     {
         $struct = new TaxStruct();
         $struct->setId($tax->getId());
-        $struct->setTax($tax->getTax());
+        $struct->setTax((float) $tax->getTax());
         $struct->setName($tax->getName());
 
         return $struct;
@@ -125,14 +126,12 @@ class Converter
             $struct->setParentId($struct->getId());
         }
 
-        $struct->setLocale(
-            $this->convertLocale($shop->getLocale())
-        );
+        if ($shop->getLocale() instanceof ShopLocale) {
+            $struct->setLocale($this->convertLocale($shop->getLocale()));
+        }
 
         if ($shop->getCategory()) {
-            $struct->setCategory(
-                $this->convertCategory($shop->getCategory())
-            );
+            $struct->setCategory($this->convertCategory($shop->getCategory()));
         }
 
         return $struct;

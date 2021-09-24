@@ -24,7 +24,10 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
+use Doctrine\DBAL\Connection;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\HrefLangService;
 use Shopware\Bundle\StoreFrontBundle\Service\HrefLangServiceInterface;
+use Shopware\Components\Api\Resource\Category;
 use Shopware\Models\Shop\Shop;
 
 class HrefLangTest extends TestCase
@@ -38,20 +41,20 @@ class HrefLangTest extends TestCase
     {
         parent::setUp();
 
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
+        Shopware()->Container()->get(Connection::class)->beginTransaction();
 
         // Easier to see english link
         Shopware()->Db()->executeQuery('UPDATE s_core_shops SET base_url = "/en", category_id = 3 WHERE id != 1');
 
         Shopware()->Container()->reset('shopware_storefront.href_lang_service');
 
-        $this->service = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\Core\HrefLangService::class);
+        $this->service = Shopware()->Container()->get(HrefLangService::class);
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
+        Shopware()->Container()->get(Connection::class)->rollBack();
     }
 
     public function testHrefLinksNotGenerated()
@@ -126,7 +129,7 @@ class HrefLangTest extends TestCase
 
     private function createCategory()
     {
-        $category = Shopware()->Container()->get(\Shopware\Components\Api\Resource\Category::class);
+        $category = Shopware()->Container()->get(Category::class);
         $category = $category->create([
             'parent' => 3,
             'name' => 'My fancy german category',
@@ -141,6 +144,7 @@ class HrefLangTest extends TestCase
         $rewriteTable->sCreateRewriteTableCategories();
 
         $englishShop = Shopware()->Models()->getRepository(Shop::class)->getById(2);
+        static::assertNotNull($englishShop);
         $englishShop->registerResources();
         $rewriteTable->baseSetup();
         $rewriteTable->sCreateRewriteTableCategories();

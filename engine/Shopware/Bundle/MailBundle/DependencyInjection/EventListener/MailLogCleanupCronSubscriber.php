@@ -45,7 +45,6 @@ class MailLogCleanupCronSubscriber implements SubscriberInterface
 
     public function __construct(EntityManagerInterface $entityManager, int $maximumAgeInDays)
     {
-        /** @var LogRepositoryInterface $logRepo */
         $logRepo = $entityManager->getRepository(Log::class);
         $this->logRepository = $logRepo;
         $this->maximumAgeInDays = $maximumAgeInDays > 0 ? $maximumAgeInDays : 0;

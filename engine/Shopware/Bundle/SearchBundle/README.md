@@ -198,7 +198,7 @@ class PluginFacetHandler implements \Shopware\Bundle\SearchBundleDBAL\FacetHandl
 
         $query->andWhere('pluginTopSeller.sales > 1');
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $total = $statement->fetch(\PDO::FETCH_COLUMN);

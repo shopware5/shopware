@@ -68,7 +68,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             $filter[] = ['property' => 'c.parentId', 'value' => $node];
         }
 
-        $query = Shopware()->Models()->getRepository(Category::class)->getListQuery(
+        $query = $this->get('models')->getRepository(Category::class)->getListQuery(
             $filter,
             $this->Request()->getParam('sort', []),
             $this->Request()->getParam('limit'),
@@ -76,7 +76,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             false
         );
 
-        $count = Shopware()->Models()->getQueryCount($query);
+        $count = $this->get('models')->getQueryCount($query);
 
         $data = $query->getArrayResult();
 
@@ -107,7 +107,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         if (self::$testRepository !== null) {
             $this->repository = self::$testRepository;
         } else {
-            $this->repository = Shopware()->Models()->getRepository(Banner::class);
+            $this->repository = $this->get('models')->getRepository(Banner::class);
         }
         $this->namespace = Shopware()->Snippets()->getNamespace('backend/banner/banner');
     }
@@ -248,8 +248,8 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 
         // Write model to db
         try {
-            Shopware()->Models()->persist($bannerModel);
-            Shopware()->Models()->flush();
+            $this->get('models')->persist($bannerModel);
+            $this->get('models')->flush();
             $params['id'] = $bannerModel->getId();
             $this->View()->assign(['success' => 'true', 'data' => $params]);
         } catch (Exception $e) {
@@ -270,10 +270,10 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $bannerRequestData = empty($multipleBanner) ? [['id' => $this->Request()->id]] : $multipleBanner;
         try {
             foreach ($bannerRequestData as $banner) {
-                $model = Shopware()->Models()->find(Banner::class, $banner['id']);
-                Shopware()->Models()->remove($model);
+                $model = $this->get('models')->find(Banner::class, $banner['id']);
+                $this->get('models')->remove($model);
             }
-            Shopware()->Models()->flush();
+            $this->get('models')->flush();
             $this->View()->assign(['success' => true]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);

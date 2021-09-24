@@ -110,9 +110,9 @@ class StockService implements StockServiceInterface
      */
     protected function getProductByNumber(string $number): ?ProductDetail
     {
-        $product = $this->entityManager->getRepository(\Shopware\Models\Article\Detail::class)->findOneBy(['number' => $number]);
+        $product = $this->entityManager->getRepository(ProductDetail::class)->findOneBy(['number' => $number]);
 
-        if ($product instanceof \Shopware\Models\Article\Detail) {
+        if ($product instanceof ProductDetail) {
             return $product;
         }
 

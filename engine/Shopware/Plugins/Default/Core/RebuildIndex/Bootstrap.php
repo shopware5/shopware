@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Shop;
 
 class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_Plugin_Bootstrap
@@ -140,17 +143,16 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
         $this->RewriteTable()->sCreateRewriteTableCleanup();
 
         foreach ($shops as $shopId) {
-            /** @var \Shopware\Models\Shop\Repository $repository */
             $repository = Shopware()->Models()->getRepository(Shop::class);
             $shop = $repository->getActiveById($shopId);
             if ($shop === null) {
                 throw new Exception('No valid shop id passed');
             }
 
-            $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+            $this->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
             Shopware()->Modules()->Categories()->baseId = $shop->getCategory()->getId();
 
-            list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();
+            [, $elementId, $shopId] = $this->SeoIndex()->getCachedTime();
             $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d H:i:s'), $elementId, $shopId);
 
             $this->RewriteTable()->baseSetup();
@@ -166,7 +168,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
 
             $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d H:i:s'), $elementId, $shopId);
 
-            $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
+            $context = $this->get(ContextServiceInterface::class)->createShopContext($shopId);
 
             $this->RewriteTable()->sCreateRewriteTableCategories();
             $this->RewriteTable()->sCreateRewriteTableCampaigns();
@@ -201,7 +203,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             return true;
         }
 
-        $indexer = $this->get(\Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer::class);
+        $indexer = $this->get(SearchIndexer::class);
         $indexer->build();
 
         return true;

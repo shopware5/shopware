@@ -34,17 +34,17 @@ use Shopware\Components\Model\ModelEntity;
 class PriceVariation extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Article\Configurator\Set
+     * @var Set
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="priceVariations")
-     * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id", nullable=false)
      */
     protected $configuratorSet;
 
     /**
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(name="is_gross", type="integer", nullable=false)
+     * @ORM\Column(name="is_gross", type="integer", nullable=true)
      */
     protected $isGross;
 
@@ -65,9 +65,9 @@ class PriceVariation extends ModelEntity
     private $options;
 
     /**
-     * @var float
+     * @var string
      *
-     * @ORM\Column(name="variation", type="float", nullable=false, precision=3)
+     * @ORM\Column(name="variation", type="decimal", precision=10, scale=3, nullable=false)
      */
     private $variation;
 
@@ -87,7 +87,7 @@ class PriceVariation extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getVariation()
     {
@@ -95,7 +95,7 @@ class PriceVariation extends ModelEntity
     }
 
     /**
-     * @param float $variation
+     * @param string $variation
      */
     public function setVariation($variation)
     {
@@ -103,7 +103,7 @@ class PriceVariation extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Set|null
+     * @return Set
      */
     public function getConfiguratorSet()
     {
@@ -111,7 +111,7 @@ class PriceVariation extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Configurator\Set $configuratorSet
+     * @param Set $configuratorSet
      */
     public function setConfiguratorSet($configuratorSet)
     {
@@ -135,7 +135,7 @@ class PriceVariation extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getIsGross()
     {
@@ -143,7 +143,7 @@ class PriceVariation extends ModelEntity
     }
 
     /**
-     * @param int $isGross
+     * @param int|null $isGross
      */
     public function setIsGross($isGross)
     {

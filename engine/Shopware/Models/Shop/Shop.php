@@ -28,6 +28,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\ShopRegistrationServiceInterface;
+use Shopware\Models\Attribute\Shop as ShopAttribute;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Customer\Group as CustomerGroup;
+use Shopware\Models\Shop\Exception\ShopCurrencyNotSetException;
+use Shopware\Models\Shop\Exception\ShopLocaleNotSetException;
+use Shopware\Models\Site\Group;
 
 /**
  * @ORM\Table(name="s_core_shops")
@@ -60,7 +66,7 @@ class Shop extends ModelEntity
     protected $categoryId;
 
     /**
-     * @var Shop
+     * @var Shop|null
      *
      * @ORM\ManyToOne(targetEntity="Shop", inversedBy="children")
      */
@@ -138,7 +144,7 @@ class Shop extends ModelEntity
     protected $template;
 
     /**
-     * @var Template
+     * @var Template|null
      *
      * @ORM\ManyToOne(targetEntity="Template")
      * @ORM\JoinColumn(name="document_template_id", referencedColumnName="id")
@@ -146,30 +152,31 @@ class Shop extends ModelEntity
     protected $documentTemplate;
 
     /**
-     * @var \Shopware\Models\Category\Category
+     * @var Category|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
      */
     protected $category;
 
     /**
-     * @var Locale
+     * @var Locale|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale")
      */
     protected $locale;
 
     /**
-     * @var Currency
+     * @var Currency|null
+     *
      * @ORM\ManyToOne(targetEntity="Currency")
      */
     protected $currency;
 
     /**
-     * @var \Shopware\Models\Customer\Group
+     * @var CustomerGroup
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Group")
-     * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id", nullable=false)
      */
     protected $customerGroup;
 
@@ -188,7 +195,7 @@ class Shop extends ModelEntity
     protected $active = true;
 
     /**
-     * @var Shop
+     * @var Shop|null
      *
      * @ORM\ManyToOne(targetEntity="Shop")
      */
@@ -202,7 +209,7 @@ class Shop extends ModelEntity
     protected $customerScope = false;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<Currency>
+     * @var ArrayCollection<Currency>
      *
      * @ORM\ManyToMany(targetEntity="Currency")
      * @ORM\JoinTable(name="s_core_shop_currencies")
@@ -211,7 +218,7 @@ class Shop extends ModelEntity
     protected $currencies;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Site\Group>
+     * @var ArrayCollection<Group>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Site\Group")
      * @ORM\JoinTable(name="s_core_shop_pages")
@@ -220,7 +227,7 @@ class Shop extends ModelEntity
     protected $pages;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<Shop>
+     * @var ArrayCollection<Shop>
      *
      * @ORM\OneToMany(targetEntity="Shop", mappedBy="main", cascade={"all"}))
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
@@ -230,9 +237,9 @@ class Shop extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Shop", mappedBy="shop", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="\Shopware\Models\Attribute\Shop", mappedBy="shop", orphanRemoval=true, cascade={"persist"})
      *
-     * @var \Shopware\Models\Attribute\Shop|null
+     * @var ShopAttribute|null
      */
     protected $attribute;
 
@@ -379,7 +386,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return Template
+     * @return Template|null
      */
     public function getDocumentTemplate()
     {
@@ -387,7 +394,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param Template $documentTemplate
+     * @param Template|null $documentTemplate
      */
     public function setDocumentTemplate($documentTemplate)
     {
@@ -395,7 +402,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Category\Category|null
+     * @return Category|null
      */
     public function getCategory()
     {
@@ -403,7 +410,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Category\Category $category
+     * @param Category|null $category
      */
     public function setCategory($category)
     {
@@ -411,15 +418,19 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Locale
+     * @return Locale
      */
     public function getLocale()
     {
+        if (!$this->locale instanceof Locale) {
+            throw new ShopLocaleNotSetException();
+        }
+
         return $this->locale;
     }
 
     /**
-     * @param \Shopware\Models\Shop\Locale $locale
+     * @param Locale|null $locale
      */
     public function setLocale($locale)
     {
@@ -427,15 +438,19 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Currency
+     * @return Currency
      */
     public function getCurrency()
     {
+        if (!$this->currency instanceof Currency) {
+            throw new ShopCurrencyNotSetException();
+        }
+
         return $this->currency;
     }
 
     /**
-     * @param \Shopware\Models\Shop\Currency $currency
+     * @param Currency|null $currency
      */
     public function setCurrency($currency)
     {
@@ -443,7 +458,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Customer\Group
+     * @return CustomerGroup
      */
     public function getCustomerGroup()
     {
@@ -451,7 +466,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Customer\Group $customerGroup
+     * @param CustomerGroup $customerGroup
      */
     public function setCustomerGroup($customerGroup)
     {
@@ -475,7 +490,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return Currency[]|\Doctrine\Common\Collections\ArrayCollection
+     * @return Currency[]|ArrayCollection
      */
     public function getCurrencies()
     {
@@ -483,7 +498,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param Currency[]|\Doctrine\Common\Collections\ArrayCollection $currencies
+     * @param Currency[]|ArrayCollection $currencies
      */
     public function setCurrencies($currencies)
     {
@@ -491,7 +506,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop|null
+     * @return Shop|null
      */
     public function getMain()
     {
@@ -499,7 +514,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Shop $main
+     * @param Shop|null $main
      */
     public function setMain($main)
     {
@@ -523,7 +538,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop|null
+     * @return Shop|null
      */
     public function getFallback()
     {
@@ -531,7 +546,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Shop $fallback
+     * @param Shop $fallback
      */
     public function setFallback($fallback)
     {
@@ -571,7 +586,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return Shop[]|\Doctrine\Common\Collections\ArrayCollection
+     * @return Shop[]|ArrayCollection
      */
     public function getChildren()
     {
@@ -579,7 +594,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param Shop[]|\Doctrine\Common\Collections\ArrayCollection $children
+     * @param Shop[]|ArrayCollection $children
      */
     public function setChildren($children)
     {
@@ -587,7 +602,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Site\Group[]
+     * @return ArrayCollection|Group[]
      */
     public function getPages()
     {
@@ -595,7 +610,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Site\Group[] $pages
+     * @param ArrayCollection|Group[] $pages
      */
     public function setPages($pages)
     {
@@ -603,7 +618,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Shop|null
+     * @return ShopAttribute|null
      */
     public function getAttribute()
     {
@@ -611,9 +626,9 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Shop|array|null $attribute
+     * @param ShopAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Shop\Shop
+     * @return Shop
      */
     public function setAttribute($attribute)
     {
@@ -631,6 +646,10 @@ class Shop extends ModelEntity
             case 'skipbackend':
                 return $this->getDefault() ? 1 : 0;
             case 'parentID':
+                if (!$this->getCategory() instanceof Category) {
+                    throw new \RuntimeException('Shop does not have a parent category set');
+                }
+
                 return $this->getCategory()->getId();
             case 'esi':
                 return $this->getTemplate() !== null ? $this->getTemplate()->getEsi() : false;
@@ -657,7 +676,7 @@ class Shop extends ModelEntity
         trigger_error('Shop::registerResources is deprecated since 5.6 and will be removed with 5.8. Use service ShopRegistrationService instead', E_USER_DEPRECATED);
 
         /** @var ShopRegistrationServiceInterface $service */
-        $service = Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class);
+        $service = Shopware()->Container()->get(ShopRegistrationServiceInterface::class);
 
         $service->registerShop($this);
 

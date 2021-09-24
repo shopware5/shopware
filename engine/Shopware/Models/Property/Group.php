@@ -71,9 +71,9 @@ class Group extends ModelEntity
     private $position;
 
     /**
-     * @var int
+     * @var bool
      *
-     * @ORM\Column(name="comparable", type="boolean")
+     * @ORM\Column(name="comparable", type="boolean", nullable=false)
      */
     private $comparable;
 
@@ -166,7 +166,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param int $comparable
+     * @param bool $comparable
      *
      * @return Group
      */
@@ -178,7 +178,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public function getComparable()
     {

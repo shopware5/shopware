@@ -17,6 +17,21 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Changes
 * Changed `themes/Frontend/Bare/frontend/listing/listing_actions.tpl` to remove a duplicate name entry
 * Update TinyMCE to version 3.5.12
+* Changed several Doctrine types to better match the database type or to improve understanding their purpose
+  * \Shopware\Models\Article\Configurator\PriceVariation::$variation
+  * \Shopware\Models\Article\Detail::$purchasePrice
+  * \Shopware\Models\Article\Price::$percent
+  * \Shopware\Models\Blog\Comment::$points
+  * \Shopware\Models\Country\Country::$taxFree
+  * \Shopware\Models\Country\Country::$taxFreeUstId
+  * \Shopware\Models\Country\Country::$taxFreeUstIdChecked
+  * \Shopware\Models\Emotion\Emotion::$active
+  * \Shopware\Models\Emotion\Emotion::$fullscreen
+  * \Shopware\Models\Emotion\Emotion::$isLandingPage
+  * \Shopware\Models\Newsletter\ContainerType\Article::$position
+  * \Shopware\Models\Order\Order::$invoiceShippingTaxRate
+  * \Shopware\Models\Premium\Premium::$startPrice
+  * \Shopware\Models\Tax\Rule::$tax
 
 ## 5.7.3
 

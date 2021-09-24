@@ -35,6 +35,9 @@ use Shopware_Components_Config;
 use Shopware_Components_Snippet_Manager;
 use Traversable;
 
+/**
+ * @extends \Shopware_Controllers_Backend_Application<Log>
+ */
 class MailLog extends \Shopware_Controllers_Backend_Application
 {
     public const CONFIG_KEY_MAILLOG_ACTIVE = 'mailLogActive';

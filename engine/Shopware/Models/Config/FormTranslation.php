@@ -26,6 +26,7 @@ namespace Shopware\Models\Config;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Shop\Locale;
 
 /**
  * @ORM\Table(name="s_core_config_form_translations")
@@ -34,20 +35,20 @@ use Shopware\Components\Model\ModelEntity;
 class FormTranslation extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Config\Form
+     * @var Form
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Config\Form", inversedBy="translations")
-     * @ORM\JoinColumn(name="form_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="form_id", referencedColumnName="id", nullable=false)
      */
     protected $form;
 
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Shop\Locale
+     * @var Locale
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale")
-     * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="locale_id", referencedColumnName="id", nullable=false)
      */
     protected $locale;
 
@@ -137,7 +138,7 @@ class FormTranslation extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Locale $locale
+     * @param Locale $locale
      */
     public function setLocale($locale)
     {
@@ -145,7 +146,7 @@ class FormTranslation extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Locale
+     * @return Locale
      */
     public function getLocale()
     {
@@ -153,7 +154,7 @@ class FormTranslation extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Config\Form $form
+     * @param Form $form
      */
     public function setForm($form)
     {
@@ -161,7 +162,7 @@ class FormTranslation extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Config\Form
+     * @return Form
      */
     public function getForm()
     {

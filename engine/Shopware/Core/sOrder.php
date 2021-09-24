@@ -25,6 +25,7 @@
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Privacy\IpAnonymizerInterface;
@@ -1323,6 +1324,9 @@ class sOrder implements Enlight_Hook
         $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
         // The (sub-)shop might be inactive by now, so that's why we use `getById` instead of `getActiveById`
         $shop = $repository->getById($shopId);
+        if ($shop === null) {
+            throw new ModelNotFoundException(Shop::class, $shopId);
+        }
         Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $dispatch = Shopware()->Modules()->Admin()->sGetDispatchTranslation($dispatch);

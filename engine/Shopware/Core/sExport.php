@@ -37,7 +37,6 @@ use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Media\Repository;
 use Shopware\Models\Shop\Currency;
-use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
 
 /**
@@ -223,7 +222,6 @@ class sExport implements Enlight_Hook
     {
         $hash = $this->db->quote($this->sHash);
 
-        /** @var ShopRepository $shopRepository */
         $shopRepository = Shopware()->Models()->getRepository(Shop::class);
 
         $sql = "

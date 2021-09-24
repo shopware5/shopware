@@ -36,6 +36,8 @@ use Shopware\Components\Model\QueryBuilder;
  * The Blog model repository is responsible to load all Blog data.
  * It supports the standard functions like findAll or findBy and extends the standard repository for
  * some specific functions to return the model data as array.
+ *
+ * @extends ModelRepository<Blog>
  */
 class Repository extends ModelRepository
 {

@@ -56,9 +56,9 @@ class ArticleImpression extends ModelEntity
     private $id;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var \DateTimeInterface
      *
-     * @ORM\Column(name="date", type="date", nullable=true)
+     * @ORM\Column(name="date", type="date", nullable=false)
      */
     private $date;
 
@@ -90,7 +90,7 @@ class ArticleImpression extends ModelEntity
     private $impressions;
 
     /**
-     * @var string|null
+     * @var string
      *
      * @ORM\Column(name="deviceType", type="string", length=50, nullable=false)
      */
@@ -128,7 +128,7 @@ class ArticleImpression extends ModelEntity
     /**
      * Set the date
      *
-     * @param \DateTimeInterface|null $date
+     * @param \DateTimeInterface $date
      */
     public function setDate($date)
     {
@@ -138,7 +138,7 @@ class ArticleImpression extends ModelEntity
     /**
      * Get the date
      *
-     * @return \DateTimeInterface|null
+     * @return \DateTimeInterface
      */
     public function getDate()
     {
@@ -208,7 +208,7 @@ class ArticleImpression extends ModelEntity
     /**
      * Increases the number of impressions
      *
-     * @return \Shopware\Models\Tracking\ArticleImpression
+     * @return ArticleImpression
      */
     public function increaseImpressions()
     {

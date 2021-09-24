@@ -25,6 +25,9 @@
 use Doctrine\DBAL\Connection;
 use Shopware\Models\Article\Vote;
 
+/**
+ * @extends Shopware_Controllers_Backend_Application<Vote>
+ */
 class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Application
 {
     protected $model = Vote::class;

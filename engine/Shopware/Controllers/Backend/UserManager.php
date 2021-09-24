@@ -282,7 +282,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         } else {
             $query = $this->getUserRepository()
                 ->getRolesQuery($offset, $limit);
-            $count = Shopware()->Models()->getQueryCount($query);
+            $count = $this->get('models')->getQueryCount($query);
         }
 
         $roles = $query->getArrayResult();
@@ -642,13 +642,12 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             $rule->setRole($role);
 
             if (isset($newRule['resourceId'])) {
-                /** @var resource $resource */
-                $resource = Shopware()->Models()->find(Resource::class, $newRule['resourceId']);
+                $resource = $this->get('models')->find(Resource::class, $newRule['resourceId']);
                 $rule->setResource($resource);
             }
             if (isset($newRule['privilegeId'])) {
                 /** @var Privilege $privilege */
-                $privilege = Shopware()->Models()->find(Privilege::class, $newRule['privilegeId']);
+                $privilege = $this->get('models')->find(Privilege::class, $newRule['privilegeId']);
                 $rule->setPrivilege($privilege);
             } else {
                 $rule->setPrivilege(null);

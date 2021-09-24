@@ -58,9 +58,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaRepository */
         $captchaRepository = $this->container->get('shopware.captcha.repository');
-        /** @var \Shopware\Components\Captcha\CaptchaInterface $captcha */
         $captcha = $captchaRepository->getConfiguredCaptcha();
 
         $captchaName = $captcha->getName();
@@ -76,10 +74,8 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
     {
         $captchaName = $this->request->getParam('captchaName', 'nocaptcha');
 
-        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaRepository */
         $captchaRepository = $this->container->get('shopware.captcha.repository');
         try {
-            /** @var \Shopware\Components\Captcha\CaptchaInterface $captcha */
             $captcha = $captchaRepository->getCaptchaByName($captchaName);
         } catch (CaptchaNotFoundException $exception) {
             // log captchaNotFound Exception

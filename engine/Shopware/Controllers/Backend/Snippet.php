@@ -263,15 +263,15 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             }
 
             try {
-                Shopware()->Models()->persist($snippet);
-                Shopware()->Models()->flush();
+                $this->get('models')->persist($snippet);
+                $this->get('models')->flush();
             } catch (Exception $e) {
                 $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
                 return;
             }
 
-            $result[$snippet->getId()] = Shopware()->Models()->toArray($snippet);
+            $result[$snippet->getId()] = $this->get('models')->toArray($snippet);
         }
 
         if ($isSingleSnippet) {
@@ -292,17 +292,17 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         if (!empty($snippets)) {
             foreach ($snippets as $snippet) {
                 /** @var Snippet $snippetModel */
-                $snippetModel = Shopware()->Models()->getRepository(Snippet::class)->find($snippet['id']);
+                $snippetModel = $this->get('models')->getRepository(Snippet::class)->find($snippet['id']);
                 $dirty = $snippetModel->getDirty() || strcmp($snippetModel->getValue(), $snippet['value']) != 0;
                 $snippetModel->setDirty($dirty);
                 $snippetModel->setValue($snippet['value']);
 
                 if (!$this->isSnippetValid($snippetModel)) {
-                    Shopware()->Models()->remove($snippetModel);
+                    $this->get('models')->remove($snippetModel);
                     continue;
                 }
             }
-            Shopware()->Models()->flush();
+            $this->get('models')->flush();
             $this->View()->assign(['success' => true]);
 
             return;
@@ -316,7 +316,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         /** @var Snippet|null $result */
-        $result = Shopware()->Models()->getRepository(Snippet::class)->find($id);
+        $result = $this->get('models')->getRepository(Snippet::class)->find($id);
         if (!$result) {
             $this->View()->assign(['success' => false, 'message' => 'Snippet not found']);
 
@@ -329,12 +329,12 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $result->fromArray($params);
 
         if (!$this->isSnippetValid($result)) {
-            Shopware()->Models()->remove($result);
+            $this->get('models')->remove($result);
         }
 
-        Shopware()->Models()->flush();
+        $this->get('models')->flush();
 
-        $data = Shopware()->Models()->toArray($result);
+        $data = $this->get('models')->toArray($result);
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
@@ -350,7 +350,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         /** @var Snippet|null $snippet */
-        $snippet = Shopware()->Models()->getRepository(Snippet::class)->find($id);
+        $snippet = $this->get('models')->getRepository(Snippet::class)->find($id);
         if (!$snippet) {
             $this->View()->assign(['success' => false, 'message' => 'Snippet not found']);
 
@@ -358,8 +358,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         try {
-            Shopware()->Models()->remove($snippet);
-            Shopware()->Models()->flush();
+            $this->get('models')->remove($snippet);
+            $this->get('models')->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -644,11 +644,11 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $node = $this->Request()->getParam('node');
 
         if ($node !== 'root') {
-            $snippets = Shopware()->Models()
+            $snippets = $this->get('models')
                                   ->getRepository('Shopware\Models\Snippet\Snippet')
                                   ->findBy(['namespace' => $node]);
 
-            $snippets = Shopware()->Models()->toArray($snippets);
+            $snippets = $this->get('models')->toArray($snippets);
 
             $result = [];
             foreach ($snippets as $snippet) {
@@ -670,7 +670,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         /** @var \Doctrine\ORM\QueryBuilder $builder */
-        $builder = Shopware()->Models()
+        $builder = $this->get('models')
                              ->getRepository('Shopware\Models\Snippet\Snippet')
                              ->createQueryBuilder('snippet');
 
@@ -701,7 +701,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         /** @var \Doctrine\ORM\QueryBuilder $builder */
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = $this->get('models')->createQueryBuilder();
 
         $builder->delete('Shopware\Models\Snippet\Snippet', 's')
                 ->andWhere('s.namespace LIKE :namespace')

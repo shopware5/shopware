@@ -215,7 +215,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         $shop = $this->shop;
         $locale = $this->locale;
 
-        $main = $shop->getMain();
+        $main = $shop !== null ? $shop->getMain() : null;
         if ($main !== null && $main->getId() === 1) {
             $main = null;
         }
@@ -229,7 +229,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         }
 
         // fallback to default shop, current locale
-        if ($shop && $shop->getId() !== 1) {
+        if ($shop !== null && $shop->getId() !== 1) {
             $extends[] = [
                 1,
                 $locale->getId(),

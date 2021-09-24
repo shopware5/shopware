@@ -32,6 +32,8 @@ use Shopware\Components\Model\ModelRepository;
  * The order document model repository is responsible to load all document data.
  * It supports the standard functions like findAll or findBy and extends the standard repository for
  * some specific functions to return the model data as array.
+ *
+ * @extends ModelRepository<Document>
  */
 class Repository extends ModelRepository
 {
@@ -53,12 +55,13 @@ class Repository extends ModelRepository
      */
     public function getListQuery($orderId, $filter = null, $orderBy = null, $limit = null, $offset = null)
     {
-        /** @var \Doctrine\ORM\QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder = $this->selectListQuery($builder);
 
         $builder = $this->filterListQuery($builder, $filter);
-        $this->addOrderBy($builder, $orderBy);
+        if (\is_array($orderBy)) {
+            $this->addOrderBy($builder, $orderBy);
+        }
 
         $builder->andWhere('documents.orderId = :orderId')
             ->setParameter('orderId', $orderId);

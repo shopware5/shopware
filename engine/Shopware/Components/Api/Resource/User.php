@@ -25,10 +25,15 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Auth\Validator\UserValidator;
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Components\Password\Manager;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Shop\Locale;
+use Shopware\Models\User\Repository as UserRepository;
 use Shopware\Models\User\Role;
 use Shopware\Models\User\User as UserModel;
 
@@ -38,7 +43,7 @@ use Shopware\Models\User\User as UserModel;
 class User extends Resource
 {
     /**
-     * @return \Shopware\Models\User\Repository
+     * @return UserRepository
      */
     public function getRepository()
     {
@@ -46,7 +51,7 @@ class User extends Resource
     }
 
     /**
-     * @return \Shopware\Models\User\Repository
+     * @return ModelRepository<Role>
      */
     public function getRoleRepository()
     {
@@ -56,8 +61,8 @@ class User extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ParameterMissingException
+     * @throws NotFoundException
      *
      * @return array|UserModel
      */
@@ -66,7 +71,7 @@ class User extends Resource
         $this->checkPrivilege('read', 'usermanager');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         $builder = $this->getRepository()->createQueryBuilder('user');
@@ -80,7 +85,7 @@ class User extends Resource
         $user = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$user) {
-            throw new ApiException\NotFoundException(sprintf('User by id %s not found', $id));
+            throw new NotFoundException(sprintf('User by id %s not found', $id));
         }
 
         if (!$this->hasPrivilege('create', 'usermanager')
@@ -167,8 +172,8 @@ class User extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
      * @return UserModel
      */
@@ -177,7 +182,7 @@ class User extends Resource
         $this->checkPrivilege('update', 'usermanager');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         $builder = $this->getManager()->createQueryBuilder();
@@ -196,7 +201,7 @@ class User extends Resource
         $user = $builder->getQuery()->getOneOrNullResult(self::HYDRATE_OBJECT);
 
         if (!$user) {
-            throw new ApiException\NotFoundException(sprintf('User by id %s not found', $id));
+            throw new NotFoundException(sprintf('User by id %s not found', $id));
         }
 
         $params = $this->prepareAssociatedData($params, $user);
@@ -215,8 +220,8 @@ class User extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ParameterMissingException
+     * @throws NotFoundException
      *
      * @return UserModel
      */
@@ -225,14 +230,14 @@ class User extends Resource
         $this->checkPrivilege('delete', 'usermanager');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         /** @var UserModel|null $user */
         $user = $this->getRepository()->find($id);
 
         if (!$user) {
-            throw new ApiException\NotFoundException(sprintf('User by id %s not found', $id));
+            throw new NotFoundException(sprintf('User by id %s not found', $id));
         }
 
         $this->getManager()->remove($user);
@@ -314,7 +319,7 @@ class User extends Resource
 
         // Check if a locale id or name is passed.
         if (!empty($data['localeId'])) {
-            if (!$this->isLocaleId($data['localeId'])) {
+            if (!$this->isLocaleId((int) $data['localeId'])) {
                 throw new ApiException\CustomValidationException(sprintf('Locale by id %s not found', $data['localeId']));
             }
         } elseif (!empty($data['locale'])) {
@@ -350,7 +355,7 @@ class User extends Resource
             $data['localeId'] = 2; // en_GB
         }
 
-        /** @var \Shopware\Components\Password\Manager $passwordEncoderRegistry */
+        /** @var Manager $passwordEncoderRegistry */
         $passwordEncoderRegistry = $this->getContainer()->get('passwordencoder');
         $defaultEncoderName = $passwordEncoderRegistry->getDefaultPasswordEncoderName();
         $encoder = $passwordEncoderRegistry->getEncoderByName($defaultEncoderName);
@@ -361,40 +366,29 @@ class User extends Resource
         return $data;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return bool
-     */
-    private function isLocaleId($id)
+    private function isLocaleId(int $id): bool
     {
-        $elementRepository = Shopware()->Models()->getRepository(Element::class);
-        $element = $elementRepository->findOneByName('backendLocales');
-        if (!$element) {
+        $element = Shopware()->Models()->getRepository(Element::class)->findOneBy(['name' => 'backendLocales']);
+        if (!$element instanceof Element) {
             return false;
         }
 
         $locales = $element->getValue();
+        if (!\is_array($locales)) {
+            return false;
+        }
 
         return \in_array($id, $locales);
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return int|null
-     */
-    private function getLocaleIdFromLocale($locale)
+    private function getLocaleIdFromLocale(string $locale): ?int
     {
-        $localeRepository = Shopware()->Models()->getRepository(Locale::class);
-
-        /** @var \Shopware\Models\Shop\Locale|null $locale */
-        $locale = $localeRepository->findOneByLocale($locale);
-        if (!$locale) {
+        $localeObject = Shopware()->Models()->getRepository(Locale::class)->findOneBy(['locale' => $locale]);
+        if (!$localeObject instanceof Locale) {
             return null;
         }
 
-        $localeId = $locale->getId();
+        $localeId = (int) $localeObject->getId();
         if (!$this->isLocaleId($localeId)) {
             return null;
         }
