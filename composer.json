@@ -96,7 +96,7 @@
         "ext-zend-opcache": "*"
     },
     "require-dev": {
-        "behat/behat": "3.7.0",
+        "behat/behat": "^3.8.0",
         "behat/gherkin": "4.6.2",
         "behat/mink": "1.8.1",
         "behat/mink-selenium2-driver": "1.4.0",
