@@ -215,6 +215,8 @@ Mink:
     rules:
         - if: '$CI_PIPELINE_SOURCE == "schedule"'
         - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $IMAGE_TAG != "8.0"'
+        - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+          when: manual
 
 RIPS security:
     stage: Security
