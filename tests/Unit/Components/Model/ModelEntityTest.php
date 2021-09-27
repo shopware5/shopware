@@ -93,7 +93,7 @@ class ModelEntityTest extends TestCase
         $product->fromArray($data);
 
         static::assertNotNull($product->getConfiguratorTemplate());
-        static::assertEquals(true, $product->getConfiguratorTemplate()->getActive());
+        static::assertTrue($product->getConfiguratorTemplate()->getActive());
         static::assertEquals('baz', $product->getConfiguratorTemplate()->getEan());
 
         // configuratorTemplate is the owning side of relation, so article has to be set
@@ -159,7 +159,7 @@ class ModelEntityTest extends TestCase
         $product->fromArray($data);
 
         static::assertNotNull($product->getConfiguratorTemplate());
-        static::assertEquals(true, $product->getConfiguratorTemplate()->getActive());
+        static::assertTrue($product->getConfiguratorTemplate()->getActive());
         static::assertEquals('foo', $product->getConfiguratorTemplate()->getEan());
     }
 
@@ -180,7 +180,7 @@ class ModelEntityTest extends TestCase
         $product->fromArray($data);
 
         static::assertNotNull($product->getConfiguratorTemplate());
-        static::assertEquals(true, $product->getConfiguratorTemplate()->getActive());
+        static::assertTrue($product->getConfiguratorTemplate()->getActive());
         static::assertEquals('foo', $product->getConfiguratorTemplate()->getEan());
     }
 
@@ -302,7 +302,7 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        static::assertEquals(null, $article->getSupplier());
+        static::assertNull($article->getSupplier());
     }
 
     public function testCanReAssignWithAnotherIdThrowsExceptionManyToOne()

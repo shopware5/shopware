@@ -41,7 +41,7 @@ class VersionTest extends AbstractApiTestCase
         $result = $this->client->getResponse();
 
         static::assertEquals('application/json', $result->headers->get('Content-Type'));
-        static::assertEquals(null, $result->headers->get('Set-Cookie'));
+        static::assertNull($result->headers->get('Set-Cookie'));
         static::assertEquals(200, $result->getStatusCode());
 
         $result = $result->getContent();

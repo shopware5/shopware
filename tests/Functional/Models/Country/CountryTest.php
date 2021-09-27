@@ -95,8 +95,8 @@ class CountryTest extends Enlight_Components_Test_Controller_TestCase
 
         $modelManager->refresh($testCountry);
 
-        static::assertEquals(true, $testCountry->getActive());
-        static::assertEquals(true, $testCountry->getAllowShipping()); // Checking that allowShipping is true
+        static::assertTrue($testCountry->getActive());
+        static::assertTrue($testCountry->getAllowShipping()); // Checking that allowShipping is true
         static::assertEquals('TS', $testCountry->getIso());
         static::assertEquals('TST', $testCountry->getIso3());
     }

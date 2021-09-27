@@ -25,6 +25,8 @@
 namespace Shopware\Tests\Functional\Components\Api;
 
 use DateTime;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Api\Resource\User;
 use Shopware_Components_Acl;
@@ -255,36 +257,34 @@ class UserTest extends TestCase
     /**
      * @depends testUpdateShouldBeSuccessful
      */
-    public function testDeleteShouldBeSuccessful($id)
+    public function testDeleteShouldBeSuccessful($id): void
     {
         $this->resource->setRole('delete');
 
         $user = $this->resource->delete($id);
 
-        static::assertInstanceOf('\Shopware\Models\User\User', $user);
-        static::assertEquals(null, $user->getId());
+        static::assertInstanceOf(\Shopware\Models\User\User::class, $user);
+        static::assertSame(0, (int) $user->getId());
     }
 
-    public function testDeleteWithInvalidIdShouldThrowNotFoundException()
+    public function testDeleteWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
-        // TODO!!!
+        $this->expectException(NotFoundException::class);
         $this->resource->setRole('delete');
 
         $this->resource->delete(9999999);
     }
 
-    public function testDeleteWithMissingIdShouldThrowParameterMissingException()
+    public function testDeleteWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
-        // TODO!!!
+        $this->expectException(ParameterMissingException::class);
 
         $this->resource->setRole('delete');
 
         $this->resource->delete('');
     }
 
-    public function testCreateWithUserRoleId()
+    public function testCreateWithUserRoleId(): void
     {
         $this->resource->setRole('create');
 

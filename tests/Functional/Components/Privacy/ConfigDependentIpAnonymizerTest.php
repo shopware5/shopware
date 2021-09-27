@@ -58,7 +58,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
             ->expects(static::exactly(1))
             ->method('get')
             ->with('anonymizeIp')
-            ->will(static::returnValue(true));
+            ->willReturn(true);
 
         $service = new ConfigDependentIpAnonymizer(new IpAnonymizer(), $configStub);
 
@@ -72,7 +72,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
             ->expects(static::exactly(1))
             ->method('get')
             ->with('anonymizeIp')
-            ->will(static::returnValue(false));
+            ->willReturn(false);
 
         $service = new ConfigDependentIpAnonymizer(new IpAnonymizer(), $configStub);
 

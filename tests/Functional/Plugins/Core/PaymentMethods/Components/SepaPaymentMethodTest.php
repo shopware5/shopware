@@ -117,8 +117,8 @@ class SepaPaymentMethodTest extends Enlight_Components_Test_Plugin_TestCase
             static::assertArrayHasKey('sErrorMessages', $validationResult);
             static::assertContains(Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')
                 ->get('ErrorIBAN', 'Invalid IBAN'), $validationResult['sErrorMessages']);
-            static::assertFalse(\array_key_exists('sSepaBic', $validationResult['sErrorFlag']));
-            static::assertFalse(\array_key_exists('sSepaBankName', $validationResult['sErrorFlag']));
+            static::assertArrayNotHasKey('sSepaBic', $validationResult['sErrorFlag']);
+            static::assertArrayNotHasKey('sSepaBankName', $validationResult['sErrorFlag']);
         }
     }
 
@@ -156,9 +156,9 @@ class SepaPaymentMethodTest extends Enlight_Components_Test_Plugin_TestCase
 
         static::assertInstanceOf(PaymentInstance::class, $paymentInstance);
         static::assertInstanceOf(Order::class, $paymentInstance->getOrder());
-        static::assertEquals(57, $paymentInstance->getOrder()->getId());
+        static::assertSame(57, $paymentInstance->getOrder()->getId());
         static::assertInstanceOf(Payment::class, $paymentInstance->getPaymentMean());
-        static::assertEquals('sepa', $paymentInstance->getPaymentMean()->getName());
+        static::assertSame('sepa', $paymentInstance->getPaymentMean()->getName());
 
         static::assertNull($paymentInstance->getBankName());
         static::assertNull($paymentInstance->getBic());
@@ -179,10 +179,10 @@ class SepaPaymentMethodTest extends Enlight_Components_Test_Plugin_TestCase
         self::$sepaPaymentMethod->savePaymentData(1, $this->Request());
 
         $lastPayment = self::$sepaPaymentMethod->getCurrentPaymentDataAsArray(1);
-        static::assertEquals(null, $lastPayment['sSepaBankName']);
-        static::assertEquals(null, $lastPayment['sSepaBic']);
-        static::assertEquals(null, $lastPayment['sSepaIban']);
-        static::assertEquals(false, $lastPayment['sSepaUseBillingData']);
+        static::assertNull($lastPayment['sSepaBankName']);
+        static::assertNull($lastPayment['sSepaBic']);
+        static::assertSame('', $lastPayment['sSepaIban']);
+        static::assertFalse($lastPayment['sSepaUseBillingData']);
     }
 
     /**
@@ -201,10 +201,10 @@ class SepaPaymentMethodTest extends Enlight_Components_Test_Plugin_TestCase
         self::$sepaPaymentMethod->savePaymentData(1, $this->Request());
 
         $lastPayment = self::$sepaPaymentMethod->getCurrentPaymentDataAsArray(1);
-        static::assertEquals('Some Valid Bank Name', $lastPayment['sSepaBankName']);
-        static::assertEquals('Some Valid Bic', $lastPayment['sSepaBic']);
-        static::assertEquals('AL47212110090000000235698741', $lastPayment['sSepaIban']);
-        static::assertEquals(true, $lastPayment['sSepaUseBillingData']);
+        static::assertSame('Some Valid Bank Name', $lastPayment['sSepaBankName']);
+        static::assertSame('Some Valid Bic', $lastPayment['sSepaBic']);
+        static::assertSame('AL47212110090000000235698741', $lastPayment['sSepaIban']);
+        static::assertTrue($lastPayment['sSepaUseBillingData']);
     }
 
     public function testCreatePaymentInstance(): void
@@ -225,18 +225,18 @@ class SepaPaymentMethodTest extends Enlight_Components_Test_Plugin_TestCase
 
         static::assertInstanceOf(PaymentInstance::class, $paymentInstance);
         static::assertInstanceOf(Order::class, $paymentInstance->getOrder());
-        static::assertEquals(57, $paymentInstance->getOrder()->getId());
+        static::assertSame(57, $paymentInstance->getOrder()->getId());
         static::assertInstanceOf(Payment::class, $paymentInstance->getPaymentMean());
-        static::assertEquals('sepa', $paymentInstance->getPaymentMean()->getName());
+        static::assertSame('sepa', $paymentInstance->getPaymentMean()->getName());
 
-        static::assertEquals('Some Valid Bank Name', $paymentInstance->getBankName());
-        static::assertEquals('Some Valid Bic', $paymentInstance->getBic());
-        static::assertEquals('AL47212110090000000235698741', $paymentInstance->getIban());
-        static::assertEquals('Max', $paymentInstance->getFirstName());
-        static::assertEquals('Mustermann', $paymentInstance->getLastName());
-        static::assertEquals('Musterstr. 55', $paymentInstance->getAddress());
-        static::assertEquals('55555', $paymentInstance->getZipCode());
-        static::assertEquals('Musterhausen', $paymentInstance->getCity());
+        static::assertSame('Some Valid Bank Name', $paymentInstance->getBankName());
+        static::assertSame('Some Valid Bic', $paymentInstance->getBic());
+        static::assertSame('AL47212110090000000235698741', $paymentInstance->getIban());
+        static::assertSame('Max', $paymentInstance->getFirstName());
+        static::assertSame('Mustermann', $paymentInstance->getLastName());
+        static::assertSame('Musterstr. 55', $paymentInstance->getAddress());
+        static::assertSame('55555', $paymentInstance->getZipCode());
+        static::assertSame('Musterhausen', $paymentInstance->getCity());
         static::assertNotNull($paymentInstance->getAmount());
     }
 }

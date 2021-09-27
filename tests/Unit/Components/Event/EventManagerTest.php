@@ -273,7 +273,7 @@ class EventManagerTest extends TestCase
         static::assertCount(3, $values->getValues());
         static::assertEquals('foo', $values->get(0));
         static::assertEquals('bar', $values->get(1));
-        static::assertEquals(true, $values->get(2));
+        static::assertTrue($values->get(2));
     }
 
     public function appendEventWithBooleanValueListener(Enlight_Event_EventArgs $args)

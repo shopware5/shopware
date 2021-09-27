@@ -44,7 +44,7 @@ class StreamProtocolValidatorTest extends Enlight_Components_Test_TestCase
         $validator = new StreamProtocolValidator();
 
         foreach ($urls as $url) {
-            static::assertEquals(true, $validator->validate($url));
+            static::assertTrue($validator->validate($url));
         }
     }
 

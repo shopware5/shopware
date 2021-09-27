@@ -229,7 +229,7 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
         $responseStr = preg_replace('/(new Date\([-0-9]+\))/', '"$1"', $response->getBody());
 
         $responseJSON = json_decode($responseStr, true);
-        static::assertEquals(true, $responseJSON['success']);
+        static::assertTrue($responseJSON['success']);
 
         foreach ($responseJSON['data'] as $dataElement) {
             switch ($dataElement['payment']['id']) {
@@ -304,7 +304,7 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
         $response = $this->dispatch('backend/Order/loadStores?' . $getString);
 
         $responseJSON = json_decode($response->getBody(), true);
-        static::assertEquals(true, $responseJSON['success']);
+        static::assertTrue($responseJSON['success']);
         $data = $responseJSON['data'];
 
         // Test for fallback value

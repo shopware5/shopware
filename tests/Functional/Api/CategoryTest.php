@@ -35,7 +35,7 @@ class CategoryTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(401, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -56,7 +56,7 @@ class CategoryTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(404, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -80,7 +80,7 @@ class CategoryTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(201, $response->getStatusCode());
         static::assertArrayHasKey('location', $response->headers->all());
 
@@ -113,7 +113,7 @@ class CategoryTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(400, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -133,7 +133,7 @@ class CategoryTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(200, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -164,7 +164,7 @@ class CategoryTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(400, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -212,7 +212,7 @@ class CategoryTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(200, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -241,7 +241,7 @@ class CategoryTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(200, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -261,7 +261,7 @@ class CategoryTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(404, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -286,7 +286,7 @@ class CategoryTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(404, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -304,7 +304,7 @@ class CategoryTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertNull($response->getHeader('Set-Cookie'));
         static::assertEquals(200, $response->getStatusCode());
 
         $response = $response->getContent();

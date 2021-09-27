@@ -40,7 +40,7 @@ class CustomerGroupTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(401, $response->getStatusCode());
 
         $result = $response->getContent();

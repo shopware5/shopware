@@ -2606,7 +2606,7 @@ class sBasketTest extends TestCase
         $basketItemId = $this->module->sAddArticle($article->getMainDetail()->getNumber());
 
         // Check that the article has been added to the basket
-        static::assertNotEquals(false, $basketItemId);
+        static::assertNotFalse($basketItemId);
 
         // Check that the final price equals the net price for the basket item
         $basketItem = Shopware()->Db()->fetchRow(

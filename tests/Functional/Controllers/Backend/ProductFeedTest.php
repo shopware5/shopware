@@ -223,7 +223,7 @@ class ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
     {
         $this->dispatch('backend/ProductFeed/getArticles');
         static::assertTrue($this->View()->success);
-        static::assertEquals(20, \count($this->View()->data));
+        static::assertCount(20, $this->View()->data);
     }
 
     /**

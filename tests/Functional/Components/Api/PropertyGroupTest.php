@@ -24,8 +24,11 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\PropertyGroup;
 use Shopware\Components\Api\Resource\Resource;
+use Shopware\Models\Property\Group;
 
 class PropertyGroupTest extends TestCase
 {
@@ -163,23 +166,23 @@ class PropertyGroupTest extends TestCase
     /**
      * @depends testUpdateShouldBeSuccessful
      */
-    public function testDeleteShouldBeSuccessful($id)
+    public function testDeleteShouldBeSuccessful($id): void
     {
         $group = $this->resource->delete($id);
 
-        static::assertInstanceOf('\Shopware\Models\Property\Group', $group);
-        static::assertEquals(null, $group->getId());
+        static::assertInstanceOf(Group::class, $group);
+        static::assertSame(0, (int) $group->getId());
     }
 
-    public function testDeleteWithInvalidIdShouldThrowNotFoundException()
+    public function testDeleteWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->delete(9999999);
     }
 
-    public function testDeleteWithMissingIdShouldThrowParameterMissingException()
+    public function testDeleteWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->delete('');
     }
 }

@@ -58,9 +58,9 @@ class XmlCronjobReaderTest extends TestCase
 
         static::assertEquals('Article Importer', $firstCron['name']);
         static::assertEquals('ImportArticle', $firstCron['action']);
-        static::assertEquals(true, $firstCron['active']);
+        static::assertTrue($firstCron['active']);
         static::assertEquals(3600, $firstCron['interval']);
-        static::assertEquals(true, $firstCron['disable_on_error']);
+        static::assertTrue($firstCron['disable_on_error']);
 
         $secondCron = $result[1];
 
@@ -72,9 +72,9 @@ class XmlCronjobReaderTest extends TestCase
 
         static::assertEquals('Order Export', $secondCron['name']);
         static::assertEquals('ExportOrder', $secondCron['action']);
-        static::assertEquals(true, $secondCron['active']);
+        static::assertTrue($secondCron['active']);
         static::assertEquals(3600, $secondCron['interval']);
-        static::assertEquals(false, $secondCron['disable_on_error']);
+        static::assertFalse($secondCron['disable_on_error']);
     }
 
     public function testReadEmptyFile(): void

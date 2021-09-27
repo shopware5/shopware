@@ -41,7 +41,7 @@ class MediaTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(401, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -62,7 +62,7 @@ class MediaTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(404, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -81,7 +81,7 @@ class MediaTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('content-type'));
-        static::assertEquals(null, $response->headers->get('set-cookie'));
+        static::assertNull($response->headers->get('set-cookie'));
         static::assertEquals(200, $response->getStatusCode());
 
         $response = $response->getContent();
@@ -110,7 +110,7 @@ class MediaTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(400, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -167,7 +167,7 @@ class MediaTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(200, $response->getStatusCode());
 
         $response = $response->getContent();
@@ -192,7 +192,7 @@ class MediaTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(200, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -249,7 +249,7 @@ class MediaTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(200, $response->getStatusCode());
 
         $response = $response->getContent();
@@ -314,7 +314,7 @@ class MediaTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(200, $response->getStatusCode());
 
         $response = $response->getContent();
@@ -339,7 +339,7 @@ class MediaTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(404, $response->getStatusCode());
 
         $result = $response->getContent();

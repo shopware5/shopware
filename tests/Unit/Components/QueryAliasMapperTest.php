@@ -83,7 +83,7 @@ class QueryAliasMapperTest extends TestCase
 
         static::assertEquals('q', $mapper->getShortAlias('sSearch'));
         static::assertEquals('p', $mapper->getShortAlias('sPage'));
-        static::assertEquals(null, $mapper->getShortAlias('somefoo'));
+        static::assertNull($mapper->getShortAlias('somefoo'));
     }
 
     public function testLongParamsGettingReplaced()

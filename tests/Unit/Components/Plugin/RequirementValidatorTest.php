@@ -223,7 +223,7 @@ class RequirementValidatorTest extends TestCase
 
         if ($plugins) {
             $repo->method('findOneBy')
-                ->will(static::returnCallback([$this, 'findPluginByName']));
+                ->willReturnCallback([$this, 'findPluginByName']);
         }
 
         $em = $this->createConfiguredMock(ModelManager::class, ['getRepository' => $repo]);

@@ -129,7 +129,7 @@ class XmlReaderBaseTest extends TestCase
         );
 
         static::assertIsBool($element1Result);
-        static::assertEquals(true, $element1Result);
+        static::assertTrue($element1Result);
 
         //required not given - passed default value
         $element2 = $this->xpath->query('//config/elements/element')->item(1);
@@ -139,7 +139,7 @@ class XmlReaderBaseTest extends TestCase
         );
 
         static::assertIsBool($element2Result);
-        static::assertEquals(false, $element2Result);
+        static::assertFalse($element2Result);
     }
 
     public function testParseStoreNodeList(): void

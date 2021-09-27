@@ -51,7 +51,7 @@ class GenerateArticleImagesTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(405, $response->getStatusCode());
 
         $result = $response->getContent();
@@ -68,7 +68,7 @@ class GenerateArticleImagesTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('content-type'));
-        static::assertEquals(null, $response->headers->get('set-cookie'));
+        static::assertNull($response->headers->get('set-cookie'));
         static::assertEquals(405, $response->getStatusCode());
 
         $result = $response->getContent();

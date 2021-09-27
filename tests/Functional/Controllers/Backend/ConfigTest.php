@@ -115,7 +115,7 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
         $this->Request()->setPost($newTestDocumentType);
         $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
 
-        static::assertEquals(true, json_decode($response->getBody(), true)['success']);
+        static::assertTrue(json_decode($response->getBody(), true)['success']);
 
         Shopware()->Db()->query('DELETE FROM `s_core_documents` WHERE `key`="first_test_document";');
     }
@@ -153,7 +153,7 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
         $response = $this->dispatch('backend/Config/getList?' . $getString);
 
         $responseJSON = json_decode($response->getBody(), true);
-        static::assertEquals(true, $responseJSON['success']);
+        static::assertTrue($responseJSON['success']);
 
         foreach ($responseJSON['data'] as $documentType) {
             static::assertEquals($documentType['name'], $documentType['description']);
@@ -173,7 +173,7 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
         $response = $this->dispatch('backend/Config/getList?' . $getString);
 
         $responseJSON = json_decode($response->getBody(), true);
-        static::assertEquals(true, $responseJSON['success']);
+        static::assertTrue($responseJSON['success']);
 
         foreach ($responseJSON['data'] as $documentType) {
             switch ($documentType['id']) {

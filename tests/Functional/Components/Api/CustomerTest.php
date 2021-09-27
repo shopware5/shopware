@@ -27,6 +27,8 @@ namespace Shopware\Tests\Functional\Components\Api;
 use DateTime;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\Customer;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Random;
@@ -398,23 +400,23 @@ class CustomerTest extends TestCase
     /**
      * @depends testUpdateShouldBeSuccessful
      */
-    public function testDeleteShouldBeSuccessful($id)
+    public function testDeleteShouldBeSuccessful($id): void
     {
         $customer = $this->resource->delete($id);
 
-        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
-        static::assertEquals(null, $customer->getId());
+        static::assertInstanceOf(\Shopware\Models\Customer\Customer::class, $customer);
+        static::assertSame(0, (int) $customer->getId());
     }
 
-    public function testDeleteWithInvalidIdShouldThrowNotFoundException()
+    public function testDeleteWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->delete(9999999);
     }
 
-    public function testDeleteWithMissingIdShouldThrowParameterMissingException()
+    public function testDeleteWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->delete('');
     }
 

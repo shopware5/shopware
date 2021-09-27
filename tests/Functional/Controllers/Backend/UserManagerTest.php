@@ -244,7 +244,7 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
         static::assertEquals($this->View()->total, 1);
 
         // Check that returning data is an array
-        static::assertTrue(\is_array($this->View()->data));
+        static::assertIsArray($this->View()->data);
 
         // Check that data matches the requested one
         static::assertEquals($user['id'], $this->View()->data['id']);

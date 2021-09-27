@@ -77,12 +77,12 @@ class XmlMenuReaderTest extends TestCase
         static::assertArrayHasKey('active', $firstMenu);
         static::assertArrayHasKey('position', $firstMenu);
 
-        static::assertEquals(false, $firstMenu['isRootMenu']);
+        static::assertFalse($firstMenu['isRootMenu']);
         static::assertEquals('SwagDefaultSort', $firstMenu['name']);
         static::assertEquals('SwagDefaultSort', $firstMenu['controller']);
         static::assertEquals('index', $firstMenu['action']);
         static::assertEquals('sprite-sort', $firstMenu['class']);
-        static::assertEquals(false, $firstMenu['active']);
+        static::assertFalse($firstMenu['active']);
         static::assertEquals(-1, $firstMenu['position']);
 
         static::assertArrayHasKey('label', $firstMenu['parent']);

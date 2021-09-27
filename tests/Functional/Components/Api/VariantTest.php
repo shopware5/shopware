@@ -24,10 +24,13 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Api\Resource\Variant;
 use Shopware\Models\Article\Configurator\Group;
+use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Esd;
 
 class VariantTest extends TestCase
@@ -226,7 +229,7 @@ class VariantTest extends TestCase
 
         static::assertEquals($testData['taxId'], $article->getTax()->getId());
 
-        static::assertEquals(2, \count($article->getMainDetail()->getPrices()));
+        static::assertCount(2, $article->getMainDetail()->getPrices());
 
         return $article;
     }
@@ -291,7 +294,7 @@ class VariantTest extends TestCase
      *
      * @param \Shopware\Models\Article\Article $article
      */
-    public function testDeleteShouldBeSuccessful($article)
+    public function testDeleteShouldBeSuccessful($article): void
     {
         $this->resource->setResultMode(Variant::HYDRATE_OBJECT);
 
@@ -306,23 +309,23 @@ class VariantTest extends TestCase
             } else {
                 $result = $this->resource->deleteByNumber($articleDetail->getNumber());
             }
-            static::assertInstanceOf('\Shopware\Models\Article\Detail', $result);
-            static::assertEquals(null, $result->getId());
+            static::assertInstanceOf(Detail::class, $result);
+            static::assertSame(0, (int) $result->getId());
         }
 
         // Delete the whole article at last
         $this->resourceArticle->delete($article->getId());
     }
 
-    public function testDeleteWithInvalidIdShouldThrowNotFoundException()
+    public function testDeleteWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->delete(9999999);
     }
 
-    public function testDeleteWithMissingIdShouldThrowParameterMissingException()
+    public function testDeleteWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->delete('');
     }
 

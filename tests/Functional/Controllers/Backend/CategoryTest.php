@@ -211,7 +211,7 @@ class CategoryTest extends Enlight_Components_Test_Controller_TestCase
         $this->dispatch('backend/Category/delete');
         static::assertTrue($this->View()->success);
         $categoryModel = $this->repository->find($id);
-        static::assertEquals(null, $categoryModel);
+        static::assertNull($categoryModel);
     }
 
     public function testUpdatingInvalidCategory(): void
