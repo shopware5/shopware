@@ -821,7 +821,7 @@ class %className% extends ModelEntity
                     $default = '"' . $default . '"';
                     break;
                 case 'boolean':
-                    $default = ($default) ? 'true' : 'false';
+                    $default = $default ? 'true' : 'false';
                     break;
                 case 'date':
                 case 'datetime':

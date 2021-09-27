@@ -242,8 +242,8 @@ class Basic implements GeneratorInterface
         $colorWhite = imagecolorallocate($newImage, 255, 255, 255);
         $processHeight = $newSize['height'] + 0;
         $processWidth = $newSize['width'] + 0;
-        for ($y = 0; $y < ($processHeight); ++$y) {
-            for ($x = 0; $x < ($processWidth); ++$x) {
+        for ($y = 0; $y < $processHeight; ++$y) {
+            for ($x = 0; $x < $processWidth; ++$x) {
                 $colorat = imagecolorat($newImage, $x, $y);
                 $r = ($colorat >> 16) & 0xFF;
                 $g = ($colorat >> 8) & 0xFF;

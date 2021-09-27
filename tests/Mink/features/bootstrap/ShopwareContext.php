@@ -117,7 +117,7 @@ class ShopwareContext extends SubContext
 
         if ($pageName === 'Index') {
             $pageName = 'Homepage';
-        } elseif (($pageName === 'Newsletter') && ($additionalData)) {
+        } elseif (($pageName === 'Newsletter') && $additionalData) {
             $data = array_merge($data, $additionalData->getHash());
         }
 

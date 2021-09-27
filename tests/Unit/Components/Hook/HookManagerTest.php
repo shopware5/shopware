@@ -951,7 +951,7 @@ class HookManagerTest extends TestCase
      */
     private function addHookListener($methodName, $hookType, callable $callback = null)
     {
-        $callback = ($callback) ?: function (\Enlight_Hook_HookArgs $args) {
+        $callback = $callback ?: function (\Enlight_Hook_HookArgs $args) {
             // pass
         };
         $this->eventManager->addListener(

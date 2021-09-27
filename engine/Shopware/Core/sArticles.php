@@ -912,7 +912,7 @@ class sArticles implements Enlight_Hook
                     $getBlockPricings[$i]['to'] = $percent['to'];
                     if ($i === 0 && $ignore) {
                         $getBlockPricings[$i]['price'] = $this->sCalculatingPrice(
-                            ($listprice / 100 * (100)),
+                            ($listprice / 100 * 100),
                             $articleData['tax'],
                             $articleData['taxID'],
                             $articleData

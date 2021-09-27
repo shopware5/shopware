@@ -530,7 +530,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
         $selectStmt = $this->pdo->prepare($selectSql);
         $selectStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
 
-        do {
+        while (true) {
             $selectStmt->execute();
             $sessionRows = $selectStmt->fetchAll(\PDO::FETCH_NUM);
 
@@ -573,7 +573,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
             }
 
             return '';
-        } while (true);
+        }
     }
 
     /**

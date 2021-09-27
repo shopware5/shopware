@@ -37,7 +37,7 @@ function smarty_modifier_tax($value, $locale = null)
     }
 
     // check if value is integer
-    if ((int) ($value) == $value) {
+    if ((int) $value == $value) {
         $format['precision'] = 0;
     }
 

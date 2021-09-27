@@ -51549,20 +51549,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
 
 		-
-			message:
-				"""
-					#^PHPDoc tag @var has invalid value \\(\\[optional\\] string fileRegex \\=\\> Regular expression for file types\\.
-					                \\}\\)\\: Unexpected token "\\[", expected type at offset 543$#
-				"""
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
-
-		-
-			message: "#^PHPDoc tag @var has invalid value \\(\\[optional\\] string value \\=\\> Only used for regular expressions, contains the regular expression\\)\\: Unexpected token \"\\[\", expected type at offset 437$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
-
-		-
 			message: "#^PHPDoc tag @var has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php

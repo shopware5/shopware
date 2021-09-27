@@ -444,7 +444,7 @@ EOD
             $notFound[$key] = $locatorArray[$key][self::$language];
         }
 
-        return ($notFound) ?: true;
+        return $notFound ?: true;
     }
 
     /**
@@ -505,7 +505,7 @@ EOD
             $notFound[$key] = $locatorArray[$key][self::$language];
         }
 
-        return ($notFound) ?: true;
+        return $notFound ?: true;
     }
 
     /**

@@ -127,9 +127,9 @@ class TaxGateway implements Gateway\TaxGatewayInterface
         Struct\Country $country = null,
         Struct\Country\State $state = null
     ) {
-        $areaId = ($area) ? $area->getId() : null;
-        $countryId = ($country) ? $country->getId() : null;
-        $stateId = ($state) ? $state->getId() : null;
+        $areaId = $area ? $area->getId() : null;
+        $countryId = $country ? $country->getId() : null;
+        $stateId = $state ? $state->getId() : null;
 
         $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getTaxRuleFields());

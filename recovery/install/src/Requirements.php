@@ -478,7 +478,8 @@ class Requirements
     private function encodeSize($bytes)
     {
         $types = ['B', 'KB', 'MB', 'GB', 'TB'];
-        for ($i = 0; $bytes >= 1024 && $i < (\count($types) - 1); $bytes /= 1024, $i++);
+        for ($i = 0; $bytes >= 1024 && $i < (\count($types) - 1); $bytes /= 1024, $i++) {
+        }
 
         return round($bytes, 2) . ' ' . $types[$i];
     }

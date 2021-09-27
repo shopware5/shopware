@@ -82,7 +82,7 @@ class PluginCheck
                     'updatableAfterUpgrade' => $inStore && $targetVersionUpdateAvailable && $storePlugins[$key]->getVersion() !== $updatesAvailable[$key]->getVersion(),
                     'id' => sprintf('plugin_incompatible-%s', $name),
                     'technicalName' => $technicalName,
-                    'errorLevel' => ($targetVersionUpdateAvailable) ? Validation::REQUIREMENT_VALID : Validation::REQUIREMENT_WARNING,
+                    'errorLevel' => $targetVersionUpdateAvailable ? Validation::REQUIREMENT_VALID : Validation::REQUIREMENT_WARNING,
                 ];
             }
         } catch (\Exception $e) {

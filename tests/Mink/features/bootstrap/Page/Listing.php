@@ -77,7 +77,7 @@ class Listing extends Page implements HelperSelectorInterface
     {
         $parameters = array_merge(
             ['sCategory' => 3],
-            ($autoPage) ? ['sPage' => 1] : [],
+            $autoPage ? ['sPage' => 1] : [],
             Helper::convertTableHashToArray($params, 'parameter')
         );
 
@@ -179,8 +179,8 @@ class Listing extends Page implements HelperSelectorInterface
             $message = sprintf(
                 'The article "%s" is%s in the listing, but should%s.',
                 $name,
-                ($negation) ? '' : ' not',
-                ($negation) ? ' not' : ''
+                $negation ? '' : ' not',
+                $negation ? ' not' : ''
             );
             Helper::throwException([$message]);
         }

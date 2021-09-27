@@ -41,8 +41,8 @@ class TextMappingFactory
     private $version;
 
     /**
-     * @param bool          $esEnabled
-     * @param string | null $version
+     * @param bool        $esEnabled
+     * @param string|null $version
      */
     public function __construct($esEnabled = false, $version = null)
     {
