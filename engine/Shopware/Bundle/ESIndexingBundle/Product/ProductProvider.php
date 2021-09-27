@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\ProviderInterface;
@@ -45,6 +47,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Config;
 
 class ProductProvider implements ProviderInterface
 {
@@ -129,7 +132,7 @@ class ProductProvider implements ProviderInterface
     private $manualPositionLoader;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -149,7 +152,7 @@ class ProductProvider implements ProviderInterface
         ProductListingVariationLoader $visibilityLoader,
         CrudServiceInterface $crudService,
         ProductManualPositionLoaderInterface $manualPositionLoader,
-        \Shopware_Components_Config $config
+        Shopware_Components_Config $config
     ) {
         $this->productGateway = $productGateway;
         $this->cheapestPriceService = $cheapestPriceService;
@@ -342,7 +345,7 @@ class ProductProvider implements ProviderInterface
         }
     }
 
-    private function formatDate(\DateTimeInterface $date = null): ?string
+    private function formatDate(DateTimeInterface $date = null): ?string
     {
         return !$date ? null : $date->format('Y-m-d');
     }
@@ -365,7 +368,7 @@ class ProductProvider implements ProviderInterface
             ->where('mapping.articleID IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $result = [];
         foreach ($data as $row) {
@@ -418,7 +421,7 @@ class ProductProvider implements ProviderInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
+        $data = $statement->fetchAll(PDO::FETCH_GROUP);
         $properties = [];
 
         $hydrator = $this->propertyHydrator;

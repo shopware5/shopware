@@ -24,8 +24,11 @@
 
 namespace Shopware\Models\Article;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use RuntimeException;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Attribute\ArticleEsd as ProductEsdAttribute;
 
@@ -126,7 +129,7 @@ class Esd extends ModelEntity
     private $maxdownloads = 0;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="datum", type="datetime", nullable=true)
      */
@@ -182,11 +185,11 @@ class Esd extends ModelEntity
     /**
      * @param Article $article
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function setArticle($article)
     {
-        throw new \RuntimeException('Article should be set implicit with setArticleDetail');
+        throw new RuntimeException('Article should be set implicit with setArticleDetail');
     }
 
     /**
@@ -212,14 +215,14 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string|null $date
+     * @param DateTimeInterface|string|null $date
      *
      * @return Esd
      */
     public function setDate($date = null)
     {
-        if ($date !== null && !($date instanceof \DateTimeInterface)) {
-            $this->date = new \DateTime($date);
+        if ($date !== null && !($date instanceof DateTimeInterface)) {
+            $this->date = new DateTime($date);
         } else {
             $this->date = $date;
         }
@@ -228,7 +231,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getDate()
     {
@@ -306,6 +309,6 @@ class Esd extends ModelEntity
      */
     public function onPrePersist()
     {
-        $this->date = new \DateTime('now');
+        $this->date = new DateTime('now');
     }
 }

@@ -25,6 +25,8 @@
 namespace Shopware\Bundle\MediaBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Enlight_Event_Exception;
+use Exception;
 use IteratorAggregate;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
@@ -60,14 +62,14 @@ class MediaServiceFactory
      *
      * @param string $backendName
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return MediaServiceInterface
      */
     public function factory($backendName)
     {
         if (!isset($this->cdnConfig['adapters'][$backendName])) {
-            throw new \Exception(sprintf('Configuration "%s" not found', $backendName));
+            throw new Exception(sprintf('Configuration "%s" not found', $backendName));
         }
 
         // Filesystem
@@ -88,8 +90,8 @@ class MediaServiceFactory
      *
      * @param array $config
      *
-     * @throws \Enlight_Event_Exception
-     * @throws \Exception
+     * @throws Enlight_Event_Exception
+     * @throws Exception
      *
      * @return AdapterInterface
      */
@@ -101,7 +103,7 @@ class MediaServiceFactory
         $adapter = $adapters->first();
 
         if (!$adapter) {
-            throw new \Exception(sprintf('CDN Adapter "%s" not found.', $config['type']));
+            throw new Exception(sprintf('CDN Adapter "%s" not found.', $config['type']));
         }
 
         return $adapter;

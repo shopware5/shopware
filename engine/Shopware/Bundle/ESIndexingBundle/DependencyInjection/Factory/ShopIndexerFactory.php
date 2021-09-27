@@ -25,12 +25,15 @@
 namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Enlight_Event_Exception;
+use Exception;
 use Shopware\Bundle\ESIndexingBundle\DataIndexerInterface;
 use Shopware\Bundle\ESIndexingBundle\MappingInterface;
 use Shopware\Bundle\ESIndexingBundle\SettingsInterface;
 use Shopware\Bundle\ESIndexingBundle\ShopIndexer;
 use Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Traversable;
 
 class ShopIndexerFactory
 {
@@ -60,9 +63,9 @@ class ShopIndexerFactory
     private $esVersion;
 
     public function __construct(
-        \Traversable $indexer,
-        \Traversable $mappings,
-        \Traversable $settings,
+        Traversable $indexer,
+        Traversable $mappings,
+        Traversable $settings,
         string $esVersion
     ) {
         $this->indexer = iterator_to_array($indexer, false);
@@ -72,7 +75,7 @@ class ShopIndexerFactory
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return ShopIndexerInterface
      */
@@ -108,7 +111,7 @@ class ShopIndexerFactory
     }
 
     /**
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return DataIndexerInterface[]
      */
@@ -124,7 +127,7 @@ class ShopIndexerFactory
     }
 
     /**
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return MappingInterface[]
      */
@@ -140,7 +143,7 @@ class ShopIndexerFactory
     }
 
     /**
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return SettingsInterface[]
      */

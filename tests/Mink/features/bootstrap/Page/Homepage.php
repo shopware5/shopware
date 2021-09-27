@@ -26,6 +26,7 @@ namespace Shopware\Tests\Mink\Page;
 
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\WebAssert;
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\Article;
 use Shopware\Tests\Mink\Element\Banner;
@@ -66,7 +67,7 @@ class Homepage extends Page implements HelperSelectorInterface
     /**
      * Verify if we're on an expected page. Throw an exception if not.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function verifyPage()
     {
@@ -233,7 +234,7 @@ class Homepage extends Page implements HelperSelectorInterface
      *
      * @param array $articles
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkBlogArticles(BlogArticle $blogArticle, $articles)
     {
@@ -261,7 +262,7 @@ class Homepage extends Page implements HelperSelectorInterface
      *
      * @param string $code
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkYoutubeVideo(YouTube $youtube, $code)
     {

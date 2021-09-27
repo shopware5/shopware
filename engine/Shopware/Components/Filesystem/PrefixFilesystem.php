@@ -24,9 +24,11 @@
 
 namespace Shopware\Components\Filesystem;
 
+use InvalidArgumentException;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\Handler;
 use League\Flysystem\PluginInterface;
+use RuntimeException;
 
 class PrefixFilesystem implements FilesystemInterface
 {
@@ -46,7 +48,7 @@ class PrefixFilesystem implements FilesystemInterface
     public function __construct(FilesystemInterface $filesystem, $prefix)
     {
         if (empty($prefix)) {
-            throw new \InvalidArgumentException('The prefix must not be empty.');
+            throw new InvalidArgumentException('The prefix must not be empty.');
         }
 
         $this->filesystem = $filesystem;
@@ -302,7 +304,7 @@ class PrefixFilesystem implements FilesystemInterface
      */
     public function addPlugin(PluginInterface $plugin)
     {
-        throw new \RuntimeException('Filesystem plugins are not allowed in prefixed filesystems.');
+        throw new RuntimeException('Filesystem plugins are not allowed in prefixed filesystems.');
     }
 
     /**
@@ -332,7 +334,7 @@ class PrefixFilesystem implements FilesystemInterface
     /**
      * @param string $path
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function checkPath($path)
     {
@@ -340,6 +342,6 @@ class PrefixFilesystem implements FilesystemInterface
             return;
         }
 
-        throw new \RuntimeException('Path traversal is not allowed.');
+        throw new RuntimeException('Path traversal is not allowed.');
     }
 }

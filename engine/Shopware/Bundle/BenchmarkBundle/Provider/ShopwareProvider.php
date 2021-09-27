@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
+use Exception;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -219,7 +220,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
             if (isset($licenseInfo['product'])) {
                 return strtolower($licenseInfo['product']);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return 'ce';

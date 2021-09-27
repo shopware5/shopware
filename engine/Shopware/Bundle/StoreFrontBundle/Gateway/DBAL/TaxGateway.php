@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
@@ -80,7 +81,7 @@ class TaxGateway implements Gateway\TaxGatewayInterface
 
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $rules = [];
 
@@ -97,7 +98,7 @@ class TaxGateway implements Gateway\TaxGatewayInterface
             /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
             $statement = $query->execute();
 
-            $area = $statement->fetch(\PDO::FETCH_ASSOC);
+            $area = $statement->fetch(PDO::FETCH_ASSOC);
 
             if (!empty($area['__taxRule_tax'])) {
                 $area['__taxRule_name'] = $tax['__tax_description'];

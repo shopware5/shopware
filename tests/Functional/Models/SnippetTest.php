@@ -27,11 +27,12 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Models;
 
 use Doctrine\ORM\EntityRepository;
+use Enlight_Components_Test_TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Snippet\Snippet;
 use Shopware\Models\Snippet\SnippetRepository;
 
-class SnippetTest extends \Enlight_Components_Test_TestCase
+class SnippetTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var array<string, string>

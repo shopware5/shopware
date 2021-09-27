@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Functional\Components;
 
 use Enlight_Components_Test_TestCase;
+use InvalidArgumentException;
 use Shopware\Components\StreamProtocolValidator;
 
 class StreamProtocolValidatorTest extends Enlight_Components_Test_TestCase
@@ -63,7 +64,7 @@ class StreamProtocolValidatorTest extends Enlight_Components_Test_TestCase
         foreach ($urls as $url) {
             try {
                 $validator->validate($url);
-            } catch (\InvalidArgumentException $ex) {
+            } catch (InvalidArgumentException $ex) {
                 static::assertStringContainsString('Invalid stream protocol', $ex->getMessage());
                 continue;
             }

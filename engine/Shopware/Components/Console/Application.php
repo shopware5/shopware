@@ -28,6 +28,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\Tools\Console\ConsoleRunner as DoctrineConsoleRunner;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
+use Enlight_Event_EventManager;
+use Exception;
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Kernel;
 use Symfony\Component\Console\Application as BaseApplication;
@@ -88,7 +90,7 @@ class Application extends BaseApplication
     {
         try {
             $this->kernel->boot();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->kernel->boot(true);
             $formatter = $this->getHelperSet()->get('formatter');
             $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . ' in ' . $e->getFile(), 'error'));
@@ -113,7 +115,7 @@ class Application extends BaseApplication
      */
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
     {
-        /** @var \Enlight_Event_EventManager $eventManager */
+        /** @var Enlight_Event_EventManager $eventManager */
         $eventManager = $this->kernel->getContainer()->get('events');
 
         $event = $eventManager->notifyUntil('Shopware_Command_Before_Run', [
@@ -162,7 +164,7 @@ class Application extends BaseApplication
                         $plugin->registerCommands($this);
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $formatter = $this->getHelperSet()->get('formatter');
                 $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . ' in ' . $e->getFile(), 'error'));
             }
@@ -173,7 +175,7 @@ class Application extends BaseApplication
     {
         $this->kernel->getContainer()->load('plugins');
 
-        /** @var \Enlight_Event_EventManager $eventManager */
+        /** @var Enlight_Event_EventManager $eventManager */
         $eventManager = $this->kernel->getContainer()->get('events');
 
         $collection = new ArrayCollection();

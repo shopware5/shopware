@@ -24,10 +24,15 @@
 
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
+use Enlight_Class;
+use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Template_Manager;
+use Enlight_View_Default;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Shop;
+use Shopware_Controllers_Frontend_Sitemap;
 
-class SitemapTest extends \Enlight_Components_Test_Controller_TestCase
+class SitemapTest extends Enlight_Components_Test_Controller_TestCase
 {
     public static function tearDownAfterClass(): void
     {
@@ -100,18 +105,18 @@ class SitemapTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @return \Shopware_Controllers_Frontend_Sitemap
+     * @return Shopware_Controllers_Frontend_Sitemap
      */
     private function getController()
     {
-        /** @var \Shopware_Controllers_Frontend_Sitemap $controller */
-        $controller = \Enlight_Class::Instance(\Shopware_Controllers_Frontend_Sitemap::class, [
+        /** @var Shopware_Controllers_Frontend_Sitemap $controller */
+        $controller = Enlight_Class::Instance(Shopware_Controllers_Frontend_Sitemap::class, [
             $this->Request(),
             $this->Response(),
         ]);
 
         $controller->setContainer(Shopware()->Container());
-        $controller->setView(new \Enlight_View_Default(new \Enlight_Template_Manager()));
+        $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
 
         return $controller;
     }

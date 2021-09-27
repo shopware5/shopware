@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Emotion;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
@@ -402,7 +403,7 @@ class Repository extends ModelRepository
             ->andWhere('emotions.isLandingPage = 0 ')
             ->andWhere('emotions.active = 1 ')
             ->setParameter(1, $categoryId)
-            ->setParameter('now', new \DateTime());
+            ->setParameter('now', new DateTime());
 
         return $builder;
     }
@@ -481,7 +482,7 @@ class Repository extends ModelRepository
             ->andWhere('(emotions.validFrom <= :now OR emotions.validFrom IS NULL)')
             ->andWhere('(emotions.validTo >= :now OR emotions.validTo IS NULL)')
             ->setParameter(1, $id)
-            ->setParameter('now', new \DateTime());
+            ->setParameter('now', new DateTime());
 
         return $builder;
     }

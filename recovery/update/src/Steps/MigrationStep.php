@@ -24,6 +24,8 @@
 
 namespace Shopware\Recovery\Update\Steps;
 
+use Exception;
+use ReflectionClass;
 use Shopware\Components\Migrations\AbstractMigration;
 use Shopware\Components\Migrations\Manager;
 
@@ -65,8 +67,8 @@ class MigrationStep
 
         try {
             $this->migrationManager->apply($migration, AbstractMigration::MODUS_UPDATE);
-        } catch (\Exception $e) {
-            $reflection = new \ReflectionClass(\get_class($migration));
+        } catch (Exception $e) {
+            $reflection = new ReflectionClass(\get_class($migration));
             $classFile = $reflection->getFileName();
 
             return new ErrorResult($e->getMessage(), $e, [

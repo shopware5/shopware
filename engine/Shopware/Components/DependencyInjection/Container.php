@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\DependencyInjection;
 
+use Enlight_Event_EventArgs;
+use Shopware;
 use Symfony\Component\DependencyInjection\Container as BaseContainer;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 
@@ -32,7 +34,7 @@ class Container extends BaseContainer
     /**
      * @return Container
      */
-    public function setApplication(\Shopware $application)
+    public function setApplication(Shopware $application)
     {
         parent::set('application', $application);
 
@@ -188,7 +190,7 @@ class Container extends BaseContainer
     {
         $eventManager = parent::get('events');
 
-        /** @var \Enlight_Event_EventArgs|null $event */
+        /** @var Enlight_Event_EventArgs|null $event */
         $event = $eventManager->notifyUntil(
             'Enlight_Bootstrap_InitResource_' . $id,
             ['subject' => $this]

@@ -24,10 +24,15 @@
 
 namespace Shopware\Tests\Components;
 
-class TemplateMailTest extends \Enlight_Components_Test_TestCase
+use Enlight_Components_Mail;
+use Enlight_Components_Test_TestCase;
+use Shopware_Components_StringCompiler;
+use Shopware_Components_TemplateMail;
+
+class TemplateMailTest extends Enlight_Components_Test_TestCase
 {
     /**
-     * @var \Shopware_Components_TemplateMail
+     * @var Shopware_Components_TemplateMail
      */
     private $mail;
 
@@ -39,7 +44,7 @@ class TemplateMailTest extends \Enlight_Components_Test_TestCase
     {
         parent::setUp();
 
-        $stringCompiler = new \Shopware_Components_StringCompiler(Shopware()->Template());
+        $stringCompiler = new Shopware_Components_StringCompiler(Shopware()->Template());
 
         $repository = $this->createMock(\Doctrine\ORM\EntityRepository::class);
         $repository->expects(static::any())
@@ -51,7 +56,7 @@ class TemplateMailTest extends \Enlight_Components_Test_TestCase
                 ->method('getRepository')
                 ->willReturn($repository);
 
-        $this->mail = new \Shopware_Components_TemplateMail();
+        $this->mail = new Shopware_Components_TemplateMail();
         $this->mail->setShop(Shopware()->Shop());
         $this->mail->setModelManager($manager);
         $this->mail->setStringCompiler($stringCompiler);
@@ -73,7 +78,7 @@ class TemplateMailTest extends \Enlight_Components_Test_TestCase
      */
     public function testLoadValuesLoadsValues()
     {
-        $mail = new \Enlight_Components_Mail('UTF-8');
+        $mail = new Enlight_Components_Mail('UTF-8');
         $templateMock = $this->getSimpleMailMockObject();
 
         $result = $this->mail->loadValues($mail, $templateMock);
@@ -87,7 +92,7 @@ class TemplateMailTest extends \Enlight_Components_Test_TestCase
      */
     public function testLoadTemplateLoadsValues()
     {
-        $mail = new \Enlight_Components_Mail('UTF-8');
+        $mail = new Enlight_Components_Mail('UTF-8');
         $templateMock = $this->getSimpleMailMockObject();
 
         $result = $this->mail->loadValues($mail, $templateMock);
@@ -106,7 +111,7 @@ class TemplateMailTest extends \Enlight_Components_Test_TestCase
      */
     public function testLoadSmartyTemplateLoadsValues()
     {
-        $mail = new \Enlight_Components_Mail('UTF-8');
+        $mail = new Enlight_Components_Mail('UTF-8');
         $templateMock = $this->getSmartyMailMockObject();
 
         $context = [
@@ -161,13 +166,13 @@ class TemplateMailTest extends \Enlight_Components_Test_TestCase
      */
     public function testCreateMailWithoutShop()
     {
-        $templateMail = new \Shopware_Components_TemplateMail();
+        $templateMail = new Shopware_Components_TemplateMail();
         $templateMail->setModelManager(Shopware()->Models());
-        $templateMail->setStringCompiler(new \Shopware_Components_StringCompiler(Shopware()->Template()));
+        $templateMail->setStringCompiler(new Shopware_Components_StringCompiler(Shopware()->Template()));
 
         $mail = $templateMail->createMail('sOrder');
 
-        static::assertInstanceOf(\Enlight_Components_Mail::class, $mail);
+        static::assertInstanceOf(Enlight_Components_Mail::class, $mail);
     }
 
     /**
@@ -187,7 +192,7 @@ class TemplateMailTest extends \Enlight_Components_Test_TestCase
         // Test mail creation
         $registerConfirmationMail = $entityManager->find(\Shopware\Models\Mail\Mail::class, 1);
         $mail = $this->mail->createMail($registerConfirmationMail, [], $newShop);
-        static::assertInstanceOf(\Enlight_Components_Mail::class, $mail);
+        static::assertInstanceOf(Enlight_Components_Mail::class, $mail);
 
         // Revert changes in the database
         $entityManager->remove($newShop);
@@ -213,7 +218,7 @@ class TemplateMailTest extends \Enlight_Components_Test_TestCase
         // Test mail creation
         $registerConfirmationMail = $entityManager->find(\Shopware\Models\Mail\Mail::class, 1);
         $mail = $this->mail->createMail($registerConfirmationMail, [], $newShop);
-        static::assertInstanceOf(\Enlight_Components_Mail::class, $mail);
+        static::assertInstanceOf(Enlight_Components_Mail::class, $mail);
 
         // Revert changes in the database
         $entityManager->remove($newMainShop);

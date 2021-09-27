@@ -27,6 +27,7 @@ namespace Shopware\Tests\Functional\Components\Cart;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Shopware\Components\Cart\BasketQueryHelper;
 use Shopware\Components\Cart\Struct\DiscountContext;
 use Shopware\Components\Cart\Struct\Price;
@@ -92,7 +93,7 @@ class BasketQueryHelperTest extends TestCase
             ->getMock();
         $connectionMock->method('lastInsertId')->willReturn(111);
 
-        $reflectionBasketQueryHelper = new \ReflectionClass(BasketQueryHelper::class);
+        $reflectionBasketQueryHelper = new ReflectionClass(BasketQueryHelper::class);
         $connectionProperty = $reflectionBasketQueryHelper->getProperty('connection');
         $connectionProperty->setAccessible(true);
         $connectionProperty->setValue(

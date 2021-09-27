@@ -26,6 +26,7 @@ namespace Shopware\Components\Plugin;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
+use InvalidArgumentException;
 use Shopware\Models\Plugin\Plugin;
 
 class CronjobSynchronizer
@@ -41,7 +42,7 @@ class CronjobSynchronizer
     }
 
     /**
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function synchronize(Plugin $plugin, array $cronjobs)
     {

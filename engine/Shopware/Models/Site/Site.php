@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Site;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Attribute\Site as SiteAttribute;
@@ -176,7 +178,7 @@ class Site extends ModelEntity
     private $shopIds;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
@@ -209,7 +211,7 @@ class Site extends ModelEntity
 
     public function __construct()
     {
-        $this->changed = new \DateTime();
+        $this->changed = new DateTime();
     }
 
     /**
@@ -617,14 +619,14 @@ class Site extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $changed
+     * @param DateTimeInterface|string $changed
      *
      * @return Site
      */
     public function setChanged($changed = 'now')
     {
-        if (!$changed instanceof \DateTimeInterface) {
-            $this->changed = new \DateTime($changed);
+        if (!$changed instanceof DateTimeInterface) {
+            $this->changed = new DateTime($changed);
         } else {
             $this->changed = $changed;
         }
@@ -633,7 +635,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getChanged()
     {

@@ -24,7 +24,10 @@
 
 namespace Shopware\Tests\Unit\Components\Plugin\XmlReader;
 
+use DOMNodeList;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Shopware\Components\Plugin\XmlReader\XmlConfigReader;
 
 class XmlConfigReaderTest extends TestCase
@@ -130,11 +133,11 @@ class XmlConfigReaderTest extends TestCase
 
     public function testParseElementNodeListEmpty(): void
     {
-        $reflection = new \ReflectionClass(\get_class($this->configReader));
+        $reflection = new ReflectionClass(\get_class($this->configReader));
         $method = $reflection->getMethod('parseElementNodeList');
         $method->setAccessible(true);
 
-        $result = $method->invokeArgs($this->configReader, [new \DOMNodeList()]);
+        $result = $method->invokeArgs($this->configReader, [new DOMNodeList()]);
 
         static::assertIsArray($result);
         static::assertCount(0, $result);
@@ -163,7 +166,7 @@ class XmlConfigReaderTest extends TestCase
 
     public function testValidateAttributeScopeThrowsException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid scope "invalid value"');
         XmlConfigReader::validateAttributeScope('invalid value');
     }

@@ -25,9 +25,10 @@
 namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Assert\Assertion;
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class CreateDateCondition implements ConditionInterface, \JsonSerializable
+class CreateDateCondition implements ConditionInterface, JsonSerializable
 {
     private const NAME = 'create_date_condition';
 

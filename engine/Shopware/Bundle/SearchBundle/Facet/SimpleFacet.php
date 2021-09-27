@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Facet;
 
+use RuntimeException;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 
 /**
@@ -44,7 +45,7 @@ class SimpleFacet implements FacetInterface
         $this->name = $name;
 
         if (empty($name)) {
-            throw new \RuntimeException('No facet name provided');
+            throw new RuntimeException('No facet name provided');
         }
     }
 

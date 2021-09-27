@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Mink\Page;
 
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
 
@@ -35,7 +36,7 @@ class SitemapIndexXml extends Page
     protected $path = '/sitemap_index.xml';
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkXml(array $links)
     {

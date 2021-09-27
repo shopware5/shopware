@@ -24,9 +24,10 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Models\Shop\Locale;
 
-class ConfigTest extends \Enlight_Components_Test_Controller_TestCase
+class ConfigTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Tests the cron job config pagination

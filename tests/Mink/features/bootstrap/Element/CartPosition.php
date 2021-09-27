@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Mink\Element;
 
+use Exception;
 use Shopware\Tests\Mink\Helper;
 
 /**
@@ -119,7 +120,7 @@ class CartPosition extends MultipleElement
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string
      */

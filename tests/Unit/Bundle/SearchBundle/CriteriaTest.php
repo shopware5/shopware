@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\SearchBundle;
 
+use DateTime;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\SearchBundle\Criteria;
 
@@ -102,7 +103,7 @@ class CriteriaTest extends TestCase
             ['123-2'],
             ['asfkln'],
             [null],
-            [new \DateTime()],
+            [new DateTime()],
         ];
     }
 
@@ -113,7 +114,7 @@ class CriteriaTest extends TestCase
             [-1],
             ['123-2'],
             ['asfkln'],
-            [new \DateTime()],
+            [new DateTime()],
         ];
     }
 }

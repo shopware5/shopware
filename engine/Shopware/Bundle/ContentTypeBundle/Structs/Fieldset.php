@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\Structs;
 
-class Fieldset implements \JsonSerializable
+use JsonSerializable;
+
+class Fieldset implements JsonSerializable
 {
     /**
      * @var string|null

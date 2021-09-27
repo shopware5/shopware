@@ -25,11 +25,12 @@
 namespace Shopware\Tests\Unit\Plugin\Frontend\InputFilter;
 
 use PHPUnit\Framework\TestCase;
+use Shopware_Plugins_Frontend_InputFilter_Bootstrap;
 
 class FilterTest extends TestCase
 {
     /**
-     * @var \Shopware_Plugins_Frontend_InputFilter_Bootstrap
+     * @var Shopware_Plugins_Frontend_InputFilter_Bootstrap
      */
     private $inputFilter;
 
@@ -38,7 +39,7 @@ class FilterTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->inputFilter = $this->createMock(\Shopware_Plugins_Frontend_InputFilter_Bootstrap::class);
+        $this->inputFilter = $this->createMock(Shopware_Plugins_Frontend_InputFilter_Bootstrap::class);
     }
 
     /**
@@ -117,7 +118,7 @@ class FilterTest extends TestCase
     public function testSql($statement)
     {
         $regex = '#' . $this->inputFilter->sqlRegex . '#msi';
-        $statement = \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($statement, $regex);
+        $statement = Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($statement, $regex);
 
         static::assertNull($statement);
     }
@@ -131,7 +132,7 @@ class FilterTest extends TestCase
     {
         static::assertEquals(
             $expected['enabled'],
-            \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#PreventRegexMatch#', true)
+            Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#PreventRegexMatch#', true)
         );
     }
 
@@ -144,7 +145,7 @@ class FilterTest extends TestCase
     {
         static::assertEquals(
             $expected['disabled'],
-            \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#PreventRegexMatch#', false)
+            Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#PreventRegexMatch#', false)
         );
     }
 
@@ -156,7 +157,7 @@ class FilterTest extends TestCase
      */
     public function testXssFilter($input, $expected)
     {
-        $result = \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#' . $this->inputFilter->xssRegex . '#msi');
+        $result = Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#' . $this->inputFilter->xssRegex . '#msi');
 
         static::assertEquals(
             $expected,

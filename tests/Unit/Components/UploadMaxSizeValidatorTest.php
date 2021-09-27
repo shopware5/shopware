@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Unit\Components;
 
+use Enlight_Controller_EventArgs;
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Controller_Response_ResponseTestCase;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\UploadMaxSizeException;
 use Shopware\Components\UploadMaxSizeValidator;
@@ -74,16 +77,16 @@ class UploadMaxSizeValidatorTest extends TestCase
     /**
      * @param int $contentLength
      *
-     * @return \Enlight_Controller_EventArgs
+     * @return Enlight_Controller_EventArgs
      */
     private function getMockEnlightControllerEventArgs($contentLength = 0)
     {
-        $response = new \Enlight_Controller_Response_ResponseTestCase();
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $response = new Enlight_Controller_Response_ResponseTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setServer('CONTENT_LENGTH', $contentLength);
         $request->setMethod('POST');
 
-        return new \Enlight_Controller_EventArgs([
+        return new Enlight_Controller_EventArgs([
             'request' => $request,
             'response' => $response,
         ]);

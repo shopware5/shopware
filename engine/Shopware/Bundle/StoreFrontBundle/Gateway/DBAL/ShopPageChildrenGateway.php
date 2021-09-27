@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageChildrenGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
@@ -62,7 +63,7 @@ class ShopPageChildrenGateway implements ShopPageChildrenGatewayInterface
             ->where('page.parentID IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
 
         if (empty($parentIds)) {
             return [];

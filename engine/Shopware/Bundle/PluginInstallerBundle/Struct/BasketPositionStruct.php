@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-class BasketPositionStruct implements \JsonSerializable
+use JsonSerializable;
+
+class BasketPositionStruct implements JsonSerializable
 {
     /**
      * @var PluginStruct

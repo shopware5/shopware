@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SitemapBundle\Service;
 
+use DateTime;
+use DateTimeZone;
 use Shopware\Bundle\SitemapBundle\SitemapLockInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\CoreCache;
 use Shopware\Models\Shop\Shop;
@@ -60,7 +62,7 @@ class SitemapLock implements SitemapLockInterface
             return false;
         }
 
-        $data = sprintf('Locked: %s', (new \DateTime('NOW', new \DateTimeZone('UTC')))->format(\DateTime::ATOM));
+        $data = sprintf('Locked: %s', (new DateTime('NOW', new DateTimeZone('UTC')))->format(DateTime::ATOM));
 
         $this->cache->save($this->generateCacheKeyForShop($shop), $data, $lifeTime);
 

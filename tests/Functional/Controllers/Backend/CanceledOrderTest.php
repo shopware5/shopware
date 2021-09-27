@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
-class CanceledOrderTest extends \Enlight_Components_Test_Plugin_TestCase
+use Enlight_Components_Test_Plugin_TestCase;
+
+class CanceledOrderTest extends Enlight_Components_Test_Plugin_TestCase
 {
     public const FIRST_DUMMY_SESSION_ID = '1231231231231231231231231231231231231320';
     public const SECOND_DUMMY_SESSION_ID = '1231231231231231231231231231231231231321';

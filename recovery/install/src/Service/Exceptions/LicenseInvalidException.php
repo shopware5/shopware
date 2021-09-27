@@ -24,6 +24,8 @@
 
 namespace Shopware\Recovery\Install\Service\Exceptions;
 
-class LicenseInvalidException extends \RuntimeException
+use RuntimeException;
+
+class LicenseInvalidException extends RuntimeException
 {
 }

@@ -24,7 +24,9 @@
 
 namespace ShopwarePlugin\PaymentMethods\Components;
 
+use DateTime;
 use Doctrine\ORM\AbstractQuery;
+use Enlight_Controller_Request_Request;
 
 /**
  * Replacement class for legacy core/paymentmeans/debit.php class.
@@ -71,7 +73,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
     /**
      * {@inheritdoc}
      */
-    public function savePaymentData($userId, \Enlight_Controller_Request_Request $request)
+    public function savePaymentData($userId, Enlight_Controller_Request_Request $request)
     {
         $lastPayment = $this->getCurrentPaymentDataAsArray($userId);
 
@@ -86,7 +88,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
         ];
 
         if (!$lastPayment) {
-            $date = new \DateTime();
+            $date = new DateTime();
             $data['created_at'] = $date->format('Y-m-d');
             $data['payment_mean_id'] = $paymentMean['id'];
             $data['user_id'] = $userId;
@@ -139,7 +141,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
 
         $debitData = $this->getCurrentPaymentDataAsArray($userId);
 
-        $date = new \DateTime();
+        $date = new DateTime();
         $data = [
             'payment_mean_id' => $paymentId,
             'order_id' => $orderId,

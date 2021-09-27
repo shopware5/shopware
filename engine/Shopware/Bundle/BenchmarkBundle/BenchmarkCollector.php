@@ -24,17 +24,19 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
+use Exception;
+use IteratorAggregate;
 use Shopware\Bundle\BenchmarkBundle\Provider\UpdatedOrdersProvider;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class BenchmarkCollector implements BenchmarkCollectorInterface
 {
     /**
-     * @var \IteratorAggregate
+     * @var IteratorAggregate
      */
     private $providers;
 
-    public function __construct(\IteratorAggregate $providers)
+    public function __construct(IteratorAggregate $providers)
     {
         $this->providers = $providers;
     }
@@ -79,7 +81,7 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
     /**
      * Moves the array element 'shop' to the parent array and deletes the 'shop' element.
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -87,7 +89,7 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
     {
         $shopDataArrayKey = 'shop';
         if (!\array_key_exists($shopDataArrayKey, $providerData)) {
-            throw new \Exception(sprintf('Necessary data with name \'%s\' not provided.', $shopDataArrayKey));
+            throw new Exception(sprintf('Necessary data with name \'%s\' not provided.', $shopDataArrayKey));
         }
 
         $providerData = $providerData[$shopDataArrayKey] + $providerData;

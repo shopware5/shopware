@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\Services;
 
+use RuntimeException;
 use Shopware\Bundle\ContentTypeBundle\Structs\Type;
 
 class TypeProvider
@@ -48,7 +49,7 @@ class TypeProvider
     public function getType(string $name): Type
     {
         if (!isset($this->types[$name])) {
-            throw new \RuntimeException(sprintf('Requested type "%s" does not exist', $name));
+            throw new RuntimeException(sprintf('Requested type "%s" does not exist', $name));
         }
 
         return $this->types[$name];
@@ -74,6 +75,6 @@ class TypeProvider
             }
         }
 
-        throw new \RuntimeException(sprintf('Cannot find type for controller "%s"', $controllerName));
+        throw new RuntimeException(sprintf('Cannot find type for controller "%s"', $controllerName));
     }
 }

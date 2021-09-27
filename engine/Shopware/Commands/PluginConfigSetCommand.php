@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Exception;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Plugin\Plugin;
@@ -71,7 +72,7 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
             $pluginManager = $this->container->get(InstallerService::class);
             try {
                 $plugin = $pluginManager->getPluginByName($pluginName);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return [];
             }
 
@@ -165,7 +166,7 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
 
         try {
             $plugin = $pluginManager->getPluginByName($pluginName);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
 
             return 1;

@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
@@ -33,7 +34,7 @@ use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\DomCrawler\Crawler;
 
-class AddressTest extends \Enlight_Components_Test_Controller_TestCase
+class AddressTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var ModelManager

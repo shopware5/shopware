@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -107,7 +108,7 @@ class ConfiguratorOptionsGateway implements Gateway\ConfiguratorOptionsGatewayIn
         $this->fieldHelper->addConfiguratorOptionTranslation($query, $context);
         $this->fieldHelper->addMediaTranslation($query, $context);
 
-        $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         return $this->hydrator->hydrateGroups($data);
     }

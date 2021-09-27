@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
@@ -65,7 +66,7 @@ class IdentifierSelector
             ->select('id')
             ->from('s_core_shops', 'shop')
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -77,7 +78,7 @@ class IdentifierSelector
             ->select('groupkey')
             ->from('s_core_customergroups', 'customerGroups')
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -93,7 +94,7 @@ class IdentifierSelector
             ->andWhere('currency.shop_id = :id')
             ->setParameter(':id', $shopId)
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
 
         $ids = array_map('intval', $ids);
 

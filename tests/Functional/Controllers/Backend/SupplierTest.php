@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
-class SupplierTest extends \Enlight_Components_Test_Controller_TestCase
+use Enlight_Components_Test_Controller_TestCase;
+
+class SupplierTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Supplier dummy data

@@ -24,8 +24,11 @@
 
 namespace Shopware\tests\Unit\Components\Template;
 
+use Enlight_Class;
+use Enlight_Template_Manager;
 use PHPUnit\Framework\TestCase;
 use Shopware\Tests\Functional\Traits\DirectoryDeletionTrait;
+use SmartyException;
 
 /**
  * Tests for the template manager
@@ -47,8 +50,8 @@ class TemplateManagerTest extends TestCase
         $tempFile = $tempDir . '/template.tpl';
         file_put_contents($tempFile, 'test');
 
-        /** @var \Enlight_Template_Manager $templateManager */
-        $templateManager = clone Shopware()->Container()->get(\Enlight_Template_Manager::class);
+        /** @var Enlight_Template_Manager $templateManager */
+        $templateManager = clone Shopware()->Container()->get(Enlight_Template_Manager::class);
         $templateManager->addTemplateDir($tempDir);
         $renderingResult = $templateManager->fetch('template.tpl');
 
@@ -74,11 +77,11 @@ class TemplateManagerTest extends TestCase
         $tempFile = $tempDir . 'index.tpl';
         file_put_contents($tempFile, '{extends file="parent:frontent/detail/index.tpl"}');
 
-        /** @var \Enlight_Template_Manager $templateManager */
-        $templateManager = clone Shopware()->Container()->get(\Enlight_Template_Manager::class);
+        /** @var Enlight_Template_Manager $templateManager */
+        $templateManager = clone Shopware()->Container()->get(Enlight_Template_Manager::class);
         $templateManager->addTemplateDir($rootDir . '/media/temp/');
 
-        $this->expectException(\SmartyException::class);
+        $this->expectException(SmartyException::class);
         $this->expectExceptionMessage('Unknown path');
 
         $templateManager->fetch('frontend/detail2/index.tpl');
@@ -91,8 +94,8 @@ class TemplateManagerTest extends TestCase
             'hashed_directory_perm' => 0777 & ~umask(),
             'cache_file_perm' => 0666 & ~umask(),
         ];
-        /** @var \Enlight_Template_Manager $template */
-        $template = \Enlight_Class::Instance('Enlight_Template_Manager', [null, $backendOptions]);
+        /** @var Enlight_Template_Manager $template */
+        $template = Enlight_Class::Instance('Enlight_Template_Manager', [null, $backendOptions]);
 
         mkdir($testDir);
 

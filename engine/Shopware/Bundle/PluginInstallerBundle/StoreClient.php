@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle;
 
+use Exception;
+use RuntimeException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\AccountException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\AuthenticationException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\DomainVerificationException;
@@ -90,7 +92,7 @@ class StoreClient
      * @param string $shopwareId
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return AccessTokenStruct
      */
@@ -112,7 +114,7 @@ class StoreClient
      * @param array  $params
      * @param array  $headers
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -132,7 +134,7 @@ class StoreClient
      * @param array  $params
      * @param array  $headers
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -157,7 +159,7 @@ class StoreClient
      * @param array  $params
      * @param array  $headers
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function doGetRequestRaw($resource, $params = [], $headers = [])
     {
@@ -175,7 +177,7 @@ class StoreClient
      * @param array  $params
      * @param array  $headers
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string
      */
@@ -200,7 +202,7 @@ class StoreClient
      * @param array  $params
      * @param array  $headers
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -219,7 +221,7 @@ class StoreClient
      * @param string $resource
      * @param array  $params
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -242,7 +244,7 @@ class StoreClient
      * @param string $resource
      * @param array  $params
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Response
      */
@@ -301,7 +303,7 @@ class StoreClient
      * @param array  $params
      * @param array  $headers
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Response
      *
@@ -341,7 +343,7 @@ class StoreClient
      * @param AccessTokenStruct $token
      *
      * @throws StoreException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Response
      */
@@ -378,7 +380,7 @@ class StoreClient
      * Parses it to detect and extract details provided
      * by SBP about what happened
      *
-     * @throws \Exception
+     * @throws Exception
      * @throws SbpServerException
      * @throws AuthenticationException
      * @throws AccountException
@@ -512,7 +514,7 @@ class StoreClient
         $signature = $response->getHeader($signatureHeaderName);
 
         if (empty($signature)) {
-            throw new \RuntimeException(sprintf('Signature not found in header "%s"', $signatureHeaderName));
+            throw new RuntimeException(sprintf('Signature not found in header "%s"', $signatureHeaderName));
         }
 
         if (!$this->openSSLVerifier->isSystemSupported()) {
@@ -523,6 +525,6 @@ class StoreClient
             return;
         }
 
-        throw new \RuntimeException('Signature not valid');
+        throw new RuntimeException('Signature not valid');
     }
 }

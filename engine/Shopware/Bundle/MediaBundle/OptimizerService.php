@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use finfo;
 use IteratorAggregate;
 use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
@@ -82,7 +83,7 @@ class OptimizerService implements OptimizerServiceInterface
      */
     private function getMimeTypeByFile($filepath)
     {
-        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
 
         return $finfo->file($filepath);
     }

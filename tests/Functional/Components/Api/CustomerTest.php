@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Api\Resource\Customer;
@@ -99,14 +100,14 @@ class CustomerTest extends TestCase
 
     public function testCreateShouldBeSuccessful()
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(\DateTime::ISO8601);
+        $firstlogin = $date->format(DateTime::ISO8601);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(\DateTime::ISO8601);
+        $lastlogin = $date->format(DateTime::ISO8601);
 
-        $birthday = \DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(\DateTime::ISO8601);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
 
         $testData = [
             'password' => 'fooobar',
@@ -422,14 +423,14 @@ class CustomerTest extends TestCase
      */
     public function testPostCustomersWithDebitShouldCreatePaymentData()
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(\DateTime::ISO8601);
+        $firstlogin = $date->format(DateTime::ISO8601);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(\DateTime::ISO8601);
+        $lastlogin = $date->format(DateTime::ISO8601);
 
-        $birthday = \DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(\DateTime::ISO8601);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
 
         $requestData = [
             'password' => 'fooobar',
@@ -495,14 +496,14 @@ class CustomerTest extends TestCase
      */
     public function testPostCustomersWithDebitPaymentDataShouldCreateDebitData()
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(\DateTime::ISO8601);
+        $firstlogin = $date->format(DateTime::ISO8601);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(\DateTime::ISO8601);
+        $lastlogin = $date->format(DateTime::ISO8601);
 
-        $birthday = \DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(\DateTime::ISO8601);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
 
         $requestData = [
             'password' => 'fooobar',

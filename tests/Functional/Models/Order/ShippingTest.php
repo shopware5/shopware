@@ -26,9 +26,10 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models\Order;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Models\Order\Shipping;
 
-class ShippingTest extends \Enlight_Components_Test_TestCase
+class ShippingTest extends Enlight_Components_Test_TestCase
 {
     public function testAddressFieldsLength(): void
     {

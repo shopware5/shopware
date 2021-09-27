@@ -24,13 +24,15 @@
 
 namespace Shopware\Controllers\Backend;
 
+use DateTime;
+use Enlight_Controller_Action;
 use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Privacy\IpAnonymizerInterface;
 use Shopware\Models\Log\Log;
 use Symfony\Component\HttpFoundation\Request;
 
-class Logger extends \Enlight_Controller_Action
+class Logger extends Enlight_Controller_Action
 {
     /**
      * @var IpAnonymizerInterface
@@ -64,7 +66,7 @@ class Logger extends \Enlight_Controller_Action
 
             $logModel = new Log();
             $logModel->fromArray($params);
-            $logModel->setDate(new \DateTime('now'));
+            $logModel->setDate(new DateTime('now'));
             $logModel->setIpAddress($ip);
             $logModel->setUserAgent($request->server->get('HTTP_USER_AGENT', 'Unknown'));
 

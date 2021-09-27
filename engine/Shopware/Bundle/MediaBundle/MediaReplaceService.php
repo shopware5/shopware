@@ -24,6 +24,9 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use DateTime;
+use Exception;
+use InvalidArgumentException;
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException;
 use Shopware\Bundle\MediaBundle\Exception\WrongMediaTypeForReplaceException;
 use Shopware\Components\Model\ModelManager;
@@ -64,7 +67,7 @@ class MediaReplaceService implements MediaReplaceServiceInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function replace($mediaId, UploadedFile $file)
     {
@@ -72,7 +75,7 @@ class MediaReplaceService implements MediaReplaceServiceInterface
         $media = $this->modelManager->find(Media::class, $mediaId);
 
         if ($media === null) {
-            throw new \InvalidArgumentException(sprintf('Media with id %s not found', $mediaId));
+            throw new InvalidArgumentException(sprintf('Media with id %s not found', $mediaId));
         }
 
         $uploadedFileExtension = $this->getExtension($file);
@@ -106,7 +109,7 @@ class MediaReplaceService implements MediaReplaceServiceInterface
 
         $media->setExtension($this->getExtension($file));
         $media->setFileSize(filesize($file->getRealPath()));
-        $media->setCreated(new \DateTime());
+        $media->setCreated(new DateTime());
 
         if ($media->getType() === Media::TYPE_IMAGE) {
             $imageSize = getimagesize($file->getRealPath());

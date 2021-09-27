@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle;
 
-class CustomerNumberSearchResult implements \JsonSerializable
+use JsonSerializable;
+
+class CustomerNumberSearchResult implements JsonSerializable
 {
     /**
      * @var BaseCustomer[]

@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Plugin;
 
+use Exception;
 use Shopware\Components\Plugin\Configuration\WriterInterface;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
@@ -56,7 +57,7 @@ class ConfigWriter
     /**
      * @param string $name
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @deprecated since 5.7 and will be removed in 5.9. `Shopware\Components\Plugin\Configuration\WriterInterface`::setByPluginName instead
      */

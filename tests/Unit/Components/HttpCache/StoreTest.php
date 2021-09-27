@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Unit\Components\HttpCache;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 
 class StoreTest extends TestCase
@@ -180,7 +181,7 @@ class StoreTest extends TestCase
     public function testGenerateCacheKey($originalURL, $expectedURL)
     {
         $originalRequest = Request::create($originalURL);
-        $class = new \ReflectionClass($this->httpCacheStore);
+        $class = new ReflectionClass($this->httpCacheStore);
         $method = $class->getMethod('generateCacheKey');
         $method->setAccessible(true);
 
@@ -201,7 +202,7 @@ class StoreTest extends TestCase
     public function testVerifyIgnoredParameters($originalURL, $expectedURL)
     {
         $originalRequest = Request::create($originalURL);
-        $class = new \ReflectionClass($this->httpCacheStore);
+        $class = new ReflectionClass($this->httpCacheStore);
         $method = $class->getMethod('verifyIgnoredParameters');
         $method->setAccessible(true);
 

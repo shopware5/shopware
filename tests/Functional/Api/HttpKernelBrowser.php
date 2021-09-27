@@ -24,8 +24,11 @@
 
 namespace Shopware\Tests\Functional\Api;
 
+use Enlight_Controller_Front;
+use Enlight_Controller_Response_ResponseTestCase;
 use Shopware\Kernel;
 use Shopware\Tests\Functional\Helper\Utils;
+use Shopware_Components_Auth;
 use Symfony\Component\BrowserKit\CookieJar;
 use Symfony\Component\BrowserKit\History;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -39,7 +42,7 @@ class HttpKernelBrowser extends Client
     protected $container;
 
     /**
-     * @var \Enlight_Controller_Front
+     * @var Enlight_Controller_Front
      */
     protected $front;
 
@@ -56,7 +59,7 @@ class HttpKernelBrowser extends Client
         Utils::hijackProperty($this->front, 'request', null);
         Utils::hijackProperty($this->container->get('plugins')->get('Core')->get('RestApi'), 'isApiCall', false);
         Utils::hijackProperty($this->container->get('errorsubscriber'), 'isInsideErrorHandlerLoop', false);
-        $this->front->setResponse(new \Enlight_Controller_Response_ResponseTestCase());
+        $this->front->setResponse(new Enlight_Controller_Response_ResponseTestCase());
         $shop = $this->container->get('shop');
         $this->container->reset('shop');
         $this->container->reset('session');
@@ -65,7 +68,7 @@ class HttpKernelBrowser extends Client
         $response = parent::request($method, $uri, $parameters, $files, $server, $content, $changeHistory);
         $this->container->set('shop', $shop);
         Utils::hijackProperty($this->container->get('plugins')->get('Core')->get('RestApi'), 'isApiCall', false);
-        \Shopware_Components_Auth::resetInstance();
+        Shopware_Components_Auth::resetInstance();
         $this->container->reset('auth');
         $this->container->reset('session');
 

@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\EmotionBundle\Service\Gateway;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\EmotionBundle\Service\Gateway\Hydrator\EmotionHydrator;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
@@ -62,7 +63,7 @@ class EmotionGateway
     public function getList(array $emotionIds, ShopContextInterface $context)
     {
         $query = $this->getQuery($emotionIds);
-        $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $emotions = [];
         foreach ($data as $row) {

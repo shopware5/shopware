@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Partner;
 
+use DateTimeInterface;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
@@ -124,14 +125,14 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object to select the partner for the statistic list
      *
-     * @param array|null         $order
-     * @param int|null           $offset
-     * @param int|null           $limit
-     * @param int                $partnerId
-     * @param bool               $summary
-     * @param \DateTimeInterface $fromDate
-     * @param \DateTimeInterface $toDate
-     * @param float|int          $userCurrencyFactor
+     * @param array|null        $order
+     * @param int|null          $offset
+     * @param int|null          $limit
+     * @param int               $partnerId
+     * @param bool              $summary
+     * @param DateTimeInterface $fromDate
+     * @param DateTimeInterface $toDate
+     * @param float|int         $userCurrencyFactor
      *
      * @return \Doctrine\ORM\Query
      */
@@ -150,12 +151,12 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getStatisticListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array|null         $order
-     * @param int                $partnerId
-     * @param bool               $summary
-     * @param \DateTimeInterface $fromDate
-     * @param \DateTimeInterface $toDate
-     * @param float|int          $userCurrencyFactor
+     * @param array|null        $order
+     * @param int               $partnerId
+     * @param bool              $summary
+     * @param DateTimeInterface $fromDate
+     * @param DateTimeInterface $toDate
+     * @param float|int         $userCurrencyFactor
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -208,10 +209,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param int                $partnerId
-     * @param \DateTimeInterface $fromDate
-     * @param \DateTimeInterface $toDate
-     * @param float|int          $userCurrencyFactor
+     * @param int               $partnerId
+     * @param DateTimeInterface $fromDate
+     * @param DateTimeInterface $toDate
+     * @param float|int         $userCurrencyFactor
      *
      * @return \Doctrine\ORM\Query
      */
@@ -226,10 +227,10 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getStatisticChartQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int                $partnerId
-     * @param \DateTimeInterface $fromDate
-     * @param \DateTimeInterface $toDate
-     * @param float|int          $userCurrencyFactor
+     * @param int               $partnerId
+     * @param DateTimeInterface $fromDate
+     * @param DateTimeInterface $toDate
+     * @param float|int         $userCurrencyFactor
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

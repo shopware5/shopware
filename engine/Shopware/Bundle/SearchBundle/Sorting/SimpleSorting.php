@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Sorting;
 
+use RuntimeException;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 
 /**
@@ -47,7 +48,7 @@ class SimpleSorting extends Sorting
         $this->name = $name;
 
         if (empty($name)) {
-            throw new \RuntimeException('No sorting name provided');
+            throw new RuntimeException('No sorting name provided');
         }
     }
 

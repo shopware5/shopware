@@ -25,6 +25,10 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Exception;
+use PDO;
+use PDOStatement;
+use RuntimeException;
 use Shopware\Bundle\PluginInstallerBundle\Context\DownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\MetaRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\RangeDownloadRequest;
@@ -92,7 +96,7 @@ class DownloadService
      * @param string $file
      * @param string $pluginName
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function extractPluginZip($file, $pluginName)
     {
@@ -110,12 +114,12 @@ class DownloadService
         } elseif ($pluginZipDetector->isPlugin($archive)) {
             $this->pluginExtractor->extract($archive);
         } else {
-            throw new \RuntimeException('No Plugin found in archive.');
+            throw new RuntimeException('No Plugin found in archive.');
         }
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return MetaStruct
      */
@@ -153,7 +157,7 @@ class DownloadService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
@@ -207,9 +211,9 @@ class DownloadService
             ->setParameter(':name', $name)
             ->setMaxResults(1);
 
-        /** @var \PDOStatement $statement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
-        return $statement->fetch(\PDO::FETCH_COLUMN);
+        return $statement->fetch(PDO::FETCH_COLUMN);
     }
 }

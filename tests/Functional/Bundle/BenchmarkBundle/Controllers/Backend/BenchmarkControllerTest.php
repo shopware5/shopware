@@ -24,16 +24,18 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend;
 
+use Shopware_Controllers_Backend_Benchmark;
+
 class BenchmarkControllerTest extends BenchmarkControllerTestCase
 {
-    public const CONTROLLER_NAME = \Shopware_Controllers_Backend_Benchmark::class;
+    public const CONTROLLER_NAME = Shopware_Controllers_Backend_Benchmark::class;
 
     /**
      * @group BenchmarkBundle
      */
     public function testSaveIndustryAction()
     {
-        /** @var \Shopware_Controllers_Backend_Benchmark $controller */
+        /** @var Shopware_Controllers_Backend_Benchmark $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
@@ -51,7 +53,7 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
      */
     public function testSetActiveAction()
     {
-        /** @var \Shopware_Controllers_Backend_Benchmark $controller */
+        /** @var Shopware_Controllers_Backend_Benchmark $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
@@ -69,7 +71,7 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
      */
     public function testSaveTypeAction()
     {
-        /** @var \Shopware_Controllers_Backend_Benchmark $controller */
+        /** @var Shopware_Controllers_Backend_Benchmark $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');

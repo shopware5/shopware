@@ -37,6 +37,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\CustomerStream\CookieSubscriber;
 use Shopware\Models\Shop\Shop;
+use Shopware_Components_Config;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CookieSubscriberTest extends TestCase
@@ -110,7 +111,7 @@ class CookieSubscriberTest extends TestCase
 
     protected function containerGetMock($key)
     {
-        if ($key === \Shopware_Components_Config::class) {
+        if ($key === Shopware_Components_Config::class) {
             return new Enlight_Collection_ArrayCollection([
                 'useSltCookie' => true,
             ]);

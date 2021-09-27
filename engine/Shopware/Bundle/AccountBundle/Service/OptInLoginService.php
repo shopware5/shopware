@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\AccountBundle\Service;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Random;
 
@@ -41,7 +42,7 @@ class OptInLoginService implements OptInLoginServiceInterface
         $this->connection = $connection;
     }
 
-    public function refreshOptInHashForUser(int $userId, int $optInId, \DateTimeInterface $lastSentDate): string
+    public function refreshOptInHashForUser(int $userId, int $optInId, DateTimeInterface $lastSentDate): string
     {
         $hash = $this->getHashForOptInId($optInId, $lastSentDate);
         $this->updateOptInEntry($optInId, $hash);
@@ -50,7 +51,7 @@ class OptInLoginService implements OptInLoginServiceInterface
         return $hash;
     }
 
-    protected function getHashForOptInId(int $optInId, \DateTimeInterface $lastSentDate): string
+    protected function getHashForOptInId(int $optInId, DateTimeInterface $lastSentDate): string
     {
         if ($this->isDateInLast15Minutes($lastSentDate)) {
             $sql = <<<'SQL'
@@ -94,7 +95,7 @@ SQL;
         $statement->execute();
     }
 
-    private function isDateInLast15Minutes(\DateTimeInterface $lastSentDate): bool
+    private function isDateInLast15Minutes(DateTimeInterface $lastSentDate): bool
     {
         $sentDateTimestamp = $lastSentDate->getTimestamp();
         $nowTimestamp = time();

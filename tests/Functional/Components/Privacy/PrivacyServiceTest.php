@@ -24,6 +24,7 @@
 
 namespace Shopware\tests\Functional\Components\Privacy;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Privacy\PrivacyService;
@@ -184,7 +185,7 @@ class PrivacyServiceTest extends TestCase
     private function createCustomer($sinceMonth)
     {
         $sqlDate = $this->connection->fetchColumn('SELECT NOW() - INTERVAL ' . $sinceMonth . ' MONTH');
-        $date = (new \DateTime($sqlDate))->format('Y-m-d');
+        $date = (new DateTime($sqlDate))->format('Y-m-d');
 
         $this->connection->insert('s_user', [
                 'password' => '098f6bcd4621d373cade4e832627b4f6',
@@ -217,7 +218,7 @@ class PrivacyServiceTest extends TestCase
     private function createOrder($userId, $status, $sinceMonth)
     {
         $sqlDate = $this->connection->fetchColumn('SELECT NOW() - INTERVAL ' . $sinceMonth . ' MONTH');
-        $date = (new \DateTime($sqlDate))->format('Y-m-d');
+        $date = (new DateTime($sqlDate))->format('Y-m-d');
 
         $this->connection->insert('s_order', [
             'userID' => $userId,
@@ -239,7 +240,7 @@ class PrivacyServiceTest extends TestCase
     private function createBasket($sinceMonth, $userId)
     {
         $sqlDate = $this->connection->fetchColumn('SELECT NOW() - INTERVAL ' . $sinceMonth . ' MONTH');
-        $date = (new \DateTime($sqlDate))->format('Y-m-d');
+        $date = (new DateTime($sqlDate))->format('Y-m-d');
 
         $this->connection->insert('s_order_basket', [
             'userID' => $userId,

@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Config;
 
 class ListingPriceTable implements ListingPriceTableInterface
 {
@@ -35,7 +36,7 @@ class ListingPriceTable implements ListingPriceTableInterface
     private $connection;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -46,7 +47,7 @@ class ListingPriceTable implements ListingPriceTableInterface
 
     public function __construct(
         Connection $connection,
-        \Shopware_Components_Config $config,
+        Shopware_Components_Config $config,
         ListingPriceHelper $listingPriceHelper
     ) {
         $this->connection = $connection;

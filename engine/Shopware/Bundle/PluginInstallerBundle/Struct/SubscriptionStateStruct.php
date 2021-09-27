@@ -24,10 +24,12 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
+use JsonSerializable;
+
 /**
  * @deprecated in 5.6, will be removed in 5.7 without replacement
  */
-class SubscriptionStateStruct implements \JsonSerializable
+class SubscriptionStateStruct implements JsonSerializable
 {
     /**
      * @var bool

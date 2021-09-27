@@ -24,6 +24,7 @@
 
 namespace Shopware\Recovery\Install\Service;
 
+use RuntimeException;
 use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
 
 class ConfigWriter
@@ -42,7 +43,7 @@ class ConfigWriter
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function writeConfig(DatabaseConnectionInformation $info)
     {
@@ -74,7 +75,7 @@ class ConfigWriter
 
         $template = '<?php return ' . var_export($config, true) . ';';
         if (!file_put_contents($databaseConfigFile, $template)) {
-            throw new \RuntimeException("Could not write config: $databaseConfigFile");
+            throw new RuntimeException("Could not write config: $databaseConfigFile");
         }
     }
 }

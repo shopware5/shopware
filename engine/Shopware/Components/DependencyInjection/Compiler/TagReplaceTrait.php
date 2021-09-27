@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\DependencyInjection\Compiler;
 
+use SplPriorityQueue;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -78,7 +79,7 @@ trait TagReplaceTrait
 
         $services = $container->findTaggedServiceIds($tagName);
 
-        $queue = new \SplPriorityQueue();
+        $queue = new SplPriorityQueue();
 
         foreach ($services as $serviceId => $tags) {
             foreach ($tags as $attributes) {

@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\DependencyInjection;
 
+use DirectoryIterator;
+use RuntimeException;
 use Shopware\Bundle\ContentTypeBundle\Field\TypeField;
 use Shopware\Bundle\ContentTypeBundle\Field\TypeGrid;
 use Shopware\Bundle\ContentTypeBundle\Services\XmlReader\ContentTypesReader;
@@ -51,7 +53,7 @@ class TypeReader
         $configs = [];
 
         foreach ($pluginDirectories as $pluginDirectory) {
-            foreach (new \DirectoryIterator($pluginDirectory) as $pluginDir) {
+            foreach (new DirectoryIterator($pluginDirectory) as $pluginDir) {
                 if ($pluginDir->isFile() || strpos($pluginDir->getBasename(), '.') === 0) {
                     continue;
                 }
@@ -83,7 +85,7 @@ class TypeReader
             foreach ($type['fieldSets'] as &$fieldSet) {
                 foreach ($fieldSet['fields'] as &$field) {
                     if (!isset($alias[$field['type']])) {
-                        throw new \RuntimeException(sprintf('Type with name "%s" does not exist', $field['type']));
+                        throw new RuntimeException(sprintf('Type with name "%s" does not exist', $field['type']));
                     }
                 }
             }

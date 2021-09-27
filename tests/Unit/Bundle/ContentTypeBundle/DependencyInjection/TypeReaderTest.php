@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Unit\Bundle\ContentTypeBundle\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Shopware\Bundle\ContentTypeBundle\DependencyInjection\TypeReader;
 use Shopware\Bundle\ContentTypeBundle\Field\TextField;
 
@@ -48,7 +49,7 @@ class TypeReaderTest extends TestCase
 
     public function testGetTypesWithoutMapping(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Type with name "text" does not exist');
 
         $this->typeReader->getTypes(['SwagTest'], [\dirname(__DIR__) . '/fixtures/plugins'], []);

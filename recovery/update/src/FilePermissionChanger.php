@@ -24,6 +24,9 @@
 
 namespace Shopware\Recovery\Update;
 
+use Exception;
+use Throwable;
+
 /**
  * Changes the permissions defined in the given array.
  */
@@ -61,9 +64,9 @@ class FilePermissionChanger
 
                 try {
                     @chmod($filePermission['filePath'], $filePermission['chmod']);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     // Don't block the update process
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     // Don't block the update process
                 }
             }

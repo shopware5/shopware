@@ -28,11 +28,17 @@ use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Enlight_Components_Db_Adapter_Pdo_Mysql;
+use InvalidArgumentException;
+use PDO;
+use PDOException;
+use RuntimeException;
+use Zend_Db_Table_Abstract;
 
 class Db
 {
     /**
-     * @return \PDO
+     * @return PDO
      */
     public static function createPDO(array $dbConfig)
     {
@@ -46,15 +52,15 @@ class Db
         $connectionString = self::buildConnectionString($dbConfig);
 
         try {
-            $conn = new \PDO(
+            $conn = new PDO(
                 'mysql:' . $connectionString,
                 $dbConfig['username'],
                 $password,
                 $dbConfig['pdoOptions']
             );
 
-            $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            $conn->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
             // Reset sql_mode "STRICT_TRANS_TABLES" that will be default in MySQL 5.6
             $conn->exec('SET @@session.sql_mode = ""');
@@ -73,12 +79,12 @@ class Db
                 } elseif ($sessionValue === null) {
                     $conn->exec(sprintf('SET @@session.`%s` = NULL;', $sessionKey));
                 } else {
-                    throw new \InvalidArgumentException(
+                    throw new InvalidArgumentException(
                         sprintf('Unexpected database session value for %s: %s', $sessionKey, serialize($sessionValue))
                     );
                 }
             }
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             $message = str_replace(
                 [
                     $dbConfig['username'],
@@ -88,14 +94,14 @@ class Db
                 $e->getMessage()
             );
 
-            throw new \RuntimeException(sprintf('Could not connect to database. Message from SQL Server: %s', $message));
+            throw new RuntimeException(sprintf('Could not connect to database. Message from SQL Server: %s', $message));
         }
 
         return $conn;
     }
 
     /**
-     * @param \PDO $pdo
+     * @param PDO $pdo
      *
      * @throws \Doctrine\DBAL\DBALException
      *
@@ -118,15 +124,15 @@ class Db
     }
 
     /**
-     * @return \Enlight_Components_Db_Adapter_Pdo_Mysql
+     * @return Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     public static function createEnlightDbAdapter(Connection $connection, array $options)
     {
         $options = ['dbname' => $options['dbname'], 'username' => null, 'password' => null];
 
-        $db = \Enlight_Components_Db_Adapter_Pdo_Mysql::createFromDbalConnectionAndConfig($connection, $options);
+        $db = Enlight_Components_Db_Adapter_Pdo_Mysql::createFromDbalConnectionAndConfig($connection, $options);
 
-        \Zend_Db_Table_Abstract::setDefaultAdapter($db);
+        Zend_Db_Table_Abstract::setDefaultAdapter($db);
 
         return $db;
     }

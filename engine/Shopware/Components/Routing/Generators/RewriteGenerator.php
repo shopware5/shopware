@@ -25,6 +25,8 @@
 namespace Shopware\Components\Routing\Generators;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Event_EventManager;
+use PDO;
 use Shopware\Components\QueryAliasMapper;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\GeneratorListInterface;
@@ -42,14 +44,14 @@ class RewriteGenerator implements GeneratorListInterface
     private $queryAliasMapper;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
     public function __construct(
         Connection $connection,
         QueryAliasMapper $queryAliasMapper,
-        \Enlight_Event_EventManager $eventManager
+        Enlight_Event_EventManager $eventManager
     ) {
         $this->connection = $connection;
         $this->queryAliasMapper = $queryAliasMapper;
@@ -262,12 +264,12 @@ class RewriteGenerator implements GeneratorListInterface
                 ':orgPath' => $list,
             ],
             [
-                ':shopId' => \PDO::PARAM_INT,
+                ':shopId' => PDO::PARAM_INT,
                 ':orgPath' => Connection::PARAM_STR_ARRAY,
             ]
         );
 
-        $rows = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $rows = $statement->fetchAll(PDO::FETCH_KEY_PAIR);
 
         foreach ($list as $key => $orgPath) {
             if (isset($rows[$orgPath])) {

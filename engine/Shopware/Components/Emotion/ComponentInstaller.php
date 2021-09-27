@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Emotion;
 
+use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Library\Component;
 use Shopware\Models\Plugin\Plugin;
@@ -51,7 +52,7 @@ class ComponentInstaller
      * @param string $pluginName
      * @param string $componentName
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Component
      */
@@ -62,7 +63,7 @@ class ComponentInstaller
         $plugin = $repo->findOneBy(['name' => $pluginName]);
 
         if (!$plugin) {
-            throw new \Exception(sprintf('Plugin by name %s not found', $pluginName));
+            throw new Exception(sprintf('Plugin by name %s not found', $pluginName));
         }
 
         $repo = $this->em->getRepository(Component::class);

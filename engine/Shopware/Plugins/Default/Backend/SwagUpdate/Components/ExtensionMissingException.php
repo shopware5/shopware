@@ -24,6 +24,8 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components;
 
-class ExtensionMissingException extends \RuntimeException
+use RuntimeException;
+
+class ExtensionMissingException extends RuntimeException
 {
 }

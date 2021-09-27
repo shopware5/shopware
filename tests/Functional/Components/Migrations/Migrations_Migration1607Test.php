@@ -27,11 +27,14 @@ declare(strict_types=1);
 namespace Functional\Components\Migrations;
 
 use Doctrine\DBAL\Connection;
+use Generator;
+use PDO;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Migrations\AbstractMigration;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware\Tests\Functional\Traits\FixtureBehaviour;
 use Shopware\Tests\Functional\Traits\MigrationTestTrait;
+use Throwable;
 
 class Migrations_Migration1607Test extends TestCase
 {
@@ -51,7 +54,7 @@ class Migrations_Migration1607Test extends TestCase
     {
         parent::setUp();
 
-        $this->migration = $this->getMigration(static::createStub(\PDO::class), self::MIGRATION_NUMBER);
+        $this->migration = $this->getMigration(static::createStub(PDO::class), self::MIGRATION_NUMBER);
         $this->connection = Shopware()->Container()->get('dbal_connection') ?? static::fail('No database connection available.');
         $this->numberOfSubshops = (int) $this->connection->fetchOne('SELECT COUNT(`id`) FROM `s_core_shops` WHERE `main_id` IS NOT NULL;');
     }
@@ -78,7 +81,7 @@ class Migrations_Migration1607Test extends TestCase
         foreach ($this->migration->getSql() as $sql) {
             try {
                 $this->connection->executeStatement($sql);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 static::fail($e->getMessage());
             }
         }
@@ -90,9 +93,9 @@ class Migrations_Migration1607Test extends TestCase
     }
 
     /**
-     * @return \Generator<string, array>
+     * @return Generator<string, array>
      */
-    public function commentArticleConfigProvider(): \Generator
+    public function commentArticleConfigProvider(): Generator
     {
         $sql = <<<'SQL'
 INSERT INTO `s_core_config_values` (`element_id`, `shop_id`, `value`)

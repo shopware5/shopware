@@ -26,6 +26,7 @@ namespace Shopware\Bundle\ContentTypeBundle\Services;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Exception;
 use Shopware\Bundle\ContentTypeBundle\Field\CheckboxField;
 use Shopware\Bundle\ContentTypeBundle\Structs\Criteria;
 use Shopware\Bundle\ContentTypeBundle\Structs\Field;
@@ -33,6 +34,7 @@ use Shopware\Bundle\ContentTypeBundle\Structs\SearchResult;
 use Shopware\Bundle\ContentTypeBundle\Structs\Type;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Api\Exception\CustomValidationException;
+use Shopware_Components_Translation;
 
 class Repository implements RepositoryInterface
 {
@@ -42,7 +44,7 @@ class Repository implements RepositoryInterface
     private $connection;
 
     /**
-     * @var \Shopware_Components_Translation
+     * @var Shopware_Components_Translation
      */
     private $translation;
 
@@ -64,7 +66,7 @@ class Repository implements RepositoryInterface
     public function __construct(
         Connection $connection,
         Type $type,
-        \Shopware_Components_Translation $translation,
+        Shopware_Components_Translation $translation,
         ContextServiceInterface $contextService,
         TypeFieldResolverInterface $fieldResolver
     ) {
@@ -236,7 +238,7 @@ class Repository implements RepositoryInterface
     {
         try {
             $context = $this->contextService->getShopContext()->getShop();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $items;
         }
 

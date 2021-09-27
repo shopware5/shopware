@@ -25,7 +25,9 @@
 namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Components\MemoryLimit;
+use Shopware_Components_Config;
 
 class SearchIndexer implements SearchIndexerInterface
 {
@@ -42,7 +44,7 @@ class SearchIndexer implements SearchIndexerInterface
     private $connection;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -60,7 +62,7 @@ class SearchIndexer implements SearchIndexerInterface
      * @param int $batchSize
      */
     public function __construct(
-        \Shopware_Components_Config $config,
+        Shopware_Components_Config $config,
         Connection $connection,
         TermHelperInterface $termHelper,
         $batchSize = 4000
@@ -385,7 +387,7 @@ class SearchIndexer implements SearchIndexerInterface
             ->setParameter(':type', 'category')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_COLUMN);
 
         $mapping = [];
         foreach ($keywords as $keyword) {

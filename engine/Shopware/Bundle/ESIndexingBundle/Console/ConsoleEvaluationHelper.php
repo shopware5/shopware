@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Console;
 
+use Exception;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ConsoleEvaluationHelper implements EvaluationHelperInterface
@@ -139,7 +140,7 @@ class ConsoleEvaluationHelper implements EvaluationHelperInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function handleItem(array $item)
     {
@@ -168,14 +169,14 @@ class ConsoleEvaluationHelper implements EvaluationHelperInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function abort(array $item)
     {
         if (isset($item['error'])) {
-            throw new \Exception("An error occured:\n" . $item['_id'] . ': ' . $item['error']['reason']);
+            throw new Exception("An error occured:\n" . $item['_id'] . ': ' . $item['error']['reason']);
         }
 
-        throw new \Exception('No error reason found. Please check the backend ES system logs for further details.');
+        throw new Exception('No error reason found. Please check the backend ES system logs for further details.');
     }
 }

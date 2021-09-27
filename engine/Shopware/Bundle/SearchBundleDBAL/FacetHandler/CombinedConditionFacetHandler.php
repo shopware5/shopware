@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
+use PDO;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CombinedConditionFacet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
@@ -65,7 +66,7 @@ class CombinedConditionFacetHandler implements PartialFacetHandlerInterface
         $query->select('1');
         $query->setMaxResults(1);
 
-        $hasFacet = $query->execute()->fetch(\PDO::FETCH_COLUMN);
+        $hasFacet = $query->execute()->fetch(PDO::FETCH_COLUMN);
         if (!$hasFacet) {
             return null;
         }

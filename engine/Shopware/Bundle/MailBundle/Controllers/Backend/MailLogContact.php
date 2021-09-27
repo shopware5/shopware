@@ -25,11 +25,12 @@
 namespace Shopware\Bundle\MailBundle\Controllers\Backend;
 
 use Shopware\Models\Mail\Contact;
+use Shopware_Controllers_Backend_Application;
 
 /**
  * @extends \Shopware_Controllers_Backend_Application<Contact>
  */
-class MailLogContact extends \Shopware_Controllers_Backend_Application
+class MailLogContact extends Shopware_Controllers_Backend_Application
 {
     /**
      * {@inheritdoc}

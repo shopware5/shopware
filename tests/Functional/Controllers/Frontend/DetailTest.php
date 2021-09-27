@@ -24,9 +24,10 @@
 
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class DetailTest extends \Enlight_Components_Test_Controller_TestCase
+class DetailTest extends Enlight_Components_Test_Controller_TestCase
 {
     use DatabaseTransactionBehaviour;
 

@@ -26,6 +26,7 @@ namespace Shopware\Commands;
 
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;
+use RuntimeException;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Thumbnail\Manager;
@@ -254,7 +255,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
         $projectDir = $this->container->getParameter('shopware.app.rootDir');
 
         if (!\is_string($projectDir)) {
-            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+            throw new RuntimeException('Parameter shopware.app.rootDir has to be an string');
         }
 
         return $mediaService->has($projectDir . $thumbnailPath);
@@ -271,7 +272,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
         $projectDir = $this->container->getParameter('shopware.app.rootDir');
 
         if (!\is_string($projectDir)) {
-            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+            throw new RuntimeException('Parameter shopware.app.rootDir has to be an string');
         }
 
         return $mediaService->has($projectDir . $media->getPath());

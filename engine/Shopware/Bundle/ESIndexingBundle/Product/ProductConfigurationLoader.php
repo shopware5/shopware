@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -105,7 +106,7 @@ class ProductConfigurationLoader
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_COLUMN);
+        return $statement->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_COLUMN);
     }
 
     /**
@@ -147,7 +148,7 @@ class ProductConfigurationLoader
         $query->where('variant.articleId IN (:articleIds)');
         $query->setParameter(':articleIds', $articleIds, Connection::PARAM_STR_ARRAY);
 
-        $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP);
+        $data = $query->execute()->fetchAll(PDO::FETCH_GROUP);
 
         $result = [];
         foreach ($data as $productId => $rows) {

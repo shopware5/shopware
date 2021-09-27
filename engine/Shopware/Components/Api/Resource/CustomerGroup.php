@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Exception;
 use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
@@ -115,7 +116,7 @@ class CustomerGroup extends Resource
 
     /**
      * @throws ValidationException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Group
      */

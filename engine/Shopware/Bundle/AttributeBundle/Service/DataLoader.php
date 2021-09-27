@@ -25,6 +25,8 @@
 namespace Shopware\Bundle\AttributeBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Exception;
+use PDO;
 
 class DataLoader implements DataLoaderInterface
 {
@@ -47,16 +49,16 @@ class DataLoader implements DataLoaderInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function load($table, $foreignKey)
     {
         if (!$this->mapping->isAttributeTable($table)) {
-            throw new \Exception(sprintf('Table %s is no attribute table', $table));
+            throw new Exception(sprintf('Table %s is no attribute table', $table));
         }
 
         if (!$foreignKey) {
-            throw new \Exception('No foreign key provided');
+            throw new Exception('No foreign key provided');
         }
 
         $foreignKeyColumn = $this->mapping->getTableForeignKey($table);
@@ -69,18 +71,18 @@ class DataLoader implements DataLoaderInterface
             ->setFirstResult(0)
             ->setMaxResults(1);
 
-        return $query->execute()->fetch(\PDO::FETCH_ASSOC) ?: [];
+        return $query->execute()->fetch(PDO::FETCH_ASSOC) ?: [];
     }
 
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function loadTranslations($table, $foreignKey)
     {
         if (!$foreignKey) {
-            throw new \Exception('No foreign key provided');
+            throw new Exception('No foreign key provided');
         }
 
         $query = $this->connection->createQueryBuilder();
@@ -91,6 +93,6 @@ class DataLoader implements DataLoaderInterface
         $query->andWhere('objectkey = :key');
         $query->setParameter(':key', $foreignKey);
 
-        return $query->execute()->fetchAll(\PDO::FETCH_ASSOC) ?: [];
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 }

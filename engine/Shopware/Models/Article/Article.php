@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Article;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -379,7 +381,7 @@ class Article extends ModelEntity
     private $descriptionLong;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @Assert\DateTime()
      *
@@ -423,7 +425,7 @@ class Article extends ModelEntity
     private $metaTitle;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="changetime", type="datetime", nullable=false)
      */
@@ -473,14 +475,14 @@ class Article extends ModelEntity
     private $mode = 0;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="available_from", type="datetime", nullable=true)
      */
     private $availableFrom;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="available_to", type="datetime", nullable=true)
      */
@@ -501,8 +503,8 @@ class Article extends ModelEntity
         $this->images = new ArrayCollection();
         $this->votes = new ArrayCollection();
         $this->esds = new ArrayCollection();
-        $this->added = new \DateTime();
-        $this->changed = new \DateTime();
+        $this->added = new DateTime();
+        $this->changed = new DateTime();
     }
 
     /**
@@ -574,14 +576,14 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $added
+     * @param DateTimeInterface|string $added
      *
      * @return Article
      */
     public function setAdded($added = 'now')
     {
-        if (!($added instanceof \DateTimeInterface)) {
-            $this->added = new \DateTime($added);
+        if (!($added instanceof DateTimeInterface)) {
+            $this->added = new DateTime($added);
         } else {
             $this->added = $added;
         }
@@ -590,7 +592,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getAdded()
     {
@@ -698,14 +700,14 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $changed
+     * @param DateTimeInterface|string $changed
      *
      * @return Article
      */
     public function setChanged($changed = 'now')
     {
-        if (!$changed instanceof \DateTimeInterface) {
-            $this->changed = new \DateTime($changed);
+        if (!$changed instanceof DateTimeInterface) {
+            $this->changed = new DateTime($changed);
         } else {
             $this->changed = $changed;
         }
@@ -714,7 +716,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getChanged()
     {
@@ -1156,7 +1158,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getAvailableFrom()
     {
@@ -1164,7 +1166,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $availableFrom
+     * @param DateTimeInterface|null $availableFrom
      *
      * @return Article
      */
@@ -1176,7 +1178,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getAvailableTo()
     {
@@ -1184,7 +1186,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $availableTo
+     * @param DateTimeInterface|null $availableTo
      *
      * @return Article
      */
@@ -1305,6 +1307,6 @@ class Article extends ModelEntity
      */
     public function updateChangedTimestamp()
     {
-        $this->changed = new \DateTime();
+        $this->changed = new DateTime();
     }
 }

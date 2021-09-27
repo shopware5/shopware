@@ -24,22 +24,24 @@
 
 namespace Shopware\Recovery\Install\Service;
 
+use PDO;
+use RuntimeException;
 use Shopware\Recovery\Install\Struct\AdminUser;
 
 class AdminService
 {
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $connection;
 
-    public function __construct(\PDO $connection)
+    public function __construct(PDO $connection)
     {
         $this->connection = $connection;
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function createAdmin(AdminUser $user)
     {
@@ -90,7 +92,7 @@ EOT;
         $localeId = $localeId->fetchColumn();
 
         if (!$localeId) {
-            throw new \RuntimeException('Could not resolve language ' . $user->locale);
+            throw new RuntimeException('Could not resolve language ' . $user->locale);
         }
 
         return (int) $localeId;

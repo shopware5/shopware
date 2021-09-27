@@ -24,6 +24,9 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components;
 
+use Enlight_Components_Snippet_Namespace;
+use Exception;
+
 /**
  * Used for plugin and system requirement validation.
  */
@@ -46,7 +49,7 @@ class Validation
     public const REQUIREMENT_CRITICAL = 20;
 
     /**
-     * @var \Enlight_Components_Snippet_Namespace
+     * @var Enlight_Components_Snippet_Namespace
      */
     private $namespace;
 
@@ -55,7 +58,7 @@ class Validation
      */
     private $checks;
 
-    public function __construct(\Enlight_Components_Snippet_Namespace $namespace, array $checks)
+    public function __construct(Enlight_Components_Snippet_Namespace $namespace, array $checks)
     {
         $this->namespace = $namespace;
         $this->checks = $checks;
@@ -72,7 +75,7 @@ class Validation
      * @var string fileRegex [optional] => Regular expression for file types.
      *             }
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array {
      *

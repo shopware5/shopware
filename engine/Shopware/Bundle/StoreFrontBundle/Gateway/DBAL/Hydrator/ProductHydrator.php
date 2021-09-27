@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
+use DateTime;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 class ProductHydrator extends Hydrator
@@ -192,17 +193,17 @@ class ProductHydrator extends Hydrator
 
         if ($data['__variant_releasedate']) {
             $product->setReleaseDate(
-                new \DateTime($data['__variant_releasedate'])
+                new DateTime($data['__variant_releasedate'])
             );
         }
         if ($data['__product_datum']) {
             $product->setCreatedAt(
-                new \DateTime($data['__product_datum'])
+                new DateTime($data['__product_datum'])
             );
         }
         if ($data['__product_changetime']) {
             $product->setUpdatedAt(
-                new \DateTime($data['__product_changetime'])
+                new DateTime($data['__product_changetime'])
             );
         }
 

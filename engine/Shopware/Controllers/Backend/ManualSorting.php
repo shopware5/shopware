@@ -26,8 +26,9 @@ namespace Shopware\Controllers\Backend;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
 use Shopware\Models\Shop\Shop;
+use Shopware_Controllers_Backend_ExtJs;
 
-class ManualSorting extends \Shopware_Controllers_Backend_ExtJs
+class ManualSorting extends Shopware_Controllers_Backend_ExtJs
 {
     public function preDispatch()
     {

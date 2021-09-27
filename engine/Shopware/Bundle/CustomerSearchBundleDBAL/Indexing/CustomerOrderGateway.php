@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 
 class CustomerOrderGateway
 {
@@ -106,7 +107,7 @@ class CustomerOrderGateway
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
         $query->groupBy('orders.userID');
 
-        return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
+        return $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
     }
 
     /**
@@ -142,7 +143,7 @@ class CustomerOrderGateway
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
         $query->groupBy('orders.userID');
 
-        return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
+        return $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
     }
 
     /**
@@ -161,7 +162,7 @@ class CustomerOrderGateway
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
         $query->groupBy('orders.userID');
 
-        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
     private function fetchProducts($customerIds)
@@ -190,6 +191,6 @@ class CustomerOrderGateway
 
         $query->groupBy('orders.userID');
 
-        return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
+        return $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
     }
 }

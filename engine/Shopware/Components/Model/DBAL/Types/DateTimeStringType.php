@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Model\DBAL\Types;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
@@ -45,9 +47,9 @@ class DateTimeStringType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (!$value instanceof \DateTimeInterface && !empty($value)) {
+        if (!$value instanceof DateTimeInterface && !empty($value)) {
             trigger_error('Deprecated the implicit conversion of strings to DateTime objects in Doctrine entities, it will be removed in Shopware 5.7. Relying on this conversion will throw a deprecation warning till then, please only insert DateTime objects.', E_USER_DEPRECATED);
-            $value = new \DateTime($value);
+            $value = new DateTime($value);
         } elseif (empty($value)) {
             $value = null;
         }
@@ -62,7 +64,7 @@ class DateTimeStringType extends Type
             return null;
         }
 
-        $val = \DateTime::createFromFormat($platform->getDateTimeFormatString(), $value);
+        $val = DateTime::createFromFormat($platform->getDateTimeFormatString(), $value);
         if (!$val) {
             throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateTimeFormatString());
         }

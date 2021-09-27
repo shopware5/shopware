@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Mink\Element;
 
 use Behat\Mink\Element\NodeElement;
+use Exception;
 use Shopware\Tests\Mink\Helper;
 
 /**
@@ -151,7 +152,7 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
      *
      * @param string[] $titles
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string
      */

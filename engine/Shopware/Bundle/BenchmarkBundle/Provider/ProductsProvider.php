@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\BenchmarkBundle\BatchableProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -163,7 +164,7 @@ class ProductsProvider implements BatchableProviderInterface
             ->where('productMain.id IN (:productIds)')
             ->setParameter(':productIds', $productIds, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
     /**
@@ -191,7 +192,7 @@ class ProductsProvider implements BatchableProviderInterface
             ->andWhere('details.kind = 2')
             ->setParameter(':productIds', $productIds, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP);
+            ->fetchAll(PDO::FETCH_GROUP);
     }
 
     /**
@@ -209,7 +210,7 @@ class ProductsProvider implements BatchableProviderInterface
             ->groupBy('image.articleID')
             ->setParameter(':productIds', $productIds, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->fetchAll(PDO::FETCH_KEY_PAIR);
 
         foreach ($mediaIdArray as $productId => $mediaIds) {
             $mediaQueryBuilder = $this->dbalConnection->createQueryBuilder();
@@ -246,7 +247,7 @@ class ProductsProvider implements BatchableProviderInterface
             ->setParameter(':categoryIds', $categoryIds, Connection::PARAM_INT_ARRAY)
             ->setParameter(':lastProductId', $lastProductId)
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -265,7 +266,7 @@ class ProductsProvider implements BatchableProviderInterface
             ->setParameter(':categoryId', $categoryId)
             ->setParameter(':categoryIdPath', '%|' . $categoryId . '|%')
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**

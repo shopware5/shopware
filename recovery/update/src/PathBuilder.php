@@ -24,6 +24,8 @@
 
 namespace Shopware\Recovery\Update;
 
+use SplFileInfo;
+
 class PathBuilder
 {
     /**
@@ -86,7 +88,7 @@ class PathBuilder
     /**
      * @return string
      */
-    public function createTargetPath(\SplFileInfo $file)
+    public function createTargetPath(SplFileInfo $file)
     {
         return str_ireplace($this->sourceDir, '', $file->getPathname());
     }
@@ -94,7 +96,7 @@ class PathBuilder
     /**
      * @return string
      */
-    public function createSourcePath(\SplFileInfo $file)
+    public function createSourcePath(SplFileInfo $file)
     {
         return $this->updateDirRelative . $this->createTargetPath($file);
     }
@@ -102,7 +104,7 @@ class PathBuilder
     /**
      * @return string
      */
-    public function createBackupPath(\SplFileInfo $file)
+    public function createBackupPath(SplFileInfo $file)
     {
         return $this->backupDirRelative . $this->createTargetPath($file);
     }

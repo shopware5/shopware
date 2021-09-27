@@ -24,10 +24,12 @@
 
 namespace Shopware\Tests\Functional\Components;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Components\ReflectionHelper;
+use Shopware_Components_CsvIterator;
 
 class ReflectionHelperTest extends TestCase
 {
@@ -50,15 +52,15 @@ class ReflectionHelperTest extends TestCase
 
     public function testOutOfFolderCreation()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/out of scope/m');
         $this->helper->createInstanceFromNamedArguments(NullLogger::class, []);
     }
 
     public function testCreationOfInvalidClass()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Class Shopware_Components_CsvIterator has to implement the interface Shopware\Components\ReflectionAwareInterface');
-        $this->helper->createInstanceFromNamedArguments(\Shopware_Components_CsvIterator::class, []);
+        $this->helper->createInstanceFromNamedArguments(Shopware_Components_CsvIterator::class, []);
     }
 }

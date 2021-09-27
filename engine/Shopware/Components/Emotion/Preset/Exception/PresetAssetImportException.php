@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Emotion\Preset\Exception;
 
-class PresetAssetImportException extends \Enlight_Exception
+use Enlight_Exception;
+
+class PresetAssetImportException extends Enlight_Exception
 {
 }

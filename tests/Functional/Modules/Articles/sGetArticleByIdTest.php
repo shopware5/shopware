@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Modules\Articles;
 
-class sGetArticleByIdTest extends \Enlight_Components_Test_Plugin_TestCase
+use Enlight_Components_Test_Plugin_TestCase;
+
+class sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
 {
     protected $articles = [
         2 => [

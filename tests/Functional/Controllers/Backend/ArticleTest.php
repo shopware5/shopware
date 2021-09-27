@@ -24,12 +24,15 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Enlight_Components_Test_Controller_TestCase;
+use ReflectionClass;
 use ReflectionMethod;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
+use Shopware_Controllers_Backend_Article;
 
-class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
+class ArticleTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var ModelManager
@@ -66,9 +69,9 @@ class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
-        $this->controller = $this->createPartialMock(\Shopware_Controllers_Backend_Article::class, []);
+        $this->controller = $this->createPartialMock(Shopware_Controllers_Backend_Article::class, []);
 
-        $class = new \ReflectionClass($this->controller);
+        $class = new ReflectionClass($this->controller);
 
         $this->prepareNumberSyntaxMethod = $class->getMethod('prepareNumberSyntax');
         $this->prepareNumberSyntaxMethod->setAccessible(true);

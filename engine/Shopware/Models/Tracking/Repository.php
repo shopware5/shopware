@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Tracking;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Shopware\Components\Model\ModelRepository;
@@ -43,10 +45,10 @@ class Repository extends ModelRepository
      *
      * @return Banner
      */
-    public function getOrCreateBannerStatsModel($bannerId, \DateTimeInterface $date = null)
+    public function getOrCreateBannerStatsModel($bannerId, DateTimeInterface $date = null)
     {
         if ($date === null) {
-            $date = new \DateTime();
+            $date = new DateTime();
         }
         /** @var Banner|null $bannerStatistics */
         $bannerStatistics = $this->findOneBy(['bannerId' => $bannerId, 'displayDate' => $date]);
@@ -65,17 +67,17 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the article impression
      *
-     * @param int                     $articleId
-     * @param int                     $shopId
-     * @param \DateTimeInterface|null $date
-     * @param string|null             $deviceType
+     * @param int                    $articleId
+     * @param int                    $shopId
+     * @param DateTimeInterface|null $date
+     * @param string|null            $deviceType
      *
      * @return Query
      */
     public function getArticleImpressionQuery($articleId, $shopId, $date = null, $deviceType = null)
     {
         if ($date == null) {
-            $date = new \DateTime();
+            $date = new DateTime();
         }
         $builder = $this->getArticleImpressionQueryBuilder($articleId, $shopId, $date, $deviceType);
 
@@ -86,10 +88,10 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleImpressionQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int                $articleId
-     * @param int                $shopId
-     * @param \DateTimeInterface $date
-     * @param string|null        $deviceType
+     * @param int               $articleId
+     * @param int               $shopId
+     * @param DateTimeInterface $date
+     * @param string|null       $deviceType
      *
      * @return QueryBuilder
      */

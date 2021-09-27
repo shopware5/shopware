@@ -24,12 +24,19 @@
 
 namespace Shopware\Tests\Functional\Plugins\Core\MarketingAggregate;
 
+use Enlight_Components_Db_Adapter_Pdo_Mysql;
+use Enlight_Components_Test_Plugin_TestCase;
+use sArticles;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Form;
 use Shopware\Models\Config\Value;
 use Shopware\Models\Shop\Shop;
+use Shopware_Components_AlsoBought;
+use Shopware_Components_SimilarShown;
+use Shopware_Components_TopSeller;
+use Shopware_Plugins_Core_MarketingAggregate_Bootstrap;
 
-class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
+class AbstractMarketing extends Enlight_Components_Test_Plugin_TestCase
 {
     public function setUp(): void
     {
@@ -37,7 +44,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
     }
 
     /**
-     * @return \Shopware_Components_SimilarShown
+     * @return Shopware_Components_SimilarShown
      */
     protected function SimilarShown()
     {
@@ -45,7 +52,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
     }
 
     /**
-     * @return \Shopware_Components_TopSeller
+     * @return Shopware_Components_TopSeller
      */
     protected function TopSeller()
     {
@@ -53,7 +60,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
     }
 
     /**
-     * @return \Shopware_Components_AlsoBought
+     * @return Shopware_Components_AlsoBought
      */
     protected function AlsoBought()
     {
@@ -61,7 +68,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
     }
 
     /**
-     * @return \Enlight_Components_Db_Adapter_Pdo_Mysql
+     * @return Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     protected function Db()
     {
@@ -69,7 +76,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
     }
 
     /**
-     * @return \sArticles
+     * @return sArticles
      */
     protected function Articles()
     {
@@ -77,7 +84,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
     }
 
     /**
-     * @return \Shopware_Plugins_Core_MarketingAggregate_Bootstrap
+     * @return Shopware_Plugins_Core_MarketingAggregate_Bootstrap
      */
     protected function Plugin()
     {

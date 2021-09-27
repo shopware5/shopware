@@ -27,6 +27,7 @@ namespace Shopware\Components\Plugin\XmlReader;
 use DOMDocument;
 use DOMElement;
 use DOMNodeList;
+use DOMXPath;
 use InvalidArgumentException;
 use Symfony\Component\Config\Util\XmlUtils;
 
@@ -49,7 +50,7 @@ class XmlConfigReader extends XmlReaderBase
 
     protected function parseFile(DOMDocument $xml): array
     {
-        $xpath = new \DOMXPath($xml);
+        $xpath = new DOMXPath($xml);
 
         $form = [];
         $form['label'] = self::parseTranslatableNodeList(

@@ -24,9 +24,10 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
-class SearchTest extends \Enlight_Components_Test_Controller_TestCase
+class SearchTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var Helper

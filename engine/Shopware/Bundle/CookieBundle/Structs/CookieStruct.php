@@ -26,7 +26,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CookieBundle\Structs;
 
-class CookieStruct implements \JsonSerializable
+use JsonSerializable;
+
+class CookieStruct implements JsonSerializable
 {
     /**
      * @var string

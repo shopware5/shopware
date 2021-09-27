@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Models\Country;
 
 use Enlight_Components_Test_Controller_TestCase;
+use PDO;
 use Shopware\Models\Country\Country;
 
 class CountryTest extends Enlight_Components_Test_Controller_TestCase
@@ -63,7 +64,7 @@ class CountryTest extends Enlight_Components_Test_Controller_TestCase
             'id' => $id,
         ]);
 
-        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         static::assertArrayHasKey('id', $result[0]);
         static::assertArrayHasKey('countryname', $result[0]);
         static::assertArrayHasKey('countryiso', $result[0]);

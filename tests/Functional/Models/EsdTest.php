@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models;
 
+use DateTime;
 use Enlight_Components_Test_TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
@@ -129,7 +130,7 @@ class EsdTest extends Enlight_Components_Test_TestCase
             static::assertEquals($esd->$getMethod(), $value);
         }
 
-        static::assertInstanceOf(\DateTime::class, $esd->getDate());
+        static::assertInstanceOf(DateTime::class, $esd->getDate());
     }
 
     public function testEsdShouldBePersistedWithCustomDateTime(): void
@@ -158,10 +159,10 @@ class EsdTest extends Enlight_Components_Test_TestCase
         $esd = $this->repo->find($esdId);
         static::assertInstanceOf(Esd::class, $esd);
 
-        static::assertInstanceOf(\DateTime::class, $esd->getDate());
+        static::assertInstanceOf(DateTime::class, $esd->getDate());
     }
 }
 
-class Carbon extends \DateTime
+class Carbon extends DateTime
 {
 }

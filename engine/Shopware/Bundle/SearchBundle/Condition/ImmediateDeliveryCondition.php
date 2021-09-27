@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class ImmediateDeliveryCondition implements ConditionInterface, \JsonSerializable
+class ImmediateDeliveryCondition implements ConditionInterface, JsonSerializable
 {
     private const NAME = 'immediate_delivery';
 

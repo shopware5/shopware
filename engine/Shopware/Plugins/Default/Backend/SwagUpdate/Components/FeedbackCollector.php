@@ -25,6 +25,8 @@
 namespace ShopwarePlugins\SwagUpdate\Components;
 
 use Shopware\Components\ShopwareReleaseStruct;
+use Zend_Http_Client;
+use Zend_Http_Response;
 
 class FeedbackCollector
 {
@@ -55,7 +57,7 @@ class FeedbackCollector
     }
 
     /**
-     * @return \Zend_Http_Response
+     * @return Zend_Http_Response
      */
     public function sendData()
     {
@@ -65,7 +67,7 @@ class FeedbackCollector
     }
 
     /**
-     * @return \Zend_Http_Response
+     * @return Zend_Http_Response
      */
     private function submitData(array $data)
     {
@@ -73,7 +75,7 @@ class FeedbackCollector
 
         $apiUrl = $this->apiEndpoint . '/submission';
 
-        $client = new \Zend_Http_Client($apiUrl, [
+        $client = new Zend_Http_Client($apiUrl, [
             'timeout' => 1,
             'useragent' => 'Shopware/' . $this->release->getVersion(),
         ]);

@@ -41,6 +41,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware_Components_Acl as AclComponent;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Zend_Acl_Role_Interface;
 
 /**
  * Abstract API Resource Class
@@ -83,7 +84,7 @@ abstract class Resource implements ContainerAwareInterface
     /**
      * Contains the current role
      *
-     * @var string|\Zend_Acl_Role_Interface|null
+     * @var string|Zend_Acl_Role_Interface|null
      */
     protected $role;
 
@@ -173,7 +174,7 @@ abstract class Resource implements ContainerAwareInterface
     }
 
     /**
-     * @param string|\Zend_Acl_Role_Interface $role
+     * @param string|Zend_Acl_Role_Interface $role
      *
      * @return self
      */
@@ -185,7 +186,7 @@ abstract class Resource implements ContainerAwareInterface
     }
 
     /**
-     * @return string|\Zend_Acl_Role_Interface|null
+     * @return string|Zend_Acl_Role_Interface|null
      */
     public function getRole()
     {

@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Bundle\CookieBundle\Services;
 
+use Enlight_Event_Handler_Default;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CookieBundle\CookieCollection;
 use Shopware\Bundle\CookieBundle\CookieGroupCollection;
@@ -59,7 +60,7 @@ class CookieCollectorTest extends TestCase
 
     public function testCollectThrowsExceptionInvalidCookieType(): void
     {
-        $eventHandler = new \Enlight_Event_Handler_Default(
+        $eventHandler = new Enlight_Event_Handler_Default(
             'CookieCollector_Collect_Cookies',
             [ExampleTestSubscriber::class, 'addInvalidCookie']
         );

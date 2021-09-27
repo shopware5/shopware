@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\EmotionBundle\Struct;
 
-class ElementViewport implements \JsonSerializable
+use JsonSerializable;
+
+class ElementViewport implements JsonSerializable
 {
     /**
      * @var int

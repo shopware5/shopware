@@ -25,6 +25,7 @@
 namespace Shopware\Models\Order;
 
 use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface;
@@ -241,7 +242,7 @@ class Order extends ModelEntity
     /**
      * Time of the last modification of the order
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
@@ -349,7 +350,7 @@ class Order extends ModelEntity
     private $invoiceShippingTaxRate;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="ordertime", type="datetime", nullable=false)
      */
@@ -416,7 +417,7 @@ class Order extends ModelEntity
     private $referer;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="cleareddate", type="datetime", nullable=true)
      */
@@ -504,7 +505,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getChanged()
     {
@@ -631,13 +632,13 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $orderTime
+     * @param DateTimeInterface|string $orderTime
      *
      * @return Order
      */
     public function setOrderTime($orderTime)
     {
-        if (!$orderTime instanceof \DateTimeInterface && \is_string($orderTime)) {
+        if (!$orderTime instanceof DateTimeInterface && \is_string($orderTime)) {
             $orderTime = new DateTime($orderTime);
         }
         $this->orderTime = $orderTime;
@@ -646,7 +647,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getOrderTime()
     {
@@ -814,13 +815,13 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $clearedDate
+     * @param DateTimeInterface|string $clearedDate
      *
      * @return Order
      */
     public function setClearedDate($clearedDate)
     {
-        if (!$clearedDate instanceof \DateTimeInterface && \is_string($clearedDate)) {
+        if (!$clearedDate instanceof DateTimeInterface && \is_string($clearedDate)) {
             $clearedDate = new DateTime($clearedDate);
         }
         $this->clearedDate = $clearedDate;
@@ -829,7 +830,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getClearedDate()
     {

@@ -24,6 +24,8 @@
 
 namespace Shopware\Commands;
 
+use Exception;
+use RuntimeException;
 use Shopware\Models\Shop\Locale;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
@@ -93,7 +95,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
         if (!file_exists($dir) || !is_writable($dir)) {
             $old = umask(0);
             if (!mkdir($dir, 0777, true) && !is_dir($dir)) {
-                throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $dir));
             }
             chmod($dir, 0777);
             umask($old);
@@ -127,7 +129,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
      * @param \Shopware\Models\Shop\Locale $locale
      * @param string                       $dir
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function exportFormLabels(OutputInterface $output, $locale, $dir)
     {
@@ -164,7 +166,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
      * @param Locale $locale
      * @param string $dir
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function exportElementLabels(OutputInterface $output, $locale, $dir)
     {

@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Order;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Article\EsdSerial;
@@ -84,7 +85,7 @@ class Esd extends ModelEntity
     private $id;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="datum", type="datetime", nullable=true)
      */
@@ -131,7 +132,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getDate()
     {
@@ -139,7 +140,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $date
+     * @param DateTimeInterface $date
      */
     public function setDate($date)
     {

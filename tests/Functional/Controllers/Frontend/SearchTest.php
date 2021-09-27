@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
-class SearchTest extends \Enlight_Components_Test_Controller_TestCase
+use Enlight_Components_Test_Controller_TestCase;
+
+class SearchTest extends Enlight_Components_Test_Controller_TestCase
 {
     public function tearDown(): void
     {

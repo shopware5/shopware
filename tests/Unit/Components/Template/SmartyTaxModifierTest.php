@@ -26,6 +26,7 @@ namespace Shopware\tests\Unit\Components\Template;
 
 require __DIR__ . '/../../../../engine/Library/Enlight/Template/Plugins/modifier.tax.php';
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class SmartyTaxModifierTest extends TestCase
@@ -49,7 +50,7 @@ class SmartyTaxModifierTest extends TestCase
      */
     public function testTaxModifierWithInvalid($tax, $locale)
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         smarty_modifier_tax($tax, $locale);
     }
 

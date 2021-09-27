@@ -28,6 +28,7 @@ namespace Shopware\Tests\Functional\Components\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Commands\ShopwareCommand;
+use TestKernel;
 
 class ConfigureContainerAwareCommandsTest extends TestCase
 {
@@ -41,7 +42,7 @@ class ConfigureContainerAwareCommandsTest extends TestCase
 
     public function getShopwareCommands(): array
     {
-        $application = new \Shopware\Components\Console\Application(\TestKernel::getKernel());
+        $application = new \Shopware\Components\Console\Application(TestKernel::getKernel());
         $application->setCommandLoader(Shopware()->Container()->get('console.command_loader'));
         $commands = [];
 

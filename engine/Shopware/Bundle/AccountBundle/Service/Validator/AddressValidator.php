@@ -28,6 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
+use Shopware_Components_Config;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ContextualValidatorInterface;
@@ -46,7 +47,7 @@ class AddressValidator implements AddressValidatorInterface
     private $context;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -58,7 +59,7 @@ class AddressValidator implements AddressValidatorInterface
     public function __construct(
         ValidatorInterface $validator,
         ContextServiceInterface $context,
-        \Shopware_Components_Config $config
+        Shopware_Components_Config $config
     ) {
         $this->validator = $validator;
         $this->context = $context;

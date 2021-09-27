@@ -24,11 +24,12 @@
 
 namespace Shopware\Tests\Controllers\Backend;
 
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Partner\Partner;
 use Shopware\Models\Partner\Repository;
 
-class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
+class PartnerTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var Repository

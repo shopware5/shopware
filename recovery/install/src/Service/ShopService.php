@@ -24,13 +24,16 @@
 
 namespace Shopware\Recovery\Install\Service;
 
+use Exception;
+use PDO;
+use RuntimeException;
 use Shopware\Recovery\Common\Service\UniqueIdGenerator;
 use Shopware\Recovery\Install\Struct\Shop;
 
 class ShopService
 {
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $connection;
 
@@ -39,21 +42,21 @@ class ShopService
      */
     private $generator;
 
-    public function __construct(\PDO $connection, UniqueIdGenerator $generator)
+    public function __construct(PDO $connection, UniqueIdGenerator $generator)
     {
         $this->connection = $connection;
         $this->generator = $generator;
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function updateShop(Shop $shop)
     {
         if (empty($shop->locale)
             || empty($shop->host)
         ) {
-            throw new \RuntimeException('Please fill in all required fields. (shop configuration)');
+            throw new RuntimeException('Please fill in all required fields. (shop configuration)');
         }
 
         try {
@@ -81,19 +84,19 @@ EOT;
                 $shop->basePath,
                 $shop->host,
             ]);
-        } catch (\Exception $e) {
-            throw new \RuntimeException($e->getMessage(), 0, $e);
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage(), 0, $e);
         }
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function updateConfig(Shop $shop)
     {
         // Do update on shop-configuration
         if (empty($shop->name) || empty($shop->email)) {
-            throw new \RuntimeException('Please fill in all required fields. (shop configuration#2)');
+            throw new RuntimeException('Please fill in all required fields. (shop configuration#2)');
         }
 
         $this->updateMailAddresses($shop);
@@ -114,7 +117,7 @@ EOT;
         $fetchLanguageId->execute([$locale]);
         $fetchLanguageId = $fetchLanguageId->fetchColumn();
         if (!$fetchLanguageId) {
-            throw new \RuntimeException('Language with id ' . $locale . ' not found');
+            throw new RuntimeException('Language with id ' . $locale . ' not found');
         }
 
         return (int) $fetchLanguageId;

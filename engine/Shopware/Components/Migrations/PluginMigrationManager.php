@@ -27,7 +27,13 @@ declare(strict_types=1);
 
 namespace Shopware\Components\Migrations;
 
+use DirectoryIterator;
+use Exception;
+use PDO;
 use Psr\Log\LoggerInterface;
+use RecursiveRegexIterator;
+use RegexIterator;
+use RuntimeException;
 use Shopware\Components\Plugin;
 
 class PluginMigrationManager extends Manager
@@ -42,7 +48,7 @@ class PluginMigrationManager extends Manager
      */
     private $logger;
 
-    public function __construct(\PDO $connection, Plugin $plugin, LoggerInterface $logger)
+    public function __construct(PDO $connection, Plugin $plugin, LoggerInterface $logger)
     {
         $this->plugin = $plugin;
         $this->logger = $logger;
@@ -94,8 +100,8 @@ ENGINE=InnoDB
 
         $migrationPath = $this->getMigrationPath();
 
-        $directoryIterator = new \DirectoryIterator($migrationPath);
-        $regex = new \RegexIterator($directoryIterator, $regexPattern, \RecursiveRegexIterator::GET_MATCH);
+        $directoryIterator = new DirectoryIterator($migrationPath);
+        $regex = new RegexIterator($directoryIterator, $regexPattern, RecursiveRegexIterator::GET_MATCH);
 
         $migrations = [];
 
@@ -141,7 +147,7 @@ ENGINE=InnoDB
             $this->log(sprintf('Revert MigrationNumber: %s - %s', $migration->getVersion(), $migration->getLabel()));
             try {
                 $this->apply($migration, $modus, $keepUserData);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->log($e->getMessage());
                 throw $e;
             }
@@ -164,8 +170,8 @@ ENGINE=InnoDB
         try {
             /** @var AbstractPluginMigration $migrationClass */
             $migrationClass = new $migrationClassName($this->getConnection());
-        } catch (\Exception $e) {
-            throw new \Exception('Could not instantiate Object');
+        } catch (Exception $e) {
+            throw new Exception('Could not instantiate Object');
         }
 
         $this->validateMigration($migrationClass, $result);
@@ -196,7 +202,7 @@ ENGINE=InnoDB
         ]);
     }
 
-    protected function markMigrationAsFailed(AbstractMigration $migration, \Exception $e): void
+    protected function markMigrationAsFailed(AbstractMigration $migration, Exception $e): void
     {
         $updateVersionSql = 'UPDATE s_plugin_schema_version SET error_msg = :msg WHERE plugin_name = :plugin_name AND version = :version';
         $stmt = $this->connection->prepare($updateVersionSql);
@@ -225,10 +231,10 @@ ENGINE=InnoDB
             foreach ($migration->getSql() as $sql) {
                 $this->connection->exec($sql);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->markMigrationAsFailed($migration, $e);
 
-            throw new \RuntimeException(sprintf('Could not revert migration (%s). Error: %s ', \get_class($migration), $e->getMessage()));
+            throw new RuntimeException(sprintf('Could not revert migration (%s). Error: %s ', \get_class($migration), $e->getMessage()));
         }
 
         $this->removeMigration($migration);

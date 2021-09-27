@@ -28,6 +28,7 @@ namespace Shopware\Tests\Functional\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Shopware\Bundle\PluginInstallerBundle\Context\BaseRequest;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService;
@@ -51,7 +52,7 @@ class PluginLocalServiceTest extends TestCase
             $this->getContainer()->get('front')
         );
 
-        $iteratePluginsMethod = (new \ReflectionClass(PluginLocalService::class))->getMethod('iteratePlugins');
+        $iteratePluginsMethod = (new ReflectionClass(PluginLocalService::class))->getMethod('iteratePlugins');
         $iteratePluginsMethod->setAccessible(true);
 
         $pluginData = [

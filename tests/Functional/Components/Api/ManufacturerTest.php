@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use DateTime;
 use Shopware\Components\Api\Resource\Manufacturer;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Model\ModelManager;
@@ -47,9 +48,9 @@ class ManufacturerTest extends TestCase
 
     public function testCreateShouldBeSuccessful()
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->modify('-3 day');
-        $changed = $date->format(\DateTime::ISO8601);
+        $changed = $date->format(DateTime::ISO8601);
 
         $testData = [
             'name' => 'fooobar',

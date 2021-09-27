@@ -24,11 +24,12 @@
 
 namespace Shopware\Tests\Functional\Components\Cart;
 
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Components\Cart\PaymentTokenService;
 use Shopware\Components\Cart\Struct\PaymentTokenResult;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class PaymentTokenServiceTest extends \Enlight_Components_Test_Controller_TestCase
+class PaymentTokenServiceTest extends Enlight_Components_Test_Controller_TestCase
 {
     use DatabaseTransactionBehaviour;
 

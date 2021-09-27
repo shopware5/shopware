@@ -27,6 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductQueryHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware_Components_Config;
 
 class ListProductQueryHelper implements ListProductQueryHelperInterface
 {
@@ -46,7 +47,7 @@ class ListProductQueryHelper implements ListProductQueryHelperInterface
     protected $fieldHelper;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     protected $config;
 
@@ -55,7 +56,7 @@ class ListProductQueryHelper implements ListProductQueryHelperInterface
      */
     protected $connection;
 
-    public function __construct(FieldHelper $fieldHelper, \Shopware_Components_Config $config, Connection $connection)
+    public function __construct(FieldHelper $fieldHelper, Shopware_Components_Config $config, Connection $connection)
     {
         $this->fieldHelper = $fieldHelper;
         $this->config = $config;

@@ -29,6 +29,8 @@ use Shopware\Bundle\AccountBundle\Constraint\FormEmail;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Customer\Customer;
+use Shopware_Components_Config;
+use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -41,12 +43,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class EmailUpdateFormType extends AbstractType
 {
     /**
-     * @var \Shopware_Components_Snippet_Manager
+     * @var Shopware_Components_Snippet_Manager
      */
     protected $snippetManager;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     protected $config;
 
@@ -56,8 +58,8 @@ class EmailUpdateFormType extends AbstractType
     private $context;
 
     public function __construct(
-        \Shopware_Components_Snippet_Manager $snippetManager,
-        \Shopware_Components_Config $config,
+        Shopware_Components_Snippet_Manager $snippetManager,
+        Shopware_Components_Config $config,
         ContextServiceInterface $context
     ) {
         $this->snippetManager = $snippetManager;

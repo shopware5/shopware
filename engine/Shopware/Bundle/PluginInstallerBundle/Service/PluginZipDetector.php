@@ -24,12 +24,14 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use ZipArchive;
+
 class PluginZipDetector
 {
     /**
      * @return bool
      */
-    public function isLegacyPlugin(\ZipArchive $archive)
+    public function isLegacyPlugin(ZipArchive $archive)
     {
         $entry = $archive->statIndex(0);
         $rootDirectory = explode('/', $entry['name'])[0];
@@ -40,7 +42,7 @@ class PluginZipDetector
     /**
      * @return bool
      */
-    public function isPlugin(\ZipArchive $archive)
+    public function isPlugin(ZipArchive $archive)
     {
         $entry = $archive->statIndex(0);
 

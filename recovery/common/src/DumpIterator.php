@@ -24,7 +24,12 @@
 
 namespace Shopware\Recovery\Common;
 
-class DumpIterator implements \SeekableIterator, \Countable
+use Countable;
+use Exception;
+use OutOfBoundsException;
+use SeekableIterator;
+
+class DumpIterator implements SeekableIterator, Countable
 {
     /**
      * @var int
@@ -49,13 +54,13 @@ class DumpIterator implements \SeekableIterator, \Countable
     /**
      * @param string $filename
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct($filename)
     {
         $this->stream = fopen($filename, 'rb');
         if (!$this->stream) {
-            throw new \Exception('Can not open stream. File: ' . $filename);
+            throw new Exception('Can not open stream. File: ' . $filename);
         }
 
         $this->position = 0;
@@ -79,7 +84,7 @@ class DumpIterator implements \SeekableIterator, \Countable
     /**
      * @param int $position
      *
-     * @throws \OutOfBoundsException
+     * @throws OutOfBoundsException
      */
     public function seek($position)
     {
@@ -90,7 +95,7 @@ class DumpIterator implements \SeekableIterator, \Countable
         }
 
         if ($this->key() < $position) {
-            throw new \OutOfBoundsException("invalid seek position ($position)");
+            throw new OutOfBoundsException("invalid seek position ($position)");
         }
     }
 

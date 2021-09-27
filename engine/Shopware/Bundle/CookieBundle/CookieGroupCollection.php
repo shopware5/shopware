@@ -27,11 +27,12 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CookieBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use JsonSerializable;
 use Shopware\Bundle\CookieBundle\Exceptions\NoCookieGroupByNameKnownException;
 use Shopware\Bundle\CookieBundle\Structs\CookieGroupStruct;
 use Shopware\Bundle\CookieBundle\Structs\CookieStruct;
 
-class CookieGroupCollection extends ArrayCollection implements \JsonSerializable
+class CookieGroupCollection extends ArrayCollection implements JsonSerializable
 {
     public function isValid(): bool
     {

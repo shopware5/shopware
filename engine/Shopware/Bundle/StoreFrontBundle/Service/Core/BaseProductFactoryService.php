@@ -25,6 +25,8 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Doctrine\DBAL\Connection;
+use PDO;
+use PDOStatement;
 use Shopware\Bundle\StoreFrontBundle\Service\BaseProductFactoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 
@@ -69,10 +71,10 @@ class BaseProductFactoryService implements BaseProductFactoryServiceInterface
             ->where('variant.ordernumber IN(:numbers)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
-        /** @var \PDOStatement $statement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $products = [];
         foreach ($data as $row) {

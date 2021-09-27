@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Article\Configurator\Template;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -250,7 +252,7 @@ class Template extends ModelEntity
     private $shippingFree = false;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
@@ -643,14 +645,14 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string|null $releaseDate
+     * @param DateTimeInterface|string|null $releaseDate
      *
      * @return Template
      */
     public function setReleaseDate($releaseDate = null)
     {
-        if ($releaseDate !== null && !($releaseDate instanceof \DateTimeInterface)) {
-            $this->releaseDate = new \DateTime($releaseDate);
+        if ($releaseDate !== null && !($releaseDate instanceof DateTimeInterface)) {
+            $this->releaseDate = new DateTime($releaseDate);
         } else {
             $this->releaseDate = $releaseDate;
         }
@@ -659,7 +661,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getReleaseDate()
     {

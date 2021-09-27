@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\MediaBundle\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
+use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ServiceSubscriber implements SubscriberInterface
@@ -52,7 +53,7 @@ class ServiceSubscriber implements SubscriberInterface
     /**
      * Runs the garbage collector
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */

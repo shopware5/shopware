@@ -24,7 +24,9 @@
 
 namespace Shopware\Components;
 
-class CSRFTokenValidationException extends \Exception
+use Exception;
+
+class CSRFTokenValidationException extends Exception
 {
     protected $code = 400;
 }

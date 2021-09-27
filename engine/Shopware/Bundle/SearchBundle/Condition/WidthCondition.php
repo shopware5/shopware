@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class WidthCondition implements ConditionInterface, \JsonSerializable
+class WidthCondition implements ConditionInterface, JsonSerializable
 {
     private const NAME = 'width';
 

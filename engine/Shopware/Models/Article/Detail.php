@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Article;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\DBAL\Constraints as ShopwareAssert;
@@ -303,7 +305,7 @@ class Detail extends ModelEntity
     private $shippingFree = false;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
@@ -729,14 +731,14 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string|null $releaseDate
+     * @param DateTimeInterface|string|null $releaseDate
      *
      * @return Detail
      */
     public function setReleaseDate($releaseDate = null)
     {
-        if ($releaseDate !== null && !($releaseDate instanceof \DateTimeInterface)) {
-            $this->releaseDate = new \DateTime($releaseDate);
+        if ($releaseDate !== null && !($releaseDate instanceof DateTimeInterface)) {
+            $this->releaseDate = new DateTime($releaseDate);
         } else {
             $this->releaseDate = $releaseDate;
         }
@@ -745,7 +747,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getReleaseDate()
     {

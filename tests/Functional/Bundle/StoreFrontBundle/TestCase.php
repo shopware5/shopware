@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -40,8 +41,10 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group;
+use Shopware_Components_Config;
+use Zend_Cache_Core;
 
-abstract class TestCase extends \Enlight_Components_Test_TestCase
+abstract class TestCase extends Enlight_Components_Test_TestCase
 {
     /**
      * @var Helper
@@ -126,7 +129,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
             $category = $this->helper->createCategory();
         }
 
-        $config = Shopware()->Container()->get(\Shopware_Components_Config::class);
+        $config = Shopware()->Container()->get(Shopware_Components_Config::class);
         $originals = [];
         foreach ($configs as $key => $value) {
             $originals[$key] = $config->get($key);
@@ -330,7 +333,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     protected function setConfig($name, $value): void
     {
         Shopware()->Container()->get(ConfigWriter::class)->save($name, $value);
-        Shopware()->Container()->get(\Zend_Cache_Core::class)->clean();
-        Shopware()->Container()->get(\Shopware_Components_Config::class)->setShop(Shopware()->Shop());
+        Shopware()->Container()->get(Zend_Cache_Core::class)->clean();
+        Shopware()->Container()->get(Shopware_Components_Config::class)->setShop(Shopware()->Shop());
     }
 }

@@ -24,7 +24,9 @@
 
 namespace Shopware\Components;
 
-class UploadMaxSizeException extends \Exception
+use Exception;
+
+class UploadMaxSizeException extends Exception
 {
     protected $code = 413;
 

@@ -24,7 +24,10 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-class PluginStruct implements \JsonSerializable
+use DateTimeInterface;
+use JsonSerializable;
+
+class PluginStruct implements JsonSerializable
 {
     /**
      * @var int
@@ -78,12 +81,12 @@ class PluginStruct implements \JsonSerializable
     private $exampleUrl;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $installationDate;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $updateDate;
 
@@ -301,7 +304,7 @@ class PluginStruct implements \JsonSerializable
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getInstallationDate()
     {
@@ -309,7 +312,7 @@ class PluginStruct implements \JsonSerializable
     }
 
     /**
-     * @param \DateTimeInterface $installationDate
+     * @param DateTimeInterface $installationDate
      */
     public function setInstallationDate($installationDate)
     {
@@ -709,7 +712,7 @@ class PluginStruct implements \JsonSerializable
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getUpdateDate()
     {
@@ -717,7 +720,7 @@ class PluginStruct implements \JsonSerializable
     }
 
     /**
-     * @param \DateTimeInterface $updateDate
+     * @param DateTimeInterface $updateDate
      */
     public function setUpdateDate($updateDate)
     {

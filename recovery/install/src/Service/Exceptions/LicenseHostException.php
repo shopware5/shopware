@@ -24,9 +24,10 @@
 
 namespace Shopware\Recovery\Install\Service\Exceptions;
 
+use RuntimeException;
 use Shopware\Recovery\Install\Struct\LicenseInformation;
 
-class LicenseHostException extends \RuntimeException
+class LicenseHostException extends RuntimeException
 {
     /**
      * @var LicenseInformation

@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use RuntimeException;
 use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -49,7 +50,7 @@ class StoreListIntegratedCommand extends StoreCommand
     {
         $shopwareVersion = $this->container->getParameter('shopware.release.version');
         if (!\is_string($shopwareVersion)) {
-            throw new \RuntimeException('Parameter shopware.release.version has to be an string');
+            throw new RuntimeException('Parameter shopware.release.version has to be an string');
         }
 
         $context = new ListingRequest('', $shopwareVersion, 0, 1000, [['property' => 'dummy', 'value' => 1]], []);

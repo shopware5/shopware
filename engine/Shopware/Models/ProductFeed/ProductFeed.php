@@ -24,9 +24,12 @@
 
 namespace Shopware\Models\ProductFeed;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Attribute\ProductFeed as ProductFeedAttribute;
+use Shopware_Controllers_Backend_MediaManager;
 
 /**
  * Shopware product feed model represents a single feed.
@@ -73,7 +76,7 @@ class ProductFeed extends ModelEntity
     private $name;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="last_export", type="datetime", nullable=false)
      */
@@ -108,7 +111,7 @@ class ProductFeed extends ModelEntity
     private $countArticles;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="expiry", type="datetime", nullable=false)
      */
@@ -129,7 +132,7 @@ class ProductFeed extends ModelEntity
     private $formatId = 1;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="last_change", type="datetime", nullable=false)
      */
@@ -262,7 +265,7 @@ class ProductFeed extends ModelEntity
     private $shopId;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="cache_refreshed", type="datetime", nullable=true)
      */
@@ -337,14 +340,14 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $lastExport
+     * @param DateTimeInterface|string $lastExport
      *
      * @return ProductFeed
      */
     public function setLastExport($lastExport)
     {
-        if (!$lastExport instanceof \DateTimeInterface) {
-            $lastExport = new \DateTime($lastExport);
+        if (!$lastExport instanceof DateTimeInterface) {
+            $lastExport = new DateTime($lastExport);
         }
         $this->lastExport = $lastExport;
 
@@ -352,7 +355,7 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getLastExport()
     {
@@ -440,14 +443,14 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $expiry
+     * @param DateTimeInterface|string $expiry
      *
      * @return ProductFeed
      */
     public function setExpiry($expiry)
     {
-        if (!$expiry instanceof \DateTimeInterface) {
-            $expiry = new \DateTime($expiry);
+        if (!$expiry instanceof DateTimeInterface) {
+            $expiry = new DateTime($expiry);
         }
         $this->expiry = $expiry;
 
@@ -455,7 +458,7 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getExpiry()
     {
@@ -503,14 +506,14 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $lastChange
+     * @param DateTimeInterface|string $lastChange
      *
      * @return ProductFeed
      */
     public function setLastChange($lastChange)
     {
-        if (!$lastChange instanceof \DateTimeInterface) {
-            $lastChange = new \DateTime($lastChange);
+        if (!$lastChange instanceof DateTimeInterface) {
+            $lastChange = new DateTime($lastChange);
         }
         $this->lastChange = $lastChange;
 
@@ -518,7 +521,7 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getLastChange()
     {
@@ -978,14 +981,14 @@ class ProductFeed extends ModelEntity
     /**
      * Set cache refreshed datetime
      *
-     * @param \DateTimeInterface|string|null $cacheRefreshed
+     * @param DateTimeInterface|string|null $cacheRefreshed
      *
      * @return ProductFeed
      */
     public function setCacheRefreshed($cacheRefreshed)
     {
-        if (!$cacheRefreshed instanceof \DateTimeInterface) {
-            $cacheRefreshed = new \DateTime($cacheRefreshed);
+        if (!$cacheRefreshed instanceof DateTimeInterface) {
+            $cacheRefreshed = new DateTime($cacheRefreshed);
         }
         $this->cacheRefreshed = $cacheRefreshed;
 
@@ -995,7 +998,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get cache refreshed datetime
      *
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getCacheRefreshed()
     {
@@ -1028,7 +1031,7 @@ class ProductFeed extends ModelEntity
         $this->fileName = basename($this->fileName);
         $extension = strtolower(pathinfo($this->fileName, PATHINFO_EXTENSION));
 
-        if (!empty($extension) && \in_array($extension, \Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist, true)) {
+        if (!empty($extension) && \in_array($extension, Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist, true)) {
             $this->fileName = str_replace('.' . $extension, '.invalid', strtolower($this->fileName));
 
             // To prevent PrePersist event

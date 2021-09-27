@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ContentTypeBundle\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Event_EventArgs;
 use Shopware\Bundle\ContentTypeBundle\Services\DatabaseContentTypeSynchronizer;
 use Shopware\Bundle\PluginInstallerBundle\Events\PluginEvent;
 use Shopware\Components\CacheManager;
@@ -62,7 +63,7 @@ class SyncSubscriber implements SubscriberInterface
         ];
     }
 
-    public function onChange(\Enlight_Event_EventArgs $eventArgs): void
+    public function onChange(Enlight_Event_EventArgs $eventArgs): void
     {
         // Plugin does not have a content type. Skip sync
         if (!file_exists($eventArgs->getPlugin()->getPath() . '/Resources/contenttypes.xml')) {

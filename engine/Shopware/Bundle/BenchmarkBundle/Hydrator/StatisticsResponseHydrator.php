@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
 
+use DateTime;
+use DateTimeZone;
 use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsHydratingException;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
 
@@ -48,6 +50,6 @@ class StatisticsResponseHydrator implements HydratorInterface
             throw new StatisticsHydratingException('Missing field "responseToken" from server response');
         }
 
-        return new StatisticsResponse($date = new \DateTime('now', new \DateTimeZone('UTC')), $data['responseToken'], false);
+        return new StatisticsResponse($date = new DateTime('now', new DateTimeZone('UTC')), $data['responseToken'], false);
     }
 }

@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Newsletter;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Models\Customer\Customer;
@@ -131,7 +133,7 @@ class Address extends LazyFetchModelEntity
     /**
      * The Double-Opt-In registration date
      *
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="added", type="datetime", nullable=true)
      */
@@ -140,7 +142,7 @@ class Address extends LazyFetchModelEntity
     /**
      * The Double-Opt-In confirmation date
      *
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="double_optin_confirmed", type="datetime", nullable=true)
      */
@@ -151,7 +153,7 @@ class Address extends LazyFetchModelEntity
      */
     public function __construct()
     {
-        $this->added = new \DateTime();
+        $this->added = new DateTime();
     }
 
     /**
@@ -294,7 +296,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getAdded()
     {
@@ -302,7 +304,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $added
+     * @param DateTimeInterface $added
      */
     public function setAdded($added)
     {
@@ -310,7 +312,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getDoubleOptinConfirmed()
     {
@@ -318,7 +320,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $doubleOptinConfirmed
+     * @param DateTimeInterface|null $doubleOptinConfirmed
      */
     public function setDoubleOptinConfirmed($doubleOptinConfirmed)
     {

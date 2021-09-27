@@ -27,6 +27,9 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Components_Db_Adapter_Pdo_Mysql;
+use Exception;
+use PDO;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface;
@@ -59,12 +62,13 @@ use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Price\Group as PriceGroup;
 use Shopware\Models\Shop\Currency;
 use Shopware\Models\Tax\Tax as TaxModel;
+use Shopware_Components_Config;
 
 class Helper
 {
     protected Converter $converter;
 
-    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+    private Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
     private ModelManager $entityManager;
 
@@ -181,7 +185,7 @@ class Helper
      */
     public function getListProducts(array $numbers, ShopContextInterface $context, array $configs = []): array
     {
-        $config = Shopware()->Container()->get(\Shopware_Components_Config::class);
+        $config = Shopware()->Container()->get(Shopware_Components_Config::class);
         $originals = [];
         foreach ($configs as $key => $value) {
             $originals[$key] = $config->get($key);
@@ -264,7 +268,7 @@ class Helper
         foreach ($this->createdCategories as $category) {
             try {
                 $this->categoryApi->delete($category);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
             }
         }
 
@@ -277,7 +281,7 @@ class Helper
 
                 $this->entityManager->remove($manufacturer);
                 $this->entityManager->flush();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
             }
         }
 
@@ -689,7 +693,7 @@ class Helper
             ->setParameter('article', $articleId)
             ->setParameter(':names', $optionNames, Connection::PARAM_STR_ARRAY);
 
-        return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getProductData(array $data = []): array
@@ -1100,7 +1104,7 @@ class Helper
             $query->andHaving("options LIKE '%|" . (int) $id . "|%'");
         }
 
-        $ids = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        $ids = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         return array_column($ids, 'article_id');
     }

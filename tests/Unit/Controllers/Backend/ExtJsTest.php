@@ -25,6 +25,8 @@
 namespace Shopware\Tests\Unit\Controllers\Backend;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Shopware_Controllers_Backend_ExtJs;
 
 class ExtJsTest extends TestCase
 {
@@ -49,9 +51,9 @@ class ExtJsTest extends TestCase
      */
     public function testInflectPath($args, $expectedResult)
     {
-        $SUT = $this->createPartialMock(\Shopware_Controllers_Backend_ExtJs::class, []);
+        $SUT = $this->createPartialMock(Shopware_Controllers_Backend_ExtJs::class, []);
 
-        $class = new \ReflectionClass($SUT);
+        $class = new ReflectionClass($SUT);
         $method = $class->getMethod('inflectPath');
         $method->setAccessible(true);
 

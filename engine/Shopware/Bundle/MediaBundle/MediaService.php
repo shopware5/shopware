@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use Exception;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\Util;
 use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
@@ -58,7 +59,7 @@ class MediaService implements MediaServiceInterface
     private $config;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy, ContainerInterface $container, array $config)
     {
@@ -68,7 +69,7 @@ class MediaService implements MediaServiceInterface
         $this->config = $config;
 
         if (!isset($config['mediaUrl'])) {
-            throw new \Exception(sprintf('Please provide a "mediaUrl" in your %s adapter.', $config['type']));
+            throw new Exception(sprintf('Please provide a "mediaUrl" in your %s adapter.', $config['type']));
         }
 
         $mediaUrl = $config['mediaUrl'] ?: $this->createFallbackMediaUrl();
@@ -286,7 +287,7 @@ class MediaService implements MediaServiceInterface
     /**
      * Generates a mediaUrl based on the request or router
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string
      */

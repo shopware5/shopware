@@ -26,11 +26,12 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Form\Form;
 use Shopware\Models\Form\Repository;
 
-class FormTest extends \Enlight_Components_Test_TestCase
+class FormTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var array<string, string>

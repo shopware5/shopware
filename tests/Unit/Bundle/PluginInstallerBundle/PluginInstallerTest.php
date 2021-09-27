@@ -27,6 +27,7 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Statement;
+use Enlight_Event_EventManager;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -87,7 +88,7 @@ class PluginInstallerTest extends TestCase
             $databaseHandler,
             $requirementValidator,
             $pdo,
-            new \Enlight_Event_EventManager(),
+            new Enlight_Event_EventManager(),
             ['ShopwarePlugins' => __DIR__ . '/Fixtures'],
             new ShopwareReleaseStruct($releaseArray['version'], $releaseArray['version_text'], $releaseArray['revision']),
             new NullLogger(),

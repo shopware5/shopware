@@ -24,6 +24,11 @@
 
 namespace Shopware\Components\Snippet;
 
+use Enlight_Components_Db_Adapter_Pdo_Mysql;
+use Enlight_Components_Snippet_Namespace;
+use Enlight_Config_Adapter_DbTable;
+use Enlight_Config_Adapter_File;
+use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\Writer\DatabaseWriter;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,7 +47,7 @@ class DatabaseHandler
     protected $em;
 
     /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     protected $db;
 
@@ -54,7 +59,7 @@ class DatabaseHandler
     /**
      * @param string $kernelRoot
      */
-    public function __construct(ModelManager $em, \Enlight_Components_Db_Adapter_Pdo_Mysql $db, $kernelRoot)
+    public function __construct(ModelManager $em, Enlight_Components_Db_Adapter_Pdo_Mysql $db, $kernelRoot)
     {
         $this->em = $em;
         $this->db = $db;
@@ -87,7 +92,7 @@ class DatabaseHandler
 
         $localeRepository = $this->em->getRepository('Shopware\Models\Shop\Locale');
 
-        $inputAdapter = new \Enlight_Config_Adapter_File([
+        $inputAdapter = new Enlight_Config_Adapter_File([
             'configDir' => $snippetsDir,
         ]);
 
@@ -112,7 +117,7 @@ class DatabaseHandler
 
             $this->printNotice('<info>Importing ' . $namespace . ' namespace</info>');
 
-            $namespaceData = new \Enlight_Components_Snippet_Namespace([
+            $namespaceData = new Enlight_Components_Snippet_Namespace([
                 'adapter' => $inputAdapter,
                 'name' => $namespace,
             ]);
@@ -142,7 +147,7 @@ class DatabaseHandler
      * @param string|null $snippetsDir
      * @param string      $localeName
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function dumpFromDatabase($snippetsDir, $localeName)
     {
@@ -155,13 +160,13 @@ class DatabaseHandler
 
         $locale = $this->em->getRepository('Shopware\Models\Shop\Locale')->findOneByLocale($localeName);
         if (!$locale) {
-            throw new \Exception(sprintf('Locale "%s" not found.', $localeName));
+            throw new Exception(sprintf('Locale "%s" not found.', $localeName));
         }
 
-        $outputAdapter = new \Enlight_Config_Adapter_File([
+        $outputAdapter = new Enlight_Config_Adapter_File([
             'configDir' => $snippetsDir . '/',
         ]);
-        $inputAdapter = new \Enlight_Config_Adapter_DbTable([
+        $inputAdapter = new Enlight_Config_Adapter_DbTable([
             'db' => $this->db,
             'table' => 's_core_snippets',
             'namespaceColumn' => 'namespace',
@@ -186,7 +191,7 @@ class DatabaseHandler
         foreach ($namespaces as $namespace) {
             if (!\array_key_exists($namespace, $data)) {
                 $data[$namespace] = true;
-                $content = new \Enlight_Components_Snippet_Namespace([
+                $content = new Enlight_Components_Snippet_Namespace([
                     'adapter' => $inputAdapter,
                     'name' => $namespace,
                     'section' => [
@@ -216,11 +221,11 @@ class DatabaseHandler
 
         $localeRepository = $this->em->getRepository(\Shopware\Models\Shop\Locale::class);
 
-        $inputAdapter = new \Enlight_Config_Adapter_File([
+        $inputAdapter = new Enlight_Config_Adapter_File([
             'configDir' => $snippetsDir,
         ]);
 
-        $outputAdapter = new \Enlight_Config_Adapter_DbTable([
+        $outputAdapter = new Enlight_Config_Adapter_DbTable([
             'db' => $this->db,
             'table' => 's_core_snippets',
             'namespaceColumn' => 'namespace',
@@ -242,7 +247,7 @@ class DatabaseHandler
 
             $this->printNotice('<info>Processing ' . $namespace . ' namespace</info>');
 
-            $namespaceData = new \Enlight_Components_Snippet_Namespace([
+            $namespaceData = new Enlight_Components_Snippet_Namespace([
                 'adapter' => $inputAdapter,
                 'name' => $namespace,
             ]);

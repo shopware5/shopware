@@ -25,6 +25,7 @@
 namespace Shopware\Components\Model;
 
 use Doctrine\ORM\EntityRepository;
+use Enlight_Hook;
 
 /**
  * Interface for the various standard models.
@@ -40,7 +41,7 @@ use Doctrine\ORM\EntityRepository;
  * @template TEntityClass of object
  * @extends EntityRepository<TEntityClass>
  */
-class ModelRepository extends EntityRepository implements \Enlight_Hook
+class ModelRepository extends EntityRepository implements Enlight_Hook
 {
     /**
      * Creates a new QueryBuilder instance that is pre-populated for this entity name.

@@ -27,6 +27,13 @@ declare(strict_types=1);
 
 namespace Shopware\Components\Migrations;
 
+use DirectoryIterator;
+use Exception;
+use PDO;
+use RecursiveRegexIterator;
+use RegexIterator;
+use RuntimeException;
+
 /**
  * Shopware migration manager
  *
@@ -38,7 +45,7 @@ namespace Shopware\Components\Migrations;
 class Manager
 {
     /**
-     * @var \PDO
+     * @var PDO
      */
     protected $connection;
 
@@ -50,7 +57,7 @@ class Manager
     /**
      * @param string $migrationPath
      */
-    public function __construct(\PDO $connection, $migrationPath)
+    public function __construct(PDO $connection, $migrationPath)
     {
         $this->migrationPath = $migrationPath;
 
@@ -60,7 +67,7 @@ class Manager
     /**
      * @return Manager
      */
-    public function setConnection(\PDO $connection)
+    public function setConnection(PDO $connection)
     {
         $this->connection = $connection;
 
@@ -68,7 +75,7 @@ class Manager
     }
 
     /**
-     * @return \PDO
+     * @return PDO
      */
     public function getConnection()
     {
@@ -159,7 +166,7 @@ class Manager
      * @param int $currentVersion
      * @param int $limit
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -169,8 +176,8 @@ class Manager
 
         $migrationPath = $this->getMigrationPath();
 
-        $directoryIterator = new \DirectoryIterator($migrationPath);
-        $regex = new \RegexIterator($directoryIterator, $regexPattern, \RecursiveRegexIterator::GET_MATCH);
+        $directoryIterator = new DirectoryIterator($migrationPath);
+        $regex = new RegexIterator($directoryIterator, $regexPattern, RecursiveRegexIterator::GET_MATCH);
 
         $migrations = [];
 
@@ -199,7 +206,7 @@ class Manager
      *
      * @param string $modus
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function apply(AbstractMigration $migration, $modus = AbstractMigration::MODUS_INSTALL)
     {
@@ -211,10 +218,10 @@ class Manager
             foreach ($migration->getSql() as $sql) {
                 $this->connection->exec($sql);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->markMigrationAsFailed($migration, $e);
 
-            throw new \Exception(sprintf('Could not apply migration (%s). Error: %s ', \get_class($migration), $e->getMessage()));
+            throw new Exception(sprintf('Could not apply migration (%s). Error: %s ', \get_class($migration), $e->getMessage()));
         }
 
         $this->markMigrationAsFinished($migration);
@@ -240,7 +247,7 @@ class Manager
             $this->log(sprintf('Apply MigrationNumber: %s - %s', $migration->getVersion(), $migration->getLabel()));
             try {
                 $this->apply($migration, $modus);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->log($e->getMessage());
                 throw $e;
             }
@@ -258,8 +265,8 @@ class Manager
         try {
             /** @var AbstractMigration $migrationClass */
             $migrationClass = new $migrationClassName($this->getConnection());
-        } catch (\Exception $e) {
-            throw new \RuntimeException(sprintf('Could not instantiate Object of class "%s"', $migrationClassName));
+        } catch (Exception $e) {
+            throw new RuntimeException(sprintf('Could not instantiate Object of class "%s"', $migrationClassName));
         }
 
         $this->validateMigration($migrationClass, $result);
@@ -288,7 +295,7 @@ class Manager
         ]);
     }
 
-    protected function markMigrationAsFailed(AbstractMigration $migration, \Exception $e): void
+    protected function markMigrationAsFailed(AbstractMigration $migration, Exception $e): void
     {
         $updateVersionSql = 'UPDATE s_schema_version SET error_msg = :msg WHERE version = :version';
         $stmt = $this->connection->prepare($updateVersionSql);
@@ -303,7 +310,7 @@ class Manager
         $version = (int) $result['0'];
 
         if ($migrationClass->getVersion() !== $version) {
-            throw new \Exception(sprintf('Version mismatch. Version in filename: %s, Version in Class: %s', $result['1'], $migrationClass->getVersion()));
+            throw new Exception(sprintf('Version mismatch. Version in filename: %s, Version in Class: %s', $result['1'], $migrationClass->getVersion()));
         }
     }
 }

@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
+use DateInterval;
+use DateTime;
 use Shopware\Bundle\SearchBundle\Condition\CreateDateCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
@@ -49,9 +51,9 @@ class CreateDateConditionHandler implements ConditionHandlerInterface
         ShopContextInterface $context
     ) {
         /** @var CreateDateCondition $condition */
-        $date = new \DateTime();
+        $date = new DateTime();
         $intervalSpec = 'P' . $condition->getDays() . 'D';
-        $interval = new \DateInterval($intervalSpec);
+        $interval = new DateInterval($intervalSpec);
         $date->sub($interval);
 
         $suffix = md5(json_encode($condition));

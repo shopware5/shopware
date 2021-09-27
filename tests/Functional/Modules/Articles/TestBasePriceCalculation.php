@@ -24,12 +24,14 @@
 
 namespace Shopware\Tests\Modules\Articles;
 
+use Enlight_Components_Test_Plugin_TestCase;
+
 /**
  * tests the base price calculation
  *
  * @ticket SW-7204
  */
-class TestBasePriceCalculation extends \Enlight_Components_Test_Plugin_TestCase
+class TestBasePriceCalculation extends Enlight_Components_Test_Plugin_TestCase
 {
     /**
      * Set up test case, fix demo data where needed

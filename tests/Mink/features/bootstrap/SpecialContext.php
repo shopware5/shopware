@@ -29,6 +29,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\DriverException;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\MultipleElement;
 use Shopware\Tests\Mink\Page\Homepage;
@@ -194,14 +195,14 @@ class SpecialContext extends SubContext
      * @param callable $lambda
      * @param int      $wait
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
     protected function spin($lambda, $wait = 60)
     {
         if (!$this->spinWithNoException($lambda, $wait)) {
-            throw new \Exception("Spin function timed out after {$wait} seconds");
+            throw new Exception("Spin function timed out after {$wait} seconds");
         }
     }
 
@@ -224,7 +225,7 @@ class SpecialContext extends SubContext
                 if ($lambda($this)) {
                     return true;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // do nothing
             }
 

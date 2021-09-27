@@ -26,6 +26,7 @@ namespace Shopware\Bundle\MediaBundle\Commands;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\ORMException;
+use Exception;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Media\Media;
@@ -82,7 +83,7 @@ class MediaCleanupCommand extends ShopwareCommand
     /**
      * Handles cleaning process and returns the number of deleted media objects
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */
@@ -123,7 +124,7 @@ class MediaCleanupCommand extends ShopwareCommand
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */

@@ -24,6 +24,8 @@
 
 namespace Shopware\Commands;
 
+use DirectoryIterator;
+use RuntimeException;
 use Shopware\Components\Snippet\QueryHandler;
 use Shopware\Models\Plugin\Plugin;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
@@ -134,7 +136,7 @@ class SnippetsToSqlCommand extends ShopwareCommand implements CompletionAwareInt
         $pluginBasePath = $pluginDirectories['Default'];
 
         foreach (['Backend', 'Core', 'Frontend'] as $namespace) {
-            foreach (new \DirectoryIterator($pluginBasePath . $namespace) as $pluginDir) {
+            foreach (new DirectoryIterator($pluginBasePath . $namespace) as $pluginDir) {
                 if ($pluginDir->isDot() || !$pluginDir->isDir()) {
                     continue;
                 }
@@ -157,7 +159,7 @@ class SnippetsToSqlCommand extends ShopwareCommand implements CompletionAwareInt
         $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
 
         if (!\is_array($pluginDirectories)) {
-            throw new \RuntimeException('Parameter shopware.plugin_directories has to be an array');
+            throw new RuntimeException('Parameter shopware.plugin_directories has to be an array');
         }
 
         foreach ($plugins as $plugin) {

@@ -24,9 +24,11 @@
 
 namespace Shopware\Tests\Regressions;
 
+use Enlight_Components_Test_Controller_TestCase;
+use Exception;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class Ticket4609Test extends \Enlight_Components_Test_Controller_TestCase
+class Ticket4609Test extends Enlight_Components_Test_Controller_TestCase
 {
     use DatabaseTransactionBehaviour;
 
@@ -43,7 +45,7 @@ class Ticket4609Test extends \Enlight_Components_Test_Controller_TestCase
 
         try {
             $this->dispatch('/backend/newsletter/log/mailling/1/mailaddress/70');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         static::assertNull($e);

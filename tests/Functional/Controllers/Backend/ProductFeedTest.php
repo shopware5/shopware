@@ -24,11 +24,12 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\ProductFeed\ProductFeed;
 use Shopware\Models\ProductFeed\Repository;
 
-class ProductFeedTest extends \Enlight_Components_Test_Controller_TestCase
+class ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var Repository

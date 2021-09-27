@@ -26,6 +26,8 @@ namespace Shopware\Models\Mail;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Order\Status;
 
@@ -503,7 +505,7 @@ class Mail extends ModelEntity
     public function arrayGetPath($array, $glue = '.')
     {
         $result = [];
-        $iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($array));
+        $iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($array));
         foreach ($iterator as $leafValue) {
             $parts = [];
             foreach (range(0, $iterator->getDepth()) as $depth) {

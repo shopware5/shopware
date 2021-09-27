@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Mink\Page;
 
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\SitemapGroup;
 use Shopware\Tests\Mink\Helper;
@@ -47,7 +48,7 @@ class Sitemap extends Page
      * @param SitemapGroup|string $group
      * @param string              $link
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkGroup($group, $link, array $sites)
     {
@@ -88,7 +89,7 @@ class Sitemap extends Page
      * @param string $title
      * @param string $link
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function checkGroupTitleLink($title, $link, array $data)
     {
@@ -121,7 +122,7 @@ class Sitemap extends Page
      * @param string $title
      * @param string $link
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function checkGroupSite($title, $link, array $data)
     {

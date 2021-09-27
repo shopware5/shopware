@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 
 class ProductManualPositionLoader implements ProductManualPositionLoaderInterface
 {
@@ -46,7 +47,7 @@ class ProductManualPositionLoader implements ProductManualPositionLoaderInterfac
             ->where('product_id IN (:ids)')
             ->setParameter('ids', $productIds, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC);
 
         foreach ($data as &$fetchGroup) {
             foreach ($fetchGroup as &$item) {

@@ -25,9 +25,14 @@
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Controller_Response_Response;
+use InvalidArgumentException;
 use Shopware\Models\Customer\Customer;
+use Shopware_Components_Config;
+use Zend_Cache_Core;
 
-class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
+class RegisterTest extends Enlight_Components_Test_Controller_TestCase
 {
     public const TEST_MAIL = 'unittest@mail.com';
     public const SAVE_URL = '/register/saveRegister/sTarget/account/sTargetAction/index';
@@ -322,7 +327,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         // Test broken data
         $this->reset();
         $this->doubleOptinSet(true);
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->dispatch(self::CONFIRM_URL_PREFIX . $hash . 'X');
     }
 
@@ -406,7 +411,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @return string|null
      */
-    private function getHeaderLocation(\Enlight_Controller_Response_Response $response)
+    private function getHeaderLocation(Enlight_Controller_Response_Response $response)
     {
         $headers = $response->getHeaders();
         foreach ($headers as $header) {
@@ -424,7 +429,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
     private function doubleOptinSet($switch)
     {
         Shopware()->Container()->get(\Shopware\Components\ConfigWriter::class)->save('optinregister', $switch, null, Shopware()->Shop()->getId());
-        Shopware()->Container()->get(\Shopware_Components_Config::class)->setShop(Shopware()->Shop());
-        Shopware()->Container()->get(\Zend_Cache_Core::class)->clean();
+        Shopware()->Container()->get(Shopware_Components_Config::class)->setShop(Shopware()->Shop());
+        Shopware()->Container()->get(Zend_Cache_Core::class)->clean();
     }
 }

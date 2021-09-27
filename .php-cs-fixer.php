@@ -59,6 +59,7 @@ return (new Config())
         'general_phpdoc_annotation_remove' => [
              'annotations' => ['copyright', 'category'],
         ],
+        'global_namespace_import' => true,
         'header_comment' => ['header' => $header, 'separate' => 'bottom', 'comment_type' => 'PHPDoc'],
         'no_useless_else' => true,
         'no_useless_return' => true,

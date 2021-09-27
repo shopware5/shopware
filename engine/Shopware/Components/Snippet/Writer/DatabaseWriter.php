@@ -25,6 +25,7 @@
 namespace Shopware\Components\Snippet\Writer;
 
 use Doctrine\DBAL\Connection;
+use Exception;
 
 class DatabaseWriter
 {
@@ -59,16 +60,16 @@ class DatabaseWriter
      * @param int    $localeId
      * @param int    $shopId
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function write($data, $namespace, $localeId, $shopId)
     {
         if (empty($data)) {
-            throw new \Exception('You called write() but provided no data to be written');
+            throw new Exception('You called write() but provided no data to be written');
         }
 
         if (!isset($this->db)) {
-            throw new \Exception('Required database connection is missing');
+            throw new Exception('Required database connection is missing');
         }
 
         $this->db->beginTransaction();
@@ -109,9 +110,9 @@ class DatabaseWriter
             }
 
             $this->db->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->db->rollBack();
-            throw new \Exception(sprintf('An error occurred when importing namespace "%s" for locale "%s"', $namespace, $localeId), 0, $e);
+            throw new Exception(sprintf('An error occurred when importing namespace "%s" for locale "%s"', $namespace, $localeId), 0, $e);
         }
     }
 

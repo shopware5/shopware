@@ -25,6 +25,9 @@
 namespace Shopware\Components\Theme;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Event_EventManager;
+use Enlight_Event_Exception;
+use Exception;
 use PDO;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
@@ -57,7 +60,7 @@ class Inheritance
     private $util;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
@@ -70,7 +73,7 @@ class Inheritance
         ModelManager $entityManager,
         Util $util,
         PathResolver $pathResolver,
-        \Enlight_Event_EventManager $eventManager,
+        Enlight_Event_EventManager $eventManager,
         MediaServiceInterface $mediaService
     ) {
         $this->pathResolver = $pathResolver;
@@ -81,7 +84,7 @@ class Inheritance
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -145,7 +148,7 @@ class Inheritance
      * @param \Shopware\Models\Shop\Shop     $shop
      * @param bool                           $lessCompatible
      *
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return array
      */
@@ -186,7 +189,7 @@ class Inheritance
      *
      * @param \Shopware\Models\Shop\Template $template
      *
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return array
      */
@@ -215,7 +218,7 @@ class Inheritance
      *
      * @param \Shopware\Models\Shop\Template $template
      *
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return array
      */
@@ -240,7 +243,7 @@ class Inheritance
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string[]
      */
@@ -259,7 +262,7 @@ class Inheritance
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string[]
      */
@@ -279,7 +282,7 @@ class Inheritance
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Theme
      */

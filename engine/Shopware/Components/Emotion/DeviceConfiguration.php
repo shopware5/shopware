@@ -26,6 +26,8 @@ namespace Shopware\Components\Emotion;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use PDO;
+use PDOStatement;
 use Shopware\Models\Emotion\Emotion;
 
 class DeviceConfiguration implements DeviceConfigurationInterface
@@ -116,10 +118,10 @@ class DeviceConfiguration implements DeviceConfigurationInterface
              AND category.category_id = :categoryId'
         );
 
-        /** @var \PDOStatement $statement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
-        $emotions = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $emotions = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $emotions = array_map(function ($emotion) {
             $emotion['devicesArray'] = explode(',', $emotion['devices']);
@@ -148,10 +150,10 @@ class DeviceConfiguration implements DeviceConfigurationInterface
             ->where('emotion.id = :emotionId')
             ->setParameter(':emotionId', $emotionId);
 
-        /** @var \PDOStatement $statement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
-        return $statement->fetch(\PDO::FETCH_ASSOC);
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -188,10 +190,10 @@ class DeviceConfiguration implements DeviceConfigurationInterface
 
         $query->setParameter(':id', $emotionId);
 
-        /** @var \PDOStatement $statement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -205,10 +207,10 @@ class DeviceConfiguration implements DeviceConfigurationInterface
             ->andWhere('emotion.id = :id')
             ->setParameter('id', $id);
 
-        /** @var \PDOStatement $statement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
-        return $statement->fetch(\PDO::FETCH_ASSOC);
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -222,10 +224,10 @@ class DeviceConfiguration implements DeviceConfigurationInterface
             ->andWhere('emotion.parent_id = :id')
             ->setParameter(':id', $parentId);
 
-        /** @var \PDOStatement $statement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
-        $emotions = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $emotions = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $this->sortEmotionsByPositionAndId($emotions);
     }

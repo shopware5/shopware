@@ -25,6 +25,8 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\DBAL\Connection;
+use Exception;
+use PDO;
 use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
@@ -79,7 +81,7 @@ class EmotionPreset extends Resource
      *
      * @throws NotFoundException
      * @throws ParameterMissingException
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete($presetId)
     {
@@ -314,7 +316,7 @@ class EmotionPreset extends Resource
         $query->where('plugin.name IN (:names)');
         $query->setParameter(':names', $technicalNames, Connection::PARAM_STR_ARRAY);
 
-        return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
+        return $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
     }
 
     /**

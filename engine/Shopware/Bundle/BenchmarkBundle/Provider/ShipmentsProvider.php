@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
 use Shopware\Bundle\BenchmarkBundle\Service\MatcherService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -146,7 +147,7 @@ class ShipmentsProvider implements BenchmarkProviderInterface
             ->groupBy('dispatch.id')
             ->setParameter(':dispatchIds', $this->getShipmentIds(), Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
 
         return array_map(function ($shippingCost) {
             $shippingCost['minPrice'] = (float) $shippingCost['minPrice'];
@@ -171,7 +172,7 @@ class ShipmentsProvider implements BenchmarkProviderInterface
             ->groupBy('orders.dispatchID')
             ->setParameter(':dispatchIds', $this->getShipmentIds(), Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
     /**
@@ -192,7 +193,7 @@ class ShipmentsProvider implements BenchmarkProviderInterface
             ->from('s_premium_dispatch', 'dispatch')
             ->where('dispatch.type != 3')
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
 
         $dispatchIds = array_combine($dispatchIds, $dispatchIds);
 
@@ -201,7 +202,7 @@ class ShipmentsProvider implements BenchmarkProviderInterface
         $forbiddenCategoriesByDispatchId = $forbiddenCategoriesBuilder->select('dispatch.dispatchID, dispatch.categoryID')
             ->from('s_premium_dispatch_categories', 'dispatch')
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_COLUMN);
 
         // Figure out all dispatches, that forbid ALL categories being available to a shop
         foreach ($forbiddenCategoriesByDispatchId as $dispatchId => $forbiddenCategories) {
@@ -238,6 +239,6 @@ class ShipmentsProvider implements BenchmarkProviderInterface
             ->setParameter(':categoryId', $categoryId)
             ->setParameter(':categoryIdPath', '%|' . $categoryId . '|%')
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 }

@@ -416,6 +416,6 @@ class DynamicCacheTimeServiceTest extends TestCase
      */
     private function getTimestampFiveMinutesFromNow()
     {
-        return (new DateTime())->add(new \DateInterval('PT5M'));
+        return (new DateTime())->add(new DateInterval('PT5M'));
     }
 }

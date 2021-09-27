@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Service;
 
+use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkCollectorInterface;
 use Shopware\Bundle\BenchmarkBundle\Exception\TransmissionNotNecessaryException;
@@ -94,7 +96,7 @@ class StatisticsService
         // If all entity counts are below the batch size (or the batch size is null), we are likely to be in the last iteration
         if ($batchSize === null
             || ($ordersCount < $batchSize && $customersCount < $batchSize && $productsCount < $batchSize && $analyticsCount < $batchSize)) {
-            $config->setLastSent(new \DateTime('now', new \DateTimeZone('UTC')));
+            $config->setLastSent(new DateTime('now', new DateTimeZone('UTC')));
             $this->benchmarkRepository->save($config);
         }
 
@@ -151,7 +153,7 @@ class StatisticsService
     {
         // If the column is still NULL, set it to "NOW()" for the first time
         if ($config->getLastUpdatedOrdersDate() === null) {
-            $config->setLastUpdatedOrdersDate(new \DateTime('now'));
+            $config->setLastUpdatedOrdersDate(new DateTime('now'));
         }
 
         if (!\array_key_exists('moved', $benchmarkData['updated_orders']) || !$benchmarkData['updated_orders']['moved'] || !$benchmarkData['orders']['list']) {
@@ -164,11 +166,11 @@ class StatisticsService
         // is necessary
         if ($ordersCount >= $config->getBatchSize()) {
             $mostRecentChangedOrder = end($benchmarkData['orders']['list']);
-            $config->setLastUpdatedOrdersDate(\DateTime::createFromFormat('Y-m-d H:i:s', $mostRecentChangedOrder['changed']));
+            $config->setLastUpdatedOrdersDate(DateTime::createFromFormat('Y-m-d H:i:s', $mostRecentChangedOrder['changed']));
 
             return;
         }
 
-        $config->setLastUpdatedOrdersDate(new \DateTime('now'));
+        $config->setLastUpdatedOrdersDate(new DateTime('now'));
     }
 }

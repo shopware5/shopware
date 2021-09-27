@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\License\Struct;
 
+use RuntimeException;
+
 class ShopwareEdition
 {
     public const CE = 'CE'; // Community Edition
@@ -47,7 +49,7 @@ class ShopwareEdition
      * @param string $edition
      * @param string $licence
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function __construct($edition, $licence = null)
     {

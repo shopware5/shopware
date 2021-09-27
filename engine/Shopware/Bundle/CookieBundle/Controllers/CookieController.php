@@ -26,13 +26,15 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CookieBundle\Controllers;
 
+use Enlight_Controller_Action;
 use Shopware\Bundle\CookieBundle\Services\CookieRemoveHandlerInterface;
 use Shopware\Components\Privacy\CookieRemoveSubscriber;
+use Shopware_Components_Config;
 
-class CookieController extends \Enlight_Controller_Action
+class CookieController extends Enlight_Controller_Action
 {
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -41,7 +43,7 @@ class CookieController extends \Enlight_Controller_Action
      */
     private $cookieRemoveHandler;
 
-    public function __construct(\Shopware_Components_Config $config, CookieRemoveHandlerInterface $cookieHandler)
+    public function __construct(Shopware_Components_Config $config, CookieRemoveHandlerInterface $cookieHandler)
     {
         $this->config = $config;
         $this->cookieRemoveHandler = $cookieHandler;

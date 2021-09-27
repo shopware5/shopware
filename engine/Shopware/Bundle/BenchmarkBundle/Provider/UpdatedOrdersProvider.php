@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
+use PDO;
+
 class UpdatedOrdersProvider extends OrdersProvider
 {
     private const NAME = 'updated_orders';
@@ -57,6 +59,6 @@ class UpdatedOrdersProvider extends OrdersProvider
             ->setParameter(':lastOrdersUpdate', $lastUpdatedOrdersDate)
             ->setParameter(':shopId', $this->shopId)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 }

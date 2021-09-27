@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use DateTime;
 use Shopware\Components\Api\Resource\Category;
 use Shopware\Components\Api\Resource\Resource;
 
@@ -44,12 +45,12 @@ class CategoryTest extends TestCase
 
     public function testCreateShouldBeSuccessful()
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->modify('-10 days');
-        $added = $date->format(\DateTime::ISO8601);
+        $added = $date->format(DateTime::ISO8601);
 
         $date->modify('-3 day');
-        $changed = $date->format(\DateTime::ISO8601);
+        $changed = $date->format(DateTime::ISO8601);
 
         $testData = [
             'name' => 'fooobar',

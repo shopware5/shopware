@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PaymentHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
@@ -89,7 +90,7 @@ class PaymentGateway implements Gateway\PaymentGatewayInterface
         /** @var \Doctrine\DBAL\Driver\Statement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $payments = [];
         foreach ($data as $row) {

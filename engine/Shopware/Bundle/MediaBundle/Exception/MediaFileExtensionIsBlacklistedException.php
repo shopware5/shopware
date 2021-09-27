@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\MediaBundle\Exception;
 
-class MediaFileExtensionIsBlacklistedException extends \Exception
+use Exception;
+
+class MediaFileExtensionIsBlacklistedException extends Exception
 {
     /**
      * @var string

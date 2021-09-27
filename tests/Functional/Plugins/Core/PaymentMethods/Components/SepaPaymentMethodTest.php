@@ -24,13 +24,14 @@
 
 namespace Shopware\Tests\Plugins\Core\PaymentMethods;
 
+use Enlight_Components_Test_Plugin_TestCase;
 use Shopware\Models\Customer\PaymentData;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Payment\Payment;
 use Shopware\Models\Payment\PaymentInstance;
 use ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod;
 
-class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
+class SepaPaymentMethodTest extends Enlight_Components_Test_Plugin_TestCase
 {
     protected static SepaPaymentMethod $sepaPaymentMethod;
 

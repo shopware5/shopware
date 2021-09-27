@@ -24,6 +24,9 @@
 
 namespace Shopware\Models\Benchmark;
 
+use DateTime;
+use DateTimeInterface;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -56,7 +59,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * Defines the date and time when the statistics were sent the last time
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="last_sent", type="datetime", nullable=false)
      */
@@ -65,7 +68,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * Defines the date and time when the last statistics where retrieved from the server
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="last_received", type="datetime", nullable=false)
      */
@@ -110,7 +113,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * The most recent date to figure out which orders have been updated since they have last been transmitted
      *
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="last_updated_orders_date", type="datetime", nullable=true)
      */
@@ -171,7 +174,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * Flag which defines if the current shop is locked for transmitting data.
      *
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="locked", type="datetime", nullable=true)
      */
@@ -185,8 +188,8 @@ class BenchmarkConfig extends ModelEntity
         $this->id = $id;
 
         // Default values
-        $this->lastReceived = new \DateTime('1970-01-01 00:00:00', new \DateTimeZone('UTC'));
-        $this->lastSent = new \DateTime('1970-01-01 00:00:00', new \DateTimeZone('UTC'));
+        $this->lastReceived = new DateTime('1970-01-01 00:00:00', new DateTimeZone('UTC'));
+        $this->lastSent = new DateTime('1970-01-01 00:00:00', new DateTimeZone('UTC'));
         $this->lastOrderId = 0;
         $this->lastCustomerId = 0;
         $this->lastProductId = 0;
@@ -212,27 +215,27 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getLastSent()
     {
         return $this->lastSent;
     }
 
-    public function setLastSent(\DateTimeInterface $lastSent)
+    public function setLastSent(DateTimeInterface $lastSent)
     {
         $this->lastSent = $lastSent;
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getLastReceived()
     {
         return $this->lastReceived;
     }
 
-    public function setLastReceived(\DateTimeInterface $lastReceived)
+    public function setLastReceived(DateTimeInterface $lastReceived)
     {
         $this->lastReceived = $lastReceived;
     }
@@ -309,7 +312,7 @@ class BenchmarkConfig extends ModelEntity
         return $this->lastUpdatedOrdersDate;
     }
 
-    public function setLastUpdatedOrdersDate(\DateTimeInterface $lastUpdatedOrdersDate = null)
+    public function setLastUpdatedOrdersDate(DateTimeInterface $lastUpdatedOrdersDate = null)
     {
         $this->lastUpdatedOrdersDate = $lastUpdatedOrdersDate;
     }
@@ -411,14 +414,14 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getLocked()
     {
         return $this->locked;
     }
 
-    public function setLocked(\DateTimeInterface $locked = null)
+    public function setLocked(DateTimeInterface $locked = null)
     {
         $this->locked = $locked;
     }

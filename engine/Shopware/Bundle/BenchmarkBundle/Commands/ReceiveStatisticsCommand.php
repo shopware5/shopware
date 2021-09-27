@@ -24,6 +24,9 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Commands;
 
+use DateInterval;
+use DateTime;
+use DateTimeZone;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Models\Benchmark\BenchmarkConfig;
 use Symfony\Component\Console\Input\InputArgument;
@@ -90,6 +93,6 @@ class ReceiveStatisticsCommand extends ShopwareCommand
     private function isShopValid(BenchmarkConfig $shopConfig)
     {
         return $shopConfig->isActive()
-            && $shopConfig->getLastReceived()->add(new \DateInterval('P1D')) < new \DateTime('now', new \DateTimeZone('UTC'));
+            && $shopConfig->getLastReceived()->add(new DateInterval('P1D')) < new DateTime('now', new DateTimeZone('UTC'));
     }
 }

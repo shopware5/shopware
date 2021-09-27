@@ -24,6 +24,9 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
+use Enlight_Event_EventManager;
+use RuntimeException;
+
 /**
  * Grammar product resource. Will generate the grammar understood by the frontend lexer with all the supported columns
  */
@@ -37,13 +40,13 @@ class Grammar
     protected $dqlHelper;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     protected $eventManager;
 
     /**
-     * @param DqlHelper                   $dqlHelper
-     * @param \Enlight_Event_EventManager $eventManager
+     * @param DqlHelper                  $dqlHelper
+     * @param Enlight_Event_EventManager $eventManager
      */
     public function __construct($dqlHelper, $eventManager)
     {
@@ -60,7 +63,7 @@ class Grammar
     }
 
     /**
-     * @return \Enlight_Event_EventManager
+     * @return Enlight_Event_EventManager
      */
     public function getEventManager()
     {
@@ -72,7 +75,7 @@ class Grammar
      * rules regarding the supported operators.
      * Most operator rules can be generated from the table definition.
      *
-     * @throws \RuntimeException When the column was not defined
+     * @throws RuntimeException When the column was not defined
      *
      * @return array
      */
@@ -130,7 +133,7 @@ class Grammar
                     )) {
                         $attributes[$formattedColumn] = $event->getReturn();
                     } else {
-                        throw new \RuntimeException(sprintf('Column with type %s was not configured, yet', $type));
+                        throw new RuntimeException(sprintf('Column with type %s was not configured, yet', $type));
                     }
             }
         }

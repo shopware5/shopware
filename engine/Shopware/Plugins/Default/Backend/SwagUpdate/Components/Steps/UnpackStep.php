@@ -24,6 +24,8 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components\Steps;
 
+use Exception;
+use RuntimeException;
 use ShopwarePlugins\SwagUpdate\Components\Archive\Entry\Zip as ZipEntry;
 use ShopwarePlugins\SwagUpdate\Components\Archive\Zip;
 use Symfony\Component\Filesystem\Filesystem;
@@ -53,8 +55,8 @@ class UnpackStep
     /**
      * @param int $offset
      *
-     * @throws \RuntimeException
-     * @throws \Exception
+     * @throws RuntimeException
+     * @throws Exception
      *
      * @return FinishResult|ValidResult
      */
@@ -67,9 +69,9 @@ class UnpackStep
             $source = new Zip($this->source);
             $count = $source->count();
             $source->seek($offset);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             @unlink($this->source);
-            throw new \Exception(sprintf('Could not open update package:<br>%s', $e->getMessage()), 0, $e);
+            throw new Exception(sprintf('Could not open update package:<br>%s', $e->getMessage()), 0, $e);
         }
 
         /** @var ZipEntry $entry */

@@ -24,6 +24,10 @@
 
 namespace Shopware\Components\Model;
 
+use InvalidArgumentException;
+use Zend_Cache;
+use Zend_Cache_Core;
+
 /**
  * Interface for the various standard models.
  *
@@ -36,7 +40,7 @@ namespace Shopware\Components\Model;
 class Cache extends \Doctrine\Common\Cache\CacheProvider
 {
     /**
-     * @var \Zend_Cache_Core
+     * @var Zend_Cache_Core
      */
     private $cache;
 
@@ -50,10 +54,10 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      */
     private $tags;
 
-    public function __construct(\Zend_Cache_Core $cache, string $prefix, array $tags)
+    public function __construct(Zend_Cache_Core $cache, string $prefix, array $tags)
     {
         if (\count($tags) === 0) {
-            throw new \InvalidArgumentException('This Adapter requires at least one tag to work correctly');
+            throw new InvalidArgumentException('This Adapter requires at least one tag to work correctly');
         }
 
         $this->tags = $tags;
@@ -120,7 +124,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      */
     protected function doFlush()
     {
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, $this->tags);
+        $this->cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, $this->tags);
 
         return true;
     }

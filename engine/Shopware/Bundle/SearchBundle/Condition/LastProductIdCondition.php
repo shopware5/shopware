@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class LastProductIdCondition implements ConditionInterface, \JsonSerializable
+class LastProductIdCondition implements ConditionInterface, JsonSerializable
 {
     private const NAME = 'last_product_id';
 

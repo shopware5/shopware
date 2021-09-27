@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\License\Service\Exceptions;
 
-class LicenseProductKeyException extends \RuntimeException
+use RuntimeException;
+
+class LicenseProductKeyException extends RuntimeException
 {
 }

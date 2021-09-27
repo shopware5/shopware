@@ -25,7 +25,9 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware_Components_Config;
 
 /**
  * NOTICE:  When doing changes on this file, please remember to do those changes in the CheapestPriceGateway as well!
@@ -33,7 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class CheapestPriceESGateway extends CheapestPriceGateway
 {
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -46,7 +48,7 @@ class CheapestPriceESGateway extends CheapestPriceGateway
         Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\PriceHydrator $priceHydrator,
-        \Shopware_Components_Config $config
+        Shopware_Components_Config $config
     ) {
         parent::__construct($connection, $fieldHelper, $priceHydrator, $config);
         $this->connection = $connection;
@@ -148,6 +150,6 @@ class CheapestPriceESGateway extends CheapestPriceGateway
 
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
 }

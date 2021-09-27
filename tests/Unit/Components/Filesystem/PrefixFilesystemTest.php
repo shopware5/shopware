@@ -24,10 +24,13 @@
 
 namespace Shopware\Tests\Unit\Components\Filesystem;
 
+use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\PluginInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use RuntimeException;
 use Shopware\Components\Filesystem\PrefixFilesystem;
 
 class PrefixFilesystemTest extends TestCase
@@ -43,7 +46,7 @@ class PrefixFilesystemTest extends TestCase
      */
     public function invokeMethod($object, $methodName, array $parameters = [])
     {
-        $reflection = new \ReflectionClass(\get_class($object));
+        $reflection = new ReflectionClass(\get_class($object));
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
 
@@ -52,7 +55,7 @@ class PrefixFilesystemTest extends TestCase
 
     public function testEmptyPrefix()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The prefix must not be empty.');
 
         $filesystem = $this->createMock(FilesystemInterface::class);
@@ -470,7 +473,7 @@ class PrefixFilesystemTest extends TestCase
 
     public function testAddPlugin()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Filesystem plugins are not allowed in prefixed filesystems.');
 
         $filesystem = $this->createMock(FilesystemInterface::class);
@@ -482,7 +485,7 @@ class PrefixFilesystemTest extends TestCase
 
     public function testPathTraversal()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Path traversal is not allowed.');
 
         $filesystem = $this->createMock(FilesystemInterface::class);

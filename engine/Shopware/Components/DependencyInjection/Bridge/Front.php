@@ -24,6 +24,11 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Enlight_Class;
+use Enlight_Controller_Front;
+use Enlight_Event_EventManager;
+use Enlight_Plugin_PluginManager;
+use Exception;
 use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -35,18 +40,18 @@ class Front
      * front dispatcher. After the controller path is set to the dispatcher,
      * the plugin namespace of the front resource is set.
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return \Enlight_Controller_Front
+     * @return Enlight_Controller_Front
      */
     public function factory(
         Container $container,
-        \Enlight_Event_EventManager $eventManager,
+        Enlight_Event_EventManager $eventManager,
         array $options,
         RequestStack $requestStack
     ) {
-        /** @var \Enlight_Controller_Front $front */
-        $front = \Enlight_Class::Instance('Enlight_Controller_Front', [$eventManager]);
+        /** @var Enlight_Controller_Front $front */
+        $front = Enlight_Class::Instance('Enlight_Controller_Front', [$eventManager]);
 
         $front->setDispatcher($container->get('dispatcher'));
 
@@ -56,7 +61,7 @@ class Front
 
         $front->setRequestStack($requestStack);
 
-        /** @var \Enlight_Plugin_PluginManager $plugins */
+        /** @var Enlight_Plugin_PluginManager $plugins */
         $plugins = $container->get('plugins');
 
         $plugins->registerNamespace($front->Plugins());
@@ -69,7 +74,7 @@ class Front
             $container->load('cache');
             $container->load('db');
             $container->load('plugins');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if ($front->throwExceptions()) {
                 throw $e;
             }

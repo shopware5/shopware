@@ -24,9 +24,11 @@
 
 namespace Shopware\Components\Api\Exception;
 
+use Enlight_Exception;
+
 /**
  * API Exception
  */
-class CustomValidationException extends \Enlight_Exception
+class CustomValidationException extends Enlight_Exception
 {
 }

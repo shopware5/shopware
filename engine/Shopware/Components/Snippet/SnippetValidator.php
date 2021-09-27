@@ -25,6 +25,11 @@
 namespace Shopware\Components\Snippet;
 
 use Doctrine\DBAL\Connection;
+use PDO;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RuntimeException;
+use SplFileInfo;
 
 class SnippetValidator
 {
@@ -46,19 +51,19 @@ class SnippetValidator
     public function validate($snippetsDir)
     {
         if (!file_exists($snippetsDir)) {
-            throw new \RuntimeException(sprintf('Could not find %s folder for snippet validation', $snippetsDir));
+            throw new RuntimeException(sprintf('Could not find %s folder for snippet validation', $snippetsDir));
         }
 
-        $dirIterator = new \RecursiveDirectoryIterator($snippetsDir, \RecursiveDirectoryIterator::SKIP_DOTS);
-        $iterator = new \RecursiveIteratorIterator(
+        $dirIterator = new RecursiveDirectoryIterator($snippetsDir, RecursiveDirectoryIterator::SKIP_DOTS);
+        $iterator = new RecursiveIteratorIterator(
             $dirIterator,
-            \RecursiveIteratorIterator::LEAVES_ONLY
+            RecursiveIteratorIterator::LEAVES_ONLY
         );
 
         $invalidSnippets = [];
         $validLocales = $this->getValidLocales();
 
-        /** @var \SplFileInfo $entry */
+        /** @var SplFileInfo $entry */
         foreach ($iterator as $entry) {
             if (!$entry->isFile() || substr($entry->getFilename(), -4) !== '.ini') {
                 continue;
@@ -102,7 +107,7 @@ class SnippetValidator
         $locales = $this->db->executeQuery(
             'SELECT locale
             FROM `s_core_locales`'
-        )->fetchAll(\PDO::FETCH_COLUMN);
+        )->fetchAll(PDO::FETCH_COLUMN);
 
         return $locales;
     }

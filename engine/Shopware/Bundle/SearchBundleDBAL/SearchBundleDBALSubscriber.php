@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
+use RuntimeException;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 
 class SearchBundleDBALSubscriber implements SubscriberInterface
@@ -116,7 +117,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     private function validateHandlers(array $handlers)
     {
         if (empty($handlers)) {
-            throw new \RuntimeException(sprintf('No handlers provided in %s', __CLASS__));
+            throw new RuntimeException(sprintf('No handlers provided in %s', __CLASS__));
         }
 
         foreach ($handlers as $handler) {
@@ -129,7 +130,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
                 continue;
             }
 
-            throw new \RuntimeException(sprintf('Unknown handler class %s detected', \is_object($handler) ? \get_class($handler) : \gettype($handler)));
+            throw new RuntimeException(sprintf('Unknown handler class %s detected', \is_object($handler) ? \get_class($handler) : \gettype($handler)));
         }
     }
 

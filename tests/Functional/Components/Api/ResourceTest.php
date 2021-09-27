@@ -24,9 +24,11 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Components\Api\Resource\Resource;
+use Shopware_Components_Acl;
 
-class ResourceTest extends \Enlight_Components_Test_TestCase
+class ResourceTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var resource
@@ -75,7 +77,7 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
     public function testCheckPrivilegeShouldThrowException()
     {
         $this->expectException('Shopware\Components\Api\Exception\PrivilegeException');
-        $aclMock = $this->createMock(\Shopware_Components_Acl::class);
+        $aclMock = $this->createMock(Shopware_Components_Acl::class);
 
         $aclMock->expects(static::any())
                 ->method('has')
@@ -93,7 +95,7 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
 
     public function testFooFlushShouldWork()
     {
-        $aclMock = $this->createMock(\Shopware_Components_Acl::class);
+        $aclMock = $this->createMock(Shopware_Components_Acl::class);
 
         $aclMock->expects(static::any())
                 ->method('isAllowed')

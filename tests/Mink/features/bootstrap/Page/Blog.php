@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Mink\Page;
 
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\BlogComment;
 use Shopware\Tests\Mink\Helper;
@@ -64,7 +65,7 @@ class Blog extends Page implements HelperSelectorInterface
     /**
      * Verify if we're on an expected page. Throw an exception if not.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function verifyPage()
     {
@@ -93,7 +94,7 @@ class Blog extends Page implements HelperSelectorInterface
      *
      * @param string $average
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkComments(BlogComment $blogComments, $average, array $comments)
     {
@@ -136,7 +137,7 @@ class Blog extends Page implements HelperSelectorInterface
      *
      * @param string $average
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function checkRating(BlogComment $blogComments, $average)
     {

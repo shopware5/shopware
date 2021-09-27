@@ -26,9 +26,10 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Bundle\AccountBundle\Service\CustomerUnlockServiceInterface;
 
-class CustomerUnlockServiceTest extends \Enlight_Components_Test_TestCase
+class CustomerUnlockServiceTest extends Enlight_Components_Test_TestCase
 {
     public function setUp(): void
     {

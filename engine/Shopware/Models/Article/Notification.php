@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Article;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Models\Attribute\ArticleNotification as ProductNotificationAttribute;
@@ -90,7 +91,7 @@ class Notification extends LazyFetchModelEntity
     private $articleNumber;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
@@ -135,7 +136,7 @@ class Notification extends LazyFetchModelEntity
     /**
      * @return Notification
      */
-    public function setDate(\DateTimeInterface $date)
+    public function setDate(DateTimeInterface $date)
     {
         $this->date = $date;
 
@@ -143,7 +144,7 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getDate()
     {

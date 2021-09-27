@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\EmotionBundle\Struct;
 
+use DateTimeInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
@@ -71,12 +72,12 @@ class Emotion extends Extendable
     protected $rows;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     protected $validFrom;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     protected $validTo;
 
@@ -111,12 +112,12 @@ class Emotion extends Extendable
     protected $seoDescription;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     protected $createDate;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     protected $modifiedDate;
 
@@ -255,7 +256,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getValidFrom()
     {
@@ -263,7 +264,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getValidTo()
     {
@@ -319,7 +320,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getCreateDate()
     {
@@ -327,7 +328,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getModifiedDate()
     {
@@ -447,7 +448,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param \DateTimeInterface $validFrom
+     * @param DateTimeInterface $validFrom
      */
     public function setValidFrom($validFrom)
     {
@@ -455,7 +456,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param \DateTimeInterface $validTo
+     * @param DateTimeInterface $validTo
      */
     public function setValidTo($validTo)
     {
@@ -511,7 +512,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param \DateTimeInterface $createDate
+     * @param DateTimeInterface $createDate
      */
     public function setCreateDate($createDate)
     {
@@ -519,7 +520,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param \DateTimeInterface $modifiedDate
+     * @param DateTimeInterface $modifiedDate
      */
     public function setModifiedDate($modifiedDate)
     {

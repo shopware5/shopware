@@ -24,7 +24,11 @@
 
 namespace Shopware\Recovery\Install\Command;
 
+use Exception;
+use PDO;
+use PDOException;
 use Pimple\Container;
+use RuntimeException;
 use Shopware\Recovery\Common\DumpIterator;
 use Shopware\Recovery\Common\IOHelper;
 use Shopware\Recovery\Install\DatabaseFactory;
@@ -204,7 +208,7 @@ class InstallCommand extends Command
         try {
             $this->IOHelper->writeln('Checking ping to: ' . $pingUrl);
             $webserverCheck->checkPing($shop);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->IOHelper->writeln('Could not verify web server' . $e->getMessage());
 
             return false;
@@ -216,7 +220,7 @@ class InstallCommand extends Command
     /**
      * @param string[] $locales
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return string
      */
@@ -257,7 +261,7 @@ class InstallCommand extends Command
         $adminUser->name = $input->getOption('admin-name');
 
         if ($adminUser->locale && !\in_array($adminUser->locale, Locale::getValidLocales())) {
-            throw new \RuntimeException('Invalid admin-locale provided');
+            throw new RuntimeException('Invalid admin-locale provided');
         }
 
         return $adminUser;
@@ -339,14 +343,14 @@ class InstallCommand extends Command
         $shop->currency = $input->getOption('shop-currency');
 
         if ($shop->locale && !\in_array($shop->locale, Locale::getValidLocales())) {
-            throw new \RuntimeException('Invalid shop-locale provided');
+            throw new RuntimeException('Invalid shop-locale provided');
         }
 
         return $shop;
     }
 
     /**
-     * @return \PDO
+     * @return PDO
      */
     protected function initDatabaseConnection(DatabaseConnectionInformation $connectionInfo, Container $container)
     {
@@ -399,7 +403,7 @@ class InstallCommand extends Command
             $pdo = null;
             try {
                 $pdo = $databaseFactory->createPDOConnection($databaseConnectionInformation);
-            } catch (\PDOException $e) {
+            } catch (PDOException $e) {
                 $IOHelper->writeln('');
                 $IOHelper->writeln(sprintf('Got database error: %s', $e->getMessage()));
                 $IOHelper->writeln('');
@@ -650,7 +654,7 @@ class InstallCommand extends Command
      */
     private function importDatabase()
     {
-        /** @var \PDO $conn */
+        /** @var PDO $conn */
         $conn = $this->getContainer()->offsetGet('db');
 
         $this->IOHelper->cls();
@@ -673,7 +677,7 @@ EOT;
     {
         $this->IOHelper->writeln('<info>=== Import Snippets ===</info>');
 
-        /** @var \PDO $conn */
+        /** @var PDO $conn */
         $conn = $this->getContainer()->offsetGet('db');
 
         $preSql = '
@@ -691,7 +695,7 @@ EOT;
         $this->dumpProgress($conn, $dump);
     }
 
-    private function dumpProgress(\PDO $conn, DumpIterator $dump)
+    private function dumpProgress(PDO $conn, DumpIterator $dump)
     {
         $totalCount = $dump->count();
 
@@ -727,7 +731,7 @@ EOT;
         try {
             $licenseInformation = $licenseService->evaluateLicense($licenseUnpackRequest);
             $licenseInstaller->installLicense($licenseInformation);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $this->IOHelper->writeln('<error>Could not validate license</error>');
             $this->askShopwareEdition($shop, $licenseService, $licenseInstaller);
         }

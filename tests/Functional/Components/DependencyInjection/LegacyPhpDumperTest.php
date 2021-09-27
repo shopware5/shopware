@@ -34,6 +34,7 @@ use Shopware\Tests\Functional\Components\DependencyInjection\_fixtures\PublicTes
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use TestContainerLegacyPhpDumperTest;
 
 class LegacyPhpDumperTest extends TestCase
 {
@@ -55,7 +56,7 @@ class LegacyPhpDumperTest extends TestCase
 
         require_once __DIR__ . '/TestContainerLegacyPhpDumperTest.php';
 
-        $testContainer = new \TestContainerLegacyPhpDumperTest();
+        $testContainer = new TestContainerLegacyPhpDumperTest();
 
         $privateCalled = false;
         $testContainer->get('events')->addListener(sprintf('Enlight_Bootstrap_InitResource_%s', PrivateTestService::class), function () use (&$privateCalled) {

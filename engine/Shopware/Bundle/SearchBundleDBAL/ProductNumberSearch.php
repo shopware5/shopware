@@ -25,7 +25,11 @@
 namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Enlight_Event_EventManager;
+use Exception;
 use IteratorAggregate;
+use PDO;
+use RuntimeException;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
@@ -45,13 +49,13 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     private $facetHandlers;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
-        \Enlight_Event_EventManager $eventManager,
+        Enlight_Event_EventManager $eventManager,
         IteratorAggregate $facetHandlers,
         Container $container
     ) {
@@ -97,7 +101,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
         $products = [];
 
         foreach ($data as $row) {
@@ -127,7 +131,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return SearchBundle\FacetResultInterface[]
      */
@@ -150,7 +154,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             $handler = $this->getFacetHandler($facet);
 
             if ($criteria->generatePartialFacets() && !$handler instanceof PartialFacetHandlerInterface) {
-                throw new \RuntimeException(sprintf("New filter mode activated, handler class %s doesn't support this mode", \get_class($handler)));
+                throw new RuntimeException(sprintf("New filter mode activated, handler class %s doesn't support this mode", \get_class($handler)));
             }
 
             if ($handler instanceof PartialFacetHandlerInterface) {
@@ -197,7 +201,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return FacetHandlerInterface
      */
@@ -209,7 +213,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             }
         }
 
-        throw new \Exception(sprintf('Facet %s not supported', \get_class($facet)));
+        throw new Exception(sprintf('Facet %s not supported', \get_class($facet)));
     }
 
     /**
@@ -226,7 +230,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
                 }
             }
             if (!$implements) {
-                throw new \RuntimeException(sprintf('Object of class "%s" has to implement one of the following interfaces: "%s".', \get_class($object), implode(',', $classes)));
+                throw new RuntimeException(sprintf('Object of class "%s" has to implement one of the following interfaces: "%s".', \get_class($object), implode(',', $classes)));
             }
         }
     }

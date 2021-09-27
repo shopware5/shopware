@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\AccountBundle\Constraint;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Customer;
@@ -141,7 +142,7 @@ class CustomerEmailValidator extends ConstraintValidator
             $builder->setParameter('userId', $customerId);
         }
 
-        $id = $builder->execute()->fetch(\PDO::FETCH_COLUMN);
+        $id = $builder->execute()->fetch(PDO::FETCH_COLUMN);
 
         return $id == 1;
     }

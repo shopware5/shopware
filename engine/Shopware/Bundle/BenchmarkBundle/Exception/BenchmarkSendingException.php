@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Exception;
 
-class BenchmarkSendingException extends \Exception
+use Exception;
+
+class BenchmarkSendingException extends Exception
 {
 }

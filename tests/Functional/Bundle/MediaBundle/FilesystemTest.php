@@ -24,10 +24,11 @@
 
 namespace Shopware\Tests\Functional\Bundle\MediaBundle;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Models\Shop\Shop;
 
-class FilesystemTest extends \Enlight_Components_Test_TestCase
+class FilesystemTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var MediaServiceInterface

@@ -25,10 +25,13 @@
 namespace Shopware\Components\Emotion;
 
 use Doctrine\DBAL\Connection;
+use Exception;
+use PDO;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Exception\EmotionImportException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use ZipArchive;
 
 class EmotionImporter implements EmotionImporterInterface
 {
@@ -108,13 +111,13 @@ class EmotionImporter implements EmotionImporterInterface
      * @param string $filePath
      * @param string $extractPath
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
     private function extractEmotionArchive($filePath, $extractPath)
     {
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
 
         if ($zip->open($filePath) !== true) {
             throw new EmotionImportException(sprintf('Could not open zip file "%s"!', $filePath));
@@ -155,7 +158,7 @@ class EmotionImporter implements EmotionImporterInterface
             ->from('s_core_plugins', 'plugin')
             ->where('plugin.name IN (:names)')
             ->setParameter(':names', $technicalNames, Connection::PARAM_STR_ARRAY)
-            ->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
+            ->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
 
         foreach ($requiredPlugins as $requiredPlugin) {
             $plugin = $plugins[$requiredPlugin['name']];

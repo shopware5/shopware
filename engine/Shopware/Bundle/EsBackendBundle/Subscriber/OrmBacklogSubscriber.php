@@ -27,6 +27,7 @@ namespace Shopware\Bundle\EsBackendBundle\Subscriber;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
+use Exception;
 use Shopware\Bundle\EsBackendBundle\Struct\Backlog;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
@@ -71,7 +72,7 @@ class OrmBacklogSubscriber implements EventSubscriber
     {
         try {
             $this->trace($eventArgs);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->container->get('corelogger')->error($e->getMessage());
         }
     }

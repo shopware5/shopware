@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\EsBackendBundle\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Event_EventArgs;
 use Shopware\Bundle\EsBackendBundle\BacklogServiceInterface;
 use Shopware\Bundle\EsBackendBundle\Struct\Backlog;
 use Shopware\Models\Order\Order;
@@ -57,7 +58,7 @@ class DomainBacklogSubscriber implements SubscriberInterface
         ];
     }
 
-    public function onOrderCreated(\Enlight_Event_EventArgs $args): void
+    public function onOrderCreated(Enlight_Event_EventArgs $args): void
     {
         if (!$this->writeBacklog) {
             return;

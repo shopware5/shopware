@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Regressions;
 
-class Ticket4788Test extends \Enlight_Components_Test_Controller_TestCase
+use Enlight_Components_Test_Controller_TestCase;
+
+class Ticket4788Test extends Enlight_Components_Test_Controller_TestCase
 {
     protected $articlesToTest = [
         206 => 23,

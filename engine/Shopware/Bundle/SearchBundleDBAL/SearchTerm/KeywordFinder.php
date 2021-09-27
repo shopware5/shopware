@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundleDBAL\KeywordFinderInterface;
+use Shopware_Components_Config;
 
 class KeywordFinder implements KeywordFinderInterface
 {
@@ -37,7 +38,7 @@ class KeywordFinder implements KeywordFinderInterface
     protected $maxKeywords = 5;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -52,7 +53,7 @@ class KeywordFinder implements KeywordFinderInterface
     private $termHelper;
 
     public function __construct(
-        \Shopware_Components_Config $config,
+        Shopware_Components_Config $config,
         Connection $connection,
         TermHelperInterface $termHelper
     ) {

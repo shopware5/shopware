@@ -25,25 +25,27 @@
 namespace Shopware\Components\Captcha;
 
 use Enlight_Controller_Request_Request;
+use Enlight_Template_Manager;
 use Shopware\Components\Random;
+use Shopware_Components_Config;
 
 class LegacyCaptcha implements CaptchaInterface
 {
     public const CAPTCHA_METHOD = 'legacy';
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
     /**
-     * @var \Enlight_Template_Manager
+     * @var Enlight_Template_Manager
      */
     private $templateManager;
 
     public function __construct(
-        \Shopware_Components_Config $config,
-        \Enlight_Template_Manager $templateManager
+        Shopware_Components_Config $config,
+        Enlight_Template_Manager $templateManager
     ) {
         $this->config = $config;
         $this->templateManager = $templateManager;

@@ -25,6 +25,8 @@
 namespace Shopware\Components\CustomerStream;
 
 use Doctrine\DBAL\Connection;
+use PDO;
+use RuntimeException;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Components\LogawareReflectionHelper;
 
@@ -55,11 +57,11 @@ class CustomerStreamCriteriaFactory implements CustomerStreamCriteriaFactoryInte
     {
         $stream = $this->getStream($streamId);
         if (!$stream) {
-            throw new \RuntimeException(sprintf('Stream by id %s not found', $streamId));
+            throw new RuntimeException(sprintf('Stream by id %s not found', $streamId));
         }
 
         if (empty($stream['conditions'])) {
-            throw new \RuntimeException(sprintf('Stream %s has no conditions', $stream['name']));
+            throw new RuntimeException(sprintf('Stream %s has no conditions', $stream['name']));
         }
 
         $conditions = $this->reflectionHelper->unserialize(
@@ -89,6 +91,6 @@ class CustomerStreamCriteriaFactory implements CustomerStreamCriteriaFactoryInte
         $query->where('id = :id');
         $query->setParameter(':id', $streamId);
 
-        return $query->execute()->fetch(\PDO::FETCH_ASSOC);
+        return $query->execute()->fetch(PDO::FETCH_ASSOC);
     }
 }

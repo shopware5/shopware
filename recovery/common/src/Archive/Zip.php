@@ -24,31 +24,33 @@
 
 namespace Shopware\Recovery\Common\Archive;
 
+use Exception;
+use RuntimeException;
 use ZipArchive;
 
 class Zip extends Adapter
 {
     /**
-     * @var \ZipArchive
+     * @var ZipArchive
      */
     protected $stream;
 
     /**
      * @param string $fileName
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct($fileName = null, $flags = null)
     {
         if (!\extension_loaded('zip')) {
-            throw new \Exception('The PHP extension "zip" is not loaded.');
+            throw new Exception('The PHP extension "zip" is not loaded.');
         }
 
-        $this->stream = new \ZipArchive();
+        $this->stream = new ZipArchive();
 
         if ($fileName != null) {
             if (($retval = $this->stream->open($fileName, $flags)) !== true) {
-                throw new \RuntimeException($this->getErrorMessage($retval, $fileName), $retval);
+                throw new RuntimeException($this->getErrorMessage($retval, $fileName), $retval);
             }
             $this->position = 0;
             $this->count = $this->stream->numFiles;

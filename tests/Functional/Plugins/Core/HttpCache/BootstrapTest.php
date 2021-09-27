@@ -24,7 +24,11 @@
 
 namespace Shopware\Tests\Functional\Plugins\Core\HttpCache;
 
+use ArrayObject;
 use Doctrine\DBAL\Connection;
+use Enlight_Components_Session_Namespace;
+use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Controller_Response_Response;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller;
 use Shopware\Components\CacheManager;
@@ -35,7 +39,7 @@ use Shopware\Components\Plugin\CachedConfigReader;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use ShopwarePlugins\HttpCache\CacheControl;
 
-class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
+class BootstrapTest extends Enlight_Components_Test_Controller_TestCase
 {
     use DatabaseTransactionBehaviour;
 
@@ -192,7 +196,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
 
         static::assertSame('checkout-1', $this->getCookie($response, 'nocache'));
 
-        /** @var \Enlight_Components_Session_Namespace $session */
+        /** @var Enlight_Components_Session_Namespace $session */
         $session = Shopware()->Container()->get('session');
         $session->offsetSet('sBasketQuantity', 0);
         $this->connection->executeUpdate('DELETE FROM s_order_basket');
@@ -201,7 +205,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertSame('', $this->getCookie($response, 'nocache'));
     }
 
-    private function getCookie(\Enlight_Controller_Response_Response $response, $name)
+    private function getCookie(Enlight_Controller_Response_Response $response, $name)
     {
         $cookies = $response->getCookies();
         foreach ($cookies as $cookie) {
@@ -222,7 +226,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         $defaultRouteService = new DefaultRouteService($configReader, $cacheRouteGeneration);
         $defaultCacheTimeService = new DefaultCacheTimeService($defaultRouteService);
 
-        $invalidationDates = new \ArrayObject(
+        $invalidationDates = new ArrayObject(
             [
                 Shopware()->Container()->get('shopware.http_cache.invalidation_date.listing_date_frontend'),
                 Shopware()->Container()->get('shopware.http_cache.invalidation_date.listing_date'),
@@ -254,7 +258,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         $this->cacheManager->clearConfigCache();
     }
 
-    private function getHeader($name, \Enlight_Controller_Response_Response $response)
+    private function getHeader($name, Enlight_Controller_Response_Response $response)
     {
         foreach ($response->getHeaders() as $header) {
             if ($header['name'] === $name) {

@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Mink\Page;
 
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\CartPosition;
 use Shopware\Tests\Mink\Helper;
@@ -81,7 +82,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      *
      * @param array $aggregation
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkAggregation($aggregation)
     {
@@ -217,7 +218,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      *
      * @param string $language
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
@@ -311,7 +312,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
                 $this->path = $element->getAttribute('href');
                 $this->open();
             }
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
         }
 
         $this->path = $originalPath;
@@ -352,7 +353,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      * @param string $labelKey
      * @param string $language
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */

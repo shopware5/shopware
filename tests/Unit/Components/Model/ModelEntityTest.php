@@ -25,7 +25,9 @@
 namespace Shopware\Tests\Unit\Components\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\Template\Template;
 use Shopware\Models\Article\Link;
@@ -323,7 +325,7 @@ class ModelEntityTest extends TestCase
             ],
         ];
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $article->fromArray($data);
     }
 
@@ -565,7 +567,7 @@ class ModelEntityTest extends TestCase
      */
     protected function setProperty($entity, $key, $value)
     {
-        $reflectionClass = new \ReflectionClass($entity);
+        $reflectionClass = new ReflectionClass($entity);
         $property = $reflectionClass->getProperty($key);
 
         $property->setAccessible(true);

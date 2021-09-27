@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Log\Handler;
 
+use DateTime;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 
@@ -79,8 +80,8 @@ class DoctrineDBALHandler extends AbstractProcessingHandler
 
         array_walk_recursive($dataToInsert, function (&$value) {
             // Convert DateTime instances to ISO-8601 Strings
-            if ($value instanceof \DateTime) {
-                $value = $value->format(\DateTime::ISO8601);
+            if ($value instanceof DateTime) {
+                $value = $value->format(DateTime::ISO8601);
             }
         });
 

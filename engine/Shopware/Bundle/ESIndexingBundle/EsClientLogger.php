@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle;
 
 use Elasticsearch\Client;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface;
 
@@ -70,7 +71,7 @@ class EsClientLogger extends Client implements EsClientInterface
 
         try {
             $this->handleResult('info', $response, $params);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return $response;
@@ -85,7 +86,7 @@ class EsClientLogger extends Client implements EsClientInterface
 
         try {
             $this->handleResult('bulk', $response, $params);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         $this->evaluation->addResult($response);
@@ -102,7 +103,7 @@ class EsClientLogger extends Client implements EsClientInterface
 
         try {
             $this->handleResult('search', $response, $params);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return $response;

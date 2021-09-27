@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Privacy;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 
 class PrivacyService implements PrivacyServiceInterface
@@ -43,7 +44,7 @@ class PrivacyService implements PrivacyServiceInterface
      */
     public function cleanupGuestUsers($months)
     {
-        $threshold = (new \DateTime())
+        $threshold = (new DateTime())
             ->modify(sprintf('-%d months', $months))
             ->format('Y-m-d H:i:s');
 
@@ -62,7 +63,7 @@ SQL;
      */
     public function cleanupCanceledOrders($months)
     {
-        $threshold = (new \DateTime())
+        $threshold = (new DateTime())
             ->modify(sprintf('-%d months', $months))
             ->format('Y-m-d H:i:s');
 

@@ -37,11 +37,13 @@ use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Doctrine\DBAL\Connection;
+use RuntimeException;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\CacheManager;
 use Shopware\Components\ConfigWriter;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Theme\Installer;
+use Shopware_Components_Config;
 
 class FeatureContext extends SubContext implements SnippetAcceptingContext
 {
@@ -76,7 +78,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     public function __construct()
     {
         if (!self::$suite->hasSetting('template')) {
-            throw new \RuntimeException('Template not set. Please start testsuite using the --profile argument.');
+            throw new RuntimeException('Template not set. Please start testsuite using the --profile argument.');
         }
 
         $this->registerErrorHandler();
@@ -202,7 +204,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
         $configWriter->save($configName, $value);
         $configWriter->save($configName, $value, null, 2);
 
-        $config = $this->getService(\Shopware_Components_Config::class);
+        $config = $this->getService(Shopware_Components_Config::class);
         $config->offsetSet($configName, $value);
 
         $this->clearCache();
@@ -327,7 +329,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
         $templateId = $this->getService('db')->fetchOne($sql);
         if (!$templateId) {
-            throw new \RuntimeException(sprintf('Unable to find template by name %s', self::$suite->getSetting('template')));
+            throw new RuntimeException(sprintf('Unable to find template by name %s', self::$suite->getSetting('template')));
         }
 
         //set the template for shop "Deutsch" and activate SEPA payment method
@@ -390,7 +392,7 @@ EOD;
 
         $path = sprintf('%s/behat-%s.%s', $logDir, $currentDateAsString, $type);
         if (!file_put_contents($path, $content)) {
-            throw new \RuntimeException(sprintf('Failed while trying to write log in "%s".', $path));
+            throw new RuntimeException(sprintf('Failed while trying to write log in "%s".', $path));
         }
     }
 

@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Components\Model;
 
+use InvalidArgumentException;
 use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 
 class ModelManagerTest extends \PHPUnit\Framework\TestCase
@@ -119,7 +120,7 @@ class ModelManagerTest extends \PHPUnit\Framework\TestCase
                 $type = TypeMappingInterface::TYPE_BOOLEAN;
                 break;
             default:
-                throw new \InvalidArgumentException(sprintf('Column type "%s" cannot be converted.', $type));
+                throw new InvalidArgumentException(sprintf('Column type "%s" cannot be converted.', $type));
         }
 
         return $type;

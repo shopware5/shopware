@@ -26,28 +26,36 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Enlight_Controller_Front;
+use Enlight_Controller_Plugins_Json_Bootstrap;
+use Enlight_Controller_Request_RequestHttp;
+use Enlight_Controller_Response_ResponseHttp;
+use Enlight_Plugin_Namespace_Loader;
+use Enlight_Template_Manager;
+use Enlight_View_Default;
 use PHPUnit\Framework\TestCase;
+use Shopware_Controllers_Backend_Error;
 
 class ErrorTest extends TestCase
 {
     public function testJsonRenderWillBeActivated(): void
     {
-        $controller = new \Shopware_Controllers_Backend_Error();
-        $request = new \Enlight_Controller_Request_RequestHttp();
+        $controller = new Shopware_Controllers_Backend_Error();
+        $request = new Enlight_Controller_Request_RequestHttp();
         $request->setHeader('CONTENT_TYPE', 'application/json');
         $controller->setRequest($request);
-        $controller->setResponse(new \Enlight_Controller_Response_ResponseHttp());
+        $controller->setResponse(new Enlight_Controller_Response_ResponseHttp());
 
-        $jsonRender = $this->createMock(\Enlight_Controller_Plugins_Json_Bootstrap::class);
+        $jsonRender = $this->createMock(Enlight_Controller_Plugins_Json_Bootstrap::class);
         $jsonRender->expects(static::once())->method('setRenderer')->willReturn(true);
 
-        $pluginLoader = $this->createMock(\Enlight_Plugin_Namespace_Loader::class);
+        $pluginLoader = $this->createMock(Enlight_Plugin_Namespace_Loader::class);
         $pluginLoader->method('Json')->willReturn($jsonRender);
 
-        $front = $this->createMock(\Enlight_Controller_Front::class);
+        $front = $this->createMock(Enlight_Controller_Front::class);
         $front->method('Plugins')->willReturn($pluginLoader);
 
-        $controller->setView(new \Enlight_View_Default(new \Enlight_Template_Manager()));
+        $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
         $controller->setFront($front);
         $controller->preDispatch();
 

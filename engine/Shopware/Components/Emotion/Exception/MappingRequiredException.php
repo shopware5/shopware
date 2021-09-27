@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Emotion\Exception;
 
-class MappingRequiredException extends \Enlight_Exception
+use Enlight_Exception;
+
+class MappingRequiredException extends Enlight_Exception
 {
 }

@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle;
 
 use Doctrine\DBAL\Query\QueryBuilder;
+use PDO;
 
 class LastIdQuery
 {
@@ -43,7 +44,7 @@ class LastIdQuery
      */
     public function fetch()
     {
-        $data = $this->query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $data = $this->query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
         $keys = array_keys($data);
         $this->query->setParameter(':lastId', array_pop($keys));
 
@@ -64,7 +65,7 @@ class LastIdQuery
         $query->resetQueryPart('orderBy');
         $query->select('COUNT(DISTINCT ' . array_shift($select) . ')');
 
-        return $query->execute()->fetch(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetch(PDO::FETCH_COLUMN);
     }
 
     /**

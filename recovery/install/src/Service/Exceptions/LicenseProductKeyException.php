@@ -24,6 +24,8 @@
 
 namespace Shopware\Recovery\Install\Service\Exceptions;
 
-class LicenseProductKeyException extends \RuntimeException
+use RuntimeException;
+
+class LicenseProductKeyException extends RuntimeException
 {
 }

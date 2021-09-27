@@ -33,6 +33,7 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\Backend\ContentTypeManagerDetailWindow;
 use Shopware\Tests\Mink\Element\Backend\ContentTypeManagerFieldWindow;
 use Shopware\Tests\Mink\Element\Backend\ContentTypeManagerListWindow;
+use Throwable;
 
 class ContentTypeManager extends Page
 {
@@ -46,7 +47,7 @@ class ContentTypeManager extends Page
         $listWindowPresent = $this->waitFor(10, function (ContentTypeManager $page): bool {
             try {
                 return $page->getListWindow() instanceof Element;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 return false;
             }
         });

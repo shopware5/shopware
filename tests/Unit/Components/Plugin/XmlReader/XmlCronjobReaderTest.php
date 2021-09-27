@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Unit\Components\Plugin\XmlReader;
 
+use DOMNodeList;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Shopware\Components\Plugin\XmlReader\XmlCronjobReader;
 
 class XmlCronjobReaderTest extends TestCase
@@ -77,11 +79,11 @@ class XmlCronjobReaderTest extends TestCase
 
     public function testReadEmptyFile(): void
     {
-        $reflection = new \ReflectionClass(\get_class($this->cronjobReader));
+        $reflection = new ReflectionClass(\get_class($this->cronjobReader));
         $method = $reflection->getMethod('parseList');
         $method->setAccessible(true);
 
-        $result = $method->invokeArgs($this->cronjobReader, [new \DOMNodeList()]);
+        $result = $method->invokeArgs($this->cronjobReader, [new DOMNodeList()]);
 
         static::assertIsArray($result);
         static::assertCount(0, $result);

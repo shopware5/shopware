@@ -30,6 +30,7 @@ use Shopware\Bundle\SearchBundle\Condition\SalesCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
+use Shopware_Components_TopSeller;
 
 /**
  * @group elasticSearch
@@ -57,7 +58,7 @@ class SalesConditionTest extends TestCase
     {
         $products = parent::createProducts($products, $context, $category);
 
-        /** @var \Shopware_Components_TopSeller $topSeller */
+        /** @var Shopware_Components_TopSeller $topSeller */
         $topSeller = Shopware()->Container()->get('topseller');
         $topSeller->incrementTopSeller($products['second']->getId(), 100);
         $topSeller->incrementTopSeller($products['fourth']->getId(), 101);

@@ -26,8 +26,12 @@ namespace ShopwarePlugins\SwagUpdate\Components\Checks;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Snippet_Namespace as SnippetNamespace;
+use Exception;
 use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
+use Zend_Http_Client;
+use Zend_Http_Client_Exception;
+use Zend_Json;
 
 class LicenseCheck implements CheckInterface
 {
@@ -98,7 +102,7 @@ class LicenseCheck implements CheckInterface
         }
 
         $url = $this->endpoint . '/licenseupgrades/permission';
-        $client = new \Zend_Http_Client(
+        $client = new Zend_Http_Client(
             $url,
             [
                 'timeout' => 15,
@@ -111,8 +115,8 @@ class LicenseCheck implements CheckInterface
             $client->setParameterPost('version', $this->shopwareVersion);
 
             try {
-                $response = $client->request(\Zend_Http_Client::POST);
-            } catch (\Zend_Http_Client_Exception $e) {
+                $response = $client->request(Zend_Http_Client::POST);
+            } catch (Zend_Http_Client_Exception $e) {
                 // Do not show exception to user if request times out
                 return null;
             }
@@ -120,11 +124,11 @@ class LicenseCheck implements CheckInterface
             try {
                 $body = $response->getBody();
                 if ($body != '') {
-                    $json = \Zend_Json::decode($body, true);
+                    $json = Zend_Json::decode($body, true);
                 } else {
                     $json = null;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Do not show exception to user if SBP returns an error
                 return null;
             }

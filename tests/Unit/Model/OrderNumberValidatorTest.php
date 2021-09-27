@@ -28,6 +28,8 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\DBAL\Constraints;
 use Shopware\Components\Model\DBAL\Validator\OrderNumberValidator;
 use Shopware\Components\OrderNumberValidator\RegexOrderNumberValidator;
+use stdClass;
+use TypeError;
 
 class OrderNumberValidatorTest extends TestCase
 {
@@ -47,7 +49,7 @@ class OrderNumberValidatorTest extends TestCase
             [0, 2, 3],
             ['somearray', 'somearray'],
             function () {},
-            new \stdClass(),
+            new stdClass(),
             new Constraints\OrderNumber(),
         ];
 
@@ -81,7 +83,7 @@ class OrderNumberValidatorTest extends TestCase
 
     public function testEmptyConstraint(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->validator->validate(null, null);
     }
 }

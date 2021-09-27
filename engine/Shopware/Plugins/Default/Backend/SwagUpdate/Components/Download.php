@@ -24,6 +24,9 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components;
 
+use Exception;
+use SplFileObject;
+
 class Download
 {
     /**
@@ -39,12 +42,12 @@ class Download
     /**
      * @param callable $callback
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function setProgressCallback($callback)
     {
         if (!\is_callable($callback)) {
-            throw new \Exception('Callback not callable');
+            throw new Exception('Callback not callable');
         }
 
         $this->progressCallback = $callback;
@@ -53,12 +56,12 @@ class Download
     /**
      * @param callable $callback
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function setHaltCallback($callback)
     {
         if (!\is_callable($callback)) {
-            throw new \Exception('Callback not callable');
+            throw new Exception('Callback not callable');
         }
 
         $this->haltCallback = $callback;
@@ -82,22 +85,22 @@ class Download
      * @param int    $totalSize
      * @param string $hash
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */
     public function downloadFile($sourceUri, $destinationUri, $totalSize, $hash)
     {
         if (($destination = fopen($destinationUri, 'a+')) === false) {
-            throw new \Exception(sprintf('Destination "%s" is invalid.', $destinationUri));
+            throw new Exception(sprintf('Destination "%s" is invalid.', $destinationUri));
         }
 
         if (filesize($destinationUri) > 0) {
-            throw new \Exception(sprintf('File on destination %s does already exist.', $destinationUri));
+            throw new Exception(sprintf('File on destination %s does already exist.', $destinationUri));
         }
 
         $partFile = $destinationUri . '.part';
-        $partFile = new \SplFileObject($partFile, 'a+');
+        $partFile = new SplFileObject($partFile, 'a+');
 
         $size = $partFile->getSize();
         if ($size >= $totalSize) {
@@ -114,7 +117,7 @@ class Download
         $range = $size . '-' . ($totalSize - 1);
 
         if (!\function_exists('curl_init')) {
-            throw new \Exception('PHP Extension "curl" is required to download a file');
+            throw new Exception('PHP Extension "curl" is required to download a file');
         }
 
         // Configuration of curl
@@ -161,11 +164,11 @@ class Download
         curl_close($ch);
 
         if ($isError && !$isHalted) {
-            throw new \Exception('Wrong http code');
+            throw new Exception('Wrong http code');
         }
 
         if ($result === false && !$isHalted) {
-            throw new \Exception($error);
+            throw new Exception($error);
         }
 
         clearstatcache(false, $partFile->getPathname());
@@ -209,10 +212,10 @@ class Download
     }
 
     /**
-     * @param \SplFileObject $partFile
-     * @param string         $hash
+     * @param SplFileObject $partFile
+     * @param string        $hash
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
@@ -221,7 +224,7 @@ class Download
         if (sha1_file($partFile->getPathname()) !== $hash) {
             // try to delete invalid file so a valid one can be downloaded
             @unlink($partFile->getPathname());
-            throw new \Exception('Hash mismatch');
+            throw new Exception('Hash mismatch');
         }
 
         return true;

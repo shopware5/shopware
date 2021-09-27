@@ -24,6 +24,8 @@
 
 namespace ShopwarePlugin\PaymentMethods\Components;
 
+use Enlight_Controller_Request_Request;
+
 /**
  * Abstract class BasePaymentMethod
  * All PaymentMethod implementations should extend this class.
@@ -45,10 +47,10 @@ abstract class BasePaymentMethod
      * Creates/updates the payment information for the current
      * method.
      *
-     * @param int                                 $userId  The user id
-     * @param \Enlight_Controller_Request_Request $request The Request object
+     * @param int                                $userId  The user id
+     * @param Enlight_Controller_Request_Request $request The Request object
      */
-    abstract public function savePaymentData($userId, \Enlight_Controller_Request_Request $request);
+    abstract public function savePaymentData($userId, Enlight_Controller_Request_Request $request);
 
     /**
      * Fetches the customer's current payment data for this

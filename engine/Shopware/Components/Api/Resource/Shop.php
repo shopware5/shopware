@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Exception;
 use Shopware\Components\Api\Exception as ApiException;
 
 /**
@@ -106,7 +107,7 @@ class Shop extends Resource
 
     /**
      * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return \Shopware\Models\Shop\Shop
      */
@@ -207,7 +208,7 @@ class Shop extends Resource
                 }
             } else {
                 if (isset($params[$param]) && empty($params[$param])) {
-                    throw new \Exception(sprintf('param %s may not be empty', $param));
+                    throw new Exception(sprintf('param %s may not be empty', $param));
                 }
             }
         }
@@ -217,7 +218,7 @@ class Shop extends Resource
             if ($currency !== null) {
                 $params['currency'] = $currency;
             } else {
-                throw new \Exception(sprintf('%s is not a valid currency id', $params['currencyId']));
+                throw new Exception(sprintf('%s is not a valid currency id', $params['currencyId']));
             }
         }
 
@@ -226,7 +227,7 @@ class Shop extends Resource
             if ($locale !== null) {
                 $params['locale'] = $locale;
             } else {
-                throw new \Exception(sprintf('%s is not a valid locale id', $params['localeId']));
+                throw new Exception(sprintf('%s is not a valid locale id', $params['localeId']));
             }
         }
 
@@ -235,7 +236,7 @@ class Shop extends Resource
             if ($customerGroup !== null) {
                 $params['customerGroup'] = $customerGroup;
             } else {
-                throw new \Exception(sprintf('%s is not a valid customerGroup id', $params['customerGroupId']));
+                throw new Exception(sprintf('%s is not a valid customerGroup id', $params['customerGroupId']));
             }
         }
 
@@ -244,7 +245,7 @@ class Shop extends Resource
             if ($shop !== null) {
                 $params['main'] = $shop;
             } else {
-                throw new \Exception(sprintf('%s is not a valid shop id', $params['mainId']));
+                throw new Exception(sprintf('%s is not a valid shop id', $params['mainId']));
             }
         }
 
@@ -253,7 +254,7 @@ class Shop extends Resource
             if ($template !== null) {
                 $params['template'] = $template;
             } else {
-                throw new \Exception(sprintf('%s is not a valid template id', $params['templateId']));
+                throw new Exception(sprintf('%s is not a valid template id', $params['templateId']));
             }
         }
 
@@ -262,7 +263,7 @@ class Shop extends Resource
             if ($template !== null) {
                 $params['documentTemplate'] = $template;
             } else {
-                throw new \Exception(sprintf('%s is not a valid template id', $params['documentTemplateId']));
+                throw new Exception(sprintf('%s is not a valid template id', $params['documentTemplateId']));
             }
         }
 
@@ -271,7 +272,7 @@ class Shop extends Resource
             if ($category !== null) {
                 $params['category'] = $category;
             } else {
-                throw new \Exception(sprintf('%s is not a valid category id', $params['categoryId']));
+                throw new Exception(sprintf('%s is not a valid category id', $params['categoryId']));
             }
         }
 

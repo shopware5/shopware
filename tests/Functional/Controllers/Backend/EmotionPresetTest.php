@@ -24,13 +24,14 @@
 
 namespace Shopware\Tests\Unit\Controller\Backend;
 
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Models\Emotion\Preset;
 
 /**
  * @group EmotionPreset
  */
-class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
+class EmotionPresetTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var EmotionPreset

@@ -24,8 +24,10 @@
 
 namespace Shopware\Tests\Unit\Components;
 
+use Enlight_Controller_Request_RequestTestCase;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\QueryAliasMapper;
+use Shopware_Components_Config;
 
 class QueryAliasMapperTest extends TestCase
 {
@@ -61,7 +63,7 @@ class QueryAliasMapperTest extends TestCase
         ];
 
         $mock = $this->createConfiguredMock(
-            \Shopware_Components_Config::class,
+            Shopware_Components_Config::class,
             ['get' => 'foo=bar,omg=baz']
         );
 
@@ -138,7 +140,7 @@ class QueryAliasMapperTest extends TestCase
 
     public function testRequestQueriesGettingReplacd()
     {
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setQuery('q', 'someValue');
         $request->setQuery('p', 'someOtherValue');
         $request->setQuery('someParam', 'someValue');

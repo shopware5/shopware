@@ -24,10 +24,12 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use DateTime;
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Category\Repository;
 
-class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
+class CategoryTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var Repository
@@ -140,8 +142,8 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
 
         static::assertEquals($dummyData['parentId'], $returningData['parentId']);
         static::assertEquals($dummyData['name'], $returningData['name']);
-        static::assertInstanceOf(\DateTime::class, $returningData['changed']);
-        static::assertInstanceOf(\DateTime::class, $returningData['added']);
+        static::assertInstanceOf(DateTime::class, $returningData['changed']);
+        static::assertInstanceOf(DateTime::class, $returningData['added']);
 
         return $id;
     }

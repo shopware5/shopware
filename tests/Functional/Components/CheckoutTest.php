@@ -24,12 +24,13 @@
 
 namespace Shopware\Tests\Functional\Components;
 
+use Enlight_Components_Test_Controller_TestCase;
 use Enlight_Controller_Request_RequestHttp;
 use Shopware\Components\Random;
 use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
-abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
+abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
 {
     public const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
 

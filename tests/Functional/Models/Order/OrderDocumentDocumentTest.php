@@ -26,10 +26,12 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models\Order;
 
+use Enlight_Components_Test_TestCase;
+use Exception;
 use Shopware\Models\Order\Document\Document;
 use Shopware_Components_Document;
 
-class OrderDocumentDocumentTest extends \Enlight_Components_Test_TestCase
+class OrderDocumentDocumentTest extends Enlight_Components_Test_TestCase
 {
     public function testSetAttribute(): void
     {
@@ -67,7 +69,7 @@ class OrderDocumentDocumentTest extends \Enlight_Components_Test_TestCase
                     '_preview' => true,
                 ]
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Append exception to possible failure ouputs (caused by the assert in the finally block)
             throw $e;
         } finally {

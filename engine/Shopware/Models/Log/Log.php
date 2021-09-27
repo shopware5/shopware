@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Log;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -68,7 +69,7 @@ class Log extends ModelEntity
     private $text;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
@@ -171,7 +172,7 @@ class Log extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $date
+     * @param DateTimeInterface $date
      *
      * @return Log
      */
@@ -183,7 +184,7 @@ class Log extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getDate()
     {

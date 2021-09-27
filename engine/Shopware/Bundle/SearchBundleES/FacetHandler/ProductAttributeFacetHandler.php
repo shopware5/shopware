@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
+use Exception;
 use ONGR\ElasticsearchDSL\Aggregation\Bucketing\FilterAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\Bucketing\TermsAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\Metric\ValueCountAggregation;
@@ -91,7 +92,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         try {
             $attribute = $this->crudService->get('s_articles_attributes', $criteriaPart->getField());
             $type = $attribute->getElasticSearchType()['type'];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         $this->criteriaParts[] = $criteriaPart;

@@ -25,6 +25,7 @@
 namespace Shopware\Components\Plugin;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Config\ElementTranslation;
@@ -134,7 +135,7 @@ class FormSynchronizer
         $query->setParameter(':names', $names, Connection::PARAM_STR_ARRAY);
         $query->setParameter(':pluginId', $plugin->getId());
 
-        $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        $ids = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
 
         if (empty($ids)) {
             return;

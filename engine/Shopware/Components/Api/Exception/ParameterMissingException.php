@@ -24,10 +24,12 @@
 
 namespace Shopware\Components\Api\Exception;
 
+use Enlight_Exception;
+
 /**
  * API Exception
  */
-class ParameterMissingException extends \Enlight_Exception
+class ParameterMissingException extends Enlight_Exception
 {
     /**
      * @var string|null

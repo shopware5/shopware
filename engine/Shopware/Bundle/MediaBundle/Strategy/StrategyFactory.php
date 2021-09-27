@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\MediaBundle\Strategy;
 
+use Exception;
+
 class StrategyFactory
 {
     /**
@@ -31,7 +33,7 @@ class StrategyFactory
      *
      * @param string $strategy
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return StrategyInterface
      */
@@ -43,7 +45,7 @@ class StrategyFactory
             case 'plain':
                 return new PlainStrategy();
             default:
-                throw new \Exception(sprintf('Unsupported strategy "%s".', $strategy));
+                throw new Exception(sprintf('Unsupported strategy "%s".', $strategy));
         }
     }
 }

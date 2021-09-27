@@ -25,10 +25,11 @@
 namespace Shopware\Tests\Functional\Components\Api;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_TestCase;
 use Shopware\Components\Api\Resource\CustomerStream;
 use Shopware\Models\CustomerStream\CustomerStream as CustomerStreamEntity;
 
-class CustomerStreamTest extends \Enlight_Components_Test_TestCase
+class CustomerStreamTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var CustomerStream

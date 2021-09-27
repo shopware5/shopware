@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use RuntimeException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Theme\Generator;
@@ -140,7 +141,7 @@ EOF
         }
 
         if (!\is_string($arguments['parent'])) {
-            throw new \RuntimeException('Invalid argument "parent" given.');
+            throw new RuntimeException('Invalid argument "parent" given.');
         }
 
         $parent = $this->getRepository()->findOneBy(['template' => $arguments['parent']]);

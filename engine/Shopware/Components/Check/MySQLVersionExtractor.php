@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Check;
 
+use RuntimeException;
+
 class MySQLVersionExtractor
 {
     /**
@@ -49,7 +51,7 @@ class MySQLVersionExtractor
             $versionString,
             $versionParts
         )) {
-            throw new \RuntimeException(sprintf('Invalid version string: %s', $versionString));
+            throw new RuntimeException(sprintf('Invalid version string: %s', $versionString));
         }
 
         return $versionParts['major'] . '.' . $versionParts['minor'] . '.' . $versionParts['patch'];

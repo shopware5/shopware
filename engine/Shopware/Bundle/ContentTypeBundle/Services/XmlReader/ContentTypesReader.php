@@ -29,6 +29,7 @@ use DOMElement;
 use DOMNode;
 use DOMNodeList;
 use DOMXPath;
+use InvalidArgumentException;
 use Shopware\Components\Plugin\XmlReader\XmlReaderBase;
 use Symfony\Component\Config\Util\XmlUtils;
 
@@ -127,7 +128,7 @@ class ContentTypesReader extends XmlReaderBase
         }
 
         if ($showInFrontend && (empty($viewDescriptionFieldName) || empty($viewImageFieldName) || empty($viewTitleFieldName) || empty($viewMetaTitleFieldName) || empty($viewMetaDescriptionFieldName))) {
-            throw new \InvalidArgumentException('Content-Type with enabled showInFrontend requires a viewTitleFieldName, viewDescriptionFieldName, viewImageFieldName, viewMetaTitleFieldName, viewMetaDescriptionFieldName');
+            throw new InvalidArgumentException('Content-Type with enabled showInFrontend requires a viewTitleFieldName, viewDescriptionFieldName, viewImageFieldName, viewMetaTitleFieldName, viewMetaDescriptionFieldName');
         }
 
         $item['menuParent'] = 'Content';

@@ -26,6 +26,7 @@ namespace Shopware\Models\User;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Zend_Acl_Role_Interface;
 
 /**
  * Shopware role model represents a acl role in shopware.
@@ -46,7 +47,7 @@ use Shopware\Components\Model\ModelEntity;
  * @ORM\Entity()
  * @ORM\Table(name="s_core_auth_roles")
  */
-class Role extends ModelEntity implements \Zend_Acl_Role_Interface
+class Role extends ModelEntity implements Zend_Acl_Role_Interface
 {
     /**
      * @var int

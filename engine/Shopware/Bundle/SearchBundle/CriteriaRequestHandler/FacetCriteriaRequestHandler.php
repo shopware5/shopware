@@ -35,11 +35,12 @@ use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
 use Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Config;
 
 class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -54,7 +55,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     private $connection;
 
     public function __construct(
-        \Shopware_Components_Config $config,
+        Shopware_Components_Config $config,
         CustomFacetServiceInterface $facetService,
         Connection $connection
     ) {

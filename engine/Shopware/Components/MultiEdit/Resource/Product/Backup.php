@@ -24,8 +24,15 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
+use DateTime;
 use Doctrine\ORM\AbstractQuery;
+use Exception;
+use PDO;
+use RuntimeException;
 use Shopware\Models\MultiEdit\Backup as BackupModel;
+use Shopware_Components_Config;
+use Zend_Db;
+use ZipArchive;
 
 /**
  * The backup class creates and loads backups
@@ -38,7 +45,7 @@ class Backup
     protected $dqlHelper;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     protected $config;
 
@@ -63,10 +70,10 @@ class Backup
     protected $backupBaseName = 'me-backup-';
 
     /**
-     * @param DqlHelper                   $dqlHelper
-     * @param \Shopware_Components_Config $config
+     * @param DqlHelper                  $dqlHelper
+     * @param Shopware_Components_Config $config
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function __construct($dqlHelper, $config)
     {
@@ -85,7 +92,7 @@ class Backup
     }
 
     /**
-     * @return \Shopware_Components_Config
+     * @return Shopware_Components_Config
      */
     public function getConfig()
     {
@@ -95,14 +102,14 @@ class Backup
     /**
      * Make sure a valid backup dir is available
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function setupBackupDir()
     {
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
 
         if (!\is_string($projectDir)) {
-            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+            throw new RuntimeException('Parameter shopware.app.rootDir has to be an string');
         }
 
         $this->backupPath = $projectDir . 'files/backup/multi_edit';
@@ -119,7 +126,7 @@ class Backup
             }
 
             if (!is_dir($this->backupPath)) {
-                throw new \RuntimeException(sprintf('Could not find nor create "%s"', $this->backupPath));
+                throw new RuntimeException(sprintf('Could not find nor create "%s"', $this->backupPath));
             }
         }
     }
@@ -202,7 +209,7 @@ class Backup
 
         try {
             $this->deleteAbandonedBackups();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // If an error occurs during cleanup, we do not need to cancel the process
         }
     }
@@ -213,7 +220,7 @@ class Backup
      * @param int $id
      * @param int $offset
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return array
      */
@@ -223,18 +230,18 @@ class Backup
         $backup = $entityManager->find(BackupModel::class, $id);
 
         if (!$backup) {
-            throw new \RuntimeException(sprintf('Backup by id %d not found', $id));
+            throw new RuntimeException(sprintf('Backup by id %d not found', $id));
         }
 
         $path = $backup->getPath();
         $dir = \dirname($path);
 
         if ($offset === 0) {
-            $zip = new \ZipArchive();
+            $zip = new ZipArchive();
             $zip->open($path);
             $success = $zip->extractTo($dir);
             if (!$success) {
-                throw new \RuntimeException(sprintf('Could not extract %s to %s', $path, $dir));
+                throw new RuntimeException(sprintf('Could not extract %s to %s', $path, $dir));
             }
             $zip->close();
         }
@@ -292,7 +299,7 @@ class Backup
      *
      * @param int $id
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return bool
      */
@@ -302,7 +309,7 @@ class Backup
         $backup = $entityManager->find(BackupModel::class, $id);
 
         if (!$backup) {
-            throw new \RuntimeException(sprintf('Backup by id %d not found', $id));
+            throw new RuntimeException(sprintf('Backup by id %d not found', $id));
         }
 
         $dir = \dirname($backup->getPath());
@@ -386,11 +393,11 @@ class Backup
         // If the value casted to float differs from the value casted to int,
         // use float as type
         if ((float) $value != (int) $value) {
-            return \Zend_Db::FLOAT_TYPE;
+            return Zend_Db::FLOAT_TYPE;
             // Else encode it as int
         }
 
-        return \Zend_Db::INT_TYPE;
+        return Zend_Db::INT_TYPE;
     }
 
     /**
@@ -448,14 +455,14 @@ class Backup
      *
      * @param string $table
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function getPrefixFromTable($table)
     {
         $prefix = $this->affectedTables[$table]['prefix'];
 
         if (!$prefix) {
-            throw new \RuntimeException(sprintf('Empty prefix for %s', $table));
+            throw new RuntimeException(sprintf('Empty prefix for %s', $table));
         }
 
         return $prefix;
@@ -466,14 +473,14 @@ class Backup
      *
      * @param string $table
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function getAffectedColumns($table)
     {
         $columns = $this->affectedTables[$table]['columns'];
 
         if (!$columns) {
-            throw new \RuntimeException(sprintf('Empty column for %s', $table));
+            throw new RuntimeException(sprintf('Empty column for %s', $table));
         }
 
         return $columns;
@@ -515,7 +522,7 @@ class Backup
         $backup->setHash(sha1_file($path));
         $backup->setSize(filesize($path));
 
-        $backup->setDate(new \DateTime());
+        $backup->setDate(new DateTime());
 
         $this->getDqlHelper()->getEntityManager()->persist($backup);
         $this->getDqlHelper()->getEntityManager()->flush($backup);
@@ -529,11 +536,11 @@ class Backup
      * @param int[]  $ids
      * @param bool   $newBackup
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function dumpTable($table, $name, $ids, $newBackup)
     {
-        $quotedIds = '(' . $this->getDqlHelper()->getDb()->quote($ids, \PDO::PARAM_INT) . ')';
+        $quotedIds = '(' . $this->getDqlHelper()->getDb()->quote($ids, PDO::PARAM_INT) . ')';
         $path = $this->getOutputPath($name);
 
         $hash = uniqid();
@@ -636,7 +643,7 @@ class Backup
      *
      * @param string $name
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return bool|string
      */
@@ -644,10 +651,10 @@ class Backup
     {
         $zipPath = $this->outputPath . $name . '.zip';
 
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
 
-        if ($zip->open($zipPath, \ZipArchive::CREATE) !== true) {
-            throw new \RuntimeException(sprintf('Could not open %s, please check the permissions.', $zipPath));
+        if ($zip->open($zipPath, ZipArchive::CREATE) !== true) {
+            throw new RuntimeException(sprintf('Could not open %s, please check the permissions.', $zipPath));
         }
 
         $files = $this->getDirectoryList($this->outputPath);

@@ -24,7 +24,10 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
-class LogTest extends \Enlight_Components_Test_Controller_TestCase
+use DateTime;
+use Enlight_Components_Test_Controller_TestCase;
+
+class LogTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Standard set up for every test - just disable auth
@@ -68,7 +71,7 @@ class LogTest extends \Enlight_Components_Test_Controller_TestCase
                 'type' => 'backend',
                 'key' => 'Log',
                 'text' => 'DummyText',
-                'date' => new \DateTime('now'),
+                'date' => new DateTime('now'),
                 'user' => 'Administrator',
                 'value4' => '',
             ]
@@ -121,7 +124,7 @@ class LogTest extends \Enlight_Components_Test_Controller_TestCase
                 'type' => 'backend',
                 'key' => 'Log',
                 'text' => 'DummyText',
-                'date' => new \DateTime('now'),
+                'date' => new DateTime('now'),
                 'user' => 'Administrator',
                 'value4' => '',
             ]

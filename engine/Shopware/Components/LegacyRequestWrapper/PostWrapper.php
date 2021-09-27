@@ -24,17 +24,21 @@
 
 namespace Shopware\Components\LegacyRequestWrapper;
 
-class PostWrapper implements \ArrayAccess
+use ArrayAccess;
+use Enlight_Controller_Request_Request;
+use Exception;
+
+class PostWrapper implements ArrayAccess
 {
     /**
-     * @var \Enlight_Controller_Request_Request
+     * @var Enlight_Controller_Request_Request
      */
     private $request;
 
     /**
-     * @param \Enlight_Controller_Request_Request $request The request object
+     * @param Enlight_Controller_Request_Request $request The request object
      */
-    public function __construct(\Enlight_Controller_Request_Request $request)
+    public function __construct(Enlight_Controller_Request_Request $request)
     {
         $this->request = $request;
     }
@@ -106,7 +110,7 @@ class PostWrapper implements \ArrayAccess
      *                      The offset to unset.
      *                      </p>
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function offsetUnset($offset)
     {

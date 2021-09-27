@@ -26,6 +26,8 @@ namespace Shopware\Tests\Mink;
 
 use Behat\Gherkin\Node\TableNode;
 use Doctrine\DBAL\Connection;
+use Exception;
+use InvalidArgumentException;
 
 class ExportContext extends SubContext
 {
@@ -65,7 +67,7 @@ class ExportContext extends SubContext
      * @param string $format
      * @param string $subshop Anything else than "subshop" will be treated as "shop"
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @Then /^I should see the feed "(?P<name>[^"]*)" with format "(?P<format>[^"]*)" in the "(?P<subshop>[^"]*)" export:$/
      */
@@ -81,7 +83,7 @@ class ExportContext extends SubContext
                 break;
 
             default:
-                throw new \InvalidArgumentException("Unknown output format '$format'");
+                throw new InvalidArgumentException("Unknown output format '$format'");
         }
 
         $this->validate($entries, $export, $subshop);

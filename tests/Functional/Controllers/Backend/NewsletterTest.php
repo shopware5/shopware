@@ -24,9 +24,10 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Enlight_Components_Test_Plugin_TestCase;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class NewsletterTest extends \Enlight_Components_Test_Plugin_TestCase
+class NewsletterTest extends Enlight_Components_Test_Plugin_TestCase
 {
     use DatabaseTransactionBehaviour;
 

@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Exception;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
@@ -1251,7 +1252,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         $article = $this->createConfiguratorSetProduct();
@@ -1369,7 +1370,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
     }
 
@@ -1380,7 +1381,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         $article = $this->createConfiguratorSetProduct();
@@ -1514,7 +1515,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
     }
 
@@ -1525,7 +1526,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         $article = $this->createConfiguratorSetProduct();
@@ -1626,7 +1627,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
     }
 
@@ -1637,7 +1638,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         $article = $this->createConfiguratorSetProduct();
@@ -1669,7 +1670,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
     }
 
@@ -1683,7 +1684,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         $article = $this->createConfiguratorSetProduct();
@@ -1715,7 +1716,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
     }
 
@@ -1730,7 +1731,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         $article = $this->createConfiguratorSetProduct();
@@ -1760,7 +1761,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
     }
 
@@ -2622,7 +2623,7 @@ class ArticleTest extends TestCase
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
         // Associate three kinds of categories with the article:
         // category by id, category by path, new category by path

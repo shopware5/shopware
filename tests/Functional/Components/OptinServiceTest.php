@@ -24,8 +24,10 @@
 
 namespace Shopware\Tests\Functional\Components;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\OptinServiceInterface;
+use stdClass;
 
 class OptinServiceTest extends TestCase
 {
@@ -66,18 +68,18 @@ class OptinServiceTest extends TestCase
 
     public function testAssertAdd()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('$type has to be of type string');
 
-        $this->service->add(new \stdClass(), 300, []);
+        $this->service->add(new stdClass(), 300, []);
     }
 
     public function testAssertGet()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('$type has to be of type string');
 
-        $this->service->get(new \stdClass(), 'asddassdasa');
+        $this->service->get(new stdClass(), 'asddassdasa');
     }
 
     public function testDelete()

@@ -24,6 +24,13 @@
 
 namespace Shopware\Components\Plugin;
 
+use DOMDocument;
+use DOMElement;
+use DOMNode;
+use DOMNodeList;
+use DOMXPath;
+use Exception;
+use InvalidArgumentException;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**
@@ -39,8 +46,8 @@ class XmlPluginInfoReader
     {
         try {
             $dom = XmlUtils::loadFile($file, __DIR__ . '/schema/plugin.xsd');
-        } catch (\Exception $e) {
-            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s". Message: %s', $file, $e->getMessage()), $e->getCode(), $e);
+        } catch (Exception $e) {
+            throw new InvalidArgumentException(sprintf('Unable to parse file "%s". Message: %s', $file, $e->getMessage()), $e->getCode(), $e);
         }
 
         return $this->parseInfo($dom);
@@ -49,11 +56,11 @@ class XmlPluginInfoReader
     /**
      * @return array|null
      */
-    private function parseInfo(\DOMDocument $xml)
+    private function parseInfo(DOMDocument $xml)
     {
-        $xpath = new \DOMXPath($xml);
+        $xpath = new DOMXPath($xml);
 
-        /** @var \DOMNodeList|false $entries */
+        /** @var DOMNodeList|false $entries */
         $entries = $xpath->query('//plugin');
         if ($entries === false) {
             return null;
@@ -108,13 +115,13 @@ class XmlPluginInfoReader
     /**
      * Get child elements by name.
      *
-     * @return \DOMElement[]
+     * @return DOMElement[]
      */
-    private function getChildren(\DOMNode $node, $name)
+    private function getChildren(DOMNode $node, $name)
     {
         $children = [];
         foreach ($node->childNodes as $child) {
-            if ($child instanceof \DOMElement && $child->localName === $name) {
+            if ($child instanceof DOMElement && $child->localName === $name) {
                 $children[] = $child;
             }
         }
@@ -125,9 +132,9 @@ class XmlPluginInfoReader
     /**
      * @param string $name
      *
-     * @return \DOMElement|null
+     * @return DOMElement|null
      */
-    private function getFirstChild(\DOMNode $node, $name)
+    private function getFirstChild(DOMNode $node, $name)
     {
         if ($children = $this->getChildren($node, $name)) {
             return $children[0];
@@ -141,11 +148,11 @@ class XmlPluginInfoReader
      *
      * @return string[]
      */
-    private function getChildrenValues(\DOMNode $node, $name)
+    private function getChildrenValues(DOMNode $node, $name)
     {
         $children = [];
         foreach ($node->childNodes as $child) {
-            if ($child instanceof \DOMElement && $child->localName === $name) {
+            if ($child instanceof DOMElement && $child->localName === $name) {
                 $children[] = $child->nodeValue;
             }
         }
@@ -154,7 +161,7 @@ class XmlPluginInfoReader
     }
 
     /**
-     * @param \DOMNode $requiredPlugins
+     * @param DOMNode $requiredPlugins
      *
      * @return array<int, array<string, array<string>|string>>
      */

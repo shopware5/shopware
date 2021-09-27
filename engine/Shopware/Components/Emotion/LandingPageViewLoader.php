@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Emotion;
 
+use Enlight_Controller_Exception;
+use Exception;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Translation;
 
@@ -44,14 +46,14 @@ class LandingPageViewLoader
         Shopware_Components_Translation $translationComponent = null
     ) {
         $this->deviceConfiguration = $deviceConfiguration;
-        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(Shopware_Components_Translation::class);
     }
 
     /**
      * @param int $emotionId
      *
-     * @throws \Exception
-     * @throws \Enlight_Controller_Exception
+     * @throws Exception
+     * @throws Enlight_Controller_Exception
      *
      * @return LandingPageViewStruct
      */
@@ -64,7 +66,7 @@ class LandingPageViewLoader
         $fallbackId = $context->getShop()->getFallbackId();
 
         if (!$landingPage || !\in_array($shopId, $landingPageShops)) {
-            throw new \Enlight_Controller_Exception('Landing page missing, non-existent or invalid for the current shop', 404);
+            throw new Enlight_Controller_Exception('Landing page missing, non-existent or invalid for the current shop', 404);
         }
 
         $translation = $this->translationComponent->readWithFallback($shopId, $fallbackId, 'emotion', $emotionId);

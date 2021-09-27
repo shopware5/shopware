@@ -29,6 +29,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware_Components_Translation;
 
 /**
  * This class gathers all categories with there id, description, position, parent category id and the number
@@ -669,7 +670,7 @@ class Repository extends ModelRepository
         );
 
         if (Shopware()->Container()->initialized('shop')) {
-            $translationComponent = Shopware()->Container()->get(\Shopware_Components_Translation::class);
+            $translationComponent = Shopware()->Container()->get(Shopware_Components_Translation::class);
             $shopId = Shopware()->Shop()->getId();
             $fallbackId = null;
             if (Shopware()->Shop()->getFallback()) {

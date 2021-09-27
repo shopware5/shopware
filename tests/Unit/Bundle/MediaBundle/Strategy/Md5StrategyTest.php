@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Unit\Bundle\MediaBundle\Strategy;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Shopware\Bundle\MediaBundle\Strategy\Md5Strategy;
 
 class Md5StrategyTest extends TestCase
@@ -50,7 +51,7 @@ class Md5StrategyTest extends TestCase
      */
     public function invokeMethod($object, $methodName, array $parameters = [])
     {
-        $reflection = new \ReflectionClass(\get_class($object));
+        $reflection = new ReflectionClass(\get_class($object));
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
 

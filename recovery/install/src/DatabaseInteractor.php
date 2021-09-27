@@ -24,6 +24,8 @@
 
 namespace Shopware\Recovery\Install;
 
+use Exception;
+use PDO;
 use Shopware\Recovery\Common\IOHelper;
 use Shopware\Recovery\Install\Service\DatabaseService;
 use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
@@ -69,7 +71,7 @@ class DatabaseInteractor
     /**
      * @return string
      */
-    public function createDatabase(\PDO $connection)
+    public function createDatabase(PDO $connection)
     {
         $question = new Question('Please enter the name database to be created: ');
         $databaseName = $this->askQuestion($question);
@@ -85,7 +87,7 @@ class DatabaseInteractor
      *
      * @return bool
      */
-    public function continueWithExistingTables($databaseName, \PDO $pdo)
+    public function continueWithExistingTables($databaseName, PDO $pdo)
     {
         $service = new DatabaseService($pdo);
         $tableCount = $service->getTableCount();
@@ -127,7 +129,7 @@ class DatabaseInteractor
         $question->setValidator(
             function ($answer) {
                 if (trim($answer) === '') {
-                    throw new \Exception('The database user can not be empty');
+                    throw new Exception('The database user can not be empty');
                 }
 
                 return $answer;
@@ -156,7 +158,7 @@ class DatabaseInteractor
         $question->setValidator(
             function ($answer) {
                 if (trim($answer) === '') {
-                    throw new \Exception('The database user can not be empty');
+                    throw new Exception('The database user can not be empty');
                 }
 
                 return $answer;
@@ -198,11 +200,11 @@ class DatabaseInteractor
         $question->setValidator(
             function ($answer) {
                 if (trim($answer) === '') {
-                    throw new \Exception('The database port can not be empty');
+                    throw new Exception('The database port can not be empty');
                 }
 
                 if (!is_numeric($answer)) {
-                    throw new \Exception('The database port must be a number');
+                    throw new Exception('The database port must be a number');
                 }
 
                 return $answer;

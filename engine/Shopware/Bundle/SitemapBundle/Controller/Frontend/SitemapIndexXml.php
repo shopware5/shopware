@@ -24,11 +24,13 @@
 
 namespace Shopware\Bundle\SitemapBundle\Controller;
 
+use Enlight_Controller_Action;
 use Shopware\Bundle\SitemapBundle\Exception\AlreadyLockedException;
 use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
 use Shopware\Bundle\SitemapBundle\SitemapListerInterface;
+use Shopware_Components_Config;
 
-class SitemapIndexXml extends \Enlight_Controller_Action
+class SitemapIndexXml extends Enlight_Controller_Action
 {
     /**
      * @var SitemapListerInterface
@@ -36,7 +38,7 @@ class SitemapIndexXml extends \Enlight_Controller_Action
     private $sitemapLister;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -45,7 +47,7 @@ class SitemapIndexXml extends \Enlight_Controller_Action
      */
     private $sitemapExporter;
 
-    public function __construct(SitemapListerInterface $sitemapLister, SitemapExporterInterface $sitemapExporter, \Shopware_Components_Config $config)
+    public function __construct(SitemapListerInterface $sitemapLister, SitemapExporterInterface $sitemapExporter, Shopware_Components_Config $config)
     {
         parent::__construct();
         $this->sitemapLister = $sitemapLister;

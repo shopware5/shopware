@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Mink;
 
+use Exception;
 use Shopware\Tests\Mink\Page\Backend;
 
 class BackendContext extends SubContext
@@ -104,7 +105,7 @@ class BackendContext extends SubContext
      * @param callable $lambda
      * @param int      $wait
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
@@ -117,14 +118,14 @@ class BackendContext extends SubContext
                 if ($lambda($this)) {
                     return true;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // do nothing
             }
 
             usleep(250000);
         }
 
-        throw new \Exception("Spin function timed out after {$wait} seconds");
+        throw new Exception("Spin function timed out after {$wait} seconds");
     }
 
     /**
@@ -162,7 +163,7 @@ JS;
                 if ($lambda($this)) {
                     return true;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // do nothing
             }
 

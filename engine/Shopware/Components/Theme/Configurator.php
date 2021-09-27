@@ -26,6 +26,8 @@ namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Enlight_Event_EventManager;
+use Exception;
 use Shopware\Components\Form;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
@@ -66,7 +68,7 @@ class Configurator
     protected $repository;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     protected $eventManager;
 
@@ -74,7 +76,7 @@ class Configurator
         ModelManager $entityManager,
         Util $util,
         Form\Persister\Theme $persister,
-        \Enlight_Event_EventManager $eventManager
+        Enlight_Event_EventManager $eventManager
     ) {
         $this->entityManager = $entityManager;
         $this->persister = $persister;
@@ -91,7 +93,7 @@ class Configurator
      *
      * If one of the theme container elements isn't valid the function throws an exception
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function synchronize(Theme $theme)
     {
@@ -147,7 +149,7 @@ class Configurator
     /**
      * Helper function which validates the passed Shopware\Components\Form\Container.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function validateConfig(Form\Interfaces\Container $container)
     {
@@ -172,7 +174,7 @@ class Configurator
      * Synchronize the theme configuration sets of the file system and
      * the database.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function synchronizeSets(Theme $theme, Shop\Template $template)
     {
@@ -184,7 +186,7 @@ class Configurator
         // Iterates all configurations sets of the file system
         foreach ($collection as $item) {
             if (!$item instanceof ConfigSet) {
-                throw new \Exception(sprintf("Theme %s adds a configuration set which isn't an instance of Shopware\Components\Theme\ConfigSet.", $theme->getTemplate()));
+                throw new Exception(sprintf("Theme %s adds a configuration set which isn't an instance of Shopware\Components\Theme\ConfigSet.", $theme->getTemplate()));
             }
 
             $item->validate();

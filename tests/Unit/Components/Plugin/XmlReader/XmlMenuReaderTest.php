@@ -27,6 +27,7 @@ namespace Shopware\Tests\Unit\Components\Plugin\XmlReader;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use RuntimeException;
 use Shopware\Components\Plugin\XmlReader\XmlMenuReader;
 
 class XmlMenuReaderTest extends TestCase
@@ -43,7 +44,7 @@ class XmlMenuReaderTest extends TestCase
 
     public function testThatEmptyEntriesThrowException(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Required element "entry" is missing.');
 
         $dom = new DOMDocument();

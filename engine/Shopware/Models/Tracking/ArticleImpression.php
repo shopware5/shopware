@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Tracking;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -56,7 +58,7 @@ class ArticleImpression extends ModelEntity
     private $id;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="date", type="date", nullable=false)
      */
@@ -97,16 +99,16 @@ class ArticleImpression extends ModelEntity
     private $deviceType;
 
     /**
-     * @param int                     $articleId
-     * @param int                     $shopId
-     * @param \DateTimeInterface|null $date
-     * @param int                     $impressions
-     * @param string|null             $deviceType
+     * @param int                    $articleId
+     * @param int                    $shopId
+     * @param DateTimeInterface|null $date
+     * @param int                    $impressions
+     * @param string|null            $deviceType
      */
     public function __construct($articleId, $shopId, $date = null, $impressions = 1, $deviceType = null)
     {
         if ($date === null) {
-            $date = new \DateTime();
+            $date = new DateTime();
         }
         $this->setArticleId($articleId);
         $this->setShopId($shopId);
@@ -128,7 +130,7 @@ class ArticleImpression extends ModelEntity
     /**
      * Set the date
      *
-     * @param \DateTimeInterface $date
+     * @param DateTimeInterface $date
      */
     public function setDate($date)
     {
@@ -138,7 +140,7 @@ class ArticleImpression extends ModelEntity
     /**
      * Get the date
      *
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getDate()
     {

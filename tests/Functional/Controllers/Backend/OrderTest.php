@@ -24,11 +24,13 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use DateTimeZone;
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Locale;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class OrderTest extends \Enlight_Components_Test_Controller_TestCase
+class OrderTest extends Enlight_Components_Test_Controller_TestCase
 {
     use DatabaseTransactionBehaviour;
 
@@ -167,7 +169,7 @@ class OrderTest extends \Enlight_Components_Test_Controller_TestCase
         /** @var \DateTime $orderTime */
         $orderTime = $data['orderTime'];
         $oldDate = clone $orderTime;
-        $orderTime->setTimezone(new \DateTimeZone('US/Alaska'));
+        $orderTime->setTimezone(new DateTimeZone('US/Alaska'));
 
         $data['orderTime'] = new \DateTime($orderTime->format(\DateTime::ATOM));
         $data['changed'] = $data['changed']->format('Y-m-d H:i:s');

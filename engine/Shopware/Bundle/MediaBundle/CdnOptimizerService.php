@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use Exception;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
@@ -87,7 +88,7 @@ class CdnOptimizerService implements OptimizerServiceInterface
         } finally {
             try {
                 $this->filesystem->delete($tempFileName);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 // Empty catch intended, an exception thrown here could hide possible other exception.
             }
         }

@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
+use PDO;
 use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
@@ -213,7 +214,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
-        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (empty($result)) {
             return null;
@@ -277,7 +278,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
-        $result = $statement->fetch(\PDO::FETCH_COLUMN);
+        $result = $statement->fetch(PDO::FETCH_COLUMN);
 
         if (empty($result)) {
             return null;

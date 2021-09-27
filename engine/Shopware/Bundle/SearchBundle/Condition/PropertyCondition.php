@@ -25,9 +25,10 @@
 namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Assert\Assertion;
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class PropertyCondition implements ConditionInterface, \JsonSerializable
+class PropertyCondition implements ConditionInterface, JsonSerializable
 {
     /**
      * Each value id is combined via OR expression to restrict the criteria.

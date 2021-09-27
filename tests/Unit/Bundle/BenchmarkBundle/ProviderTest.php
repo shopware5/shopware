@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\BenchmarkBundle;
 
+use ArrayObject;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
@@ -37,7 +38,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGet()
     {
-        $provider = new BenchmarkCollector(new \ArrayObject([
+        $provider = new BenchmarkCollector(new ArrayObject([
             new ShopBenchmarkProvider(),
             new FooBenchmarkProvider(),
             new BarBenchmarkProvider(),
@@ -62,7 +63,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetShouldThrowExceptionNoShopProvider()
     {
-        $provider = new BenchmarkCollector(new \ArrayObject([
+        $provider = new BenchmarkCollector(new ArrayObject([
             new FooBenchmarkProvider(),
             new BarBenchmarkProvider(),
         ]));

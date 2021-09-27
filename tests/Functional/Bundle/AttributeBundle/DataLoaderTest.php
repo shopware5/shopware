@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Functional\Bundle\AttributeBundle;
 
 use Doctrine\DBAL\Connection;
+use Exception;
 use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
 use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
 
@@ -86,7 +87,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadForeignKeyValidation($input)
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('No foreign key provided');
 
         $this->attributeLoader->load('s_user_addresses_attributes', $input);
@@ -104,7 +105,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
 
     public function testLoadWithUnknownTable()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Table table_does_not_exists is no attribute table');
 
         $this->attributeLoader->load('table_does_not_exists', 1);
@@ -130,7 +131,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadTranslationsForeignKeyValidation($input): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('No foreign key provided');
 
         $this->attributeLoader->loadTranslations('s_user_addresses_attributes', $input);

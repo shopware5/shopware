@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\MediaBundle;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MediaBundle\MediaReplaceService;
 use Shopware\Models\Media\Media;
@@ -48,7 +49,7 @@ class MediaReplaceServiceTest extends TestCase
     {
         $source = __DIR__ . '/../../Components/Api/fixtures/test-bild.jpg';
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Media with id -1 not found');
         $this->service->replace(-1, new UploadedFile($source, 'test-bild.jpg'));
     }

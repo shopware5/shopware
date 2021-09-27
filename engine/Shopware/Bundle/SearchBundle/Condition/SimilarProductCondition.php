@@ -25,9 +25,10 @@
 namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Assert\Assertion;
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class SimilarProductCondition implements ConditionInterface, \JsonSerializable
+class SimilarProductCondition implements ConditionInterface, JsonSerializable
 {
     public const NAME = 'similar_products';
 

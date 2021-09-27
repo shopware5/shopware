@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\HttpClient;
 
+use Exception;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 use Psr\Http\Message\ResponseInterface;
@@ -48,7 +49,7 @@ class GuzzleHttpClient implements HttpClientInterface
         try {
             /** @var ResponseInterface $response */
             $response = $this->guzzleClient->get($url, ['headers' => $headers]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             /** @var GuzzleClientException $e */
             $body = '';
             if ($e->hasResponse()) {
@@ -73,7 +74,7 @@ class GuzzleHttpClient implements HttpClientInterface
         try {
             /** @var ResponseInterface $response */
             $response = $this->guzzleClient->head($url, ['headers' => $headers]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new RequestException($e->getMessage(), $e->getCode(), $e);
         }
 
@@ -92,7 +93,7 @@ class GuzzleHttpClient implements HttpClientInterface
         try {
             /** @var ResponseInterface $response */
             $response = $this->guzzleClient->delete($url, ['headers' => $headers]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new RequestException($e->getMessage(), $e->getCode(), $e);
         }
 
@@ -111,7 +112,7 @@ class GuzzleHttpClient implements HttpClientInterface
         try {
             /** @var ResponseInterface $response */
             $response = $this->guzzleClient->put($url, $this->formatOptions($headers, $content));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new RequestException($e->getMessage(), $e->getCode(), $e);
         }
 
@@ -130,7 +131,7 @@ class GuzzleHttpClient implements HttpClientInterface
         try {
             /** @var ResponseInterface $response */
             $response = $this->guzzleClient->patch($url, $this->formatOptions($headers, $content));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $body = '';
 
             if (($e instanceof GuzzleClientException) && $e->hasResponse()) {
@@ -155,7 +156,7 @@ class GuzzleHttpClient implements HttpClientInterface
         try {
             /** @var ResponseInterface $response */
             $response = $this->guzzleClient->post($url, $this->formatOptions($headers, $content));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $body = '';
 
             if (($e instanceof GuzzleClientException) && $e->hasResponse()) {

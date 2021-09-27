@@ -25,8 +25,10 @@
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 use Enlight_Components_Test_Plugin_TestCase;
+use Exception;
 use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware_Components_Translation;
 
 class FormTest extends Enlight_Components_Test_Plugin_TestCase
 {
@@ -42,7 +44,7 @@ class FormTest extends Enlight_Components_Test_Plugin_TestCase
     {
         try {
             $this->dispatch('/partnerformular');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             static::fail('Exception thrown. This should not occur.');
         }
 
@@ -57,13 +59,13 @@ class FormTest extends Enlight_Components_Test_Plugin_TestCase
     {
         $this->Request()->setCookie('shop', 2);
 
-        Shopware()->Container()->get(\Shopware_Components_Translation::class)->write(2, 'forms', 8, [
+        Shopware()->Container()->get(Shopware_Components_Translation::class)->write(2, 'forms', 8, [
             'name' => self::ENGLISH_NAME,
         ]);
 
         try {
             $this->dispatch('/partnerformular');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             static::fail('Exception thrown. This should not occur.');
         }
 

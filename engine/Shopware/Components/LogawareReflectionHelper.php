@@ -24,6 +24,7 @@
 
 namespace Shopware\Components;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 
 class LogawareReflectionHelper
@@ -60,7 +61,7 @@ class LogawareReflectionHelper
 
             try {
                 $classes[] = $this->reflector->createInstanceFromNamedArguments($className, $arguments);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->critical($errorSource . ': ' . $e->getMessage());
             }
         }

@@ -25,6 +25,11 @@
 namespace Shopware\Components\Model;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Exception;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RuntimeException;
+use SplFileInfo;
 
 class Generator
 {
@@ -267,7 +272,7 @@ class %className% extends ModelEntity
      *
      * @param string[] $tableNames
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -279,7 +284,7 @@ class %className% extends ModelEntity
 
         try {
             $this->createTargetDirectory($this->getPath());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return ['success' => false, 'error' => self::CREATE_TARGET_DIRECTORY_FAILED, 'message' => $e->getMessage()];
         }
 
@@ -309,7 +314,7 @@ class %className% extends ModelEntity
      * @param \Doctrine\DBAL\Schema\Table $table
      * @param string                      $sourceCode
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
@@ -329,7 +334,7 @@ class %className% extends ModelEntity
         $file = $this->getPath() . $className . '.php';
 
         if (file_exists($file) && !is_writable($file)) {
-            throw new \Exception(sprintf('File: "%s" isn\'t writable, please check the file permissions for this model!', $file), 501);
+            throw new Exception(sprintf('File: "%s" isn\'t writable, please check the file permissions for this model!', $file), 501);
         }
 
         $result = file_put_contents($file, $sourceCode);
@@ -364,14 +369,14 @@ class %className% extends ModelEntity
      */
     public function createTableMapping()
     {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($this->getModelPath()),
-            \RecursiveIteratorIterator::SELF_FIRST
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($this->getModelPath()),
+            RecursiveIteratorIterator::SELF_FIRST
         );
 
         $classes = [];
 
-        /** @var \SplFileInfo $file */
+        /** @var SplFileInfo $file */
         foreach ($iterator as $file) {
             $extension = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
             if ($extension !== 'php' || $file->isDir()) {
@@ -430,10 +435,10 @@ class %className% extends ModelEntity
     {
         if (!is_dir($dir)) {
             if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
-                throw new \RuntimeException(sprintf("Unable to create directory (%s)\n", $dir));
+                throw new RuntimeException(sprintf("Unable to create directory (%s)\n", $dir));
             }
         } elseif (!is_writable($dir)) {
-            throw new \RuntimeException(sprintf("Unable to write in directory (%s)\n", $dir));
+            throw new RuntimeException(sprintf("Unable to write in directory (%s)\n", $dir));
         }
     }
 

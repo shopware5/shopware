@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Snippet;
 
+use Enlight_Components_Snippet_Namespace;
+use Enlight_Config_Adapter_File;
 use Shopware\Components\Snippet\Writer\QueryWriter;
 use Symfony\Component\Finder\Finder;
 
@@ -61,7 +63,7 @@ class QueryHandler
         $locales = [];
         $finder = new Finder();
 
-        $inputAdapter = new \Enlight_Config_Adapter_File([
+        $inputAdapter = new Enlight_Config_Adapter_File([
             'configDir' => $snippetsDir,
         ]);
 
@@ -76,7 +78,7 @@ class QueryHandler
                 continue;
             }
 
-            $namespaceData = new \Enlight_Components_Snippet_Namespace([
+            $namespaceData = new Enlight_Components_Snippet_Namespace([
                 'adapter' => $inputAdapter,
                 'name' => $namespace,
             ]);

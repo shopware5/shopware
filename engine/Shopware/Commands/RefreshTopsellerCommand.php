@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Shopware_Components_TopSeller;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -47,7 +48,7 @@ class RefreshTopsellerCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('Refreshing the topseller index. This may take a while depending on the shop size.');
-        /** @var \Shopware_Components_TopSeller $topseller */
+        /** @var Shopware_Components_TopSeller $topseller */
         $topseller = $this->container->get('topseller');
         $topseller->updateElapsedTopSeller();
 

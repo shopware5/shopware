@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\LocationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
@@ -87,7 +88,7 @@ class LocationService implements LocationServiceInterface
         $query->select('id');
         $query->from('s_core_countries', 'country');
 
-        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**

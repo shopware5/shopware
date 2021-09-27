@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Mink\Page;
 
 use Behat\Mink\Element\NodeElement;
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\ArticleEvaluation;
 use Shopware\Tests\Mink\Helper;
@@ -141,7 +142,7 @@ class Detail extends Page implements HelperSelectorInterface
                 if ($this->find('css', "a[title='$text']")) {
                     return true;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Page does not contain the text
             }
 
@@ -160,7 +161,7 @@ class Detail extends Page implements HelperSelectorInterface
      *
      * @param string $average
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkEvaluations(ArticleEvaluation $articleEvaluations, $average, array $evaluations)
     {
@@ -221,7 +222,7 @@ class Detail extends Page implements HelperSelectorInterface
      * @param string $configuratorOption
      * @param string $configuratorGroup
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup)
     {
@@ -259,7 +260,7 @@ class Detail extends Page implements HelperSelectorInterface
      * @param string $max        Last option
      * @param int    $graduation Steps between each options
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkSelect($select, $min, $max, $graduation)
     {
@@ -342,7 +343,7 @@ class Detail extends Page implements HelperSelectorInterface
     /**
      * @param string $average
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function checkRating(ArticleEvaluation $articleEvaluations, $average)
     {

@@ -24,12 +24,16 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Closure;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
+use Generator;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models\Customer\Address;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware_Controllers_Backend_Application;
 
 class ApplicationTest extends TestCase
 {
@@ -42,7 +46,7 @@ class ApplicationTest extends TestCase
     {
         $controller = new ApplicationControllerMock();
 
-        $method = (new \ReflectionClass(ApplicationControllerMock::class))->getMethod('formatSearchValue');
+        $method = (new ReflectionClass(ApplicationControllerMock::class))->getMethod('formatSearchValue');
         $method->setAccessible(true);
 
         $result = $method->invokeArgs($controller, $parameter);
@@ -59,15 +63,15 @@ class ApplicationTest extends TestCase
         static::assertInstanceOf(Container::class, $this->getContainer());
         $controller->setContainer($this->getContainer());
 
-        $getAssociationModel = \Closure::bind(function (string $association): string {
+        $getAssociationModel = Closure::bind(function (string $association): string {
             return $this->getAssociatedModelByProperty($this->model, $association);
         }, $controller, $controller);
 
-        $getBuilder = \Closure::bind(function (array $args): QueryBuilder {
+        $getBuilder = Closure::bind(function (array $args): QueryBuilder {
             return $this->getSearchAssociationQuery(...$args);
         }, $controller, $controller);
 
-        $getSearchAssociation = \Closure::bind(function (array $args): array {
+        $getSearchAssociation = Closure::bind(function (array $args): array {
             return $this->searchAssociation(...$args);
         }, $controller, $controller);
 
@@ -122,9 +126,9 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * @return \Generator<string, array>
+     * @return Generator<string, array>
      */
-    public function searchProvider(): \Generator
+    public function searchProvider(): Generator
     {
         yield 'search parameter null' => [null, null];
         yield 'search parameter empty' => ['', null];
@@ -138,7 +142,7 @@ class ApplicationTest extends TestCase
 /**
  * @extends \Shopware_Controllers_Backend_Application<Address>
  */
-class ApplicationControllerMock extends \Shopware_Controllers_Backend_Application
+class ApplicationControllerMock extends Shopware_Controllers_Backend_Application
 {
     protected $model = Address::class;
 
@@ -148,7 +152,7 @@ class ApplicationControllerMock extends \Shopware_Controllers_Backend_Applicatio
 /**
  * @extends \Shopware_Controllers_Backend_Application<Address>
  */
-class ApplicationControllerDerivateMock extends \Shopware_Controllers_Backend_Application
+class ApplicationControllerDerivateMock extends Shopware_Controllers_Backend_Application
 {
     protected $model = Address::class;
 

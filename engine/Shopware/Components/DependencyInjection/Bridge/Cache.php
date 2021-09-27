@@ -25,7 +25,13 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Shopware\Components\ShopwareReleaseStruct;
+use Zend_Cache;
+use Zend_Cache_Backend;
+use Zend_Cache_Backend_Apcu;
+use Zend_Cache_Backend_File;
 use Zend_Cache_Core;
+use Zend_Cache_Exception;
+use Zend_Db_Table_Abstract;
 use Zend_Locale_Data;
 
 /**
@@ -39,7 +45,7 @@ class Cache
      * @param array  $frontendOptions
      * @param array  $backendOptions
      *
-     * @throws \Zend_Cache_Exception
+     * @throws Zend_Cache_Exception
      *
      * @return Zend_Cache_Core
      */
@@ -52,8 +58,8 @@ class Cache
 
         $cacheCore->setBackend($backend);
 
-        \Zend_Locale_Data::setCache($cacheCore);
-        \Zend_Db_Table_Abstract::setDefaultMetadataCache($cacheCore);
+        Zend_Locale_Data::setCache($cacheCore);
+        Zend_Db_Table_Abstract::setDefaultMetadataCache($cacheCore);
 
         return $cacheCore;
     }
@@ -62,7 +68,7 @@ class Cache
      * @param string $backend
      * @param array  $backendOptions
      *
-     * @return \Zend_Cache_Backend
+     * @return Zend_Cache_Backend
      */
     private function createBackend($backend, $backendOptions)
     {
@@ -73,7 +79,7 @@ class Cache
                 $backend = 'apcu';
             }
 
-            $backend = \Zend_Cache::_makeBackend($backend, $backendOptions);
+            $backend = Zend_Cache::_makeBackend($backend, $backendOptions);
         }
 
         return $backend;
@@ -82,14 +88,14 @@ class Cache
     /**
      * @param array $backendOptions
      *
-     * @return \Zend_Cache_Backend
+     * @return Zend_Cache_Backend
      */
     private function createAutomaticBackend($backendOptions = [])
     {
         if ($this->isApcuAvailable()) {
-            $backend = new \Zend_Cache_Backend_Apcu($backendOptions);
+            $backend = new Zend_Cache_Backend_Apcu($backendOptions);
         } else {
-            $backend = new \Zend_Cache_Backend_File($backendOptions);
+            $backend = new Zend_Cache_Backend_File($backendOptions);
         }
 
         return $backend;

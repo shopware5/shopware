@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Property;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\ESIndexingBundle\ProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator;
@@ -84,7 +85,7 @@ class PropertyProvider implements ProviderInterface
 
         foreach ($groupIds as $groupId) {
             $query->setParameter(':id', $groupId);
-            $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+            $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
             if (empty($data)) {
                 continue;
             }

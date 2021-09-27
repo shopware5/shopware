@@ -28,6 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Vote;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware_Components_Config;
 
 class VoteTest extends TestCase
 {
@@ -187,7 +188,7 @@ class VoteTest extends TestCase
     private function assertShopVotes($number, $points = [], $expected = [], $configs = [])
     {
         //switch config values
-        $config = Shopware()->Container()->get(\Shopware_Components_Config::class);
+        $config = Shopware()->Container()->get(Shopware_Components_Config::class);
         $originals = [];
         foreach ($configs as $key => $value) {
             $originals = $config->get($key);

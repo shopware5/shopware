@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SitemapBundle\Exception;
 
-class AlreadyLockedException extends \RuntimeException
+use RuntimeException;
+
+class AlreadyLockedException extends RuntimeException
 {
 }

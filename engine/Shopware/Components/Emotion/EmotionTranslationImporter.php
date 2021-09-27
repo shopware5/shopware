@@ -25,6 +25,7 @@
 namespace Shopware\Components\Emotion;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Components\Emotion\Exception\MappingRequiredException;
 use Shopware_Components_Translation;
 
@@ -43,7 +44,7 @@ class EmotionTranslationImporter
     public function __construct(Connection $connection, Shopware_Components_Translation $translationComponent = null)
     {
         $this->connection = $connection;
-        $this->translator = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
+        $this->translator = $translationComponent ?: Shopware()->Container()->get(Shopware_Components_Translation::class);
     }
 
     /**
@@ -69,7 +70,7 @@ class EmotionTranslationImporter
             ->from('s_core_shops', 'shop')
             ->leftJoin('shop', 's_core_locales', 'locale', 'locale.id = shop.locale_id')
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP);
+            ->fetchAll(PDO::FETCH_GROUP);
 
         foreach ($shops as $key => $shopData) {
             $shops[$key] = array_combine(array_column($shopData, 'name'), array_column($shopData, 'id'));
@@ -92,7 +93,7 @@ class EmotionTranslationImporter
             ->where('e.emotionID = :id')
             ->setParameter('id', $emotionId)
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
 
         foreach ($translations as &$translation) {
             $translation['objectdata'] = unserialize($translation['objectdata'], ['allowed_classes' => false]);

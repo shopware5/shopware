@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Unit\Components\Plugin;
 
+use Enlight_Components_Snippet_Manager;
+use Enlight_Components_Snippet_Namespace;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
@@ -58,7 +61,7 @@ class RequirementValidatorTest extends TestCase
         $e = null;
         try {
             $validator->validate(__DIR__ . '/examples/shopware_version_requirement.xml', '5.1.0');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         static::assertNull($e);
@@ -78,7 +81,7 @@ class RequirementValidatorTest extends TestCase
         $e = null;
         try {
             $validator->validate(__DIR__ . '/examples/shopware_version_requirement.xml', '5.1.0');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
         static::assertNull($e);
     }
@@ -97,7 +100,7 @@ class RequirementValidatorTest extends TestCase
         $e = null;
         try {
             $validator->validate(__DIR__ . '/examples/shopware_version_requirement.xml', '5.1.3');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
         static::assertNull($e);
     }
@@ -180,7 +183,7 @@ class RequirementValidatorTest extends TestCase
         $e = null;
         try {
             $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
         static::assertNull($e);
     }
@@ -229,11 +232,11 @@ class RequirementValidatorTest extends TestCase
     }
 
     /**
-     * @return \Enlight_Components_Snippet_Manager
+     * @return Enlight_Components_Snippet_Manager
      */
     private function createSnippetManager()
     {
-        $snippetNamespace = $this->createMock(\Enlight_Components_Snippet_Namespace::class);
+        $snippetNamespace = $this->createMock(Enlight_Components_Snippet_Namespace::class);
 
         $snippetNamespace
             ->expects(static::any())
@@ -261,7 +264,7 @@ class RequirementValidatorTest extends TestCase
                 }
             });
 
-        $snippetManager = $this->createMock(\Enlight_Components_Snippet_Manager::class);
+        $snippetManager = $this->createMock(Enlight_Components_Snippet_Manager::class);
 
         $snippetManager->expects(static::any())
             ->method('getNamespace')

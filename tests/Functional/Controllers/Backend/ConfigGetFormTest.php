@@ -24,7 +24,10 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
-class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
+use Enlight_Components_Test_Controller_TestCase;
+use Exception;
+
+class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
 {
     public const TEST_USER_USERNAME = 'testuser';
     public const TEST_ROLE_NAME = 'testadminrole';
@@ -313,10 +316,10 @@ class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertIsString($responseBody);
         $responseDataTransferObject = json_decode($responseBody);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \Exception('JSON parse error: ' . json_last_error_msg() . ' for request to ' . $requestUrl . ' which returned ' . $responseBody);
+            throw new Exception('JSON parse error: ' . json_last_error_msg() . ' for request to ' . $requestUrl . ' which returned ' . $responseBody);
         }
         if (!\is_object($responseDataTransferObject)) {
-            throw new \Exception('Response could not be parsed to an object for request to ' . $requestUrl . ' which returned ' . $responseBody);
+            throw new Exception('Response could not be parsed to an object for request to ' . $requestUrl . ' which returned ' . $responseBody);
         }
 
         // Basic assertions about the response to catch non-test-related errors early:

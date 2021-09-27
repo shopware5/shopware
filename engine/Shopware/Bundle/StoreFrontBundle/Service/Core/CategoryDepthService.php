@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryDepthServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 
@@ -60,7 +61,7 @@ class CategoryDepthService implements CategoryDepthServiceInterface
                 ->andWhere('category.id IN (:ids)');
         }
 
-        $paths = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $paths = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
         $ids = array_keys($paths);
         $plain = array_values($paths);
 

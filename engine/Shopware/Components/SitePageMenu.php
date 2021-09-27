@@ -25,6 +25,8 @@
 namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
+use PDO;
+use PDOStatement;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Routing\RouterInterface;
@@ -71,10 +73,10 @@ class SitePageMenu
     {
         $query = $this->getQuery($shopId);
 
-        /** @var \PDOStatement $statement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $menu = [];
         $links = [];

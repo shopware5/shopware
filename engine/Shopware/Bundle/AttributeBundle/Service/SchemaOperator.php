@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\AttributeBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Exception;
 
 class SchemaOperator implements SchemaOperatorInterface
 {
@@ -54,7 +55,7 @@ class SchemaOperator implements SchemaOperatorInterface
      * {@inheritdoc}
      *
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \Exception
+     * @throws Exception
      */
     public function createColumn($table, $column, $type, $defaultValue = null)
     {
@@ -62,7 +63,7 @@ class SchemaOperator implements SchemaOperatorInterface
         $defaultValue = $this->filterDefaultValue($defaultValue);
 
         if (!$type) {
-            throw new \Exception('No column type provided');
+            throw new Exception('No column type provided');
         }
 
         $sql = sprintf(
@@ -80,17 +81,17 @@ class SchemaOperator implements SchemaOperatorInterface
      * {@inheritdoc}
      *
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \Exception
+     * @throws Exception
      */
     public function changeColumn($table, $originalName, $newName, $type, $defaultValue = null)
     {
         $this->validate($table, $originalName);
 
         if (!$newName) {
-            throw new \Exception('No column name provided');
+            throw new Exception('No column name provided');
         }
         if (!$type) {
-            throw new \Exception('No column type provided');
+            throw new Exception('No column type provided');
         }
 
         $this->validateField($newName);
@@ -112,14 +113,14 @@ class SchemaOperator implements SchemaOperatorInterface
      * {@inheritdoc}
      *
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \Exception
+     * @throws Exception
      */
     public function dropColumn($table, $column)
     {
         $this->validate($table, $column);
 
         if ($this->tableMapping->isCoreColumn($table, $column)) {
-            throw new \Exception(sprintf('Provided column is an core attribute column: %s', $column));
+            throw new Exception(sprintf('Provided column is an core attribute column: %s', $column));
         }
 
         $sql = sprintf('ALTER TABLE `%s` DROP `%s`', $table, $column);
@@ -130,14 +131,14 @@ class SchemaOperator implements SchemaOperatorInterface
      * {@inheritdoc}
      *
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \Exception
+     * @throws Exception
      */
     public function resetColumn($table, $column)
     {
         $this->validate($table, $column);
 
         if (!$this->tableMapping->isTableColumn($table, $column)) {
-            throw new \Exception(sprintf('Provided column %s does not exist in table %s', $column, $table));
+            throw new Exception(sprintf('Provided column %s does not exist in table %s', $column, $table));
         }
 
         $sql = sprintf('UPDATE `%s` SET `%s` = NULL', $table, $column);
@@ -148,46 +149,46 @@ class SchemaOperator implements SchemaOperatorInterface
      * @param string $table
      * @param string $name
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function validate($table, $name)
     {
         if (!$table) {
-            throw new \Exception('No table name provided');
+            throw new Exception('No table name provided');
         }
         if (!$name) {
-            throw new \Exception('No column name provided');
+            throw new Exception('No column name provided');
         }
 
         $this->validateField($table);
         $this->validateField($name);
 
         if (!$this->tableMapping->isAttributeTable($table)) {
-            throw new \Exception(sprintf('Provided table is no attribute table: %s', $table));
+            throw new Exception(sprintf('Provided table is no attribute table: %s', $table));
         }
         if ($this->tableMapping->isIdentifierColumn($table, $name)) {
-            throw new \Exception(sprintf('Provided column is an identifier column: %s', $name));
+            throw new Exception(sprintf('Provided column is an identifier column: %s', $name));
         }
 
         $lowerCaseName = strtolower($name);
         if (\in_array($lowerCaseName, $this->nameBlacklist)) {
-            throw new \Exception(sprintf('Provided name %s is a reserved keyword.', $name));
+            throw new Exception(sprintf('Provided name %s is a reserved keyword.', $name));
         }
     }
 
     /**
      * @param string $field
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function validateField($field)
     {
         if (\strlen($field) > 64) {
-            throw new \Exception('Maximum length: 64 chars');
+            throw new Exception('Maximum length: 64 chars');
         }
 
         if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $field)) {
-            throw new \Exception(sprintf('Invalid chars in %s', $field));
+            throw new Exception(sprintf('Invalid chars in %s', $field));
         }
     }
 

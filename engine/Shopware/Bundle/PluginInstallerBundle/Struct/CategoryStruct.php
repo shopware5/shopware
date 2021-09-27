@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-class CategoryStruct implements \JsonSerializable
+use JsonSerializable;
+
+class CategoryStruct implements JsonSerializable
 {
     /**
      * @var int

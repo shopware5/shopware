@@ -27,6 +27,10 @@ declare(strict_types=1);
 
 namespace Shopware\Commands;
 
+use DirectoryIterator;
+use RecursiveRegexIterator;
+use RegexIterator;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -53,11 +57,11 @@ class GenerateMigrationCommand extends ShopwareCommand
         $migrationDirectory = $this->findMigrationDirectory($pluginName);
 
         if ($migrationDirectory === null) {
-            throw new \RuntimeException(sprintf('Plugin by name "%s" does not exists', $pluginName));
+            throw new RuntimeException(sprintf('Plugin by name "%s" does not exists', $pluginName));
         }
 
         if (!file_exists($migrationDirectory) && !mkdir($migrationDirectory, 0777, true) && !is_dir($migrationDirectory)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $migrationDirectory));
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $migrationDirectory));
         }
 
         $nextVersion = $this->getLatestMigrationVersion($migrationDirectory) + 1;
@@ -77,7 +81,7 @@ class GenerateMigrationCommand extends ShopwareCommand
             $rootDir = $this->container->getParameter('kernel.root_dir');
 
             if (!\is_string($rootDir)) {
-                throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+                throw new RuntimeException('Parameter kernel.root_dir has to be an string');
             }
 
             return $rootDir . '/_sql/migrations';
@@ -99,8 +103,8 @@ class GenerateMigrationCommand extends ShopwareCommand
     {
         $regexPattern = '/^([0-9]*)-.+\.php$/i';
 
-        $directoryIterator = new \DirectoryIterator($migrationFolder);
-        $regex = new \RegexIterator($directoryIterator, $regexPattern, \RecursiveRegexIterator::GET_MATCH);
+        $directoryIterator = new DirectoryIterator($migrationFolder);
+        $regex = new RegexIterator($directoryIterator, $regexPattern, RecursiveRegexIterator::GET_MATCH);
         $values = iterator_to_array($regex, false);
 
         if (empty($values)) {

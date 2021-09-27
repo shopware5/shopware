@@ -24,9 +24,12 @@
 
 namespace Shopware\Components\Template;
 
-class Security extends \Smarty_Security
+use Smarty;
+use Smarty_Security;
+
+class Security extends Smarty_Security
 {
-    public function __construct(\Smarty $smarty, $config = [])
+    public function __construct(Smarty $smarty, $config = [])
     {
         if (\is_array($config)) {
             foreach ($config as $key => $value) {

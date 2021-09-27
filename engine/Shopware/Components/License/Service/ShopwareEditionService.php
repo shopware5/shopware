@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Components\License\Service;
 
+use RuntimeException;
 use Shopware\Components\License\Struct\LicenseUnpackRequest;
 use Shopware\Components\License\Struct\ShopwareEdition;
 use Shopware\Components\Model\ModelManager;
@@ -70,7 +71,7 @@ class ShopwareEditionService implements ShopwareEditionServiceInterface
             return $this->licenseUnpackService->evaluateLicense(
                 new LicenseUnpackRequest($license->getLicense(), $host)
             )->edition;
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             return ShopwareEdition::CE;
         }
     }

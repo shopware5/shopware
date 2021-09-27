@@ -24,6 +24,8 @@
 
 namespace Shopware\Components;
 
+use DomainException;
+
 /**
  * Pseudorandom number generator (PRNG).
  *
@@ -70,14 +72,14 @@ abstract class Random
      * @param int $min
      * @param int $max
      *
-     * @throws \DomainException
+     * @throws DomainException
      *
      * @return int
      */
     public static function getInteger($min, $max)
     {
         if ($min > $max) {
-            throw new \DomainException('The min parameter must be lower than max parameter');
+            throw new DomainException('The min parameter must be lower than max parameter');
         }
 
         return random_int($min, $max);
@@ -108,14 +110,14 @@ abstract class Random
      * @param int         $length
      * @param string|null $charlist
      *
-     * @throws \DomainException
+     * @throws DomainException
      *
      * @return string
      */
     public static function getString($length, $charlist = null)
     {
         if ($length < 1) {
-            throw new \DomainException('Length should be >= 1');
+            throw new DomainException('Length should be >= 1');
         }
 
         // Charlist is empty or not provided
@@ -148,14 +150,14 @@ abstract class Random
      *
      * @param int $length
      *
-     * @throws \DomainException
+     * @throws DomainException
      *
      * @return string
      */
     public static function getAlphanumericString($length)
     {
         if ($length < 1) {
-            throw new \DomainException('Length should be >= 1');
+            throw new DomainException('Length should be >= 1');
         }
 
         $charlist = implode('', range('a', 'z')) . implode('', range('A', 'Z')) . implode('', range(0, 9));

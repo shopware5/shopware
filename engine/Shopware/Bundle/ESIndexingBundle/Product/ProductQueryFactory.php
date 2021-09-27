@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 
@@ -57,8 +58,8 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
                 ->from('s_articles_categories_ro', 'categories')
                 ->andWhere('categories.articleID > :lastId')
                 ->andWhere('categories.categoryID = :categoryId')
-                ->setParameter(':categoryId', $categoryId, \PDO::PARAM_INT)
-                ->setParameter(':lastId', 0, \PDO::PARAM_INT)
+                ->setParameter(':categoryId', $categoryId, PDO::PARAM_INT)
+                ->setParameter(':lastId', 0, PDO::PARAM_INT)
                 ->orderBy('categories.articleID');
 
             if ($limit !== null) {
@@ -68,7 +69,7 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
             $query = $this->createQuery($limit);
             $query->innerJoin('variant', 's_articles_categories_ro', 'categories', 'variant.articleID = categories.articleID')
                 ->andWhere('categories.categoryID = :categoryId')
-                ->setParameter(':categoryId', $categoryId, \PDO::PARAM_INT);
+                ->setParameter(':categoryId', $categoryId, PDO::PARAM_INT);
         }
 
         return new LastIdQuery($query);

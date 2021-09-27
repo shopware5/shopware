@@ -26,7 +26,11 @@ namespace Shopware\Components\CustomerStream;
 
 use Doctrine\DBAL\Connection;
 use Enlight\Event\SubscriberInterface;
+use Enlight_Controller_EventArgs;
+use Enlight_Controller_Front;
+use Enlight_Event_EventArgs;
 use Ramsey\Uuid\Uuid;
+use Shopware_Components_Config;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 
@@ -63,7 +67,7 @@ class CookieSubscriber implements SubscriberInterface
             return;
         }
 
-        /** @var \Enlight_Controller_Front $controller */
+        /** @var Enlight_Controller_Front $controller */
         $controller = $this->container->get('front');
 
         if ($this->container->initialized('session')) {
@@ -76,11 +80,11 @@ class CookieSubscriber implements SubscriberInterface
         );
     }
 
-    public function checkCookie(\Enlight_Controller_EventArgs $args)
+    public function checkCookie(Enlight_Controller_EventArgs $args)
     {
         $request = $args->getRequest();
 
-        $config = $this->container->get(\Shopware_Components_Config::class);
+        $config = $this->container->get(Shopware_Components_Config::class);
 
         if (!$config->get('useSltCookie')) {
             return;
@@ -126,9 +130,9 @@ class CookieSubscriber implements SubscriberInterface
         $session->offsetSet('auto-user', (int) $data['id']);
     }
 
-    public function afterLogin(\Enlight_Event_EventArgs $args)
+    public function afterLogin(Enlight_Event_EventArgs $args)
     {
-        $config = $this->container->get(\Shopware_Components_Config::class);
+        $config = $this->container->get(Shopware_Components_Config::class);
 
         if (!$config->get('useSltCookie')) {
             return;
@@ -141,7 +145,7 @@ class CookieSubscriber implements SubscriberInterface
             return;
         }
 
-        /** @var \Enlight_Controller_Front $controller */
+        /** @var Enlight_Controller_Front $controller */
         $controller = $this->container->get('front');
 
         $response = $controller->Response();

@@ -24,20 +24,24 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use Exception;
+use RuntimeException;
+use ZipArchive;
+
 class LegacyPluginExtractor
 {
     /**
      * Extracts the provided zip file to the provided destination
      *
-     * @param \ZipArchive $archive
-     * @param string      $destination
+     * @param ZipArchive $archive
+     * @param string     $destination
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function extract($archive, $destination)
     {
         if (!is_writable($destination)) {
-            throw new \Exception(sprintf('Destination directory "%s" is not writable', $destination));
+            throw new Exception(sprintf('Destination directory "%s" is not writable', $destination));
         }
 
         $this->validatePluginZip($archive);
@@ -52,9 +56,9 @@ class LegacyPluginExtractor
      * path and validates the plugin namespace, directory traversal
      * and multiple plugin directories.
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    private function validatePluginZip(\ZipArchive $archive)
+    private function validatePluginZip(ZipArchive $archive)
     {
         $prefix = $this->getLegacyPluginPrefix($archive);
 
@@ -64,7 +68,7 @@ class LegacyPluginExtractor
     /**
      * @param string $prefix
      */
-    private function assertValid(\ZipArchive $archive, $prefix)
+    private function assertValid(ZipArchive $archive, $prefix)
     {
         for ($i = 2; $i < $archive->numFiles; ++$i) {
             $stat = $archive->statIndex($i);
@@ -77,13 +81,13 @@ class LegacyPluginExtractor
     /**
      * @return string
      */
-    private function getLegacyPluginPrefix(\ZipArchive $archive)
+    private function getLegacyPluginPrefix(ZipArchive $archive)
     {
         $segments = $archive->statIndex(0);
         $segments = array_filter(explode('/', $segments['name']));
 
         if (!\in_array($segments[0], ['Frontend', 'Backend', 'Core'])) {
-            throw new \RuntimeException('Uploaded zip archive contains no plugin namespace directory');
+            throw new RuntimeException('Uploaded zip archive contains no plugin namespace directory');
         }
 
         if (\count($segments) <= 1) {
@@ -116,7 +120,7 @@ class LegacyPluginExtractor
     private function assertPrefix($filename, $prefix)
     {
         if (strpos($filename, $prefix) !== 0) {
-            throw new \RuntimeException(sprintf('Detected invalid file/directory %s in the plugin zip: %s', $filename, $prefix));
+            throw new RuntimeException(sprintf('Detected invalid file/directory %s in the plugin zip: %s', $filename, $prefix));
         }
     }
 
@@ -126,7 +130,7 @@ class LegacyPluginExtractor
     private function assertNoDirectoryTraversal($filename)
     {
         if (strpos($filename, '../') !== false) {
-            throw new \RuntimeException('Directory Traversal detected');
+            throw new RuntimeException('Directory Traversal detected');
         }
     }
 }

@@ -27,6 +27,7 @@ namespace ShopwarePlugins\HttpCache;
 use Enlight_Components_Session_Namespace as Session;
 use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_Response as Response;
+use Enlight_Event_EventManager;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\HttpCache\CacheRouteGenerationService;
 use Shopware\Components\HttpCache\CacheTimeServiceInterface;
@@ -53,7 +54,7 @@ class CacheControl
     private $config;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
@@ -75,7 +76,7 @@ class CacheControl
     public function __construct(
         Session $session,
         array $config,
-        \Enlight_Event_EventManager $eventManager,
+        Enlight_Event_EventManager $eventManager,
         DefaultRouteService $defaultRouteService,
         CacheTimeServiceInterface $cacheTimeService,
         CacheRouteGenerationService $cacheRouteGeneration

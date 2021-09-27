@@ -24,7 +24,9 @@
 
 namespace Shopware\Components;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
+use RuntimeException;
 
 class HolidayTableUpdater
 {
@@ -42,7 +44,7 @@ class HolidayTableUpdater
      */
     public function update()
     {
-        $date = new \DateTime('now');
+        $date = new DateTime('now');
 
         // Update new, or outdated holidays to current year
         $holidays = $this->getPastHolidays();
@@ -94,7 +96,7 @@ class HolidayTableUpdater
                 $calculation
             );
             if (!\is_string($calculation)) {
-                throw new \RuntimeException('Holiday calculating string could not be created');
+                throw new RuntimeException('Holiday calculating string could not be created');
             }
             $calculation = str_replace(['EASTERDATE()', 'YEAR()'], ["'$easterDate'", "'$year'"], $calculation);
 

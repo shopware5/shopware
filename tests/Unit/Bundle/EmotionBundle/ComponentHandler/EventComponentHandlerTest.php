@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\EmotionBundle\ComponentHandler;
 
+use Enlight_Event_EventManager;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\EmotionBundle\ComponentHandler\EventComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
@@ -33,7 +34,7 @@ class EventComponentHandlerTest extends TestCase
 {
     public function testSupportsIsFalse()
     {
-        $eventManagerMock = $this->getMockBuilder(\Enlight_Event_EventManager::class)
+        $eventManagerMock = $this->getMockBuilder(Enlight_Event_EventManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 

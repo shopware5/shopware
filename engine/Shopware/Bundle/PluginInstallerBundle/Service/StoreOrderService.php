@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use Exception;
 use Shopware\Bundle\PluginInstallerBundle\Context\OrderRequest;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
@@ -95,7 +96,7 @@ class StoreOrderService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */

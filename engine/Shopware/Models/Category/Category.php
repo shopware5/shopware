@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Category;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -344,14 +346,14 @@ class Category extends ModelEntity
     private $allArticles;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
     private $changed;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
@@ -381,8 +383,8 @@ class Category extends ModelEntity
         $this->allArticles = new ArrayCollection();
         $this->emotions = new ArrayCollection();
         $this->manualSorting = new ArrayCollection();
-        $this->changed = new \DateTime();
-        $this->added = new \DateTime();
+        $this->changed = new DateTime();
+        $this->added = new DateTime();
     }
 
     /**
@@ -546,14 +548,14 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $changed
+     * @param DateTimeInterface|string $changed
      *
      * @return Category
      */
     public function setChanged($changed = 'now')
     {
-        if (!$changed instanceof \DateTimeInterface) {
-            $this->changed = new \DateTime($changed);
+        if (!$changed instanceof DateTimeInterface) {
+            $this->changed = new DateTime($changed);
         } else {
             $this->changed = $changed;
         }
@@ -562,7 +564,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getChanged()
     {
@@ -570,7 +572,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getAdded()
     {

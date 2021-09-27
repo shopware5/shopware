@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
+use DateTime;
+use DateTimeInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing;
@@ -83,14 +85,14 @@ class LandingPageUrlProvider extends BaseUrlProvider
      * Helper function to filter emotion campaigns
      * Returns false, if the campaign starts later or is outdated
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
+     * @param DateTimeInterface|null $from
+     * @param DateTimeInterface|null $to
      *
      * @return bool
      */
     private function filterCampaign($from = null, $to = null)
     {
-        $now = new \DateTime();
+        $now = new DateTime();
 
         if ($from !== null && $now < $from) {
             return false;

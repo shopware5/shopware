@@ -24,7 +24,9 @@
 
 namespace Shopware\Components\Theme;
 
+use DirectoryIterator;
 use Doctrine\ORM\AbstractQuery;
+use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Snippet\DatabaseHandler;
@@ -109,7 +111,7 @@ class Installer
      * The synchronization are processed in the synchronizeThemes and
      * synchronizeTemplates function.
      *
-     * @throws \Exception
+     * @throws Exception
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
@@ -129,14 +131,14 @@ class Installer
      * After the inheritance is build, the installer uses
      * the Theme\Configurator to synchronize the theme configurations.
      *
-     * @throws \Exception
+     * @throws Exception
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     private function synchronizeThemes()
     {
         // Creates a directory iterator for the default theme directory (engine/Shopware/Themes)
-        $directories = new \DirectoryIterator($this->pathResolver->getFrontendThemeDirectory());
+        $directories = new DirectoryIterator($this->pathResolver->getFrontendThemeDirectory());
 
         // Synchronize the default themes which are stored in the engine/Shopware/Themes directory.
         $themes = $this->synchronizeThemeDirectories($directories);
@@ -169,7 +171,7 @@ class Installer
      *
      * @return Theme[]
      */
-    private function synchronizeThemeDirectories(\DirectoryIterator $directories, Plugin $plugin = null)
+    private function synchronizeThemeDirectories(DirectoryIterator $directories, Plugin $plugin = null)
     {
         $themes = [];
 
@@ -177,7 +179,7 @@ class Installer
             AbstractQuery::HYDRATE_OBJECT
         );
 
-        /** @var \DirectoryIterator $directory */
+        /** @var DirectoryIterator $directory */
         foreach ($directories as $directory) {
             // Check valid directory
 
@@ -187,7 +189,7 @@ class Installer
 
             try {
                 $theme = $this->util->getThemeByDirectory($directory);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 continue;
             }
 
@@ -254,7 +256,7 @@ class Installer
                 continue;
             }
 
-            $directories = new \DirectoryIterator(
+            $directories = new DirectoryIterator(
                 $path . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . 'Frontend'
             );
 
@@ -349,7 +351,7 @@ class Installer
      * Helper function which resolves the theme parent for each
      * passed theme
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function setParents(array $themes)
     {
@@ -363,14 +365,14 @@ class Installer
                 'template' => $theme->getTemplate(),
             ]);
             if (!$template instanceof Template) {
-                throw new \Exception(sprintf('Template of theme %s not found', $theme->getTemplate()));
+                throw new Exception(sprintf('Template of theme %s not found', $theme->getTemplate()));
             }
 
             $parent = $this->repository->findOneBy([
                 'template' => $theme->getExtend(),
             ]);
             if (!$parent instanceof Template) {
-                throw new \Exception(sprintf('Parent %s of theme %s not found', $theme->getExtend(), $theme->getTemplate()));
+                throw new Exception(sprintf('Parent %s of theme %s not found', $theme->getExtend(), $theme->getTemplate()));
             }
 
             $template->setParent($parent);

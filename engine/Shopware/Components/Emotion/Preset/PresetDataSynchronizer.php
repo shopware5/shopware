@@ -25,6 +25,8 @@
 namespace Shopware\Components\Emotion\Preset;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Enlight_Event_EventManager;
+use Exception;
 use IteratorAggregate;
 use Shopware\Components\Emotion\Preset\ComponentHandler\ComponentHandlerInterface;
 use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
@@ -40,7 +42,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     private $modelManager;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
@@ -57,7 +59,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     /**
      * @param string $rootDir
      */
-    public function __construct(ModelManager $modelManager, \Enlight_Event_EventManager $eventManager, IteratorAggregate $componentHandlers, $rootDir)
+    public function __construct(ModelManager $modelManager, Enlight_Event_EventManager $eventManager, IteratorAggregate $componentHandlers, $rootDir)
     {
         $this->modelManager = $modelManager;
         $this->eventManager = $eventManager;
@@ -112,7 +114,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
 
         try {
             $element = $handler->import($element, $syncData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new PresetAssetImportException($e->getMessage());
         }
 

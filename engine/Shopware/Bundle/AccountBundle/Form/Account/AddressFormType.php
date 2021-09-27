@@ -32,6 +32,7 @@ use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
+use Shopware_Components_Config;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -47,7 +48,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class AddressFormType extends AbstractType
 {
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -56,7 +57,7 @@ class AddressFormType extends AbstractType
      */
     private $models;
 
-    public function __construct(\Shopware_Components_Config $config, ModelManager $models)
+    public function __construct(Shopware_Components_Config $config, ModelManager $models)
     {
         $this->config = $config;
         $this->models = $models;

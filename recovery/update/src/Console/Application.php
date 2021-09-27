@@ -24,6 +24,7 @@
 
 namespace Shopware\Recovery\Update\Console;
 
+use ErrorException;
 use Shopware\Recovery\Common\DependencyInjection\ContainerInterface;
 use Shopware\Recovery\Update\Command\UpdateCommand;
 use Shopware\Recovery\Update\DependencyInjection\Container;
@@ -111,7 +112,7 @@ class Application extends BaseApplication
                 return false;
             }
 
-            throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+            throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
         });
     }
 }

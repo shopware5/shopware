@@ -28,11 +28,12 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\KeywordFinderInterface;
 use Shopware\Bundle\SearchBundleDBAL\SearchTermQueryBuilderInterface;
+use Shopware_Components_Config;
 
 class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 {
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -52,7 +53,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     private $termHelper;
 
     public function __construct(
-        \Shopware_Components_Config $config,
+        Shopware_Components_Config $config,
         Connection $connection,
         KeywordFinderInterface $keywordFinder,
         SearchIndexerInterface $searchIndexer,

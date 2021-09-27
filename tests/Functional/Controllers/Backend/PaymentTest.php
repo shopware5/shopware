@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
-class PaymentTest extends \Enlight_Components_Test_Controller_TestCase
+use Enlight_Components_Test_Controller_TestCase;
+
+class PaymentTest extends Enlight_Components_Test_Controller_TestCase
 {
     private $testDataCreate = [
         'name' => 'New payment',

@@ -26,6 +26,7 @@ namespace Shopware\Tests\Mink\Page;
 
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\WebAssert;
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\AccountOrder;
@@ -96,7 +97,7 @@ class Account extends Page implements HelperSelectorInterface
      *
      * @param string $action
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
@@ -281,7 +282,7 @@ class Account extends Page implements HelperSelectorInterface
      *
      * @param string $paymentMethod
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkPaymentMethod($paymentMethod)
     {
@@ -492,7 +493,7 @@ class Account extends Page implements HelperSelectorInterface
     /**
      * @param string $name
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function searchAddress(AddressBox $addresses, $name)
     {
@@ -546,7 +547,7 @@ class Account extends Page implements HelperSelectorInterface
     /**
      * Helper method checks the order positions
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function checkOrderPositions(AccountOrder $order, array $articles)
     {
@@ -584,7 +585,7 @@ class Account extends Page implements HelperSelectorInterface
      *
      * @param string $date
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function checkEsdArticles($date, array $articles)
     {

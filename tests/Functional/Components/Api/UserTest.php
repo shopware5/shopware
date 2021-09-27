@@ -24,8 +24,10 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use DateTime;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Api\Resource\User;
+use Shopware_Components_Acl;
 
 class UserTest extends TestCase
 {
@@ -69,13 +71,13 @@ class UserTest extends TestCase
     {
         $this->resource->setRole('create');
 
-        $date = new \DateTime();
+        $date = new DateTime();
 
         $date->modify('-10 days');
-        $lastLogin = $date->format(\DateTime::ISO8601);
+        $lastLogin = $date->format(DateTime::ISO8601);
 
         $date->modify('+14 days');
-        $lockedUntil = $date->format(\DateTime::ISO8601);
+        $lockedUntil = $date->format(DateTime::ISO8601);
 
         $testData = [
             'email' => uniqid((string) rand()) . '@example.com',
@@ -112,9 +114,9 @@ class UserTest extends TestCase
 
         static::assertEquals($user->getEncoder(), $testData['encoder']);
         static::assertEquals($user->getApiKey(), $testData['apiKey']);
-        static::assertEquals($user->getLastLogin(), new \DateTime($testData['lastLogin']));
+        static::assertEquals($user->getLastLogin(), new DateTime($testData['lastLogin']));
         static::assertEquals($user->getFailedLogins(), $testData['failedLogins']);
-        static::assertEquals($user->getLockedUntil(), new \DateTime($testData['lockedUntil']));
+        static::assertEquals($user->getLockedUntil(), new DateTime($testData['lockedUntil']));
         static::assertEquals($user->getExtendedEditor(), $testData['extendedEditor']);
         static::assertEquals($user->getDisabledCache(), $testData['disabledCache']);
 
@@ -364,7 +366,7 @@ class UserTest extends TestCase
 
     protected function getAclMockAllowEverything()
     {
-        $aclMock = $this->createMock(\Shopware_Components_Acl::class);
+        $aclMock = $this->createMock(Shopware_Components_Acl::class);
 
         $aclMock->expects(static::any())
             ->method('has')

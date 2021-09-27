@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\Condition\AssignedToStreamCondition;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface;
@@ -371,9 +373,9 @@ class CustomerStream extends Resource
      *
      * @return array|bool
      */
-    public function updateFrozenState($streamId, \DateTimeInterface $freezeUp = null, $conditions)
+    public function updateFrozenState($streamId, DateTimeInterface $freezeUp = null, $conditions)
     {
-        $now = new \DateTime();
+        $now = new DateTime();
         if (!$freezeUp || $freezeUp >= $now) {
             return false;
         }

@@ -26,7 +26,13 @@ namespace Shopware\Tests\Unit\Components\Event;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
+use Enlight_Event_EventArgs;
+use Enlight_Event_EventHandler;
+use Enlight_Event_EventManager;
+use Enlight_Event_Exception;
+use Enlight_Event_Handler_Default;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class EventManagerTest extends TestCase
 {
@@ -34,21 +40,21 @@ class EventManagerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->eventManager = new \Enlight_Event_EventManager();
+        $this->eventManager = new Enlight_Event_EventManager();
     }
 
     public function testCanCreateInstance()
     {
-        static::assertInstanceOf(\Enlight_Event_EventManager::class, $this->eventManager);
+        static::assertInstanceOf(Enlight_Event_EventManager::class, $this->eventManager);
     }
 
     public function testAppendEventWithCallback()
     {
-        $callback = function (\Enlight_Event_EventArgs $args) {
+        $callback = function (Enlight_Event_EventArgs $args) {
             return 'foo';
         };
 
-        $event = new \Enlight_Event_Handler_Default(
+        $event = new Enlight_Event_Handler_Default(
             'Example',
             $callback
         );
@@ -68,7 +74,7 @@ class EventManagerTest extends TestCase
 
     public function testEventHandlerWithHighPosition()
     {
-        $handler0 = new \Enlight_Event_Handler_Default(
+        $handler0 = new Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'foo';
@@ -77,7 +83,7 @@ class EventManagerTest extends TestCase
         );
         $this->eventManager->registerListener($handler0);
 
-        $handler1 = new \Enlight_Event_Handler_Default(
+        $handler1 = new Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'bar';
@@ -98,7 +104,7 @@ class EventManagerTest extends TestCase
 
     public function testEventHandlerWithEqualPosition()
     {
-        $handler0 = new \Enlight_Event_Handler_Default(
+        $handler0 = new Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'foo';
@@ -107,7 +113,7 @@ class EventManagerTest extends TestCase
         );
         $this->eventManager->registerListener($handler0);
 
-        $handler1 = new \Enlight_Event_Handler_Default(
+        $handler1 = new Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'bar';
@@ -116,7 +122,7 @@ class EventManagerTest extends TestCase
         );
         $this->eventManager->registerListener($handler1);
 
-        $handler2 = new \Enlight_Event_Handler_Default(
+        $handler2 = new Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'baz';
@@ -138,7 +144,7 @@ class EventManagerTest extends TestCase
 
     public function testExceptionIsThrownOnInvalidEventArgs()
     {
-        $event = new \Enlight_Event_Handler_Default(
+        $event = new Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
             }
@@ -146,18 +152,18 @@ class EventManagerTest extends TestCase
 
         $this->eventManager->registerListener($event);
 
-        $this->expectException(\Enlight_Event_Exception::class);
+        $this->expectException(Enlight_Event_Exception::class);
 
         $this->eventManager->collect(
             'Example',
             new ArrayCollection(),
-            new \stdClass()
+            new stdClass()
         );
     }
 
     public function testAppendEventWithArray()
     {
-        $event = new \Enlight_Event_EventHandler(
+        $event = new Enlight_Event_EventHandler(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithArray',
             [
                 $this,
@@ -180,7 +186,7 @@ class EventManagerTest extends TestCase
         static::assertEquals('bar2', $values->get(3));
     }
 
-    public function appendEventWithArrayListener(\Enlight_Event_EventArgs $args)
+    public function appendEventWithArrayListener(Enlight_Event_EventArgs $args)
     {
         return new ArrayCollection([
             ['foo2'],
@@ -192,7 +198,7 @@ class EventManagerTest extends TestCase
     {
         $values = new ArrayCollection(['foo', 'bar']);
 
-        $event = new \Enlight_Event_EventHandler(
+        $event = new Enlight_Event_EventHandler(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithSingleValue',
             [
                 $this,
@@ -213,7 +219,7 @@ class EventManagerTest extends TestCase
         static::assertEquals('foo2', $values->get(2));
     }
 
-    public function appendEventWithSingleValueListener(\Enlight_Event_EventArgs $args)
+    public function appendEventWithSingleValueListener(Enlight_Event_EventArgs $args)
     {
         return 'foo2';
     }
@@ -222,7 +228,7 @@ class EventManagerTest extends TestCase
     {
         $values = new ArrayCollection(['foo', 'bar']);
 
-        $event = new \Enlight_Event_EventHandler(
+        $event = new Enlight_Event_EventHandler(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithNullValue',
             [
                 $this,
@@ -241,7 +247,7 @@ class EventManagerTest extends TestCase
         static::assertEquals('bar', $values->get(1));
     }
 
-    public function appendEventWithNullValueListener(\Enlight_Event_EventArgs $args)
+    public function appendEventWithNullValueListener(Enlight_Event_EventArgs $args)
     {
         return null;
     }
@@ -250,7 +256,7 @@ class EventManagerTest extends TestCase
     {
         $values = new ArrayCollection(['foo', 'bar']);
 
-        $event = new \Enlight_Event_EventHandler(
+        $event = new Enlight_Event_EventHandler(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithBooleanValue',
             [
                 $this,
@@ -270,7 +276,7 @@ class EventManagerTest extends TestCase
         static::assertEquals(true, $values->get(2));
     }
 
-    public function appendEventWithBooleanValueListener(\Enlight_Event_EventArgs $args)
+    public function appendEventWithBooleanValueListener(Enlight_Event_EventArgs $args)
     {
         return new ArrayCollection([
             true,
@@ -306,7 +312,7 @@ class EventManagerTest extends TestCase
 
     public function testRemoveSubscriber()
     {
-        $handler0 = new \Enlight_Event_Handler_Default(
+        $handler0 = new Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'foo';
@@ -314,7 +320,7 @@ class EventManagerTest extends TestCase
         );
         $this->eventManager->registerListener($handler0);
 
-        $handler1 = new \Enlight_Event_Handler_Default(
+        $handler1 = new Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'bar';

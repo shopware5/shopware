@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct\Product;
 
+use DateTimeInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class Esd extends Extendable
@@ -44,7 +45,7 @@ class Esd extends Extendable
     protected $hasSerials;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     protected $createdAt;
 
@@ -97,7 +98,7 @@ class Esd extends Extendable
     }
 
     /**
-     * @param \DateTimeInterface $createdAt
+     * @param DateTimeInterface $createdAt
      */
     public function setCreatedAt($createdAt)
     {
@@ -105,7 +106,7 @@ class Esd extends Extendable
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getCreatedAt()
     {

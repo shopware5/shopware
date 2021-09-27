@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 use Shopware\Bundle\SearchBundleDBAL\KeywordFinderInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
+use Shopware_Components_Config;
 
 class CacheKeywordFinder implements KeywordFinderInterface
 {
@@ -40,7 +41,7 @@ class CacheKeywordFinder implements KeywordFinderInterface
     private $cache;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -49,7 +50,7 @@ class CacheKeywordFinder implements KeywordFinderInterface
      */
     public function __construct(
         CacheInterface $cache,
-        \Shopware_Components_Config $config,
+        Shopware_Components_Config $config,
         KeywordFinderInterface $keywordFinder
     ) {
         $this->cache = $cache;

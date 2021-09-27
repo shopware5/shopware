@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\EsBackendBundle;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Components\Random;
 use Shopware\Models\Customer\Customer;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\ProgressHelper;
@@ -31,7 +32,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\ProgressHelper;
 /**
  * @group elasticSearch
  */
-class BacklogTest extends \Enlight_Components_Test_TestCase
+class BacklogTest extends Enlight_Components_Test_TestCase
 {
     public function setUp(): void
     {

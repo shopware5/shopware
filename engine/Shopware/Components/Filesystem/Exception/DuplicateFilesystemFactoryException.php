@@ -24,7 +24,9 @@
 
 namespace Shopware\Components\Filesystem\Exception;
 
-class DuplicateFilesystemFactoryException extends \Exception
+use Exception;
+
+class DuplicateFilesystemFactoryException extends Exception
 {
     public static function fromAdapterType($type)
     {

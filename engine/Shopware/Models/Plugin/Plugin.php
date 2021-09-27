@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Plugin;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -93,28 +95,28 @@ class Plugin extends ModelEntity
     private $active = false;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     private $added;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="installation_date", type="datetime", nullable=true)
      */
     private $installed;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="update_date", type="datetime", nullable=true)
      */
     private $updated;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="refresh_date", type="datetime", nullable=true)
      */
@@ -290,7 +292,7 @@ class Plugin extends ModelEntity
 
     public function __construct()
     {
-        $this->added = new \DateTime('now');
+        $this->added = new DateTime('now');
         $this->emotionComponents = new ArrayCollection();
         $this->configForms = new ArrayCollection();
         $this->menuItems = new ArrayCollection();
@@ -410,7 +412,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getAdded()
     {
@@ -418,7 +420,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $added
+     * @param DateTimeInterface $added
      */
     public function setAdded($added)
     {
@@ -426,7 +428,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getInstalled()
     {
@@ -434,7 +436,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $installed
+     * @param DateTimeInterface|null $installed
      */
     public function setInstalled($installed)
     {
@@ -442,7 +444,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getUpdated()
     {
@@ -450,7 +452,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $updated
+     * @param DateTimeInterface|null $updated
      */
     public function setUpdated($updated)
     {

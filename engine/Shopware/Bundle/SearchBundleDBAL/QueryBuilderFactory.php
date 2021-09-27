@@ -26,7 +26,10 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
+use Enlight_Event_EventManager;
+use Exception;
 use IteratorAggregate;
+use RuntimeException;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -42,7 +45,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     private $connection;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
@@ -58,7 +61,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
 
     public function __construct(
         Connection $connection,
-        \Enlight_Event_EventManager $eventManager,
+        Enlight_Event_EventManager $eventManager,
         IteratorAggregate $conditionHandlers,
         IteratorAggregate $sortingHandlers,
         ContainerInterface $container
@@ -129,7 +132,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function createQuery(Criteria $criteria, ShopContextInterface $context)
     {
@@ -196,7 +199,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return SortingHandlerInterface
      */
@@ -208,11 +211,11 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
             }
         }
 
-        throw new \Exception(sprintf('Sorting %s not supported', \get_class($sorting)));
+        throw new Exception(sprintf('Sorting %s not supported', \get_class($sorting)));
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return ConditionHandlerInterface
      */
@@ -224,7 +227,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
             }
         }
 
-        throw new \Exception(sprintf('Condition %s not supported', \get_class($condition)));
+        throw new Exception(sprintf('Condition %s not supported', \get_class($condition)));
     }
 
     /**
@@ -262,13 +265,13 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     /**
      * @param string $class
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function assertCollectionIsInstanceOf(ArrayCollection $objects, $class)
     {
         foreach ($objects as $object) {
             if (!$object instanceof $class) {
-                throw new \RuntimeException(sprintf('Object of class "%s" must be instance of "%s".', \get_class($object), $class));
+                throw new RuntimeException(sprintf('Object of class "%s" must be instance of "%s".', \get_class($object), $class));
             }
         }
     }

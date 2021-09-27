@@ -24,8 +24,11 @@
 
 namespace Shopware\Tests\Functional\Components\Model;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\Cache;
+use Zend_Cache_Backend_File;
+use Zend_Cache_Core;
 
 class CacheTest extends TestCase
 {
@@ -36,17 +39,17 @@ class CacheTest extends TestCase
 
     protected function setUp(): void
     {
-        $zendCache = new \Zend_Cache_Core(['automatic_serialization' => true]);
-        $zendCache->setBackend(new \Zend_Cache_Backend_File());
+        $zendCache = new Zend_Cache_Core(['automatic_serialization' => true]);
+        $zendCache->setBackend(new Zend_Cache_Backend_File());
         $this->cache = new Cache($zendCache, 'Shopware_Models', ['tag']);
     }
 
     public function testMissingTags(): void
     {
-        static::expectException(\InvalidArgumentException::class);
+        static::expectException(InvalidArgumentException::class);
         static::expectExceptionMessage('This Adapter requires at least one tag to work correct');
 
-        new Cache(new \Zend_Cache_Core(), 'Shopware_Models', []);
+        new Cache(new Zend_Cache_Core(), 'Shopware_Models', []);
     }
 
     public function testCacheWrite(): void

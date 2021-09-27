@@ -24,9 +24,13 @@
 
 namespace Shopware\Models\Media;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
+use PDO;
+use RuntimeException;
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionIsBlacklistedException;
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException;
 use Shopware\Bundle\MediaBundle\MediaExtensionMappingServiceInterface;
@@ -38,6 +42,7 @@ use Shopware\Models\Article\Image;
 use Shopware\Models\Attribute\Media as MediaAttribute;
 use Shopware\Models\Blog\Media as BlogMedia;
 use Shopware\Models\Property\Value;
+use Shopware_Controllers_Backend_MediaManager;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -216,7 +221,7 @@ class Media extends ModelEntity
     /**
      * Creation date of the media
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="created", type="date", nullable=false)
      */
@@ -461,7 +466,7 @@ class Media extends ModelEntity
     /**
      * Sets the creation date of the media.
      *
-     * @param \DateTimeInterface $created
+     * @param DateTimeInterface $created
      *
      * @return Media
      */
@@ -475,7 +480,7 @@ class Media extends ModelEntity
     /**
      * Returns the creation date of the media.
      *
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getCreated()
     {
@@ -853,7 +858,7 @@ class Media extends ModelEntity
             if (!$mediaService->has($thumbnail)) {
                 try {
                     $this->createThumbnail((int) $size[0], (int) $size[1]);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     // Ignore for now
                     // Exception might be thrown when thumbnails can not
                     // be generated due to invalid image files
@@ -1046,7 +1051,7 @@ class Media extends ModelEntity
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
 
         if (!\is_string($projectDir)) {
-            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+            throw new RuntimeException('Parameter shopware.app.rootDir has to be an string');
         }
 
         // Move the file to the upload directory
@@ -1142,7 +1147,7 @@ class Media extends ModelEntity
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
 
         if (!\is_string($projectDir)) {
-            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+            throw new RuntimeException('Parameter shopware.app.rootDir has to be an string');
         }
 
         return $projectDir . 'media' . DIRECTORY_SEPARATOR . strtolower($this->type) . DIRECTORY_SEPARATOR;
@@ -1242,7 +1247,7 @@ class Media extends ModelEntity
         }
 
         // #2 - blacklist
-        if (\in_array($extension, \Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist, true)) {
+        if (\in_array($extension, Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist, true)) {
             throw new MediaFileExtensionIsBlacklistedException($extension);
         }
 
@@ -1262,7 +1267,7 @@ class Media extends ModelEntity
 
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
         if (!\is_string($projectDir)) {
-            throw new \RuntimeException('Parameter shopware.app.rootDir has to be an string');
+            throw new RuntimeException('Parameter shopware.app.rootDir has to be an string');
         }
 
         $this->path = str_replace($projectDir, '', $this->getUploadDir() . $this->getFileName());
@@ -1298,7 +1303,7 @@ class Media extends ModelEntity
         $connection = Shopware()->Container()->get(Connection::class);
         $joinedSizes = $connection
             ->query('SELECT DISTINCT thumbnail_size FROM s_media_album_settings WHERE thumbnail_size != ""')
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
 
         $sizes = [];
         foreach ($joinedSizes as $sizeItem) {

@@ -24,11 +24,12 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Voucher\Repository;
 use Shopware\Models\Voucher\Voucher;
 
-class VoucherTest extends \Enlight_Components_Test_Controller_TestCase
+class VoucherTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var Repository

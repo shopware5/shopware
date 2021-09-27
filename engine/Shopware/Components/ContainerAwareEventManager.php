@@ -24,9 +24,13 @@
 
 namespace Shopware\Components;
 
+use Enlight_Event_EventManager;
+use Enlight_Event_Handler;
+use Enlight_Event_Handler_Default;
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ContainerAwareEventManager extends \Enlight_Event_EventManager
+class ContainerAwareEventManager extends Enlight_Event_EventManager
 {
     /**
      * Contains all registered event listeners. A listener can be registered by the
@@ -61,12 +65,12 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
      *                          will be triggered in the chain.
      *                          Defaults to 0
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function addListenerService($eventName, $callback, $priority = 0)
     {
         if (!\is_array($callback) || \count($callback) !== 2) {
-            throw new \InvalidArgumentException('Expected an array("service", "method") argument');
+            throw new InvalidArgumentException('Expected an array("service", "method") argument');
         }
 
         $eventName = strtolower($eventName);
@@ -76,7 +80,7 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
     /**
      * {@inheritdoc}
      */
-    public function removeListener(\Enlight_Event_Handler $handler)
+    public function removeListener(Enlight_Event_Handler $handler)
     {
         $eventName = strtolower($handler->getName());
         $this->lazyLoad($eventName);
@@ -197,7 +201,7 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
             if (!isset($this->containerListeners[$eventName][$key])) {
                 $this->addListener($eventName, [$listener, $method], $priority);
             } elseif ($listener !== $this->containerListeners[$eventName][$key]) {
-                $handler = new \Enlight_Event_Handler_Default(
+                $handler = new Enlight_Event_Handler_Default(
                     $eventName,
                     [$this->containerListeners[$eventName][$key], $method]
                 );

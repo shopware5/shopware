@@ -24,13 +24,20 @@
 
 namespace Shopware\Commands;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
+use Exception;
+use PDO;
+use sCategories;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Shop;
+use Shopware_Components_Modules;
+use Shopware_Components_SeoIndex;
+use sRewriteTable;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
@@ -42,17 +49,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareInterface
 {
     /**
-     * @var \Shopware_Components_SeoIndex
+     * @var Shopware_Components_SeoIndex
      */
     protected $seoIndex;
 
     /**
-     * @var \sRewriteTable
+     * @var sRewriteTable
      */
     protected $rewriteTable;
 
     /**
-     * @var \sCategories
+     * @var sCategories
      */
     protected $categories;
 
@@ -62,7 +69,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
     protected $database;
 
     /**
-     * @var \Shopware_Components_Modules
+     * @var Shopware_Components_Modules
      */
     protected $modules;
 
@@ -129,7 +136,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -156,10 +163,10 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
                 ->from('s_core_shops', 'shops')
                 ->where('active', 1)
                 ->execute()
-                ->fetchAll(\PDO::FETCH_COLUMN);
+                ->fetchAll(PDO::FETCH_COLUMN);
         }
 
-        $currentTime = new \DateTime();
+        $currentTime = new DateTime();
 
         $this->rewriteTable->sCreateRewriteTableCleanup();
 

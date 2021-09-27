@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use Exception;
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest;
@@ -58,7 +59,7 @@ class PluginStoreService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return ListingResultStruct
      */
@@ -116,7 +117,7 @@ class PluginStoreService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return UpdateResultStruct
      */
@@ -164,7 +165,7 @@ class PluginStoreService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -184,7 +185,7 @@ class PluginStoreService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return CategoryStruct[]
      */

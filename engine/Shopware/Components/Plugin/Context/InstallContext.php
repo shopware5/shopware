@@ -24,10 +24,11 @@
 
 namespace Shopware\Components\Plugin\Context;
 
+use JsonSerializable;
 use Shopware\Components\CacheManager;
 use Shopware\Models\Plugin\Plugin;
 
-class InstallContext implements \JsonSerializable
+class InstallContext implements JsonSerializable
 {
     public const CACHE_TAG_TEMPLATE = CacheManager::CACHE_TAG_TEMPLATE;
     public const CACHE_TAG_CONFIG = CacheManager::CACHE_TAG_CONFIG;

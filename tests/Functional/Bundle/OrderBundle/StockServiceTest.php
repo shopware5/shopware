@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\OrderBundle\Service;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Models\Article\Detail as ProductVariant;
@@ -148,7 +149,7 @@ class StockServiceTest extends TestCase
         $order->setInvoiceAmountNet(110.76);
 
         $order->setShop($customer->getShop());
-        $order->setOrderTime(new \DateTime());
+        $order->setOrderTime(new DateTime());
         $order->setDeviceType('Backend');
         $order->setTransactionId('');
         $order->setComment('');

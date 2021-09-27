@@ -24,10 +24,16 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\ResultStatement;
 use Enlight_Event_EventManager;
+use Exception;
+use InvalidArgumentException;
+use PDO;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Shopware\Bundle\PluginInstallerBundle\Events\PluginEvent;
 use Shopware\Bundle\PluginInstallerBundle\Events\PostPluginActivateEvent;
 use Shopware\Bundle\PluginInstallerBundle\Events\PostPluginDeactivateEvent;
@@ -85,7 +91,7 @@ class PluginInstaller
     private $requirementValidator;
 
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $pdo;
 
@@ -121,7 +127,7 @@ class PluginInstaller
         ModelManager $em,
         DatabaseHandler $snippetHandler,
         RequirementValidator $requirementValidator,
-        \PDO $pdo,
+        PDO $pdo,
         Enlight_Event_EventManager $events,
         $pluginDirectories,
         ShopwareReleaseStruct $release,
@@ -141,7 +147,7 @@ class PluginInstaller
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return InstallContext
      */
@@ -169,8 +175,8 @@ class PluginInstaller
 
         $this->events->notify(PluginEvent::POST_INSTALL, new PostPluginInstallEvent($context, $pluginBootstrap));
 
-        $plugin->setInstalled(new \DateTime());
-        $plugin->setUpdated(new \DateTime());
+        $plugin->setInstalled(new DateTime());
+        $plugin->setUpdated(new DateTime());
 
         $this->em->flush($plugin);
 
@@ -180,7 +186,7 @@ class PluginInstaller
     /**
      * @param bool $removeData
      *
-     * @throws \Exception
+     * @throws Exception
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\OptimisticLockException
      *
@@ -224,7 +230,7 @@ class PluginInstaller
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return UpdateContext
      */
@@ -253,7 +259,7 @@ class PluginInstaller
         $plugin->setVersion($context->getUpdateVersion());
         $plugin->setUpdateVersion(null);
         $plugin->setUpdateSource(null);
-        $plugin->setUpdated(new \DateTime());
+        $plugin->setUpdated(new DateTime());
 
         $this->em->flush($plugin);
 
@@ -261,7 +267,7 @@ class PluginInstaller
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return ActivateContext
@@ -286,7 +292,7 @@ class PluginInstaller
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return DeactivateContext
@@ -309,9 +315,9 @@ class PluginInstaller
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    public function refreshPluginList(\DateTimeInterface $refreshDate)
+    public function refreshPluginList(DateTimeInterface $refreshDate)
     {
         $initializer = new PluginInitializer(
             $this->pdo,
@@ -396,7 +402,7 @@ class PluginInstaller
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string
      */
@@ -416,7 +422,7 @@ class PluginInstaller
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function installResources(PluginBootstrap $bootstrap, Plugin $plugin)
     {
@@ -445,7 +451,7 @@ class PluginInstaller
     /**
      * @param string $file
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function installForm(Plugin $plugin, $file)
     {
@@ -459,7 +465,7 @@ class PluginInstaller
     /**
      * @param string $file
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function installMenu(Plugin $plugin, $file)
     {
@@ -473,7 +479,7 @@ class PluginInstaller
     /**
      * @param string $file
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function installCronjob(Plugin $plugin, $file)
     {
@@ -498,7 +504,7 @@ class PluginInstaller
     /**
      * @param string $pluginName
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return PluginBootstrap
      */
@@ -507,7 +513,7 @@ class PluginInstaller
         $plugins = $this->kernel->getPlugins();
 
         if (!isset($plugins[$pluginName])) {
-            throw new \InvalidArgumentException(sprintf('Plugin by name "%s" not found.', $pluginName));
+            throw new InvalidArgumentException(sprintf('Plugin by name "%s" not found.', $pluginName));
         }
 
         return $plugins[$pluginName];

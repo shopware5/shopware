@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\EsBackendBundle;
 
+use DateTime;
 use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
 
 class IndexFactory implements IndexFactoryInterface
@@ -64,7 +65,7 @@ class IndexFactory implements IndexFactoryInterface
 
     private function getIndexName(string $name): string
     {
-        return $this->getAlias($name) . '_' . (new \DateTime())->format('YmdHis');
+        return $this->getAlias($name) . '_' . (new DateTime())->format('YmdHis');
     }
 
     private function getAlias(string $name): string

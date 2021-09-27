@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\BenchmarkBundle;
 
 use Doctrine\DBAL\Connection;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsHydratingException;
@@ -96,7 +97,7 @@ class StatisticsClient implements StatisticsClientInterface
 
         try {
             $response = $this->client->post($this->statisticsApiEndpoint, $headers, (string) $statisticsRequest);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $body = '';
 
             if ($ex instanceof RequestException) {

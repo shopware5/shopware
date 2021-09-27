@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface MediaReplaceServiceInterface
@@ -33,7 +34,7 @@ interface MediaReplaceServiceInterface
      *
      * @param int $mediaId
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function replace($mediaId, UploadedFile $file);
 }

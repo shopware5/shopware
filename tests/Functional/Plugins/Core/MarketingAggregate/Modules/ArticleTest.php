@@ -24,12 +24,13 @@
 
 namespace Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\Modules;
 
+use sArticles;
 use Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\AbstractMarketing;
 
 class ArticleTest extends AbstractMarketing
 {
     /**
-     * @var \sArticles
+     * @var sArticles
      */
     protected $module;
 

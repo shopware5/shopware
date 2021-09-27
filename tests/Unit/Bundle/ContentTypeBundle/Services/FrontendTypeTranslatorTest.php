@@ -24,10 +24,12 @@
 
 namespace Shopware\Tests\Unit\Bundle\ContentTypeBundle\Services;
 
+use Enlight_Components_Snippet_Namespace;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\ContentTypeBundle\Services\FrontendTypeTranslator;
 use Shopware\Bundle\ContentTypeBundle\Structs\Field;
 use Shopware\Bundle\ContentTypeBundle\Structs\Type;
+use Shopware_Components_Snippet_Manager;
 
 class FrontendTypeTranslatorTest extends TestCase
 {
@@ -38,7 +40,7 @@ class FrontendTypeTranslatorTest extends TestCase
 
     public function setUp(): void
     {
-        $namespace = $this->getMockBuilder(\Enlight_Components_Snippet_Namespace::class)
+        $namespace = $this->getMockBuilder(Enlight_Components_Snippet_Namespace::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -48,7 +50,7 @@ class FrontendTypeTranslatorTest extends TestCase
                 ['field_label', 'field', false, 'Fancy Translation'],
             ]);
 
-        $manager = $this->getMockBuilder(\Shopware_Components_Snippet_Manager::class)
+        $manager = $this->getMockBuilder(Shopware_Components_Snippet_Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
 

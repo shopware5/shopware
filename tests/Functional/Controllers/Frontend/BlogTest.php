@@ -24,9 +24,11 @@
 
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
+use Enlight_Components_Test_Plugin_TestCase;
+use Exception;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class BlogTest extends \Enlight_Components_Test_Plugin_TestCase
+class BlogTest extends Enlight_Components_Test_Plugin_TestCase
 {
     use DatabaseTransactionBehaviour;
 
@@ -70,7 +72,7 @@ class BlogTest extends \Enlight_Components_Test_Plugin_TestCase
         $ex = null;
         try {
             $this->dispatch('/blog/?sCategory=17');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $ex = $e;
         }
         static::assertEquals(404, $ex->getCode());
@@ -78,7 +80,7 @@ class BlogTest extends \Enlight_Components_Test_Plugin_TestCase
         // Should be redirected because blog category is inactive
         try {
             $this->dispatch('/blog/detail/?blogArticle=3');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $ex = $e;
         }
         static::assertEquals(404, $ex->getCode());

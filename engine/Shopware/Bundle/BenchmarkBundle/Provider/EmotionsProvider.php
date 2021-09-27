@@ -26,6 +26,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use PDO;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -206,7 +207,7 @@ class EmotionsProvider implements BenchmarkProviderInterface
             ->setParameter(':categoryId', $categoryId)
             ->setParameter(':categoryIdPath', '%|' . $categoryId . '|%')
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
 
         $emoShopIds = $emoShopsQb->select('emotion.id')
             ->from('s_emotion', 'emotion')
@@ -214,7 +215,7 @@ class EmotionsProvider implements BenchmarkProviderInterface
             ->where('emotion.is_landingpage = 1 AND emoShops.shop_id = :shopId')
             ->setParameter(':shopId', $this->shopContext->getShop()->getId())
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
 
         $this->emotionIds[$shopId] = array_merge($emoShopIds, $emoCategoryIds);
 

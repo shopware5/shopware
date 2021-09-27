@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ContentTypeBundle\Services;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\ContentTypeBundle\DependencyInjection\TypeReader;
 use Shopware\Bundle\ContentTypeBundle\Field\FieldInterface;
 use Shopware\Bundle\ContentTypeBundle\Structs\Type;
@@ -138,7 +139,7 @@ class DatabaseContentTypeSynchronizer implements DatabaseContentTypeSynchronizer
                 'names' => $types,
             ], [
                 'names' => Connection::PARAM_STR_ARRAY,
-            ])->fetchAll(\PDO::FETCH_COLUMN);
+            ])->fetchAll(PDO::FETCH_COLUMN);
 
             foreach ($names as $name) {
                 $this->cleanupService->deleteContentType($name);

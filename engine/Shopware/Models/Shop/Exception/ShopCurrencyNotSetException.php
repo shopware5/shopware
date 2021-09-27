@@ -26,9 +26,12 @@ declare(strict_types=1);
 
 namespace Shopware\Models\Shop\Exception;
 
-class ShopCurrencyNotSetException extends \RuntimeException
+use RuntimeException;
+use Throwable;
+
+class ShopCurrencyNotSetException extends RuntimeException
 {
-    public function __construct(int $code = 0, ?\Throwable $previous = null)
+    public function __construct(int $code = 0, ?Throwable $previous = null)
     {
         $message = 'Current shop has no currency set';
         parent::__construct($message, $code, $previous);

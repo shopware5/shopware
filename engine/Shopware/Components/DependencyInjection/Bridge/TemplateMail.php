@@ -24,27 +24,31 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Enlight_Template_Manager;
+use RuntimeException;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
+use Shopware_Components_StringCompiler;
+use Shopware_Components_TemplateMail;
 
 class TemplateMail
 {
     /**
-     * @return \Shopware_Components_TemplateMail
+     * @return Shopware_Components_TemplateMail
      */
     public function factory(Container $container)
     {
         $container->load('mailtransport');
 
-        $stringCompiler = new \Shopware_Components_StringCompiler(
-            $container->get(\Enlight_Template_Manager::class)
+        $stringCompiler = new Shopware_Components_StringCompiler(
+            $container->get(Enlight_Template_Manager::class)
         );
-        $mailer = new \Shopware_Components_TemplateMail();
+        $mailer = new Shopware_Components_TemplateMail();
         if ($container->initialized('shop')) {
             $shop = $container->get('shop');
             if (!$shop instanceof Shop) {
-                throw new \RuntimeException('Shop object not found in DI container');
+                throw new RuntimeException('Shop object not found in DI container');
             }
             $mailer->setShop($shop);
         }

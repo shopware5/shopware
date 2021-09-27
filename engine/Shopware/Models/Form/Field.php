@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Form;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -143,7 +145,7 @@ class Field extends ModelEntity
     /**
      * Defines the date and time when the field was created
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
@@ -429,7 +431,7 @@ class Field extends ModelEntity
      */
     public function onPrePersist()
     {
-        $this->added = new \DateTime('now');
+        $this->added = new DateTime('now');
     }
 
     /**

@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Exception;
 use Shopware\Components\Api\Exception as ApiException;
 
 /**
@@ -94,7 +95,7 @@ class PropertyGroup extends Resource
 
     /**
      * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return \Shopware\Models\Property\Group
      */

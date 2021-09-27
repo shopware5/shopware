@@ -24,7 +24,10 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-class AccessTokenStruct implements \JsonSerializable
+use DateTimeInterface;
+use JsonSerializable;
+
+class AccessTokenStruct implements JsonSerializable
 {
     /**
      * @var string
@@ -32,7 +35,7 @@ class AccessTokenStruct implements \JsonSerializable
     private $token;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $expire;
 
@@ -59,7 +62,7 @@ class AccessTokenStruct implements \JsonSerializable
      */
     public function __construct(
         $token,
-        \DateTimeInterface $expire,
+        DateTimeInterface $expire,
         $shopwareId,
         $userId,
         $locale
@@ -88,7 +91,7 @@ class AccessTokenStruct implements \JsonSerializable
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getExpire()
     {

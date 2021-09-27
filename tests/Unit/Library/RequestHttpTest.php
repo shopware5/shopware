@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Library;
 
+use Enlight_Controller_Request_RequestHttp;
 use PHPUnit\Framework\TestCase;
 use Shopware\Tests\Functional\Helper\Utils;
 
@@ -33,7 +34,7 @@ class RequestHttpTest extends TestCase
 
     public function setUp(): void
     {
-        $this->request = new \Enlight_Controller_Request_RequestHttp();
+        $this->request = new Enlight_Controller_Request_RequestHttp();
     }
 
     /**

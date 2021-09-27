@@ -24,7 +24,9 @@
 
 namespace Shopware\Components;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
+use InvalidArgumentException;
 
 class OptinService implements OptinServiceInterface
 {
@@ -44,11 +46,11 @@ class OptinService implements OptinServiceInterface
     public function add($type, $duration, array $data)
     {
         if (!\is_string($type)) {
-            throw new \InvalidArgumentException('$type has to be of type string');
+            throw new InvalidArgumentException('$type has to be of type string');
         }
 
         if (!is_numeric($duration)) {
-            throw new \InvalidArgumentException('$duration has to be of type integer');
+            throw new InvalidArgumentException('$duration has to be of type integer');
         }
 
         $hash = Random::getAlphanumericString(32);
@@ -80,11 +82,11 @@ SQL;
     public function get($type, $hash)
     {
         if (!\is_string($type)) {
-            throw new \InvalidArgumentException('$type has to be of type string');
+            throw new InvalidArgumentException('$type has to be of type string');
         }
 
         if (!\is_string($hash)) {
-            throw new \InvalidArgumentException('$hash has to be of type string');
+            throw new InvalidArgumentException('$hash has to be of type string');
         }
 
         $sql = <<<'SQL'
@@ -95,7 +97,7 @@ SQL;
                 AND optIn.datum >= :currentDate
 SQL;
 
-        $currentDate = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
+        $currentDate = (new DateTimeImmutable())->format('Y-m-d H:i:s');
 
         $statement = $this->connection->prepare($sql);
         $statement->execute([
@@ -119,11 +121,11 @@ SQL;
     public function delete($type, $hash)
     {
         if (!\is_string($type)) {
-            throw new \InvalidArgumentException('$type has to be of type string');
+            throw new InvalidArgumentException('$type has to be of type string');
         }
 
         if (!\is_string($hash)) {
-            throw new \InvalidArgumentException('$hash has to be of type string');
+            throw new InvalidArgumentException('$hash has to be of type string');
         }
 
         $sql = <<<'SQL'

@@ -25,6 +25,8 @@
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
+use InvalidArgumentException;
+use RuntimeException;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition as Condition;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
@@ -40,17 +42,17 @@ trait DynamicConditionParserTrait
      * @param array|string|null $value
      * @param string|null       $operator
      *
-     * @throws \InvalidArgumentException If field value is empty                          (code: 1)
-     * @throws \InvalidArgumentException If an invalid column name has been specified     (code: 2)
-     * @throws \InvalidArgumentException If an unsupported operator has been specified    (code: 3)
-     * @throws \RuntimeException         If columns could not be retrieved from the table
+     * @throws InvalidArgumentException If field value is empty                          (code: 1)
+     * @throws InvalidArgumentException If an invalid column name has been specified     (code: 2)
+     * @throws InvalidArgumentException If an unsupported operator has been specified    (code: 3)
+     * @throws RuntimeException         If columns could not be retrieved from the table
      */
     public function parse(QueryBuilder $query, $table, $tableAlias, $field = null, $value = null, $operator = null)
     {
         $field = trim($field);
 
         if (empty($field)) {
-            throw new \InvalidArgumentException('Condition class requires a defined attribute field!', 1);
+            throw new InvalidArgumentException('Condition class requires a defined attribute field!', 1);
         }
 
         /**
@@ -61,7 +63,7 @@ trait DynamicConditionParserTrait
             ->listTableColumns($table);
 
         if (empty($columns)) {
-            throw new \RuntimeException(sprintf('Could not retrieve columns from "%s".', $table));
+            throw new RuntimeException(sprintf('Could not retrieve columns from "%s".', $table));
         }
 
         $names = array_map(function (\Doctrine\DBAL\Schema\Column $column) {
@@ -69,7 +71,7 @@ trait DynamicConditionParserTrait
         }, $columns);
 
         if (!\array_key_exists(strtolower($field), $names)) {
-            throw new \InvalidArgumentException(sprintf('Invalid column name "%s" specified.', $field), 1);
+            throw new InvalidArgumentException(sprintf('Invalid column name "%s" specified.', $field), 1);
         }
 
         $validOperators = [
@@ -94,7 +96,7 @@ trait DynamicConditionParserTrait
          * When an operator is not specified, by default, return all results that are not null
          */
         if (empty($operator)) {
-            throw new \InvalidArgumentException(sprintf('Must specify an operator, please use one of: %s', implode(', ', $validOperators)), 3);
+            throw new InvalidArgumentException(sprintf('Must specify an operator, please use one of: %s', implode(', ', $validOperators)), 3);
         }
 
         //Identify each field placeholder value with table alias and a hash of condition properties
@@ -160,7 +162,7 @@ trait DynamicConditionParserTrait
 
             case $operator === Condition::OPERATOR_BETWEEN:
                 if (!isset($value['min']) && !isset($value['max'])) {
-                    throw new \InvalidArgumentException('The between operator needs a minimum or a maximum', 3);
+                    throw new InvalidArgumentException('The between operator needs a minimum or a maximum', 3);
                 }
 
                 if (isset($value['min'])) {
@@ -190,7 +192,7 @@ trait DynamicConditionParserTrait
                 break;
 
             default:
-                throw new \InvalidArgumentException(sprintf('Invalid operator specified, please use one of: %s', implode(', ', $validOperators)), 3);
+                throw new InvalidArgumentException(sprintf('Invalid operator specified, please use one of: %s', implode(', ', $validOperators)), 3);
         }
     }
 }

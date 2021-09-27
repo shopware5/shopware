@@ -24,7 +24,10 @@
 
 namespace Shopware\Recovery\Install;
 
+use ErrorException;
+use RuntimeException;
 use Shopware\Recovery\Install\Service\TranslationService;
+use SimpleXMLElement;
 
 class Requirements
 {
@@ -44,7 +47,7 @@ class Requirements
     public function __construct($sourceFile, TranslationService $translations)
     {
         if (!is_readable($sourceFile)) {
-            throw new \RuntimeException(sprintf('Cannot read requirements file in %s.', $sourceFile));
+            throw new RuntimeException(sprintf('Cannot read requirements file in %s.', $sourceFile));
         }
 
         $this->sourceFile = $sourceFile;
@@ -117,14 +120,14 @@ class Requirements
     /**
      * Returns the check list
      *
-     * @return \SimpleXMLElement[]
+     * @return SimpleXMLElement[]
      */
     private function runChecks()
     {
         $xmlObject = simplexml_load_file($this->sourceFile);
 
         if (!\is_object($xmlObject->requirements)) {
-            throw new \RuntimeException('Requirements XML file is not valid.');
+            throw new RuntimeException('Requirements XML file is not valid.');
         }
 
         foreach ($xmlObject->requirement as $requirement) {
@@ -252,7 +255,7 @@ class Requirements
                     'error' => '',
                 ];
             }
-        } catch (\ErrorException $x) {
+        } catch (ErrorException $x) {
             // Systems that have an 'open_basedir' defined might not allow an access of '/'
         }
 

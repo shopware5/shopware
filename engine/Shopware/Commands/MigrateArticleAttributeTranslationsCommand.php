@@ -24,6 +24,8 @@
 
 namespace Shopware\Commands;
 
+use Exception;
+use PDO;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,7 +38,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
 {
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $connection;
 
@@ -73,7 +75,7 @@ class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
 
         $result = $this->connection
             ->query('SELECT MAX(id) AS maxId, count(1) AS count FROM s_core_translations;')
-            ->fetch(\PDO::FETCH_ASSOC);
+            ->fetch(PDO::FETCH_ASSOC);
 
         $this->migrate($io->createProgressBar($result['count']), $result['maxId']);
 
@@ -102,7 +104,7 @@ EOL
 
         do {
             $selectStatement->execute([':lastId' => $lastId, ':maxId' => $maxId]);
-            $rows = $selectStatement->fetchAll(\PDO::FETCH_ASSOC);
+            $rows = $selectStatement->fetchAll(PDO::FETCH_ASSOC);
 
             if (empty($rows)) {
                 continue;
@@ -122,7 +124,7 @@ EOL
      */
     private function getColumns()
     {
-        $columns = $this->connection->query('SHOW COLUMNS FROM s_articles_attributes')->fetchAll(\PDO::FETCH_ASSOC);
+        $columns = $this->connection->query('SHOW COLUMNS FROM s_articles_attributes')->fetchAll(PDO::FETCH_ASSOC);
 
         $columns = array_column($columns, 'Field');
 
@@ -191,7 +193,7 @@ EOL
         foreach ($rows as $row) {
             try {
                 $updated = $this->filter(unserialize($row['objectdata'], ['allowed_classes' => false]), $columns);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 //serialize error - continue with next translation
                 continue;
             }

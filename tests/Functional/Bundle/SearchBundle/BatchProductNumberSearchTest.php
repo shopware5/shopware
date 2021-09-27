@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Bundle\SearchBundle;
 
 use Doctrine\DBAL\Connection;
+use OutOfBoundsException;
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearch;
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearchRequest;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
@@ -233,7 +234,7 @@ class BatchProductNumberSearchTest extends TestCase
 
         $result = $this->batchSearch->search($request, $context);
 
-        $this->expectException(\OutOfBoundsException::class);
+        $this->expectException(OutOfBoundsException::class);
         $result->get('not_existing');
     }
 

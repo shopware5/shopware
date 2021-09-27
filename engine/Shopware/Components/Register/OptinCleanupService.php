@@ -26,6 +26,7 @@ namespace Shopware\Components\Register;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use PDO;
 use Shopware_Components_Config;
 
 class OptinCleanupService implements OptinCleanupServiceInterface
@@ -64,7 +65,7 @@ class OptinCleanupService implements OptinCleanupServiceInterface
                 ->andWhere('datum < NOW() - INTERVAL :interval DAY')
                 ->setParameter(':interval', $interval)
                 ->execute()
-                ->fetchAll(\PDO::FETCH_COLUMN);
+                ->fetchAll(PDO::FETCH_COLUMN);
 
             if (!$ids) {
                 $this->connection->commit();

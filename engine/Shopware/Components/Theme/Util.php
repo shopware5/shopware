@@ -24,7 +24,9 @@
 
 namespace Shopware\Components\Theme;
 
+use DirectoryIterator;
 use Doctrine\ORM\AbstractQuery;
+use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Theme;
 use Shopware\Models\Shop;
@@ -73,7 +75,7 @@ class Util
      * The function resolves the theme directory over the
      * getDirectory function of the PathResolver
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Theme
      */
@@ -87,7 +89,7 @@ class Util
         $file = $directory . DIRECTORY_SEPARATOR . 'Theme.php';
 
         if (!file_exists($file)) {
-            throw new \Exception(sprintf('Theme directory %s contains no Theme.php', $directory));
+            throw new Exception(sprintf('Theme directory %s contains no Theme.php', $directory));
         }
 
         require_once $file;
@@ -99,11 +101,11 @@ class Util
      * Resolves the passed directory to a theme class.
      * Returns a new instance of the \Shopware\Theme
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Theme
      */
-    public function getThemeByDirectory(\DirectoryIterator $directory)
+    public function getThemeByDirectory(DirectoryIterator $directory)
     {
         $namespace = 'Shopware\\Themes\\' . $directory->getFilename();
         $class = $namespace . '\\Theme';
@@ -111,13 +113,13 @@ class Util
         $file = $directory->getPathname() . DIRECTORY_SEPARATOR . 'Theme.php';
 
         if (!file_exists($file)) {
-            throw new \Exception(sprintf('Theme directory %s contains no Theme.php', $directory->getPathname()));
+            throw new Exception(sprintf('Theme directory %s contains no Theme.php', $directory->getPathname()));
         }
 
         require_once $file;
 
         if (!class_exists($class)) {
-            throw new \Exception(sprintf('Theme file %s contains unexpected class %s', $file, $class));
+            throw new Exception(sprintf('Theme file %s contains unexpected class %s', $file, $class));
         }
 
         return new $class();

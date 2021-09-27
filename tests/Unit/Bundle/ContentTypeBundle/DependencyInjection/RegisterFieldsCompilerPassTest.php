@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Unit\Bundle\ContentTypeBundle\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Shopware\Bundle\ContentTypeBundle\DependencyInjection\RegisterFieldsCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -32,7 +33,7 @@ class RegisterFieldsCompilerPassTest extends TestCase
 {
     public function testMissingFieldName(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Service with id "foo" need the tag attribute fieldName to identify the short name');
         $container = new ContainerBuilder();
         $container

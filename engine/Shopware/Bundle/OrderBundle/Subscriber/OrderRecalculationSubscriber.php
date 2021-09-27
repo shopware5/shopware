@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\OrderBundle\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Event_EventArgs;
 use Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Detail;
@@ -58,7 +59,7 @@ class OrderRecalculationSubscriber implements SubscriberInterface
     /**
      * If a product position get updated, the order totals must be recalculated
      */
-    public function preUpdate(\Enlight_Event_EventArgs $arguments)
+    public function preUpdate(Enlight_Event_EventArgs $arguments)
     {
         /** @var Detail $orderDetail */
         $orderDetail = $arguments->get('entity');
@@ -82,7 +83,7 @@ class OrderRecalculationSubscriber implements SubscriberInterface
     /**
      * If a product position got added to the order, the order totals must be recalculated
      */
-    public function postPersist(\Enlight_Event_EventArgs $arguments)
+    public function postPersist(Enlight_Event_EventArgs $arguments)
     {
         /** @var Detail $orderDetail */
         $orderDetail = $arguments->get('entity');
@@ -96,7 +97,7 @@ class OrderRecalculationSubscriber implements SubscriberInterface
     /**
      * If a product position get removed from the order, the order totals must be recalculated
      */
-    public function preRemove(\Enlight_Event_EventArgs $arguments)
+    public function preRemove(Enlight_Event_EventArgs $arguments)
     {
         /** @var Detail $orderDetail */
         $orderDetail = $arguments->get('entity');

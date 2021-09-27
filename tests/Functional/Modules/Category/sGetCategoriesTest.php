@@ -24,9 +24,11 @@
 
 namespace Shopware\Tests\Functional\Modules\Category;
 
+use Enlight_Components_Test_TestCase;
+use sCategories;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
-class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
+class sGetCategoriesTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var Helper
@@ -34,7 +36,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
     protected $helper;
 
     /**
-     * @var \sCategories
+     * @var sCategories
      */
     private $module;
 
@@ -46,7 +48,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
             "DELETE FROM s_categories WHERE description LIKE 'Foo%' AND parent = 3"
         );
 
-        $this->module = new \sCategories();
+        $this->module = new sCategories();
         $this->module->baseId = 3;
         $this->module->customerGroupId = 1;
 

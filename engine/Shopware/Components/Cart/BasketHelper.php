@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Cart;
 
+use PDO;
 use Shopware\Components\Cart\Struct\DiscountContext;
 use Shopware\Components\Cart\Struct\Price;
 
@@ -96,7 +97,7 @@ class BasketHelper implements BasketHelperInterface
             $discountContext
         );
 
-        $rows = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        $rows = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         return array_map(function ($row) {
             return new Price(

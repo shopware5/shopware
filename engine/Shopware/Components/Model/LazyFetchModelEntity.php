@@ -27,6 +27,7 @@ namespace Shopware\Components\Model;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Persistence\Proxy;
+use Exception;
 
 /**
  * @ORM\MappedSuperclass()
@@ -61,7 +62,7 @@ abstract class LazyFetchModelEntity extends ModelEntity
      * @param array         $condition
      * @param EntityManager $em
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return TModel|null
      */
@@ -82,7 +83,7 @@ abstract class LazyFetchModelEntity extends ModelEntity
         }
 
         if ($em === null) {
-            throw new \Exception('Lazy fetch class not supported.');
+            throw new Exception('Lazy fetch class not supported.');
         }
 
         /** @var class-string<TModel> $class */

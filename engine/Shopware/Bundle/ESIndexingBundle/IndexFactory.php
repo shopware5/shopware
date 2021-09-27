@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle;
 
+use DateTime;
 use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
@@ -90,7 +91,7 @@ class IndexFactory implements IndexFactoryInterface
      */
     private function getTimestamp()
     {
-        $date = new \DateTime();
+        $date = new DateTime();
 
         return $date->format('YmdHis');
     }

@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
@@ -172,7 +173,7 @@ class ProductReader extends GenericReader
         $query->groupBy('articleID');
         $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $categories = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $categories = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
 
         foreach ($products as &$product) {
             $mapping = [];
@@ -200,7 +201,7 @@ class ProductReader extends GenericReader
         $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
         $query->setParameter('variantIds', $variantIds, Connection::PARAM_INT_ARRAY);
 
-        $prices = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $prices = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
 
         foreach ($products as &$product) {
             $id = $product['variantId'];

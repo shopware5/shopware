@@ -24,6 +24,8 @@
 
 namespace Shopware\Tests\Unit\Bundle\SitemapBundle;
 
+use DateTime;
+use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\SitemapBundle\Service\SitemapLock;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\CoreCache;
@@ -47,7 +49,7 @@ class SitemapLockTest extends TestCase
 
         $this->lifeTime = 3600;
 
-        $data = sprintf('Locked: %s', (new \DateTime('NOW', new \DateTimeZone('UTC')))->format(\DateTime::ATOM));
+        $data = sprintf('Locked: %s', (new DateTime('NOW', new DateTimeZone('UTC')))->format(DateTime::ATOM));
 
         $this->cacheMock = $this->getMockBuilder(\Shopware\Bundle\StoreFrontBundle\Service\Core\CoreCache::class)
             ->disableOriginalConstructor()

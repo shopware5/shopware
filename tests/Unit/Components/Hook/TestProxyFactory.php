@@ -26,9 +26,12 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Unit\Components\Hook;
 
-class TestProxyFactory extends \Enlight_Hook_ProxyFactory
+use Enlight_Hook_HookManager;
+use Enlight_Hook_ProxyFactory;
+
+class TestProxyFactory extends Enlight_Hook_ProxyFactory
 {
-    public function __construct(\Enlight_Hook_HookManager $hookManager, $proxyNamespace)
+    public function __construct(Enlight_Hook_HookManager $hookManager, $proxyNamespace)
     {
         $this->hookManager = $hookManager;
         $this->proxyNamespace = $proxyNamespace;

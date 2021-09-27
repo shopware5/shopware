@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class CloseoutCondition implements ConditionInterface, \JsonSerializable
+class CloseoutCondition implements ConditionInterface, JsonSerializable
 {
     private const NAME = 'closeout';
 

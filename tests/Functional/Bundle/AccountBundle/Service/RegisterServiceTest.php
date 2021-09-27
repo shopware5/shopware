@@ -28,6 +28,7 @@ namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\ORMException;
+use Enlight_Components_Test_TestCase;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
@@ -38,7 +39,7 @@ use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 
-class RegisterServiceTest extends \Enlight_Components_Test_TestCase
+class RegisterServiceTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var RegisterServiceInterface

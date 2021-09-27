@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SitemapBundle\ConfigHandler;
 
+use DateTime;
 use Shopware\Bundle\SitemapBundle\Service\ConfigHandler;
 
 /**
@@ -66,7 +67,7 @@ class File implements ConfigHandlerInterface
     private function getSitemapCustomUrls(array $customUrls)
     {
         foreach ($customUrls as &$customUrl) {
-            $customUrl['lastMod'] = \DateTime::createFromFormat('Y-m-d H:i:s', $customUrl['lastMod']);
+            $customUrl['lastMod'] = DateTime::createFromFormat('Y-m-d H:i:s', $customUrl['lastMod']);
         }
 
         return $customUrls;

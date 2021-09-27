@@ -24,7 +24,11 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use DateTime;
 use Doctrine\ORM\ORMException;
+use Exception;
+use InvalidArgumentException;
+use RuntimeException;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Random;
 use Shopware\Components\Thumbnail\Manager;
@@ -116,7 +120,7 @@ class Media extends Resource
 
     /**
      * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return MediaModel
      */
@@ -188,7 +192,7 @@ class Media extends Resource
             try {
                 $this->getContainer()->get(\Shopware\Bundle\MediaBundle\MediaReplaceServiceInterface::class)->replace($id, $file);
                 @unlink($path);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 @unlink($path);
                 throw new ApiException\CustomValidationException($exception->getMessage());
             }
@@ -261,7 +265,7 @@ class Media extends Resource
         $media->setFile($file);
         $media->setName($name);
         $media->setDescription('');
-        $media->setCreated(new \DateTime());
+        $media->setCreated(new DateTime());
         $media->setUserId(0);
 
         /** @var Album|null $album */
@@ -298,8 +302,8 @@ class Media extends Resource
      * @param string $url          URL of the resource that should be loaded (ftp, http, file)
      * @param string $baseFilename Optional: Instead of creating a hash, create a filename based on the given one
      *
-     * @throws \InvalidArgumentException
-     * @throws \Exception
+     * @throws InvalidArgumentException
+     * @throws Exception
      *
      * @return bool|string returns the absolute path of the downloaded file
      */
@@ -309,7 +313,7 @@ class Media extends Resource
         unlink($destPath);
 
         if (!@mkdir($destPath) && !is_dir($destPath)) {
-            throw new \RuntimeException(sprintf('Could not create temp directory "%s"', $destPath));
+            throw new RuntimeException(sprintf('Could not create temp directory "%s"', $destPath));
         }
 
         $this->getContainer()->get('shopware.components.stream_protocol_validator')->validate($url);
@@ -322,11 +326,11 @@ class Media extends Resource
         $filePath = sprintf('%s/%s', $destPath, $filename);
 
         if (!$put_handle = fopen($filePath, 'wb+')) {
-            throw new \Exception(sprintf('Could not open %s for writing', $filePath));
+            throw new Exception(sprintf('Could not open %s for writing', $filePath));
         }
 
         if (!$get_handle = fopen($url, 'rb')) {
-            throw new \Exception(sprintf('Could not open %s for reading', $url));
+            throw new Exception(sprintf('Could not open %s for reading', $url));
         }
 
         while (!feof($get_handle)) {
@@ -391,14 +395,14 @@ class Media extends Resource
      * @param string $baseFilename
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string
      */
     protected function uploadBase64File($url, $destinationPath, $baseFilename)
     {
         if (!$get_handle = fopen($url, 'r')) {
-            throw new \Exception(sprintf('Could not open %s for reading', $url));
+            throw new Exception(sprintf('Could not open %s for reading', $url));
         }
 
         $meta = stream_get_meta_data($get_handle);
@@ -411,7 +415,7 @@ class Media extends Resource
         $destinationFilePath = sprintf('%s/%s', $destinationPath, $filename);
 
         if (!$put_handle = fopen("$destinationPath/$filename", 'wb+')) {
-            throw new \Exception("Could not open $destinationPath/$filename for writing");
+            throw new Exception("Could not open $destinationPath/$filename for writing");
         }
         while (!feof($get_handle)) {
             fwrite($put_handle, fgets($get_handle, 4096));
@@ -427,7 +431,7 @@ class Media extends Resource
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -451,7 +455,7 @@ class Media extends Resource
         }
 
         if (!$media && (!isset($params['created']) || empty($params['created']))) {
-            $params['created'] = new \DateTime();
+            $params['created'] = new DateTime();
         }
 
         // Check / set album
@@ -479,8 +483,8 @@ class Media extends Resource
                     if (strpos($params['file'], 'data:image') !== false) {
                         $originalName = $params['name'];
                     }
-                } catch (\Exception $e) {
-                    throw new \Exception(sprintf('Could not load image %s', $params['file']), $e->getCode(), $e);
+                } catch (Exception $e) {
+                    throw new Exception(sprintf('Could not load image %s', $params['file']), $e->getCode(), $e);
                 }
             } else {
                 $path = str_replace('file://', '', $params['file']);

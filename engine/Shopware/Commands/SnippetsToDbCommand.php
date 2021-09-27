@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use RuntimeException;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
@@ -44,7 +45,7 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
             $rootDir = $this->container->getParameter('kernel.root_dir');
 
             if (!\is_string($rootDir)) {
-                throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+                throw new RuntimeException('Parameter kernel.root_dir has to be an string');
             }
 
             return $this->completeInDirectory($rootDir);
@@ -103,12 +104,12 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
         $rootDir = $this->container->getParameter('kernel.root_dir');
 
         if (!\is_string($rootDir)) {
-            throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+            throw new RuntimeException('Parameter kernel.root_dir has to be an string');
         }
 
         $source = $input->getOption('source');
         if (!\is_string($source)) {
-            throw new \RuntimeException('Option "source" needs to be a string');
+            throw new RuntimeException('Option "source" needs to be a string');
         }
 
         $sourceDir = $rootDir . '/' . $source . '/';
@@ -126,7 +127,7 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
             $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
 
             if (!\is_array($pluginDirectories)) {
-                throw new \RuntimeException('Parameter shopware.plugin_directories has to be an array');
+                throw new RuntimeException('Parameter shopware.plugin_directories has to be an array');
             }
 
             foreach ($plugins as $plugin) {

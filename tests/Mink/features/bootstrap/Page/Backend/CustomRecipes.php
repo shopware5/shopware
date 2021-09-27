@@ -30,6 +30,7 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\ElementNotFoundException;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\Backend\CustomRecipesListWindow;
+use Throwable;
 
 class CustomRecipes extends Page
 {
@@ -43,7 +44,7 @@ class CustomRecipes extends Page
         $recipesWindowPresent = $this->waitFor(10, function (CustomRecipes $page): bool {
             try {
                 return $page->getCustomRecipesListWindow() instanceof Element;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 return false;
             }
         });

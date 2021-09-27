@@ -24,11 +24,15 @@
 
 namespace Shopware\Tests\Unit\Components\DependencyInjection;
 
+use Enlight_Event_EventArgs;
+use Enlight_Event_EventManager;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\DependencyInjection\Container;
+use stdClass;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 
@@ -44,14 +48,14 @@ class ContainerTest extends TestCase
     protected function setUp(): void
     {
         $this->container = new ProjectServiceContainer();
-        $service = $this->createMock(\Enlight_Event_EventManager::class);
+        $service = $this->createMock(Enlight_Event_EventManager::class);
 
         $this->container->set('events', $service);
     }
 
     public function testSet(): void
     {
-        $object = new \stdClass();
+        $object = new stdClass();
 
         $this->container->set('someKey', $object);
         static::assertSame($object, $this->container->get('someKey'));
@@ -67,14 +71,14 @@ class ContainerTest extends TestCase
 
     public function testGetOnNonExistentWithDefaultBehaviour(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
 
         $this->container->get('foo');
     }
 
     public function testGetOnNonExistentWithExceptionBehaviour(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->container->get('foo', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE);
     }
 
@@ -94,7 +98,7 @@ class ContainerTest extends TestCase
 
     public function testEventsAreEmitedDuringServiceInitialisation(): void
     {
-        $service = $this->prophesize(\Enlight_Event_EventManager::class);
+        $service = $this->prophesize(Enlight_Event_EventManager::class);
 
         $service->notify('Enlight_Bootstrap_AfterRegisterResource_events', Argument::any())->shouldBeCalled();
         $service->notifyUntil('Enlight_Bootstrap_InitResource_bar', Argument::any())->shouldBeCalled();
@@ -108,7 +112,7 @@ class ContainerTest extends TestCase
 
     public function testEventsAreEmitedDuringServiceInitialisationWhenUsingAlias(): void
     {
-        $service = $this->prophesize(\Enlight_Event_EventManager::class);
+        $service = $this->prophesize(Enlight_Event_EventManager::class);
 
         $service->notify('Enlight_Bootstrap_AfterRegisterResource_events', Argument::any())->shouldBeCalled();
         $service->notifyUntil('Enlight_Bootstrap_InitResource_bar', Argument::any())->shouldBeCalled();
@@ -124,7 +128,7 @@ class ContainerTest extends TestCase
 
     public function testEventsAreEmitedDuringServiceInitialisationWhenUsingUnknownServices(): void
     {
-        $service = $this->prophesize(\Enlight_Event_EventManager::class);
+        $service = $this->prophesize(Enlight_Event_EventManager::class);
 
         $service->notify('Enlight_Bootstrap_AfterRegisterResource_events', Argument::any())->shouldBeCalled();
         $service->notifyUntil('Enlight_Bootstrap_InitResource_foo', Argument::any())->shouldBeCalled();
@@ -133,7 +137,7 @@ class ContainerTest extends TestCase
         $service = $service->reveal();
         $this->container->set('events', $service);
 
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
 
         $this->container->get('foo');
     }
@@ -144,12 +148,12 @@ class ContainerTest extends TestCase
         $eventManager = new ContainerAwareEventManager($this->container);
         $this->container->set('events', $eventManager);
 
-        $class = new \stdClass();
+        $class = new stdClass();
         $class->name = 'decorated';
 
         $this->container->get('events')->addListener(
             'Enlight_Bootstrap_AfterInitResource_bar',
-            function (\Enlight_Event_EventArgs $e) use ($class) {
+            function (Enlight_Event_EventArgs $e) use ($class) {
                 /** @var ProjectServiceContainer $container */
                 $container = $e->getSubject();
                 $container->set('bar', $class);
@@ -165,7 +169,7 @@ class ContainerTest extends TestCase
         $eventManager = new ContainerAwareEventManager($this->container);
         $this->container->set('events', $eventManager);
 
-        $class = new \stdClass();
+        $class = new stdClass();
         $class->name = 'decorated';
 
         $this->container->set('service.listener', new Service($class));
@@ -186,7 +190,7 @@ class ContainerTest extends TestCase
 
         $this->container->get('events')->addListener(
             'Enlight_Bootstrap_InitResource_child',
-            function (\Enlight_Event_EventArgs $e) {
+            function (Enlight_Event_EventArgs $e) {
                 /** @var ProjectServiceContainer $container */
                 $container = $e->getSubject();
 
@@ -197,13 +201,13 @@ class ContainerTest extends TestCase
 
         $this->container->get('events')->addListener(
             'Enlight_Bootstrap_AfterInitResource_parent',
-            function (\Enlight_Event_EventArgs $e) {
+            function (Enlight_Event_EventArgs $e) {
                 /** @var ProjectServiceContainer $container */
                 $container = $e->getSubject();
 
                 $coreParent = $container->get('parent');
 
-                $decoratedParent = new \stdClass();
+                $decoratedParent = new stdClass();
                 $decoratedParent->name = 'decorated_parent';
                 $decoratedParent->coreParent = $coreParent;
 

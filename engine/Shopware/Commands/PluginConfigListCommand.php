@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Exception;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
@@ -104,7 +105,7 @@ EOF
 
         try {
             $plugin = $pluginManager->getPluginByName($pluginName);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
 
             return 1;

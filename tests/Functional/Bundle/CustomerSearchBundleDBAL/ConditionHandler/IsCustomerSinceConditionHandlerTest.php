@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
+use DateTime;
 use Shopware\Bundle\CustomerSearchBundle\Condition\IsCustomerSinceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
@@ -35,7 +36,7 @@ class IsCustomerSinceConditionHandlerTest extends TestCase
         $criteria = new Criteria();
         $criteria->addCondition(
             new IsCustomerSinceCondition(
-                new \DateTime('2016-02-16')
+                new DateTime('2016-02-16')
             )
         );
 

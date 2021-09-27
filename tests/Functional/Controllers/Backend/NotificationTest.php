@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
-class NotificationTest extends \Enlight_Components_Test_Controller_TestCase
+use Enlight_Components_Test_Controller_TestCase;
+
+class NotificationTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Standard set up for every test - just disable auth

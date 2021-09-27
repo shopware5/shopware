@@ -27,6 +27,7 @@ namespace Shopware\Tests\Mink\Page;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\CheckoutPayment;
 use Shopware\Tests\Mink\Helper;
@@ -180,7 +181,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
      *
      * @param string $paymentMethod
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkPaymentMethod($paymentMethod)
     {

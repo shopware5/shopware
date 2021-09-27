@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Components\Plugin;
 
+use Enlight_Event_EventArgs;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Plugin\ResourceSubscriber;
 use Shopware\Components\Theme\LessDefinition;
@@ -39,7 +40,7 @@ class ResourceSubscriberTest extends TestCase
         static::assertNull($subscriber->onCollectLess());
 
         $subscriberWithViews = new ResourceSubscriber(__DIR__ . '/examples/EmptyPlugin');
-        $templateEventArgs = new \Enlight_Event_EventArgs();
+        $templateEventArgs = new Enlight_Event_EventArgs();
         $subscriberWithViews->onRegisterTemplate($templateEventArgs);
         static::assertIsArray($templateEventArgs->getReturn());
         static::assertNotEmpty($templateEventArgs->getReturn());
@@ -73,7 +74,7 @@ class ResourceSubscriberTest extends TestCase
         );
 
         $subscriberWithViews = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin');
-        $templateEventArgs = new \Enlight_Event_EventArgs();
+        $templateEventArgs = new Enlight_Event_EventArgs();
         $subscriberWithViews->onRegisterTemplate($templateEventArgs);
         static::assertTrue(\is_array($templateEventArgs->getReturn()));
         static::assertSame(

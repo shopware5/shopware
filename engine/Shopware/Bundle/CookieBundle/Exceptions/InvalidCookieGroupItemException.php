@@ -26,6 +26,8 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CookieBundle\Exceptions;
 
-class InvalidCookieGroupItemException extends \Exception
+use Exception;
+
+class InvalidCookieGroupItemException extends Exception
 {
 }

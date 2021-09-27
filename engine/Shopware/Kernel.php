@@ -24,7 +24,12 @@
 
 namespace Shopware;
 
+use Enlight_Controller_Front;
 use Enlight_Controller_Request_RequestHttp as EnlightRequest;
+use Exception;
+use PDO;
+use RuntimeException;
+use Shopware;
 use Shopware\Bundle\AccountBundle\AccountBundle;
 use Shopware\Bundle\AttributeBundle\AttributeBundle;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\StaticResourcesCompilerPass;
@@ -108,7 +113,7 @@ class Kernel extends SymfonyKernel
     ];
 
     /**
-     * @var \Shopware
+     * @var Shopware
      */
     protected $shopware;
 
@@ -135,7 +140,7 @@ class Kernel extends SymfonyKernel
     private $pluginHash;
 
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $connection;
 
@@ -143,7 +148,7 @@ class Kernel extends SymfonyKernel
      * @param string $environment
      * @param bool   $debug
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct($environment, $debug)
     {
@@ -182,7 +187,7 @@ class Kernel extends SymfonyKernel
             $this->boot();
         }
 
-        /** @var \Enlight_Controller_Front $front */
+        /** @var Enlight_Controller_Front $front */
         $front = $this->container->get('front');
 
         $enlightRequest = $this->transformSymfonyRequestToEnlightRequest($request);
@@ -227,7 +232,7 @@ class Kernel extends SymfonyKernel
      *
      * @param bool $skipDatabase
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function boot($skipDatabase = false)
     {
@@ -504,7 +509,7 @@ class Kernel extends SymfonyKernel
      * The shopware configuration is required before the shopware application booted,
      * to pass the configuration to the Symfony di container.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function initializeConfig()
     {
@@ -525,7 +530,7 @@ class Kernel extends SymfonyKernel
      */
     protected function initializeShopware()
     {
-        $this->shopware = new \Shopware($this->container);
+        $this->shopware = new Shopware($this->container);
         $this->container->setApplication($this->shopware);
     }
 
@@ -535,8 +540,8 @@ class Kernel extends SymfonyKernel
      * The cached version of the service container is used when fresh, otherwise the
      * container is built.
      *
-     * @throws \Exception
-     * @throws \RuntimeException
+     * @throws Exception
+     * @throws RuntimeException
      */
     protected function initializeContainer()
     {
@@ -577,7 +582,7 @@ class Kernel extends SymfonyKernel
      * @param string           $class     The name of the class to generate
      * @param string           $baseClass The name of the container's base class
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function dumpContainer(ConfigCache $cache, ContainerBuilder $container, $class, $baseClass)
     {
@@ -601,8 +606,8 @@ class Kernel extends SymfonyKernel
     /**
      * Builds the service container.
      *
-     * @throws \Exception
-     * @throws \RuntimeException
+     * @throws Exception
+     * @throws RuntimeException
      *
      * @return ContainerBuilder The compiled service container
      */
@@ -619,10 +624,10 @@ class Kernel extends SymfonyKernel
         foreach ($runtimeDirectories as $name => $dir) {
             if (!is_dir($dir)) {
                 if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
-                    throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", $name, $dir));
+                    throw new RuntimeException(sprintf("Unable to create the %s directory (%s)\n", $name, $dir));
                 }
             } elseif (!is_writable($dir)) {
-                throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", $name, $dir));
+                throw new RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", $name, $dir));
             }
         }
 
@@ -642,7 +647,7 @@ class Kernel extends SymfonyKernel
      *
      * @param ContainerBuilder $container A ContainerBuilder instance
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function prepareContainer(ContainerBuilder $container)
     {
@@ -824,17 +829,17 @@ class Kernel extends SymfonyKernel
 
         try {
             $contentTypes = $this->connection->query('SELECT internalName, config FROM s_content_types');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return [];
         }
 
         $result = [];
 
         try {
-            foreach ($contentTypes->fetchAll(\PDO::FETCH_KEY_PAIR) as $key => $type) {
+            foreach ($contentTypes->fetchAll(PDO::FETCH_KEY_PAIR) as $key => $type) {
                 $result[$key] = json_decode($type, true);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return $result;

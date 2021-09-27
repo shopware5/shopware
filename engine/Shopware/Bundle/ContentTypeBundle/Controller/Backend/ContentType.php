@@ -29,8 +29,9 @@ use Shopware\Bundle\ContentTypeBundle\Services\RepositoryInterface;
 use Shopware\Bundle\ContentTypeBundle\Structs\Criteria;
 use Shopware\Bundle\ContentTypeBundle\Structs\Type;
 use Shopware\Components\DependencyInjection\Container;
+use Shopware_Controllers_Backend_ExtJs;
 
-class ContentType extends \Shopware_Controllers_Backend_ExtJs
+class ContentType extends Shopware_Controllers_Backend_ExtJs
 {
     /**
      * @var Type

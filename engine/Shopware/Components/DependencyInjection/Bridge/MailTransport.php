@@ -24,12 +24,19 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Enlight_Class;
+use Enlight_Components_Mail;
+use Enlight_Loader;
+use Shopware_Components_Config;
+use Zend_Mail_Transport_Abstract;
+use Zend_Mail_Transport_Smtp;
+
 class MailTransport
 {
     /**
-     * @return \Enlight_Class|\Zend_Mail_Transport_Abstract
+     * @return Enlight_Class|Zend_Mail_Transport_Abstract
      */
-    public function factory(\Enlight_Loader $loader, \Shopware_Components_Config $config, array $options)
+    public function factory(Enlight_Loader $loader, Shopware_Components_Config $config, array $options)
     {
         if (!isset($options['type']) && !empty($config->MailerMailer) && $config->MailerMailer != 'mail') {
             $options['type'] = $config->MailerMailer;
@@ -71,30 +78,30 @@ class MailTransport
         unset($options['type'], $options['charset']);
 
         if ($transportName === 'Zend_Mail_Transport_Smtp') {
-            /** @var \Zend_Mail_Transport_Smtp $transport */
-            $transport = \Enlight_Class::Instance($transportName, [$options['host'], $options]);
+            /** @var Zend_Mail_Transport_Smtp $transport */
+            $transport = Enlight_Class::Instance($transportName, [$options['host'], $options]);
         } elseif (!empty($options)) {
-            /** @var \Zend_Mail_Transport_Abstract $transport */
-            $transport = \Enlight_Class::Instance($transportName, [$options]);
+            /** @var Zend_Mail_Transport_Abstract $transport */
+            $transport = Enlight_Class::Instance($transportName, [$options]);
         } else {
-            /** @var \Zend_Mail_Transport_Abstract $transport */
-            $transport = \Enlight_Class::Instance($transportName);
+            /** @var Zend_Mail_Transport_Abstract $transport */
+            $transport = Enlight_Class::Instance($transportName);
         }
-        \Enlight_Components_Mail::setDefaultTransport($transport);
+        Enlight_Components_Mail::setDefaultTransport($transport);
 
         if (!isset($options['from']) && !empty($config->Mail)) {
             $options['from'] = ['email' => $config->Mail, 'name' => $config->Shopname];
         }
 
         if (!empty($options['from']['email'])) {
-            \Enlight_Components_Mail::setDefaultFrom(
+            Enlight_Components_Mail::setDefaultFrom(
                 $options['from']['email'],
                 !empty($options['from']['name']) ? $options['from']['name'] : null
             );
         }
 
         if (!empty($options['replyTo']['email'])) {
-            \Enlight_Components_Mail::setDefaultReplyTo(
+            Enlight_Components_Mail::setDefaultReplyTo(
                 $options['replyTo']['email'],
                 !empty($options['replyTo']['name']) ? $options['replyTo']['name'] : null
             );
