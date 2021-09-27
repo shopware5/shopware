@@ -265,8 +265,8 @@ class Detail extends Page implements HelperSelectorInterface
     public function checkSelect($select, $min, $max, $graduation)
     {
         $selectBox = $this->findField($select);
-        $min = \strval($min);
-        $max = \strval($max);
+        $min = (string) $min;
+        $max = (string) $max;
 
         if (empty($selectBox)) {
             $message = sprintf('Select box "%s" was not found!', $select);

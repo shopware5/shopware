@@ -64,7 +64,7 @@ class ArticleEvaluation extends BlogComment
     {
         $elements = Helper::findElements($this, ['stars']);
 
-        return \floatval($elements['stars']->getAttribute('content')) * 2;
+        return (float) $elements['stars']->getAttribute('content') * 2;
     }
 
     /**
