@@ -63,6 +63,7 @@ return (new Config())
         'header_comment' => ['header' => $header, 'separate' => 'bottom', 'comment_type' => 'PHPDoc'],
         'modernize_types_casting' => true,
         'native_function_invocation' => true,
+        'no_alias_functions' => true,
         'no_useless_else' => true,
         'no_useless_return' => true,
         'no_superfluous_phpdoc_tags' => true,

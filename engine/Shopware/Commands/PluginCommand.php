@@ -67,11 +67,10 @@ abstract class PluginCommand extends ShopwareCommand
      */
     protected function clearCaches(OutputInterface $output, ...$contexts)
     {
-        /** @var CacheManager $cacheManager */
-        $cacheManager = $this->container->get(\Shopware\Components\CacheManager::class);
+        $cacheManager = $this->container->get(CacheManager::class);
         $cacheTags = $this->getScheduledCaches(...$contexts);
         if ($cacheManager->clearByTags($cacheTags)) {
-            $output->writeln(sprintf('Caches cleared (%s).', join(', ', $cacheTags)));
+            $output->writeln(sprintf('Caches cleared (%s).', implode(', ', $cacheTags)));
         }
     }
 
