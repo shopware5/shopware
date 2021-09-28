@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Changes
 * Changed `themes/Frontend/Bare/frontend/listing/listing_actions.tpl` to remove a duplicate name entry
+* Update TinyMCE to version 3.5.12
 
 ## 5.7.3
 
