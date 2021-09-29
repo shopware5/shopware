@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\ControllerBundle\Exceptions\ResourceNotFoundException;
 use Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfigurationInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
@@ -198,6 +199,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      * @param int $categoryId
      *
      * @return array
+     *
+     * @deprecated in 5.6, will be private in 5.8
+     *
+     * Returns listing breadcrumb
      */
     public function getBreadcrumb($categoryId)
     {
@@ -292,7 +297,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         if (!empty($categoryContent['external'])) {
             $location = $categoryContent['external'];
         } elseif (empty($categoryContent)) {
-            throw new Enlight_Controller_Exception('Category not found', Enlight_Controller_Exception::PROPERTY_NOT_FOUND);
+            throw new ResourceNotFoundException('Category not found', $this->Request());
         } elseif ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
             $location = ['controller' => 'index'];
         } elseif ($checkRedirect && $this->get(Shopware_Components_Config::class)->get('categoryDetailLink')) {

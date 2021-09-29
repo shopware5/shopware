@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\ControllerBundle\Exceptions\ResourceNotFoundException;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+
 class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
 {
     /**
@@ -33,7 +36,7 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/custom/ajax.tpl');
         }
 
-        $shopId = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->getId();
+        $shopId = $this->container->get(ContextServiceInterface::class)->getShopContext()->getShop()->getId();
 
         $staticPage = Shopware()->Modules()->Cms()->sGetStaticPage(
             $this->Request()->sCustom,
@@ -41,7 +44,7 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
         );
 
         if (!$staticPage) {
-            throw new Enlight_Controller_Exception('Custom page not found', Enlight_Controller_Exception::PROPERTY_NOT_FOUND);
+            throw new ResourceNotFoundException('Custom page not found', $this->Request());
         }
 
         if (!empty($staticPage['link'])) {
