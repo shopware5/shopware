@@ -26,6 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository;
 
 use Shopware\Bundle\AttributeBundle\Repository\Reader\ReaderInterface;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherInterface;
+use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Bundle\EsBackendBundle\EsAwareRepository;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
@@ -75,21 +76,21 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
     {
         return [
             'properties' => [
-                'id' => ['type' => 'long'],
+                'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'number' => $this->getTextFieldWithRawData(),
                 'email' => $this->getTextFieldWithRawData(),
-                'active' => ['type' => 'boolean'],
+                'active' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
                 'title' => $this->getTextFieldWithRawData(),
                 'salutation' => $this->textMapping->getKeywordField(),
                 'firstname' => $this->getTextFieldWithRawData(),
                 'lastname' => $this->getTextFieldWithRawData(),
-                'lastLogin' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
-                'firstLogin' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
-                'newsletter' => ['type' => 'boolean'],
-                'birthday' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
-                'lockedUntil' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
-                'accountMode' => ['type' => 'long'],
-                'shopId' => ['type' => 'long'],
+                'lastLogin' => TypeMappingInterface::MAPPING_DATE_TIME_FIELD,
+                'firstLogin' => TypeMappingInterface::MAPPING_DATE_TIME_FIELD,
+                'newsletter' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
+                'birthday' => TypeMappingInterface::MAPPING_DATE_FIELD,
+                'lockedUntil' => TypeMappingInterface::MAPPING_DATE_TIME_FIELD,
+                'accountMode' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'shopId' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'shopName' => $this->getTextFieldWithRawData(),
                 'company' => $this->getTextFieldWithRawData(),
                 'department' => $this->getTextFieldWithRawData(),
@@ -97,9 +98,9 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
                 'zipcode' => $this->getTextFieldWithRawData(),
                 'city' => $this->getTextFieldWithRawData(),
                 'phone' => $this->getTextFieldWithRawData(),
-                'countryId' => ['type' => 'long'],
+                'countryId' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'countryName' => $this->textMapping->getKeywordField(),
-                'customerGroupId' => ['type' => 'long'],
+                'customerGroupId' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'customerGroupName' => $this->textMapping->getKeywordField(),
 
                 'swag_all' => $this->textMapping->getTextField(),

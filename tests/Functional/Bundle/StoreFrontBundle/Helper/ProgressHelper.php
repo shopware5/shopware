@@ -22,34 +22,21 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\EsBackendBundle;
+namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
-use Enlight_Components_Test_TestCase;
-use Shopware\Components\Random;
-use Shopware\Models\Customer\Customer;
-use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper\ProgressHelper;
+use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 
-/**
- * @group elasticSearch
- */
-class BacklogTest extends Enlight_Components_Test_TestCase
+class ProgressHelper implements ProgressHelperInterface
 {
-    public function setUp(): void
+    public function start($count, $label = '')
     {
-        parent::setUp();
-
-        $indexer = Shopware()->Container()->get('shopware_es_backend.indexer');
-        $indexer->index(new ProgressHelper());
     }
 
-    public function testBacklogWillBeWritten()
+    public function advance($step = 1)
     {
-        $customers = Shopware()->Models()->getRepository(Customer::class)->findAll();
-        $customers[0]->setReferer(Random::getAlphanumericString(12));
+    }
 
-        Shopware()->Models()->persist($customers[0]);
-        Shopware()->Models()->flush($customers[0]);
-
-        static::assertGreaterThanOrEqual(1, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_es_backend_backlog'));
+    public function finish()
+    {
     }
 }

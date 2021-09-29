@@ -38,77 +38,77 @@ class TypeMapping implements TypeMappingInterface
             'dbal' => 'string',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'string'],
+            'elastic' => self::MAPPING_STRING_FIELD,
         ],
         TypeMappingInterface::TYPE_TEXT => [
             'sql' => 'TEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'string'],
+            'elastic' => self::MAPPING_STRING_FIELD,
         ],
         TypeMappingInterface::TYPE_HTML => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'string'],
+            'elastic' => self::MAPPING_STRING_FIELD,
         ],
         TypeMappingInterface::TYPE_INTEGER => [
             'sql' => 'INT(11)',
             'dbal' => 'integer',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'long'],
+            'elastic' => self::MAPPING_LONG_FIELD,
         ],
         TypeMappingInterface::TYPE_FLOAT => [
             'sql' => 'DOUBLE',
             'dbal' => 'float',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'double'],
+            'elastic' => self::MAPPING_DOUBLE_FIELD,
         ],
         TypeMappingInterface::TYPE_BOOLEAN => [
             'sql' => 'INT(1)',
             'dbal' => 'boolean',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'boolean'],
+            'elastic' => self::MAPPING_BOOLEAN_FIELD,
         ],
         TypeMappingInterface::TYPE_DATE => [
             'sql' => 'DATE',
             'dbal' => 'date',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => true,
-            'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
+            'elastic' => self::MAPPING_DATE_FIELD,
         ],
         TypeMappingInterface::TYPE_DATETIME => [
             'sql' => 'DATETIME',
             'dbal' => 'datetime',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => true,
-            'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'],
+            'elastic' => self::MAPPING_DATE_TIME_FIELD,
         ],
         TypeMappingInterface::TYPE_COMBOBOX => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'string'],
+            'elastic' => self::MAPPING_STRING_FIELD,
         ],
         TypeMappingInterface::TYPE_SINGLE_SELECTION => [
             'sql' => 'TEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'string'],
+            'elastic' => self::MAPPING_STRING_FIELD,
         ],
         TypeMappingInterface::TYPE_MULTI_SELECTION => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'string'],
+            'elastic' => self::MAPPING_STRING_FIELD,
         ],
     ];
 
@@ -241,6 +241,6 @@ class TypeMapping implements TypeMappingInterface
             return $this->types[$type]['elastic'];
         }
 
-        return ['type' => 'string'];
+        return TypeMappingInterface::MAPPING_STRING_FIELD;
     }
 }

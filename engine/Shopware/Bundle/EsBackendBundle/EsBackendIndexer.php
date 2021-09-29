@@ -27,6 +27,7 @@ namespace Shopware\Bundle\EsBackendBundle;
 use DateTime;
 use Elasticsearch\Client;
 use IteratorAggregate;
+use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
@@ -104,7 +105,7 @@ class EsBackendIndexer
             $documents[] = ['index' => ['_id' => $row['id']]];
             foreach ($row as $key => &$value) {
                 if ($value instanceof DateTime) {
-                    $value = $value->format('Y-m-d');
+                    $value = $value->format('Y-m-d H:i:s');
                 }
 
                 if (\in_array($key, $booleanFields, true)) {
@@ -222,7 +223,7 @@ class EsBackendIndexer
     {
         $mapping = [
             'properties' => [
-                'id' => ['type' => 'long'],
+                'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
             ],
         ];
 

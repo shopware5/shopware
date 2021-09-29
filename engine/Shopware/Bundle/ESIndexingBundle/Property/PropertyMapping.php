@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Property;
 
+use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\ESIndexingBundle\MappingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
@@ -66,14 +67,14 @@ class PropertyMapping implements MappingInterface
         return [
             'dynamic' => $this->isDynamic,
             'properties' => [
-                'id' => ['type' => 'long'],
+                'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'name' => $this->fieldMapping->getLanguageField($shop),
-                'filterable' => ['type' => 'boolean'],
+                'filterable' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
                 'options' => [
                     'properties' => [
-                        'id' => ['type' => 'long'],
+                        'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
                         'name' => $this->fieldMapping->getLanguageField($shop),
-                        'position' => ['type' => 'long'],
+                        'position' => TypeMappingInterface::MAPPING_LONG_FIELD,
                     ],
                 ],
             ],
