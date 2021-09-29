@@ -4,6 +4,9 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ## 5.7.4
 
+### Deprecations
+* Deprecated `ajaxValidateEmailAction`. It will be removed in Shopware 5.8 with no replacement.
+
 [View all changes from v5.7.3...v5.7.4](https://github.com/shopware/shopware/compare/v5.7.3...v5.7.4)
 
 ### Additions
