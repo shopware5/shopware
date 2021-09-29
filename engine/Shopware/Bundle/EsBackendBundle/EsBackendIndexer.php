@@ -102,7 +102,7 @@ class EsBackendIndexer
             $documents[] = ['index' => ['_id' => $row['id']]];
             foreach ($row as $key => &$value) {
                 if ($value instanceof \DateTime) {
-                    $value = $value->format('Y-m-d');
+                    $value = $value->format('Y-m-d H:i:s');
                 }
 
                 if (\in_array($key, $booleanFields, true)) {

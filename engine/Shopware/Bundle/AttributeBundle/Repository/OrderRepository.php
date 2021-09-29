@@ -79,7 +79,7 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'number' => $this->getTextFieldWithRawData(),
                 'invoiceAmount' => ['type' => 'double'],
                 'invoiceShipping' => ['type' => 'double'],
-                'orderTime' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
+                'orderTime' => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'],
                 'status' => ['type' => 'long'],
                 'cleared' => ['type' => 'long'],
                 'customerId' => ['type' => 'long'],
