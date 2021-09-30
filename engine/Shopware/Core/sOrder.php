@@ -24,7 +24,9 @@
 
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister;
+use Shopware\Bundle\CartBundle\CartKey;
 use Shopware\Bundle\CartBundle\CartPositionsMode;
+use Shopware\Bundle\CartBundle\CheckoutKey;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
@@ -389,12 +391,12 @@ class sOrder implements Enlight_Hook
      */
     public function sCreateTemporaryOrder()
     {
-        $this->sShippingData['AmountNumeric'] = $this->sShippingData['AmountNumeric'] ? $this->sShippingData['AmountNumeric'] : '0';
+        $this->sShippingData[CartKey::AMOUNT_NUMERIC] = $this->sShippingData[CartKey::AMOUNT_NUMERIC] ? $this->sShippingData[CartKey::AMOUNT_NUMERIC] : '0';
         if (!$this->sShippingcostsNumeric) {
             $this->sShippingcostsNumeric = 0.;
         }
-        if (!$this->sBasketData['AmountWithTaxNumeric']) {
-            $this->sBasketData['AmountWithTaxNumeric'] = $this->sBasketData['AmountNumeric'];
+        if (!$this->sBasketData[CartKey::AMOUNT_WITH_TAX_NUMERIC]) {
+            $this->sBasketData[CartKey::AMOUNT_WITH_TAX_NUMERIC] = $this->sBasketData[CartKey::AMOUNT_NUMERIC];
         }
 
         $net = '0';
@@ -406,18 +408,18 @@ class sOrder implements Enlight_Hook
         }
 
         $dispatchId = '0';
-        $this->sBasketData['AmountNetNumeric'] = round($this->sBasketData['AmountNetNumeric'], 2);
+        $this->sBasketData[CartKey::AMOUNT_NET_NUMERIC] = round($this->sBasketData[CartKey::AMOUNT_NET_NUMERIC], 2);
         if ($this->dispatchId) {
             $dispatchId = $this->dispatchId;
         }
 
-        $this->sBasketData['AmountNetNumeric'] = round($this->sBasketData['AmountNetNumeric'], 2);
+        $this->sBasketData[CartKey::AMOUNT_NET_NUMERIC] = round($this->sBasketData[CartKey::AMOUNT_NET_NUMERIC], 2);
 
-        if (empty($this->sBasketData['sCurrencyName'])) {
-            $this->sBasketData['sCurrencyName'] = 'EUR';
+        if (empty($this->sBasketData[CheckoutKey::CURRENCY_NAME])) {
+            $this->sBasketData[CheckoutKey::CURRENCY_NAME] = 'EUR';
         }
-        if (empty($this->sBasketData['sCurrencyFactor'])) {
-            $this->sBasketData['sCurrencyFactor'] = '1';
+        if (empty($this->sBasketData[CheckoutKey::CURRENCY_FACTOR])) {
+            $this->sBasketData[CheckoutKey::CURRENCY_FACTOR] = '1';
         }
 
         $shop = Shopware()->Shop();
@@ -427,22 +429,22 @@ class sOrder implements Enlight_Hook
         if (!empty($this->sNet)) {
             // Complete net delivery
             $net = '1';
-            $this->sBasketData['AmountWithTaxNumeric'] = $this->sBasketData['AmountNetNumeric'];
+            $this->sBasketData[CartKey::AMOUNT_WITH_TAX_NUMERIC] = $this->sBasketData[CartKey::AMOUNT_NET_NUMERIC];
             $this->sShippingcostsNumeric = $this->sShippingcostsNumericNet;
             $taxfree = '1';
         }
-        if (empty($this->sBasketData['AmountWithTaxNumeric'])) {
-            $this->sBasketData['AmountWithTaxNumeric'] = '0';
+        if (empty($this->sBasketData[CartKey::AMOUNT_WITH_TAX_NUMERIC])) {
+            $this->sBasketData[CartKey::AMOUNT_WITH_TAX_NUMERIC] = '0';
         }
-        if (empty($this->sBasketData['AmountNetNumeric'])) {
-            $this->sBasketData['AmountNetNumeric'] = '0';
+        if (empty($this->sBasketData[CartKey::AMOUNT_NET_NUMERIC])) {
+            $this->sBasketData[CartKey::AMOUNT_NET_NUMERIC] = '0';
         }
 
         $data = [
             'ordernumber' => '0',
             'userID' => $this->sUserData['additional']['user']['id'],
-            'invoice_amount' => $this->sBasketData['AmountWithTaxNumeric'],
-            'invoice_amount_net' => $this->sBasketData['AmountNetNumeric'],
+            'invoice_amount' => $this->sBasketData[CartKey::AMOUNT_WITH_TAX_NUMERIC],
+            'invoice_amount_net' => $this->sBasketData[CartKey::AMOUNT_NET_NUMERIC],
             'invoice_shipping' => $this->sShippingcostsNumeric,
             'invoice_shipping_net' => $this->sShippingcostsNumericNet,
             'ordertime' => new Zend_Db_Expr('NOW()'),
@@ -456,8 +458,8 @@ class sOrder implements Enlight_Hook
             'referer' => (string) $this->getSession()->offsetGet('sReferer'),
             'language' => $shop->getId(),
             'dispatchID' => $dispatchId,
-            'currency' => $this->sBasketData['sCurrencyName'],
-            'currencyFactor' => $this->sBasketData['sCurrencyFactor'],
+            'currency' => $this->sBasketData[CheckoutKey::CURRENCY_NAME],
+            'currencyFactor' => $this->sBasketData[CheckoutKey::CURRENCY_FACTOR],
             'subshopID' => $mainShop->getId(),
             'deviceType' => $this->deviceType,
         ];
@@ -475,7 +477,7 @@ class sOrder implements Enlight_Hook
         // Create order attributes
         $this->attributePersister->persist($this->orderAttributes, 's_order_attributes', $orderID);
 
-        foreach ($this->sBasketData['content'] as $basketRow) {
+        foreach ($this->sBasketData[CartKey::POSITIONS] as $basketRow) {
             if (!$basketRow['price']) {
                 $basketRow['price'] = '0,00';
             }
@@ -536,7 +538,7 @@ class sOrder implements Enlight_Hook
         $this->sComment = stripslashes($this->sComment);
         $this->sComment = stripcslashes($this->sComment);
 
-        $this->sShippingData['AmountNumeric'] = $this->sShippingData['AmountNumeric'] ?: '0';
+        $this->sShippingData[CartKey::AMOUNT_NUMERIC] = $this->sShippingData[CartKey::AMOUNT_NUMERIC] ?: '0';
 
         if ($this->isTransactionExist($this->bookingId)) {
             return false;
@@ -550,8 +552,8 @@ class sOrder implements Enlight_Hook
             $this->sShippingcostsNumeric = 0.;
         }
 
-        if (!$this->sBasketData['AmountWithTaxNumeric']) {
-            $this->sBasketData['AmountWithTaxNumeric'] = $this->sBasketData['AmountNumeric'];
+        if (!$this->sBasketData[CartKey::AMOUNT_WITH_TAX_NUMERIC]) {
+            $this->sBasketData[CartKey::AMOUNT_WITH_TAX_NUMERIC] = $this->sBasketData[CartKey::AMOUNT_NUMERIC];
         }
 
         if ($this->isTaxFree($this->sSYSTEM->sUSERGROUPDATA['tax'], $this->sSYSTEM->sUSERGROUPDATA['id'])) {
@@ -566,13 +568,13 @@ class sOrder implements Enlight_Hook
             $dispatchId = '0';
         }
 
-        $this->sBasketData['AmountNetNumeric'] = round($this->sBasketData['AmountNetNumeric'], 2);
+        $this->sBasketData[CartKey::AMOUNT_NET_NUMERIC] = round($this->sBasketData[CartKey::AMOUNT_NET_NUMERIC], 2);
 
-        if (empty($this->sBasketData['sCurrencyName'])) {
-            $this->sBasketData['sCurrencyName'] = 'EUR';
+        if (empty($this->sBasketData[CheckoutKey::CURRENCY_NAME])) {
+            $this->sBasketData[CheckoutKey::CURRENCY_NAME] = 'EUR';
         }
-        if (empty($this->sBasketData['sCurrencyFactor'])) {
-            $this->sBasketData['sCurrencyFactor'] = '1';
+        if (empty($this->sBasketData[CheckoutKey::CURRENCY_FACTOR])) {
+            $this->sBasketData[CheckoutKey::CURRENCY_FACTOR] = '1';
         }
 
         $shop = Shopware()->Shop();
@@ -582,7 +584,7 @@ class sOrder implements Enlight_Hook
         if (!empty($this->sNet)) {
             // Complete net delivery
             $net = '1';
-            $this->sBasketData['AmountWithTaxNumeric'] = $this->sBasketData['AmountNetNumeric'];
+            $this->sBasketData[CartKey::AMOUNT_WITH_TAX_NUMERIC] = $this->sBasketData[CartKey::AMOUNT_NET_NUMERIC];
             $this->sShippingcostsNumeric = $this->sShippingcostsNumericNet;
             $taxfree = '1';
         }
@@ -598,11 +600,11 @@ class sOrder implements Enlight_Hook
         $orderParams = [
             'ordernumber' => $orderNumber,
             'userID' => $this->sUserData['additional']['user']['id'],
-            'invoice_amount' => $this->sBasketData['AmountWithTaxNumeric'],
-            'invoice_amount_net' => $this->sBasketData['AmountNetNumeric'],
+            'invoice_amount' => $this->sBasketData[CartKey::AMOUNT_WITH_TAX_NUMERIC],
+            'invoice_amount_net' => $this->sBasketData[CartKey::AMOUNT_NET_NUMERIC],
             'invoice_shipping' => (float) $this->sShippingcostsNumeric,
             'invoice_shipping_net' => (float) $this->sShippingcostsNumericNet,
-            'invoice_shipping_tax_rate' => isset($this->sBasketData['sShippingcostsTaxProportional']) ? 0 : $this->sBasketData['sShippingcostsTax'],
+            'invoice_shipping_tax_rate' => isset($this->sBasketData[CheckoutKey::SHIPPING_COSTS_TAX_PROPORTIONAL]) ? 0 : $this->sBasketData[CheckoutKey::SHIPPING_COSTS_TAX],
             'ordertime' => new Zend_Db_Expr('NOW()'),
             'changed' => new Zend_Db_Expr('NOW()'),
             'status' => 0,
@@ -617,12 +619,12 @@ class sOrder implements Enlight_Hook
             'referer' => (string) $this->getSession()->offsetGet('sReferer'),
             'language' => $shop->getId(),
             'dispatchID' => $dispatchId,
-            'currency' => $this->sBasketData['sCurrencyName'],
-            'currencyFactor' => $this->sBasketData['sCurrencyFactor'],
+            'currency' => $this->sBasketData[CheckoutKey::CURRENCY_NAME],
+            'currencyFactor' => $this->sBasketData[CheckoutKey::CURRENCY_FACTOR],
             'subshopID' => $mainShop->getId(),
             'remote_addr' => $ip,
             'deviceType' => $this->deviceType,
-            'is_proportional_calculation' => isset($this->sBasketData['sShippingcostsTaxProportional']) ? 1 : 0,
+            'is_proportional_calculation' => isset($this->sBasketData[CheckoutKey::SHIPPING_COSTS_TAX_PROPORTIONAL]) ? 1 : 0,
         ];
 
         $orderParams = $this->eventManager->filter(
@@ -675,7 +677,7 @@ class sOrder implements Enlight_Hook
         unset($attributes['id'], $attributes['orderID']);
 
         $esdOrder = null;
-        foreach ($this->sBasketData['content'] as $key => $basketRow) {
+        foreach ($this->sBasketData[CartKey::POSITIONS] as $key => $basketRow) {
             $basketRow = $this->formatBasketRow($basketRow);
 
             $preparedQuery = '
@@ -750,7 +752,7 @@ class sOrder implements Enlight_Hook
                 throw new Enlight_Exception(sprintf('Shopware Order Fatal-Error %s :%s', $_SERVER['HTTP_HOST'], $e->getMessage()), 0, $e);
             }
 
-            $this->sBasketData['content'][$key]['orderDetailId'] = $orderdetailsID;
+            $this->sBasketData[CartKey::POSITIONS][$key]['orderDetailId'] = $orderdetailsID;
 
             // Save attributes
             $attributeData = $this->attributeLoader->load('s_order_basket_attributes', $basketRow['id']);
@@ -768,7 +770,7 @@ class sOrder implements Enlight_Hook
             $this->attributePersister->persist($attributeData, 's_order_details_attributes', $orderdetailsID);
             $detailAttributes = $this->attributeLoader->load('s_order_details_attributes', $orderdetailsID);
             unset($detailAttributes['id'], $detailAttributes['detailID']);
-            $this->sBasketData['content'][$key]['attributes'] = $detailAttributes;
+            $this->sBasketData[CartKey::POSITIONS][$key]['attributes'] = $detailAttributes;
 
             // Update sales and stock
             if ($basketRow['priceNumeric'] >= 0) {
@@ -785,14 +787,14 @@ class sOrder implements Enlight_Hook
 
                 // Add assignedSerials to basketcontent
                 if (!empty($basketRow['assignedSerials'])) {
-                    $this->sBasketData['content'][$key]['serials'] = $basketRow['assignedSerials'];
+                    $this->sBasketData[CartKey::POSITIONS][$key]['serials'] = $basketRow['assignedSerials'];
                 }
             }
         } // For every product in basket
 
         $this->eventManager->notify('Shopware_Modules_Order_SaveOrder_ProcessDetails', [
             'subject' => $this,
-            'details' => $this->sBasketData['content'],
+            'details' => $this->sBasketData[CartKey::POSITIONS],
             'orderId' => $orderID,
         ]);
 
@@ -803,7 +805,7 @@ class sOrder implements Enlight_Hook
         $this->sUserData = $this->getUserDataForMail($this->sUserData);
 
         $details = $this->getOrderDetailsForMail(
-            $this->sBasketData['content']
+            $this->sBasketData[CartKey::POSITIONS]
         );
 
         $variables = [
@@ -811,12 +813,12 @@ class sOrder implements Enlight_Hook
             'billingaddress' => $this->sUserData['billingaddress'],
             'shippingaddress' => $this->sUserData['shippingaddress'],
             'additional' => $this->sUserData['additional'],
-            'sShippingCosts' => $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sShippingcosts) . ' ' . $this->sBasketData['sCurrencyName'],
-            'sAmount' => $this->sAmountWithTax ? $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmountWithTax) . ' ' . $this->sBasketData['sCurrencyName'] : $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmount) . ' ' . $this->sBasketData['sCurrencyName'],
+            'sShippingCosts' => $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sShippingcosts) . ' ' . $this->sBasketData[CheckoutKey::CURRENCY_NAME],
+            'sAmount' => $this->sAmountWithTax ? $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmountWithTax) . ' ' . $this->sBasketData[CheckoutKey::CURRENCY_NAME] : $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmount) . ' ' . $this->sBasketData[CheckoutKey::CURRENCY_NAME],
             'sAmountNumeric' => $this->sAmountWithTax ? $this->sAmountWithTax : $this->sAmount,
-            'sAmountNet' => $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sBasketData['AmountNetNumeric']) . ' ' . $this->sBasketData['sCurrencyName'],
-            'sAmountNetNumeric' => $this->sBasketData['AmountNetNumeric'],
-            'sTaxRates' => $this->sBasketData['sTaxRates'],
+            'sAmountNet' => $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sBasketData[CartKey::AMOUNT_NET_NUMERIC]) . ' ' . $this->sBasketData[CheckoutKey::CURRENCY_NAME],
+            'sAmountNetNumeric' => $this->sBasketData[CartKey::AMOUNT_NET_NUMERIC],
+            'sTaxRates' => $this->sBasketData[CheckoutKey::TAX_RATES],
             'ordernumber' => $orderNumber,
             'sOrderDay' => date('d.m.Y'),
             'sOrderTime' => date('H:i'),
@@ -861,7 +863,7 @@ class sOrder implements Enlight_Hook
 
         $this->eventManager->notify('Shopware_Modules_Order_SaveOrder_OrderCreated', [
             'subject' => $this,
-            'details' => $this->sBasketData['content'],
+            'details' => $this->sBasketData[CartKey::POSITIONS],
             'orderId' => $orderID,
             'orderNumber' => $orderNumber,
         ]);
@@ -891,9 +893,9 @@ class sOrder implements Enlight_Hook
             'shippingaddress' => $variables['shippingaddress'],
             'additional' => $variables['additional'],
 
-            'sTaxRates' => $variables['sTaxRates'],
+            'sTaxRates' => $variables[CheckoutKey::TAX_RATES],
             'sShippingCosts' => $variables['sShippingCosts'],
-            'sAmount' => $variables['sAmount'],
+            'sAmount' => $variables[CheckoutKey::AMOUNT],
             'sAmountNumeric' => $variables['sAmountNumeric'],
             'sAmountNet' => $variables['sAmountNet'],
             'sAmountNetNumeric' => $variables['sAmountNetNumeric'],
@@ -904,7 +906,7 @@ class sOrder implements Enlight_Hook
             'sComment' => $variables['sComment'],
 
             'attributes' => $variables['attributes'],
-            'sCurrency' => $this->sBasketData['sCurrencyName'],
+            'sCurrency' => $this->sBasketData[CheckoutKey::CURRENCY_NAME],
 
             'sLanguage' => $shopContext->getShop()->getId(),
 
@@ -1397,7 +1399,7 @@ class sOrder implements Enlight_Hook
         $mail->clearSubject();
         $mail->setSubject($return['subject']);
 
-        $mail->setBodyText($return['content']);
+        $mail->setBodyText($return[CartKey::POSITIONS]);
 
         $mail->clearFrom();
         $mail->setFrom($return['frommail'], $return['fromname']);

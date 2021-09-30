@@ -1067,5 +1067,13 @@
             <argument type="service" id="cache"/>
             <tag name="shopware.event_subscriber"/>
         </service>
+
+        <service id="Shopware\Components\Cart\TaxAggregatorInterface" class="Shopware\Components\Cart\TaxAggregator">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.context_service"/>
+            <argument type="expression">service('config').get('sVOUCHERTAX')</argument>
+            <argument type="expression">service('config').get('sDISCOUNTTAX')</argument>
+            <argument type="expression">service('config').get('sTAXAUTOMODE')</argument>
+        </service>
     </services>
 </container>

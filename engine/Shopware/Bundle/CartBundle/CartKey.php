@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,29 +24,21 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Cart;
+namespace Shopware\Bundle\CartBundle;
 
-use Shopware\Bundle\CartBundle\CartKey;
-
-class ProportionalCartNormalizer implements ProportionalCartNormalizerInterface
+final class CartKey
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function normalize(array $cart)
+    public const POSITIONS = 'content';
+
+    public const AMOUNT = 'Amount';
+    public const AMOUNT_NET = 'AmountNet';
+    public const QUANTITY = 'Quantity';
+    public const AMOUNT_NUMERIC = 'AmountNumeric';
+    public const AMOUNT_NET_NUMERIC = 'AmountNetNumeric';
+    public const AMOUNT_WITH_TAX = 'AmountWithTax';
+    public const AMOUNT_WITH_TAX_NUMERIC = 'AmountWithTaxNumeric';
+
+    private function __construct()
     {
-        foreach ($cart[CartKey::POSITIONS] as $key => $item) {
-            if (!isset($item['proportion'])) {
-                continue;
-            }
-
-            foreach ($item['proportion'] as $proportionalItem) {
-                $cart[CartKey::POSITIONS][] = $proportionalItem;
-            }
-
-            unset($cart[CartKey::POSITIONS][$key]);
-        }
-
-        return $cart;
     }
 }

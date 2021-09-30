@@ -1903,8 +1903,8 @@ class sBasketTest extends TestCase
         static::assertGreaterThanOrEqual(1, \count($result['content']));
         static::assertGreaterThanOrEqual(2, $formatPrice($result['Amount']));
         static::assertGreaterThanOrEqual(2, $formatPrice($result['AmountNet']));
-        static::assertGreaterThanOrEqual(2, $formatPrice($result['AmountNumeric']));
-        static::assertGreaterThanOrEqual(2, $formatPrice($result['AmountNetNumeric']));
+        static::assertGreaterThanOrEqual(2, $formatPrice((string) $result['AmountNumeric']));
+        static::assertGreaterThanOrEqual(2, $formatPrice((string) $result['AmountNetNumeric']));
         static::assertEquals(1, $result['Quantity']);
     }
 

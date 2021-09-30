@@ -22,29 +22,29 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Cart;
+namespace Shopware\Bundle\CartBundle;
 
-use Shopware\Bundle\CartBundle\CartKey;
-
-class ProportionalCartNormalizer implements ProportionalCartNormalizerInterface
+final class CheckoutKey
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function normalize(array $cart)
+    public const CURRENCY_ID = 'sCurrencyId';
+    public const CURRENCY_NAME = 'sCurrencyName';
+    public const CURRENCY_FACTOR = 'sCurrencyFactor';
+
+    public const AMOUNT = 'sAmount';
+    public const AMOUNT_WITH_TAX = 'sAmountWithTax';
+    public const AMOUNT_TAX = 'sAmountTax';
+
+    public const SHIPPING_COSTS = 'sShippingcosts';
+    public const SHIPPING_COSTS_NET = 'sShippingcostsNet';
+    public const SHIPPING_COSTS_DIFFERENCE = 'sShippingcostsDifference';
+    public const SHIPPING_COSTS_WITH_TAX = 'sShippingcostsWithTax';
+    public const SHIPPING_COSTS_TAX = 'sShippingcostsTax';
+    public const SHIPPING_COSTS_TAX_PROPORTIONAL = 'sShippingcostsTaxProportional';
+
+    public const BASKET_PROPORTIONAL = 'sBasketProportional';
+    public const TAX_RATES = 'sTaxRates';
+
+    private function __construct()
     {
-        foreach ($cart[CartKey::POSITIONS] as $key => $item) {
-            if (!isset($item['proportion'])) {
-                continue;
-            }
-
-            foreach ($item['proportion'] as $proportionalItem) {
-                $cart[CartKey::POSITIONS][] = $proportionalItem;
-            }
-
-            unset($cart[CartKey::POSITIONS][$key]);
-        }
-
-        return $cart;
     }
 }

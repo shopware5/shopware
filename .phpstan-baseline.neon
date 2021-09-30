@@ -37903,11 +37903,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getBasket\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getBoughtToo\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
@@ -38009,16 +38004,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getSimilarShown\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getTaxRates\\(\\) has parameter \\$basket with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getTaxRates\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
@@ -40864,7 +40849,6 @@ parameters:
 			message: "#^Method sBasket\\:\\:sGetBasket\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sBasket.php
-
 		-
 			message: "#^Method sBasket\\:\\:sGetBasketData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1

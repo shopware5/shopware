@@ -23,6 +23,7 @@
  */
 
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\CartBundle\CartKey;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\OrderNumberValidator\Exception\InvalidOrderNumberException;
 use Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface;
@@ -224,7 +225,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                         case 'basket':
                             $text = Shopware()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextBasket');
                             $getBasket = Shopware()->Modules()->Basket()->sGetBasket();
-                            foreach ($getBasket['content'] as $basketRow) {
+                            foreach ($getBasket[CartKey::POSITIONS] as $basketRow) {
                                 if (empty($basketRow['modus'])) {
                                     $text .= sprintf(
                                         "\n%s x %s (%s) - %s %s",
