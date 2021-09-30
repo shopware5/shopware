@@ -117,7 +117,8 @@ abstract class AbstractProxyFactory
 
         foreach ($definition->identifierFields as $idField) {
             if ( ! isset($identifier[$idField])) {
-                // @shopware-hack: reverts https://github.com/doctrine/common/commit/b1a31ae
+                // @shopware-overwrite: reverts https://github.com/doctrine/common/commit/b1a31ae
+                // do not throw exception and continue instead
                 // throw OutOfBoundsException::missingPrimaryKeyValue($className, $idField);
                 continue;
             }
