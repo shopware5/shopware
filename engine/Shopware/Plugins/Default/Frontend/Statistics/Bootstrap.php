@@ -26,7 +26,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Privacy\IpAnonymizerInterface;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Tracking\ArticleImpression;
-use Shopware\Models\Tracking\Repository;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -316,10 +315,8 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             return;
         }
         $shopId = Shopware()->Shop()->getId();
-        /** @var Repository $repository */
         $repository = Shopware()->Models()->getRepository(ArticleImpression::class);
         $articleImpressionQuery = $repository->getArticleImpressionQuery($articleId, $shopId, null, $deviceType);
-        /** @var ArticleImpression $articleImpression */
         $articleImpression = $articleImpressionQuery->getOneOrNullResult();
 
         // If no Entry for this day exists - create a new one

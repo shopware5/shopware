@@ -27,6 +27,9 @@ namespace Shopware\Models\Property;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\Query\SqlWalker;
 
+/**
+ * @extends ModelRepository<Group>
+ */
 class Repository extends ModelRepository
 {
     /**

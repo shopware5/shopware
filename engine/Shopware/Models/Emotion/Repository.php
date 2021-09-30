@@ -29,6 +29,9 @@ use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Attribute\Emotion as EmotionAttribute;
 
+/**
+ * @extends ModelRepository<Emotion>
+ */
 class Repository extends ModelRepository
 {
     /**

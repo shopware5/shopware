@@ -24,8 +24,10 @@
 
 namespace Shopware\Models\Widget;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Plugin\Plugin;
 
 /**
  * @ORM\Table(name="s_core_widgets")
@@ -50,7 +52,7 @@ class Widget extends ModelEntity
     private $name;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Widget\View>
+     * @var ArrayCollection<View>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Widget\View", mappedBy="widget")
      */
@@ -64,7 +66,7 @@ class Widget extends ModelEntity
     private $pluginId;
 
     /**
-     * @var \Shopware\Models\Plugin\Plugin|null
+     * @var Plugin|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="widgets")
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
@@ -96,7 +98,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Widget\View>
+     * @return ArrayCollection<View>
      */
     public function getViews()
     {
@@ -104,7 +106,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Widget\View> $views
+     * @param ArrayCollection<View> $views
      */
     public function setViews($views)
     {
@@ -112,7 +114,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Plugin\Plugin|null $plugin
+     * @param Plugin|null $plugin
      */
     public function setPlugin($plugin)
     {
@@ -120,7 +122,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Plugin\Plugin|null
+     * @return Plugin|null
      */
     public function getPlugin()
     {

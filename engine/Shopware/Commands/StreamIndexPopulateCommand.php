@@ -26,7 +26,7 @@ namespace Shopware\Commands;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
-use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\CustomerStream\CustomerStream;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
@@ -42,8 +42,7 @@ class StreamIndexPopulateCommand extends ShopwareCommand implements CompletionAw
     public function completeOptionValues($optionName, CompletionContext $context)
     {
         if ($optionName === 'streamId') {
-            /** @var ModelRepository $customerStreamRepository */
-            $customerStreamRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(CustomerStream::class);
+            $customerStreamRepository = $this->getContainer()->get(ModelManager::class)->getRepository(CustomerStream::class);
             $queryBuilder = $customerStreamRepository->createQueryBuilder('stream');
 
             if (is_numeric($context->getCurrentWord())) {
@@ -107,7 +106,7 @@ class StreamIndexPopulateCommand extends ShopwareCommand implements CompletionAw
      */
     private function getStreams($ids = [])
     {
-        $query = $this->container->get(\Shopware\Components\Model\ModelManager::class)->createQueryBuilder();
+        $query = $this->container->get(ModelManager::class)->createQueryBuilder();
         $query->select(['stream']);
         $query->from(CustomerStream::class, 'stream');
 

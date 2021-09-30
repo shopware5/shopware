@@ -24,19 +24,21 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Voucher\Repository;
+use Shopware\Models\Voucher\Voucher;
+
 class VoucherTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * @var \Shopware\Models\Voucher\Voucher
+     * @var Repository
      */
     protected $repository;
 
     /**
      * Voucher dummy data
-     *
-     * @var array
      */
-    private $voucherData = [
+    private array $voucherData = [
         'description' => 'description',
         'minimumCharge' => '20',
         'modus' => '1',
@@ -58,7 +60,7 @@ class VoucherTest extends \Enlight_Components_Test_Controller_TestCase
     ];
 
     /**
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     private $manager;
 
@@ -70,7 +72,7 @@ class VoucherTest extends \Enlight_Components_Test_Controller_TestCase
         parent::setUp();
 
         $this->manager = Shopware()->Models();
-        $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Voucher\Voucher::class);
+        $this->repository = Shopware()->Models()->getRepository(Voucher::class);
 
         // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -325,11 +327,11 @@ class VoucherTest extends \Enlight_Components_Test_Controller_TestCase
      *
      * @param bool $individualMode
      *
-     * @return \Shopware\Models\Voucher\Voucher
+     * @return Voucher
      */
     private function getDummyVoucher($individualMode = true)
     {
-        $voucher = new \Shopware\Models\Voucher\Voucher();
+        $voucher = new Voucher();
         $voucherData = $this->voucherData;
         if (!$individualMode) {
             $voucherData['modus'] = 0;
@@ -345,7 +347,7 @@ class VoucherTest extends \Enlight_Components_Test_Controller_TestCase
      *
      * @param bool $individualMode
      *
-     * @return \Shopware\Models\Voucher\Voucher
+     * @return Voucher
      */
     private function createDummy($individualMode = true)
     {

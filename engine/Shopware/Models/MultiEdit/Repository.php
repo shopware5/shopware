@@ -26,6 +26,9 @@ namespace Shopware\Models\MultiEdit;
 
 use Shopware\Components\Model\ModelRepository;
 
+/**
+ * @extends ModelRepository<Backup|Filter|Queue|QueueArticle>
+ */
 class Repository extends ModelRepository
 {
     /**

@@ -45,8 +45,7 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
             'value' => $node,
         ];
 
-        /** @var \Shopware\Models\Shop\Repository $repository */
-        $repository = Shopware()->Models()->getRepository(Shop::class);
+        $repository = $this->get('models')->getRepository(Shop::class);
 
         $query = $repository->getListQuery($filter, $sort);
 

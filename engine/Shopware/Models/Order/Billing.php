@@ -28,7 +28,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
 use Shopware\Models\Attribute\OrderBilling as OrderBillingAttribute;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Customer;
 
 /**
  * Shopware order billing model represents a single billing address of an order.
@@ -246,7 +249,7 @@ class Billing extends ModelEntity
      * The customer property is the owning side of the association between customer and billing.
      * The association is joined over the billing userID and the customer id
      *
-     * @var \Shopware\Models\Customer\Customer|null
+     * @var Customer|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
@@ -257,23 +260,23 @@ class Billing extends ModelEntity
      * The order property is the owning side of the association between order and billing.
      * The association is joined over the billing orderID and the order id
      *
-     * @var \Shopware\Models\Order\Order
+     * @var Order
      *
      * @ORM\OneToOne(targetEntity="Order", inversedBy="billing")
-     * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="orderID", referencedColumnName="id", nullable=false)
      */
     private $order;
 
     /**
-     * @var \Shopware\Models\Country\Country
+     * @var Country
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\Country")
-     * @ORM\JoinColumn(name="countryID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="countryID", referencedColumnName="id", nullable=false)
      */
     private $country;
 
     /**
-     * @var \Shopware\Models\Country\State|null
+     * @var State|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\State")
      * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
@@ -371,7 +374,10 @@ class Billing extends ModelEntity
      */
     public function setNumber($number)
     {
-        $this->number = $this->cleanup($number);
+        if (\is_string($number)) {
+            $number = $this->cleanup($number);
+        }
+        $this->number = $number;
 
         return $this;
     }
@@ -540,7 +546,10 @@ class Billing extends ModelEntity
      */
     public function setVatId($vatId)
     {
-        $this->vatId = $this->cleanup($vatId);
+        if (\is_string($vatId)) {
+            $vatId = $this->cleanup($vatId);
+        }
+        $this->vatId = $vatId;
 
         return $this;
     }
@@ -562,7 +571,7 @@ class Billing extends ModelEntity
      * the Customer.billing property (INVERSE SIDE) and the Billing.customer (OWNING SIDE) property.
      * The customer data is joined over the s_user.id field.
      *
-     * @return \Shopware\Models\Customer\Customer|null
+     * @return Customer|null
      */
     public function getCustomer()
     {
@@ -575,7 +584,7 @@ class Billing extends ModelEntity
      * the Customer.billing property (INVERSE SIDE) and the Billing.customer (OWNING SIDE) property.
      * The customer data is joined over the s_user.id field.
      *
-     * @param \Shopware\Models\Customer\Customer $customer
+     * @param Customer $customer
      */
     public function setCustomer($customer)
     {
@@ -583,7 +592,7 @@ class Billing extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Order\Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -591,7 +600,7 @@ class Billing extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Order\Order $order
+     * @param Order $order
      */
     public function setOrder($order)
     {
@@ -601,7 +610,7 @@ class Billing extends ModelEntity
     /**
      * Getter for the country association
      *
-     * @return \Shopware\Models\Country\Country
+     * @return Country
      */
     public function getCountry()
     {
@@ -611,7 +620,7 @@ class Billing extends ModelEntity
     /**
      * Setter for the country association
      *
-     * @param \Shopware\Models\Country\Country $country
+     * @param Country $country
      */
     public function setCountry($country)
     {
@@ -621,7 +630,7 @@ class Billing extends ModelEntity
     /**
      * Setter for the state association
      *
-     * @param \Shopware\Models\Country\State|null $state
+     * @param State|null $state
      */
     public function setState($state)
     {
@@ -631,7 +640,7 @@ class Billing extends ModelEntity
     /**
      * Getter for the state association
      *
-     * @return \Shopware\Models\Country\State|null
+     * @return State|null
      */
     public function getState()
     {
@@ -663,7 +672,10 @@ class Billing extends ModelEntity
      */
     public function setAdditionalAddressLine2($additionalAddressLine2)
     {
-        $this->additionalAddressLine2 = $this->cleanup($additionalAddressLine2);
+        if (\is_string($additionalAddressLine2)) {
+            $additionalAddressLine2 = $this->cleanup($additionalAddressLine2);
+        }
+        $this->additionalAddressLine2 = $additionalAddressLine2;
     }
 
     /**
@@ -683,7 +695,10 @@ class Billing extends ModelEntity
      */
     public function setAdditionalAddressLine1($additionalAddressLine1)
     {
-        $this->additionalAddressLine1 = $this->cleanup($additionalAddressLine1);
+        if (\is_string($additionalAddressLine1)) {
+            $additionalAddressLine1 = $this->cleanup($additionalAddressLine1);
+        }
+        $this->additionalAddressLine1 = $additionalAddressLine1;
     }
 
     /**
@@ -739,6 +754,9 @@ class Billing extends ModelEntity
      */
     public function setTitle($title)
     {
-        $this->title = $this->cleanup($title);
+        if (\is_string($title)) {
+            $title = $this->cleanup($title);
+        }
+        $this->title = $title;
     }
 }

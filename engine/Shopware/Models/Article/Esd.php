@@ -48,7 +48,7 @@ class Esd extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<EsdSerial>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\EsdSerial", mappedBy="esd")
      */
@@ -60,7 +60,7 @@ class Esd extends ModelEntity
      * @var Article
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="esds")
-     * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="articleID", referencedColumnName="id", nullable=false)
      */
     protected $article;
 
@@ -70,7 +70,7 @@ class Esd extends ModelEntity
      * @var Detail
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="esd")
-     * @ORM\JoinColumn(name="articleDetailsID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="articleDetailsID", referencedColumnName="id", nullable=false)
      */
     protected $articleDetail;
 

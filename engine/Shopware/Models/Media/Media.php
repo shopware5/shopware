@@ -29,9 +29,15 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionIsBlacklistedException;
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException;
+use Shopware\Bundle\MediaBundle\MediaExtensionMappingServiceInterface;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Random;
+use Shopware\Components\Thumbnail\Manager;
+use Shopware\Models\Article\Image;
 use Shopware\Models\Attribute\Media as MediaAttribute;
+use Shopware\Models\Blog\Media as BlogMedia;
+use Shopware\Models\Property\Value;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -106,7 +112,7 @@ class Media extends ModelEntity
     protected $attribute;
 
     /**
-     * @var ArrayCollection<\Shopware\Models\Article\Image>
+     * @var ArrayCollection<Image>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="media")
      */
@@ -115,14 +121,14 @@ class Media extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection<\Shopware\Models\Blog\Media>
+     * @var ArrayCollection<BlogMedia>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="media", orphanRemoval=true, cascade={"persist"})
      */
     protected $blogMedia;
 
     /**
-     * @var ArrayCollection<\Shopware\Models\Property\Value>
+     * @var ArrayCollection<Value>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Property\Value", mappedBy="media")
      */
@@ -130,12 +136,8 @@ class Media extends ModelEntity
 
     /**
      * Contains the default thumbnail sizes which used for backend modules.
-     *
-     * @var array
      */
-    private $defaultThumbnails = [
-        [140, 140],
-    ];
+    private array $defaultThumbnails = [[140, 140]];
 
     /**
      * Unique identifier
@@ -261,7 +263,7 @@ class Media extends ModelEntity
      * @var Album
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Album", inversedBy="media")
-     * @ORM\JoinColumn(name="albumID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="albumID", referencedColumnName="id", nullable=false)
      */
     private $album;
 
@@ -280,13 +282,7 @@ class Media extends ModelEntity
      */
     private $highDpiThumbnails;
 
-    /****************************************************************
-     *                  Property Getter & Setter                    *
-     ****************************************************************/
-
     /**
-     * Returns the identifier "id"
-     *
      * @return int
      */
     public function getId()
@@ -534,7 +530,7 @@ class Media extends ModelEntity
     /**
      * Returns the instance of the assigned album
      *
-     * @return Album|null
+     * @return Album
      */
     public function getAlbum()
     {
@@ -683,7 +679,7 @@ class Media extends ModelEntity
 
         // Name changed? Then rename the file and set the new path
         if ($isNameChanged) {
-            $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+            $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
             $newName = $this->getFileName();
             $newPath = $this->getUploadDir() . $newName;
 
@@ -714,7 +710,7 @@ class Media extends ModelEntity
      */
     public function onRemove()
     {
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
         //check if file exist and remove it
         if ($mediaService->has($this->path)) {
             $mediaService->delete($this->path);
@@ -794,7 +790,7 @@ class Media extends ModelEntity
             return;
         }
 
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         foreach ($thumbnailSizes as $size) {
             if (strpos($size, 'x') === false) {
@@ -845,7 +841,7 @@ class Media extends ModelEntity
     public function loadThumbnails($highDpi = false)
     {
         $thumbnails = $this->getThumbnailFilePaths($highDpi);
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         if (!$mediaService->has($this->getPath())) {
             return $thumbnails;
@@ -1027,7 +1023,7 @@ class Media extends ModelEntity
      */
     private function updateAssociations()
     {
-        /** @var \Shopware\Models\Article\Image $article */
+        /** @var Image $article */
         foreach ($this->articles as $article) {
             $article->setPath($this->getName());
             Shopware()->Models()->persist($article);
@@ -1046,7 +1042,7 @@ class Media extends ModelEntity
      */
     private function uploadFile()
     {
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
 
         if (!\is_string($projectDir)) {
@@ -1089,8 +1085,8 @@ class Media extends ModelEntity
             return;
         }
 
-        /** @var \Shopware\Components\Thumbnail\Manager $generator */
-        $generator = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
+        /** @var Manager $generator */
+        $generator = Shopware()->Container()->get(Manager::class);
 
         $generator->createMediaThumbnail($this, $this->defaultThumbnails, true);
     }
@@ -1107,7 +1103,7 @@ class Media extends ModelEntity
             return;
         }
 
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         foreach ($this->defaultThumbnails as $size) {
             if (\count($size) === 1) {
@@ -1159,7 +1155,7 @@ class Media extends ModelEntity
      */
     private function getThumbnailDir()
     {
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
         $path = $this->getUploadDir() . 'thumbnail' . DIRECTORY_SEPARATOR;
         $path = $mediaService->normalize($path);
 
@@ -1179,8 +1175,8 @@ class Media extends ModelEntity
             return;
         }
 
-        /** @var \Shopware\Components\Thumbnail\Manager $manager */
-        $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
+        /** @var Manager $manager */
+        $manager = Shopware()->Container()->get(Manager::class);
 
         $newSize = [
             'width' => $width,
@@ -1240,7 +1236,7 @@ class Media extends ModelEntity
 
         // Validate extension
         // #1 - whitelist
-        $mappingService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaExtensionMappingServiceInterface::class);
+        $mappingService = Shopware()->Container()->get(MediaExtensionMappingServiceInterface::class);
         if (!$mappingService->isAllowed($extension)) {
             throw new MediaFileExtensionNotAllowedException($extension);
         }
@@ -1299,7 +1295,7 @@ class Media extends ModelEntity
     private function getAllThumbnailSizes()
     {
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $connection = Shopware()->Container()->get(Connection::class);
         $joinedSizes = $connection
             ->query('SELECT DISTINCT thumbnail_size FROM s_media_album_settings WHERE thumbnail_size != ""')
             ->fetchAll(\PDO::FETCH_COLUMN);

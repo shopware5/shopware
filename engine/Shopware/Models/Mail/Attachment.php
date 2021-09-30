@@ -67,7 +67,7 @@ class Attachment extends File
      * @var Mail
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Mail\Mail", inversedBy="attachments")
-     * @ORM\JoinColumn(name="mailID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="mailID", referencedColumnName="id", nullable=false)
      */
     protected $mail;
 

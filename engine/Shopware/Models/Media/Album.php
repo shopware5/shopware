@@ -70,7 +70,7 @@ class Album extends ModelEntity
     /**
      * Settings of the album.
      *
-     * @var \Shopware\Models\Media\Settings
+     * @var Settings|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Media\Settings", mappedBy="album", orphanRemoval=true, cascade={"persist"})
      */
@@ -126,7 +126,7 @@ class Album extends ModelEntity
     /**
      * An album can have multiple sub-albums.
      *
-     * @var ArrayCollection<\Shopware\Models\Media\Album>
+     * @var ArrayCollection<Album>
      *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Media\Album", mappedBy="parent")
      * @ORM\OrderBy({"position" = "ASC"})
@@ -136,7 +136,7 @@ class Album extends ModelEntity
     /**
      * An album can only be subordinated to another album.
      *
-     * @var \Shopware\Models\Media\Album|null
+     * @var Album|null
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Album", inversedBy="children")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
@@ -146,7 +146,7 @@ class Album extends ModelEntity
     /**
      * An album can be assigned to multiple media.
      *
-     * @var ArrayCollection<\Shopware\Models\Media\Media>
+     * @var ArrayCollection<Media>
      *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Media\Media", mappedBy="album")
      */
@@ -157,8 +157,8 @@ class Album extends ModelEntity
      */
     public function __construct()
     {
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->media = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->media = new ArrayCollection();
     }
 
     /**
@@ -210,7 +210,7 @@ class Album extends ModelEntity
      *
      * @param int $position
      *
-     * @return \Shopware\Models\Media\Album
+     * @return Album
      */
     public function setPosition($position)
     {
@@ -232,7 +232,7 @@ class Album extends ModelEntity
     /**
      * @param bool $garbageCollectable
      *
-     * @return \Shopware\Models\Media\Album
+     * @return Album
      */
     public function setGarbageCollectable($garbageCollectable)
     {
@@ -244,7 +244,7 @@ class Album extends ModelEntity
     /**
      * Returns the child albums.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Media\Album>
+     * @return ArrayCollection
      */
     public function getChildren()
     {
@@ -254,9 +254,9 @@ class Album extends ModelEntity
     /**
      * Sets the child albums.
      *
-     * @param ArrayCollection<\Shopware\Models\Media\Album> $children
+     * @param ArrayCollection<Album> $children
      *
-     * @return array|\Shopware\Models\Media\Album
+     * @return array|Album
      */
     public function setChildren($children)
     {
@@ -268,7 +268,7 @@ class Album extends ModelEntity
     /**
      * Returns the parent album instance
      *
-     * @return \Shopware\Models\Media\Album|null
+     * @return Album|null
      */
     public function getParent()
     {
@@ -278,9 +278,9 @@ class Album extends ModelEntity
     /**
      * Sets the parent album instance
      *
-     * @param \Shopware\Models\Media\Album|null $parent
+     * @param Album|null $parent
      *
-     * @return \Shopware\Models\Media\Album
+     * @return Album
      */
     public function setParent($parent)
     {
@@ -292,7 +292,7 @@ class Album extends ModelEntity
     /**
      * Returns the associated media.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Media\Media>
+     * @return ArrayCollection
      */
     public function getMedia()
     {
@@ -302,7 +302,7 @@ class Album extends ModelEntity
     /**
      * Sets the associated media
      *
-     * @param ArrayCollection<\Shopware\Models\Media\Media> $media
+     * @param ArrayCollection<Media> $media
      */
     public function setMedia($media)
     {
@@ -312,7 +312,7 @@ class Album extends ModelEntity
     /**
      * Returns the album settings
      *
-     * @return \Shopware\Models\Media\Settings|null
+     * @return Settings|null
      */
     public function getSettings()
     {
@@ -322,9 +322,7 @@ class Album extends ModelEntity
     /**
      * Sets the album settings
      *
-     * @param \Shopware\Models\Media\Settings $settings
-     *
-     * @return \Shopware\Models\Media\Album
+     * @return Album
      */
     public function setSettings(Settings $settings)
     {

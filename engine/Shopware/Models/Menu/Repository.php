@@ -26,6 +26,9 @@ namespace Shopware\Models\Menu;
 
 use Shopware\Components\Model\ModelRepository;
 
+/**
+ * @extends ModelRepository<Menu>
+ */
 class Repository extends ModelRepository
 {
 }

@@ -58,10 +58,10 @@ class Tax extends ModelEntity
     private $id;
 
     /**
-     * @var float
+     * @var string
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="tax", type="decimal", nullable=false)
+     * @ORM\Column(name="tax", type="decimal", precision=10, scale=2, nullable=false)
      */
     private $tax;
 
@@ -90,7 +90,7 @@ class Tax extends ModelEntity
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getId()
     {
@@ -98,7 +98,7 @@ class Tax extends ModelEntity
     }
 
     /**
-     * @param float $tax
+     * @param string $tax
      *
      * @return Tax
      */
@@ -110,7 +110,7 @@ class Tax extends ModelEntity
     }
 
     /**
-     * @return float|null
+     * @return string
      */
     public function getTax()
     {

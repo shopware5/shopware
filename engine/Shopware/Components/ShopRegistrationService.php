@@ -25,6 +25,8 @@
 namespace Shopware\Components;
 
 use Shopware\Components\Theme\Inheritance;
+use Shopware\Models\Shop\Currency;
+use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 use Symfony\Component\DependencyInjection\ContainerInterface;

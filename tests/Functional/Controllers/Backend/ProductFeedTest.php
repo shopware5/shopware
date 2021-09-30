@@ -24,19 +24,18 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\ProductFeed\ProductFeed;
+use Shopware\Models\ProductFeed\Repository;
 
 class ProductFeedTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * @var ProductFeed
+     * @var Repository
      */
     protected $repository;
 
-    /**
-     * @var array
-     */
-    private $feedData = [
+    private array $feedData = [
         'name' => 'UnitTest Produktsuche',
         'lastExport' => '2012-06-13 13:45:12',
         'active' => '1',
@@ -68,10 +67,7 @@ class ProductFeedTest extends \Enlight_Components_Test_Controller_TestCase
         'variantExport' => '1',
     ];
 
-    /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    private $manager;
+    private ModelManager $manager;
 
     /**
      * Standard set up for every test - just disable auth

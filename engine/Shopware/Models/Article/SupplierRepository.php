@@ -30,6 +30,8 @@ use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository class for Supplier entity
+ *
+ * @extends ModelRepository<Supplier>
  */
 class SupplierRepository extends ModelRepository
 {

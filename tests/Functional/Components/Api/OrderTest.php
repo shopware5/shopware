@@ -315,9 +315,9 @@ class OrderTest extends TestCase
         $order = $this->filterOrderId($order);
         unset($order['billing']['stateId']);
 
-        $newOrder = $this->resource->create($order);
-
-        static::assertEquals($newOrder->getBilling()->getState(), null);
+        $billing = $this->resource->create($order)->getBilling();
+        static::assertNotNull($billing);
+        static::assertNull($billing->getState());
     }
 
     public function testCreateOrderOnEmptyStateIdInShippingAddress(): void
@@ -329,9 +329,9 @@ class OrderTest extends TestCase
         $order = $this->filterOrderId($order);
         unset($order['shipping']['stateId']);
 
-        $newOrder = $this->resource->create($order);
-
-        static::assertEquals($newOrder->getShipping()->getState(), null);
+        $shipping = $this->resource->create($order)->getShipping();
+        static::assertNotNull($shipping);
+        static::assertNull($shipping->getState());
     }
 
     public function testCreateOrderOnInvalidStateId(): void
@@ -516,14 +516,17 @@ class OrderTest extends TestCase
         // Checking some fields in all models
         static::assertGreaterThan($this->order['id'], $newOrder->getId());
         static::assertNotNull($newOrder->getNumber());
-        static::assertNotSame((int) $newOrder->getNumber(), $oldOrderNumber);
-        static::assertEquals($newOrder->getCustomer()->getId(), $order['customer']['id']);
-        static::assertEquals($newOrder->getInvoiceAmount(), $order['invoiceAmount']);
-        static::assertEquals($newOrder->getBilling()->getCity(), $order['billing']['city']);
-        static::assertEquals($newOrder->getShipping()->getCity(), $order['shipping']['city']);
-        static::assertCount(\count($newOrder->getDetails()), $order['details']);
-        static::assertEquals($newOrder->getDetails()[0]->getArticleName(), $order['details'][0]['articleName']);
-        static::assertEquals((int) $newOrder->getDetails()[0]->getNumber(), ($oldOrderNumber + 1));
+        static::assertNotSame($oldOrderNumber, (int) $newOrder->getNumber());
+        static::assertNotNull($newOrder->getCustomer());
+        static::assertEquals($order['customer']['id'], $newOrder->getCustomer()->getId());
+        static::assertEquals($order['invoiceAmount'], $newOrder->getInvoiceAmount());
+        static::assertNotNull($newOrder->getBilling());
+        static::assertEquals($order['billing']['city'], $newOrder->getBilling()->getCity());
+        static::assertNotNull($newOrder->getShipping());
+        static::assertEquals($order['shipping']['city'], $newOrder->getShipping()->getCity());
+        static::assertCount(\count($order['details']), $newOrder->getDetails());
+        static::assertEquals($order['details'][0]['articleName'], $newOrder->getDetails()[0]->getArticleName());
+        static::assertEquals(($oldOrderNumber + 1), (int) $newOrder->getDetails()[0]->getNumber());
     }
 
     public function testUpdateOrderPositionStatusShouldBeSuccessful(): void

@@ -65,7 +65,7 @@ class Basket extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var OrderBasketAttribute
+     * @var OrderBasketAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBasket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist"})
      */
@@ -176,10 +176,10 @@ class Basket extends ModelEntity
      *
      * @ORM\Column(name="currencyFactor", type="float", nullable=false)
      */
-    private $currencyFactor = 1;
+    private $currencyFactor = 1.0;
 
     /**
-     * @return OrderBasketAttribute
+     * @return OrderBasketAttribute|null
      */
     public function getAttribute()
     {
@@ -187,7 +187,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @param OrderBasketAttribute|array|null $attribute
+     * @param OrderBasketAttribute|null $attribute
      *
      * @return Basket
      */

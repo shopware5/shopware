@@ -23,7 +23,6 @@
  */
 
 use League\Flysystem;
-use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
 class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Controllers_Backend_ExtJs implements \Shopware\Components\CSRFWhitelistAware
 {
@@ -93,7 +92,6 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
      */
     private function getStartingTemplate()
     {
-        /** @var BenchmarkRepository $benchmarkRepository */
         $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
         if ($benchmarkRepository->getConfigsCount() === 0) {

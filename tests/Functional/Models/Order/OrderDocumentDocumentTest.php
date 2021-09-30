@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,14 +24,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Models\Order;
+namespace Shopware\Tests\Functional\Models\Order;
 
 use Shopware\Models\Order\Document\Document;
 use Shopware_Components_Document;
 
 class OrderDocumentDocumentTest extends \Enlight_Components_Test_TestCase
 {
-    public function testSetAttribute()
+    public function testSetAttribute(): void
     {
         $document = new Document();
         $attribute = new \Shopware\Models\Attribute\Document();
@@ -42,7 +44,7 @@ class OrderDocumentDocumentTest extends \Enlight_Components_Test_TestCase
     /*
      * Test order document creation for inactive subshops
      */
-    public function testDocumentForInactiveSubshop()
+    public function testDocumentForInactiveSubshop(): void
     {
         // Temporarily set main shop to inactive
         $shop = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class)->find(1);
@@ -82,7 +84,7 @@ class OrderDocumentDocumentTest extends \Enlight_Components_Test_TestCase
      * Test the creation of multiple documents of the same order and the same type.
      * Asserts the number of created documents is 2 if the _allowMultipleDocuments flag is set.
      */
-    public function testMultipleDocumentsOfTheSameType()
+    public function testMultipleDocumentsOfTheSameType(): void
     {
         $document1 = Shopware_Components_Document::initDocument(
             15,
@@ -124,7 +126,7 @@ class OrderDocumentDocumentTest extends \Enlight_Components_Test_TestCase
      * Test the creation of multiple documents of the same order and the same type.
      * Asserts the number of created documents stays 1 if the _allowMultipleDocuments flag is not set.
      */
-    public function testMultipleDocumentsOfTheSameTypeNegative()
+    public function testMultipleDocumentsOfTheSameTypeNegative(): void
     {
         $document1 = Shopware_Components_Document::initDocument(
             15,

@@ -31,7 +31,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Detail;
-use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
 class ProductReader extends GenericReader
@@ -121,10 +120,8 @@ class ProductReader extends GenericReader
      */
     private function assignAdditionalText(array $products)
     {
-        /** @var Repository $shopRepo */
         $shopRepo = $this->entityManager->getRepository(Shop::class);
 
-        /** @var Shop $shop */
         $shop = $shopRepo->getActiveDefault();
 
         $context = $this->contextService->createShopContext(

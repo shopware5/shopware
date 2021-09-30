@@ -39,7 +39,7 @@ class State extends ModelEntity
      * The countries property is the owning side of the association between area and countries.
      * The association is joined over the countryID field and the id field of the country.
      *
-     * @var Country
+     * @var Country|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Country", inversedBy="states", cascade={"persist"})
      * @ORM\JoinColumn(name="countryID", referencedColumnName="id")
@@ -86,9 +86,9 @@ class State extends ModelEntity
     private $name;
 
     /**
-     * @var string|null
+     * @var string
      *
-     * @ORM\Column(name="shortcode", type="string", length=255, nullable=true)
+     * @ORM\Column(name="shortcode", type="string", length=255, nullable=false)
      */
     private $shortCode;
 
@@ -140,7 +140,7 @@ class State extends ModelEntity
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getShortCode()
     {
@@ -195,7 +195,7 @@ class State extends ModelEntity
     }
 
     /**
-     * @param Country|array $country
+     * @param Country|null $country
      *
      * @return State
      */

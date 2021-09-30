@@ -24,8 +24,10 @@
 
 namespace Shopware\Models\Emotion;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Emotion\Library\Component;
 
 /**
  * @ORM\Entity()
@@ -41,10 +43,10 @@ class Element extends ModelEntity
      * The element model is the owning side (primary key in this table) of the association between
      * emotion and grid elements.
      *
-     * @var \Shopware\Models\Emotion\Emotion
+     * @var Emotion
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Emotion", inversedBy="elements", cascade={"persist"})
-     * @ORM\JoinColumn(name="emotionID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="emotionID", referencedColumnName="id", nullable=false)
      */
     protected $emotion;
 
@@ -53,17 +55,17 @@ class Element extends ModelEntity
      * which can be configured in the backend emotion module.
      * The assigned library component contains the data definition for the grid element.
      *
-     * @var \Shopware\Models\Emotion\Library\Component
+     * @var Component
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Emotion\Library\Component")
-     * @ORM\JoinColumn(name="componentID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="componentID", referencedColumnName="id", nullable=false)
      */
     protected $component;
 
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\Data>
+     * @var ArrayCollection<Data>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Data", mappedBy="element", orphanRemoval=true, cascade={"persist"})
      */
@@ -72,7 +74,7 @@ class Element extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\ElementViewport>
+     * @var ArrayCollection<ElementViewport>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\ElementViewport", mappedBy="element", orphanRemoval=true, cascade={"persist"})
      */
@@ -157,8 +159,8 @@ class Element extends ModelEntity
 
     public function __construct()
     {
-        $this->data = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->viewports = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->data = new ArrayCollection();
+        $this->viewports = new ArrayCollection();
     }
 
     public function __clone()
@@ -176,7 +178,7 @@ class Element extends ModelEntity
             $dataArray[] = $newData;
         }
 
-        $this->data = new \Doctrine\Common\Collections\ArrayCollection($dataArray);
+        $this->data = new ArrayCollection($dataArray);
 
         $viewportData = [];
         foreach ($this->viewports as $viewport) {
@@ -187,7 +189,7 @@ class Element extends ModelEntity
             $viewportData[] = $newViewport;
         }
 
-        $this->viewports = new \Doctrine\Common\Collections\ArrayCollection($viewportData);
+        $this->viewports = new ArrayCollection($viewportData);
     }
 
     /**
@@ -295,7 +297,7 @@ class Element extends ModelEntity
      * The emotion model is the owning side (primary key in this table) of the association between
      * emotion and grid.
      *
-     * @return \Shopware\Models\Emotion\Emotion
+     * @return Emotion
      */
     public function getEmotion()
     {
@@ -309,7 +311,7 @@ class Element extends ModelEntity
      * The emotion model is the owning side (primary key in this table) of the association between
      * emotion and grid elements.
      *
-     * @param \Shopware\Models\Emotion\Emotion $emotion
+     * @param Emotion $emotion
      */
     public function setEmotion($emotion)
     {
@@ -317,7 +319,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|null
+     * @return ArrayCollection|null
      */
     public function getData()
     {
@@ -325,17 +327,17 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Emotion\Data[]|null $data
+     * @param Data[]|null $data
      *
      * @return Element
      */
     public function setData($data)
     {
-        return $this->setOneToMany($data, \Shopware\Models\Emotion\Data::class, 'data', 'element');
+        return $this->setOneToMany($data, Data::class, 'data', 'element');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\ElementViewport>
+     * @return ArrayCollection<ElementViewport>
      */
     public function getViewports()
     {
@@ -343,13 +345,13 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Emotion\ElementViewport[]|null $viewports
+     * @param ElementViewport[]|null $viewports
      *
      * @return Element
      */
     public function setViewports($viewports)
     {
-        return $this->setOneToMany($viewports, \Shopware\Models\Emotion\ElementViewport::class, 'viewports', 'element');
+        return $this->setOneToMany($viewports, ElementViewport::class, 'viewports', 'element');
     }
 
     /**
@@ -357,7 +359,7 @@ class Element extends ModelEntity
      * which can be configured in the backend emotion module.
      * The assigned library component contains the data definition for the grid element.
      *
-     * @return \Shopware\Models\Emotion\Library\Component
+     * @return Component
      */
     public function getComponent()
     {
@@ -369,7 +371,7 @@ class Element extends ModelEntity
      * which can be configured in the backend emotion module.
      * The assigned library component contains the data definition for the grid element.
      *
-     * @param \Shopware\Models\Emotion\Library\Component $component
+     * @param Component $component
      */
     public function setComponent($component)
     {

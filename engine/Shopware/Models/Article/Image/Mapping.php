@@ -46,12 +46,12 @@ class Mapping extends ModelEntity
      * @var Image
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Image", inversedBy="mappings")
-     * @ORM\JoinColumn(name="image_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", nullable=false)
      */
     protected $image;
 
     /**
-     * @var ArrayCollection<\Shopware\Models\Article\Image\Rule>
+     * @var ArrayCollection<Rule>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image\Rule", mappedBy="mapping", orphanRemoval=true, cascade={"persist"})
      */
@@ -103,7 +103,7 @@ class Mapping extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Article\Image\Rule>
+     * @return ArrayCollection<Rule>
      */
     public function getRules()
     {
@@ -111,7 +111,7 @@ class Mapping extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<\Shopware\Models\Article\Image\Rule>|Rule[] $rules
+     * @param ArrayCollection<Rule>|Rule[] $rules
      */
     public function setRules($rules)
     {

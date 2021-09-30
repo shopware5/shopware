@@ -38,6 +38,8 @@ use Shopware\Models\Document\Document;
  * The order model repository is responsible to load all order data.
  * It supports the standard functions like findAll or findBy and extends the standard repository for
  * some specific functions to return the model data as array.
+ *
+ * @extends ModelRepository<Order>
  */
 class Repository extends ModelRepository
 {

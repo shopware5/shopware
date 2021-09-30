@@ -30,7 +30,6 @@ use Shopware\Components\License\Struct\LicenseUnpackRequest;
 use Shopware\Components\License\Struct\ShopwareEdition;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Plugin\License;
-use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
 
 class ShopwareEditionService implements ShopwareEditionServiceInterface
@@ -64,7 +63,6 @@ class ShopwareEditionService implements ShopwareEditionServiceInterface
             return ShopwareEdition::CE;
         }
 
-        /** @var ShopRepository $shopRepository */
         $shopRepository = $this->models->getRepository(Shop::class);
         $host = $shopRepository->getActiveDefault()->getHost();
 

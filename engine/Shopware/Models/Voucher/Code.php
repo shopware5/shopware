@@ -26,6 +26,7 @@ namespace Shopware\Models\Voucher;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Customer\Customer;
 
 /**
  * Standard Code Model Entity
@@ -73,17 +74,17 @@ class Code extends ModelEntity
     private $cashed = 0;
 
     /**
-     * @var \Shopware\Models\Voucher\Voucher
+     * @var Voucher
      *
      * @ORM\ManyToOne(targetEntity="Voucher", inversedBy="codes")
-     * @ORM\JoinColumn(name="voucherID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="voucherID", referencedColumnName="id", nullable=false)
      */
     private $voucher;
 
     /**
-     * @var \Shopware\Models\Customer\Customer|null
+     * @var Customer|null
      *
-     * @ORM\OneToOne(targetEntity="\Shopware\Models\Customer\Customer")
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer", inversedBy="codes")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
      */
     private $customer;
@@ -177,7 +178,7 @@ class Code extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Voucher\Voucher
+     * @return Voucher
      */
     public function getVoucher()
     {
@@ -185,7 +186,7 @@ class Code extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Voucher\Voucher $voucher
+     * @param Voucher $voucher
      */
     public function setVoucher($voucher)
     {
@@ -193,7 +194,7 @@ class Code extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Customer\Customer|null
+     * @return Customer|null
      */
     public function getCustomer()
     {
@@ -201,7 +202,7 @@ class Code extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Customer\Customer $user
+     * @param Customer $user
      */
     public function setCustomer($user)
     {

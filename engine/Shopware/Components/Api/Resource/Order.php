@@ -26,6 +26,11 @@ namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Country\Country as CountryModel;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Customer as CustomerModel;
@@ -34,6 +39,7 @@ use Shopware\Models\Order\Billing;
 use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\DetailStatus;
 use Shopware\Models\Order\Order as OrderModel;
+use Shopware\Models\Order\Repository;
 use Shopware\Models\Order\Shipping;
 use Shopware\Models\Order\Status;
 use Shopware\Models\Partner\Partner;
@@ -47,7 +53,7 @@ use Shopware\Models\Tax\Tax;
 class Order extends Resource
 {
     /**
-     * @return \Shopware\Models\Order\Repository
+     * @return Repository
      */
     public function getRepository()
     {
@@ -59,22 +65,22 @@ class Order extends Resource
      *
      * @param string $number
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
      * @return int
      */
     public function getIdFromNumber($number)
     {
         if (empty($number)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ParameterMissingException();
         }
 
         /** @var OrderModel|null $orderModel */
         $orderModel = $this->getRepository()->findOneBy(['number' => $number]);
 
         if (!$orderModel) {
-            throw new ApiException\NotFoundException(sprintf('Order by number %s not found', $number));
+            throw new NotFoundException(sprintf('Order by number %s not found', $number));
         }
 
         return $orderModel->getId();
@@ -83,8 +89,8 @@ class Order extends Resource
     /**
      * @param string $number
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ParameterMissingException
+     * @throws NotFoundException
      *
      * @return array|OrderModel
      */
@@ -98,8 +104,8 @@ class Order extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ParameterMissingException
+     * @throws NotFoundException
      *
      * @return array|OrderModel
      */
@@ -108,7 +114,7 @@ class Order extends Resource
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ParameterMissingException();
         }
 
         $filters = [['property' => 'orders.id', 'expression' => '=', 'value' => $id]];
@@ -117,7 +123,7 @@ class Order extends Resource
         $order = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$order) {
-            throw new ApiException\NotFoundException(sprintf('Order by id %d not found', $id));
+            throw new NotFoundException(sprintf('Order by id %d not found', $id));
         }
 
         if (\is_array($order)) {
@@ -174,7 +180,7 @@ class Order extends Resource
     }
 
     /**
-     * @throws ApiException\ValidationException
+     * @throws ValidationException
      *
      * @return OrderModel
      */
@@ -207,7 +213,7 @@ class Order extends Resource
 
         $violations = $this->getManager()->validate($order);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $this->prepareCreateAddresses($params, $order);
@@ -215,10 +221,10 @@ class Order extends Resource
         // Generate an order number if none was provided. Doing it after validation since
         // the generation of the order number cannot be reverted in a simple manner.
         if ($order->getNumber() === null) {
-            $orderNumberGenerator = Shopware()->Container()->get(\Shopware\Components\NumberRangeIncrementerInterface::class);
+            $orderNumberGenerator = Shopware()->Container()->get(NumberRangeIncrementerInterface::class);
             $orderNumber = $orderNumberGenerator->increment('invoice');
 
-            $order->setNumber($orderNumber);
+            $order->setNumber((string) $orderNumber);
             foreach ($order->getDetails() as $detail) {
                 $detail->setNumber($orderNumber);
             }
@@ -246,9 +252,9 @@ class Order extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ValidationException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
      * @return OrderModel
      */
@@ -257,14 +263,14 @@ class Order extends Resource
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         /** @var OrderModel|null $order */
         $order = $this->getRepository()->find($id);
 
         if (!$order) {
-            throw new ApiException\NotFoundException(sprintf('Order by id %d not found', $id));
+            throw new NotFoundException(sprintf('Order by id %d not found', $id));
         }
 
         $params = $this->prepareOrderData($params, $order);
@@ -273,7 +279,7 @@ class Order extends Resource
 
         $violations = $this->getManager()->validate($order);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $this->flush();
@@ -284,8 +290,8 @@ class Order extends Resource
     /**
      * Helper method to prepare the order data
      *
-     * @throws ApiException\NotFoundException
-     * @throws ApiException\ParameterMissingException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
      * @return array
      */
@@ -335,78 +341,78 @@ class Order extends Resource
         $params = array_intersect_key($params, array_flip($orderWhiteList));
 
         if (!\array_key_exists('customerId', $params)) {
-            throw new ApiException\ParameterMissingException('customerId');
+            throw new ParameterMissingException('customerId');
         }
 
         if (!\array_key_exists('orderStatusId', $params)) {
-            throw new ApiException\ParameterMissingException('orderStatusId');
+            throw new ParameterMissingException('orderStatusId');
         }
 
         if (!\array_key_exists('paymentStatusId', $params)) {
-            throw new ApiException\ParameterMissingException('paymentStatusId');
+            throw new ParameterMissingException('paymentStatusId');
         }
 
         if (!\array_key_exists('paymentId', $params)) {
-            throw new ApiException\ParameterMissingException('paymentId');
+            throw new ParameterMissingException('paymentId');
         }
 
         if (!\array_key_exists('dispatchId', $params)) {
-            throw new ApiException\ParameterMissingException('dispatchId');
+            throw new ParameterMissingException('dispatchId');
         }
 
         if (!\array_key_exists('shopId', $params)) {
-            throw new ApiException\ParameterMissingException('shopId');
+            throw new ParameterMissingException('shopId');
         }
 
-        $params['customer'] = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(CustomerModel::class, $params['customerId']);
+        $params['customer'] = $this->getContainer()->get(ModelManager::class)->find(CustomerModel::class, $params['customerId']);
         if (empty($params['customer'])) {
-            throw new ApiException\NotFoundException(sprintf('Customer by id %s not found', $params['customerId']));
+            throw new NotFoundException(sprintf('Customer by id %s not found', $params['customerId']));
         }
         unset($params['customerId']);
 
-        $params['orderStatus'] = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Status::class)->findOneBy([
+        $params['orderStatus'] = $this->getContainer()->get(ModelManager::class)->getRepository(Status::class)->findOneBy([
             'id' => $params['orderStatusId'],
             'group' => 'state',
         ]);
         if (empty($params['orderStatus'])) {
-            throw new ApiException\NotFoundException(sprintf('OrderStatus by id %s not found', $params['orderStatusId']));
+            throw new NotFoundException(sprintf('OrderStatus by id %s not found', $params['orderStatusId']));
         }
         unset($params['orderStatusId']);
 
-        $params['paymentStatus'] = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Status::class)->findOneBy([
+        $params['paymentStatus'] = $this->getContainer()->get(ModelManager::class)->getRepository(Status::class)->findOneBy([
             'id' => $params['paymentStatusId'],
             'group' => 'payment',
         ]);
         if (empty($params['paymentStatus'])) {
-            throw new ApiException\NotFoundException(sprintf('PaymentStatus by id %s not found', $params['paymentStatusId']));
+            throw new NotFoundException(sprintf('PaymentStatus by id %s not found', $params['paymentStatusId']));
         }
         unset($params['paymentStatusId']);
 
-        $params['payment'] = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(Payment::class, $params['paymentId']);
+        $params['payment'] = $this->getContainer()->get(ModelManager::class)->find(Payment::class, $params['paymentId']);
         if (empty($params['payment'])) {
-            throw new ApiException\NotFoundException(sprintf('Payment by id %s not found', $params['paymentId']));
+            throw new NotFoundException(sprintf('Payment by id %s not found', $params['paymentId']));
         }
         unset($params['paymentId']);
 
-        $params['dispatch'] = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(Dispatch::class, $params['dispatchId']);
+        $params['dispatch'] = $this->getContainer()->get(ModelManager::class)->find(Dispatch::class, $params['dispatchId']);
         if (empty($params['dispatch'])) {
-            throw new ApiException\NotFoundException(sprintf('Dispatch by id %s not found', $params['dispatchId']));
+            throw new NotFoundException(sprintf('Dispatch by id %s not found', $params['dispatchId']));
         }
         unset($params['dispatchId']);
 
         if (!empty($params['partnerId'])) {
-            $params['partner'] = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(Partner::class, $params['partnerId']);
+            $params['partner'] = $this->getContainer()->get(ModelManager::class)->find(Partner::class, $params['partnerId']);
 
             if (empty($params['partner'])) {
-                throw new ApiException\NotFoundException(sprintf('Partner by id %s not found', $params['partnerId']));
+                throw new NotFoundException(sprintf('Partner by id %s not found', $params['partnerId']));
             }
 
             unset($params['partnerId']);
         }
 
-        $params['shop'] = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(Shop::class, $params['shopId']);
+        $params['shop'] = $this->getContainer()->get(ModelManager::class)->find(Shop::class, $params['shopId']);
         if (empty($params['shop'])) {
-            throw new ApiException\NotFoundException(sprintf('Shop by id %s not found', $params['shopId']));
+            throw new NotFoundException(sprintf('Shop by id %s not found', $params['shopId']));
         }
 
         unset($params['shopId']);
@@ -417,8 +423,8 @@ class Order extends Resource
     /**
      * Helper method to prepare the order detail data
      *
-     * @throws ApiException\NotFoundException
-     * @throws ApiException\ValidationException
+     * @throws NotFoundException
+     * @throws ValidationException
      *
      * @return array
      */
@@ -461,11 +467,11 @@ class Order extends Resource
             $detail = array_intersect_key($detail, array_flip($detailWhiteList));
 
             if (!\array_key_exists('statusId', $detail)) {
-                throw new ApiException\NotFoundException('details.statusId');
+                throw new NotFoundException('details.statusId');
             }
 
             if (!\array_key_exists('taxId', $detail)) {
-                throw new ApiException\NotFoundException('details.taxId');
+                throw new NotFoundException('details.taxId');
             }
 
             // If no order number was specified for the details we use the one from the order if there is one
@@ -478,16 +484,16 @@ class Order extends Resource
             $detailModel->fromArray($detail);
 
             /** @var DetailStatus|null $status */
-            $status = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(DetailStatus::class, $detail['statusId']);
+            $status = $this->getContainer()->get(ModelManager::class)->find(DetailStatus::class, $detail['statusId']);
             if (!$status) {
-                throw new ApiException\NotFoundException(sprintf('DetailStatus by id %s not found', $detail['statusId']));
+                throw new NotFoundException(sprintf('DetailStatus by id %s not found', $detail['statusId']));
             }
             $detailModel->setStatus($status);
             unset($detail['statusId']);
 
-            $tax = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(Tax::class, $detail['taxId']);
+            $tax = $this->getContainer()->get(ModelManager::class)->find(Tax::class, $detail['taxId']);
             if (!$tax) {
-                throw new ApiException\NotFoundException(sprintf('Tax by id %s not found', $detail['taxId']));
+                throw new NotFoundException(sprintf('Tax by id %s not found', $detail['taxId']));
             }
             $detailModel->setTax($tax);
             unset($detail['taxId']);
@@ -499,7 +505,7 @@ class Order extends Resource
 
             $violations = $this->getManager()->validate($detailModel);
             if ($violations->count() > 0) {
-                throw new ApiException\ValidationException($violations);
+                throw new ValidationException($violations);
             }
 
             $detail = $detailModel;
@@ -513,7 +519,7 @@ class Order extends Resource
     /**
      * Helper method to prepare the order data
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
      *
      * @return array
      */
@@ -545,7 +551,7 @@ class Order extends Resource
             );
 
             if (empty($params['orderStatus'])) {
-                throw new ApiException\NotFoundException(sprintf('OrderStatus by id %s not found', $params['orderStatusId']));
+                throw new NotFoundException(sprintf('OrderStatus by id %s not found', $params['orderStatusId']));
             }
         }
 
@@ -558,7 +564,7 @@ class Order extends Resource
             );
 
             if (empty($params['paymentStatus'])) {
-                throw new ApiException\NotFoundException(sprintf('PaymentStatus by id %s not found', $params['paymentStatusId']));
+                throw new NotFoundException(sprintf('PaymentStatus by id %s not found', $params['paymentStatusId']));
             }
 
             return $params;
@@ -570,7 +576,7 @@ class Order extends Resource
     /**
      * Helper method to prepare the order detail data
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException|ApiException\CustomValidationException
+     * @throws NotFoundException|ApiException\CustomValidationException
      *
      * @return array
      */
@@ -611,7 +617,7 @@ class Order extends Resource
                 $status = Shopware()->Models()->find(DetailStatus::class, $detail['status']);
 
                 if (!$status) {
-                    throw new ApiException\NotFoundException(sprintf('DetailStatus by id %s not found', $detail['status']));
+                    throw new NotFoundException(sprintf('DetailStatus by id %s not found', $detail['status']));
                 }
 
                 $detailModel->setStatus($status);
@@ -631,18 +637,18 @@ class Order extends Resource
     }
 
     /**
-     * @throws ApiException\NotFoundException
-     * @throws ApiException\ValidationException
-     * @throws ApiException\ParameterMissingException
+     * @throws NotFoundException
+     * @throws ValidationException
+     * @throws ParameterMissingException
      */
     private function prepareCreateAddresses(array $params, OrderModel $order)
     {
         if (!\array_key_exists('billing', $params)) {
-            throw new ApiException\ParameterMissingException('billing');
+            throw new ParameterMissingException('billing');
         }
 
         if (!\array_key_exists('shipping', $params)) {
-            throw new ApiException\ParameterMissingException('shipping');
+            throw new ParameterMissingException('shipping');
         }
 
         $billing = $params['billing'];
@@ -650,21 +656,25 @@ class Order extends Resource
         $state = null;
 
         if (!\array_key_exists('countryId', $billing)) {
-            throw new ApiException\ParameterMissingException('billing.countryId');
+            throw new ParameterMissingException('billing.countryId');
         }
 
         if (isset($billing['stateId'])) {
-            $state = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(State::class, (int) $billing['stateId']);
+            $state = $this->getContainer()->get(ModelManager::class)->find(State::class, (int) $billing['stateId']);
             if (!$state instanceof State) {
-                throw new ApiException\NotFoundException(sprintf('Billing State by id %s not found', $billing['stateId']));
+                throw new NotFoundException(sprintf('Billing State by id %s not found', $billing['stateId']));
             }
         } else {
             $billing['stateId'] = 0;
         }
 
-        $country = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(CountryModel::class, $billing['countryId']);
+        $country = $this->getContainer()->get(ModelManager::class)->find(CountryModel::class, $billing['countryId']);
         if (!$country) {
-            throw new ApiException\NotFoundException(sprintf('Billing Country by id %s not found', $billing['countryId']));
+            throw new NotFoundException(sprintf('Billing Country by id %s not found', $billing['countryId']));
+        }
+
+        if (!$order->getCustomer() instanceof CustomerModel) {
+            throw new NotFoundException(sprintf('Order with ID "%s" has no customer', $order->getId()));
         }
 
         $billingAddress = new Billing();
@@ -675,7 +685,7 @@ class Order extends Resource
 
         $violations = $this->getManager()->validate($billingAddress);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $shipping = $params['shipping'];
@@ -683,21 +693,21 @@ class Order extends Resource
         $state = null;
 
         if (!\array_key_exists('countryId', $shipping)) {
-            throw new ApiException\ParameterMissingException('shipping.countryId');
+            throw new ParameterMissingException('shipping.countryId');
         }
 
         if (isset($shipping['stateId'])) {
-            $state = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(State::class, (int) $shipping['stateId']);
+            $state = $this->getContainer()->get(ModelManager::class)->find(State::class, (int) $shipping['stateId']);
             if (!$state instanceof State) {
-                throw new ApiException\NotFoundException(sprintf('Shipping State by id %s not found', $shipping['stateId']));
+                throw new NotFoundException(sprintf('Shipping State by id %s not found', $shipping['stateId']));
             }
         } else {
             $shipping['stateId'] = 0;
         }
 
-        $country = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(CountryModel::class, $shipping['countryId']);
+        $country = $this->getContainer()->get(ModelManager::class)->find(CountryModel::class, $shipping['countryId']);
         if (!$country) {
-            throw new ApiException\NotFoundException(sprintf('Shipping Country by id %s not found', $shipping['countryId']));
+            throw new NotFoundException(sprintf('Shipping Country by id %s not found', $shipping['countryId']));
         }
 
         $shippingAddress = new Shipping();
@@ -708,7 +718,7 @@ class Order extends Resource
 
         $violations = $this->getManager()->validate($shippingAddress);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $order->setBilling($billingAddress);

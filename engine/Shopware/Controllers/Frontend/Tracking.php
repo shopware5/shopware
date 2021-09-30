@@ -24,7 +24,6 @@
 
 use Shopware\Models\Banner\Banner;
 use Shopware\Models\Tracking\Banner as TrackingBanner;
-use Shopware\Models\Tracking\Repository as TrackingRepository;
 
 class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
 {
@@ -59,16 +58,15 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
         }
 
         /** @var Banner|null $banner */
-        $banner = Shopware()->Models()->getRepository(Banner::class)->findOneBy(['id' => $bannerId]);
+        $banner = $this->get('models')->getRepository(Banner::class)->findOneBy(['id' => $bannerId]);
         if ($banner === null) {
             return false;
         }
 
-        /** @var TrackingRepository $trackingRepo */
-        $trackingRepo = Shopware()->Models()->getRepository(TrackingBanner::class);
+        $trackingRepo = $this->get('models')->getRepository(TrackingBanner::class);
         $bannerStatistics = $trackingRepo->getOrCreateBannerStatsModel($bannerId);
         $bannerStatistics->increaseClicks();
-        Shopware()->Models()->flush($bannerStatistics);
+        $this->get('models')->flush($bannerStatistics);
         // Save
         $jumpTarget = $banner->getLink();
         if (!empty($jumpTarget)) {
@@ -91,11 +89,10 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
         }
 
         try {
-            /** @var TrackingRepository $statRepository */
-            $statRepository = Shopware()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
+            $statRepository = $this->get('models')->getRepository(TrackingBanner::class);
             $bannerStatistics = $statRepository->getOrCreateBannerStatsModel($bannerId);
             $bannerStatistics->increaseViews();
-            Shopware()->Models()->flush($bannerStatistics);
+            $this->get('models')->flush($bannerStatistics);
         } catch (Exception $e) {
             return false;
         }

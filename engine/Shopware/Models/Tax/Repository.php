@@ -41,6 +41,8 @@ use Shopware\Components\Model\QueryBuilder;
  * Affected tables
  *  - s_core_tax
  *  - s_core_tax_rules
+ *
+ * @extends ModelRepository<Tax>
  */
 class Repository extends ModelRepository
 {

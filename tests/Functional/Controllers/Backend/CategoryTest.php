@@ -25,11 +25,12 @@
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Shopware\Models\Category\Category;
+use Shopware\Models\Category\Repository;
 
 class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * @var Category
+     * @var Repository
      */
     protected $repository;
 
@@ -183,7 +184,9 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertTrue($this->View()->success);
 
         $movedCategoryModel = $this->repository->find($id);
+        static::assertNotNull($movedCategoryModel);
         $parentModel = $movedCategoryModel->getParent();
+        static::assertNotNull($parentModel);
 
         // parentCategory should be Deutsch Id = 3
         static::assertEquals(3, $parentModel->getId());
@@ -198,6 +201,7 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $params['id'] = $id;
         $categoryModel = $this->repository->find($id);
+        static::assertNotNull($categoryModel);
         $categoryName = $categoryModel->getName();
         static::assertNotEmpty($categoryName);
 

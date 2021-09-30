@@ -31,6 +31,7 @@ use Shopware\Components\Random;
 use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Category\Category;
+use Shopware\Models\Customer\Group;
 
 class ArticleTest extends TestCase
 {
@@ -2454,87 +2455,72 @@ class ArticleTest extends TestCase
         );
     }
 
-    public function testCustomerGroupReplacement()
+    public function testCustomerGroupReplacement(): void
     {
-        $this->internalTestReplaceMode(
-            'Shopware\Models\Customer\Group',
-            'customerGroups',
-            true
-        );
-        $this->internalTestReplaceMode(
-            'Shopware\Models\Customer\Group',
-            'customerGroups',
-            false
-        );
+        $this->internalTestReplaceMode(Group::class, 'customerGroups');
+        $this->internalTestReplaceMode(Group::class, 'customerGroups', false);
     }
 
-    public function testArticleDefaultPriceBehavior()
+    public function testArticleDefaultPriceBehavior(): void
     {
         $data = $this->getSimpleTestData();
 
-        $article = $this->resource->create($data);
+        $product = $this->resource->create($data);
 
-        static::assertInstanceOf('Shopware\Models\Article\Article', $article);
+        static::assertInstanceOf(ProductModel::class, $product);
 
-        /** @var \Shopware\Models\Article\Price $price */
-        $price = $article->getMainDetail()->getPrices()->first();
+        $price = $product->getMainDetail()->getPrices()->first();
 
         static::assertEquals(
-            400 / (($article->getTax()->getTax() + 100) / 100),
+            400 / (((float) $product->getTax()->getTax() + 100) / 100),
             $price->getPrice(),
             'Customer group price not calculated'
         );
 
-        $data = $this->resource->getOne($article->getId());
+        $data = $this->resource->getOne($product->getId());
 
         static::assertEquals(
-            400 / (($article->getTax()->getTax() + 100) / 100),
+            400 / (((float) $product->getTax()->getTax() + 100) / 100),
             $data['mainDetail']['prices'][0]['price']
         );
     }
 
-    public function testSimilarWithNumber()
+    public function testSimilarWithNumber(): void
     {
-        $articles = $this->getEntityOffset('Shopware\Models\Article\Article', 0, 3);
+        $products = $this->getEntityOffset(ProductModel::class, 0, 3);
 
         $data = $this->getSimpleTestData();
         $similar = [];
-        foreach ($articles as $article) {
-            $model = Shopware()->Models()->find(
-                'Shopware\Models\Article\Article',
-                $article['id']
-            );
+        foreach ($products as $product) {
+            $model = Shopware()->Models()->find(ProductModel::class, $product['id']);
 
             $similar[] = ['number' => $model->getMainDetail()->getNumber()];
         }
 
         $data['similar'] = $similar;
 
-        $article = $this->resource->create($data);
+        $product = $this->resource->create($data);
 
-        static::assertNotEmpty($article->getSimilar());
+        static::assertNotEmpty($product->getSimilar());
     }
 
-    public function testRelatedWithNumber()
+    public function testRelatedWithNumber(): void
     {
-        $articles = $this->getEntityOffset('Shopware\Models\Article\Article', 0, 3);
+        $products = $this->getEntityOffset(ProductModel::class, 0, 3);
 
         $data = $this->getSimpleTestData();
         $similar = [];
-        foreach ($articles as $article) {
-            $model = Shopware()->Models()->find(
-                'Shopware\Models\Article\Article',
-                $article['id']
-            );
+        foreach ($products as $product) {
+            $model = Shopware()->Models()->find(ProductModel::class, $product['id']);
 
             $similar[] = ['number' => $model->getMainDetail()->getNumber()];
         }
 
         $data['related'] = $similar;
 
-        $article = $this->resource->create($data);
+        $product = $this->resource->create($data);
 
-        static::assertNotEmpty($article->getRelated());
+        static::assertNotEmpty($product->getRelated());
     }
 
     public function testDownloads()
@@ -2545,17 +2531,17 @@ class ArticleTest extends TestCase
             ['link' => 'data:image/png;base64,' . require (__DIR__ . '/fixtures/base64image.php')],
         ];
 
-        $article = $this->resource->create($data);
+        $product = $this->resource->create($data);
 
-        static::assertCount(1, $article->getDownloads());
+        static::assertCount(1, $product->getDownloads());
 
         $downloads = [
-            ['id' => $article->getDownloads()->first()->getId()],
+            ['id' => $product->getDownloads()->first()->getId()],
             ['link' => 'file://' . __DIR__ . '/fixtures/variant-image.png'],
         ];
 
         $update = $this->resource->update(
-            $article->getId(),
+            $product->getId(),
             [
                 'downloads' => $downloads,
                 '__options_downloads' => ['replace' => false],
@@ -2596,18 +2582,17 @@ class ArticleTest extends TestCase
         }
     }
 
-    public function testArticleGrossPrices()
+    public function testArticleGrossPrices(): void
     {
         $data = $this->getSimpleTestData();
 
         $article = $this->resource->create($data);
 
-        static::assertInstanceOf('Shopware\Models\Article\Article', $article);
+        static::assertInstanceOf(ProductModel::class, $article);
 
-        /** @var \Shopware\Models\Article\Price $price */
         $price = $article->getMainDetail()->getPrices()->first();
 
-        $net = 400 / (($article->getTax()->getTax() + 100) / 100);
+        $net = 400 / (((float) $article->getTax()->getTax() + 100) / 100);
 
         static::assertEquals(
             $net,

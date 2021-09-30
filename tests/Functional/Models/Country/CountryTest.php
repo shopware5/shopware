@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -41,7 +43,7 @@ class CountryTest extends Enlight_Components_Test_Controller_TestCase
         parent::tearDown();
     }
 
-    public function testNewCountryIsShippableByDefaultUsingDbal()
+    public function testNewCountryIsShippableByDefaultUsingDbal(): void
     {
         $connection = Shopware()->Models()->getConnection();
 
@@ -76,7 +78,7 @@ class CountryTest extends Enlight_Components_Test_Controller_TestCase
         static::assertSame(1, (int) $result[0]['allow_shipping']);
     }
 
-    public function testNewCountryIsShippableByDefaultUsingDoctrine()
+    public function testNewCountryIsShippableByDefaultUsingDoctrine(): void
     {
         $modelManager = Shopware()->Models();
 

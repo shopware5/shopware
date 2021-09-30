@@ -44,10 +44,10 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         }
 
         $id = (int) $this->Request()->get('id');
-        $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
+        $supplierModel = $this->get('models')->find('Shopware\Models\Article\Supplier', $id);
 
-        Shopware()->Models()->remove($supplierModel);
-        Shopware()->Models()->flush();
+        $this->get('models')->remove($supplierModel);
+        $this->get('models')->flush();
 
         $this->View()->assign(['success' => true, 'data' => $id]);
     }
@@ -88,7 +88,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         }
 
         $query = $this->getRepository()->getSupplierListQuery($filter, $sort, $limit, $offset);
-        $total = Shopware()->Models()->getQueryCount($query);
+        $total = $this->get('models')->getQueryCount($query);
 
         $suppliers = $query->getArrayResult();
         $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
@@ -151,7 +151,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $supplierModel = null;
         $id = (int) $this->Request()->get('id');
         if ($id > 0) {
-            $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
+            $supplierModel = $this->get('models')->find('Shopware\Models\Article\Supplier', $id);
         } else {
             $supplierModel = new \Shopware\Models\Article\Supplier();
         }
@@ -182,7 +182,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
             return;
         }
 
-        $manager = Shopware()->Models();
+        $manager = $this->get('models');
         $manager->persist($supplierModel);
         $manager->flush();
         $params['id'] = $supplierModel->getId();
@@ -206,7 +206,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $offset = $this->Request()->getParam('start', 0);
 
         $query = $this->getRepository()->getSupplierListQuery($filter, $sort, $limit, $offset);
-        $count = Shopware()->Models()->getQueryCount($query);
+        $count = $this->get('models')->getQueryCount($query);
 
         return [
             'result' => $query->getArrayResult(),
@@ -258,7 +258,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     private function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+            $this->repository = $this->get('models')->getRepository('Shopware\Models\Article\Article');
         }
 
         return $this->repository;

@@ -71,7 +71,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public static $manager;
 
     /**
-     * @var ModelRepository
+     * @var ModelRepository<Group>
      */
     protected $groupRepository;
 
@@ -580,7 +580,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     protected function getManager()
     {
         if (self::$manager === null) {
-            self::$manager = Shopware()->Models();
+            self::$manager = $this->get('models');
         }
 
         return self::$manager;
@@ -627,6 +627,8 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
     /**
      * Helper function to get access to the group repository.
+     *
+     * @return ModelRepository<Group>
      */
     private function getGroupRepository(): ModelRepository
     {

@@ -904,7 +904,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = $this->get('models');
         }
 
         return $this->manager;

@@ -169,9 +169,9 @@ class Site extends ModelEntity
     private $target;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="shop_ids", type="string", nullable=false)
+     * @ORM\Column(name="shop_ids", type="string", nullable=true)
      */
     private $shopIds;
 
@@ -201,7 +201,7 @@ class Site extends ModelEntity
     private $parent;
 
     /**
-     * @var int|null
+     * @var int
      *
      * @ORM\Column(name="parentID", type="integer", nullable=false)
      */
@@ -643,7 +643,7 @@ class Site extends ModelEntity
     /**
      * Returns the unexploded shop ids string (ex: |1|2|)
      *
-     * @return string
+     * @return string|null
      */
     public function getShopIds()
     {
@@ -664,17 +664,13 @@ class Site extends ModelEntity
         $explodedShopIds = explode('|', trim($this->shopIds, '|'));
 
         // cast to ints
-        $explodedShopIds = array_map(function ($elem) {
-            return (int) $elem;
-        }, $explodedShopIds);
-
-        return $explodedShopIds;
+        return array_map('\intval', $explodedShopIds);
     }
 
     /**
      * Set the unexploded shop ids string (ex: |1|2|)
      *
-     * @param string $shopIds
+     * @param string|null $shopIds
      *
      * @return Site
      */

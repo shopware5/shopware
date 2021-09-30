@@ -27,7 +27,8 @@ namespace Shopware\Components\Theme;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Form;
-use Shopware\Components\Model;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Theme;
 use Shopware\Models\Shop;
 use Shopware\Models\Shop\Template;
@@ -45,7 +46,7 @@ use Shopware\Models\Shop\TemplateConfig\Set;
 class Configurator
 {
     /**
-     * @var Model\ModelManager
+     * @var ModelManager
      */
     protected $entityManager;
 
@@ -60,7 +61,7 @@ class Configurator
     protected $util;
 
     /**
-     * @var Model\ModelRepository
+     * @var ModelRepository<Template>
      */
     protected $repository;
 
@@ -70,7 +71,7 @@ class Configurator
     protected $eventManager;
 
     public function __construct(
-        Model\ModelManager $entityManager,
+        ModelManager $entityManager,
         Util $util,
         Form\Persister\Theme $persister,
         \Enlight_Event_EventManager $eventManager
@@ -79,7 +80,7 @@ class Configurator
         $this->persister = $persister;
         $this->util = $util;
         $this->eventManager = $eventManager;
-        $this->repository = $entityManager->getRepository('Shopware\Models\Shop\Template');
+        $this->repository = $entityManager->getRepository(Template::class);
     }
 
     /**

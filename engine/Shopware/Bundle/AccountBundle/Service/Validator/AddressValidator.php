@@ -118,11 +118,10 @@ class AddressValidator implements AddressValidatorInterface
     }
 
     /**
-     * @param string        $property
-     * @param string|object $value
-     * @param Constraint[]  $constraints
+     * @param string|object|null $value
+     * @param Constraint[]       $constraints
      */
-    private function validateField($property, $value, $constraints)
+    private function validateField(string $property, $value, array $constraints)
     {
         $this->validationContext->atPath($property)->validate($value, $constraints);
     }

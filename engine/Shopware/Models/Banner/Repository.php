@@ -31,6 +31,8 @@ use Shopware\Components\Model\ModelRepository;
  * Repository for the banner model (Shopware\Models\Banner\Banner).
  * <br>
  * The banner model repository is responsible to load all banner data.
+ *
+ * @extends ModelRepository<Banner>
  */
 class Repository extends ModelRepository
 {

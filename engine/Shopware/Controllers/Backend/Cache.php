@@ -24,6 +24,10 @@
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CacheManager;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Theme\Compiler;
+use Shopware\Components\Theme\PathResolver;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware 5
@@ -61,7 +65,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         parent::preDispatch();
 
-        $this->cacheManager = $this->get(\Shopware\Components\CacheManager::class);
+        $this->cacheManager = $this->get(CacheManager::class);
     }
 
     /**
@@ -89,7 +93,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     /**
      * Clear cache action
      *
-     * @throws \Zend_Cache_Exception
+     * @throws Zend_Cache_Exception
      */
     public function clearCacheAction()
     {
@@ -157,11 +161,11 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $shopId = $this->Request()->get('shopId');
 
-        $repository = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Shop\Shop::class);
+        $repository = $this->get(ModelManager::class)->getRepository(Shop::class);
 
         $query = $repository->getShopsWithThemes(['shop.id' => $shopId]);
 
-        /** @var \Shopware\Models\Shop\Shop|null $shop */
+        /** @var Shop|null $shop */
         $shop = $query->getResult(
             AbstractQuery::HYDRATE_OBJECT
         )[0];
@@ -179,7 +183,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         }
 
         try {
-            /** @var \Shopware\Components\Theme\Compiler $compiler */
+            /** @var Compiler $compiler */
             $compiler = $this->container->get('theme_compiler');
             $compiler->compileJavascript('new', $shop->getTemplate(), $shop);
             $compiler->compileLess('new', $shop->getTemplate(), $shop);
@@ -196,11 +200,10 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
     public function moveThemeFilesAction()
     {
-        /** @var \Shopware\Models\Shop\Repository $repository */
-        $repository = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Shop\Shop::class);
+        $repository = $this->get(ModelManager::class)->getRepository(Shop::class);
         $shops = $repository->getShopsWithThemes()->getResult();
         $compiler = $this->container->get('theme_compiler');
-        $pathResolver = $this->container->get(\Shopware\Components\Theme\PathResolver::class);
+        $pathResolver = $this->container->get(PathResolver::class);
 
         $time = time();
 

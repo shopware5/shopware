@@ -25,7 +25,6 @@
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\RobotsTxtGeneratorInterface;
 use Shopware\Components\Routing\Context;
-use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Frontend_RobotsTxt extends Enlight_Controller_Action
@@ -58,7 +57,6 @@ class Shopware_Controllers_Frontend_RobotsTxt extends Enlight_Controller_Action
     {
         $config = $this->container->get(Shopware_Components_Config::class);
 
-        /** @var Repository $shopRepository */
         $shopRepository = $this->container->get(ModelManager::class)->getRepository(Shop::class);
         $context = [];
         $allShops = $mainShop->getChildren();

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,18 +24,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Models\Category;
+namespace Shopware\Tests\Functional\Models\Category;
 
 use Shopware\Models\Category\Category;
+use Shopware\Models\Category\Repository;
 
 class BlogCategoryTreeListQueryTest extends \Enlight_Components_Test_TestCase
 {
-    /**
-     * @var \Shopware\Models\Category\Repository
-     */
-    protected $repo;
+    protected ?Repository $repo = null;
 
-    protected $expected = [
+    /**
+     * @var array<int, array>
+     */
+    protected array $expected = [
         1 => [
             0 => [
                 'id' => 3,
@@ -78,7 +81,7 @@ class BlogCategoryTreeListQueryTest extends \Enlight_Components_Test_TestCase
         ],
     ];
 
-    public function testQuery()
+    public function testQuery(): void
     {
         foreach ($this->expected as $id => $expected) {
             $filter = [['property' => 'c.parentId', 'value' => $id]];
@@ -88,10 +91,7 @@ class BlogCategoryTreeListQueryTest extends \Enlight_Components_Test_TestCase
         }
     }
 
-    /**
-     * @return \Shopware\Models\Category\Repository
-     */
-    protected function getRepo()
+    protected function getRepo(): Repository
     {
         if ($this->repo === null) {
             $this->repo = Shopware()->Models()->getRepository(Category::class);
@@ -101,9 +101,11 @@ class BlogCategoryTreeListQueryTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param array $data
+     * @param array<array<string, mixed>> $data
+     *
+     * @return array<array<string, mixed>>
      */
-    protected function removeDates($data): array
+    protected function removeDates(array $data): array
     {
         foreach ($data as &$subCategory) {
             unset($subCategory['changed'], $subCategory['cmsText'], $subCategory['added']);

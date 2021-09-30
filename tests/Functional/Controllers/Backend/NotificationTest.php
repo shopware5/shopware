@@ -79,10 +79,10 @@ class NotificationTest extends \Enlight_Components_Test_Controller_TestCase
         $params['orderNumber'] = 'SW2001';
         $this->Request()->setParams($params);
         $this->dispatch('backend/Notification/getCustomerList');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
-        $returnData = $this->View()->data;
-        static::assertEquals(2, \count($returnData));
+        $returnData = $this->View()->getAssign('data');
+        static::assertCount(2, $returnData);
         $listingFirstEntry = $returnData[0];
         $listingSecondEntry = $returnData[1];
 
@@ -96,9 +96,9 @@ class NotificationTest extends \Enlight_Components_Test_Controller_TestCase
         $params['orderNumber'] = 'SW2003';
         $this->Request()->setParams($params);
         $this->dispatch('backend/Notification/getCustomerList');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
-        $returnData = $this->View()->data;
+        $returnData = $this->View()->getAssign('data');
 
         static::assertCount(1, $returnData);
         static::assertEquals('test@example.com', $returnData[0]['mail']);

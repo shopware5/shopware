@@ -24,8 +24,13 @@
 
 namespace Shopware\Models\Dispatch;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\Dispatch as DispatchAttribute;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Payment\Payment;
 
 /**
  * Dispatch Model
@@ -54,7 +59,7 @@ class Dispatch extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\ShippingCost>
+     * @var ArrayCollection<ShippingCost>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Dispatch\ShippingCost", mappedBy="dispatch", orphanRemoval=true, cascade={"persist"})
      */
@@ -63,7 +68,7 @@ class Dispatch extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Dispatch|null
+     * @var DispatchAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Dispatch", mappedBy="dispatch", orphanRemoval=true, cascade={"persist"})
      */
@@ -180,11 +185,11 @@ class Dispatch extends ModelEntity
     /**
      * Defines the value after the shipping fee will be dropped.
      *
-     * @var float|null
+     * @var string|null
      *
-     * @ORM\Column(name="shippingfree", type="decimal", nullable=true)
+     * @ORM\Column(name="shippingfree", type="decimal", precision=10, scale=2, nullable=true)
      */
-    private $shippingFree = 0;
+    private $shippingFree = '0.0';
 
     /**
      * Id of the sub shop used for this dispatch
@@ -254,7 +259,7 @@ class Dispatch extends ModelEntity
     /**
      * Just use this dispatch if there are sales articles in the shopping cart.
      *
-     * @var int|null
+     * @var int
      *
      * @ORM\Column(name="bind_laststock", type="integer", nullable=false)
      */
@@ -284,9 +289,9 @@ class Dispatch extends ModelEntity
      * This dispatch is only available if the weight of the shopping cart is between this start point and and the end point.
      * The start point is defined here.
      *
-     * @var float|null
+     * @var string|null
      *
-     * @ORM\Column(name="bind_weight_from", type="decimal", nullable=true)
+     * @ORM\Column(name="bind_weight_from", type="decimal", precision=10, scale=3, nullable=true)
      */
     private $bindWeightFrom;
 
@@ -294,9 +299,9 @@ class Dispatch extends ModelEntity
      * This dispatch is only available if the weight of the shopping cart is between a start point and and this end point.
      * The end point is defined here.
      *
-     * @var float|null
+     * @var string|null
      *
-     * @ORM\Column(name="bind_weight_to", type="decimal", nullable=true)
+     * @ORM\Column(name="bind_weight_to", type="decimal", precision=10, scale=3, nullable=true)
      */
     private $bindWeightTo;
 
@@ -304,9 +309,9 @@ class Dispatch extends ModelEntity
      * This dispatch is only available from this price to the end price.
      * The start price is defined here.
      *
-     * @var float|null
+     * @var string|null
      *
-     * @ORM\Column(name="bind_price_from", type="decimal", nullable=true)
+     * @ORM\Column(name="bind_price_from", type="decimal", precision=10, scale=2, nullable=true)
      */
     private $bindPriceFrom;
 
@@ -314,9 +319,9 @@ class Dispatch extends ModelEntity
      * This dispatch is only available from a price to this end price.
      * The end price is defined here.
      *
-     * @var float|null
+     * @var string|null
      *
-     * @ORM\Column(name="bind_price_to", type="decimal", nullable=true)
+     * @ORM\Column(name="bind_price_to", type="decimal", precision=10, scale=2, nullable=true)
      */
     private $bindPriceTo;
 
@@ -350,12 +355,12 @@ class Dispatch extends ModelEntity
     /**
      * Contains all known countries for whom this dispatch is available.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Country\Country>
+     * @var ArrayCollection<Country>
      *
      * @ORM\ManyToMany(targetEntity="\Shopware\Models\Country\Country")
      * @ORM\JoinTable(name="s_premium_dispatch_countries",
-     *     joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id", nullable=false)}
      * )
      */
     private $countries;
@@ -363,12 +368,12 @@ class Dispatch extends ModelEntity
     /**
      * A list of categories in which the dispatch is not allowed.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Category\Category>
+     * @var ArrayCollection<Category>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_premium_dispatch_categories",
-     *     joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="categoryID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="categoryID", referencedColumnName="id", nullable=false)}
      * )
      */
     private $categories;
@@ -376,12 +381,12 @@ class Dispatch extends ModelEntity
     /**
      * A list if payments means that are allowed this this dispatch
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
+     * @var ArrayCollection<Payment>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Payment\Payment")
      * @ORM\JoinTable(name="s_premium_dispatch_paymentmeans",
-     *     joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id", nullable=false)}
      * )
      */
     private $payments;
@@ -389,12 +394,12 @@ class Dispatch extends ModelEntity
     /**
      * A list of dates (holidays) on which this dispatch is not allowed.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\Holiday>
+     * @var ArrayCollection<Holiday>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Dispatch\Holiday")
      * @ORM\JoinTable(name="s_premium_dispatch_holidays",
-     *     joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="holidayID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="holidayID", referencedColumnName="id", nullable=false)}
      * )
      */
     private $holidays;
@@ -404,11 +409,11 @@ class Dispatch extends ModelEntity
      */
     public function __construct()
     {
-        $this->countries = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->payments = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->holidays = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->costsMatrix = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->countries = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+        $this->payments = new ArrayCollection();
+        $this->holidays = new ArrayCollection();
+        $this->costsMatrix = new ArrayCollection();
     }
 
     /**
@@ -600,7 +605,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @param float $shippingFree
+     * @param string|null $shippingFree
      *
      * @return Dispatch
      */
@@ -612,7 +617,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @return float|null
+     * @return string|null
      */
     public function getShippingFree()
     {
@@ -800,7 +805,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @param float $bindWeightFrom
+     * @param string|null $bindWeightFrom
      *
      * @return Dispatch
      */
@@ -812,7 +817,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @return float|null
+     * @return string|null
      */
     public function getBindWeightFrom()
     {
@@ -820,7 +825,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @param float $bindWeightTo
+     * @param string|null $bindWeightTo
      *
      * @return Dispatch
      */
@@ -832,7 +837,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @return float|null
+     * @return string|null
      */
     public function getBindWeightTo()
     {
@@ -840,7 +845,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @param float $bindPriceFrom
+     * @param string|null $bindPriceFrom
      *
      * @return Dispatch
      */
@@ -852,7 +857,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @return float|null
+     * @return string|null
      */
     public function getBindPriceFrom()
     {
@@ -860,7 +865,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @param float $bindPriceTo
+     * @param string|null $bindPriceTo
      *
      * @return Dispatch
      */
@@ -872,7 +877,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @return float|null
+     * @return string|null
      */
     public function getBindPriceTo()
     {
@@ -942,7 +947,7 @@ class Dispatch extends ModelEntity
     /**
      * Returns an ArrayCollection of holiday objects
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\Holiday>
+     * @return ArrayCollection<Holiday>
      */
     public function getHolidays()
     {
@@ -952,9 +957,9 @@ class Dispatch extends ModelEntity
     /**
      * Takes an ArrayCollection of holiday objects
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\Holiday> $holidays
+     * @param ArrayCollection<Holiday> $holidays
      *
-     * @return \Shopware\Models\Dispatch\Dispatch
+     * @return Dispatch
      */
     public function setHolidays($holidays)
     {
@@ -966,7 +971,7 @@ class Dispatch extends ModelEntity
     /**
      * Returns an ArrayCollection of payment objects
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
+     * @return ArrayCollection<Payment>
      */
     public function getPayments()
     {
@@ -976,9 +981,9 @@ class Dispatch extends ModelEntity
     /**
      * Takes an ArrayCollection of payments
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment> $payments
+     * @param ArrayCollection<Payment> $payments
      *
-     * @return \Shopware\Models\Dispatch\Dispatch
+     * @return Dispatch
      */
     public function setPayments($payments)
     {
@@ -990,7 +995,7 @@ class Dispatch extends ModelEntity
     /**
      * Returns an ArrayCollection of category objects
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Category\Category>
+     * @return ArrayCollection<Category>
      */
     public function getCategories()
     {
@@ -1000,9 +1005,9 @@ class Dispatch extends ModelEntity
     /**
      * Takes an ArrayCollection of category objects
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Category\Category> $categories
+     * @param ArrayCollection<Category> $categories
      *
-     * @return \Shopware\Models\Dispatch\Dispatch
+     * @return Dispatch
      */
     public function setCategories($categories)
     {
@@ -1014,7 +1019,7 @@ class Dispatch extends ModelEntity
     /**
      * Returns an ArrayCollection of country objects
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Country\Country>
+     * @return ArrayCollection<Country>
      */
     public function getCountries()
     {
@@ -1024,7 +1029,7 @@ class Dispatch extends ModelEntity
     /**
      * Takes an ArrayCollection of country objects
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Country\Country> $countries
+     * @param ArrayCollection<Country> $countries
      *
      * @return Dispatch
      */
@@ -1036,7 +1041,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\ShippingCost>
+     * @return ArrayCollection<ShippingCost>
      */
     public function getCostsMatrix()
     {
@@ -1044,17 +1049,17 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Dispatch\ShippingCost[]|null $costsMatrix
+     * @param ShippingCost[]|null $costsMatrix
      *
      * @return Dispatch
      */
     public function setCostsMatrix($costsMatrix)
     {
-        return $this->setOneToMany($costsMatrix, \Shopware\Models\Dispatch\ShippingCost::class, 'costsMatrix', 'dispatch');
+        return $this->setOneToMany($costsMatrix, ShippingCost::class, 'costsMatrix', 'dispatch');
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Dispatch|null
+     * @return DispatchAttribute|null
      */
     public function getAttribute()
     {
@@ -1062,12 +1067,12 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Dispatch|array|null $attribute
+     * @param DispatchAttribute|array|null $attribute
      *
      * @return Dispatch
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Dispatch::class, 'attribute', 'dispatch');
+        return $this->setOneToOne($attribute, DispatchAttribute::class, 'attribute', 'dispatch');
     }
 }

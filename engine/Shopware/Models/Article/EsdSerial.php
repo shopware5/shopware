@@ -26,6 +26,7 @@ namespace Shopware\Models\Article;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Order\Esd as OrderEsd;
 
 /**
  * @ORM\Entity()
@@ -39,14 +40,14 @@ class EsdSerial extends ModelEntity
      * @var Esd
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Esd", inversedBy="serials")
-     * @ORM\JoinColumn(name="esdID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="esdID", referencedColumnName="id", nullable=false)
      */
     protected $esd;
 
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Order\Esd
+     * @var OrderEsd|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Esd", mappedBy="serial")
      */
@@ -62,9 +63,9 @@ class EsdSerial extends ModelEntity
     private $id;
 
     /**
-     * @var string|null
+     * @var string
      *
-     * @ORM\Column(name="serialnumber", type="string", length=255, nullable=true)
+     * @ORM\Column(name="serialnumber", type="string", length=255, nullable=false)
      */
     private $serialnumber = '';
 
@@ -103,7 +104,7 @@ class EsdSerial extends ModelEntity
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getSerialnumber()
     {

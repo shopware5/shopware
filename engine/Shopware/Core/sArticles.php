@@ -55,7 +55,6 @@ use Shopware\Components\Compatibility\LegacyEventManager;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\ProductStream\CriteriaFactoryInterface;
 use Shopware\Components\ProductStream\Repository;
-use Shopware\Components\ProductStream\RepositoryInterface;
 use Shopware\Components\QueryAliasMapper;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Repository as ArticleRepository;
@@ -2118,12 +2117,10 @@ class sArticles implements Enlight_Hook
             );
         }
 
-        /** @var CriteriaFactoryInterface $factory */
         $factory = Shopware()->Container()->get(CriteriaFactoryInterface::class);
         $criteria = $factory->createCriteria($request, $context);
         $criteria->limit(null);
 
-        /** @var RepositoryInterface $streamRepository */
         $streamRepository = Shopware()->Container()->get(Repository::class);
         $streamRepository->prepareCriteria($criteria, $streamId);
 
@@ -2164,7 +2161,6 @@ class sArticles implements Enlight_Hook
             return [];
         }
 
-        /** @var BaseProduct $currentProduct */
         foreach ($products as $index => $currentProduct) {
             if ($currentProduct->getNumber() != $orderNumber) {
                 continue;

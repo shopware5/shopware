@@ -33,6 +33,8 @@ use Shopware\Components\Model\QueryBuilder;
  * Repository for the customer model (Shopware\Models\Dispatch\Dispatch).
  *
  * The dispatch models accumulates all data needed for a specific dispatch service
+ *
+ * @extends ModelRepository<Dispatch>
  */
 class Repository extends ModelRepository
 {

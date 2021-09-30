@@ -86,10 +86,10 @@ class Element extends ModelEntity
     /**
      * Owning Side
      *
-     * @var \Shopware\Models\Document\Document
+     * @var Document
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Document\Document", inversedBy="elements")
-     * @ORM\JoinColumn(name="documentID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="documentID", referencedColumnName="id", nullable=false)
      */
     private $document;
 
@@ -108,7 +108,7 @@ class Element extends ModelEntity
      *
      * @param string $name
      *
-     * @return \Shopware\Models\Document\Element
+     * @return Element
      */
     public function setName($name)
     {
@@ -132,7 +132,7 @@ class Element extends ModelEntity
      *
      * @param string $value
      *
-     * @return \Shopware\Models\Document\Element
+     * @return Element
      */
     public function setValue($value)
     {
@@ -156,7 +156,7 @@ class Element extends ModelEntity
      *
      * @param string $style
      *
-     * @return \Shopware\Models\Document\Element
+     * @return Element
      */
     public function setStyle($style)
     {
@@ -174,9 +174,9 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Document\Document $document
+     * @param Document $document
      *
-     * @return \Shopware\Models\Document\Element
+     * @return Element
      */
     public function setDocument($document)
     {
@@ -186,7 +186,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Document\Document
+     * @return Document
      */
     public function getDocument()
     {

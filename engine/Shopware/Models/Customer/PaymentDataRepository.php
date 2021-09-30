@@ -28,6 +28,8 @@ use Shopware\Components\Model\ModelRepository;
 
 /**
  * Shopware Payment Data Repository
+ *
+ * @extends ModelRepository<PaymentData>
  */
 class PaymentDataRepository extends ModelRepository
 {

@@ -24,8 +24,11 @@
 
 namespace Shopware\Models\User;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\User as UserAttribute;
+use Shopware\Models\Blog\Blog;
 
 /**
  * Shopware backend user model represents a single backend user.
@@ -50,16 +53,16 @@ class User extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\User|null
+     * @var UserAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\User", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
     /**
-     * @var \Shopware\Models\Blog\Blog
+     * @var ArrayCollection<int, Blog>
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Blog", mappedBy="author")
+     * @ORM\OneToMany(targetEntity="\Shopware\Models\Blog\Blog", mappedBy="author")
      * @ORM\JoinColumn(name="id", referencedColumnName="author_id")
      */
     protected $blog;
@@ -182,10 +185,10 @@ class User extends ModelEntity
      * The role property is the owning side of the association between user and role.
      * The association is joined over the s_core_auth_roles.id field and the s_core_auth.roleID
      *
-     * @var \Shopware\Models\User\Role
+     * @var Role
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Role", inversedBy="users")
-     * @ORM\JoinColumn(name="roleID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="roleID", referencedColumnName="id", nullable=false)
      */
     private $role;
 
@@ -464,7 +467,7 @@ class User extends ModelEntity
      *
      * @param int $roleId
      *
-     * @return \Shopware\Models\User\User
+     * @return User
      */
     public function setRoleId($roleId)
     {
@@ -488,7 +491,7 @@ class User extends ModelEntity
      *
      * @param int $localeId
      *
-     * @return \Shopware\Models\User\User
+     * @return User
      */
     public function setLocaleId($localeId)
     {
@@ -503,7 +506,7 @@ class User extends ModelEntity
      * the User.role property (OWNING SIDE) and the Role.users (INVERSE SIDE) property.
      * The role data is joined over the s_core_auth.roleID field.
      *
-     * @return \Shopware\Models\User\Role
+     * @return Role
      */
     public function getRole()
     {
@@ -516,9 +519,9 @@ class User extends ModelEntity
      * the User.role property (OWNING SIDE) and the Role.users (INVERSE SIDE) property.
      * The role data is joined over the s_core_auth.roleID field.
      *
-     * @param \Shopware\Models\User\Role $role
+     * @param Role $role
      *
-     * @return \Shopware\Models\User\User
+     * @return User
      */
     public function setRole($role)
     {
@@ -528,7 +531,7 @@ class User extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\User|null
+     * @return UserAttribute|null
      */
     public function getAttribute()
     {
@@ -536,9 +539,9 @@ class User extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\User|array|null $attribute
+     * @param UserAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\User\User
+     * @return User
      */
     public function setAttribute($attribute)
     {
@@ -548,7 +551,7 @@ class User extends ModelEntity
     /**
      * @param string $encoder
      *
-     * @return \Shopware\Models\User\User
+     * @return User
      */
     public function setEncoder($encoder)
     {

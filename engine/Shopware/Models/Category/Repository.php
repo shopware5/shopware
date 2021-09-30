@@ -44,6 +44,8 @@ use Shopware\Components\Model\QueryBuilder;
  *  - s_categories
  *  - s_articles
  *  - s_articles_categories
+ *
+ * @extends ModelRepository<Category>
  */
 class Repository extends ModelRepository
 {
@@ -457,7 +459,7 @@ class Repository extends ModelRepository
     /**
      * @param int $id
      *
-     * @return array
+     * @return int
      */
     public function getChildrenCountList($id)
     {

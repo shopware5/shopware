@@ -79,7 +79,7 @@ class AccountManagerService
 
         $default = $repo->getActiveDefault();
 
-        return $default->getHost();
+        return (string) $default->getHost();
     }
 
     /**

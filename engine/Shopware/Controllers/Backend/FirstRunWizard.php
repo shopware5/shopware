@@ -23,13 +23,19 @@
  */
 
 use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
+use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
+use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Random;
+use Shopware\Components\Theme\Service;
 use Shopware\Models\Document\Element;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
+use Symfony\Component\Filesystem\Filesystem;
 
-class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_Backend_ExtJs implements \Shopware\Components\CSRFWhitelistAware
+class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * {@inheritdoc}
@@ -47,11 +53,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     public function saveEnabledAction()
     {
         $value = (bool) $this->Request()->getParam('value');
-        $element = Shopware()->Models()
+        $element = $this->get('models')
             ->getRepository(\Shopware\Models\Config\Element::class)
             ->findOneBy(['name' => 'firstRunWizardEnabled']);
 
-        $defaultShop = Shopware()->Models()->getRepository(Shop::class)->getDefault();
+        $defaultShop = $this->get('models')->getRepository(Shop::class)->getDefault();
 
         $requestElements = [
             [
@@ -67,8 +73,8 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             ],
         ];
 
-        /** @var \Shopware\Bundle\PluginInstallerBundle\StoreClient $storeClient */
-        $storeClient = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\StoreClient::class);
+        /** @var StoreClient $storeClient */
+        $storeClient = $this->container->get(StoreClient::class);
         $storeClient->doTrackEvent('First Run Wizard completed');
 
         $this->Request()->setParam('elements', $requestElements);
@@ -82,7 +88,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     public function saveConfigurationAction()
     {
         $values = $this->Request()->getParams();
-        $defaultShop = Shopware()->Models()->getRepository(Shop::class)->getDefault();
+        $defaultShop = $this->get('models')->getRepository(Shop::class)->getDefault();
 
         if (strpos($values['desktopLogo'], 'media/') === 0) {
             $values['tabletLandscapeLogo'] = $values['desktopLogo'];
@@ -112,7 +118,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             ];
         }, $themeConfigKeys);
 
-        $theme = $this->container->get(\Shopware\Components\Model\ModelManager::class)
+        $theme = $this->container->get(ModelManager::class)
             ->getRepository(Template::class)
             ->findOneBy(['template' => 'Responsive']);
 
@@ -120,7 +126,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             return !empty($config['value']);
         });
 
-        $this->container->get(\Shopware\Components\Theme\Service::class)->saveConfig($theme, $themeConfigValues);
+        $this->container->get(Service::class)->saveConfig($theme, $themeConfigValues);
         $this->container->get('theme_timestamp_persistor')->updateTimestamp($defaultShop->getId(), time());
 
         /**
@@ -140,7 +146,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $requestElements = [];
 
         foreach ($shopConfigValues as $configName => $configValue) {
-            $element = Shopware()->Models()
+            $element = $this->get('models')
                 ->getRepository(\Shopware\Models\Config\Element::class)
                 ->findOneBy(['name' => $configName]);
 
@@ -186,14 +192,14 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         foreach ($documentConfigValues as $key => $value) {
             $key = str_replace('__document_', '', $key);
-            $elements = Shopware()->Models()->getRepository(Element::class)->findBy(['name' => $key]);
+            $elements = $this->get('models')->getRepository(Element::class)->findBy(['name' => $key]);
 
             if (empty($elements) || empty($value)) {
                 continue;
             }
 
             if ($key === 'logo') {
-                $hash = \Shopware\Components\Random::getAlphanumericString(16);
+                $hash = Random::getAlphanumericString(16);
                 $value = sprintf(
                     '<p><img id="tinymce-editor-image-%s" class="tinymce-editor-image tinymce-editor-image-%s" src="{media path=\'%s\'}" style="max-height: 20mm;" data-src="%s" /></p>',
                     $hash,
@@ -210,7 +216,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         }
 
         if (\count($persistElements)) {
-            Shopware()->Models()->flush($persistElements);
+            $this->get('models')->flush($persistElements);
         }
 
         $this->forward('saveForm', 'Config');
@@ -221,10 +227,10 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     public function loadConfigurationAction()
     {
-        $defaultShop = $this->container->get(\Shopware\Components\Model\ModelManager::class)
+        $defaultShop = $this->container->get(ModelManager::class)
             ->getRepository(Shop::class)
             ->getDefault();
-        $theme = $this->container->get(\Shopware\Components\Model\ModelManager::class)
+        $theme = $this->container->get(ModelManager::class)
             ->getRepository(Template::class)
             ->findOneBy(['template' => 'Responsive']);
 
@@ -237,7 +243,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             'brand-secondary',
         ];
 
-        $themeConfigData = $this->container->get(\Shopware\Components\Theme\Service::class)->getConfig(
+        $themeConfigData = $this->container->get(Service::class)->getConfig(
             $theme,
             $defaultShop,
             $themeConfigKeys
@@ -267,7 +273,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             'company',
         ];
 
-        $builder = $this->container->get(\Shopware\Components\Model\ModelManager::class)->createQueryBuilder();
+        $builder = $this->container->get(ModelManager::class)->createQueryBuilder();
         $builder->select([
             'elements',
             'values',
@@ -437,13 +443,13 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     public function registerDomainAction()
     {
-        $shop = $this->container->get(\Shopware\Components\Model\ModelManager::class)
-            ->getRepository('Shopware\Models\Shop\Shop')
+        $shop = $this->container->get(ModelManager::class)
+            ->getRepository(Shop::class)
             ->getDefault();
 
         $shopwareId = $this->Request()->get('shopwareID');
         $password = $this->Request()->get('password');
-        $domain = $shop->getHost();
+        $domain = (string) $shop->getHost();
 
         try {
             $token = $this->getToken($shopwareId, $password);
@@ -492,11 +498,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             return;
         }
 
-        /** @var \Symfony\Component\Filesystem\Filesystem $fileSystem */
+        /** @var Filesystem $fileSystem */
         $fileSystem = $this->container->get('file_system');
         $rootDir = $this->container->getParameter('kernel.root_dir');
         if (!\is_string($rootDir)) {
-            throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+            throw new RuntimeException('Parameter kernel.root_dir has to be an string');
         }
 
         $filePath = $rootDir . DIRECTORY_SEPARATOR . $filename;
@@ -567,7 +573,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $version = $this->container->getParameter('shopware.release.version');
 
         if (!\is_string($version)) {
-            throw new \RuntimeException('Parameter shopware.release.version has to be an string');
+            throw new RuntimeException('Parameter shopware.release.version has to be an string');
         }
 
         return $version;
@@ -651,7 +657,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      * @param string $shopwareId
      * @param string $password
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return AccessTokenStruct Token to access the API
      */
@@ -662,7 +668,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         if (empty($token) || $token->getExpire()->getTimestamp() <= strtotime('+30 seconds')) {
             if (empty($shopwareId) || empty($password)) {
-                throw new \RuntimeException('Could not login - missing login data');
+                throw new RuntimeException('Could not login - missing login data');
             }
 
             /** @var AccountManagerService $accountManagerService */

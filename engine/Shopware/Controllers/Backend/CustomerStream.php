@@ -26,6 +26,9 @@ use Shopware\Components\Api\Resource\CustomerStream as CustomerStreamApi;
 use Shopware\Models\CustomerStream\CustomerStream;
 use Shopware\Models\CustomerStream\CustomerStreamRepository;
 
+/**
+ * @extends Shopware_Controllers_Backend_Application<CustomerStream>
+ */
 class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_Backend_Application
 {
     protected $model = CustomerStream::class;

@@ -26,10 +26,16 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
+use Shopware\Models\Customer\AddressRepository;
 use Shopware\Models\Customer\Customer as CustomerModel;
-use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
 
 /**
@@ -44,11 +50,11 @@ class Address extends Resource
 
     public function __construct()
     {
-        $this->addressService = $this->getContainer()->get(\Shopware\Bundle\AccountBundle\Service\AddressServiceInterface::class);
+        $this->addressService = $this->getContainer()->get(AddressServiceInterface::class);
     }
 
     /**
-     * @return \Shopware\Models\Customer\AddressRepository
+     * @return AddressRepository
      */
     public function getRepository()
     {
@@ -58,8 +64,8 @@ class Address extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ParameterMissingException
+     * @throws NotFoundException
      *
      * @return array|\Shopware\Models\Customer\Address
      */
@@ -68,7 +74,7 @@ class Address extends Resource
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         $query = $this->getRepository()->getOne($id);
@@ -77,7 +83,7 @@ class Address extends Resource
         $address = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$address) {
-            throw new ApiException\NotFoundException(sprintf('Address by id %d not found', $id));
+            throw new NotFoundException(sprintf('Address by id %d not found', $id));
         }
 
         return $address;
@@ -109,7 +115,7 @@ class Address extends Resource
 
     /**
      * @throws ApiException\CustomValidationException
-     * @throws ApiException\NotFoundException
+     * @throws NotFoundException
      *
      * @return \Shopware\Models\Customer\Address
      */
@@ -120,9 +126,9 @@ class Address extends Resource
         $customerId = !empty($params['customer']) ? (int) $params['customer'] : 0;
         unset($params['customer']);
 
-        $customer = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(CustomerModel::class, $customerId);
+        $customer = $this->getContainer()->get(ModelManager::class)->find(CustomerModel::class, $customerId);
         if (!$customer) {
-            throw new ApiException\NotFoundException(sprintf('Customer by id %s not found', $customerId));
+            throw new NotFoundException(sprintf('Customer by id %s not found', $customerId));
         }
 
         $this->setupContext($customer->getShop()->getId());
@@ -152,9 +158,9 @@ class Address extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ValidationException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
      * @return \Shopware\Models\Customer\Address
      */
@@ -163,14 +169,14 @@ class Address extends Resource
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         /** @var \Shopware\Models\Customer\Address|null $address */
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {
-            throw new ApiException\NotFoundException(sprintf('Address by id %d not found', $id));
+            throw new NotFoundException(sprintf('Address by id %d not found', $id));
         }
 
         $this->setupContext($address->getCustomer()->getShop()->getId());
@@ -194,8 +200,8 @@ class Address extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ParameterMissingException
+     * @throws NotFoundException
      *
      * @return \Shopware\Models\Customer\Address
      */
@@ -204,14 +210,14 @@ class Address extends Resource
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         /** @var \Shopware\Models\Customer\Address|null $address */
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {
-            throw new ApiException\NotFoundException(sprintf('Address by id %d not found', $id));
+            throw new NotFoundException(sprintf('Address by id %d not found', $id));
         }
 
         $this->addressService->delete($address);
@@ -224,19 +230,18 @@ class Address extends Resource
      *
      * @param int $shopId
      *
-     * @throws \RuntimeException
+     * @throws ModelNotFoundException
      */
     private function setupContext($shopId)
     {
-        /** @var Repository $shopRepository */
-        $shopRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(ShopModel::class);
+        $shopRepository = $this->getContainer()->get(ModelManager::class)->getRepository(ShopModel::class);
 
         $shop = $shopRepository->getActiveById($shopId);
         if (!$shop) {
-            throw new \RuntimeException('A valid shopId is required.');
+            throw new ModelNotFoundException(ShopModel::class, $shopId);
         }
 
-        $this->getContainer()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        $this->getContainer()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
     }
 
     /**
@@ -245,7 +250,7 @@ class Address extends Resource
      * @param int|null $customerId
      * @param bool     $filter
      *
-     * @throws ApiException\NotFoundException         if the given customer id in the data array is invalid
+     * @throws NotFoundException                      if the given customer id in the data array is invalid
      * @throws ApiException\CustomValidationException when attempting to change a customer id on an address
      *
      * @return array
@@ -261,7 +266,7 @@ class Address extends Resource
             $data['customer'] = (int) $data['customer'];
 
             if ($data['customer'] <= 0) {
-                throw new ApiException\NotFoundException('Invalid customer id');
+                throw new NotFoundException('Invalid customer id');
             }
 
             if ($customerId !== null && $data['customer'] !== $customerId) {
@@ -271,8 +276,8 @@ class Address extends Resource
             unset($data['customer']);
         }
 
-        $data['country'] = !empty($data['country']) ? $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(Country::class, (int) $data['country']) : null;
-        $data['state'] = !empty($data['state']) ? $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(State::class, $data['state']) : null;
+        $data['country'] = !empty($data['country']) ? $this->getContainer()->get(ModelManager::class)->find(Country::class, (int) $data['country']) : null;
+        $data['state'] = !empty($data['state']) ? $this->getContainer()->get(ModelManager::class)->find(State::class, $data['state']) : null;
 
         return $filter ? array_filter($data) : $data;
     }

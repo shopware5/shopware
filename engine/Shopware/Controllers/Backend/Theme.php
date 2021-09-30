@@ -31,6 +31,9 @@ use Shopware\Models\Shop\Template;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+/**
+ * @extends Shopware_Controllers_Backend_Application<Template>
+ */
 class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Application implements CSRFWhitelistAware
 {
     /**

@@ -27,9 +27,8 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Emotion\Emotion;
-use Shopware\Models\Emotion\Repository;
 use Shopware\Models\Shop\DetachedShop;
-use Shopware\Models\Site\Repository as SiteRepository;
+use Shopware\Models\Shop\Shop;
 use Shopware\Models\Site\Site;
 
 class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
@@ -55,6 +54,9 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     private function getCategoryTree(): array
     {
         $shop = $this->container->get('shop');
+        if (!$shop instanceof Shop) {
+            throw new RuntimeException('Shop is not initialized correctly in DI container');
+        }
         $categoryTree = $this->container->get('modules')->Categories()->sGetWholeCategoryTree(null, null, $shop->getId());
 
         $categoryTranslations = $this->fetchTranslations('category', $this->getTranslationKeys(
@@ -165,7 +167,6 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         $statement = $this->container->get('db')->executeQuery($sql, [$shopId]);
         $keys = $statement->fetchAll(PDO::FETCH_COLUMN);
 
-        /** @var SiteRepository $siteRepository */
         $siteRepository = $this->get(ModelManager::class)->getRepository(Site::class);
 
         $sites = [];
@@ -302,11 +303,12 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     private function getLandingPages(): array
     {
-        /** @var Repository $emotionRepository */
         $emotionRepository = $this->get(ModelManager::class)->getRepository(Emotion::class);
 
-        /** @var DetachedShop $shop */
         $shop = $this->container->get('shop');
+        if (!$shop instanceof Shop) {
+            throw new RuntimeException('Shop is not initialized correctly in DI container');
+        }
 
         $campaigns = $emotionRepository->getCampaignsByShopId($shop->getId())->getQuery()->getArrayResult();
         $translations = $this->fetchTranslations('emotion', array_column($campaigns, 'id'));

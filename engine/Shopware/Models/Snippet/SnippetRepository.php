@@ -28,6 +28,8 @@ use Shopware\Components\Model\ModelRepository;
 
 /**
  * Doctrine Repository class for Snippet model
+ *
+ * @extends ModelRepository<Snippet>
  */
 class SnippetRepository extends ModelRepository
 {

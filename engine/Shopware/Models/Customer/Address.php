@@ -133,9 +133,9 @@ class Address extends ModelEntity
     /**
      * Contains the street name of the address
      *
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="street", type="string", length=255, nullable=false)
+     * @ORM\Column(name="street", type="string", length=255, nullable=true)
      */
     protected $street;
 
@@ -219,7 +219,7 @@ class Address extends ModelEntity
      * @var Customer
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Customer")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected $customer;
 
@@ -236,7 +236,7 @@ class Address extends ModelEntity
      * @var Country
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Country")
-     * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="id", nullable=false)
      */
     protected $country;
 
@@ -270,7 +270,10 @@ class Address extends ModelEntity
      */
     public function setCompany($company)
     {
-        $this->company = $this->cleanup($company);
+        if (\is_string($company)) {
+            $company = $this->cleanup($company);
+        }
+        $this->company = $company;
     }
 
     /**
@@ -290,7 +293,10 @@ class Address extends ModelEntity
      */
     public function setDepartment($department)
     {
-        $this->department = $this->cleanup($department);
+        if (\is_string($department)) {
+            $department = $this->cleanup($department);
+        }
+        $this->department = $department;
     }
 
     /**
@@ -364,9 +370,7 @@ class Address extends ModelEntity
     }
 
     /**
-     * Setter function for the street column property.
-     *
-     * @param string $street
+     * @param string|null $street
      */
     public function setStreet($street)
     {
@@ -374,9 +378,7 @@ class Address extends ModelEntity
     }
 
     /**
-     * Getter function for the street column property.
-     *
-     * @return string
+     * @return string|null
      */
     public function getStreet()
     {
@@ -430,7 +432,10 @@ class Address extends ModelEntity
      */
     public function setPhone($phone)
     {
-        $this->phone = $this->cleanup($phone);
+        if (\is_string($phone)) {
+            $phone = $this->cleanup($phone);
+        }
+        $this->phone = $phone;
     }
 
     /**
@@ -451,7 +456,10 @@ class Address extends ModelEntity
      */
     public function setVatId($vatId)
     {
-        $this->vatId = $this->cleanup($vatId);
+        if (\is_string($vatId)) {
+            $vatId = $this->cleanup($vatId);
+        }
+        $this->vatId = $vatId;
     }
 
     /**
@@ -503,7 +511,10 @@ class Address extends ModelEntity
      */
     public function setAdditionalAddressLine1($additionalAddressLine1)
     {
-        $this->additionalAddressLine1 = $this->cleanup($additionalAddressLine1);
+        if (\is_string($additionalAddressLine1)) {
+            $additionalAddressLine1 = $this->cleanup($additionalAddressLine1);
+        }
+        $this->additionalAddressLine1 = $additionalAddressLine1;
     }
 
     /**
@@ -523,7 +534,10 @@ class Address extends ModelEntity
      */
     public function setAdditionalAddressLine2($additionalAddressLine2)
     {
-        $this->additionalAddressLine2 = $this->cleanup($additionalAddressLine2);
+        if (\is_string($additionalAddressLine2)) {
+            $additionalAddressLine2 = $this->cleanup($additionalAddressLine2);
+        }
+        $this->additionalAddressLine2 = $additionalAddressLine2;
     }
 
     /**
@@ -591,6 +605,9 @@ class Address extends ModelEntity
      */
     public function setTitle($title)
     {
-        $this->title = $this->cleanup($title);
+        if (\is_string($title)) {
+            $title = $this->cleanup($title);
+        }
+        $this->title = $title;
     }
 }

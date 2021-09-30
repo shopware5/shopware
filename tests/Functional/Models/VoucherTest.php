@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,28 +24,22 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Models;
+namespace Shopware\Tests\Functional\Models;
 
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Voucher\Repository;
 use Shopware\Models\Voucher\Voucher;
 
 class VoucherTest extends \Enlight_Components_Test_TestCase
 {
-    /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    protected $em;
+    protected ModelManager $em;
+
+    protected Repository $repo;
 
     /**
-     * @var \Shopware\Models\User\Repository
+     * @var array<string, string|int> voucher dummy data
      */
-    protected $repo;
-
-    /**
-     * Voucher dummy data
-     *
-     * @var array
-     */
-    private $testData = [
+    private array $testData = [
         'description' => 'description',
         'minimumCharge' => '20',
         'modus' => '1',
@@ -91,7 +87,7 @@ class VoucherTest extends \Enlight_Components_Test_TestCase
     /**
      * Test case getter and setter
      */
-    public function testGetterAndSetter()
+    public function testGetterAndSetter(): void
     {
         $voucher = new Voucher();
 
@@ -107,7 +103,7 @@ class VoucherTest extends \Enlight_Components_Test_TestCase
     /**
      * Test case from array
      */
-    public function testFromArrayWorks()
+    public function testFromArrayWorks(): void
     {
         $voucher = new Voucher();
         $voucher->fromArray($this->testData);
@@ -121,7 +117,7 @@ class VoucherTest extends \Enlight_Components_Test_TestCase
     /**
      * Test case voucher should be persisted
      */
-    public function testVoucherShouldBePersisted()
+    public function testVoucherShouldBePersisted(): void
     {
         $voucher = new Voucher();
         $voucher->fromArray($this->testData);

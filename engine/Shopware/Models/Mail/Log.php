@@ -51,9 +51,9 @@ class Log extends ModelEntity
     protected $id;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="subject", type="text")
+     * @ORM\Column(name="subject", type="text", nullable=true)
      */
     protected $subject;
 
@@ -70,8 +70,8 @@ class Log extends ModelEntity
      * @ORM\ManyToMany(targetEntity="Contact", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
      * @ORM\JoinTable(
      *     name="s_mail_log_recipient",
-     *     joinColumns={@ORM\JoinColumn(name="log_id", referencedColumnName="id", onDelete="CASCADE")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")}
+     *     joinColumns={@ORM\JoinColumn(name="log_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)}
      * )
      */
     protected $recipients;
@@ -79,26 +79,26 @@ class Log extends ModelEntity
     /**
      * @var DateTimeInterface
      *
-     * @ORM\Column(name="sent_at", type="datetime")
+     * @ORM\Column(name="sent_at", type="datetime", nullable=false)
      */
     protected $sentAt;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="content_html", type="text", nullable=true)
      */
     protected $contentHtml;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="content_text", type="text", nullable=true)
      */
     protected $contentText;
 
     /**
-     * @var Mail
+     * @var Mail|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Mail\Mail")
      */

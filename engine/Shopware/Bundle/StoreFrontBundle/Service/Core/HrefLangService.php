@@ -29,6 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\HrefLangServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\HrefLang;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\RouterInterface;
@@ -209,7 +210,12 @@ class HrefLangService implements HrefLangServiceInterface
 
     private function getDetachedShop(int $languageShopId): ShopModel
     {
-        return $this->modelManager->getRepository(ShopModel::class)->getById($languageShopId);
+        $shopModel = $this->modelManager->getRepository(ShopModel::class)->getById($languageShopId);
+        if ($shopModel === null) {
+            throw new ModelNotFoundException(ShopModel::class, $languageShopId);
+        }
+
+        return $shopModel;
     }
 
     private function isUrlHome(array $parameters): bool

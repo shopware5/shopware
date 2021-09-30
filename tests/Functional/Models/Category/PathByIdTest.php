@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,16 +24,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Models\Category;
+namespace Shopware\Tests\Functional\Models\Category;
+
+use Shopware\Models\Category\Category;
+use Shopware\Models\Category\Repository;
 
 class PathByIdTest extends \Enlight_Components_Test_TestCase
 {
-    /**
-     * @var \Shopware\Models\Category\Repository
-     */
-    protected $repo;
+    protected ?Repository $repo = null;
 
-    public function simpleNameArrayProvider()
+    /**
+     * @return array<array<int|array<int, string>>>
+     */
+    public function simpleNameArrayProvider(): array
     {
         return [
             [1, [1 => 'Root']],
@@ -43,7 +48,10 @@ class PathByIdTest extends \Enlight_Components_Test_TestCase
         ];
     }
 
-    public function simpleIdArrayProvider()
+    /**
+     * @return array<array<int|array<int, int>>>
+     */
+    public function simpleIdArrayProvider(): array
     {
         return [
             [1, [1 => 1]],
@@ -55,7 +63,10 @@ class PathByIdTest extends \Enlight_Components_Test_TestCase
         ];
     }
 
-    public function multiArrayProvider()
+    /**
+     * @return array[]
+     */
+    public function multiArrayProvider(): array
     {
         return [
             [1, [
@@ -80,7 +91,10 @@ class PathByIdTest extends \Enlight_Components_Test_TestCase
         ];
     }
 
-    public function stringPathProvider()
+    /**
+     * @return array<array<string|int>>
+     */
+    public function stringPathProvider(): array
     {
         return [
             [1, 'Root'],
@@ -94,8 +108,10 @@ class PathByIdTest extends \Enlight_Components_Test_TestCase
 
     /**
      * @dataProvider simpleNameArrayProvider
+     *
+     * @param array<int, string> $expectedResult
      */
-    public function testGetPathByIdWithDefaultParameters($categoryId, $expectedResult)
+    public function testGetPathByIdWithDefaultParameters(int $categoryId, array $expectedResult): void
     {
         $result = $this->getRepo()->getPathById($categoryId);
         static::assertEquals($expectedResult, $result);
@@ -103,8 +119,10 @@ class PathByIdTest extends \Enlight_Components_Test_TestCase
 
     /**
      * @dataProvider simpleNameArrayProvider
+     *
+     *                                      @param array<int, string> $expectedResult
      */
-    public function testGetPathByIdWithDefaultNameParameter($categoryId, $expectedResult)
+    public function testGetPathByIdWithDefaultNameParameter(int $categoryId, array $expectedResult): void
     {
         $result = $this->getRepo()->getPathById($categoryId, 'name');
         static::assertEquals($expectedResult, $result);
@@ -112,8 +130,10 @@ class PathByIdTest extends \Enlight_Components_Test_TestCase
 
     /**
      * @dataProvider simpleIdArrayProvider
+     *
+     *                                    @param array<int, int> $expectedResult
      */
-    public function testGetPathByIdWithIdParameter($categoryId, $expectedResult)
+    public function testGetPathByIdWithIdParameter(int $categoryId, array $expectedResult): void
     {
         $result = $this->getRepo()->getPathById($categoryId, 'id');
         static::assertEquals($expectedResult, $result);
@@ -121,8 +141,10 @@ class PathByIdTest extends \Enlight_Components_Test_TestCase
 
     /**
      * @dataProvider multiArrayProvider
+     *
+     *                                 @param array<int, array> $expectedResult
      */
-    public function testGetPathByIdShouldReturnArray($categoryId, $expectedResult)
+    public function testGetPathByIdShouldReturnArray(int $categoryId, array $expectedResult): void
     {
         $result = $this->getRepo()->getPathById($categoryId, ['id', 'name', 'blog']);
         static::assertEquals($expectedResult, $result);
@@ -131,7 +153,7 @@ class PathByIdTest extends \Enlight_Components_Test_TestCase
     /**
      * @dataProvider stringPathProvider
      */
-    public function testGetPathByIdShouldReturnPathAsString($categoryId, $expectedResult)
+    public function testGetPathByIdShouldReturnPathAsString(int $categoryId, string $expectedResult): void
     {
         $result = $this->getRepo()->getPathById($categoryId, 'name', ' > ');
         static::assertEquals($expectedResult, $result);
@@ -140,7 +162,7 @@ class PathByIdTest extends \Enlight_Components_Test_TestCase
     /**
      * @dataProvider stringPathProvider
      */
-    public function testGetPathByIdShouldReturnPathAsStringWithCustomSeparator($categoryId, $expectedResult)
+    public function testGetPathByIdShouldReturnPathAsStringWithCustomSeparator(int $categoryId, string $expectedResult): void
     {
         $expectedResult = str_replace(' > ', '|', $expectedResult);
 
@@ -148,13 +170,10 @@ class PathByIdTest extends \Enlight_Components_Test_TestCase
         static::assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @return \Shopware\Models\Category\Repository
-     */
-    protected function getRepo()
+    protected function getRepo(): Repository
     {
         if ($this->repo === null) {
-            $this->repo = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
+            $this->repo = Shopware()->Models()->getRepository(Category::class);
         }
 
         return $this->repo;

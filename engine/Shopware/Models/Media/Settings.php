@@ -47,10 +47,10 @@ use Shopware\Components\Model\ModelEntity;
 class Settings extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Media\Album
+     * @var Album
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Media\Album", inversedBy="settings")
-     * @ORM\JoinColumn(name="albumID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="albumID", referencedColumnName="id", nullable=false)
      */
     protected $album;
 
@@ -104,27 +104,27 @@ class Settings extends ModelEntity
     /**
      * Generate high dpi thumbnails
      *
-     * @var bool
+     * @var bool|null
      *
-     * @ORM\Column(name="thumbnail_high_dpi", type="boolean", nullable=false)
+     * @ORM\Column(name="thumbnail_high_dpi", type="boolean", nullable=true)
      */
     private $thumbnailHighDpi;
 
     /**
      * Thumbnail quality
      *
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(name="thumbnail_quality", type="integer", nullable=false)
+     * @ORM\Column(name="thumbnail_quality", type="integer", nullable=true)
      */
     private $thumbnailQuality;
 
     /**
      * High DPI thumbnails quality
      *
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(name="thumbnail_high_dpi_quality", type="integer", nullable=false)
+     * @ORM\Column(name="thumbnail_high_dpi_quality", type="integer", nullable=true)
      */
     private $thumbnailHighDpiQuality;
 
@@ -133,7 +133,7 @@ class Settings extends ModelEntity
      *
      * @param int $createThumbnails
      *
-     * @return \Shopware\Models\Media\Settings
+     * @return Settings
      */
     public function setCreateThumbnails($createThumbnails)
     {
@@ -157,7 +157,7 @@ class Settings extends ModelEntity
      *
      * @param string $icon
      *
-     * @return \Shopware\Models\Media\Settings
+     * @return Settings
      */
     public function setIcon($icon)
     {
@@ -191,7 +191,7 @@ class Settings extends ModelEntity
      *
      * @param string|array $thumbnailSize
      *
-     * @return \Shopware\Models\Media\Settings
+     * @return Settings
      */
     public function setThumbnailSize($thumbnailSize)
     {
@@ -221,7 +221,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Media\Album
+     * @return Album
      */
     public function getAlbum()
     {
@@ -229,7 +229,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Media\Album $album
+     * @param Album $album
      */
     public function setAlbum($album)
     {
@@ -237,7 +237,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getThumbnailHighDpiQuality()
     {
@@ -245,7 +245,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @param int $thumbnailHighDpiQuality
+     * @param int|null $thumbnailHighDpiQuality
      */
     public function setThumbnailHighDpiQuality($thumbnailHighDpiQuality)
     {
@@ -253,7 +253,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isThumbnailHighDpi()
     {
@@ -261,7 +261,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @param bool $thumbnailHighDpi
+     * @param bool|null $thumbnailHighDpi
      */
     public function setThumbnailHighDpi($thumbnailHighDpi)
     {
@@ -269,7 +269,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getThumbnailQuality()
     {
@@ -277,7 +277,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @param int $thumbnailQuality
+     * @param int|null $thumbnailQuality
      */
     public function setThumbnailQuality($thumbnailQuality)
     {

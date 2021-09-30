@@ -180,7 +180,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $this->View()->assign(['success' => false, 'errorMsg' => 'No ID given to delete']);
         }
         try {
-            $costsModel = Shopware()->Models()->find(ShippingCost::class, (int) $costsId);
+            $costsModel = $this->get('models')->find(ShippingCost::class, (int) $costsId);
             $this->getManager()->remove($costsModel);
             $this->getManager()->flush();
             $this->View()->assign(['success' => true]);
@@ -293,7 +293,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             return;
         }
 
-        $dispatch = Shopware()->Models()->find(Dispatch::class, $dispatchId);
+        $dispatch = $this->get('models')->find(Dispatch::class, $dispatchId);
         if (!($dispatch instanceof Dispatch)) {
             $this->View()->assign(['success' => false, 'errorMsg' => 'No valid dispatch ID.']);
 
@@ -390,7 +390,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
      */
     protected function getManager()
     {
-        return Shopware()->Models();
+        return $this->get('models');
     }
 
     /**
@@ -400,7 +400,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
      */
     protected function getRepository()
     {
-        return Shopware()->Models()->getRepository(Dispatch::class);
+        return $this->get('models')->getRepository(Dispatch::class);
     }
 
     /**

@@ -25,7 +25,10 @@
 namespace Shopware\Models\Newsletter\ContainerType;
 
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\LazyFetchModelEntity;
+use Shopware\Models\Article\Detail;
+use Shopware\Models\Newsletter\Container;
 
 /**
  * Shopware text model represents a text container type.
@@ -36,24 +39,22 @@ use Shopware\Components\Model\LazyFetchModelEntity;
 class Article extends LazyFetchModelEntity
 {
     /**
-     * OWNING SIDE
      * Owning side of relation between container type 'article' and parent container
      *
-     * @var \Shopware\Models\Newsletter\Container|null
+     * @var Container
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="articles")
-     * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="parentID", referencedColumnName="id", nullable=false)
      */
     protected $container;
 
     /**
-     * OWNING SIDE
-     * Owning side of the uni-direction relation between article-Container and article ordernumber
+     * Owning side of the uni-direction relation between article-Container and article order number
      *
-     * @var \Shopware\Models\Article\Detail
+     * @var Detail
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
-     * @ORM\JoinColumn(name="articleordernumber", referencedColumnName="ordernumber")
+     * @ORM\JoinColumn(name="articleordernumber", referencedColumnName="ordernumber", nullable=false)
      */
     protected $articleDetail;
 
@@ -110,7 +111,7 @@ class Article extends LazyFetchModelEntity
      *
      * @var int
      *
-     * @ORM\Column(name="position", type="string", length=255, nullable=false)
+     * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position;
 
@@ -123,7 +124,7 @@ class Article extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Newsletter\Container $container
+     * @param Container $container
      */
     public function setContainer($container)
     {
@@ -132,7 +133,7 @@ class Article extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\Container|null
+     * @return Container
      */
     public function getContainer()
     {
@@ -188,7 +189,7 @@ class Article extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Detail $articleDetail
+     * @param Detail $articleDetail
      */
     public function setArticleDetail($articleDetail)
     {
@@ -196,13 +197,15 @@ class Article extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function getArticleDetail()
     {
-        /** @var \Shopware\Models\Article\Detail $detail */
-        $detail = $this->fetchLazy($this->articleDetail, ['number' => $this->number]);
+        $productVariant = $this->fetchLazy($this->articleDetail, ['number' => $this->number]);
+        if (!$productVariant instanceof Detail) {
+            throw new ModelNotFoundException(Detail::class, $this->number, 'number');
+        }
 
-        return $detail;
+        return $productVariant;
     }
 }

@@ -1487,7 +1487,7 @@ class Repository
      *
      * @param string|null $column
      *
-     * @return $this
+     * @return Repository
      */
     private function addDateRangeCondition(DBALQueryBuilder $builder, \DateTimeInterface $from = null, \DateTimeInterface $to = null, $column = null)
     {

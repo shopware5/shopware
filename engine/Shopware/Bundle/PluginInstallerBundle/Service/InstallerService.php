@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Plugin\ConfigReader;
 use Shopware\Components\Plugin\ConfigWriter;
 use Shopware\Components\Plugin\Context\ActivateContext;
@@ -34,22 +35,18 @@ use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Models\Plugin\Plugin;
+use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
 
 class InstallerService
 {
     /**
-     * @var ModelManager
-     */
-    private $em;
-
-    /**
-     * @var \Shopware\Components\Model\ModelRepository
+     * @var ModelRepository<Plugin>
      */
     private $pluginRepository;
 
     /**
-     * @var \Shopware\Models\Shop\Repository
+     * @var ShopRepository
      */
     private $shopRepository;
 
@@ -86,13 +83,12 @@ class InstallerService
         ConfigReader $configReader,
         ShopwareReleaseStruct $release
     ) {
-        $this->em = $em;
         $this->pluginInstaller = $pluginInstaller;
         $this->legacyPluginInstaller = $legacyPluginInstaller;
         $this->configWriter = $configWriter;
         $this->configReader = $configReader;
-        $this->pluginRepository = $this->em->getRepository(Plugin::class);
-        $this->shopRepository = $this->em->getRepository(Shop::class);
+        $this->pluginRepository = $em->getRepository(Plugin::class);
+        $this->shopRepository = $em->getRepository(Shop::class);
         $this->release = $release;
     }
 

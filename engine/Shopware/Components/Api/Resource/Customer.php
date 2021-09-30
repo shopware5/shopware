@@ -47,7 +47,6 @@ use Shopware\Models\Customer\PaymentData;
 use Shopware\Models\Customer\PriceGroup;
 use Shopware\Models\Customer\Repository as CustomerRepository;
 use Shopware\Models\Payment\Payment;
-use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop as ShopModel;
 
 /**
@@ -491,7 +490,6 @@ class Customer extends Resource
      */
     private function setupContext($shopId = null)
     {
-        /** @var ShopRepository $shopRepository */
         $shopRepository = $this->getContainer()->get(ModelManager::class)->getRepository(ShopModel::class);
 
         if ($shopId) {

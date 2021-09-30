@@ -77,9 +77,9 @@ class ModelEntityTest extends TestCase
         static::assertEquals('bar', $article->getDescription());
     }
 
-    public function testCanAssignOneToOne()
+    public function testCanAssignOneToOne(): void
     {
-        $article = new Article();
+        $product = new Article();
 
         $data = [
             'configuratorTemplate' => [
@@ -88,18 +88,19 @@ class ModelEntityTest extends TestCase
             ],
         ];
 
-        $article->fromArray($data);
+        $product->fromArray($data);
 
-        static::assertEquals(true, $article->getConfiguratorTemplate()->getActive());
-        static::assertEquals('baz', $article->getConfiguratorTemplate()->getEan());
+        static::assertNotNull($product->getConfiguratorTemplate());
+        static::assertEquals(true, $product->getConfiguratorTemplate()->getActive());
+        static::assertEquals('baz', $product->getConfiguratorTemplate()->getEan());
 
         // configuratorTemplate is the owning side of relation, so article has to be set
-        static::assertSame($article, $article->getConfiguratorTemplate()->getArticle());
+        static::assertSame($product, $product->getConfiguratorTemplate()->getArticle());
     }
 
-    public function testLoopsArePreventedOneToOne()
+    public function testLoopsArePreventedOneToOne(): void
     {
-        $article = new Article();
+        $product = new Article();
 
         $data = [
             'name' => 'foo',
@@ -111,14 +112,15 @@ class ModelEntityTest extends TestCase
             ],
         ];
 
-        $article->fromArray($data);
+        $product->fromArray($data);
 
-        static::assertSame($article, $article->getConfiguratorTemplate()->getArticle());
+        static::assertNotNull($product->getConfiguratorTemplate());
+        static::assertSame($product, $product->getConfiguratorTemplate()->getArticle());
     }
 
-    public function testCanAssignOneToOneByInstance()
+    public function testCanAssignOneToOneByInstance(): void
     {
-        $article = new Article();
+        $product = new Article();
 
         $tax = new Tax();
         $tax->setName('foobar');
@@ -131,20 +133,20 @@ class ModelEntityTest extends TestCase
             'configuratorTemplate' => $template,
         ];
 
-        $article->fromArray($data);
+        $product->fromArray($data);
 
-        static::assertSame($tax, $article->getTax());
-        static::assertSame($template, $article->getConfiguratorTemplate());
+        static::assertSame($tax, $product->getTax());
+        static::assertSame($template, $product->getConfiguratorTemplate());
     }
 
-    public function testCanReAssignOneToOne()
+    public function testCanReAssignOneToOne(): void
     {
-        $article = new Article();
+        $product = new Article();
 
         $template = new Template();
         $template->setEan('foo');
 
-        $article->setConfiguratorTemplate($template);
+        $product->setConfiguratorTemplate($template);
 
         $data = [
             'configuratorTemplate' => [
@@ -152,50 +154,52 @@ class ModelEntityTest extends TestCase
             ],
         ];
 
-        $article->fromArray($data);
+        $product->fromArray($data);
 
-        static::assertEquals(true, $article->getConfiguratorTemplate()->getActive());
-        static::assertEquals('foo', $article->getConfiguratorTemplate()->getEan());
+        static::assertNotNull($product->getConfiguratorTemplate());
+        static::assertEquals(true, $product->getConfiguratorTemplate()->getActive());
+        static::assertEquals('foo', $product->getConfiguratorTemplate()->getEan());
     }
 
-    public function testCanEmptyArrayDoesNotOverrideOneToOne()
+    public function testCanEmptyArrayDoesNotOverrideOneToOne(): void
     {
-        $article = new Article();
+        $product = new Article();
 
         $template = new Template();
         $template->setEan('foo');
         $template->setActive(true);
 
-        $article->setConfiguratorTemplate($template);
+        $product->setConfiguratorTemplate($template);
 
         $data = [
             'configuratorTemplate' => [],
         ];
 
-        $article->fromArray($data);
+        $product->fromArray($data);
 
-        static::assertEquals(true, $article->getConfiguratorTemplate()->getActive());
-        static::assertEquals('foo', $article->getConfiguratorTemplate()->getEan());
+        static::assertNotNull($product->getConfiguratorTemplate());
+        static::assertEquals(true, $product->getConfiguratorTemplate()->getActive());
+        static::assertEquals('foo', $product->getConfiguratorTemplate()->getEan());
     }
 
-    public function testCanRemoveOneToOne()
+    public function testCanRemoveOneToOne(): void
     {
-        $article = new Article();
-        $article->setName('Dummy');
+        $product = new Article();
+        $product->setName('Dummy');
 
         $template = new Template();
         $template->setEan('foo');
 
-        $article->setConfiguratorTemplate($template);
-        $template->setArticle($article);
+        $product->setConfiguratorTemplate($template);
+        $template->setArticle($product);
 
         $data = [
             'configuratorTemplate' => null,
         ];
 
-        $article->fromArray($data);
+        $product->fromArray($data);
 
-        static::assertNull($article->getConfiguratorTemplate());
+        static::assertNull($product->getConfiguratorTemplate());
         static::assertNull($template->getArticle());
     }
 

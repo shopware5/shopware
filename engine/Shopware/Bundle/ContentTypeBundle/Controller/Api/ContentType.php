@@ -42,7 +42,6 @@ class ContentType extends \Shopware_Controllers_Api_Rest
     {
         $this->repository = $repository;
 
-        /** @var \Shopware\Models\Shop\Repository $shopRepository */
         $shopRepository = $manager->getRepository(Shop::class);
         $shopRegistrationService->registerShop($shopRepository->getDefault());
     }

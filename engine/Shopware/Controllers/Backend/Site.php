@@ -386,7 +386,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     private function getSiteRepository()
     {
         if ($this->siteRepository === null) {
-            $this->siteRepository = Shopware()->Models()->getRepository(Site::class);
+            $this->siteRepository = $this->get('models')->getRepository(Site::class);
         }
 
         return $this->siteRepository;
@@ -400,7 +400,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = $this->get('models');
         }
 
         return $this->manager;

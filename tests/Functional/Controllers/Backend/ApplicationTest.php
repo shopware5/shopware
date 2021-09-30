@@ -27,10 +27,14 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
+use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models\Customer\Address;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 class ApplicationTest extends TestCase
 {
+    use ContainerTrait;
+
     /**
      * @dataProvider formatSearchValueTestDataProvider
      */
@@ -52,6 +56,8 @@ class ApplicationTest extends TestCase
     public function testGetSearchAssociationQueryDoesNotContainUnnecessaryParameters(?string $search, ?int $id): void
     {
         $controller = new ApplicationControllerDerivateMock();
+        static::assertInstanceOf(Container::class, $this->getContainer());
+        $controller->setContainer($this->getContainer());
 
         $getAssociationModel = \Closure::bind(function (string $association): string {
             return $this->getAssociatedModelByProperty($this->model, $association);
@@ -129,10 +135,19 @@ class ApplicationTest extends TestCase
     }
 }
 
+/**
+ * @extends \Shopware_Controllers_Backend_Application<Address>
+ */
 class ApplicationControllerMock extends \Shopware_Controllers_Backend_Application
 {
+    protected $model = Address::class;
+
+    protected $alias = 'address';
 }
 
+/**
+ * @extends \Shopware_Controllers_Backend_Application<Address>
+ */
 class ApplicationControllerDerivateMock extends \Shopware_Controllers_Backend_Application
 {
     protected $model = Address::class;

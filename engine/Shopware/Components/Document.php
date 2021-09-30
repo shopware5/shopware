@@ -27,11 +27,13 @@ use Mpdf\Mpdf;
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 use Shopware\Bundle\OrderBundle\Service\OrderListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Components\Theme\PathResolver;
-use Shopware\Models\Attribute\Document;
+use Shopware\Models\Attribute\Document as DocumentAttribute;
+use Shopware\Models\Order\Document\Document;
 use Shopware\Models\Shop\Currency;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
@@ -641,10 +643,17 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $repository = Shopware()->Models()->getRepository(Shop::class);
         // "language" actually refers to a language-shop and not to a locale
         $shop = $repository->getById($this->_order->order->language);
+        if ($shop === null) {
+            throw new ModelNotFoundException(Shop::class, $this->_order->order->language);
+        }
 
         if (!empty($this->_order->order->currencyID)) {
             $repository = Shopware()->Models()->getRepository(Currency::class);
-            $shop->setCurrency($repository->find($this->_order->order->currencyID));
+            $currency = $repository->find($this->_order->order->currencyID);
+            if ($currency === null) {
+                throw new ModelNotFoundException(Currency::class, $this->_order->order->currencyID);
+            }
+            $shop->setCurrency($currency);
         }
 
         Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerResources($shop);
@@ -711,23 +720,26 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
             if (!empty($this->_config['attributes'])) {
                 // Get the updated document
-                $updatedDocument = Shopware()->Models()->getRepository(\Shopware\Models\Order\Document\Document::class)->findOneBy([
+                $updatedDocument = Shopware()->Models()->getRepository(Document::class)->findOneBy([
                     'type' => $typID,
                     'customerId' => $this->_order->userID,
                     'orderId' => $this->_order->id,
                 ]);
                 // Check its attributes
                 if ($updatedDocument->getAttribute() === null) {
-                    // Create a new attributes entity for the document
-                    $documentAttributes = new Document();
-                    $updatedDocument->setAttribute($documentAttributes);
+                    // Create a new attribute entity for the document
+                    $updatedDocument->setAttribute(new DocumentAttribute());
                     // Persist the document
                     Shopware()->Models()->flush($updatedDocument);
                 }
                 // Save all given attributes
-                $updatedDocument->getAttribute()->fromArray($this->_config['attributes']);
+                $documentAttributes = $updatedDocument->getAttribute();
+                if (!$documentAttributes instanceof DocumentAttribute) {
+                    throw new RuntimeException('Document attributes are not set correctly');
+                }
+                $documentAttributes->fromArray($this->_config['attributes']);
                 // Persist the attributes
-                Shopware()->Models()->flush($updatedDocument->getAttribute());
+                Shopware()->Models()->flush($documentAttributes);
             }
 
             $rowID = $checkForExistingDocument['id'];
@@ -758,11 +770,14 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
             // Add an entry in s_order_documents_attributes for the created document
             // containing all values found in the 'attributes' element of '_config'
-            $createdDocument = Shopware()->Models()->getRepository('\Shopware\Models\Order\Document\Document')->findOneById($rowID);
-            // Create a new attributes entity for the document
-            $documentAttributes = new Document();
+            $createdDocument = Shopware()->Models()->getRepository(Document::class)->findOneById($rowID);
+            // Create a new attribute entity for the document
+            $documentAttributes = new DocumentAttribute();
             $createdDocument->setAttribute($documentAttributes);
             if (!empty($this->_config['attributes'])) {
+                if (!$createdDocument->getAttribute() instanceof DocumentAttribute) {
+                    throw new RuntimeException('Document attributes are not set correctly');
+                }
                 // Save all given attributes
                 $createdDocument->getAttribute()->fromArray($this->_config['attributes']);
             }

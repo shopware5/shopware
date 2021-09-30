@@ -26,6 +26,7 @@ namespace Shopware\Models\Blog;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Standard Code Model Entity
@@ -45,9 +46,9 @@ class Comment extends ModelEntity
     private $id;
 
     /**
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(name="blog_id", type="integer", nullable=false)
+     * @ORM\Column(name="blog_id", type="integer", nullable=true)
      */
     private $blogId;
 
@@ -98,12 +99,12 @@ class Comment extends ModelEntity
     /**
      * @var float
      *
-     * @ORM\Column(name="points", type="decimal", nullable=false)
+     * @ORM\Column(name="points", type="float", nullable=false)
      */
     private $points;
 
     /**
-     * @var \Shopware\Models\Shop\Shop|null
+     * @var Shop|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
@@ -118,7 +119,7 @@ class Comment extends ModelEntity
     private $shopId;
 
     /**
-     * @var \Shopware\Models\Blog\Blog
+     * @var Blog|null
      *
      * @ORM\ManyToOne(targetEntity="Blog", inversedBy="comments")
      * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
@@ -233,7 +234,7 @@ class Comment extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Blog\Blog $blog
+     * @param Blog|null $blog
      */
     public function setBlog($blog)
     {
@@ -241,7 +242,7 @@ class Comment extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Blog\Blog
+     * @return Blog|null
      */
     public function getBlog()
     {
@@ -265,7 +266,7 @@ class Comment extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop|null
+     * @return Shop|null
      */
     public function getShop()
     {
@@ -273,7 +274,7 @@ class Comment extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Shop $shop
+     * @param Shop $shop
      */
     public function setShop($shop)
     {

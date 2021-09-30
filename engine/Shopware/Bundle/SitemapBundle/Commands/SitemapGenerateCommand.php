@@ -28,8 +28,8 @@ use Shopware\Bundle\SitemapBundle\Exception\AlreadyLockedException;
 use Shopware\Bundle\SitemapBundle\Service\SitemapExporter;
 use Shopware\Bundle\SitemapBundle\Service\SitemapLock;
 use Shopware\Commands\ShopwareCommand;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -65,19 +65,17 @@ class SitemapGenerateCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Repository $repository */
         $repository = $this->container->get(ModelManager::class)->getRepository(Shop::class);
 
         $shops = null;
-        $shopId = $input->getOption('shopId');
+        $shopId = (int) $input->getOption('shopId');
 
-        if ($shopId) {
-            /** @var Shop|null $shop */
-            $shop = $repository->getById((int) $shopId);
-            if ($shop) {
+        if ($shopId > 0) {
+            $shop = $repository->getById($shopId);
+            if ($shop instanceof Shop) {
                 $shops = [$shop];
             } else {
-                throw new \RuntimeException(sprintf('Could not found a shop with id %d', $shopId));
+                throw new ModelNotFoundException(Shop::class, $shopId);
             }
         }
 

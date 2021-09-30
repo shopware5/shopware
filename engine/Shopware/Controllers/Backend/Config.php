@@ -47,6 +47,7 @@ use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Price\Group as PriceGroup;
 use Shopware\Models\Shop\Currency;
 use Shopware\Models\Shop\Locale;
+use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 use Shopware\Models\Site\Group as SiteGroup;
@@ -157,9 +158,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     {
         $repository = $this->getRepository('form');
 
-        $user = Shopware()->Container()->get('auth')->getIdentity();
         /** @var Locale $locale */
-        $locale = $user->locale;
+        $locale = Shopware()->Container()->get('auth')->getIdentity()->locale;
         $language = $locale->toString();
 
         $fallback = $this->getFallbackLocaleId($locale->getId());
@@ -242,6 +242,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     public function saveFormAction()
     {
         $shopRepository = $this->getRepository('shop');
+        if (!$shopRepository instanceof ShopRepository) {
+            throw new RuntimeException(sprintf('%s needed', ShopRepository::class));
+        }
         $elements = $this->Request()->getParam('elements');
 
         $defaultShop = $shopRepository->getDefault();
@@ -261,13 +264,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         /** @var string $name */
         $name = $this->Request()->get('_repositoryClass');
 
-        $repository = $this->getRepository($name);
-
-        $builder = null;
-
-        if ($repository !== null) {
-            $builder = $repository->createQueryBuilder($name);
-        }
+        /** @var QueryBuilder $builder */
+        $builder = $this->getRepository($name)->createQueryBuilder($name);
 
         switch ($name) {
             case 'shop':
@@ -317,19 +315,14 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 break;
         }
 
-        $data = [];
-        $total = null;
+        $builder->addFilter((array) $this->Request()->getParam('filter', []))
+            ->addOrderBy((array) $this->Request()->getParam('sort', []));
+        $builder->setFirstResult($this->Request()->getParam('start'))
+            ->setMaxResults($this->Request()->getParam('limit'));
 
-        if ($builder !== null) {
-            $builder->addFilter((array) $this->Request()->getParam('filter', []))
-                ->addOrderBy((array) $this->Request()->getParam('sort', []));
-            $builder->setFirstResult($this->Request()->getParam('start'))
-                ->setMaxResults($this->Request()->getParam('limit'));
-
-            $query = $builder->getQuery();
-            $total = Shopware()->Models()->getQueryCount($query);
-            $data = $query->getArrayResult();
-        }
+        $query = $builder->getQuery();
+        $total = $this->get('models')->getQueryCount($query);
+        $data = $query->getArrayResult();
 
         if (!empty($data) && $name === 'locale') {
             $data = $this->getSnippetsForLocales($data);
@@ -466,6 +459,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     public function getValuesAction()
     {
         $name = $this->Request()->get('_repositoryClass');
+        /** @var QueryBuilder $builder */
         $builder = $this->getRepository($name)->createQueryBuilder($name);
 
         switch ($name) {
@@ -529,8 +523,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $builder->addFilter((array) $this->Request()->getParam('filter', []));
 
-        $query = $builder->getQuery();
-        $data = $query->getArrayResult();
+        $data = $builder->getQuery()->getArrayResult();
         $total = \count($data);
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
@@ -541,7 +534,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function saveValuesAction()
     {
-        $manager = Shopware()->Models();
+        $manager = $this->get('models');
         $name = $this->Request()->get('_repositoryClass');
         $repository = $this->getRepository($name);
 
@@ -850,7 +843,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function deleteValuesAction()
     {
-        $manager = Shopware()->Models();
+        $manager = $this->get('models');
         $name = $this->Request()->get('_repositoryClass');
         $repository = $this->getRepository($name);
 
@@ -993,8 +986,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 default:
                     throw new RuntimeException(sprintf('Repository with name "%s" not found', $name));
             }
-            $repo = Shopware()->Models()->getRepository($repository);
-            self::$repositories[$name] = $repo;
+            self::$repositories[$name] = $this->get('models')->getRepository($repository);
         }
 
         return self::$repositories[$name];
@@ -1289,7 +1281,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
                 // check existence of each locale
                 foreach ($value as $localeId) {
-                    $locale = Shopware()->Models()->find(Locale::class, $localeId);
+                    $locale = $this->get('models')->find(Locale::class, $localeId);
                     if ($locale === null) {
                         return false;
                     }
@@ -1401,13 +1393,13 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     {
         $shopRepository = $this->getRepository('shop');
 
-        $element = Shopware()->Models()->find(ConfigElement::class, $elementData['id']);
+        $element = $this->get('models')->find(ConfigElement::class, $elementData['id']);
         if (!$element instanceof ConfigElement) {
             throw new ModelNotFoundException(ConfigElement::class, $elementData['id']);
         }
 
         $removedValues = [];
-        $modelManager = Shopware()->Models();
+        $modelManager = $this->get('models');
         foreach ($element->getValues() as $value) {
             $modelManager->remove($value);
             $removedValues[] = $value;

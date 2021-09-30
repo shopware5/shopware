@@ -74,7 +74,7 @@ class Installer
     private $snippetWriter;
 
     /**
-     * @var ModelRepository
+     * @var ModelRepository<Template>
      */
     private $repository;
 

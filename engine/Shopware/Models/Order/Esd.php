@@ -26,6 +26,8 @@ namespace Shopware\Models\Order;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\EsdSerial;
+use Shopware\Models\Customer\Customer;
 
 /**
  * @ORM\Entity()
@@ -37,38 +39,38 @@ class Esd extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\EsdSerial
+     * @var EsdSerial
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\EsdSerial", inversedBy="esdOrder")
-     * @ORM\JoinColumn(name="serialID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="serialID", referencedColumnName="id", nullable=false)
      */
     protected $serial;
 
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Order\Order
+     * @var Order
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Order", inversedBy="esd")
-     * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="orderID", referencedColumnName="id", nullable=false)
      */
     protected $order;
 
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Order\Detail
+     * @var Detail
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Detail", inversedBy="esd")
-     * @ORM\JoinColumn(name="orderdetailsID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="orderdetailsID", referencedColumnName="id", nullable=false)
      */
     protected $orderDetail;
 
     /**
-     * @var \Shopware\Models\Customer\Customer
+     * @var Customer
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer")
-     * @ORM\JoinColumn(name="userID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="userID", referencedColumnName="id", nullable=false)
      */
     protected $customer;
 
@@ -97,7 +99,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Order\Order $order
+     * @param Order $order
      */
     public function setOrder($order)
     {
@@ -113,7 +115,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Order\Detail $orderDetail
+     * @param Detail $orderDetail
      */
     public function setOrderDetail($orderDetail)
     {

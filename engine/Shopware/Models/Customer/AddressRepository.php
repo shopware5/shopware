@@ -29,6 +29,8 @@ use Shopware\Components\Model\ModelRepository;
 
 /**
  * Repository for the address model (Shopware\Models\Customer\Address).
+ *
+ * @extends ModelRepository<Address>
  */
 class AddressRepository extends ModelRepository
 {

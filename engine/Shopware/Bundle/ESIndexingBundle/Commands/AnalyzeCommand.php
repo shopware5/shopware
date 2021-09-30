@@ -27,8 +27,10 @@ namespace Shopware\Bundle\ESIndexingBundle\Commands;
 use Elasticsearch\Client;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
+use Shopware\Bundle\ESIndexingBundle\IndexFactory;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
 use Shopware\Commands\ShopwareCommand;
-use Shopware\Models\Shop\Repository;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
@@ -98,8 +100,7 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
         if ($argumentName === 'shopId') {
-            /** @var Repository $shopRepository */
-            $shopRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
+            $shopRepository = $this->getContainer()->get(ModelManager::class)->getRepository(Shop::class);
             $queryBuilder = $shopRepository->createQueryBuilder('shop');
 
             if (is_numeric($context->getCurrentWord())) {
@@ -117,7 +118,7 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
 
         if ($argumentName === 'analyzer') {
             /** @var Client $client */
-            $client = $this->container->get(\Elasticsearch\Client::class);
+            $client = $this->container->get(Client::class);
 
             $recursive = new RecursiveIteratorIterator(
                 new RecursiveArrayIterator($client->indices()->getMapping()),
@@ -162,9 +163,9 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
         $query = $input->getArgument('query');
         $analyzer = $input->getArgument('analyzer');
 
-        $shop = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface::class)->get($shopId);
-        $client = $this->container->get(\Elasticsearch\Client::class);
-        $index = $this->container->get(\Shopware\Bundle\ESIndexingBundle\IndexFactory::class)->createShopIndex($shop, $type);
+        $shop = $this->container->get(ShopGatewayInterface::class)->get($shopId);
+        $client = $this->container->get(Client::class);
+        $index = $this->container->get(IndexFactory::class)->createShopIndex($shop, $type);
 
         $analyzed = $client->indices()->analyze([
             'index' => $index->getName(),

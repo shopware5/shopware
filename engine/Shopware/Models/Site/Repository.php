@@ -31,6 +31,8 @@ use Shopware\Components\Model\QueryBuilder;
  * Repository for the site model (Shopware\Models\Site\Site).
  *
  * The premium model repository is responsible for loading site data.
+ *
+ * @extends ModelRepository<Site>
  */
 class Repository extends ModelRepository
 {

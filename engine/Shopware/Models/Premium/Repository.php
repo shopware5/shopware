@@ -25,6 +25,7 @@
 namespace Shopware\Models\Premium;
 
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository for the premium model (Shopware\Models\Premium\Premium).
@@ -32,21 +33,24 @@ use Shopware\Components\Model\ModelRepository;
  * The premium model repository is responsible to load all premium articles.
  * It supports the standard functions like findAll or findBy and extends the standard repository for
  * some specific functions to return the model data as array.
+ *
+ * @extends ModelRepository<Premium>
  */
 class Repository extends ModelRepository
 {
     /**
      * Function to get all premium-articles and the subshop-name and the article-name
      *
-     * @param int         $start
-     * @param int         $limit
-     * @param string      $order
-     * @param string|null $filterValue
+     * @param int                               $start
+     * @param int                               $limit
+     * @param array<int, array<string, string>> $order
+     * @param string|null                       $filterValue
      *
      * @return \Doctrine\ORM\Query
      */
     public function getBackendPremiumListQuery($start, $limit, $order, $filterValue = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select([
             'premium.id',

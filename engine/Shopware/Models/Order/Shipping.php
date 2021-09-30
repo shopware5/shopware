@@ -31,6 +31,7 @@ use Shopware\Models\Attribute\OrderShipping as OrderShippingAttribute;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Customer;
 
 /**
  * The Shopware order shipping model represents the shipping address for a single order.
@@ -89,7 +90,7 @@ class Shipping extends ModelEntity
      * The customer property is the owning side of the association between customer and shipping.
      * The association is joined over the shipping userID and the customer id
      *
-     * @var \Shopware\Models\Customer\Customer|null
+     * @var Customer|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
@@ -103,7 +104,7 @@ class Shipping extends ModelEntity
      * @var Order
      *
      * @ORM\OneToOne(targetEntity="Order", inversedBy="shipping")
-     * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="orderID", referencedColumnName="id", nullable=false)
      */
     protected $order;
 
@@ -111,7 +112,7 @@ class Shipping extends ModelEntity
      * @var Country
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\Country")
-     * @ORM\JoinColumn(name="countryID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="countryID", referencedColumnName="id", nullable=false)
      */
     protected $country;
 
@@ -495,7 +496,7 @@ class Shipping extends ModelEntity
      * the Customer.shipping property (INVERSE SIDE) and the Shipping.customer (OWNING SIDE) property.
      * The customer data is joined over the s_user.id field.
      *
-     * @return \Shopware\Models\Customer\Customer|null
+     * @return Customer|null
      */
     public function getCustomer()
     {
@@ -508,7 +509,7 @@ class Shipping extends ModelEntity
      * the Customer.shipping property (INVERSE SIDE) and the Shipping.customer (OWNING SIDE) property.
      * The customer data is joined over the s_user.id field.
      *
-     * @param \Shopware\Models\Customer\Customer $customer
+     * @param Customer $customer
      */
     public function setCustomer($customer)
     {
@@ -588,11 +589,14 @@ class Shipping extends ModelEntity
     /**
      * Setter function for the setAdditionalAddressLine2 column property.
      *
-     * @param string $additionalAddressLine2
+     * @param string|null $additionalAddressLine2
      */
     public function setAdditionalAddressLine2($additionalAddressLine2)
     {
-        $this->additionalAddressLine2 = $this->cleanup($additionalAddressLine2);
+        if (\is_string($additionalAddressLine2)) {
+            $additionalAddressLine2 = $this->cleanup($additionalAddressLine2);
+        }
+        $this->additionalAddressLine2 = $additionalAddressLine2;
     }
 
     /**
@@ -608,11 +612,14 @@ class Shipping extends ModelEntity
     /**
      * Setter function for the setAdditionalAddressLine1 column property.
      *
-     * @param string $additionalAddressLine1
+     * @param string|null $additionalAddressLine1
      */
     public function setAdditionalAddressLine1($additionalAddressLine1)
     {
-        $this->additionalAddressLine1 = $this->cleanup($additionalAddressLine1);
+        if (\is_string($additionalAddressLine1)) {
+            $additionalAddressLine1 = $this->cleanup($additionalAddressLine1);
+        }
+        $this->additionalAddressLine1 = $additionalAddressLine1;
     }
 
     /**
@@ -662,10 +669,13 @@ class Shipping extends ModelEntity
     }
 
     /**
-     * @param string $title
+     * @param string|null $title
      */
     public function setTitle($title)
     {
-        $this->title = $this->cleanup($title);
+        if (\is_string($title)) {
+            $title = $this->cleanup($title);
+        }
+        $this->title = $title;
     }
 }

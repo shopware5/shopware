@@ -23,11 +23,15 @@
  */
 
 use Shopware\Bundle\BenchmarkBundle\Service\TemplateCachingHandler;
+use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Routing\RouterInterface;
 use Shopware\Models\Benchmark\BenchmarkConfig;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 use Shopware\Models\Menu\Menu;
+use Shopware\Models\Shop\Shop;
 
-class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controllers_Backend_ExtJs implements \Shopware\Components\CSRFWhitelistAware
+class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Returns a list with actions which should not be validated for CSRF protection
@@ -43,8 +47,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     {
         $shopId = $this->getShopId();
 
-        /** @var BenchmarkRepository $benchmarkRepository */
-        $benchmarkRepository = $this->get(\Shopware\Models\Benchmark\Repository::class);
+        $benchmarkRepository = $this->get(BenchmarkRepository::class);
         $config = $benchmarkRepository->getConfigForShop($shopId);
 
         $this->handleSettings($config);
@@ -55,8 +58,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $this->get('plugins')->Controller()->ViewRenderer()->setNoRender(true);
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
-        /** @var BenchmarkRepository $benchmarkRepository */
-        $benchmarkRepository = $this->get(\Shopware\Models\Benchmark\Repository::class);
+        $benchmarkRepository = $this->get(BenchmarkRepository::class);
         $config = $benchmarkRepository->getConfigForShop($this->getShopId());
 
         if ($this->hasOutdatedStatistics($config->getLastReceived())) {
@@ -76,8 +78,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     {
         $config = $this->request->getParam('config');
 
-        /** @var BenchmarkRepository $benchmarkRepository */
-        $benchmarkRepository = $this->get(\Shopware\Models\Benchmark\Repository::class);
+        $benchmarkRepository = $this->get(BenchmarkRepository::class);
         $benchmarkRepository->saveShopConfigs($config);
 
         $this->enableMenu();
@@ -86,8 +87,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
 
     public function getShopsAction()
     {
-        /** @var BenchmarkRepository $benchmarkRepository */
-        $benchmarkRepository = $this->get(\Shopware\Models\Benchmark\Repository::class);
+        $benchmarkRepository = $this->get(BenchmarkRepository::class);
 
         $shops = $benchmarkRepository->getShopsWithValidTemplate();
         $currentShop = $this->getShopId();
@@ -118,8 +118,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     {
         $backendLanguage = $this->get('auth')->getIdentity()->locale->getId() === 1 ? 'de' : 'en';
 
-        /** @var BenchmarkRepository $benchmarkRepository */
-        $benchmarkRepository = $this->get(\Shopware\Models\Benchmark\Repository::class);
+        $benchmarkRepository = $this->get(BenchmarkRepository::class);
 
         if (!$config || $benchmarkRepository->getConfigsCount() === 0) {
             $this->redirect([
@@ -159,11 +158,11 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
      */
     private function hasFreshStatistics(DateTimeInterface $lastReceived)
     {
-        $today = new \DateTime('now');
+        $today = new DateTime('now');
 
-        $interval = new \DateInterval('PT1H');
+        $interval = new DateInterval('PT1H');
 
-        $periods = new \DatePeriod($lastReceived, $interval, $today);
+        $periods = new DatePeriod($lastReceived, $interval, $today);
         $hours = iterator_count($periods);
 
         return $hours < 24;
@@ -176,11 +175,11 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
      */
     private function hasOutdatedStatistics(DateTimeInterface $lastReceived)
     {
-        $today = new \DateTime('now');
+        $today = new DateTime('now');
 
-        $interval = new \DateInterval('P1D');
+        $interval = new DateInterval('P1D');
 
-        $periods = new \DatePeriod($lastReceived, $interval, $today);
+        $periods = new DatePeriod($lastReceived, $interval, $today);
         $days = iterator_count($periods);
 
         return $days > 7;
@@ -193,7 +192,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $shopId = $this->getShopId();
 
         if ($cachingHandler->isTemplateCached($shopId)) {
-            $link = $this->get(\Shopware\Components\Routing\RouterInterface::class)->assemble([
+            $link = $this->get(RouterInterface::class)->assemble([
                 'controller' => 'BenchmarkOverview',
                 'action' => 'render',
                 'shopId' => $shopId,
@@ -216,7 +215,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
 
     private function enableMenu()
     {
-        $em = $this->get(\Shopware\Components\Model\ModelManager::class);
+        $em = $this->get(ModelManager::class);
         $repo = $em->getRepository(Menu::class);
 
         /** @var Menu|null $menuEntry */
@@ -236,7 +235,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $shopId = (int) $this->request->getParam('shopId');
 
         if (!$shopId) {
-            $shopId = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveDefault()->getId();
+            $shopId = $this->get(ModelManager::class)->getRepository(Shop::class)->getActiveDefault()->getId();
         }
 
         return $shopId;

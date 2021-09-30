@@ -47,6 +47,9 @@ use Shopware\Models\Property\Group as PropertyGroup;
 use Shopware\Models\Tax\Tax;
 use Shopware\Models\Translation\Translation;
 
+/**
+ * @extends ModelRepository<Article|Detail|Price>
+ */
 class Repository extends ModelRepository
 {
     /**

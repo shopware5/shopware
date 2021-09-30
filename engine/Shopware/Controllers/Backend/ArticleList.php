@@ -30,10 +30,10 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\Api\Resource\Article as ArticleResource;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\MultiEdit\Resource\ResourceInterface;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Repository as ProductModelRepository;
 use Shopware\Models\MultiEdit\Filter;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
@@ -77,7 +77,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     public function getMultiEditRepository()
     {
         if (!isset($this->multiEditRepository)) {
-            $this->multiEditRepository = Shopware()->Models()->getRepository('Shopware\Models\MultiEdit\Filter');
+            $this->multiEditRepository = $this->get('models')->getRepository('Shopware\Models\MultiEdit\Filter');
         }
 
         return $this->multiEditRepository;
@@ -434,8 +434,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
         $filter->fromArray($data);
 
-        Shopware()->Models()->persist($filter);
-        Shopware()->Models()->flush();
+        $this->get('models')->persist($filter);
+        $this->get('models')->flush();
 
         $this->View()->assign(
             [
@@ -451,11 +451,11 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     {
         $id = $this->Request()->get('id');
 
-        $filter = Shopware()->Models()->find('Shopware\Models\MultiEdit\Filter', $id);
+        $filter = $this->get('models')->find(Filter::class, $id);
 
         if ($filter) {
-            Shopware()->Models()->remove($filter);
-            Shopware()->Models()->flush();
+            $this->get('models')->remove($filter);
+            $this->get('models')->flush();
         }
 
         $this->View()->assign(
@@ -525,10 +525,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             if ($variant->getKind() == 1) {
                 $articleResource->delete($variant->getArticle()->getId());
             } else {
-                Shopware()->Models()->remove($variant);
+                $this->get('models')->remove($variant);
             }
 
-            Shopware()->Models()->flush();
+            $this->get('models')->flush();
 
             $this->View()->assign([
                 'success' => true,
@@ -568,11 +568,11 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     /**
      * Internal helper function to get access to the product repository.
      *
-     * @return ModelRepository
+     * @return ProductModelRepository
      */
     private function getDetailRepository()
     {
-        return Shopware()->Models()->getRepository(Detail::class);
+        return $this->get('models')->getRepository(Detail::class);
     }
 
     /**
@@ -648,18 +648,14 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      *
      * @return ListProduct[]
      */
-    private function getAdditionalTexts($products)
+    private function getAdditionalTexts(array $products): array
     {
-        /** @var AdditionalTextServiceInterface $service */
         $service = $this->get(AdditionalTextServiceInterface::class);
 
-        /** @var Repository $shopRepo */
         $shopRepo = $this->get(ModelManager::class)->getRepository(Shop::class);
 
-        /** @var Shop $shop */
         $shop = $shopRepo->getActiveDefault();
 
-        /** @var ContextServiceInterface $contextService */
         $contextService = $this->get(ContextServiceInterface::class);
 
         $context = $contextService->createShopContext(
@@ -671,7 +667,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         return $service->buildAdditionalTextLists($products, $context);
     }
 
-    private function filterByRepository()
+    /**
+     * @return array{data: array, total: int}
+     */
+    private function filterByRepository(): array
     {
         $criteria = $this->createCriteria($this->Request());
 

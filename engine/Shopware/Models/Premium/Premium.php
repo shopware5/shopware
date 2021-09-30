@@ -25,7 +25,10 @@
 namespace Shopware\Models\Premium;
 
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\LazyFetchModelEntity;
+use Shopware\Models\Article\Detail;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Model Premium
@@ -40,18 +43,18 @@ use Shopware\Components\Model\LazyFetchModelEntity;
 class Premium extends LazyFetchModelEntity
 {
     /**
-     * @var \Shopware\Models\Shop\Shop
+     * @var Shop
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Shop\Shop")
-     * @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="subshopID", referencedColumnName="id", nullable=false)
      */
     protected $shop;
 
     /**
-     * @var \Shopware\Models\Article\Detail
+     * @var Detail
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail")
-     * @ORM\JoinColumn(name="ordernumber", referencedColumnName="ordernumber")
+     * @ORM\JoinColumn(name="ordernumber", referencedColumnName="ordernumber", nullable=false)
      */
     protected $articleDetail;
 
@@ -67,7 +70,7 @@ class Premium extends LazyFetchModelEntity
     /**
      * @var float
      *
-     * @ORM\Column(name="startprice", type="decimal", nullable=false)
+     * @ORM\Column(name="startprice", type="float", nullable=false)
      */
     private $startPrice;
 
@@ -177,7 +180,7 @@ class Premium extends LazyFetchModelEntity
     /**
      * Sets the assigned subShop
      *
-     * @param \Shopware\Models\Shop\Shop $shop
+     * @param Shop $shop
      */
     public function setShop($shop)
     {
@@ -187,7 +190,7 @@ class Premium extends LazyFetchModelEntity
     /**
      * Returns the instance of the assigned subShop
      *
-     * @return \Shopware\Models\Shop\Shop
+     * @return Shop
      */
     public function getShop()
     {
@@ -197,9 +200,9 @@ class Premium extends LazyFetchModelEntity
     /**
      * Sets the assigned article
      *
-     * @param \Shopware\Models\Article\Detail $articleDetail
+     * @param Detail $articleDetail
      *
-     * @return \Shopware\Models\Premium\Premium
+     * @return Premium
      */
     public function setArticleDetail($articleDetail)
     {
@@ -211,14 +214,16 @@ class Premium extends LazyFetchModelEntity
     /**
      * Gets the instance of the assigned article
      *
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function getArticleDetail()
     {
-        /** @var \Shopware\Models\Article\Detail $return */
-        $return = $this->fetchLazy($this->articleDetail, ['number' => $this->orderNumber]);
+        $productVariant = $this->fetchLazy($this->articleDetail, ['number' => $this->orderNumber]);
+        if (!$productVariant instanceof Detail) {
+            throw new ModelNotFoundException(Detail::class, $this->orderNumber, 'number');
+        }
 
-        return $return;
+        return $productVariant;
     }
 
     /**
@@ -226,7 +231,7 @@ class Premium extends LazyFetchModelEntity
      *
      * @param int $shopId Contains the shopId
      *
-     * @return \Shopware\Models\Premium\Premium
+     * @return Premium
      */
     public function setShopId($shopId)
     {

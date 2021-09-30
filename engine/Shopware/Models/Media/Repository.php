@@ -31,6 +31,8 @@ use Shopware\Components\Model\QueryBuilder;
  * The media repository used for the media manager backend module.
  *
  * The repository is responsible to load the media data into the models.
+ *
+ * @extends ModelRepository<Media>
  */
 class Repository extends ModelRepository
 {

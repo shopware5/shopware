@@ -27,8 +27,7 @@ namespace Shopware\Commands;
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CacheManager;
-use Shopware\Components\Theme\Compiler;
-use Shopware\Models\Shop\Repository;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
@@ -85,13 +84,11 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Repository $repository */
-        $repository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
+        $repository = $this->container->get(ModelManager::class)->getRepository(Shop::class);
 
         $shopIds = $input->getOption('shopId');
         $current = (bool) $input->getOption('current');
 
-        /** @var Shop[] $shopsWithThemes */
         $shopsWithThemes = $repository->getShopsWithThemes()->getResult(AbstractQuery::HYDRATE_OBJECT);
 
         if (!empty($shopIds)) {
@@ -106,7 +103,6 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
             return 0;
         }
 
-        /** @var Compiler $compiler */
         $compiler = $this->container->get('theme_compiler');
 
         foreach ($shopsWithThemes as $shop) {
@@ -125,8 +121,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
             return 0;
         }
 
-        /** @var CacheManager $cacheManager */
-        $cacheManager = $this->container->get(\Shopware\Components\CacheManager::class);
+        $cacheManager = $this->container->get(CacheManager::class);
         $output->writeln('Clearing HTTP cache ...');
         $cacheManager->clearHttpCache();
 

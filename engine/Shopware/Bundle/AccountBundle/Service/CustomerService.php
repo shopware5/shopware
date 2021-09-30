@@ -27,6 +27,7 @@ namespace Shopware\Bundle\AccountBundle\Service;
 use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Customer\Customer;
 
 class CustomerService implements CustomerServiceInterface
@@ -54,7 +55,7 @@ class CustomerService implements CustomerServiceInterface
     {
         $this->validator->validate($customer);
         $entities = [$customer];
-        if ($customer->getAttribute() instanceof \Shopware\Models\Attribute\Customer) {
+        if ($customer->getAttribute() instanceof CustomerAttribute) {
             $entities[] = $customer->getAttribute();
         }
         $this->modelManager->flush($entities);

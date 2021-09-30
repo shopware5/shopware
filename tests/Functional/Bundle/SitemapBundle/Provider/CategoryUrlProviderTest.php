@@ -53,6 +53,7 @@ class CategoryUrlProviderTest extends TestCase
     public function testGetUrls(): void
     {
         $shop = Shopware()->Container()->get('models')->getRepository(Shop::class)->getActiveById(1);
+        static::assertNotNull($shop);
 
         $categoryUrlProvider = $this->getCategoryUrlProvider();
         $urls = $categoryUrlProvider->getUrls($this->getRouterContext($shop), $this->getShopContext($shop));
@@ -63,6 +64,7 @@ class CategoryUrlProviderTest extends TestCase
     public function testGetUrlsConsidersParentCategory(): void
     {
         $shop = Shopware()->Container()->get('models')->getRepository(Shop::class)->getActiveById(1);
+        static::assertNotNull($shop);
 
         $categoryUrlProvider = $this->getCategoryUrlProvider();
         $urls = $categoryUrlProvider->getUrls($this->getRouterContext($shop), $this->getShopContext($shop));
@@ -75,6 +77,7 @@ class CategoryUrlProviderTest extends TestCase
     public function testGetUrlsWorksWithSubshops(): void
     {
         $shop = Shopware()->Container()->get('models')->getRepository(Shop::class)->getActiveById(1);
+        static::assertNotNull($shop);
 
         $categoryUrlProvider = $this->getCategoryUrlProvider();
         $urls = $categoryUrlProvider->getUrls($this->getRouterContext($shop), $this->getShopContext($shop));
@@ -82,6 +85,7 @@ class CategoryUrlProviderTest extends TestCase
         static::assertCount(9, $urls);
 
         $shop = Shopware()->Container()->get('models')->getRepository(Shop::class)->getActiveById(2);
+        static::assertNotNull($shop);
 
         $categoryUrlProvider = $this->getCategoryUrlProvider();
         $urls = $categoryUrlProvider->getUrls($this->getRouterContext($shop), $this->getShopContext($shop));
@@ -96,6 +100,8 @@ class CategoryUrlProviderTest extends TestCase
 
     private function getShopContext(Shop $shop): ShopContext
     {
+        static::assertNotNull($shop->getCurrency());
+
         return Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(
             $shop->getId(),
             $shop->getCurrency()->getId(),

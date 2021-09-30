@@ -22,16 +22,27 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\ProductSearchInterface;
+use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
-use Shopware\Components\ProductStream\RepositoryInterface;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\ProductStream\Repository as ProductStreamRepository;
 use Shopware\Models\ProductStream\ProductStream;
 use Shopware\Models\Shop\Shop;
 
+/**
+ * @extends Shopware_Controllers_Backend_Application<ProductStream>
+ */
 class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Backend_Application
 {
     protected $model = ProductStream::class;
@@ -43,7 +54,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $sourceStreamId = $this->Request()->getParam('sourceStreamId');
         $targetStreamId = $this->Request()->getParam('targetStreamId');
 
-        $persister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
+        $persister = Shopware()->Container()->get(DataPersister::class);
         $persister->cloneAttribute(
             's_product_streams_attributes',
             $sourceStreamId,
@@ -56,14 +67,13 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
     public function loadPreviewAction()
     {
         try {
-            /** @var RepositoryInterface $streamRepo */
-            $streamRepo = $this->get(\Shopware\Components\ProductStream\Repository::class);
+            $streamRepo = $this->get(ProductStreamRepository::class);
             $criteria = new Criteria();
 
             $sorting = $this->Request()->getParam('sort');
 
             if ($sorting !== null) {
-                /** @var \Shopware\Bundle\SearchBundle\SortingInterface[] $sorting */
+                /** @var SortingInterface[] $sorting */
                 $sorting = $streamRepo->unserialize($sorting);
 
                 foreach ($sorting as $sort) {
@@ -77,10 +87,10 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
                 $conditions = json_decode($conditions, true);
 
                 if (json_last_error() !== JSON_ERROR_NONE) {
-                    throw new \InvalidArgumentException('Could not decode JSON: ' . json_last_error_msg());
+                    throw new InvalidArgumentException('Could not decode JSON: ' . json_last_error_msg());
                 }
 
-                /** @var \Shopware\Bundle\SearchBundle\ConditionInterface[] $conditions */
+                /** @var ConditionInterface[] $conditions */
                 $conditions = $streamRepo->unserialize($conditions);
 
                 foreach ($conditions as $condition) {
@@ -106,7 +116,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
                 new CategoryCondition([$category])
             );
 
-            $result = Shopware()->Container()->get(\Shopware\Bundle\SearchBundle\ProductSearchInterface::class)
+            $result = Shopware()->Container()->get(ProductSearchInterface::class)
                 ->search($criteria, $context);
 
             $products = array_values($result->getProducts());
@@ -122,7 +132,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             $error = false;
             $data = $products;
             $total = $result->getTotalCount();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $success = false;
             $error = $e->getMessage();
             $data = [];
@@ -173,7 +183,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
     public function loadSelectedProductsAction()
     {
         $streamId = $this->Request()->getParam('streamId');
-        $query = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        $query = Shopware()->Container()->get(Connection::class)->createQueryBuilder();
 
         $query->select(['product.id', 'variant.ordernumber as number', 'product.name'])
             ->from('s_articles', 'product')
@@ -200,7 +210,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $streamId = $this->Request()->getParam('streamId');
         $productId = $this->Request()->getParam('articleId');
 
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeUpdate(
+        Shopware()->Container()->get(Connection::class)->executeUpdate(
             'DELETE FROM s_product_streams_selection WHERE stream_id = :streamId AND article_id = :articleId',
             [':streamId' => $streamId, ':articleId' => $productId]
         );
@@ -213,7 +223,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $streamId = $this->Request()->getParam('streamId');
         $productId = $this->Request()->getParam('articleId');
 
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeUpdate(
+        Shopware()->Container()->get(Connection::class)->executeUpdate(
             'INSERT IGNORE INTO s_product_streams_selection(stream_id, article_id) VALUES (:streamId, :articleId)',
             [':streamId' => $streamId, ':articleId' => $productId]
         );
@@ -223,7 +233,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
     public function getAttributesAction()
     {
-        $service = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
+        $service = Shopware()->Container()->get(CrudService::class);
         $data = $service->getList('s_articles_attributes');
 
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -261,7 +271,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             return;
         }
 
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeUpdate(
+        Shopware()->Container()->get(Connection::class)->executeUpdate(
             'INSERT IGNORE INTO s_product_streams_selection (stream_id, article_id) SELECT :targetStreamId, article_id FROM s_product_streams_selection WHERE stream_id = :sourceStreamId',
             [':targetStreamId' => $targetStreamId, ':sourceStreamId' => $sourceStreamId]
         );
@@ -274,19 +284,18 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
      * @param int|null $currencyId
      * @param int|null $customerGroupKey
      *
-     * @throws \InvalidArgumentException if the specified shop couldn't be found
+     * @throws InvalidArgumentException if the specified shop couldn't be found
      *
      * @return ProductContext
      */
     private function createContext($shopId, $currencyId = null, $customerGroupKey = null)
     {
-        /** @var \Shopware\Models\Shop\Repository $repo */
-        $repo = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
+        $repo = Shopware()->Container()->get(ModelManager::class)->getRepository(Shop::class);
 
         $shop = $repo->getActiveById($shopId);
 
         if (!$shop) {
-            throw new \InvalidArgumentException('Shop not found');
+            throw new InvalidArgumentException('Shop not found');
         }
 
         $shopId = $shop->getId();
@@ -299,7 +308,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             $customerGroupKey = ContextService::FALLBACK_CUSTOMER_GROUP;
         }
 
-        return Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)
+        return Shopware()->Container()->get(ContextServiceInterface::class)
             ->createShopContext($shopId, $currencyId, $customerGroupKey);
     }
 }

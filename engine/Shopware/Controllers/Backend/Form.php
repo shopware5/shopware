@@ -373,7 +373,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     private function getManager(): ModelManager
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = $this->get('models');
         }
 
         return $this->manager;

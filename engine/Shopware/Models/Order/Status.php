@@ -26,6 +26,7 @@ namespace Shopware\Models\Order;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Mail\Mail;
 
 /**
  * Shopware order status model represents the status of an order (payment or order state).
@@ -87,7 +88,7 @@ class Status extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Mail\Mail
+     * @var Mail|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Mail\Mail", mappedBy="status")
      */
@@ -222,7 +223,7 @@ class Status extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Mail\Mail
+     * @return Mail|null
      */
     public function getMail()
     {
@@ -230,7 +231,7 @@ class Status extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Mail\Mail|array $mail
+     * @param Mail|null $mail
      *
      * @return Status
      */

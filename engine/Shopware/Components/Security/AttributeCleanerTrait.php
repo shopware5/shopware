@@ -33,18 +33,18 @@ trait AttributeCleanerTrait
      *
      * NOTE: This method works for strings
      *
-     * @param string|object $var      Value to be cleaned
-     * @param callable      $callback Function that we will used to perform the cleaning on the attributes
+     * @param string        $var      Value to be cleaned
+     * @param callable|null $callback Function that we will be used to perform the cleaning on the attributes
      *
-     * @return string|object The filtered string
+     * @return string The filtered string
      */
     protected function cleanup($var, callable $callback = null)
     {
-        $callback = $callback ? $callback : 'strip_tags';
-
-        if (!\is_string($var) || empty($var)) {
+        if (!\is_string($var)) {
             return $var;
         }
+
+        $callback = $callback ?: 'strip_tags';
 
         return $callback($var);
     }

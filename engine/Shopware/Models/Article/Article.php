@@ -27,6 +27,7 @@ namespace Shopware\Models\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Configurator\Template\Template;
 use Shopware\Models\Category\Category as ArticleCategory;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -282,7 +283,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var Configurator\Template\Template
+     * @var Template|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
@@ -430,7 +431,7 @@ class Article extends ModelEntity
     private $priceGroupActive = false;
 
     /**
-     * @var bool
+     * @var bool|null
      *
      * @deprecated 5.6 will be removed in 5.8
      * @ORM\Column(name="laststock", type="boolean", nullable=true)
@@ -751,7 +752,7 @@ class Article extends ModelEntity
     /**
      * @deprecated 5.6 will be removed in 5.7
      *
-     * @return bool
+     * @return bool|null
      */
     public function getLastStock()
     {
@@ -1229,7 +1230,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return Configurator\Template\Template
+     * @return Template|null
      */
     public function getConfiguratorTemplate()
     {
@@ -1237,7 +1238,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param Configurator\Template\Template $configuratorTemplate
+     * @param Template|null $configuratorTemplate
      *
      * @return Article
      */
@@ -1245,7 +1246,7 @@ class Article extends ModelEntity
     {
         $this->setOneToOne(
             $configuratorTemplate,
-            Configurator\Template\Template::class,
+            Template::class,
             'configuratorTemplate',
             'article'
         );

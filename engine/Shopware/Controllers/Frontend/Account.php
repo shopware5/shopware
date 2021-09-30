@@ -39,7 +39,6 @@ use Shopware\Components\Random;
 use Shopware\Models\CommentConfirm\CommentConfirm;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Partner\Partner;
-use Shopware\Models\Partner\Repository;
 use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 
 class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
@@ -186,7 +185,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function partnerStatisticMenuItemAction()
     {
         // Show partner statistic menu
-        $partnerModel = Shopware()->Models()->getRepository(Partner::class)->findOneBy(['customerId' => Shopware()->Session()->get('sUserId')]);
+        $partnerModel = $this->get('models')->getRepository(Partner::class)->findOneBy(['customerId' => Shopware()->Session()->get('sUserId')]);
         if (!empty($partnerModel)) {
             $this->View()->assign('partnerId', $partnerModel->getId());
             Shopware()->Session()->offsetSet('partnerId', $partnerModel->getId());
@@ -229,8 +228,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         // To get the right value cause 2012-02-02 is smaller than 2012-02-02 15:33:12
         $toDate = $toDate->add(new DateInterval('P1D'));
 
-        /** @var Repository $repository */
-        $repository = Shopware()->Models()->getRepository(Partner::class);
+        $repository = $this->get('models')->getRepository(Partner::class);
 
         // Get the information of the partner chart
         $userCurrencyFactor = Shopware()->Shop()->getCurrency()->getFactor();
