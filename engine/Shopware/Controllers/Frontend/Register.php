@@ -33,6 +33,7 @@ use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 {
@@ -306,21 +307,15 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         );
     }
 
+    /**
+     * @throws Exception
+     *
+     * @deprecated since 5.7.4. Will be removed in Shopware 5.8 without replacement
+     */
     public function ajaxValidateEmailAction()
     {
-        Shopware()->Front()->Plugins()->ViewRenderer()->setNoRender();
-
-        $data = $this->getPostData();
-        $customerForm = $this->createCustomerForm($data['register']['personal']);
-
-        $errors = $this->getFormErrors($customerForm);
-        $errors = [
-            'email' => $errors['email'] ?: false,
-            'emailConfirmation' => $errors['emailConfirmation'] ?: false,
-        ];
-
-        $this->Response()->headers->set('content-type', 'application/json', true);
-        $this->Response()->setContent(json_encode($errors));
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        $this->Response()->setHttpResponseCode(Response::HTTP_GONE);
     }
 
     public function ajaxValidatePasswordAction()

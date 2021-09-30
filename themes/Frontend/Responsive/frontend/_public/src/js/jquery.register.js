@@ -500,7 +500,7 @@
         },
 
         /**
-         * Called when a input field lost its focus.
+         * Called when an input field lost its focus.
          * Depending on the elements id, the corresponding method will be called.
          * billing ust id, emails and passwords will be validated via AJAX.
          *
@@ -514,20 +514,12 @@
                 id = $el.attr('id'),
                 action,
                 relatedTarget = event.relatedTarget || document.activeElement,
-                hasEmailConfirmation = me.$personalEmailConfirmation.length > 0,
                 hasPasswordConfirmation = me.$personalPasswordConfirmation.length > 0;
 
             me.$targetElement = $(relatedTarget);
 
             switch (id) {
                 case undefined:
-                    break;
-                case me.$personalEmail.prop('id'):
-                case me.$personalEmailConfirmation.prop('id'):
-                    if (hasEmailConfirmation && (me.$personalEmail.val().length <= 0 || me.$personalEmailConfirmation.val().length <= 0)) {
-                        break;
-                    }
-                    action = 'ajax_validate_email';
                     break;
                 case me.$personalPassword.prop('id'):
                 case me.$personalPasswordConfirmation.prop('id'):
