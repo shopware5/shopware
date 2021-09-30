@@ -194,12 +194,6 @@ parameters:
 			message: "#^Method Enlight_Components_Cron_Adapter\\:\\:startJob\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Cron/Adapter.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 2
-			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
-
 		-
 			message: "#^Method Enlight_Components_Cron_Adapter_DBAL\\:\\:getJobByAction\\(\\) should return Enlight_Components_Cron_Job but returns Enlight_Components_Cron_Job\\|null\\.$#"
 			count: 1
@@ -3789,12 +3783,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Constraint\\\\CurrentPasswordValidator\\:\\:validate\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AccountBundle/Constraint/CurrentPasswordValidator.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Constraint/CustomerEmailValidator.php
-
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Constraint\\\\CustomerEmailValidator\\:\\:addError\\(\\) has no return typehint specified\\.$#"
 			count: 1
@@ -4614,12 +4602,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\CrudServiceInterface\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudServiceInterface.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Service/DataLoader.php
-
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\DataLoader\\:\\:load\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
@@ -4906,11 +4888,6 @@ parameters:
 			path: engine/Shopware/Bundle/BenchmarkBundle/BusinessIntelligenceClient.php
 
 		-
-			message: "#^Argument of an invalid type array\\|string supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Commands/ReceiveStatisticsCommand.php
-
-		-
 			message: "#^Call to an undefined method DateTimeInterface\\:\\:add\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Commands/ReceiveStatisticsCommand.php
@@ -4919,11 +4896,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Commands\\\\ReceiveStatisticsCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Commands/ReceiveStatisticsCommand.php
-
-		-
-			message: "#^Argument of an invalid type array\\|string supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Commands/SendStatisticsCommand.php
 
 		-
 			message: "#^Call to an undefined method DateTimeInterface\\:\\:add\\(\\)\\.$#"
@@ -5164,12 +5136,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\CustomersProvider\\:\\:matchGenders\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/CustomersProvider.php
-
-		-
-			message: "#^Cannot call method fetchColumn\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 3
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/EmotionsProvider.php
-
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\EmotionsProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
@@ -5599,11 +5565,6 @@ parameters:
 			message: "#^Property Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Struct\\\\StatisticsResponse\\:\\:\\$shopId \\(int\\) does not accept int\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Struct/StatisticsResponse.php
-
-		-
-			message: "#^Parameter \\#2 \\$destructive of method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\DatabaseContentTypeSynchronizer\\:\\:sync\\(\\) expects bool, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Commands/TypeSynchronizerCommand.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Api\\\\ContentType\\:\\:indexAction\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
@@ -7044,12 +7005,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandlerInterface\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandlerInterface.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/CustomerNumberSearch.php
-
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\CustomerNumberSearch\\:\\:fetchTotal\\(\\) has no return typehint specified\\.$#"
 			count: 1
@@ -7546,16 +7501,6 @@ parameters:
 			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/AnalyzeCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$id of method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\ShopGateway\\:\\:get\\(\\) expects int, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/AnalyzeCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\$mappingType of method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\IndexFactory\\:\\:createShopIndex\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/AnalyzeCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\Commands\\\\BacklogClearCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/BacklogClearCommand.php
@@ -7576,11 +7521,6 @@ parameters:
 			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/IndexCleanupCommand.php
 
 		-
-			message: "#^Argument of an invalid type array\\<string\\>\\|bool\\|string\\|null supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/IndexPopulateCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\Commands\\\\IndexPopulateCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/IndexPopulateCommand.php
@@ -7596,11 +7536,6 @@ parameters:
 			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/IndexPopulateCommand.php
 
 		-
-			message: "#^Parameter \\#3 \\$indexes of method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\ShopIndexerInterface\\:\\:index\\(\\) expects array\\|null, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/IndexPopulateCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\Commands\\\\SwitchAliasCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/SwitchAliasCommand.php
@@ -7612,21 +7547,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\Commands\\\\SwitchAliasCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/SwitchAliasCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$id of method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\ShopGateway\\:\\:get\\(\\) expects int, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/SwitchAliasCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\$mappingType of method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\IndexFactory\\:\\:createShopIndex\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/SwitchAliasCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ESIndexingBundle/Commands/SwitchAliasCommand.php
 
@@ -7869,12 +7789,6 @@ parameters:
 			message: "#^Property Shopware\\\\Bundle\\\\ESIndexingBundle\\\\IndexFactory\\:\\:\\$indexConfig type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ESIndexingBundle/IndexFactory.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/LastIdQuery.php
-
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\LastIdQuery\\:\\:fetch\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
@@ -10136,16 +10050,6 @@ parameters:
 			path: engine/Shopware/Bundle/MediaBundle/Commands/ImageMigrateCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$backendName of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceFactory\\:\\:factory\\(\\) expects string, array\\<string\\>\\|string\\|true given\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/MediaBundle/Commands/ImageMigrateCommand.php
-
-		-
-			message: "#^Parameter \\#4 \\$skipScan of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaMigration\\:\\:migrate\\(\\) expects bool, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/Commands/ImageMigrateCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Commands\\\\MediaCleanupCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaCleanupCommand.php
@@ -10187,21 +10091,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @var for variable \\$contents has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaOptimizeCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$directory of method League\\\\Flysystem\\\\FilesystemInterface\\:\\:listContents\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaOptimizeCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$directory of method Shopware\\\\Bundle\\\\MediaBundle\\\\Commands\\\\MediaOptimizeCommand\\:\\:optimizeFiles\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaOptimizeCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, array\\<string\\>\\|string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaOptimizeCommand.php
 
@@ -11074,12 +10963,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:removeTemplates\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLicenceService.php
-
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginLicenceService\\:\\:cleanupLocalLicenseInformation\\(\\) has no return typehint specified\\.$#"
 			count: 1
@@ -11149,12 +11032,6 @@ parameters:
 			message: "#^Cannot access offset 'name' on array\\|false\\.$#"
 			count: 2
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginZipDetector.php
-
-		-
-			message: "#^Cannot call method fetchColumn\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/SubscriptionService.php
-
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\SubscriptionService\\:\\:getPluginsNameAndVersion\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
@@ -12884,12 +12761,6 @@ parameters:
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\FacetInterface\\:\\:getRequestParameter\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/CombinedConditionFacetHandler.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/CombinedConditionFacetHandler.php
-
 		-
 			message: "#^Property Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\FacetHandler\\\\ImmediateDeliveryFacetHandler\\:\\:\\$fieldName \\(string\\) does not accept string\\|null\\.$#"
 			count: 1
@@ -12964,12 +12835,6 @@ parameters:
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\FacetInterface\\:\\:getSuffix\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/ProductDimensionsFacetHandler.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/ProductDimensionsFacetHandler.php
-
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\FacetHandler\\\\ProductDimensionsFacetHandler\\:\\:createRangeFacet\\(\\) has parameter \\$stats with no value type specified in iterable type array\\.$#"
 			count: 1
@@ -14774,12 +14639,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\UrlProviderInterface\\:\\:reset\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/UrlProviderInterface.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/StaticContentBundle/Gateway/DBAL/EsdGateway.php
-
 		-
 			message: "#^Cannot access offset 'size' on array\\|false\\.$#"
 			count: 1
@@ -14802,11 +14661,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$str of function fwrite expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StaticContentBundle/Service/Core/DownloadService.php
-
-		-
-			message: "#^Parameter \\#2 \\$values of method Symfony\\\\Component\\\\HttpFoundation\\\\ResponseHeaderBag\\:\\:set\\(\\) expects array\\<string\\>\\|string, string\\|false\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StaticContentBundle/Service/Core/DownloadService.php
 
@@ -16444,12 +16298,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\Core\\\\ProductLinkService\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/ProductLinkService.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 7
-			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/ProductNumberService.php
-
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\Core\\\\ProductNumberService\\:\\:getAvailableNumber\\(\\) has parameter \\$selection with no value type specified in iterable type array\\.$#"
 			count: 1
@@ -18746,36 +18594,6 @@ parameters:
 			path: engine/Shopware/Commands/AdminCreateCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$email of method Shopware\\\\Models\\\\User\\\\User\\:\\:setEmail\\(\\) expects string, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/AdminCreateCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$locale of method Shopware\\\\Commands\\\\AdminCreateCommand\\:\\:getLocaleIdFromLocale\\(\\) expects string, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/AdminCreateCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of method Shopware\\\\Models\\\\User\\\\User\\:\\:setName\\(\\) expects string, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/AdminCreateCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$username of method Shopware\\\\Models\\\\User\\\\User\\:\\:setUsername\\(\\) expects string, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/AdminCreateCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\$default of method Symfony\\\\Component\\\\Console\\\\Style\\\\SymfonyStyle\\:\\:ask\\(\\) expects string\\|null, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/AdminCreateCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\$plainPassword of method Shopware\\\\Commands\\\\AdminCreateCommand\\:\\:setPassword\\(\\) expects string, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/AdminCreateCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\CacheClearCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/CacheClearCommand.php
@@ -18816,16 +18634,6 @@ parameters:
 			path: engine/Shopware/Commands/CloneCategoryTreeCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$categoryInput of method Shopware\\\\Commands\\\\CloneCategoryTreeCommand\\:\\:getCategoryFromInput\\(\\) expects int\\|string, array\\<string\\>\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/CloneCategoryTreeCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$categoryInput of method Shopware\\\\Commands\\\\CloneCategoryTreeCommand\\:\\:getCategoryFromInput\\(\\) expects int\\|string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/CloneCategoryTreeCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\CronListCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/CronListCommand.php
@@ -18847,21 +18655,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Commands\\\\CronRunCommand\\:\\:runSingleCronjob\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/CronRunCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$force of method Enlight_Components_Cron_Manager\\:\\:getNextJob\\(\\) expects bool, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/CronRunCommand.php
-
-		-
-			message: "#^Parameter \\#3 \\$cronjob of method Shopware\\\\Commands\\\\CronRunCommand\\:\\:runSingleCronjob\\(\\) expects string, array\\<string\\>\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/CronRunCommand.php
-
-		-
-			message: "#^Parameter \\#4 \\$force of method Shopware\\\\Commands\\\\CronRunCommand\\:\\:runSingleCronjob\\(\\) expects bool, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/CronRunCommand.php
 
@@ -18891,11 +18684,6 @@ parameters:
 			path: engine/Shopware/Commands/DatabaseSetupCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Commands/DatabaseSetupCommand.php
-
-		-
 			message: "#^Property Shopware\\\\Commands\\\\DatabaseSetupCommand\\:\\:\\$validSteps has no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/DatabaseSetupCommand.php
@@ -18916,27 +18704,7 @@ parameters:
 			path: engine/Shopware/Commands/GenerateAttributesCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$pluginName of method Shopware\\\\Commands\\\\GenerateMigrationCommand\\:\\:findMigrationDirectory\\(\\) expects string\\|null, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/GenerateMigrationCommand.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function ltrim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/GenerateMigrationCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\$migrationName of method Shopware\\\\Commands\\\\GenerateMigrationCommand\\:\\:createMigration\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/GenerateMigrationCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/GenerateMigrationCommand.php
-
-		-
-			message: "#^Parameter \\#3 \\$pluginName of method Shopware\\\\Commands\\\\GenerateMigrationCommand\\:\\:createMigration\\(\\) expects string\\|null, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/GenerateMigrationCommand.php
 
@@ -19061,11 +18829,6 @@ parameters:
 			path: engine/Shopware/Commands/MigrationsMigrateCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$modus of method Shopware\\\\Components\\\\Migrations\\\\Manager\\:\\:run\\(\\) expects string, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/MigrationsMigrateCommand.php
-
-		-
 			message: "#^Parameter \\#2 \\$arr2 of function array_intersect_key expects array, array\\<string, mixed\\>\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/MigrationsMigrateCommand.php
@@ -19083,16 +18846,6 @@ parameters:
 		-
 			message: "#^Method Shopware\\\\Commands\\\\PluginActivateCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Commands/PluginActivateCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$pluginName of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\InstallerService\\:\\:getPluginByName\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginActivateCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 4
 			path: engine/Shopware/Commands/PluginActivateCommand.php
 
 		-
@@ -19126,21 +18879,6 @@ parameters:
 			path: engine/Shopware/Commands/PluginConfigListCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$pluginName of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\InstallerService\\:\\:getPluginByName\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginConfigListCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Commands/PluginConfigListCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|true given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginConfigListCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\PluginConfigSetCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/PluginConfigSetCommand.php
@@ -19156,32 +18894,7 @@ parameters:
 			path: engine/Shopware/Commands/PluginConfigSetCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$pluginName of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\InstallerService\\:\\:getPluginByName\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginConfigSetCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$value of method Shopware\\\\Commands\\\\PluginConfigSetCommand\\:\\:castValue\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginConfigSetCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\$name of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\InstallerService\\:\\:saveConfigElement\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginConfigSetCommand.php
-
-		-
 			message: "#^Parameter \\#2 \\$subject of function preg_match expects string, bool\\|int\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginConfigSetCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Commands/PluginConfigSetCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|true given\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/PluginConfigSetCommand.php
 
@@ -19198,16 +18911,6 @@ parameters:
 		-
 			message: "#^Method Shopware\\\\Commands\\\\PluginDeactivateCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Commands/PluginDeactivateCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$pluginName of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\InstallerService\\:\\:getPluginByName\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginDeactivateCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 3
 			path: engine/Shopware/Commands/PluginDeactivateCommand.php
 
 		-
@@ -19236,21 +18939,6 @@ parameters:
 			path: engine/Shopware/Commands/PluginDeleteCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$pluginName of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\InstallerService\\:\\:getPluginByName\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginDeleteCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$pluginName of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\InstallerService\\:\\:getPluginPath\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginDeleteCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Commands/PluginDeleteCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\PluginInstallCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/PluginInstallCommand.php
@@ -19263,16 +18951,6 @@ parameters:
 		-
 			message: "#^Method Shopware\\\\Commands\\\\PluginInstallCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Commands/PluginInstallCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$pluginName of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\InstallerService\\:\\:getPluginByName\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginInstallCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 4
 			path: engine/Shopware/Commands/PluginInstallCommand.php
 
 		-
@@ -19301,16 +18979,6 @@ parameters:
 			path: engine/Shopware/Commands/PluginListCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginListCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginListCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\PluginRefreshCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/PluginRefreshCommand.php
@@ -19331,21 +18999,6 @@ parameters:
 			path: engine/Shopware/Commands/PluginReinstallCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$pluginName of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\InstallerService\\:\\:getPluginByName\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginReinstallCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\$removeData of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\InstallerService\\:\\:uninstallPlugin\\(\\) expects bool, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginReinstallCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Commands/PluginReinstallCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\PluginUninstallCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/PluginUninstallCommand.php
@@ -19359,21 +19012,6 @@ parameters:
 			message: "#^Method Shopware\\\\Commands\\\\PluginUninstallCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/PluginUninstallCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$pluginName of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\InstallerService\\:\\:getPluginByName\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginUninstallCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 3
-			path: engine/Shopware/Commands/PluginUninstallCommand.php
-
-		-
-			message: "#^Argument of an invalid type array\\<string\\>\\|string supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginUpdateCommand.php
 
 		-
 			message: "#^Method Shopware\\\\Commands\\\\PluginUpdateCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -19391,24 +19029,9 @@ parameters:
 			path: engine/Shopware/Commands/PluginUpdateCommand.php
 
 		-
-			message: "#^Parameter \\#2 \\$batchUpdate of method Shopware\\\\Commands\\\\PluginUpdateCommand\\:\\:batchUpdate\\(\\) expects string, array\\<string\\>\\|string\\|true given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginUpdateCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\RebuildCategoryTreeCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/RebuildCategoryTreeCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$count of method Shopware\\\\Components\\\\Model\\\\CategoryDenormalization\\:\\:rebuildAllAssignments\\(\\) expects int\\|null, array\\<string\\>\\|int\\|string\\|true given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/RebuildCategoryTreeCommand.php
-
-		-
-			message: "#^Argument of an invalid type array\\|string\\|true supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/RebuildSeoIndexCommand.php
 
 		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
@@ -19444,11 +19067,6 @@ parameters:
 			message: "#^Method Shopware\\\\Commands\\\\SessionCleanupCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/SessionCleanupCommand.php
-
-		-
-			message: "#^Binary operation \"\\.\" between '\\<error\\>Output dir ' and array\\<string\\>\\|bool\\|string\\|null results in an error\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/SettingsLabelsFindMissingCommand.php
 
 		-
 			message: "#^Method Shopware\\\\Commands\\\\SettingsLabelsFindMissingCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -19516,11 +19134,6 @@ parameters:
 			path: engine/Shopware/Commands/ShopwareCommand.php
 
 		-
-			message: "#^Binary operation \"\\.\" between array\\<string\\>\\|bool\\|string\\|null and '/' results in an error\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/SnippetsFindMissingCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\SnippetsFindMissingCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/SnippetsFindMissingCommand.php
@@ -19566,16 +19179,6 @@ parameters:
 			path: engine/Shopware/Commands/SnippetsToDbCommand.php
 
 		-
-			message: "#^Parameter \\#2 \\$force of method Shopware\\\\Components\\\\Snippet\\\\DatabaseHandler\\:\\:loadToDatabase\\(\\) expects bool, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 5
-			path: engine/Shopware/Commands/SnippetsToDbCommand.php
-
-		-
-			message: "#^Binary operation \"\\.\" between '\\<error\\>Output dir ' and array\\<string\\>\\|bool\\|string\\|null results in an error\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/SnippetsToIniCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\SnippetsToIniCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/SnippetsToIniCommand.php
@@ -19589,21 +19192,6 @@ parameters:
 			message: "#^Method Shopware\\\\Commands\\\\SnippetsToIniCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/SnippetsToIniCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$snippetsDir of method Shopware\\\\Components\\\\Snippet\\\\DatabaseHandler\\:\\:dumpFromDatabase\\(\\) expects string\\|null, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/SnippetsToIniCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\$localeName of method Shopware\\\\Components\\\\Snippet\\\\DatabaseHandler\\:\\:dumpFromDatabase\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/SnippetsToIniCommand.php
-
-		-
-			message: "#^Binary operation \"\\.\" between '\\<error\\>Output file ' and array\\<string\\>\\|string\\|null results in an error\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/SnippetsToSqlCommand.php
 
 		-
 			message: "#^Method Shopware\\\\Commands\\\\SnippetsToSqlCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -19641,26 +19229,6 @@ parameters:
 			path: engine/Shopware/Commands/SnippetsToSqlCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$file of function file_put_contents expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/SnippetsToSqlCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function file_exists expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/SnippetsToSqlCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/SnippetsToSqlCommand.php
-
-		-
-			message: "#^Parameter \\#3 \\$file of method Shopware\\\\Commands\\\\SnippetsToSqlCommand\\:\\:exportPluginSnippets\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Commands/SnippetsToSqlCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\SnippetsValidateCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/SnippetsValidateCommand.php
@@ -19682,11 +19250,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @var for variable \\$pluginDirectories has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/SnippetsValidateCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$snippetsDir of method Shopware\\\\Components\\\\Snippet\\\\SnippetValidator\\:\\:validate\\(\\) expects string, array\\<string\\>\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/SnippetsValidateCommand.php
 
@@ -19716,28 +19279,8 @@ parameters:
 			path: engine/Shopware/Commands/StoreCommand.php
 
 		-
-			message: "#^Method Shopware\\\\Commands\\\\StoreCommand\\:\\:setupDomain\\(\\) should return string but returns array\\<string\\>\\|string\\|true\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/StoreCommand.php
-
-		-
-			message: "#^Method Shopware\\\\Commands\\\\StoreCommand\\:\\:setupShopwareVersion\\(\\) should return string but returns array\\<string\\>\\|string\\|true\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/StoreCommand.php
-
-		-
 			message: "#^Binary operation \"\\+\" between int\\|string and 1 results in an error\\.$#"
 			count: 4
-			path: engine/Shopware/Commands/StoreDownloadCommand.php
-
-		-
-			message: "#^Method Shopware\\\\Commands\\\\StoreDownloadCommand\\:\\:checkDomain\\(\\) should return string but returns array\\<string\\>\\|string\\|true\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/StoreDownloadCommand.php
-
-		-
-			message: "#^Method Shopware\\\\Commands\\\\StoreDownloadCommand\\:\\:checkVersion\\(\\) should return string but returns array\\<string\\>\\|string\\|true\\.$#"
-			count: 1
 			path: engine/Shopware/Commands/StoreDownloadCommand.php
 
 		-
@@ -19788,21 +19331,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$plugin of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\InstallerService\\:\\:deactivatePlugin\\(\\) expects Shopware\\\\Models\\\\Plugin\\\\Plugin, Shopware\\\\Models\\\\Plugin\\\\Plugin\\|null given\\.$#"
 			count: 2
-			path: engine/Shopware/Commands/StoreDownloadCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/StoreDownloadCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$technicalName of method Shopware\\\\Commands\\\\StoreDownloadCommand\\:\\:getFreePlugin\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/StoreDownloadCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
 			path: engine/Shopware/Commands/StoreDownloadCommand.php
 
 		-
@@ -19886,21 +19414,6 @@ parameters:
 			path: engine/Shopware/Commands/ThemeCacheGenerateCommand.php
 
 		-
-			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, array\\<string\\>\\|string\\|true given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/ThemeCacheGenerateCommand.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Models\\\\Shop\\\\Template\\:\\:createQueryBuilder\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/ThemeCreateCommand.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Models\\\\Shop\\\\Template\\:\\:findOneByTemplate\\(\\)\\.$#"
-			count: 2
-			path: engine/Shopware/Commands/ThemeCreateCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\ThemeCreateCommand\\:\\:askForOptionalData\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/ThemeCreateCommand.php
@@ -19917,16 +19430,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Commands\\\\ThemeCreateCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/ThemeCreateCommand.php
-
-		-
-			message: "#^Method Shopware\\\\Commands\\\\ThemeCreateCommand\\:\\:dialog\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/ThemeCreateCommand.php
-
-		-
-			message: "#^Property Shopware\\\\Commands\\\\ThemeCreateCommand\\:\\:\\$repository has no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/ThemeCreateCommand.php
 
@@ -20036,11 +19539,6 @@ parameters:
 			path: engine/Shopware/Commands/ThumbnailGenerateCommand.php
 
 		-
-			message: "#^Argument of an invalid type array\\<string\\>\\|string\\|true supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/WarmUpHttpCacheCommand.php
-
-		-
 			message: "#^Argument of an invalid type array\\|null supplied for foreach, only iterables are supported\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/WarmUpHttpCacheCommand.php
@@ -20067,11 +19565,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Commands\\\\WarmUpHttpCacheCommand\\:\\:prepareOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/WarmUpHttpCacheCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, array\\<string\\>\\|bool\\|string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/WarmUpHttpCacheCommand.php
 
@@ -22604,12 +22097,6 @@ parameters:
 			message: "#^Property Shopware_Components_Auth_Adapter_Default\\:\\:\\$conditions type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Auth/Adapter/Default.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Auth/Constraint/UserEmailValidator.php
-
 		-
 			message: "#^Method Shopware\\\\Components\\\\Auth\\\\Constraint\\\\UserEmailValidator\\:\\:addError\\(\\) has no return typehint specified\\.$#"
 			count: 1
@@ -22624,12 +22111,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Auth\\\\Constraint\\\\UserEmailValidator\\:\\:validate\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Auth/Constraint/UserEmailValidator.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Auth/Constraint/UserNameValidator.php
-
 		-
 			message: "#^Method Shopware\\\\Components\\\\Auth\\\\Constraint\\\\UserNameValidator\\:\\:addError\\(\\) has no return typehint specified\\.$#"
 			count: 1
@@ -23869,12 +23350,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\ConfigLoader\\:\\:loadConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ConfigLoader.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 2
-			path: engine/Shopware/Components/ConfigWriter.php
-
 		-
 			message: "#^Method Shopware\\\\Components\\\\ConfigWriter\\:\\:get\\(\\) has no return typehint specified\\.$#"
 			count: 1
@@ -24079,12 +23554,6 @@ parameters:
 			message: "#^Strict comparison using \\=\\=\\= between Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ShopContextInterface and null will always evaluate to false\\.$#"
 			count: 1
 			path: engine/Shopware/Components/CustomerStream/CookieSubscriber.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CustomerStream/CustomerStreamCriteriaFactory.php
-
 		-
 			message: "#^Method Shopware\\\\Components\\\\CustomerStream\\\\CustomerStreamCriteriaFactory\\:\\:getStream\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
@@ -28856,11 +28325,6 @@ parameters:
 			path: engine/Shopware/Components/Privacy/CookieRemoveSubscriber.php
 
 		-
-			message: "#^Parameter \\#2 \\$values of method Symfony\\\\Component\\\\HttpFoundation\\\\ResponseHeaderBag\\:\\:set\\(\\) expects array\\<string\\>\\|string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Privacy/CookieRemoveSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Privacy\\\\IpAnonymizer\\:\\:anonymize\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Privacy/IpAnonymizer.php
@@ -31409,12 +30873,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, bool\\|string given\\.$#"
 			count: 2
 			path: engine/Shopware/Components/Thumbnail/Manager.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Translation.php
-
 		-
 			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
 			count: 1
@@ -36081,11 +35539,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
 		-
-			message: "#^Parameter \\#2 \\$values of method Symfony\\\\Component\\\\HttpFoundation\\\\ResponseHeaderBag\\:\\:set\\(\\) expects array\\<string\\>\\|string, int\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
@@ -36827,11 +36280,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$str of function fwrite expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Parameter \\#2 \\$values of method Symfony\\\\Component\\\\HttpFoundation\\\\ResponseHeaderBag\\:\\:set\\(\\) expects array\\<string\\>\\|string, int\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Order.php
 
@@ -37579,12 +37027,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Backend_ProductFeed\\:\\:setDirty\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ProductFeed.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
 		-
 			message: "#^Cannot call method getCalculatedPrice\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
 			count: 1
@@ -41039,12 +40481,6 @@ parameters:
 			message: "#^Cannot access offset mixed on \\(array&nonEmpty\\)\\|false\\.$#"
 			count: 4
 			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
 		-
 			message: "#^Cannot call method getControllerName\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
 			count: 2
@@ -42409,12 +41845,6 @@ parameters:
 			message: "#^Call to an undefined method object\\:\\:fetch\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sBasket.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sBasket.php
-
 		-
 			message: "#^Cannot call method getCookie\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
 			count: 5
@@ -46904,12 +46334,6 @@ parameters:
 			message: "#^Method Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\:\\:setStatic\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Models/CustomerStream/CustomerStream.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Models/CustomerStream/CustomerStreamRepository.php
-
 		-
 			message: "#^Method Shopware\\\\Models\\\\CustomerStream\\\\CustomerStreamRepository\\:\\:fetchSearchIndexIds\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
@@ -50894,12 +50318,6 @@ parameters:
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
 			count: 4
 			path: engine/Shopware/Models/Shop/Repository.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Shop/Repository.php
-
 		-
 			message: "#^Method Shopware\\\\Models\\\\Shop\\\\Repository\\:\\:fetchAndFixShop\\(\\) has parameter \\$shop with no value type specified in iterable type array\\.$#"
 			count: 1
@@ -54033,12 +53451,6 @@ parameters:
 			message: "#^Parameter \\#4 \\$active of method Shopware_Components_Plugin_Bootstrap\\:\\:createCronJob\\(\\) expects int, true given\\.$#"
 			count: 2
 			path: engine/Shopware/Plugins/Default/Core/RebuildIndex/Bootstrap.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RebuildIndex/Components/SeoIndex.php
-
 		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
 			count: 1
@@ -54313,12 +53725,6 @@ parameters:
 			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$show\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/AdvancedMenu/Bootstrap.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/AdvancedMenu/Bootstrap.php
-
 		-
 			message: "#^Cannot call method getFile\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Media\\|null\\.$#"
 			count: 1
@@ -63708,12 +63114,6 @@ parameters:
 			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$total\\.$#"
 			count: 3
 			path: tests/Functional/Controllers/Backend/UserManagerTest.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/UserManagerTest.php
-
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\UserManagerTest\\:\\:deleteUserByUsername\\(\\) has no return typehint specified\\.$#"
 			count: 1

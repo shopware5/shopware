@@ -145,7 +145,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $response->headers->set('content-description', 'File Transfer');
         $response->headers->set('content-disposition', 'attachment; filename=' . $tmpFileName);
         $response->headers->set('content-transfer-encoding', 'binary');
-        $response->headers->set('content-length', $mediaService->getSize($file));
+        $response->headers->set('content-length', (string) $mediaService->getSize($file));
         echo $mediaService->read($file);
     }
 

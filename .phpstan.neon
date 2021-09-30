@@ -72,7 +72,7 @@ parameters:
         - '#Call to an undefined method Enlight_Template_Manager::setCompileId\(\)#'
 
         # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
-        - '#Cannot call method fetchAll\(\) on Doctrine\\DBAL\\Driver\\ResultStatement\|int#'
+        - '#Cannot call method fetch.*\(\) on Doctrine\\DBAL\\.*Statement\|int#'
 
         - # This property contains many different repositories, so we do not specify the type
             message: '#with generic class Shopware\\Components\\Model\\ModelRepository does not specify its types: TEntityClass#'

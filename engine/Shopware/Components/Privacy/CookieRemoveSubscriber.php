@@ -87,7 +87,7 @@ class CookieRemoveSubscriber implements SubscriberInterface
                 json_encode([
                     'cookieNoteMode' => $this->config->get('cookie_note_mode'),
                     'showCookieNote' => $this->config->get('show_cookie_note'),
-                ])
+                ], JSON_THROW_ON_ERROR)
             );
         }
 

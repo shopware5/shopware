@@ -91,7 +91,7 @@ class DownloadService implements DownloadServiceInterface
 
         if ($this->canServedLocal($filesystem, $downloadStrategy)) {
             $publicUrl = $this->publicUrlGenerator->generateUrl($location);
-            $path = parse_url($publicUrl, PHP_URL_PATH);
+            $path = (string) parse_url($publicUrl, PHP_URL_PATH);
             switch ($downloadStrategy) {
                 case 0:
                     $response->setRedirect($publicUrl);
