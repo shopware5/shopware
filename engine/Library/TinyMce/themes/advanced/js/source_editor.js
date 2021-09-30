@@ -2,10 +2,7 @@ tinyMCEPopup.requireLangPack();
 tinyMCEPopup.onInit.add(onLoadInit);
 
 function saveContent() {
-    var ed = tinyMCE.activeEditor,
-        undoManager = ed.undoManager;
 	tinyMCEPopup.editor.setContent(document.getElementById('htmlSource').value, {source_view : true});
-    undoManager.add();
 	tinyMCEPopup.close();
 }
 
@@ -76,6 +73,6 @@ function resizeInputs() {
 
 	if (el) {
 		el.style.width = (vp.w - 20) + 'px';
-		el.style.height = (vp.h - 90) + 'px';
+		el.style.height = (vp.h - 65) + 'px';
 	}
 }

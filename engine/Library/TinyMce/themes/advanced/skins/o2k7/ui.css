@@ -220,20 +220,3 @@
 .o2k7Skin span.mce_restoredraft {background-position:-20px -40px}
 .o2k7Skin span.mce_spellchecker {background-position:-540px -20px}
 .o2k7Skin span.mce_visualblocks {background-position: -40px -40px}
-
-#mce_fullscreen_container #mce_fullscreen_ifr {
-    max-width: 820px;
-    margin: 0 auto;
-}
-#mce_fullscreen_container .mceIframeContainer {
-    background: #d1d1d1;
-    overflow: hidden;
-}
-@media all and (min-width: 820px) {
-    #mce_fullscreen_container #mce_fullscreen_ifr  {
-        border-left: 1px solid #c7c7c7 !important;
-        border-right: 1px solid #c7c7c7 !important;
-        -webkit-box-shadow: 0 0 10px #475C6A;
-    }
-}
-
