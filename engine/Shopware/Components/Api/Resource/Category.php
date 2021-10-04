@@ -24,13 +24,22 @@
 
 namespace Shopware\Components\Api\Resource;
 
-use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\ORMInvalidArgumentException;
 use RuntimeException;
-use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
+use Shopware\Components\Api\Exception\CustomValidationException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Models\Article\Article as Product;
 use Shopware\Models\Category\Category as CategoryModel;
 use Shopware\Models\Category\ManualSorting;
+use Shopware\Models\Category\Repository;
 use Shopware\Models\Media\Media as MediaModel;
+use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware_Components_Translation as TranslationComponent;
 
 /**
@@ -45,11 +54,11 @@ class Category extends Resource
 
     public function __construct(TranslationComponent $translationComponent = null)
     {
-        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(TranslationComponent::class);
     }
 
     /**
-     * @return \Shopware\Models\Category\Repository
+     * @return Repository
      */
     public function getRepository()
     {
@@ -59,8 +68,8 @@ class Category extends Resource
     /**
      * @param int $id
      *
-     * @throws ApiException\ParameterMissingException
-     * @throws ApiException\NotFoundException
+     * @throws ParameterMissingException
+     * @throws NotFoundException
      *
      * @return CategoryModel|array
      */
@@ -69,16 +78,15 @@ class Category extends Resource
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         $query = $this->getRepository()->getDetailQueryWithoutArticles($id);
 
-        /** @var array $categoryResult */
         $categoryResult = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$categoryResult) {
-            throw new ApiException\NotFoundException(sprintf('Category by id %d not found', $id));
+            throw new NotFoundException(sprintf('Category by id %d not found', $id));
         }
 
         if ($this->getResultMode() === Resource::HYDRATE_ARRAY) {
@@ -105,7 +113,6 @@ class Category extends Resource
                 }
             }
         } else {
-            /** @var CategoryModel $category */
             $category = $categoryResult[0];
         }
 
@@ -137,7 +144,7 @@ class Category extends Resource
     }
 
     /**
-     * @throws ApiException\ValidationException
+     * @throws ValidationException
      * @throws \Exception
      *
      * @return CategoryModel
@@ -155,15 +162,14 @@ class Category extends Resource
         $category->fromArray($params);
 
         if (isset($params['id'])) {
-            /** @var ClassMetaData $metaData */
             $metaData = $this->getManager()->getMetadataFactory()->getMetadataFor(CategoryModel::class);
-            $metaData->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+            $metaData->setIdGeneratorType(ClassMetadataInfo::GENERATOR_TYPE_NONE);
             $category->setPrimaryIdentifier($params['id']);
         }
 
         $violations = $this->getManager()->validate($category);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $this->getManager()->persist($category);
@@ -179,10 +185,10 @@ class Category extends Resource
     /**
      * @param int $id
      *
-     * @throws ApiException\ValidationException
-     * @throws ApiException\NotFoundException
-     * @throws ApiException\ParameterMissingException
-     * @throws ApiException\CustomValidationException
+     * @throws ValidationException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
+     * @throws CustomValidationException
      *
      * @return CategoryModel
      */
@@ -191,14 +197,13 @@ class Category extends Resource
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
-        /** @var CategoryModel|null $category */
         $category = $this->getRepository()->find($id);
 
         if (!$category) {
-            throw new ApiException\NotFoundException(sprintf('Category by id %d not found', $id));
+            throw new NotFoundException(sprintf('Category by id %d not found', $id));
         }
 
         $params = $this->prepareCategoryData($params);
@@ -208,7 +213,7 @@ class Category extends Resource
 
         $violations = $this->getManager()->validate($category);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $this->flush();
@@ -223,8 +228,8 @@ class Category extends Resource
     /**
      * @param int $id
      *
-     * @throws ApiException\ParameterMissingException
-     * @throws ApiException\NotFoundException
+     * @throws ParameterMissingException
+     * @throws NotFoundException
      *
      * @return CategoryModel
      */
@@ -233,14 +238,13 @@ class Category extends Resource
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
-        /** @var CategoryModel|null $category */
         $category = $this->getRepository()->find($id);
 
         if (!$category) {
-            throw new ApiException\NotFoundException(sprintf('Category by id %d not found', $id));
+            throw new NotFoundException(sprintf('Category by id %d not found', $id));
         }
 
         $this->getManager()->remove($category);
@@ -262,10 +266,10 @@ class Category extends Resource
     }
 
     /**
-     * Find a category by a given human readable path.
+     * Find a category by a given human-readable path.
      * This will step through all categories from top to bottom and return the matching category.
      *
-     * @param string $path   Path of the category to search separated by pipe. Eg. Deutsch|Foo|Bar
+     * @param string $path   Path of the category to search separated by pipe. E.g. Deutsch|Foo|Bar
      * @param bool   $create Should categories be created?
      *
      * @throws RuntimeException
@@ -289,7 +293,6 @@ class Category extends Resource
                 break;
             }
 
-            /** @var CategoryModel|null $categoryModel */
             $categoryModel = $this->getRepository()->findOneBy(['name' => $categoryName, 'parentId' => $parentId]);
             if (!$categoryModel) {
                 if (!$create) {
@@ -297,7 +300,6 @@ class Category extends Resource
                 }
 
                 if ($parent === null) {
-                    /** @var CategoryModel|null $parent */
                     $parent = $this->getRepository()->find($parentId);
                     if (!$parent) {
                         throw new RuntimeException(sprintf('Could not find parent %s', $parentId));
@@ -321,18 +323,18 @@ class Category extends Resource
      * @param int   $categoryId
      * @param array $translations
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws ApiException\CustomValidationException
+     * @throws ORMException
+     * @throws ORMInvalidArgumentException
+     * @throws CustomValidationException
      */
     public function writeTranslations($categoryId, $translations)
     {
         $attributes = $this->getAttributeProperties();
 
         foreach ($translations as $translation) {
-            $shop = $this->getManager()->find(\Shopware\Models\Shop\Shop::class, $translation['shopId']);
+            $shop = $this->getManager()->find(ShopModel::class, $translation['shopId']);
             if (!$shop) {
-                throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $translation['shopId']));
+                throw new CustomValidationException(sprintf('Shop by id %s not found', $translation['shopId']));
             }
 
             $attributeTranslation = array_intersect_key($translation, array_flip($attributes));
@@ -346,14 +348,12 @@ class Category extends Resource
     }
 
     /**
-     * @throws ApiException\CustomValidationException
-     *
-     * @return array
+     * @throws CustomValidationException
      */
-    private function prepareCategoryData(array $params)
+    private function prepareCategoryData(array $params): array
     {
         if (!isset($params['name'])) {
-            throw new ApiException\CustomValidationException('A name is required');
+            throw new CustomValidationException('A name is required');
         }
 
         // In order to have a consistent interface within the REST Api, one might want
@@ -365,7 +365,7 @@ class Category extends Resource
         if (!empty($params['parent'])) {
             $params['parent'] = Shopware()->Models()->getRepository(CategoryModel::class)->find($params['parent']);
             if (!$params['parent']) {
-                throw new ApiException\CustomValidationException(sprintf('Parent by id %s not found', $params['parent']));
+                throw new CustomValidationException(sprintf('Parent by id %s not found', $params['parent']));
             }
         } else {
             unset($params['parent']);
@@ -384,11 +384,13 @@ class Category extends Resource
     }
 
     /**
-     * @throws ApiException\CustomValidationException
+     * @param array<string, mixed> $data
      *
-     * @return array
+     * @throws CustomValidationException
+     *
+     * @return array<string, mixed>
      */
-    private function prepareMediaData(array $data, CategoryModel $categoryModel)
+    private function prepareMediaData(array $data, CategoryModel $categoryModel): array
     {
         if (!isset($data['media'])) {
             return $data;
@@ -397,15 +399,13 @@ class Category extends Resource
         $media = null;
 
         if (isset($data['media']['link'])) {
-            /** @var Media $mediaResource */
-            $mediaResource = $this->getContainer()->get(\Shopware\Components\Api\Resource\Media::class);
-            /** @var MediaModel $media */
+            $mediaResource = $this->getContainer()->get(Media::class);
             $media = $mediaResource->internalCreateMediaByFileLink($data['media']['link']);
         } elseif (!empty($data['media']['mediaId'])) {
             $media = $this->getManager()->find(MediaModel::class, (int) $data['media']['mediaId']);
 
             if (!($media instanceof MediaModel)) {
-                throw new ApiException\CustomValidationException(sprintf('Media by mediaId %s not found', $data['media']['mediaId']));
+                throw new CustomValidationException(sprintf('Media by mediaId %s not found', $data['media']['mediaId']));
             }
         }
 
@@ -415,6 +415,11 @@ class Category extends Resource
         return $data;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
+     */
     private function prepareManualSorting(array $data, CategoryModel $category): array
     {
         if (!\array_key_exists('manualSorting', $data)) {
@@ -426,25 +431,27 @@ class Category extends Resource
 
         foreach ($data['manualSorting'] as $sorting) {
             if (!isset($sorting['product_id'])) {
-                throw new ApiException\CustomValidationException(sprintf('Field product_id is missing in manualSorting array'));
+                throw new CustomValidationException(sprintf('Field product_id is missing in manualSorting array'));
             }
 
             if (!isset($sorting['position'])) {
-                throw new ApiException\CustomValidationException(sprintf('Field position is missing in manualSorting array'));
+                throw new CustomValidationException(sprintf('Field position is missing in manualSorting array'));
             }
 
-            if (!$connection->fetchColumn('SELECT 1 FROM s_articles_categories_ro WHERE categoryID = ? AND articleID = ?', [
+            if (!$connection->fetchOne('SELECT 1 FROM s_articles_categories_ro WHERE categoryID = ? AND articleID = ?', [
                 $category->getId(),
                 $sorting['product_id'],
             ])) {
-                throw new ApiException\CustomValidationException(sprintf('Product with id %d is not assigned to the category', $sorting['product_id']));
+                throw new CustomValidationException(sprintf('Product with id %d is not assigned to the category', $sorting['product_id']));
             }
 
             $sortingObj = new ManualSorting();
             $sortingObj->setCategory($category);
 
-            /** @var Product $product */
             $product = $this->getManager()->find(Product::class, $sorting['product_id']);
+            if (!$product instanceof Product) {
+                throw new ModelNotFoundException(Product::class, $sorting['product_id']);
+            }
 
             $sortingObj->setProduct($product);
             $sortingObj->setPosition((int) $sorting['position']);
@@ -464,12 +471,11 @@ class Category extends Resource
     /**
      * Returns all none association property of the category class.
      *
-     * @return array
+     * @return string[]
      */
-    private function getAttributeProperties()
+    private function getAttributeProperties(): array
     {
-        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface $crud */
-        $crud = $this->getContainer()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class);
+        $crud = $this->getContainer()->get(CrudServiceInterface::class);
         $list = $crud->getList('s_categories_attributes');
         $fields = [];
         foreach ($list as $property) {

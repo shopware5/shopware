@@ -54,7 +54,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
-     * Emotion repository. Declared for an fast access to the emotion repository.
+     * Emotion repository. Declared for a fast access to the emotion repository.
      *
      * @var Repository
      */
@@ -142,8 +142,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $builder->andWhere('emotions.is_landingpage = 1')
             ->andWhere('emotions.parent_id IS NULL');
 
-        $statement = $builder->execute();
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $builder->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
@@ -302,7 +301,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         @set_time_limit(0);
 
         $binaryResponse = new BinaryFileResponse($exportFilePath, 200, [], true, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
-        $binaryResponse->deleteFileAfterSend(true);
+        $binaryResponse->deleteFileAfterSend();
         $binaryResponse->send();
 
         exit;
@@ -369,8 +368,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             basename($this->Request()->get('filePath'))
         );
 
-        $emotionImporter = $this->container->get('shopware.emotion.emotion_importer');
-        $preset = $emotionImporter->import($filePath);
+        $preset = $this->container->get('shopware.emotion.emotion_importer')->import($filePath);
 
         $this->View()->assign([
             'success' => true,
@@ -474,7 +472,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
             $component['fieldLabel'] = $snippets->get($name, $component['name']);
         }
-        unset($component); // to make shyim happy and prevent potential issues (scoped anyway)
+        unset($component);
 
         $this->View()->assign([
             'success' => true,
@@ -502,7 +500,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 return;
             }
 
-            $alreadyExists = $this->hasEmotionForSameDeviceType($data['categoryId']);
+            $alreadyExists = $this->hasEmotionForSameDeviceType((int) $data['categoryId']);
 
             $data['id'] = $emotion->getId();
 
@@ -533,7 +531,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $data = $this->Request()->getParams();
 
             if (empty($data['id'])) {
-                throw new NotFoundException('The emotion must exists before previewing it.');
+                throw new NotFoundException('The emotion must exist before previewing it.');
             }
 
             $data['previewId'] = $data['id'];
@@ -722,7 +720,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $this->get('models')->flush();
 
         if (!empty($new->getId())) {
-            $this->copyEmotionTranslations($emotion->getId(), $new->getId());
+            $this->copyEmotionTranslations((int) $emotion->getId(), (int) $new->getId());
             $this->copyElementTranslations($emotion, $new);
             $persister = Shopware()->Container()->get(DataPersister::class);
             $persister->cloneAttribute('s_emotion_attributes', $emotion->getId(), $new->getId());
@@ -749,7 +747,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * Controller action to update an existing template.
      * Use the internal "saveTemplate" function.
      * The request parameters are used as template/model data.
-     * The updateTemplateAction should have a "id" request parameter which
+     * The updateTemplateAction should have an "id" request parameter which
      * contains the id of the existing template.
      */
     public function updateTemplateAction()
@@ -848,9 +846,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
-     * The delete many templates function is used from the controller action deleteManyTemplatesAction
+     * The "delete many templates" function is used from the controller action deleteManyTemplatesAction
      * and contains the real deleteMany process. As parameter the function expects
-     * and two dimensional array with model ids:
+     * and two-dimensional array with model ids:
      *
      * Example:
      * array(
@@ -863,8 +861,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * the "deleteTemplate" function. If the delete action for the item was successfully,
      * the delete function returns the following array('success' => true).
      * If the delete function fails, the delete action returns array('success' => false, 'error'),
-     * this errors will be collected.
-     * Notice: The iteration don't stops if an errors occurs. It will be continue with the next record.
+     * those errors will be collected.
+     * Notice: The iteration doesn't stop if an error occurs. It will be continued with the next record.
      *
      * After all records deleted, the function returns array('success' => true) if no errors occurs.
      * If one or more errors occurred the function return an array like this:
@@ -983,7 +981,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         try {
-            $template = $this->get('models')->find('Shopware\Models\Emotion\Template', $id);
+            $template = $this->get('models')->find(Template::class, $id);
             if (!$template instanceof Template) {
                 return ['success' => false, 'error' => 'The passed template id exist no more!'];
             }
@@ -1019,7 +1017,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         try {
-            $template = $this->get('models')->find('Shopware\Models\Emotion\Template', $id);
+            $template = $this->get('models')->find(Template::class, $id);
             if (!$template instanceof Template) {
                 return ['success' => false, 'error' => 'The passed template id exist no more!'];
             }
@@ -1140,10 +1138,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * Method for saving a single emotion model.
      * Processes the provided data and creates necessary associations.
-     *
-     * @return Emotion|null
      */
-    private function saveEmotion(array $data)
+    private function saveEmotion(array $data): ?Emotion
     {
         $namespace = Shopware()->Snippets()->getNamespace('backend/emotion');
 
@@ -1257,10 +1253,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
     /**
      * Helper method for creating associated emotion elements.
-     *
-     * @return array
      */
-    private function createElements(Emotion $emotion, array $emotionElements)
+    private function createElements(Emotion $emotion, array $emotionElements): array
     {
         foreach ($emotionElements as &$item) {
             if (!empty($item['componentId'])) {
@@ -1285,10 +1279,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
     /**
      * Helper method for creating associated element viewports.
-     *
-     * @return array
      */
-    private function createElementViewports(Emotion $emotion, array $elementViewports)
+    private function createElementViewports(Emotion $emotion, array $elementViewports): array
     {
         foreach ($elementViewports as &$viewport) {
             $viewport['emotion'] = $emotion;
@@ -1299,10 +1291,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
     /**
      * Helper method for creating associated element data.
-     *
-     * @return array
      */
-    private function createElementData(Emotion $emotion, array $element, array $elementData)
+    private function createElementData(Emotion $emotion, array $element, array $elementData): array
     {
         foreach ($elementData as $key => &$item) {
             if (empty($item['fieldId'])) {
@@ -1342,29 +1332,24 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 foreach ($value as &$val) {
                     $val['path'] = $mediaService->normalize($val['path']);
                 }
+                unset($val);
             }
 
             $value = Zend_Json::encode($value);
         }
 
-        if (\in_array($xType, $mediaFields)) {
-            if ($mediaService->isEncoded($value)) {
-                $value = $mediaService->normalize($value);
-            }
+        if (\in_array($xType, $mediaFields) && $mediaService->isEncoded($value)) {
+            $value = $mediaService->normalize($value);
         }
 
         return $value;
     }
 
     /**
-     * Fetch all emotions with same category Id and
+     * Fetch all emotions with same category ID and
      * mark existing emotions with same devices and category
-     *
-     * @param int $categoryId
-     *
-     * @return bool
      */
-    private function hasEmotionForSameDeviceType($categoryId)
+    private function hasEmotionForSameDeviceType(int $categoryId): bool
     {
         $builder = $this->get('models')->createQueryBuilder();
         $builder
@@ -1373,13 +1358,12 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             ->leftJoin('emotions.categories', 'categories')
             ->where('categories.id = :categoryId');
 
-        $builder->setParameters(['categoryId' => $categoryId]);
+        $builder->setParameter('categoryId', $categoryId);
         $result = $builder->getQuery()->getArrayResult();
 
         $usedDevices = [];
         foreach ($result as $emotion) {
-            $devices = explode(',', $emotion['device']);
-            foreach ($devices as $device) {
+            foreach (explode(',', $emotion['device']) as $device) {
                 if (!\in_array($device, $usedDevices)) {
                     $usedDevices[] = $device;
                 } else {
@@ -1393,19 +1377,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
     /**
      * Copies the translations of an emotion to a new one.
-     *
-     * @param int $oldId
-     * @param int $newId
      */
-    private function copyEmotionTranslations($oldId, $newId)
+    private function copyEmotionTranslations(int $oldId, int $newId): void
     {
         if (empty($oldId) || empty($newId)) {
             return;
         }
 
-        $query = Shopware()->Container()->get(Connection::class)->createQueryBuilder();
-
-        $languageIds = $query->select('id')
+        $languageIds = Shopware()->Container()->get(Connection::class)->createQueryBuilder()->select('id')
             ->from('s_core_shops', 'shops')
             ->execute()
             ->fetchAll(PDO::FETCH_COLUMN);
@@ -1425,15 +1404,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * Deletes all corresponding translations for the given emotions.
      */
-    private function deleteTranslations(array $emotions)
+    private function deleteTranslations(array $emotions): void
     {
         if (empty($emotions)) {
             return;
         }
 
-        $query = Shopware()->Container()->get(Connection::class)->createQueryBuilder();
-
-        $languageIds = $query->select('id')
+        $languageIds = Shopware()->Container()->get(Connection::class)->createQueryBuilder()->select('id')
             ->from('s_core_shops', 'shops')
             ->execute()
             ->fetchAll(PDO::FETCH_COLUMN);
@@ -1450,12 +1427,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param Query $query
-     * @param int   $hydrationMode
-     *
-     * @return Paginator
+     * @return Paginator<Template>
      */
-    private function getQueryPaginator($query, $hydrationMode = AbstractQuery::HYDRATE_ARRAY)
+    private function getQueryPaginator(Query $query, int $hydrationMode = AbstractQuery::HYDRATE_ARRAY): Paginator
     {
         $query->setHydrationMode($hydrationMode);
 

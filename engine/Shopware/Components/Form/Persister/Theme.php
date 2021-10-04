@@ -24,13 +24,29 @@
 
 namespace Shopware\Components\Form\Persister;
 
-use Doctrine\ORM\PersistentCollection;
+use Doctrine\Common\Collections\Collection;
 use Shopware\Components\Form;
 use Shopware\Components\Form\Container;
+use Shopware\Components\Form\Container\FieldSet;
+use Shopware\Components\Form\Container\Tab;
+use Shopware\Components\Form\Container\TabContainer;
+use Shopware\Components\Form\Field;
+use Shopware\Components\Form\Field\Boolean;
+use Shopware\Components\Form\Field\Color;
+use Shopware\Components\Form\Field\Date;
+use Shopware\Components\Form\Field\Em;
+use Shopware\Components\Form\Field\Media;
+use Shopware\Components\Form\Field\Number;
+use Shopware\Components\Form\Field\Percent;
+use Shopware\Components\Form\Field\Pixel;
+use Shopware\Components\Form\Field\Selection;
+use Shopware\Components\Form\Field\Text;
+use Shopware\Components\Form\Field\TextArea;
 use Shopware\Components\Form\Interfaces\Container as ContainerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Template;
-use Shopware\Models\Shop\TemplateConfig;
+use Shopware\Models\Shop\TemplateConfig\Element;
+use Shopware\Models\Shop\TemplateConfig\Layout;
 
 class Theme implements Form\Interfaces\Persister
 {
@@ -47,19 +63,15 @@ class Theme implements Form\Interfaces\Persister
     /**
      * Saves the given container to the database, files or wherever.
      *
-     * @param \Shopware\Components\Form\Interfaces\Container $container
-     * @param Template                                       $reference
+     * @param Template $reference
      */
-    public function save(Form\Interfaces\Container $container, $reference)
+    public function save(ContainerInterface $container, $reference)
     {
         $this->saveContainer($container, $reference);
         $this->entityManager->flush();
     }
 
-    /**
-     * @param TemplateConfig\Layout $parent
-     */
-    private function saveContainer(Form\Interfaces\Container $container, Template $template, TemplateConfig\Layout $parent = null)
+    private function saveContainer(ContainerInterface $container, Template $template, ?Layout $parent = null): void
     {
         $class = \get_class($container);
 
@@ -67,16 +79,16 @@ class Theme implements Form\Interfaces\Persister
 
         // Do class switch to route the container to the responsible save function.
         switch ($class) {
-            case 'Shopware\\Components\\Form\\Container\\TabContainer':
+            case TabContainer::class:
                 $entity = $this->saveTabContainer($entity);
                 break;
 
-            case 'Shopware\\Components\\Form\\Container\\Tab':
+            case Tab::class:
                 /** @var Form\Container\Tab $container */
                 $entity = $this->saveTab($entity, $container);
                 break;
 
-            case 'Shopware\\Components\\Form\\Container\\FieldSet':
+            case FieldSet::class:
                 /** @var Form\Container\FieldSet $container */
                 $entity = $this->saveFieldSet($entity, $container);
                 break;
@@ -84,9 +96,9 @@ class Theme implements Form\Interfaces\Persister
 
         // Check for recursion
         foreach ($container->getElements() as $element) {
-            if ($element instanceof Form\Interfaces\Container) {
+            if ($element instanceof ContainerInterface) {
                 $this->saveContainer($element, $template, $entity);
-            } elseif ($element instanceof Form\Interfaces\Field) {
+            } elseif ($element instanceof Field) {
                 $this->saveField($element, $template, $entity);
             }
         }
@@ -94,16 +106,12 @@ class Theme implements Form\Interfaces\Persister
 
     /**
      * Helper function to create a generic ConfigLayout entity.
-     *
-     * @param TemplateConfig\Layout $parent
-     *
-     * @return TemplateConfig\Layout
      */
     private function createContainer(
         ContainerInterface $container,
         Template $template,
-        TemplateConfig\Layout $parent = null
-    ) {
+        ?Layout $parent = null
+    ): Layout {
         $entity = $this->checkExistingLayout(
             $template->getLayouts(),
             $container->getName()
@@ -117,10 +125,7 @@ class Theme implements Form\Interfaces\Persister
         return $entity;
     }
 
-    /**
-     * @return TemplateConfig\Layout
-     */
-    private function saveFieldSet(TemplateConfig\Layout $entity, Form\Container\FieldSet $container)
+    private function saveFieldSet(Layout $entity, FieldSet $container): Layout
     {
         $entity->setType('theme-field-set');
         $entity->setTitle($container->getTitle());
@@ -129,10 +134,7 @@ class Theme implements Form\Interfaces\Persister
         return $entity;
     }
 
-    /**
-     * @return TemplateConfig\Layout
-     */
-    private function saveTabContainer(TemplateConfig\Layout $entity)
+    private function saveTabContainer(Layout $entity): Layout
     {
         $entity->setType('theme-tab-panel');
         $this->entityManager->persist($entity);
@@ -140,10 +142,7 @@ class Theme implements Form\Interfaces\Persister
         return $entity;
     }
 
-    /**
-     * @return TemplateConfig\Layout
-     */
-    private function saveTab(TemplateConfig\Layout $entity, Form\Container\Tab $container)
+    private function saveTab(Layout $entity, Tab $container): Layout
     {
         $entity->setType('theme-tab');
         $entity->setTitle($container->getTitle());
@@ -152,9 +151,8 @@ class Theme implements Form\Interfaces\Persister
         return $entity;
     }
 
-    private function saveField(Form\Interfaces\Field $field, Template $template, TemplateConfig\Layout $parent)
+    private function saveField(Field $field, Template $template, Layout $parent): void
     {
-        /** @var Form\Field $field */
         $lessCompatible = true;
         if (\array_key_exists('lessCompatible', $field->getAttributes())) {
             $attributes = $field->getAttributes();
@@ -174,37 +172,37 @@ class Theme implements Form\Interfaces\Persister
         $class = \get_class($field);
 
         switch ($class) {
-            case 'Shopware\\Components\\Form\\Field\\Text':
+            case Text::class:
                 $data += ['type' => 'theme-text-field'];
                 break;
-            case 'Shopware\\Components\\Form\\Field\\Boolean':
+            case Boolean::class:
                 $data += ['type' => 'theme-checkbox-field'];
                 break;
-            case 'Shopware\\Components\\Form\\Field\\Date':
+            case Date::class:
                 $data += ['type' => 'theme-date-field'];
                 break;
-            case 'Shopware\\Components\\Form\\Field\\Color':
+            case Color::class:
                 $data += ['type' => 'theme-color-picker'];
                 break;
-            case 'Shopware\\Components\\Form\\Field\\Media':
+            case Media::class:
                 $data += ['type' => 'theme-media-selection'];
                 break;
-            case 'Shopware\\Components\\Form\\Field\\Number':
+            case Number::class:
                 $data += ['type' => 'numberfield'];
                 break;
-            case 'Shopware\\Components\\Form\\Field\\Em':
+            case Em::class:
                 $data += ['type' => 'theme-em-field'];
                 break;
-            case 'Shopware\\Components\\Form\\Field\\Percent':
+            case Percent::class:
                 $data += ['type' => 'theme-percent-field'];
                 break;
-            case 'Shopware\\Components\\Form\\Field\\Pixel':
+            case Pixel::class:
                 $data += ['type' => 'theme-pixel-field'];
                 break;
-            case 'Shopware\\Components\\Form\\Field\\TextArea':
+            case TextArea::class:
                 $data += ['type' => 'theme-text-area-field'];
                 break;
-            case 'Shopware\\Components\\Form\\Field\\Selection':
+            case Selection::class:
                 $data += [
                     'type' => 'theme-select-field',
                     'selection' => $field->getStore(),
@@ -212,10 +210,7 @@ class Theme implements Form\Interfaces\Persister
                 break;
         }
 
-        $entity = $this->checkExistingElement(
-            $template->getElements(),
-            $field->getName()
-        );
+        $entity = $this->checkExistingElement($template->getElements(), $field->getName());
 
         $entity->fromArray($data);
         $entity->setTemplate($template);
@@ -225,36 +220,30 @@ class Theme implements Form\Interfaces\Persister
     }
 
     /**
-     * @param string $name
-     *
-     * @return TemplateConfig\Element
+     * @param Collection<array-key, Element> $collection
      */
-    private function checkExistingElement(PersistentCollection $collection, $name)
+    private function checkExistingElement(Collection $collection, string $name): Element
     {
-        /** @var TemplateConfig\Element $element */
         foreach ($collection as $element) {
-            if ($element->getName() == $name) {
+            if ($element->getName() === $name) {
                 return $element;
             }
         }
 
-        return new TemplateConfig\Element();
+        return new Element();
     }
 
     /**
-     * @param string $name
-     *
-     * @return TemplateConfig\Layout
+     * @param Collection<array-key, Layout> $collection
      */
-    private function checkExistingLayout(PersistentCollection $collection, $name)
+    private function checkExistingLayout(Collection $collection, string $name): Layout
     {
-        /** @var TemplateConfig\Layout $element */
         foreach ($collection as $element) {
-            if ($element->getName() == $name) {
+            if ($element->getName() === $name) {
                 return $element;
             }
         }
 
-        return new TemplateConfig\Layout();
+        return new Layout();
     }
 }

@@ -49,6 +49,9 @@ class LogRepository extends ModelRepository implements LogRepositoryInterface
      */
     private $maxDate;
 
+    /**
+     * @param ClassMetadata<Log> $class
+     */
     public function __construct(EntityManagerInterface $entityManager, ClassMetadata $class)
     {
         $this->minDate = new DateTime(self::MIN_DATE);

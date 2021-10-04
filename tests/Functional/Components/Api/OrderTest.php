@@ -525,8 +525,10 @@ class OrderTest extends TestCase
         static::assertNotNull($newOrder->getShipping());
         static::assertEquals($order['shipping']['city'], $newOrder->getShipping()->getCity());
         static::assertCount(\count($order['details']), $newOrder->getDetails());
-        static::assertEquals($order['details'][0]['articleName'], $newOrder->getDetails()[0]->getArticleName());
-        static::assertEquals(($oldOrderNumber + 1), (int) $newOrder->getDetails()[0]->getNumber());
+        $firstOrderDetail = $newOrder->getDetails()[0];
+        static::assertInstanceOf(Detail::class, $firstOrderDetail);
+        static::assertEquals($order['details'][0]['articleName'], $firstOrderDetail->getArticleName());
+        static::assertEquals(($oldOrderNumber + 1), (int) $firstOrderDetail->getNumber());
     }
 
     public function testUpdateOrderPositionStatusShouldBeSuccessful(): void

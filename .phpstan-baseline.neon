@@ -4359,11 +4359,6 @@ parameters:
 			path: engine/Shopware/Bundle/AttributeBundle/Repository/Searcher/GenericSearcher.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Searcher/GenericSearcher.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Searcher\\\\GenericSearcher\\:\\:addSearchTermCondition\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AttributeBundle/Repository/Searcher/GenericSearcher.php
@@ -11966,36 +11961,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VariantCondition\\:\\:getGroupId\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundle/Condition/VariantCondition.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\Criteria\\:\\:removeBaseCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/Criteria.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\Criteria\\:\\:removeCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/Criteria.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\Criteria\\:\\:removeFacet\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/Criteria.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\Criteria\\:\\:removeSorting\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/Criteria.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\Criteria\\:\\:setGeneratePartialFacets\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/Criteria.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\SearchBundle\\\\Criteria\\:\\:\\$limit \\(int\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/Criteria.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addCategoryCondition\\(\\) has no return typehint specified\\.$#"
@@ -19674,11 +19639,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Manager.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Address.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Address\\:\\:create\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Address.php
@@ -19730,41 +19690,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:current\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getId\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getRelated\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getSimilar\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Cannot call method clear\\(\\) on \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\>\\)\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Cannot call method clear\\(\\) on \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Article.php
 
@@ -20114,11 +20039,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Article.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:resetProductCategoryAssignment\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:resetProductCategoryAssignment\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Article.php
@@ -20204,27 +20124,7 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Article.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$categories contains generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$product has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Parameter \\#1 \\$collection of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getCollectionElementByProperties\\(\\) expects Doctrine\\\\Common\\\\Collections\\\\Collection, \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
 			message: "#^Parameter \\#1 \\$media of method Shopware\\\\Components\\\\Thumbnail\\\\Manager\\:\\:createMediaThumbnail\\(\\) expects Shopware\\\\Models\\\\Media\\\\Media, Shopware\\\\Models\\\\Media\\\\Media\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Article.php
 
@@ -20279,17 +20179,7 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Cache.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Category.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Category\\:\\:create\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Category.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Category\\:\\:getAttributeProperties\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Category.php
 
@@ -20324,26 +20214,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Category.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Category\\:\\:prepareManualSorting\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Category.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Category\\:\\:prepareManualSorting\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Category.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Category\\:\\:prepareMediaData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Category.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Category\\:\\:prepareMediaData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Category.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Category\\:\\:update\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Category.php
@@ -20359,17 +20229,7 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Category.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$categoryResult has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Category.php
-
-		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Country.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Country.php
 
@@ -20422,26 +20282,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Country\\:\\:update\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Country.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Components\\\\Model\\\\ModelEntity\\:\\:getCustomer\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Components\\\\Model\\\\ModelEntity\\:\\:setCustomer\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Components\\\\Model\\\\ModelEntity\\:\\:setPaymentMean\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
 
 		-
 			message: "#^Cannot call method fromArray\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
@@ -20559,11 +20399,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/CustomerGroup.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerGroup.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerGroup\\:\\:create\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/CustomerGroup.php
@@ -20620,11 +20455,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:setAlias\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
 
@@ -20824,16 +20654,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/EmotionPreset.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:setIdGeneratorType\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Manufacturer.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Manufacturer.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Manufacturer\\:\\:create\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Manufacturer.php
@@ -20882,11 +20702,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Manufacturer\\:\\:update\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Manufacturer.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Media.php
 
 		-
 			message: "#^Cannot call method fromArray\\(\\) on Shopware\\\\Models\\\\Attribute\\\\Media\\|null\\.$#"
@@ -21029,11 +20844,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Order.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Order.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Order\\:\\:create\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Order.php
@@ -21060,11 +20870,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Order\\:\\:getOneByNumber\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Order\\:\\:prepareCreateAddresses\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Order.php
 
@@ -21124,19 +20929,9 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Order.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$order has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Order.php
-
-		-
 			message: "#^Parameter \\#1 \\$sort of method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addOrderBy\\(\\) expects Doctrine\\\\ORM\\\\Query\\\\Expr\\\\OrderBy\\|string, array given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Order.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/PaymentMethods.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\PaymentMethods\\:\\:create\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
@@ -21179,11 +20974,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/PaymentMethods.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/PropertyGroup.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\PropertyGroup\\:\\:create\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/PropertyGroup.php
@@ -21224,33 +21014,8 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/PropertyGroup.php
 
 		-
-			message: "#^Call to an undefined method Shopware\\\\Components\\\\Api\\\\BatchInterface\\:\\:delete\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Components\\\\Api\\\\BatchInterface\\:\\:getManager\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Components\\\\Api\\\\BatchInterface\\:\\:getResultMode\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Components\\\\Api\\\\BatchInterface\\:\\:resetEntityManager\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
 			message: "#^Call to an undefined method Symfony\\\\Component\\\\Validator\\\\ConstraintViolationListInterface\\:\\:getIterator\\(\\)\\.$#"
 			count: 2
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Cannot call method create\\(\\) on Shopware\\\\Components\\\\Api\\\\BatchInterface\\|null\\.$#"
-			count: 1
 			path: engine/Shopware/Components/Api/Resource/Resource.php
 
 		-
@@ -21259,72 +21024,7 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Resource.php
 
 		-
-			message: "#^Cannot call method getIdByData\\(\\) on Shopware\\\\Components\\\\Api\\\\BatchInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Cannot call method getManager\\(\\) on Shopware\\\\Components\\\\Api\\\\BatchInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Cannot call method getResultMode\\(\\) on Shopware\\\\Components\\\\Api\\\\BatchInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Cannot call method getRoleId\\(\\) on Zend_Acl_Role_Interface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Cannot call method has\\(\\) on Shopware_Components_Acl\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Cannot call method isAllowed\\(\\) on Shopware_Components_Acl\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Cannot call method resetEntityManager\\(\\) on Shopware\\\\Components\\\\Api\\\\BatchInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Cannot call method update\\(\\) on Shopware\\\\Components\\\\Api\\\\BatchInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:batch\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:batch\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:batchDelete\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:batchDelete\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:checkDataReplacement\\(\\) has parameter \\$collection with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:checkDataReplacement\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Resource.php
 
@@ -21339,11 +21039,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Resource.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:findEntityByConditions\\(\\) has parameter \\$conditions with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:flush\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Resource.php
@@ -21354,22 +21049,7 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Resource.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getCollectionElementByProperties\\(\\) has parameter \\$conditions with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getCollectionElementByProperty\\(\\) has parameter \\$collection with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getCollectionElementByProperty\\(\\) has parameter \\$collection with no value type specified in iterable type array\\|Doctrine\\\\Common\\\\Collections\\\\Collection\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getCollectionElementByProperty\\(\\) has parameter \\$value with no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Resource.php
 
@@ -21379,27 +21059,7 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Resource.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getManyToManySubElement\\(\\) has parameter \\$conditions with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getManyToManySubElement\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getOneToManySubElement\\(\\) has parameter \\$collection with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getOneToManySubElement\\(\\) has parameter \\$conditions with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getOneToManySubElement\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Resource.php
 
@@ -21430,11 +21090,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Shop.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Shop.php
 
@@ -21484,16 +21139,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Shop.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:checkRequirements\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Translation.php
@@ -21514,17 +21159,7 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Translation.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:create\\(\\) should return Shopware\\\\Models\\\\Translation\\\\Translation but returns array\\|Shopware\\\\Models\\\\Translation\\\\Translation\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:createByNumber\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:createByNumber\\(\\) should return Shopware\\\\Models\\\\Translation\\\\Translation but returns array\\|Shopware\\\\Models\\\\Translation\\\\Translation\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Translation.php
 
@@ -21539,17 +21174,7 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Translation.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:getDownloadIdByNumber\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:getIdByData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:getLinkIdByNumber\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Translation.php
 
@@ -21594,11 +21219,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Translation.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:saveTranslation\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:setTranslationComponent\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Translation.php
@@ -21609,37 +21229,7 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Translation.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:update\\(\\) should return Shopware\\\\Models\\\\Translation\\\\Translation but returns array\\|Shopware\\\\Models\\\\Translation\\\\Translation\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:updateByNumber\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:updateByNumber\\(\\) should return Shopware\\\\Models\\\\Translation\\\\Translation but returns array\\|Shopware\\\\Models\\\\Translation\\\\Translation\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$existing has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, array\\|Shopware\\\\Models\\\\Translation\\\\Translation given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:flush\\(\\) expects object\\|null, array\\|Shopware\\\\Models\\\\Translation\\\\Translation given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Parameter \\#1 \\$sort of method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addOrderBy\\(\\) expects Doctrine\\\\ORM\\\\Query\\\\Expr\\\\OrderBy\\|string, array given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Translation.php
 
@@ -21647,11 +21237,6 @@ parameters:
 			message: "#^Property Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:\\$repository with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: TEntityClass$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/User.php
 
 		-
 			message: "#^Cannot call method getRoleId\\(\\) on Zend_Acl_Role_Interface\\|null\\.$#"
@@ -21722,11 +21307,6 @@ parameters:
 			message: "#^Parameter \\#2 \\.\\.\\.\\$values of function sprintf expects bool\\|float\\|int\\|string\\|null, string\\|Zend_Acl_Resource_Interface given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/User.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
 
 		-
 			message: "#^Cannot call method getGroups\\(\\) on Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set\\|null\\.$#"
@@ -21979,27 +21559,12 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Variant.php
 
 		-
-			message: "#^Parameter \\#1 \\$availableGroups of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:getAvailableGroup\\(\\) expects Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\>, \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\>\\)\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Parameter \\#1 \\$collection of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getCollectionElementByProperty\\(\\) expects array\\|Doctrine\\\\Common\\\\Collections\\\\Collection, \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
 			message: "#^Parameter \\#1 \\$filename of function unlink expects string, bool\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Variant.php
 
 		-
 			message: "#^Parameter \\#1 \\$images of method Shopware\\\\Models\\\\Article\\\\Detail\\:\\:setImages\\(\\) expects array\\<Shopware\\\\Models\\\\Article\\\\Image\\>\\|\\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Image\\>\\)\\|null, Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<Shopware\\\\Models\\\\Article\\\\Image\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Parameter \\#1 \\$options of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:createImageMappingForOptions\\(\\) expects array\\|Doctrine\\\\Common\\\\Collections\\\\Collection, \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Variant.php
 
@@ -25130,26 +24695,6 @@ parameters:
 			path: engine/Shopware/Components/Form/Persister/Theme.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Form\\\\Persister\\\\Theme\\:\\:saveContainer\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Form/Persister/Theme.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Form\\\\Persister\\\\Theme\\:\\:saveField\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Form/Persister/Theme.php
-
-		-
-			message: "#^Parameter \\#1 \\$collection of method Shopware\\\\Components\\\\Form\\\\Persister\\\\Theme\\:\\:checkExistingElement\\(\\) expects Doctrine\\\\ORM\\\\PersistentCollection, Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Shop\\\\TemplateConfig\\\\Element\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Form/Persister/Theme.php
-
-		-
-			message: "#^Parameter \\#1 \\$collection of method Shopware\\\\Components\\\\Form\\\\Persister\\\\Theme\\:\\:checkExistingLayout\\(\\) expects Doctrine\\\\ORM\\\\PersistentCollection, Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Shop\\\\TemplateConfig\\\\Layout\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Form/Persister/Theme.php
-
-		-
 			message: "#^Call to an undefined method Symfony\\\\Component\\\\HttpKernel\\\\HttpCache\\\\StoreInterface\\:\\:purgeAll\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Components/HttpCache/AppCache.php
@@ -26220,11 +25765,6 @@ parameters:
 			path: engine/Shopware/Components/Model/Cache.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Model\\\\Cache\\:\\:doGetStats\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/Cache.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\Model\\\\Cache\\:\\:\\$tags type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/Cache.php
@@ -26401,11 +25941,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Components\\\\Model\\\\DBAL\\\\Result\\:\\:\\$data type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/DBAL/Result.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\Model\\\\DBAL\\\\Result\\:\\:\\$statement \\(Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\) does not accept Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\|int\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/DBAL/Result.php
 
@@ -26840,11 +26375,6 @@ parameters:
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Backup.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/Backup.php
-
-		-
 			message: "#^Cannot access offset mixed on \\(array\\<int, string\\>&nonEmpty\\)\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Backup.php
@@ -27145,16 +26675,6 @@ parameters:
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
 
 		-
-			message: "#^Offset 'nullable' does not exist on array\\('type' \\=\\> string, 'fieldName' \\=\\> string, 'columnName' \\=\\> string, 'inherited' \\=\\> class\\-string\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
-
-		-
-			message: "#^Offset 'precision' does not exist on array\\('type' \\=\\> string, 'fieldName' \\=\\> string, 'columnName' \\=\\> string, 'inherited' \\=\\> class\\-string\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:\\$attributeToColumn has no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
@@ -27198,11 +26718,6 @@ parameters:
 			message: "#^Property Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:\\$prefixToEntity has no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/Filter.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Filter\\:\\:filter\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
@@ -27318,11 +26833,6 @@ parameters:
 			message: "#^Parameter \\#4 \\$id of method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Backup\\:\\:finishBackup\\(\\) expects int, int\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Queue.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/Value.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Value\\:\\:getValuesFor\\(\\) has parameter \\$queryConfig with no value type specified in iterable type array\\.$#"
@@ -31599,16 +31109,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Analytics.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:current\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
 			message: "#^Cannot access offset 'day' on array\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Application.php
@@ -31864,32 +31364,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Argument of an invalid type \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
 			count: 2
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 4
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Cannot access offset 'size' on array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Cannot call method clear\\(\\) on \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\>\\)\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Cannot call method clear\\(\\) on \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
 
@@ -31910,7 +31390,7 @@ parameters:
 
 		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set\\|null\\.$#"
-			count: 6
+			count: 5
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
@@ -31925,11 +31405,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method getOptions\\(\\) on Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Cannot call method getTax\\(\\) on Shopware\\\\Models\\\\Tax\\\\Tax\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
 
@@ -32539,11 +32014,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:prepareRelatedProductStreamsData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:prepareSeoCategoryAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
@@ -32754,11 +32224,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$result has no value type specified in iterable type Traversable\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Parameter \\#1 \\$fp of function fclose expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
@@ -32779,22 +32244,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Parameter \\#1 \\$mainDetail of method Shopware_Controllers_Backend_Article\\:\\:getMappingData\\(\\) expects Shopware\\\\Models\\\\Article\\\\Detail, Shopware\\\\Models\\\\Article\\\\Detail\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Parameter \\#1 \\$option of method Shopware\\\\Models\\\\Article\\\\Image\\\\Rule\\:\\:setOption\\(\\) expects Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option, Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Parameter \\#2 \\$detail of method Shopware_Controllers_Backend_Article\\:\\:copyConfigurationTemplateTranslations\\(\\) expects Shopware\\\\Models\\\\Article\\\\Detail, Shopware\\\\Models\\\\Article\\\\Detail\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Parameter \\#2 \\$mainDetail of method Shopware_Controllers_Backend_Article\\:\\:getVariantsForMapping\\(\\) expects Shopware\\\\Models\\\\Article\\\\Detail, Shopware\\\\Models\\\\Article\\\\Detail\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
 
@@ -33514,11 +32964,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
 			message: "#^Cannot call method rowCount\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
@@ -33596,11 +33041,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$usedIds\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Category.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 3
 			path: engine/Shopware/Controllers/Backend/Category.php
 
 		-
@@ -34439,22 +33879,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Document.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
 			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:afterImportAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:copyEmotionTranslations\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
@@ -34525,11 +33955,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:deleteTemplateAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:deleteTranslations\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
@@ -35794,11 +35219,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/NewsletterManager.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Backend/NewsletterManager.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_NewsletterManager\\:\\:createNewsletterAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/NewsletterManager.php
@@ -35950,11 +35370,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Order.php
 
@@ -37228,11 +36643,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/RiskManagement.php
 
 		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Search.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Search\\:\\:addIdsCondition\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Search.php
@@ -37276,11 +36686,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Search.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Shipping.php
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Shipping\\:\\:convertShippingCostsDates\\(\\) has parameter \\$shippingCosts with no value type specified in iterable type array\\.$#"
@@ -38080,11 +37485,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$voucherId\\.$#"
 			count: 2
-			path: engine/Shopware/Controllers/Backend/Voucher.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
 			path: engine/Shopware/Controllers/Backend/Voucher.php
 
 		-
@@ -43481,11 +42881,6 @@ parameters:
 			path: engine/Shopware/Models/Article/Article.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:getCustomerGroups\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Article.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:getDetails\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Article.php
@@ -43511,22 +42906,12 @@ parameters:
 			path: engine/Shopware/Models/Article/Article.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:getRelated\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Article.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:getRelatedProductStreams\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Article.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:getSeoCategories\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:getSimilar\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Article.php
 
@@ -43541,17 +42926,7 @@ parameters:
 			path: engine/Shopware/Models/Article/Article.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:setCustomerGroups\\(\\) has parameter \\$customerGroups with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Article.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:setPropertyValues\\(\\) has parameter \\$propertyValues with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:setRelated\\(\\) has parameter \\$related with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Article.php
 
@@ -43562,11 +42937,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:setRelatedProductStreams\\(\\) has parameter \\$relatedProductStreams with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:setSimilar\\(\\) has parameter \\$similar with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Article.php
 
@@ -49030,11 +48400,6 @@ parameters:
 			path: engine/Shopware/Models/Order/Order.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:getDetails\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:getDocuments\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Order/Order.php
@@ -49192,11 +48557,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
 			count: 2
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
-			message: "#^Call to an undefined method Traversable\\<mixed, mixed\\>\\:\\:getArrayCopy\\(\\)\\.$#"
-			count: 1
 			path: engine/Shopware/Models/Order/Repository.php
 
 		-
@@ -53781,11 +53141,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Frontend/AdvancedMenu/Bootstrap.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Driver\\\\ResultStatement\\:\\:rowCount\\(\\)\\.$#"
-			count: 5
-			path: engine/Shopware/Plugins/Default/Frontend/CronRefresh/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Frontend_CronRefresh_Bootstrap\\:\\:onCronJobClearing\\(\\) has parameter \\$job with no value type specified in iterable type Shopware_Components_Cron_CronJob\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/CronRefresh/Bootstrap.php
@@ -55836,11 +55191,6 @@ parameters:
 			path: tests/Functional/Bundle/ESIndexingBundle/BacklogProcessorTest.php
 
 		-
-			message: "#^Argument of an invalid type \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\>\\)\\|null supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/ESIndexingBundle/Product/ProductListingVariationLoaderTest.php
-
-		-
 			message: "#^Cannot call method getGroups\\(\\) on Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set\\|null\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/ESIndexingBundle/Product/ProductListingVariationLoaderTest.php
@@ -57431,11 +56781,6 @@ parameters:
 			path: tests/Functional/Components/Api/AddressTest.php
 
 		-
-			message: "#^Argument of an invalid type \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null supplied for foreach, only iterables are supported\\.$#"
-			count: 3
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
 			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
 			count: 4
 			path: tests/Functional/Components/Api/ArticleTest.php
@@ -58111,21 +57456,6 @@ parameters:
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
-			message: "#^Offset 0 does not exist on \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null\\.$#"
-			count: 3
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Offset 1 does not exist on \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null\\.$#"
-			count: 3
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Offset 2 does not exist on \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
 			message: "#^PHPDoc tag @var for variable \\$article contains unknown class Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\Shopware\\\\Models\\\\Article\\\\Article\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
@@ -58188,11 +57518,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$stack of function array_shift is passed by reference, so it expects variables only\\.$#"
 			count: 2
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertCount\\(\\) expects Countable\\|iterable, \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null given\\.$#"
-			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
@@ -59836,11 +59161,6 @@ parameters:
 			path: tests/Functional/Components/Api/UserTest.php
 
 		-
-			message: "#^Argument of an invalid type \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\>\\)\\|null supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/VariantTest.php
-
-		-
 			message: "#^Cannot access offset 'configuratorOptions' on array\\|Shopware\\\\Models\\\\Article\\\\Detail\\.$#"
 			count: 2
 			path: tests/Functional/Components/Api/VariantTest.php
@@ -59857,11 +59177,6 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'prices' on array\\|Shopware\\\\Models\\\\Article\\\\Detail\\.$#"
-			count: 2
-			path: tests/Functional/Components/Api/VariantTest.php
-
-		-
-			message: "#^Cannot call method count\\(\\) on \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null\\.$#"
 			count: 2
 			path: tests/Functional/Components/Api/VariantTest.php
 
@@ -60113,16 +59428,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$number of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:getOneByNumber\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
-			path: tests/Functional/Components/Api/VariantTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertCount\\(\\) expects Countable\\|iterable, \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\>\\)\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/VariantTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertCount\\(\\) expects Countable\\|iterable, \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>\\)\\|null given\\.$#"
-			count: 2
 			path: tests/Functional/Components/Api/VariantTest.php
 
 		-
@@ -71960,62 +71265,7 @@ parameters:
 			path: tests/Unit/Components/Model/ModelRepositoryTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\QueryBuilderTest\\:\\:getInvalidFilterDataProvider\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/QueryBuilderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\QueryBuilderTest\\:\\:testAddFilterAfterSetParameter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/QueryBuilderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\QueryBuilderTest\\:\\:testAddFilterArrayOfValues\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/QueryBuilderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\QueryBuilderTest\\:\\:testAddFilterBehavior\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/QueryBuilderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\QueryBuilderTest\\:\\:testAddParameterProvidesOldDoctrineSetParametersBehavior\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/QueryBuilderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\QueryBuilderTest\\:\\:testComplexFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/QueryBuilderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\QueryBuilderTest\\:\\:testInvalidOperatorsThrowException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/QueryBuilderTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\QueryBuilderTest\\:\\:testInvalidOperatorsThrowException\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/QueryBuilderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\QueryBuilderTest\\:\\:testMixedFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/QueryBuilderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\QueryBuilderTest\\:\\:testMultipleSimpleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/QueryBuilderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\QueryBuilderTest\\:\\:testOverwriteFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/QueryBuilderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\QueryBuilderTest\\:\\:testSimpleFilter\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Model/QueryBuilderTest.php
 

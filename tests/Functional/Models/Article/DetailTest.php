@@ -24,7 +24,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Models\Order;
+namespace Shopware\Tests\Functional\Models\Article;
 
 use ReflectionClass;
 use Shopware\Components\Model\ModelManager;

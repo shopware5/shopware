@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\DBAL\Constraints as ShopwareAssert;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Attribute\Article as ProductAttribute;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -51,7 +52,7 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection<\Shopware\Models\Article\Price>
+     * @var ArrayCollection<Price>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Price", mappedBy="detail", orphanRemoval=true, cascade={"persist"})
      */
@@ -79,7 +80,7 @@ class Detail extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var ArrayCollection<\Shopware\Models\Article\Configurator\Option>
+     * @var ArrayCollection<Option>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="articles")
      * @ORM\JoinTable(name="s_article_configurator_option_relations",
@@ -105,7 +106,7 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection<\Shopware\Models\Article\Notification>
+     * @var ArrayCollection<Notification>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Notification", mappedBy="articleDetail")
      */
@@ -114,7 +115,7 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection<\Shopware\Models\Article\Image>
+     * @var ArrayCollection<Image>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
@@ -321,7 +322,7 @@ class Detail extends ModelEntity
         $this->images = new ArrayCollection();
         $this->configuratorOptions = new ArrayCollection();
         $this->notifications = new ArrayCollection();
-        $this->attribute = new \Shopware\Models\Attribute\Article();
+        $this->attribute = new ProductAttribute();
         $this->attribute->setArticleDetail($this);
     }
 
@@ -578,7 +579,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<Price>
      */
     public function getPrices()
     {
@@ -897,7 +898,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Option>|null
+     * @return ArrayCollection<Option>
      */
     public function getConfiguratorOptions()
     {
@@ -905,7 +906,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Option> $configuratorOptions
+     * @param ArrayCollection<Option> $configuratorOptions
      */
     public function setConfiguratorOptions($configuratorOptions)
     {

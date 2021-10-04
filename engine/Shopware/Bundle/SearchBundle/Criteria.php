@@ -42,14 +42,14 @@ class Criteria extends Extendable implements ReflectionAwareInterface
     /**
      * Offset for the limitation
      *
-     * @var int
+     * @var int|null
      */
     private $offset;
 
     /**
      * Count of result
      *
-     * @var int
+     * @var int|null
      */
     private $limit;
 
@@ -116,7 +116,7 @@ class Criteria extends Extendable implements ReflectionAwareInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getOffset()
     {
@@ -124,7 +124,7 @@ class Criteria extends Extendable implements ReflectionAwareInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getLimit()
     {
@@ -288,7 +288,7 @@ class Criteria extends Extendable implements ReflectionAwareInterface
      *
      * Do not rely on the array key or the order of the returned conditions.
      *
-     * @return \Shopware\Bundle\SearchBundle\ConditionInterface[]
+     * @return ConditionInterface[]
      */
     public function getConditions()
     {
@@ -299,7 +299,7 @@ class Criteria extends Extendable implements ReflectionAwareInterface
     }
 
     /**
-     * @return \Shopware\Bundle\SearchBundle\FacetInterface[]
+     * @return FacetInterface[]
      */
     public function getFacets()
     {
@@ -307,7 +307,7 @@ class Criteria extends Extendable implements ReflectionAwareInterface
     }
 
     /**
-     * @return \Shopware\Bundle\SearchBundle\SortingInterface[]
+     * @return SortingInterface[]
      */
     public function getSortings()
     {
@@ -366,6 +366,8 @@ class Criteria extends Extendable implements ReflectionAwareInterface
      * Removes a condition of the current criteria object.
      *
      * @param string $name
+     *
+     * @return void
      */
     public function removeCondition($name)
     {
@@ -378,6 +380,8 @@ class Criteria extends Extendable implements ReflectionAwareInterface
      * Removes a base condition of the current criteria object.
      *
      * @param string $name
+     *
+     * @return void
      */
     public function removeBaseCondition($name)
     {
@@ -390,6 +394,8 @@ class Criteria extends Extendable implements ReflectionAwareInterface
      * Removes a facet of the current criteria object.
      *
      * @param string $name
+     *
+     * @return void
      */
     public function removeFacet($name)
     {
@@ -402,6 +408,8 @@ class Criteria extends Extendable implements ReflectionAwareInterface
      * Removes a sorting of the current criteria object.
      *
      * @param string $name
+     *
+     * @return void
      */
     public function removeSorting($name)
     {
@@ -458,6 +466,8 @@ class Criteria extends Extendable implements ReflectionAwareInterface
 
     /**
      * @param bool $generatePartialFacets
+     *
+     * @return void
      */
     public function setGeneratePartialFacets($generatePartialFacets)
     {

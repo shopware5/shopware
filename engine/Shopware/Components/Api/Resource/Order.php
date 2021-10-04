@@ -76,7 +76,6 @@ class Order extends Resource
             throw new ParameterMissingException();
         }
 
-        /** @var OrderModel|null $orderModel */
         $orderModel = $this->getRepository()->findOneBy(['number' => $number]);
 
         if (!$orderModel) {
@@ -118,11 +117,10 @@ class Order extends Resource
         }
 
         $filters = [['property' => 'orders.id', 'expression' => '=', 'value' => $id]];
-        $builder = $this->getRepository()->getOrdersQueryBuilder($filters);
-        /** @var OrderModel|array|null $order */
-        $order = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
+        $order = $this->getRepository()->getOrdersQueryBuilder($filters)->getQuery()
+            ->getOneOrNullResult($this->getResultMode());
 
-        if (!$order) {
+        if ($order === null) {
             throw new NotFoundException(sprintf('Order by id %d not found', $id));
         }
 
@@ -171,8 +169,7 @@ class Order extends Resource
             if (\is_array($order)) {
                 $order['paymentStatusId'] = $order['cleared'];
                 $order['orderStatusId'] = $order['status'];
-                unset($order['cleared']);
-                unset($order['status']);
+                unset($order['cleared'], $order['status']);
             }
         }
 
@@ -200,7 +197,7 @@ class Order extends Resource
         // Create model
         $order = new OrderModel();
 
-        // Setting default values, necessary because of not-nullable table colums
+        // Setting default values, necessary because of not-nullable table columns
         $order->setComment('');
         $order->setCustomerComment('');
         $order->setInternalComment('');
@@ -226,7 +223,7 @@ class Order extends Resource
 
             $order->setNumber((string) $orderNumber);
             foreach ($order->getDetails() as $detail) {
-                $detail->setNumber($orderNumber);
+                $detail->setNumber((string) $orderNumber);
             }
         }
 
@@ -266,7 +263,6 @@ class Order extends Resource
             throw new ParameterMissingException('id');
         }
 
-        /** @var OrderModel|null $order */
         $order = $this->getRepository()->find($id);
 
         if (!$order) {
@@ -483,7 +479,6 @@ class Order extends Resource
             $detailModel = new Detail();
             $detailModel->fromArray($detail);
 
-            /** @var DetailStatus|null $status */
             $status = $this->getContainer()->get(ModelManager::class)->find(DetailStatus::class, $detail['statusId']);
             if (!$status) {
                 throw new NotFoundException(sprintf('DetailStatus by id %s not found', $detail['statusId']));
@@ -510,6 +505,7 @@ class Order extends Resource
 
             $detail = $detailModel;
         }
+        unset($detail);
 
         $params['details'] = $details;
 
@@ -600,11 +596,11 @@ class Order extends Resource
             // Apply whiteList
             $detail = array_intersect_key($detail, array_flip($detailWhiteList));
         }
+        unset($detail);
 
         $detailModels = $this->checkDataReplacement(new ArrayCollection($order->getDetails()->toArray()), $params, 'details', true);
 
-        foreach ($details as &$detail) {
-            /** @var Detail $detailModel */
+        foreach ($details as $detail) {
             $detailModel = $this->getOneToManySubElement($order->getDetails(), $detail, Detail::class);
 
             if (empty($detailModel->getId())) {
@@ -613,7 +609,6 @@ class Order extends Resource
             }
 
             if (isset($detail['status'])) {
-                /** @var DetailStatus|null $status */
                 $status = Shopware()->Models()->find(DetailStatus::class, $detail['status']);
 
                 if (!$status) {
@@ -641,7 +636,7 @@ class Order extends Resource
      * @throws ValidationException
      * @throws ParameterMissingException
      */
-    private function prepareCreateAddresses(array $params, OrderModel $order)
+    private function prepareCreateAddresses(array $params, OrderModel $order): void
     {
         if (!\array_key_exists('billing', $params)) {
             throw new ParameterMissingException('billing');
@@ -652,7 +647,6 @@ class Order extends Resource
         }
 
         $billing = $params['billing'];
-        $country = null;
         $state = null;
 
         if (!\array_key_exists('countryId', $billing)) {
@@ -669,7 +663,7 @@ class Order extends Resource
         }
 
         $country = $this->getContainer()->get(ModelManager::class)->find(CountryModel::class, $billing['countryId']);
-        if (!$country) {
+        if (!$country instanceof CountryModel) {
             throw new NotFoundException(sprintf('Billing Country by id %s not found', $billing['countryId']));
         }
 

@@ -24,7 +24,7 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Shopware\Components\Backend\GlobalSearch;
@@ -126,7 +126,6 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function createEntitySearchQuery($entity)
     {
-        /** @var QueryBuilder $query */
         $query = $this->get(ModelManager::class)->createQueryBuilder();
         $query->select('entity')
             ->from($entity, 'entity');
@@ -174,12 +173,9 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     protected function getPaginator($builder)
     {
         $query = $builder->getQuery();
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
-        /** @var ModelManager $entityManager */
-        $entityManager = $this->get(ModelManager::class);
-
-        return $entityManager->createPaginator($query);
+        return $this->get(ModelManager::class)->createPaginator($query);
     }
 
     /**
@@ -206,7 +202,6 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
     private function getEntitySearchFields(string $entity): array
     {
-        /** @var ModelManager $entityManager */
         $entityManager = $this->get(ModelManager::class);
         $metaData = $entityManager->getClassMetadata($entity);
 
@@ -281,7 +276,6 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     private function getCategories(array $ids): array
     {
-        /** @var DBALQueryBuilder $query */
         $query = $this->get(Connection::class)->createQueryBuilder();
         $query->select(['id', 'description'])
             ->from('s_categories', 'category')

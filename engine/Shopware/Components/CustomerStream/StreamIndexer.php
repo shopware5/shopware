@@ -84,7 +84,7 @@ class StreamIndexer implements StreamIndexerInterface
                     ]);
                 }
 
-                $helper->advance($criteria->getLimit());
+                $helper->advance((int) $criteria->getLimit());
                 $criteria->offset($criteria->getOffset() + $criteria->getLimit());
                 $customers = $this->numberSearch->search($criteria);
             }

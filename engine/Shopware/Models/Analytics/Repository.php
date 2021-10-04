@@ -1442,7 +1442,7 @@ class Repository
      */
     protected function createVisitedReferrerBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
     {
-        $builder = $builder = $this->connection->createQueryBuilder();
+        $builder = $this->connection->createQueryBuilder();
         $builder->select([
             'COUNT(referrers.referer) as count',
             'referrers.referer as referrer',

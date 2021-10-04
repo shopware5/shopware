@@ -24,6 +24,9 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
+use Doctrine\ORM\AbstractQuery;
+use Shopware\Models\MultiEdit\Backup as BackupModel;
+
 /**
  * The backup class creates and loads backups
  */
@@ -131,10 +134,8 @@ class Backup
      */
     public function getList($offset, $limit)
     {
-        /** @var \Doctrine\ORM\Query $query */
-        $query = $this->getDqlHelper()->getEntityManager()->getRepository(\Shopware\Models\MultiEdit\Backup::class)->getBackupListQuery($offset, $limit);
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        /** @var \Doctrine\ORM\Tools\Pagination\Paginator $paginator */
+        $query = $this->getDqlHelper()->getEntityManager()->getRepository(BackupModel::class)->getBackupListQuery($offset, $limit);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
         $paginator = Shopware()->Models()->createPaginator($query);
         $totalCount = $paginator->count();
 
@@ -219,8 +220,7 @@ class Backup
     public function restore($id, $offset = 0)
     {
         $entityManager = $this->getDqlHelper()->getEntityManager();
-        /** @var \Shopware\Models\MultiEdit\Backup|null $backup */
-        $backup = $entityManager->find(\Shopware\Models\MultiEdit\Backup::class, $id);
+        $backup = $entityManager->find(BackupModel::class, $id);
 
         if (!$backup) {
             throw new \RuntimeException(sprintf('Backup by id %d not found', $id));
@@ -299,8 +299,7 @@ class Backup
     public function delete($id)
     {
         $entityManager = $this->getDqlHelper()->getEntityManager();
-        /** @var \Shopware\Models\MultiEdit\Backup|null $backup */
-        $backup = $entityManager->find(\Shopware\Models\MultiEdit\Backup::class, $id);
+        $backup = $entityManager->find(BackupModel::class, $id);
 
         if (!$backup) {
             throw new \RuntimeException(sprintf('Backup by id %d not found', $id));
@@ -350,7 +349,7 @@ class Backup
             if (empty($zips)) {
                 $query = $this->getDqlHelper()->getEntityManager()->createQueryBuilder()
                     ->select('backup')
-                    ->from(\Shopware\Models\MultiEdit\Backup::class, 'backup')
+                    ->from(BackupModel::class, 'backup')
                     ->where('backup.path LIKE ?1')
                     ->setParameter(1, $folder . '%')
                     ->getQuery();
@@ -507,7 +506,7 @@ class Backup
      */
     protected function saveBackup($path, $filterString, $operations, $items)
     {
-        $backup = new \Shopware\Models\MultiEdit\Backup();
+        $backup = new BackupModel();
 
         $backup->setFilterString($filterString);
         $backup->setOperationString($this->operationsToString($operations));
