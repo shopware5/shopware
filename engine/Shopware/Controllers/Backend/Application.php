@@ -352,7 +352,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
 
         $paginator = $this->getQueryPaginator($builder);
         $data = $paginator->getIterator()->current();
-        if (!$data) {
+        if (!\is_array($data)) {
             $data = [];
         }
         $data = $this->getAdditionalDetailData($data);
@@ -1103,7 +1103,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      *
      * @param int $hydrationMode
      *
-     * @return Paginator
+     * @return Paginator<TEntityClass|array>
      */
     protected function getQueryPaginator(QueryBuilder $builder, $hydrationMode = AbstractQuery::HYDRATE_ARRAY)
     {

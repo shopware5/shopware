@@ -4,22 +4,46 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ## 5.7.4
 
-### Deprecations
-* Deprecated `ajaxValidateEmailAction`. It will be removed in Shopware 5.8 with no replacement.
-
 [View all changes from v5.7.3...v5.7.4](https://github.com/shopware/shopware/compare/v5.7.3...v5.7.4)
+
+### Deprecations
+
+* Deprecated `ajaxValidateEmailAction`. It will be removed in Shopware 5.8 with no replacement.
 
 ### Additions
 
 * Added filter event `Shopware_Controllers_Order_OpenPdf_FilterName` to `Shopware_Controllers_Backend_Order::openPdfAction()`
+* Added new composer dependency `psr/http-message`
 
 ### Breaks
 
 * In case you have extended the `frontend_listing_actions_filter` block to override the include of the button template, please extend the `frontend_listing_actions_filter_include` block from now on instead
 
 ### Changes
+
 * Changed `themes/Frontend/Bare/frontend/listing/listing_actions.tpl` to remove a duplicate name entry
-* Update TinyMCE to version 3.5.12
+* Updated TinyMCE to version 3.5.12
+* Updated `bcremer/line-reader` to version 1.1.0
+* Updated `beberlei/assert` to version 3.3.1
+* Updated `beberlei/doctrineextensions` to version 1.3.0
+* Updated `doctrine/cache` to version 1.12.1
+* Updated `doctrine/collections` to version 1.6.8
+* Updated `doctrine/common` to version 3.1.2
+* Updated `doctrine/dbal` to version 2.13.4
+* Updated `doctrine/orm` to version 2.9.5
+* Updated `doctrine/persistence` to version 2.2.2
+* Updated `guzzlehttp/guzzle` to version 7.3.0
+* Updated `guzzlehttp/psr7` to version 1.8.2
+* Updated `laminas/laminas-code` to version 4.4.3
+* Updated `.aminas/laminas-escaper` to version 2.9.0
+* Updated `mpdf/mpdf` to version 8.0.13
+* Updated `ocramius/proxy-manager` to version 2.13.0
+* Updated `ongr/elasticsearch-dsl` to version 7.2.2
+* Updated `setasign/fpdf` to version 1.8.4
+* Updated `setasign/fpdi` to version 2.3.6
+* Updated `symfony/serializer` to version 5.3.8
+* Updated `friends-of-behat/mink-extension` to version 2.5.0
+* Updated `sensiolabs/behat-page-object-extension` to version 2.3.3
 * Changed several Doctrine types to better match the database type or to improve understanding their purpose
   * \Shopware\Models\Article\Configurator\PriceVariation::$variation
   * \Shopware\Models\Article\Detail::$purchasePrice
@@ -36,6 +60,10 @@ This changelog references changes done in Shopware 5.7 patch versions.
   * \Shopware\Models\Premium\Premium::$startPrice
   * \Shopware\Models\Tax\Rule::$tax
 
+### Removals
+
+* Removed unused composer dependency `php-http/message`
+
 ## 5.7.3
 
 [View all changes from v5.7.2...v5.7.3](https://github.com/shopware/shopware/compare/v5.7.2...v5.7.3)
@@ -45,6 +73,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `wikimedia/less.php` to 3.1.0
 
 ### Removals
+
 * Removed password hash from session
 * Removed xml support for the snippet importer
 

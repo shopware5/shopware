@@ -208,7 +208,6 @@ class ModelManager extends EntityManager
         $proxyFactory = $this->getProxyFactory();
 
         $attributeMetaData = [];
-        /** @var ClassMetadata $metaData */
         foreach ($allMetaData as $metaData) {
             $tableName = $metaData->getTableName();
             if (strpos($tableName, '_attributes') === false) {

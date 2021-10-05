@@ -58,7 +58,17 @@ parameters:
 
         - # We override the method in higher class inheritance to public method
             message: '#Call to protected method verifyPage#'
-            path: 'tests/Mink/features/bootstrap/SpecialContext.php'
+            path: tests/Mink/features/bootstrap/SpecialContext.php
+
+        - # Every API resource class has those methods, but we cannot put that into an interface or abstract class, because the parameter amount is different
+            message: '#Call to an undefined method \$this\(Shopware\\Components\\Api\\Resource\\Resource\)&Shopware\\Components\\Api\\BatchInterface::(delete|update|create)\(\)#'
+            path: engine/Shopware/Components/Api/Resource/Resource.php
+
+        - # Currently not possible to determine the paginator generic type at those places
+            message: '#return type with generic class Doctrine\\ORM\\Tools\\Pagination\\Paginator does not specify its types: T#'
+            paths:
+                - engine/Shopware/Components/Model/ModelManager.php
+                - engine/Shopware/Controllers/Backend/Search.php
 
         # Some day this should be specified
         - '#no value type specified in iterable type Enlight_Components_Snippet_Namespace#'
@@ -72,7 +82,7 @@ parameters:
         - '#Call to an undefined method Enlight_Template_Manager::setCompileId\(\)#'
 
         # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
-        - '#Cannot call method fetchAll\(\) on Doctrine\\DBAL\\Driver\\ResultStatement\|int#'
+        - '#Cannot call method fetch.*\(\) on Doctrine\\DBAL\\.*Statement\|int#'
 
         - # This property contains many different repositories, so we do not specify the type
             message: '#with generic class Shopware\\Components\\Model\\ModelRepository does not specify its types: TEntityClass#'

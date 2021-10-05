@@ -46,7 +46,6 @@ class EnlightHookProxyFactoryTest extends TestCase
 <?php
 class ShopwareTests_ShopwareTestsUnitComponentsHookMyBasicTestClassProxy extends \Shopware\Tests\Unit\Components\Hook\MyBasicTestClass implements Enlight_Hook_Proxy
 {
-
     private $__hookProxyExecutionContexts = null;
 
     /**
@@ -159,8 +158,6 @@ class ShopwareTests_ShopwareTestsUnitComponentsHookMyBasicTestClassProxy extends
             ['bar' => $bar]
         );
     }
-
-
 }
 
 EOT;
@@ -174,7 +171,6 @@ EOT;
 <?php
 class ShopwareTests_ShopwareTestsUnitComponentsHookMyReferenceTestClassProxy extends \Shopware\Tests\Unit\Components\Hook\MyReferenceTestClass implements Enlight_Hook_Proxy
 {
-
     private $__hookProxyExecutionContexts = null;
 
     /**
@@ -263,8 +259,6 @@ class ShopwareTests_ShopwareTestsUnitComponentsHookMyReferenceTestClassProxy ext
             ['bar' => &$bar, 'foo' => $foo]
         );
     }
-
-
 }
 
 EOT;

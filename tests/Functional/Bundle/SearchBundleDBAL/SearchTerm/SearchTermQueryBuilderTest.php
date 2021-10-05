@@ -49,11 +49,6 @@ class SearchTermQueryBuilderTest extends TestCase
         }
 
         $stmt = $query->execute();
-
-        if (!($stmt instanceof \PDOStatement)) {
-            static::fail(sprintf('Instance of %s expected.', \PDOStatement::class));
-        }
-
         $ranking = $stmt->fetchAll();
 
         $bestMatch = array_shift($ranking);
@@ -67,11 +62,6 @@ class SearchTermQueryBuilderTest extends TestCase
         $modelManager->flush($product);
 
         $stmt = $query->execute();
-
-        if (!($stmt instanceof \PDOStatement)) {
-            static::fail(sprintf('Instance of %s expected.', \PDOStatement::class));
-        }
-
         $ranking = $stmt->fetchAll();
 
         $bestMatchNew = array_shift($ranking);

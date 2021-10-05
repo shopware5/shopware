@@ -116,10 +116,10 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
 
         $query->addGroupBy('product.id');
 
-        if ($criteria->getOffset()) {
+        if ($criteria->getOffset() !== null) {
             $query->setFirstResult($criteria->getOffset());
         }
-        if ($criteria->getLimit()) {
+        if ($criteria->getLimit() !== null) {
             $query->setMaxResults($criteria->getLimit());
         }
 

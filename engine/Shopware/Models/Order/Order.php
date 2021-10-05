@@ -1069,7 +1069,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<array-key, Detail>
      */
     public function getDetails()
     {
@@ -1077,7 +1077,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param Detail[]|null $details
+     * @param ArrayCollection<array-key, Detail>|array<array-key, Detail> $details
      *
      * @return Order
      */

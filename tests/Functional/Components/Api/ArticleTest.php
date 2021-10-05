@@ -27,7 +27,6 @@ namespace Shopware\Tests\Functional\Components\Api;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
-use Shopware\Components\Random;
 use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Category\Category;
@@ -1658,7 +1657,7 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        /** @var ProductModel $article */
+
         $updated = $this->resource->update($article->getId(), $updateArticle);
         $options = $updated->getConfiguratorSet()->getOptions();
 

@@ -28,6 +28,7 @@ use Doctrine\Common\EventSubscriber as BaseEventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\PersistentCollection;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -37,11 +38,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class CategorySubscriber implements BaseEventSubscriber
 {
-    /**
-     * @var ModelManager
-     */
-    protected $em;
-
     /**
      * @var CategoryDenormalization
      */
@@ -82,9 +78,7 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function getCategoryComponent()
     {
-        /** @var CategoryDenormalization $categoryDenormalization */
-        $categoryDenormalization = $this->container->get('categorydenormalization');
-        $this->categoryDenormalization = $categoryDenormalization;
+        $this->categoryDenormalization = $this->container->get('categorydenormalization');
 
         $this->categoryDenormalization->disableTransactions();
 
@@ -113,11 +107,8 @@ class CategorySubscriber implements BaseEventSubscriber
             return;
         }
 
-        /** @var ModelManager $em */
         $em = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
-
-        $this->em = $em;
 
         $this->pendingAddAssignments = [];
         $this->pendingRemoveAssignments = [];
@@ -177,6 +168,10 @@ class CategorySubscriber implements BaseEventSubscriber
         }
 
         foreach ($uow->getScheduledCollectionDeletions() as $col) {
+            if (!$col instanceof PersistentCollection) {
+                continue;
+            }
+
             if (!$col->getOwner() instanceof Article) {
                 continue;
             }
@@ -186,15 +181,17 @@ class CategorySubscriber implements BaseEventSubscriber
                     continue;
                 }
 
-                /** @var Article $product */
                 $product = $col->getOwner();
                 $this->addPendingRemoveAssignment($product, $category);
             }
         }
 
         foreach ($uow->getScheduledCollectionUpdates() as $col) {
+            if (!$col instanceof PersistentCollection) {
+                continue;
+            }
+
             if ($col->getOwner() instanceof Article) {
-                /** @var Article $product */
                 $product = $col->getOwner();
 
                 foreach ($col->getInsertDiff() as $category) {
@@ -236,7 +233,7 @@ class CategorySubscriber implements BaseEventSubscriber
         }
     }
 
-    public function postFlush(/* @noinspection PhpUnusedParameterInspection */ PostFlushEventArgs $eventArgs)
+    public function postFlush(PostFlushEventArgs $eventArgs)
     {
         if ($this->disabledForNextFlush) {
             $this->disabledForNextFlush = false;
@@ -253,25 +250,20 @@ class CategorySubscriber implements BaseEventSubscriber
         }
 
         foreach ($this->pendingRemoveAssignments as $pendingRemove) {
-            /** @var Category $category */
             $category = $pendingRemove['category'];
-            /** @var Article $product */
             $product = $pendingRemove['article'];
 
             $this->backlogRemoveAssignment($product->getId(), $category->getId());
         }
 
         foreach ($this->pendingAddAssignments as $pendingAdd) {
-            /** @var Category $category */
             $category = $pendingAdd['category'];
-            /** @var Article $product */
             $product = $pendingAdd['article'];
 
             $this->backlogAddAssignment($product->getId(), $category->getId());
         }
 
         foreach ($this->pendingMoves as $pendingMove) {
-            /** @var Category $category */
             $category = $pendingMove['category'];
             $this->backlogMoveCategory($category->getId());
         }

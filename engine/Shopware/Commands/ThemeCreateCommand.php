@@ -24,13 +24,13 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Components\Model\QueryBuilder;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Theme\Generator;
 use Shopware\Components\Theme\Installer;
 use Shopware\Models\Shop\Template;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -39,7 +39,10 @@ use Symfony\Component\Console\Question\Question;
 
 class ThemeCreateCommand extends ShopwareCommand implements CompletionAwareInterface
 {
-    private $repository;
+    /**
+     * @var ModelRepository<Template>|null
+     */
+    private ?ModelRepository $repository;
 
     /**
      * {@inheritdoc}
@@ -55,10 +58,9 @@ class ThemeCreateCommand extends ShopwareCommand implements CompletionAwareInter
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
         if ($argumentName === 'parent') {
-            /** @var QueryBuilder $queryBuilder */
             $queryBuilder = $this->getRepository()->createQueryBuilder('tpl');
 
-            if (\strlen($context->getCurrentWord())) {
+            if ($context->getCurrentWord() !== '') {
                 $queryBuilder->andWhere($queryBuilder->expr()->like('tpl.template', ':search'))
                     ->setParameter('search', addcslashes($context->getCurrentWord(), '_%') . '%');
             }
@@ -128,19 +130,20 @@ EOF
     {
         $arguments = $input->getArguments();
 
-        /** @var Installer $themeInstaller */
-        $themeInstaller = $this->container->get(\Shopware\Components\Theme\Installer::class);
+        $themeInstaller = $this->container->get(Installer::class);
         $themeInstaller->synchronize();
 
-        if ($this->getRepository()->findOneByTemplate($arguments['template'])) {
+        if ($this->getRepository()->findOneBy(['template' => $arguments['template']])) {
             $output->writeln('A theme with that name already exists');
 
             return 1;
         }
 
-        /** @var Template $parent */
-        $parent = $this->getRepository()->findOneByTemplate($arguments['parent']);
+        if (!\is_string($arguments['parent'])) {
+            throw new \RuntimeException('Invalid argument "parent" given.');
+        }
 
+        $parent = $this->getRepository()->findOneBy(['template' => $arguments['parent']]);
         if (!$parent instanceof Template) {
             $output->writeln(
                 sprintf(
@@ -154,8 +157,7 @@ EOF
 
         $arguments = array_merge($arguments, $this->dialog($input, $output));
 
-        /** @var Generator $themeGenerator */
-        $themeGenerator = $this->container->get(\Shopware\Components\Theme\Generator::class);
+        $themeGenerator = $this->container->get(Generator::class);
         $themeGenerator->generateTheme($arguments, $parent);
 
         $output->writeln(sprintf('Theme "%s" has been created successfully.', $arguments['name']));
@@ -164,14 +166,12 @@ EOF
     }
 
     /**
-     * Helper function to get the repository of the configured model.
-     *
-     * @return \Shopware\Models\Shop\Template
+     * @return ModelRepository<Template>
      */
-    private function getRepository()
+    private function getRepository(): ModelRepository
     {
         if ($this->repository === null) {
-            $this->repository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository('Shopware\Models\Shop\Template');
+            $this->repository = $this->container->get(ModelManager::class)->getRepository(Template::class);
         }
 
         return $this->repository;
@@ -180,9 +180,9 @@ EOF
     /**
      * Helper function to ask for optional data
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function dialog(InputInterface $input, OutputInterface $output)
+    private function dialog(InputInterface $input, OutputInterface $output): array
     {
         $options = [];
 
@@ -195,15 +195,12 @@ EOF
 
     /**
      * Helper function to ask the user a question
-     *
-     * @param string $optionKey
      */
-    private function askForOptionalData(InputInterface $input, OutputInterface $output, $optionKey)
+    private function askForOptionalData(InputInterface $input, OutputInterface $output, string $optionKey)
     {
         $optionValue = $input->getOption($optionKey);
 
         if (empty($optionValue)) {
-            /** @var QuestionHelper $questionHelper */
             $questionHelper = $this->getHelper('question');
             $question = new Question(sprintf('Please enter the %s: ', $optionKey));
             $optionValue = $questionHelper->ask($input, $output, $question);
