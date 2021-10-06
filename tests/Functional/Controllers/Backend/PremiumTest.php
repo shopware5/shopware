@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
-class PremiumTest extends \Enlight_Components_Test_Controller_TestCase
+use Enlight_Components_Test_Controller_TestCase;
+
+class PremiumTest extends Enlight_Components_Test_Controller_TestCase
 {
     private $premiumData = [
         'orderNumber' => 'SW2001_test',

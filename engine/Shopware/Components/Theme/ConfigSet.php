@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Theme;
 
+use Exception;
+
 /**
  * The config set class is used to add theme configuration sets within the
  * Theme.php of a single theme.
@@ -131,15 +133,15 @@ class ConfigSet
      * Validates the ConfigSet component.
      * If no name or values configured the component throws an exception.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function validate()
     {
         if (!$this->name) {
-            throw new \Exception('Each config set requires a configured name!');
+            throw new Exception('Each config set requires a configured name!');
         }
         if (!$this->values || !\is_array($this->values)) {
-            throw new \Exception(sprintf('Config set %s defined without values array.', $this->name));
+            throw new Exception(sprintf('Config set %s defined without values array.', $this->name));
         }
     }
 }

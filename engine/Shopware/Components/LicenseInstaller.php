@@ -25,6 +25,8 @@
 namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
+use PDOException;
+use RuntimeException;
 use Shopware\Components\License\Struct\LicenseInformation;
 
 class LicenseInstaller
@@ -40,7 +42,7 @@ class LicenseInstaller
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function installLicense(LicenseInformation $license)
     {
@@ -67,8 +69,8 @@ EOT;
                 ':creation' => $this->checkDate($license->creation),
                 ':expiration' => $this->checkDate($license->expiration),
             ]);
-        } catch (\PDOException $e) {
-            throw new \RuntimeException('Could not insert license into database', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Could not insert license into database', 0, $e);
         }
     }
 

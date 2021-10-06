@@ -26,11 +26,13 @@ namespace Shopware\Tests\Mink\Element;
 
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Session;
+use Countable;
+use Iterator;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Factory;
 use Shopware\Tests\Mink\Helper;
 
-abstract class MultipleElement extends Element implements \Countable, \Iterator, \Shopware\Tests\Mink\HelperSelectorInterface
+abstract class MultipleElement extends Element implements Countable, Iterator, \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var string
@@ -222,12 +224,8 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
 
     /**
      * Default method to get an element property
-     *
-     * @param string $property
-     *
-     * @return string|null
      */
-    public function getProperty($property)
+    public function getProperty(string $property): string
     {
         $element = Helper::findElements($this, [$property]);
 

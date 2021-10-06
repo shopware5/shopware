@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Snippet;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -94,14 +96,14 @@ class Snippet extends ModelEntity
     private $value;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     private $created;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="updated", type="datetime", nullable=false)
      */
@@ -216,14 +218,14 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $created
+     * @param DateTimeInterface|string $created
      *
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setCreated($created = 'now')
     {
-        if (!$created instanceof \DateTimeInterface) {
-            $this->created = new \DateTime($created);
+        if (!$created instanceof DateTimeInterface) {
+            $this->created = new DateTime($created);
         } else {
             $this->created = $created;
         }
@@ -232,7 +234,7 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getCreated()
     {
@@ -240,14 +242,14 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $updated
+     * @param DateTimeInterface|string $updated
      *
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setUpdated($updated = 'now')
     {
-        if (!$updated instanceof \DateTimeInterface) {
-            $this->updated = new \DateTime($updated);
+        if (!$updated instanceof DateTimeInterface) {
+            $this->updated = new DateTime($updated);
         } else {
             $this->updated = $updated;
         }
@@ -256,7 +258,7 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getUpdated()
     {
@@ -270,8 +272,8 @@ class Snippet extends ModelEntity
      */
     public function onPrePersist()
     {
-        $this->created = new \DateTime('now');
-        $this->updated = new \DateTime('now');
+        $this->created = new DateTime('now');
+        $this->updated = new DateTime('now');
     }
 
     /**
@@ -281,7 +283,7 @@ class Snippet extends ModelEntity
      */
     public function onPreUpdate()
     {
-        $this->updated = new \DateTime('now');
+        $this->updated = new DateTime('now');
     }
 
     /**

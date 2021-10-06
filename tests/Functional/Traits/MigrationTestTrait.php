@@ -26,17 +26,18 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Traits;
 
+use PDO;
 use Shopware\Components\Migrations\AbstractMigration;
 use Shopware\Components\Migrations\Manager;
 
 trait MigrationTestTrait
 {
-    public function getMigrationManager(\PDO $connection): Manager
+    public function getMigrationManager(PDO $connection): Manager
     {
         return new Manager($connection, __DIR__ . '/../../../_sql/migrations');
     }
 
-    public function getMigration(\PDO $connection, int $number): AbstractMigration
+    public function getMigration(PDO $connection, int $number): AbstractMigration
     {
         return $this->getMigrationManager($connection)->getMigrationsForVersion(0)[$number];
     }

@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\CommentConfirm;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -45,7 +47,7 @@ class CommentConfirm extends ModelEntity
     private $id;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
@@ -118,18 +120,18 @@ class CommentConfirm extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $creationDate
+     * @param DateTimeInterface|string $creationDate
      */
     public function setCreationDate($creationDate)
     {
-        if (!$creationDate instanceof \DateTimeInterface && $creationDate !== '') {
-            $creationDate = new \DateTime($creationDate);
+        if (!$creationDate instanceof DateTimeInterface && $creationDate !== '') {
+            $creationDate = new DateTime($creationDate);
         }
         $this->creationDate = $creationDate;
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getCreationDate()
     {

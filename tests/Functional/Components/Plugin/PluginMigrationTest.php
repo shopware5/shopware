@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Components\Plugin;
 
+use PDO;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Components\Migrations\AbstractPluginMigration;
 use Shopware\Components\Migrations\PluginMigrationManager;
@@ -37,7 +38,7 @@ class PluginMigrationTest extends TestCase
 
     protected function setUp(): void
     {
-        $pdo = Shopware()->Container()->get(\PDO::class);
+        $pdo = Shopware()->Container()->get(PDO::class);
         $initializer = new PluginInitializer($pdo, [
             'ShopwarePlugins' => __DIR__ . '/fixtures/',
         ]);
@@ -47,7 +48,7 @@ class PluginMigrationTest extends TestCase
     public function testMigrationWithDown(): void
     {
         $manager = new PluginMigrationManager(
-            Shopware()->Container()->get(\PDO::class),
+            Shopware()->Container()->get(PDO::class),
             $this->plugins['SwagTest'],
             Shopware()->Container()->get('pluginlogger')
         );
@@ -66,7 +67,7 @@ class PluginMigrationTest extends TestCase
     public function testMigrationWithDownWithKeepUserData(): void
     {
         $manager = new PluginMigrationManager(
-            Shopware()->Container()->get(\PDO::class),
+            Shopware()->Container()->get(PDO::class),
             $this->plugins['SwagTest'],
             Shopware()->Container()->get('pluginlogger')
         );
@@ -87,7 +88,7 @@ class PluginMigrationTest extends TestCase
     public function testMigrationWithDownWithUpdate(): void
     {
         $manager = new PluginMigrationManager(
-            Shopware()->Container()->get(\PDO::class),
+            Shopware()->Container()->get(PDO::class),
             $this->plugins['SwagTest'],
             Shopware()->Container()->get('pluginlogger')
         );

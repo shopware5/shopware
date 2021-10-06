@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\AttributeBundle\Service;
 
 use Doctrine\DBAL\Types\Type;
+use Shopware_Components_Snippet_Manager;
 
 class TypeMapping implements TypeMappingInterface
 {
@@ -137,11 +138,11 @@ class TypeMapping implements TypeMappingInterface
     ];
 
     /**
-     * @var \Shopware_Components_Snippet_Manager
+     * @var Shopware_Components_Snippet_Manager
      */
     private $snippets;
 
-    public function __construct(\Shopware_Components_Snippet_Manager $snippets)
+    public function __construct(Shopware_Components_Snippet_Manager $snippets)
     {
         $this->snippets = $snippets;
     }

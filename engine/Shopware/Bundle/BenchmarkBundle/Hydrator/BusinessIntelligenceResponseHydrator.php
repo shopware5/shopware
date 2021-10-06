@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
 
+use DateTime;
+use DateTimeZone;
 use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse;
 
 class BusinessIntelligenceResponseHydrator implements HydratorInterface
@@ -33,6 +35,6 @@ class BusinessIntelligenceResponseHydrator implements HydratorInterface
      */
     public function hydrate(array $data)
     {
-        return new BusinessIntelligenceResponse(new \DateTime('now', new \DateTimeZone('UTC')), $data['html']);
+        return new BusinessIntelligenceResponse(new DateTime('now', new DateTimeZone('UTC')), $data['html']);
     }
 }

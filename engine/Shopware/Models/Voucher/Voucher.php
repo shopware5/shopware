@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Voucher;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -113,14 +115,14 @@ class Voucher extends ModelEntity
     private $bindToSupplier;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="valid_from", type="date", nullable=true)
      */
     private $validFrom;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="valid_to", type="date", nullable=true)
      */
@@ -382,14 +384,14 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the validFrom field from the Model
      *
-     * @param \DateTimeInterface|string|null $validFrom
+     * @param DateTimeInterface|string|null $validFrom
      *
      * @return Voucher
      */
     public function setValidFrom($validFrom)
     {
-        if (!$validFrom instanceof \DateTimeInterface && !empty($validFrom)) {
-            $validFrom = new \DateTime($validFrom);
+        if (!$validFrom instanceof DateTimeInterface && !empty($validFrom)) {
+            $validFrom = new DateTime($validFrom);
         }
         $this->validFrom = $validFrom;
 
@@ -399,7 +401,7 @@ class Voucher extends ModelEntity
     /**
      * Getter Method to get the ValidFrom field from the Model
      *
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getValidFrom()
     {
@@ -409,14 +411,14 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the validTo field from the Model
      *
-     * @param \DateTimeInterface|string|null $validTo
+     * @param DateTimeInterface|string|null $validTo
      *
      * @return Voucher
      */
     public function setValidTo($validTo)
     {
-        if (!$validTo instanceof \DateTimeInterface && !empty($validTo)) {
-            $validTo = new \DateTime($validTo);
+        if (!$validTo instanceof DateTimeInterface && !empty($validTo)) {
+            $validTo = new DateTime($validTo);
         }
         $this->validTo = $validTo;
 
@@ -426,7 +428,7 @@ class Voucher extends ModelEntity
     /**
      * Getter Method to get the ValidTo field from the Model
      *
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getValidTo()
     {

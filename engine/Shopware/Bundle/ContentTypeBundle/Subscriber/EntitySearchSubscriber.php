@@ -25,6 +25,9 @@
 namespace Shopware\Bundle\ContentTypeBundle\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Controller_Action;
+use Enlight_Event_EventArgs;
+use RuntimeException;
 use Shopware\Bundle\ContentTypeBundle\Services\RepositoryInterface;
 use Shopware\Bundle\ContentTypeBundle\Services\TypeProvider;
 use Shopware\Bundle\ContentTypeBundle\Structs\Criteria;
@@ -53,9 +56,9 @@ class EntitySearchSubscriber implements SubscriberInterface
         ];
     }
 
-    public function onSearch(\Enlight_Event_EventArgs $args)
+    public function onSearch(Enlight_Event_EventArgs $args)
     {
-        /** @var \Enlight_Controller_Action $controller */
+        /** @var Enlight_Controller_Action $controller */
         $controller = $args->get('subject');
         $model = $controller->Request()->getParam('model');
 
@@ -67,7 +70,7 @@ class EntitySearchSubscriber implements SubscriberInterface
 
         try {
             $type = $this->provider->getType($model);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             return;
         }
 
@@ -112,7 +115,7 @@ class EntitySearchSubscriber implements SubscriberInterface
         return true;
     }
 
-    private function loadTypes(\Enlight_Controller_Action $controller): void
+    private function loadTypes(Enlight_Controller_Action $controller): void
     {
         $data = array_values(array_map(static function (Type $type) {
             return $type->jsonSerialize() + ['id' => $type->getInternalName()];
@@ -146,6 +149,6 @@ class EntitySearchSubscriber implements SubscriberInterface
             }
         }
 
-        throw new \RuntimeException(sprintf('Type %s needs a label', $type->getName()));
+        throw new RuntimeException(sprintf('Type %s needs a label', $type->getName()));
     }
 }

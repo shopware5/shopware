@@ -25,9 +25,10 @@
 namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Assert\Assertion;
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class ProductAttributeCondition implements ConditionInterface, \JsonSerializable
+class ProductAttributeCondition implements ConditionInterface, JsonSerializable
 {
     /**
      * @var string

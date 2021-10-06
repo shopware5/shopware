@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CookieBundle\Services;
 
+use DateTime;
 use Shopware\Bundle\CookieBundle\CookieCollection;
 use Shopware\Bundle\CookieBundle\Structs\CookieStruct;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -136,7 +137,7 @@ class CookieRemoveHandler extends CookieHandler implements CookieRemoveHandlerIn
 
     protected function setNewPreferencesCookie(Request $request, Response $response, array $preferences): void
     {
-        $expire = new \DateTime();
+        $expire = new DateTime();
         $expire->modify('+180 day');
 
         $response->headers->setCookie(

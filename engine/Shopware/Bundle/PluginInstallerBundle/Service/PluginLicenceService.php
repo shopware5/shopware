@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateLicencesRequest;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
@@ -92,7 +94,7 @@ class PluginLicenceService
         }
         $expirations = $this->getExpirations($licenses);
         foreach ($expirations as $expiration => $license) {
-            $expirationDate = new \DateTime($expiration);
+            $expirationDate = new DateTime($expiration);
             if ($this->isExpired($expirationDate) || $this->isSoonExpiring($expirationDate)) {
                 $expiringPluginLicenses[] = $this->createPluginInformationStruct($license);
             }
@@ -116,7 +118,7 @@ class PluginLicenceService
         }
         $expirations = $this->getExpirations($licenses);
         foreach ($expirations as $expiration => $license) {
-            $expirationDate = new \DateTime($expiration);
+            $expirationDate = new DateTime($expiration);
             if ($this->isExpired($expirationDate)) {
                 $expiredPluginLicenses[] = $this->createPluginInformationStruct($license);
             }
@@ -200,7 +202,7 @@ class PluginLicenceService
      */
     private function createLocalLicenseInformation(PluginInformationStruct $plugin, $domain)
     {
-        $today = new \DateTime();
+        $today = new DateTime();
         $data = [
             'module' => $plugin->getTechnicalName(),
             'host' => $domain,
@@ -215,8 +217,8 @@ class PluginLicenceService
         if ($plugin->isUnknownLicense()) {
             $type = self::TYPE_UNLICENSED;
         } else {
-            $creationDate = new \DateTime($plugin->getLicenseCreation());
-            $expirationDate = new \DateTime($plugin->getLicenseExpiration());
+            $creationDate = new DateTime($plugin->getLicenseCreation());
+            $expirationDate = new DateTime($plugin->getLicenseExpiration());
             $type = $plugin->getType();
             $data['creation'] = $creationDate->format('Y-m-d');
             $data['expiration'] = $expirationDate->format('Y-m-d');
@@ -256,9 +258,9 @@ class PluginLicenceService
     /**
      * @return bool
      */
-    private function isExpired(\DateTimeInterface $expirationDate)
+    private function isExpired(DateTimeInterface $expirationDate)
     {
-        $diff = $expirationDate->diff(new \DateTime('now'));
+        $diff = $expirationDate->diff(new DateTime('now'));
 
         return $diff->invert == 0;
     }
@@ -268,9 +270,9 @@ class PluginLicenceService
      *
      * @return bool
      */
-    private function isSoonExpiring(\DateTimeInterface $expirationDate, $daysTillExpiration = 14)
+    private function isSoonExpiring(DateTimeInterface $expirationDate, $daysTillExpiration = 14)
     {
-        $diff = $expirationDate->diff(new \DateTime('now'));
+        $diff = $expirationDate->diff(new DateTime('now'));
 
         return $diff->invert == 1 && $diff->days <= $daysTillExpiration;
     }
@@ -283,7 +285,7 @@ class PluginLicenceService
         $information = [
             'label' => $data['label'],
             'name' => $data['module'],
-            'licenseExpiration' => (new \DateTime($data['expiration']))->format('Y-m-d'),
+            'licenseExpiration' => (new DateTime($data['expiration']))->format('Y-m-d'),
         ];
 
         return new PluginInformationStruct($information);

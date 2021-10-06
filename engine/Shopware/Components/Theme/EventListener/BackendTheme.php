@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Theme\EventListener;
 
+use Enlight_Controller_EventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -44,7 +45,7 @@ class BackendTheme
     /**
      * Shopware\EventListener: Enlight_Controller_Front_RouteShutdown
      */
-    public function registerBackendTheme(\Enlight_Controller_EventArgs $args)
+    public function registerBackendTheme(Enlight_Controller_EventArgs $args)
     {
         if ($args->getRequest()->getModuleName() !== 'backend') {
             return;

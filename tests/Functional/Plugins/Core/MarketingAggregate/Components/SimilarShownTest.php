@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\Components;
 
+use Enlight_Event_EventArgs;
 use Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\AbstractMarketing;
 
 class SimilarShownTest extends AbstractMarketing
@@ -126,7 +127,7 @@ class SimilarShownTest extends AbstractMarketing
         static::assertNotEmpty($cron);
 
         //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
-        $this->Plugin()->refreshSimilarShown(new \Enlight_Event_EventArgs(['subject' => $this]));
+        $this->Plugin()->refreshSimilarShown(new Enlight_Event_EventArgs(['subject' => $this]));
 
         $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
         static::assertCount(

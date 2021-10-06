@@ -25,6 +25,7 @@
 namespace Shopware\Components\Privacy;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Controller_ActionEventArgs;
 use Shopware\Bundle\CookieBundle\CookieGroupCollection;
 use Shopware\Bundle\CookieBundle\Services\CookieHandlerInterface;
 use Shopware\Bundle\CookieBundle\Services\CookieRemoveHandler;
@@ -72,7 +73,7 @@ class CookieRemoveSubscriber implements SubscriberInterface
         ];
     }
 
-    public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args): void
+    public function onPostDispatch(Enlight_Controller_ActionEventArgs $args): void
     {
         $controller = $args->getSubject();
         $controller->View()->assign('httpCacheEnabled', $this->httpCacheEnabled);

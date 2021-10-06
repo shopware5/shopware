@@ -24,6 +24,8 @@
 
 namespace Shopware\Recovery\Common\Service;
 
+use PDO;
+
 /**
  * Reads the generated unique Id from the generator and stores it into the database.
  */
@@ -35,11 +37,11 @@ class UniqueIdPersister
     private $uniqueIdGenerator;
 
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $connection;
 
-    public function __construct(UniqueIdGenerator $uniqueIdGenerator, \PDO $connection)
+    public function __construct(UniqueIdGenerator $uniqueIdGenerator, PDO $connection)
     {
         $this->uniqueIdGenerator = $uniqueIdGenerator;
         $this->connection = $connection;

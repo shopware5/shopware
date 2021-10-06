@@ -24,7 +24,9 @@
 
 namespace Shopware\Commands;
 
+use PDO;
 use ReflectionClass;
+use RuntimeException;
 use Shopware\Components\Migrations\AbstractMigration;
 use Shopware\Components\Migrations\Manager;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
@@ -84,12 +86,12 @@ class MigrationsMigrateCommand extends ShopwareCommand implements CompletionAwar
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $connection = $this->getContainer()->get(\PDO::class);
+        $connection = $this->getContainer()->get(PDO::class);
 
         $rootDir = $this->container->getParameter('kernel.root_dir');
 
         if (!\is_string($rootDir)) {
-            throw new \RuntimeException('Parameter kernel.root_dir has to be an string');
+            throw new RuntimeException('Parameter kernel.root_dir has to be an string');
         }
 
         $mode = $input->getOption('mode');

@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\MultiEdit;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -68,7 +69,7 @@ class Backup extends ModelEntity
     private $items;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
@@ -96,7 +97,7 @@ class Backup extends ModelEntity
     private $hash;
 
     /**
-     * @param \DateTimeInterface|null $date
+     * @param DateTimeInterface|null $date
      */
     public function setDate($date)
     {
@@ -104,7 +105,7 @@ class Backup extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getDate()
     {

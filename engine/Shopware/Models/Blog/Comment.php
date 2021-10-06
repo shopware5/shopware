@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Blog;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Shop\Shop;
@@ -74,7 +76,7 @@ class Comment extends ModelEntity
     private $comment;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
@@ -167,18 +169,18 @@ class Comment extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $creationDate
+     * @param DateTimeInterface|string $creationDate
      */
     public function setCreationDate($creationDate)
     {
-        if (!$creationDate instanceof \DateTimeInterface && !empty($creationDate)) {
-            $creationDate = new \DateTime($creationDate);
+        if (!$creationDate instanceof DateTimeInterface && !empty($creationDate)) {
+            $creationDate = new DateTime($creationDate);
         }
         $this->creationDate = $creationDate;
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getCreationDate()
     {

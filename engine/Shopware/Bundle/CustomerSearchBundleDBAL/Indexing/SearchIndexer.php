@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 
 class SearchIndexer implements SearchIndexerInterface
@@ -252,7 +253,7 @@ class SearchIndexer implements SearchIndexerInterface
      *
      * @return string|null
      */
-    private function formatDate(\DateTimeInterface $date = null, $format = 'Y-m-d H:i:s')
+    private function formatDate(DateTimeInterface $date = null, $format = 'Y-m-d H:i:s')
     {
         if ($date === null) {
             return null;

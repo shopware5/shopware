@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Form\Interfaces;
 
+use Exception;
+
 interface Validate
 {
     /**
@@ -31,7 +33,7 @@ interface Validate
      * and throws an exception if
      * some requirements are not set.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function validate();
 }

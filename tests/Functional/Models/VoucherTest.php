@@ -26,11 +26,12 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Voucher\Repository;
 use Shopware\Models\Voucher\Voucher;
 
-class VoucherTest extends \Enlight_Components_Test_TestCase
+class VoucherTest extends Enlight_Components_Test_TestCase
 {
     protected ModelManager $em;
 

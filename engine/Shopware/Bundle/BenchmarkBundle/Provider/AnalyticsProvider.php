@@ -26,6 +26,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use PDO;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -79,7 +80,7 @@ class AnalyticsProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->getVisitsListQueryBuilder($lastAnalyticsId);
 
-        $data = $queryBuilder->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $data = array_map(function ($item) {
             $item['totalImpressions'] = (int) $item['totalImpressions'];
@@ -101,7 +102,7 @@ class AnalyticsProvider implements BenchmarkProviderInterface
         $queryBuilder = $this->getVisitsPerDeviceQueryBuilder($lastAnalyticsId);
 
         $visitsPerDevice = $queryBuilder->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_ASSOC);
 
         $visitsPerDevice = array_map(function ($item) {
             $item['totalImpressions'] = (int) $item['totalImpressions'];

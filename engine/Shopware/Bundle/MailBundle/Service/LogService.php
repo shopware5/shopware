@@ -26,6 +26,8 @@ namespace Shopware\Bundle\MailBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Mail;
+use Exception;
+use PDO;
 use Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter;
 use Shopware\Bundle\MailBundle\Service\Filter\MailFilterInterface;
 use Shopware\Models\Mail\Contact;
@@ -129,7 +131,7 @@ class LogService implements LogServiceInterface
             }
 
             $this->connection->commit();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->connection->rollback();
             throw $exception;
         }
@@ -145,7 +147,7 @@ class LogService implements LogServiceInterface
         if ($mail->getAssociation(AdministrativeMailFilter::ADMINISTRATIVE_MAIL)) {
             try {
                 $this->flush();
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 /*
                  * flush() could throw exceptions, which would otherwise be caught by Monolog again.
                  * This is a precaution to prevent an infinite loop.
@@ -173,7 +175,7 @@ class LogService implements LogServiceInterface
         $recipients = array_unique(array_filter(array_map('trim', $recipients)));
 
         $sql = 'SELECT LOWER(mail_address), id FROM s_mail_log_contact WHERE mail_address IN (:addresses)';
-        $foundRecipients = $this->connection->executeQuery($sql, ['addresses' => $recipients])->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $foundRecipients = $this->connection->executeQuery($sql, ['addresses' => $recipients])->fetchAll(PDO::FETCH_KEY_PAIR);
 
         foreach ($recipients as $recipient) {
             if (\array_key_exists($recipient, $foundRecipients)) {

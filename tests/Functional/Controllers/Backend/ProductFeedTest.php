@@ -24,11 +24,12 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\ProductFeed\ProductFeed;
 use Shopware\Models\ProductFeed\Repository;
 
-class ProductFeedTest extends \Enlight_Components_Test_Controller_TestCase
+class ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var Repository
@@ -222,7 +223,7 @@ class ProductFeedTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $this->dispatch('backend/ProductFeed/getArticles');
         static::assertTrue($this->View()->success);
-        static::assertEquals(20, \count($this->View()->data));
+        static::assertCount(20, $this->View()->data);
     }
 
     /**

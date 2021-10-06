@@ -24,8 +24,11 @@
 
 namespace Shopware\Tests\Functional\Components\Captcha;
 
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Template_Manager;
 use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Captcha\DefaultCaptcha;
+use Shopware_Components_Config;
 
 class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
 {
@@ -38,8 +41,8 @@ class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->captcha = new DefaultCaptcha(
             Shopware()->Container(),
-            Shopware()->Container()->get(\Shopware_Components_Config::class),
-            Shopware()->Container()->get(\Enlight_Template_Manager::class)
+            Shopware()->Container()->get(Shopware_Components_Config::class),
+            Shopware()->Container()->get(Enlight_Template_Manager::class)
         );
     }
 
@@ -49,7 +52,7 @@ class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
         $validator = Shopware()->Container()->get('shopware.captcha.validator');
         $honeypotParams = include __DIR__ . '/fixtures/honeypotRequest.php';
 
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setParams($honeypotParams);
 
         static::assertTrue($validator->validateByName($honeypotParams['captchaName'], $request));
@@ -64,7 +67,7 @@ class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
         $defaultParam = include __DIR__ . '/fixtures/honeypotRequest.php';
         $defaultParam['captchaName'] = 'default';
 
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setParams($defaultParam);
 
         $random = Shopware()->Session()->get(DefaultCaptcha::SESSION_KEY);
@@ -82,7 +85,7 @@ class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
         $defaultParam = include __DIR__ . '/fixtures/honeypotRequest.php';
         $defaultParam['captchaName'] = 'default';
 
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setParams($defaultParam);
 
         // set a random false parameter

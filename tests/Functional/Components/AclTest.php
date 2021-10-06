@@ -25,11 +25,12 @@
 namespace Shopware\Tests\Components;
 
 use Enlight_Components_Test_TestCase;
+use Shopware_Components_Acl;
 
 class AclTest extends Enlight_Components_Test_TestCase
 {
     /**
-     * @var \Shopware_Components_Acl
+     * @var Shopware_Components_Acl
      */
     private $acl;
 

@@ -24,26 +24,30 @@
 
 namespace Shopware\Recovery\Install;
 
+use Exception;
+use PDO;
+use PDOException;
+use RuntimeException;
 use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
 
 class DatabaseFactory
 {
     /**
-     * @throws \Exception
-     * @throws \PDOException
+     * @throws Exception
+     * @throws PDOException
      *
-     * @return \PDO
+     * @return PDO
      */
     public function createPDOConnection(DatabaseConnectionInformation $info)
     {
-        $conn = new \PDO(
+        $conn = new PDO(
             $this->buildDsn($info),
             $info->username,
             $info->password,
             [
-                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-                \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
             ]
         );
 
@@ -56,7 +60,7 @@ class DatabaseFactory
         return $conn;
     }
 
-    protected function setNonStrictSQLMode(\PDO $conn)
+    protected function setNonStrictSQLMode(PDO $conn)
     {
         $conn->exec("SET @@session.sql_mode = ''");
     }
@@ -89,10 +93,10 @@ class DatabaseFactory
      *
      * @return bool
      */
-    private function hasStorageEngine($engineName, \PDO $conn)
+    private function hasStorageEngine($engineName, PDO $conn)
     {
         $sql = 'SHOW ENGINES;';
-        $allEngines = $conn->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+        $allEngines = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($allEngines as $engine) {
             if ($engine['Engine'] == $engineName) {
@@ -106,38 +110,38 @@ class DatabaseFactory
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    private function checkVersion(\PDO $conn)
+    private function checkVersion(PDO $conn)
     {
         $sql = 'SELECT VERSION()';
         $result = $conn->query($sql)->fetchColumn(0);
         if (version_compare($result, '5.5.0', '<')) {
-            throw new \RuntimeException("Database error!: Your database server is running MySQL $result, but Shopware 5 requires at least MySQL 5.5");
+            throw new RuntimeException("Database error!: Your database server is running MySQL $result, but Shopware 5 requires at least MySQL 5.5");
         }
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    private function checkEngineSupport(\PDO $conn)
+    private function checkEngineSupport(PDO $conn)
     {
         $hasEngineSupport = $this->hasStorageEngine('InnoDB', $conn);
         if (!$hasEngineSupport) {
-            throw new \RuntimeException('Database error!: The MySQL storage engine InnoDB not found. Please consult your hosting provider to solve this problem.');
+            throw new RuntimeException('Database error!: The MySQL storage engine InnoDB not found. Please consult your hosting provider to solve this problem.');
         }
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    private function checkSQLMode(\PDO $conn)
+    private function checkSQLMode(PDO $conn)
     {
         $sql = 'SELECT @@SESSION.sql_mode;';
         $result = $conn->query($sql)->fetchColumn(0);
 
         if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
-            throw new \RuntimeException("Database error!: The MySQL strict mode is active ($result). Please consult your hosting provider to solve this problem.");
+            throw new RuntimeException("Database error!: The MySQL strict mode is active ($result). Please consult your hosting provider to solve this problem.");
         }
     }
 }

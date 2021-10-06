@@ -26,6 +26,7 @@ namespace Shopware\Components\Api\Resource;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
+use Exception;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
@@ -43,6 +44,7 @@ use Shopware\Models\Property\Group;
 use Shopware\Models\Property\Option;
 use Shopware\Models\Property\Value;
 use Shopware\Models\Translation\Translation as TranslationModel;
+use Shopware_Components_Translation;
 
 /**
  * Translation API Resource
@@ -65,7 +67,7 @@ class Translation extends Resource implements BatchInterface
     public const TYPE_CONFIGURATOR_OPTION = 'configuratoroption';
 
     /**
-     * @var \Shopware_Components_Translation
+     * @var Shopware_Components_Translation
      */
     protected $translationWriter;
 
@@ -75,13 +77,13 @@ class Translation extends Resource implements BatchInterface
     protected $repository;
 
     /**
-     * @var \Shopware_Components_Translation
+     * @var Shopware_Components_Translation
      */
     private $translationComponent;
 
-    public function __construct(\Shopware_Components_Translation $translationComponent = null)
+    public function __construct(Shopware_Components_Translation $translationComponent = null)
     {
-        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(Shopware_Components_Translation::class);
     }
 
     /**
@@ -108,7 +110,7 @@ class Translation extends Resource implements BatchInterface
     }
 
     /**
-     * @return \Shopware_Components_Translation
+     * @return Shopware_Components_Translation
      */
     public function getTranslationComponent()
     {
@@ -116,7 +118,7 @@ class Translation extends Resource implements BatchInterface
     }
 
     /**
-     * @param \Shopware_Components_Translation $translationWriter
+     * @param Shopware_Components_Translation $translationWriter
      */
     public function setTranslationComponent($translationWriter)
     {
@@ -486,7 +488,7 @@ class Translation extends Resource implements BatchInterface
      * @param string $number
      * @param string $type
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */
@@ -534,7 +536,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $number - Alphanumeric order number of the variant
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int - Identifier of the product
      */
@@ -558,7 +560,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $number - Alphanumeric order number of the variant
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int - Identifier of the product
      */
@@ -613,7 +615,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $number
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */
@@ -637,7 +639,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $number
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */
@@ -664,7 +666,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $number
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */
@@ -690,7 +692,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $number
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */
@@ -715,7 +717,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $number
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */
@@ -741,7 +743,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $number
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */
@@ -770,7 +772,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $number
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */
@@ -815,7 +817,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $number
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */
@@ -866,7 +868,7 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $number
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return int
      */

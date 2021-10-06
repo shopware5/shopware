@@ -24,22 +24,24 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend;
 
+use Enlight_Template_Manager;
 use Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend\Mocks\ViewMock;
+use Shopware_Controllers_Backend_BenchmarkLocalOverview;
 
 class BenchmarkLocalOverviewControllerTest extends BenchmarkControllerTestCase
 {
-    public const CONTROLLER_NAME = \Shopware_Controllers_Backend_BenchmarkLocalOverview::class;
+    public const CONTROLLER_NAME = Shopware_Controllers_Backend_BenchmarkLocalOverview::class;
 
     /**
      * @group BenchmarkBundle
      */
     public function testRenderActionShouldLoadStart()
     {
-        /** @var \Shopware_Controllers_Backend_BenchmarkLocalOverview $controller */
+        /** @var Shopware_Controllers_Backend_BenchmarkLocalOverview $controller */
         $controller = $this->getController();
 
         Shopware()->Db()->exec('DELETE FROM s_benchmark_config;');
-        $controller->setView(new ViewMock(new \Enlight_Template_Manager()));
+        $controller->setView(new ViewMock(new Enlight_Template_Manager()));
 
         $controller->renderAction();
 
@@ -53,11 +55,11 @@ class BenchmarkLocalOverviewControllerTest extends BenchmarkControllerTestCase
      */
     public function testRenderActionShouldLoadCustom()
     {
-        /** @var \Shopware_Controllers_Backend_BenchmarkLocalOverview $controller */
+        /** @var Shopware_Controllers_Backend_BenchmarkLocalOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
-        $controller->setView(new ViewMock(new \Enlight_Template_Manager()));
+        $controller->setView(new ViewMock(new Enlight_Template_Manager()));
         $controller->Request()->setParam('template', 'custom');
 
         $controller->renderAction();

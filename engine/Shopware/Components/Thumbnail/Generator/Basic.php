@@ -24,9 +24,12 @@
 
 namespace Shopware\Components\Thumbnail\Generator;
 
+use Exception;
+use RuntimeException;
 use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\MediaBundle\OptimizerServiceInterface;
+use Shopware_Components_Config;
 
 /**
  * Shopware Basic Thumbnail Generator
@@ -52,7 +55,7 @@ class Basic implements GeneratorInterface
      */
     private $optimizerService;
 
-    public function __construct(\Shopware_Components_Config $config, MediaServiceInterface $mediaService, OptimizerServiceInterface $optimizerService)
+    public function __construct(Shopware_Components_Config $config, MediaServiceInterface $mediaService, OptimizerServiceInterface $optimizerService)
     {
         $this->fixGdImageBlur = $config->get('thumbnailNoiseFilter');
         $this->mediaService = $mediaService;
@@ -65,7 +68,7 @@ class Basic implements GeneratorInterface
     public function createThumbnail($imagePath, $destination, $maxWidth, $maxHeight, $keepProportions = false, $quality = 90)
     {
         if (!$this->mediaService->has($imagePath)) {
-            throw new \Exception(sprintf('File not found: %s', $imagePath));
+            throw new Exception(sprintf('File not found: %s', $imagePath));
         }
 
         $content = $this->mediaService->read($imagePath);
@@ -125,14 +128,14 @@ class Basic implements GeneratorInterface
      * @param string $fileContent
      * @param string $imagePath
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return resource
      */
     private function createImageResource($fileContent, $imagePath)
     {
         if (!$image = @imagecreatefromstring($fileContent)) {
-            throw new \RuntimeException(sprintf('Image is not in a recognized format (%s)', $imagePath));
+            throw new RuntimeException(sprintf('Image is not in a recognized format (%s)', $imagePath));
         }
 
         return $image;
@@ -242,8 +245,8 @@ class Basic implements GeneratorInterface
         $colorWhite = imagecolorallocate($newImage, 255, 255, 255);
         $processHeight = $newSize['height'] + 0;
         $processWidth = $newSize['width'] + 0;
-        for ($y = 0; $y < ($processHeight); ++$y) {
-            for ($x = 0; $x < ($processWidth); ++$x) {
+        for ($y = 0; $y < $processHeight; ++$y) {
+            for ($x = 0; $x < $processWidth; ++$x) {
                 $colorat = imagecolorat($newImage, $x, $y);
                 $r = ($colorat >> 16) & 0xFF;
                 $g = ($colorat >> 8) & 0xFF;

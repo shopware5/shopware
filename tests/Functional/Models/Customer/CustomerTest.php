@@ -26,6 +26,8 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models\Customer;
 
+use Closure;
+use DateTime;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
@@ -141,8 +143,8 @@ class CustomerTest extends TestCase
         $customer->setLastname('Mustermann');
 
         // Set password change to past, otherwise the test will fail, cause the time is the same
-        $closure = \Closure::bind(static function (Customer $class) {
-            $class->passwordChangeDate = new \DateTime('2000-01-01 00:00:00');
+        $closure = Closure::bind(static function (Customer $class) {
+            $class->passwordChangeDate = new DateTime('2000-01-01 00:00:00');
         }, null, Customer::class);
         $closure($customer);
 

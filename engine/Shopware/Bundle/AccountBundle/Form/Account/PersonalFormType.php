@@ -30,6 +30,7 @@ use Shopware\Bundle\AccountBundle\Type\SalutationType;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Customer\Customer;
+use Shopware_Components_Config;
 use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
@@ -61,7 +62,7 @@ class PersonalFormType extends AbstractType
     private $snippetManager;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -72,7 +73,7 @@ class PersonalFormType extends AbstractType
 
     public function __construct(
         Shopware_Components_Snippet_Manager $snippetManager,
-        \Shopware_Components_Config $config,
+        Shopware_Components_Config $config,
         ContextServiceInterface $context
     ) {
         $this->snippetManager = $snippetManager;

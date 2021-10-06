@@ -25,6 +25,8 @@
 namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Controller_Request_Request;
+use Enlight_Controller_Response_Response;
 use Enlight_Event_EventArgs;
 use Psr\Link\LinkProviderInterface;
 use Symfony\Component\WebLink\HttpHeaderSerializer;
@@ -65,7 +67,7 @@ class AddLinkHeaderSubscriber implements SubscriberInterface
 
     public function onDispatchLoopShutdown(Enlight_Event_EventArgs $args): void
     {
-        /** @var \Enlight_Controller_Request_Request $request */
+        /** @var Enlight_Controller_Request_Request $request */
         $request = $args->get('request');
 
         // Only use Server Push if it is enabled in the settings and the current module is "frontend"
@@ -74,7 +76,7 @@ class AddLinkHeaderSubscriber implements SubscriberInterface
             return;
         }
 
-        /** @var \Enlight_Controller_Response_Response $response */
+        /** @var Enlight_Controller_Response_Response $response */
         $response = $args->get('response');
 
         $linkProvider = $this->webLinkManager->getLinkProvider();

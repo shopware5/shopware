@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Mink\Page;
 
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class Backend extends Page
@@ -65,20 +66,20 @@ class Backend extends Page
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function verifyModule(): void
     {
         $selector = "document.querySelector('.x-window-header-text') !== null";
         $result = $this->getSession()->wait(self::TIMEOUT_MILLISECONDS, $selector);
         if (!$result) {
-            throw new \Exception('No Module was opened');
+            throw new Exception('No Module was opened');
         }
 
         $selector = "document.querySelector('.x-window-header-text').innerHTML != 'Shopware Fehler Reporter'";
         $result = $this->getSession()->wait(self::TIMEOUT_MILLISECONDS, $selector);
         if (!$result) {
-            throw new \Exception('Error Module was opened');
+            throw new Exception('Error Module was opened');
         }
     }
 }

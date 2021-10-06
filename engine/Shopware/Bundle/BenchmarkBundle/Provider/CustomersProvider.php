@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\BenchmarkBundle\BatchableProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -138,7 +139,7 @@ class CustomersProvider implements BatchableProviderInterface
             ->orderBy('customer.id')
             ->setMaxResults($batch)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
     /**
@@ -159,7 +160,7 @@ class CustomersProvider implements BatchableProviderInterface
             ->groupBy('orders.userID')
             ->setParameter(':customerIds', $customerIds, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
     /**

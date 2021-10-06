@@ -33,12 +33,13 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Mail\Log;
 use Shopware_Components_Config;
 use Shopware_Components_Snippet_Manager;
+use Shopware_Controllers_Backend_Application;
 use Traversable;
 
 /**
  * @extends \Shopware_Controllers_Backend_Application<Log>
  */
-class MailLog extends \Shopware_Controllers_Backend_Application
+class MailLog extends Shopware_Controllers_Backend_Application
 {
     public const CONFIG_KEY_MAILLOG_ACTIVE = 'mailLogActive';
     public const CONFIG_KEY_MAILLOG_ACTIVE_FILTERS = 'mailLogActiveFilters';

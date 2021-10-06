@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle;
 
+use RuntimeException;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkEncryption;
 
 class BenchmarkEncryptionTest extends \PHPUnit\Framework\TestCase
@@ -68,13 +69,13 @@ class BenchmarkEncryptionTest extends \PHPUnit\Framework\TestCase
         if (false === $privateKeyResource = openssl_pkey_get_private('file://' . __DIR__ . '/fixtures/private_test_key.pem', null)) {
             while ($errors[] = openssl_error_string()) {
             }
-            throw new \RuntimeException(sprintf("Could not import private key: \n%s", implode("\n", $errors)));
+            throw new RuntimeException(sprintf("Could not import private key: \n%s", implode("\n", $errors)));
         }
 
         if (openssl_sign($message, $signature, $privateKeyResource) === false) {
             while ($errors[] = openssl_error_string()) {
             }
-            throw new \RuntimeException(sprintf("Error during private key read: \n%s", implode("\n", $errors)));
+            throw new RuntimeException(sprintf("Error during private key read: \n%s", implode("\n", $errors)));
         }
 
         return base64_encode($signature);

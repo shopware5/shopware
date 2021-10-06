@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\MediaBundle;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
 class GarbageCollector
@@ -334,6 +335,6 @@ class GarbageCollector
             ->select($mediaPosition->getSourceColumn())
             ->from($mediaPosition->getSourceTable())
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 }

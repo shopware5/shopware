@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Functional\Components\Cart;
 
 use Enlight_Controller_Request_RequestHttp;
+use Enlight_Controller_Request_RequestTestCase;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Shop;
@@ -40,7 +41,7 @@ class CartMigrationTest extends TestCase
     {
         self::executeFixture(__DIR__ . '/fixture/cart_migration_1.sql');
 
-        Shopware()->Front()->setRequest(new \Enlight_Controller_Request_RequestTestCase());
+        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestTestCase());
         Shopware()->Modules()->Basket()->sRefreshBasket();
         static::assertEquals(0, Shopware()->Session()->get('sBasketAmount'));
 

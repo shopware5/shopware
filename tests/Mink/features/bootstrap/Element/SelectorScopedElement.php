@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Tests\Mink\Element;
 
 use Behat\Mink\Session;
+use RuntimeException;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Factory;
 
@@ -43,7 +44,7 @@ class SelectorScopedElement extends Element
             $parentType = \is_array($parentSelector) ? array_key_first($parentSelector) : 'css';
 
             if ($childType !== $parentType) {
-                throw new \RuntimeException(sprintf('Combining the parent element\'s %s selector with the childs %s selector won\'t work.', $parentType, $childType));
+                throw new RuntimeException(sprintf('Combining the parent element\'s %s selector with the childs %s selector won\'t work.', $parentType, $childType));
             }
 
             return implode(

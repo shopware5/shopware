@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Snippet\Writer;
 
+use Exception;
+
 class QueryWriter
 {
     /**
@@ -47,14 +49,14 @@ class QueryWriter
      * @param int|string $localeId
      * @param int        $shopId
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return $this
      */
     public function write($data, $namespace, $localeId, $shopId)
     {
         if (empty($data)) {
-            throw new \Exception('You called write() but provided no data to be written');
+            throw new Exception('You called write() but provided no data to be written');
         }
 
         if (!$this->update) {

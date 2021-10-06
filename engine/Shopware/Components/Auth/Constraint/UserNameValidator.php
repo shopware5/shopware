@@ -25,6 +25,7 @@
 namespace Shopware\Components\Auth\Constraint;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Components\Validator\UserNameValidatorInterface;
 use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Validator\Constraint;
@@ -122,7 +123,7 @@ class UserNameValidator extends ConstraintValidator
             $builder->setParameter('userId', $userId);
         }
 
-        $id = $builder->execute()->fetch(\PDO::FETCH_COLUMN);
+        $id = $builder->execute()->fetch(PDO::FETCH_COLUMN);
 
         return $id == 1;
     }

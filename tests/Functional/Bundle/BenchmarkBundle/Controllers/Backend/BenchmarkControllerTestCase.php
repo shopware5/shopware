@@ -25,6 +25,12 @@
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend;
 
 use Doctrine\DBAL\Query\QueryBuilder;
+use Enlight_Class;
+use Enlight_Controller_Action;
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Controller_Response_ResponseTestCase;
+use Enlight_Template_Manager;
+use Enlight_View_Default;
 use Shopware\Tests\Functional\Bundle\BenchmarkBundle\BenchmarkTestCase;
 
 class BenchmarkControllerTestCase extends BenchmarkTestCase
@@ -35,17 +41,17 @@ class BenchmarkControllerTestCase extends BenchmarkTestCase
     }
 
     /**
-     * @return \Enlight_Class
+     * @return Enlight_Class
      */
     protected function getController()
     {
-        /** @var \Enlight_Controller_Action $controller */
-        $controller = \Enlight_Class::Instance($this::CONTROLLER_NAME);
+        /** @var Enlight_Controller_Action $controller */
+        $controller = Enlight_Class::Instance($this::CONTROLLER_NAME);
 
-        $controller->initController(new \Enlight_Controller_Request_RequestTestCase(), new \Enlight_Controller_Response_ResponseTestCase());
+        $controller->initController(new Enlight_Controller_Request_RequestTestCase(), new Enlight_Controller_Response_ResponseTestCase());
 
         $controller->setContainer(Shopware()->Container());
-        $controller->setView(new \Enlight_View_Default(new \Enlight_Template_Manager()));
+        $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
 
         return $controller;
     }

@@ -24,7 +24,10 @@
 
 namespace Shopware\Tests\Components\Snippet;
 
-class SnippetStructureTest extends \Enlight_Components_Test_TestCase
+use DirectoryIterator;
+use Enlight_Components_Test_TestCase;
+
+class SnippetStructureTest extends Enlight_Components_Test_TestCase
 {
     /**
      * Test case
@@ -41,7 +44,7 @@ class SnippetStructureTest extends \Enlight_Components_Test_TestCase
 
         $pluginBasePath = Shopware()->Container()->get('application')->AppPath('Plugins_Default');
         foreach (['Backend', 'Core', 'Frontend'] as $namespace) {
-            foreach (new \DirectoryIterator($pluginBasePath . $namespace) as $pluginDir) {
+            foreach (new DirectoryIterator($pluginBasePath . $namespace) as $pluginDir) {
                 if ($pluginDir->isDot() || !$pluginDir->isDir()) {
                     continue;
                 }

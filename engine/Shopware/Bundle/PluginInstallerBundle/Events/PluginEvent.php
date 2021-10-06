@@ -24,10 +24,11 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Events;
 
+use Enlight_Event_EventArgs;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\InstallContext;
 
-abstract class PluginEvent extends \Enlight_Event_EventArgs
+abstract class PluginEvent extends Enlight_Event_EventArgs
 {
     public const PRE_INSTALL = PrePluginInstallEvent::class;
     public const POST_INSTALL = PostPluginInstallEvent::class;

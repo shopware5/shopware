@@ -24,8 +24,11 @@
 
 namespace Shopware\Models\Customer;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use LogicException;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
@@ -213,7 +216,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Time of the last modification of the customer
      *
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="changed", type="datetime", nullable=true)
      */
@@ -313,7 +316,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Contains the date on which the customer account was created.
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="firstlogin", type="date", nullable=true)
      */
@@ -322,7 +325,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Contains the date on which the customer has logged in recently.
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="lastlogin", type="datetime", nullable=true)
      */
@@ -436,7 +439,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Contains the time, since the customer is logged into a session.
      *
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="lockedUntil", type="datetime", nullable=true)
      */
@@ -475,7 +478,7 @@ class Customer extends LazyFetchModelEntity
     private $lastname;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="birthday", type="date", nullable=true)
      */
@@ -489,14 +492,14 @@ class Customer extends LazyFetchModelEntity
     private $doubleOptinRegister;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="doubleOptinEmailSentDate", type="datetime", nullable=true)
      */
     private $doubleOptinEmailSentDate;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="doubleOptinConfirmDate", type="datetime", nullable=true)
      */
@@ -510,7 +513,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Contains the date on which the customer account last changed the password
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="password_change_date", type="datetime", nullable=false)
      */
@@ -528,8 +531,8 @@ class Customer extends LazyFetchModelEntity
     public function __construct()
     {
         $this->orders = new ArrayCollection();
-        $this->firstLogin = new \DateTime();
-        $this->passwordChangeDate = new \DateTime();
+        $this->firstLogin = new DateTime();
+        $this->passwordChangeDate = new DateTime();
         $this->notifications = new ArrayCollection();
         $this->paymentInstances = new ArrayCollection();
         $this->paymentData = new ArrayCollection();
@@ -546,7 +549,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getChanged()
     {
@@ -699,14 +702,14 @@ class Customer extends LazyFetchModelEntity
      * with the date when the customer creates the account. The parameter can be a DateTime object
      * or a string with the date. If a string is passed, the string converts to an DateTime object.
      *
-     * @param \DateTimeInterface|string|null $firstLogin
+     * @param DateTimeInterface|string|null $firstLogin
      *
      * @return Customer
      */
     public function setFirstLogin($firstLogin)
     {
-        if ($firstLogin !== null && !($firstLogin instanceof \DateTimeInterface)) {
-            $firstLogin = new \DateTime($firstLogin);
+        if ($firstLogin !== null && !($firstLogin instanceof DateTimeInterface)) {
+            $firstLogin = new DateTime($firstLogin);
         }
         $this->firstLogin = $firstLogin;
 
@@ -717,7 +720,7 @@ class Customer extends LazyFetchModelEntity
      * Getter function for the first login column property of the customer, which contains a DateTime object
      * with the date when the customer creates the account.
      *
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getFirstLogin()
     {
@@ -729,14 +732,14 @@ class Customer extends LazyFetchModelEntity
      * with the date when the customer last logged in. The parameter can be a DateTime object
      * or a string with the date. If a string is passed, the string converts to an DateTime object.
      *
-     * @param \DateTimeInterface|string|null $lastLogin
+     * @param DateTimeInterface|string|null $lastLogin
      *
      * @return Customer
      */
     public function setLastLogin($lastLogin)
     {
-        if ($lastLogin !== null && !($lastLogin instanceof \DateTimeInterface)) {
-            $lastLogin = new \DateTime($lastLogin);
+        if ($lastLogin !== null && !($lastLogin instanceof DateTimeInterface)) {
+            $lastLogin = new DateTime($lastLogin);
         }
         $this->lastLogin = $lastLogin;
 
@@ -747,7 +750,7 @@ class Customer extends LazyFetchModelEntity
      * Getter function for the last login column property of the customer, which contains a DateTime object
      * with the date when the customer last logged in.
      *
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getLastLogin()
     {
@@ -958,14 +961,14 @@ class Customer extends LazyFetchModelEntity
      * Setter function for the lockedUntil column property, which contains the time since the customer is logged into a session.
      * Expects a \DateTimeInterface object or a time string which will be converted to a \DateTime object.
      *
-     * @param string|\DateTimeInterface|null $lockedUntil
+     * @param string|DateTimeInterface|null $lockedUntil
      *
      * @return Customer
      */
     public function setLockedUntil($lockedUntil)
     {
-        if (!$lockedUntil instanceof \DateTimeInterface) {
-            $lockedUntil = new \DateTime($lockedUntil);
+        if (!$lockedUntil instanceof DateTimeInterface) {
+            $lockedUntil = new DateTime($lockedUntil);
         }
         $this->lockedUntil = $lockedUntil;
 
@@ -975,7 +978,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Getter function for the lockedUntil column property, which contains the time since the customer is logged into a session.
      *
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getLockedUntil()
     {
@@ -988,15 +991,15 @@ class Customer extends LazyFetchModelEntity
      *
      * @ORM\PrePersist()
      *
-     * @throws \LogicException (See AttributeCleanerTrait)
+     * @throws LogicException (See AttributeCleanerTrait)
      */
     public function onSave()
     {
         if ($this->firstLogin === null) {
-            $this->firstLogin = new \DateTime();
+            $this->firstLogin = new DateTime();
         }
         if ($this->lastLogin === null) {
-            $this->lastLogin = new \DateTime();
+            $this->lastLogin = new DateTime();
         }
 
         if (!empty($this->rawPassword)) {
@@ -1012,7 +1015,7 @@ class Customer extends LazyFetchModelEntity
      *
      * @ORM\PreUpdate()
      *
-     * @throws \LogicException (See AttributeCleanerTrait)
+     * @throws LogicException (See AttributeCleanerTrait)
      */
     public function onUpdate()
     {
@@ -1028,7 +1031,7 @@ class Customer extends LazyFetchModelEntity
         $passwordChanged = isset($changeSet['hashPassword']) && $changeSet['hashPassword'][0] !== $changeSet['hashPassword'][1];
 
         if ($passwordChanged) {
-            $this->passwordChangeDate = new \DateTime();
+            $this->passwordChangeDate = new DateTime();
         }
     }
 
@@ -1376,7 +1379,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getBirthday()
     {
@@ -1384,7 +1387,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string|null $birthday
+     * @param DateTimeInterface|string|null $birthday
      */
     public function setBirthday($birthday = null)
     {
@@ -1392,8 +1395,8 @@ class Customer extends LazyFetchModelEntity
             $birthday = null;
         }
 
-        if (!$birthday instanceof \DateTimeInterface && $birthday !== null) {
-            $birthday = new \DateTime($birthday);
+        if (!$birthday instanceof DateTimeInterface && $birthday !== null) {
+            $birthday = new DateTime($birthday);
         }
 
         $this->birthday = $birthday;
@@ -1480,7 +1483,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getDoubleOptinEmailSentDate()
     {
@@ -1488,7 +1491,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $doubleOptinEmailSentDate
+     * @param DateTimeInterface|null $doubleOptinEmailSentDate
      */
     public function setDoubleOptinEmailSentDate($doubleOptinEmailSentDate)
     {
@@ -1496,7 +1499,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getDoubleOptinConfirmDate()
     {
@@ -1504,14 +1507,14 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $doubleOptinConfirmDate
+     * @param DateTimeInterface|null $doubleOptinConfirmDate
      */
     public function setDoubleOptinConfirmDate($doubleOptinConfirmDate)
     {
         $this->doubleOptinConfirmDate = $doubleOptinConfirmDate;
     }
 
-    public function getPasswordChangeDate(): \DateTimeInterface
+    public function getPasswordChangeDate(): DateTimeInterface
     {
         return $this->passwordChangeDate;
     }
@@ -1522,7 +1525,7 @@ class Customer extends LazyFetchModelEntity
      */
     public function updateChangedTimestamp()
     {
-        $this->changed = new \DateTime();
+        $this->changed = new DateTime();
     }
 
     public function getRegisterOptInId(): ?int

@@ -24,9 +24,11 @@
 
 namespace Shopware\Tests\Unit\Bundle\FormBundle;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\FormBundle\StringRendererService;
 use Shopware\Tests\Unit\Bundle\FormBundle\fixtures\View;
+use stdClass;
 
 class StringRendererServiceTest extends TestCase
 {
@@ -155,7 +157,7 @@ Wir freuen uns auf Ihre Kontaktaufnahme.
         $view = $this->view->getAssign();
         $view['sTestException'] = [0 => 1, 2 => 3, 4 => 5];
 
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->stringRendererService->render('testString {$sTestException} test 123', $view, []);
     }
 
@@ -169,11 +171,11 @@ Wir freuen uns auf Ihre Kontaktaufnahme.
             'required' => '1',
             'label' => 'Anrede',
             'class' => 'normal',
-            'value' => new \stdClass(),
+            'value' => new stdClass(),
             'error_msg' => '',
         ];
 
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->stringRendererService->render(
             'testString {$sElement.value} test 123',
             $this->view->getAssign(),

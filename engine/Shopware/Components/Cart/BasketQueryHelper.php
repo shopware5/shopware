@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Cart;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Cart\Struct\DiscountContext;
 
@@ -91,7 +92,7 @@ class BasketQueryHelper implements BasketQueryHelperInterface
                 'taxRate' => $price->getTaxRate(),
                 'mode' => $discountContext->getBasketMode(),
                 'currencyFactor' => $discountContext->getCurrencyFactor(),
-                'datum' => (new \DateTime())->format('Y-m-d H:i:s'),
+                'datum' => (new DateTime())->format('Y-m-d H:i:s'),
                 'articleID' => 0,
                 'quantity' => 1,
             ]);

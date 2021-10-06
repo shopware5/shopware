@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Components;
 
+use RuntimeException;
 use Shopware\Components\NumberRangeIncrementer;
 use Shopware\Components\NumberRangeIncrementerInterface;
 
@@ -70,7 +71,7 @@ class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
     {
         $manager = new NumberRangeIncrementer($this->connection);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Number range with name "invalid" does not exist.');
         $manager->increment('invalid');
     }

@@ -24,6 +24,8 @@
 
 namespace Shopware\Commands;
 
+use Enlight_Components_Snippet_Namespace;
+use Enlight_Config_Adapter_File;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Locale;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
@@ -169,7 +171,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
         $output->writeln('<info></info>');
         $output->writeln('<info>' . \count($snippets) . ' missing snippets detected</info>');
 
-        $outputAdapter = new \Enlight_Config_Adapter_File([
+        $outputAdapter = new Enlight_Config_Adapter_File([
             'configDir' => $input->getOption('target') . '/',
         ]);
 
@@ -177,7 +179,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
 
         foreach ($snippets as $snippet) {
             if (!\array_key_exists($snippet['namespace'], $data)) {
-                $data[$snippet['namespace']] = new \Enlight_Components_Snippet_Namespace([
+                $data[$snippet['namespace']] = new Enlight_Components_Snippet_Namespace([
                     'name' => $snippet['namespace'],
                     'section' => [
                         $locale->getLocale(),

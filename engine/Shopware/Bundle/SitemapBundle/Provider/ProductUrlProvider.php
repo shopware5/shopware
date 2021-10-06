@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
 use Shopware\Bundle\SearchBundle\Condition\LastProductIdCondition;
@@ -134,7 +135,7 @@ class ProductUrlProvider implements UrlProviderInterface
 
         $urls = [];
         for ($i = 0, $productCount = \count($products); $i < $productCount; ++$i) {
-            $urls[] = new Url($routes[$i], new \DateTime($products[$i]['changetime']), 'weekly', Product::class, $products[$i]['id']);
+            $urls[] = new Url($routes[$i], new DateTime($products[$i]['changetime']), 'weekly', Product::class, $products[$i]['id']);
         }
 
         reset($products);

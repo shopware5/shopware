@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\CustomerStream;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Attribute\CustomerStream as CustomerStreamAttribute;
@@ -84,7 +86,7 @@ class CustomerStream extends ModelEntity
     private $static = false;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @Assert\DateTime()
      *
@@ -149,7 +151,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getFreezeUp()
     {
@@ -157,12 +159,12 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string|null $freezeUp
+     * @param DateTimeInterface|string|null $freezeUp
      */
     public function setFreezeUp($freezeUp)
     {
         if (\is_string($freezeUp)) {
-            $freezeUp = new \DateTime($freezeUp);
+            $freezeUp = new DateTime($freezeUp);
         }
         $this->freezeUp = $freezeUp;
     }

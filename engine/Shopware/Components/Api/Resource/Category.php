@@ -27,6 +27,7 @@ namespace Shopware\Components\Api\Resource;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\ORMInvalidArgumentException;
+use Exception;
 use RuntimeException;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Components\Api\Exception\CustomValidationException;
@@ -145,7 +146,7 @@ class Category extends Resource
 
     /**
      * @throws ValidationException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return CategoryModel
      */

@@ -26,11 +26,13 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models\Shop;
 
+use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Controller_Request_RequestTestCase;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
-class ShopRepositoryTest extends \Enlight_Components_Test_Controller_TestCase
+class ShopRepositoryTest extends Enlight_Components_Test_Controller_TestCase
 {
     private Repository $shopRepository;
 
@@ -157,7 +159,7 @@ class ShopRepositoryTest extends \Enlight_Components_Test_Controller_TestCase
      */
     public function callGetActiveShopByRequest(string $url, string $shopName, bool $secure = false): void
     {
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setHttpHost($this->mainShop['host']);
         $request->setRequestUri($url);
         $request->setSecure($secure);

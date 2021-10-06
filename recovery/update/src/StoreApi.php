@@ -24,6 +24,7 @@
 
 namespace Shopware\Recovery\Update;
 
+use RuntimeException;
 use Shopware\Recovery\Common\HttpClient\Client;
 
 class StoreApi
@@ -115,7 +116,7 @@ class StoreApi
         $result = $result->call;
 
         if ($result->status == 'failed') {
-            throw new \RuntimeException($result->response->message);
+            throw new RuntimeException($result->response->message);
         }
 
         $result = $result->response->_search_result;

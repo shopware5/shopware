@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
+use InvalidArgumentException;
+use RuntimeException;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition as Condition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
@@ -47,8 +49,8 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
      *
      * @see \
      *
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
     public function generateCondition(
         ConditionInterface $condition,

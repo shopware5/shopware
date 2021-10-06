@@ -24,10 +24,12 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\Services;
 
+use InvalidArgumentException;
+
 interface MenuSynchronizerInterface
 {
     /**
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function synchronize(array $menu): void;
 }

@@ -24,10 +24,12 @@
 
 namespace Shopware\Tests\Components\LegacyRequestWrapper;
 
+use Enlight_Components_Test_Controller_TestCase;
+
 /**
  * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper
  */
-class PostWrapperTest extends \Enlight_Components_Test_Controller_TestCase
+class PostWrapperTest extends Enlight_Components_Test_Controller_TestCase
 {
     private static $resources = [
         'Admin',

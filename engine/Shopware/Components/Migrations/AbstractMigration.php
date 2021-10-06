@@ -24,13 +24,16 @@
 
 namespace Shopware\Components\Migrations;
 
+use PDO;
+use ReflectionClass;
+
 abstract class AbstractMigration
 {
     public const MODUS_UPDATE = 'update';
     public const MODUS_INSTALL = 'install';
 
     /**
-     * @var \PDO
+     * @var PDO
      */
     protected $connection;
 
@@ -39,13 +42,13 @@ abstract class AbstractMigration
      */
     protected $sql = [];
 
-    public function __construct(\PDO $connection)
+    public function __construct(PDO $connection)
     {
         $this->connection = $connection;
     }
 
     /**
-     * @param \PDO $connection
+     * @param PDO $connection
      *
      * @return AbstractMigration
      */
@@ -56,7 +59,7 @@ abstract class AbstractMigration
         return $this;
     }
 
-    public function getConnection(): \PDO
+    public function getConnection(): PDO
     {
         return $this->connection;
     }
@@ -67,7 +70,7 @@ abstract class AbstractMigration
 
         $regexPattern = '/[\d]*-(.+)\.php$/i';
 
-        $rc = new \ReflectionClass(\get_class($this));
+        $rc = new ReflectionClass(\get_class($this));
         $fileName = basename($rc->getFileName());
 
         preg_match($regexPattern, $fileName, $result);

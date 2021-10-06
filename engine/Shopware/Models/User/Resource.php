@@ -27,6 +27,7 @@ namespace Shopware\Models\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Zend_Acl_Resource_Interface;
 
 /**
  * Shopware resource model represents a single authentication resource.
@@ -45,7 +46,7 @@ use Shopware\Components\Model\ModelEntity;
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks()
  */
-class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
+class Resource extends ModelEntity implements Zend_Acl_Resource_Interface
 {
     /**
      * @var int

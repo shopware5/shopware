@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
+use DateTime;
+
 /**
  * Handles request for values suggested to the user
  */
@@ -96,7 +98,7 @@ class Value
         // Iterate results, do some formatting if needed
         foreach ($paginator->getIterator()->getArrayCopy() as $item) {
             $item = array_pop($item);
-            if ($item instanceof \DateTime) {
+            if ($item instanceof DateTime) {
                 if ($columnType === 'date') {
                     $item = $item->format('Y-m-d');
                 } elseif ($columnType === 'datetime') {

@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\OrderNumberValidator\Exception;
 
-class InvalidOrderNumberException extends \RuntimeException
+use RuntimeException;
+
+class InvalidOrderNumberException extends RuntimeException
 {
 }

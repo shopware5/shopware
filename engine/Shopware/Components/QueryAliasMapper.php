@@ -24,6 +24,9 @@
 
 namespace Shopware\Components;
 
+use Enlight_Controller_Request_RequestHttp;
+use Shopware_Components_Config;
+
 class QueryAliasMapper
 {
     /**
@@ -49,7 +52,7 @@ class QueryAliasMapper
     /**
      * @return QueryAliasMapper
      */
-    public static function createFromConfig(\Shopware_Components_Config $config)
+    public static function createFromConfig(Shopware_Components_Config $config)
     {
         $queryAliases = $config->get('SeoQueryAlias');
 
@@ -113,7 +116,7 @@ class QueryAliasMapper
     /**
      * Replaces the query params with their matching long form
      */
-    public function replaceShortRequestQueries(\Enlight_Controller_Request_RequestHttp $request)
+    public function replaceShortRequestQueries(Enlight_Controller_Request_RequestHttp $request)
     {
         foreach ($this->getQueryAliases() as $key => $alias) {
             $value = $request->getQuery($alias);

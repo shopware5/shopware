@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
@@ -33,7 +34,7 @@ use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\DomCrawler\Crawler;
 
-class AddressTest extends \Enlight_Components_Test_Controller_TestCase
+class AddressTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var ModelManager
@@ -117,7 +118,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Container()->reset('router');
     }
 
-    public function testList()
+    public function testList(): void
     {
         $this->ensureLogin();
         $crawler = $this->doRequest('GET', '/address/');
@@ -127,10 +128,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertGreaterThan(0, $crawler->filter('html:contains("Standard-Lieferadresse")')->count());
     }
 
-    /**
-     * @return int
-     */
-    public function testCreation()
+    public function testCreation(): int
     {
         $this->ensureLogin();
         $crawler = $this->doRequest(
@@ -157,10 +155,9 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @param int $addressId
      * @depends testCreation
      */
-    public function testEditPage($addressId)
+    public function testEditPage(int $addressId): void
     {
         $this->ensureLogin();
 
@@ -170,10 +167,9 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @param int $addressId
      * @depends testCreation
      */
-    public function testEdit($addressId)
+    public function testEdit(int $addressId): void
     {
         $this->ensureLogin();
 
@@ -202,10 +198,8 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 
     /**
      * @depends testCreation
-     *
-     * @param int $addressId
      */
-    public function testDeletion($addressId)
+    public function testDeletion(int $addressId): void
     {
         $this->ensureLogin();
 
@@ -222,7 +216,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @depends testCreation
      */
-    public function testDeletionOfDefaultAddressesShouldFail()
+    public function testDeletionOfDefaultAddressesShouldFail(): void
     {
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('The address is defined as default billing or shipping address and cannot be removed.');
@@ -235,7 +229,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @depends testDeletionOfDefaultAddressesShouldFail
      */
-    public function testVerifyAddressDeletionOfDefaultAddressesShouldFail()
+    public function testVerifyAddressDeletionOfDefaultAddressesShouldFail(): void
     {
         $this->ensureLogin();
 
@@ -247,7 +241,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @depends testCreation
      */
-    public function testChangeOfBillingAddressReflectsInAccount()
+    public function testChangeOfBillingAddressReflectsInAccount(): void
     {
         $this->ensureLogin();
 
@@ -288,13 +282,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals('Deutschland', trim($panelBody->filter('.address--countryname')->text()));
     }
 
-    /**
-     * @param string $method
-     * @param string $url
-     *
-     * @return Crawler
-     */
-    private function doRequest($method, $url, array $data = [])
+    private function doRequest(string $method, string $url, array $data = []): Crawler
     {
         $this->reset();
 
@@ -331,19 +319,15 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Log-in into account, needed for every test
      */
-    private function ensureLogin()
+    private function ensureLogin(): void
     {
         $this->doRequest('POST', '/account/login', ['email' => self::$loginEmail, 'password' => self::$loginPassword]);
     }
 
     /**
      * Helper method for creating a valid customer
-     *
-     * @param bool $randomEmail
-     *
-     * @return array
      */
-    private static function getCustomerDemoData($randomEmail = false)
+    private static function getCustomerDemoData(bool $randomEmail = false): array
     {
         $emailPrefix = $randomEmail ? uniqid((string) rand()) : '';
 
@@ -356,7 +340,10 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         ];
     }
 
-    private static function getBillingDemoData()
+    /**
+     * @return array<string, string|Country|State>
+     */
+    private static function getBillingDemoData(): array
     {
         $country = self::createCountry();
 
@@ -372,7 +359,10 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         ];
     }
 
-    private static function getShippingDemoData()
+    /**
+     * @return array<string, string|Country>
+     */
+    private static function getShippingDemoData(): array
     {
         return [
             'salutation' => 'mr',
@@ -385,10 +375,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         ];
     }
 
-    /**
-     * @return Country
-     */
-    private static function createCountry()
+    private static function createCountry(): Country
     {
         $country = new Country();
 
@@ -405,10 +392,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         return self::$modelManager->merge($country);
     }
 
-    /**
-     * @return State
-     */
-    private static function createState(Country $country)
+    private static function createState(Country $country): State
     {
         $state = new State();
 

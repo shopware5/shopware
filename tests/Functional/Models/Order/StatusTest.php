@@ -26,7 +26,9 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models\Order;
 
-class StatusTest extends \Enlight_Components_Test_TestCase
+use Enlight_Components_Test_TestCase;
+
+class StatusTest extends Enlight_Components_Test_TestCase
 {
     public function testStatusIsPersistableViaOrm(): void
     {

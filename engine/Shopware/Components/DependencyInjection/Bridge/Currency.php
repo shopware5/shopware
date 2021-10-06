@@ -25,19 +25,21 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Shopware\Components\DependencyInjection\Container;
+use Zend_Currency;
+use Zend_Locale;
 
 class Currency
 {
     /**
-     * @return \Zend_Currency
+     * @return Zend_Currency
      */
-    public function factory(Container $container, \Zend_Locale $locale)
+    public function factory(Container $container, Zend_Locale $locale)
     {
         $currency = 'EUR';
         if ($container->has('shop')) {
             $currency = $container->get('shop')->getCurrency()->getCurrency();
         }
 
-        return new \Zend_Currency($currency, $locale);
+        return new Zend_Currency($currency, $locale);
     }
 }

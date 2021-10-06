@@ -24,13 +24,18 @@
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
+use Enlight_Components_Db_Adapter_Pdo_Mysql;
+use Enlight_Components_Session_Namespace;
+use Enlight_Components_Test_Controller_TestCase;
+use Shopware_Components_Config;
+use Shopware_Components_Modules;
 use Symfony\Component\DependencyInjection\Container;
 
-class AccountTest extends \Enlight_Components_Test_Controller_TestCase
+class AccountTest extends Enlight_Components_Test_Controller_TestCase
 {
     private Container $container;
 
-    private \Enlight_Components_Session_Namespace $session;
+    private Enlight_Components_Session_Namespace $session;
 
     public function setUp(): void
     {
@@ -58,7 +63,7 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
         $filesystem = $this->container->get('shopware.filesystem.private');
 
         $config = $this->container->get('config');
-        static::assertInstanceOf(\Shopware_Components_Config::class, $config);
+        static::assertInstanceOf(Shopware_Components_Config::class, $config);
 
         $filePath = $config->offsetGet('esdKey') . '/shopware_packshot_community_edition_72dpi_rgb.png';
         $deleteFolderOnTearDown = !$filesystem->has($filePath) ? $filePath : false;
@@ -79,7 +84,9 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
 
         static::assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"', $this->Response()->getHeader('Content-Disposition'));
         static::assertGreaterThan(630, (int) $this->Response()->getHeader('Content-Length'));
-        static::assertEquals(\strlen($this->Response()->getBody()), (int) $this->Response()->getHeader('Content-Length'));
+        $body = $this->Response()->getBody();
+        static::assertIsString($body);
+        static::assertEquals(mb_strlen($body), (int) $this->Response()->getHeader('Content-Length'));
 
         if ($deleteFolderOnTearDown) {
             $filesystem->delete($filePath);
@@ -142,7 +149,7 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/');
 
         $modules = $this->container->get('modules');
-        static::assertInstanceOf(\Shopware_Components_Modules::class, $modules);
+        static::assertInstanceOf(Shopware_Components_Modules::class, $modules);
 
         $result = $modules->Admin()->sLogin(true);
 
@@ -181,7 +188,7 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/');
 
         $modules = $this->container->get('modules');
-        static::assertInstanceOf(\Shopware_Components_Modules::class, $modules);
+        static::assertInstanceOf(Shopware_Components_Modules::class, $modules);
 
         $result = $modules->Admin()->sLogin();
 
@@ -213,7 +220,7 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $sql = 'SELECT email, password FROM s_user WHERE id = 1';
         $database = $this->container->get('db');
-        static::assertInstanceOf(\Enlight_Components_Db_Adapter_Pdo_Mysql::class, $database);
+        static::assertInstanceOf(Enlight_Components_Db_Adapter_Pdo_Mysql::class, $database);
 
         $userData = $database->fetchRow($sql);
         $this->Request()->setMethod('POST')

@@ -24,13 +24,16 @@
 
 namespace Shopware\Components;
 
+use RuntimeException;
+use Shopware_Components_Snippet_Manager;
+
 class StateTranslatorService implements StateTranslatorServiceInterface
 {
     public const STATE_PAYMENT = 'payment';
     public const STATE_ORDER = 'order';
 
     /**
-     * @var \Shopware_Components_Snippet_Manager
+     * @var Shopware_Components_Snippet_Manager
      */
     private $snippetManager;
 
@@ -40,7 +43,7 @@ class StateTranslatorService implements StateTranslatorServiceInterface
     private $availableTypes;
 
     public function __construct(
-        \Shopware_Components_Snippet_Manager $snippetManager,
+        Shopware_Components_Snippet_Manager $snippetManager,
         $types = [
             self::STATE_PAYMENT => 'backend/static/payment_status',
             self::STATE_ORDER => 'backend/static/order_status',
@@ -53,14 +56,14 @@ class StateTranslatorService implements StateTranslatorServiceInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function translateState($type, array $state)
     {
         $type = strtolower($type);
 
         if (!$this->availableTypes[$type]) {
-            throw new \RuntimeException(sprintf('Invalid type \'%s\' given.', $type));
+            throw new RuntimeException(sprintf('Invalid type \'%s\' given.', $type));
         }
 
         $namespace = $this->availableTypes[$type];

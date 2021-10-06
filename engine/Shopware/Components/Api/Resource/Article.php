@@ -27,6 +27,7 @@ namespace Shopware\Components\Api\Resource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\ORMException;
+use Exception;
 use RuntimeException;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
@@ -425,7 +426,7 @@ class Article extends Resource implements BatchInterface
      *
      * @param string $number
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteByNumber($number)
     {
@@ -1122,7 +1123,7 @@ class Article extends Resource implements BatchInterface
      * @param array $data
      *
      * @throws CustomValidationException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */

@@ -24,6 +24,8 @@
 
 namespace Shopware\Commands;
 
+use Exception;
+use RuntimeException;
 use Shopware\Bundle\PluginInstallerBundle\Context\DownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
@@ -146,7 +148,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
 
                 /** @var LicenceStruct|null $plugin */
                 $plugin = array_shift($licences);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $io->error('An error occured: ' . $e->getMessage());
 
                 return 1;
@@ -184,7 +186,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
                     $this->handleLicenceInstall($plugin, $domain, $version, $token);
                     break;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->error('An error occured: ' . $e->getMessage());
             exit(1);
         }
@@ -194,7 +196,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
             $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class)->refreshPluginList();
 
             $this->io->success('Process completed successfully.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return 0;
@@ -204,7 +206,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
      * @param string $domain
      * @param string $version
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function handleDummyUpdate(PluginStruct $plugin, $domain, $version)
     {
@@ -231,7 +233,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
      * @param string $version
      * @param string $domain
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function handleDummyInstall(PluginStruct $plugin, $domain, $version)
     {
@@ -247,7 +249,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
      * @param string            $version
      * @param AccessTokenStruct $token
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function handleLicenceUpdate(PluginStruct $plugin, $domain, $version, AccessTokenStruct $token = null)
     {
@@ -372,7 +374,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
     /**
      * @param PluginStruct|LicenceStruct $plugin
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return PluginStruct
      */
@@ -469,7 +471,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
             $storeClient = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\StoreClient::class);
 
             return $storeClient->getAccessToken($username, $password);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return null;

@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Unit\Core;
 
 use PHPUnit\Framework\TestCase;
+use sCategories;
 use Shopware\Models\Category\Repository;
 
 class sCategoriesTest extends TestCase
@@ -75,7 +76,7 @@ class sCategoriesTest extends TestCase
         $baseURL = 'shopware.php?sViewport=cat&sCategory=';
 
         $repository = $this->createMock(Repository::class);
-        $sCategories = $this->createPartialMock(\sCategories::class, []);
+        $sCategories = $this->createPartialMock(sCategories::class, []);
         $sCategories->repository = $repository;
         $sCategories->baseUrl = $baseURL;
         $repository->method('getPathById')->willReturn($resultGiven);

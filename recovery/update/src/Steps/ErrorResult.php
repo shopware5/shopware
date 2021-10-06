@@ -24,6 +24,8 @@
 
 namespace Shopware\Recovery\Update\Steps;
 
+use Exception;
+
 class ErrorResult
 {
     /**
@@ -32,7 +34,7 @@ class ErrorResult
     private $message;
 
     /**
-     * @var \Exception
+     * @var Exception
      */
     private $exception;
 
@@ -42,11 +44,11 @@ class ErrorResult
     private $args;
 
     /**
-     * @param string     $message
-     * @param \Exception $exception
-     * @param array      $args
+     * @param string    $message
+     * @param Exception $exception
+     * @param array     $args
      */
-    public function __construct($message, \Exception $exception = null, $args = [])
+    public function __construct($message, Exception $exception = null, $args = [])
     {
         $this->message = $message;
         $this->exception = $exception;
@@ -62,7 +64,7 @@ class ErrorResult
     }
 
     /**
-     * @return \Exception
+     * @return Exception
      */
     public function getException()
     {

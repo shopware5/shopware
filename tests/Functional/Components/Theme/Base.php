@@ -24,10 +24,13 @@
 
 namespace Shopware\Tests\Functional\Components\Theme;
 
+use Enlight_Components_Test_TestCase;
+use Enlight_Event_EventManager;
+use ReflectionClass;
 use Shopware\Components\Theme\Configurator;
 use Shopware\Models\Shop\Template;
 
-class Base extends \Enlight_Components_Test_TestCase
+class Base extends Enlight_Components_Test_TestCase
 {
     /**
      * @return \PHPUnit\Framework\MockObject\MockObject
@@ -42,7 +45,7 @@ class Base extends \Enlight_Components_Test_TestCase
      */
     protected function getEventManager()
     {
-        return $this->createMock(\Enlight_Event_EventManager::class);
+        return $this->createMock(Enlight_Event_EventManager::class);
     }
 
     /**
@@ -129,7 +132,7 @@ class Base extends \Enlight_Components_Test_TestCase
      */
     protected function invokeMethod(&$object, $methodName, array $parameters = [])
     {
-        $reflection = new \ReflectionClass(\get_class($object));
+        $reflection = new ReflectionClass(\get_class($object));
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
 

@@ -27,6 +27,7 @@ namespace Shopware\Tests\Unit\Components\Plugin\XmlReader;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use RuntimeException;
 use Shopware\Components\Plugin\XmlReader\XmlMenuReader;
 
 class XmlMenuReaderTest extends TestCase
@@ -43,7 +44,7 @@ class XmlMenuReaderTest extends TestCase
 
     public function testThatEmptyEntriesThrowException(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Required element "entry" is missing.');
 
         $dom = new DOMDocument();
@@ -76,12 +77,12 @@ class XmlMenuReaderTest extends TestCase
         static::assertArrayHasKey('active', $firstMenu);
         static::assertArrayHasKey('position', $firstMenu);
 
-        static::assertEquals(false, $firstMenu['isRootMenu']);
+        static::assertFalse($firstMenu['isRootMenu']);
         static::assertEquals('SwagDefaultSort', $firstMenu['name']);
         static::assertEquals('SwagDefaultSort', $firstMenu['controller']);
         static::assertEquals('index', $firstMenu['action']);
         static::assertEquals('sprite-sort', $firstMenu['class']);
-        static::assertEquals(false, $firstMenu['active']);
+        static::assertFalse($firstMenu['active']);
         static::assertEquals(-1, $firstMenu['position']);
 
         static::assertArrayHasKey('label', $firstMenu['parent']);

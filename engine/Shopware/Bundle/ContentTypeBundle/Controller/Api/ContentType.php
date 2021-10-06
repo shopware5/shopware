@@ -30,8 +30,9 @@ use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Shop;
+use Shopware_Controllers_Api_Rest;
 
-class ContentType extends \Shopware_Controllers_Api_Rest
+class ContentType extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var RepositoryInterface

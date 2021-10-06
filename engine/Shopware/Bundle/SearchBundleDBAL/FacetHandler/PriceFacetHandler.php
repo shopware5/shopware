@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
+use Enlight_Components_Snippet_Namespace;
+use PDO;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
@@ -35,6 +37,7 @@ use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
+use Shopware_Components_Snippet_Manager;
 
 class PriceFacetHandler implements PartialFacetHandlerInterface
 {
@@ -44,7 +47,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
     private $queryBuilderFactory;
 
     /**
-     * @var \Enlight_Components_Snippet_Namespace
+     * @var Enlight_Components_Snippet_Namespace
      */
     private $snippetNamespace;
 
@@ -65,7 +68,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
 
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
-        \Shopware_Components_Snippet_Manager $snippetManager,
+        Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper,
         ListingPriceSwitcher $listingPriceSwitcher
     ) {
@@ -106,7 +109,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $min = $statement->fetch(\PDO::FETCH_COLUMN);
+        $min = $statement->fetch(PDO::FETCH_COLUMN);
 
         $query = $this->buildQuery($reverted, $criteria, $context);
 
@@ -115,7 +118,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $max = $statement->fetch(\PDO::FETCH_COLUMN);
+        $max = $statement->fetch(PDO::FETCH_COLUMN);
 
         $activeMin = $min;
         $activeMax = $max;

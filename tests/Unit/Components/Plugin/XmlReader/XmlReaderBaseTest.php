@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\Components\Plugin\XmlReader;
 
 use DOMDocument;
 use DOMXPath;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Plugin\XmlReader\XmlConfigReader;
 use Shopware\Components\Plugin\XmlReader\XmlReaderBase;
@@ -34,7 +35,7 @@ use Symfony\Component\Config\Util\XmlUtils;
 class XmlReaderBaseTest extends TestCase
 {
     /**
-     * @var \DOMDocument
+     * @var DOMDocument
      */
     private $xmlFile;
 
@@ -71,7 +72,7 @@ class XmlReaderBaseTest extends TestCase
 
     public function testReadInvalidFile(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('#Unable to parse file#');
 
         $xmlReader = new XmlConfigReader();
@@ -128,7 +129,7 @@ class XmlReaderBaseTest extends TestCase
         );
 
         static::assertIsBool($element1Result);
-        static::assertEquals(true, $element1Result);
+        static::assertTrue($element1Result);
 
         //required not given - passed default value
         $element2 = $this->xpath->query('//config/elements/element')->item(1);
@@ -138,7 +139,7 @@ class XmlReaderBaseTest extends TestCase
         );
 
         static::assertIsBool($element2Result);
-        static::assertEquals(false, $element2Result);
+        static::assertFalse($element2Result);
     }
 
     public function testParseStoreNodeList(): void
@@ -225,7 +226,7 @@ class XmlReaderBaseTest extends TestCase
 
     public function testGetElementChildValueByNameThrowsException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Element with invalid not found');
 
         $options = $this->xpath->query('//config/elements/element[6]/options');

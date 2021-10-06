@@ -27,6 +27,7 @@ namespace Shopware\Bundle\SearchBundle\FacetResult;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 use Shopware\Components\QueryAliasMapper;
+use Shopware_Components_Snippet_Manager;
 
 class CategoryTreeFacetResultBuilder
 {
@@ -41,7 +42,7 @@ class CategoryTreeFacetResultBuilder
     private $queryAliasMapper;
 
     public function __construct(
-        \Shopware_Components_Snippet_Manager $snippetManager,
+        Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {
         $this->snippetManager = $snippetManager;

@@ -24,13 +24,14 @@
 
 namespace Shopware\Tests\Functional\Components\Cart;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Components\Cart\ProportionalTaxCalculatorInterface;
 use Shopware\Components\Cart\Struct\Price;
 
 /**
  * @group Basket
  */
-class ProportionalTaxCalculatorTest extends \Enlight_Components_Test_TestCase
+class ProportionalTaxCalculatorTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var ProportionalTaxCalculatorInterface

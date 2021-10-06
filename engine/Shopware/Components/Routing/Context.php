@@ -25,6 +25,7 @@
 namespace Shopware\Components\Routing;
 
 use Enlight_Controller_Request_Request as EnlightRequest;
+use JsonSerializable;
 use Shopware\Models\Shop\Shop as ShopwareShop;
 use Shopware_Components_Config as ShopwareConfig;
 
@@ -33,7 +34,7 @@ use Shopware_Components_Config as ShopwareConfig;
  * @see http://api.symfony.com/2.0/Symfony/Component/Routing/RequestContext.html
  * @see \Enlight_Controller_Request_Request
  */
-class Context implements \JsonSerializable
+class Context implements JsonSerializable
 {
     /**
      * @var array

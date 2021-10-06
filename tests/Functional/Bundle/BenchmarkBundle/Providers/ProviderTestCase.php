@@ -24,8 +24,11 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
+use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Constraint\IsType;
+use PHPUnit_Framework_ExpectationFailedException;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
 use Shopware\Bundle\BenchmarkBundle\Service\StatisticsService;
 use Shopware\Bundle\BenchmarkBundle\StatisticsClient;
@@ -137,7 +140,7 @@ abstract class ProviderTestCase extends BenchmarkTestCase
                         static::assertIsString($resultItem);
                         break;
                 }
-            } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
+            } catch (PHPUnit_Framework_ExpectationFailedException $e) {
                 // Print custom error message
                 static::fail(sprintf('Failed asserting that the value for the key %s is of type %s', $resultKey, $expectedTypes[$resultKey]));
             }
@@ -169,7 +172,7 @@ abstract class ProviderTestCase extends BenchmarkTestCase
     protected function sendStatistics(): void
     {
         Shopware()->Models()->clear();
-        $response = new StatisticsResponse(new \DateTime('now', new \DateTimeZone('UTC')), 'foo', false);
+        $response = new StatisticsResponse(new DateTime('now', new DateTimeZone('UTC')), 'foo', false);
         $client = $this->createMock(StatisticsClient::class);
         $client->method('sendStatistics')->willReturn($response);
         $service = new StatisticsService(Shopware()->Container()->get('shopware.benchmark_bundle.collector'), $client, Shopware()->Container()->get('shopware.benchmark_bundle.repository.config'), Shopware()->Container()->get('shopware_storefront.context_service'), Shopware()->Container()->get('dbal_connection'));

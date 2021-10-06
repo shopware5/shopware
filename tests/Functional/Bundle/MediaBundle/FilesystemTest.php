@@ -24,10 +24,12 @@
 
 namespace Shopware\Tests\Functional\Bundle\MediaBundle;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
 
-class FilesystemTest extends \Enlight_Components_Test_TestCase
+class FilesystemTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var MediaServiceInterface
@@ -56,7 +58,7 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
     {
         parent::setUp();
 
-        $this->mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $this->mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
         $this->testData = [
             'key' => 'myKey',
             'name' => 'name',
@@ -66,7 +68,7 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
                 'grumpy guy',
             ],
         ];
-        $this->testFileSize = \strlen(json_encode($this->testData));
+        $this->testFileSize = mb_strlen(json_encode($this->testData, JSON_THROW_ON_ERROR));
     }
 
     protected function tearDown(): void
@@ -94,7 +96,7 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
         $file = current($this->testPaths);
 
         /** @var Shop $shop */
-        $shop = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class)->getActiveDefault();
+        $shop = Shopware()->Container()->get(ModelManager::class)->getRepository(Shop::class)->getActiveDefault();
         if ($shop->getMain()) {
             $shop = $shop->getMain();
         }

@@ -27,6 +27,7 @@ namespace Shopware\Models\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Zend_Db_Adapter_Exception;
 
 /**
  * The Shopware album model is used to structure the media data.
@@ -337,7 +338,7 @@ class Album extends ModelEntity
      *
      * @ORM\PreRemove()
      *
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Zend_Db_Adapter_Exception
      */
     public function onRemove()
     {

@@ -24,6 +24,10 @@
 
 namespace Shopware\Components\Model;
 
+use Exception;
+use PDO;
+use PDOException;
+
 /**
  * CategoryDenormalization-Class
  *
@@ -39,7 +43,7 @@ namespace Shopware\Components\Model;
 class CategoryDenormalization
 {
     /**
-     * @var \PDO
+     * @var PDO
      */
     protected $connection;
 
@@ -48,13 +52,13 @@ class CategoryDenormalization
      */
     protected $enableTransactions = true;
 
-    public function __construct(\PDO $connection)
+    public function __construct(PDO $connection)
     {
         $this->connection = $connection;
     }
 
     /**
-     * @param \PDO $connection
+     * @param PDO $connection
      *
      * @return CategoryDenormalization
      */
@@ -66,7 +70,7 @@ class CategoryDenormalization
     }
 
     /**
-     * @return \PDO
+     * @return PDO
      */
     public function getConnection()
     {
@@ -115,7 +119,7 @@ class CategoryDenormalization
     {
         $stmt = $this->getConnection()->prepare('SELECT id, parent FROM s_categories WHERE id = :id AND parent IS NOT NULL');
         $stmt->execute([':id' => $id]);
-        $parent = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $parent = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$parent) {
             return [];
         }
@@ -207,7 +211,7 @@ class CategoryDenormalization
 
         $this->beginTransaction();
 
-        while ($category = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+        while ($category = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $count += $this->rebuildPath($category['id'], $category['path']);
         }
 
@@ -267,7 +271,7 @@ class CategoryDenormalization
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute(['categoryId' => $categoryId]);
 
-        $rows = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+        $rows = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
         // in case that a leaf category is moved
         if (empty($rows)) {
@@ -343,7 +347,7 @@ class CategoryDenormalization
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute(['categoryId' => '%|' . $categoryId . '|%']);
 
-        $rows = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+        $rows = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
         // in case that a leaf category is moved
         if (empty($rows)) {
@@ -553,7 +557,7 @@ class CategoryDenormalization
         // TRUNCATE is faster than DELETE
         try {
             $count = $this->getConnection()->exec('TRUNCATE s_articles_categories_ro');
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             $count = $this->getConnection()->exec('DELETE FROM s_articles_categories_ro');
         }
 
@@ -587,7 +591,7 @@ class CategoryDenormalization
      * @param int    $count
      * @param int    $offset OPTIONAL
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string
      */
@@ -595,12 +599,12 @@ class CategoryDenormalization
     {
         $count = (int) $count;
         if ($count <= 0) {
-            throw new \Exception(sprintf('LIMIT argument count=%s is not valid', $count));
+            throw new Exception(sprintf('LIMIT argument count=%s is not valid', $count));
         }
 
         $offset = (int) $offset;
         if ($offset < 0) {
-            throw new \Exception(sprintf('LIMIT argument offset=%s is not valid', $offset));
+            throw new Exception(sprintf('LIMIT argument offset=%s is not valid', $offset));
         }
 
         $sql .= " LIMIT $count";

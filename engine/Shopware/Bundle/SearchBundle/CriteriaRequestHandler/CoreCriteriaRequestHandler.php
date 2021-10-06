@@ -42,11 +42,12 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Config;
 
 class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -56,7 +57,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     private $searchTermPreProcessor;
 
     public function __construct(
-        \Shopware_Components_Config $config,
+        Shopware_Components_Config $config,
         SearchTermPreProcessorInterface $searchTermPreProcessor
     ) {
         $this->config = $config;

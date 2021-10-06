@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
+use DateTime;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
 class CustomerHydrator extends Hydrator
@@ -72,21 +73,21 @@ class CustomerHydrator extends Hydrator
         $customer->setNewsletter((bool) $data['__active_campaign']);
 
         if ($data['__customer_birthday']) {
-            $customer->setBirthday(new \DateTime($data['__customer_birthday']));
+            $customer->setBirthday(new DateTime($data['__customer_birthday']));
         }
 
         if ($customer->getBirthday()) {
-            $customer->setAge($customer->getBirthday()->diff(new \DateTime())->y);
+            $customer->setAge($customer->getBirthday()->diff(new DateTime())->y);
         }
 
         if (!empty($data['__customer_lockeduntil'])) {
-            $customer->setLockedUntil(new \DateTime($data['__customer_lockeduntil']));
+            $customer->setLockedUntil(new DateTime($data['__customer_lockeduntil']));
         }
         if (!empty($data['__customer_firstlogin'])) {
-            $customer->setFirstLogin(new \DateTime($data['__customer_firstlogin']));
+            $customer->setFirstLogin(new DateTime($data['__customer_firstlogin']));
         }
         if (!empty($data['__customer_lastlogin'])) {
-            $customer->setLastLogin(new \DateTime($data['__customer_lastlogin']));
+            $customer->setLastLogin(new DateTime($data['__customer_lastlogin']));
         }
 
         if ($data['__customer_customergroup']) {

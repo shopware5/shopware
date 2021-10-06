@@ -24,13 +24,16 @@
 
 namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_TestCase;
+use Exception;
 use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
 use Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch;
 use Shopware\Bundle\SearchBundle\Criteria;
 
-class TestCase extends \Enlight_Components_Test_TestCase
+class TestCase extends Enlight_Components_Test_TestCase
 {
     /**
      * @var Connection
@@ -51,7 +54,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
         try {
             $this->connection->insert('s_core_shops', ['id' => 1000, 'name' => 'customer_search']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         $this->connection->delete('s_user', ['subshopID' => 1000]);
@@ -143,7 +146,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
         if (\array_key_exists('orders', $customer)) {
             foreach ($customer['orders'] as $order) {
                 $order = array_merge([
-                    'ordertime' => (new \DateTime())->format('Y-m-d H:i:s'),
+                    'ordertime' => (new DateTime())->format('Y-m-d H:i:s'),
                     'language' => 1,
                     'subshopID' => 1,
                     'currencyFactor' => 1,

@@ -24,24 +24,26 @@
 
 namespace Shopware\Tests\Unit\Components\LegacyRequestWrapper;
 
+use Enlight_Controller_Request_RequestTestCase;
 use PHPUnit\Framework\TestCase;
+use sSystem;
 
 class GetWrapperTest extends TestCase
 {
     /**
-     * @var \Enlight_Controller_Request_RequestTestCase
+     * @var Enlight_Controller_Request_RequestTestCase
      */
     private $request;
 
     /**
-     * @var \sSystem
+     * @var sSystem
      */
     private $system;
 
     public function setUp(): void
     {
-        $this->request = new \Enlight_Controller_Request_RequestTestCase();
-        $this->system = new \sSystem($this->request);
+        $this->request = new Enlight_Controller_Request_RequestTestCase();
+        $this->system = new sSystem($this->request);
     }
 
     public function tearDown(): void

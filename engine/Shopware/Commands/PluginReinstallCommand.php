@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Exception;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
@@ -99,7 +100,7 @@ class PluginReinstallCommand extends PluginCommand implements CompletionAwareInt
 
         try {
             $plugin = $pluginManager->getPluginByName($pluginName);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
 
             return 1;

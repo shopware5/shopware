@@ -25,6 +25,7 @@
 namespace Shopware\Components\HttpCache\InvalidationDate;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Controller_Front;
 use Enlight_Controller_Request_Request as Request;
 
 class ProductDetailDate implements InvalidationDateInterface
@@ -42,14 +43,14 @@ class ProductDetailDate implements InvalidationDateInterface
     private $route;
 
     /**
-     * @var \Enlight_Controller_Front
+     * @var Enlight_Controller_Front
      */
     private $front;
 
     /**
      * @param string $route
      */
-    public function __construct(Connection $connection, \Enlight_Controller_Front $front, $route = 'frontend/detail/index')
+    public function __construct(Connection $connection, Enlight_Controller_Front $front, $route = 'frontend/detail/index')
     {
         $this->connection = $connection;
         $this->front = $front;

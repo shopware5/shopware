@@ -27,7 +27,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-class DomainStruct implements \JsonSerializable
+use JsonSerializable;
+
+class DomainStruct implements JsonSerializable
 {
     /**
      * @var int

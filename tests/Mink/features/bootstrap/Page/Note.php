@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Mink\Page;
 
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\NotePosition;
 use Shopware\Tests\Mink\Helper;
@@ -38,7 +39,7 @@ class Note extends Page
     /**
      * Verify if we're on an expected page. Throw an exception if not.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function verifyPage()
     {

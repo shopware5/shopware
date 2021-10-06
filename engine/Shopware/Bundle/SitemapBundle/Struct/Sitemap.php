@@ -24,6 +24,10 @@
 
 namespace Shopware\Bundle\SitemapBundle\Struct;
 
+use DateTime;
+use DateTimeInterface;
+use DateTimeZone;
+
 class Sitemap
 {
     /**
@@ -32,7 +36,7 @@ class Sitemap
     private $filename;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $created;
 
@@ -45,10 +49,10 @@ class Sitemap
      * @param string $filename
      * @param int    $urlCount
      */
-    public function __construct($filename, $urlCount, \DateTimeInterface $created = null)
+    public function __construct($filename, $urlCount, DateTimeInterface $created = null)
     {
         $this->filename = $filename;
-        $this->created = $created ?: new \DateTime('NOW', new \DateTimeZone('UTC'));
+        $this->created = $created ?: new DateTime('NOW', new DateTimeZone('UTC'));
         $this->urlCount = $urlCount;
     }
 
@@ -85,7 +89,7 @@ class Sitemap
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getCreated()
     {
@@ -93,7 +97,7 @@ class Sitemap
     }
 
     /**
-     * @param \DateTimeInterface $created
+     * @param DateTimeInterface $created
      */
     public function setCreated($created)
     {

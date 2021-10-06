@@ -24,13 +24,15 @@
 
 namespace Shopware\Components\CategoryHandling;
 
+use PDO;
+use RuntimeException;
 use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
 use Shopware\Components\Model\CategoryDenormalization;
 
 class CategoryDuplicator
 {
     /**
-     * @var \PDO
+     * @var PDO
      */
     protected $connection;
 
@@ -45,7 +47,7 @@ class CategoryDuplicator
     private $attributePersister;
 
     public function __construct(
-        \PDO $connection,
+        PDO $connection,
         CategoryDenormalization $categoryDenormalization,
         DataPersisterInterface $attributePersister
     ) {
@@ -61,7 +63,7 @@ class CategoryDuplicator
      * @param int  $parentId
      * @param bool $copyArticleAssociations
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return int
      */
@@ -70,10 +72,10 @@ class CategoryDuplicator
         $originalCategoryStmt = $this->connection
             ->prepare('SELECT * FROM s_categories WHERE id = :id');
         $originalCategoryStmt->execute([':id' => $originalCategoryId]);
-        $originalCategory = $originalCategoryStmt->fetch(\PDO::FETCH_ASSOC);
+        $originalCategory = $originalCategoryStmt->fetch(PDO::FETCH_ASSOC);
 
         if (empty($originalCategory)) {
-            throw new \RuntimeException(sprintf('Category "%s" not found', $originalCategoryId));
+            throw new RuntimeException(sprintf('Category "%s" not found', $originalCategoryId));
         }
 
         $newPosStmt = $this->connection
@@ -154,7 +156,7 @@ class CategoryDuplicator
             'SELECT articleID FROM s_articles_categories WHERE categoryID = :categoryID'
         );
         $assocProductsStmt->execute([':categoryID' => $originalCategoryId]);
-        $products = $assocProductsStmt->fetchAll(\PDO::FETCH_COLUMN, 0);
+        $products = $assocProductsStmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
         if ($products) {
             $insertStmt = $this->connection->prepare(

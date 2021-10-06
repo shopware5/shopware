@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
-class MailTest extends \Enlight_Components_Test_Controller_TestCase
+use Enlight_Components_Test_Controller_TestCase;
+
+class MailTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var array

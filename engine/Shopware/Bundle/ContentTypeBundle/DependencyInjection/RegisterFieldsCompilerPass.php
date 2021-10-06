@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\DependencyInjection;
 
+use RuntimeException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -37,7 +38,7 @@ class RegisterFieldsCompilerPass implements CompilerPassInterface
             $def = $container->getDefinition($id);
 
             if (!isset($options[0]['fieldName'])) {
-                throw new \RuntimeException(sprintf('Service with id "%s" need the tag attribute fieldName to identify the short name', $id));
+                throw new RuntimeException(sprintf('Service with id "%s" need the tag attribute fieldName to identify the short name', $id));
             }
 
             // To support FQCN ids without class attribute

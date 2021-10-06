@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Order;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Attribute\OrderBasket as OrderBasketAttribute;
@@ -130,7 +131,7 @@ class Basket extends ModelEntity
     private $netPrice = 0;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="datum", type="datetime", nullable=true)
      */
@@ -397,7 +398,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getDate()
     {
@@ -405,7 +406,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $date
+     * @param DateTimeInterface|null $date
      */
     public function setDate($date)
     {

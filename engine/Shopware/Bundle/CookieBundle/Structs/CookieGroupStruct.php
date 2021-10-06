@@ -26,9 +26,10 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CookieBundle\Structs;
 
+use JsonSerializable;
 use Shopware\Bundle\CookieBundle\CookieCollection;
 
-class CookieGroupStruct implements \JsonSerializable
+class CookieGroupStruct implements JsonSerializable
 {
     public const TECHNICAL = 'technical';
     public const COMFORT = 'comfort';

@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class CombinedCondition implements ConditionInterface, \JsonSerializable
+class CombinedCondition implements ConditionInterface, JsonSerializable
 {
     /**
      * @var ConditionInterface[]

@@ -24,6 +24,9 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Commands;
 
+use DateInterval;
+use DateTime;
+use DateTimeZone;
 use Shopware\Bundle\BenchmarkBundle\Exception\TransmissionNotNecessaryException;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Models\Benchmark\BenchmarkConfig;
@@ -83,8 +86,8 @@ class SendStatisticsCommand extends ShopwareCommand
             }
 
             $locked = $shopConfig->getLocked();
-            $dateOneHourAgo = new \DateTime('now');
-            $dateOneHourAgo->sub(new \DateInterval('PT1H'));
+            $dateOneHourAgo = new DateTime('now');
+            $dateOneHourAgo->sub(new DateInterval('PT1H'));
 
             if ($locked && $locked > $dateOneHourAgo) {
                 $output->writeln(sprintf('<comment>Shop with ID %s is currently locked, skipping.</comment>', $shopId));
@@ -128,6 +131,6 @@ class SendStatisticsCommand extends ShopwareCommand
     private function isShopValid(BenchmarkConfig $shopConfig): bool
     {
         return $shopConfig->isActive()
-            && $shopConfig->getLastSent()->add(new \DateInterval('P1D')) < new \DateTime('now', new \DateTimeZone('UTC'));
+            && $shopConfig->getLastSent()->add(new DateInterval('P1D')) < new DateTime('now', new DateTimeZone('UTC'));
     }
 }

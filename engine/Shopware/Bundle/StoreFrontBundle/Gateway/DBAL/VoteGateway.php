@@ -25,8 +25,10 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware_Components_Config;
 
 class VoteGateway implements Gateway\VoteGatewayInterface
 {
@@ -56,7 +58,7 @@ class VoteGateway implements Gateway\VoteGatewayInterface
     private $connection;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -64,7 +66,7 @@ class VoteGateway implements Gateway\VoteGatewayInterface
         Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\VoteHydrator $voteHydrator,
-        \Shopware_Components_Config $config
+        Shopware_Components_Config $config
     ) {
         $this->voteHydrator = $voteHydrator;
         $this->connection = $connection;
@@ -112,7 +114,7 @@ class VoteGateway implements Gateway\VoteGatewayInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $votes = [];
         foreach ($data as $row) {

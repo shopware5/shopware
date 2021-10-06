@@ -24,18 +24,25 @@
 
 namespace Shopware\Components\Check;
 
+use ErrorException;
+use PDO;
+use PDOException;
+use RuntimeException;
+use Shopware_Components_Snippet_Manager;
+use SimpleXMLElement;
+
 class Requirements
 {
     private string $sourceFile;
 
-    private \PDO $connection;
+    private PDO $connection;
 
-    private \Shopware_Components_Snippet_Manager $snippetManager;
+    private Shopware_Components_Snippet_Manager $snippetManager;
 
-    public function __construct(string $sourceFile, \PDO $connection, \Shopware_Components_Snippet_Manager $snippetManager)
+    public function __construct(string $sourceFile, PDO $connection, Shopware_Components_Snippet_Manager $snippetManager)
     {
         if (!is_readable($sourceFile)) {
-            throw new \RuntimeException(sprintf('Cannot read requirements file in %s.', $sourceFile));
+            throw new RuntimeException(sprintf('Cannot read requirements file in %s.', $sourceFile));
         }
 
         $this->sourceFile = $sourceFile;
@@ -99,12 +106,12 @@ class Requirements
     /**
      * Returns the check list
      */
-    private function runChecks(): \SimpleXMLElement
+    private function runChecks(): SimpleXMLElement
     {
         $xmlObject = simplexml_load_string(file_get_contents($this->sourceFile));
 
         if (!\is_object($xmlObject->requirements)) {
-            throw new \RuntimeException('Requirements XML file is not valid.');
+            throw new RuntimeException('Requirements XML file is not valid.');
         }
 
         foreach ($xmlObject->requirement as $requirement) {
@@ -137,7 +144,7 @@ class Requirements
      *
      * @return bool|string|int|null
      */
-    private function getRuntimeValue(string $name, \SimpleXMLElement $requirement)
+    private function getRuntimeValue(string $name, SimpleXMLElement $requirement)
     {
         $m = 'check' . str_replace(' ', '', ucwords(str_replace(['_', '.'], ' ', $name)));
         if (method_exists($this, $m)) {
@@ -153,7 +160,7 @@ class Requirements
         }
 
         $value = ini_get($name);
-        if ($value !== '') {
+        if ($value !== '' && $value !== false) {
             if (strtolower($value) === 'off' || (is_numeric($value) && $value == 0)) {
                 return false;
             }
@@ -199,8 +206,9 @@ class Requirements
      */
     private function checkPhp(): string
     {
-        if (strpos(PHP_VERSION, '-')) {
-            return substr(PHP_VERSION, 0, strpos(PHP_VERSION, '-'));
+        $phpVersionDashPosition = strpos(PHP_VERSION, '-');
+        if ($phpVersionDashPosition !== false) {
+            return substr(PHP_VERSION, 0, $phpVersionDashPosition);
         }
 
         return PHP_VERSION;
@@ -211,10 +219,10 @@ class Requirements
         try {
             $sql = 'SELECT @@SESSION.sql_mode;';
             $result = $this->connection->query($sql)->fetchColumn();
-            if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
+            if (\is_string($result) && (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false)) {
                 return true;
             }
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             return true;
         }
 
@@ -270,7 +278,7 @@ class Requirements
                     'error' => '',
                 ];
             }
-        } catch (\ErrorException $x) {
+        } catch (ErrorException $x) {
             // Systems that have an 'open_basedir' defined might not allow an access of '/'
         }
 

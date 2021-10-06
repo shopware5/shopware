@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Mink\Page;
 
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
 use Shopware\Tests\Mink\HelperSelectorInterface;
@@ -58,7 +59,7 @@ class Newsletter extends Page implements HelperSelectorInterface
     /**
      * Verify if we're on an expected page. Throw an exception if not.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function verifyPage()
     {

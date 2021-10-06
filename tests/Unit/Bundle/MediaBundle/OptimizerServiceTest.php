@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\Bundle\MediaBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
 use Shopware\Bundle\MediaBundle\OptimizerService;
@@ -143,7 +144,7 @@ abstract class UnitOptimizer implements OptimizerInterface
      */
     public function getSupportedMimeTypes()
     {
-        throw new \RuntimeException('This method should be overwritten.');
+        throw new RuntimeException('This method should be overwritten.');
     }
 
     /**

@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
@@ -90,7 +91,7 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $customerGroups = [];
         foreach ($data as $group) {

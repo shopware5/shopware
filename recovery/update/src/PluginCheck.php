@@ -24,6 +24,8 @@
 
 namespace Shopware\Recovery\Update;
 
+use PDO;
+
 class PluginCheck
 {
     /**
@@ -32,7 +34,7 @@ class PluginCheck
     private $storeApi;
 
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $conn;
 
@@ -44,7 +46,7 @@ class PluginCheck
     /**
      * @param string $shopwareVersion
      */
-    public function __construct(StoreApi $storeApi, \PDO $conn, $shopwareVersion)
+    public function __construct(StoreApi $storeApi, PDO $conn, $shopwareVersion)
     {
         $this->storeApi = $storeApi;
         $this->conn = $conn;
@@ -136,7 +138,7 @@ WHERE source != "Default"
 AND name != "PluginManager"
 AND name != "StoreAPI"
 EOT;
-        $result = $this->conn->query($sql)->fetchAll(\PDO::FETCH_COLUMN);
+        $result = $this->conn->query($sql)->fetchAll(PDO::FETCH_COLUMN);
 
         return $result;
     }

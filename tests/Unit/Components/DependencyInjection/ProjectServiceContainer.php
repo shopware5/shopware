@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Unit\Components\DependencyInjection;
 
 use Shopware\Components\DependencyInjection\Container;
+use stdClass;
 
 class ProjectServiceContainer extends Container
 {
@@ -38,7 +39,7 @@ class ProjectServiceContainer extends Container
     {
         parent::__construct();
 
-        $this->__bar = new \stdClass();
+        $this->__bar = new stdClass();
 
         $this->methodMap = [
             'parent' => 'getParentService',
@@ -48,23 +49,23 @@ class ProjectServiceContainer extends Container
 
         $this->aliases = ['alias' => 'bar'];
 
-        $this->__parent = new \stdClass();
-        $this->__child = new \stdClass();
+        $this->__parent = new stdClass();
+        $this->__child = new stdClass();
     }
 
-    protected function getBarService(): \stdClass
+    protected function getBarService(): stdClass
     {
         return $this->__bar;
     }
 
-    protected function getParentService(): \stdClass
+    protected function getParentService(): stdClass
     {
         $this->__parent->child = $this->get('child');
 
         return $this->__parent;
     }
 
-    protected function getChildService(): \stdClass
+    protected function getChildService(): stdClass
     {
         return $this->__child;
     }

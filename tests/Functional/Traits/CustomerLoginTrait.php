@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Functional\Traits;
 
+use Enlight_Components_Session_Namespace;
+use RuntimeException;
+
 trait CustomerLoginTrait
 {
     /**
@@ -40,8 +43,8 @@ trait CustomerLoginTrait
     ): void {
         Shopware()->Container()->reset('modules');
         $session = Shopware()->Container()->get('session');
-        if (!$session instanceof \Enlight_Components_Session_Namespace) {
-            throw new \RuntimeException('Cannot initialize session');
+        if (!$session instanceof Enlight_Components_Session_Namespace) {
+            throw new RuntimeException('Cannot initialize session');
         }
 
         $session->offsetSet('sessionId', $sessionId);

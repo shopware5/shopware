@@ -27,6 +27,8 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_TestCase;
+use PDO;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -36,7 +38,7 @@ use Shopware\Models\Country\Country;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 
-class AddressServiceTest extends \Enlight_Components_Test_TestCase
+class AddressServiceTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var AddressServiceInterface
@@ -239,7 +241,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
     {
         $address = self::$modelManager->find(Address::class, $addressId);
 
-        $unusedAddressId = self::$connection->executeQuery('SELECT id FROM s_user_addresses WHERE user_id = ? AND id != ?', [$address->getCustomer()->getId(), $address->getId()])->fetch(\PDO::FETCH_COLUMN);
+        $unusedAddressId = self::$connection->executeQuery('SELECT id FROM s_user_addresses WHERE user_id = ? AND id != ?', [$address->getCustomer()->getId(), $address->getId()])->fetch(PDO::FETCH_COLUMN);
         static::assertGreaterThan(0, $unusedAddressId, 'No unused address found.');
 
         $unusedAddress = self::$modelManager->find(Address::class, $unusedAddressId);

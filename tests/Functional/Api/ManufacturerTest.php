@@ -35,7 +35,7 @@ class ManufacturerTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(200, $response->getStatusCode());
 
         $response = $response->getContent();
@@ -66,7 +66,7 @@ class ManufacturerTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertNull($response->headers->get('Set-Cookie'));
         static::assertEquals(400, $response->getStatusCode());
 
         $result = $response->getContent();

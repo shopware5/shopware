@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Components\Model\ModelEntity;
@@ -110,7 +111,7 @@ class AttributeFormType extends AbstractType
                         $form->add($field, null, ['empty_data' => $data->$method()]);
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->error($e->getMessage());
             }
         });

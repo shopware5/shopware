@@ -26,6 +26,7 @@ namespace Shopware\Components\Cart;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Session_Namespace as Session;
+use PDO;
 
 class CartPersistService implements CartPersistServiceInterface
 {
@@ -64,7 +65,7 @@ class CartPersistService implements CartPersistServiceInterface
             ->andWhere('cart.sessionId = :sessionId')
             ->setParameter('sessionId', $this->session->get('sessionId'))
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
 
         if (empty($this->cart)) {
             return;
@@ -80,7 +81,7 @@ class CartPersistService implements CartPersistServiceInterface
                 $qb->expr()->in('cartAttributes.basketID', $ids)
             )
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
     public function persist(): void

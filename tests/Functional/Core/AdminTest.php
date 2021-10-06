@@ -26,33 +26,42 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Core;
 
+use DateTime;
+use Enlight_Components_Session_Namespace;
+use Enlight_Controller_Front;
+use Enlight_Controller_Request_Request;
+use Enlight_Controller_Request_RequestHttp;
 use PHPUnit\Framework\TestCase;
+use sAdmin;
+use sBasket;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Payment\Payment;
+use Shopware_Components_Config;
+use Shopware_Components_Snippet_Manager;
 use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 
 class AdminTest extends TestCase
 {
-    private \sAdmin $module;
+    private sAdmin $module;
 
-    private \sBasket $basketModule;
+    private sBasket $basketModule;
 
-    private \Shopware_Components_Config $config;
+    private Shopware_Components_Config $config;
 
-    private \Enlight_Components_Session_Namespace $session;
+    private Enlight_Components_Session_Namespace $session;
 
-    private \Shopware_Components_Snippet_Manager $snippetManager;
+    private Shopware_Components_Snippet_Manager $snippetManager;
 
-    private \Enlight_Controller_Front $front;
+    private Enlight_Controller_Front $front;
 
     public function setUp(): void
     {
         parent::setUp();
 
         Shopware()->Container()->get(ModelManager::class)->clear();
-        Shopware()->Front()->setRequest(new \Enlight_Controller_Request_RequestHttp());
+        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 
         $this->module = Shopware()->Modules()->Admin();
         $this->config = Shopware()->Config();
@@ -139,7 +148,7 @@ class AdminTest extends TestCase
         foreach ($payments as $payment) {
             $paymentClass = $this->module->sInitiatePaymentClass($this->module->sGetPaymentMeanById($payment->getId()));
             static::assertInstanceOf(BasePaymentMethod::class, $paymentClass);
-            Shopware()->Front()->setRequest(new \Enlight_Controller_Request_RequestHttp());
+            Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 
             $requestData = Shopware()->Front()->Request()->getParams();
             $validationResult = $paymentClass->validate($requestData);
@@ -1476,7 +1485,7 @@ class AdminTest extends TestCase
         ];
         $user = $this->module->sGetUserData();
 
-        $date = new \DateTime();
+        $date = new DateTime();
 
         // Inject demo data
         $orderData = [
@@ -2511,13 +2520,13 @@ class AdminTest extends TestCase
      */
     private function createDummyCustomer(): Customer
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->modify('-8 days');
-        $lastLogin = $date->format(\DateTime::ISO8601);
+        $lastLogin = $date->format(DateTime::ISO8601);
 
-        $oldDate = \DateTime::createFromFormat('Y-m-d', '1986-12-20');
+        $oldDate = DateTime::createFromFormat('Y-m-d', '1986-12-20');
         static::assertNotFalse($oldDate);
-        $birthday = $oldDate->format(\DateTime::ISO8601);
+        $birthday = $oldDate->format(DateTime::ISO8601);
 
         $testData = [
             'password' => 'fooobar',
@@ -2588,7 +2597,7 @@ class AdminTest extends TestCase
         Shopware()->Db()->delete('s_user', 'id = ' . $customer->getId());
     }
 
-    private function getRequest(): \Enlight_Controller_Request_Request
+    private function getRequest(): Enlight_Controller_Request_Request
     {
         $request = $this->front->Request();
         static::assertNotNull($request);

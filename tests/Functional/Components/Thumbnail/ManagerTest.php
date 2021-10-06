@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Components\Thumbnail;
 
+use Error;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Thumbnail\Manager;
@@ -139,7 +140,7 @@ class ManagerTest extends TestCase
 
     public function testGenerationWithoutAlbum(): void
     {
-        $this->expectException(\Error::class);
+        $this->expectException(Error::class);
         $this->expectExceptionMessage('Call to a member function getSettings() on null');
         $media = new Media();
 

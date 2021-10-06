@@ -25,10 +25,15 @@
 
 namespace Shopware\Tests\Plugins\Frontend;
 
-class StatisticsTest extends \Enlight_Components_Test_Plugin_TestCase
+use Enlight_Components_Test_Plugin_TestCase;
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Controller_Response_Response;
+use Shopware_Plugins_Frontend_Statistics_Bootstrap;
+
+class StatisticsTest extends Enlight_Components_Test_Plugin_TestCase
 {
     /**
-     * @var \Shopware_Plugins_Frontend_Statistics_Bootstrap
+     * @var Shopware_Plugins_Frontend_Statistics_Bootstrap
      */
     protected $plugin;
 
@@ -60,7 +65,7 @@ class StatisticsTest extends \Enlight_Components_Test_Plugin_TestCase
     /**
      * Retrieve plugin instance
      *
-     * @return \Shopware_Plugins_Frontend_Statistics_Bootstrap
+     * @return Shopware_Plugins_Frontend_Statistics_Bootstrap
      */
     public function Plugin()
     {
@@ -72,7 +77,7 @@ class StatisticsTest extends \Enlight_Components_Test_Plugin_TestCase
      */
     public function testRefreshCurrentUsers()
     {
-        /** @var \Enlight_Controller_Request_RequestTestCase $request */
+        /** @var Enlight_Controller_Request_RequestTestCase $request */
         $request = $this->Request()
             ->setModuleName('frontend')
             ->setDispatched(true)
@@ -158,7 +163,7 @@ class StatisticsTest extends \Enlight_Components_Test_Plugin_TestCase
         static::assertEquals('sCampaign1', Shopware()->Session()->get('sPartner'));
     }
 
-    private function getCookie(\Enlight_Controller_Response_Response $response, $name)
+    private function getCookie(Enlight_Controller_Response_Response $response, $name)
     {
         $cookies = $response->getCookies();
         foreach ($cookies as $cookie) {

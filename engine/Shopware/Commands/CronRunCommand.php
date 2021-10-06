@@ -24,14 +24,18 @@
 
 namespace Shopware\Commands;
 
+use DateTime;
 use Enlight_Components_Cron_Job;
 use Enlight_Components_Cron_Manager;
+use Exception;
+use RuntimeException;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zend_Date;
 
 class CronRunCommand extends ShopwareCommand implements CompletionAwareInterface
 {
@@ -104,7 +108,7 @@ EOF
         if (!empty($cronjob)) {
             try {
                 $this->runSingleCronjob($output, $manager, $cronjob, $force);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $output->writeln('<error>' . $e->getMessage() . '</error>');
                 $output->writeln('Please use the action name of a cronjob. You can see existing cronjobs in shopware backend or via <info>sw:cron:list</info> command.');
 
@@ -152,11 +156,11 @@ EOF
             return true;
         }
 
-        /** @var \Zend_Date $nextRun */
+        /** @var Zend_Date $nextRun */
         $nextRun = $job->getNext();
-        $nextRun = new \DateTime($nextRun->getIso());
+        $nextRun = new DateTime($nextRun->getIso());
 
-        return $nextRun <= new \DateTime();
+        return $nextRun <= new DateTime();
     }
 
     /**
@@ -167,7 +171,7 @@ EOF
      *
      * @param string $action
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return Enlight_Components_Cron_Job
      */
@@ -189,6 +193,6 @@ EOF
             return $job;
         }
 
-        throw new \RuntimeException(sprintf('Cron not found by action name "%s".', $action));
+        throw new RuntimeException(sprintf('Cron not found by action name "%s".', $action));
     }
 }

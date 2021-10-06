@@ -24,6 +24,9 @@
 
 namespace Shopware\Components;
 
+use InvalidArgumentException;
+use RuntimeException;
+
 class OpenSSLVerifier
 {
     /**
@@ -39,12 +42,12 @@ class OpenSSLVerifier
     /**
      * @param string $publicKey
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($publicKey)
     {
         if (!is_readable($publicKey)) {
-            throw new \InvalidArgumentException(sprintf('Public keyfile "%s" not readable', $publicKey));
+            throw new InvalidArgumentException(sprintf('Public keyfile "%s" not readable', $publicKey));
         }
 
         $this->publicKeyPath = $publicKey;
@@ -62,7 +65,7 @@ class OpenSSLVerifier
      * @param string $message
      * @param string $signature
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return bool
      */
@@ -83,7 +86,7 @@ class OpenSSLVerifier
         }
         while ($errors[] = openssl_error_string()) {
         }
-        throw new \RuntimeException(sprintf("Error during private key read: \n%s", implode("\n", $errors)));
+        throw new RuntimeException(sprintf("Error during private key read: \n%s", implode("\n", $errors)));
     }
 
     /**
@@ -100,7 +103,7 @@ class OpenSSLVerifier
         if (false === $this->keyResource = openssl_pkey_get_public($publicKey)) {
             while ($errors[] = openssl_error_string()) {
             }
-            throw new \RuntimeException(sprintf("Error during public key read: \n%s", implode("\n", $errors)));
+            throw new RuntimeException(sprintf("Error during public key read: \n%s", implode("\n", $errors)));
         }
 
         return $this->keyResource;

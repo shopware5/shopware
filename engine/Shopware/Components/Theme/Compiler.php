@@ -26,11 +26,19 @@ namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Enlight_Event_EventManager;
+use Enlight_Event_Exception;
+use Exception;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RuntimeException;
 use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGeneratorInterface;
 use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Theme\Compressor\CompressorInterface;
 use Shopware\Components\Theme\Compressor\Js;
 use Shopware\Models\Shop;
+use SplFileInfo;
+use SplFileObject;
 
 /**
  * The Theme\Compiler class is used for the less compiling in the store front.
@@ -59,7 +67,7 @@ class Compiler
     private $inheritance;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
@@ -108,7 +116,7 @@ class Compiler
         Inheritance $inheritance,
         Service $service,
         CompressorInterface $jsCompressor,
-        \Enlight_Event_EventManager $eventManager,
+        Enlight_Event_EventManager $eventManager,
         TimestampPersistor $timestampPersistor,
         ShopwareReleaseStruct $release,
         UniqueIdGeneratorInterface $uniqueIdGenerator
@@ -140,7 +148,7 @@ class Compiler
      * Helper function which compiles a shop with new theme.
      * The function is called when the template cache is cleared.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function compile(Shop\Shop $shop)
     {
@@ -171,7 +179,7 @@ class Compiler
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Configuration
      */
@@ -222,7 +230,7 @@ class Compiler
      *
      * @param string $timestamp
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function compileLess($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
@@ -235,13 +243,13 @@ class Compiler
         $dir = \dirname($file);
         if (!is_dir($dir)) {
             if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
-                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'web', $dir));
+                throw new RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'web', $dir));
             }
         } elseif (!is_writable($dir)) {
-            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'web', $dir));
+            throw new RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'web', $dir));
         }
 
-        $file = new \SplFileObject($file, 'w');
+        $file = new SplFileObject($file, 'w');
         if (!$file->flock(LOCK_EX | LOCK_NB)) {
             return;
         }
@@ -263,7 +271,7 @@ class Compiler
 
         $success = $file->fwrite($css);
         if ($success === null) {
-            throw new \RuntimeException('Could not write to ' . $file->getPath());
+            throw new RuntimeException('Could not write to ' . $file->getPath());
         }
         $file->flock(LOCK_UN);   // release the lock
 
@@ -277,7 +285,7 @@ class Compiler
      *
      * @param string $timestamp
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function compileJavascript($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
@@ -286,7 +294,7 @@ class Compiler
         }
 
         $file = $this->pathResolver->getTmpJsFilePath($shop, $timestamp);
-        $file = new \SplFileObject($file, 'w');
+        $file = new SplFileObject($file, 'w');
         if (!$file->flock(LOCK_EX | LOCK_NB)) {
             return;
         }
@@ -355,7 +363,7 @@ class Compiler
      * Helper function which compiles the passed less definition.
      * The shop parameter is required to build the shop url for the files.
      *
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      */
     private function compileLessDefinition(Shop\Shop $shop, LessDefinition $definition)
     {
@@ -403,7 +411,7 @@ class Compiler
      * the function throws the event `Theme_Compiler_Collect_Plugin_Less_Config`
      * to allow plugins to override the theme configuration.
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -422,7 +430,7 @@ class Compiler
 
         foreach ($collection as $temp) {
             if (!\is_array($temp)) {
-                throw new \Exception('The passed plugin less config isn\'t an array!');
+                throw new Exception('The passed plugin less config isn\'t an array!');
             }
             $config = array_merge($config, $temp);
         }
@@ -433,7 +441,7 @@ class Compiler
     /**
      * Builds the configuration for the less compiler class.
      *
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return array
      */
@@ -498,15 +506,15 @@ class Compiler
             return;
         }
 
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
                 $dir,
-                \RecursiveDirectoryIterator::SKIP_DOTS
+                RecursiveDirectoryIterator::SKIP_DOTS
             ),
-            \RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        /** @var \SplFileInfo $path */
+        /** @var SplFileInfo $path */
         foreach ($iterator as $path) {
             if ($path->getFilename() === '.gitkeep') {
                 continue;

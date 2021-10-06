@@ -24,14 +24,16 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Enlight_Components_Mail;
 use Shopware\Components\DependencyInjection\Container;
+use Shopware_Components_Config;
 
 class Mail
 {
     /**
-     * @return \Enlight_Components_Mail|null
+     * @return Enlight_Components_Mail|null
      */
-    public function factory(Container $container, \Shopware_Components_Config $config, array $options)
+    public function factory(Container $container, Shopware_Components_Config $config, array $options)
     {
         if (!$container->load('mailtransport')) {
             return null;
@@ -45,6 +47,6 @@ class Mail
             $defaultCharSet = null;
         }
 
-        return new \Enlight_Components_Mail($defaultCharSet);
+        return new Enlight_Components_Mail($defaultCharSet);
     }
 }

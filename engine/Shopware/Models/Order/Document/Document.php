@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Order\Document;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Attribute\Document as DocumentAttribute;
@@ -64,7 +65,7 @@ class Document extends ModelEntity
     private $id;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="date", type="date", nullable=false)
      */
@@ -137,7 +138,7 @@ class Document extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $date
+     * @param DateTimeInterface $date
      *
      * @return Document
      */
@@ -149,7 +150,7 @@ class Document extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getDate()
     {

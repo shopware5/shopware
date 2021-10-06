@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\Bundle\MediaBundle;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Shopware\Bundle\MediaBundle\GarbageCollector;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
@@ -79,7 +80,7 @@ class GarbageCollectorTest extends TestCase
 
     private function callHandleHtmlTable(GarbageCollector $garbageCollector)
     {
-        $refl = new \ReflectionClass($garbageCollector);
+        $refl = new ReflectionClass($garbageCollector);
         $method = $refl->getMethod('handleHtmlTable');
         $method->setAccessible(true);
 

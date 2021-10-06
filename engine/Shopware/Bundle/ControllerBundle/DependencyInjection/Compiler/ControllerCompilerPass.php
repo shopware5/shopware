@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler;
 
+use RuntimeException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -38,11 +39,11 @@ class ControllerCompilerPass implements CompilerPassInterface
             $options = $options[0];
 
             if (!isset($options['module'])) {
-                throw new \RuntimeException(sprintf('Attribute "module" is required for "shopware.controller" tagged service with id "%s"', $id));
+                throw new RuntimeException(sprintf('Attribute "module" is required for "shopware.controller" tagged service with id "%s"', $id));
             }
 
             if (!isset($options['controller'])) {
-                throw new \RuntimeException(sprintf('Attribute "controller" is required for "shopware.controller" tagged service with id "%s"', $id));
+                throw new RuntimeException(sprintf('Attribute "controller" is required for "shopware.controller" tagged service with id "%s"', $id));
             }
 
             $controllers[strtolower(sprintf('%s_%s', $options['module'], $options['controller']))] = $id;

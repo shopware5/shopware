@@ -24,7 +24,10 @@
 
 namespace Shopware\Tests\Functional\Components\Captcha;
 
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Template_Manager;
 use Shopware\Components\Captcha\DefaultCaptcha;
+use Shopware_Components_Config;
 
 class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
 {
@@ -39,14 +42,14 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
 
         $this->captcha = new DefaultCaptcha(
             Shopware()->Container(),
-            Shopware()->Container()->get(\Shopware_Components_Config::class),
-            Shopware()->Container()->get(\Enlight_Template_Manager::class)
+            Shopware()->Container()->get(Shopware_Components_Config::class),
+            Shopware()->Container()->get(Enlight_Template_Manager::class)
         );
     }
 
     public function testCaptchaIsInitiallyInvalid()
     {
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setParam('sCaptcha', 'foobar');
         static::assertFalse($this->captcha->validate($request));
     }
@@ -58,7 +61,7 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
 
         $random = Shopware()->Session()->get(DefaultCaptcha::SESSION_KEY);
 
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setParam('sCaptcha', array_pop(array_keys($random)));
 
         static::assertTrue($this->captcha->validate($request));
@@ -78,7 +81,7 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
         $random = Shopware()->Session()->get(DefaultCaptcha::SESSION_KEY);
         static::assertCount(5, $random);
 
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setParam('sCaptcha', 'INVALID CHALLENGE');
         static::assertFalse($this->captcha->validate($request));
 
@@ -87,7 +90,7 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
 
         // extract second generated captcha
         $challenge = \array_slice(array_keys($random), 1, 1)[0];
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setParam('sCaptcha', $challenge);
         static::assertTrue($this->captcha->validate($request));
 

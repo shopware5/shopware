@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Order;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -222,7 +223,7 @@ class History extends ModelEntity
     /**
      * Contains the date when the order status or payment status has been changed.
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="change_date", type="datetime", nullable=false)
      */
@@ -462,7 +463,7 @@ class History extends ModelEntity
      * Getter function for the changeDate property.
      * Contains the date when the order status or payment status has been changed.
      *
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getChangeDate()
     {
@@ -473,7 +474,7 @@ class History extends ModelEntity
      * Setter function for the changeDate property.
      * Contains the date when the order status or payment status has been changed.
      *
-     * @param \DateTimeInterface $changeDate
+     * @param DateTimeInterface $changeDate
      */
     public function setChangeDate($changeDate)
     {

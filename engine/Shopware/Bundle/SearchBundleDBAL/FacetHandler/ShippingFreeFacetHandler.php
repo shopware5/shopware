@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
+use Enlight_Components_Snippet_Namespace;
+use PDO;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
@@ -32,6 +34,7 @@ use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
+use Shopware_Components_Snippet_Manager;
 
 class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
 {
@@ -41,7 +44,7 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
     private $queryBuilderFactory;
 
     /**
-     * @var \Enlight_Components_Snippet_Namespace
+     * @var Enlight_Components_Snippet_Namespace
      */
     private $snippetNamespace;
 
@@ -52,7 +55,7 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
 
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
-        \Shopware_Components_Snippet_Manager $snippetManager,
+        Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
@@ -80,7 +83,7 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $total = $statement->fetch(\PDO::FETCH_COLUMN);
+        $total = $statement->fetch(PDO::FETCH_COLUMN);
 
         if ($total <= 0) {
             return null;

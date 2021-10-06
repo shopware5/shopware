@@ -24,17 +24,18 @@
 
 namespace Shopware\Components\Theme\LessCompiler;
 
+use Less_Parser;
 use Less_Tree_Quoted;
 use Shopware\Components\Theme\LessCompiler;
 
 class Oyejorge implements LessCompiler
 {
     /**
-     * @var \Less_Parser
+     * @var Less_Parser
      */
     private $compiler;
 
-    public function __construct(\Less_Parser $compiler)
+    public function __construct(Less_Parser $compiler)
     {
         $this->compiler = $compiler;
     }

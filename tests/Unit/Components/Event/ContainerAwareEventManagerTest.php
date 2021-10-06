@@ -27,6 +27,8 @@ declare(strict_types=1);
 namespace Shopware\Tests\Unit\Components\Event;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Event_EventArgs;
+use Enlight_Event_Handler_Default;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\ContainerAwareEventManager;
 use Symfony\Component\DependencyInjection\Container;
@@ -47,7 +49,7 @@ class ContainerAwareEventManagerTest extends TestCase
     {
         $service = $this->createMock(Service::class);
 
-        $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
+        $eventArgs = new Enlight_Event_EventArgs(['some' => 'args']);
 
         $service
             ->expects(static::once())
@@ -65,7 +67,7 @@ class ContainerAwareEventManagerTest extends TestCase
     {
         $service = $this->createMock(Service::class);
 
-        $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
+        $eventArgs = new Enlight_Event_EventArgs(['some' => 'args']);
 
         $service
             ->expects(static::exactly(2))
@@ -82,7 +84,7 @@ class ContainerAwareEventManagerTest extends TestCase
 
     public function testAddASubscriberService(): void
     {
-        $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
+        $eventArgs = new Enlight_Event_EventArgs(['some' => 'args']);
 
         $service = $this->createMock(SubscriberService::class);
         $service
@@ -110,7 +112,7 @@ class ContainerAwareEventManagerTest extends TestCase
 
     public function testPreventDuplicateListenerService(): void
     {
-        $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
+        $eventArgs = new Enlight_Event_EventArgs(['some' => 'args']);
         $service = $this->createMock(Service::class);
         $service
             ->expects(static::once())
@@ -157,7 +159,7 @@ class ContainerAwareEventManagerTest extends TestCase
 
     public function testRemoveAfterDispatch(): void
     {
-        $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
+        $eventArgs = new Enlight_Event_EventArgs(['some' => 'args']);
 
         $service = $this->createMock(Service::class);
         $this->container->set('service.listener', $service);
@@ -166,7 +168,7 @@ class ContainerAwareEventManagerTest extends TestCase
 
         $listener = $this->container->get('service.listener');
         static::assertNotNull($listener);
-        $handler = new \Enlight_Event_Handler_Default('onEvent', [$listener, 'onEvent']);
+        $handler = new Enlight_Event_Handler_Default('onEvent', [$listener, 'onEvent']);
 
         $this->eventManager->notify('onEvent', $eventArgs);
 
@@ -183,7 +185,7 @@ class ContainerAwareEventManagerTest extends TestCase
 
         $listener = $this->container->get('service.listener');
         static::assertNotNull($listener);
-        $this->eventManager->removeListener(new \Enlight_Event_Handler_Default('onEvent', [$listener, 'onEvent']));
+        $this->eventManager->removeListener(new Enlight_Event_Handler_Default('onEvent', [$listener, 'onEvent']));
 
         static::assertFalse($this->eventManager->hasListeners('onEvent'));
     }
@@ -191,7 +193,7 @@ class ContainerAwareEventManagerTest extends TestCase
 
 class Service
 {
-    public function onEvent(\Enlight_Event_EventArgs $e): void
+    public function onEvent(Enlight_Event_EventArgs $e): void
     {
     }
 }
@@ -206,15 +208,15 @@ class SubscriberService implements SubscriberInterface
         ];
     }
 
-    public function onEvent(\Enlight_Event_EventArgs $e): void
+    public function onEvent(Enlight_Event_EventArgs $e): void
     {
     }
 
-    public function onEventWithPriority(\Enlight_Event_EventArgs $e): void
+    public function onEventWithPriority(Enlight_Event_EventArgs $e): void
     {
     }
 
-    public function onEventNested(\Enlight_Event_EventArgs $e): void
+    public function onEventNested(Enlight_Event_EventArgs $e): void
     {
     }
 }

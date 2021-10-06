@@ -27,6 +27,7 @@ namespace Shopware\Tests\Functional\Components\Privacy;
 use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Components\Privacy\ConfigDependentIpAnonymizer;
 use Shopware\Components\Privacy\IpAnonymizer;
+use Shopware_Components_Config;
 
 class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller_TestCase
 {
@@ -52,12 +53,12 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
 
     public function testConfigActiveWorking()
     {
-        $configStub = $this->createMock(\Shopware_Components_Config::class);
+        $configStub = $this->createMock(Shopware_Components_Config::class);
         $configStub
             ->expects(static::exactly(1))
             ->method('get')
             ->with('anonymizeIp')
-            ->will(static::returnValue(true));
+            ->willReturn(true);
 
         $service = new ConfigDependentIpAnonymizer(new IpAnonymizer(), $configStub);
 
@@ -66,12 +67,12 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
 
     public function testConfigInactiveWorking()
     {
-        $configStub = $this->createMock(\Shopware_Components_Config::class);
+        $configStub = $this->createMock(Shopware_Components_Config::class);
         $configStub
             ->expects(static::exactly(1))
             ->method('get')
             ->with('anonymizeIp')
-            ->will(static::returnValue(false));
+            ->willReturn(false);
 
         $service = new ConfigDependentIpAnonymizer(new IpAnonymizer(), $configStub);
 

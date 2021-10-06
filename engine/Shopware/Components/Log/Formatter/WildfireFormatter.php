@@ -26,6 +26,7 @@ namespace Shopware\Components\Log\Formatter;
 
 use Monolog\Formatter\WildfireFormatter as BaseWildfireFormatter;
 use Monolog\Logger;
+use ReflectionClass;
 
 /**
  * Serializes a log message according to Wildfire's header requirements
@@ -223,7 +224,7 @@ class WildfireFormatter extends BaseWildfireFormatter
 
             $return['__className'] = $class = \get_class($object);
 
-            $reflectionClass = new \ReflectionClass($class);
+            $reflectionClass = new ReflectionClass($class);
             $properties = [];
             foreach ($reflectionClass->getProperties() as $property) {
                 $properties[$property->getName()] = $property;

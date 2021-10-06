@@ -28,6 +28,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ResponseTextException;
 use Doctrine\DBAL\Connection;
+use Exception;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Category;
 use Shopware\Components\Api\Resource\CustomerGroup;
@@ -82,7 +83,7 @@ class CheckoutContext extends SubContext
             $page = $this->getPage('CheckoutCart');
             $page->resetCart();
             $page->fillCartWithProducts([['number' => $article, 'quantity' => 1]]);
-        } catch (\Exception $unexpectedPageException) {
+        } catch (Exception $unexpectedPageException) {
         }
     }
 
@@ -335,7 +336,7 @@ class CheckoutContext extends SubContext
 
             try {
                 $resource->updateByNumber($row['number'], $data);
-            } catch (\Exception $ex) {
+            } catch (Exception $ex) {
                 $resource->create($data);
             }
         }
@@ -483,7 +484,7 @@ class CheckoutContext extends SubContext
      *
      * @param int $wait
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function spin($lambda, $wait = 60)
     {
@@ -494,14 +495,14 @@ class CheckoutContext extends SubContext
                 if ($lambda($this)) {
                     return;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // do nothing
             }
 
             usleep(250000);
         }
 
-        throw new \Exception("Spin function timed out after {$wait} seconds");
+        throw new Exception("Spin function timed out after {$wait} seconds");
     }
 
     /**

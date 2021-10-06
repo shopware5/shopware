@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,24 +26,28 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
-use Shopware\Components\Api\Resource\Address;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Resource\Address as AddressResource;
+use Shopware\Models\Customer\Address as AddressModel;
+use Shopware\Models\Customer\Customer;
 
 class AddressTest extends TestCase
 {
     /**
-     * @var Address
+     * @var AddressResource
      */
     protected $resource;
 
     /**
-     * @return Address
+     * @return AddressResource
      */
     public function createResource()
     {
-        return new Address();
+        return new AddressResource();
     }
 
-    public function testCreateShouldBeSuccessful()
+    public function testCreateShouldBeSuccessful(): int
     {
         $testData = [
             'customer' => 2,
@@ -56,7 +62,7 @@ class AddressTest extends TestCase
 
         $address = $this->resource->create($testData);
 
-        static::assertInstanceOf('\Shopware\Models\Customer\Address', $address);
+        static::assertInstanceOf(AddressModel::class, $address);
         static::assertGreaterThan(0, $address->getId());
 
         static::assertEquals($testData['country'], $address->getCountry()->getId());
@@ -69,7 +75,7 @@ class AddressTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetOneShouldBeSuccessful($id)
+    public function testGetOneShouldBeSuccessful($id): void
     {
         $address = $this->resource->getOne($id);
         static::assertGreaterThan(0, $address['id']);
@@ -78,7 +84,7 @@ class AddressTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetListShouldBeSuccessful()
+    public function testGetListShouldBeSuccessful(): void
     {
         $result = $this->resource->getList();
 
@@ -92,7 +98,7 @@ class AddressTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testUpdateShouldBeSuccessful($id)
+    public function testUpdateShouldBeSuccessful($id): int
     {
         $testData = [
             'lastname' => uniqid((string) rand()) . ' new lastname',
@@ -101,7 +107,7 @@ class AddressTest extends TestCase
 
         $address = $this->resource->update($id, $testData);
 
-        static::assertInstanceOf('\Shopware\Models\Customer\Address', $address);
+        static::assertInstanceOf(AddressModel::class, $address);
         static::assertEquals($id, $address->getId());
 
         static::assertEquals($address->getLastname(), $testData['lastname']);
@@ -113,11 +119,11 @@ class AddressTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testNewAddressShouldNotBeDefault($id)
+    public function testNewAddressShouldNotBeDefault(): int
     {
         $newAddressId = $this->testCreateShouldBeSuccessful();
         $address = $this->resource->getOne($newAddressId);
-        $customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $address['customer']['id']);
+        $customer = Shopware()->Models()->find(Customer::class, $address['customer']['id']);
 
         static::assertNotEquals($newAddressId, $customer->getDefaultBillingAddress()->getId());
 
@@ -127,7 +133,7 @@ class AddressTest extends TestCase
     /**
      * @depends testNewAddressShouldNotBeDefault
      */
-    public function testMakeNewAddressTheDefault($id)
+    public function testMakeNewAddressTheDefault($id): int
     {
         $testData = [
             '__options_set_default_billing_address' => 1,
@@ -142,38 +148,38 @@ class AddressTest extends TestCase
         return $id;
     }
 
-    public function testUpdateWithInvalidIdShouldThrowNotFoundException()
+    public function testUpdateWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->update(9999999, []);
     }
 
-    public function testUpdateWithMissingIdShouldThrowParameterMissingException()
+    public function testUpdateWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->update('', []);
     }
 
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testDeleteShouldBeSuccessfulAfterOtherDefaultAddress($id)
+    public function testDeleteShouldBeSuccessfulAfterOtherDefaultAddress($id): void
     {
         $address = $this->resource->delete($id);
 
-        static::assertInstanceOf('\Shopware\Models\Customer\Address', $address);
-        static::assertEquals(null, $address->getId());
+        static::assertInstanceOf(AddressModel::class, $address);
+        static::assertSame(0, (int) $address->getId());
     }
 
-    public function testDeleteWithInvalidIdShouldThrowNotFoundException()
+    public function testDeleteWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->delete(9999999);
     }
 
-    public function testDeleteWithMissingIdShouldThrowParameterMissingException()
+    public function testDeleteWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->delete('');
     }
 }

@@ -25,7 +25,9 @@
 namespace Shopware\Tests\Unit\Components\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\Template\Template;
 use Shopware\Models\Article\Link;
@@ -91,7 +93,7 @@ class ModelEntityTest extends TestCase
         $product->fromArray($data);
 
         static::assertNotNull($product->getConfiguratorTemplate());
-        static::assertEquals(true, $product->getConfiguratorTemplate()->getActive());
+        static::assertTrue($product->getConfiguratorTemplate()->getActive());
         static::assertEquals('baz', $product->getConfiguratorTemplate()->getEan());
 
         // configuratorTemplate is the owning side of relation, so article has to be set
@@ -157,7 +159,7 @@ class ModelEntityTest extends TestCase
         $product->fromArray($data);
 
         static::assertNotNull($product->getConfiguratorTemplate());
-        static::assertEquals(true, $product->getConfiguratorTemplate()->getActive());
+        static::assertTrue($product->getConfiguratorTemplate()->getActive());
         static::assertEquals('foo', $product->getConfiguratorTemplate()->getEan());
     }
 
@@ -178,7 +180,7 @@ class ModelEntityTest extends TestCase
         $product->fromArray($data);
 
         static::assertNotNull($product->getConfiguratorTemplate());
-        static::assertEquals(true, $product->getConfiguratorTemplate()->getActive());
+        static::assertTrue($product->getConfiguratorTemplate()->getActive());
         static::assertEquals('foo', $product->getConfiguratorTemplate()->getEan());
     }
 
@@ -300,7 +302,7 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        static::assertEquals(null, $article->getSupplier());
+        static::assertNull($article->getSupplier());
     }
 
     public function testCanReAssignWithAnotherIdThrowsExceptionManyToOne()
@@ -323,7 +325,7 @@ class ModelEntityTest extends TestCase
             ],
         ];
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $article->fromArray($data);
     }
 
@@ -565,7 +567,7 @@ class ModelEntityTest extends TestCase
      */
     protected function setProperty($entity, $key, $value)
     {
-        $reflectionClass = new \ReflectionClass($entity);
+        $reflectionClass = new ReflectionClass($entity);
         $property = $reflectionClass->getProperty($key);
 
         $property->setAccessible(true);

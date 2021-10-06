@@ -30,6 +30,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\OptimisticLockException;
 use InvalidArgumentException;
+use PDO;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Configuration\WriterException;
 use Shopware\Models\Config\Element;
@@ -98,7 +99,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
                 'coreConfigValues.value',
             ])
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR)
+            ->fetchAll(PDO::FETCH_KEY_PAIR)
         ;
 
         return $this->mergeValues($this->getParent()->readValues($pluginName, $shopId), $this->unserializeArray($values));

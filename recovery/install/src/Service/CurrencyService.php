@@ -24,6 +24,9 @@
 
 namespace Shopware\Recovery\Install\Service;
 
+use Exception;
+use PDO;
+use RuntimeException;
 use Shopware\Recovery\Install\Struct\Shop;
 
 class CurrencyService
@@ -50,24 +53,24 @@ class CurrencyService
     ];
 
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $connection;
 
-    public function __construct(\PDO $connection)
+    public function __construct(PDO $connection)
     {
         $this->connection = $connection;
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function updateCurrency(Shop $shop)
     {
         $currency = strtoupper($shop->currency);
 
         if (!\array_key_exists($currency, $this->currencySettings)) {
-            throw new \RuntimeException("Couldn't find definitions for the select currency");
+            throw new RuntimeException("Couldn't find definitions for the select currency");
         }
 
         try {
@@ -78,8 +81,8 @@ class CurrencyService
                 WHERE id = 1'
             );
             $prepareStatement->execute($this->currencySettings[$currency]);
-        } catch (\Exception $e) {
-            throw new \RuntimeException($e->getMessage(), 0, $e);
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage(), 0, $e);
         }
     }
 }

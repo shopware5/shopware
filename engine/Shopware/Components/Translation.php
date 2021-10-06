@@ -590,7 +590,7 @@ class Shopware_Components_Translation
 
         $text = html_entity_decode($text);
         $text = preg_replace('!<[^>]*?>!', ' ', $text);
-        $text = str_replace(\chr(0xa0), ' ', $text);
+        $text = str_replace(\chr(0xA0), ' ', $text);
         $text = preg_replace('/\s\s+/', ' ', $text);
         $text = htmlspecialchars($text);
         $text = trim($text);

@@ -24,9 +24,13 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use DateTime;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\Manufacturer;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Supplier;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
 
@@ -47,9 +51,9 @@ class ManufacturerTest extends TestCase
 
     public function testCreateShouldBeSuccessful()
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->modify('-3 day');
-        $changed = $date->format(\DateTime::ISO8601);
+        $changed = $date->format(DateTime::ISO8601);
 
         $testData = [
             'name' => 'fooobar',
@@ -134,23 +138,23 @@ class ManufacturerTest extends TestCase
     /**
      * @depends testUpdateShouldBeSuccessful
      */
-    public function testDeleteShouldBeSuccessful($id)
+    public function testDeleteShouldBeSuccessful($id): void
     {
         $manufacturer = $this->resource->delete($id);
 
-        static::assertInstanceOf('\Shopware\Models\Article\Supplier', $manufacturer);
-        static::assertEquals(null, $manufacturer->getId());
+        static::assertInstanceOf(Supplier::class, $manufacturer);
+        static::assertSame(0, (int) $manufacturer->getId());
     }
 
-    public function testDeleteWithInvalidIdShouldThrowNotFoundException()
+    public function testDeleteWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->delete(9999999);
     }
 
-    public function testDeleteWithMissingIdShouldThrowParameterMissingException()
+    public function testDeleteWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->delete('');
     }
 

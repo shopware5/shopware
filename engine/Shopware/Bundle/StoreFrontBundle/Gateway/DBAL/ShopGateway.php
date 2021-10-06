@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ShopHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
@@ -138,7 +139,7 @@ class ShopGateway implements ShopGatewayInterface
             ->where('shop.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
         $result = [];
 
         foreach ($data as $row) {

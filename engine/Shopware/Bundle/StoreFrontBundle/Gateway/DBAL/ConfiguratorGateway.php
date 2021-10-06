@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
@@ -96,7 +97,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $this->configuratorHydrator->hydrate($data);
     }
@@ -134,7 +135,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $data = $statement->fetchAll(PDO::FETCH_KEY_PAIR);
         $data = array_filter($data);
 
         $media = $this->mediaGateway->getList($data, $context);
@@ -179,7 +180,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $data = $statement->fetchAll(PDO::FETCH_KEY_PAIR);
 
         foreach ($data as &$row) {
             $row = explode('|', $row);

@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Exception;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Country\Country as CountryModel;
 use Shopware\Models\Payment\Payment as PaymentModel;
@@ -97,7 +98,7 @@ class PaymentMethods extends Resource
 
     /**
      * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return PaymentModel
      */

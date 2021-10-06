@@ -24,6 +24,10 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components;
 
+use DirectoryIterator;
+use Exception;
+use SplFileInfo;
+
 class FileSystem
 {
     /**
@@ -51,7 +55,7 @@ class FileSystem
         }
 
         if ($fixPermission && !is_writable($directory)) {
-            $fileInfo = new \SplFileInfo($directory);
+            $fileInfo = new SplFileInfo($directory);
             $this->fixDirectoryPermission($fileInfo);
         }
 
@@ -78,8 +82,8 @@ class FileSystem
             return $errors;
         }
 
-        /** @var \DirectoryIterator $fileInfo */
-        foreach (new \DirectoryIterator($directory) as $fileInfo) {
+        /** @var DirectoryIterator $fileInfo */
+        foreach (new DirectoryIterator($directory) as $fileInfo) {
             if ($fileInfo->isDot()) {
                 continue;
             }
@@ -116,11 +120,11 @@ class FileSystem
         return $errors;
     }
 
-    private function fixDirectoryPermission(\SplFileInfo $fileInfo)
+    private function fixDirectoryPermission(SplFileInfo $fileInfo)
     {
         try {
             $permission = substr(sprintf('%o', $fileInfo->getPerms()), -4);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // cannot get permissions...
             return;
         }
@@ -137,11 +141,11 @@ class FileSystem
         clearstatcache(false, $fileInfo->getPathname());
     }
 
-    private function fixFilePermission(\SplFileInfo $fileInfo)
+    private function fixFilePermission(SplFileInfo $fileInfo)
     {
         try {
             $permission = substr(sprintf('%o', $fileInfo->getPerms()), -4);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // cannot get permissions...
             return;
         }

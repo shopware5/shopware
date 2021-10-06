@@ -26,13 +26,15 @@ namespace Shopware\Bundle\MediaBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
+use Enlight_Event_EventManager;
+use Enlight_Event_Exception;
 use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
 class GarbageCollectorFactory
 {
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $events;
 
@@ -46,7 +48,7 @@ class GarbageCollectorFactory
      */
     private $mediaService;
 
-    public function __construct(\Enlight_Event_EventManager $events, Connection $connection, MediaServiceInterface $mediaService)
+    public function __construct(Enlight_Event_EventManager $events, Connection $connection, MediaServiceInterface $mediaService)
     {
         $this->connection = $connection;
         $this->events = $events;
@@ -54,7 +56,7 @@ class GarbageCollectorFactory
     }
 
     /**
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return GarbageCollector
      */
@@ -98,7 +100,7 @@ class GarbageCollectorFactory
     }
 
     /**
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return MediaPosition[]
      */

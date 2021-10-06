@@ -26,20 +26,24 @@ namespace Shopware\Bundle\SearchBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight_Controller_Request_Request as Request;
+use Enlight_Event_EventManager;
+use Enlight_Event_Exception;
+use IteratorAggregate;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Condition\IsAvailableCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Config;
 
 class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
 {
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
@@ -49,11 +53,11 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     private $requestHandlers;
 
     /**
-     * @param \IteratorAggregate $requestHandlers
+     * @param IteratorAggregate $requestHandlers
      */
     public function __construct(
-        \Shopware_Components_Config $config,
-        \Enlight_Event_EventManager $eventManager,
+        Shopware_Components_Config $config,
+        Enlight_Event_EventManager $eventManager,
         $requestHandlers
     ) {
         $this->config = $config;
@@ -257,7 +261,7 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     /**
      * @param CriteriaRequestHandlerInterface[] $existingHandlers
      *
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return CriteriaRequestHandlerInterface[]
      */

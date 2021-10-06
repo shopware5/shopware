@@ -24,8 +24,12 @@
 
 namespace Shopware\Tests\Unit\Bundle\StoreFrontBundle\Struct;
 
+use ArrayIterator;
+use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
+use TypeError;
 
 class AttributeStructTest extends TestCase
 {
@@ -52,7 +56,7 @@ class AttributeStructTest extends TestCase
      */
     public function testWithInvalidValues($value)
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Attribute(['attr' => $value]);
     }
@@ -62,7 +66,7 @@ class AttributeStructTest extends TestCase
      */
     public function testWithInvalidValuesSet($value)
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $attr = new Attribute(['attr' => null]);
         $attr->set('attr', $value);
@@ -70,14 +74,14 @@ class AttributeStructTest extends TestCase
 
     public function testWithNullData()
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         new Attribute(null);
     }
 
     public function testWithObjectData()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        new Attribute([new \ArrayIterator([])]);
+        $this->expectException(InvalidArgumentException::class);
+        new Attribute([new ArrayIterator([])]);
     }
 
     public function getDataProvider()
@@ -100,8 +104,8 @@ class AttributeStructTest extends TestCase
     {
         return [
             [fopen('php://memory', 'rw')],
-            [new \ArrayIterator([])],
-            [new \Exception()],
+            [new ArrayIterator([])],
+            [new Exception()],
         ];
     }
 }

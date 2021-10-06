@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\MultiEdit;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -92,7 +93,7 @@ class Queue extends ModelEntity
     private $active = false;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="created", type="datetime", nullable=true)
      */
@@ -107,13 +108,13 @@ class Queue extends ModelEntity
         $this->articleDetails = new ArrayCollection();
     }
 
-    public function setCreated(?\DateTimeInterface $created)
+    public function setCreated(?DateTimeInterface $created)
     {
         $this->created = $created;
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getCreated()
     {

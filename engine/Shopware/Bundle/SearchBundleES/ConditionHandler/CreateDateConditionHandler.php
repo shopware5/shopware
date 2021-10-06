@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
+use DateInterval;
+use DateTime;
 use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
@@ -78,9 +80,9 @@ class CreateDateConditionHandler implements PartialConditionHandlerInterface
     private function createQuery(CriteriaPartInterface $criteriaPart)
     {
         /** @var CreateDateCondition $criteriaPart */
-        $date = new \DateTime();
+        $date = new DateTime();
         $intervalSpec = 'P' . $criteriaPart->getDays() . 'D';
-        $interval = new \DateInterval($intervalSpec);
+        $interval = new DateInterval($intervalSpec);
         $date->sub($interval);
 
         return new RangeQuery('formattedCreatedAt', [

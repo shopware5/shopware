@@ -24,10 +24,13 @@
 
 namespace Shopware\Tests\Unit\Components\Model;
 
+use Exception;
+use PDO;
+use PDOException;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\CategoryDenormalization;
 
-class PDOMock extends \PDO
+class PDOMock extends PDO
 {
 }
 
@@ -39,7 +42,7 @@ class CategoryDenormalizationTest extends TestCase
     private $component;
 
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $conn;
 
@@ -52,10 +55,10 @@ class CategoryDenormalizationTest extends TestCase
         }
 
         try {
-            $conn = new \PDO('sqlite::memory:');
-            $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            $conn->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
+            $conn = new PDO('sqlite::memory:');
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
             static::markTestSkipped(
                 'Could not create sqlite connection, got error:  ' . $e->getMessage()
             );
@@ -171,7 +174,7 @@ class CategoryDenormalizationTest extends TestCase
             ['id' => '7', 'path' => '|6|3|'],
         ];
 
-        $result = $this->conn->query('SELECT id, path FROM s_categories WHERE path IS NOT NULL')->fetchAll(\PDO::FETCH_ASSOC);
+        $result = $this->conn->query('SELECT id, path FROM s_categories WHERE path IS NOT NULL')->fetchAll(PDO::FETCH_ASSOC);
 
         static::assertEquals($expectedResult, $result);
     }
@@ -337,7 +340,7 @@ class CategoryDenormalizationTest extends TestCase
     {
         $statement = 'SELECT * FROM example';
 
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
 
         $this->component->limit($statement, 0, 20);
     }
@@ -346,7 +349,7 @@ class CategoryDenormalizationTest extends TestCase
     {
         $statement = 'SELECT * FROM example';
 
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
 
         $this->component->limit($statement, 5, -1);
     }

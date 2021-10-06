@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
 use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
@@ -441,7 +442,7 @@ class ProductListingVariationLoader
         }
 
         /** @var array[] $prices */
-        $prices = $query->execute()->fetchAll(\PDO::FETCH_GROUP);
+        $prices = $query->execute()->fetchAll(PDO::FETCH_GROUP);
 
         foreach ($prices as &$productPrices) {
             $priceResult = [];
@@ -491,7 +492,7 @@ class ProductListingVariationLoader
         $query->andWhere('availableVariant.id IN (:variants)');
 
         /** @var array[] $availability */
-        $availability = $query->execute()->fetchAll(\PDO::FETCH_GROUP);
+        $availability = $query->execute()->fetchAll(PDO::FETCH_GROUP);
 
         foreach ($availability as &$productAvailability) {
             $availabilityResult = [];

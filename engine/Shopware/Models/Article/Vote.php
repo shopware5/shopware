@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Article;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Shop\Shop;
@@ -111,7 +113,7 @@ class Vote extends ModelEntity
     private $points;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
@@ -139,7 +141,7 @@ class Vote extends ModelEntity
     private $answer;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="answer_date", type="datetime", nullable=true)
      */
@@ -255,14 +257,14 @@ class Vote extends ModelEntity
     /**
      * Sets the datum of the vote
      *
-     * @param \DateTimeInterface $datum
+     * @param DateTimeInterface $datum
      *
      * @return Vote
      */
     public function setDatum($datum)
     {
-        if (!$datum instanceof \DateTimeInterface) {
-            $datum = new \DateTime($datum);
+        if (!$datum instanceof DateTimeInterface) {
+            $datum = new DateTime($datum);
         }
 
         $this->datum = $datum;
@@ -273,7 +275,7 @@ class Vote extends ModelEntity
     /**
      * Gets the datum of the vote
      *
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getDatum()
     {
@@ -357,14 +359,14 @@ class Vote extends ModelEntity
     /**
      * Sets the datum of the answer
      *
-     * @param \DateTimeInterface|string|null $answer_date
+     * @param DateTimeInterface|string|null $answer_date
      *
      * @return Vote
      */
     public function setAnswerDate($answer_date)
     {
-        if (!$answer_date instanceof \DateTimeInterface) {
-            $answer_date = new \DateTime($answer_date);
+        if (!$answer_date instanceof DateTimeInterface) {
+            $answer_date = new DateTime($answer_date);
         }
         $this->answer_date = $answer_date;
 
@@ -374,7 +376,7 @@ class Vote extends ModelEntity
     /**
      * Gets the datum of the answer
      *
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getAnswerDate()
     {

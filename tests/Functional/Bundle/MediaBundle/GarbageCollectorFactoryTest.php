@@ -24,6 +24,8 @@
 
 namespace Shopware\Tests\Functional\Bundle\MediaBundle;
 
+use Closure;
+use Enlight_Event_EventManager;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Bundle\MediaBundle\GarbageCollector;
@@ -33,7 +35,7 @@ class GarbageCollectorFactoryTest extends TestCase
 {
     public function testTextAttributesAreCollected()
     {
-        $factory = new GarbageCollectorFactory(new \Enlight_Event_EventManager(), Shopware()->Container()->get(
+        $factory = new GarbageCollectorFactory(new Enlight_Event_EventManager(), Shopware()->Container()->get(
             \Doctrine\DBAL\Connection::class
         ), Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class));
         $collector = $factory->factory();
@@ -57,7 +59,7 @@ class GarbageCollectorFactoryTest extends TestCase
         $getMediaPositions = static function (GarbageCollector $collector) {
             return $collector->mediaPositions;
         };
-        $getMediaPositions = \Closure::bind($getMediaPositions, null, $collector);
+        $getMediaPositions = Closure::bind($getMediaPositions, null, $collector);
 
         return $getMediaPositions($collector);
     }

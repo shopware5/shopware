@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\FormBundle;
 
+use Exception;
+
 class StringRendererService implements StringRendererServiceInterface
 {
     /**
@@ -76,7 +78,7 @@ class StringRendererService implements StringRendererServiceInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string
      */
@@ -103,7 +105,7 @@ class StringRendererService implements StringRendererServiceInterface
         }
 
         if (!\in_array(\gettype($variable), $this->whiteListTypeArray)) {
-            throw new \Exception(sprintf('Could not render type of %s', \gettype($variable)));
+            throw new Exception(sprintf('Could not render type of %s', \gettype($variable)));
         }
 
         return (string) $variable;

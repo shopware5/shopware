@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\ContentTypeBundle\FieldResolver;
 
+use PDO;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\ContentTypeBundle\Field\Shopware\ProductField;
 use Shopware\Bundle\ContentTypeBundle\Field\Shopware\ProductGrid;
@@ -64,7 +65,7 @@ class ProductResolverTest extends TestCase
 
     public function testMultiResolve(): void
     {
-        $idsArray = Shopware()->Models()->getConnection()->executeQuery('SELECT ordernumber from s_articles_details LIMIT 5')->fetchAll(\PDO::FETCH_COLUMN);
+        $idsArray = Shopware()->Models()->getConnection()->executeQuery('SELECT ordernumber from s_articles_details LIMIT 5')->fetchAll(PDO::FETCH_COLUMN);
         $ids = implode('|', $idsArray);
         $this->field->setType(new ProductGrid());
 

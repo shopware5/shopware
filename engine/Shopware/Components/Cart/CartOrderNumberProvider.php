@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Components\Cart;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware_Components_Config as Config;
 
 class CartOrderNumberProvider implements CartOrderNumberProviderInterface
@@ -87,7 +88,7 @@ class CartOrderNumberProvider implements CartOrderNumberProviderInterface
             ->setParameter('names', self::CONFIG_KEYS, Connection::PARAM_STR_ARRAY)
             ->groupBy('elements.name')
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->fetchAll(PDO::FETCH_KEY_PAIR);
 
         foreach ($values as $key => $value) {
             $value = array_filter(explode('|', $value));

@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use RuntimeException;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Struct\UpdateResultStruct;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
@@ -78,7 +79,7 @@ class StoreListUpdatesCommand extends StoreCommand implements CompletionAwareInt
             $version = $this->container->getParameter('shopware.release.version');
 
             if (!\is_string($version)) {
-                throw new \RuntimeException('Parameter shopware.release.version has to be an string');
+                throw new RuntimeException('Parameter shopware.release.version has to be an string');
             }
         }
 

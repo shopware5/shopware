@@ -26,6 +26,8 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CookieBundle\Exceptions;
 
-class NoCookieGroupByNameKnownException extends \Exception
+use Exception;
+
+class NoCookieGroupByNameKnownException extends Exception
 {
 }

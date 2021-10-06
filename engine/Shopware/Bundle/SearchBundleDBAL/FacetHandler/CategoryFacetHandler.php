@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
+use PDO;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
@@ -35,6 +36,7 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryDepthServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Config;
 
 class CategoryFacetHandler implements PartialFacetHandlerInterface
 {
@@ -49,7 +51,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     private $queryBuilderFactory;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -66,7 +68,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     public function __construct(
         CategoryServiceInterface $categoryService,
         QueryBuilderFactoryInterface $queryBuilderFactory,
-        \Shopware_Components_Config $config,
+        Shopware_Components_Config $config,
         CategoryDepthServiceInterface $categoryDepthService,
         CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
     ) {
@@ -147,7 +149,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
         $query->innerJoin('product', 's_articles_categories_ro', 'productCategoryFacet', 'productCategoryFacet.articleID = product.id');
         $query->groupBy('productCategoryFacet.categoryID');
 
-        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**

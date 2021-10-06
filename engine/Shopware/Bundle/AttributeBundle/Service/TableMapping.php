@@ -26,6 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Column;
+use Exception;
 
 class TableMapping implements TableMappingInterface
 {
@@ -48,12 +49,12 @@ class TableMapping implements TableMappingInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function isIdentifierColumn($table, $name)
     {
         if (!\array_key_exists($table, $this->tables)) {
-            throw new \Exception(sprintf('Table %s is no attribute table', $table));
+            throw new Exception(sprintf('Table %s is no attribute table', $table));
         }
         $config = $this->tables[$table];
         $identifiers = isset($config['identifiers']) ? $config['identifiers'] : [];
@@ -65,12 +66,12 @@ class TableMapping implements TableMappingInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function isCoreColumn($table, $name)
     {
         if (!\array_key_exists($table, $this->tables)) {
-            throw new \Exception(sprintf('Table %s is no attribute table', $table));
+            throw new Exception(sprintf('Table %s is no attribute table', $table));
         }
         $config = $this->tables[$table];
         $coreAttributes = isset($config['coreAttributes']) ? $config['coreAttributes'] : [];
@@ -133,12 +134,12 @@ class TableMapping implements TableMappingInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getDependingTables($table)
     {
         if (!$this->isAttributeTable($table)) {
-            throw new \Exception(sprintf('Table %s is no supported attribute table', $table));
+            throw new Exception(sprintf('Table %s is no supported attribute table', $table));
         }
 
         return $this->tables[$table]['dependingTables'];

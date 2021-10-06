@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\Condition;
 
+use DateTime;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class IsCustomerSinceCondition implements ConditionInterface
@@ -31,7 +32,7 @@ class IsCustomerSinceCondition implements ConditionInterface
     private const NAME = 'IsCustomerSinceCondition';
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $customerSince;
 
@@ -41,13 +42,13 @@ class IsCustomerSinceCondition implements ConditionInterface
     protected $operator;
 
     /**
-     * @param \DateTime|string $customerSince
-     * @param string           $operator
+     * @param DateTime|string $customerSince
+     * @param string          $operator
      */
     public function __construct($customerSince, $operator = ConditionInterface::OPERATOR_GTE)
     {
-        if (!$customerSince instanceof \DateTime) {
-            $customerSince = new \DateTime($customerSince);
+        if (!$customerSince instanceof DateTime) {
+            $customerSince = new DateTime($customerSince);
         }
         $this->customerSince = $customerSince;
         $this->operator = $operator;
@@ -59,7 +60,7 @@ class IsCustomerSinceCondition implements ConditionInterface
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCustomerSince()
     {

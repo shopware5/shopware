@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Functional\Api;
 
 use DateTime;
+use Exception;
 use Shopware\Models\Customer\Customer;
 
 /**
@@ -146,7 +147,7 @@ class CustomerTest extends AbstractApiTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testPostCustomersWithDebitShouldCreatePaymentData()
     {
@@ -230,7 +231,7 @@ class CustomerTest extends AbstractApiTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testPostCustomersWithDebitPaymentDataShouldCreateDebitData()
     {

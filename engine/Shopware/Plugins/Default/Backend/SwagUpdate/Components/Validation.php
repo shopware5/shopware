@@ -24,6 +24,9 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components;
 
+use Enlight_Components_Snippet_Namespace;
+use Exception;
+
 /**
  * Used for plugin and system requirement validation.
  */
@@ -46,7 +49,7 @@ class Validation
     public const REQUIREMENT_CRITICAL = 20;
 
     /**
-     * @var \Enlight_Components_Snippet_Namespace
+     * @var Enlight_Components_Snippet_Namespace
      */
     private $namespace;
 
@@ -55,7 +58,7 @@ class Validation
      */
     private $checks;
 
-    public function __construct(\Enlight_Components_Snippet_Namespace $namespace, array $checks)
+    public function __construct(Enlight_Components_Snippet_Namespace $namespace, array $checks)
     {
         $this->namespace = $namespace;
         $this->checks = $checks;
@@ -64,15 +67,15 @@ class Validation
     /**
      * @param array $requirements {
      *
-     * @var string     type => Type of the requirement check
-     * @var array      directories => Array of directories which should be iterated
-     * @var string     errorLevel => Flag how critical the error is (1 => Warning, 2 => Exception)
-     * @var string     errorMessage => Error message which can be set for the validation, 1x %s will be replaced with all found files
-     * @var [optional] string value => Only used for regular expressions, contains the regular expression
-     * @var [optional] string fileRegex => Regular expression for file types.
-     *                 }
+     * @var string type => Type of the requirement check
+     * @var array  directories => Array of directories which should be iterated
+     * @var string errorLevel => Flag how critical the error is (1 => Warning, 2 => Exception)
+     * @var string errorMessage => Error message which can be set for the validation, 1x %s will be replaced with all found files
+     * @var string value [optional] => Only used for regular expressions, contains the regular expression
+     * @var string fileRegex [optional] => Regular expression for file types.
+     *             }
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array {
      *

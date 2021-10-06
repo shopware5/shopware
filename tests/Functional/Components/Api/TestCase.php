@@ -24,12 +24,14 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Components\Api\Resource\Resource as APIResource;
+use Shopware_Components_Acl;
 
 /**
  * Abstract TestCase for Resource-Tests
  */
-abstract class TestCase extends \Enlight_Components_Test_TestCase
+abstract class TestCase extends Enlight_Components_Test_TestCase
 {
     /**
      * @var APIResource
@@ -79,7 +81,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
     protected function getAclMock()
     {
-        $aclMock = $this->createMock(\Shopware_Components_Acl::class);
+        $aclMock = $this->createMock(Shopware_Components_Acl::class);
 
         $aclMock->expects(static::any())
                 ->method('has')

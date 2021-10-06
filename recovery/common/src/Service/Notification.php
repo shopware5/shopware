@@ -24,6 +24,7 @@
 
 namespace Shopware\Recovery\Common\Service;
 
+use Exception;
 use Shopware\Recovery\Common\HttpClient\Client;
 
 class Notification
@@ -70,7 +71,7 @@ class Notification
 
         try {
             $response = $this->client->post($this->apiEndPoint . '/tracking/events', json_encode($payload));
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             return false;
         }
 

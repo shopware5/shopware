@@ -25,6 +25,7 @@
 namespace Shopware\Recovery\Update\Controller;
 
 use DirectoryIterator;
+use PDO;
 use Shopware\Recovery\Update\Cleanup;
 use Shopware\Recovery\Update\CleanupFilesFinder;
 use Shopware\Recovery\Update\DummyPluginFinder;
@@ -32,6 +33,7 @@ use Shopware\Recovery\Update\Utils;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Slim;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
 class CleanupController
@@ -67,7 +69,7 @@ class CleanupController
     private $shopwarePath;
 
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $conn;
 
@@ -93,7 +95,7 @@ class CleanupController
         Cleanup $cleanupService,
         Slim $app,
         $shopwarePath,
-        \PDO $conn,
+        PDO $conn,
         $backupDir
     ) {
         $this->request = $request;
@@ -176,7 +178,7 @@ class CleanupController
             ->path('#/(' . implode('|', array_keys($blacklistMapping)) . ')/#')
             ->getIterator();
 
-        /** @var \SplFileInfo $file */
+        /** @var SplFileInfo $file */
         foreach ($files as $file) {
             $sanitizedPath = str_replace($mediaPath, '', $file->getPathname());
 

@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Exception;
 
-class StatisticsHydratingException extends \Exception
+use Exception;
+
+class StatisticsHydratingException extends Exception
 {
 }

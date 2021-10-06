@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -52,7 +53,7 @@ class CacheClearCommand extends ShopwareCommand
         $realCacheDir = $this->getContainer()->getParameter('kernel.cache_dir');
 
         if (!\is_string($realCacheDir)) {
-            throw new \RuntimeException('Parameter kernel.cache_dir needs to be a string');
+            throw new RuntimeException('Parameter kernel.cache_dir needs to be a string');
         }
 
         // the old cache dir name must not be longer than the real one to avoid exceeding
@@ -61,7 +62,7 @@ class CacheClearCommand extends ShopwareCommand
         $filesystem = $this->getContainer()->get('file_system');
 
         if (!is_writable($realCacheDir)) {
-            throw new \RuntimeException(sprintf('Unable to write into directory "%s"', $realCacheDir));
+            throw new RuntimeException(sprintf('Unable to write into directory "%s"', $realCacheDir));
         }
 
         if ($filesystem->exists($oldCacheDir)) {

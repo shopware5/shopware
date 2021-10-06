@@ -25,11 +25,13 @@
 namespace Shopware\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Components_Session_Namespace;
+use Shopware_Components_Config;
 
 class StoreFrontCustomerGreetingService implements StoreFrontCustomerGreetingServiceInterface
 {
     /**
-     * @var \Enlight_Components_Session_Namespace
+     * @var Enlight_Components_Session_Namespace
      */
     private $session;
 
@@ -39,14 +41,14 @@ class StoreFrontCustomerGreetingService implements StoreFrontCustomerGreetingSer
     private $connection;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
     public function __construct(
-        \Enlight_Components_Session_Namespace $session,
+        Enlight_Components_Session_Namespace $session,
         Connection $connection,
-        \Shopware_Components_Config $config
+        Shopware_Components_Config $config
     ) {
         $this->session = $session;
         $this->connection = $connection;

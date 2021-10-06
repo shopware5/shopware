@@ -24,12 +24,14 @@
 
 namespace Shopware\Recovery\Update\Steps;
 
+use Exception;
+
 class ResultMapper
 {
     /**
      * @param ValidResult|FinishResult|ErrorResult $result
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -60,6 +62,6 @@ class ResultMapper
             ];
         }
 
-        throw new \Exception(sprintf('Result type %s can not be mapped.', \get_class($result)));
+        throw new Exception(sprintf('Result type %s can not be mapped.', \get_class($result)));
     }
 }

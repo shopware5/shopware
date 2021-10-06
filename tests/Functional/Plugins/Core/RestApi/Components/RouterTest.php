@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Functional\Plugins\Core\RestApi\Components;
 
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Controller_Response_ResponseTestCase;
+use Enlight_Loader;
 use ShopwarePlugins\RestApi\Components\Router;
 
 class RouterTest extends \PHPUnit\Framework\TestCase
@@ -36,7 +39,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function setUp(): void
     {
         $helper = Shopware();
-        $loader = $helper->Container()->get(\Enlight_Loader::class);
+        $loader = $helper->Container()->get(Enlight_Loader::class);
 
         $pluginDir = $helper->DocPath() . 'engine/Shopware/Plugins/Default/Core/RestApi';
 
@@ -72,10 +75,10 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRoutes($uri, $expectedVersion, $expectedController, $expectedAction, $expectedId)
     {
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setMethod('GET');
 
-        $response = new \Enlight_Controller_Response_ResponseTestCase();
+        $response = new Enlight_Controller_Response_ResponseTestCase();
 
         $request->setPathInfo($uri);
         $this->router->assembleRoute($request, $response);
@@ -105,10 +108,10 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     public function testPostRoutes($uri, $expectedVersion, $expectedController, $expectedAction, $expectedId)
     {
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setMethod('POST');
 
-        $response = new \Enlight_Controller_Response_ResponseTestCase();
+        $response = new Enlight_Controller_Response_ResponseTestCase();
 
         $request->setPathInfo($uri);
         $this->router->assembleRoute($request, $response);
@@ -137,10 +140,10 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     public function testPutRoutes($uri, $expectedVersion, $expectedController, $expectedAction, $expectedId, $expectedCode)
     {
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setMethod('PUT');
 
-        $response = new \Enlight_Controller_Response_ResponseTestCase();
+        $response = new Enlight_Controller_Response_ResponseTestCase();
 
         $request->setPathInfo($uri);
         $this->router->assembleRoute($request, $response);
@@ -171,10 +174,10 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteRoutes($uri, $expectedVersion, $expectedController, $expectedAction, $expectedId, $expectedCode)
     {
-        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setMethod('DELETE');
 
-        $response = new \Enlight_Controller_Response_ResponseTestCase();
+        $response = new Enlight_Controller_Response_ResponseTestCase();
 
         $request->setPathInfo($uri);
         $this->router->assembleRoute($request, $response);

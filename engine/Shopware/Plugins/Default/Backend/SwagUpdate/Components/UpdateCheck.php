@@ -24,9 +24,13 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components;
 
+use Exception;
 use Shopware\Components\OpenSSLVerifier;
 use Shopware\Components\ShopwareReleaseStruct;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
+use Zend_Http_Client;
+use Zend_Http_Client_Exception;
+use Zend_Json;
 
 class UpdateCheck
 {
@@ -86,7 +90,7 @@ class UpdateCheck
     {
         $url = $this->apiEndpoint . '/release/update';
 
-        $client = new \Zend_Http_Client($url, [
+        $client = new Zend_Http_Client($url, [
             'timeout' => 5,
             'useragent' => 'Shopware/' . $this->release->getVersion(),
         ]);
@@ -97,7 +101,7 @@ class UpdateCheck
 
         try {
             $response = $client->request();
-        } catch (\Zend_Http_Client_Exception $e) {
+        } catch (Zend_Http_Client_Exception $e) {
             // Do not show exception to user if request times out
             return null;
         }
@@ -112,7 +116,7 @@ class UpdateCheck
         }
 
         if ($body != '') {
-            $json = \Zend_Json::decode($body, true);
+            $json = Zend_Json::decode($body, true);
         } else {
             $json = null;
         }
@@ -129,7 +133,7 @@ class UpdateCheck
      * @param string $signature
      * @param string $body
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function verifyBody($signature, $body)
     {
@@ -138,7 +142,7 @@ class UpdateCheck
         }
 
         if (!$this->verificator->isValid($body, $signature)) {
-            throw new \Exception('Signature is not valid. Try downloading again');
+            throw new Exception('Signature is not valid. Try downloading again');
         }
     }
 }

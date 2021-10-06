@@ -24,7 +24,12 @@
 
 namespace Shopware\Components\Emotion;
 
+use DirectoryIterator;
 use Enlight\Event\SubscriberInterface;
+use Enlight_Event_EventArgs;
+use Enlight_View_Default;
+use RecursiveRegexIterator;
+use RegexIterator;
 
 class EmotionComponentViewSubscriber implements SubscriberInterface
 {
@@ -49,9 +54,9 @@ class EmotionComponentViewSubscriber implements SubscriberInterface
         ];
     }
 
-    public function registerBackendTemplates(\Enlight_Event_EventArgs $args)
+    public function registerBackendTemplates(Enlight_Event_EventArgs $args)
     {
-        /** @var \Enlight_View_Default $view */
+        /** @var Enlight_View_Default $view */
         $view = $args->get('subject')->View();
 
         $templateDir = $this->path . '/Resources/views/emotion_components/';
@@ -66,8 +71,8 @@ class EmotionComponentViewSubscriber implements SubscriberInterface
             return;
         }
 
-        $directoryIterator = new \DirectoryIterator($backendPath);
-        $regex = new \RegexIterator($directoryIterator, '/^.+\.js$/i', \RecursiveRegexIterator::GET_MATCH);
+        $directoryIterator = new DirectoryIterator($backendPath);
+        $regex = new RegexIterator($directoryIterator, '/^.+\.js$/i', RecursiveRegexIterator::GET_MATCH);
         foreach ($regex as $file) {
             $path = 'backend/' . $file[0];
             $view->extendsBlock(
@@ -78,9 +83,9 @@ class EmotionComponentViewSubscriber implements SubscriberInterface
         }
     }
 
-    public function registerWidgetTemplates(\Enlight_Event_EventArgs $args)
+    public function registerWidgetTemplates(Enlight_Event_EventArgs $args)
     {
-        /** @var \Enlight_View_Default $view */
+        /** @var Enlight_View_Default $view */
         $view = $args->get('subject')->View();
 
         if (file_exists($this->path . '/Resources/views/emotion_components/')) {

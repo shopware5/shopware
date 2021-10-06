@@ -25,6 +25,8 @@
 namespace Shopware\Bundle\FormBundle\Constraints;
 
 use Doctrine\DBAL\Connection;
+use PDOStatement;
+use RuntimeException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -50,7 +52,7 @@ class UniqueValidator extends ConstraintValidator
     {
         /** @var Unique $constraint */
         if (!$constraint instanceof Unique) {
-            throw new \RuntimeException('Invalid constraint for validator given.');
+            throw new RuntimeException('Invalid constraint for validator given.');
         }
 
         if (empty($value)) {
@@ -69,7 +71,7 @@ class UniqueValidator extends ConstraintValidator
                 ->setParameter('ignoreId', $ignoreIdValue);
         }
 
-        /** @var \PDOStatement $stmt */
+        /** @var PDOStatement $stmt */
         $stmt = $builder->execute();
 
         if ($stmt->rowCount() === 0) {

@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Unit\Core;
 
 use PHPUnit\Framework\TestCase;
+use sArticles;
 
 class sArticlesTest extends TestCase
 {
@@ -63,8 +64,8 @@ class sArticlesTest extends TestCase
      */
     public function testStrings($input, $expectedResult)
     {
-        /** @var \sArticles $sArticles */
-        $sArticles = $this->createPartialMock(\sArticles::class, []);
+        /** @var sArticles $sArticles */
+        $sArticles = $this->createPartialMock(sArticles::class, []);
 
         static::assertSame($expectedResult, $sArticles->sOptimizeText($input));
     }

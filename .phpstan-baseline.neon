@@ -151,11 +151,6 @@ parameters:
 			path: engine/Library/Enlight/Collection/ArrayCollection.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|null given\\.$#"
-			count: 2
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
 			message: "#^Parameter \\$key of method Enlight_Collection_ArrayCollection\\:\\:offsetUnset\\(\\) has invalid typehint type unknown_type\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Collection/ArrayCollection.php
@@ -1920,11 +1915,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
-
-		-
 			message: "#^Property Enlight_Controller_Request_RequestHttp\\:\\:\\$_params type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
@@ -3106,11 +3096,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$stack of function array_unshift expects array, array\\|string given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Manager.php
-
-		-
-			message: "#^Parameter \\#2 \\$callback of function array_filter expects callable\\(mixed, mixed\\)\\: bool, Closure\\(mixed\\)\\: int\\<0, max\\>\\|false given\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Manager.php
 
@@ -10245,11 +10230,6 @@ parameters:
 			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
-
-		-
 			message: "#^Parameter \\#2 \\$contents of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceInterface\\:\\:write\\(\\) expects string, string\\|false given\\.$#"
 			count: 2
 			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
@@ -10766,11 +10746,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$bootstrap of method Shopware_Components_Plugin_Namespace\\:\\:uninstallPlugin\\(\\) expects Shopware_Components_Plugin_Bootstrap, Shopware_Components_Plugin_Bootstrap\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginInstaller.php
-
-		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginInstaller.php
 
@@ -22157,11 +22132,6 @@ parameters:
 			path: engine/Shopware/Components/Cart/ProportionalCartMerger.php
 
 		-
-			message: "#^Parameter \\#3 \\$length of function substr expects int, int\\<0, max\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/ProportionalCartMerger.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\ProportionalCartMergerInterface\\:\\:mergeProportionalItems\\(\\) has parameter \\$content with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/ProportionalCartMergerInterface.php
@@ -22397,11 +22367,6 @@ parameters:
 			path: engine/Shopware/Components/Check/File.php
 
 		-
-			message: "#^Parameter \\#3 \\$length of function substr expects int, int\\<0, max\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Check/MySQLVersionExtractor.php
-
-		-
 			message: "#^Access to an undefined property Zend_Config_Xml\\:\\:\\$file\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Check/Path.php
@@ -22517,16 +22482,6 @@ parameters:
 			path: engine/Shopware/Components/Check/Requirements.php
 
 		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, int\\|string\\|false\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Check/Requirements.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Check/Requirements.php
-
-		-
 			message: "#^Parameter \\#1 \\$versionString of static method Shopware\\\\Components\\\\Check\\\\MySQLVersionExtractor\\:\\:extract\\(\\) expects string, int\\|string\\|false\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Check/Requirements.php
@@ -22534,11 +22489,6 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\$value of method Shopware\\\\Components\\\\Check\\\\Requirements\\:\\:compare\\(\\) expects string, string\\|false given\\.$#"
 			count: 4
-			path: engine/Shopware/Components/Check/Requirements.php
-
-		-
-			message: "#^Parameter \\#3 \\$length of function substr expects int, int\\<0, max\\>\\|false given\\.$#"
-			count: 1
 			path: engine/Shopware/Components/Check/Requirements.php
 
 		-
@@ -22812,11 +22762,6 @@ parameters:
 			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, int\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
-
-		-
 			message: "#^Parameter \\#1 \\$unit of method Shopware\\\\Components\\\\Compatibility\\\\LegacyStructConverter\\:\\:convertUnitStruct\\(\\) expects Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Unit, Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Unit\\|null given\\.$#"
 			count: 2
 			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
@@ -23057,16 +23002,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$fp of function rewind expects resource, resource\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/CsvIterator.php
-
-		-
-			message: "#^Parameter \\#1 \\$haystack of function substr_count expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CsvIterator.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|false given\\.$#"
 			count: 2
 			path: engine/Shopware/Components/CsvIterator.php
 
@@ -23426,11 +23361,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\DispatchFormatHelper\\:\\:formatNameForRequest\\(\\) should return string but returns string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DispatchFormatHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DispatchFormatHelper.php
 
@@ -28035,11 +27965,6 @@ parameters:
 			path: engine/Shopware/Components/ReflectionHelper.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/ReflectionHelper.php
-
-		-
 			message: "#^Parameter \\#2 \\$search of function array_key_exists expects array, array\\<string, string\\>\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ReflectionHelper.php
@@ -30160,17 +30085,7 @@ parameters:
 			path: engine/Shopware/Components/Theme/Service.php
 
 		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Service.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of method Shopware\\\\Components\\\\Theme\\\\Service\\:\\:getSnippetName\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Service.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/Service.php
 
@@ -32395,11 +32310,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @var for variable \\$operations has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ArticleList.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ArticleList.php
 
@@ -37583,22 +37493,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Voucher.php
 
 		-
-			message: "#^Parameter \\#1 \\$generatedCode of method Shopware_Controllers_Backend_Voucher\\:\\:replaceAllMatchingPatterns\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Voucher.php
-
-		-
-			message: "#^Parameter \\#1 \\$haystack of function substr_count expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Voucher.php
-
-		-
 			message: "#^Parameter \\#3 \\$codePattern of method Shopware_Controllers_Backend_Voucher\\:\\:generateVoucherCodes\\(\\) expects string, array\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Voucher.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Voucher.php
 
@@ -40657,11 +40552,6 @@ parameters:
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
-			message: "#^Parameter \\#3 \\$length of function substr expects int, int\\<0, max\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
 			message: "#^Parameter \\#3 \\$user of method sAdmin\\:\\:sManageRisks\\(\\) expects array, array\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
@@ -41098,11 +40988,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, int\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
 
@@ -41928,11 +41813,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$url of method sExport\\:\\:fixShopHost\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Parameter \\#3 \\$length of function substr expects int, int\\<0, max\\>\\|false given\\.$#"
-			count: 1
 			path: engine/Shopware/Core/sExport.php
 
 		-
@@ -47265,11 +47145,6 @@ parameters:
 			path: engine/Shopware/Models/Media/Media.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/Media.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Media/Media.php
@@ -51549,20 +51424,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
 
 		-
-			message:
-				"""
-					#^PHPDoc tag @var has invalid value \\(\\[optional\\] string fileRegex \\=\\> Regular expression for file types\\.
-					                \\}\\)\\: Unexpected token "\\[", expected type at offset 543$#
-				"""
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
-
-		-
-			message: "#^PHPDoc tag @var has invalid value \\(\\[optional\\] string value \\=\\> Only used for regular expressions, contains the regular expression\\)\\: Unexpected token \"\\[\", expected type at offset 437$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
-
-		-
 			message: "#^PHPDoc tag @var has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
@@ -52023,11 +51884,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Parameter \\#2 \\$cacheId of method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:invalidateWithBANRequest\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
@@ -52044,11 +51900,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:\\$cacheInvalidationBuffer type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between null and string\\|false will always evaluate to false\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
@@ -52695,16 +52546,6 @@ parameters:
 		-
 			message: "#^Offset 'sSepaUseBillingData' does not exist on array\\|null\\.$#"
 			count: 6
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function strlen expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|null given\\.$#"
-			count: 1
 			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
 
 		-
@@ -53891,11 +53732,6 @@ parameters:
 			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function strlen expects string, array\\|string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
 			message: "#^Cannot access offset 'path' on array\\(\\?'scheme' \\=\\> string, \\?'host' \\=\\> string, \\?'port' \\=\\> int, \\?'user' \\=\\> string, \\?'pass' \\=\\> string, \\?'path' \\=\\> string, \\?'query' \\=\\> string, \\?'fragment' \\=\\> string\\)\\|false\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
@@ -53916,57 +53752,7 @@ parameters:
 			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AddressTest\\:\\:ensureLogin\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AddressTest\\:\\:getBillingDemoData\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AddressTest\\:\\:getCustomerDemoData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AddressTest\\:\\:getShippingDemoData\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AddressTest\\:\\:testChangeOfBillingAddressReflectsInAccount\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AddressTest\\:\\:testDeletion\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AddressTest\\:\\:testDeletionOfDefaultAddressesShouldFail\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AddressTest\\:\\:testEdit\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AddressTest\\:\\:testEditPage\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AddressTest\\:\\:testList\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AddressTest\\:\\:testVerifyAddressDeletionOfDefaultAddressesShouldFail\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
 
@@ -55287,11 +55073,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$expectedJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJsonStringEqualsJsonString\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/MediaBundle/FilesystemTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function strlen expects string, string\\|false given\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/MediaBundle/FilesystemTest.php
 
@@ -56691,37 +56472,7 @@ parameters:
 			path: tests/Functional/Components/Api/AddressTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testCreateShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testDeleteShouldBeSuccessfulAfterOtherDefaultAddress\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/AddressTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testDeleteShouldBeSuccessfulAfterOtherDefaultAddress\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testDeleteWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testDeleteWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testGetListShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testGetOneShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/AddressTest.php
 
@@ -56731,42 +56482,12 @@ parameters:
 			path: tests/Functional/Components/Api/AddressTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testMakeNewAddressTheDefault\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/AddressTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testMakeNewAddressTheDefault\\(\\) has parameter \\$id with no typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/AddressTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testNewAddressShouldNotBeDefault\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testNewAddressShouldNotBeDefault\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testUpdateShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/AddressTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testUpdateShouldBeSuccessful\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testUpdateWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/AddressTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\AddressTest\\:\\:testUpdateWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/AddressTest.php
 
@@ -56783,21 +56504,6 @@ parameters:
 		-
 			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
 			count: 4
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Call to method getPropertyValues\\(\\) on an unknown class Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\Shopware\\\\Models\\\\Article\\\\Article\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Call to method getRepository\\(\\) on an unknown class Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\Shopware\\\\Components\\\\Model\\\\ModelManager\\.$#"
-			count: 3
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertTrue\\(\\) with false and 'There is an unknown…' will always evaluate to false\\.$#"
-			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
@@ -56981,51 +56687,6 @@ parameters:
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getEntityOffset\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getEntityOffset\\(\\) has parameter \\$entity with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getEntityOffset\\(\\) has parameter \\$fields with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getEntityOffset\\(\\) has parameter \\$limit with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getEntityOffset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getImagesForNewArticle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getImagesForNewArticle\\(\\) has parameter \\$limit with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getImagesForNewArticle\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getOptionsForImage\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getOptionsForImage\\(\\) has parameter \\$configuratorSet with no typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
@@ -57041,42 +56702,12 @@ parameters:
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getSimpleConfiguratorSet\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getSimpleConfiguratorSet\\(\\) has parameter \\$groupLimit with no typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getSimpleConfiguratorSet\\(\\) has parameter \\$optionLimit with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getSimpleTestData\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getSimpleVariantData\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getVariantOptionsOfSet\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:getVariantOptionsOfSet\\(\\) has parameter \\$configuratorSet with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:internalTestReplaceMode\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
 
@@ -57096,152 +56727,7 @@ parameters:
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testAddArticleMediaOverMediaId\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testArticleCreateWithNoStock\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testAssignCategoriesByPathShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testBase64ImageUpload\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testBatchDeleteShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testBatchModeShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCategoryAssignment\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCategoryReplacement\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCreateShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCreateTranslation\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCreateUseConfiguratorId\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCreateWithDuplicateProperties\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCreateWithImageShouldCreateThumbnailsWithRightProportions\\(\\) should return int but return statement is missing\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCreateWithInvalidDataShouldThrowValidationException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCreateWithMainImages\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCreateWithMultiplePropertiesAndNewGroup\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCreateWithNewUnitShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCreateWithVariantsAndNewConfiguratorSetShouldBeSuccessful\\(\\) should return int but return statement is missing\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testCreateWithoutAttributes\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testDeleteWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testDeleteWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testDeletingAnArticleAlsoDeletesDetailsAndAttributes\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testDeletingPricesWorksOnReplace\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testDownloads\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testFlipArticleMainVariantShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testGetListShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testGetListShouldUseCorrectDetailsAttribute\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testGetOneByNumberShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
 
@@ -57251,17 +56737,7 @@ parameters:
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testGetOneShouldBeAbleToReturnObject\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testGetOneShouldBeAbleToReturnObject\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testGetOneShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
 
@@ -57271,72 +56747,7 @@ parameters:
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testImageAttributes\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testImageConfiguration\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testImageReplacement\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testImageReplacementMerge\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testImageReplacementWithoutOption\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testInvalidProductInBatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testPriceReplacement\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testRelatedReplacement\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testSeoCategories\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testSimilarReplacement\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateByNumberShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateByNumberShouldBeSuccessful\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateLastStock\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
 
@@ -57346,57 +56757,7 @@ parameters:
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateToConfiguratorSetPosition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateToConfiguratorSetPositionsShouldBeGenerated\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateToConfiguratorSetPositionsShouldOverwritePositions\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateToConfiguratorSetPositionsShouldRemainUntouched\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateToConfiguratorSetType\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateToVariantArticle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateUseConfiguratorIds\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateUseConfiguratorIds\\(\\) has parameter \\$variantNumber with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateWithDuplicateProperties\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateWithImageShouldCreateThumbnails\\(\\) should return int but return statement is missing\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateWithInvalidDataShouldThrowValidationException\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
 
@@ -57406,42 +56767,12 @@ parameters:
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateWithMainImage\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateWithMainImage\\(\\) has parameter \\$articleId with no typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateWithMultiplePropertiesAndNewGroup\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateWithSingleMainImage\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testUpdateWithSingleMainImage\\(\\) has parameter \\$articleId with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ArticleTest\\:\\:testVariantImagesOnArticleCreate\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
 
@@ -57452,16 +56783,6 @@ parameters:
 
 		-
 			message: "#^Offset 'metaTitle' does not exist on array\\('name' \\=\\> 'Testarticle', 'description' \\=\\> 'testdescription', 'descriptionLong' \\=\\> 'Test descriptionLong', 'active' \\=\\> true, 'pseudoSales' \\=\\> 999, 'highlight' \\=\\> true, 'keywords' \\=\\> 'test, testarticle', 'tax' \\=\\> 19, \\.\\.\\.\\)\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$article contains unknown class Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\Shopware\\\\Models\\\\Article\\\\Article\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$entityManager contains unknown class Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\Shopware\\\\Components\\\\Model\\\\ModelManager\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
 
@@ -57523,16 +56844,6 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\$string of function finfo_buffer expects string, string\\|false given\\.$#"
 			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$message of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertEquals\\(\\) expects string, int given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$strict of function in_array expects bool, string given\\.$#"
-			count: 2
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
@@ -57606,47 +56917,7 @@ parameters:
 			path: tests/Functional/Components/Api/CategoryTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testCreateCategoryWithTranslation\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testCreateCategoryWithTranslationWithUpdate\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testCreateShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CategoryTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testDeleteWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testDeleteWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testGetListShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testGetOneShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/CategoryTest.php
 
@@ -57662,21 +56933,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testUpdateShouldBeSuccessful\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testUpdateWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testUpdateWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CategoryTest\\:\\:testfindCategoryByPath\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/CategoryTest.php
 
@@ -57766,47 +57022,7 @@ parameters:
 			path: tests/Functional/Components/Api/CustomerGroupTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerGroupTest\\:\\:testCreateShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerGroupTest\\:\\:testCreateShouldShouldPopulateDefaultValues\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerGroupTest\\:\\:testCreateWithInvalidDataShouldThrowValidationException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerGroupTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerGroupTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerGroupTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerGroupTest\\:\\:testDeleteWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerGroupTest\\:\\:testDeleteWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerGroupTest\\:\\:testGetListShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerGroupTest\\:\\:testGetOneShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/CustomerGroupTest.php
 
@@ -57822,16 +57038,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerGroupTest\\:\\:testUpdateShouldBeSuccessful\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerGroupTest\\:\\:testUpdateWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerGroupTest\\:\\:testUpdateWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/CustomerGroupTest.php
 
@@ -57951,22 +57157,7 @@ parameters:
 			path: tests/Functional/Components/Api/CustomerTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerTest\\:\\:testDeleteWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerTest\\:\\:testDeleteWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/CustomerTest.php
 
@@ -58241,22 +57432,7 @@ parameters:
 			path: tests/Functional/Components/Api/ManufacturerTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ManufacturerTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ManufacturerTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ManufacturerTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ManufacturerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ManufacturerTest\\:\\:testDeleteWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ManufacturerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\ManufacturerTest\\:\\:testDeleteWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ManufacturerTest.php
 
@@ -58436,22 +57612,7 @@ parameters:
 			path: tests/Functional/Components/Api/PropertyGroupTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\PropertyGroupTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/PropertyGroupTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\PropertyGroupTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/PropertyGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\PropertyGroupTest\\:\\:testDeleteWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/PropertyGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\PropertyGroupTest\\:\\:testDeleteWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/PropertyGroupTest.php
 
@@ -59046,32 +58207,12 @@ parameters:
 			path: tests/Functional/Components/Api/UserTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\UserTest\\:\\:testCreateWithUserRoleId\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/UserTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\UserTest\\:\\:testCreateWithUserRoleName\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/UserTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\UserTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/UserTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\UserTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has parameter \\$id with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/UserTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\UserTest\\:\\:testDeleteWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/UserTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\UserTest\\:\\:testDeleteWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/UserTest.php
 
@@ -59357,21 +58498,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\VariantTest\\:\\:testCreateWithExistingOrderNumberShouldThrowCustomValidationException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/VariantTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\VariantTest\\:\\:testDeleteShouldBeSuccessful\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/VariantTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\VariantTest\\:\\:testDeleteWithInvalidIdShouldThrowNotFoundException\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/VariantTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\VariantTest\\:\\:testDeleteWithMissingIdShouldThrowParameterMissingException\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/VariantTest.php
 
@@ -61496,21 +60622,6 @@ parameters:
 			path: tests/Functional/Controllers/Backend/ApplicationTest.php
 
 		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleTest\\:\\:testSaveArticleOverwriteProtection\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ArticleTest\\:\\:testinterpretNumberSyntax\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ArticleTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CanceledOrderTest\\:\\:testCanceledOrderSummary\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/CanceledOrderTest.php
@@ -62636,11 +61747,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoucherTest\\:\\:testValidateVoucherCode\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function strlen expects string, array\\|string\\|null given\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/VoucherTest.php
 
@@ -64350,31 +63456,6 @@ parameters:
 			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/TopSellerTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Modules\\\\ArticleTest\\:\\:getDemoCategory\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Modules/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Modules\\\\ArticleTest\\:\\:insertDemoData\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Modules/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Modules\\\\ArticleTest\\:\\:removeDemoData\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Modules/ArticleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Modules\\\\ArticleTest\\:\\:testTopSellerSelection\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Modules/ArticleTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Modules\\\\ArticleTest\\:\\:\\$category has no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Modules/ArticleTest.php
-
-		-
 			message: "#^Offset 'sSepaBankName' does not exist on array\\|null\\.$#"
 			count: 2
 			path: tests/Functional/Plugins/Core/PaymentMethods/Components/SepaPaymentMethodTest.php
@@ -64633,11 +63714,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: tests/Functional/Regressions/Ticket4609Test.php
-
-		-
-			message: "#^Parameter \\#1 \\$haystack of function substr_count expects string, array\\|string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Regressions/Ticket4788Test.php
 
 		-
 			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, array\\|string\\|null given\\.$#"
@@ -65865,11 +64941,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Element/Article.php
 
 		-
-			message: "#^Parameter \\#1 \\$value of static method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:floatValue\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Element/ArticleBox.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Element\\\\ArticleBox\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Element/ArticleBox.php
@@ -66165,16 +65236,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Element/CompareColumn.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Element\\\\FilterGroup\\:\\:expandProperties\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Element/FilterGroup.php
-
-		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, string\\|null given\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Element/FilterGroup.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Element\\\\FilterGroup\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Element/FilterGroup.php
@@ -66246,11 +65307,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Element\\\\MultipleElement\\:\\:__call\\(\\) has parameter \\$arguments with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Element/MultipleElement.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Element\\\\MultipleElement\\:\\:__call\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Element/MultipleElement.php
 
@@ -67221,11 +66277,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Account\\:\\:verifyPage\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/Account.php
-
-		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, string\\|null given\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/Account.php
 

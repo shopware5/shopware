@@ -24,7 +24,10 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
-class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
+use Enlight_Components_Test_Controller_TestCase;
+use PDO;
+
+class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Temporary user data
@@ -241,7 +244,7 @@ class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals($this->View()->total, 1);
 
         // Check that returning data is an array
-        static::assertTrue(\is_array($this->View()->data));
+        static::assertIsArray($this->View()->data);
 
         // Check that data matches the requested one
         static::assertEquals($user['id'], $this->View()->data['id']);
@@ -299,7 +302,7 @@ class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
             ->setParameter('name', $randomRoleName)
             ->setMaxResults(1)
             ->execute()
-            ->fetch(\PDO::FETCH_ASSOC);
+            ->fetch(PDO::FETCH_ASSOC);
 
         static::assertGreaterThan(0, $randomRole['id']);
 
@@ -333,7 +336,7 @@ class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
             ->setMaxResults(1)
             ->orderBy('RAND(id)')
             ->execute()
-            ->fetch(\PDO::FETCH_ASSOC);
+            ->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -378,7 +381,7 @@ class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
             ->setParameter('username', $username)
             ->setMaxResults(1)
             ->execute()
-            ->fetch(\PDO::FETCH_ASSOC);
+            ->fetch(PDO::FETCH_ASSOC);
     }
 
     /**

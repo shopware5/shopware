@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\CustomerSearchBundleDBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\CustomerSearchBundle\BaseCustomer;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
@@ -129,7 +130,7 @@ class CustomerNumberSearch implements CustomerNumberSearchInterface
 
         $query->addSelect('customer.id, customer.customernumber, customer.email');
 
-        return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 
     private function fetchTotal(QueryBuilder $query)
@@ -139,6 +140,6 @@ class CustomerNumberSearch implements CustomerNumberSearchInterface
         $query->setFirstResult(0);
         $query->setMaxResults(1);
 
-        return $query->execute()->fetch(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetch(PDO::FETCH_COLUMN);
     }
 }

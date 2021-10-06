@@ -36,6 +36,7 @@ use Shopware\Models\Shop\Locale;
 use Shopware\Models\User\Repository as UserRepository;
 use Shopware\Models\User\Role;
 use Shopware\Models\User\User as UserModel;
+use Zend_Acl_Resource_Interface;
 
 /**
  * User API Resource
@@ -247,8 +248,8 @@ class User extends Resource
     }
 
     /**
-     * @param string                                   $privilege
-     * @param string|\Zend_Acl_Resource_Interface|null $resource
+     * @param string                                  $privilege
+     * @param string|Zend_Acl_Resource_Interface|null $resource
      *
      * @throws ApiException\PrivilegeException
      */

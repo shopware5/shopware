@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\ContentTypeBundle;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\ContentTypeBundle\Field\DummyField;
 use Shopware\Bundle\ContentTypeBundle\Field\TextField;
@@ -89,14 +90,14 @@ class XmlReaderTest extends TestCase
 
     public function testReadInvalidFile(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->reader->read(__DIR__ . '/fixtures/invalid.xml');
     }
 
     public function testReadingInvalidFrontendConfiguration(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Content-Type with enabled showInFrontend requires a viewTitleFieldName, viewDescriptionFieldName, viewImageFieldName');
 
         $this->reader->read(__DIR__ . '/fixtures/invalid_frontend.xml');

@@ -24,6 +24,7 @@
 
 namespace Shopware\Recovery\Install\Service;
 
+use RuntimeException;
 use Shopware\Recovery\Common\HttpClient\Client;
 use Shopware\Recovery\Common\HttpClient\ClientException;
 use Shopware\Recovery\Install\Struct\Shop;
@@ -59,7 +60,7 @@ class WebserverCheck
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return bool
      */
@@ -70,15 +71,15 @@ class WebserverCheck
         try {
             $response = $this->httpClient->get($pingUrl);
         } catch (ClientException $e) {
-            throw new \RuntimeException('Could not check web server', $e->getCode(), $e);
+            throw new RuntimeException('Could not check web server', $e->getCode(), $e);
         }
 
         if ($response->getCode() != 200) {
-            throw new \RuntimeException('Wrong http code ' . $response->getCode());
+            throw new RuntimeException('Wrong http code ' . $response->getCode());
         }
 
         if ($response->getBody() != 'pong') {
-            throw new \RuntimeException('Content  ' . $response->getBody());
+            throw new RuntimeException('Content  ' . $response->getBody());
         }
 
         return true;

@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\EsBackendBundle;
 
+use DateTime;
 use Elasticsearch\Client;
+use IteratorAggregate;
 use Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
@@ -42,7 +44,7 @@ class EsBackendIndexer
     private $client;
 
     /**
-     * @var EsAwareRepository[]|\IteratorAggregate
+     * @var EsAwareRepository[]|IteratorAggregate
      */
     private $repositories;
 
@@ -58,7 +60,7 @@ class EsBackendIndexer
 
     public function __construct(
         Client $client,
-        \IteratorAggregate $repositories,
+        IteratorAggregate $repositories,
         EvaluationHelperInterface $evaluation,
         IndexFactoryInterface $indexFactory
     ) {
@@ -101,7 +103,7 @@ class EsBackendIndexer
         foreach ($data as $row) {
             $documents[] = ['index' => ['_id' => $row['id']]];
             foreach ($row as $key => &$value) {
-                if ($value instanceof \DateTime) {
+                if ($value instanceof DateTime) {
                     $value = $value->format('Y-m-d');
                 }
 

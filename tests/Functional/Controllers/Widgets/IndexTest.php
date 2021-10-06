@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Functional\Controllers\Widgets;
 
-class IndexTest extends \Enlight_Components_Test_Controller_TestCase
+use Enlight_Components_Test_Controller_TestCase;
+
+class IndexTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @ticket SW-8127

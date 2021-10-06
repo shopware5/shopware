@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Dispatch;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -80,7 +81,7 @@ class Holiday extends ModelEntity
     /**
      * Next date on which this is due.
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="date", type="date", nullable=false)
      */
@@ -135,7 +136,7 @@ class Holiday extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $date
+     * @param DateTimeInterface $date
      *
      * @return Holiday
      */
@@ -147,7 +148,7 @@ class Holiday extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getDate()
     {

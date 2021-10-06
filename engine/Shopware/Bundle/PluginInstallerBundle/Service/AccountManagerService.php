@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use Exception;
 use GuzzleHttp\ClientInterface;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
@@ -32,6 +33,7 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
+use Shopware_Components_Snippet_Manager;
 
 class AccountManagerService
 {
@@ -46,7 +48,7 @@ class AccountManagerService
     private $hydrator;
 
     /**
-     * @var \Shopware_Components_Snippet_Manager
+     * @var Shopware_Components_Snippet_Manager
      */
     private $snippetManager;
 
@@ -61,7 +63,7 @@ class AccountManagerService
     public function __construct(
         StoreClient $storeClient,
         StructHydrator $structHydrator,
-        \Shopware_Components_Snippet_Manager $snippetManager,
+        Shopware_Components_Snippet_Manager $snippetManager,
         ModelManager $entityManager
     ) {
         $this->storeClient = $storeClient;
@@ -85,7 +87,7 @@ class AccountManagerService
     /**
      * Pings SBP to see if a connection is available and the service is up
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
@@ -93,12 +95,12 @@ class AccountManagerService
     {
         try {
             return $this->storeClient->doPing();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $snippet = $this->snippetManager
                 ->getNamespace('backend/plugin_manager/exceptions')
                 ->get('timeout', 'The connection with SBP timed out');
 
-            throw new \Exception($snippet, $e->getCode(), $e);
+            throw new Exception($snippet, $e->getCode(), $e);
         }
     }
 
@@ -110,7 +112,7 @@ class AccountManagerService
      * @param string $password
      * @param int    $localeId
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -133,7 +135,7 @@ class AccountManagerService
     /**
      * Gets a list of locales supported by the SBP
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return LocaleStruct[] array of locale details
      */
@@ -151,7 +153,7 @@ class AccountManagerService
     /**
      * Get the list of shops (and details) associated to the given user
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array Array of shop details
      */
@@ -172,7 +174,7 @@ class AccountManagerService
      *
      * @param string $domain
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array Filename and domain hash of the domain validation file
      */
@@ -193,7 +195,7 @@ class AccountManagerService
      * @param string $domain
      * @param string $shopwareVersion Current Shopware version
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array Result of the validation operation (empty if successful)
      */
@@ -218,7 +220,7 @@ class AccountManagerService
      * @param string $shopwareId
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return AccessTokenStruct Token to access the API
      */
@@ -232,7 +234,7 @@ class AccountManagerService
     }
 
     /**
-     * @return \Exception
+     * @return Exception
      */
     private function translateExceptionMessage(StoreException $exception)
     {
@@ -247,6 +249,6 @@ class AccountManagerService
 
         $snippet .= '<br><br>Error code: ' . $exception->getSbpCode();
 
-        return new \Exception($snippet, $exception->getCode(), $exception);
+        return new Exception($snippet, $exception->getCode(), $exception);
     }
 }

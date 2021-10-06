@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\PluginInstallerBundle\Struct\CategoryStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
 
@@ -198,6 +199,6 @@ class PluginCategoryService
             ->where('categories.locale = :locale')
             ->setParameter(':locale', $locale)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP);
+            ->fetchAll(PDO::FETCH_GROUP);
     }
 }

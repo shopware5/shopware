@@ -24,30 +24,34 @@
 
 namespace Shopware\Tests\Unit\Components\Event;
 
+use Enlight_Event_EventArgs;
+use Enlight_Event_Handler_Default;
+use Enlight_Event_Subscriber;
+use Enlight_Event_Subscriber_Config;
 use PHPUnit\Framework\TestCase;
 
 class SubscriberConfigTest extends TestCase
 {
     /**
-     * @var \Enlight_Event_Subscriber_Config
+     * @var Enlight_Event_Subscriber_Config
      */
     protected $eventManager;
 
     public function setUp(): void
     {
-        $this->eventManager = new \Enlight_Event_Subscriber_Config('test');
+        $this->eventManager = new Enlight_Event_Subscriber_Config('test');
     }
 
     public function testCanCreateInstance()
     {
-        static::assertInstanceOf(\Enlight_Event_Subscriber_Config::class, $this->eventManager);
-        static::assertInstanceOf(\Enlight_Event_Subscriber::class, $this->eventManager);
+        static::assertInstanceOf(Enlight_Event_Subscriber_Config::class, $this->eventManager);
+        static::assertInstanceOf(Enlight_Event_Subscriber::class, $this->eventManager);
     }
 
     public function testAddSubscriber()
     {
         // Add to subscribers
-        $handler0 = new \Enlight_Event_Handler_Default(
+        $handler0 = new Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'foo';
@@ -55,7 +59,7 @@ class SubscriberConfigTest extends TestCase
         );
         $this->eventManager->registerListener($handler0);
 
-        $handler1 = new \Enlight_Event_Handler_Default(
+        $handler1 = new Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'bar';
@@ -66,14 +70,14 @@ class SubscriberConfigTest extends TestCase
         $result = $this->eventManager->getListeners();
 
         static::assertCount(2, $result);
-        static::assertEquals('foo', $result[0]->execute(new \Enlight_Event_EventArgs()));
-        static::assertEquals('bar', $result[1]->execute(new \Enlight_Event_EventArgs()));
+        static::assertEquals('foo', $result[0]->execute(new Enlight_Event_EventArgs()));
+        static::assertEquals('bar', $result[1]->execute(new Enlight_Event_EventArgs()));
     }
 
     public function testRemoveSubscriber()
     {
         // Add to subscribers
-        $handler0 = new \Enlight_Event_Handler_Default(
+        $handler0 = new Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'foo';
@@ -81,7 +85,7 @@ class SubscriberConfigTest extends TestCase
         );
         $this->eventManager->registerListener($handler0);
 
-        $handler1 = new \Enlight_Event_Handler_Default(
+        $handler1 = new Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'bar';
@@ -96,6 +100,6 @@ class SubscriberConfigTest extends TestCase
 
         // Only the second one should be left
         static::assertCount(1, $result);
-        static::assertEquals('bar', $result[0]->execute(new \Enlight_Event_EventArgs()));
+        static::assertEquals('bar', $result[0]->execute(new Enlight_Event_EventArgs()));
     }
 }

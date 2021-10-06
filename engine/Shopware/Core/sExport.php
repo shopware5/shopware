@@ -721,7 +721,7 @@ class sExport implements Enlight_Hook
                     }
                     $elements[$i] = str_replace($fieldmark . $fieldmark, $fieldmark, $elements[$i]);
                 }
-                $index = substr($elements[$i], 0, strpos($elements[$i], ':'));
+                $index = substr($elements[$i], 0, (int) strpos($elements[$i], ':'));
                 $elements[$i] = substr($elements[$i], strpos($elements[$i], ':') + 1);
                 $tmp_elements[$index] = $elements[$i];
             }

@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SitemapBundle\Service;
 
+use DateTime;
 use League\Flysystem\FilesystemInterface;
 use Shopware\Bundle\SitemapBundle\SitemapListerInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Sitemap;
@@ -68,7 +69,7 @@ class SitemapLister implements SitemapListerInterface
             $sitemaps[] = new Sitemap(
                 $path,
                 0,
-                new \DateTime('@' . $file['timestamp'])
+                new DateTime('@' . $file['timestamp'])
             );
         }
 

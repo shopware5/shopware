@@ -26,7 +26,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\AccountBundle\Service;
 
+use DateTimeInterface;
+
 interface OptInLoginServiceInterface
 {
-    public function refreshOptInHashForUser(int $userId, int $optInId, \DateTimeInterface $lastSentDate): string;
+    public function refreshOptInHashForUser(int $userId, int $optInId, DateTimeInterface $lastSentDate): string;
 }

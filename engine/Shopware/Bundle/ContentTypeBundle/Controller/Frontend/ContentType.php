@@ -24,12 +24,14 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\Controller\Frontend;
 
+use Enlight_Controller_Action;
+use Enlight_Controller_Exception;
 use Shopware\Bundle\ContentTypeBundle\Field\TemplateProvidingFieldInterface;
 use Shopware\Bundle\ContentTypeBundle\Services\RepositoryInterface;
 use Shopware\Bundle\ContentTypeBundle\Structs\Criteria;
 use Shopware\Bundle\ContentTypeBundle\Structs\Type;
 
-class ContentType extends \Enlight_Controller_Action
+class ContentType extends Enlight_Controller_Action
 {
     private const LIMIT = 10;
 
@@ -80,7 +82,7 @@ class ContentType extends \Enlight_Controller_Action
         $result = $this->repository->findAll($criteria);
 
         if (\count($result->items) === 0) {
-            throw new \Enlight_Controller_Exception(sprintf('Cannot find element with id %d of type \'%s\'', $id, $this->type->getInternalName()));
+            throw new Enlight_Controller_Exception(sprintf('Cannot find element with id %d of type \'%s\'', $id, $this->type->getInternalName()));
         }
 
         $item = current($result->items);

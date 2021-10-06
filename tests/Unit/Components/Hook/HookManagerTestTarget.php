@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Unit\Components\Hook;
 
-class HookManagerTestTarget implements \Enlight_Hook
+use Enlight_Hook;
+
+class HookManagerTestTarget implements Enlight_Hook
 {
     public const TEST_METHOD_NAME = 'testMethod';
     public const RECURSIVE_TEST_METHOD_NAME = 'recursiveTestMethod';

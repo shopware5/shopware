@@ -24,6 +24,8 @@
 
 namespace Shopware\Recovery\Update;
 
+use DirectoryIterator;
+
 class DummyPluginFinder
 {
     /**
@@ -49,7 +51,7 @@ class DummyPluginFinder
         $plugins = [];
 
         foreach ($types as $type) {
-            foreach (new \DirectoryIterator($pluginPath . '/' . $type) as $dir) {
+            foreach (new DirectoryIterator($pluginPath . '/' . $type) as $dir) {
                 if (!$dir->isDir() || $dir->isDot()) {
                     continue;
                 }

@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\BenchmarkBundle\Service;
 
 use DateInterval;
+use Exception;
 use Shopware\Bundle\BenchmarkBundle\Exception\TransmissionNotNecessaryException;
 use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkDataResult;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
@@ -52,7 +53,7 @@ class BenchmarkStatisticsService
     private $biService;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(
         BenchmarkRepository $benchmarkRepository,

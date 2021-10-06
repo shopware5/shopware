@@ -31,6 +31,7 @@ use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Shop\Shop;
+use Shopware_Components_Config;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
@@ -167,7 +168,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareI
         foreach ($shops as $shop) {
             $context = Context::createFromShop(
                 $shop,
-                $this->container->get(\Shopware_Components_Config::class)
+                $this->container->get(Shopware_Components_Config::class)
             );
 
             // Gathering URLs

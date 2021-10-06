@@ -28,6 +28,7 @@ use DOMDocument;
 use DOMElement;
 use DOMNode;
 use DOMNodeList;
+use Exception;
 use InvalidArgumentException;
 use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreValueParserFactory;
 use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreValueParserInterface;
@@ -49,8 +50,8 @@ abstract class XmlReaderBase implements XmlReaderInterface
     {
         try {
             $dom = XmlUtils::loadFile($xmlFile, $this->xsdFile);
-        } catch (\Exception $e) {
-            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s". Message: %s', $xmlFile, $e->getMessage()), $e->getCode(), $e);
+        } catch (Exception $e) {
+            throw new InvalidArgumentException(sprintf('Unable to parse file "%s". Message: %s', $xmlFile, $e->getMessage()), $e->getCode(), $e);
         }
 
         return $this->parseFile($dom);

@@ -26,6 +26,8 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models\Order;
 
+use DateTime;
+use Enlight_Components_Test_TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Dispatch\Dispatch;
 use Shopware\Models\Order\History;
@@ -36,7 +38,7 @@ use Shopware\Models\Partner\Partner;
 use Shopware\Models\Payment\Payment;
 use Shopware\Models\Shop\Shop;
 
-class OrderTest extends \Enlight_Components_Test_TestCase
+class OrderTest extends Enlight_Components_Test_TestCase
 {
     protected ModelManager $em;
 
@@ -113,7 +115,7 @@ class OrderTest extends \Enlight_Components_Test_TestCase
         $partner = new Partner();
         $partner->setCompany('Dummy');
         $partner->setIdCode('Dummy');
-        $partner->setDate(new \DateTime());
+        $partner->setDate(new DateTime());
         $partner->setContact('Dummy');
         $partner->setStreet('Dummy');
         $partner->setZipCode('Dummy');

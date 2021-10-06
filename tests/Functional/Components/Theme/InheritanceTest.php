@@ -67,7 +67,7 @@ class InheritanceTest extends Base
                 static::equalTo($custom),
                 static::equalTo($custom->getParent())
             ))
-            ->will(static::returnCallback([$this, 'getTheme']));
+            ->willReturnCallback([$this, 'getTheme']);
 
         $inheritance = new \Shopware\Components\Theme\Inheritance(
             Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class),

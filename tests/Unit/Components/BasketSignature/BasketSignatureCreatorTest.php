@@ -25,6 +25,7 @@
 namespace Shopware\tests\Unit\Components\BasketSignature;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Shopware\Components\BasketSignature\BasketSignatureGenerator;
 
 class BasketSignatureCreatorTest extends TestCase
@@ -256,7 +257,7 @@ class BasketSignatureCreatorTest extends TestCase
         $signatureCreator = new BasketSignatureGenerator();
 
         $generator = $this->createPartialMock(BasketSignatureGenerator::class, []);
-        $class = new \ReflectionClass($generator);
+        $class = new ReflectionClass($generator);
         $method = $class->getMethod('sortItems');
         $method->setAccessible(true);
 
@@ -291,7 +292,7 @@ class BasketSignatureCreatorTest extends TestCase
     public function testSortRandomItems()
     {
         $generator = $this->createPartialMock(BasketSignatureGenerator::class, []);
-        $class = new \ReflectionClass($generator);
+        $class = new ReflectionClass($generator);
         $method = $class->getMethod('sortItems');
         $method->setAccessible(true);
 

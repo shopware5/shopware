@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Tracking;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -63,7 +65,7 @@ class Banner extends ModelEntity
      * Date when the banner has been shown or has been clicked.
      * Part one of the composite primary key
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="display_date", type="date", nullable=false)
      */
@@ -97,13 +99,13 @@ class Banner extends ModelEntity
     private $views;
 
     /**
-     * @param int                     $bannerId
-     * @param \DateTimeInterface|null $date
+     * @param int                    $bannerId
+     * @param DateTimeInterface|null $date
      */
     public function __construct($bannerId, $date = null)
     {
         if ($date === null) {
-            $date = new \DateTime();
+            $date = new DateTime();
         }
         $this->setDisplayDate($date);
         $this->setBannerId($bannerId);
@@ -112,7 +114,7 @@ class Banner extends ModelEntity
     /**
      * Returns the date
      *
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getDisplayDate()
     {
@@ -122,7 +124,7 @@ class Banner extends ModelEntity
     /**
      * Set the Date on when the event happened
      *
-     * @param \DateTimeInterface $displayDate
+     * @param DateTimeInterface $displayDate
      *
      * @return Banner
      */

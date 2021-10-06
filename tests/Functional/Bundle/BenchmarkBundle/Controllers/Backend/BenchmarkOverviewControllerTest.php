@@ -24,18 +24,22 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend;
 
+use DateTime;
+use Enlight_Controller_Response_ResponseHttp;
+use Enlight_Event_EventArgs;
 use Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend\Mocks\AuthMock;
+use Shopware_Controllers_Backend_BenchmarkOverview;
 
 class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 {
-    public const CONTROLLER_NAME = \Shopware_Controllers_Backend_BenchmarkOverview::class;
+    public const CONTROLLER_NAME = Shopware_Controllers_Backend_BenchmarkOverview::class;
 
     /**
      * @group BenchmarkBundle
      */
     public function testIndexActionShouldRedirectLocalStart()
     {
-        /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
+        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         Shopware()->Db()->exec('DELETE FROM s_benchmark_config;');
@@ -51,7 +55,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
      */
     public function testIndexActionShouldRedirectCachedFreshStatistics()
     {
-        /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
+        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
@@ -71,7 +75,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
      */
     public function testIndexActionShouldRedirectWaitingFreshStatisticsNoCachedTemplate()
     {
-        /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
+        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
@@ -90,7 +94,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
      */
     public function testIndexActionShouldRedirectWaitingInactive()
     {
-        /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
+        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
@@ -109,7 +113,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
      */
     public function testIndexActionShouldRedirectWaitingActiveOutdated()
     {
-        /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
+        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
@@ -129,7 +133,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
      */
     public function testIndexActionShouldRedirectCachedActive()
     {
-        /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
+        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
@@ -147,10 +151,10 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
     public function testRenderActionShouldRenderCachedTemplate()
     {
-        /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
+        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
-        $now = new \DateTime('now');
+        $now = new DateTime('now');
 
         $this->installDemoData('benchmark_config');
         $this->setSetting('cached_template', '<h2>Placeholder</h2>');
@@ -161,14 +165,14 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     }
 
     /**
-     * @return \Shopware_Controllers_Backend_BenchmarkOverview
+     * @return Shopware_Controllers_Backend_BenchmarkOverview
      */
     protected function getController()
     {
         $controller = parent::getController();
 
         Shopware()->Container()->set('auth', new AuthMock());
-        Shopware()->Plugins()->Backend()->Auth()->onInitResourceAuth(new \Enlight_Event_EventArgs());
+        Shopware()->Plugins()->Backend()->Auth()->onInitResourceAuth(new Enlight_Event_EventArgs());
 
         return $controller;
     }
@@ -176,7 +180,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @return string
      */
-    private function getRedirect(\Enlight_Controller_Response_ResponseHttp $response)
+    private function getRedirect(Enlight_Controller_Response_ResponseHttp $response)
     {
         return $response->getHeader('Location');
     }

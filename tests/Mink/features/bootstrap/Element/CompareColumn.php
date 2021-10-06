@@ -108,7 +108,7 @@ class CompareColumn extends MultipleElement implements \Shopware\Tests\Mink\Help
 
         $ranking = $elements['stars']->getAttribute('content');
 
-        return ($ranking) ? $ranking : '0';
+        return $ranking ? $ranking : '0';
     }
 
     /**

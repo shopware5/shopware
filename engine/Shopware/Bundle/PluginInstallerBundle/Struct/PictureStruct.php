@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-class PictureStruct implements \JsonSerializable
+use JsonSerializable;
+
+class PictureStruct implements JsonSerializable
 {
     /**
      * @var int

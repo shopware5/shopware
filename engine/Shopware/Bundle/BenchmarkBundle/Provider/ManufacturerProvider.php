@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -95,7 +96,7 @@ class ManufacturerProvider implements BenchmarkProviderInterface
             ->where('productCat.categoryID IN (:categoryIds)')
             ->setParameter(':categoryIds', $categoryIds, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -114,6 +115,6 @@ class ManufacturerProvider implements BenchmarkProviderInterface
             ->setParameter(':categoryId', $categoryId)
             ->setParameter(':categoryIdPath', '%|' . $categoryId . '|%')
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 }

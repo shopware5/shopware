@@ -25,6 +25,8 @@
 namespace Shopware\Components\Log\Parser;
 
 use Bcremer\LineReader\LineReader;
+use LimitIterator;
+use SplFileObject;
 
 class LogfileParser
 {
@@ -44,7 +46,7 @@ class LogfileParser
             $lineGenerator = LineReader::readLines($file);
         }
 
-        $reader = new \LimitIterator($lineGenerator, $offset, $limit);
+        $reader = new LimitIterator($lineGenerator, $offset, $limit);
 
         $result = [];
         foreach ($reader as $line) {
@@ -61,7 +63,7 @@ class LogfileParser
      */
     public function countLogFile($filePath)
     {
-        $file = new \SplFileObject($filePath, 'r');
+        $file = new SplFileObject($filePath, 'r');
         $file->seek(PHP_INT_MAX);
 
         return $file->key();

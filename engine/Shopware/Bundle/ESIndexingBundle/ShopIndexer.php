@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle;
 
 use Elasticsearch\Client;
+use RuntimeException;
 use Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
@@ -108,7 +109,7 @@ class ShopIndexer implements ShopIndexerInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function index(Shop $shop, ProgressHelperInterface $helper, array $indexNames = null)
     {
@@ -149,13 +150,13 @@ class ShopIndexer implements ShopIndexerInterface
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function createIndex(IndexConfiguration $configuration, ShopIndex $index)
     {
         $exist = $this->client->indices()->exists(['index' => $configuration->getName()]);
         if ($exist) {
-            throw new \RuntimeException(sprintf('ElasticSearch index %s already exist.', $configuration->getName()));
+            throw new RuntimeException(sprintf('ElasticSearch index %s already exist.', $configuration->getName()));
         }
 
         $mergedSettings = [

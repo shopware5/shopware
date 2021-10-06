@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\EmotionBundle\Struct;
 
-class ElementData implements \JsonSerializable
+use JsonSerializable;
+
+class ElementData implements JsonSerializable
 {
     /**
      * Internal storage which contains all struct data.

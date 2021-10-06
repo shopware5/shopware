@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
+use Enlight_Components_Snippet_Namespace;
+use PDO;
 use Shopware\Bundle\SearchBundle\Condition\HeightCondition;
 use Shopware\Bundle\SearchBundle\Condition\LengthCondition;
 use Shopware\Bundle\SearchBundle\Condition\WeightCondition;
@@ -40,6 +42,7 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Snippet_Manager;
 
 class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
 {
@@ -49,7 +52,7 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
     private $queryBuilderFactory;
 
     /**
-     * @var \Enlight_Components_Snippet_Namespace
+     * @var Enlight_Components_Snippet_Namespace
      */
     private $snippetNamespace;
 
@@ -60,7 +63,7 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
 
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
-        \Shopware_Components_Snippet_Manager $snippetManager,
+        Shopware_Components_Snippet_Manager $snippetManager,
         VariantHelperInterface $variantHelper
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
@@ -97,7 +100,7 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
 
         $query->setMaxResults(1);
 
-        $stats = $query->execute()->fetch(\PDO::FETCH_ASSOC);
+        $stats = $query->execute()->fetch(PDO::FETCH_ASSOC);
 
         $facets = ['width', 'height', 'length', 'weight'];
         $results = [];

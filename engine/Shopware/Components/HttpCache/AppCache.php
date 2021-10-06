@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\HttpCache;
 
+use Exception;
 use Shopware\Bundle\CookieBundle;
 use Shopware\Bundle\CookieBundle\CookieGroupCollection;
 use Shopware\Components\Privacy\CookieRemoveSubscriber;
@@ -202,7 +203,7 @@ class AppCache extends HttpCache
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function store(Request $request, Response $response)
     {

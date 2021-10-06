@@ -27,6 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware_Components_Config;
 
 class MediaService implements Service\MediaServiceInterface
 {
@@ -41,7 +42,7 @@ class MediaService implements Service\MediaServiceInterface
     private $variantMediaGateway;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $shopwareConfig;
 
@@ -62,7 +63,7 @@ class MediaService implements Service\MediaServiceInterface
         Gateway\MediaGatewayInterface $mediaGateway,
         Gateway\ProductMediaGatewayInterface $productMedia,
         Gateway\VariantMediaGatewayInterface $variantMedia,
-        \Shopware_Components_Config $shopwareConfig,
+        Shopware_Components_Config $shopwareConfig,
         Service\VariantCoverServiceInterface $variantCoverService
     ) {
         $this->productMediaGateway = $productMedia;

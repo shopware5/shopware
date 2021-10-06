@@ -24,6 +24,8 @@
 
 namespace Shopware\Recovery\Update\Steps;
 
+use PDO;
+use PDOException;
 use Shopware\Recovery\Common\DumpIterator;
 
 class SnippetStep
@@ -32,7 +34,7 @@ class SnippetStep
 
     private $dumper;
 
-    public function __construct(\PDO $connection, DumpIterator $dumper)
+    public function __construct(PDO $connection, DumpIterator $dumper)
     {
         $this->conn = $connection;
         $this->dumper = $dumper;
@@ -70,7 +72,7 @@ class SnippetStep
                 try {
                     $conn->exec(implode(";\n", $sql));
                     $sql = [];
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     return new ErrorResult($e->getMessage(), $e, ['query' => $sql]);
                 }
             }
@@ -84,7 +86,7 @@ class SnippetStep
         if (!empty($sql)) {
             try {
                 $conn->exec(implode(";\n", $sql));
-            } catch (\PDOException $e) {
+            } catch (PDOException $e) {
                 return new ErrorResult('second' . $e->getMessage(), $e, ['query' => $sql]);
             }
         }

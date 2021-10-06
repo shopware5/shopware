@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
+use DateTimeInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Esd;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
@@ -73,7 +74,7 @@ class ListProduct extends BaseProduct
      * Defines the date when the product was released / will be
      * released and can be ordered.
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     protected $releaseDate;
 
@@ -110,7 +111,7 @@ class ListProduct extends BaseProduct
      * Defines the date which the product was created in the
      * database.
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     protected $createdAt;
 
@@ -118,7 +119,7 @@ class ListProduct extends BaseProduct
      * Defines the date which the product was last updated in
      * the database.
      *
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     protected $updatedAt;
 
@@ -712,7 +713,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTimeInterface|null $releaseDate
+     * @param DateTimeInterface|null $releaseDate
      */
     public function setReleaseDate($releaseDate)
     {
@@ -720,7 +721,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getReleaseDate()
     {
@@ -828,7 +829,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getCreatedAt()
     {
@@ -836,7 +837,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTimeInterface|null $createdAt
+     * @param DateTimeInterface|null $createdAt
      */
     public function setCreatedAt($createdAt)
     {
@@ -844,7 +845,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getUpdatedAt()
     {
@@ -852,7 +853,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTimeInterface|null $updatedAt
+     * @param DateTimeInterface|null $updatedAt
      */
     public function setUpdatedAt($updatedAt)
     {

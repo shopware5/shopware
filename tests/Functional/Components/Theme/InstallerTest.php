@@ -24,6 +24,8 @@
 
 namespace Shopware\Tests\Functional\Components\Theme;
 
+use DirectoryIterator;
+
 class InstallerTest extends Base
 {
     protected function setUp(): void
@@ -63,7 +65,7 @@ class InstallerTest extends Base
             Shopware()->Container()->get(\Shopware\Components\Theme\Service::class),
         );
         //creates a directory iterator for the default theme directory (engine/Shopware/Themes)
-        $directories = new \DirectoryIterator(
+        $directories = new DirectoryIterator(
             __DIR__ . '/Themes/'
         );
 

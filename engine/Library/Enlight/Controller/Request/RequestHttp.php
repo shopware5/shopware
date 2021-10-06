@@ -842,9 +842,13 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
-        $header = strtolower($this->getHeader('USER_AGENT'));
+        $userAgent = $this->getHeader('USER_AGENT');
+        if ($userAgent === false) {
+            return false;
+        }
+        $header = strtolower($userAgent);
 
-        return strstr($header, ' flash') ? true : false;
+        return strpos($header, ' flash') !== false;
     }
 
     /**

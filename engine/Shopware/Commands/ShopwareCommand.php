@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Exception;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Components\Model\ModelManager;
@@ -178,7 +179,7 @@ abstract class ShopwareCommand extends Command implements ContainerAwareInterfac
 
         try {
             $em = $this->getContainer()->get(ModelManager::class);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return [];
         }
 

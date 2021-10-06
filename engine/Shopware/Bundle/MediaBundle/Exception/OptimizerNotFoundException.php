@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\MediaBundle\Exception;
 
-class OptimizerNotFoundException extends \Exception
+use Exception;
+
+class OptimizerNotFoundException extends Exception
 {
 }

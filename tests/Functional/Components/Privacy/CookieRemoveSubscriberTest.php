@@ -26,6 +26,13 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Components\Privacy;
 
+use Enlight_Class;
+use Enlight_Controller_Action;
+use Enlight_Controller_ActionEventArgs;
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Controller_Response_ResponseTestCase;
+use Enlight_Template_Manager;
+use Enlight_View_Default;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CookieBundle\CookieCollection;
 use Shopware\Bundle\CookieBundle\Services\CookieHandler;
@@ -33,6 +40,7 @@ use Shopware\Bundle\CookieBundle\Services\CookieRemoveHandler;
 use Shopware\Bundle\CookieBundle\Structs\CookieGroupStruct;
 use Shopware\Bundle\CookieBundle\Structs\CookieStruct;
 use Shopware\Components\Privacy\CookieRemoveSubscriber;
+use Shopware_Controllers_Frontend_Index;
 
 class CookieRemoveSubscriberTest extends TestCase
 {
@@ -144,20 +152,20 @@ class CookieRemoveSubscriberTest extends TestCase
         static::assertNotNull($controller->View()->getAssign('cookieGroups'));
     }
 
-    private function getEventArgs(\Enlight_Controller_Action $controller = null): \Enlight_Controller_ActionEventArgs
+    private function getEventArgs(Enlight_Controller_Action $controller = null): Enlight_Controller_ActionEventArgs
     {
-        return new \Enlight_Controller_ActionEventArgs([
+        return new Enlight_Controller_ActionEventArgs([
             'subject' => $controller ?: $this->getController(),
         ]);
     }
 
-    private function getController(): \Enlight_Controller_Action
+    private function getController(): Enlight_Controller_Action
     {
-        /** @var \Enlight_Controller_Action $controller */
-        $controller = \Enlight_Class::Instance(\Shopware_Controllers_Frontend_Index::class);
-        $controller->setRequest(new \Enlight_Controller_Request_RequestTestCase());
-        $controller->setResponse(new \Enlight_Controller_Response_ResponseTestCase());
-        $controller->setView(new \Enlight_View_Default(new \Enlight_Template_Manager()));
+        /** @var Enlight_Controller_Action $controller */
+        $controller = Enlight_Class::Instance(Shopware_Controllers_Frontend_Index::class);
+        $controller->setRequest(new Enlight_Controller_Request_RequestTestCase());
+        $controller->setResponse(new Enlight_Controller_Response_ResponseTestCase());
+        $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
 
         return $controller;
     }

@@ -102,12 +102,12 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
         switch (substr($name, 0, 3)) {
             case 'get':
                 $key = strtolower(substr($name, 3, 1)) . substr($name, 4);
-                $key = strtolower(preg_replace('/([A-Z])/', '_$0', $key));
+                $key = strtolower((string) preg_replace('/([A-Z])/', '_$0', $key));
 
                 return $this->get($key);
             case 'set':
                 $key = strtolower(substr($name, 3, 1)) . substr($name, 4);
-                $key = strtolower(preg_replace('/([A-Z])/', '_$0', $key));
+                $key = strtolower((string) preg_replace('/([A-Z])/', '_$0', $key));
 
                 return $this->set($key, isset($args[0]) ? $args[0] : null);
             default:

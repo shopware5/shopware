@@ -26,12 +26,13 @@ declare(strict_types=1);
 
 namespace Shopware\Recovery\Tests\Traits;
 
+use Closure;
 use Pimple\Container;
 use Shopware\Recovery\Common\IOHelper;
 
 trait InstallCommandTestTrait
 {
-    public function initializeCommandAndCall(IOHelper $IOHelper, Container $container, string $method, ?array $arguments = []): \Closure
+    public function initializeCommandAndCall(IOHelper $IOHelper, Container $container, string $method, ?array $arguments = []): Closure
     {
         return function () use ($IOHelper, $container, $method, $arguments): void {
             $this->IOHelper = $IOHelper;

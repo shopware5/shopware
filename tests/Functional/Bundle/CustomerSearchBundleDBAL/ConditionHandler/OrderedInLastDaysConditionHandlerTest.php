@@ -24,6 +24,8 @@
 
 namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
+use DateInterval;
+use DateTime;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedInLastDaysCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
@@ -47,7 +49,7 @@ class OrderedInLastDaysConditionHandlerTest extends TestCase
                     'orders' => [
                         [
                             'ordernumber' => '1',
-                            'ordertime' => (new \DateTime())->format('Y-m-d'),
+                            'ordertime' => (new DateTime())->format('Y-m-d'),
                             'status' => 2,
                         ],
                     ],
@@ -58,7 +60,7 @@ class OrderedInLastDaysConditionHandlerTest extends TestCase
                     'orders' => [
                         [
                             'ordernumber' => '2',
-                            'ordertime' => (new \DateTime())->sub(new \DateInterval('P10D'))->format('Y-m-d'),
+                            'ordertime' => (new DateTime())->sub(new DateInterval('P10D'))->format('Y-m-d'),
                             'status' => 2,
                         ],
                     ],
@@ -69,7 +71,7 @@ class OrderedInLastDaysConditionHandlerTest extends TestCase
                     'orders' => [
                         [
                             'ordernumber' => '3',
-                            'ordertime' => (new \DateTime())->sub(new \DateInterval('P4D'))->format('Y-m-d'),
+                            'ordertime' => (new DateTime())->sub(new DateInterval('P4D'))->format('Y-m-d'),
                             'status' => 2,
                         ],
                     ],

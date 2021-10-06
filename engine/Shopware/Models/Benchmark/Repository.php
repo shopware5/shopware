@@ -24,6 +24,9 @@
 
 namespace Shopware\Models\Benchmark;
 
+use DateTime;
+use DateTimeZone;
+use PDO;
 use Ramsey\Uuid\Uuid;
 use Shopware\Components\Model\ModelRepository;
 
@@ -109,7 +112,7 @@ class Repository extends ModelRepository
             ->where('configs.last_received > NOW() - INTERVAL 7 DAY')
             ->andWhere('configs.cached_template IS NOT NULL')
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
     /**
@@ -143,7 +146,7 @@ class Repository extends ModelRepository
                 ->orderBy('configs.shop_id', 'ASC');
         }
 
-        return $queryBuilder->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+        return $queryBuilder->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
     /**
@@ -157,7 +160,7 @@ class Repository extends ModelRepository
             ->from('s_core_shops', 'shop')
             ->where('shop.main_id IS NULL')
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
 
         /** @var BenchmarkConfig[] $configs */
         $configs = $this->findAll();
@@ -197,7 +200,7 @@ class Repository extends ModelRepository
             ->from('s_benchmark_config', 'configs')
             ->where('configs.active = 1 AND configs.industry != 0')
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -220,10 +223,10 @@ class Repository extends ModelRepository
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
-        $yesterday = new \DateTime('now', new \DateTimeZone('UTC'));
+        $yesterday = new DateTime('now', new DateTimeZone('UTC'));
         $yesterday = $yesterday->modify('-1 day');
 
-        $lastHour = new \DateTime('now', new \DateTimeZone('UTC'));
+        $lastHour = new DateTime('now', new DateTimeZone('UTC'));
         $lastHour = $lastHour->modify('-1 hour');
 
         return $queryBuilder->select('configs')
@@ -247,7 +250,7 @@ class Repository extends ModelRepository
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $now = new DateTime('now', new DateTimeZone('UTC'));
         $now = $now->modify('-1 day');
 
         return $queryBuilder->select('configs')
@@ -270,7 +273,7 @@ class Repository extends ModelRepository
     public function lockShop($shopId)
     {
         $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $now = new DateTime('now', new DateTimeZone('UTC'));
 
         $queryBuilder->update('s_benchmark_config')
             ->set('locked', ':now')
@@ -305,7 +308,7 @@ class Repository extends ModelRepository
             ->from('s_benchmark_config', 'configs')
             ->where('configs.industry != 0')
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -319,6 +322,6 @@ class Repository extends ModelRepository
             ->from('s_core_shops', 'shops')
             ->where('shops.main_id IS NULL')
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 }

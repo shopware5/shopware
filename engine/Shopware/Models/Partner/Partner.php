@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Partner;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -69,7 +71,7 @@ class Partner extends ModelEntity
     private $idCode;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="datum", type="date", nullable=false)
      */
@@ -197,7 +199,7 @@ class Partner extends ModelEntity
 
     public function __construct()
     {
-        $this->date = new \DateTime();
+        $this->date = new DateTime();
         $this->orders = new ArrayCollection();
     }
 
@@ -230,14 +232,14 @@ class Partner extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $date
+     * @param DateTimeInterface|string $date
      *
      * @return Partner
      */
     public function setDate($date)
     {
-        if ($date !== null && !($date instanceof \DateTimeInterface)) {
-            $this->date = new \DateTime($date);
+        if ($date !== null && !($date instanceof DateTimeInterface)) {
+            $this->date = new DateTime($date);
         } else {
             $this->date = $date;
         }
@@ -246,7 +248,7 @@ class Partner extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getDate()
     {

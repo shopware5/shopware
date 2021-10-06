@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Newsletter;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -61,7 +62,7 @@ class Newsletter extends ModelEntity
     /**
      * Date of the newsletter
      *
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="datum", type="date", nullable=true)
      */
@@ -137,7 +138,7 @@ class Newsletter extends ModelEntity
     private $status = 0;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="locked", type="datetime", nullable=true)
      */
@@ -191,7 +192,7 @@ class Newsletter extends ModelEntity
     /**
      * Should the mail delivered in future?
      *
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="timed_delivery", type="datetime", nullable=true)
      */
@@ -214,7 +215,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $date
+     * @param DateTimeInterface|null $date
      */
     public function setDate($date)
     {
@@ -222,7 +223,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getDate()
     {
@@ -294,7 +295,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $locked
+     * @param DateTimeInterface|null $locked
      */
     public function setLocked($locked)
     {
@@ -302,7 +303,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getLocked()
     {
@@ -496,7 +497,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getTimedDelivery()
     {
@@ -504,7 +505,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $timedDelivery
+     * @param DateTimeInterface|null $timedDelivery
      */
     public function setTimedDelivery($timedDelivery)
     {

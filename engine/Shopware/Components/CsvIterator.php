@@ -234,9 +234,12 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         }
         $count = 0;
         $line = stream_get_line($this->_handler, self::DEFAULT_LENGTH, $this->_newline);
+        if ($line === false) {
+            throw new RuntimeException('Could not read line');
+        }
 
         // Remove possible utf8-bom
-        if (substr($line, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
+        if (substr($line, 0, 3) == pack('CCC', 0xEF, 0xBB, 0xBF)) {
             $line = substr($line, 3);
         }
 

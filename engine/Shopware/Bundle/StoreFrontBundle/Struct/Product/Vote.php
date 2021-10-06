@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct\Product;
 
+use DateTimeInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class Vote extends Extendable
@@ -54,7 +55,7 @@ class Vote extends Extendable
     protected $points;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     protected $createdAt;
 
@@ -69,7 +70,7 @@ class Vote extends Extendable
     protected $answer;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     protected $answeredAt;
 
@@ -138,7 +139,7 @@ class Vote extends Extendable
     }
 
     /**
-     * @param \DateTimeInterface $createdAt
+     * @param DateTimeInterface $createdAt
      */
     public function setCreatedAt($createdAt)
     {
@@ -146,7 +147,7 @@ class Vote extends Extendable
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -202,7 +203,7 @@ class Vote extends Extendable
     }
 
     /**
-     * @param \DateTimeInterface $answeredAt
+     * @param DateTimeInterface $answeredAt
      */
     public function setAnsweredAt($answeredAt)
     {
@@ -210,7 +211,7 @@ class Vote extends Extendable
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getAnsweredAt()
     {

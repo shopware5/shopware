@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
+use DateInterval;
+use DateTime;
 use Shopware\Bundle\SearchBundle\Condition\ReleaseDateCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
@@ -48,12 +50,12 @@ class ReleaseDateConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $date = new \DateTime();
+        $date = new DateTime();
         /** @var ReleaseDateCondition $condition */
         $intervalSpec = 'P' . $condition->getDays() . 'D';
-        $interval = new \DateInterval($intervalSpec);
+        $interval = new DateInterval($intervalSpec);
 
-        $dateNow = new \DateTime();
+        $dateNow = new DateTime();
 
         $min = ':releaseDateFrom' . md5(json_encode($condition));
         $max = ':releaseDateTo' . md5(json_encode($condition));

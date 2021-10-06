@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Unit\Bundle\SitemapBundle\Service;
 
+use ArrayIterator;
+use DateTime;
+use IteratorAggregate;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\SitemapBundle\Service\ConfigHandler;
 use Shopware\Bundle\SitemapBundle\Service\FilterContainerFactory;
@@ -52,7 +55,7 @@ class UrlFilterTest extends TestCase
         $urls = $urlFilter->filter([
             new Url(
                 'fooBar.com',
-                new \DateTime(),
+                new DateTime(),
                 'weekly',
                 'foo',
                 '1'
@@ -82,14 +85,14 @@ class UrlFilterTest extends TestCase
         $urls = $urlFilter->filter([
             new Url(
                 'fooBar.com',
-                new \DateTime(),
+                new DateTime(),
                 'weekly',
                 'foo',
                 $identifier
             ),
             new Url(
                 'fooBar.com',
-                new \DateTime(),
+                new DateTime(),
                 'weekly',
                 'foo',
                 2
@@ -119,14 +122,14 @@ class UrlFilterTest extends TestCase
         $urls = $urlFilter->filter([
             new Url(
                 'fooBar.com',
-                new \DateTime(),
+                new DateTime(),
                 'weekly',
                 'foo',
                 $identifier
             ),
             new Url(
                 'fooBar.com',
-                new \DateTime(),
+                new DateTime(),
                 'weekly',
                 'foo',
                 2
@@ -154,21 +157,21 @@ class UrlFilterTest extends TestCase
         $urls = $urlFilter->filter([
             new Url(
                 'fooBar.com',
-                new \DateTime(),
+                new DateTime(),
                 'weekly',
                 'foo',
                 10
             ),
             new Url(
                 'fooBar.com',
-                new \DateTime(),
+                new DateTime(),
                 'weekly',
                 'foo',
                 27
             ),
             new Url(
                 'fooBar.com',
-                new \DateTime(),
+                new DateTime(),
                 'weekly',
                 'foo',
                 25
@@ -193,14 +196,14 @@ class UrlFilterTest extends TestCase
         $urls = $urlFilter->filter([
             new Url(
                 'fooBar.com',
-                new \DateTime(),
+                new DateTime(),
                 'weekly',
                 'foo',
                 $identifier
             ),
             new Url(
                 'fooBar.com',
-                new \DateTime(),
+                new DateTime(),
                 'weekly',
                 'foo',
                 2
@@ -231,7 +234,7 @@ class UrlFilterTest extends TestCase
         $urlFilter->filter([
             new Url(
                 'fooBar.com',
-                new \DateTime(),
+                new DateTime(),
                 'weekly',
                 'fooBar',
                 1
@@ -239,7 +242,7 @@ class UrlFilterTest extends TestCase
         ], 1);
     }
 
-    private function getUrlFilter(ConfigHandler $configHandlerStub, \IteratorAggregate $filterHandlers)
+    private function getUrlFilter(ConfigHandler $configHandlerStub, IteratorAggregate $filterHandlers)
     {
         return new UrlFilter($this->getFilterContainerFactory($configHandlerStub), $filterHandlers);
     }
@@ -250,11 +253,11 @@ class UrlFilterTest extends TestCase
     }
 }
 
-class FilterHandlers implements \IteratorAggregate
+class FilterHandlers implements IteratorAggregate
 {
     public function getIterator()
     {
-        return new \ArrayIterator([
+        return new ArrayIterator([
             'foo' => new Foo(),
         ]);
     }

@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
+use DateTime;
+
 class CustomerOrderHydrator
 {
     public function hydrate(array $data)
@@ -40,8 +42,8 @@ class CustomerOrderHydrator
         $struct->setMinAmount((float) $data['invoice_amount_min']);
         $struct->setMaxAmount((float) $data['invoice_amount_max']);
         $struct->setAvgProductPrice((float) $data['product_avg']);
-        $struct->setFirstOrderTime(new \DateTime($data['first_order_time']));
-        $struct->setLastOrderTime(new \DateTime($data['last_order_time']));
+        $struct->setFirstOrderTime(new DateTime($data['first_order_time']));
+        $struct->setLastOrderTime(new DateTime($data['last_order_time']));
         $struct->setPayments($this->explodeAndFilter($data['selected_payments']));
         $struct->setShops($this->explodeAndFilter($data['ordered_in_shops']));
         $struct->setDevices($this->explodeAndFilter($data['ordered_with_devices']));

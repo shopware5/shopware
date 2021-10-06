@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-class PluginInformationStruct implements \JsonSerializable
+use JsonSerializable;
+
+class PluginInformationStruct implements JsonSerializable
 {
     /**
      * @const array

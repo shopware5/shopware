@@ -24,12 +24,14 @@
 
 namespace Shopware\Recovery\Install\Service;
 
+use PDO;
 use Pimple\Container;
+use RuntimeException;
 
 class LocaleSettingsService
 {
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $connection;
 
@@ -38,7 +40,7 @@ class LocaleSettingsService
      */
     private $container;
 
-    public function __construct(\PDO $connection, Container $container)
+    public function __construct(PDO $connection, Container $container)
     {
         $this->connection = $connection;
         $this->container = $container;
@@ -47,7 +49,7 @@ class LocaleSettingsService
     /**
      * @param string $locale
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function updateLocaleSettings($locale)
     {

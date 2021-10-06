@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CurrencyGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CurrencyHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
@@ -86,6 +87,6 @@ class CurrencyGateway implements CurrencyGatewayInterface
             ->where('currency.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 }

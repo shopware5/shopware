@@ -31,6 +31,7 @@ use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
+use Zend_Cache_Core;
 
 /**
  * @group elasticSearch
@@ -59,7 +60,7 @@ class OrderNumberConditionTest extends TestCase
 
         Shopware()->Container()->get(SearchIndexer::class)->build();
 
-        Shopware()->Container()->get(\Zend_Cache_Core::class)->clean('all', ['Shopware_Modules_Search']);
+        Shopware()->Container()->get(Zend_Cache_Core::class)->clean('all', ['Shopware_Modules_Search']);
 
         return $articles;
     }

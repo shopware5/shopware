@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Mink\Element;
 
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Shopware\Tests\Mink\Helper;
 
@@ -65,7 +66,7 @@ class HeaderCart extends Element implements \Shopware\Tests\Mink\HelperSelectorI
      * @param string $quantity
      * @param float  $amount
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkCart($quantity, $amount)
     {

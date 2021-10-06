@@ -27,6 +27,8 @@ namespace Shopware\Components\Model;
 use Doctrine\Common\EventSubscriber as BaseEventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Proxy\Proxy;
+use Enlight_Event_EventArgs;
+use Enlight_Event_EventManager;
 
 /**
  * The Shopware EventSubscriber is an extension of the standard Doctrine EventSubscriber.
@@ -52,12 +54,12 @@ use Doctrine\ORM\Proxy\Proxy;
 class EventSubscriber implements BaseEventSubscriber
 {
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     protected $eventManager;
 
     /**
-     * @param \Enlight_Event_EventManager $eventManager
+     * @param Enlight_Event_EventManager $eventManager
      */
     public function __construct($eventManager)
     {
@@ -84,7 +86,7 @@ class EventSubscriber implements BaseEventSubscriber
     /**
      * Event listener function of the preUpdate live cycle event. Fired before an existing model saved.
      *
-     * @return \Enlight_Event_EventArgs|null
+     * @return Enlight_Event_EventArgs|null
      */
     public function preUpdate(LifecycleEventArgs $eventArgs)
     {
@@ -98,7 +100,7 @@ class EventSubscriber implements BaseEventSubscriber
     /**
      * Event listener function of the preRemove live cycle event. Fired before an model removed.
      *
-     * @return \Enlight_Event_EventArgs|null
+     * @return Enlight_Event_EventArgs|null
      */
     public function preRemove(LifecycleEventArgs $eventArgs)
     {
@@ -112,7 +114,7 @@ class EventSubscriber implements BaseEventSubscriber
     /**
      * Event listener function of the prePersist live cycle event. Fired before a new model saved.
      *
-     * @return \Enlight_Event_EventArgs|null
+     * @return Enlight_Event_EventArgs|null
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
@@ -126,7 +128,7 @@ class EventSubscriber implements BaseEventSubscriber
     /**
      * Event listener function of the postUpdateRemove live cycle event. Fired after an existing model saved.
      *
-     * @return \Enlight_Event_EventArgs|null
+     * @return Enlight_Event_EventArgs|null
      */
     public function postUpdate(LifecycleEventArgs $eventArgs)
     {
@@ -140,7 +142,7 @@ class EventSubscriber implements BaseEventSubscriber
     /**
      * Event listener function of the postRemove live cycle event. Fired after a model removed.
      *
-     * @return \Enlight_Event_EventArgs|null
+     * @return Enlight_Event_EventArgs|null
      */
     public function postRemove(LifecycleEventArgs $eventArgs)
     {
@@ -154,7 +156,7 @@ class EventSubscriber implements BaseEventSubscriber
     /**
      * Event listener function of the postPersist live cycle event. Fired after a new model saved.
      *
-     * @return \Enlight_Event_EventArgs|null
+     * @return Enlight_Event_EventArgs|null
      */
     public function postPersist(LifecycleEventArgs $eventArgs)
     {
@@ -189,7 +191,7 @@ class EventSubscriber implements BaseEventSubscriber
      * @param string             $eventName
      * @param LifecycleEventArgs $eventArgs
      *
-     * @return \Enlight_Event_EventArgs|null
+     * @return Enlight_Event_EventArgs|null
      */
     protected function notifyEvent($eventName, $eventArgs)
     {

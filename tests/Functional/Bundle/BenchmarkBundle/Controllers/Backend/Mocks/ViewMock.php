@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend\Mocks;
 
-class ViewMock extends \Enlight_View_Default
+use Enlight_View_Default;
+
+class ViewMock extends Enlight_View_Default
 {
     /**
      * @var string

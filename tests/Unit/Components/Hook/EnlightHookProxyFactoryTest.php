@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Unit\Components\Hook;
 
+use Enlight_Hook_HookManager;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class EnlightHookProxyFactoryTest extends TestCase
 {
@@ -32,7 +34,7 @@ class EnlightHookProxyFactoryTest extends TestCase
 
     public function setUp(): void
     {
-        $hookManager = $this->createConfiguredMock(\Enlight_Hook_HookManager::class, [
+        $hookManager = $this->createConfiguredMock(Enlight_Hook_HookManager::class, [
             'hasHooks' => true,
         ]);
 
@@ -267,7 +269,7 @@ EOT;
 
     private function invokeMethod($object, $methodName, array $parameters = [])
     {
-        $reflection = new \ReflectionClass(\get_class($object));
+        $reflection = new ReflectionClass(\get_class($object));
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
 

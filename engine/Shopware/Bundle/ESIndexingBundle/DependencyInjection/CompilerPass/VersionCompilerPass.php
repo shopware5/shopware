@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass;
 
+use Exception;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -48,7 +49,7 @@ class VersionCompilerPass implements CompilerPassInterface
             try {
                 $info = $client->info();
                 $container->setParameter('shopware.es.version', $info['version']['number']);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $container->setParameter('shopware.es.version', '6');
             }
         }

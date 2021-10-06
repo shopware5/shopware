@@ -24,8 +24,11 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\Customer;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Random;
@@ -99,14 +102,14 @@ class CustomerTest extends TestCase
 
     public function testCreateShouldBeSuccessful()
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(\DateTime::ISO8601);
+        $firstlogin = $date->format(DateTime::ISO8601);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(\DateTime::ISO8601);
+        $lastlogin = $date->format(DateTime::ISO8601);
 
-        $birthday = \DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(\DateTime::ISO8601);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
 
         $testData = [
             'password' => 'fooobar',
@@ -397,23 +400,23 @@ class CustomerTest extends TestCase
     /**
      * @depends testUpdateShouldBeSuccessful
      */
-    public function testDeleteShouldBeSuccessful($id)
+    public function testDeleteShouldBeSuccessful($id): void
     {
         $customer = $this->resource->delete($id);
 
-        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
-        static::assertEquals(null, $customer->getId());
+        static::assertInstanceOf(\Shopware\Models\Customer\Customer::class, $customer);
+        static::assertSame(0, (int) $customer->getId());
     }
 
-    public function testDeleteWithInvalidIdShouldThrowNotFoundException()
+    public function testDeleteWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->delete(9999999);
     }
 
-    public function testDeleteWithMissingIdShouldThrowParameterMissingException()
+    public function testDeleteWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->delete('');
     }
 
@@ -422,14 +425,14 @@ class CustomerTest extends TestCase
      */
     public function testPostCustomersWithDebitShouldCreatePaymentData()
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(\DateTime::ISO8601);
+        $firstlogin = $date->format(DateTime::ISO8601);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(\DateTime::ISO8601);
+        $lastlogin = $date->format(DateTime::ISO8601);
 
-        $birthday = \DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(\DateTime::ISO8601);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
 
         $requestData = [
             'password' => 'fooobar',
@@ -495,14 +498,14 @@ class CustomerTest extends TestCase
      */
     public function testPostCustomersWithDebitPaymentDataShouldCreateDebitData()
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(\DateTime::ISO8601);
+        $firstlogin = $date->format(DateTime::ISO8601);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(\DateTime::ISO8601);
+        $lastlogin = $date->format(DateTime::ISO8601);
 
-        $birthday = \DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(\DateTime::ISO8601);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
 
         $requestData = [
             'password' => 'fooobar',

@@ -25,8 +25,10 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware_Components_Config;
 
 class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
 {
@@ -41,14 +43,14 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
     private $connection;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
     public function __construct(
         Connection $connection,
         Hydrator\VoteHydrator $voteHydrator,
-        \Shopware_Components_Config $config
+        Shopware_Components_Config $config
     ) {
         $this->connection = $connection;
         $this->voteHydrator = $voteHydrator;
@@ -100,7 +102,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
+        $data = $statement->fetchAll(PDO::FETCH_GROUP);
 
         $result = [];
         foreach ($products as $product) {

@@ -25,6 +25,7 @@
 namespace Shopware\Components\Form;
 
 use Shopware\Components\Form\Interfaces\Element;
+use Traversable;
 
 class Base implements Element
 {
@@ -75,7 +76,7 @@ class Base implements Element
 
             $value = $this->$method();
 
-            if ($value instanceof \Traversable) {
+            if ($value instanceof Traversable) {
                 $converted = [];
                 foreach ($value as $item) {
                     if ($item instanceof self) {

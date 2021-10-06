@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
 
 class BacklogReader implements BacklogReaderInterface
@@ -51,7 +52,7 @@ class BacklogReader implements BacklogReaderInterface
             ->setParameter(':name', 'lastBacklogId')
             ->setMaxResults(1)
             ->execute()
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->fetch(PDO::FETCH_COLUMN);
 
         return unserialize($value, ['allowed_classes' => false]);
     }
@@ -80,7 +81,7 @@ class BacklogReader implements BacklogReaderInterface
             ->setParameter(':lastId', $lastId)
             ->setMaxResults($limit);
 
-        $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $result = [];
         foreach ($data as $row) {

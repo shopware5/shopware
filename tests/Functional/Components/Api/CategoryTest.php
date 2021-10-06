@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,10 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use DateTime;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\Category;
 use Shopware\Components\Api\Resource\Resource;
 
@@ -42,14 +48,14 @@ class CategoryTest extends TestCase
         return new Category();
     }
 
-    public function testCreateShouldBeSuccessful()
+    public function testCreateShouldBeSuccessful(): int
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->modify('-10 days');
-        $added = $date->format(\DateTime::ISO8601);
+        $added = $date->format(DateTime::ISO8601);
 
         $date->modify('-3 day');
-        $changed = $date->format(\DateTime::ISO8601);
+        $changed = $date->format(DateTime::ISO8601);
 
         $testData = [
             'name' => 'fooobar',
@@ -79,7 +85,6 @@ class CategoryTest extends TestCase
             ],
         ];
 
-        /** @var \Shopware\Models\Category\Category $category */
         $category = $this->resource->create($testData);
 
         static::assertInstanceOf(\Shopware\Models\Category\Category::class, $category);
@@ -97,7 +102,7 @@ class CategoryTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetOneShouldBeSuccessful($id)
+    public function testGetOneShouldBeSuccessful($id): void
     {
         $category = $this->resource->getOne($id);
         static::assertGreaterThan(0, $category['id']);
@@ -106,7 +111,7 @@ class CategoryTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetListShouldBeSuccessful()
+    public function testGetListShouldBeSuccessful(): void
     {
         $result = $this->resource->getList();
 
@@ -140,42 +145,42 @@ class CategoryTest extends TestCase
         return $id;
     }
 
-    public function testUpdateWithInvalidIdShouldThrowNotFoundException()
+    public function testUpdateWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->update(9999999, []);
     }
 
-    public function testUpdateWithMissingIdShouldThrowParameterMissingException()
+    public function testUpdateWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->update('', []);
     }
 
     /**
      * @depends testUpdateShouldBeSuccessful
      */
-    public function testDeleteShouldBeSuccessful($id)
+    public function testDeleteShouldBeSuccessful($id): void
     {
         $category = $this->resource->delete($id);
 
-        static::assertInstanceOf('\Shopware\Models\Category\Category', $category);
-        static::assertEquals(null, $category->getId());
+        static::assertInstanceOf(\Shopware\Models\Category\Category::class, $category);
+        static::assertSame(0, (int) $category->getId());
     }
 
-    public function testDeleteWithInvalidIdShouldThrowNotFoundException()
+    public function testDeleteWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->delete(9999999);
     }
 
-    public function testDeleteWithMissingIdShouldThrowParameterMissingException()
+    public function testDeleteWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->delete('');
     }
 
-    public function testfindCategoryByPath()
+    public function testfindCategoryByPath(): void
     {
         $parts = [
             'Deutsch',
@@ -185,9 +190,8 @@ class CategoryTest extends TestCase
 
         $path = implode('|', $parts);
 
-        /** @var \Shopware\Models\Category\Category $category */
         $category = $this->resource->findCategoryByPath($path);
-        static::assertEquals(null, $category);
+        static::assertNull($category);
 
         $category = $this->resource->findCategoryByPath($path, true);
         $this->resource->flush();
@@ -203,10 +207,9 @@ class CategoryTest extends TestCase
         static::assertSame($category->getId(), $secondCategory->getId());
     }
 
-    public function testCreateCategoryWithTranslation()
+    public function testCreateCategoryWithTranslation(): void
     {
-        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface $crud */
-        $crud = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class);
+        $crud = Shopware()->Container()->get(CrudServiceInterface::class);
 
         $crud->update('s_categories_attributes', 'underscore_test', 'string');
 
@@ -244,7 +247,7 @@ class CategoryTest extends TestCase
         $crud->delete('s_categories_attributes', 'underscore_test');
     }
 
-    public function testCreateCategoryWithTranslationWithUpdate()
+    public function testCreateCategoryWithTranslationWithUpdate(): void
     {
         $categoryData = [
             'name' => 'German',

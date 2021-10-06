@@ -24,6 +24,7 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components;
 
+use Exception;
 use ShopwarePlugins\SwagUpdate\Components\Steps\ErrorResult;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 use ShopwarePlugins\SwagUpdate\Components\Steps\ValidResult;
@@ -33,7 +34,7 @@ class ExtJsResultMapper
     /**
      * @param ValidResult|FinishResult|ErrorResult $result
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -64,6 +65,6 @@ class ExtJsResultMapper
             ];
         }
 
-        throw new \Exception(sprintf('Result type %s can not be mapped.', \get_class($result)));
+        throw new Exception(sprintf('Result type %s can not be mapped.', \get_class($result)));
     }
 }

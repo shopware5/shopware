@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Controller_Response_Response;
+use Enlight_Controller_Response_ResponseTestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Customer\Address;
@@ -33,7 +36,7 @@ use Shopware\Models\Customer\PaymentData;
 use Shopware\Models\Customer\Repository;
 use Shopware\Models\Payment\Payment;
 
-class CustomerTest extends \Enlight_Components_Test_Controller_TestCase
+class CustomerTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var Repository
@@ -309,7 +312,7 @@ class CustomerTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->Request()->setParams(['id' => $customer->getId()]);
 
-        /** @var \Enlight_Controller_Response_ResponseTestCase $response */
+        /** @var Enlight_Controller_Response_ResponseTestCase $response */
         $response = $this->dispatch('backend/Customer/performOrder');
 
         $headerLocation = $response->getHeader('Location');
@@ -372,7 +375,7 @@ class CustomerTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @return array<string, mixed>|null
      */
-    private function getCookie(\Enlight_Controller_Response_Response $response, string $name): ?array
+    private function getCookie(Enlight_Controller_Response_Response $response, string $name): ?array
     {
         foreach ($response->getCookies() as $cookie) {
             if ($cookie['name'] === $name) {

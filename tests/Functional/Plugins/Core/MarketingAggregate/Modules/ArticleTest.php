@@ -24,16 +24,17 @@
 
 namespace Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\Modules;
 
+use sArticles;
 use Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\AbstractMarketing;
 
 class ArticleTest extends AbstractMarketing
 {
-    /**
-     * @var \sArticles
-     */
-    protected $module;
+    protected sArticles $module;
 
-    protected $category;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $category;
 
     /**
      * Set up function for this test case.
@@ -49,7 +50,7 @@ class ArticleTest extends AbstractMarketing
      *
      * @group skipElasticSearch
      */
-    public function testTopSellerSelection()
+    public function testTopSellerSelection(): void
     {
         $this->removeDemoData();
         $this->insertDemoData();
@@ -73,7 +74,7 @@ class ArticleTest extends AbstractMarketing
      * Helper function to initial the test case
      * demo data.
      */
-    protected function insertDemoData()
+    protected function insertDemoData(): void
     {
         $category = [
             'parent' => '3',
@@ -109,7 +110,7 @@ class ArticleTest extends AbstractMarketing
     /**
      * Helper function to clean up the test case demo data.
      */
-    protected function removeDemoData()
+    protected function removeDemoData(): void
     {
         $category = $this->getDemoCategory();
 
@@ -128,10 +129,15 @@ class ArticleTest extends AbstractMarketing
     /**
      * Helper function to get the test case demo category.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    protected function getDemoCategory()
+    protected function getDemoCategory(): array
     {
-        return $this->Db()->fetchRow("SELECT * FROM s_categories WHERE description = 'TopSellerTest' LIMIT 1");
+        $category = $this->Db()->fetchRow("SELECT * FROM s_categories WHERE description = 'TopSellerTest' LIMIT 1");
+        if ($category === false) {
+            return [];
+        }
+
+        return $category;
     }
 }

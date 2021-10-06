@@ -24,22 +24,25 @@
 
 namespace Shopware\Recovery\Install\Service;
 
+use PDO;
+use PDOException;
+use RuntimeException;
 use Shopware\Recovery\Install\Struct\LicenseInformation;
 
 class LicenseInstaller
 {
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $pdo;
 
-    public function __construct(\PDO $pdo)
+    public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function installLicense(LicenseInformation $license)
     {
@@ -66,8 +69,8 @@ EOT;
                 ':creation' => $this->checkDate($license->creation),
                 ':expiration' => $this->checkDate($license->expiration),
             ]);
-        } catch (\PDOException $e) {
-            throw new \RuntimeException('Could not insert license into database', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Could not insert license into database', 0, $e);
         }
     }
 

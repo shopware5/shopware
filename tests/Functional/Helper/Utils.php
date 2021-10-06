@@ -24,11 +24,13 @@
 
 namespace Shopware\Tests\Functional\Helper;
 
+use Closure;
+
 class Utils
 {
     public static function bindAndCall(callable $fn, $newThis, $args = [], $bindClass = null)
     {
-        $func = \Closure::bind($fn, $newThis, $bindClass ?: \get_class($newThis));
+        $func = Closure::bind($fn, $newThis, $bindClass ?: \get_class($newThis));
         if ($args) {
             return \call_user_func_array($func, $args);
         }

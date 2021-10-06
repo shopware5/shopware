@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Mink\Page;
 
 use Behat\Mink\Element\NodeElement;
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\ArticleBox;
 use Shopware\Tests\Mink\Element\FilterGroup;
@@ -77,7 +78,7 @@ class Listing extends Page implements HelperSelectorInterface
     {
         $parameters = array_merge(
             ['sCategory' => 3],
-            ($autoPage) ? ['sPage' => 1] : [],
+            $autoPage ? ['sPage' => 1] : [],
             Helper::convertTableHashToArray($params, 'parameter')
         );
 
@@ -91,7 +92,7 @@ class Listing extends Page implements HelperSelectorInterface
     /**
      * Verify if we're on an expected page. Throw an exception if not.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function verifyPage()
     {
@@ -122,7 +123,7 @@ class Listing extends Page implements HelperSelectorInterface
     /**
      * Sets the article filter
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function filter(FilterGroup $filterGroups, array $properties)
     {
@@ -179,8 +180,8 @@ class Listing extends Page implements HelperSelectorInterface
             $message = sprintf(
                 'The article "%s" is%s in the listing, but should%s.',
                 $name,
-                ($negation) ? '' : ' not',
-                ($negation) ? ' not' : ''
+                $negation ? '' : ' not',
+                $negation ? ' not' : ''
             );
             Helper::throwException([$message]);
         }
@@ -189,7 +190,7 @@ class Listing extends Page implements HelperSelectorInterface
     /**
      * Checks the properties of a product box
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkArticleBox(ArticleBox $articleBox, array $properties)
     {
@@ -218,7 +219,7 @@ class Listing extends Page implements HelperSelectorInterface
      * @param callable $lambda
      * @param int      $wait
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
@@ -231,14 +232,14 @@ class Listing extends Page implements HelperSelectorInterface
                 if ($lambda($this)) {
                     return true;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // do nothing
             }
 
             usleep(250000);
         }
 
-        throw new \Exception("Spin function timed out after {$wait} seconds");
+        throw new Exception("Spin function timed out after {$wait} seconds");
     }
 
     /**
@@ -271,7 +272,7 @@ class Listing extends Page implements HelperSelectorInterface
     /**
      * Sets the filters
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function setFilters(FilterGroup $filterGroups, array $properties)
     {
@@ -333,7 +334,7 @@ class Listing extends Page implements HelperSelectorInterface
                 if ($lambda($this)) {
                     return true;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // do nothing
             }
 
@@ -361,7 +362,7 @@ class Listing extends Page implements HelperSelectorInterface
     /**
      * Submits the filters
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function pressShowResults()
     {

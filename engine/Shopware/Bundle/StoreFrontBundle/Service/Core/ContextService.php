@@ -25,9 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Enlight_Components_Session_Namespace as Session;
+use Enlight_Controller_Front;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Models;
+use Shopware_Components_Config;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ContextService implements ContextServiceInterface
@@ -165,12 +168,12 @@ class ContextService implements ContextServiceInterface
      */
     private function getStoreFrontBaseUrl()
     {
-        /** @var \Shopware_Components_Config $config */
-        $config = $this->container->get(\Shopware_Components_Config::class);
+        /** @var Shopware_Components_Config $config */
+        $config = $this->container->get(Shopware_Components_Config::class);
 
         $request = null;
         if ($this->container->initialized('front')) {
-            /** @var \Enlight_Controller_Front $front */
+            /** @var Enlight_Controller_Front $front */
             $front = $this->container->get('front');
             $request = $front->Request();
         }
@@ -275,7 +278,7 @@ class ContextService implements ContextServiceInterface
         $query->from('s_customer_streams_mapping', 'mapping');
         $query->where('mapping.customer_id = :customerId');
         $query->setParameter(':customerId', $customerId);
-        $streams = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        $streams = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
         sort($streams);
 
         return $streams;

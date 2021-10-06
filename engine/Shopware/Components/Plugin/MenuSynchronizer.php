@@ -25,6 +25,9 @@
 namespace Shopware\Components\Plugin;
 
 use Doctrine\DBAL\Connection;
+use Exception;
+use InvalidArgumentException;
+use RuntimeException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\Writer\DatabaseWriter;
 use Shopware\Models\Menu\Menu;
@@ -50,7 +53,7 @@ class MenuSynchronizer
     }
 
     /**
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function synchronize(Plugin $plugin, array $menu)
     {
@@ -69,12 +72,12 @@ class MenuSynchronizer
                 $parent = null;
             } else {
                 if (!isset($menuItem['parent'])) {
-                    throw new \InvalidArgumentException('Root Menu Item must provide parent element');
+                    throw new InvalidArgumentException('Root Menu Item must provide parent element');
                 }
                 /** @var Menu|null $parent */
                 $parent = $this->menuRepository->findOneBy($menuItem['parent']);
                 if (!$parent) {
-                    throw new \InvalidArgumentException(sprintf('Unable to find parent for query %s', print_r($menuItem['parent'], true)));
+                    throw new InvalidArgumentException(sprintf('Unable to find parent for query %s', print_r($menuItem['parent'], true)));
                 }
             }
 
@@ -88,7 +91,7 @@ class MenuSynchronizer
     /**
      * @param string $name
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveMenuTranslation(array $labels, $name)
     {
@@ -109,7 +112,7 @@ class MenuSynchronizer
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return Menu
      */
@@ -133,7 +136,7 @@ class MenuSynchronizer
         $item->setPlugin($plugin);
 
         if (!isset($menuItem['label']['en']) || empty($menuItem['label']['en'])) {
-            throw new \RuntimeException('Label with lang en required');
+            throw new RuntimeException('Label with lang en required');
         }
         $item->setLabel($menuItem['name']);
 

@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Emotion\Exception;
 
-class EmotionImportException extends \Enlight_Exception
+use Enlight_Exception;
+
+class EmotionImportException extends Enlight_Exception
 {
 }

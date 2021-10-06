@@ -24,6 +24,10 @@
 
 namespace Shopware\Tests\Functional\Traits;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
+
 trait DirectoryDeletionTrait
 {
     /**
@@ -37,12 +41,12 @@ trait DirectoryDeletionTrait
             return;
         }
 
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        /** @var \SplFileInfo $path */
+        /** @var SplFileInfo $path */
         foreach ($iterator as $path) {
             if ($path->getFilename() === '.gitkeep') {
                 continue;

@@ -868,9 +868,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      *
      * @return bool true if one surrogate has ESI/1.0 capability, false otherwise
      */
-    private function hasSurrogateEsiCapability(Request $request)
+    private function hasSurrogateEsiCapability(Request $request): bool
     {
-        if (null === $value = $request->getHeader('Surrogate-Capability')) {
+        $value = $request->getHeader('Surrogate-Capability');
+        if ($value === false) {
             return false;
         }
 

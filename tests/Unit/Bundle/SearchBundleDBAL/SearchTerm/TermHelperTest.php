@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\Bundle\SearchBundleDBAL\SearchTerm;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\SearchBundleDBAL\SearchTerm\TermHelper;
+use Shopware_Components_Config;
 
 class TermHelperTest extends TestCase
 {
@@ -40,7 +41,7 @@ class TermHelperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $configStub = $this->createMock(\Shopware_Components_Config::class);
+        $configStub = $this->createMock(Shopware_Components_Config::class);
 
         $this->termHelper = new TermHelper($configStub);
     }

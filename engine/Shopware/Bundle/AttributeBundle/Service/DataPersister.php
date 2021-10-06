@@ -24,8 +24,11 @@
 
 namespace Shopware\Bundle\AttributeBundle\Service;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Column;
+use Exception;
+use PDO;
 use Shopware\Components\Model\DBAL\Types\DateStringType;
 use Shopware\Components\Model\DBAL\Types\DateTimeStringType;
 
@@ -56,15 +59,15 @@ class DataPersister implements DataPersisterInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function persist($data, $table, $foreignKey)
     {
         if (!$this->mapping->isAttributeTable($table)) {
-            throw new \Exception(sprintf('Table %s is no attribute table', $table));
+            throw new Exception(sprintf('Table %s is no attribute table', $table));
         }
         if (!$foreignKey) {
-            throw new \Exception('No foreign key provided');
+            throw new Exception('No foreign key provided');
         }
         $data = $this->filter($table, $data);
 
@@ -86,15 +89,15 @@ class DataPersister implements DataPersisterInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function cloneAttribute($table, $sourceForeignKey, $targetForeignKey)
     {
         if (!$this->mapping->isAttributeTable($table)) {
-            throw new \Exception(sprintf('Table %s is no attribute table', $table));
+            throw new Exception(sprintf('Table %s is no attribute table', $table));
         }
         if (!$sourceForeignKey) {
-            throw new \Exception('No foreign key provided');
+            throw new Exception('No foreign key provided');
         }
         $data = $this->dataLoader->load($table, $sourceForeignKey);
 
@@ -110,15 +113,15 @@ class DataPersister implements DataPersisterInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function cloneAttributeTranslations($table, $sourceForeignKey, $targetForeignKey)
     {
         if (!$this->mapping->isAttributeTable($table)) {
-            throw new \Exception(sprintf('Table %s is no attribute table', $table));
+            throw new Exception(sprintf('Table %s is no attribute table', $table));
         }
         if (!$sourceForeignKey) {
-            throw new \Exception('No foreign key provided');
+            throw new Exception('No foreign key provided');
         }
 
         $translations = $this->dataLoader->loadTranslations($table, $sourceForeignKey);
@@ -192,7 +195,7 @@ class DataPersister implements DataPersisterInterface
      * @param string $table
      * @param array  $data
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -237,10 +240,10 @@ class DataPersister implements DataPersisterInterface
         }
 
         try {
-            new \DateTime($date);
+            new DateTime($date);
 
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -267,6 +270,6 @@ class DataPersister implements DataPersisterInterface
             ->setParameter(':tablename', $table)
         ;
 
-        return $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $builder->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 }

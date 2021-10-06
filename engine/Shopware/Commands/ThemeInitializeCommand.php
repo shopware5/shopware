@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use RuntimeException;
 use Shopware\Components\Theme\Installer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -74,7 +75,7 @@ class ThemeInitializeCommand extends ShopwareCommand
         $templateId = $statement->fetchColumn();
 
         if (!$templateId) {
-            throw new \RuntimeException('Could not get id for default template');
+            throw new RuntimeException('Could not get id for default template');
         }
 
         return (int) $templateId;

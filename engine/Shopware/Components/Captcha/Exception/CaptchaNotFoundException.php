@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Captcha\Exception;
 
-class CaptchaNotFoundException extends \Exception
+use Exception;
+
+class CaptchaNotFoundException extends Exception
 {
 }

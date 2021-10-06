@@ -26,13 +26,15 @@ namespace Shopware\Bundle\ESIndexingBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
+use Enlight_Event_EventManager;
+use IteratorAggregate;
 use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 
 class BacklogProcessor implements BacklogProcessorInterface
 {
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     protected $eventManager;
 
@@ -48,8 +50,8 @@ class BacklogProcessor implements BacklogProcessorInterface
 
     public function __construct(
         Connection $connection,
-        \IteratorAggregate $synchronizers,
-        \Enlight_Event_EventManager $eventManager
+        IteratorAggregate $synchronizers,
+        Enlight_Event_EventManager $eventManager
     ) {
         $this->connection = $connection;
         $this->synchronizers = iterator_to_array($synchronizers, true);

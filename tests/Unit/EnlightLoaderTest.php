@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit;
 
+use Enlight_Loader;
 use PHPUnit\Framework\TestCase;
 
 class EnlightLoaderTest extends TestCase
@@ -33,8 +34,8 @@ class EnlightLoaderTest extends TestCase
      */
     public function testEnlightLoaderCheckFile()
     {
-        static::assertTrue(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'));
-        static::assertFalse(\Enlight_Loader::checkFile("H:\Apache Group\Apache\htdocs\shopware.php\0"));
+        static::assertTrue(Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'));
+        static::assertFalse(Enlight_Loader::checkFile("H:\Apache Group\Apache\htdocs\shopware.php\0"));
     }
 
     /**
@@ -42,11 +43,11 @@ class EnlightLoaderTest extends TestCase
      */
     public function testAddIncludePath()
     {
-        $old = \Enlight_Loader::addIncludePath('.');
-        $new = \Enlight_Loader::explodeIncludePath();
+        $old = Enlight_Loader::addIncludePath('.');
+        $new = Enlight_Loader::explodeIncludePath();
         $last = array_pop($new);
 
-        \Enlight_Loader::setIncludePath($old);
+        Enlight_Loader::setIncludePath($old);
 
         static::assertEquals('.', $last);
     }
@@ -56,11 +57,11 @@ class EnlightLoaderTest extends TestCase
      */
     public function testAddIncludePath2()
     {
-        $old = \Enlight_Loader::addIncludePath('.', \Enlight_Loader::POSITION_PREPEND);
-        $new = \Enlight_Loader::explodeIncludePath();
+        $old = Enlight_Loader::addIncludePath('.', Enlight_Loader::POSITION_PREPEND);
+        $new = Enlight_Loader::explodeIncludePath();
         $first = array_shift($new);
 
-        \Enlight_Loader::setIncludePath($old);
+        Enlight_Loader::setIncludePath($old);
 
         static::assertEquals('.', $first);
     }
@@ -70,11 +71,11 @@ class EnlightLoaderTest extends TestCase
      */
     public function testAddIncludePath3()
     {
-        $old = \Enlight_Loader::addIncludePath('.', \Enlight_Loader::POSITION_REMOVE);
-        $new = \Enlight_Loader::explodeIncludePath();
+        $old = Enlight_Loader::addIncludePath('.', Enlight_Loader::POSITION_REMOVE);
+        $new = Enlight_Loader::explodeIncludePath();
         $found = array_search('.', $new, true);
 
-        \Enlight_Loader::setIncludePath($old);
+        Enlight_Loader::setIncludePath($old);
 
         static::assertFalse($found);
     }
@@ -89,7 +90,7 @@ class EnlightLoaderTest extends TestCase
         $oldCWD = getcwd();
         chdir(__DIR__);
 
-        $result = \Enlight_Loader::realpath($path);
+        $result = Enlight_Loader::realpath($path);
         static::assertEquals($expected, $result);
 
         chdir($oldCWD);

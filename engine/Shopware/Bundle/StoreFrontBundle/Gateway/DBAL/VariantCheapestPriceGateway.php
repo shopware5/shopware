@@ -26,11 +26,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use PDO;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware_Components_Config;
 
 class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGatewayInterface
 {
@@ -55,7 +57,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
     private $fieldHelper;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -73,7 +75,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\PriceHydrator $priceHydrator,
-        \Shopware_Components_Config $config,
+        Shopware_Components_Config $config,
         VariantHelperInterface $variantHelper
     ) {
         $this->connection = $connection;
@@ -145,7 +147,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $mainQuery->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $prices = [];
         foreach ($data as $row) {

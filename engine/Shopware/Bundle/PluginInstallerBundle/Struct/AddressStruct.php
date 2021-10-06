@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-class AddressStruct implements \JsonSerializable
+use JsonSerializable;
+
+class AddressStruct implements JsonSerializable
 {
     /**
      * @var string

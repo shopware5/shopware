@@ -26,6 +26,7 @@ namespace Shopware\Components\HttpCache;
 
 use DateTime;
 use Enlight_Controller_Request_Request as Request;
+use IteratorAggregate;
 use Shopware\Components\HttpCache\InvalidationDate\InvalidationDateInterface;
 
 class DynamicCacheTimeService implements CacheTimeServiceInterface
@@ -48,7 +49,7 @@ class DynamicCacheTimeService implements CacheTimeServiceInterface
     public function __construct(
         CacheRouteGenerationService $cacheRouteGeneration,
         CacheTimeServiceInterface $cacheTimeService,
-        \IteratorAggregate $invalidationDateProvider
+        IteratorAggregate $invalidationDateProvider
     ) {
         $this->cacheTimeService = $cacheTimeService;
         $this->cacheRouteGeneration = $cacheRouteGeneration;

@@ -25,6 +25,7 @@
 namespace Shopware\Components\ProductStream;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\SearchBundle\Condition\ProductIdCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -113,7 +114,7 @@ class Repository implements RepositoryInterface
             ->where('stream_id = :productStreamId')
             ->setParameter(':productStreamId', $productStreamId);
 
-        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**

@@ -27,6 +27,7 @@ namespace Shopware\Components\Model;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Repository\RepositoryFactory;
 use Doctrine\Persistence\ObjectRepository;
+use Enlight_Hook_HookManager;
 
 class ProxyAwareRepositoryFactory implements RepositoryFactory
 {
@@ -38,11 +39,11 @@ class ProxyAwareRepositoryFactory implements RepositoryFactory
     private $repositoryList = [];
 
     /**
-     * @var \Enlight_Hook_HookManager
+     * @var Enlight_Hook_HookManager
      */
     private $hookManager;
 
-    public function __construct(\Enlight_Hook_HookManager $hookManager)
+    public function __construct(Enlight_Hook_HookManager $hookManager)
     {
         $this->hookManager = $hookManager;
     }

@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
+use DateTime;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 class ShopPageHydrator extends Hydrator
@@ -78,7 +79,7 @@ class ShopPageHydrator extends Hydrator
         }
 
         if (!empty($data['__page_changed'])) {
-            $shopPage->setChanged(\DateTime::createFromFormat('Y-m-d H:i:s', $data['__page_changed']));
+            $shopPage->setChanged(DateTime::createFromFormat('Y-m-d H:i:s', $data['__page_changed']));
         }
 
         $shopIds = [];

@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
@@ -75,7 +76,7 @@ class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
+        $data = $statement->fetchAll(PDO::FETCH_GROUP);
 
         $related = [];
         foreach ($data as $productId => $row) {

@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct\Blog;
 
+use DateTimeInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
@@ -66,7 +67,7 @@ class Blog extends Extendable
     protected $views;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     protected $displayDate;
 
@@ -233,7 +234,7 @@ class Blog extends Extendable
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getDisplayDate()
     {
@@ -241,7 +242,7 @@ class Blog extends Extendable
     }
 
     /**
-     * @param \DateTimeInterface $displayDate
+     * @param DateTimeInterface $displayDate
      */
     public function setDisplayDate($displayDate)
     {

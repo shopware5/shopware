@@ -25,6 +25,7 @@
 namespace Shopware\Components\Routing\Matchers;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Components\QueryAliasMapper;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\MatcherInterface;
@@ -96,11 +97,11 @@ class RewriteMatcher implements MatcherInterface
 
         $pathInfo = ltrim($pathInfo, '/');
         $statement = $this->getRouteStatement();
-        $statement->bindValue(':shopId', $context->getShopId(), \PDO::PARAM_INT);
-        $statement->bindValue(':pathInfo', $pathInfo, \PDO::PARAM_STR);
+        $statement->bindValue(':shopId', $context->getShopId(), PDO::PARAM_INT);
+        $statement->bindValue(':pathInfo', $pathInfo, PDO::PARAM_STR);
 
         if ($statement->execute() && $statement->rowCount() > 0) {
-            $route = $statement->fetch(\PDO::FETCH_ASSOC);
+            $route = $statement->fetch(PDO::FETCH_ASSOC);
             $query = $this->getQueryFormOrgPath($route['orgPath']);
             if (empty($route['main']) || $route['shopId'] != $context->getShopId()) {
                 $query['rewriteAlias'] = true;

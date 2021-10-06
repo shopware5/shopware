@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Blog;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
@@ -95,7 +96,7 @@ class Repository extends ModelRepository
         ->leftJoin('blog.attribute', 'attribute')
         ->where('blog.active = 1')
         ->andWhere('blog.displayDate < :now')
-        ->setParameter('now', new \DateTime())
+        ->setParameter('now', new DateTime())
         ->orderBy('blog.displayDate', 'DESC');
 
         if ($shopId !== null) {
@@ -333,7 +334,7 @@ class Repository extends ModelRepository
             ->leftJoin('blog.author', 'author')
             ->where('blog.active = 1')
             ->andWhere('blog.displayDate < :now')
-            ->setParameter('now', new \DateTime())
+            ->setParameter('now', new DateTime())
             ->orderBy('blog.displayDate', 'DESC');
 
         if ($shopId !== null) {

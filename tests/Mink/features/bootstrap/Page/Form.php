@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Mink\Page;
 
 use Behat\Mink\Element\NodeElement;
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
 use Shopware\Tests\Mink\HelperSelectorInterface;
@@ -62,7 +63,7 @@ class Form extends Page implements HelperSelectorInterface
     /**
      * Verify if we're on an expected page. Throw an exception if not.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function verifyPage()
     {
@@ -85,7 +86,7 @@ class Form extends Page implements HelperSelectorInterface
     /**
      * Checks, whether a captcha exists and has loaded correctly
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkCaptcha()
     {

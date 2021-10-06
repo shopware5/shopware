@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\MultiEdit;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -68,7 +69,7 @@ class Filter extends ModelEntity
     private $description;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
@@ -88,13 +89,13 @@ class Filter extends ModelEntity
      */
     private $isSimple = false;
 
-    public function setCreated(?\DateTimeInterface $created)
+    public function setCreated(?DateTimeInterface $created)
     {
         $this->created = $created;
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getCreated()
     {

@@ -25,6 +25,7 @@
 namespace Shopware\Components\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use InvalidArgumentException;
 
 /**
  * Abstract class for shopware standard models.
@@ -273,7 +274,7 @@ abstract class ModelEntity
      * @param string                 $model    Full namespace of the association model, example: '\Shopware\Models\Article\Supplier'
      * @param string                 $property Name of the association property, example: 'supplier'
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @return $this
      */
@@ -312,7 +313,7 @@ abstract class ModelEntity
         // If an id passed, the already assigned model has an id and the ids are not equal, we can't update the model instance.
         // Otherwise we would update the instance with the id 1 with the data for the instance with id 2.
         if (!empty($data['id']) && !empty($id) && $data['id'] !== $id) {
-            throw new \InvalidArgumentException('Passed id and id of the already assigned model are not equal');
+            throw new InvalidArgumentException('Passed id and id of the already assigned model are not equal');
         }
 
         $instance->fromArray($data);

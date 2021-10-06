@@ -25,7 +25,10 @@
 namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Controller_Action;
 use Enlight_Controller_ActionEventArgs as ActionEventArgs;
+use Enlight_Event_EventArgs;
+use Shopware_Components_Config;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -108,13 +111,13 @@ class CSRFTokenValidator implements SubscriberInterface
      *
      * @throws CSRFTokenValidationException
      */
-    public function checkFrontendTokenValidation(\Enlight_Event_EventArgs $args)
+    public function checkFrontendTokenValidation(Enlight_Event_EventArgs $args)
     {
         if (!$this->isEnabledFrontend) {
             return;
         }
 
-        /** @var \Enlight_Controller_Action $controller */
+        /** @var Enlight_Controller_Action $controller */
         $controller = $args->getSubject();
         $request = $controller->Request();
 
@@ -154,7 +157,7 @@ class CSRFTokenValidator implements SubscriberInterface
         $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
         $name = '__csrf_token-' . $context->getShop()->getId();
 
-        if ($context->getShop()->getParentId() && $this->container->get(\Shopware_Components_Config::class)->get('shareSessionBetweenLanguageShops')) {
+        if ($context->getShop()->getParentId() && $this->container->get(Shopware_Components_Config::class)->get('shareSessionBetweenLanguageShops')) {
             $name = '__csrf_token-' . $context->getShop()->getParentId();
         }
 
@@ -171,7 +174,7 @@ class CSRFTokenValidator implements SubscriberInterface
      *
      * @return bool
      */
-    private function isWhitelisted(\Enlight_Controller_Action $controller)
+    private function isWhitelisted(Enlight_Controller_Action $controller)
     {
         if (!($controller instanceof CSRFWhitelistAware)) {
             return false;
@@ -191,7 +194,7 @@ class CSRFTokenValidator implements SubscriberInterface
      *
      * @return bool
      */
-    private function isProtected(\Enlight_Controller_Action $controller)
+    private function isProtected(Enlight_Controller_Action $controller)
     {
         if (!($controller instanceof CSRFGetProtectionAware)) {
             return false;

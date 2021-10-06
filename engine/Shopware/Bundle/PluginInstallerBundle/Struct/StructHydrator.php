@@ -24,6 +24,9 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
+use DateTime;
+use DateTimeZone;
+
 class StructHydrator
 {
     /**
@@ -63,9 +66,9 @@ class StructHydrator
      */
     public function hydrateAccessToken($data, $shopwareId)
     {
-        $time = new \DateTime(
+        $time = new DateTime(
             $data['expire']['date'],
-            new \DateTimeZone($data['expire']['timezone'])
+            new DateTimeZone($data['expire']['timezone'])
         );
 
         $struct = new AccessTokenStruct(
@@ -271,7 +274,7 @@ class StructHydrator
             $licence->setIconPath($row['plugin']['iconPath']);
 
             if (isset($row['creationDate'])) {
-                $date = new \DateTime($row['creationDate']);
+                $date = new DateTime($row['creationDate']);
                 $licence->setCreationDate($date);
             }
 
@@ -283,11 +286,11 @@ class StructHydrator
             }
 
             if (isset($subscription) && $subscription['expirationDate']) {
-                $date = new \DateTime($subscription['expirationDate']);
+                $date = new DateTime($subscription['expirationDate']);
                 $licence->setExpirationDate($date);
             } else {
                 if (isset($row['expirationDate'])) {
-                    $date = new \DateTime($row['expirationDate']);
+                    $date = new DateTime($row['expirationDate']);
                     $licence->setExpirationDate($date);
                 }
             }
@@ -357,12 +360,12 @@ class StructHydrator
         $plugin->setInSafeMode((bool) $data['in_safe_mode']);
 
         if (isset($data['installation_date']) && !empty($data['installation_date'])) {
-            $date = new \DateTime($data['installation_date']);
+            $date = new DateTime($data['installation_date']);
             $plugin->setInstallationDate($date);
         }
 
         if (isset($data['update_date']) && !empty($data['update_date'])) {
-            $date = new \DateTime($data['update_date']);
+            $date = new DateTime($data['update_date']);
             $plugin->setUpdateDate($date);
         }
 
@@ -385,12 +388,12 @@ class StructHydrator
             $licence->setShop($data['__licence_host']);
 
             if (isset($data['__licence_creation']) && !empty($data['__licence_creation'])) {
-                $date = new \DateTime($data['__licence_creation']);
+                $date = new DateTime($data['__licence_creation']);
                 $licence->setCreationDate($date);
             }
 
             if (isset($data['__licence_expiration']) && !empty($data['__licence_expiration'])) {
-                $date = new \DateTime($data['__licence_expiration']);
+                $date = new DateTime($data['__licence_expiration']);
                 $licence->setExpirationDate($date);
             }
 
@@ -649,7 +652,7 @@ class StructHydrator
             $comment->setRating((int) $row['rating']);
 
             if (isset($row['creationDate']) && !empty($row['creationDate'])) {
-                $date = new \DateTime($row['creationDate']['date']);
+                $date = new DateTime($row['creationDate']['date']);
                 $comment->setCreationDate($date);
             }
             $comments[] = $comment;

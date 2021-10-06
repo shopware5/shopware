@@ -24,6 +24,9 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Struct;
 
+use DateTime;
+use DateTimeInterface;
+
 class Backlog
 {
     /**
@@ -42,7 +45,7 @@ class Backlog
     private $payload;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $time;
 
@@ -57,7 +60,7 @@ class Backlog
         $this->id = $id;
         $this->event = $event;
         $this->payload = $payload;
-        $this->time = new \DateTime($time);
+        $this->time = new DateTime($time);
     }
 
     /**
@@ -85,7 +88,7 @@ class Backlog
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getTime()
     {

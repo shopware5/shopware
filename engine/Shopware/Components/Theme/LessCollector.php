@@ -25,6 +25,9 @@
 namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Enlight_Event_EventManager;
+use Enlight_Event_Exception;
+use Exception;
 use Shopware\Models\Shop;
 
 class LessCollector
@@ -40,14 +43,14 @@ class LessCollector
     private $inheritance;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
     public function __construct(
         PathResolver $pathResolver,
         Inheritance $inheritance,
-        \Enlight_Event_EventManager $eventManager
+        Enlight_Event_EventManager $eventManager
     ) {
         $this->pathResolver = $pathResolver;
         $this->inheritance = $inheritance;
@@ -55,8 +58,8 @@ class LessCollector
     }
 
     /**
-     * @throws \Exception
-     * @throws \Enlight_Event_Exception
+     * @throws Exception
+     * @throws Enlight_Event_Exception
      *
      * @return LessDefinition[]
      */
@@ -121,7 +124,7 @@ class LessCollector
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return LessDefinition[]
      */
@@ -148,7 +151,7 @@ class LessCollector
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return LessDefinition[]
      */
@@ -172,7 +175,7 @@ class LessCollector
     }
 
     /**
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return LessDefinition[]
      */
@@ -189,7 +192,7 @@ class LessCollector
     }
 
     /**
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return LessDefinition[]
      */

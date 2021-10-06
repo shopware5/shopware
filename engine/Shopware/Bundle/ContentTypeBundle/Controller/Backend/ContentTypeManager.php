@@ -37,10 +37,11 @@ use Shopware\Components\Slug\SlugInterface;
 use Shopware\Models\Shop\Shop;
 use Shopware_Components_SeoIndex;
 use Shopware_Components_Snippet_Manager as Snippets;
+use Shopware_Controllers_Backend_ExtJs;
 use sRewriteTable;
 use Symfony\Component\HttpFoundation\Request;
 
-class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
+class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
 {
     /**
      * @var TypeProvider

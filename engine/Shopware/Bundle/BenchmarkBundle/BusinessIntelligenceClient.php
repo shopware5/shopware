@@ -24,8 +24,10 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use RuntimeException;
 use Shopware\Bundle\BenchmarkBundle\Exception\BenchmarkHydratingException;
 use Shopware\Bundle\BenchmarkBundle\Exception\BenchmarkSendingException;
 use Shopware\Bundle\BenchmarkBundle\Hydrator\HydratorInterface;
@@ -90,7 +92,7 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
 
         try {
             $response = $this->client->get($this->biEndpoint . '?' . (string) $biRequest, $headers);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->logger->warning(sprintf('Could not retrieve BI data from %s', $this->biEndpoint), [$ex]);
 
             throw new BenchmarkSendingException('Could not retrieve BI data', 0, $ex);
@@ -118,7 +120,7 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function verifyResponseSignature(Response $response)
     {
@@ -126,7 +128,7 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
         $signature = $response->getHeader($signatureHeaderName);
 
         if (empty($signature)) {
-            throw new \RuntimeException(sprintf('Signature not found in header "%s"', $signatureHeaderName));
+            throw new RuntimeException(sprintf('Signature not found in header "%s"', $signatureHeaderName));
         }
 
         if (!$this->benchmarkEncryption->isSignatureSupported()) {
@@ -137,6 +139,6 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
             return;
         }
 
-        throw new \RuntimeException('Signature not valid');
+        throw new RuntimeException('Signature not valid');
     }
 }

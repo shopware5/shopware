@@ -30,6 +30,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\Query\Parameter;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Model\QueryOperatorValidator;
@@ -341,7 +342,7 @@ class QueryBuilderTest extends TestCase
     public function testInvalidOperatorsThrowException(array $filter): void
     {
         $this->querybuilder->resetDQLParts();
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf('\'%s\' is no valid operator', $filter['expression']));
         $this->querybuilder->addFilter([$filter]);
     }

@@ -25,6 +25,9 @@
 namespace ShopwarePlugins\SwagUpdate\Components\Checks;
 
 use Enlight_Components_Snippet_Namespace as SnippetNamespace;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RegexIterator;
 use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 
 class RegexCheck implements CheckInterface
@@ -101,15 +104,15 @@ class RegexCheck implements CheckInterface
     private function scanDirectoryForRegex($path, $regex, $regexFile = null)
     {
         // Iterate the given path recursively
-        $directoryIterator = new \RecursiveDirectoryIterator($path);
+        $directoryIterator = new RecursiveDirectoryIterator($path);
         // get a flat iterator
-        $iterator = new \RecursiveIteratorIterator($directoryIterator);
+        $iterator = new RecursiveIteratorIterator($directoryIterator);
 
         $results = [];
 
         // Allow files to be filtered out by name
         if (isset($regexFile) && !empty($regexFile)) {
-            $iterator = new \RegexIterator($iterator, $regexFile);
+            $iterator = new RegexIterator($iterator, $regexFile);
         }
 
         // Iterate the result, get file content, check for $regex matches

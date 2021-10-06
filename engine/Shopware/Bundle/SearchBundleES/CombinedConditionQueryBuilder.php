@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundleES;
 
 use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use RuntimeException;
 use Shopware\Bundle\ESIndexingBundle\EsSearch;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -89,6 +90,6 @@ class CombinedConditionQueryBuilder
                 return $handler;
             }
         }
-        throw new \RuntimeException(sprintf('%s class not supported', \get_class($condition)));
+        throw new RuntimeException(sprintf('%s class not supported', \get_class($condition)));
     }
 }

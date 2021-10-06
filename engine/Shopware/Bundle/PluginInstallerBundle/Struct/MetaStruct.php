@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-class MetaStruct implements \JsonSerializable
+use JsonSerializable;
+
+class MetaStruct implements JsonSerializable
 {
     /**
      * @var string

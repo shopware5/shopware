@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\MultiEdit\Resource;
 
+use RuntimeException;
 use Shopware\Components\MultiEdit\Resource\Product\Backup;
 use Shopware\Components\MultiEdit\Resource\Product\BatchProcess;
 use Shopware\Components\MultiEdit\Resource\Product\DqlHelper;
@@ -207,7 +208,7 @@ class Product implements ResourceInterface
 
                     $price = str_replace(',', '.', $field['value']);
                     if (!\is_string($price)) {
-                        throw new \RuntimeException('Price needs to be a string');
+                        throw new RuntimeException('Price needs to be a string');
                     }
                     $price = $tax != 0 ? $price / $tax : 0;
                     $setter = 'set' . ucfirst($field['field']);

@@ -30,6 +30,7 @@ use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Traversable;
 
 class BacklogSyncCommand extends ShopwareCommand
 {
@@ -43,7 +44,7 @@ class BacklogSyncCommand extends ShopwareCommand
      */
     private $mappings;
 
-    public function __construct(int $batchSize, \Traversable $mappings)
+    public function __construct(int $batchSize, Traversable $mappings)
     {
         $this->batchSize = $batchSize;
         $this->mappings = iterator_to_array($mappings, false);

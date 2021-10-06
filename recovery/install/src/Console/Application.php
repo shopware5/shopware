@@ -24,6 +24,7 @@
 
 namespace Shopware\Recovery\Install\Console;
 
+use ErrorException;
 use Pimple\Container;
 use Shopware\Recovery\Install\Command\InstallCommand;
 use Shopware\Recovery\Install\ContainerProvider;
@@ -112,7 +113,7 @@ class Application extends BaseApplication
                 return false;
             }
 
-            throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+            throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
         });
     }
 }

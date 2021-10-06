@@ -26,6 +26,8 @@ namespace Shopware\Components\Cart;
 
 use Enlight\Event\SubscriberInterface;
 use Enlight_Components_Session_Namespace as Session;
+use Enlight_Controller_Action;
+use Enlight_Event_EventArgs;
 use Symfony\Component\HttpFoundation\Cookie;
 
 class PaymentTokenSubscriber implements SubscriberInterface
@@ -53,9 +55,9 @@ class PaymentTokenSubscriber implements SubscriberInterface
         ];
     }
 
-    public function onPreDispatchFrontend(\Enlight_Event_EventArgs $args): void
+    public function onPreDispatchFrontend(Enlight_Event_EventArgs $args): void
     {
-        /** @var \Enlight_Controller_Action $controller */
+        /** @var Enlight_Controller_Action $controller */
         $controller = $args->get('subject');
         $request = $controller->Request();
 

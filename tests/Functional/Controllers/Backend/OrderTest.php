@@ -24,11 +24,13 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use DateTimeZone;
+use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Locale;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class OrderTest extends \Enlight_Components_Test_Controller_TestCase
+class OrderTest extends Enlight_Components_Test_Controller_TestCase
 {
     use DatabaseTransactionBehaviour;
 
@@ -167,7 +169,7 @@ class OrderTest extends \Enlight_Components_Test_Controller_TestCase
         /** @var \DateTime $orderTime */
         $orderTime = $data['orderTime'];
         $oldDate = clone $orderTime;
-        $orderTime->setTimezone(new \DateTimeZone('US/Alaska'));
+        $orderTime->setTimezone(new DateTimeZone('US/Alaska'));
 
         $data['orderTime'] = new \DateTime($orderTime->format(\DateTime::ATOM));
         $data['changed'] = $data['changed']->format('Y-m-d H:i:s');
@@ -227,7 +229,7 @@ class OrderTest extends \Enlight_Components_Test_Controller_TestCase
         $responseStr = preg_replace('/(new Date\([-0-9]+\))/', '"$1"', $response->getBody());
 
         $responseJSON = json_decode($responseStr, true);
-        static::assertEquals(true, $responseJSON['success']);
+        static::assertTrue($responseJSON['success']);
 
         foreach ($responseJSON['data'] as $dataElement) {
             switch ($dataElement['payment']['id']) {
@@ -302,7 +304,7 @@ class OrderTest extends \Enlight_Components_Test_Controller_TestCase
         $response = $this->dispatch('backend/Order/loadStores?' . $getString);
 
         $responseJSON = json_decode($response->getBody(), true);
-        static::assertEquals(true, $responseJSON['success']);
+        static::assertTrue($responseJSON['success']);
         $data = $responseJSON['data'];
 
         // Test for fallback value

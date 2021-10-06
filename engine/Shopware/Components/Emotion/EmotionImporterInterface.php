@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Emotion;
 
+use Exception;
 use Shopware\Models\Emotion\Preset;
 
 interface EmotionImporterInterface
@@ -31,7 +32,7 @@ interface EmotionImporterInterface
     /**
      * @param string $filePath
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Preset
      */

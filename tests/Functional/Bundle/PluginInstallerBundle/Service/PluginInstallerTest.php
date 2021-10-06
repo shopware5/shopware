@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\PluginInstallerBundle\Service;
 
+use Enlight_Event_EventManager;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -60,7 +61,7 @@ class PluginInstallerTest extends TestCase
             $databaseHandler,
             $requirementValidator,
             $pdo,
-            new \Enlight_Event_EventManager(),
+            new Enlight_Event_EventManager(),
             ['ShopwarePlugins' => __DIR__ . '/Fixtures'],
             new ShopwareReleaseStruct('1.0.0', '', '___VERSION___'),
             new NullLogger(),

@@ -24,6 +24,8 @@
 
 namespace Shopware\Components;
 
+use RuntimeException;
+
 interface NumberRangeIncrementerInterface
 {
     /**
@@ -34,7 +36,7 @@ interface NumberRangeIncrementerInterface
      *
      * @param string $name
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return int
      */

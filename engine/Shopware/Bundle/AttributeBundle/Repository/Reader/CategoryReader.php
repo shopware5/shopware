@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 
 class CategoryReader extends GenericReader
 {
@@ -81,6 +82,6 @@ class CategoryReader extends GenericReader
         $query->where('category.id IN (:ids)');
         $query->setParameter(':ids', $parents, Connection::PARAM_INT_ARRAY);
 
-        return $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+        return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 }

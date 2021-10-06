@@ -25,7 +25,12 @@
 namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Controller_Request_RequestHttp;
+use Enlight_Controller_Response_ResponseHttp;
 use Enlight_Event_EventArgs as EventArgs;
+use Exception;
+use PDOException;
+use ReflectionException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AttributeSubscriber implements SubscriberInterface
@@ -65,14 +70,14 @@ class AttributeSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param \Exception $exception
+     * @param Exception $exception
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function handleException($exception)
     {
-        $request = new \Enlight_Controller_Request_RequestHttp();
-        $response = new \Enlight_Controller_Response_ResponseHttp();
+        $request = new Enlight_Controller_Request_RequestHttp();
+        $response = new Enlight_Controller_Response_ResponseHttp();
 
         if ($this->isModelException($exception)) {
             $generator = $this->container->get(\Shopware\Components\Model\ModelManager::class)->createModelGenerator();
@@ -95,7 +100,7 @@ class AttributeSubscriber implements SubscriberInterface
      *
      * @return bool
      */
-    private function isModelException(\Exception $exception)
+    private function isModelException(Exception $exception)
     {
         if (isset($_COOKIE[self::redirectCookieString])) {
             return false;
@@ -111,14 +116,14 @@ class AttributeSubscriber implements SubscriberInterface
         /*
          * This case matches, when a doctrine attribute model don't exist
          */
-        if ($exception instanceof \ReflectionException && strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
+        if ($exception instanceof ReflectionException && strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
             return true;
         }
 
         /*
          * This case matches, when a doctrine model field defined which not exist in the database
          */
-        if ($exception instanceof \PDOException && strpos($exception->getFile(), '/Doctrine/DBAL/')) {
+        if ($exception instanceof PDOException && strpos($exception->getFile(), '/Doctrine/DBAL/')) {
             return true;
         }
 

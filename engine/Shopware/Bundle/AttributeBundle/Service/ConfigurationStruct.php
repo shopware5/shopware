@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\AttributeBundle\Service;
 
-class ConfigurationStruct implements \JsonSerializable
+use JsonSerializable;
+
+class ConfigurationStruct implements JsonSerializable
 {
     /**
      * @var int

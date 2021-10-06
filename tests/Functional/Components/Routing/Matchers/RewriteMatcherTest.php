@@ -25,10 +25,11 @@
 namespace Shopware\Tests\Functional\Components\Routing\Matchers;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_TestCase;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\Matchers\RewriteMatcher;
 
-class RewriteMatcherTest extends \Enlight_Components_Test_TestCase
+class RewriteMatcherTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var Connection

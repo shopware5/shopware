@@ -24,10 +24,12 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
+use Shopware_Components_Config;
+
 class TermHelper implements TermHelperInterface
 {
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -47,10 +49,10 @@ class TermHelper implements TermHelperInterface
     private $replaceNonLetters;
 
     /**
-     * @param \Shopware_Components_Config $config
-     * @param bool                        $useBadWords
-     * @param bool                        $replaceUmlauts
-     * @param bool                        $replaceNonLetters
+     * @param Shopware_Components_Config $config
+     * @param bool                       $useBadWords
+     * @param bool                       $replaceUmlauts
+     * @param bool                       $replaceNonLetters
      */
     public function __construct($config, $useBadWords = true, $replaceUmlauts = true, $replaceNonLetters = true)
     {

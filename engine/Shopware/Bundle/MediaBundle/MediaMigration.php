@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use RuntimeException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -81,7 +82,7 @@ class MediaMigration
      *
      * @param string $path
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function migrateFile($path, MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFileSystem)
     {
@@ -112,7 +113,7 @@ class MediaMigration
             return;
         }
 
-        throw new \RuntimeException('File not found: ' . $path);
+        throw new RuntimeException('File not found: ' . $path);
     }
 
     /**

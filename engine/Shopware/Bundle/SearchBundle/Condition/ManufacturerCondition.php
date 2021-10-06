@@ -25,9 +25,10 @@
 namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Assert\Assertion;
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class ManufacturerCondition implements ConditionInterface, \JsonSerializable
+class ManufacturerCondition implements ConditionInterface, JsonSerializable
 {
     private const NAME = 'manufacturer';
 

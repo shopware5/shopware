@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class HasPseudoPriceCondition implements ConditionInterface, \JsonSerializable
+class HasPseudoPriceCondition implements ConditionInterface, JsonSerializable
 {
     private const NAME = 'has_pseudo_price_condition';
 

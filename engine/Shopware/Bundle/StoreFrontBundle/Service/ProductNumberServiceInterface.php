@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
+use RuntimeException;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ProductNumberServiceInterface
@@ -49,7 +50,7 @@ interface ProductNumberServiceInterface
      *
      * @param int $productId
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return string
      */

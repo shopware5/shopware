@@ -24,12 +24,14 @@
 
 namespace Shopware\Recovery\Install\Service;
 
+use PDO;
+use RuntimeException;
 use Shopware\Components\Theme\Installer as ThemeInstaller;
 
 class ThemeService
 {
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $conn;
 
@@ -38,7 +40,7 @@ class ThemeService
      */
     private $themeInstaller;
 
-    public function __construct(\PDO $conn, ThemeInstaller $themeInstaller)
+    public function __construct(PDO $conn, ThemeInstaller $themeInstaller)
     {
         $this->themeInstaller = $themeInstaller;
         $this->conn = $conn;
@@ -63,7 +65,7 @@ class ThemeService
         $templateId = $statement->fetchColumn(0);
 
         if (!$templateId) {
-            throw new \RuntimeException('Could not get id for default template');
+            throw new RuntimeException('Could not get id for default template');
         }
 
         return (int) $templateId;

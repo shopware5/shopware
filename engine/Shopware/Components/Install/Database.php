@@ -24,14 +24,18 @@
 
 namespace Shopware\Components\Install;
 
+use Exception;
+use InvalidArgumentException;
+use PDO;
+
 class Database
 {
     /**
-     * @var \PDO
+     * @var PDO
      */
     protected $connection;
 
-    public function __construct(\PDO $connection)
+    public function __construct(PDO $connection)
     {
         $this->connection = $connection;
     }
@@ -40,14 +44,14 @@ class Database
      * @param string $dbName
      * @param string $file
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function importFile($dbName, $file)
     {
         $this->connection->query(sprintf('use `%s`', $dbName));
 
         if (($contents = file_get_contents($file)) === false) {
-            throw new \Exception(sprintf('Could not open file: %s', $file));
+            throw new Exception(sprintf('Could not open file: %s', $file));
         }
 
         $rows = explode(";\n", trim($contents));
@@ -60,13 +64,13 @@ class Database
      * @param string $url
      * @param string $dbName
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setupShop($url, $dbName)
     {
         $parts = parse_url($url);
         if ($parts === false || !\array_key_exists('host', $parts)) {
-            throw new \InvalidArgumentException(sprintf('Invalid Shop URL (%s)', $url));
+            throw new InvalidArgumentException(sprintf('Invalid Shop URL (%s)', $url));
         }
 
         $isSecure = $parts['scheme'] === 'https';

@@ -26,10 +26,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CustomSortingGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Config;
 
 class CustomSortingGateway implements CustomSortingGatewayInterface
 {
@@ -49,7 +51,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
     private $hydrator;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -57,7 +59,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
         Connection $connection,
         FieldHelper $fieldHelper,
         CustomListingHydrator $hydrator,
-        \Shopware_Components_Config $config
+        Shopware_Components_Config $config
     ) {
         $this->connection = $connection;
         $this->fieldHelper = $fieldHelper;
@@ -76,7 +78,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $sortings = $this->hydrate(
-            $query->execute()->fetchAll(\PDO::FETCH_ASSOC)
+            $query->execute()->fetchAll(PDO::FETCH_ASSOC)
         );
 
         return $this->getAndSortElementsByIds($ids, $sortings);
@@ -131,7 +133,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
         $query->from('s_search_custom_sorting', 'customSorting');
         $query->andWhere('customSorting.display_in_categories = 1');
         $query->addOrderBy('customSorting.position', 'ASC');
-        $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        $ids = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
 
         $default = $this->config->get('defaultListingSorting', 1);
 
@@ -199,7 +201,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
             ->where('categories.id IN (:ids)')
             ->setParameter(':ids', $categoryIds, Connection::PARAM_INT_ARRAY);
 
-        $mapping = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $mapping = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
 
         $allSortingIds = [];
         $hasEmpty = \count(array_filter($mapping)) !== \count($mapping);

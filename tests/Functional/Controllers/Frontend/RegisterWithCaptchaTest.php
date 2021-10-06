@@ -24,9 +24,10 @@
 
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
+use Enlight_Components_Test_Plugin_TestCase;
 use Shopware\Components\Captcha\DefaultCaptcha;
 
-class RegisterWithCaptchaTest extends \Enlight_Components_Test_Plugin_TestCase
+class RegisterWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
 {
     public static function tearDownAfterClass(): void
     {

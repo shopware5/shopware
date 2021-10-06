@@ -27,6 +27,7 @@ namespace Shopware\Components;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Query\QueryBuilder;
+use PDO;
 
 class ConfigWriter
 {
@@ -49,7 +50,7 @@ class ConfigWriter
     {
         $query = $this->getConfigValueByNameQuery($name, $namespace, $shopId);
 
-        $result = $query->execute()->fetch(\PDO::FETCH_ASSOC);
+        $result = $query->execute()->fetch(PDO::FETCH_ASSOC);
 
         if ($result['configured']) {
             return unserialize($result['configured'], ['allowed_classes' => false]);
@@ -69,7 +70,7 @@ class ConfigWriter
 
         $query = $this->getConfigValueByNameQuery($name, $namespace, $shopId);
 
-        $result = $query->execute()->fetch(\PDO::FETCH_ASSOC);
+        $result = $query->execute()->fetch(PDO::FETCH_ASSOC);
 
         if ($result['valueId']) {
             $this->update($value, $result['valueId']);

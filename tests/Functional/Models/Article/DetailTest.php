@@ -26,13 +26,15 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models\Article;
 
+use Enlight_Components_Test_TestCase;
 use ReflectionClass;
+use ReflectionException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Repository;
 
-class DetailTest extends \Enlight_Components_Test_TestCase
+class DetailTest extends Enlight_Components_Test_TestCase
 {
     protected ModelManager $em;
 
@@ -135,7 +137,7 @@ class DetailTest extends \Enlight_Components_Test_TestCase
     /**
      * This helper set's the new regex pattern via inflection into the Validator-instance defined in the DIC
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function internalTestChangingOrderNumberRegexIsWorking(string $regex, string $number): void
     {

@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Translation;
 
+use Shopware_Components_Translation;
+
 /**
  * Translation context that can be used to translate properties on a specific translatable object type.
  */
@@ -50,7 +52,7 @@ class ObjectTranslator
     private $translations;
 
     /**
-     * @var \Shopware_Components_Translation
+     * @var Shopware_Components_Translation
      */
     private $translationService;
 
@@ -59,7 +61,7 @@ class ObjectTranslator
      */
     private $type;
 
-    public function __construct(\Shopware_Components_Translation $translationService, string $type, int $language, int $fallback)
+    public function __construct(Shopware_Components_Translation $translationService, string $type, int $language, int $fallback)
     {
         $this->language = $language;
         $this->loaded = false;

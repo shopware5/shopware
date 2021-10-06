@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\ContentTypeBundle\FieldResolver;
 
+use PDO;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\ContentTypeBundle\Field\MediaField;
 use Shopware\Bundle\ContentTypeBundle\Field\MediaGrid;
@@ -64,7 +65,7 @@ class MediaResolverTest extends TestCase
 
     public function testMultiResolve(): void
     {
-        $idsArray = Shopware()->Models()->getConnection()->executeQuery('SELECT id from s_media LIMIT 5')->fetchAll(\PDO::FETCH_COLUMN);
+        $idsArray = Shopware()->Models()->getConnection()->executeQuery('SELECT id from s_media LIMIT 5')->fetchAll(PDO::FETCH_COLUMN);
         $ids = implode('|', $idsArray);
         $this->field->setType(new MediaGrid());
 

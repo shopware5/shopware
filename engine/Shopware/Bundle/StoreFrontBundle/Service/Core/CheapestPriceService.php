@@ -33,6 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Config;
 
 class CheapestPriceService implements CheapestPriceServiceInterface
 {
@@ -42,13 +43,13 @@ class CheapestPriceService implements CheapestPriceServiceInterface
     private $cheapestPriceGateway;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
     public function __construct(
         CheapestPriceGatewayInterface $cheapestPriceGateway,
-        \Shopware_Components_Config $config
+        Shopware_Components_Config $config
     ) {
         $this->cheapestPriceGateway = $cheapestPriceGateway;
         $this->config = $config;

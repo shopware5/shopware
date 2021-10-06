@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use DateTime;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\Order;
@@ -564,7 +565,7 @@ class OrderTest extends TestCase
         $order = $this->filterOrderId($order);
         $order['documents'] = [
             [
-                'date' => new \DateTime(),
+                'date' => new DateTime(),
                 'amount' => 47.11,
                 'typeId' => 1,
                 'customerId' => 1,
@@ -572,7 +573,7 @@ class OrderTest extends TestCase
                 'hash' => 4711,
             ],
             [
-                'date' => new \DateTime(),
+                'date' => new DateTime(),
                 'amount' => 47.12,
                 'typeId' => 1,
                 'customerId' => 1,

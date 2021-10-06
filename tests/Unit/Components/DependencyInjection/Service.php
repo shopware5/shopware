@@ -24,6 +24,8 @@
 
 namespace Shopware\Tests\Unit\Components\DependencyInjection;
 
+use Enlight_Event_EventArgs;
+
 /**
  * Just a test service
  */
@@ -36,7 +38,7 @@ class Service
         $this->class = $class;
     }
 
-    public function onEvent(\Enlight_Event_EventArgs $e): void
+    public function onEvent(Enlight_Event_EventArgs $e): void
     {
         /** @var ProjectServiceContainer $container */
         $container = $e->getSubject();

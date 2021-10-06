@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Form;
 
+use Exception;
 use Shopware\Components\Form\Interfaces\Field as FieldInterface;
 use Shopware\Components\Form\Interfaces\Validate;
 
@@ -169,12 +170,12 @@ class Field extends Base implements FieldInterface, Validate
      * and throws an exception if
      * some requirements are not set.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function validate()
     {
         if (!$this->name) {
-            throw new \Exception(sprintf('Field %s requires a configured name', \get_class($this)));
+            throw new Exception(sprintf('Field %s requires a configured name', \get_class($this)));
         }
     }
 }

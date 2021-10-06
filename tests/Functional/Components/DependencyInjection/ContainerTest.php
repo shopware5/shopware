@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Functional\Components\DependencyInjection;
 
 use Enlight_Event_EventArgs;
+use Enlight_Event_Handler_Default;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Cart\NetRounding\RoundLineAfterQuantity;
 use Shopware\Components\DependencyInjection\Container;
@@ -134,7 +135,7 @@ class ContainerTest extends TestCase
     {
         $events = $this->container->get('events');
 
-        $event = new \Enlight_Event_Handler_Default(
+        $event = new Enlight_Event_Handler_Default(
             'Enlight_Bootstrap_InitResource_shopware.cart.net_rounding.after_quantity',
             [
                 $this,

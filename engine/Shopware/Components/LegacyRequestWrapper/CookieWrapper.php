@@ -24,17 +24,21 @@
 
 namespace Shopware\Components\LegacyRequestWrapper;
 
-class CookieWrapper implements \ArrayAccess
+use ArrayAccess;
+use Enlight_Controller_Request_Request;
+use Exception;
+
+class CookieWrapper implements ArrayAccess
 {
     /**
-     * @var \Enlight_Controller_Request_Request
+     * @var Enlight_Controller_Request_Request
      */
     private $request;
 
     /**
-     * @param \Enlight_Controller_Request_Request $request The request object
+     * @param Enlight_Controller_Request_Request $request The request object
      */
-    public function __construct(\Enlight_Controller_Request_Request $request)
+    public function __construct(Enlight_Controller_Request_Request $request)
     {
         $this->request = $request;
     }
@@ -91,11 +95,11 @@ class CookieWrapper implements \ArrayAccess
      *                      The value to set.
      *                      </p>
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function offsetSet($offset, $value)
     {
-        throw new \Exception('Please use setcookie() to set cookie data');
+        throw new Exception('Please use setcookie() to set cookie data');
     }
 
     /**
@@ -108,11 +112,11 @@ class CookieWrapper implements \ArrayAccess
      *                      The offset to unset.
      *                      </p>
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function offsetUnset($offset)
     {
-        throw new \Exception('Unsupported operation');
+        throw new Exception('Unsupported operation');
     }
 
     /**

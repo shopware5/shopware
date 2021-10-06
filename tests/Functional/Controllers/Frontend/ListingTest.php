@@ -24,9 +24,11 @@
 
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
+use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Controller_Exception;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class ListingTest extends \Enlight_Components_Test_Controller_TestCase
+class ListingTest extends Enlight_Components_Test_Controller_TestCase
 {
     use DatabaseTransactionBehaviour;
 
@@ -41,7 +43,7 @@ class ListingTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function testDispatchExistingCategoryWithPageNotAvailable(): void
     {
-        static::expectException(\Enlight_Controller_Exception::class);
+        static::expectException(Enlight_Controller_Exception::class);
         $this->dispatch('/cat/?sCategory=14&sPage=2');
         static::assertEquals(200, $this->Response()->getHttpResponseCode());
     }

@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
+use DateTime;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 class EsdHydrator extends Hydrator
@@ -50,7 +51,7 @@ class EsdHydrator extends Hydrator
         }
 
         if (isset($data['__esd_datum'])) {
-            $esd->setCreatedAt(new \DateTime($data['__esd_datum']));
+            $esd->setCreatedAt(new DateTime($data['__esd_datum']));
         }
 
         if (isset($data['__esd_file'])) {

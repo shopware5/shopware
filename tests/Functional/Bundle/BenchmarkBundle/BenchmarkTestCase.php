@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle;
 
+use Exception;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 abstract class BenchmarkTestCase extends \PHPUnit\Framework\TestCase
@@ -56,7 +57,7 @@ abstract class BenchmarkTestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param string $fileName
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool|string
      */
@@ -66,7 +67,7 @@ abstract class BenchmarkTestCase extends \PHPUnit\Framework\TestCase
         $path = $this->getAssetsFolder();
         $filePath = $path . $fileName;
         if (!file_exists($filePath)) {
-            throw new \Exception(sprintf('File with name %s does not exist in path %s', $fileName, $path));
+            throw new Exception(sprintf('File with name %s does not exist in path %s', $fileName, $path));
         }
 
         return file_get_contents($filePath);

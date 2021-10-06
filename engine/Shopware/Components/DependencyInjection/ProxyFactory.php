@@ -24,9 +24,11 @@
 
 namespace Shopware\Components\DependencyInjection;
 
+use Enlight_Hook_HookManager;
+
 class ProxyFactory
 {
-    public static function getProxy(\Enlight_Hook_HookManager $hookManager, $className, array $arguments)
+    public static function getProxy(Enlight_Hook_HookManager $hookManager, $className, array $arguments)
     {
         $proxy = $hookManager->getProxy($className);
 

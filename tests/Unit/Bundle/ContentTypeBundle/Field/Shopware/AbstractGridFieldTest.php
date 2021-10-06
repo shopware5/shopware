@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Unit\Bundle\ContentTypeBundle\Field\Shopware;
 
+use Generator;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\ContentTypeBundle\Field\MediaGrid;
 use Shopware\Bundle\ContentTypeBundle\Field\Shopware\AbstractGridField;
@@ -50,9 +51,9 @@ class AbstractGridFieldTest extends TestCase
     }
 
     /**
-     * @return \Generator<string, array>
+     * @return Generator<string, array>
      */
-    public function fieldProvider(): \Generator
+    public function fieldProvider(): Generator
     {
         yield 'MediaGrid' => [
             new MediaGrid(),

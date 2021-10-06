@@ -24,18 +24,18 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_Controller_TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 use ReflectionMethod;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
+use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
+use Shopware_Controllers_Backend_Article;
 
-class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
+class ArticleTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
-
     /**
      * @var ReflectionMethod
      */
@@ -47,7 +47,7 @@ class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
     private $interpretNumberSyntaxMethod;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $controller;
 
@@ -58,17 +58,15 @@ class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
     {
         parent::setUp();
 
-        $this->modelManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
-
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
+        Shopware()->Container()->get(Connection::class)->beginTransaction();
 
         // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
-        $this->controller = $this->createPartialMock(\Shopware_Controllers_Backend_Article::class, []);
+        $this->controller = $this->createPartialMock(Shopware_Controllers_Backend_Article::class, []);
 
-        $class = new \ReflectionClass($this->controller);
+        $class = new ReflectionClass($this->controller);
 
         $this->prepareNumberSyntaxMethod = $class->getMethod('prepareNumberSyntax');
         $this->prepareNumberSyntaxMethod->setAccessible(true);
@@ -83,16 +81,16 @@ class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
 
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
+        Shopware()->Container()->get(Connection::class)->rollBack();
     }
 
     /**
      * Tests whether an article cannot be overwritten by a save request that bases on outdated data. (The article in the
      * database is newer than that one the request body is based on.)
      */
-    public function testSaveArticleOverwriteProtection()
+    public function testSaveArticleOverwriteProtection(): void
     {
-        $helper = new \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper();
+        $helper = new Helper();
         $article = $helper->createArticle([
             'name' => 'Testartikel',
             'description' => 'Test description',
@@ -128,7 +126,7 @@ class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
             ->setPost($postData);
 
         $this->dispatch('backend/Article/save');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
         // Now use an outdated timestamp. The controller should detect this and fail.
         $postData['changed'] = '2008-08-07 18:11:31';
@@ -137,10 +135,10 @@ class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
             ->setPost($postData);
 
         $this->dispatch('backend/Article/save');
-        static::assertFalse($this->View()->success);
+        static::assertFalse($this->View()->getAssign('success'));
     }
 
-    public function testinterpretNumberSyntax()
+    public function testinterpretNumberSyntax(): void
     {
         $article = new Article();
 

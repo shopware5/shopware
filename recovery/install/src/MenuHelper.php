@@ -24,6 +24,7 @@
 
 namespace Shopware\Recovery\Install;
 
+use Exception;
 use Shopware\Recovery\Install\Service\TranslationService;
 
 class MenuHelper
@@ -77,12 +78,12 @@ class MenuHelper
     /**
      * @param string $name
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function setCurrent($name)
     {
         if (array_search($name, $this->entries) === false) {
-            throw new \Exception('could not find entrie');
+            throw new Exception('could not find entrie');
         }
 
         reset($this->entries);

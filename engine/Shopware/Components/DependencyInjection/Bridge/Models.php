@@ -27,6 +27,7 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Enlight_Loader;
 use Shopware\Components\Model\Configuration;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Components\Model\ModelManager;
@@ -48,7 +49,7 @@ class Models
     public function factory(
         EventManager $eventManager,
         Configuration $config,
-        \Enlight_Loader $loader,
+        Enlight_Loader $loader,
         Connection $connection,
         // Annotation driver is not really used here but has to be loaded first
         AnnotationDriver $modelAnnotation,

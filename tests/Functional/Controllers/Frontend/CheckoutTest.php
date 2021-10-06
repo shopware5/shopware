@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
+use Enlight_Components_Test_Plugin_TestCase;
+use Enlight_Controller_Request_RequestHttp;
+use LogicException;
 use Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Customer\Group;
@@ -31,7 +34,7 @@ use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
-class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
+class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
 {
     public const ARTICLE_NUMBER = 'SW10239';
     public const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
@@ -120,7 +123,7 @@ class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
      */
     public function testAddBasketOverGetFails()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
 
         $this->reset();
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
@@ -300,7 +303,7 @@ class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
      */
     public function loginFrontendUser()
     {
-        Shopware()->Front()->setRequest(new \Enlight_Controller_Request_RequestHttp());
+        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
         $user = Shopware()->Db()->fetchRow(
             'SELECT id, email, password, subshopID, language FROM s_user WHERE id = 1'
         );

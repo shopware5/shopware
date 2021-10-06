@@ -26,7 +26,10 @@ declare(strict_types=1);
 
 namespace Shopware\Components\Model\Exception;
 
-class ModelNotFoundException extends \RuntimeException
+use RuntimeException;
+use Throwable;
+
+class ModelNotFoundException extends RuntimeException
 {
     /**
      * @param int|string $identifierValue
@@ -36,7 +39,7 @@ class ModelNotFoundException extends \RuntimeException
         $identifierValue,
         string $identifier = 'id',
         int $code = 0,
-        ?\Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         $message = sprintf('Model of "%s" for %s "%s" not found', $modelClass, $identifier, (string) $identifierValue);
         parent::__construct($message, $code, $previous);

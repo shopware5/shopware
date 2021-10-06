@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Exception;
 
+use Enlight_Exception;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationInterface;
@@ -33,7 +34,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 /**
  * API Exception
  */
-class ValidationException extends \Enlight_Exception
+class ValidationException extends Enlight_Exception
 {
     /**
      * @var ConstraintViolationListInterface

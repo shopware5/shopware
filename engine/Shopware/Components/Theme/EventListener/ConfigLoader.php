@@ -25,6 +25,9 @@
 namespace Shopware\Components\Theme\EventListener;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Controller_Action;
+use Enlight_Event_EventArgs;
+use Exception;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -52,11 +55,11 @@ class ConfigLoader implements SubscriberInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function onDispatch(\Enlight_Event_EventArgs $args)
+    public function onDispatch(Enlight_Event_EventArgs $args)
     {
-        /** @var \Enlight_Controller_Action $controller */
+        /** @var Enlight_Controller_Action $controller */
         $controller = $args->get('subject');
 
         if (!$controller->View()->hasTemplate()) {

@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class ShippingFreeCondition implements ConditionInterface, \JsonSerializable
+class ShippingFreeCondition implements ConditionInterface, JsonSerializable
 {
     private const NAME = 'shipping_free';
 

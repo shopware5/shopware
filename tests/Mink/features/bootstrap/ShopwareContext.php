@@ -26,6 +26,7 @@ namespace Shopware\Tests\Mink;
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use RuntimeException;
 use Shopware\Tests\Mink\Element\CompareColumn;
 use Shopware\Tests\Mink\Page\Homepage;
 
@@ -117,7 +118,7 @@ class ShopwareContext extends SubContext
 
         if ($pageName === 'Index') {
             $pageName = 'Homepage';
-        } elseif (($pageName === 'Newsletter') && ($additionalData)) {
+        } elseif (($pageName === 'Newsletter') && $additionalData) {
             $data = array_merge($data, $additionalData->getHash());
         }
 
@@ -414,7 +415,7 @@ class ShopwareContext extends SubContext
         $element = $this->getSession()->getPage()->findAll('xpath', sprintf('//*[contains(concat(" ",normalize-space(@class)," ")," account--menu ")]//li//a[contains(text(),\'%s\')]', $link));
 
         if (!isset($element[1])) {
-            throw new \RuntimeException(sprintf('Cannot find element with name "%s"', $link));
+            throw new RuntimeException(sprintf('Cannot find element with name "%s"', $link));
         }
 
         $element[1]->click();

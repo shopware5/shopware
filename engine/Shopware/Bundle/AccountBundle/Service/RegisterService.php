@@ -24,8 +24,10 @@
 
 namespace Shopware\Bundle\AccountBundle\Service;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_Request as Request;
+use Exception;
 use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop as ShopStruct;
@@ -40,6 +42,7 @@ use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware_Components_Config;
+use Shopware_Components_TemplateMail;
 
 class RegisterService implements RegisterServiceInterface
 {
@@ -97,7 +100,7 @@ class RegisterService implements RegisterServiceInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function register(
         ShopStruct $shop,
@@ -135,7 +138,7 @@ class RegisterService implements RegisterServiceInterface
             $this->saveReferer($customer);
 
             $this->modelManager->commit();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->modelManager->rollback();
             throw $ex;
         }
@@ -167,7 +170,7 @@ class RegisterService implements RegisterServiceInterface
             // Reset login information if Double-Opt-In is active
             $customer->setFirstLogin(null);
             $customer->setLastLogin(null);
-            $customer->setDoubleOptinEmailSentDate(new \DateTime());
+            $customer->setDoubleOptinEmailSentDate(new DateTime());
         }
 
         // Password validation
@@ -284,9 +287,9 @@ class RegisterService implements RegisterServiceInterface
         );
 
         if (((int) $customer->getAccountMode()) === 1) {
-            $mail = $container->get(\Shopware_Components_TemplateMail::class)->createMail('sOPTINREGISTERACCOUNTLESS', $context);
+            $mail = $container->get(Shopware_Components_TemplateMail::class)->createMail('sOPTINREGISTERACCOUNTLESS', $context);
         } else {
-            $mail = $container->get(\Shopware_Components_TemplateMail::class)->createMail('sOPTINREGISTER', $context);
+            $mail = $container->get(Shopware_Components_TemplateMail::class)->createMail('sOPTINREGISTER', $context);
         }
         $mail->addTo($customer->getEmail());
         $mail->send();

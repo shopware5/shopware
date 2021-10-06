@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Theme\Compressor;
 
+use JSMin;
+
 /**
  * Javascript compressor for the frontend themes.
  * Used to compress theme and plugin javascript files.
@@ -40,6 +42,6 @@ class Js implements CompressorInterface
      */
     public function compress($content)
     {
-        return \JSMin::minify($content);
+        return JSMin::minify($content);
     }
 }

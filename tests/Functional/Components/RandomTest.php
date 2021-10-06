@@ -24,9 +24,10 @@
 
 namespace Shopware\Tests\Components;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Components\Random;
 
-class RandomTest extends \Enlight_Components_Test_TestCase
+class RandomTest extends Enlight_Components_Test_TestCase
 {
     /**
      * Test case

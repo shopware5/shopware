@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class IsAvailableCondition implements ConditionInterface, \JsonSerializable
+class IsAvailableCondition implements ConditionInterface, JsonSerializable
 {
     private const NAME = 'is_available_condition';
 

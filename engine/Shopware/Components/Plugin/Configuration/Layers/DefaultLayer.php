@@ -26,6 +26,7 @@ namespace Shopware\Components\Plugin\Configuration\Layers;
 
 use Doctrine\DBAL\Connection;
 use LogicException;
+use PDO;
 use Shopware\Components\Plugin\Configuration\WriterException;
 
 class DefaultLayer implements ConfigurationLayerInterface
@@ -65,7 +66,7 @@ class DefaultLayer implements ConfigurationLayerInterface
                 'coreConfigElements.value',
             ])
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR)
+            ->fetchAll(PDO::FETCH_KEY_PAIR)
         ;
 
         return AbstractShopConfigurationLayer::unserializeArray($values);

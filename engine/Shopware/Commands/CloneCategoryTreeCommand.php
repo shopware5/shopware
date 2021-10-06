@@ -24,6 +24,9 @@
 
 namespace Shopware\Commands;
 
+use Exception;
+use PDO;
+use RuntimeException;
 use Shopware\Components\CategoryHandling\CategoryDuplicator;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Category\Category;
@@ -155,7 +158,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
 
         try {
             $this->duplicateCategory($originalCategory->getId(), $parent->getId(), $copyProductAssociations);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 
             return 1;
@@ -174,7 +177,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
      *
      * @param int|string $categoryInput
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Category|null
      */
@@ -223,7 +226,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
      * @param bool $copyProductAssociations
      * @param int  $newRootCategoryId
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function duplicateCategory(
         $categoryId,
@@ -238,7 +241,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
 
         $childrenStmt = $this->container->get('db')->prepare('SELECT id FROM s_categories WHERE parent = :parent');
         $childrenStmt->execute([':parent' => $categoryId]);
-        $children = $childrenStmt->fetchAll(\PDO::FETCH_COLUMN);
+        $children = $childrenStmt->fetchAll(PDO::FETCH_COLUMN);
 
         $newRootCategoryId = $newRootCategoryId ?: $newCategoryId;
 

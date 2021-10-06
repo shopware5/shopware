@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Commands;
 
 use Elasticsearch\Client;
+use RuntimeException;
 use Shopware\Bundle\ESIndexingBundle\IndexFactory;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
@@ -113,7 +114,7 @@ class SwitchAliasCommand extends ShopwareCommand implements CompletionAwareInter
 
         $exist = $client->indices()->exists(['index' => $indexName]);
         if (!$exist) {
-            throw new \RuntimeException(sprintf('Index "%s" does not exist', $indexName));
+            throw new RuntimeException(sprintf('Index "%s" does not exist', $indexName));
         }
 
         $actions = [

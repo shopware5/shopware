@@ -26,11 +26,14 @@ namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
+use Enlight_Components_Snippet_Namespace;
+use Exception;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop;
 use Shopware\Models\Shop\Template;
 use Shopware\Models\Theme\Settings;
+use Shopware_Components_Snippet_Manager;
 
 /**
  * The theme service class handles all crud operations
@@ -50,7 +53,7 @@ class Service
     /**
      * Snippet manager for translations.
      *
-     * @var \Shopware_Components_Snippet_Manager
+     * @var Shopware_Components_Snippet_Manager
      */
     private $snippets;
 
@@ -68,7 +71,7 @@ class Service
 
     public function __construct(
         ModelManager $entityManager,
-        \Shopware_Components_Snippet_Manager $snippets,
+        Shopware_Components_Snippet_Manager $snippets,
         Util $util,
         MediaServiceInterface $mediaService
     ) {
@@ -233,7 +236,7 @@ class Service
      * @param int $shopId
      * @param int $templateId
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function assignShopTemplate($shopId, $templateId)
     {
@@ -241,14 +244,14 @@ class Service
         $shop = $this->entityManager->find(\Shopware\Models\Shop\Shop::class, $shopId);
 
         if (!$shop instanceof Shop\Shop) {
-            throw new \Exception();
+            throw new Exception();
         }
 
         /** @var Shop\Template $template */
         $template = $this->entityManager->find(Template::class, $templateId);
 
         if (!$template instanceof Shop\Template) {
-            throw new \Exception();
+            throw new Exception();
         }
 
         $shop->setTemplate($template);
@@ -326,7 +329,7 @@ class Service
      *
      * @return array
      */
-    public function translateConfigSet($set, \Enlight_Components_Snippet_Namespace $namespace)
+    public function translateConfigSet($set, Enlight_Components_Snippet_Namespace $namespace)
     {
         $set['name'] = $this->convertSnippet($set['name'], $namespace);
         $set['description'] = $this->convertSnippet($set['description'], $namespace);
@@ -350,7 +353,7 @@ class Service
      *
      * @return array
      */
-    protected function translateContainer(array $container, Shop\Template $template, \Enlight_Components_Snippet_Namespace $namespace)
+    protected function translateContainer(array $container, Shop\Template $template, Enlight_Components_Snippet_Namespace $namespace)
     {
         foreach ($container['elements'] as &$element) {
             $element['fieldLabel'] = $this->convertSnippet(
@@ -477,7 +480,7 @@ class Service
      *
      * @return array
      */
-    protected function translateThemeData(array $data, \Enlight_Components_Snippet_Namespace $namespace)
+    protected function translateThemeData(array $data, Enlight_Components_Snippet_Namespace $namespace)
     {
         $data['name'] = $this->convertSnippet($data['name'], $namespace);
         $data['description'] = $this->convertSnippet($data['description'], $namespace);
@@ -492,7 +495,7 @@ class Service
      *
      * @param string|array $data
      */
-    private function translateRecursive($data, \Enlight_Components_Snippet_Namespace $namespace)
+    private function translateRecursive($data, Enlight_Components_Snippet_Namespace $namespace)
     {
         if (\is_array($data)) {
             foreach ($data as &$value) {
@@ -509,7 +512,7 @@ class Service
      * Helper function to check, convert and load the translation for
      * the passed value.
      */
-    private function convertSnippet(?string $snippet, \Enlight_Components_Snippet_Namespace $namespace): ?string
+    private function convertSnippet(?string $snippet, Enlight_Components_Snippet_Namespace $namespace): ?string
     {
         if (!$this->isSnippet($snippet)) {
             return $snippet;
@@ -526,8 +529,11 @@ class Service
      */
     private function isSnippet(?string $value): bool
     {
-        return (bool) (substr($value, -2) === '__'
-            && strpos($value, '__') === 0);
+        if ($value === null) {
+            return false;
+        }
+
+        return substr($value, -2) === '__' && strpos($value, '__') === 0;
     }
 
     /**
@@ -584,7 +590,7 @@ class Service
     /**
      * Returns the snippet namespace for the passed template.
      *
-     * @return \Enlight_Components_Snippet_Namespace
+     * @return Enlight_Components_Snippet_Namespace
      */
     private function getConfigSnippetNamespace(Shop\Template $template)
     {

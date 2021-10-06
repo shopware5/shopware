@@ -24,7 +24,9 @@
 
 namespace Shopware\Components\Filesystem\Exception;
 
-class AdapterFactoryNotFoundException extends \Exception
+use Exception;
+
+class AdapterFactoryNotFoundException extends Exception
 {
     public static function fromAdapterType($type)
     {

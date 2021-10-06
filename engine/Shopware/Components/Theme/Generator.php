@@ -24,7 +24,10 @@
 
 namespace Shopware\Components\Theme;
 
+use Enlight_Event_EventManager;
+use Exception;
 use Shopware\Models\Shop\Template;
+use SplFileObject;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -43,7 +46,7 @@ class Generator
     private $fileSystem;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
@@ -176,7 +179,7 @@ EOD;
         ],
     ];
 
-    public function __construct(PathResolver $pathResolver, Filesystem $fileSystem, \Enlight_Event_EventManager $eventManager)
+    public function __construct(PathResolver $pathResolver, Filesystem $fileSystem, Enlight_Event_EventManager $eventManager)
     {
         $this->pathResolver = $pathResolver;
         $this->fileSystem = $fileSystem;
@@ -189,15 +192,15 @@ EOD;
      *
      * @param Template $parent
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function generateTheme(array $data, Template $parent = null)
     {
         if (!is_writable($this->pathResolver->getFrontendThemeDirectory())) {
-            throw new \Exception(sprintf('Theme directory %s isn\'t writable', $this->pathResolver->getFrontendThemeDirectory()));
+            throw new Exception(sprintf('Theme directory %s isn\'t writable', $this->pathResolver->getFrontendThemeDirectory()));
         }
         if (!isset($data['template']) || empty($data['template'])) {
-            throw new \Exception('Passed data array contains no valid theme name under the array key "template".');
+            throw new Exception('Passed data array contains no valid theme name under the array key "template".');
         }
 
         // Ensure that the first character is upper case.
@@ -288,7 +291,7 @@ EOD;
         $source = $this->replacePlaceholder('license', $data['license'], $source);
         $source = $this->replacePlaceholder('description', $data['description'], $source);
 
-        $output = new \SplFileObject(
+        $output = new SplFileObject(
             $this->getThemeDirectory($data['template']) . DIRECTORY_SEPARATOR . 'Theme.php',
             'w+'
         );
@@ -342,7 +345,7 @@ EOD;
             } else {
                 // Switch between create file or create directory
                 if (strpos($value, '.') !== false) {
-                    $output = new \SplFileObject(
+                    $output = new SplFileObject(
                         $baseDir . DIRECTORY_SEPARATOR . $value,
                         'w+'
                     );

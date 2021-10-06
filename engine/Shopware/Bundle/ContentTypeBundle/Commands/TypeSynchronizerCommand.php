@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\Commands;
 
+use RuntimeException;
 use Shopware\Bundle\ContentTypeBundle\Services\DatabaseContentTypeSynchronizerInterface;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -49,7 +50,7 @@ class TypeSynchronizerCommand extends ShopwareCommand
         $activePlugins = $this->container->getParameter('active_plugins');
 
         if (!\is_array($activePlugins)) {
-            throw new \RuntimeException('Parameter active_plugins needs to be an array');
+            throw new RuntimeException('Parameter active_plugins needs to be an array');
         }
 
         $types = $sync->sync(array_keys($activePlugins), $input->getOption('destructive'));

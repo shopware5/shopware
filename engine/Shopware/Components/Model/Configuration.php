@@ -41,8 +41,12 @@ use DoctrineExtensions\Query\Mysql\IfElse;
 use DoctrineExtensions\Query\Mysql\IfNull;
 use DoctrineExtensions\Query\Mysql\Regexp;
 use DoctrineExtensions\Query\Mysql\Replace;
+use Exception;
+use Redis;
+use RuntimeException;
 use Shopware\Components\CacheManager;
 use Shopware\Components\ShopwareReleaseStruct;
+use Zend_Cache_Core;
 
 class Configuration extends BaseConfiguration
 {
@@ -66,12 +70,12 @@ class Configuration extends BaseConfiguration
     protected $release;
 
     /**
-     * @throws \Exception
-     * @throws \RuntimeException
+     * @throws Exception
+     * @throws RuntimeException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(array $options, \Zend_Cache_Core $cache, RepositoryFactory $repositoryFactory, ShopwareReleaseStruct $release)
+    public function __construct(array $options, Zend_Cache_Core $cache, RepositoryFactory $repositoryFactory, ShopwareReleaseStruct $release)
     {
         // Specifies the FQCN of a subclass of the EntityRepository.
         // That will be available for all entities without a custom repository class.
@@ -147,7 +151,7 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function setCacheProvider(array $options)
     {
@@ -171,7 +175,7 @@ class Configuration extends BaseConfiguration
         }
     }
 
-    public function setCacheResource(\Zend_Cache_Core $cacheResource)
+    public function setCacheResource(Zend_Cache_Core $cacheResource)
     {
         $cache = new Cache($cacheResource, 'Shopware_Models_' . $this->release->getRevision() . '_', [CacheManager::ITEM_TAG_MODELS]);
 
@@ -197,7 +201,7 @@ class Configuration extends BaseConfiguration
     /**
      * @param string $dir
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return Configuration
      */
@@ -205,10 +209,10 @@ class Configuration extends BaseConfiguration
     {
         if (!is_dir($dir)) {
             if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
-                throw new \RuntimeException(sprintf("Unable to create the doctrine attribute directory (%s)\n", $dir));
+                throw new RuntimeException(sprintf("Unable to create the doctrine attribute directory (%s)\n", $dir));
             }
         } elseif (!is_writable($dir)) {
-            throw new \RuntimeException(sprintf("Unable to write in the doctrine attribute directory (%s)\n", $dir));
+            throw new RuntimeException(sprintf("Unable to write in the doctrine attribute directory (%s)\n", $dir));
         }
 
         $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
@@ -231,16 +235,16 @@ class Configuration extends BaseConfiguration
      *
      * @param string $dir
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function setProxyDir($dir)
     {
         if (!is_dir($dir)) {
             if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
-                throw new \RuntimeException(sprintf("Unable to create the doctrine proxy directory (%s)\n", $dir));
+                throw new RuntimeException(sprintf("Unable to create the doctrine proxy directory (%s)\n", $dir));
             }
         } elseif (!is_writable($dir)) {
-            throw new \RuntimeException(sprintf("Unable to write in the doctrine proxy directory (%s)\n", $dir));
+            throw new RuntimeException(sprintf("Unable to write in the doctrine proxy directory (%s)\n", $dir));
         }
 
         parent::setProxyDir($dir);
@@ -251,7 +255,7 @@ class Configuration extends BaseConfiguration
      */
     private function createRedisCacheProvider(array $options)
     {
-        $redis = new \Redis();
+        $redis = new Redis();
         if (isset($options['redisPersistent']) && $options['redisPersistent'] == true) {
             $redis->pconnect($options['redisHost'], $options['redisPort']);
         } else {
@@ -268,7 +272,7 @@ class Configuration extends BaseConfiguration
 
         // RedisCache->setRedis might configure igbinary as serializer, which might cause problems
         // this enforces the PHP serializer
-        $redis->setOption(\Redis::OPT_SERIALIZER, (string) \Redis::SERIALIZER_PHP);
+        $redis->setOption(Redis::OPT_SERIALIZER, (string) Redis::SERIALIZER_PHP);
 
         return $cache;
     }
@@ -276,7 +280,7 @@ class Configuration extends BaseConfiguration
     /**
      * @param string $provider
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function createDefaultProvider($provider)
     {
@@ -288,7 +292,7 @@ class Configuration extends BaseConfiguration
         }
 
         if (!class_exists($provider)) {
-            throw new \Exception(sprintf('Doctrine cache provider "%s" not found failure.', $provider));
+            throw new Exception(sprintf('Doctrine cache provider "%s" not found failure.', $provider));
         }
 
         return new $provider();

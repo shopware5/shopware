@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Banner;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
 
@@ -63,7 +64,7 @@ class Repository extends ModelRepository
     public function getAllActiveBanners($filter = null, $limit = 0, $randomize = false)
     {
         $builder = $this->getBannerMainQuery($filter);
-        $today = new \DateTime();
+        $today = new DateTime();
 
         $builder->andWhere('(banner.validFrom <= ?3 OR (banner.validFrom = ?4 OR banner.validFrom IS NULL))')
             ->setParameter(3, $today)
@@ -116,7 +117,7 @@ class Repository extends ModelRepository
     public function getBannerIds($categoryId, $limit = 0)
     {
         $builder = $this->createQueryBuilder('banner');
-        $today = new \DateTime();
+        $today = new DateTime();
 
         $builder->andWhere('(banner.validFrom <= ?3 OR (banner.validFrom = ?4 OR banner.validFrom IS NULL))')
                 ->setParameter(3, $today)

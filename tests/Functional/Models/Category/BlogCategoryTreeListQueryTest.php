@@ -26,10 +26,11 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models\Category;
 
+use Enlight_Components_Test_TestCase;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Category\Repository;
 
-class BlogCategoryTreeListQueryTest extends \Enlight_Components_Test_TestCase
+class BlogCategoryTreeListQueryTest extends Enlight_Components_Test_TestCase
 {
     protected ?Repository $repo = null;
 

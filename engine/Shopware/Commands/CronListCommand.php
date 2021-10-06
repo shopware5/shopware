@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Enlight_Components_Cron_Manager;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -52,7 +53,7 @@ EOF
     {
         $this->container->load('table');
 
-        /** @var \Enlight_Components_Cron_Manager $manager */
+        /** @var Enlight_Components_Cron_Manager $manager */
         $manager = $this->container->get('cron');
         $rows = [];
 

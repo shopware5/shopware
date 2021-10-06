@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SitemapBundle\UrlFilter;
 
-class UrlFilterException extends \Exception
+use Exception;
+
+class UrlFilterException extends Exception
 {
 }

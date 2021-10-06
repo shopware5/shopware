@@ -545,7 +545,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
     private function normalizeFilter($filter)
     {
-        return strtolower(preg_replace('/[^\da-z]/i', '_', strip_tags($filter)));
+        return strtolower((string) preg_replace('/[^\da-z]/i', '_', strip_tags($filter)));
     }
 
     /**

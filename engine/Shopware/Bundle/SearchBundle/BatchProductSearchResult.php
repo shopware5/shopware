@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
+use OutOfBoundsException;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 
 class BatchProductSearchResult
@@ -45,7 +46,7 @@ class BatchProductSearchResult
      *
      * @param string $key
      *
-     * @throws \OutOfBoundsException
+     * @throws OutOfBoundsException
      *
      * @return array<string, ListProduct|null>
      */
@@ -55,7 +56,7 @@ class BatchProductSearchResult
             return $this->storage[$key];
         }
 
-        throw new \OutOfBoundsException(sprintf('Key "%s" was not found.', $key));
+        throw new OutOfBoundsException(sprintf('Key "%s" was not found.', $key));
     }
 
     /**

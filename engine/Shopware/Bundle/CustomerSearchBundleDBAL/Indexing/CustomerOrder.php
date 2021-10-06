@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
+use DateTime;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class CustomerOrder extends Extendable
@@ -54,12 +55,12 @@ class CustomerOrder extends Extendable
     protected $maxAmount;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      */
     protected $firstOrderTime;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      */
     protected $lastOrderTime;
 
@@ -194,7 +195,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @return \DateTime|null
+     * @return DateTime|null
      */
     public function getFirstOrderTime()
     {
@@ -202,7 +203,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @param \DateTime|null $firstOrderTime
+     * @param DateTime|null $firstOrderTime
      */
     public function setFirstOrderTime($firstOrderTime)
     {
@@ -210,7 +211,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @return \DateTime|null
+     * @return DateTime|null
      */
     public function getLastOrderTime()
     {
@@ -218,7 +219,7 @@ class CustomerOrder extends Extendable
     }
 
     /**
-     * @param \DateTime|null $lastOrderTime
+     * @param DateTime|null $lastOrderTime
      */
     public function setLastOrderTime($lastOrderTime)
     {

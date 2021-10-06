@@ -26,7 +26,9 @@ declare(strict_types=1);
 
 namespace Shopware\Controllers\Widgets;
 
-class Blog extends \Enlight_Controller_Action
+use Enlight_Controller_Action;
+
+class Blog extends Enlight_Controller_Action
 {
     public function formAction(): void
     {

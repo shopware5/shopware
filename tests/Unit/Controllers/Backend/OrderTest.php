@@ -25,6 +25,8 @@
 namespace Shopware\tests\Unit\Controllers\Backend;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionMethod;
 use Shopware_Controllers_Backend_Order;
 
 class OrderTest extends TestCase
@@ -35,14 +37,14 @@ class OrderTest extends TestCase
     private $controller;
 
     /**
-     * @var \ReflectionMethod
+     * @var ReflectionMethod
      */
     private $method;
 
     protected function setUp(): void
     {
         $this->controller = $this->createPartialMock(Shopware_Controllers_Backend_Order::class, []);
-        $class = new \ReflectionClass($this->controller);
+        $class = new ReflectionClass($this->controller);
         $this->method = $class->getMethod('resolveSortParameter');
         $this->method->setAccessible(true);
     }

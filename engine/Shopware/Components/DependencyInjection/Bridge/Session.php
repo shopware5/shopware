@@ -24,8 +24,12 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Enlight_Components_Session_Namespace;
+use RuntimeException;
+use SessionHandlerInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Session\PdoSessionHandler;
+use Shopware_Components_Config;
 use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
@@ -37,7 +41,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 class Session
 {
     /**
-     * @return \SessionHandlerInterface|null
+     * @return SessionHandlerInterface|null
      */
     public function createSaveHandler(Container $container)
     {
@@ -48,7 +52,7 @@ class Session
 
         $dbOptions = $container->getParameter('shopware.db');
         if (!\is_array($dbOptions)) {
-            throw new \RuntimeException('Parameter shopware.db has to be an array');
+            throw new RuntimeException('Parameter shopware.db has to be an array');
         }
 
         $conn = Db::createPDO($dbOptions);
@@ -67,14 +71,14 @@ class Session
     }
 
     /**
-     * @return \Enlight_Components_Session_Namespace
+     * @return Enlight_Components_Session_Namespace
      */
-    public function createSession(Container $container, \SessionHandlerInterface $saveHandler = null)
+    public function createSession(Container $container, SessionHandlerInterface $saveHandler = null)
     {
         // If another session is already started, save and close it before starting the frontend session below.
         // We need to do this, because the other session would use the session id of the frontend session and thus write
         // its data into the wrong session.
-        \Enlight_Components_Session_Namespace::ensureBackendSessionClosed($container);
+        Enlight_Components_Session_Namespace::ensureBackendSessionClosed($container);
         // Ensure no session is active before starting the frontend session below. We need to do this because there
         // could be another session with inconsistent/invalid state in the container.
         if (session_status() === PHP_SESSION_ACTIVE) {
@@ -87,7 +91,7 @@ class Session
         $sessionOptions = $container->getParameter('shopware.session');
 
         if (!\is_array($sessionOptions)) {
-            throw new \RuntimeException('Parameter shopware.session has to be an array');
+            throw new RuntimeException('Parameter shopware.session has to be an array');
         }
 
         /** @var \Shopware\Models\Shop\Shop $shop */
@@ -96,7 +100,7 @@ class Session
 
         $name = 'session-' . $shop->getId();
 
-        if ($container->get(\Shopware_Components_Config::class)->get('shareSessionBetweenLanguageShops')) {
+        if ($container->get(Shopware_Components_Config::class)->get('shareSessionBetweenLanguageShops')) {
             $name = 'session-' . $mainShop->getId();
         }
 
@@ -132,7 +136,7 @@ class Session
 
         $attributeBag = new NamespacedAttributeBag('Shopware');
 
-        $session = new \Enlight_Components_Session_Namespace($storage, $attributeBag);
+        $session = new Enlight_Components_Session_Namespace($storage, $attributeBag);
         $session->start();
         $session->set('sessionId', $session->getId());
 

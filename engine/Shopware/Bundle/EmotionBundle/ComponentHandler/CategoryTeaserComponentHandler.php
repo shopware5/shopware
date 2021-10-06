@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
@@ -212,7 +213,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
             ->setParameter('categoryId', $categoryId)
             ->setParameter('path', '%|' . $categoryId . '|%');
 
-        $blogIds = $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        $blogIds = $builder->execute()->fetchAll(PDO::FETCH_COLUMN);
         shuffle($blogIds);
 
         return (int) reset($blogIds);

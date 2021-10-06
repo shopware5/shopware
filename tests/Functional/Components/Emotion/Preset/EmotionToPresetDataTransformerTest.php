@@ -27,6 +27,7 @@ namespace Shopware\tests\Functional\Components\Emotion\Preset;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\NoResultException;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformer;
 
@@ -116,7 +117,7 @@ class EmotionToPresetDataTransformerTest extends TestCase
         $this->connection->insert('s_core_plugins', ['name' => 'SwagLiveShopping', 'label' => 'Live shopping', 'version' => '1.0.0']);
         $pluginId = $this->connection->fetchColumn('SELECT id FROM s_core_plugins');
 
-        $method = new \ReflectionMethod($this->transformer, 'getRequiredPluginsById');
+        $method = new ReflectionMethod($this->transformer, 'getRequiredPluginsById');
         $method->setAccessible(true);
 
         $ids = [$pluginId];

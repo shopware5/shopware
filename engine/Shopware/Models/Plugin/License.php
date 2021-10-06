@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Plugin;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -98,21 +99,21 @@ class License extends ModelEntity
     private $source;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="added", type="date", nullable=true)
      */
     private $added;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="creation", type="date", nullable=true)
      */
     private $creation;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="expiration", type="date", nullable=true)
      */
@@ -165,7 +166,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $added
+     * @param DateTimeInterface $added
      */
     public function setAdded($added)
     {
@@ -173,7 +174,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getAdded()
     {
@@ -181,7 +182,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $creation
+     * @param DateTimeInterface $creation
      */
     public function setCreation($creation)
     {
@@ -189,7 +190,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getCreation()
     {
@@ -197,7 +198,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $expiration
+     * @param DateTimeInterface $expiration
      */
     public function setExpiration($expiration)
     {
@@ -205,7 +206,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getExpiration()
     {

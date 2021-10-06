@@ -25,11 +25,12 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Shopware\Components\DependencyInjection\Container;
+use Zend_Locale;
 
 class Locale
 {
     /**
-     * @return \Zend_Locale
+     * @return Zend_Locale
      */
     public function factory(Container $container)
     {
@@ -38,6 +39,6 @@ class Locale
             $locale = $container->get('shop')->getLocale()->getLocale();
         }
 
-        return new \Zend_Locale($locale);
+        return new Zend_Locale($locale);
     }
 }

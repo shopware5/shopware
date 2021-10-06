@@ -26,6 +26,8 @@ namespace Shopware\Bundle\AccountBundle\Form\Account;
 
 use Shopware\Bundle\AccountBundle\Type\SalutationType;
 use Shopware\Models\Customer\Customer;
+use Shopware_Components_Config;
+use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -42,18 +44,18 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class ProfileUpdateFormType extends AbstractType
 {
     /**
-     * @var \Shopware_Components_Snippet_Manager
+     * @var Shopware_Components_Snippet_Manager
      */
     protected $snippetManager;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     protected $config;
 
     public function __construct(
-        \Shopware_Components_Snippet_Manager $snippetManager,
-        \Shopware_Components_Config $config
+        Shopware_Components_Snippet_Manager $snippetManager,
+        Shopware_Components_Config $config
     ) {
         $this->snippetManager = $snippetManager;
         $this->config = $config;

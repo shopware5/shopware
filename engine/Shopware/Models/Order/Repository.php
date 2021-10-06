@@ -24,9 +24,12 @@
 
 namespace Shopware\Models\Order;
 
+use DateInterval;
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
+use PDO;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Article\Article;
@@ -376,7 +379,7 @@ class Repository extends ModelRepository
      */
     public function getVoucherQuery()
     {
-        $today = new \DateTime();
+        $today = new DateTime();
         $today = "'" . $today->format('Y-m-d') . "'";
 
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -628,14 +631,14 @@ class Repository extends ModelRepository
                     break;
 
                 case 'from':
-                    $tmp = new \DateTime($filter['value']);
+                    $tmp = new DateTime($filter['value']);
                     $builder->andWhere('orders.orderTime >= :orderTimeFrom');
                     $builder->setParameter('orderTimeFrom', $tmp->format('Ymd'));
                     break;
 
                 case 'to':
-                    $tmp = new \DateTime($filter['value']);
-                    $tmp->add(new \DateInterval('P1D'));
+                    $tmp = new DateTime($filter['value']);
+                    $tmp->add(new DateInterval('P1D'));
                     $builder->andWhere('orders.orderTime <= :orderTimeTo');
                     $builder->setParameter('orderTimeTo', $tmp->format('Ymd'));
                     break;
@@ -742,7 +745,7 @@ class Repository extends ModelRepository
 
         $query->setMaxResults(self::SEARCH_TERM_LIMIT);
 
-        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -789,7 +792,7 @@ class Repository extends ModelRepository
         ]);
 
         $query->setMaxResults(self::SEARCH_TERM_LIMIT);
-        $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        $ids = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
 
         if (empty($ids)) {
             return [];
@@ -808,7 +811,7 @@ class Repository extends ModelRepository
 
         $query->setMaxResults(self::SEARCH_TERM_LIMIT);
 
-        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -837,7 +840,7 @@ class Repository extends ModelRepository
         }
         $query->setMaxResults(self::SEARCH_TERM_LIMIT);
 
-        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -861,6 +864,6 @@ class Repository extends ModelRepository
         }
         $query->setMaxResults(self::SEARCH_TERM_LIMIT);
 
-        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 }

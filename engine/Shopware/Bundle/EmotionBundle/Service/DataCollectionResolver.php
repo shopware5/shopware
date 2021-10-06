@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\EmotionBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\SearchBundle\BatchProductSearch;
@@ -113,7 +114,7 @@ class DataCollectionResolver implements DataCollectionResolverInterface
             ->where('path in (:paths)')
             ->setParameter('paths', $mediaPaths, Connection::PARAM_STR_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**

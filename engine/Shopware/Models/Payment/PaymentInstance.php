@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Payment;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Customer\Customer;
@@ -159,7 +161,7 @@ class PaymentInstance extends ModelEntity
     protected $amount;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="created_at", type="date", nullable=false)
      */
@@ -176,7 +178,7 @@ class PaymentInstance extends ModelEntity
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new DateTime();
     }
 
     /**
@@ -254,7 +256,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $createdAt
+     * @param DateTimeInterface $createdAt
      */
     public function setCreatedAt($createdAt)
     {
@@ -262,7 +264,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getCreatedAt()
     {

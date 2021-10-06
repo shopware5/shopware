@@ -25,7 +25,11 @@
 namespace Shopware\Recovery\Update\Steps;
 
 use Gaufrette\Filesystem;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RuntimeException;
 use Shopware\Recovery\Update\pathBuilder;
+use SplFileInfo;
 
 class UnpackStep
 {
@@ -64,7 +68,7 @@ class UnpackStep
      * @param int $offset
      * @param int $total
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return FinishResult|ValidResult
      */
@@ -86,9 +90,9 @@ class UnpackStep
             $localFs->write($backupDirRelative . 'dummy', 'dummyfile');
         }
 
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($inflector->getSourceDir(), \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::LEAVES_ONLY
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($inflector->getSourceDir(), RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::LEAVES_ONLY
         );
 
         if (!$total) {
@@ -99,7 +103,7 @@ class UnpackStep
         $maxCount = 5000;
         $startTime = time();
 
-        /** @var \SplFileInfo $path */
+        /** @var SplFileInfo $path */
         foreach ($iterator as $path) {
             $targetFile = $inflector->createTargetPath($path);
             $backupFile = $inflector->createBackupPath($path);

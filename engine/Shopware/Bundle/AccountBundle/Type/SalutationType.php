@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\AccountBundle\Type;
 
+use Shopware_Components_Config;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,11 +32,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SalutationType extends AbstractType
 {
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
-    public function __construct(\Shopware_Components_Config $config)
+    public function __construct(Shopware_Components_Config $config)
     {
         $this->config = $config;
     }

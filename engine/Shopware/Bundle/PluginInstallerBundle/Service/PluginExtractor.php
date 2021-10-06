@@ -24,9 +24,12 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use Exception;
+use RuntimeException;
 use Shopware\Components\Plugin\RequirementValidator;
 use Shopware\Components\ShopwareReleaseStruct;
 use Symfony\Component\Filesystem\Filesystem;
+use ZipArchive;
 
 class PluginExtractor
 {
@@ -76,16 +79,16 @@ class PluginExtractor
     /**
      * Extracts the provided zip file to the provided destination
      *
-     * @param \ZipArchive $archive
+     * @param ZipArchive $archive
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function extract($archive)
     {
         $destination = $this->pluginDir;
 
         if (!is_writable($destination)) {
-            throw new \Exception(sprintf('Destination directory "%s" is not writable', $destination));
+            throw new Exception(sprintf('Destination directory "%s" is not writable', $destination));
         }
 
         $prefix = $this->getPluginPrefix($archive);
@@ -103,7 +106,7 @@ class PluginExtractor
             }
 
             unlink($archive->filename);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if ($backupFile !== false) {
                 $this->filesystem->rename($backupFile, $oldFile);
             }
@@ -120,7 +123,7 @@ class PluginExtractor
      *
      * @param string $prefix
      */
-    private function validatePluginZip($prefix, \ZipArchive $archive)
+    private function validatePluginZip($prefix, ZipArchive $archive)
     {
         for ($i = 2; $i < $archive->numFiles; ++$i) {
             $stat = $archive->statIndex($i);
@@ -133,7 +136,7 @@ class PluginExtractor
     /**
      * @return string
      */
-    private function getPluginPrefix(\ZipArchive $archive)
+    private function getPluginPrefix(ZipArchive $archive)
     {
         $entry = $archive->statIndex(0);
 
@@ -162,7 +165,7 @@ class PluginExtractor
     private function assertPrefix($filename, $prefix)
     {
         if (strpos($filename, $prefix) !== 0) {
-            throw new \RuntimeException(sprintf('Detected invalid file/directory %s in the plugin zip: %s', $filename, $prefix));
+            throw new RuntimeException(sprintf('Detected invalid file/directory %s in the plugin zip: %s', $filename, $prefix));
         }
     }
 
@@ -172,7 +175,7 @@ class PluginExtractor
     private function assertNoDirectoryTraversal($filename)
     {
         if (strpos($filename, '../') !== false) {
-            throw new \RuntimeException('Directory Traversal detected');
+            throw new RuntimeException('Directory Traversal detected');
         }
     }
 
@@ -222,7 +225,7 @@ class PluginExtractor
     /**
      * @param string $prefix
      */
-    private function validatePluginRequirements($prefix, \ZipArchive $archive)
+    private function validatePluginRequirements($prefix, ZipArchive $archive)
     {
         if ($xml = $archive->getFromName($prefix . '/plugin.xml')) {
             $tmpFile = tempnam(sys_get_temp_dir(), uniqid()) . '.xml';

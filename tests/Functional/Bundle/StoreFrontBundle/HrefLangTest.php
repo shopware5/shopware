@@ -29,6 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\HrefLangService;
 use Shopware\Bundle\StoreFrontBundle\Service\HrefLangServiceInterface;
 use Shopware\Components\Api\Resource\Category;
 use Shopware\Models\Shop\Shop;
+use Shopware_Components_Translation;
 
 class HrefLangTest extends TestCase
 {
@@ -135,7 +136,7 @@ class HrefLangTest extends TestCase
             'name' => 'My fancy german category',
         ]);
 
-        Shopware()->Container()->get(\Shopware_Components_Translation::class)->write(2, 'category', $category->getId(), [
+        Shopware()->Container()->get(Shopware_Components_Translation::class)->write(2, 'category', $category->getId(), [
             'description' => 'My fancy english category',
         ]);
 

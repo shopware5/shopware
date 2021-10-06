@@ -26,6 +26,7 @@ namespace Shopware\Tests\Mink;
 
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Element\DocumentElement;
+use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\MultipleElement;
@@ -56,7 +57,7 @@ class Helper
      *
      * @param bool $strict
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool|int|string
      */
@@ -112,7 +113,7 @@ class Helper
         $float = str_replace([' ', '.', ','], ['', '', '.'], $value);
         preg_match('/([0-9]+[\\.]?[0-9]*)/', $float, $matches);
 
-        return \floatval($matches[0]);
+        return (float) ($matches[0]);
     }
 
     /**
@@ -218,7 +219,7 @@ class Helper
      * @param Page|Element|HelperSelectorInterface $parent
      * @param bool                                 $throwExceptions
      *
-     * @throws \Exception|PendingException
+     * @throws Exception|PendingException
      *
      * @return Element[]
      */
@@ -260,7 +261,7 @@ class Helper
      * @param Page|Element|HelperSelectorInterface $parent
      * @param bool                                 $throwExceptions
      *
-     * @throws \Exception|PendingException
+     * @throws Exception|PendingException
      *
      * @return array
      */
@@ -302,7 +303,7 @@ class Helper
      * @param Page|Element|HelperSelectorInterface $parent
      * @param bool                                 $throwExceptions
      *
-     * @throws \Exception
+     * @throws Exception
      * @throws PendingException
      *
      * @return array
@@ -363,7 +364,7 @@ class Helper
      * @param array|string $messages
      * @param int          $type
      *
-     * @throws \Exception|PendingException
+     * @throws Exception|PendingException
      */
     public static function throwException($messages = [], $type = self::EXCEPTION_GENERIC)
     {
@@ -397,7 +398,7 @@ EOD
 
         switch ($type) {
             case self::EXCEPTION_GENERIC:
-                throw new \Exception($message);
+                throw new Exception($message);
             case self::EXCEPTION_PENDING:
                 throw new PendingException($message);
             default:
@@ -444,7 +445,7 @@ EOD
             $notFound[$key] = $locatorArray[$key][self::$language];
         }
 
-        return ($notFound) ?: true;
+        return $notFound ?: true;
     }
 
     /**
@@ -453,7 +454,7 @@ EOD
      * @param Page|Element|HelperSelectorInterface $parent
      * @param string                               $key
      *
-     * @throws \Exception
+     * @throws Exception
      * @throws PendingException
      */
     public static function clickNamedLink(HelperSelectorInterface $parent, $key)
@@ -505,7 +506,7 @@ EOD
             $notFound[$key] = $locatorArray[$key][self::$language];
         }
 
-        return ($notFound) ?: true;
+        return $notFound ?: true;
     }
 
     /**
@@ -537,7 +538,7 @@ EOD
     /**
      * Helper method that returns the content block of a page
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return \Behat\Mink\Element\NodeElement
      */
@@ -761,7 +762,7 @@ EOD
     /**
      * Returns the unique value of an array, throws in exception if there are differences
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string
      */
@@ -885,7 +886,7 @@ EOD
      * @param callable $lambda
      * @param int      $wait
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public static function spin($lambda, $wait = 60)
     {
@@ -896,7 +897,7 @@ EOD
                 if ($lambda()) {
                     return;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // do nothing
             }
 
@@ -914,7 +915,7 @@ EOD
                 $element = $page->find('css', '.js--overlay');
 
                 return $element === null;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return true;
             }
         });

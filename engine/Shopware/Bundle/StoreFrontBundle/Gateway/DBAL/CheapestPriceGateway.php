@@ -25,8 +25,10 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware_Components_Config;
 
 class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
 {
@@ -51,7 +53,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
     private $fieldHelper;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -64,7 +66,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
         Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\PriceHydrator $priceHydrator,
-        \Shopware_Components_Config $config
+        Shopware_Components_Config $config
     ) {
         $this->connection = $connection;
         $this->priceHydrator = $priceHydrator;
@@ -119,7 +121,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $prices = [];
         foreach ($data as $row) {
@@ -237,6 +239,6 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
 
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
 }

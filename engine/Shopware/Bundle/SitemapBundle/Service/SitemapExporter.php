@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SitemapBundle\Service;
 
+use IteratorAggregate;
 use Shopware\Bundle\SitemapBundle\Exception\AlreadyLockedException;
 use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
 use Shopware\Bundle\SitemapBundle\SitemapLockInterface;
@@ -74,13 +75,13 @@ class SitemapExporter implements SitemapExporterInterface
     private $urlFilter;
 
     /**
-     * @param \IteratorAggregate<UrlProviderInterface> $urlProvider
+     * @param IteratorAggregate<UrlProviderInterface> $urlProvider
      */
     public function __construct(
         SitemapWriterInterface $sitemapWriter,
         ContextServiceInterface $contextService,
         ShopwareConfig $shopwareConfig,
-        \IteratorAggregate $urlProvider,
+        IteratorAggregate $urlProvider,
         ConfigWriter $configWriter,
         SitemapLockInterface $sitemapLock,
         UrlFilterInterface $urlFilter

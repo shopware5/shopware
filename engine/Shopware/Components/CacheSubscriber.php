@@ -25,20 +25,22 @@
 namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Event_EventArgs;
 use Shopware\Models\Config\Value;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Zend_Cache;
+use Zend_Cache_Core;
 
 class CacheSubscriber implements SubscriberInterface
 {
     private $clearTags = [];
 
     /**
-     * @var \Zend_Cache_Core
+     * @var Zend_Cache_Core
      */
     private $cacheManager;
 
-    public function __construct(\Zend_Cache_Core $cacheManager)
+    public function __construct(Zend_Cache_Core $cacheManager)
     {
         $this->cacheManager = $cacheManager;
     }
@@ -53,7 +55,7 @@ class CacheSubscriber implements SubscriberInterface
         ];
     }
 
-    public function onConfigElement(\Enlight_Event_EventArgs $args): void
+    public function onConfigElement(Enlight_Event_EventArgs $args): void
     {
         /** @var \Shopware\Models\Config\Value $entity */
         $entity = $args->get('entity');
@@ -61,7 +63,7 @@ class CacheSubscriber implements SubscriberInterface
         $this->addTagsConfigValue($entity);
     }
 
-    public function onKernelTerminate(\Enlight_Event_EventArgs $args): void
+    public function onKernelTerminate(Enlight_Event_EventArgs $args): void
     {
         if (\count($this->clearTags) === 0) {
             return;

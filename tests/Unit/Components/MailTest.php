@@ -24,13 +24,15 @@
 
 namespace Shopware\Tests\Unit\Components;
 
+use Enlight_Components_Mail;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class MailTest extends TestCase
 {
     public function testValidFromAddress()
     {
-        $mail = new \Enlight_Components_Mail();
+        $mail = new Enlight_Components_Mail();
         $mail->setFrom('foo@example.com', 'Sender\'s name');
 
         static::assertSame('foo@example.com', $mail->getFrom());
@@ -38,9 +40,9 @@ class MailTest extends TestCase
 
     public function testCodeInjectionInFromHeader()
     {
-        $mail = new \Enlight_Components_Mail();
+        $mail = new Enlight_Components_Mail();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         $mail->setFrom('"AAA\" code injection"@domain', 'Sender\'s name');
     }

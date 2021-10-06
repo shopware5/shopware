@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Exception;
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
@@ -92,7 +93,7 @@ class StoreListCommand extends StoreCommand implements CompletionAwareInterface
         try {
             $licences = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::class)
                 ->getLicences($context);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->handleError([
                 'message' => $e->getMessage(),
             ]);

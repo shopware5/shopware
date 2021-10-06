@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
+use Exception;
 use Shopware\Bundle\SearchBundle\Condition\CombinedCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
@@ -68,7 +69,7 @@ class CombinedConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return ConditionHandlerInterface
      */
@@ -85,6 +86,6 @@ class CombinedConditionHandler implements ConditionHandlerInterface
             }
         }
 
-        throw new \Exception(sprintf('Condition %s not supported', \get_class($condition)));
+        throw new Exception(sprintf('Condition %s not supported', \get_class($condition)));
     }
 }

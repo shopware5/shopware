@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Mail;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -72,7 +73,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the creation date of the media.
      *
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getCreated()
     {

@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SitemapBundle\Provider;
 
 use DateTime;
 use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
+use PDO;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -125,7 +126,7 @@ class StaticUrlProvider implements UrlProviderInterface
             ->where('shopPages.shop_id = :shopId')
             ->setParameter('shopId', $shopId)
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
 
         $sites = [];
         foreach ($keys as $key) {
@@ -153,7 +154,7 @@ class StaticUrlProvider implements UrlProviderInterface
                 ->setParameter('g4', '%|' . $key . '|%')
                 ->setParameter('shopId', '%|' . $shopId . '|%')
                 ->execute()
-                ->fetchAll(\PDO::FETCH_ASSOC);
+                ->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($current as $item) {
                 $sites[$item['id']] = $item;

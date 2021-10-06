@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-class BasketStruct implements \JsonSerializable
+use JsonSerializable;
+
+class BasketStruct implements JsonSerializable
 {
     /**
      * @var DomainStruct[]

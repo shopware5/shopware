@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\MediaBundle\Exception;
 
-class WrongMediaTypeForReplaceException extends \Exception
+use Exception;
+
+class WrongMediaTypeForReplaceException extends Exception
 {
     /**
      * @var string

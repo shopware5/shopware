@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SitemapBundle\Exception;
 
-class UnknownFileException extends \Exception
+use Exception;
+
+class UnknownFileException extends Exception
 {
 }

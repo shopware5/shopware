@@ -24,12 +24,14 @@
 
 namespace Shopware\Components\Compatibility;
 
+use Enlight_Event_EventManager;
+use sArticles;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
 class LegacyEventManager
 {
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
@@ -39,7 +41,7 @@ class LegacyEventManager
     private $contextService;
 
     public function __construct(
-        \Enlight_Event_EventManager $eventManager,
+        Enlight_Event_EventManager $eventManager,
         ContextServiceInterface $contextService
     ) {
         $this->eventManager = $eventManager;
@@ -55,7 +57,7 @@ class LegacyEventManager
     public function fireArticlesByCategoryEvents(
         array $result,
         $categoryId,
-        \sArticles $module
+        sArticles $module
     ) {
         foreach ($result['sArticles'] as &$product) {
             $product = Shopware()->Events()->filter(
@@ -84,7 +86,7 @@ class LegacyEventManager
      *
      * @return array|mixed
      */
-    public function fireArticleByIdEvents(array $product, \sArticles $module)
+    public function fireArticleByIdEvents(array $product, sArticles $module)
     {
         $getArticle = $product;
         $context = $this->contextService->getShopContext();

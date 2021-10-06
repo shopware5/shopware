@@ -25,9 +25,10 @@
 namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Assert\Assertion;
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class CategoryCondition implements ConditionInterface, \JsonSerializable
+class CategoryCondition implements ConditionInterface, JsonSerializable
 {
     private const NAME = 'category';
 

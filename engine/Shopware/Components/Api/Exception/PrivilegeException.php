@@ -24,9 +24,11 @@
 
 namespace Shopware\Components\Api\Exception;
 
+use Enlight_Exception;
+
 /**
  * API Exception
  */
-class PrivilegeException extends \Enlight_Exception
+class PrivilegeException extends Enlight_Exception
 {
 }

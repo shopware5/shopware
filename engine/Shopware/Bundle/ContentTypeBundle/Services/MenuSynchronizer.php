@@ -25,6 +25,8 @@
 namespace Shopware\Bundle\ContentTypeBundle\Services;
 
 use Doctrine\DBAL\Connection;
+use InvalidArgumentException;
+use PDO;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\Writer\DatabaseWriter;
 use Shopware\Models\Menu\Menu;
@@ -62,14 +64,14 @@ class MenuSynchronizer implements MenuSynchronizerInterface
                 $parent = null;
             } else {
                 if (!isset($menuItem['parent'])) {
-                    throw new \InvalidArgumentException('Root Menu Item must provide parent element');
+                    throw new InvalidArgumentException('Root Menu Item must provide parent element');
                 }
 
                 /** @var Menu $parent */
                 $parent = $this->menuRepository->findOneBy($menuItem['parent']);
 
                 if (!\is_object($parent)) {
-                    throw new \InvalidArgumentException(sprintf('Unable to find parent for query %s', print_r($menuItem['parent'], true)));
+                    throw new InvalidArgumentException(sprintf('Unable to find parent for query %s', print_r($menuItem['parent'], true)));
                 }
             }
 
@@ -167,7 +169,7 @@ class MenuSynchronizer implements MenuSynchronizerInterface
             ->groupBy('content_type')
             ->having('COUNT(content_type) > 1')
             ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll(PDO::FETCH_COLUMN);
 
         if (empty($ids)) {
             return;

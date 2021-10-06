@@ -24,6 +24,10 @@
 
 namespace Shopware\Commands;
 
+use DateTime;
+use Exception;
+use InvalidArgumentException;
+use RuntimeException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\User\Role;
 use Shopware\Models\User\User;
@@ -105,7 +109,7 @@ class AdminCreateCommand extends ShopwareCommand
         $user->setEmail($input->getOption('email'));
         $user->setUsername($input->getOption('username'));
         $user->setName($input->getOption('name'));
-        $user->setLockedUntil(new \DateTime('2010-01-01 00:00:00'));
+        $user->setLockedUntil(new DateTime('2010-01-01 00:00:00'));
         $this->setPassword($user, $input->getOption('password'));
 
         $this->persistUser($user);
@@ -162,7 +166,7 @@ class AdminCreateCommand extends ShopwareCommand
             return $locales[$locale];
         }
 
-        throw new \RuntimeException(sprintf('Backend Locale "%s" not supported', $locale));
+        throw new RuntimeException(sprintf('Backend Locale "%s" not supported', $locale));
     }
 
     /**
@@ -180,7 +184,7 @@ class AdminCreateCommand extends ShopwareCommand
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function persistUser(User $user)
     {
@@ -208,27 +212,27 @@ class AdminCreateCommand extends ShopwareCommand
     {
         $option = $input->getOption('email');
         if (empty($option)) {
-            throw new \InvalidArgumentException('Email is required');
+            throw new InvalidArgumentException('Email is required');
         }
 
         $option = $input->getOption('name');
         if (empty($option)) {
-            throw new \InvalidArgumentException('Name is required');
+            throw new InvalidArgumentException('Name is required');
         }
 
         $option = $input->getOption('username');
         if (empty($option)) {
-            throw new \InvalidArgumentException('Username is required');
+            throw new InvalidArgumentException('Username is required');
         }
 
         $option = $input->getOption('locale');
         if (empty($option)) {
-            throw new \InvalidArgumentException('Locale is required');
+            throw new InvalidArgumentException('Locale is required');
         }
 
         $option = $input->getOption('password');
         if (empty($option)) {
-            throw new \InvalidArgumentException('Password is required');
+            throw new InvalidArgumentException('Password is required');
         }
     }
 }

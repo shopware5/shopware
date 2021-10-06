@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-class WeightCondition implements ConditionInterface, \JsonSerializable
+class WeightCondition implements ConditionInterface, JsonSerializable
 {
     private const NAME = 'weight';
 

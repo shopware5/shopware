@@ -25,6 +25,8 @@
 namespace Shopware\Bundle\FormBundle\Constraints;
 
 use Doctrine\DBAL\Connection;
+use PDOStatement;
+use RuntimeException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -50,7 +52,7 @@ class ExistsValidator extends ConstraintValidator
     {
         /** @var Exists $constraint */
         if (!$constraint instanceof Exists) {
-            throw new \RuntimeException('Invalid constraint for validator given.');
+            throw new RuntimeException('Invalid constraint for validator given.');
         }
 
         if (empty($value)) {
@@ -70,7 +72,7 @@ class ExistsValidator extends ConstraintValidator
             }
         }
 
-        /** @var \PDOStatement $stmt */
+        /** @var PDOStatement $stmt */
         $stmt = $builder->execute();
 
         if ($stmt->rowCount() > 0) {

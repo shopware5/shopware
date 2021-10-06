@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\BenchmarkBundle\BatchableProviderInterface;
 use Shopware\Bundle\BenchmarkBundle\Service\MatcherService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -98,7 +100,7 @@ class OrdersProvider implements BatchableProviderInterface
             ->setParameter(':lastOrderId', $lastOrderId)
             ->setParameter(':shopId', $this->shopId)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
     /**
@@ -213,7 +215,7 @@ class OrdersProvider implements BatchableProviderInterface
 
         $currentHydratedOrder = [];
         foreach ($orderData as $orderId => $order) {
-            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $order['ordertime']);
+            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $order['ordertime']);
 
             $currentHydratedOrder['orderId'] = (int) $orderId;
             $currentHydratedOrder['status'] = (int) $order['status'];
@@ -305,7 +307,7 @@ class OrdersProvider implements BatchableProviderInterface
             ->where('details.orderID IN (:orderIds)')
             ->setParameter(':orderIds', $orderIds, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
     /**
@@ -322,7 +324,7 @@ class OrdersProvider implements BatchableProviderInterface
             ->setParameter(':dispatchIds', $dispatchIds, Connection::PARAM_INT_ARRAY)
             ->groupBy('dispatch.id')
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
     /**
@@ -343,7 +345,7 @@ class OrdersProvider implements BatchableProviderInterface
             ->where('payment.id IN (:paymentIds)')
             ->setParameter(':paymentIds', $paymentIds, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
     /**
@@ -384,7 +386,7 @@ class OrdersProvider implements BatchableProviderInterface
             ->setParameter(':customerIds', $customerIds, Connection::PARAM_INT_ARRAY)
             ->orderBy('customer.id')
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
 
         return array_map([$this, 'matchGenders'], $customers);
     }
@@ -402,7 +404,7 @@ class OrdersProvider implements BatchableProviderInterface
             ->where('billingAddress.orderID IN (:orderIds)')
             ->setParameter(':orderIds', $orderIds, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
     /**
@@ -418,7 +420,7 @@ class OrdersProvider implements BatchableProviderInterface
             ->where('shippingAddress.orderID IN (:orderIds)')
             ->setParameter(':orderIds', $orderIds, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
     /**

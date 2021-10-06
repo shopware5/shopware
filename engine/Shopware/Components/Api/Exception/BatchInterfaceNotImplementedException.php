@@ -24,9 +24,11 @@
 
 namespace Shopware\Components\Api\Exception;
 
+use Enlight_Exception;
+
 /**
  * API Exception
  */
-class BatchInterfaceNotImplementedException extends \Enlight_Exception
+class BatchInterfaceNotImplementedException extends Enlight_Exception
 {
 }

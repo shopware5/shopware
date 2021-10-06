@@ -26,6 +26,7 @@ namespace Shopware\Models\Shop;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use RuntimeException;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Attribute\Shop as ShopAttribute;
@@ -647,7 +648,7 @@ class Shop extends ModelEntity
                 return $this->getDefault() ? 1 : 0;
             case 'parentID':
                 if (!$this->getCategory() instanceof Category) {
-                    throw new \RuntimeException('Shop does not have a parent category set');
+                    throw new RuntimeException('Shop does not have a parent category set');
                 }
 
                 return $this->getCategory()->getId();

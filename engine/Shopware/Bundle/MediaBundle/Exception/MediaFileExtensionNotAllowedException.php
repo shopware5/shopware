@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\MediaBundle\Exception;
 
-class MediaFileExtensionNotAllowedException extends \Exception
+use Exception;
+
+class MediaFileExtensionNotAllowedException extends Exception
 {
     public $extension;
 

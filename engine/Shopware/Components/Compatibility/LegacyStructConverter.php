@@ -24,7 +24,10 @@
 
 namespace Shopware\Components\Compatibility;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Connection;
+use Enlight_Event_EventManager;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
@@ -33,12 +36,13 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
+use Shopware_Components_Config;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LegacyStructConverter
 {
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -48,7 +52,7 @@ class LegacyStructConverter
     private $contextService;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
@@ -78,9 +82,9 @@ class LegacyStructConverter
     private $categoryService;
 
     public function __construct(
-        \Shopware_Components_Config $config,
+        Shopware_Components_Config $config,
         ContextServiceInterface $contextService,
-        \Enlight_Event_EventManager $eventManager,
+        Enlight_Event_EventManager $eventManager,
         MediaServiceInterface $mediaService,
         Connection $connection,
         ModelManager $modelManager,
@@ -590,11 +594,11 @@ class LegacyStructConverter
             $data['attribute'] = $vote->getAttribute('core');
         }
 
-        if ($vote->getCreatedAt() instanceof \DateTime) {
+        if ($vote->getCreatedAt() instanceof DateTime) {
             $data['datum'] = $vote->getCreatedAt()->format('Y-m-d H:i:s');
         }
 
-        if ($vote->getAnsweredAt() instanceof \DateTime) {
+        if ($vote->getAnsweredAt() instanceof DateTime) {
             $data['answer_date'] = $vote->getAnsweredAt()->format('Y-m-d H:i:s');
         }
 
@@ -1202,7 +1206,7 @@ class LegacyStructConverter
         if (empty($amountStr[1])) {
             $amountStr[1] = 0;
         }
-        $amountStr[1] = substr($amountStr[1], 0, 3); // Rounded to the nearest thousandth as a string
+        $amountStr[1] = substr((string) $amountStr[1], 0, 3); // Rounded to the nearest thousandth as a string
 
         $amountStr = $amountStr[0] . '.' . $amountStr[1];
 
@@ -1299,7 +1303,7 @@ class LegacyStructConverter
             $data['topseller'] = $marketing->isTopSeller();
         }
 
-        $today = new \DateTime();
+        $today = new DateTime();
         if ($product->getReleaseDate() && $product->getReleaseDate() > $today) {
             $data['sReleasedate'] = $product->getReleaseDate()->format('Y-m-d');
         }
@@ -1310,13 +1314,13 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \DateTimeInterface|string $date
+     * @param DateTimeInterface|string $date
      *
      * @return string
      */
     private function dateToString($date)
     {
-        if ($date instanceof \DateTime) {
+        if ($date instanceof DateTime) {
             return $date->format('Y-m-d');
         }
 

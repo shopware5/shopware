@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Newsletter;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -103,21 +104,21 @@ class ContactData extends ModelEntity
     protected $city;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     protected $added;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="double_optin_confirmed", type="datetime", nullable=false)
      */
     protected $doubleOptinConfirmed;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="deleted", type="datetime", nullable=true)
      */
@@ -135,7 +136,7 @@ class ContactData extends ModelEntity
     private $id;
 
     /**
-     * @param \DateTimeInterface $added
+     * @param DateTimeInterface $added
      */
     public function setAdded($added)
     {
@@ -143,7 +144,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getAdded()
     {
@@ -167,7 +168,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $deleted
+     * @param DateTimeInterface|null $deleted
      */
     public function setDeleted($deleted)
     {
@@ -175,7 +176,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getDeleted()
     {
@@ -319,7 +320,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getDoubleOptinConfirmed()
     {
@@ -327,7 +328,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $doubleOptinConfirmed
+     * @param DateTimeInterface $doubleOptinConfirmed
      */
     public function setDoubleOptinConfirmed($doubleOptinConfirmed)
     {

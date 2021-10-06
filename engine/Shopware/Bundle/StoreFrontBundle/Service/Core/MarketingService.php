@@ -24,17 +24,19 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
+use DateTime;
 use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware_Components_Config;
 
 class MarketingService implements Service\MarketingServiceInterface
 {
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
-    public function __construct(\Shopware_Components_Config $config)
+    public function __construct(Shopware_Components_Config $config)
     {
         $this->config = $config;
     }
@@ -46,7 +48,7 @@ class MarketingService implements Service\MarketingServiceInterface
     {
         $attribute = new Struct\Product\MarketingAttribute();
 
-        $today = new \DateTime();
+        $today = new DateTime();
 
         $diff = $today->diff($product->getCreatedAt());
 

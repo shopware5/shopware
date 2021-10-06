@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Form\Field;
 
+use Exception;
 use Shopware\Components\Form\Field;
 
 class Selection extends Field
@@ -64,14 +65,14 @@ class Selection extends Field
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function validate()
     {
         parent::validate();
 
         if (!$this->store) {
-            throw new \Exception(sprintf('Field %s requires a configured store', $this->name));
+            throw new Exception(sprintf('Field %s requires a configured store', $this->name));
         }
     }
 }

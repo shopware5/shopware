@@ -24,7 +24,11 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-class Attribute extends Struct implements \JsonSerializable, \ArrayAccess
+use ArrayAccess;
+use InvalidArgumentException;
+use JsonSerializable;
+
+class Attribute extends Struct implements JsonSerializable, ArrayAccess
 {
     /**
      * Internal storage which contains all struct data.
@@ -34,12 +38,12 @@ class Attribute extends Struct implements \JsonSerializable, \ArrayAccess
     protected $storage = [];
 
     /**
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(array $data = [])
     {
         if (!$this->isValid($data)) {
-            throw new \InvalidArgumentException('Class values should be serializable');
+            throw new InvalidArgumentException('Class values should be serializable');
         }
         $this->storage = $data;
     }
@@ -63,12 +67,12 @@ class Attribute extends Struct implements \JsonSerializable, \ArrayAccess
      *
      * @param string $name
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function set($name, $value)
     {
         if (!$this->isValid($value)) {
-            throw new \InvalidArgumentException('Class values should be serializable');
+            throw new InvalidArgumentException('Class values should be serializable');
         }
 
         $this->storage[$name] = $value;
@@ -121,7 +125,7 @@ class Attribute extends Struct implements \JsonSerializable, \ArrayAccess
     /**
      * {@inheritdoc}
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function offsetSet($offset, $value)
     {
@@ -140,7 +144,7 @@ class Attribute extends Struct implements \JsonSerializable, \ArrayAccess
 
     private function isValid($value): bool
     {
-        if ($value instanceof \JsonSerializable || is_scalar($value) || $value === null) {
+        if ($value instanceof JsonSerializable || is_scalar($value) || $value === null) {
             return true;
         }
 

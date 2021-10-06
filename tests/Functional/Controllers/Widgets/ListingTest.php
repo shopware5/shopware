@@ -26,6 +26,10 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Controllers\Widgets;
 
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Controller_Response_ResponseTestCase;
+use Enlight_Template_Manager;
+use Enlight_View_Default;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
@@ -55,8 +59,8 @@ class ListingTest extends TestCase
     {
         $controller = new ListingController();
 
-        $request = new \Enlight_Controller_Request_RequestTestCase();
-        $response = new \Enlight_Controller_Response_ResponseTestCase();
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $response = new Enlight_Controller_Response_ResponseTestCase();
 
         $front = $this->getContainer()->get('front');
         $front->setRequest($request);
@@ -69,7 +73,7 @@ class ListingTest extends TestCase
         $controller->setFront($front);
         $controller->setRequest($request);
         $controller->setResponse($response);
-        $controller->setView(new \Enlight_View_Default(new \Enlight_Template_Manager()));
+        $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
 
         return $controller;
     }

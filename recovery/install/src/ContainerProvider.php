@@ -26,6 +26,7 @@ namespace Shopware\Recovery\Install;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use RuntimeException;
 use Shopware\Recovery\Common\DumpIterator;
 use Shopware\Recovery\Common\HttpClient\CurlClient;
 use Shopware\Recovery\Common\Service\Notification;
@@ -152,7 +153,7 @@ class ContainerProvider implements ServiceProviderInterface
         };
 
         $container['db'] = function ($c) {
-            throw new \RuntimeException('Identifier DB not initialized yet');
+            throw new RuntimeException('Identifier DB not initialized yet');
         };
 
         $container['config.writer'] = function ($c) {

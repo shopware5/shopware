@@ -582,8 +582,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 
     /**
      * Returns plugin name
-     *
-     * @final
      */
     final public function getName(): ?string
     {
@@ -592,8 +590,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 
     /**
      * Returns plugin source
-     *
-     * @final
      */
     final public function getSource(): ?string
     {

@@ -26,6 +26,7 @@
 namespace Shopware\Commands;
 
 use Doctrine\ORM\AbstractQuery;
+use RuntimeException;
 use Shopware\Components\CacheManager;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
@@ -48,7 +49,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
             }, array_keys($context->getWords(), '--shopId'));
             $combinedArray = array_combine($shopIdKeys, array_pad([], \count($shopIdKeys), 0));
             if ($combinedArray === false) {
-                throw new \RuntimeException('Arrays could not be combined');
+                throw new RuntimeException('Arrays could not be combined');
             }
             $selectedShopIds = array_intersect_key($context->getWords(), $combinedArray);
 

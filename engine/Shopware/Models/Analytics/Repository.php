@@ -24,8 +24,11 @@
 
 namespace Shopware\Models\Analytics;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Enlight_Event_EventManager;
+use PDO;
 use Shopware\Components\Model\DBAL\Result;
 use Shopware\Models\Shop\Shop;
 
@@ -37,11 +40,11 @@ class Repository
     protected $connection;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     protected $eventManager;
 
-    public function __construct(Connection $connection, \Enlight_Event_EventManager $eventManager)
+    public function __construct(Connection $connection, Enlight_Event_EventManager $eventManager)
     {
         $this->connection = $connection;
         $this->eventManager = $eventManager;
@@ -58,7 +61,7 @@ class Repository
      *
      * @return Result
      */
-    public function getDailyVisitors(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    public function getDailyVisitors(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->createDailyVisitorsBuilder($from, $to);
 
@@ -68,7 +71,7 @@ class Repository
 
         return new Result(
             $builder,
-            \PDO::FETCH_GROUP | \PDO::FETCH_ASSOC,
+            PDO::FETCH_GROUP | PDO::FETCH_ASSOC,
             false
         );
     }
@@ -88,7 +91,7 @@ class Repository
      *
      * @return Result
      */
-    public function getDailyShopVisitors(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    public function getDailyShopVisitors(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $builder = $this->createDailyVisitorsBuilder($from, $to);
 
@@ -105,7 +108,7 @@ class Repository
 
         return new Result(
             $builder,
-            \PDO::FETCH_GROUP | \PDO::FETCH_ASSOC,
+            PDO::FETCH_GROUP | PDO::FETCH_ASSOC,
             false
         );
     }
@@ -125,7 +128,7 @@ class Repository
      *
      * @return Result
      */
-    public function getDailyShopOrders(\DateTimeInterface $from, \DateTimeInterface $to, array $shopIds)
+    public function getDailyShopOrders(DateTimeInterface $from, DateTimeInterface $to, array $shopIds)
     {
         $builder = $this->createDailyShopOrderBuilder($from, $to, $shopIds);
 
@@ -135,7 +138,7 @@ class Repository
 
         return new Result(
             $builder,
-            \PDO::FETCH_GROUP | \PDO::FETCH_ASSOC,
+            PDO::FETCH_GROUP | PDO::FETCH_ASSOC,
             false
         );
     }
@@ -151,7 +154,7 @@ class Repository
      *
      * @return Result
      */
-    public function getDailyRegistrations(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    public function getDailyRegistrations(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->createDailyRegistrationsBuilder($from, $to);
 
@@ -161,7 +164,7 @@ class Repository
 
         return new Result(
             $builder,
-            \PDO::FETCH_GROUP | \PDO::FETCH_ASSOC,
+            PDO::FETCH_GROUP | PDO::FETCH_ASSOC,
             false
         );
     }
@@ -177,7 +180,7 @@ class Repository
      *
      * @return Result
      */
-    public function getDailyTurnover(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    public function getDailyTurnover(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->createDailyTurnoverBuilder($from, $to);
 
@@ -187,7 +190,7 @@ class Repository
 
         return new Result(
             $builder,
-            \PDO::FETCH_GROUP | \PDO::FETCH_ASSOC,
+            PDO::FETCH_GROUP | PDO::FETCH_ASSOC,
             false
         );
     }
@@ -204,7 +207,7 @@ class Repository
      *                'referrer' => 'https://www.google.de/',
      *                )
      */
-    public function getVisitedReferrer($offset, $limit, \DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    public function getVisitedReferrer($offset, $limit, DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->createVisitedReferrerBuilder($from, $to);
 
@@ -222,7 +225,7 @@ class Repository
      *
      * @return Result
      */
-    public function getReferrerRevenue(Shop $shop, \DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    public function getReferrerRevenue(Shop $shop, DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->createReferrerRevenueBuilder($shop, $from, $to);
 
@@ -241,7 +244,7 @@ class Repository
      *
      * @return Result
      */
-    public function getPartnerRevenue($offset, $limit, \DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    public function getPartnerRevenue($offset, $limit, DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->createPartnerRevenueBuilder($from, $to);
 
@@ -273,7 +276,7 @@ class Repository
      *          'ordernumber' => 'SW10002841',
      *      ),
      */
-    public function getProductSales($offset, $limit, \DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    public function getProductSales($offset, $limit, DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->createProductSalesBuilder($from, $to);
 
@@ -304,7 +307,7 @@ class Repository
      *          'salutation' => 'mr',
      *      ),
      */
-    public function getOrdersOfCustomers(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    public function getOrdersOfCustomers(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->createOrdersOfCustomersBuilder($from, $to);
 
@@ -322,7 +325,7 @@ class Repository
      *
      * @return Result
      */
-    public function getAgeOfCustomers(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    public function getAgeOfCustomers(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $builder = $this->createAgeOfCustomersBuilder($from, $to, $shopIds);
 
@@ -356,7 +359,7 @@ class Repository
      *                'node' => '39',
      *                ),
      */
-    public function getProductAmountPerCategory($categoryId, \DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    public function getProductAmountPerCategory($categoryId, DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->createProductAmountBuilder($from, $to)
             ->addSelect('categories.description as name')
@@ -396,7 +399,7 @@ class Repository
      *                'name' => 'Example',
      *                )
      */
-    public function getProductAmountPerManufacturer($offset = null, $limit = null, \DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    public function getProductAmountPerManufacturer($offset = null, $limit = null, DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->createProductAmountBuilder($from, $to)
             ->addSelect('suppliers.name')
@@ -430,7 +433,7 @@ class Repository
      *                'deviceType' => 'tablet',
      *                )
      */
-    public function getProductAmountPerDevice(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    public function getProductAmountPerDevice(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('orders.deviceType')
@@ -466,7 +469,7 @@ class Repository
      *                'countResults' => '1390',
      *                )
      */
-    public function getSearchTerms($offset, $limit, \DateTimeInterface $from = null, \DateTimeInterface $to = null, $sort = [], array $shopIds = [])
+    public function getSearchTerms($offset, $limit, DateTimeInterface $from = null, DateTimeInterface $to = null, $sort = [], array $shopIds = [])
     {
         $builder = $this->connection->createQueryBuilder();
 
@@ -592,7 +595,7 @@ class Repository
      *                'visits9' => '0',
      *                )
      */
-    public function getVisitorImpressions($offset, $limit, \DateTimeInterface $from = null, \DateTimeInterface $to = null, $sort = [], array $shopIds = [])
+    public function getVisitorImpressions($offset, $limit, DateTimeInterface $from = null, DateTimeInterface $to = null, $sort = [], array $shopIds = [])
     {
         $builder = $this->createVisitorImpressionBuilder(
             $offset,
@@ -661,7 +664,7 @@ class Repository
      *                'name' => 'Deutschland',
      *                ),
      */
-    public function getAmountPerCountry(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    public function getAmountPerCountry(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('country.countryname AS name')
@@ -695,7 +698,7 @@ class Repository
      *                'name' => 'Rechnung',
      *                ),
      */
-    public function getAmountPerPayment(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    public function getAmountPerPayment(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('payment.description AS name')
@@ -729,7 +732,7 @@ class Repository
      *                'name' => 'Standard Versand',
      *                ),
      */
-    public function getAmountPerShipping(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    public function getAmountPerShipping(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('dispatch.name AS name')
@@ -772,7 +775,7 @@ class Repository
      *          'date' => '2001-10-01',
      *      ),
      */
-    public function getAmountPerMonth(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    public function getAmountPerMonth(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $dateCondition = 'DATE_FORMAT(ordertime, \'%Y-%m-04\')';
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
@@ -816,7 +819,7 @@ class Repository
      *          'date' => '2000-07-27',
      *      ),
      */
-    public function getAmountPerCalendarWeek(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    public function getAmountPerCalendarWeek(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $dateCondition = 'DATE_SUB(DATE(ordertime), INTERVAL WEEKDAY(ordertime)-3 DAY)';
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
@@ -860,7 +863,7 @@ class Repository
      *          'date' => '2002-07-15',
      *      ),
      */
-    public function getAmountPerWeekday(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    public function getAmountPerWeekday(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('DATE_FORMAT(ordertime, \'%Y-%m-%d\') AS date')
@@ -903,7 +906,7 @@ class Repository
      *          'date' => '1970-01-01 01:00:00',
      *      ),
      */
-    public function getAmountPerHour(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    public function getAmountPerHour(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $dateCondition = 'DATE_FORMAT(ordertime, \'1970-01-01 %H:00:00\')';
 
@@ -947,7 +950,7 @@ class Repository
      *          'amount2' => '0',
      *      ),
      */
-    public function getProductImpressions($offset, $limit, \DateTimeInterface $from = null, \DateTimeInterface $to = null, array $sort = [], array $shopIds = [])
+    public function getProductImpressions($offset, $limit, DateTimeInterface $from = null, DateTimeInterface $to = null, array $sort = [], array $shopIds = [])
     {
         $builder = $this->createProductImpressionBuilder($offset, $limit);
 
@@ -985,7 +988,7 @@ class Repository
      *
      * @return Result
      */
-    public function getCustomerGroupAmount(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    public function getCustomerGroupAmount(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $builder = $this->createCustomerGroupAmountBuilder($from, $to, $shopIds);
 
@@ -1011,7 +1014,7 @@ class Repository
      *
      * @return DBALQueryBuilder
      */
-    protected function createDailyShopOrderBuilder(\DateTimeInterface $from, \DateTimeInterface $to, array $shopIds)
+    protected function createDailyShopOrderBuilder(DateTimeInterface $from, DateTimeInterface $to, array $shopIds)
     {
         $builder = $this->connection->createQueryBuilder();
 
@@ -1066,7 +1069,7 @@ class Repository
      *
      * @return DBALQueryBuilder
      */
-    protected function createDailyTurnoverBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    protected function createDailyTurnoverBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select([
@@ -1096,7 +1099,7 @@ class Repository
      *
      * @return DBALQueryBuilder
      */
-    protected function createDailyVisitorsBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    protected function createDailyVisitorsBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->connection->createQueryBuilder();
 
@@ -1126,7 +1129,7 @@ class Repository
      *
      * @return DBALQueryBuilder
      */
-    protected function createDailyRegistrationsBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    protected function createDailyRegistrationsBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->connection->createQueryBuilder();
 
@@ -1187,7 +1190,7 @@ class Repository
      *
      * @return DBALQueryBuilder
      */
-    protected function createProductAmountBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    protected function createProductAmountBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select([
@@ -1222,7 +1225,7 @@ class Repository
      *                          'displayDate' => 'Monday',
      *                          ),
      */
-    protected function createAmountBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    protected function createAmountBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select([
@@ -1260,14 +1263,14 @@ class Repository
      * in the passed date range.
      * The sort parameter allows to sort the data result by different conditions.
      *
-     * @param int                $offset
-     * @param int                $limit
-     * @param \DateTimeInterface $from
-     * @param \DateTimeInterface $to
+     * @param int               $offset
+     * @param int               $limit
+     * @param DateTimeInterface $from
+     * @param DateTimeInterface $to
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function createVisitorImpressionBuilder($offset, $limit, \DateTimeInterface $from = null, \DateTimeInterface $to = null, array $sort = [])
+    protected function createVisitorImpressionBuilder($offset, $limit, DateTimeInterface $from = null, DateTimeInterface $to = null, array $sort = [])
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select([
@@ -1300,7 +1303,7 @@ class Repository
      *
      * @return DBALQueryBuilder
      */
-    protected function createAgeOfCustomersBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    protected function createAgeOfCustomersBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select([
@@ -1331,7 +1334,7 @@ class Repository
      *
      * @return DBALQueryBuilder
      */
-    protected function createOrdersOfCustomersBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    protected function createOrdersOfCustomersBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->connection->createQueryBuilder();
 
@@ -1357,7 +1360,7 @@ class Repository
      *
      * @return DBALQueryBuilder
      */
-    protected function createProductSalesBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    protected function createProductSalesBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select([
@@ -1383,7 +1386,7 @@ class Repository
      *
      * @return DBALQueryBuilder
      */
-    protected function createPartnerRevenueBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    protected function createPartnerRevenueBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select([
@@ -1409,7 +1412,7 @@ class Repository
      *
      * @return DBALQueryBuilder
      */
-    protected function createReferrerRevenueBuilder(Shop $shop = null, \DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    protected function createReferrerRevenueBuilder(Shop $shop = null, DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select([
@@ -1440,7 +1443,7 @@ class Repository
      *
      * @return DBALQueryBuilder
      */
-    protected function createVisitedReferrerBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
+    protected function createVisitedReferrerBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select([
@@ -1468,7 +1471,7 @@ class Repository
      *                          'displayDate' => 'Monday',
      *                          ),
      */
-    protected function createCustomerGroupAmountBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    protected function createCustomerGroupAmountBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('customerGroups.description as customerGroup')
@@ -1489,13 +1492,13 @@ class Repository
      *
      * @return Repository
      */
-    private function addDateRangeCondition(DBALQueryBuilder $builder, \DateTimeInterface $from = null, \DateTimeInterface $to = null, $column = null)
+    private function addDateRangeCondition(DBALQueryBuilder $builder, DateTimeInterface $from = null, DateTimeInterface $to = null, $column = null)
     {
-        if ($from instanceof \DateTimeInterface) {
+        if ($from instanceof DateTimeInterface) {
             $builder->andWhere($column . ' >= :fromDate')
                 ->setParameter('fromDate', $from->format('Y-m-d H:i:s'));
         }
-        if ($to instanceof \DateTimeInterface) {
+        if ($to instanceof DateTimeInterface) {
             $builder->andWhere($column . ' <= :toDate')
                 ->setParameter('toDate', $to->format('Y-m-d H:i:s'));
         }

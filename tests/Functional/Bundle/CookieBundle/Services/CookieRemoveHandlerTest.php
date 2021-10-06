@@ -26,6 +26,8 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Bundle\CookieBundle\Services;
 
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Controller_Response_ResponseTestCase;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CookieBundle\Services\CookieCollector;
 use Shopware\Bundle\CookieBundle\Services\CookieRemoveHandler;
@@ -274,14 +276,14 @@ class CookieRemoveHandlerTest extends TestCase
         static::assertEmpty($response->headers->getCookies());
     }
 
-    private function getRequest(): \Enlight_Controller_Request_RequestTestCase
+    private function getRequest(): Enlight_Controller_Request_RequestTestCase
     {
-        return new \Enlight_Controller_Request_RequestTestCase();
+        return new Enlight_Controller_Request_RequestTestCase();
     }
 
-    private function getResponse(): \Enlight_Controller_Response_ResponseTestCase
+    private function getResponse(): Enlight_Controller_Response_ResponseTestCase
     {
-        return new \Enlight_Controller_Response_ResponseTestCase();
+        return new Enlight_Controller_Response_ResponseTestCase();
     }
 
     private function getRemoveHandler(): CookieRemoveHandler

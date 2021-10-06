@@ -24,6 +24,8 @@
 
 namespace Shopware\Components;
 
+use Exception;
+
 /**
  * This class is responsible to load and parse the shopware configuration
  * files.
@@ -85,7 +87,7 @@ class ConfigLoader
      *
      * @param string $file
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -94,13 +96,13 @@ class ConfigLoader
         $suffix = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
         if (!\in_array($suffix, ['php', 'inc'])) {
-            throw new \Exception(sprintf('Invalid configuration file provided; unknown config type "%s"', $suffix));
+            throw new Exception(sprintf('Invalid configuration file provided; unknown config type "%s"', $suffix));
         }
 
         $config = include $file;
 
         if (!\is_array($config)) {
-            throw new \Exception('Invalid configuration file provided; PHP file does not return an array value');
+            throw new Exception('Invalid configuration file provided; PHP file does not return an array value');
         }
 
         $config = array_change_key_case($config, CASE_LOWER);

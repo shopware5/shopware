@@ -24,9 +24,10 @@
 
 namespace Shopware\Tests\Functional\Modules\Articles;
 
+use Enlight_Components_Test_TestCase;
 use sArticles;
 
-class sGetArticlesByCategoryTest extends \Enlight_Components_Test_TestCase
+class sGetArticlesByCategoryTest extends Enlight_Components_Test_TestCase
 {
     /**
      * Module instance

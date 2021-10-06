@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\EmotionBundle\Struct\Library;
 
-class Component implements \JsonSerializable
+use JsonSerializable;
+
+class Component implements JsonSerializable
 {
     /**
      * @var int

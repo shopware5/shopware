@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
+use DateTime;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 class VoteHydrator extends Hydrator
@@ -77,7 +78,7 @@ class VoteHydrator extends Hydrator
 
         if (isset($data['__vote_datum']) && $data['__vote_datum'] != '0000-00-00 00:00:00') {
             $struct->setCreatedAt(
-                new \DateTime($data['__vote_datum'])
+                new DateTime($data['__vote_datum'])
             );
         }
 
@@ -95,7 +96,7 @@ class VoteHydrator extends Hydrator
 
         if (isset($data['__vote_answer_date'])) {
             $struct->setAnsweredAt(
-                new \DateTime($data['__vote_answer_date'])
+                new DateTime($data['__vote_answer_date'])
             );
         }
 

@@ -25,6 +25,9 @@
 namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Enlight_Event_EventManager;
+use Enlight_Event_Exception;
+use Exception;
 use Shopware\Models\Shop;
 
 class JavascriptCollector
@@ -35,20 +38,20 @@ class JavascriptCollector
     private $inheritance;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
     public function __construct(
         Inheritance $inheritance,
-        \Enlight_Event_EventManager $eventManager
+        Enlight_Event_EventManager $eventManager
     ) {
         $this->eventManager = $eventManager;
         $this->inheritance = $inheritance;
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string[] returns array with absolute javascript files paths
      */
@@ -101,7 +104,7 @@ class JavascriptCollector
     /**
      * @param array $inheritance
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return JavascriptDefinition[]
      */
@@ -121,8 +124,8 @@ class JavascriptCollector
     }
 
     /**
-     * @throws \Enlight_Event_Exception
-     * @throws \Exception
+     * @throws Enlight_Event_Exception
+     * @throws Exception
      *
      * @return JavascriptDefinition[]
      */
@@ -139,7 +142,7 @@ class JavascriptCollector
 
         foreach ($collection as $file) {
             if (!file_exists($file)) {
-                throw new \Exception(sprintf('Some plugin tries to compress a javascript file, but the file %s doesn\'t exist', $file));
+                throw new Exception(sprintf('Some plugin tries to compress a javascript file, but the file %s doesn\'t exist', $file));
             }
         }
 

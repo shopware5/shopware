@@ -26,31 +26,35 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CookieBundle\Services;
 
+use ArrayIterator;
+use Enlight_Event_EventManager;
 use Shopware\Bundle\CookieBundle\CookieCollection;
 use Shopware\Bundle\CookieBundle\CookieGroupCollection;
 use Shopware\Bundle\CookieBundle\Exceptions\InvalidCookieGroupItemException;
 use Shopware\Bundle\CookieBundle\Exceptions\InvalidCookieItemException;
 use Shopware\Bundle\CookieBundle\Structs\CookieGroupStruct;
 use Shopware\Bundle\CookieBundle\Structs\CookieStruct;
+use Shopware_Components_Config;
+use Shopware_Components_Snippet_Manager;
 
 class CookieCollector implements CookieCollectorInterface
 {
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
     /**
-     * @var \Shopware_Components_Snippet_Manager
+     * @var Shopware_Components_Snippet_Manager
      */
     private $snippetManager;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
-    public function __construct(\Enlight_Event_EventManager $eventManager, \Shopware_Components_Snippet_Manager $snippetManager, \Shopware_Components_Config $config)
+    public function __construct(Enlight_Event_EventManager $eventManager, Shopware_Components_Snippet_Manager $snippetManager, Shopware_Components_Config $config)
     {
         $this->eventManager = $eventManager;
         $this->snippetManager = $snippetManager;
@@ -145,7 +149,7 @@ class CookieCollector implements CookieCollectorInterface
 
     private function sortCookies(CookieCollection $cookieCollection): CookieCollection
     {
-        /** @var \ArrayIterator<int, CookieStruct> $cookieIterator */
+        /** @var ArrayIterator<int, CookieStruct> $cookieIterator */
         $cookieIterator = $cookieCollection->getIterator();
         $cookieIterator->uasort(static function (CookieStruct $firstCookie, CookieStruct $secondCookie) {
             return strcmp($firstCookie->getLabel(), $secondCookie->getLabel());

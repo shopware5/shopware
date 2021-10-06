@@ -25,7 +25,9 @@
 namespace Shopware\Components\Captcha;
 
 use Enlight_Controller_Request_Request;
+use Enlight_Template_Manager;
 use Shopware\Components\Random;
+use Shopware_Components_Config;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DefaultCaptcha implements CaptchaInterface
@@ -39,19 +41,19 @@ class DefaultCaptcha implements CaptchaInterface
     private $container;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
     /**
-     * @var \Enlight_Template_Manager
+     * @var Enlight_Template_Manager
      */
     private $templateManager;
 
     public function __construct(
         ContainerInterface $container,
-        \Shopware_Components_Config $config,
-        \Enlight_Template_Manager $templateManager
+        Shopware_Components_Config $config,
+        Enlight_Template_Manager $templateManager
     ) {
         $this->container = $container;
         $this->config = $config;

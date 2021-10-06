@@ -24,8 +24,12 @@
 
 namespace Shopware\Components;
 
+use ArrayObject;
 use Enlight\Event\SubscriberInterface;
+use Enlight_Controller_EventArgs;
+use Enlight_Controller_Exception;
 use Enlight_Event_EventManager as EnlightEventManager;
+use Exception;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -82,9 +86,9 @@ class ErrorSubscriber implements SubscriberInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function handleError(\Enlight_Controller_EventArgs $args)
+    public function handleError(Enlight_Controller_EventArgs $args)
     {
         $front = $args->getSubject();
         $request = $args->getRequest();
@@ -113,12 +117,12 @@ class ErrorSubscriber implements SubscriberInterface
                 }
 
                 // Make sure this is an Exception and also no minor one
-                if ($last instanceof \Exception
+                if ($last instanceof Exception
                     && !\in_array($last->getCode(), [
-                    \Enlight_Controller_Exception::ActionNotFound,
-                    \Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found,
-                    \Enlight_Controller_Exception::Controller_Dispatcher_Controller_No_Route,
-                    \Enlight_Controller_Exception::NO_ROUTE,
+                    Enlight_Controller_Exception::ActionNotFound,
+                    Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found,
+                    Enlight_Controller_Exception::Controller_Dispatcher_Controller_No_Route,
+                    Enlight_Controller_Exception::NO_ROUTE,
                     ], true)
                     && !\in_array(\get_class($last), $this->ignoredExceptionClasses, true) // Check for exceptions to be ignored
                 ) {
@@ -140,7 +144,7 @@ class ErrorSubscriber implements SubscriberInterface
         $this->isInsideErrorHandlerLoop = true;
 
         // Get exception information
-        $error = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+        $error = new ArrayObject([], ArrayObject::ARRAY_AS_PROPS);
         $exceptions = $response->getException();
         $exception = $exceptions[0];
         $error->offsetSet('exception', $exception);

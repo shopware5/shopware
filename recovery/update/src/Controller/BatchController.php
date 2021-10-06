@@ -25,6 +25,7 @@
 namespace Shopware\Recovery\Update\Controller;
 
 use Gaufrette\Filesystem;
+use RuntimeException;
 use Shopware\Components\Migrations\Manager;
 use Shopware\Recovery\Common\Utils;
 use Shopware\Recovery\Update\DependencyInjection\Container;
@@ -103,7 +104,7 @@ class BatchController
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function unpack()
     {
@@ -144,20 +145,20 @@ class BatchController
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function validateFilesytems(Filesystem $localFilesyste, Filesystem $remoteFilesyste)
     {
         if (!$remoteFilesyste->has('shopware.php')) {
-            throw new \RuntimeException('shopware.php not found in remote filesystem');
+            throw new RuntimeException('shopware.php not found in remote filesystem');
         }
 
         if (!$localFilesyste->has('shopware.php')) {
-            throw new \RuntimeException('shopware.php not found in local filesystem');
+            throw new RuntimeException('shopware.php not found in local filesystem');
         }
 
         if ($localFilesyste->checksum('shopware.php') != $remoteFilesyste->checksum('shopware.php')) {
-            throw new \RuntimeException('Filesytems does not seem to match');
+            throw new RuntimeException('Filesytems does not seem to match');
         }
     }
 

@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Log\Handler;
 
+use Enlight_Components_Mail;
+use Exception;
 use Monolog\Handler\MailHandler;
 use Monolog\Logger;
 use Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter;
@@ -31,16 +33,16 @@ use Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter;
 class EnlightMailHandler extends MailHandler
 {
     /**
-     * @var \Enlight_Components_Mail
+     * @var Enlight_Components_Mail
      */
     protected $mailer;
 
     /**
-     * @param \Enlight_Components_Mail $mailer The mailer to use
-     * @param bool|int                 $level  The minimum logging level at which this handler will be triggered
-     * @param bool                     $bubble Whether the messages that are handled can bubble up the stack or not
+     * @param Enlight_Components_Mail $mailer The mailer to use
+     * @param bool|int                $level  The minimum logging level at which this handler will be triggered
+     * @param bool                    $bubble Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct(\Enlight_Components_Mail $mailer, $level = Logger::ERROR, $bubble = true)
+    public function __construct(Enlight_Components_Mail $mailer, $level = Logger::ERROR, $bubble = true)
     {
         parent::__construct($level, $bubble);
         $this->mailer = $mailer;
@@ -58,7 +60,7 @@ class EnlightMailHandler extends MailHandler
             $mailer->setBodyText($content);
             $mailer->setAssociation(AdministrativeMailFilter::ADMINISTRATIVE_MAIL, true);
             $mailer->send();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // empty catch intended to prevent recursion
         }
     }

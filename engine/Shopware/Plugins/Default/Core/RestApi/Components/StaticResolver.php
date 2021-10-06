@@ -26,8 +26,9 @@ namespace ShopwarePlugins\RestApi\Components;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\User\User;
+use Zend_Auth_Adapter_Http_Resolver_Interface;
 
-class StaticResolver implements \Zend_Auth_Adapter_Http_Resolver_Interface
+class StaticResolver implements Zend_Auth_Adapter_Http_Resolver_Interface
 {
     /**
      * Contains the shopware model manager

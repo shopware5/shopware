@@ -24,9 +24,11 @@
 
 namespace Shopware\Tests\Functional\Bundle\EmotionBundle\ComponentHandler;
 
+use ArrayObject;
+use Enlight_Components_Test_TestCase;
 use Shopware\Bundle\EmotionBundle\Service\EmotionElementService;
 
-class EventComponentHandlerTest extends \Enlight_Components_Test_TestCase
+class EventComponentHandlerTest extends Enlight_Components_Test_TestCase
 {
     public function testFallbackToEventComponentHandler()
     {
@@ -42,7 +44,7 @@ class EventComponentHandlerTest extends \Enlight_Components_Test_TestCase
                 ->method('handle');
 
         $emotionElementService = new EmotionElementService(
-            new \ArrayObject(),
+            new ArrayObject(),
             Shopware()->Container()->get(\Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionElementGateway::class),
             $eventComponentHandlerMock,
             Shopware()->Container()->get(\Shopware\Bundle\EmotionBundle\Service\DataCollectionResolverInterface::class),

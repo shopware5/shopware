@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\SitemapBundle\ConfigHandler;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SitemapBundle\Service\ConfigHandler;
 
@@ -66,7 +67,7 @@ class Database implements ConfigHandlerInterface
             }
 
             if (!$customUrl['last_mod']) {
-                $customUrl['last_mod'] = (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s');
+                $customUrl['last_mod'] = (new DateTimeImmutable('now'))->format('Y-m-d H:i:s');
             }
 
             if (isset($customUrl['changeFreq'])) {

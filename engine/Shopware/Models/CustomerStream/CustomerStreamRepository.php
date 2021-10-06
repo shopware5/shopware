@@ -224,7 +224,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
             ->from('s_customer_streams')
             ->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
 
-        $date = (new \DateTime())->sub(new \DateInterval('P' . (int) 12 . 'M'));
+        $date = (new DateTime())->sub(new DateInterval('P' . (int) 12 . 'M'));
 
         $query = $this->createAmountPerMonthQuery($date);
         $query->addSelect('stream_mapping.stream_id as stream');

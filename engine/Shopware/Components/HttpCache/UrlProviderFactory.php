@@ -25,6 +25,7 @@
 namespace Shopware\Components\HttpCache;
 
 use IteratorAggregate;
+use RuntimeException;
 use Shopware\Components\HttpCache\UrlProvider\UrlProviderInterface;
 
 class UrlProviderFactory implements UrlProviderFactoryInterface
@@ -50,7 +51,7 @@ class UrlProviderFactory implements UrlProviderFactoryInterface
             }
         }
 
-        throw new \RuntimeException(sprintf('No provider with name "%s" found', $providerName));
+        throw new RuntimeException(sprintf('No provider with name "%s" found', $providerName));
     }
 
     /**

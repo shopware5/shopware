@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\User;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -126,7 +128,7 @@ class User extends ModelEntity
     private $sessionId = '';
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="lastlogin", type="datetime", nullable=true)
      */
@@ -161,7 +163,7 @@ class User extends ModelEntity
     private $failedLogins = 0;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="lockeduntil", type="datetime", nullable=true)
      */
@@ -289,14 +291,14 @@ class User extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string|null $lastLogin
+     * @param DateTimeInterface|string|null $lastLogin
      *
      * @return User
      */
     public function setLastLogin($lastLogin)
     {
-        if ($lastLogin !== null && !($lastLogin instanceof \DateTimeInterface)) {
-            $lastLogin = new \DateTime((string) $lastLogin);
+        if ($lastLogin !== null && !($lastLogin instanceof DateTimeInterface)) {
+            $lastLogin = new DateTime((string) $lastLogin);
         }
         $this->lastLogin = $lastLogin;
 
@@ -304,7 +306,7 @@ class User extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getLastLogin()
     {
@@ -396,8 +398,8 @@ class User extends ModelEntity
      */
     public function setLockedUntil($lockedUntil)
     {
-        if (!$lockedUntil instanceof \DateTimeInterface) {
-            $lockedUntil = new \DateTime((string) $lockedUntil);
+        if (!$lockedUntil instanceof DateTimeInterface) {
+            $lockedUntil = new DateTime((string) $lockedUntil);
         }
         $this->lockedUntil = $lockedUntil;
 
@@ -405,7 +407,7 @@ class User extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getLockedUntil()
     {

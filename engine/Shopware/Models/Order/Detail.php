@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Order;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Article\Detail as ArticleDetail;
@@ -217,7 +218,7 @@ class Detail extends ModelEntity
     private $shippedGroup = 0;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
@@ -427,7 +428,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|null $releaseDate
+     * @param DateTimeInterface|null $releaseDate
      *
      * @return Detail
      */
@@ -439,7 +440,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
     public function getReleaseDate()
     {

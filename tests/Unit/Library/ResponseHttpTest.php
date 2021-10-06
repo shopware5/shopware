@@ -24,18 +24,19 @@
 
 namespace Shopware\Tests\Unit\Library;
 
+use Enlight_Controller_Response_ResponseHttp;
 use PHPUnit\Framework\TestCase;
 
 class ResponseHttpTest extends TestCase
 {
     /**
-     * @var \Enlight_Controller_Response_ResponseHttp
+     * @var Enlight_Controller_Response_ResponseHttp
      */
     private $response;
 
     protected function setUp(): void
     {
-        $this->response = new \Enlight_Controller_Response_ResponseHttp();
+        $this->response = new Enlight_Controller_Response_ResponseHttp();
     }
 
     public function testCookieRemove()

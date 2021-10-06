@@ -27,7 +27,9 @@ declare(strict_types=1);
 namespace Shopware\Bundle\SearchBundleES;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Enlight_Event_EventManager;
 use IteratorAggregate;
+use RuntimeException;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 
 class HandlerRegistry
@@ -39,7 +41,7 @@ class HandlerRegistry
 
     public function __construct(
         IteratorAggregate $handlers,
-        \Enlight_Event_EventManager $events
+        Enlight_Event_EventManager $events
     ) {
         $eventHandlers = $events->collect(
             'Shopware_SearchBundleES_Collect_Handlers',
@@ -57,7 +59,7 @@ class HandlerRegistry
             }
         }
 
-        throw new \RuntimeException(sprintf('%s class not supported', \get_class($condition)));
+        throw new RuntimeException(sprintf('%s class not supported', \get_class($condition)));
     }
 
     /**

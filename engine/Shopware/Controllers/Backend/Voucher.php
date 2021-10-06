@@ -523,13 +523,13 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
      * @param array  $range
      * @param string $pattern
      *
-     * @return string|null
+     * @return string
      */
     private function replaceAllMatchingPatterns($generatedCode, $range, $pattern)
     {
         $allPatternsReplaced = false;
         while (!$allPatternsReplaced) {
-            $generatedCode = preg_replace('/\\' . $pattern . '/', $range[Random::getInteger(1, \count($range) - 1)], $generatedCode, 1);
+            $generatedCode = (string) preg_replace('/\\' . $pattern . '/', $range[Random::getInteger(1, \count($range) - 1)], $generatedCode, 1);
             $allPatternsReplaced = substr_count($generatedCode, $pattern) == 0;
         }
 

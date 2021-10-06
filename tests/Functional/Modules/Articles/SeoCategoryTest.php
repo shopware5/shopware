@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Modules\Articles;
 
-class SeoCategoryTest extends \Enlight_Components_Test_Plugin_TestCase
+use Enlight_Components_Test_Plugin_TestCase;
+
+class SeoCategoryTest extends Enlight_Components_Test_Plugin_TestCase
 {
     /**
      * @var \Shopware\Components\Api\Resource\Article

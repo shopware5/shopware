@@ -25,6 +25,8 @@
 namespace Shopware\Bundle\EmotionBundle\Service;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Enlight_Event_EventManager;
+use Enlight_Event_Exception;
 use IteratorAggregate;
 use Shopware\Bundle\EmotionBundle\ComponentHandler\ComponentHandlerInterface;
 use Shopware\Bundle\EmotionBundle\ComponentHandler\EventComponentHandler;
@@ -57,7 +59,7 @@ class EmotionElementService implements EmotionElementServiceInterface
     private $dataCollectionResolver;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $eventManager;
 
@@ -66,7 +68,7 @@ class EmotionElementService implements EmotionElementServiceInterface
         EmotionElementGateway $gateway,
         EventComponentHandler $eventComponentHandler,
         DataCollectionResolverInterface $dataCollectionResolver,
-        \Enlight_Event_EventManager $eventManager
+        Enlight_Event_EventManager $eventManager
     ) {
         $this->gateway = $gateway;
         $this->eventComponentHandler = $eventComponentHandler;
@@ -140,7 +142,7 @@ class EmotionElementService implements EmotionElementServiceInterface
     }
 
     /**
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return array
      */

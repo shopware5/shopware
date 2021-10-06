@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
@@ -124,7 +125,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $valueIds = $statement->fetchAll(\PDO::FETCH_COLUMN);
+        $valueIds = $statement->fetchAll(PDO::FETCH_COLUMN);
 
         if (empty($valueIds)) {
             return null;

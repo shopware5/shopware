@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Enlight_Template_Manager;
+use RuntimeException;
 use sExport;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\ProductFeed\ProductFeed;
@@ -110,17 +111,17 @@ class GenerateProductFeedCommand extends ShopwareCommand implements CompletionAw
         $cacheDir = $this->container->getParameter('kernel.cache_dir');
 
         if (!\is_string($cacheDir)) {
-            throw new \RuntimeException('Parameter kernel.cache_dir has to be an string');
+            throw new RuntimeException('Parameter kernel.cache_dir has to be an string');
         }
 
         $this->cacheDir = $cacheDir . '/productexport/';
 
         if (!is_dir($this->cacheDir)) {
             if (@mkdir($this->cacheDir, 0777, true) === false) {
-                throw new \RuntimeException(sprintf("Unable to create directory '%s'\n", $this->cacheDir));
+                throw new RuntimeException(sprintf("Unable to create directory '%s'\n", $this->cacheDir));
             }
         } elseif (!is_writable($this->cacheDir)) {
-            throw new \RuntimeException(sprintf("Unable to write in directory '%s'\n", $this->cacheDir));
+            throw new RuntimeException(sprintf("Unable to write in directory '%s'\n", $this->cacheDir));
         }
 
         $feedId = (int) $input->getOption('feed-id');
@@ -150,11 +151,11 @@ class GenerateProductFeedCommand extends ShopwareCommand implements CompletionAw
             /** @var ProductFeed|null $productFeed */
             $productFeed = $productFeedRepository->find((int) $feedId);
             if ($productFeed === null) {
-                throw new \RuntimeException(sprintf("Unable to load feed with id %s\n", $feedId));
+                throw new RuntimeException(sprintf("Unable to load feed with id %s\n", $feedId));
             }
 
             if ($productFeed->getActive() !== 1) {
-                throw new \RuntimeException(sprintf("The feed with id %s is not active\n", $feedId));
+                throw new RuntimeException(sprintf("The feed with id %s is not active\n", $feedId));
             }
             $this->generateFeed($export, $productFeed);
         }

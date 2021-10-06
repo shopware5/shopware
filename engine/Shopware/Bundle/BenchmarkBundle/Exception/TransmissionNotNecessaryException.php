@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Exception;
 
-class TransmissionNotNecessaryException extends \Exception
+use Exception;
+
+class TransmissionNotNecessaryException extends Exception
 {
 }

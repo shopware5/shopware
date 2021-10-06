@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Blog;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -141,7 +143,7 @@ class Blog extends ModelEntity
     private $views = null;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="display_date", type="datetime", nullable=false)
      */
@@ -320,7 +322,7 @@ class Blog extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getDisplayDate()
     {
@@ -328,12 +330,12 @@ class Blog extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $displayDate
+     * @param DateTimeInterface|string $displayDate
      */
     public function setDisplayDate($displayDate)
     {
-        if (!$displayDate instanceof \DateTimeInterface && $displayDate !== '') {
-            $displayDate = new \DateTime($displayDate);
+        if (!$displayDate instanceof DateTimeInterface && $displayDate !== '') {
+            $displayDate = new DateTime($displayDate);
         }
         $this->displayDate = $displayDate;
     }

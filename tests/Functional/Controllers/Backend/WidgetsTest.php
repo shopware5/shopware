@@ -24,16 +24,24 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use DateInterval;
+use DateTime;
 use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_Controller_TestCase;
 use Enlight_Plugin_Bootstrap;
 use Enlight_Plugin_Namespace;
 use Enlight_Plugin_PluginManager;
+use Enlight_View;
+use Generator;
 use PHPUnit\Framework\Constraint\Constraint;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware_Controllers_Backend_Widgets;
 use Shopware_Plugins_Backend_Auth_Bootstrap;
+use UnexpectedValueException;
+use Zend_Db_Expr;
 
-class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
+class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 {
     use DatabaseTransactionBehaviour;
     use ContainerTrait;
@@ -56,7 +64,7 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
         $pluginManager = $this->getContainer()->get('plugin_manager');
 
         if (!($pluginManager instanceof Enlight_Plugin_PluginManager)) {
-            throw new \UnexpectedValueException(sprintf('Couldn\'t load %s', Enlight_Plugin_PluginManager::class));
+            throw new UnexpectedValueException(sprintf('Couldn\'t load %s', Enlight_Plugin_PluginManager::class));
         }
 
         $this->pluginManager = $pluginManager;
@@ -64,13 +72,13 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
         $backendPlugins = $pluginManager->get('Backend');
 
         if (!($backendPlugins instanceof Enlight_Plugin_Namespace)) {
-            throw new \UnexpectedValueException(sprintf('Couldn\'t load %s', Enlight_Plugin_Namespace::class));
+            throw new UnexpectedValueException(sprintf('Couldn\'t load %s', Enlight_Plugin_Namespace::class));
         }
 
         $authPlugin = $backendPlugins->get('Auth');
 
         if (!($authPlugin instanceof Shopware_Plugins_Backend_Auth_Bootstrap)) {
-            throw new \UnexpectedValueException(sprintf('Couldn\'t load %s', Shopware_Plugins_Backend_Auth_Bootstrap::class));
+            throw new UnexpectedValueException(sprintf('Couldn\'t load %s', Shopware_Plugins_Backend_Auth_Bootstrap::class));
         }
 
         $this->authPlugin = $authPlugin;
@@ -105,8 +113,8 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function testConversionIsCalucatedFromBeginningOfDay()
     {
-        $date = new \DateTime();
-        $date->sub(new \DateInterval('P7DT1M'));
+        $date = new DateTime();
+        $date->sub(new DateInterval('P7DT1M'));
 
         $this->connection
             ->insert('s_statistics_visitors', [
@@ -138,8 +146,8 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function testConversionStillWorks()
     {
-        $date = new \DateTime();
-        $date->sub(new \DateInterval('P6DT59M'));
+        $date = new DateTime();
+        $date->sub(new DateInterval('P6DT59M'));
 
         $this->connection
             ->insert('s_statistics_visitors', [
@@ -171,8 +179,8 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function testIfNoConversionAfterEightDays()
     {
-        $date = new \DateTime();
-        $date->sub(new \DateInterval('P8D'));
+        $date = new DateTime();
+        $date->sub(new DateInterval('P8D'));
 
         $this->connection
             ->insert('s_statistics_visitors', [
@@ -297,9 +305,9 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @dataProvider backendAuthProvider
      */
-    public function testGetNoticeChecksBackendAuth(object $auth, \Enlight_View $view): void
+    public function testGetNoticeChecksBackendAuth(object $auth, Enlight_View $view): void
     {
-        $controller = new \Shopware_Controllers_Backend_Widgets();
+        $controller = new Shopware_Controllers_Backend_Widgets();
         $controller->setView($view);
 
         $_SESSION['ShopwareBackend']['Auth'] = $auth;
@@ -312,11 +320,11 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @dataProvider backendAuthProvider
      */
-    public function testSaveNoticeChecksBackendAuth(object $auth, \Enlight_View $view): void
+    public function testSaveNoticeChecksBackendAuth(object $auth, Enlight_View $view): void
     {
         $this->Request()->setParam('notice', 'bf0b9d61-8f55-4f2c-818b-9d0891178df8');
 
-        $controller = new \Shopware_Controllers_Backend_Widgets();
+        $controller = new Shopware_Controllers_Backend_Widgets();
         $controller->setRequest($this->Request());
         $controller->setView($view);
 
@@ -328,9 +336,9 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @return \Generator<string, array>
+     * @return Generator<string, array>
      */
-    public function backendAuthProvider(): \Generator
+    public function backendAuthProvider(): Generator
     {
         yield 'invalid auth' => [
             (object) [],
@@ -356,9 +364,9 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @param array<Constraint> $arguments
      */
-    private function getViewMockCheckingForAssign(array $arguments): \Enlight_View
+    private function getViewMockCheckingForAssign(array $arguments): Enlight_View
     {
-        $view = static::createMock(\Enlight_View::class);
+        $view = static::createMock(Enlight_View::class);
         $view->expects(static::once())
             ->method('assign')
             ->with(...$arguments);
@@ -411,7 +419,7 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
         $this->connection->insert('s_statistics_currentusers', [
             'remoteaddr' => '127.0.0.1',
             'page' => '/',
-            'time' => new \Zend_Db_Expr('NOW()'),
+            'time' => new Zend_Db_Expr('NOW()'),
             'userID' => $this->userId,
             'deviceType' => 'Test',
         ]);
