@@ -718,7 +718,7 @@ class sOrder implements Enlight_Hook
                 $this->db->quote((string) $basketRow['ean']),
                 $this->db->quote((string) $basketRow['itemUnit']),
                 $this->db->quote((string) $basketRow['packunit']),
-                !\is_null($basketRow['additional_details']['articleDetailsID']) ? $basketRow['additional_details']['articleDetailsID'] : 'null'
+                $basketRow['additional_details']['articleDetailsID'] ?? 'null'
             );
 
             $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterDetailsSQL', $sql, [

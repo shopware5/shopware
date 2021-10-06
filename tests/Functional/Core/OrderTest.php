@@ -24,14 +24,24 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Core;
+
 use Doctrine\ORM\AbstractQuery;
+use Enlight_Controller_Request_RequestHttp as ShopwareRequest;
+use Enlight_Event_EventArgs;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Shopware\Models\Article\Detail as ProductVariant;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Order\Billing;
+use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Order\Shipping;
+use sOrder;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Zend_Db_Expr;
 
-class sOrderTest extends TestCase
+class OrderTest extends TestCase
 {
     public static string $sessionId;
 
@@ -50,13 +60,11 @@ class sOrderTest extends TestCase
 
     public function testGetOrderNumber(): void
     {
-        $current = (int) Shopware()->Db()->fetchOne(
-            "SELECT number FROM s_order_number WHERE name='invoice'"
-        );
+        $current = (int) Shopware()->Db()->fetchOne('SELECT number FROM s_order_number WHERE name="invoice"');
 
-        $next = $this->module->sGetOrderNumber();
+        $next = (int) $this->module->sGetOrderNumber();
 
-        static::assertEquals($next, $current + 1);
+        static::assertSame($next, $current + 1);
     }
 
     /**
@@ -87,7 +95,7 @@ class sOrderTest extends TestCase
             [$this, 'validatePaymentContextData']
         );
 
-        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
+        Shopware()->Front()->setRequest(new ShopwareRequest());
 
         $variables = [
             'additional' => [
@@ -140,17 +148,12 @@ class sOrderTest extends TestCase
     {
         $detail = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE instock > 10 LIMIT 1');
 
-        $this->invokeMethod($this->module, 'refreshOrderedVariant', [
-            $detail['ordernumber'],
-            10,
-        ]);
+        $this->invokeMethod($this->module, 'refreshOrderedVariant', [$detail['ordernumber'], 10]);
 
-        $updated = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE id = :id', [
-            ':id' => $detail['id'],
-        ]);
+        $updated = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE id = :id', [':id' => $detail['id']]);
 
-        static::assertEquals($updated['sales'], $detail['sales'] + 10);
-        static::assertEquals($updated['instock'], $detail['instock'] - 10);
+        static::assertSame((int) $updated['sales'], $detail['sales'] + 10);
+        static::assertSame((int) $updated['instock'], $detail['instock'] - 10);
     }
 
     public function testGetOrderDetailsForMail(): void
@@ -200,12 +203,12 @@ class sOrderTest extends TestCase
         static::assertArrayHasKey('attribute5', $order['attributes']);
         static::assertArrayHasKey('attribute6', $order['attributes']);
 
-        static::assertEquals('attribute1', $order['attributes']['attribute1']);
-        static::assertEquals('attribute2', $order['attributes']['attribute2']);
-        static::assertEquals('attribute3', $order['attributes']['attribute3']);
-        static::assertEquals('attribute4', $order['attributes']['attribute4']);
-        static::assertEquals('attribute5', $order['attributes']['attribute5']);
-        static::assertEquals('attribute6', $order['attributes']['attribute6']);
+        static::assertSame('attribute1', $order['attributes']['attribute1']);
+        static::assertSame('attribute2', $order['attributes']['attribute2']);
+        static::assertSame('attribute3', $order['attributes']['attribute3']);
+        static::assertSame('attribute4', $order['attributes']['attribute4']);
+        static::assertSame('attribute5', $order['attributes']['attribute5']);
+        static::assertSame('attribute6', $order['attributes']['attribute6']);
     }
 
     public function testGetUserDataForMail(): void
@@ -250,20 +253,20 @@ class sOrderTest extends TestCase
         static::assertArrayHasKey('additional', $processedUserData);
         static::assertArrayHasKey('country', $processedUserData);
 
-        static::assertEquals("I'll \"walk\" the <b>dog</b> now", $processedUserData['billingaddress'][1]);
-        static::assertEquals("I'll \"walk\" the <b>dog</b> later", $processedUserData['billingaddress'][2]);
+        static::assertSame("I'll \"walk\" the <b>dog</b> now", $processedUserData['billingaddress'][1]);
+        static::assertSame("I'll \"walk\" the <b>dog</b> later", $processedUserData['billingaddress'][2]);
 
-        static::assertEquals("I'll \"walk\" the <b>dog</b> now", $processedUserData['billingaddress']['attributes']['foo']);
-        static::assertEquals("I'll \"walk\" the <b>dog</b> later", $processedUserData['billingaddress']['attributes']['bar']);
+        static::assertSame("I'll \"walk\" the <b>dog</b> now", $processedUserData['billingaddress']['attributes']['foo']);
+        static::assertSame("I'll \"walk\" the <b>dog</b> later", $processedUserData['billingaddress']['attributes']['bar']);
 
-        static::assertEquals("I won't \"walk\" the <b>dog</b> now", $processedUserData['shippingaddress'][1]);
-        static::assertEquals("I won't \"walk\" the <b>dog</b> later", $processedUserData['shippingaddress'][2]);
+        static::assertSame("I won't \"walk\" the <b>dog</b> now", $processedUserData['shippingaddress'][1]);
+        static::assertSame("I won't \"walk\" the <b>dog</b> later", $processedUserData['shippingaddress'][2]);
 
-        static::assertEquals("I'll \"walk\" the <b>dog</b> now", $processedUserData['shippingaddress']['attributes']['foo']);
-        static::assertEquals("I'll \"walk\" the <b>dog</b> later", $processedUserData['shippingaddress']['attributes']['bar']);
+        static::assertSame("I'll \"walk\" the <b>dog</b> now", $processedUserData['shippingaddress']['attributes']['foo']);
+        static::assertSame("I'll \"walk\" the <b>dog</b> later", $processedUserData['shippingaddress']['attributes']['bar']);
 
-        static::assertEquals('<span>dog</span>', $processedUserData['country'][1]);
-        static::assertEquals('<span>dog</span>', $processedUserData['additional']['payment']['description']);
+        static::assertSame('<span>dog</span>', $processedUserData['country'][1]);
+        static::assertSame('<span>dog</span>', $processedUserData['additional']['payment']['description']);
     }
 
     public function testFormatBasketRow(): void
@@ -284,11 +287,11 @@ class sOrderTest extends TestCase
         static::assertArrayHasKey('modus', $processedBasketRowOne);
         static::assertArrayHasKey('taxID', $processedBasketRowOne);
 
-        static::assertEquals('This is a very fancy article name', $processedBasketRowOne['articlename']);
-        static::assertEquals('0,00', $processedBasketRowOne['price']);
-        static::assertEquals('0', $processedBasketRowOne['esdarticle']);
-        static::assertEquals('0', $processedBasketRowOne['modus']);
-        static::assertEquals('0', $processedBasketRowOne['taxID']);
+        static::assertSame('This is a very fancy article name', $processedBasketRowOne['articlename']);
+        static::assertSame('0,00', $processedBasketRowOne['price']);
+        static::assertSame('0', $processedBasketRowOne['esdarticle']);
+        static::assertSame('0', $processedBasketRowOne['modus']);
+        static::assertSame('0', $processedBasketRowOne['taxID']);
 
         $rawBasketRowTwo = [
             'articlename' => 'This is a very &lt;tag&gt;fancy&lt;/tag&gt; <br /> article name',
@@ -310,11 +313,11 @@ class sOrderTest extends TestCase
         static::assertArrayHasKey('modus', $processedBasketRowTwo);
         static::assertArrayHasKey('taxID', $processedBasketRowTwo);
 
-        static::assertEquals('This is a very fancy article name', $processedBasketRowTwo['articlename']);
-        static::assertEquals('1,00', $processedBasketRowTwo['price']);
-        static::assertEquals('3', $processedBasketRowTwo['esdarticle']);
-        static::assertEquals('2', $processedBasketRowTwo['modus']);
-        static::assertEquals('4', $processedBasketRowTwo['taxID']);
+        static::assertSame('This is a very fancy article name', $processedBasketRowTwo['articlename']);
+        static::assertSame('1,00', $processedBasketRowTwo['price']);
+        static::assertSame('3', $processedBasketRowTwo['esdarticle']);
+        static::assertSame('2', $processedBasketRowTwo['modus']);
+        static::assertSame('4', $processedBasketRowTwo['taxID']);
     }
 
     public function testSSaveBillingAddress(): void
@@ -323,27 +326,27 @@ class sOrderTest extends TestCase
         $originalBillingAddress = $user['billingaddress'];
         $orderNumber = mt_rand(111111111, 999999999);
 
-        static::assertEquals(1, $this->module->sSaveBillingAddress($originalBillingAddress, $orderNumber));
+        static::assertSame(1, $this->module->sSaveBillingAddress($originalBillingAddress, $orderNumber));
 
         $billing = Shopware()->Models()->getRepository(Billing::class)->findOneBy(['order' => $orderNumber]);
         static::assertInstanceOf(Billing::class, $billing);
         static::assertInstanceOf(Customer::class, $billing->getCustomer());
 
-        static::assertEquals($originalBillingAddress['userID'], $billing->getCustomer()->getId());
-        static::assertEquals($originalBillingAddress['company'], $billing->getCompany());
-        static::assertEquals($originalBillingAddress['firstname'], $billing->getFirstName());
-        static::assertEquals($originalBillingAddress['lastname'], $billing->getLastName());
-        static::assertEquals($originalBillingAddress['street'], $billing->getStreet());
+        static::assertSame((int) $originalBillingAddress['userID'], $billing->getCustomer()->getId());
+        static::assertSame($originalBillingAddress['company'], $billing->getCompany());
+        static::assertSame($originalBillingAddress['firstname'], $billing->getFirstName());
+        static::assertSame($originalBillingAddress['lastname'], $billing->getLastName());
+        static::assertSame($originalBillingAddress['street'], $billing->getStreet());
 
         $billingAttr = $billing->getAttribute();
 
         if ($billingAttr !== null) {
-            static::assertEquals($originalBillingAddress['text1'], $billingAttr->getText1());
-            static::assertEquals($originalBillingAddress['text2'], $billingAttr->getText2());
-            static::assertEquals($originalBillingAddress['text3'], $billingAttr->getText3());
-            static::assertEquals($originalBillingAddress['text4'], $billingAttr->getText4());
-            static::assertEquals($originalBillingAddress['text5'], $billingAttr->getText5());
-            static::assertEquals($originalBillingAddress['text6'], $billingAttr->getText6());
+            static::assertSame($originalBillingAddress['text1'], $billingAttr->getText1());
+            static::assertSame($originalBillingAddress['text2'], $billingAttr->getText2());
+            static::assertSame($originalBillingAddress['text3'], $billingAttr->getText3());
+            static::assertSame($originalBillingAddress['text4'], $billingAttr->getText4());
+            static::assertSame($originalBillingAddress['text5'], $billingAttr->getText5());
+            static::assertSame($originalBillingAddress['text6'], $billingAttr->getText6());
             Shopware()->Models()->remove($billingAttr);
         }
         Shopware()->Models()->remove($billing);
@@ -357,27 +360,27 @@ class sOrderTest extends TestCase
 
         $orderNumber = mt_rand(111111111, 999999999);
 
-        static::assertEquals(1, $this->module->sSaveShippingAddress($originalBillingAddress, $orderNumber));
+        static::assertSame(1, $this->module->sSaveShippingAddress($originalBillingAddress, $orderNumber));
 
         $shipping = Shopware()->Models()->getRepository(Shipping::class)->findOneBy(['order' => $orderNumber]);
         static::assertInstanceOf(Shipping::class, $shipping);
         static::assertInstanceOf(Customer::class, $shipping->getCustomer());
 
-        static::assertEquals($originalBillingAddress['userID'], $shipping->getCustomer()->getId());
-        static::assertEquals($originalBillingAddress['company'], $shipping->getCompany());
-        static::assertEquals($originalBillingAddress['firstname'], $shipping->getFirstName());
-        static::assertEquals($originalBillingAddress['lastname'], $shipping->getLastName());
-        static::assertEquals($originalBillingAddress['street'], $shipping->getStreet());
+        static::assertSame((int) $originalBillingAddress['userID'], $shipping->getCustomer()->getId());
+        static::assertSame($originalBillingAddress['company'], $shipping->getCompany());
+        static::assertSame($originalBillingAddress['firstname'], $shipping->getFirstName());
+        static::assertSame($originalBillingAddress['lastname'], $shipping->getLastName());
+        static::assertSame($originalBillingAddress['street'], $shipping->getStreet());
 
         $shippingAttr = $shipping->getAttribute();
 
         if ($shippingAttr !== null) {
-            static::assertEquals($originalBillingAddress['text1'], $shippingAttr->getText1());
-            static::assertEquals($originalBillingAddress['text2'], $shippingAttr->getText2());
-            static::assertEquals($originalBillingAddress['text3'], $shippingAttr->getText3());
-            static::assertEquals($originalBillingAddress['text4'], $shippingAttr->getText4());
-            static::assertEquals($originalBillingAddress['text5'], $shippingAttr->getText5());
-            static::assertEquals($originalBillingAddress['text6'], $shippingAttr->getText6());
+            static::assertSame($originalBillingAddress['text1'], $shippingAttr->getText1());
+            static::assertSame($originalBillingAddress['text2'], $shippingAttr->getText2());
+            static::assertSame($originalBillingAddress['text3'], $shippingAttr->getText3());
+            static::assertSame($originalBillingAddress['text4'], $shippingAttr->getText4());
+            static::assertSame($originalBillingAddress['text5'], $shippingAttr->getText5());
+            static::assertSame($originalBillingAddress['text6'], $shippingAttr->getText6());
             Shopware()->Models()->remove($shippingAttr);
         }
 
@@ -416,9 +419,9 @@ class sOrderTest extends TestCase
 
         static::assertNotNull($order);
         static::assertNotNull($order->getAttribute());
-        static::assertEquals('1113', $order->getInvoiceAmount());
-        static::assertEquals('1113', $order->getInvoiceAmountNet());
-        static::assertEquals('0', $order->getNumber());
+        static::assertSame(1113.0, $order->getInvoiceAmount());
+        static::assertSame(1113.0, $order->getInvoiceAmountNet());
+        static::assertSame('0', $order->getNumber());
 
         foreach ($order->getDetails() as $orderDetail) {
             static::assertNotNull($orderDetail->getAttribute());
@@ -440,9 +443,9 @@ class sOrderTest extends TestCase
             ->getQuery()
             ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
-        static::assertEquals('1113', $order['invoiceAmount']);
-        static::assertEquals('1113', $order['invoiceAmountNet']);
-        static::assertEquals('0', $order['number']);
+        static::assertSame(1113.0, $order['invoiceAmount']);
+        static::assertSame(1113.0, $order['invoiceAmountNet']);
+        static::assertSame('0', $order['number']);
 
         $this->module->sDeleteTemporaryOrder();
 
@@ -507,7 +510,7 @@ class sOrderTest extends TestCase
             } else {
                 // ESD with serial and enough available
                 // Assert serial is used
-                static::assertEquals($basketRow['quantity'], Shopware()->Db()->fetchRow(
+                static::assertSame($basketRow['quantity'], Shopware()->Db()->fetchRow(
                     'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
                     [1234, 4567]
                 ));
@@ -524,8 +527,7 @@ class sOrderTest extends TestCase
 
     public function testSSaveOrder(): void
     {
-        $requestStack = Shopware()->Container()->get('request_stack');
-        $requestStack->push(new Enlight_Controller_Request_RequestHttp());
+        $requestStack = $this->prepareRequestStack();
 
         $this->createOrder();
 
@@ -534,8 +536,8 @@ class sOrderTest extends TestCase
         $order = Shopware()->Models()->getRepository(Order::class)->findOneBy(['number' => $orderNumber]);
         static::assertInstanceOf(Order::class, $order);
 
-        static::assertEquals('1113', $order->getInvoiceAmount());
-        static::assertEquals('1113', $order->getInvoiceAmountNet());
+        static::assertSame(1113.0, $order->getInvoiceAmount());
+        static::assertSame(1113.0, $order->getInvoiceAmountNet());
         static::assertNotEquals('0', $order->getNumber());
 
         Shopware()->Models()->remove($order);
@@ -589,10 +591,7 @@ class sOrderTest extends TestCase
 
     public function testSetPaymentStatus(): void
     {
-        $requestStack = Shopware()->Container()->get('request_stack');
-        $request = new Enlight_Controller_Request_RequestHttp();
-        $requestStack->push($request);
-        Shopware()->Front()->setRequest($request);
+        $requestStack = $this->prepareRequestStack();
 
         $this->createOrder();
 
@@ -610,7 +609,7 @@ class sOrderTest extends TestCase
         static::assertIsArray($orderHistory);
 
         static::assertCount(0, $orderHistory);
-        static::assertEquals(17, $order->getPaymentStatus()->getId());
+        static::assertSame(17, $order->getPaymentStatus()->getId());
 
         $this->module->setPaymentStatus($orderId, 10, false, 'random payment status comment');
 
@@ -622,10 +621,10 @@ class sOrderTest extends TestCase
         );
 
         static::assertNotEmpty($orderHistory);
-        static::assertEquals(10, $order->getPaymentStatus()->getId());
-        static::assertEquals(17, $orderHistory['previous_payment_status_id']);
-        static::assertEquals(10, $orderHistory['payment_status_id']);
-        static::assertEquals('random payment status comment', $orderHistory['comment']);
+        static::assertSame(10, $order->getPaymentStatus()->getId());
+        static::assertSame(17, (int) $orderHistory['previous_payment_status_id']);
+        static::assertSame(10, (int) $orderHistory['payment_status_id']);
+        static::assertSame('random payment status comment', $orderHistory['comment']);
 
         Shopware()->Models()->remove($order);
         Shopware()->Models()->flush();
@@ -635,10 +634,7 @@ class sOrderTest extends TestCase
 
     public function testSetOrderStatus(): void
     {
-        $requestStack = Shopware()->Container()->get('request_stack');
-        $request = new Enlight_Controller_Request_RequestHttp();
-        $requestStack->push($request);
-        Shopware()->Front()->setRequest($request);
+        $requestStack = $this->prepareRequestStack();
 
         $this->createOrder();
 
@@ -656,7 +652,7 @@ class sOrderTest extends TestCase
         static::assertIsArray($orderHistory);
 
         static::assertCount(0, $orderHistory);
-        static::assertEquals(0, $order->getOrderStatus()->getId());
+        static::assertSame(0, $order->getOrderStatus()->getId());
 
         $this->module->setOrderStatus($orderId, 10, false, 'random order status comment');
 
@@ -668,10 +664,10 @@ class sOrderTest extends TestCase
         );
 
         static::assertNotEmpty($orderHistory);
-        static::assertEquals(10, $order->getOrderStatus()->getId());
-        static::assertEquals(0, $orderHistory['previous_order_status_id']);
-        static::assertEquals(10, $orderHistory['order_status_id']);
-        static::assertEquals('random order status comment', $orderHistory['comment']);
+        static::assertSame(10, $order->getOrderStatus()->getId());
+        static::assertSame(0, (int) $orderHistory['previous_order_status_id']);
+        static::assertSame(10, (int) $orderHistory['order_status_id']);
+        static::assertSame('random order status comment', $orderHistory['comment']);
 
         Shopware()->Models()->remove($order);
         Shopware()->Models()->flush();
@@ -681,9 +677,7 @@ class sOrderTest extends TestCase
 
     public function testEKOrder(): void
     {
-        $requestStack = Shopware()->Container()->get('request_stack');
-        $request = new Enlight_Controller_Request_RequestHttp();
-        $requestStack->push($request);
+        $requestStack = $this->prepareRequestStack();
 
         $this->module->sUserData = $this->getDummyUserDataForBasket();
         $this->module->sNet = $this->module->sUserData['additional']['charge_vat'];
@@ -697,7 +691,19 @@ class sOrderTest extends TestCase
         $this->module->sShippingcostsNumericNet = 3.2799999999999998;
         $this->module->dispatchId = 9;
         $this->module->sBasketData = $this->getBasketRows();
-        $this->module->sSaveOrder();
+        $orderNumber = $this->module->sSaveOrder();
+
+        $order = Shopware()->Models()->getRepository(Order::class)->findOneBy(['number' => $orderNumber]);
+        static::assertInstanceOf(Order::class, $order);
+
+        foreach ($order->getDetails() as $detail) {
+            static::assertInstanceOf(Detail::class, $detail);
+            if ($detail->getArticleName() === 'Warenkorbrabatt') {
+                static::assertNull($detail->getArticleDetail());
+            } else {
+                static::assertInstanceOf(ProductVariant::class, $detail->getArticleDetail());
+            }
+        }
 
         $requestStack->pop();
     }
@@ -961,6 +967,10 @@ class sOrderTest extends TestCase
                     'esdarticle' => '0',
                     'laststock' => '0',
                     'priceNet' => 16.764705882353,
+                    'additional_details' => [
+                        'articleID' => '178',
+                        'articleDetailsID' => 407,
+                    ],
                 ],
                 [
                     'id' => 2,
@@ -976,6 +986,10 @@ class sOrderTest extends TestCase
                     'laststock' => '1',
                     'priceNumeric' => '59.99',
                     'priceNet' => 50.411764705882,
+                    'additional_details' => [
+                        'articleID' => '175',
+                        'articleDetailsID' => 404,
+                    ],
                 ],
                 [
                     'id' => 3,
@@ -991,6 +1005,10 @@ class sOrderTest extends TestCase
                     'laststock' => '1',
                     'priceNumeric' => '23.99',
                     'priceNet' => 20.159663865546,
+                    'additional_details' => [
+                        'articleID' => '162',
+                        'articleDetailsID' => 380,
+                    ],
                 ],
                 [
                     'id' => 4,
@@ -1006,6 +1024,10 @@ class sOrderTest extends TestCase
                     'laststock' => '1',
                     'priceNumeric' => '29.99',
                     'priceNet' => 25, 201680672,
+                    'additional_details' => [
+                        'articleID' => '197',
+                        'articleDetailsID' => 437,
+                    ],
                 ],
                 [
                     'id' => 5,
@@ -1146,5 +1168,15 @@ class sOrderTest extends TestCase
                 'stateID' => null,
             ],
         ];
+    }
+
+    private function prepareRequestStack(): RequestStack
+    {
+        $requestStack = Shopware()->Container()->get('request_stack');
+        $request = new ShopwareRequest();
+        $requestStack->push($request);
+        Shopware()->Front()->setRequest($request);
+
+        return $requestStack;
     }
 }
