@@ -295,6 +295,10 @@ class LegacyPluginInstaller
         }
 
         $content = file_get_contents($file);
+        if ($content === false) {
+            return false;
+        }
+
         $pos = strpos($content, 'if(!extension_loaded(\'ionCube Loader\')){$__oc=strtolower(');
 
         return $pos > 0;

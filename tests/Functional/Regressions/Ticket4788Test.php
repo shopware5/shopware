@@ -87,7 +87,9 @@ class Ticket4788Test extends Enlight_Components_Test_Controller_TestCase
 
         // Count occurrences in category listing
         $this->dispatch('/cat/index/sCategory/23');
-        $count = substr_count($this->Response()->getBody(), $this->longDescriptionStripped);
+        $body = $this->Response()->getBody();
+        static::assertIsString($body);
+        $count = mb_substr_count($body, $this->longDescriptionStripped);
         static::assertEquals(2, $count);
 
         $oldValue = 'b:' . $oldValue . ';';

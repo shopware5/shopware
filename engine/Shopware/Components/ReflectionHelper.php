@@ -114,6 +114,9 @@ class ReflectionHelper
     private function verifyClass(ReflectionClass $class, $docPath, array $directories)
     {
         $fileName = $class->getFileName();
+        if ($fileName === false) {
+            throw new RuntimeException('Could not get file name');
+        }
         $fileDir = substr($fileName, 0, \strlen($docPath));
 
         // Trying to execute a class outside of the Shopware DocumentRoot

@@ -224,12 +224,8 @@ abstract class MultipleElement extends Element implements Countable, Iterator, \
 
     /**
      * Default method to get an element property
-     *
-     * @param string $property
-     *
-     * @return string|null
      */
-    public function getProperty($property)
+    public function getProperty(string $property): string
     {
         $element = Helper::findElements($this, [$property]);
 

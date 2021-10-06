@@ -31,6 +31,7 @@ use Enlight_Exception;
 use Exception;
 use Mpdf\Mpdf;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
+use Shopware\Models\Customer\PaymentData;
 use Zend_Mime;
 
 /**
@@ -123,7 +124,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
      */
     public function getCurrentPaymentDataAsArray($userId)
     {
-        $paymentData = Shopware()->Models()->getRepository('\Shopware\Models\Customer\PaymentData')
+        $paymentData = Shopware()->Models()->getRepository(PaymentData::class)
             ->getCurrentPaymentDataQueryBuilder($userId, 'sepa')->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         if (isset($paymentData)) {
@@ -134,12 +135,14 @@ class SepaPaymentMethod extends GenericPaymentMethod
                 'sSepaBic' => $paymentData['bic'],
             ];
 
-            $arrayData = Shopware()->Container()->get('events')->filter('Sepa_Payment_Method_Current_Payment_Data_Array', $arrayData, [
-                'subject' => $this,
-                'paymentData' => $paymentData,
-            ]);
-
-            return $arrayData;
+            return Shopware()->Container()->get('events')->filter(
+                'Sepa_Payment_Method_Current_Payment_Data_Array',
+                $arrayData,
+                [
+                    'subject' => $this,
+                    'paymentData' => $paymentData,
+                ]
+            );
         }
 
         return null;
@@ -214,7 +217,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
             . (string) (\ord($teststring[1]) - 55)
             . substr($teststring, 2, 2);
 
-        $teststring = preg_replace_callback('/[A-Za-z]/', function ($letter) {
+        $teststring = (string) preg_replace_callback('/[A-Za-z]/', function ($letter) {
             return (int) (\ord(strtolower($letter[0])) - 87);
         }, $teststring);
 

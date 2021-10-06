@@ -34,8 +34,9 @@ class MySQLVersionExtractor
     public static function extract(string $versionString): array
     {
         if (stripos($versionString, 'mariadb') === false) {
-            if (strpos($versionString, '-')) {
-                $versionString = substr($versionString, 0, strpos($versionString, '-'));
+            $versionStringDashPosition = strpos($versionString, '-');
+            if ($versionStringDashPosition !== false) {
+                $versionString = substr($versionString, 0, $versionStringDashPosition);
             }
 
             return ['mysql', $versionString];

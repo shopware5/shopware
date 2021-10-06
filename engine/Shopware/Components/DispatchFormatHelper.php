@@ -53,7 +53,7 @@ class DispatchFormatHelper
         $segments = explode('_', $unFormatted);
 
         foreach ($segments as $key => $segment) {
-            $segment = preg_replace('#[A-Z]#', ' $0', $segment);
+            $segment = (string) preg_replace('#[A-Z]#', ' $0', $segment);
             $segment = str_replace(['-', '.'], ' ', strtolower($segment));
             $segment = preg_replace('/[^a-z0-9 ]/', '', $segment);
             $segments[$key] = str_replace(' ', '', ucwords($segment));

@@ -160,7 +160,7 @@ class Requirements
         }
 
         $value = ini_get($name);
-        if ($value !== '') {
+        if ($value !== '' && $value !== false) {
             if (strtolower($value) === 'off' || (is_numeric($value) && $value == 0)) {
                 return false;
             }
@@ -206,8 +206,9 @@ class Requirements
      */
     private function checkPhp(): string
     {
-        if (strpos(PHP_VERSION, '-')) {
-            return substr(PHP_VERSION, 0, strpos(PHP_VERSION, '-'));
+        $phpVersionDashPosition = strpos(PHP_VERSION, '-');
+        if ($phpVersionDashPosition !== false) {
+            return substr(PHP_VERSION, 0, $phpVersionDashPosition);
         }
 
         return PHP_VERSION;
@@ -218,7 +219,7 @@ class Requirements
         try {
             $sql = 'SELECT @@SESSION.sql_mode;';
             $result = $this->connection->query($sql)->fetchColumn();
-            if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
+            if (\is_string($result) && (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false)) {
                 return true;
             }
         } catch (PDOException $e) {

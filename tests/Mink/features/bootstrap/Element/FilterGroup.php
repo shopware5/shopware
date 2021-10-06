@@ -77,11 +77,14 @@ class FilterGroup extends MultipleElement
     /**
      * Helper method to expand the properties of the group
      */
-    protected function expandProperties()
+    protected function expandProperties(): void
     {
         $class = $this->getParent()->getParent()->getAttribute('class');
+        if ($class === null) {
+            return;
+        }
 
-        if (strpos($class, 'is--collapsed') === false) {
+        if (mb_strpos($class, 'is--collapsed') === false) {
             $this->click();
         }
     }

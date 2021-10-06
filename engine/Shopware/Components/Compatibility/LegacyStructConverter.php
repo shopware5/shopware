@@ -1206,7 +1206,7 @@ class LegacyStructConverter
         if (empty($amountStr[1])) {
             $amountStr[1] = 0;
         }
-        $amountStr[1] = substr($amountStr[1], 0, 3); // Rounded to the nearest thousandth as a string
+        $amountStr[1] = substr((string) $amountStr[1], 0, 3); // Rounded to the nearest thousandth as a string
 
         $amountStr = $amountStr[0] . '.' . $amountStr[1];
 

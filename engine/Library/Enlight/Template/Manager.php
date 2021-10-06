@@ -175,7 +175,7 @@ class Enlight_Template_Manager extends Smarty
 
         // Filter all directories which includes the new shopware themes
         $themeDirectories = array_filter($template_dir, static function ($themeDir) {
-            return stripos($themeDir, '/Themes/Frontend/');
+            return (bool) stripos($themeDir, '/Themes/Frontend/');
         });
 
         // If no shopware theme assigned, we have to use the passed inheritance

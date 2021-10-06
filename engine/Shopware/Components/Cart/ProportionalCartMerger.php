@@ -59,7 +59,7 @@ class ProportionalCartMerger implements ProportionalCartMergerInterface
 
             if (!isset($newCart[$cartItem['ordernumber']]['fixedName'])) {
                 $newCart[$cartItem['ordernumber']]['proportion'] = [$newCart[$cartItem['ordernumber']], $cartItem];
-                $newCart[$cartItem['ordernumber']]['articlename'] = substr($newCart[$cartItem['ordernumber']]['articlename'], 0, strrpos($newCart[$cartItem['ordernumber']]['articlename'], ' '));
+                $newCart[$cartItem['ordernumber']]['articlename'] = substr($newCart[$cartItem['ordernumber']]['articlename'], 0, (int) strrpos($newCart[$cartItem['ordernumber']]['articlename'], ' '));
                 $newCart[$cartItem['ordernumber']]['fixedName'] = true;
             } elseif (isset($newCart[$cartItem['ordernumber']]['proportion'])) {
                 $newCart[$cartItem['ordernumber']]['proportion'][] = $cartItem;

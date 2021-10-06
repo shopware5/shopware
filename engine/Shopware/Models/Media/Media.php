@@ -1224,7 +1224,7 @@ class Media extends ModelEntity
             return;
         }
 
-        $extension = $this->file->guessExtension();
+        $extension = (string) $this->file->guessExtension();
         $name = $this->file->getBasename();
 
         if ($this->file instanceof UploadedFile) {

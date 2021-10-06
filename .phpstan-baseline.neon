@@ -151,11 +151,6 @@ parameters:
 			path: engine/Library/Enlight/Collection/ArrayCollection.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|null given\\.$#"
-			count: 2
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
 			message: "#^Parameter \\$key of method Enlight_Collection_ArrayCollection\\:\\:offsetUnset\\(\\) has invalid typehint type unknown_type\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Collection/ArrayCollection.php
@@ -1920,11 +1915,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
-
-		-
 			message: "#^Property Enlight_Controller_Request_RequestHttp\\:\\:\\$_params type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
@@ -3106,11 +3096,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$stack of function array_unshift expects array, array\\|string given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Manager.php
-
-		-
-			message: "#^Parameter \\#2 \\$callback of function array_filter expects callable\\(mixed, mixed\\)\\: bool, Closure\\(mixed\\)\\: int\\<0, max\\>\\|false given\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Manager.php
 
@@ -10245,11 +10230,6 @@ parameters:
 			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
-
-		-
 			message: "#^Parameter \\#2 \\$contents of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceInterface\\:\\:write\\(\\) expects string, string\\|false given\\.$#"
 			count: 2
 			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
@@ -10766,11 +10746,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$bootstrap of method Shopware_Components_Plugin_Namespace\\:\\:uninstallPlugin\\(\\) expects Shopware_Components_Plugin_Bootstrap, Shopware_Components_Plugin_Bootstrap\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginInstaller.php
-
-		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginInstaller.php
 
@@ -22157,11 +22132,6 @@ parameters:
 			path: engine/Shopware/Components/Cart/ProportionalCartMerger.php
 
 		-
-			message: "#^Parameter \\#3 \\$length of function substr expects int, int\\<0, max\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/ProportionalCartMerger.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\ProportionalCartMergerInterface\\:\\:mergeProportionalItems\\(\\) has parameter \\$content with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/ProportionalCartMergerInterface.php
@@ -22397,11 +22367,6 @@ parameters:
 			path: engine/Shopware/Components/Check/File.php
 
 		-
-			message: "#^Parameter \\#3 \\$length of function substr expects int, int\\<0, max\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Check/MySQLVersionExtractor.php
-
-		-
 			message: "#^Access to an undefined property Zend_Config_Xml\\:\\:\\$file\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Check/Path.php
@@ -22517,16 +22482,6 @@ parameters:
 			path: engine/Shopware/Components/Check/Requirements.php
 
 		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, int\\|string\\|false\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Check/Requirements.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Check/Requirements.php
-
-		-
 			message: "#^Parameter \\#1 \\$versionString of static method Shopware\\\\Components\\\\Check\\\\MySQLVersionExtractor\\:\\:extract\\(\\) expects string, int\\|string\\|false\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Check/Requirements.php
@@ -22534,11 +22489,6 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\$value of method Shopware\\\\Components\\\\Check\\\\Requirements\\:\\:compare\\(\\) expects string, string\\|false given\\.$#"
 			count: 4
-			path: engine/Shopware/Components/Check/Requirements.php
-
-		-
-			message: "#^Parameter \\#3 \\$length of function substr expects int, int\\<0, max\\>\\|false given\\.$#"
-			count: 1
 			path: engine/Shopware/Components/Check/Requirements.php
 
 		-
@@ -22812,11 +22762,6 @@ parameters:
 			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, int\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
-
-		-
 			message: "#^Parameter \\#1 \\$unit of method Shopware\\\\Components\\\\Compatibility\\\\LegacyStructConverter\\:\\:convertUnitStruct\\(\\) expects Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Unit, Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Unit\\|null given\\.$#"
 			count: 2
 			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
@@ -23057,16 +23002,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$fp of function rewind expects resource, resource\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/CsvIterator.php
-
-		-
-			message: "#^Parameter \\#1 \\$haystack of function substr_count expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CsvIterator.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|false given\\.$#"
 			count: 2
 			path: engine/Shopware/Components/CsvIterator.php
 
@@ -23426,11 +23361,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\DispatchFormatHelper\\:\\:formatNameForRequest\\(\\) should return string but returns string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DispatchFormatHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DispatchFormatHelper.php
 
@@ -28035,11 +27965,6 @@ parameters:
 			path: engine/Shopware/Components/ReflectionHelper.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/ReflectionHelper.php
-
-		-
 			message: "#^Parameter \\#2 \\$search of function array_key_exists expects array, array\\<string, string\\>\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ReflectionHelper.php
@@ -30160,17 +30085,7 @@ parameters:
 			path: engine/Shopware/Components/Theme/Service.php
 
 		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Service.php
-
-		-
 			message: "#^Parameter \\#1 \\$name of method Shopware\\\\Components\\\\Theme\\\\Service\\:\\:getSnippetName\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Service.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/Service.php
 
@@ -32395,11 +32310,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @var for variable \\$operations has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ArticleList.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ArticleList.php
 
@@ -37583,22 +37493,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Voucher.php
 
 		-
-			message: "#^Parameter \\#1 \\$generatedCode of method Shopware_Controllers_Backend_Voucher\\:\\:replaceAllMatchingPatterns\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Voucher.php
-
-		-
-			message: "#^Parameter \\#1 \\$haystack of function substr_count expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Voucher.php
-
-		-
 			message: "#^Parameter \\#3 \\$codePattern of method Shopware_Controllers_Backend_Voucher\\:\\:generateVoucherCodes\\(\\) expects string, array\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Voucher.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Voucher.php
 
@@ -40657,11 +40552,6 @@ parameters:
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
-			message: "#^Parameter \\#3 \\$length of function substr expects int, int\\<0, max\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
 			message: "#^Parameter \\#3 \\$user of method sAdmin\\:\\:sManageRisks\\(\\) expects array, array\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
@@ -41098,11 +40988,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, int\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
 
@@ -41928,11 +41813,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$url of method sExport\\:\\:fixShopHost\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Parameter \\#3 \\$length of function substr expects int, int\\<0, max\\>\\|false given\\.$#"
-			count: 1
 			path: engine/Shopware/Core/sExport.php
 
 		-
@@ -47265,11 +47145,6 @@ parameters:
 			path: engine/Shopware/Models/Media/Media.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function strtolower expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/Media.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Media/Media.php
@@ -52009,11 +51884,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Parameter \\#2 \\$cacheId of method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:invalidateWithBANRequest\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
@@ -52030,11 +51900,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:\\$cacheInvalidationBuffer type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between null and string\\|false will always evaluate to false\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
@@ -52681,16 +52546,6 @@ parameters:
 		-
 			message: "#^Offset 'sSepaUseBillingData' does not exist on array\\|null\\.$#"
 			count: 6
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function strlen expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|null given\\.$#"
-			count: 1
 			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
 
 		-
@@ -53873,11 +53728,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AccountTest\\:\\:testWithoutIgnoreLogin\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function strlen expects string, array\\|string\\|null given\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
 
@@ -55223,11 +55073,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$expectedJson of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJsonStringEqualsJsonString\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/MediaBundle/FilesystemTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function strlen expects string, string\\|false given\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/MediaBundle/FilesystemTest.php
 
@@ -61906,11 +61751,6 @@ parameters:
 			path: tests/Functional/Controllers/Backend/VoucherTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function strlen expects string, array\\|string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoucherTest\\:\\:\\$voucherData type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/VoucherTest.php
@@ -63876,11 +63716,6 @@ parameters:
 			path: tests/Functional/Regressions/Ticket4609Test.php
 
 		-
-			message: "#^Parameter \\#1 \\$haystack of function substr_count expects string, array\\|string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Regressions/Ticket4788Test.php
-
-		-
 			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, array\\|string\\|null given\\.$#"
 			count: 2
 			path: tests/Functional/Regressions/Ticket4788Test.php
@@ -65106,11 +64941,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Element/Article.php
 
 		-
-			message: "#^Parameter \\#1 \\$value of static method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:floatValue\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Element/ArticleBox.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Element\\\\ArticleBox\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Element/ArticleBox.php
@@ -65406,16 +65236,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Element/CompareColumn.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Element\\\\FilterGroup\\:\\:expandProperties\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Element/FilterGroup.php
-
-		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, string\\|null given\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Element/FilterGroup.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Element\\\\FilterGroup\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Element/FilterGroup.php
@@ -65487,11 +65307,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Element\\\\MultipleElement\\:\\:__call\\(\\) has parameter \\$arguments with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Element/MultipleElement.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Element\\\\MultipleElement\\:\\:__call\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Element/MultipleElement.php
 
@@ -66462,11 +66277,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Account\\:\\:verifyPage\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/Account.php
-
-		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, string\\|null given\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/Account.php
 

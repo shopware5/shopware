@@ -291,7 +291,9 @@ class VoucherTest extends Enlight_Components_Test_Controller_TestCase
         $lastHeader = array_pop($header);
         static::assertEquals('Content-Disposition', $lastHeader['name']);
         static::assertEquals('attachment;filename=voucherCodes.csv', $lastHeader['value']);
-        static::assertGreaterThan(1000, \strlen($this->Response()->getBody()));
+        $body = $this->Response()->getBody();
+        static::assertIsString($body);
+        static::assertGreaterThan(1000, mb_strlen($body));
 
         return $id;
     }

@@ -529,8 +529,11 @@ class Service
      */
     private function isSnippet(?string $value): bool
     {
-        return (bool) (substr($value, -2) === '__'
-            && strpos($value, '__') === 0);
+        if ($value === null) {
+            return false;
+        }
+
+        return substr($value, -2) === '__' && strpos($value, '__') === 0;
     }
 
     /**

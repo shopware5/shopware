@@ -141,7 +141,7 @@ class MediaReplaceService implements MediaReplaceServiceInterface
     {
         $extension = $file->getClientOriginalExtension();
         if (!$extension) {
-            $extension = $file->guessExtension();
+            $extension = (string) $file->guessExtension();
         }
 
         $extension = strtolower($extension);

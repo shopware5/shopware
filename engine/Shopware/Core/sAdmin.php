@@ -491,7 +491,7 @@ class sAdmin implements \Enlight_Hook
         $dirs = [];
 
         if (substr($paymentData['class'], -\strlen('.php')) === '.php') {
-            $index = substr($paymentData['class'], 0, strpos($paymentData['class'], '.php'));
+            $index = substr($paymentData['class'], 0, (int) strpos($paymentData['class'], '.php'));
         } else {
             $index = $paymentData['class'];
         }

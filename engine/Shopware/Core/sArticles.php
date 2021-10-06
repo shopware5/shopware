@@ -1246,7 +1246,7 @@ class sArticles implements Enlight_Hook
         if (empty($money_str[1])) {
             $money_str[1] = 0;
         }
-        $money_str[1] = substr($money_str[1], 0, 3); // convert to rounded (to the nearest thousandth) string
+        $money_str[1] = substr((string) $money_str[1], 0, 3); // convert to rounded (to the nearest thousandth) string
 
         $value = (float) ($money_str[0] . '.' . $money_str[1]);
 
