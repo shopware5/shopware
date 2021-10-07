@@ -697,7 +697,7 @@ class sOrder implements Enlight_Hook
                 pack_unit,
                 articleDetailID
                 )
-                VALUES (%d, %s, %d, %s, %f, %d, %s, %d, %s, %d, %d, %d, %f, %s, %s, %s, %d)
+                VALUES (%d, %s, %d, %s, %f, %d, %s, %d, %s, %d, %d, %d, %f, %s, %s, %s, %s)
             ';
 
             $sql = sprintf(
@@ -718,7 +718,7 @@ class sOrder implements Enlight_Hook
                 $this->db->quote((string) $basketRow['ean']),
                 $this->db->quote((string) $basketRow['itemUnit']),
                 $this->db->quote((string) $basketRow['packunit']),
-                $basketRow['additional_details']['articleDetailsID']
+                $basketRow['additional_details']['articleDetailsID'] ?? 'null'
             );
 
             $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterDetailsSQL', $sql, [
