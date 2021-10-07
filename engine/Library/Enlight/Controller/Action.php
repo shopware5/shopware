@@ -60,7 +60,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected $response;
 
     /**
-     * @var Shopware\Components\DependencyInjection\Container
+     * @var Container
      */
     protected $container;
 
