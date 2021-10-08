@@ -30,6 +30,7 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Shopware\Bundle\PluginInstallerBundle\Context\BaseRequest;
+use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
@@ -90,5 +91,23 @@ class PluginLocalServiceTest extends TestCase
         static::assertSame('', $changelog[0]['text']);
         static::assertSame('1.0.0', $changelog[1]['version']);
         static::assertStringContainsString('First release', $changelog[1]['text']);
+    }
+
+    public function testGetExistingPlugin(): void
+    {
+        $pluginLocalService = $this->getContainer()->get(PluginLocalService::class);
+        $context = new PluginsByTechnicalNameRequest(null, null, ['SwagUpdate']);
+
+        $plugin = $pluginLocalService->getPlugin($context);
+        static::assertInstanceOf(PluginStruct::class, $plugin);
+    }
+
+    public function testGetNonExistingPlugin(): void
+    {
+        $pluginLocalService = $this->getContainer()->get(PluginLocalService::class);
+        $context = new PluginsByTechnicalNameRequest(null, null, ['FooBar']);
+
+        $plugin = $pluginLocalService->getPlugin($context);
+        static::assertNull($plugin);
     }
 }
