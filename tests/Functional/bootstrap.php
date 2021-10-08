@@ -25,17 +25,19 @@
 
 require __DIR__ . '/../../autoload.php';
 
-use Shopware\Models\Shop\Repository;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\ShopRegistrationServiceInterface;
+use Shopware\Kernel;
 use Shopware\Models\Shop\Shop;
 
-class TestKernel extends \Shopware\Kernel
+class TestKernel extends Kernel
 {
-    private static $kernel;
+    private static TestKernel $kernel;
 
     /**
      * Static method to start boot kernel without leaving local scope in test helper
      */
-    public static function start()
+    public static function start(): void
     {
         static::$kernel = new self('testing', true);
         static::$kernel->boot();
@@ -43,11 +45,8 @@ class TestKernel extends \Shopware\Kernel
         $container = static::$kernel->getContainer();
         $container->get('plugins')->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
 
-        /** @var Repository $repository */
-        $repository = $container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
-
-        $shop = $repository->getActiveDefault();
-        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        $shop = $container->get(ModelManager::class)->getRepository(Shop::class)->getActiveDefault();
+        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $_SERVER['HTTP_HOST'] = $shop->getHost();
     }

@@ -63746,16 +63746,6 @@ parameters:
 			path: tests/Functional/Regressions/Ticket4788Test.php
 
 		-
-			message: "#^Method TestKernel\\:\\:start\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/bootstrap.php
-
-		-
-			message: "#^Property TestKernel\\:\\:\\$kernel has no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/bootstrap.php
-
-		-
 			message: "#^Variable \\$this might not be defined\\.$#"
 			count: 3
 			path: tests/Functional/config.php

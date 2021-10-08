@@ -87,8 +87,19 @@ parameters:
         - # This property contains many different repositories, so we do not specify the type
             message: '#with generic class Shopware\\Components\\Model\\ModelRepository does not specify its types: TEntityClass#'
             path: engine/Shopware/Controllers/Backend/Config.php
+
         - # The config stores values as serialized strings, but the getter of the models return the actual type like bool or int
             message: '#::\$value type mapping mismatch: database|property can contain #'
             paths:
                 - engine/Shopware/Models/Config/Element.php
                 - engine/Shopware/Models/Config/Value.php
+
+        - # Testing DI container stuff with autowiring services into controller actions. No possibility to teach that to PHPStan
+            message: '#Service "Shopware\\Tests\\Functional\\Bundle\\ControllerBundle\\TestController\\Test" is not registered in the container#'
+            path: tests/Functional/Bundle/ControllerBundle/ControllerActionTest.php
+        -
+            message: '#Instantiated class TestContainer not found#'
+            path: tests/Functional/Bundle/ControllerBundle/ControllerActionTest.php
+        -
+            message: '#Parameter \#1 \$loader of method Enlight_Controller_Action::setContainer\(\) expects Shopware\\Components\\DependencyInjection\\Container\|null, TestContainer given#'
+            path: tests/Functional/Bundle/ControllerBundle/ControllerActionTest.php

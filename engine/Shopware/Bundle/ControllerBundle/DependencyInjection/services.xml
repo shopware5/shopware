@@ -22,7 +22,7 @@
 
         <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
             <tag name="controller.argument_value_resolver" priority="0" />
-            <argument type="collection" />
+            <argument type="service" id="service_container"/>
         </service>
 
         <service id="argument_resolver.request_parameter" class="Shopware\Bundle\ControllerBundle\ArgumentResolver\RequestParameterResolver">
