@@ -33,7 +33,6 @@ use Enlight_Controller_Front;
 use Exception;
 use InvalidArgumentException;
 use PDO;
-use RuntimeException;
 use Shopware\Bundle\PluginInstallerBundle\Context\BaseRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
@@ -91,14 +90,11 @@ class PluginLocalService
     }
 
     /**
-     * @return PluginStruct
+     * @return PluginStruct|null
      */
     public function getPlugin(PluginsByTechnicalNameRequest $context)
     {
         $plugins = $this->getPlugins($context);
-        if ($plugins === []) {
-            throw new RuntimeException(sprintf('Plugin "%s" not found', implode(',', $context->getTechnicalNames())));
-        }
 
         return array_shift($plugins);
     }
