@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,74 +24,57 @@
  * our trademarks remain entirely with us.
  */
 
-use Doctrine\ORM\EntityRepository;
+namespace Shopware\Tests\Functional\Core;
+
+use Doctrine\DBAL\Connection;
+use Enlight_Template_Manager;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
+use sExport;
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\ProductFeed\ProductFeed;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class sExportTest extends PHPUnit\Framework\TestCase
+class ExportTest extends TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private sExport $export;
+
+    private string $cacheDir;
 
     /**
-     * @var sExport
+     * @var ModelRepository<ProductFeed>
      */
-    private $export;
+    private ModelRepository $repository;
 
-    /**
-     * @var string
-     */
-    private $cacheDir;
+    private Enlight_Template_Manager $template;
 
-    /**
-     * @var EntityRepository<ProductFeed>
-     */
-    private $repository;
+    private Connection $connection;
 
-    /**
-     * @var Enlight_Template_Manager
-     */
-    private $template;
-
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $connection;
-
-    /**
-     * @var string
-     */
-    private $testDir;
+    private string $testDir;
 
     public function setUp(): void
     {
-        $this->container = Shopware()->Container();
+        $container = Shopware()->Container();
 
         $this->export = Shopware()->Modules()->Export();
-        $this->repository = $this->container->get('models')->getRepository(ProductFeed::class);
-        $this->template = $this->container->get('template');
+        $this->repository = $container->get('models')->getRepository(ProductFeed::class);
+        $this->template = $container->get('template');
 
-        /** @var string $cacheDir */
-        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+        $this->cacheDir = $container->getParameter('shopware.product_export.cache_dir');
 
-        $this->cacheDir = $cacheDir . '/productexport/';
         $this->testDir = __DIR__ . '/fixtures/productexport/';
 
         if (!is_dir($this->cacheDir)) {
             if (@mkdir($this->cacheDir, 0777, true) === false) {
-                throw new \RuntimeException(sprintf("Unable to create directory '%s'\n", $this->cacheDir));
+                throw new RuntimeException(sprintf("Unable to create directory '%s'\n", $this->cacheDir));
             }
         } elseif (!is_writable($this->cacheDir)) {
-            throw new \RuntimeException(sprintf("Unable to write in directory '%s'\n", $this->cacheDir));
+            throw new RuntimeException(sprintf("Unable to write in directory '%s'\n", $this->cacheDir));
         }
 
-        /* @var \Doctrine\DBAL\Connection $connextion */
-        $this->connection = $this->container->get('dbal_connection');
+        $this->connection = $container->get('dbal_connection');
     }
 
     public function testNewFields(): void
@@ -149,12 +134,8 @@ class sExportTest extends PHPUnit\Framework\TestCase
 
     private function generateFeed(int $feedId): string
     {
-        /** @var ProductFeed|null $productFeed */
         $productFeed = $this->repository->find($feedId);
-
-        if ($productFeed === null) {
-            throw new Exception('Product feed not found');
-        }
+        static::assertInstanceOf(ProductFeed::class, $productFeed);
 
         $this->export->sFeedID = $productFeed->getId();
         $this->export->sHash = $productFeed->getHash();

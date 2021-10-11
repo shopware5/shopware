@@ -43,6 +43,10 @@ parameters:
         # We manually check if the class exists before instantiating / using it
         - '#PHPDoc tag \@var for variable \$payPalInstaller contains unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'
 
+        - # Config is read out in kernel, so there is a context for $this
+            message: '#Variable \$this might not be defined#'
+            path: engine/Shopware/Configs/Default.php
+
         - # Seem to be issues, but need tests to verify changes there
             message: '#Negated boolean expression is always false#'
             path: 'engine/Shopware/Core/sArticles.php'

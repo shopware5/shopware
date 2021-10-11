@@ -30549,11 +30549,6 @@ parameters:
 			path: engine/Shopware/Components/WebLinkManager.php
 
 		-
-			message: "#^Variable \\$this might not be defined\\.$#"
-			count: 33
-			path: engine/Shopware/Configs/Default.php
-
-		-
 			message: "#^Method Shopware_Controllers_Api_Error\\:\\:errorAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/Error.php
