@@ -18674,11 +18674,6 @@ parameters:
 			path: engine/Shopware/Commands/GenerateProductFeedCommand.php
 
 		-
-			message: "#^Service \"system\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/GenerateProductFeedCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\ListProductFeedCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/ListProductFeedCommand.php
@@ -41666,16 +41661,6 @@ parameters:
 			path: engine/Shopware/Core/sCore.php
 
 		-
-			message: "#^Cannot access offset 'groupkey' on array\\|true\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Cannot access offset 'id' on array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Shop\\\\Shop\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sExport.php
@@ -41692,16 +41677,6 @@ parameters:
 
 		-
 			message: "#^Method sExport\\:\\:_decode_line\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Method sExport\\:\\:executeExport\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Method sExport\\:\\:sCreateSql\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sExport.php
 
@@ -41731,27 +41706,7 @@ parameters:
 			path: engine/Shopware/Core/sExport.php
 
 		-
-			message: "#^Method sExport\\:\\:sGetArticleShippingcost\\(\\) has parameter \\$dispatch with no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
 			message: "#^Method sExport\\:\\:sGetCountry\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Method sExport\\:\\:sGetCurrency\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Method sExport\\:\\:sGetCustomergroup\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Method sExport\\:\\:sGetDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sExport.php
 
@@ -41781,22 +41736,7 @@ parameters:
 			path: engine/Shopware/Core/sExport.php
 
 		-
-			message: "#^Method sExport\\:\\:sInitSettings\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Method sExport\\:\\:sInitSmarty\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
 			message: "#^Method sExport\\:\\:sMapTranslation\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$dispatch has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sExport.php
 
@@ -41818,66 +41758,6 @@ parameters:
 		-
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
 			count: 2
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Property sExport\\:\\:\\$cdnConfig type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Property sExport\\:\\:\\$sApi has no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Property sExport\\:\\:\\$sCurrency has no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Property sExport\\:\\:\\$sCustomergroup has no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Property sExport\\:\\:\\$sDB has no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Property sExport\\:\\:\\$sFeedID has no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Property sExport\\:\\:\\$sHash has no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Property sExport\\:\\:\\$sPath has no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Property sExport\\:\\:\\$sSYSTEM has no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Property sExport\\:\\:\\$sSettings has no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Property sExport\\:\\:\\$sTemplates has no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Property sExport\\:\\:\\$shopData type has no value type specified in iterable type array\\.$#"
-			count: 1
 			path: engine/Shopware/Core/sExport.php
 
 		-
