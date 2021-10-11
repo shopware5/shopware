@@ -124,10 +124,9 @@ class GenerateProductFeedCommand extends ShopwareCommand implements CompletionAw
 
         $feedId = (int) $input->getOption('feed-id');
 
-        /** @var sExport $export */
         $export = $this->container->get('modules')->Export();
 
-        $export->sSYSTEM = $this->container->get('system');
+        $export->sSYSTEM = $this->container->get('modules')->System();
 
         $this->sSmarty = $this->container->get(Enlight_Template_Manager::class);
 
