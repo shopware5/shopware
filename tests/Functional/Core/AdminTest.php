@@ -2012,15 +2012,15 @@ class AdminTest extends TestCase
         // Test subscribe with empty post field and empty address, fail validation
         $this->getRequest()->setPost('newsletter', '');
         $result = $this->module->sNewsletterSubscription('');
-        static::assertEquals(
-            [
-                'code' => 5,
-                'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('ErrorFillIn', 'Please fill in all red fields'),
-                'sErrorFlag' => ['newsletter' => true],
-            ],
-            $result
-        );
+
+        static::assertArrayHasKey('code', $result);
+        static::assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertSame(5, $result['code']);
+        $message = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+            ->get('ErrorFillIn', 'Please fill in all red fields');
+        static::assertSame($message, $result['message']);
+        static::assertSame(['newsletter' => true], $result['sErrorFlag']);
     }
 
     /**

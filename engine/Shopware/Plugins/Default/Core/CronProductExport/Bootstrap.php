@@ -62,7 +62,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
     public function exportProductFiles()
     {
         /** @var string $cacheDir */
-        $cacheDir = Shopware()->Container()->getParameter('kernel.cache_dir.product_export');
+        $cacheDir = Shopware()->Container()->getParameter('shopware.product_export.cache_dir');
         if (!is_dir($cacheDir)) {
             if (@mkdir($cacheDir, 0777, true) === false) {
                 throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Productexport', $cacheDir));

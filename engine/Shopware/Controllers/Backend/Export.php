@@ -186,9 +186,9 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
      */
     private function createOutputDirectory()
     {
-        $dirName = $this->container->getParameter('kernel.cache_dir.product_export');
+        $dirName = $this->container->getParameter('shopware.product_export.cache_dir');
         if (!\is_string($dirName)) {
-            throw new \RuntimeException('Parameter kernel.cache_dir.product_export has to be an string');
+            throw new \RuntimeException('Parameter shopware.product_export.cache_dir has to be an string');
         }
 
         if (!file_exists($dirName)) {

@@ -22,6 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
+use Shopware\Components\Api\Exception\CustomValidationException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\OrmException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\PrivilegeException;
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Logger;
 
 if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
@@ -131,15 +138,15 @@ return array_replace_recursive([
     'errorhandler' => [
         'throwOnRecoverableError' => false,
         'ignoredExceptionClasses' => [
-             // Disable logging for defined exceptions by class, eg. to disable any logging for CSRF exceptions add this:
-             // \Shopware\Components\CSRFTokenValidationException::class
-            \Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException::class,
-            \Shopware\Components\Api\Exception\CustomValidationException::class,
-            \Shopware\Components\Api\Exception\NotFoundException::class,
-            \Shopware\Components\Api\Exception\OrmException::class,
-            \Shopware\Components\Api\Exception\ParameterMissingException::class,
-            \Shopware\Components\Api\Exception\PrivilegeException::class,
-            \Shopware\Components\Api\Exception\ValidationException::class,
+            // Disable logging for defined exceptions by class, eg. to disable any logging for CSRF exceptions add this:
+            // \Shopware\Components\CSRFTokenValidationException::class
+            BatchInterfaceNotImplementedException::class,
+            CustomValidationException::class,
+            NotFoundException::class,
+            OrmException::class,
+            ParameterMissingException::class,
+            PrivilegeException::class,
+            ValidationException::class,
         ],
     ],
     'db' => [
@@ -254,33 +261,33 @@ return array_replace_recursive([
          * of the parameters listed here is matched. This allows the caching system to be more efficient.
          */
         'ignored_url_parameters' => [
-           'pk_campaign',    // Piwik
-           'piwik_campaign',
-           'pk_kwd',
-           'piwik_kwd',
-           'pk_keyword',
-           'pixelId',        // Yahoo
-           'kwid',
-           'kw',
-           'adid',
-           'chl',
-           'dv',
-           'nk',
-           'pa',
-           'camid',
-           'adgid',
-           'utm_term',       // Google
-           'utm_source',
-           'utm_medium',
-           'utm_campaign',
-           'utm_content',
-           'gclid',
-           'cx',
-           'ie',
-           'cof',
-           'siteurl',
-           '_ga',
-           'fbclid',         // Facebook
+            'pk_campaign',    // Piwik
+            'piwik_campaign',
+            'pk_kwd',
+            'piwik_kwd',
+            'pk_keyword',
+            'pixelId',        // Yahoo
+            'kwid',
+            'kw',
+            'adid',
+            'chl',
+            'dv',
+            'nk',
+            'pa',
+            'camid',
+            'adgid',
+            'utm_term',       // Google
+            'utm_source',
+            'utm_medium',
+            'utm_campaign',
+            'utm_content',
+            'gclid',
+            'cx',
+            'ie',
+            'cof',
+            'siteurl',
+            '_ga',
+            'fbclid',         // Facebook
         ],
     ],
     'bi' => [
@@ -427,8 +434,10 @@ return array_replace_recursive([
          */
         'orderNumberRegex' => '/^[a-zA-Z0-9-_.]+$/',
     ],
-    'backward_compatibility' => [
+    'product_export' => [
+        'cache_dir' => $this->getCacheDir() . '/productexport/',
     ],
+    'backward_compatibility' => [],
     'logger' => [
         'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
     ],

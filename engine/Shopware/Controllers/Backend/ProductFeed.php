@@ -195,9 +195,9 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $productFeed->setLastChange(new DateTime());
 
         // Clear feed cache
-        $cacheDir = $this->container->getParameter('kernel.cache_dir.product_export');
+        $cacheDir = $this->container->getParameter('shopware.product_export.cache_dir');
         if (!\is_string($cacheDir)) {
-            throw new RuntimeException('Parameter kernel.cache_dir.product_export has to be an string');
+            throw new RuntimeException('Parameter shopware.product_export.cache_dir has to be an string');
         }
 
         if (!is_dir($cacheDir)) {
