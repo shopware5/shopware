@@ -12,6 +12,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Changes
 * Changed `themes/Frontend/Bare/frontend/listing/listing_actions.tpl` to remove a duplicate name entry
+* Updated `themes/Frontend/Bare/frontend/detail/content/buy_container.tpl` for structured data enhancement
 
 ## 5.7.3
 
