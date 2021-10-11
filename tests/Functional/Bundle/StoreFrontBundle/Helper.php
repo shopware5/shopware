@@ -30,7 +30,6 @@ use Doctrine\DBAL\Connection;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Exception;
 use PDO;
-use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
@@ -62,6 +61,7 @@ use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Price\Group as PriceGroup;
 use Shopware\Models\Shop\Currency;
 use Shopware\Models\Tax\Tax as TaxModel;
+use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper\ProgressHelper;
 use Shopware_Components_Config;
 
 class Helper
@@ -1266,20 +1266,5 @@ class Helper
             'txtpackunit' => 'Dummy Translation',
             'metaTitle' => 'Dummy Translation',
         ];
-    }
-}
-
-class ProgressHelper implements ProgressHelperInterface
-{
-    public function start($count, $label = '')
-    {
-    }
-
-    public function advance($step = 1)
-    {
-    }
-
-    public function finish()
-    {
     }
 }

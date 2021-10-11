@@ -42,6 +42,13 @@ interface TypeMappingInterface
     public const TYPE_SINGLE_SELECTION = 'single_selection';
     public const TYPE_MULTI_SELECTION = 'multi_selection';
 
+    public const MAPPING_DATE_FIELD = ['type' => 'date', 'format' => 'yyyy-MM-dd'];
+    public const MAPPING_DATE_TIME_FIELD = ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'];
+    public const MAPPING_LONG_FIELD = ['type' => 'long'];
+    public const MAPPING_BOOLEAN_FIELD = ['type' => 'boolean'];
+    public const MAPPING_DOUBLE_FIELD = ['type' => 'double'];
+    public const MAPPING_STRING_FIELD = ['type' => 'string'];
+
     /**
      * @return array
      */

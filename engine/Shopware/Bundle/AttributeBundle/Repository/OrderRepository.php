@@ -26,6 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository;
 
 use Shopware\Bundle\AttributeBundle\Repository\Reader\ReaderInterface;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherInterface;
+use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Bundle\EsBackendBundle\EsAwareRepository;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
@@ -75,28 +76,28 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
     {
         return [
             'properties' => [
-                'id' => ['type' => 'long'],
+                'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'number' => $this->getTextFieldWithRawData(),
-                'invoiceAmount' => ['type' => 'double'],
-                'invoiceShipping' => ['type' => 'double'],
-                'orderTime' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
-                'status' => ['type' => 'long'],
-                'cleared' => ['type' => 'long'],
-                'customerId' => ['type' => 'long'],
+                'invoiceAmount' => TypeMappingInterface::MAPPING_DOUBLE_FIELD,
+                'invoiceShipping' => TypeMappingInterface::MAPPING_DOUBLE_FIELD,
+                'orderTime' => TypeMappingInterface::MAPPING_DATE_TIME_FIELD,
+                'status' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'cleared' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'customerId' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'supplierId' => $this->textMapping->getTextField(),
-                'billingCountryId' => ['type' => 'long'],
-                'shippingCountryId' => ['type' => 'long'],
+                'billingCountryId' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'shippingCountryId' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'groupKey' => $this->textMapping->getKeywordField(),
                 'email' => $this->getTextFieldWithRawData(),
                 'orderDocuments' => $this->getTextFieldWithRawData(),
                 'transactionId' => $this->textMapping->getKeywordField(),
                 'firstname' => $this->getTextFieldWithRawData(),
                 'lastname' => $this->getTextFieldWithRawData(),
-                'paymentId' => ['type' => 'long'],
+                'paymentId' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'paymentName' => $this->textMapping->getTextField(),
-                'dispatchId' => ['type' => 'long'],
+                'dispatchId' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'dispatchName' => $this->textMapping->getTextField(),
-                'shopId' => ['type' => 'long'],
+                'shopId' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'shopName' => $this->textMapping->getTextField(),
                 'title' => $this->textMapping->getTextField(),
                 'company' => $this->textMapping->getTextField(),

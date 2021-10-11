@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
+use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\MappingInterface;
@@ -112,9 +113,9 @@ class ProductMapping implements MappingInterface
             ],
             'properties' => [
                 // Identifiers
-                'id' => ['type' => 'long'],
-                'mainVariantId' => ['type' => 'long'],
-                'variantId' => ['type' => 'long'],
+                'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'mainVariantId' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'variantId' => TypeMappingInterface::MAPPING_LONG_FIELD,
 
                 // Number fields
                 'number' => array_merge($this->textMapping->getTextField(), ['analyzer' => 'standard', 'fields' => ['raw' => $this->textMapping->getKeywordField()]]),
@@ -131,40 +132,40 @@ class ProductMapping implements MappingInterface
 
                 // Other fields
                 'calculatedPrices' => $this->getCalculatedPricesMapping($shop),
-                'minStock' => ['type' => 'long'],
-                'stock' => ['type' => 'long'],
-                'sales' => ['type' => 'long'],
+                'minStock' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'stock' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'sales' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'states' => $this->textMapping->getKeywordField(),
                 'template' => $this->textMapping->getKeywordField(),
                 'shippingTime' => $this->textMapping->getKeywordField(),
-                'weight' => ['type' => 'double'],
-                'height' => ['type' => 'long'],
-                'length' => ['type' => 'long'],
-                'width' => ['type' => 'double'],
+                'weight' => TypeMappingInterface::MAPPING_DOUBLE_FIELD,
+                'height' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'length' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'width' => TypeMappingInterface::MAPPING_DOUBLE_FIELD,
 
                 // Grouped id fields
-                'blockedCustomerGroupIds' => ['type' => 'long'],
-                'categoryIds' => ['type' => 'long'],
+                'blockedCustomerGroupIds' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'categoryIds' => TypeMappingInterface::MAPPING_LONG_FIELD,
 
                 // Flags
-                'isMainVariant' => ['type' => 'boolean'],
-                'closeouts' => ['type' => 'boolean'],
-                'allowsNotification' => ['type' => 'boolean'],
-                'hasProperties' => ['type' => 'boolean'],
-                'hasAvailableVariant' => ['type' => 'boolean'],
-                'hasConfigurator' => ['type' => 'boolean'],
-                'hasEsd' => ['type' => 'boolean'],
-                'isPriceGroupActive' => ['type' => 'boolean'],
-                'shippingFree' => ['type' => 'boolean'],
-                'highlight' => ['type' => 'boolean'],
-                'hasStock' => ['type' => 'boolean'],
-                'customerPriceCount' => ['type' => 'long'],
-                'fallbackPriceCount' => ['type' => 'long'],
+                'isMainVariant' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
+                'closeouts' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
+                'allowsNotification' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
+                'hasProperties' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
+                'hasAvailableVariant' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
+                'hasConfigurator' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
+                'hasEsd' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
+                'isPriceGroupActive' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
+                'shippingFree' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
+                'highlight' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
+                'hasStock' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
+                'customerPriceCount' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'fallbackPriceCount' => TypeMappingInterface::MAPPING_LONG_FIELD,
 
                 // Dates
-                'formattedCreatedAt' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
-                'formattedUpdatedAt' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
-                'formattedReleaseDate' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
+                'formattedCreatedAt' => TypeMappingInterface::MAPPING_DATE_FIELD,
+                'formattedUpdatedAt' => TypeMappingInterface::MAPPING_DATE_FIELD,
+                'formattedReleaseDate' => TypeMappingInterface::MAPPING_DATE_FIELD,
 
                 // Nested structs
                 'manufacturer' => $this->getManufacturerMapping($shop),
@@ -237,9 +238,9 @@ class ProductMapping implements MappingInterface
         return [
             'type' => 'object',
             'properties' => [
-                'id' => ['type' => 'long'],
+                'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'name' => $this->fieldMapping->getLanguageField($shop),
-                'position' => ['type' => 'long'],
+                'position' => TypeMappingInterface::MAPPING_LONG_FIELD,
             ],
         ];
     }
@@ -248,15 +249,15 @@ class ProductMapping implements MappingInterface
     {
         return [
             'properties' => [
-                'id' => ['type' => 'long'],
+                'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'name' => $this->textMapping->getKeywordField(),
                 'unit' => $this->textMapping->getKeywordField(),
-                'minPurchase' => ['type' => 'long'],
-                'maxPurchase' => ['type' => 'long'],
+                'minPurchase' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'maxPurchase' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'packUnit' => $this->textMapping->getKeywordField(),
-                'purchaseStep' => ['type' => 'long'],
-                'purchaseUnit' => ['type' => 'long'],
-                'referenceUnit' => ['type' => 'long'],
+                'purchaseStep' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'purchaseUnit' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'referenceUnit' => TypeMappingInterface::MAPPING_LONG_FIELD,
             ],
         ];
     }
@@ -265,7 +266,7 @@ class ProductMapping implements MappingInterface
     {
         return [
             'properties' => [
-                'id' => ['type' => 'long'],
+                'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'name' => $this->fieldMapping->getLanguageField($shop),
                 'description' => $this->textMapping->getKeywordField(),
                 'coverFile' => $this->textMapping->getKeywordField(),
@@ -281,7 +282,7 @@ class ProductMapping implements MappingInterface
     {
         return [
             'properties' => [
-                'id' => ['type' => 'long'],
+                'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'name' => $this->textMapping->getKeywordField(),
             ],
         ];
@@ -291,14 +292,14 @@ class ProductMapping implements MappingInterface
     {
         return [
             'properties' => [
-                'id' => ['type' => 'long'],
+                'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'file' => $this->textMapping->getKeywordField(),
-                'hasSerials' => ['type' => 'boolean'],
+                'hasSerials' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
                 'createdAt' => [
                     'properties' => [
                         'date' => $this->textMapping->getKeywordField(),
                         'timezone' => $this->textMapping->getKeywordField(),
-                        'timezone_type' => ['type' => 'long'],
+                        'timezone_type' => TypeMappingInterface::MAPPING_LONG_FIELD,
                     ],
                 ],
             ],
@@ -309,9 +310,9 @@ class ProductMapping implements MappingInterface
     {
         return [
             'properties' => [
-                'id' => ['type' => 'long'],
+                'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'name' => $this->textMapping->getKeywordField(),
-                'tax' => ['type' => 'long'],
+                'tax' => TypeMappingInterface::MAPPING_LONG_FIELD,
             ],
         ];
     }
@@ -339,9 +340,9 @@ class ProductMapping implements MappingInterface
     {
         return [
             'properties' => [
-                'calculatedPrice' => ['type' => 'double'],
-                'calculatedReferencePrice' => ['type' => 'double'],
-                'calculatedPseudoPrice' => ['type' => 'double'],
+                'calculatedPrice' => TypeMappingInterface::MAPPING_DOUBLE_FIELD,
+                'calculatedReferencePrice' => TypeMappingInterface::MAPPING_DOUBLE_FIELD,
+                'calculatedPseudoPrice' => TypeMappingInterface::MAPPING_DOUBLE_FIELD,
             ],
         ];
     }
@@ -388,12 +389,12 @@ class ProductMapping implements MappingInterface
     {
         return [
             'properties' => [
-                'id' => ['type' => 'long'],
+                'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'name' => $this->fieldMapping->getLanguageField($shop),
                 'description' => $this->fieldMapping->getLanguageField($shop),
                 'options' => [
                     'properties' => [
-                        'id' => ['type' => 'long'],
+                        'id' => TypeMappingInterface::MAPPING_LONG_FIELD,
                         'name' => $this->fieldMapping->getLanguageField($shop),
                         'description' => $this->fieldMapping->getLanguageField($shop),
                     ],
@@ -407,8 +408,8 @@ class ProductMapping implements MappingInterface
         return [
             'type' => 'nested',
             'properties' => [
-                'category_id' => ['type' => 'long'],
-                'position' => ['type' => 'long'],
+                'category_id' => TypeMappingInterface::MAPPING_LONG_FIELD,
+                'position' => TypeMappingInterface::MAPPING_LONG_FIELD,
             ],
         ];
     }
