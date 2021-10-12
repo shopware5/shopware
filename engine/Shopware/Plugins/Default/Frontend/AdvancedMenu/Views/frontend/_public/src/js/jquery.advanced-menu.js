@@ -156,7 +156,7 @@
                     me._on($el, 'touchstart', $.proxy(me.onTouchStart, me, i, $el));
                 }
 
-                me._on($el, 'mouseenter', $.proxy(me.onListItemEnter, me, i, $el));
+                me._on($el, 'mouseenter touchstart', $.proxy(me.onListItemEnter, me, i, $el));
                 me._on($el, 'click', $.proxy(me.onClick, me, i, $el));
                 me._on($el, 'mouseleave', $.proxy(me.onMouseLeave, me));
             });
