@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\CartBundle\CartPositionsMode;
 use Shopware\Components\Cart\Struct\Price;
 use Shopware\Models\Shop\Locale as ShopLocale;
 use Shopware\Models\Tax\Repository as TaxRepository;
@@ -463,7 +464,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             );
             $position['attributes'] = \is_array($attributes) ? $attributes : [];
 
-            if (\in_array((int) $position['modus'], [0, 1], true)) {
+            if (\in_array((int) $position['modus'], [CartPositionsMode::PRODUCT, CartPositionsMode::PREMIUM_PRODUCT], true)) {
                 $kind = (int) $position['kind'];
                 $translation = $translator->read(
                     $orderLocale,
@@ -487,7 +488,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     {
         $maxTax = 0;
         foreach ($this->_positions as $position) {
-            if ((int) $position['mode'] === 0) {
+            if ((int) $position['mode'] === CartPositionsMode::PRODUCT) {
                 $getTax = $position['tax_rate'];
                 if (empty($getTax) && $this->_shipping !== null) {
                     $position['tax'] = $this->getTaxRepository()->getTaxRateByConditions(
@@ -522,21 +523,21 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 continue;
             }
 
-            /*
-            modus 0 = default product
-            modus 1 = premium product
-            modus 2 = voucher
-            modus 3 = customergroup discount
-            modus 4 = payment surcharge / discount
-            modus 10 = bundle discount
-            modus 12 = trusted shops product
-            */
+            $allowedPositionModes = [
+                CartPositionsMode::PRODUCT,
+                CartPositionsMode::CUSTOMER_GROUP_DISCOUNT,
+                CartPositionsMode::PAYMENT_SURCHARGE_OR_DISCOUNT,
+                CartPositionsMode::SWAG_BUNDLE_DISCOUNT,
+                CartPositionsMode::TRUSTED_SHOPS_PRODUCT,
+            ];
             $positionMode = (int) $position['modus'];
-            if (\in_array($positionMode, [0, 4, 3, 10, 12], true)) {
+            if (\in_array($positionMode, $allowedPositionModes, true)) {
                 /*
                 Read tax for each order position
                 */
-                if ($positionMode === 4 || $positionMode === 3) {
+                if ($positionMode === CartPositionsMode::CUSTOMER_GROUP_DISCOUNT
+                    || $positionMode === CartPositionsMode::PAYMENT_SURCHARGE_OR_DISCOUNT
+                ) {
                     if (empty($position['tax_rate'])) {
                         // Discounts get tax from configuration
                         if (!empty(Shopware()->Config()->get('sTAXAUTOMODE'))) {
@@ -581,7 +582,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 } else {
                     $position['netto'] = $position['price'] / (100 + $position['tax']) * 100;
                 }
-            } elseif ($positionMode === 2) {
+            } elseif ($positionMode === CartPositionsMode::VOUCHER) {
                 $ticketResult = Shopware()->Db()->fetchRow(
                     'SELECT * FROM s_emarketing_vouchers WHERE ordercode=?',
                     [$position['articleordernumber']]
@@ -616,7 +617,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 } else {
                     $position['netto'] = $position['price'] / (100 + $position['tax']) * 100;
                 }
-            } elseif ($positionMode === 1) {
+            } elseif ($positionMode === CartPositionsMode::PREMIUM_PRODUCT) {
                 $position['tax'] = 0;
                 $position['netto'] = 0;
             }
@@ -945,7 +946,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         $prices = [];
 
         foreach ($this->_positions as $position) {
-            if ((int) $position['modus'] === 0) {
+            if ((int) $position['modus'] === CartPositionsMode::PRODUCT) {
                 $prices[] = new Price($position['amount'], $position['amount_netto'], (float) $position['tax_rate'], null);
             }
         }

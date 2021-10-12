@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister;
+use Shopware\Bundle\CartBundle\CartPositionsMode;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
@@ -729,7 +730,7 @@ class sOrder implements Enlight_Hook
             ]);
 
             // Check for individual voucher - code
-            if ($basketRow['modus'] == 2) {
+            if ($basketRow['modus'] == CartPositionsMode::VOUCHER) {
                 //reserve the basket voucher for the current user.
                 $this->reserveVoucher(
                     $basketRow['ordernumber'],
@@ -1866,7 +1867,7 @@ EOT;
             [$orderCode]
         );
 
-        if ($getVoucher['modus'] == 1) {
+        if ($getVoucher['modus'] == CartPositionsMode::PREMIUM_PRODUCT) {
             $this->db->executeUpdate(
                 'UPDATE s_emarketing_voucher_codes SET cashed = 1, userID= ? WHERE id = ?',
                 [$customerId, $voucherCodeId]

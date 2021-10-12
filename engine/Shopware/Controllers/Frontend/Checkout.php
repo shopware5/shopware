@@ -28,6 +28,7 @@ use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\Validator\AddressValidatorInterface;
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
+use Shopware\Bundle\CartBundle\CartPositionsMode;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\BasketSignature\BasketPersister;
@@ -1229,7 +1230,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             if (!empty($item['tax_rate'])) {
             } elseif (!empty($item['taxPercent'])) {
                 $item['tax_rate'] = $item['taxPercent'];
-            } elseif ($item['modus'] == 2) {
+            } elseif ($item['modus'] == CartPositionsMode::VOUCHER) {
                 // Ticket 4842 - dynamic tax-rates
                 $resultVoucherTaxMode = Shopware()->Db()->fetchOne(
                     'SELECT taxconfig FROM s_emarketing_vouchers WHERE ordercode=?',
@@ -1961,7 +1962,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         }
 
         foreach ($basket['content'] as $cartItem) {
-            if ((int) $cartItem['modus'] === 4 || $cartItem['esd']) {
+            if ((int) $cartItem['modus'] === CartPositionsMode::PAYMENT_SURCHARGE_OR_DISCOUNT || $cartItem['esd']) {
                 continue;
             }
 
@@ -2170,7 +2171,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $products = [];
 
         foreach ($basket['content'] as $item) {
-            if ((int) $item['modus'] !== 0) {
+            if ((int) $item['modus'] !== CartPositionsMode::PRODUCT) {
                 continue;
             }
 

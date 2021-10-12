@@ -24,6 +24,7 @@
  */
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\CartBundle\CartPositionsMode;
 use Shopware\Bundle\OrderBundle\Service\OrderListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGatewayInterface;
@@ -2620,7 +2621,7 @@ SQL;
             }
 
             // Get additional basket meta data for each product
-            if ($getProducts[$key]['modus'] == 0) {
+            if ($getProducts[$key]['modus'] == CartPositionsMode::PRODUCT) {
                 if (isset($additionalDetails[$getProducts[$key]['ordernumber']])) {
                     $getProducts[$key]['additional_details'] = $additionalDetails[$getProducts[$key]['ordernumber']];
                     $getProducts[$key]['shippingtime'] = $additionalDetails[$getProducts[$key]['ordernumber']]['shippingtime'];
@@ -2686,16 +2687,18 @@ SQL;
                     if ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount'] && $this->sCheckForDiscount()) {
                         $discount += ($getProducts[$key]['amountWithTax'] / 100 * $this->sSYSTEM->sUSERGROUPDATA['basketdiscount']);
                     }
-                } elseif ($getProducts[$key]['modus'] == 3) {
+                } elseif ($getProducts[$key]['modus'] == CartPositionsMode::CUSTOMER_GROUP_DISCOUNT) {
                     $getProducts[$key]['amountWithTax'] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
                 // Basket discount
-                } elseif ($getProducts[$key]['modus'] == 2) {
+                } elseif ($getProducts[$key]['modus'] == CartPositionsMode::VOUCHER) {
                     $getProducts[$key]['amountWithTax'] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
 
                     if ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount'] && $this->sCheckForDiscount()) {
                         $discount += ($getProducts[$key]['amountWithTax'] / 100 * ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount']));
                     }
-                } elseif ($getProducts[$key]['modus'] == 4 || $getProducts[$key]['modus'] == 10) {
+                } elseif ($getProducts[$key]['modus'] == CartPositionsMode::PAYMENT_SURCHARGE_OR_DISCOUNT
+                                 || $getProducts[$key]['modus'] == CartPositionsMode::SWAG_BUNDLE_DISCOUNT
+                ) {
                     $getProducts[$key]['amountWithTax'] = round(1 * ($price / 100 * (100 + $tax)), 2);
                     if ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount'] && $this->sCheckForDiscount()) {
                         $discount += ($getProducts[$key]['amountWithTax'] / 100 * $this->sSYSTEM->sUSERGROUPDATA['basketdiscount']);
@@ -2720,8 +2723,7 @@ SQL;
                 $getProducts[$key]['itemInfoArray']['price'] = $this->moduleManager->Articles()->sFormatPrice($getProducts[$key]['amount'] / $quantity * $getProducts[$key]['purchaseunit']);
             }
 
-            if ($getProducts[$key]['modus'] == 2) {
-                // Vouchers
+            if ($getProducts[$key]['modus'] == CartPositionsMode::VOUCHER) {
                 if (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']) {
                     $getProducts[$key]['amountnet'] = $quantity * round($price, 2);
                 } else {
@@ -2765,8 +2767,7 @@ SQL;
 
             if (!empty($getProducts[$key]['additional_details']['image'])) {
                 $getProducts[$key]['image'] = $this->getBasketImage($getProducts[$key]['additional_details']['image']);
-            } elseif ((int) $getProducts[$key]['modus'] === 1 && !empty($getProducts[$key]['articleID'])) {
-                // Premium product image
+            } elseif ((int) $getProducts[$key]['modus'] === CartPositionsMode::PREMIUM_PRODUCT && !empty($getProducts[$key]['articleID'])) {
                 $getProducts[$key]['image'] = $this->moduleManager->Articles()
                     ->sGetArticlePictures(
                         $getProducts[$key]['articleID'],
@@ -2778,7 +2779,7 @@ SQL;
 
             // Links to details, basket
             $getProducts[$key]['linkDetails'] = $this->config->get('sBASEFILE') . '?sViewport=detail&sArticle=' . $getProducts[$key]['articleID'];
-            if ($getProducts[$key]['modus'] == 2) {
+            if ($getProducts[$key]['modus'] == CartPositionsMode::VOUCHER) {
                 $getProducts[$key]['linkDelete'] = $this->config->get('sBASEFILE') . '?sViewport=basket&sDelete=voucher';
             } else {
                 $getProducts[$key]['linkDelete'] = $this->config->get('sBASEFILE') . '?sViewport=basket&sDelete=' . $getProducts[$key]['id'];
