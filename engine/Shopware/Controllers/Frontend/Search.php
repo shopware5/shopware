@@ -135,7 +135,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 FROM s_articles_details
                   INNER JOIN s_articles
                    ON s_articles.id = s_articles_details.articleID
-                WHERE ordernumber = ? AND s_articles.active = 1
+                WHERE ordernumber = ? AND s_articles.active = 1 AND s_articles_details.active = 1
                 GROUP BY articleID
                 LIMIT 2
             ';
