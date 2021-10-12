@@ -60,6 +60,7 @@ class PropertyQueryFactory
         $query->select(['propertyGroups.id', 'propertyGroups.id'])
             ->from('s_filter_options', 'propertyGroups')
             ->where('propertyGroups.id > :lastId')
+            ->orderBy('propertyGroups.id', 'ASC')
             ->setParameter(':lastId', 0);
 
         if ($limit !== null) {
