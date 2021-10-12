@@ -45700,17 +45700,7 @@ parameters:
 			path: engine/Shopware/Models/Document/Document.php
 
 		-
-			message: "#^Cannot clone ArrayObject\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
 			message: "#^Method Shopware_Models_Document_Order\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:__get\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Document/Order.php
 
@@ -45732,91 +45722,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Models_Document_Order\\:\\:assignAttributeTranslation\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:getBilling\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:getDemoData\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:getDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:getOrder\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:getPayment\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:getPaymentInstances\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:getPositions\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:getShipping\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:getTaxRateByApproximateTaxRate\\(\\) should return string but returns float\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:getUser\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:processOrder\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:processPositions\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:setParameters\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:setParameters\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Offset 'id' does not exist on ArrayObject\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Parameter \\#1 \\$input of class ArrayObject constructor expects array\\|object, array\\|false given\\.$#"
-			count: 2
 			path: engine/Shopware/Models/Document/Order.php
 
 		-
