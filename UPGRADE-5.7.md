@@ -60,6 +60,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
   * \Shopware\Models\Order\Order::$invoiceShippingTaxRate
   * \Shopware\Models\Premium\Premium::$startPrice
   * \Shopware\Models\Tax\Rule::$tax
+* Updated `themes/Frontend/Bare/frontend/detail/content/buy_container.tpl` for structured data enhancement
 
 ### Removals
 
