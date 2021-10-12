@@ -69,7 +69,7 @@ class LastIdQuery
     }
 
     /**
-     * @deprecated in 5.6, will be removed in 5.7 without replacement
+     * @deprecated in 5.6, will be removed in 5.8 without replacement
      *
      * @return QueryBuilder
      */
