@@ -135,7 +135,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 FROM s_articles_details
                   INNER JOIN s_articles
                    ON s_articles.id = s_articles_details.articleID
-                WHERE ordernumber = ?
+                WHERE ordernumber = ? AND s_articles.active = 1
                 GROUP BY articleID
                 LIMIT 2
             ';
@@ -151,8 +151,8 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 $sql = '
                     SELECT DISTINCT articleID
                     FROM s_articles_details
-                    WHERE ordernumber = ?
-                    OR ordernumber LIKE ?
+                    WHERE (ordernumber = ?
+                    OR ordernumber LIKE ?) AND active = 1
                     GROUP BY articleID
                     LIMIT 2
                 ';
