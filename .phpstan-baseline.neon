@@ -14665,26 +14665,6 @@ parameters:
 			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/ConfiguratorOptionsGatewayInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\CountryGatewayInterface\\:\\:getAreas\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/CountryGatewayInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\CountryGatewayInterface\\:\\:getCountries\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/CountryGatewayInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\CountryGatewayInterface\\:\\:getCountryStates\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/CountryGatewayInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\CountryGatewayInterface\\:\\:getStates\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/CountryGatewayInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\CustomFacetGatewayInterface\\:\\:getFacetsOfCategories\\(\\) has parameter \\$categoryIds with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/CustomFacetGatewayInterface.php
@@ -14778,51 +14758,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\ConfiguratorOptionsGateway\\:\\:getOptions\\(\\) has parameter \\$optionIds with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/ConfiguratorOptionsGateway.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\CountryGateway\\:\\:getArea\\(\\) should return Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Country\\\\Area but returns Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Country\\\\Area\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/CountryGateway.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\CountryGateway\\:\\:getAreas\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/CountryGateway.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\CountryGateway\\:\\:getCountries\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/CountryGateway.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\CountryGateway\\:\\:getCountry\\(\\) should return Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Country but returns Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Country\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/CountryGateway.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\CountryGateway\\:\\:getCountryStates\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/CountryGateway.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\CountryGateway\\:\\:getState\\(\\) should return Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Country\\\\State but returns Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Country\\\\State\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/CountryGateway.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\CountryGateway\\:\\:getStates\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/CountryGateway.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\CountryGateway\\:\\:sortByIds\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/CountryGateway.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\CountryGateway\\:\\:sortByIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/CountryGateway.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\CustomFacetGateway\\:\\:fetchAssignedStreams\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
@@ -15905,26 +15840,6 @@ parameters:
 			path: engine/Shopware/Bundle/StoreFrontBundle/Service/ConfiguratorServiceInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\ContextServiceInterface\\:\\:initializeContext\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Service/ContextServiceInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\ContextServiceInterface\\:\\:initializeLocationContext\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Service/ContextServiceInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\ContextServiceInterface\\:\\:initializeProductContext\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Service/ContextServiceInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\ContextServiceInterface\\:\\:initializeShopContext\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Service/ContextServiceInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\Core\\\\AdditionalTextService\\:\\:buildAdditionalText\\(\\) should return Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct but returns Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/AdditionalTextService.php
@@ -16000,33 +15915,8 @@ parameters:
 			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/ConfiguratorService.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\Core\\\\ContextService\\:\\:getStoreFrontStreamIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/ContextService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\Core\\\\ContextService\\:\\:initializeContext\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/ContextService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\Core\\\\ContextService\\:\\:initializeLocationContext\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/ContextService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\Core\\\\ContextService\\:\\:initializeProductContext\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/ContextService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\Core\\\\ContextService\\:\\:initializeShopContext\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/ContextService.php
-
-		-
 			message: "#^Service \"shop\" is not registered in the container\\.$#"
-			count: 3
+			count: 1
 			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/ContextService.php
 
 		-

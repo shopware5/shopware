@@ -23,8 +23,17 @@
  */
 
 use Shopware\Bundle\CartBundle\CartPositionsMode;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Cart\Struct\Price;
+use Shopware\Components\Compatibility\LegacyStructConverter;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Locale as ShopLocale;
+use Shopware\Models\Shop\Shop;
 use Shopware\Models\Tax\Repository as TaxRepository;
 use Shopware\Models\Tax\Tax;
 
@@ -176,6 +185,12 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     protected $_taxRepository;
 
+    private ShopContextInterface $context;
+
+    private CountryGatewayInterface $countryGateway;
+
+    private LegacyStructConverter $structConverter;
+
     /**
      * @param int   $id
      * @param array $config
@@ -204,6 +219,11 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         $this->_shippingCostsAsPosition = (bool) $config['shippingCostsAsPosition'];
 
         $this->getOrder();
+
+        $this->initializeShopContext((int) $this->_order['language']);
+        $this->countryGateway = Shopware()->Container()->get(CountryGatewayInterface::class);
+        $this->structConverter = Shopware()->Container()->get(LegacyStructConverter::class);
+
         $this->getPositions();
 
         $this->getUser();
@@ -834,6 +854,16 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         );
     }
 
+    private function initializeShopContext(int $shopId): void
+    {
+        $shop = Shopware()->Container()->get('models')->getRepository(Shop::class)->find($shopId);
+        if (!$shop instanceof Shop) {
+            throw new ModelNotFoundException(Shop::class, $shopId);
+        }
+        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
+        $this->context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -980,18 +1010,12 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     private function getCountry(int $countryId): array
     {
-        $country = Shopware()->Db()->fetchRow(
-            'SELECT *
-             FROM s_core_countries
-             WHERE id=?',
-            [$countryId]
-        );
-
-        if (!\is_array($country)) {
+        $country = $this->countryGateway->getCountry($countryId, $this->context);
+        if (!$country instanceof Country) {
             throw new RuntimeException(sprintf('Country with ID "%s" not found', $countryId));
         }
 
-        return $country;
+        return $this->structConverter->convertCountryStruct($country);
     }
 
     /**
@@ -999,17 +1023,11 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     private function getCountryState(int $countryStateId): array
     {
-        $countryState = Shopware()->Db()->fetchRow(
-            'SELECT *
-             FROM s_core_countries_states
-             WHERE id=?',
-            [$countryStateId]
-        );
-
-        if (!\is_array($countryState)) {
+        $countryState = $this->countryGateway->getState($countryStateId, $this->context);
+        if (!$countryState instanceof State) {
             return [];
         }
 
-        return $countryState;
+        return $this->structConverter->convertStateStruct($countryState);
     }
 }
