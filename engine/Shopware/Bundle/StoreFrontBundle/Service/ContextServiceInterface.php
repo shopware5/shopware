@@ -84,24 +84,32 @@ interface ContextServiceInterface
     /**
      * Initials a global context class which contains
      * all information about the current request state.
+     *
+     * @return void
      */
     public function initializeContext();
 
     /**
      * Initials a shop context class which contains
      * the information about the shop state
+     *
+     * @return void
      */
     public function initializeShopContext();
 
     /**
      * Initials a location context class which contains
      * the information about the country state
+     *
+     * @return void
      */
     public function initializeLocationContext();
 
     /**
      * Initials a product context class which contains
      * all required information to calculate a product.
+     *
+     * @return void
      */
     public function initializeProductContext();
 

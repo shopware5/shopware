@@ -25,6 +25,10 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface CountryGatewayInterface
 {
@@ -34,9 +38,9 @@ interface CountryGatewayInterface
      *
      * @param int $id
      *
-     * @return Struct\Country\Area
+     * @return Area|null
      */
-    public function getArea($id, Struct\ShopContextInterface $context);
+    public function getArea($id, ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -44,9 +48,11 @@ interface CountryGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getState()
      *
-     * @return Struct\Country\State[]
+     * @param int[] $ids
+     *
+     * @return State[]
      */
-    public function getStates(array $ids, Struct\ShopContextInterface $context);
+    public function getStates(array $ids, ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -54,9 +60,11 @@ interface CountryGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getCountry()
      *
-     * @return Struct\Country[]
+     * @param int[] $ids
+     *
+     * @return Country[]
      */
-    public function getCountries(array $ids, Struct\ShopContextInterface $context);
+    public function getCountries(array $ids, ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -64,9 +72,11 @@ interface CountryGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getArea()
      *
-     * @return Struct\Country\Area[]
+     * @param int[] $ids
+     *
+     * @return Area[]
      */
-    public function getAreas(array $ids, Struct\ShopContextInterface $context);
+    public function getAreas(array $ids, ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Country requires the following data:
@@ -78,9 +88,9 @@ interface CountryGatewayInterface
      *
      * @param int $id
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Country
+     * @return Country|null
      */
-    public function getCountry($id, Struct\ShopContextInterface $context);
+    public function getCountry($id, ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Country\State requires the following data:
@@ -92,14 +102,14 @@ interface CountryGatewayInterface
      *
      * @param int $id
      *
-     * @return Struct\Country\State
+     * @return State|null
      */
-    public function getState($id, Struct\ShopContextInterface $context);
+    public function getState($id, ShopContextInterface $context);
 
     /**
      * @param int[] $countryIds
      *
-     * @return array indexed by country id contains an array of Struct\Country\State
+     * @return array<int, array<int, State>> indexed by country id contains an array of Struct\Country\State
      */
-    public function getCountryStates($countryIds, Struct\ShopContextInterface $context);
+    public function getCountryStates($countryIds, ShopContextInterface $context);
 }

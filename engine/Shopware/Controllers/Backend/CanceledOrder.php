@@ -23,6 +23,7 @@
  */
 
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\CartBundle\CartPositionsMode;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
@@ -864,7 +865,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     private function isProductPosition(Detail $orderDetailModel): bool
     {
-        return $orderDetailModel->getMode() === 0;
+        return $orderDetailModel->getMode() === CartPositionsMode::PRODUCT;
     }
 
     /**
