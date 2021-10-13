@@ -269,6 +269,13 @@
         },
 
         /**
+         * Keep empty method for compatibility
+         */
+        onMouseMove: function (event) {
+            // empty
+        },
+
+        /**
          * Fired when the mouse leaves the navigation list items or advanced menu.
          *
          * @event onCloseButtonClick
