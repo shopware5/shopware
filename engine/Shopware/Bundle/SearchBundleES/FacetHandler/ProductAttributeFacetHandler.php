@@ -155,7 +155,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
             $type = $attribute ? $attribute->getColumnType() : null;
 
-            if ($aggregations[$key]['buckets']) {
+            if (\is_array($aggregations[$key]['buckets'])) {
                 $aggregations[$key]['buckets'] = array_filter($aggregations[$key]['buckets'], function ($item) {
                     return $item['key'] !== '';
                 });
