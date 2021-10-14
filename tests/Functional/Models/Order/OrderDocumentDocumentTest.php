@@ -28,15 +28,30 @@ namespace Shopware\Tests\Functional\Models\Order;
 
 use Enlight_Components_Test_TestCase;
 use Exception;
+use Generator;
+use RuntimeException;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Attribute\Document as DocumentAttribute;
 use Shopware\Models\Order\Document\Document;
+use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware_Components_Document;
 
 class OrderDocumentDocumentTest extends Enlight_Components_Test_TestCase
 {
+    use ContainerTrait;
+
+    private ModelManager $modelManager;
+
+    protected function setUp(): void
+    {
+        $this->modelManager = $this->getContainer()->get(ModelManager::class);
+    }
+
     public function testSetAttribute(): void
     {
         $document = new Document();
-        $attribute = new \Shopware\Models\Attribute\Document();
+        $attribute = new DocumentAttribute();
         $document->setAttribute($attribute);
 
         static::assertSame($document, $attribute->getDocument());
@@ -46,14 +61,15 @@ class OrderDocumentDocumentTest extends Enlight_Components_Test_TestCase
     /*
      * Test order document creation for inactive subshops
      */
+
     public function testDocumentForInactiveSubshop(): void
     {
         // Temporarily set main shop to inactive
-        $shop = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class)->find(1);
+        $shop = $this->modelManager->getRepository(Shop::class)->find(1);
         $shop->setActive(false);
 
         // Flush changed shop to the database, needed for the Document code
-        Shopware()->Models()->flush($shop);
+        $this->modelManager->flush($shop);
 
         try {
             /*
@@ -70,12 +86,12 @@ class OrderDocumentDocumentTest extends Enlight_Components_Test_TestCase
                 ]
             );
         } catch (Exception $e) {
-            // Append exception to possible failure ouputs (caused by the assert in the finally block)
+            // Append exception to possible failure outputs (caused by the assert in the finally block)
             throw $e;
         } finally {
             // Make sure we always clean up, since an inactive default shop would otherwise crash the next test execution
             $shop->setActive(true);
-            Shopware()->Models()->flush($shop);
+            $this->modelManager->flush($shop);
 
             // Check that document was actually created
             static::assertNotNull($document);
@@ -110,7 +126,7 @@ class OrderDocumentDocumentTest extends Enlight_Components_Test_TestCase
         );
         $document2->render();
 
-        $documents = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Order\Document\Document::class)
+        $documents = $this->modelManager->getRepository(Document::class)
             ->findBy([
                 'typeId' => 1,
                 'orderId' => 15,
@@ -119,9 +135,9 @@ class OrderDocumentDocumentTest extends Enlight_Components_Test_TestCase
 
         // Revert changes of this test
         foreach ($documents as $document) {
-            Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->remove($document);
+            $this->modelManager->remove($document);
         }
-        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->flush();
+        $this->modelManager->flush();
     }
 
     /**
@@ -152,7 +168,7 @@ class OrderDocumentDocumentTest extends Enlight_Components_Test_TestCase
         );
         $document2->render();
 
-        $documents = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Order\Document\Document::class)
+        $documents = $this->modelManager->getRepository(Document::class)
             ->findBy([
                 'typeId' => 1,
                 'orderId' => 15,
@@ -161,8 +177,36 @@ class OrderDocumentDocumentTest extends Enlight_Components_Test_TestCase
 
         // Revert changes of this test
         foreach ($documents as $document) {
-            Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->remove($document);
+            $this->modelManager->remove($document);
         }
-        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->flush();
+        $this->modelManager->flush();
+    }
+
+    /**
+     * @dataProvider orderIdProvider
+     */
+    public function testOrderWithoutBillingAddress(int $orderId, bool $expectException): void
+    {
+        if ($expectException) {
+            $this->expectException(RuntimeException::class);
+            $this->expectExceptionMessage('Country ID not set in shipping address');
+        }
+        $document = Shopware_Components_Document::initDocument($orderId, 1, [
+            '_renderer' => 'pdf',
+            '_preview' => false,
+        ]);
+        $document->render();
+
+        $documents = $this->modelManager->getRepository(Document::class)->findBy(['typeId' => 1]);
+        static::assertCount(1, $documents);
+    }
+
+    /**
+     * @return Generator<string, array<int|bool>>
+     */
+    public function orderIdProvider(): Generator
+    {
+        yield 'Invalid order from the demo data without billing and shipping address' => [52, true];
+        yield 'Valid order' => [15, false];
     }
 }

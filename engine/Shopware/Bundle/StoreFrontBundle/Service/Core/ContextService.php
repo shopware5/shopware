@@ -24,12 +24,12 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Enlight_Components_Session_Namespace as Session;
-use Enlight_Controller_Front;
+use Doctrine\DBAL\Connection;
 use PDO;
+use RuntimeException;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Models;
+use Shopware\Models\Shop\Shop;
 use Shopware_Components_Config;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -37,20 +37,11 @@ class ContextService implements ContextServiceInterface
 {
     public const FALLBACK_CUSTOMER_GROUP = 'EK';
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
-    /**
-     * @var ShopContextInterface
-     */
-    private $context = null;
+    private ?ShopContextInterface $context = null;
 
-    /**
-     * @var ShopContextFactoryInterface
-     */
-    private $shopContextFactory;
+    private ShopContextFactoryInterface $shopContextFactory;
 
     public function __construct(
         ContainerInterface $container,
@@ -67,6 +58,10 @@ class ContextService implements ContextServiceInterface
     {
         if ($this->context === null) {
             $this->initializeShopContext();
+        }
+
+        if ($this->context === null) {
+            throw new RuntimeException('Shop context not initialized correctly');
         }
 
         return $this->context;
@@ -163,19 +158,13 @@ class ContextService implements ContextServiceInterface
         );
     }
 
-    /**
-     * @return string
-     */
-    private function getStoreFrontBaseUrl()
+    private function getStoreFrontBaseUrl(): string
     {
-        /** @var Shopware_Components_Config $config */
         $config = $this->container->get(Shopware_Components_Config::class);
 
         $request = null;
         if ($this->container->initialized('front')) {
-            /** @var Enlight_Controller_Front $front */
-            $front = $this->container->get('front');
-            $request = $front->Request();
+            $request = $this->container->get('front')->Request();
         }
 
         if ($request !== null) {
@@ -185,51 +174,28 @@ class ContextService implements ContextServiceInterface
         return 'http://' . $config->get('basePath');
     }
 
-    /**
-     * @return int
-     */
-    private function getStoreFrontShopId()
+    private function getStoreFrontShopId(): int
     {
-        /** @var Models\Shop\Shop $shop */
-        $shop = $this->container->get('shop');
-
-        return $shop->getId();
+        return $this->getShop()->getId();
     }
 
-    /**
-     * @return int
-     */
-    private function getStoreFrontCurrencyId()
+    private function getStoreFrontCurrencyId(): int
     {
-        /** @var Models\Shop\Shop $shop */
-        $shop = $this->container->get('shop');
-
-        return $shop->getCurrency()->getId();
+        return $this->getShop()->getCurrency()->getId();
     }
 
-    /**
-     * @return string
-     */
-    private function getStoreFrontCurrentCustomerGroupKey()
+    private function getStoreFrontCurrentCustomerGroupKey(): string
     {
-        /** @var Session $session */
         $session = $this->container->get('session');
         if ($session->offsetExists('sUserGroup') && $session->offsetGet('sUserGroup')) {
             return $session->offsetGet('sUserGroup');
         }
 
-        /** @var Models\Shop\Shop $shop */
-        $shop = $this->container->get('shop');
-
-        return $shop->getCustomerGroup()->getKey();
+        return $this->getShop()->getCustomerGroup()->getKey();
     }
 
-    /**
-     * @return int|null
-     */
-    private function getStoreFrontAreaId()
+    private function getStoreFrontAreaId(): ?int
     {
-        /** @var Session $session */
         $session = $this->container->get('session');
         if ($session->offsetGet('sArea')) {
             return $session->offsetGet('sArea');
@@ -238,12 +204,8 @@ class ContextService implements ContextServiceInterface
         return null;
     }
 
-    /**
-     * @return int|null
-     */
-    private function getStoreFrontCountryId()
+    private function getStoreFrontCountryId(): ?int
     {
-        /** @var Session $session */
         $session = $this->container->get('session');
         if ($session->offsetGet('sCountry')) {
             return $session->offsetGet('sCountry');
@@ -252,12 +214,8 @@ class ContextService implements ContextServiceInterface
         return null;
     }
 
-    /**
-     * @return int|null
-     */
-    private function getStoreFrontStateId()
+    private function getStoreFrontStateId(): ?int
     {
-        /** @var Session $session */
         $session = $this->container->get('session');
         if ($session->offsetGet('sState')) {
             return $session->offsetGet('sState');
@@ -267,13 +225,11 @@ class ContextService implements ContextServiceInterface
     }
 
     /**
-     * @param int $customerId
-     *
-     * @return string[]
+     * @return int[]
      */
-    private function getStreamsOfCustomerId($customerId)
+    private function getStreamsOfCustomerId(int $customerId): array
     {
-        $query = $this->container->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        $query = $this->container->get(Connection::class)->createQueryBuilder();
         $query->select('mapping.stream_id');
         $query->from('s_customer_streams_mapping', 'mapping');
         $query->where('mapping.customer_id = :customerId');
@@ -285,23 +241,20 @@ class ContextService implements ContextServiceInterface
     }
 
     /**
-     * @return array
+     * @return int[]
      */
-    private function getStoreFrontStreamIds()
+    private function getStoreFrontStreamIds(): array
     {
         $customerId = $this->getStoreFrontCustomerId();
 
-        if (!$customerId) {
+        if ($customerId === null) {
             return [];
         }
 
         return $this->getStreamsOfCustomerId($customerId);
     }
 
-    /**
-     * @return int|null
-     */
-    private function getStoreFrontCustomerId()
+    private function getStoreFrontCustomerId(): ?int
     {
         $session = $this->container->get('session');
         if ($session->offsetGet('sUserId')) {
@@ -313,5 +266,15 @@ class ContextService implements ContextServiceInterface
         }
 
         return null;
+    }
+
+    private function getShop(): Shop
+    {
+        $shop = $this->container->get('shop');
+        if (!$shop instanceof Shop) {
+            throw new RuntimeException('Shop not initialized correctly');
+        }
+
+        return $shop;
     }
 }
