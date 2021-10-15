@@ -80,7 +80,7 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'number' => $this->getTextFieldWithRawData(),
                 'invoiceAmount' => TypeMappingInterface::MAPPING_DOUBLE_FIELD,
                 'invoiceShipping' => TypeMappingInterface::MAPPING_DOUBLE_FIELD,
-                'orderTime' => TypeMappingInterface::MAPPING_DATE_TIME_FIELD,
+                'orderTime' => TypeMappingInterface::MAPPING_DATE_AND_DATE_TIME_FIELD,
                 'status' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'cleared' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'customerId' => TypeMappingInterface::MAPPING_LONG_FIELD,
