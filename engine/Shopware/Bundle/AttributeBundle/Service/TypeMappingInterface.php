@@ -44,6 +44,7 @@ interface TypeMappingInterface
 
     public const MAPPING_DATE_FIELD = ['type' => 'date', 'format' => 'yyyy-MM-dd'];
     public const MAPPING_DATE_TIME_FIELD = ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'];
+    public const MAPPING_DATE_AND_DATE_TIME_FIELD = ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss||yyyy-MM-dd'];
     public const MAPPING_LONG_FIELD = ['type' => 'long'];
     public const MAPPING_BOOLEAN_FIELD = ['type' => 'boolean'];
     public const MAPPING_DOUBLE_FIELD = ['type' => 'double'];

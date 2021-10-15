@@ -44,7 +44,7 @@ class OrderRepositoryTest extends TestCase
     {
         $mapping = $this->getOrderRepository()->getMapping();
 
-        $expectedFormat = 'yyyy-MM-dd HH:mm:ss';
+        $expectedFormat = 'yyyy-MM-dd HH:mm:ss||yyyy-MM-dd';
 
         static::assertSame($expectedFormat, $mapping['properties']['orderTime']['format']);
     }
