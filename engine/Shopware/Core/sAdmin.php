@@ -4336,10 +4336,6 @@ SQL;
             return null;
         }
 
-        if ($shippingAddress->getCustomer()->getId() !== $customer->getId()) {
-            throw new \UnexpectedValueException('Address did not match the user');
-        }
-
         $shippingAddressArray = $this->convertToLegacyAddressArray($shippingAddress);
 
         $shippingAddressArray['attributes'] = $this->attributeLoader->load(
