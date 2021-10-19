@@ -43,7 +43,7 @@ class ThemeCreateCommand extends ShopwareCommand implements CompletionAwareInter
     /**
      * @var ModelRepository<Template>|null
      */
-    private ?ModelRepository $repository;
+    private ?ModelRepository $repository = null;
 
     /**
      * {@inheritdoc}
