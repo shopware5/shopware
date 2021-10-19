@@ -38638,16 +38638,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Error.php
 
 		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$id\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sSupport\\.$#"
-			count: 4
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
 			message: "#^Binary operation \"\\.\" between ' ' and array\\|string\\|false results in an error\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Forms.php
@@ -38693,32 +38683,7 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Forms.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Forms\\:\\:checkFields\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Forms\\:\\:commitForm\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Forms\\:\\:getContent\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Forms\\:\\:handleFormPost\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Forms\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Forms\\:\\:renderElementNote\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Forms.php
 
