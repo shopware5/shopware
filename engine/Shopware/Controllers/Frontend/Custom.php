@@ -57,6 +57,8 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
             $this->View()->assign('sContent', $staticPage['html']);
         }
 
+        $this->View()->assign('sCustomPage', $staticPage);
+
         for ($i = 1; $i <= 3; ++$i) {
             if (empty($staticPage['tpl' . $i . 'variable']) || empty($staticPage['tpl' . $i . 'path'])) {
                 continue;
@@ -69,7 +71,5 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
                 $this->View()->fetch($staticPage['tpl' . $i . 'path'])
             );
         }
-
-        $this->View()->assign('sCustomPage', $staticPage);
     }
 }
