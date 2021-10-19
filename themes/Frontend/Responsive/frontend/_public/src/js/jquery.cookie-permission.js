@@ -382,7 +382,9 @@
         hideElement: function() {
             this.$el.addClass(this.opts.isHiddenClass);
             $body.css('padding-bottom', 0);
-            $.modal.close();
+            if(window.cookieRemoval === 2) {
+                $.modal.close();
+            }
         },
 
         getBasePath: function () {
