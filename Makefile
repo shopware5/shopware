@@ -60,7 +60,7 @@ frontend-watch: clear-cache
 prepare-mink: .make.config.build.mink
 	./bin/console sw:rebuild:seo:index
 	./bin/console sw:theme:cache:generate
-	./bin/console dbal:run-sql 'UPDATE s_core_config_elements SET value = "b:0;" WHERE name = "show_cookie_note"'
+	./bin/console sw:config:set show_cookie_note false -d
 	./bin/console sw:cache:clear
 
 test-mink: init .make.config.build.mink

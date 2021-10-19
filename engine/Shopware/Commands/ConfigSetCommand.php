@@ -26,8 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Commands;
 
-use Exception;
-use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Models\Config\Element as ConfigElement;
 use Shopware\Models\Config\Value;
 use Shopware\Models\Shop\Shop;
@@ -42,38 +41,37 @@ class ConfigSetCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:config:set')
-            ->addOption('shopId', null, InputOption::VALUE_OPTIONAL, 'If provided, the configuration will affect the specified shop. Otherwise it will affect the default shop.')
+            ->addOption('shopId', null, InputOption::VALUE_OPTIONAL, 'If provided, the configuration will be set for the specified shop. Otherwise, it will be set for the default shop.')
             ->addOption('decode', 'd', InputOption::VALUE_NONE, 'If provided, the input value will be interpreted as JSON. Use this option to provide values as boolean, integer or float.')
-            ->addArgument('name', InputArgument::REQUIRED, 'The name of the configuration element to affect.')
+            ->addArgument('name', InputArgument::REQUIRED, 'The name of the configuration element.')
             ->addArgument('value', InputArgument::REQUIRED, 'The new value for the specified configuration element.')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var ModelManager $modelManager */
         $modelManager = $this->container->get('models');
         $shopRepository = $modelManager->getRepository(Shop::class);
 
-        $shopId = $input->getOption('shopId');
-        $name = $input->getArgument('name');
-        $inputValue = $input->getArgument('value');
-        $decode = $input->getOption('decode');
+        $shopId = (int) $input->getOption('shopId');
+        $name = (string) $input->getArgument('name');
+        $inputValue = (string) $input->getArgument('value');
+        $decode = (bool) $input->getOption('decode');
 
         if ($decode) {
             $inputValue = json_decode($inputValue, true);
         }
 
-        $shop = is_numeric($shopId) ? $shopRepository->find((int) $shopId) : $shopRepository->getDefault();
+        $shop = $shopRepository->find($shopId);
         if (!$shop instanceof Shop) {
-            throw new Exception('Unable to find shop by id "%s"', $shopId);
+            $shop = $shopRepository->getDefault();
         }
 
         $shopId = $shop->getId();
 
         $element = $modelManager->getRepository(ConfigElement::class)->findOneBy(['name' => $name]);
         if (!$element instanceof ConfigElement) {
-            throw new Exception('Unable to find config element by name "%s"', $name);
+            throw new ModelNotFoundException(ConfigElement::class, $name, 'name');
         }
 
         $value = $element->getValues()->filter(static fn (Value $value) => $value->getShopId() === $shopId)->first();

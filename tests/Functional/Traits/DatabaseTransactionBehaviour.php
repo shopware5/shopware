@@ -24,6 +24,8 @@
 
 namespace Shopware\Tests\Functional\Traits;
 
+use Doctrine\DBAL\Connection;
+
 trait DatabaseTransactionBehaviour
 {
     /**
@@ -31,7 +33,7 @@ trait DatabaseTransactionBehaviour
      */
     public function startTransactionBefore(): void
     {
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
+        Shopware()->Container()->get(Connection::class)->beginTransaction();
     }
 
     /**
@@ -39,7 +41,7 @@ trait DatabaseTransactionBehaviour
      */
     public function stopTransactionAfter(): void
     {
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
+        Shopware()->Container()->get(Connection::class)->rollBack();
         Shopware()->Models()->clear();
     }
 }
