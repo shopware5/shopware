@@ -56,7 +56,7 @@ abstract class Enlight_Components_Test_Plugin_TestCase extends Enlight_Component
     /**
      * Tests set up method
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
