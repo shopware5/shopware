@@ -61591,31 +61591,6 @@ parameters:
 			path: tests/Functional/Controllers/Frontend/DetailTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\FormTest\\:\\:testInvalidOrderNumberIsRemoved\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/FormTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\FormTest\\:\\:testRequestPartnerForm\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/FormTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\FormTest\\:\\:testRequestPartnerFormEnglish\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/FormTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\FormTest\\:\\:testValidOrderNumberIsResolved\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/FormTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, array\\|string\\|null given\\.$#"
-			count: 4
-			path: tests/Functional/Controllers/Frontend/FormTest.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Frontend/ListingTest.php

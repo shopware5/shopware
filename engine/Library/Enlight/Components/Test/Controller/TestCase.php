@@ -86,7 +86,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     /**
      * Tests set up method
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

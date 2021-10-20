@@ -17,18 +17,15 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Basic class for each specified test case.
  *
  * The Enlight_Components_Test_TestCase is the basic class for all specified test cases.
  * The enlight test case basic class extends PHPUnit\Framework\TestCase and sets the database link automatically.
- *
- * @category   Enlight
- *
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
  */
-abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCase
+abstract class Enlight_Components_Test_TestCase extends TestCase
 {
     /**
      * Sets up the fixture, for example, open a network connection.
@@ -58,7 +55,7 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCa
     protected function setConfig($name, $value)
     {
         Shopware()->Container()->get('config_writer')->save($name, $value);
-        Shopware()->Container()->get(\Zend_Cache_Core::class)->clean();
-        Shopware()->Container()->get(\Shopware_Components_Config::class)->setShop(Shopware()->Shop());
+        Shopware()->Container()->get(Zend_Cache_Core::class)->clean();
+        Shopware()->Container()->get(Shopware_Components_Config::class)->setShop(Shopware()->Shop());
     }
 }
