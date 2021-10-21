@@ -577,7 +577,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function getLabel()
     {
-        return $this->info !== null && $this->Info()->offsetExists('label') ? $this->Info()->get('label') : $this->getName();
+        return $this->info instanceof Enlight_Config && $this->Info()->offsetExists('label') ? $this->Info()->get('label') : $this->getName();
     }
 
     /**
@@ -593,6 +593,10 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     final public function getSource(): ?string
     {
+        if (!$this->info instanceof Enlight_Config) {
+            return null;
+        }
+
         return $this->Info()->get('source');
     }
 
