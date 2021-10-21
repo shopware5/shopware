@@ -56,6 +56,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         'py',
         'rb',
         'exe',
+        'svg',
     ];
 
     /**
