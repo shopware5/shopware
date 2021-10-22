@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use DateTime;
+use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Category\Repository;
@@ -122,6 +123,27 @@ class CategoryTest extends Enlight_Components_Test_Controller_TestCase
         static::assertEquals($this->updateMetaDescription, $this->View()->data['metaDescription']);
 
         return $this->View()->data['id'];
+    }
+
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function testSaveDetailFullParam(): void
+    {
+        $this->Request()->setParams([
+            'facetIds' => '|12|5|2|4|10|11|3|6|7|8|9|',
+            'id' => 5,
+        ]);
+        $this->dispatch('backend/Category/updateDetail');
+
+        $connection = Shopware()->Container()->get(Connection::class);
+
+        $result = $connection->executeQuery(
+            "SELECT facet_ids FROM s_categories WHERE description = 'Genusswelten'"
+        );
+        $result = $result->fetchAll();
+
+        static::assertSame('|12|5|2|4|10|11|3|6|7|8|9|', $result[0]['facet_ids']);
     }
 
     /**
