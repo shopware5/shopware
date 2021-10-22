@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.6
+
+[View all changes from v5.7.5...v5.7.6](https://github.com/shopware/shopware/compare/v5.7.5...v5.7.6)
+
+### Additions
+
+* Added a new CSP directive to the default `.htaccess`
+
 ## 5.7.4
 
 [View all changes from v5.7.3...v5.7.4](https://github.com/shopware/shopware/compare/v5.7.3...v5.7.4)
