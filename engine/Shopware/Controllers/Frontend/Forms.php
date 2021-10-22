@@ -98,16 +98,15 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      * @throws Zend_Mail_Exception
      * @throws Enlight_Event_Exception
      *
-     * @deprecated in 5.6, will be private in 5.8
+     * @deprecated in 5.6, will be protected in 5.8
      *
      * Commit form via email (default) or database (ticket system)
+     * Method is extended in SwagTicketSystem
      *
      * @return void
      */
     public function commitForm()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $mail = $this->get('mail');
 
         // Email field available check
