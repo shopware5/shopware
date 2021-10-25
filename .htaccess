@@ -96,6 +96,12 @@ DirectoryIndex shopware.php
     </IfModule>
 </FilesMatch>
 
+<IfModule mod_headers.c>
+    <FilesMatch "\.(?i:svg)$">
+        Header set Content-Security-Policy "script-src 'none'"
+    </FilesMatch>
+</IfModule>
+
 # Disables auto directory index
 <IfModule mod_autoindex.c>
     Options -Indexes
