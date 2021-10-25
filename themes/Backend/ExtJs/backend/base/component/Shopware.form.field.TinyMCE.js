@@ -142,7 +142,7 @@ Ext.define('Shopware.form.field.TinyMCE',
             document_base_url: '{"{url controller="index" fullPath}"}/'.replace('/backend', ''),
 
             // Content CSS - Styles the tiny mce editor. Please note the append timestamp. It's used to prevent caching the stylesheet
-            contentCSS: '{link file="backend/_resources/styles/tiny_mce.css" fullPath}?_dc=' + new Date().getTime(),
+            content_css: '{link file="backend/_resources/styles/tiny_mce.css" fullPath}?_dc=' + new Date().getTime(),
 
             /** {if $user->extended_editor eq 1} */
             skin_variant: 'silver',
