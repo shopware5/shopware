@@ -158,8 +158,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
         me.fullscreenField = Ext.create('Ext.form.field.Checkbox', {
             name: 'fullscreen',
             boxLabel: me.snippets.fields.fullscreenLabel,
-            inputValue: 1,
-            uncheckedValue: 0,
+            inputValue: true,
+            uncheckedValue: false,
             hideEmptyLabel: false,
             margin: '10 0 5 0',
             labelWidth: layoutLabelWidth

@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
 
         { name: 'position', type: 'int', useNull: false, defaultValue: 1 },
         { name: 'device', type: 'string' },
-        { name: 'fullscreen', type: 'int' },
+        { name: 'fullscreen', type: 'boolean' },
 
         { name: 'rows', type: 'int', defaultValue: 20 },
         { name: 'cols', type: 'int', defaultValue: 4 },
