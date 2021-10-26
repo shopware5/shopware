@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Emotion.model.Presetdata', {
         { name: 'cellSpacing', type: 'int' },
         { name: 'cols', type: 'int' },
         { name: 'device' },
-        { name: 'fullscreen', type: 'int' },
+        { name: 'fullscreen', type: 'boolean' },
         { name: 'isLandingPage', type: 'boolean' },
         { name: 'mode' },
         { name: 'position', type: 'int' },

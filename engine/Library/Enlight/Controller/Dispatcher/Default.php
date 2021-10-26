@@ -438,14 +438,14 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             $controller = $class;
         }
 
-        $controller->initController($request, $response);
-
-        $controller->setFront($this->Front());
-
         if ($controller instanceof ContainerAwareInterface) {
             $container = Shopware()->Container();
             $controller->setContainer($container);
         }
+
+        $controller->initController($request, $response);
+
+        $controller->setFront($this->Front());
 
         $action = $this->getActionMethod($request);
 
