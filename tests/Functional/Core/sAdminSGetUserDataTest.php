@@ -22,10 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Tests\Functional\Traits\CustomerLoginTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class sAdminSGetUserDataTest extends PHPUnit\Framework\TestCase
+class sAdminSGetUserDataTest extends TestCase
 {
     use CustomerLoginTrait;
     use DatabaseTransactionBehaviour;
@@ -55,5 +56,34 @@ class sAdminSGetUserDataTest extends PHPUnit\Framework\TestCase
 
         static::assertSame($countryId, $result['shippingaddress']['country']['id']);
         static::assertSame('FooBar, 12', $result['shippingaddress']['street']);
+    }
+
+    public function testSGetUserDataWithAddressUserIdNotEqualsToUser(): void
+    {
+        $shippingAddress = 701;
+        $sql = file_get_contents(__DIR__ . '/fixtures/user_address_change.sql');
+        static::assertIsString($sql);
+        Shopware()->Container()->get('dbal_connection')->exec($sql);
+
+        $sql = 'UPDATE s_user_addresses SET user_id = 4 WHERE id = 701';
+        Shopware()->Container()->get('dbal_connection')->exec($sql);
+
+        $this->loginCustomer(
+            'f375fe1b4ad9c6f2458844226831463f',
+            3,
+            'unit@test.com',
+        );
+
+        $session = Shopware()->Container()->get('session');
+        static::assertInstanceOf(\Enlight_Components_Session_Namespace::class, $session);
+        $session->offsetSet('checkoutShippingAddressId', $shippingAddress);
+
+        $result = Shopware()->Modules()->Admin()->sGetUserData();
+        static::assertIsArray($result);
+
+        $this->logOutCustomer();
+        $session->offsetUnset('checkoutShippingAddressId');
+
+        static::assertSame($shippingAddress, $result['shippingaddress']['id']);
     }
 }
