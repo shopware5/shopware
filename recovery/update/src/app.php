@@ -152,6 +152,7 @@ $app->map('/importSnippets', function () use ($container) {
 
 $app->map('/unpack', function () use ($container) {
     $container->get('controller.batch')->unpack();
+    $container->get('controller.batch')->updateHtaccess();
 })->via('GET', 'POST')->name('unpack');
 
 $app->map('/cleanup', function () use ($container) {

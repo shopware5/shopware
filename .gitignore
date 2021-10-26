@@ -42,6 +42,8 @@ Thumbs.db
 /.env.*
 !/.env.dist
 
+.htaccess
+
 # Caches/Proxies
 /tests/Shopware/TempFiles/*
 /var/cache/*

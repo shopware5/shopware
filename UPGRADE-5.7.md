@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Added `\Shopware\Components\Cart\TaxAggregatorInterface`
 * Added `\Shopware\Components\Cart\TaxAggregator` as a default implementation, extracting the tax aggregation logic from the checkout controller
+* Added a new component to the update process. The `.htaccess`-file now contains a section dedicated to the Shopware core.
 
 ### Changes
 

@@ -99,6 +99,7 @@ class UpdateCommand extends Command
         }
 
         $this->unpackFiles();
+        $this->updateHtaccess();
         $this->migrateDatabase();
         $this->importSnippets();
         $this->cleanup();
@@ -146,6 +147,11 @@ class UpdateCommand extends Command
             $offset = $result->getOffset();
             $total = $result->getTotal();
         } while ($result instanceof ValidResult);
+    }
+
+    private function updateHtaccess()
+    {
+        $this->container->get('shopware.update.update_htaccess')->update();
     }
 
     private function migrateDatabase()

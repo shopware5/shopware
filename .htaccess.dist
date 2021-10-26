@@ -1,3 +1,6 @@
+# BEGIN Shopware
+# The directives (lines) between "# BEGIN Shopware" and "# END Shopware" are dynamically generated. Any changes to the directives between these markers will be overwritten.
+
 <IfModule mod_rewrite.c>
 RewriteEngine on
 
@@ -119,3 +122,5 @@ DirectoryIndex shopware.php
     # Uncomment the following line to enable HSTS (https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) and force clients to use HTTPS for at least one year (31536000 seconds)
     # Header always set Strict-Transport-Security "max-age=31536000"
 </IfModule>
+
+# END Shopware
