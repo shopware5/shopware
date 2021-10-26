@@ -13,7 +13,7 @@
 
     {if $facets}
         <div id="facets">
-            {$facets|@json_encode}
+            {$facets|@json_encode|escape}
         </div>
     {/if}
 </div>
