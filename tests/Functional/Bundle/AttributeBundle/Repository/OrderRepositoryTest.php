@@ -45,8 +45,10 @@ class OrderRepositoryTest extends TestCase
         $mapping = $this->getOrderRepository()->getMapping();
 
         $expectedFormat = 'yyyy-MM-dd HH:mm:ss||yyyy-MM-dd';
+        $expectedTextField = ['type' => 'text', 'fielddata' => true];
 
         static::assertSame($expectedFormat, $mapping['properties']['orderTime']['format']);
+        static::assertSame($expectedTextField, $mapping['properties']['articleNumber']);
     }
 
     /**
@@ -88,6 +90,32 @@ class OrderRepositoryTest extends TestCase
             static::assertLessThan($orderTimeStamp, $orderTime->getTimestamp());
 
             $orderTimeStamp = $orderTime->getTimestamp();
+        }
+    }
+
+    /**
+     * @group elasticSearch
+     */
+    public function testOrderContainsProductNumbers(): void
+    {
+        $searchCriteria = new SearchCriteria(Order::class);
+        $searchCriteria->sortings = [[
+            'property' => 'orderTime',
+            'direction' => 'DESC',
+        ]];
+
+        $sql = file_get_contents(__DIR__ . '/_fixtures/orders.sql');
+        static::assertIsString($sql);
+        $this->getContainer()->get('dbal_connection')->executeStatement($sql);
+
+        $indexer = Shopware()->Container()->get('shopware_es_backend.indexer');
+        $indexer->index(new ProgressHelper());
+
+        $searchResult = $this->getOrderRepository()->search($searchCriteria);
+        $orders = $searchResult->getData();
+
+        foreach ($orders as $order) {
+            static::assertArrayHasKey('articleNumber', $order);
         }
     }
 

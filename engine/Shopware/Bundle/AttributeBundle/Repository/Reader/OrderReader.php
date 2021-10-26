@@ -83,7 +83,7 @@ class OrderReader extends GenericReader
             'entity.transactionId',
             'entity.orderTime',
             'entity.cleared',
-            'GroupConcat(DISTINCT orderDetails.articleNumber) as productNumbers',
+            'GroupConcat(DISTINCT orderDetails.articleNumber) as articleNumber',
             'GroupConcat(DISTINCT supplier.id) as supplierId',
             'customer.id as customerId',
             'customer.email as email',
