@@ -71,7 +71,5 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
                 $this->View()->fetch($staticPage['tpl' . $i . 'path'])
             );
         }
-
-        $this->View()->assign('sCustomPage', $staticPage);
     }
 }
