@@ -47480,11 +47480,6 @@ parameters:
 			path: engine/Shopware/Models/Newsletter/Newsletter.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Newsletter/Repository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Newsletter\\\\Repository\\:\\:getListAddressesQuery\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Newsletter/Repository.php
