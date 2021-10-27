@@ -166,7 +166,6 @@ class Element extends ModelEntity
     public function __clone()
     {
         $this->id = null;
-
         $this->emotionId = null;
 
         $dataArray = [];
