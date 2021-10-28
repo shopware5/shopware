@@ -27,23 +27,12 @@ namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class BannerSliderComponentHandler implements ComponentHandlerInterface
 {
     public const LEGACY_CONVERT_FUNCTION = 'getBannerSlider';
     public const COMPONENT_NAME = 'emotion-components-banner-slider';
-
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
-
-    public function __construct(MediaServiceInterface $mediaService)
-    {
-        $this->mediaService = $mediaService;
-    }
 
     /**
      * @return bool
@@ -56,7 +45,6 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
 
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
-        /** @var array $sliderList */
         $sliderList = $element->getConfig()->get('banner_slider', []);
 
         $collection->addMediaIds(array_column($sliderList, 'mediaId'));
@@ -66,13 +54,13 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
                 $slider['link'] = $context->getBaseUrl() . $slider['link'];
             }
         }
+        unset($slider);
 
         $element->getConfig()->set('banner_slider', $sliderList);
     }
 
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
-        /** @var array $sliderList */
         $sliderList = $element->getConfig()->get('banner_slider', []);
 
         $mediaList = [];

@@ -29,20 +29,17 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class PrepareDataCollection extends Extendable
 {
-    /**
-     * @var BatchProductNumberSearchRequest
-     */
-    private $batchRequest;
+    private BatchProductNumberSearchRequest $batchRequest;
 
     /**
-     * @var int[]
+     * @var array<int>
      */
-    private $mediaIdList = [];
+    private array $mediaIdList = [];
 
     /**
-     * @var string[]
+     * @var array<string>
      */
-    private $mediaPathList = [];
+    private array $mediaPathList = [];
 
     public function __construct()
     {
@@ -50,7 +47,7 @@ class PrepareDataCollection extends Extendable
     }
 
     /**
-     * @param int[] $ids
+     * @param array<int> $ids
      */
     public function addMediaIds(array $ids = [])
     {
@@ -58,7 +55,7 @@ class PrepareDataCollection extends Extendable
     }
 
     /**
-     * @param string[] $paths
+     * @param array<string> $paths
      */
     public function addMediaPaths(array $paths = [])
     {
@@ -66,7 +63,7 @@ class PrepareDataCollection extends Extendable
     }
 
     /**
-     * @return int[]
+     * @return array<int>
      */
     public function getMediaIdList()
     {
@@ -74,7 +71,7 @@ class PrepareDataCollection extends Extendable
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getMediaPathList()
     {

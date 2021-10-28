@@ -36,7 +36,13 @@ interface ComponentHandlerInterface
      */
     public function supports(Element $element);
 
+    /**
+     * @return void
+     */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context);
 
+    /**
+     * @return void
+     */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context);
 }

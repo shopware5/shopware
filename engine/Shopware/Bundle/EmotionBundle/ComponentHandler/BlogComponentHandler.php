@@ -38,15 +38,9 @@ class BlogComponentHandler implements ComponentHandlerInterface
 {
     public const COMPONENT_NAME = 'emotion-components-blog';
 
-    /**
-     * @var BlogServiceInterface
-     */
-    private $blogService;
+    private BlogServiceInterface $blogService;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(BlogServiceInterface $blogService, Connection $connection)
     {
@@ -71,8 +65,8 @@ class BlogComponentHandler implements ComponentHandlerInterface
 
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
-        $numberOfEntries = $element->getConfig()->get('entry_amount');
-        $categoryId = $element->getConfig()->get('blog_entry_selection');
+        $numberOfEntries = (int) $element->getConfig()->get('entry_amount');
+        $categoryId = (int) $element->getConfig()->get('blog_entry_selection');
 
         $blogEntries = $this->getRandomBlogEntries($numberOfEntries, $categoryId, $context);
 
@@ -80,19 +74,19 @@ class BlogComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param int $numberOfEntries
-     * @param int $categoryId
-     *
      * @return Blog[]
      */
-    private function getRandomBlogEntries($numberOfEntries, $categoryId, ShopContextInterface $context)
+    private function getRandomBlogEntries(int $numberOfEntries, int $categoryId, ShopContextInterface $context): array
     {
         $blogIds = $this->findBlogIds($numberOfEntries, $categoryId, (int) $context->getShop()->getId());
 
         return $this->blogService->getList($blogIds, $context);
     }
 
-    private function findBlogIds(int $numberOfEntries, int $categoryId, int $shopId)
+    /**
+     * @return array<int>
+     */
+    private function findBlogIds(int $numberOfEntries, int $categoryId, int $shopId): array
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select('blog.id')

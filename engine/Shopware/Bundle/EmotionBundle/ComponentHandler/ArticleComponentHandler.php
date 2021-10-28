@@ -27,6 +27,7 @@ namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\RandomSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
@@ -48,20 +49,11 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     public const LEGACY_CONVERT_FUNCTION = 'getArticle';
     public const COMPONENT_NAME = 'emotion-components-article';
 
-    /**
-     * @var StoreFrontCriteriaFactoryInterface
-     */
-    private $criteriaFactory;
+    private StoreFrontCriteriaFactoryInterface $criteriaFactory;
 
-    /**
-     * @var ShopwareConfig
-     */
-    private $shopwareConfig;
+    private ShopwareConfig $shopwareConfig;
 
-    /**
-     * @var AdditionalTextServiceInterface
-     */
-    private $additionalTextService;
+    private AdditionalTextServiceInterface $additionalTextService;
 
     public function __construct(
         StoreFrontCriteriaFactoryInterface $criteriaFactory,
@@ -69,7 +61,6 @@ class ArticleComponentHandler implements ComponentHandlerInterface
         AdditionalTextServiceInterface $additionalTextService
     ) {
         $this->criteriaFactory = $criteriaFactory;
-
         $this->shopwareConfig = $shopwareConfig;
         $this->additionalTextService = $additionalTextService;
     }
@@ -95,7 +86,9 @@ class ArticleComponentHandler implements ComponentHandlerInterface
             $collection->getBatchRequest()->setProductNumbers($key, [$element->getConfig()->get('article')]);
 
             return;
-        } elseif ($type === self::TYPE_STATIC_VARIANT) {
+        }
+
+        if ($type === self::TYPE_STATIC_VARIANT) {
             $collection->getBatchRequest()->setProductNumbers($key, [$element->getConfig()->get('variant')]);
 
             return;
@@ -115,16 +108,15 @@ class ArticleComponentHandler implements ComponentHandlerInterface
         $key = 'emotion-element--' . $element->getId();
         $type = $element->getConfig()->get('article_type');
 
-        /** @var ListProduct|false $product */
         $product = current($collection->getBatchResult()->get($key));
         if ($product && $type === self::TYPE_STATIC_VARIANT) {
-            $this->additionalTextService->buildAdditionalText($product, $context);
+            $product = $this->additionalTextService->buildAdditionalText($product, $context);
             $this->switchPrice($product);
         }
         $element->getData()->set('product', $product);
     }
 
-    private function switchPrice(ListProduct $product)
+    private function switchPrice(ListProduct $product): void
     {
         $prices = array_values($product->getPrices());
         $product->setListingPrice($prices[0]);
@@ -138,10 +130,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
         }
     }
 
-    /**
-     * @return \Shopware\Bundle\SearchBundle\Criteria
-     */
-    private function generateCriteria(Element $element, ShopContextInterface $context)
+    private function generateCriteria(Element $element, ShopContextInterface $context): Criteria
     {
         $categoryId = (int) $element->getConfig()->get('article_category');
         $type = $element->getConfig()->get('article_type');

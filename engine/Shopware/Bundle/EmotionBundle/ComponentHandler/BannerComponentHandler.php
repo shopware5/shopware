@@ -73,7 +73,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
         $this->resolveMappings($collection, $element);
     }
 
-    private function generateLink(Element $element, ShopContextInterface $context)
+    private function generateLink(Element $element, ShopContextInterface $context): void
     {
         $link = $element->getConfig()->get('link');
         if (empty($link)) {
@@ -89,9 +89,8 @@ class BannerComponentHandler implements ComponentHandlerInterface
         $element->getConfig()->set('link', $link);
     }
 
-    private function addMappings(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    private function addMappings(PrepareDataCollection $collection, Element $element, ShopContextInterface $context): void
     {
-        /** @var array $mappings */
         $mappings = $element->getConfig()->get('bannerMapping', []);
         if (empty($mappings)) {
             return;
@@ -123,9 +122,8 @@ class BannerComponentHandler implements ComponentHandlerInterface
         $element->getConfig()->set('bannerMapping', $mappings);
     }
 
-    private function resolveMappings(ResolvedDataCollection $collection, Element $element)
+    private function resolveMappings(ResolvedDataCollection $collection, Element $element): void
     {
-        /** @var array $mappings */
         $mappings = $element->getConfig()->get('bannerMapping', []);
 
         if (empty($mappings)) {
@@ -161,9 +159,9 @@ class BannerComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @return string
+     * @param array<string, mixed> $mapping
      */
-    private function getMappingKey(array $mapping)
+    private function getMappingKey(array $mapping): string
     {
         return md5($mapping['x'] . $mapping['y'] . $mapping['width'] . $mapping['height'] . $mapping['link']);
     }

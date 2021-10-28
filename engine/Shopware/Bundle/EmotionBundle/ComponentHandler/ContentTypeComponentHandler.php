@@ -40,10 +40,7 @@ class ContentTypeComponentHandler implements ComponentHandlerInterface
     private const MODE_RANDOM = 1;
     private const MODE_SELECTED = 2;
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
     public function __construct(ContainerInterface $container)
     {
@@ -96,6 +93,6 @@ class ContentTypeComponentHandler implements ComponentHandlerInterface
         $result = $repository->findAll($criteria);
 
         $element->getData()->set('sItems', $result->items);
-        $element->getData()->set('sType', json_decode(json_encode($result->type), true));
+        $element->getData()->set('sType', json_decode((string) json_encode($result->type), true));
     }
 }

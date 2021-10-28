@@ -40,15 +40,9 @@ class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
     public const LEGACY_CONVERT_FUNCTION = 'getManufacturerSlider';
     public const COMPONENT_NAME = 'emotion-components-manufacturer-slider';
 
-    /**
-     * @var ManufacturerServiceInterface
-     */
-    private $manufacturerService;
+    private ManufacturerServiceInterface $manufacturerService;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(ManufacturerServiceInterface $manufacturerService, Connection $connection)
     {
@@ -103,11 +97,9 @@ class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param int $categoryId
-     *
      * @return int[]
      */
-    private function getManufacturerIdsByCategoryId($categoryId, ShopContextInterface $context)
+    private function getManufacturerIdsByCategoryId(int $categoryId, ShopContextInterface $context): array
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select('manufacturer.id')

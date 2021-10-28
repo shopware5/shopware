@@ -27,6 +27,7 @@ namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\RandomSorting;
@@ -53,25 +54,13 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     public const LEGACY_CONVERT_FUNCTION = 'getArticleSlider';
     public const COMPONENT_NAME = 'emotion-components-article-slider';
 
-    /**
-     * @var StoreFrontCriteriaFactoryInterface
-     */
-    private $criteriaFactory;
+    private StoreFrontCriteriaFactoryInterface $criteriaFactory;
 
-    /**
-     * @var RepositoryInterface
-     */
-    private $productStreamRepository;
+    private RepositoryInterface $productStreamRepository;
 
-    /**
-     * @var ShopwareConfig
-     */
-    private $shopwareConfig;
+    private ShopwareConfig $shopwareConfig;
 
-    /**
-     * @var AdditionalTextServiceInterface
-     */
-    private $additionalTextService;
+    private AdditionalTextServiceInterface $additionalTextService;
 
     public function __construct(
         StoreFrontCriteriaFactoryInterface $criteriaFactory,
@@ -173,7 +162,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
 
                 $products = [];
                 foreach ($productNumbers as $productNumber) {
-                    if (!$listProducts[$productNumber]) {
+                    if (!$listProducts[$productNumber] instanceof ListProduct) {
                         continue;
                     }
                     $products[$productNumber] = $listProducts[$productNumber];
@@ -189,9 +178,8 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
 
                 $products = [];
                 foreach ($productNumbers as $productNumber) {
-                    /** @var ListProduct|null $product */
                     $product = $listProducts[$productNumber];
-                    if (!$product) {
+                    if (!$product instanceof ListProduct) {
                         continue;
                     }
                     $this->switchPrice($product);
@@ -203,7 +191,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
         }
     }
 
-    private function switchPrice(ListProduct $product)
+    private function switchPrice(ListProduct $product): void
     {
         $prices = array_values($product->getPrices());
         $product->setListingPrice($prices[0]);
@@ -217,10 +205,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
         }
     }
 
-    /**
-     * @return \Shopware\Bundle\SearchBundle\Criteria
-     */
-    private function generateCriteria(Element $element, ShopContextInterface $context)
+    private function generateCriteria(Element $element, ShopContextInterface $context): Criteria
     {
         $type = $element->getConfig()->get('article_slider_type');
         $limit = (int) $element->getConfig()->get('article_slider_max_number');
