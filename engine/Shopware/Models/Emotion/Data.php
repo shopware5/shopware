@@ -121,7 +121,10 @@ class Data extends ModelEntity
 
     public function __clone()
     {
-        unset($this->id, $this->emotionId, $this->elementId, $this->fieldId);
+        $this->id = null;
+        $this->emotionId = null;
+        $this->elementId = null;
+        $this->fieldId = null;
     }
 
     /**

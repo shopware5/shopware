@@ -91,6 +91,16 @@ parameters:
         - # This property contains many different repositories, so we do not specify the type
             message: '#with generic class Shopware\\Components\\Model\\ModelRepository does not specify its types: TEntityClass#'
             path: engine/Shopware/Controllers/Backend/Config.php
+        - # While cloning entities the ID or foreign key columns need to be set to `null` even if they do not allow that from the database definition
+            message: '#Property Shopware\\Models\\Emotion\\.*::.*id|Id \(int\) does not accept null#'
+            paths:
+                - engine/Shopware/Models/Emotion/Data.php
+                - engine/Shopware/Models/Emotion/Element.php
+                - engine/Shopware/Models/Emotion/ElementViewport.php
+                - engine/Shopware/Models/Emotion/Emotion.php
+                - engine/Shopware/Models/Emotion/Preset.php
+                - engine/Shopware/Models/Emotion/PresetTranslation.php
+                - engine/Shopware/Models/Emotion/Template.php
 
         - # The config stores values as serialized strings, but the getter of the models return the actual type like bool or int
             message: '#::\$value type mapping mismatch: database|property can contain #'

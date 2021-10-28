@@ -45635,16 +45635,6 @@ parameters:
 			path: engine/Shopware/Models/Emotion/Element.php
 
 		-
-			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\Element\\:\\:\\$emotionId \\(int\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Element.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\Element\\:\\:\\$id \\(int\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Element.php
-
-		-
 			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\Element\\:\\:\\$viewports with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Emotion/Element.php
@@ -45691,21 +45681,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\ElementViewport\\:\\:setVisible\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/ElementViewport.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\ElementViewport\\:\\:\\$elementId \\(int\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/ElementViewport.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\ElementViewport\\:\\:\\$emotionId \\(int\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/ElementViewport.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\ElementViewport\\:\\:\\$id \\(int\\) does not accept null\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Emotion/ElementViewport.php
 
@@ -45906,11 +45881,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\Emotion\\:\\:\\$elements with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Emotion.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\Emotion\\:\\:\\$id \\(int\\) does not accept null\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Emotion/Emotion.php
 
@@ -46185,11 +46155,6 @@ parameters:
 			path: engine/Shopware/Models/Emotion/Preset.php
 
 		-
-			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\Preset\\:\\:\\$id \\(int\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Preset.php
-
-		-
 			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\Preset\\:\\:\\$translations with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Emotion/Preset.php
@@ -46211,11 +46176,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\PresetTranslation\\:\\:setPreset\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/PresetTranslation.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\PresetTranslation\\:\\:\\$id \\(int\\) does not accept null\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Emotion/PresetTranslation.php
 
@@ -46256,11 +46216,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\Template\\:\\:\\$emotions with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Template.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\Template\\:\\:\\$id \\(int\\) does not accept null\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Emotion/Template.php
 
