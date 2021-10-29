@@ -29,25 +29,18 @@ use PDO;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\SearchBundle\BatchProductSearch;
+use Shopware\Bundle\SearchBundle\BatchProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class DataCollectionResolver implements DataCollectionResolverInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
+    private MediaServiceInterface $mediaService;
 
-    /**
-     * @var BatchProductSearch
-     */
-    private $batchProductSearch;
+    private BatchProductSearch $batchProductSearch;
 
     public function __construct(
         BatchProductSearch $batchProductSearch,
@@ -76,9 +69,9 @@ class DataCollectionResolver implements DataCollectionResolverInterface
     }
 
     /**
-     * @return array
+     * @return array<int|string, Media>
      */
-    private function resolveMedia(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context)
+    private function resolveMedia(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context): array
     {
         $mediaIds = $this->convertMediaPathsToIds($prepareDataCollection->getMediaPathList());
         $mediaIds = array_merge($prepareDataCollection->getMediaIdList(), $mediaIds);
@@ -102,11 +95,11 @@ class DataCollectionResolver implements DataCollectionResolverInterface
     }
 
     /**
-     * @param string[] $mediaPaths
+     * @param array<string> $mediaPaths
      *
-     * @return int[]
+     * @return array<int>
      */
-    private function convertMediaPathsToIds(array $mediaPaths = [])
+    private function convertMediaPathsToIds(array $mediaPaths = []): array
     {
         return $this->connection->createQueryBuilder()
             ->select(['id'])
@@ -117,10 +110,7 @@ class DataCollectionResolver implements DataCollectionResolverInterface
             ->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    /**
-     * @return \Shopware\Bundle\SearchBundle\BatchProductSearchResult
-     */
-    private function resolveBatchRequest(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context)
+    private function resolveBatchRequest(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context): BatchProductSearchResult
     {
         $request = $prepareDataCollection->getBatchRequest();
 

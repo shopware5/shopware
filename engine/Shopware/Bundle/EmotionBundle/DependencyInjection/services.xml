@@ -115,32 +115,22 @@
         </service>
 
         <service id="shopware_emotion.component_handler.banner_slider" class="Shopware\Bundle\EmotionBundle\ComponentHandler\BannerSliderComponentHandler">
-            <argument type="service" id="Shopware\Bundle\MediaBundle\MediaServiceInterface" />
-
             <tag name="shopware_emotion.component_handler"/>
         </service>
 
         <service id="shopware_emotion.component_handler.youtube" class="Shopware\Bundle\EmotionBundle\ComponentHandler\YoutubeComponentHandler">
-            <argument type="service" id="Shopware\Components\ContainerAwareEventManager" />
-
             <tag name="shopware_emotion.component_handler"/>
         </service>
 
         <service id="shopware_emotion.component_handler.html_element" class="Shopware\Bundle\EmotionBundle\ComponentHandler\HtmlElementComponentHandler">
-            <argument type="service" id="Shopware\Components\ContainerAwareEventManager" />
-
             <tag name="shopware_emotion.component_handler"/>
         </service>
 
         <service id="shopware_emotion.component_handler.iframe" class="Shopware\Bundle\EmotionBundle\ComponentHandler\IFrameComponentHandler">
-            <argument type="service" id="Shopware\Components\ContainerAwareEventManager" />
-
             <tag name="shopware_emotion.component_handler"/>
         </service>
 
         <service id="shopware_emotion.component_handler.html_code" class="Shopware\Bundle\EmotionBundle\ComponentHandler\HtmlCodeComponentHandler">
-            <argument type="service" id="Shopware\Components\ContainerAwareEventManager" />
-
             <tag name="shopware_emotion.component_handler"/>
         </service>
 

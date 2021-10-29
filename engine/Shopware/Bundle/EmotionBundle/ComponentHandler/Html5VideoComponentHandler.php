@@ -35,10 +35,7 @@ class Html5VideoComponentHandler implements ComponentHandlerInterface
     public const LEGACY_CONVERT_FUNCTION = 'getHtml5Video';
     public const COMPONENT_NAME = 'emotion-components-html-video';
 
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
+    private MediaServiceInterface $mediaService;
 
     public function __construct(MediaServiceInterface $mediaService)
     {
@@ -60,9 +57,7 @@ class Html5VideoComponentHandler implements ComponentHandlerInterface
 
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
-        $mediaFields = ['webm_video', 'ogg_video', 'h264_video', 'fallback_picture'];
-
-        foreach ($mediaFields as $field) {
+        foreach (['webm_video', 'ogg_video', 'h264_video', 'fallback_picture'] as $field) {
             $value = $element->getConfig()->get($field);
 
             if (!preg_match('#^media/*#i', $value)) {

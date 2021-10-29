@@ -296,7 +296,7 @@ class ListProduct extends BaseProduct
      * Contains the product cover which displayed
      * as product image in listings or sliders.
      *
-     * @var Media
+     * @var Media|null
      */
     protected $cover;
 
@@ -479,7 +479,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Tax $tax
+     * @param Tax $tax
      */
     public function setTax($tax)
     {
@@ -487,7 +487,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Tax
+     * @return Tax
      */
     public function getTax()
     {
@@ -495,7 +495,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price[]|null $prices
+     * @param Price[]|null $prices
      */
     public function setPrices($prices)
     {
@@ -503,7 +503,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price[]
+     * @return Price[]
      */
     public function getPrices()
     {
@@ -511,7 +511,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer $manufacturer
+     * @param Manufacturer $manufacturer
      */
     public function setManufacturer($manufacturer)
     {
@@ -519,7 +519,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer|null
+     * @return Manufacturer|null
      */
     public function getManufacturer()
     {
@@ -527,7 +527,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Media $cover
+     * @param Media $cover
      */
     public function setCover($cover)
     {
@@ -535,7 +535,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media|null
+     * @return Media|null
      */
     public function getCover()
     {
@@ -543,7 +543,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price|null $cheapestPrice
+     * @param Price|null $cheapestPrice
      */
     public function setCheapestPrice($cheapestPrice)
     {
@@ -551,7 +551,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price|null
+     * @return Price|null
      */
     public function getCheapestPrice()
     {
@@ -559,7 +559,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price
+     * @return Price
      */
     public function getVariantPrice()
     {
@@ -869,7 +869,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup $priceGroup
+     * @param PriceGroup $priceGroup
      */
     public function setPriceGroup(PriceGroup $priceGroup = null)
     {
@@ -877,7 +877,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule[]
+     * @return PriceRule[]
      */
     public function getPriceRules()
     {
@@ -885,7 +885,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule[]|null $priceRules
+     * @param PriceRule[]|null $priceRules
      */
     public function setPriceRules($priceRules)
     {
@@ -893,7 +893,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule|null
+     * @return PriceRule|null
      */
     public function getCheapestPriceRule()
     {
@@ -901,7 +901,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule|null $cheapestPriceRule
+     * @param PriceRule|null $cheapestPriceRule
      */
     public function setCheapestPriceRule($cheapestPriceRule)
     {

@@ -36,9 +36,9 @@ class ResolvedDataCollection extends Extendable
     private $batchResult;
 
     /**
-     * @var Media[]
+     * @var array<int|string, Media>
      */
-    private $mediaList = [];
+    private array $mediaList = [];
 
     /**
      * @param int $mediaId
@@ -47,25 +47,17 @@ class ResolvedDataCollection extends Extendable
      */
     public function getMedia($mediaId)
     {
-        if (!\array_key_exists($mediaId, $this->mediaList)) {
-            return null;
-        }
-
-        return $this->mediaList[$mediaId];
+        return $this->mediaList[$mediaId] ?? null;
     }
 
     /**
-     * @param int $mediaPath
+     * @param string $mediaPath
      *
      * @return Media|null
      */
     public function getMediaByPath($mediaPath)
     {
-        if (!\array_key_exists($mediaPath, $this->mediaList)) {
-            return null;
-        }
-
-        return $this->mediaList[$mediaPath];
+        return $this->mediaList[$mediaPath] ?? null;
     }
 
     /**
@@ -85,7 +77,7 @@ class ResolvedDataCollection extends Extendable
     }
 
     /**
-     * @param Media[] $mediaList
+     * @param array<int|string, Media> $mediaList
      */
     public function setMediaList($mediaList)
     {

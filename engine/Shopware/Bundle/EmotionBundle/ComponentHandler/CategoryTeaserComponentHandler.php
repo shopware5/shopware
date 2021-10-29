@@ -36,6 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\BlogServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Blog\Blog;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -47,28 +48,20 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     public const LEGACY_CONVERT_FUNCTION = 'getCategoryTeaser';
     public const COMPONENT_NAME = 'emotion-components-category-teaser';
 
-    /**
-     * @var StoreFrontCriteriaFactoryInterface
-     */
-    private $criteriaFactory;
+    private StoreFrontCriteriaFactoryInterface $criteriaFactory;
 
-    /**
-     * @var CategoryServiceInterface
-     */
-    private $categoryService;
+    private CategoryServiceInterface $categoryService;
 
-    /**
-     * @var BlogServiceInterface
-     */
-    private $blogService;
+    private BlogServiceInterface $blogService;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    public function __construct(StoreFrontCriteriaFactoryInterface $criteriaFactory, CategoryServiceInterface $categoryService, Connection $connection, BlogServiceInterface $blogService)
-    {
+    public function __construct(
+        StoreFrontCriteriaFactoryInterface $criteriaFactory,
+        CategoryServiceInterface $categoryService,
+        Connection $connection,
+        BlogServiceInterface $blogService
+    ) {
         $this->criteriaFactory = $criteriaFactory;
         $this->categoryService = $categoryService;
         $this->connection = $connection;
@@ -138,11 +131,14 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
 
                 if ($isBlog) {
                     $blog = $this->getRandomBlog($categoryId, $context);
-                    if (!$blog) {
+                    if (!$blog instanceof Blog) {
                         break;
                     }
                     $medias = $blog->getMedias();
                     $media = array_shift($medias);
+                    if (!$media instanceof Media) {
+                        break;
+                    }
 
                     $element->getData()->set('blog', $blog);
                     $element->getData()->set('image', $media);
@@ -153,10 +149,9 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
                 $products = $collection->getBatchResult()->get($key);
                 shuffle($products);
 
-                /** @var ListProduct|null $product */
                 $product = reset($products);
 
-                if (!$product || !$product->getCover()) {
+                if (!$product instanceof ListProduct || !$product->getCover() instanceof Media) {
                     break;
                 }
 
@@ -168,7 +163,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
         $this->fetchCategory($element, $context);
     }
 
-    private function fetchCategory(Element $element, ShopContextInterface $context)
+    private function fetchCategory(Element $element, ShopContextInterface $context): void
     {
         $categoryId = (int) $element->getConfig()->get('category_selection');
         $category = $this->categoryService->getList([$categoryId], $context);
@@ -180,12 +175,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
         $element->getData()->set('category', reset($category));
     }
 
-    /**
-     * @param int $categoryId
-     *
-     * @return Blog|null
-     */
-    private function getRandomBlog($categoryId, ShopContextInterface $context)
+    private function getRandomBlog(int $categoryId, ShopContextInterface $context): ?Blog
     {
         $blogId = $this->findBlogIdByCategoryId($categoryId);
         $blog = $this->blogService->getList([$blogId], $context);
@@ -195,10 +185,8 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param int $categoryId
-     *
-     * @return int
      */
-    private function findBlogIdByCategoryId($categoryId)
+    private function findBlogIdByCategoryId($categoryId): int
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select('blog.id')
