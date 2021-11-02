@@ -123,6 +123,7 @@ debug-config-test: .make.config.build.debug
 	./bin/console sw:firstrunwizard:disable
 	./bin/console sw:admin:create --name="Demo" --email="demo@demo.de" --username="demo" --password="demo" --locale=de_DE -n
 	touch recovery/install/data/install.lock
+	cp .htaccess.dist .htaccess
 
 .git/hooks/pre-commit:
 	mkdir -p .git/hooks
