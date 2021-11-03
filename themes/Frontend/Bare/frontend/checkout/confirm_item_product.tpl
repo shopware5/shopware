@@ -19,9 +19,11 @@
 
 {* Additional product relevant information *}
 {block name='frontend_checkout_cart_item_details_essential_features'}
-    <div class="product--essential-features">
-        {include file="string:{config name="mainfeatures"}"}
-    </div>
+    {if {config name="alwaysShowMainFeatures"}}
+        <div class="product--essential-features">
+            {include file="string:{config name="mainfeatures"}"}
+        </div>
+    {/if}
 {/block}
 
 {* Hide tax symbols *}
