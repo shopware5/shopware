@@ -52,10 +52,8 @@ class OrderReaderTest extends TestCase
         ];
 
         foreach ($expectedResult as $oderId => $expectedResultArray) {
-            $resultArray = explode(',', $result[$oderId]['articleNumber']);
-
             foreach ($expectedResultArray as $expectedInArray) {
-                static::assertContains($expectedInArray, $resultArray);
+                static::assertContains($expectedInArray, $result[$oderId]['articleNumber']);
             }
         }
     }

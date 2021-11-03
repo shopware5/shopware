@@ -104,7 +104,7 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'department' => $this->textMapping->getTextField(),
                 'street' => $this->textMapping->getTextField(),
                 'zipcode' => $this->textMapping->getKeywordField(),
-                'articleNumber' => $this->textMapping->getTextField(),
+                'articleNumber' => $this->textMapping->getKeywordField(),
                 'city' => $this->textMapping->getTextField(),
                 'phone' => $this->textMapping->getKeywordField(),
                 'countryName' => $this->textMapping->getTextField(),

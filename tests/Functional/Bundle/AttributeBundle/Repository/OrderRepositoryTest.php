@@ -45,7 +45,7 @@ class OrderRepositoryTest extends TestCase
         $mapping = $this->getOrderRepository()->getMapping();
 
         $expectedFormat = 'yyyy-MM-dd HH:mm:ss||yyyy-MM-dd';
-        $expectedTextField = ['type' => 'text', 'fielddata' => true];
+        $expectedTextField = ['type' => 'keyword'];
 
         static::assertSame($expectedFormat, $mapping['properties']['orderTime']['format']);
         static::assertSame($expectedTextField, $mapping['properties']['articleNumber']);
@@ -116,6 +116,7 @@ class OrderRepositoryTest extends TestCase
 
         foreach ($orders as $order) {
             static::assertArrayHasKey('articleNumber', $order);
+            static::assertIsArray($order['articleNumber']);
         }
     }
 

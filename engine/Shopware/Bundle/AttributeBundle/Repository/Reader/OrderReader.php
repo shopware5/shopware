@@ -62,6 +62,7 @@ class OrderReader extends GenericReader
             $row['orderStateName'] = $namespace->get($row['orderStateKey']);
             $row['orderDocuments'] = $this->getOrderDocuments($documents, $row);
             $row['supplierId'] = explode(',', $row['supplierId']);
+            $row['articleNumber'] = explode(',', $row['articleNumber']);
         }
 
         return $data;
