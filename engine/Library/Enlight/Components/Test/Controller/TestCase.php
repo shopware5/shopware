@@ -33,35 +33,35 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     /**
      * Instance of the Front resource
      *
-     * @var Enlight_Controller_Front
+     * @var Enlight_Controller_Front|null
      */
     protected $_front;
 
     /**
      * Instance of the View resource
      *
-     * @var Enlight_Template_Manager
+     * @var Enlight_Template_Manager|null
      */
     protected $_template;
 
     /**
      * Instance of the enlight view. Is filled in the dispatch function with the template.
      *
-     * @var Enlight_View_Default
+     * @var Enlight_View_Default|null
      */
     protected $_view;
 
     /**
      * Instance of the enlight request. Filled in the dispatch function.
      *
-     * @var Enlight_Controller_Request_Request
+     * @var Enlight_Controller_Request_Request|null
      */
     protected $_request;
 
     /**
      * Instance of the enlight response. Filled in the dispatch function.
      *
-     * @var Enlight_Controller_Response_Response
+     * @var Enlight_Controller_Response_Response|null
      */
     protected $_response;
 
@@ -249,6 +249,10 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
      */
     public function View()
     {
+        if (!$this->_view instanceof Enlight_View_Default) {
+            throw new RuntimeException('View property is not set');
+        }
+
         return $this->_view;
     }
 

@@ -24,11 +24,16 @@
 
 use Shopware\Bundle\ControllerBundle\Exceptions\ResourceNotFoundException;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
 {
     /**
      * Index action method
+     *
+     * @throws ResourceNotFoundException
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -38,19 +43,18 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
 
         $shopId = $this->container->get(ContextServiceInterface::class)->getShopContext()->getShop()->getId();
 
-        $staticPage = Shopware()->Modules()->Cms()->sGetStaticPage(
-            $this->Request()->sCustom,
-            $shopId
-        );
+        $staticPage = Shopware()->Modules()->Cms()->sGetStaticPage($this->Request()->get('sCustom'), $shopId);
 
-        if (!$staticPage) {
+        if (!\is_array($staticPage)) {
             throw new ResourceNotFoundException('Custom page not found', $this->Request());
         }
 
         if (!empty($staticPage['link'])) {
             $link = Shopware()->Modules()->Core()->sRewriteLink($staticPage['link'], $staticPage['description']);
 
-            return $this->redirect($link, ['code' => 301]);
+            $this->redirect($link, ['code' => Response::HTTP_MOVED_PERMANENTLY]);
+
+            return;
         }
 
         if (!empty($staticPage['html'])) {
