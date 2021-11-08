@@ -2014,7 +2014,7 @@ class sExport implements Enlight_Hook
     private function ensurePHPTimeLimit(): void
     {
         $maxExecutionTime = (int) ini_get('max_execution_time');
-        if ($maxExecutionTime >= 30) {
+        if ($maxExecutionTime <= 0 || $maxExecutionTime >= 30) {
             return;
         }
 
