@@ -22,7 +22,9 @@
 
                     {* Author content *}
                     {block name='frontend_detail_comment_author_content'}
-                        <span class="content--field" itemprop="author">{if $vote.name}{$vote.name}{else}{s name="DetailCommentAnonymousName"}{/s}{/if}</span>
+                        <span class="content--field" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                            <span itemprop="name">{if $vote.name}{$vote.name}{else}{s name="DetailCommentAnonymousName"}{/s}{/if}</span>
+                        </span>
                     {/block}
                 {/block}
 
