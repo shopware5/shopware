@@ -24,6 +24,7 @@
  */
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\CartBundle\CartKey;
 use Shopware\Bundle\CartBundle\CartPositionsMode;
 use Shopware\Bundle\OrderBundle\Service\OrderListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
@@ -41,6 +42,8 @@ use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * Shopware Class that handles cart operations
+ *
+ * @phpstan-type BasketArray array{content: non-empty-array, Amount: string, AmountNet: string, Quantity: int, AmountNumeric: float, AmountNetNumeric: float, AmountWithTax: string, AmountWithTaxNumeric: float}
  */
 class sBasket implements \Enlight_Hook
 {
@@ -1330,7 +1333,9 @@ SQL;
      * @throws \Enlight_Event_Exception
      * @throws \Zend_Db_Adapter_Exception
      *
-     * @return array Basket content
+     * @phpstan-return array|BasketArray
+     *
+     * @return array
      */
     public function sGetBasket()
     {
@@ -1387,6 +1392,8 @@ SQL;
      * @throws \Exception
      * @throws \Enlight_Exception
      *
+     * @phpstan-return array|BasketArray
+     *
      * @return array
      */
     public function sGetBasketData()
@@ -1429,18 +1436,18 @@ SQL;
         $totalAmountNet = $this->moduleManager->Articles()->sFormatPrice($totalAmountNet);
 
         $result = [
-            'content' => $getProducts,
-            'Amount' => $totalAmount,
-            'AmountNet' => $totalAmountNet,
-            'Quantity' => $totalCount,
-            'AmountNumeric' => $totalAmountNumeric,
-            'AmountNetNumeric' => $totalAmountNetNumeric,
-            'AmountWithTax' => $totalAmountWithTax,
-            'AmountWithTaxNumeric' => $totalAmountWithTaxNumeric,
+            CartKey::POSITIONS => $getProducts,
+            CartKey::AMOUNT => $totalAmount,
+            CartKey::AMOUNT_NET => $totalAmountNet,
+            CartKey::QUANTITY => $totalCount,
+            CartKey::AMOUNT_NUMERIC => $totalAmountNumeric,
+            CartKey::AMOUNT_NET_NUMERIC => $totalAmountNetNumeric,
+            CartKey::AMOUNT_WITH_TAX => $totalAmountWithTax,
+            CartKey::AMOUNT_WITH_TAX_NUMERIC => $totalAmountWithTaxNumeric,
         ];
 
-        if (!empty($result['content'])) {
-            foreach ($result['content'] as $key => $value) {
+        if (!empty($result[CartKey::POSITIONS])) {
+            foreach ($result[CartKey::POSITIONS] as $key => $value) {
                 if (!empty($value['amountWithTax'])) {
                     $t = round((float) str_replace(',', '.', $value['amountWithTax']), 2);
                 } else {
@@ -1457,7 +1464,7 @@ SQL;
                     );
                 }
                 $calcDifference = $this->moduleManager->Articles()->sFormatPrice($t - $p);
-                $result['content'][$key]['tax'] = $calcDifference;
+                $result[CartKey::POSITIONS][$key]['tax'] = $calcDifference;
             }
         }
         $result = $this->eventManager->filter(

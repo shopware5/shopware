@@ -30,6 +30,7 @@ use Shopware\Bundle\AccountBundle\Service\OptInLoginServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
+use Shopware\Bundle\CartBundle\CartKey;
 use Shopware\Bundle\StoreFrontBundle\Gateway\PaymentGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
@@ -1633,7 +1634,7 @@ class sAdmin implements \Enlight_Hook
      */
     public function sRiskORDERVALUEMORE($user, $order, $value)
     {
-        $basketValue = $order['AmountNumeric'];
+        $basketValue = $order[CartKey::AMOUNT_NUMERIC];
 
         if ($this->sSYSTEM->sCurrency['factor']) {
             $basketValue /= $this->sSYSTEM->sCurrency['factor'];
@@ -1653,7 +1654,7 @@ class sAdmin implements \Enlight_Hook
      */
     public function sRiskORDERVALUELESS($user, $order, $value)
     {
-        $basketValue = $order['AmountNumeric'];
+        $basketValue = $order[CartKey::AMOUNT_NUMERIC];
 
         if ($this->sSYSTEM->sCurrency['factor']) {
             $basketValue /= $this->sSYSTEM->sCurrency['factor'];
@@ -1880,7 +1881,7 @@ class sAdmin implements \Enlight_Hook
      */
     public function sRiskORDERPOSITIONSMORE($user, $order, $value)
     {
-        return \is_array($order['content']) ? \count($order['content']) : $order['content'] >= $value;
+        return \is_array($order[CartKey::POSITIONS]) ? \count($order[CartKey::POSITIONS]) : $order[CartKey::POSITIONS] >= $value;
     }
 
     /**
@@ -1894,7 +1895,7 @@ class sAdmin implements \Enlight_Hook
      */
     public function sRiskATTRIS($user, $order, $value)
     {
-        if (!empty($order['content'])) {
+        if (!empty($order[CartKey::POSITIONS])) {
             $value = explode('|', $value);
 
             if (!isset($value[0], $value[1])) {
@@ -1918,7 +1919,7 @@ class sAdmin implements \Enlight_Hook
      */
     public function sRiskATTRISNOT($user, $order, $value)
     {
-        if (!empty($order['content'])) {
+        if (!empty($order[CartKey::POSITIONS])) {
             $value = explode('|', $value);
 
             if (!isset($value[0], $value[1])) {
@@ -4333,10 +4334,6 @@ SQL;
 
         if (!$shippingAddress instanceof Address) {
             return null;
-        }
-
-        if ($shippingAddress->getCustomer()->getId() !== $customer->getId()) {
-            throw new \UnexpectedValueException('Address did not match the user');
         }
 
         $shippingAddressArray = $this->convertToLegacyAddressArray($shippingAddress);

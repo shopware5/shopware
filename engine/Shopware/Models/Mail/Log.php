@@ -121,7 +121,7 @@ class Log extends ModelEntity
     /**
      * @var Collection<Document>
      *
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Order\Document\Document", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Order\Document\Document", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\JoinTable(
      *     name="s_mail_log_document",
      *     joinColumns={@ORM\JoinColumn(name="log_id", referencedColumnName="id", onDelete="CASCADE")},

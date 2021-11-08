@@ -259,17 +259,17 @@
          *
          * @returns { boolean }
          */
-        hasPreferencesHashChanged: function () {
+        hasPreferencesHashChanged: function() {
             var preferences = JSON.parse($.getCookie('cookiePreferences')),
                 currentHash = preferences.hash,
                 uniqueNames = [],
                 newHash;
 
-            $(this.opts.cookieGroupNameSelector).each(function (key, group) {
+            $(this.opts.cookieGroupNameSelector).each(function(key, group) {
                 uniqueNames.push($(group).val());
             });
 
-            $(this.opts.cookieNameSelector).each(function (key, cookie) {
+            $(this.opts.cookieNameSelector).each(function(key, cookie) {
                 uniqueNames.push($(cookie).val());
             });
 
@@ -309,7 +309,7 @@
 
             try {
                 window.localStorage.setItem(this.storageKey, 'true');
-            } catch (err) {}
+            } catch (err) { }
 
             var d = new Date();
             d.setTime(d.getTime() + (180 * 24 * 60 * 60 * 1000));
@@ -382,10 +382,12 @@
         hideElement: function() {
             this.$el.addClass(this.opts.isHiddenClass);
             $body.css('padding-bottom', 0);
-            $.modal.close();
+            if (window.cookieRemoval === 2) {
+                $.modal.close();
+            }
         },
 
-        getBasePath: function () {
+        getBasePath: function() {
             return window.csrfConfig.basePath || '/';
         }
     });

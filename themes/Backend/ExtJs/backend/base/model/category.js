@@ -70,7 +70,8 @@ Ext.define('Shopware.apps.Base.model.Category', {
         { name: 'text', type: 'string' },
         { name: 'cls', type: 'string' },
         { name: 'leaf', type: 'boolean' },
-        { name: 'allowDrag', type: 'boolean' }
+        { name: 'allowDrag', type: 'boolean' },
+        { name: 'facetIds', type: 'string' }
     ]
 });
 //{/block}

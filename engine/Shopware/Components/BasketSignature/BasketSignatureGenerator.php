@@ -24,6 +24,9 @@
 
 namespace Shopware\Components\BasketSignature;
 
+use Shopware\Bundle\CartBundle\CartKey;
+use Shopware\Bundle\CartBundle\CheckoutKey;
+
 class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
 {
     /**
@@ -40,16 +43,16 @@ class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
                     'price' => (float) $item['price'],
                 ];
             },
-            $basket['content']
+            $basket[CartKey::POSITIONS]
         );
 
         $items = $this->sortItems($items);
 
         $data = [
-            'amount' => (float) $basket['sAmount'],
-            'taxAmount' => (float) $basket['sAmountTax'],
+            'amount' => (float) $basket[CheckoutKey::AMOUNT],
+            'taxAmount' => (float) $basket[CheckoutKey::AMOUNT_TAX],
             'items' => $items,
-            'currencyId' => (int) $basket['sCurrencyId'],
+            'currencyId' => (int) $basket[CheckoutKey::CURRENCY_ID],
         ];
 
         return hash('sha256', json_encode($data) . $customerId);

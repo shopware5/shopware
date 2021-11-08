@@ -1,8 +1,7 @@
 ;(function ($, window) {
     'use strict';
 
-    var $body = $('body'),
-        $html = $('html'),
+    var $html = $('html'),
         isTouchIE = $html.hasClass('is--ie-touch');
 
     /**
@@ -127,6 +126,9 @@
 
             // Register all needed events
             me.registerEvents();
+
+            // Fixes initial hover delay
+            me.closeMenu();
         },
 
         /**
@@ -140,7 +142,8 @@
          */
         registerEvents: function () {
             var me = this,
-                $el;
+                $el,
+                pluginEl = me.$el[0];
 
             $.each(me._$listItems, function (i, el) {
                 $el = $(el);
@@ -153,10 +156,12 @@
                     me._on($el, 'touchstart', $.proxy(me.onTouchStart, me, i, $el));
                 }
 
-                me._on($el, 'mouseenter', $.proxy(me.onListItemEnter, me, i, $el));
+                me._on($el, 'mouseenter touchstart', $.proxy(me.onListItemEnter, me, i, $el));
                 me._on($el, 'click', $.proxy(me.onClick, me, i, $el));
+                me._on($el, 'mouseleave', $.proxy(me.onMouseLeave, me));
             });
 
+            me._on(pluginEl, 'mouseleave', $.proxy(me.onMouseLeave, me));
             me._on(me._$closeButton, 'click', $.proxy(me.onCloseButtonClick, me));
         },
 
@@ -246,12 +251,12 @@
          * @event onMouseLeave
          * @param {jQuery.Event} event
          */
-        onMouseMove: function (event) {
+        onMouseLeave: function (event) {
             var me = this,
-                target = event.target,
+                target = event.toElement || event.relatedTarget,
                 pluginEl = me.$el[0];
 
-            if (pluginEl === target || $.contains(me.$el[0], target) || me._$listItems.has(target).length) {
+            if (pluginEl === target || $.contains(pluginEl, target) || me._$listItems.has(target).length) {
                 return;
             }
 
@@ -261,6 +266,13 @@
             }
 
             me.closeMenu();
+        },
+
+        /**
+         * Keep empty method for compatibility
+         */
+        onMouseMove: function (event) {
+            // empty
         },
 
         /**
@@ -312,8 +324,6 @@
         openMenu: function () {
             var me = this;
 
-            $body.on('mousemove touchstart', $.proxy(me.onMouseMove, me));
-
             me.$el.show();
 
             $.publish('plugin/swAdvancedMenu/onOpenMenu', [ me ]);
@@ -332,8 +342,6 @@
             me._$list.find('.' + opts.itemHoverClass).removeClass(opts.itemHoverClass);
 
             me.$el.hide();
-
-            $body.off('mousemove touchstart', $.proxy(me.onMouseMove, me));
 
             me._targetIndex = -1;
 

@@ -22,13 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\CartBundle\CartKey;
 use Shopware\Bundle\CartBundle\CartPositionsMode;
+use Shopware\Bundle\CartBundle\CheckoutKey;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Cart\Struct\Price;
+use Shopware\Components\Cart\TaxAggregatorInterface;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\ShopRegistrationServiceInterface;
@@ -211,11 +214,8 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         }
 
         $this->_id = $id;
-
         $this->_config = $config;
-
         $this->_summaryNet = (bool) $config['summaryNet'];
-
         $this->_shippingCostsAsPosition = (bool) $config['shippingCostsAsPosition'];
 
         $this->getOrder();
@@ -379,7 +379,6 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             } else {
                 if ($this->_order['is_proportional_calculation']) {
                     $taxes = Shopware()->Container()->get('shopware.cart.proportional_tax_calculator')->calculate($this->_order['invoice_shipping'], $this->getPricePositions(), false);
-
                     $taxNet = 0;
 
                     foreach ($taxes as $tax) {
@@ -390,8 +389,23 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                     $this->_amountNetto += $taxNet;
                 } else {
                     $this->_amountNetto += ($this->_order['invoice_shipping'] / (100 + $taxShipping) * 100);
+
                     if (!empty($taxShipping) && !empty($this->_order['invoice_shipping'])) {
-                        $this->_tax[number_format($taxShipping, 2)] += ($this->_order['invoice_shipping'] / (100 + $taxShipping)) * $taxShipping;
+                        $shippingTax = Shopware()->Container()->get(TaxAggregatorInterface::class)->shippingCostsTaxSum([
+                            CheckoutKey::SHIPPING_COSTS_TAX => (float) $this->_order['invoice_shipping_tax_rate'],
+                            CheckoutKey::SHIPPING_COSTS_NET => (float) $this->_order['invoice_shipping_net'],
+                            CheckoutKey::SHIPPING_COSTS_WITH_TAX => (float) $this->_order['invoice_shipping'],
+                        ]);
+
+                        if ($shippingTax !== null) {
+                            foreach ($shippingTax as $key => $val) {
+                                if (isset($this->_tax[$key])) {
+                                    $this->_tax[$key] = $this->_tax[$key] + $val;
+                                } else {
+                                    $this->_tax[$key] = $val;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -643,21 +657,32 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             }
 
             $position['amount_netto'] = round($position['netto'] * $position['quantity'], 2);
-
             $position['amount'] = round($position['price'] * $position['quantity'], 2);
 
             $this->_amountNetto += $position['amount_netto'];
             $this->_amount += $position['amount'];
 
-            if (!empty($position['tax'])) {
-                $this->_tax[number_format((float) $position['tax'], 2)] += round($position['amount'] - $position['amount_netto'], 2);
-            }
             if ($position['amount'] <= 0) {
                 $this->_discount += $position['amount'];
             }
 
             $this->_positions->offsetSet($key, $position);
         }
+
+        $cartPositions = array_map(static function (array $position): array {
+            $position['tax'] = $position['amount'] - $position['amount_netto'];
+
+            return $position;
+        }, $this->_positions->getArrayCopy());
+
+        $positionsTaxSum = Shopware()->Container()->get(TaxAggregatorInterface::class)->positionsTaxSum(
+            [
+                CartKey::POSITIONS => $cartPositions,
+            ],
+            (float) $this->getMaxTaxRate()
+        );
+
+        $this->_tax = $positionsTaxSum ?? [];
 
         $parameters = Shopware()->Container()->get('events')->filter(
             'Shopware_Models_Order_Document_Filter_Parameters',

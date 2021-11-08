@@ -24,11 +24,13 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
+use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Constraint\IsType;
+use Shopware\Bundle\BenchmarkBundle\Provider\OrdersProvider;
 
 class OrdersProviderTest extends ProviderTestCase
 {
-    public const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\OrdersProvider::class;
+    public const SERVICE_ID = OrdersProvider::class;
     public const EXPECTED_KEYS_COUNT = 1;
     public const EXPECTED_TYPES = [
         'list' => IsType::TYPE_ARRAY,
@@ -36,7 +38,7 @@ class OrdersProviderTest extends ProviderTestCase
 
     public function testGetArrayKeysFit()
     {
-        $dbalConnection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $dbalConnection = Shopware()->Container()->get(Connection::class);
         $basicContent = $this->openDemoDataFile('basic_setup');
         $dbalConnection->exec($basicContent);
 
@@ -45,7 +47,7 @@ class OrdersProviderTest extends ProviderTestCase
 
     public function testGetValidateTypes()
     {
-        $dbalConnection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $dbalConnection = Shopware()->Container()->get(Connection::class);
         $basicContent = $this->openDemoDataFile('basic_setup');
         $dbalConnection->exec($basicContent);
 
@@ -105,16 +107,22 @@ class OrdersProviderTest extends ProviderTestCase
                 'absoluteCostsPerCountry' => 0.0,
             ],
         ], $resultData['list'][0]['payment']);
+
+        $currentDetailId = 0;
+        foreach ($resultData['list'][0]['items'] as &$orderItem) {
+            static::assertGreaterThan($currentDetailId, $orderItem['detailId']);
+            $currentDetailId = $orderItem['detailId'];
+            unset($orderItem['detailId']);
+        }
+
         static::assertSame([
             [
-                'detailId' => 206,
                 'unitPrice' => 150.00,
                 'totalPrice' => 150.00,
                 'amount' => 1,
                 'packUnit' => '',
                 'purchaseUnit' => '',
             ], [
-                'detailId' => 207,
                 'unitPrice' => 20.00,
                 'totalPrice' => 80.00,
                 'amount' => 4,

@@ -144,6 +144,11 @@ class BatchController
         $this->toJson(200, $this->resultMapper->toExtJs($result));
     }
 
+    public function updateHtaccess()
+    {
+        $this->container->get('shopware.update.update_htaccess')->update();
+    }
+
     /**
      * @throws RuntimeException
      */

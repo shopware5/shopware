@@ -2,6 +2,30 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.7
+
+[View all changes from v5.7.6...v5.7.7](https://github.com/shopware/shopware/compare/v5.7.5...v5.7.6)
+
+### Breaks
+
+### Deprecations
+
+* Deprecated `\Shopware_Controllers_Frontend_Checkout::getTaxRates`, it will be removed in the next minor version v5.8. Use `TaxAggregator::taxSum` instead.
+
+### Additions
+
+* Added `\Shopware\Components\Cart\TaxAggregatorInterface`
+* Added `\Shopware\Components\Cart\TaxAggregator` as a default implementation, extracting the tax aggregation logic from the checkout controller
+* Added a new component to the update process. The `.htaccess`-file now contains a section dedicated to the Shopware core.
+
+### Changes
+
+* Changed `\Shopware_Controllers_Frontend_Checkout::getTaxRates`, this method uses the `TaxAggregator::taxSum` now
+* Changed `\Shopware_Models_Document_Order::processOrder`, this method uses the `TaxAggregator::shippingCostsTaxSum` method now
+* Changed `\Shopware_Models_Document_Order::processPositions`, this method uses the `TaxAggregator::positionsTaxSum` method now
+
+### Removals
+
 ## 5.7.6
 
 [View all changes from v5.7.5...v5.7.6](https://github.com/shopware/shopware/compare/v5.7.5...v5.7.6)
@@ -9,6 +33,10 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Additions
 
 * Added a new CSP directive to the default `.htaccess`
+
+## 5.7.5
+
+[View all changes from v5.7.4...v5.7.5](https://github.com/shopware/shopware/compare/v5.7.4...v5.7.5)
 
 ## 5.7.4
 

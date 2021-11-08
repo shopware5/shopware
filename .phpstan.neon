@@ -7,6 +7,8 @@ parameters:
     reportUnmatchedIgnoredErrors: true
     treatPhpDocTypesAsCertain: false
     tmpDir: var/cache/phpstan
+    bootstrapFiles:
+        - %currentWorkingDirectory%/recovery/common/autoload.php # Additional autoloading for testing classes under recovery/*
 
     symfony:
         constant_hassers: false

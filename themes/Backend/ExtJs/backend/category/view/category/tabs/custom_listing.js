@@ -173,15 +173,50 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
         return me.sortingSelection;
     },
 
+    createFacetSearchStore: function(entity) {
+        var me = this;
+
+        return Ext.create('Ext.data.Store', {
+            model: 'Shopware.model.Dynamic',
+            proxy: {
+                type: 'ajax',
+                url: '{url controller="EntitySearch" action="search"}?model=' + entity,
+                reader: Ext.create('Shopware.model.DynamicReader')
+            },
+            sorters: [{
+                sorterFn: function(facet1, facet2){
+                    if(!me.facets) {
+                        return;
+                    }
+
+                    var getPos = function(facet){
+                        var indices = me.facets;
+                        return indices.indexOf(facet.internalId.toString());
+                    };
+
+                    var pos1 = getPos(facet1),
+                        pos2 = getPos(facet2);
+
+                    if (pos1 === pos2) {
+                        return 0;
+                    }
+                    return pos1 < pos2 ? -1 : 1;
+                }
+            }],
+        });
+    },
+
     /**
      * @return { Shopware.form.field.CustomFacetGrid }
      */
     createFacetSelection: function() {
         var me = this, store, searchStore;
 
-        store = me.createEntitySearchStore("Shopware\\Models\\Search\\CustomFacet");
-        searchStore = me.createEntitySearchStore("Shopware\\Models\\Search\\CustomFacet");
+        store = me.createFacetSearchStore("Shopware\\Models\\Search\\CustomFacet");
+        searchStore = me.createFacetSearchStore("Shopware\\Models\\Search\\CustomFacet");
+
         searchStore.remoteFilter = true;
+        searchStore.sortOnLoad = true;
         searchStore.filter(me.createFacetStoreFilter());
         store.remoteFilter = true;
         store.filter(me.createFacetStoreFilter());
@@ -343,8 +378,17 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
         me.activateFacets.setValue(hasFacets);
 
         if (hasFacets) {
+            me.facets = category.get('facetIds').split('|').filter(
+                function(i) {
+                    if(i.length){
+                        return i;
+                    }
+                });
+            me.facetSelection.store.sort();
             me.facetSelection.enable();
         } else {
+            me.facets = null;
+            me.facetSelection.store.sort();
             me.facetSelection.disable();
             me.facetSelection.store.load();
         }

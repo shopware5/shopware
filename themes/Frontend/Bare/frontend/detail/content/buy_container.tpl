@@ -2,7 +2,9 @@
     <div class="product--buybox block{if $sArticle.sConfigurator && $sArticle.sConfiguratorSettings.type==2} is--wide{/if}">
 
         {block name="frontend_detail_rich_snippets_brand"}
-            <meta itemprop="brand" content="{$sArticle.supplierName|escape}"/>
+            <div class="is--hidden" itemprop="brand" itemtype="https://schema.org/Brand" itemscope>
+                <meta itemprop="name" content="{$sArticle.supplierName|escape}" />
+            </div>
         {/block}
 
         {block name="frontend_detail_rich_snippets_weight"}

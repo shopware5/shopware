@@ -40,6 +40,7 @@ use Shopware\Recovery\Update\FilesystemFactory;
 use Shopware\Recovery\Update\PathBuilder;
 use Shopware\Recovery\Update\PluginCheck;
 use Shopware\Recovery\Update\StoreApi;
+use Shopware\Recovery\Update\UpdateHtaccess;
 use Shopware\Recovery\Update\Utils;
 
 class Container extends BaseContainer
@@ -198,6 +199,10 @@ class Container extends BaseContainer
                 ['chmod' => 0775, 'filePath' => SW_PATH . '/bin/console'],
                 ['chmod' => 0775, 'filePath' => SW_PATH . '/var/cache/clear_cache.sh'],
             ]);
+        };
+
+        $container['shopware.update.update_htaccess'] = function ($container) {
+            return new UpdateHtaccess(SW_PATH . '/.htaccess');
         };
     }
 }

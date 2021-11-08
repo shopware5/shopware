@@ -594,6 +594,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $params['changed'] = new DateTime();
         $categoryModel->fromArray($params);
         $categoryModel->setShops($this->Request()->getParam('shops'));
+        $this->em->persist($categoryModel);
         $this->em->flush();
 
         $categoryId = $categoryModel->getId();
@@ -857,7 +858,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
-     * Helper function to add multiple products to an category.
+     * Helper function to add multiple products to a category.
      *
      * @param int   $categoryId
      * @param array $articleIds

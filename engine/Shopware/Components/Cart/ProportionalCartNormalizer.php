@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Cart;
 
+use Shopware\Bundle\CartBundle\CartKey;
+
 class ProportionalCartNormalizer implements ProportionalCartNormalizerInterface
 {
     /**
@@ -31,16 +33,16 @@ class ProportionalCartNormalizer implements ProportionalCartNormalizerInterface
      */
     public function normalize(array $cart)
     {
-        foreach ($cart['content'] as $key => $item) {
+        foreach ($cart[CartKey::POSITIONS] as $key => $item) {
             if (!isset($item['proportion'])) {
                 continue;
             }
 
             foreach ($item['proportion'] as $proportionalItem) {
-                $cart['content'][] = $proportionalItem;
+                $cart[CartKey::POSITIONS][] = $proportionalItem;
             }
 
-            unset($cart['content'][$key]);
+            unset($cart[CartKey::POSITIONS][$key]);
         }
 
         return $cart;

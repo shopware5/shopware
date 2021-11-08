@@ -77,5 +77,17 @@ class ConfigWriter
         if (!file_put_contents($databaseConfigFile, $template)) {
             throw new RuntimeException("Could not write config: $databaseConfigFile");
         }
+
+        $htaccessPath = \dirname($this->configPath) . '/.htaccess';
+
+        if (file_exists($htaccessPath . '.dist') && !file_exists($htaccessPath)) {
+            copy($htaccessPath . '.dist', $htaccessPath);
+
+            $perms = fileperms($htaccessPath . '.dist');
+
+            if ($perms !== false) {
+                chmod($htaccessPath, $perms | 0644);
+            }
+        }
     }
 }

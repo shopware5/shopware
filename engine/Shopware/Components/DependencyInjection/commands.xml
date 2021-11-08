@@ -243,5 +243,9 @@
                  class="Shopware\Commands\GenerateMigrationCommand">
             <tag name="console.command" command="sw:generate:migration"/>
         </service>
+
+        <service id="Shopware\Commands\ConfigSetCommand" public="true">
+            <tag name="console.command" command="sw:config:set"/>
+        </service>
     </services>
 </container>

@@ -16,3 +16,6 @@ c266595a9df3c8ca6cee75291f2febb87ca83b28
 c8c3418a11f2b8355000e5fad155fa2d62fca621
 e03293ff21fcee29f6cb3811c0bdc7ac78f94d0b
 e04304b7987986a9d7e35750fba62263978b8405
+
+# SW-20660 - use typecast instead of intval, strval, doubleval and floatval
+e1d0b23fba81d3c80e80f2881ab38bf9d7f6397a

@@ -49,10 +49,7 @@ class Shopware_Controllers_Backend_EntitySearch extends Shopware_Controllers_Bac
         }
     }
 
-    /**
-     * @return SearchCriteria
-     */
-    private function createCriteria(Request $request)
+    private function createCriteria(Request $request): SearchCriteria
     {
         $criteria = new SearchCriteria($request->getParam('model'));
         $criteria->offset = $request->getParam('start', 0);
