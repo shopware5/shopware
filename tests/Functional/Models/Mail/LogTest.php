@@ -37,39 +37,32 @@ class LogTest extends TestCase
 {
     use ContainerTrait;
     use DatabaseTransactionBehaviour;
-    public const SQL_DOCUMENTS_ID = 99999;
-    public const SQL_MAIL_LOG_ID = 99999;
 
-    /**
-     * @throws \Doctrine\DBAL\Exception
-     */
+    private const SQL_DOCUMENTS_ID = 99999;
+    private const SQL_MAIL_LOG_ID = 99999;
+
     public function setUp(): void
     {
         $connection = $this->getContainer()->get(Connection::class);
         $connection->executeQuery(
-            "
-                INSERT INTO s_order_documents  VALUES(:documentid, '2000-05-07', 69, 69, 69420, 420.69, 'test', 'loremipsumfoobar1337');
-                INSERT INTO s_mail_log(id, sender, sent_at) VALUES(:mailid, 'ipsumlorem','2000-07-05 00:00:00');
-                INSERT INTO s_mail_log_document VALUES(:mailid,:documentid);
-            ",
+            'INSERT INTO s_order_documents  VALUES(:documentId, "2000-05-07", 69, 69, 69420, 420.69, "test", "loremipsumfoobar1337");
+             INSERT INTO s_mail_log(id, sender, sent_at) VALUES(:mailId, "ipsumlorem","2000-07-05 00:00:00");
+             INSERT INTO s_mail_log_document VALUES(:mailId,:documentId);',
             [
-                'documentid' => self::SQL_DOCUMENTS_ID,
-                'mailid' => self::SQL_MAIL_LOG_ID,
+                'documentId' => self::SQL_DOCUMENTS_ID,
+                'mailId' => self::SQL_MAIL_LOG_ID,
             ]
         );
     }
 
-    /**
-     * @throws \Doctrine\DBAL\Exception
-     */
     public function testThatDocumentIsNotDeletedWithLogEntry(): void
     {
-        $modelmanager = $this->getContainer()->get('models');
-        $log = $modelmanager->find(Log::class, self::SQL_MAIL_LOG_ID);
+        $modelManager = $this->getContainer()->get('models');
+        $log = $modelManager->find(Log::class, self::SQL_MAIL_LOG_ID);
         static::assertInstanceOf(Log::class, $log);
-        $modelmanager->remove($log);
-        $modelmanager->flush();
-        $document = $modelmanager->find(Document::class, self::SQL_DOCUMENTS_ID);
+        $modelManager->remove($log);
+        $modelManager->flush();
+        $document = $modelManager->find(Document::class, self::SQL_DOCUMENTS_ID);
         static::assertInstanceOf(Document::class, $document);
     }
 }
