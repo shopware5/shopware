@@ -700,11 +700,6 @@ parameters:
 			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
 
 		-
-			message: "#^Left side of && is always true\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
-
-		-
 			message: "#^Method Enlight_Components_Test_Controller_TestCase\\:\\:Request\\(\\) should return Enlight_Controller_Request_RequestTestCase but returns Enlight_Controller_Request_Request\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
@@ -741,31 +736,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$url of method Enlight_Components_Test_Controller_TestCase\\:\\:dispatch\\(\\) expects string\\|null, string\\|false\\|null given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
-
-		-
-			message: "#^Property Enlight_Components_Test_Controller_TestCase\\:\\:\\$_front \\(Enlight_Controller_Front\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
-
-		-
-			message: "#^Property Enlight_Components_Test_Controller_TestCase\\:\\:\\$_request \\(Enlight_Controller_Request_Request\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
-
-		-
-			message: "#^Property Enlight_Components_Test_Controller_TestCase\\:\\:\\$_response \\(Enlight_Controller_Response_Response\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
-
-		-
-			message: "#^Property Enlight_Components_Test_Controller_TestCase\\:\\:\\$_template \\(Enlight_Template_Manager\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
-
-		-
-			message: "#^Property Enlight_Components_Test_Controller_TestCase\\:\\:\\$_view \\(Enlight_View_Default\\) does not accept null\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Test/Controller/TestCase.php
 
@@ -38171,16 +38141,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Frontend_Csrftoken\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Csrftoken.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$sCustom\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Custom.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Custom\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Custom.php
 
 		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$sArticle\\.$#"
