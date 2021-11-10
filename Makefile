@@ -124,6 +124,8 @@ debug-config-test: .make.config.build.debug
 	./bin/console sw:admin:create --name="Demo" --email="demo@demo.de" --username="demo" --password="demo" --locale=de_DE -n
 	touch recovery/install/data/install.lock
 	cp .htaccess.dist .htaccess
+	./bin/console sw:config:set installationSurvey false -d
+	./bin/console dbal:run-sql "INSERT IGNORE INTO \`s_core_auth_config\` (\`user_id\`, \`name\`, \`config\`) VALUES (1, 'customer_module', '{\"showWizard\":false}');"
 
 .git/hooks/pre-commit:
 	mkdir -p .git/hooks
