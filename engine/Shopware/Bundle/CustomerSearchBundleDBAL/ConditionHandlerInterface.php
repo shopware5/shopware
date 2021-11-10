@@ -34,5 +34,8 @@ interface ConditionHandlerInterface
      */
     public function supports(ConditionInterface $condition);
 
+    /**
+     * @return void
+     */
     public function handle(ConditionInterface $condition, QueryBuilder $query);
 }

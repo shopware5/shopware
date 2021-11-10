@@ -69,7 +69,7 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
         $this->handle($criteriaPart, $criteria, $search);
     }
 
-    private function handle(CriteriaPartInterface $criteriaPart, Criteria $criteria, Search $search)
+    private function handle(CriteriaPartInterface $criteriaPart, Criteria $criteria, Search $search): void
     {
         $groupBy = $this->buildGroupBy($criteria);
 
@@ -96,7 +96,7 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
         );
     }
 
-    private function buildGroupBy(Criteria $criteria)
+    private function buildGroupBy(Criteria $criteria): ?string
     {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
 

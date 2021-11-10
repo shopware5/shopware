@@ -40,6 +40,8 @@ interface HandlerInterface
 
     /**
      * Handles the criteria part and extends the provided search.
+     *
+     * @return void
      */
     public function handle(
         CriteriaPartInterface $criteriaPart,

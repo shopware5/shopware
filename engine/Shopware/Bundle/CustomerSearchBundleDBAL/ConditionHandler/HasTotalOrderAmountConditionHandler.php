@@ -36,16 +36,17 @@ class HasTotalOrderAmountConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        /*
-         * $this->parse method is Imported from DynamicConditionParserTrait
-         */
-        return $this->parse(
+        if (!$condition instanceof HasTotalOrderAmountCondition) {
+            return;
+        }
+
+        $this->parse(
             $query,
             's_customer_search_index',
             'customer',
             'invoice_amount_sum',
             $condition->getMinimumOrderAmount(),
-            $condition->getOperator() ? $condition->getOperator() : ConditionInterface::OPERATOR_GTE
+            $condition->getOperator() ?: ConditionInterface::OPERATOR_GTE
         );
     }
 

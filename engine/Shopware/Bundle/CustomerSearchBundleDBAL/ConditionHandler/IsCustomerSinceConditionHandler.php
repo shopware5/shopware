@@ -38,6 +38,10 @@ class IsCustomerSinceConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        if (!$condition instanceof IsCustomerSinceCondition) {
+            return;
+        }
+
         switch ($condition->getOperator()) {
             case ConditionInterface::OPERATOR_EQ:
                 $query->andWhere('customer.firstlogin = :IsCustomerSinceCondition');

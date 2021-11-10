@@ -82,9 +82,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
             'track_total_hits' => true,
         ];
 
-        $data = $this->client->search(
-            $arguments
-        );
+        $data = $this->client->search($arguments);
 
         $products = $this->createProducts($data);
 

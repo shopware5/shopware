@@ -34,5 +34,8 @@ interface SortingHandlerInterface
      */
     public function supports(SortingInterface $sorting);
 
+    /**
+     * @return void
+     */
     public function handle(SortingInterface $sorting, QueryBuilder $query);
 }

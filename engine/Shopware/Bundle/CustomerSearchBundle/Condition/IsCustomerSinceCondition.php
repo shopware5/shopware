@@ -67,6 +67,9 @@ class IsCustomerSinceCondition implements ConditionInterface
         return $this->customerSince;
     }
 
+    /**
+     * @return string
+     */
     public function getOperator()
     {
         return $this->operator;

@@ -30,13 +30,12 @@ use ONGR\ElasticsearchDSL\Aggregation\Bucketing\TermsAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\Metric\ValueCountAggregation;
 use ONGR\ElasticsearchDSL\Query\TermLevel\ExistsQuery;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
+use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
@@ -54,14 +53,11 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     public const AGGREGATION_SIZE = 5000;
 
     /**
-     * @var FacetInterface[]|CriteriaPartInterface[]
+     * @var array<ProductAttributeFacet>
      */
     private $criteriaParts = [];
 
-    /**
-     * @var CrudServiceInterface
-     */
-    private $crudService;
+    private CrudServiceInterface $crudService;
 
     public function __construct(CrudServiceInterface $crudService)
     {
@@ -85,7 +81,10 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var ProductAttributeFacet $criteriaPart */
+        if (!$criteriaPart instanceof ProductAttributeFacet) {
+            return;
+        }
+
         $field = 'attributes.core.' . $criteriaPart->getField();
         $type = null;
 
@@ -150,7 +149,6 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
                 continue;
             }
 
-            /** @var ConfigurationStruct|null $attribute */
             $attribute = $this->crudService->get('s_articles_attributes', $criteriaPart->getField());
 
             $type = $attribute ? $attribute->getColumnType() : null;
@@ -195,12 +193,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         }
     }
 
-    /**
-     * @param string $type
-     *
-     * @return FacetResultInterface
-     */
-    private function switchTemplate($type, FacetResultInterface $result, ProductAttributeFacet $facet)
+    private function switchTemplate(string $type, FacetResultInterface $result, ProductAttributeFacet $facet): FacetResultInterface
     {
         if (!$result instanceof TemplateSwitchable) {
             return $result;
@@ -219,14 +212,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         return $result;
     }
 
-    /**
-     * @param string $type
-     * @param string $mode
-     * @param string $defaultTemplate
-     *
-     * @return string
-     */
-    private function getTypeTemplate($type, $mode, $defaultTemplate)
+    private function getTypeTemplate(string $type, string $mode, string $defaultTemplate): string
     {
         switch (true) {
             case $type === TypeMappingInterface::TYPE_DATE && $mode === ProductAttributeFacet::MODE_RANGE_RESULT:
@@ -253,13 +239,13 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     }
 
     /**
-     * @param array $data
+     * @param array<string, array> $data
      *
      * @return RadioFacetResult|ValueListFacetResult|null
      */
     private function createItemListResult(
         ProductAttributeFacet $criteriaPart,
-        $data,
+        array $data,
         Criteria $criteria
     ) {
         $values = array_column($data['buckets'], 'key');
@@ -269,7 +255,8 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
         $actives = [];
 
-        if ($condition = $criteria->getCondition($criteriaPart->getName())) {
+        $condition = $criteria->getCondition($criteriaPart->getName());
+        if ($condition instanceof ProductAttributeCondition) {
             $actives = $condition->getValue();
 
             // $condition->getValue() can return a string
@@ -302,11 +289,9 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     }
 
     /**
-     * @param array $data
-     *
-     * @return BooleanFacetResult|null
+     * @param array<string, mixed> $data
      */
-    private function createBooleanResult(ProductAttributeFacet $criteriaPart, $data, Criteria $criteria)
+    private function createBooleanResult(ProductAttributeFacet $criteriaPart, array $data, Criteria $criteria): ?BooleanFacetResult
     {
         $count = $data[$criteriaPart->getName() . '_count'];
         $count = $count['value'];
@@ -323,12 +308,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         );
     }
 
-    /**
-     * @param array $data
-     *
-     * @return RangeFacetResult
-     */
-    private function createRangeResult(ProductAttributeFacet $criteriaPart, $data, Criteria $criteria)
+    private function createRangeResult(ProductAttributeFacet $criteriaPart, array $data, Criteria $criteria): RangeFacetResult
     {
         $values = array_column($data['buckets'], 'key');
         $min = empty($values) ? 0 : min($values);
@@ -337,10 +317,13 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         $activeMin = $min;
         $activeMax = $max;
 
-        if ($condition = $criteria->getCondition($criteriaPart->getName())) {
+        $condition = $criteria->getCondition($criteriaPart->getName());
+        if ($condition instanceof ProductAttributeCondition) {
             $data = $condition->getValue();
-            $activeMin = $data['min'];
-            $activeMax = $data['max'];
+            if (\is_array($data)) {
+                $activeMin = $data['min'];
+                $activeMax = $data['max'];
+            }
         }
 
         return new RangeFacetResult(
@@ -360,9 +343,11 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $aggregation
+     *
+     * @return array<string, mixed>
      */
-    private function formatDates(array $aggregation)
+    private function formatDates(array $aggregation): array
     {
         $aggregation['buckets'] = array_map(function ($bucket) {
             $bucket['key'] = $bucket['key_as_string'];

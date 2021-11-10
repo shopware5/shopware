@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Schema\Column;
 use InvalidArgumentException;
 use RuntimeException;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition as Condition;
@@ -36,20 +37,24 @@ trait DynamicConditionParserTrait
      * Adds base conditions to a query builder object
      * NOTE: The method will also verify that the column to be compared actually exists in the table.
      *
-     * @param string            $table      table name
-     * @param string            $tableAlias table alias in query
-     * @param string            $field      Field to be used in the comparisons
-     * @param array|string|null $value
-     * @param string|null       $operator
+     * @param string                                                        $table      table name
+     * @param string                                                        $tableAlias table alias in query
+     * @param string                                                        $field      Field to be used in the comparisons
+     * @param array{min?: int|float, max?: int|float}|float|int|string|null $value
+     * @param string|null                                                   $operator
      *
      * @throws InvalidArgumentException If field value is empty                          (code: 1)
      * @throws InvalidArgumentException If an invalid column name has been specified     (code: 2)
      * @throws InvalidArgumentException If an unsupported operator has been specified    (code: 3)
      * @throws RuntimeException         If columns could not be retrieved from the table
+     *
+     * @return void
      */
     public function parse(QueryBuilder $query, $table, $tableAlias, $field = null, $value = null, $operator = null)
     {
-        $field = trim($field);
+        if (\is_string($field)) {
+            $field = trim($field);
+        }
 
         if (empty($field)) {
             throw new InvalidArgumentException('Condition class requires a defined attribute field!', 1);
@@ -66,7 +71,7 @@ trait DynamicConditionParserTrait
             throw new RuntimeException(sprintf('Could not retrieve columns from "%s".', $table));
         }
 
-        $names = array_map(function (\Doctrine\DBAL\Schema\Column $column) {
+        $names = array_map(function (Column $column) {
             return strtolower($column->getName());
         }, $columns);
 
@@ -90,7 +95,9 @@ trait DynamicConditionParserTrait
         ];
 
         // Normalize with strtoupper in case of non-algorithmic comparisons NOT IN, IN, STARTS WITH
-        $operator = strtoupper(trim($operator));
+        if (\is_string($operator)) {
+            $operator = strtoupper(trim($operator));
+        }
 
         /*
          * When an operator is not specified, by default, return all results that are not null
@@ -161,6 +168,10 @@ trait DynamicConditionParserTrait
                 break;
 
             case $operator === Condition::OPERATOR_BETWEEN:
+                if (!\is_array($value)) {
+                    throw new InvalidArgumentException('The between operator needs an array value');
+                }
+
                 if (!isset($value['min']) && !isset($value['max'])) {
                     throw new InvalidArgumentException('The between operator needs a minimum or a maximum', 3);
                 }
@@ -176,17 +187,17 @@ trait DynamicConditionParserTrait
                 }
                 break;
 
-            case $operator === Condition::OPERATOR_STARTS_WITH:
+            case $operator === Condition::OPERATOR_STARTS_WITH && is_scalar($value):
                 $query->andWhere($query->expr()->like($field, $boundParamName));
                 $query->setParameter($boundParamName, $value . '%');
                 break;
 
-            case $operator === Condition::OPERATOR_ENDS_WITH:
+            case $operator === Condition::OPERATOR_ENDS_WITH && is_scalar($value):
                 $query->andWhere($query->expr()->like($field, $boundParamName));
                 $query->setParameter($boundParamName, '%' . $value);
                 break;
 
-            case $operator === Condition::OPERATOR_CONTAINS:
+            case $operator === Condition::OPERATOR_CONTAINS && is_scalar($value):
                 $query->andWhere($query->expr()->like($field, $boundParamName));
                 $query->setParameter($boundParamName, '%' . $value . '%');
                 break;

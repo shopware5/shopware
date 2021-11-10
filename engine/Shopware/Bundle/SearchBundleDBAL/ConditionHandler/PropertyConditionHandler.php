@@ -48,6 +48,10 @@ class PropertyConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        if (!$condition instanceof PropertyCondition) {
+            return;
+        }
+
         $tableKey = $condition->getName();
 
         $suffix = md5(json_encode($condition));

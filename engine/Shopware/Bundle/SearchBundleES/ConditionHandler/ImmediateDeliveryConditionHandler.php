@@ -67,7 +67,7 @@ class ImmediateDeliveryConditionHandler implements PartialConditionHandlerInterf
         $this->handle($criteria, $search);
     }
 
-    private function handle(Criteria $criteria, Search $search)
+    private function handle(Criteria $criteria, Search $search): void
     {
         $groupBy = $this->buildGroupBy($criteria);
 
@@ -82,7 +82,7 @@ class ImmediateDeliveryConditionHandler implements PartialConditionHandlerInterf
         );
     }
 
-    private function buildGroupBy(Criteria $criteria)
+    private function buildGroupBy(Criteria $criteria): ?string
     {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
 
