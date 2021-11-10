@@ -51,7 +51,9 @@ class ManufacturerFacetTest extends TestCase
             [new ManufacturerFacet()]
         );
 
-        static::assertCount(0, $result->getFacets());
+        foreach ($result->getFacets() as $facet) {
+            static::assertNotInstanceOf(ManufacturerFacet::class, $facet);
+        }
     }
 
     public function testSingleManufacturer(): void

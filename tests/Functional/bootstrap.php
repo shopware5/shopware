@@ -29,6 +29,9 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Kernel;
 use Shopware\Models\Shop\Shop;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 class TestKernel extends Kernel
 {
@@ -56,9 +59,16 @@ class TestKernel extends Kernel
         return static::$kernel;
     }
 
-    protected function getConfigPath()
+    protected function getConfigPath(): string
     {
         return __DIR__ . '/config.php';
+    }
+
+    protected function prepareContainer(ContainerBuilder $container): void
+    {
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__));
+        $loader->load('services_test.xml');
+        parent::prepareContainer($container);
     }
 }
 

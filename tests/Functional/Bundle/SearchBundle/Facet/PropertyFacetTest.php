@@ -70,7 +70,7 @@ class PropertyFacetTest extends TestCase
             [new PropertyFacet()]
         );
 
-        static::assertCount(1, $result->getFacets());
+        static::assertCount(2, $result->getFacets());
 
         $facet = $result->getFacets()[0];
         static::assertInstanceOf(FacetResultGroup::class, $facet);
@@ -105,16 +105,15 @@ class PropertyFacetTest extends TestCase
             [new PropertyFacet()]
         );
 
-        static::assertCount(1, $result->getFacets());
+        static::assertCount(2, $result->getFacets());
 
-        foreach ($result->getFacets() as $facet) {
-            static::assertInstanceOf(FacetResultGroup::class, $facet);
+        $facet = $result->getFacets()[0];
+        static::assertInstanceOf(FacetResultGroup::class, $facet);
 
-            static::assertCount(4, $facet->getFacetResults());
-            foreach ($facet->getFacetResults() as $result) {
-                static::assertInstanceOf(ValueListFacetResult::class, $result);
-                static::assertCount(3, $result->getValues());
-            }
+        static::assertCount(4, $facet->getFacetResults());
+        foreach ($facet->getFacetResults() as $result) {
+            static::assertInstanceOf(ValueListFacetResult::class, $result);
+            static::assertCount(3, $result->getValues());
         }
     }
 

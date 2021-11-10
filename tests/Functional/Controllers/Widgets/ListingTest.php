@@ -32,19 +32,17 @@ use Enlight_Template_Manager;
 use Enlight_View_Default;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware_Controllers_Widgets_Listing as ListingController;
-
-require_once __DIR__ . '/../../../../engine/Shopware/Controllers/Widgets/Listing.php';
 
 class ListingTest extends TestCase
 {
     use ContainerTrait;
 
-    public function testListingCountAction(): void
+    public function testListingCountActionWithEmptySearch(): void
     {
         $controller = $this->getController();
-
         $controller->Request()->setParam('sSearch', '');
 
         $controller->listingCountAction();
@@ -53,6 +51,37 @@ class ListingTest extends TestCase
 
         static::assertIsArray($result);
         static::assertSame(196, $result['totalCount']);
+    }
+
+    /**
+     * @group elasticSearch
+     */
+    public function testListingCountActionWithHTMLInFacets(): void
+    {
+        $this->prepareElasticSearchIndex();
+        $controller = $this->getController();
+        $controller->Request()->setParam('sCategory', '14');
+        $controller->Request()->setParam('loadFacets', '1');
+
+        $controller->listingCountAction();
+
+        $controller->View()->addTemplateDir(__DIR__ . '/../../../../themes/Frontend/Bare', 'test');
+
+        $html = $controller->View()->fetch('widgets/listing/listing_count.tpl');
+
+        preg_match('/<div id="facets">(.*?)<\/div>/s', $html, $match);
+        $facetsJson = trim($match[1]);
+        $facets = json_decode(htmlspecialchars_decode($facetsJson, ENT_QUOTES), true);
+        static::assertIsArray($facets);
+
+        foreach ($facets as $facet) {
+            if (\array_key_exists('test', $facet)) {
+                static::assertSame('<b>', $facet['test']);
+
+                return;
+            }
+        }
+        static::fail('Test facet not found');
     }
 
     private function getController(): ListingController
@@ -76,5 +105,20 @@ class ListingTest extends TestCase
         $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
 
         return $controller;
+    }
+
+    private function prepareElasticSearchIndex(): void
+    {
+        $helper = new Helper();
+        $context = $helper->createContext(
+            $helper->createCustomerGroup(),
+            $helper->getShop(),
+            [],
+            null,
+            $helper->createCurrency()
+        );
+        $shop = $context->getShop();
+        $shop->setCurrency($context->getCurrency());
+        $helper->refreshSearchIndexes($shop);
     }
 }
