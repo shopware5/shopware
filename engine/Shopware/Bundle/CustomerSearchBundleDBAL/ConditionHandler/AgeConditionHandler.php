@@ -41,10 +41,11 @@ class AgeConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        /*
-         * $this->parse method is Imported from DynamicConditionParserTrait
-         */
-        return $this->parse(
+        if (!$condition instanceof AgeCondition) {
+            return;
+        }
+
+        $this->parse(
             $query,
             's_customer_search_index',
             'customer',

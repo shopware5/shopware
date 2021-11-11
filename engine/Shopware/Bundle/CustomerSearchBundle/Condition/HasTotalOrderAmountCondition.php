@@ -63,6 +63,9 @@ class HasTotalOrderAmountCondition implements ConditionInterface
         return self::NAME;
     }
 
+    /**
+     * @return string
+     */
     public function getOperator()
     {
         return $this->operator;

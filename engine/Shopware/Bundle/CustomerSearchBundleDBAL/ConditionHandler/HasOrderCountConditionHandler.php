@@ -41,16 +41,17 @@ class HasOrderCountConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        /*
-         * $this->parse method is Imported from DynamicConditionParserTrait
-         */
-        return $this->parse(
+        if (!$condition instanceof HasOrderCountCondition) {
+            return;
+        }
+
+        $this->parse(
             $query,
             's_customer_search_index',
             'customer',
             'count_orders',
             $condition->getMinimumOrderCount(),
-            $condition->getOperator() ? $condition->getOperator() : ConditionInterface::OPERATOR_GTE
+            $condition->getOperator() ?: ConditionInterface::OPERATOR_GTE
         );
     }
 }

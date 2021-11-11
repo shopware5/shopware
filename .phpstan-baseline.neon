@@ -6517,21 +6517,6 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundle/Condition/AgeCondition.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundle\\\\Condition\\\\HasOrderCountCondition\\:\\:getOperator\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundle/Condition/HasOrderCountCondition.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundle\\\\Condition\\\\HasTotalOrderAmountCondition\\:\\:getOperator\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundle/Condition/HasTotalOrderAmountCondition.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundle\\\\Condition\\\\IsCustomerSinceCondition\\:\\:getOperator\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundle/Condition/IsCustomerSinceCondition.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Commands\\\\SearchIndexPopulateCommand\\:\\:configure\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Commands/SearchIndexPopulateCommand.php
@@ -6547,129 +6532,9 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AccountModeConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\AccountModeConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AccountModeConditionHandler.php
-
-		-
-			message: "#^Binary operation \"\\.\" between '%%' and array\\|string\\|null results in an error\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AgeConditionHandler.php
-
-		-
-			message: "#^Binary operation \"\\.\" between array\\|string\\|null and '%%' results in an error\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AgeConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getOperator\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AgeConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getValue\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AgeConditionHandler.php
-
-		-
-			message: "#^Cannot assign offset 'max' to array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AgeConditionHandler.php
-
-		-
-			message: "#^Cannot assign offset 'min' to array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AgeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\AgeConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AgeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\AgeConditionHandler\\:\\:parse\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AgeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\AgeConditionHandler\\:\\:parse\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AgeConditionHandler.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AgeConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getStreamId\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AssignedToStreamConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\AssignedToStreamConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AssignedToStreamConditionHandler.php
-
-		-
-			message: "#^Binary operation \"\\.\" between '%%' and array\\|string\\|null results in an error\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandler.php
-
-		-
-			message: "#^Binary operation \"\\.\" between array\\|string\\|null and '%%' results in an error\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getField\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getOperator\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getValue\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandler.php
-
-		-
-			message: "#^Cannot assign offset 'max' to array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandler.php
-
-		-
-			message: "#^Cannot assign offset 'min' to array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\CustomerAttributeConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\CustomerAttributeConditionHandler\\:\\:parse\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\CustomerAttributeConditionHandler\\:\\:parse\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\CustomerAttributeConditionHandler\\:\\:supports\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandler.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandler.php
 
 		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getCountryIds\\(\\)\\.$#"
@@ -6677,149 +6542,9 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasAddressWithCountryConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\HasAddressWithCountryConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasAddressWithCountryConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\HasCanceledOrdersConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasCanceledOrdersConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\HasNewsletterRegistrationConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasNewsletterRegistrationConditionHandler.php
-
-		-
-			message: "#^Binary operation \"\\.\" between '%%' and array\\|string\\|null results in an error\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasOrderCountConditionHandler.php
-
-		-
-			message: "#^Binary operation \"\\.\" between array\\|string\\|null and '%%' results in an error\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasOrderCountConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getMinimumOrderCount\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasOrderCountConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getOperator\\(\\)\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasOrderCountConditionHandler.php
-
-		-
-			message: "#^Cannot assign offset 'max' to array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasOrderCountConditionHandler.php
-
-		-
-			message: "#^Cannot assign offset 'min' to array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasOrderCountConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\HasOrderCountConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasOrderCountConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\HasOrderCountConditionHandler\\:\\:parse\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasOrderCountConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\HasOrderCountConditionHandler\\:\\:parse\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasOrderCountConditionHandler.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasOrderCountConditionHandler.php
-
-		-
-			message: "#^Binary operation \"\\.\" between '%%' and array\\|string\\|null results in an error\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasTotalOrderAmountConditionHandler.php
-
-		-
-			message: "#^Binary operation \"\\.\" between array\\|string\\|null and '%%' results in an error\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasTotalOrderAmountConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getMinimumOrderAmount\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasTotalOrderAmountConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getOperator\\(\\)\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasTotalOrderAmountConditionHandler.php
-
-		-
-			message: "#^Cannot assign offset 'max' to array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasTotalOrderAmountConditionHandler.php
-
-		-
-			message: "#^Cannot assign offset 'min' to array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasTotalOrderAmountConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\HasTotalOrderAmountConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasTotalOrderAmountConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\HasTotalOrderAmountConditionHandler\\:\\:parse\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasTotalOrderAmountConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\HasTotalOrderAmountConditionHandler\\:\\:parse\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasTotalOrderAmountConditionHandler.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasTotalOrderAmountConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getCustomerSince\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/IsCustomerSinceConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getOperator\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/IsCustomerSinceConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\IsCustomerSinceConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/IsCustomerSinceConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getCustomerGroupIds\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/IsInCustomerGroupConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\IsInCustomerGroupConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/IsInCustomerGroupConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedAtWeekdayConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedAtWeekdayConditionHandler.php
 
 		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getLastDays\\(\\)\\.$#"
@@ -6827,17 +6552,7 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedInLastDaysConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedInLastDaysConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedInLastDaysConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getShopIds\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedInShopConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedInShopConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedInShopConditionHandler.php
 
@@ -6847,17 +6562,7 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedOnDeviceConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedOnDeviceConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedOnDeviceConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getNumbers\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedProductConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedProductConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedProductConditionHandler.php
 
@@ -6867,17 +6572,7 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedProductOfCategoryConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedProductOfCategoryConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedProductOfCategoryConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getManufacturerIds\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedProductOfManufacturerConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedProductOfManufacturerConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedProductOfManufacturerConditionHandler.php
 
@@ -6887,17 +6582,7 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedWithDeliveryConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedWithDeliveryConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedWithDeliveryConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getPaymentIds\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedWithPaymentConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedWithPaymentConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedWithPaymentConditionHandler.php
 
@@ -6907,27 +6592,12 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/RegisteredInShopConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\RegisteredInShopConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/RegisteredInShopConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getSalutations\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/SalutationConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\SalutationConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/SalutationConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getTerm\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/SearchTermConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\SearchTermConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/SearchTermConditionHandler.php
 
@@ -6950,11 +6620,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\<int, string\\>\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler/SearchTermConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandlerInterface\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandlerInterface.php
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\CustomerNumberSearch\\:\\:fetchTotal\\(\\) has no return typehint specified\\.$#"
 			count: 1
@@ -7261,17 +6926,7 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/AgeSortingHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\AgeSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/AgeSortingHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\SortingInterface\\:\\:getDirection\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/AverageAmountSortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\AverageAmountSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/AverageAmountSortingHandler.php
 
@@ -7281,17 +6936,7 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/AverageProductAmountSortingHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\AverageProductAmountSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/AverageProductAmountSortingHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\SortingInterface\\:\\:getDirection\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/CitySortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\CitySortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/CitySortingHandler.php
 
@@ -7301,17 +6946,7 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/CustomerGroupSortingHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\CustomerGroupSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/CustomerGroupSortingHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\SortingInterface\\:\\:getDirection\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/CustomerSinceSortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\CustomerSinceSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/CustomerSinceSortingHandler.php
 
@@ -7321,17 +6956,7 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/LastNameSortingHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\LastNameSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/LastNameSortingHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\SortingInterface\\:\\:getDirection\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/LastOrderSortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\LastOrderSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/LastOrderSortingHandler.php
 
@@ -7341,17 +6966,7 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/NumberSortingHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\NumberSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/NumberSortingHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\SortingInterface\\:\\:getDirection\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/OrderCountSortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\OrderCountSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/OrderCountSortingHandler.php
 
@@ -7361,17 +6976,7 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/StreetNameSortingHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\StreetNameSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/StreetNameSortingHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\SortingInterface\\:\\:getDirection\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/TotalAmountSortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\TotalAmountSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/TotalAmountSortingHandler.php
 
@@ -7379,16 +6984,6 @@ parameters:
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\SortingInterface\\:\\:getDirection\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/ZipCodeSortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandler\\\\ZipCodeSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler/ZipCodeSortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\SortingHandlerInterface\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandlerInterface.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\BacklogProcessor\\:\\:__construct\\(\\) has parameter \\$synchronizers with no value type specified in iterable type IteratorAggregate\\.$#"
@@ -12028,29 +11623,9 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/CategoryConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\CategoryConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/CategoryConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\CloseoutConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/CloseoutConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getConditions\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/CombinedConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\CombinedConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/CombinedConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\CreateDateConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/CreateDateConditionHandler.php
 
 		-
 			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
@@ -12063,19 +11638,9 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/CustomerGroupConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\CustomerGroupConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/CustomerGroupConditionHandler.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/CustomerGroupConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\HasPseudoPriceConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/HasPseudoPriceConditionHandler.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\HasPseudoPriceConditionHandler\\:\\:setCriteria\\(\\) has no return typehint specified\\.$#"
@@ -12093,19 +11658,9 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/HeightConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\HeightConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/HeightConditionHandler.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
 			count: 2
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/HeightConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\ImmediateDeliveryConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ImmediateDeliveryConditionHandler.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\ImmediateDeliveryConditionHandler\\:\\:setCriteria\\(\\) has no return typehint specified\\.$#"
@@ -12113,19 +11668,9 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ImmediateDeliveryConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\IsAvailableConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/IsAvailableConditionHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\IsAvailableConditionHandler\\:\\:setCriteria\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/IsAvailableConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\IsNewConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/IsNewConditionHandler.php
 
 		-
 			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
@@ -12143,11 +11688,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/LastProductIdConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\LastProductIdConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/LastProductIdConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getMaxLength\\(\\)\\.$#"
 			count: 2
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/LengthConditionHandler.php
@@ -12158,22 +11698,12 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/LengthConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\LengthConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/LengthConditionHandler.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
 			count: 2
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/LengthConditionHandler.php
 
 		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getManufacturerIds\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ManufacturerConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\ManufacturerConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ManufacturerConditionHandler.php
 
@@ -12188,19 +11718,9 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/OrdernumberConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\OrdernumberConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/OrdernumberConditionHandler.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/OrdernumberConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\PriceConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/PriceConditionHandler.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\PriceConditionHandler\\:\\:setCriteria\\(\\) has no return typehint specified\\.$#"
@@ -12213,94 +11733,19 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/PriceConditionHandler.php
 
 		-
-			message: "#^Binary operation \"\\.\" between '%%' and array\\|string\\|null results in an error\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
-			message: "#^Binary operation \"\\.\" between array\\|string\\|null and '%%' results in an error\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getField\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getOperator\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getValue\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
-			message: "#^Cannot assign offset 'max' to array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
-			message: "#^Cannot assign offset 'min' to array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\ProductAttributeConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\ProductAttributeConditionHandler\\:\\:parse\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\ProductAttributeConditionHandler\\:\\:parse\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getProductIds\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductIdConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\ProductIdConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
+			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductIdConditionHandler.php
 
 		-
 			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
 			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ProductIdConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getValueIds\\(\\)\\.$#"
-			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/PropertyConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\PropertyConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/PropertyConditionHandler.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/PropertyConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\ReleaseDateConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ReleaseDateConditionHandler.php
 
 		-
 			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
@@ -12313,42 +11758,12 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/SalesConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\SalesConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/SalesConditionHandler.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/SalesConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\SearchTermConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/SearchTermConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\ShippingFreeConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/ShippingFreeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\SimilarProductConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/SimilarProductConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\VariantConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/VariantConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getAverage\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/VoteAverageConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\VoteAverageConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/VoteAverageConditionHandler.php
 
@@ -12360,11 +11775,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getMinWeight\\(\\)\\.$#"
 			count: 2
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/WeightConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\WeightConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/WeightConditionHandler.php
 
 		-
@@ -12383,19 +11793,9 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/WidthConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandler\\\\WidthConditionHandler\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/WidthConditionHandler.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
 			count: 2
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandler/WidthConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ConditionHandlerInterface\\:\\:generateCondition\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ConditionHandlerInterface.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\CriteriaAwareInterface\\:\\:setCriteria\\(\\) has no return typehint specified\\.$#"
@@ -12462,32 +11862,12 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/PriceFacetHandler.php
 
 		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\FacetInterface\\:\\:getField\\(\\)\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:addTranslations\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:extractTranslations\\(\\) has parameter \\$row with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/ProductAttributeFacetHandler.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:unserializeTranslation\\(\\) has parameter \\$row with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
-			message: "#^Parameter \\#1 \\$type of method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:getTypeTemplate\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
-			message: "#^Parameter \\#3 \\$defaultTemplate of method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:getTypeTemplate\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/FacetHandler/ProductAttributeFacetHandler.php
 
@@ -13081,119 +12461,9 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/CategoryConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\CategoryConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/CategoryConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\CategoryConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/CategoryConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\CloseoutConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/CloseoutConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\CloseoutConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/CloseoutConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\CombinedConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/CombinedConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\CombinedConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/CombinedConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\CreateDateConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/CreateDateConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\CreateDateConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/CreateDateConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\CustomerGroupConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/CustomerGroupConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\CustomerGroupConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/CustomerGroupConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\HasPseudoPriceConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/HasPseudoPriceConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\HasPseudoPriceConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/HasPseudoPriceConditionHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\HeightConditionHandler\\:\\:createQuery\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/HeightConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\HeightConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/HeightConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\HeightConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/HeightConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ImmediateDeliveryConditionHandler\\:\\:buildGroupBy\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ImmediateDeliveryConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ImmediateDeliveryConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ImmediateDeliveryConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ImmediateDeliveryConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ImmediateDeliveryConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ImmediateDeliveryConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ImmediateDeliveryConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\IsAvailableConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/IsAvailableConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\IsAvailableConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/IsAvailableConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\IsNewConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/IsNewConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\IsNewConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/IsNewConditionHandler.php
 
 		-
 			message: "#^Parameter \\#2 \\$timestamp of function date expects int, int\\|false given\\.$#"
@@ -13206,53 +12476,13 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/LastProductIdConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\LastProductIdConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/LastProductIdConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\LastProductIdConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/LastProductIdConditionHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\LengthConditionHandler\\:\\:createQuery\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/LengthConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\LengthConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/LengthConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\LengthConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/LengthConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\MainVariantConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/MainVariantConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\MainVariantConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/MainVariantConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaPartInterface\\:\\:getManufacturerIds\\(\\)\\.$#"
 			count: 2
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ManufacturerConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ManufacturerConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ManufacturerConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ManufacturerConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ManufacturerConditionHandler.php
 
 		-
@@ -13261,37 +12491,7 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/OrdernumberConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\OrdernumberConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/OrdernumberConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\OrdernumberConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/OrdernumberConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\PriceConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/PriceConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\PriceConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/PriceConditionHandler.php
-
-		-
 			message: "#^Cannot call method getElasticSearchType\\(\\) on Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\ConfigurationStruct\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ProductAttributeConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ProductAttributeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ProductAttributeConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ProductAttributeConditionHandler.php
 
@@ -13301,53 +12501,8 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ProductIdConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ProductIdConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ProductIdConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ProductIdConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ProductIdConditionHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaPartInterface\\:\\:getValueIds\\(\\)\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/PropertyConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\PropertyConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/PropertyConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\PropertyConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/PropertyConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ReleaseDateConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ReleaseDateConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ReleaseDateConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ReleaseDateConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaPartInterface\\:\\:getMinSales\\(\\)\\.$#"
 			count: 2
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/SalesConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\SalesConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/SalesConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\SalesConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/SalesConditionHandler.php
 
 		-
@@ -13356,58 +12511,8 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/SearchTermConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\SearchTermConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/SearchTermConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\SearchTermConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/SearchTermConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ShippingFreeConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ShippingFreeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\ShippingFreeConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/ShippingFreeConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\SimilarProductConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/SimilarProductConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\SimilarProductConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/SimilarProductConditionHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaPartInterface\\:\\:getOptionIds\\(\\)\\.$#"
 			count: 2
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/VariantConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\VariantConditionHandler\\:\\:buildGroupBy\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/VariantConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\VariantConditionHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/VariantConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\VariantConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/VariantConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\VariantConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/VariantConditionHandler.php
 
 		-
@@ -13416,42 +12521,12 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/VoteAverageConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\VoteAverageConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/VoteAverageConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\VoteAverageConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/VoteAverageConditionHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\WeightConditionHandler\\:\\:createQuery\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/WeightConditionHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\WeightConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/WeightConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\WeightConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/WeightConditionHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\WidthConditionHandler\\:\\:createQuery\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/WidthConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\WidthConditionHandler\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/WidthConditionHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ConditionHandler\\\\WidthConditionHandler\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/ConditionHandler/WidthConditionHandler.php
 
@@ -13466,24 +12541,9 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/CategoryFacetHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\CategoryFacetHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/CategoryFacetHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\CategoryFacetHandler\\:\\:hydrate\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/CategoryFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\CategoryFacetHandler\\:\\:hydrate\\(\\) has parameter \\$elasticResult with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/CategoryFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\CombinedConditionFacetHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/CombinedConditionFacetHandler.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\CombinedConditionFacetHandler\\:\\:hydrate\\(\\) has no return typehint specified\\.$#"
@@ -13491,22 +12551,7 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/CombinedConditionFacetHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\CombinedConditionFacetHandler\\:\\:hydrate\\(\\) has parameter \\$elasticResult with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/CombinedConditionFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ImmediateDeliveryFacetHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ImmediateDeliveryFacetHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ImmediateDeliveryFacetHandler\\:\\:hydrate\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ImmediateDeliveryFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ImmediateDeliveryFacetHandler\\:\\:hydrate\\(\\) has parameter \\$elasticResult with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ImmediateDeliveryFacetHandler.php
 
@@ -13521,17 +12566,7 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ManufacturerFacetHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ManufacturerFacetHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ManufacturerFacetHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ManufacturerFacetHandler\\:\\:hydrate\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ManufacturerFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ManufacturerFacetHandler\\:\\:hydrate\\(\\) has parameter \\$elasticResult with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ManufacturerFacetHandler.php
 
@@ -13546,47 +12581,12 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/PriceFacetHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\PriceFacetHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/PriceFacetHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\PriceFacetHandler\\:\\:hydrate\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/PriceFacetHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\PriceFacetHandler\\:\\:hydrate\\(\\) has parameter \\$elasticResult with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/PriceFacetHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\:\\:getValue\\(\\)\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaPartInterface\\:\\:getField\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaPartInterface\\:\\:getMode\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
 			message: "#^Cannot call method getElasticSearchType\\(\\) on Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\ConfigurationStruct\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:createBooleanResult\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:createItemListResult\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductAttributeFacetHandler.php
 
@@ -13596,27 +12596,7 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductAttributeFacetHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:formatDates\\(\\) has parameter \\$aggregation with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:formatDates\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:hydrate\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductAttributeFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ProductAttributeFacetHandler\\:\\:hydrate\\(\\) has parameter \\$elasticResult with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductAttributeFacetHandler.php
 
@@ -13646,17 +12626,7 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductDimensionsFacetHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ProductDimensionsFacetHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductDimensionsFacetHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ProductDimensionsFacetHandler\\:\\:hydrate\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductDimensionsFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ProductDimensionsFacetHandler\\:\\:hydrate\\(\\) has parameter \\$elasticResult with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ProductDimensionsFacetHandler.php
 
@@ -13666,32 +12636,12 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/PropertyFacetHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\PropertyFacetHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/PropertyFacetHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\PropertyFacetHandler\\:\\:hydrate\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/PropertyFacetHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\PropertyFacetHandler\\:\\:hydrate\\(\\) has parameter \\$elasticResult with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/PropertyFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ShippingFreeFacetHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ShippingFreeFacetHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ShippingFreeFacetHandler\\:\\:hydrate\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ShippingFreeFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\ShippingFreeFacetHandler\\:\\:hydrate\\(\\) has parameter \\$elasticResult with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/ShippingFreeFacetHandler.php
 
@@ -13701,17 +12651,7 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/VariantFacetHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\VariantFacetHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/VariantFacetHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\VariantFacetHandler\\:\\:hydrate\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/VariantFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\VariantFacetHandler\\:\\:hydrate\\(\\) has parameter \\$elasticResult with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/VariantFacetHandler.php
 
@@ -13741,24 +12681,9 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/VoteAverageFacetHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\VoteAverageFacetHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/VoteAverageFacetHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\VoteAverageFacetHandler\\:\\:hydrate\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/VoteAverageFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\VoteAverageFacetHandler\\:\\:hydrate\\(\\) has parameter \\$elasticResult with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/VoteAverageFacetHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\HandlerInterface\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/HandlerInterface.php
 
 		-
 			message: "#^Cannot call method toArray\\(\\) on Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null\\.$#"
@@ -13774,16 +12699,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\HandlerRegistry\\:\\:getHandler\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/HandlerRegistry.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\PartialConditionHandlerInterface\\:\\:handleFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/PartialConditionHandlerInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\PartialConditionHandlerInterface\\:\\:handlePostFilter\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/PartialConditionHandlerInterface.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\PriceFieldMapper\\:\\:getPriceField\\(\\) has no return typehint specified\\.$#"
@@ -13806,11 +12721,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/ResultHydratorInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\ResultHydratorInterface\\:\\:hydrate\\(\\) has parameter \\$elasticResult with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/ResultHydratorInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\SearchTermQueryBuilder\\:\\:__construct\\(\\) has parameter \\$maxExpansions with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/SearchTermQueryBuilder.php
@@ -13826,37 +12736,12 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/ManualSortingHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\SortingHandler\\\\ManualSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/ManualSortingHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaPartInterface\\:\\:getDirection\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/PopularitySortingHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\SortingHandler\\\\PopularitySortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/PopularitySortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\SortingHandler\\\\PriceSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/PriceSortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\SortingHandler\\\\ProductAttributeSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/ProductAttributeSortingHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaPartInterface\\:\\:getDirection\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/ProductNameSortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\SortingHandler\\\\ProductNameSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/ProductNameSortingHandler.php
 
@@ -13866,24 +12751,9 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/ProductNumberSortingHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\SortingHandler\\\\ProductNumberSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/ProductNumberSortingHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaPartInterface\\:\\:getDirection\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/ProductStockSortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\SortingHandler\\\\ProductStockSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/ProductStockSortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\SortingHandler\\\\RandomSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/RandomSortingHandler.php
 
 		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaPartInterface\\:\\:getDirection\\(\\)\\.$#"
@@ -13891,17 +12761,7 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/ReleaseDateSortingHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\SortingHandler\\\\ReleaseDateSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/ReleaseDateSortingHandler.php
-
-		-
 			message: "#^Call to an undefined method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaPartInterface\\:\\:getDirection\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/SearchRankingSortingHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\SortingHandler\\\\SearchRankingSortingHandler\\:\\:handle\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/SortingHandler/SearchRankingSortingHandler.php
 

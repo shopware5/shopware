@@ -84,7 +84,10 @@ class ImmediateDeliveryFacetTest extends TestCase
             [],
             [new ImmediateDeliveryFacet()]
         );
-        static::assertCount(0, $result->getFacets());
+
+        foreach ($result->getFacets() as $facet) {
+            static::assertNotInstanceOf(ImmediateDeliveryFacet::class, $facet);
+        }
     }
 
     /**

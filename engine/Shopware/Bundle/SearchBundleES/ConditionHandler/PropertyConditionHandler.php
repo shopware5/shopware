@@ -52,6 +52,10 @@ class PropertyConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
+        if (!$criteriaPart instanceof PropertyCondition) {
+            return;
+        }
+
         $search->addQuery(
             new TermsQuery('properties.id', $criteriaPart->getValueIds()),
             BoolQuery::FILTER
@@ -67,6 +71,10 @@ class PropertyConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
+        if (!$criteriaPart instanceof PropertyCondition) {
+            return;
+        }
+
         $search->addPostFilter(
             new TermsQuery('properties.id', $criteriaPart->getValueIds())
         );

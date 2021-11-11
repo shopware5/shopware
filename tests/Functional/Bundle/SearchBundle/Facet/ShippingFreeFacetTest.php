@@ -52,13 +52,12 @@ class ShippingFreeFacetTest extends TestCase
             [$facet]
         );
 
-        static::assertCount(1, $result->getFacets());
+        static::assertCount(2, $result->getFacets());
         static::assertInstanceOf(BooleanFacetResult::class, $result->getFacets()[0]);
     }
 
     public function testShippingFreeWithoutMatch(): void
     {
-        $facet = new ShippingFreeFacet();
         $result = $this->search(
             [
                 'first' => false,
@@ -68,10 +67,12 @@ class ShippingFreeFacetTest extends TestCase
             ['first', 'second', 'third'],
             null,
             [],
-            [$facet]
+            [new ShippingFreeFacet()]
         );
 
-        static::assertCount(0, $result->getFacets());
+        foreach ($result->getFacets() as $facet) {
+            static::assertNotInstanceOf(ShippingFreeFacet::class, $facet);
+        }
     }
 
     /**

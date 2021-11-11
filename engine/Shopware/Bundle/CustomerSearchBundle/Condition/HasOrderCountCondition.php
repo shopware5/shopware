@@ -63,6 +63,9 @@ class HasOrderCountCondition implements ConditionInterface
         return $this->minimumOrderCount;
     }
 
+    /**
+     * @return string
+     */
     public function getOperator()
     {
         return $this->operator;

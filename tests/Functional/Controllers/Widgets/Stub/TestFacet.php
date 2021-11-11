@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,20 +24,33 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CustomerSearchBundleDBAL;
+namespace Shopware\Tests\Functional\Controllers\Widgets\Stub;
 
-use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\FacetResultInterface;
 
-interface SortingHandlerInterface
+class TestFacet implements FacetResultInterface
 {
-    /**
-     * @return bool
-     */
-    public function supports(SortingInterface $sorting);
+    protected string $facetName = 'bla';
 
-    /**
-     * @return void
-     */
-    public function handle(SortingInterface $sorting, QueryBuilder $query);
+    public string $test = '<b>';
+
+    public function getFacetName()
+    {
+        return $this->facetName;
+    }
+
+    public function isActive()
+    {
+        return false;
+    }
+
+    public function getLabel()
+    {
+        return $this->facetName;
+    }
+
+    public function getTemplate()
+    {
+        return null;
+    }
 }

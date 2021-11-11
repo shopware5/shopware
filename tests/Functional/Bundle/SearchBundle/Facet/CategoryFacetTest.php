@@ -64,7 +64,7 @@ class CategoryFacetTest extends TestCase
             [new CategoryFacet()]
         );
 
-        static::assertCount(1, $result->getFacets());
+        static::assertCount(2, $result->getFacets());
 
         $facet = $result->getFacets()[0];
         static::assertInstanceOf(TreeFacetResult::class, $facet);

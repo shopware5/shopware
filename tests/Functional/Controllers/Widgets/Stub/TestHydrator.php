@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,31 +24,54 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleES;
+namespace Shopware\Tests\Functional\Controllers\Widgets\Stub;
 
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
+use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
+use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-interface HandlerInterface
+class TestHydrator implements PartialConditionHandlerInterface, HandlerInterface, ResultHydratorInterface
 {
-    /**
-     * Validates if the criteria part can be handled by this handler
-     *
-     * @return bool
-     */
-    public function supports(CriteriaPartInterface $criteriaPart);
+    public function hydrate(
+        array $elasticResult,
+        ProductNumberSearchResult $result,
+        Criteria $criteria,
+        ShopContextInterface $context
+    ): void {
+        $result->addFacet(new TestFacet());
+    }
 
-    /**
-     * Handles the criteria part and extends the provided search.
-     *
-     * @return void
-     */
+    public function supports(CriteriaPartInterface $criteriaPart): bool
+    {
+        return $criteriaPart instanceof TestFacet;
+    }
+
+    public function handleFilter(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ): void {
+    }
+
+    public function handlePostFilter(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ): void {
+    }
+
     public function handle(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
         ShopContextInterface $context
-    );
+    ): void {
+    }
 }

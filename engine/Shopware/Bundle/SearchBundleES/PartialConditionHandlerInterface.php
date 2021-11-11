@@ -40,6 +40,8 @@ interface PartialConditionHandlerInterface
 
     /**
      * Handles the criteria part and adds the provided condition as post filter.
+     *
+     * @return void
      */
     public function handleFilter(
         CriteriaPartInterface $criteriaPart,
@@ -50,6 +52,8 @@ interface PartialConditionHandlerInterface
 
     /**
      * Handles the criteria part and extends the provided search.
+     *
+     * @return void
      */
     public function handlePostFilter(
         CriteriaPartInterface $criteriaPart,

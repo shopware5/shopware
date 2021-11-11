@@ -95,7 +95,9 @@ class VoteAverageFacetTest extends TestCase
             ['displayOnlySubShopVotes' => true]
         );
 
-        static::assertEmpty($result->getFacets());
+        foreach ($result->getFacets() as $facet) {
+            static::assertNotInstanceOf(VoteAverageFacet::class, $facet);
+        }
     }
 
     public function testVoteFacetWithSubshopVotes(): void
