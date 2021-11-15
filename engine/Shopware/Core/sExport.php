@@ -44,6 +44,9 @@ use Shopware\Models\Shop\Shop;
  */
 class sExport implements Enlight_Hook
 {
+    private const DEFAULT_MAX_EXECUTION_TIME = 30;
+    private const DISABLED_MAX_EXECUTION_TIME = 0;
+
     /**
      * @var int
      */
@@ -2014,10 +2017,10 @@ class sExport implements Enlight_Hook
     private function ensurePHPTimeLimit(): void
     {
         $maxExecutionTime = (int) ini_get('max_execution_time');
-        if ($maxExecutionTime >= 30) {
+        if ($maxExecutionTime <= self::DISABLED_MAX_EXECUTION_TIME || $maxExecutionTime >= self::DEFAULT_MAX_EXECUTION_TIME) {
             return;
         }
 
-        @set_time_limit(30);
+        @set_time_limit(self::DEFAULT_MAX_EXECUTION_TIME);
     }
 }
