@@ -35,6 +35,8 @@ interface ResultHydratorInterface
      * with facets or attributes.
      *
      * @param array<string, array> $elasticResult
+     *
+     * @return void
      */
     public function hydrate(
         array $elasticResult,
