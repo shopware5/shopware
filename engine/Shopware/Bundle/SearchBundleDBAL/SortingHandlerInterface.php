@@ -38,8 +38,10 @@ interface SortingHandlerInterface
 
     /**
      * Handles the passed sorting object.
-     * Extends the passed query builder with the specify sorting.
+     * Extends the passed query builder with the specified sorting.
      * Should use the addOrderBy function, otherwise other sortings would be overwritten.
+     *
+     * @return void
      */
     public function generateSorting(
         SortingInterface $sorting,
