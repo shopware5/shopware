@@ -94,11 +94,15 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($shopId = $input->getOption('shopId')) {
+        if ($input->getOption('shopId')) {
             $shops = [];
 
             foreach ($input->getOption('shopId') as $shopId) {
-                $shops[] = $this->container->get(ShopGatewayInterface::class)->get($shopId);
+                $shop = $this->container->get(ShopGatewayInterface::class)->get($shopId);
+
+                if ($shop instanceof Shop) {
+                    $shops[] = $shop;
+                }
             }
         } else {
             $shops = $this->container->get(IdentifierSelector::class)->getShops();
