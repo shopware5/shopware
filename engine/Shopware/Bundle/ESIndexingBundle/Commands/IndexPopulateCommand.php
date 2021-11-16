@@ -97,7 +97,7 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
         if ($input->getOption('shopId')) {
             $shops = [];
 
-            foreach ($input->getOption('shopId') as $shopId) {                
+            foreach ($input->getOption('shopId') as $shopId) {
                 $shop = $this->container->get(ShopGatewayInterface::class)->get($shopId);
 
                 if ($shop instanceof Shop) {
