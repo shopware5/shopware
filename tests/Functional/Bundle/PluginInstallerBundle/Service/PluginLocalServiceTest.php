@@ -96,7 +96,7 @@ class PluginLocalServiceTest extends TestCase
     public function testGetExistingPlugin(): void
     {
         $pluginLocalService = $this->getContainer()->get(PluginLocalService::class);
-        $context = new PluginsByTechnicalNameRequest(null, null, ['SwagUpdate']);
+        $context = new PluginsByTechnicalNameRequest('', '', ['SwagUpdate']);
 
         $plugin = $pluginLocalService->getPlugin($context);
         static::assertInstanceOf(PluginStruct::class, $plugin);
@@ -105,7 +105,7 @@ class PluginLocalServiceTest extends TestCase
     public function testGetNonExistingPlugin(): void
     {
         $pluginLocalService = $this->getContainer()->get(PluginLocalService::class);
-        $context = new PluginsByTechnicalNameRequest(null, null, ['FooBar']);
+        $context = new PluginsByTechnicalNameRequest('', '', ['FooBar']);
 
         $plugin = $pluginLocalService->getPlugin($context);
         static::assertNull($plugin);

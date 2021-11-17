@@ -28,25 +28,14 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 
 class LicenceRequest extends BaseRequest
 {
-    /**
-     * @var string
-     */
-    private $domain;
+    private string $domain;
 
-    /**
-     * @var AccessTokenStruct
-     */
-    private $token;
+    private AccessTokenStruct $token;
 
-    /**
-     * @param string $locale
-     * @param string $shopwareVersion
-     * @param string $domain
-     */
     public function __construct(
-        $locale,
-        $shopwareVersion,
-        $domain,
+        string $locale,
+        string $shopwareVersion,
+        string $domain,
         AccessTokenStruct $token
     ) {
         $this->domain = $domain;

@@ -26,27 +26,21 @@ namespace Shopware\Bundle\PluginInstallerBundle\Context;
 
 class UpdateListingRequest extends BaseRequest
 {
-    /**
-     * @var string
-     */
-    private $domain;
+    private string $domain;
 
     /**
-     * @var array
+     * @var array<string, string> indexed by technical name, value contains the version
      */
-    private $plugins;
+    private array $plugins;
 
     /**
-     * @param string $domain
-     * @param string $locale
-     * @param array  $plugins
-     * @param string $shopwareVersion
+     * @param array<string, string> $plugins indexed by technical name, value contains the version
      */
     public function __construct(
-        $locale,
-        $shopwareVersion,
-        $domain,
-        $plugins
+        string $locale,
+        string $shopwareVersion,
+        string $domain,
+        array $plugins
     ) {
         $this->domain = $domain;
         $this->plugins = $plugins;
@@ -63,7 +57,7 @@ class UpdateListingRequest extends BaseRequest
     }
 
     /**
-     * @return array
+     * @return array<string, string> indexed by technical name, value contains the version
      */
     public function getPlugins()
     {

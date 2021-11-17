@@ -225,11 +225,7 @@ class PluginViewService
      */
     private function getAdditionallyLocalData($plugins)
     {
-        $context = new PluginsByTechnicalNameRequest(
-            null,
-            null,
-            array_keys($plugins)
-        );
+        $context = new PluginsByTechnicalNameRequest('', '', array_keys($plugins));
 
         $local = $this->localPluginService->getPlugins($context);
 
