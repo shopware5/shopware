@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,23 +24,26 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Gateway;
+namespace Shopware\Bundle\StoreFrontBundle\Exception;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use RuntimeException;
+use Shopware\Bundle\StoreFrontBundle\Struct\Struct;
+use Throwable;
 
-interface ShopGatewayInterface
+class StructNotFoundException extends RuntimeException
 {
     /**
-     * @param int[] $ids
-     *
-     * @return Shop[] indexed by id
+     * @param class-string<Struct> $structClass
+     * @param int|string           $identifierValue
      */
-    public function getList($ids);
-
-    /**
-     * @param int $id
-     *
-     * @return Shop|null
-     */
-    public function get($id);
+    public function __construct(
+        string $structClass,
+        $identifierValue,
+        string $identifier = 'id',
+        int $code = 0,
+        ?Throwable $previous = null
+    ) {
+        $message = sprintf('Struct of "%s" for %s "%s" not found', $structClass, $identifier, (string) $identifierValue);
+        parent::__construct($message, $code, $previous);
+    }
 }

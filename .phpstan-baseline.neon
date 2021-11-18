@@ -13941,11 +13941,6 @@ parameters:
 			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/RelatedProductsGateway.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\ShopGateway\\:\\:get\\(\\) should return Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Shop but returns Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Shop\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/ShopGateway.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\SimilarProductsGateway\\:\\:get\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/SimilarProductsGateway.php

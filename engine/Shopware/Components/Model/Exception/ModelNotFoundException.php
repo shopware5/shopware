@@ -27,12 +27,14 @@ declare(strict_types=1);
 namespace Shopware\Components\Model\Exception;
 
 use RuntimeException;
+use Shopware\Components\Model\ModelEntity;
 use Throwable;
 
 class ModelNotFoundException extends RuntimeException
 {
     /**
-     * @param int|string $identifierValue
+     * @param class-string<ModelEntity> $modelClass
+     * @param int|string                $identifierValue
      */
     public function __construct(
         string $modelClass,

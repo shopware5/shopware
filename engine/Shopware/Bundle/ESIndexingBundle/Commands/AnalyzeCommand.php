@@ -28,10 +28,12 @@ use Elasticsearch\Client;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
 use Shopware\Bundle\ESIndexingBundle\IndexFactory;
+use Shopware\Bundle\StoreFrontBundle\Exception\StructNotFoundException;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop as ShopStruct;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Shop\Shop;
+use Shopware\Models\Shop\Shop as ShopModel;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Helper\Table;
@@ -100,7 +102,7 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
         if ($argumentName === 'shopId') {
-            $shopRepository = $this->getContainer()->get(ModelManager::class)->getRepository(Shop::class);
+            $shopRepository = $this->getContainer()->get(ModelManager::class)->getRepository(ShopModel::class);
             $queryBuilder = $shopRepository->createQueryBuilder('shop');
 
             if (is_numeric($context->getCurrentWord())) {
@@ -117,7 +119,6 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
         }
 
         if ($argumentName === 'analyzer') {
-            /** @var Client $client */
             $client = $this->container->get(Client::class);
 
             $recursive = new RecursiveIteratorIterator(
@@ -158,12 +159,15 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $shopId = $input->getArgument('shopId');
+        $shopId = (int) $input->getArgument('shopId');
         $type = $input->getArgument('type');
         $query = $input->getArgument('query');
         $analyzer = $input->getArgument('analyzer');
 
         $shop = $this->container->get(ShopGatewayInterface::class)->get($shopId);
+        if (!$shop instanceof ShopStruct) {
+            throw new StructNotFoundException(ShopStruct::class, $shopId);
+        }
         $client = $this->container->get(Client::class);
         $index = $this->container->get(IndexFactory::class)->createShopIndex($shop, $type);
 

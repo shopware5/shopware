@@ -24,12 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
+use Shopware\Bundle\StoreFrontBundle\Exception\StructNotFoundException;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CurrencyGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -97,9 +99,12 @@ class ShopContextFactory implements ShopContextFactoryInterface
         array $streamIds = []
     ): ShopContextInterface {
         $shop = $this->shopGateway->get($shopId);
+        if (!$shop instanceof Shop) {
+            throw new StructNotFoundException(Shop::class, $shopId);
+        }
         $fallbackCustomerGroupKey = self::FALLBACK_CUSTOMER_GROUP;
 
-        if ($currentCustomerGroupKey == null) {
+        if ($currentCustomerGroupKey === null) {
             $currentCustomerGroupKey = $fallbackCustomerGroupKey;
         }
 
@@ -109,7 +114,7 @@ class ShopContextFactory implements ShopContextFactoryInterface
         $fallbackCustomerGroup = $groups[$fallbackCustomerGroupKey];
 
         $currency = null;
-        if ($currencyId != null) {
+        if ($currencyId !== null) {
             $currency = $this->currencyGateway->getList([$currencyId]);
             $currency = array_shift($currency);
         }
