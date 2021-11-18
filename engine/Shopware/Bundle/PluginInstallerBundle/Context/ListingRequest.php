@@ -26,41 +26,31 @@ namespace Shopware\Bundle\PluginInstallerBundle\Context;
 
 class ListingRequest extends BaseRequest
 {
-    /**
-     * @var int
-     */
-    private $offset;
+    private int $offset;
 
-    /**
-     * @var int
-     */
-    private $limit;
+    private int $limit;
 
     /**
      * @var array[]
      */
-    private $sortings;
+    private array $sortings;
 
     /**
      * @var array[]
      */
-    private $conditions;
+    private array $conditions;
 
     /**
-     * @param string  $locale
-     * @param string  $shopwareVersion
-     * @param int     $offset
-     * @param int     $limit
      * @param array[] $conditions
      * @param array[] $sortings
      */
     public function __construct(
-        $locale,
-        $shopwareVersion,
-        $offset,
-        $limit,
-        $conditions,
-        $sortings
+        string $locale,
+        string $shopwareVersion,
+        int $offset,
+        int $limit,
+        array $conditions,
+        array $sortings
     ) {
         $this->limit = $limit;
         $this->offset = $offset;

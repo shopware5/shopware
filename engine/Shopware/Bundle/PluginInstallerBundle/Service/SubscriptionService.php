@@ -40,47 +40,39 @@ use Symfony\Component\HttpFoundation\Cookie;
 
 class SubscriptionService
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
+
+    private StoreClient $storeClient;
+
+    private ModelManager $modelManager;
+
+    private PluginLicenceService $pluginLicenceService;
+
+    private ShopwareReleaseStruct $release;
 
     /**
-     * @var StoreClient
-     */
-    private $storeClient;
-
-    /**
-     * @var ModelManager
-     */
-    private $models;
-
-    /**
-     * @var PluginLicenceService
-     */
-    private $pluginLicenceService;
-
-    /**
-     * @var ShopwareReleaseStruct
-     */
-    private $release;
-
-    /**
-     * @var Exception
+     * @var Exception|null
      */
     private $exception;
 
-    public function __construct(Connection $connection, StoreClient $storeClient, ModelManager $models, PluginLicenceService $pluginLicenceService, ShopwareReleaseStruct $release)
-    {
+    public function __construct(
+        Connection $connection,
+        StoreClient $storeClient,
+        ModelManager $modelManager,
+        PluginLicenceService $pluginLicenceService,
+        ShopwareReleaseStruct $release
+    ) {
         $this->connection = $connection;
         $this->storeClient = $storeClient;
-        $this->models = $models;
+        $this->modelManager = $modelManager;
         $this->pluginLicenceService = $pluginLicenceService;
         $this->release = $release;
     }
 
     /**
      * Reset the Secret in the database
+     *
+     * @return void
      */
     public function resetShopSecret()
     {
@@ -107,13 +99,13 @@ class SubscriptionService
 
         $statement = $queryBuilder->execute();
 
-        $secret = unserialize($statement->fetchColumn(), ['allowed_classes' => false]);
-
-        return $secret;
+        return unserialize($statement->fetchColumn(), ['allowed_classes' => false]);
     }
 
     /**
      * Set new secret to the database
+     *
+     * @return void
      */
     public function setShopSecret()
     {
@@ -129,7 +121,7 @@ class SubscriptionService
     /**
      * Returns information about shop upgrade state and installed plugins.
      *
-     * @return PluginInformationResultStruct|bool
+     * @return PluginInformationResultStruct|false
      */
     public function getPluginInformation(Response $response, Request $request)
     {
@@ -157,7 +149,7 @@ class SubscriptionService
     /**
      * Requests the plugin information from the store API and returns the parsed result.
      *
-     * @return PluginInformationResultStruct|false
+     * @return PluginInformationResultStruct
      */
     public function getPluginInformationFromApi()
     {
@@ -208,7 +200,7 @@ class SubscriptionService
     }
 
     /**
-     * @return Exception
+     * @return Exception|null
      */
     public function getException()
     {
@@ -217,10 +209,8 @@ class SubscriptionService
 
     /**
      * Generate new secret by API call
-     *
-     * @return string
      */
-    private function generateApiShopSecret()
+    private function generateApiShopSecret(): string
     {
         $allowedClassList = [
             AccessTokenStruct::class,
@@ -247,24 +237,18 @@ class SubscriptionService
 
     /**
      * Returns the domain of the shop
-     *
-     * @return string
      */
-    private function getDomain()
+    private function getDomain(): string
     {
-        $repo = $this->models->getRepository(Shop::class);
-
-        $default = $repo->getActiveDefault();
+        $default = $this->modelManager->getRepository(Shop::class)->getActiveDefault();
 
         return (string) $default->getHost();
     }
 
     /**
      * Check the date of the last subscription-check var
-     *
-     * @return bool
      */
-    private function isPluginsSubscriptionCookieValid(Request $request)
+    private function isPluginsSubscriptionCookieValid(Request $request): bool
     {
         if ($request->getParam('force')) {
             return true;
@@ -278,17 +262,14 @@ class SubscriptionService
     /**
      * Get all plugins with name and version
      *
-     * @return array
+     * @return array<array<string, string>>
      */
-    private function getPluginsNameAndVersion()
+    private function getPluginsNameAndVersion(): array
     {
-        $queryBuilder = $this->connection->createQueryBuilder();
-
-        $queryBuilder->select(['plugin.name', 'plugin.version'])
-            ->from('s_core_plugins', 'plugin');
-
-        $builderExecute = $queryBuilder->execute();
-
-        return $builderExecute->fetchAll();
+        return $this->connection->createQueryBuilder()
+            ->select(['plugin.name', 'plugin.version', 'plugin.active'])
+            ->from('s_core_plugins', 'plugin')
+            ->execute()
+            ->fetchAllAssociative();
     }
 }

@@ -26,21 +26,11 @@ namespace Shopware\Bundle\PluginInstallerBundle\Context;
 
 class BaseRequest
 {
-    /**
-     * @var string
-     */
-    private $locale;
+    private string $locale;
 
-    /**
-     * @var string
-     */
-    private $shopwareVersion;
+    private string $shopwareVersion;
 
-    /**
-     * @param string $locale
-     * @param string $shopwareVersion
-     */
-    public function __construct($locale, $shopwareVersion)
+    public function __construct(string $locale, string $shopwareVersion)
     {
         $this->locale = $locale;
         $this->shopwareVersion = $shopwareVersion;

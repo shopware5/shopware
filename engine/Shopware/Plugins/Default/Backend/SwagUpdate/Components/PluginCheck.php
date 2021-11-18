@@ -27,15 +27,14 @@ namespace ShopwarePlugins\SwagUpdate\Components;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Snippet_Namespace;
 use Exception;
-use PDO;
-use PDOStatement;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
+use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService;
 use Shopware\Components\DependencyInjection\Container;
 
 class PluginCheck
 {
     /**
-     * @var \Shopware\Components\DependencyInjection\Container
+     * @var Container
      */
     private $container;
 
@@ -49,16 +48,15 @@ class PluginCheck
      *
      * @param string $version
      *
-     * @return array
+     * @return array<array<string, bool|int|string>>
      */
     public function checkInstalledPluginsAvailableForNewVersion($version)
     {
-        $service = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::class);
+        $service = $this->container->get(PluginStoreService::class);
         $installedPlugins = $this->getUserInstalledPlugins();
         $technicalNames = array_column($installedPlugins, 'name');
         $locale = $this->getLocale();
 
-        /** @var string $shopwareVersion */
         $shopwareVersion = $this->container->getParameter('shopware.release.version');
 
         $request = new PluginsByTechnicalNameRequest($locale, $shopwareVersion, $technicalNames);
@@ -102,11 +100,13 @@ class PluginCheck
         usort($results, function ($a, $b) {
             if ($a['inStore'] < $b['inStore']) {
                 return -1;
-            } elseif ($a['inStore'] > $b['inStore']) {
+            }
+
+            if ($a['inStore'] > $b['inStore']) {
                 return 1;
             }
 
-            return $a['success'] > $b['success'];
+            return $a['success'] <=> $b['success'];
         });
 
         return $results;
@@ -122,26 +122,23 @@ class PluginCheck
         return $this->container->get('snippets')->getNamespace('backend/swag_update/main');
     }
 
-    /**
-     * @return string|null
-     */
-    private function getLocale()
+    private function getLocale(): string
     {
         try {
             return $this->container->get('auth')->getIdentity()->locale->getLocale();
         } catch (Exception $e) {
-            return null;
+            return '';
         }
     }
 
     /**
      * Returns a list of all plugins installed by the user
      *
-     * @return array
+     * @return array<array<string, string>>
      */
-    private function getUserInstalledPlugins()
+    private function getUserInstalledPlugins(): array
     {
-        $query = $this->container->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        $query = $this->container->get(Connection::class)->createQueryBuilder();
         $query->select(['plugin.name', 'plugin.label', 'plugin.version'])
             ->from('s_core_plugins', 'plugin')
             ->where('plugin.name NOT IN (:names)')
@@ -149,19 +146,10 @@ class PluginCheck
             ->setParameter(':source', 'Default')
             ->setParameter(':names', ['PluginManager', 'StoreApi'], Connection::PARAM_STR_ARRAY);
 
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAllAssociative();
     }
 
-    /**
-     * @param bool $inStore
-     * @param bool $available
-     *
-     * @return string
-     */
-    private function getPluginStateDescription($inStore, $available)
+    private function getPluginStateDescription(bool $inStore, bool $available): string
     {
         switch (true) {
             case $inStore && $available:
