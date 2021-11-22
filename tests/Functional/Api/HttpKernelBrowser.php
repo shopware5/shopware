@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,26 +28,26 @@ namespace Shopware\Tests\Functional\Api;
 
 use Enlight_Controller_Front;
 use Enlight_Controller_Response_ResponseTestCase;
+use PHPUnit\Framework\TestCase;
+use Shopware\Components\DependencyInjection\Container;
 use Shopware\Kernel;
 use Shopware\Tests\Functional\Helper\Utils;
 use Shopware_Components_Auth;
+use Shopware_Components_Plugin_Namespace;
 use Symfony\Component\BrowserKit\CookieJar;
 use Symfony\Component\BrowserKit\History;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Client;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpKernel\HttpKernelBrowser as SymfonyHttpKernelBrowser;
 
-class HttpKernelBrowser extends Client
+class HttpKernelBrowser extends SymfonyHttpKernelBrowser
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    protected Container $container;
+
+    protected Enlight_Controller_Front $front;
 
     /**
-     * @var Enlight_Controller_Front
+     * @param array<string, mixed> $server
      */
-    protected $front;
-
     public function __construct(Kernel $kernel, array $server = [], History $history = null, CookieJar $cookieJar = null)
     {
         $this->container = $kernel->getContainer();
@@ -53,11 +55,25 @@ class HttpKernelBrowser extends Client
         parent::__construct($kernel, $server, $history, $cookieJar);
     }
 
-    public function request($method, $uri, array $parameters = [], array $files = [], array $server = [], $content = null, $changeHistory = true)
-    {
+    /**
+     * @param array<string, mixed> $parameters
+     * @param array<string, mixed> $files
+     * @param array<string, mixed> $server
+     */
+    public function request(
+        string $method,
+        string $uri,
+        array $parameters = [],
+        array $files = [],
+        array $server = [],
+        ?string $content = null,
+        bool $changeHistory = true
+    ): Crawler {
         $this->front->throwExceptions(false);
         Utils::hijackProperty($this->front, 'request', null);
-        Utils::hijackProperty($this->container->get('plugins')->get('Core')->get('RestApi'), 'isApiCall', false);
+        $corePluginNamespace = $this->container->get('plugins')->get('Core');
+        TestCase::assertInstanceOf(Shopware_Components_Plugin_Namespace::class, $corePluginNamespace);
+        Utils::hijackProperty($corePluginNamespace->RestApi(), 'isApiCall', false);
         Utils::hijackProperty($this->container->get('errorsubscriber'), 'isInsideErrorHandlerLoop', false);
         $this->front->setResponse(new Enlight_Controller_Response_ResponseTestCase());
         $shop = $this->container->get('shop');
@@ -67,7 +83,7 @@ class HttpKernelBrowser extends Client
 
         $response = parent::request($method, $uri, $parameters, $files, $server, $content, $changeHistory);
         $this->container->set('shop', $shop);
-        Utils::hijackProperty($this->container->get('plugins')->get('Core')->get('RestApi'), 'isApiCall', false);
+        Utils::hijackProperty($corePluginNamespace->RestApi(), 'isApiCall', false);
         Shopware_Components_Auth::resetInstance();
         $this->container->reset('auth');
         $this->container->reset('session');

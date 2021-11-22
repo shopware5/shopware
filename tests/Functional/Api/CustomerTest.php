@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,6 +27,8 @@
 namespace Shopware\Tests\Functional\Api;
 
 use DateTime;
+use DateTimeInterface;
+use Enlight_Controller_Response_ResponseTestCase;
 use Exception;
 use Shopware\Models\Customer\Customer;
 
@@ -42,7 +46,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertEquals(401, $response->getStatusCode());
 
         $result = $response->getContent();
-
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -62,7 +66,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertEquals(404, $response->getStatusCode());
 
         $result = $response->getContent();
-
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -71,7 +75,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testPostCustomersShouldBeSuccessful(): string
+    public function testPostCustomersShouldBeSuccessful(): int
     {
         $date = new DateTime();
         $date->modify('-10 days');
@@ -80,7 +84,9 @@ class CustomerTest extends AbstractApiTestCase
         $date->modify('+2 day');
         $lastlogin = $date->format(DateTime::ATOM);
 
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ATOM);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20');
+        static::assertInstanceOf(DateTimeInterface::class, $birthday);
+        $birthday = $birthday->format(DateTime::ATOM);
 
         $requestData = [
             'password' => 'fooobar',
@@ -133,13 +139,16 @@ class CustomerTest extends AbstractApiTestCase
         static::assertArrayHasKey('location', $response->headers->all());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
 
         $location = $response->headers->get('location');
-        $identifier = (int) array_pop(explode('/', $location));
+        static::assertIsString($location);
+        $locationPars = explode('/', $location);
+        $identifier = (int) array_pop($locationPars);
 
         static::assertGreaterThan(0, $identifier);
 
@@ -149,7 +158,7 @@ class CustomerTest extends AbstractApiTestCase
     /**
      * @throws Exception
      */
-    public function testPostCustomersWithDebitShouldCreatePaymentData()
+    public function testPostCustomersWithDebitShouldCreatePaymentData(): void
     {
         $date = new DateTime();
         $date->modify('-10 days');
@@ -158,7 +167,9 @@ class CustomerTest extends AbstractApiTestCase
         $date->modify('+2 day');
         $lastLogin = $date->format(DateTime::ATOM);
 
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ATOM);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20');
+        static::assertInstanceOf(DateTimeInterface::class, $birthday);
+        $birthday = $birthday->format(DateTime::ATOM);
 
         $requestData = [
             'password' => 'fooobar',
@@ -210,18 +221,23 @@ class CustomerTest extends AbstractApiTestCase
         static::assertArrayHasKey('location', $response->headers->all());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
 
         $location = $response->headers->get('location');
-        $identifier = (int) array_pop(explode('/', $location));
+        static::assertIsString($location);
+        $locationPars = explode('/', $location);
+        $identifier = (int) array_pop($locationPars);
 
         static::assertGreaterThan(0, $identifier);
 
         $customer = Shopware()->Models()->getRepository(Customer::class)->find($identifier);
-        $paymentData = array_shift($customer->getPaymentData()->toArray());
+        static::assertInstanceOf(Customer::class, $customer);
+        $payments = $customer->getPaymentData()->toArray();
+        $paymentData = array_shift($payments);
 
         static::assertNotNull($paymentData);
         static::assertEquals('Max Mustermann', $paymentData->getAccountHolder());
@@ -233,7 +249,7 @@ class CustomerTest extends AbstractApiTestCase
     /**
      * @throws Exception
      */
-    public function testPostCustomersWithDebitPaymentDataShouldCreateDebitData()
+    public function testPostCustomersWithDebitPaymentDataShouldCreateDebitData(): void
     {
         $date = new DateTime();
         $date->modify('-10 days');
@@ -242,7 +258,9 @@ class CustomerTest extends AbstractApiTestCase
         $date->modify('+2 day');
         $lastlogin = $date->format(DateTime::ATOM);
 
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ATOM);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20');
+        static::assertInstanceOf(DateTimeInterface::class, $birthday);
+        $birthday = $birthday->format(DateTime::ATOM);
 
         $requestData = [
             'password' => 'fooobar',
@@ -297,18 +315,23 @@ class CustomerTest extends AbstractApiTestCase
         static::assertArrayHasKey('location', $response->headers->all());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
 
         $location = $response->headers->get('Location');
-        $identifier = (int) array_pop(explode('/', $location));
+        static::assertIsString($location);
+        $locationPars = explode('/', $location);
+        $identifier = (int) array_pop($locationPars);
 
         static::assertGreaterThan(0, $identifier);
 
         $customer = Shopware()->Models()->getRepository(Customer::class)->find($identifier);
-        $paymentData = array_shift($customer->getPaymentData()->toArray());
+        static::assertInstanceOf(Customer::class, $customer);
+        $payments = $customer->getPaymentData()->toArray();
+        $paymentData = array_shift($payments);
 
         static::assertNotNull($paymentData);
         static::assertEquals('Max Mustermann', $paymentData->getAccountHolder());
@@ -317,7 +340,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertEquals('55555555', $paymentData->getBankCode());
     }
 
-    public function testPostCustomersWithInvalidDataShouldReturnError()
+    public function testPostCustomersWithInvalidDataShouldReturnError(): void
     {
         $requestData = [
             'active' => true,
@@ -335,6 +358,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertEquals(400, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -345,15 +369,16 @@ class CustomerTest extends AbstractApiTestCase
     /**
      * @depends testPostCustomersShouldBeSuccessful
      */
-    public function testGetCustomersWithIdShouldBeSuccessful($id)
+    public function testGetCustomersWithIdShouldBeSuccessful(int $id): void
     {
-        $this->authenticatedApiRequest('GET', '/api/customers/' . $id, []);
+        $this->authenticatedApiRequest('GET', '/api/customers/' . $id);
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
         static::assertEquals(200, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -377,7 +402,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertEquals('Fake Account', $paymentInfo['accountNumber']);
     }
 
-    public function testPutBatchCustomersShouldFail()
+    public function testPutBatchCustomersShouldFail(): void
     {
         $requestData = [
             'active' => true,
@@ -391,6 +416,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertEquals(405, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -401,7 +427,7 @@ class CustomerTest extends AbstractApiTestCase
     /**
      * @depends testPostCustomersShouldBeSuccessful
      */
-    public function testPutCustomersWithInvalidDataShouldReturnError($id): void
+    public function testPutCustomersWithInvalidDataShouldReturnError(int $id): void
     {
         $requestData = [
             'active' => true,
@@ -415,6 +441,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertEquals(400, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -426,9 +453,10 @@ class CustomerTest extends AbstractApiTestCase
     /**
      * @depends testPostCustomersShouldBeSuccessful
      */
-    public function testPutCustomersShouldBeSuccessful($id)
+    public function testPutCustomersShouldBeSuccessful(int $id): int
     {
         $customer = Shopware()->Models()->getRepository(Customer::class)->find($id);
+        static::assertInstanceOf(Customer::class, $customer);
 
         $requestData = [
             'active' => true,
@@ -446,6 +474,7 @@ class CustomerTest extends AbstractApiTestCase
         );
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -457,7 +486,7 @@ class CustomerTest extends AbstractApiTestCase
     /**
      * @depends testPostCustomersShouldBeSuccessful
      */
-    public function testDeleteCustomersShouldBeSuccessful($id)
+    public function testDeleteCustomersShouldBeSuccessful(int $id): int
     {
         $this->authenticatedApiRequest('DELETE', '/api/customers/' . $id);
         $response = $this->client->getResponse();
@@ -466,6 +495,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertEquals(200, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -474,7 +504,7 @@ class CustomerTest extends AbstractApiTestCase
         return $id;
     }
 
-    public function testDeleteCustomersWithInvalidIdShouldReturnMessage()
+    public function testDeleteCustomersWithInvalidIdShouldReturnMessage(): void
     {
         $id = 99999999;
 
@@ -485,6 +515,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertEquals(404, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -493,7 +524,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testPutCustomersWithInvalidIdShouldReturnMessage()
+    public function testPutCustomersWithInvalidIdShouldReturnMessage(): void
     {
         $id = 99999999;
 
@@ -504,6 +535,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertEquals(404, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -516,11 +548,13 @@ class CustomerTest extends AbstractApiTestCase
     {
         $this->authenticatedApiRequest('GET', '/api/customers/');
         $response = $this->client->getResponse();
+        static::assertInstanceOf(Enlight_Controller_Response_ResponseTestCase::class, $response);
 
         static::assertEquals('application/json', $response->getHeader('Content-Type'));
         static::assertEquals(200, $response->getStatusCode());
 
-        $response = $response->getBody();
+        $response = $response->getContent();
+        static::assertIsString($response);
         $response = json_decode($response, true);
 
         static::assertArrayHasKey('success', $response);

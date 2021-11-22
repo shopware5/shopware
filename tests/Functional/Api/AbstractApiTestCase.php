@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,16 +29,15 @@ namespace Shopware\Tests\Functional\Api;
 use PHPUnit\Framework\TestCase;
 use Shopware\Kernel;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpKernel\Client;
 
 abstract class AbstractApiTestCase extends TestCase
 {
     /**
-     * @var Client
+     * @var HttpKernelBrowser
      */
     protected $client;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         /** @var Kernel $kernel */
         $kernel = Shopware()->Container()->get('kernel');
@@ -46,6 +47,11 @@ abstract class AbstractApiTestCase extends TestCase
         Shopware()->Models()->clear();
     }
 
+    /**
+     * @param array<string, mixed>                   $parameters
+     * @param array<array<string, mixed>|mixed>|null $content
+     * @param array<string, mixed>                   $files
+     */
     public function authenticatedApiRequest(
         string $method,
         string $url,
@@ -59,6 +65,6 @@ abstract class AbstractApiTestCase extends TestCase
             'Content-Type' => 'application/json',
         ];
 
-        return $this->client->request($method, $url, $parameters, $files, $headers, $content ? json_encode($content) : null);
+        return $this->client->request($method, $url, $parameters, $files, $headers, $content ? json_encode($content, JSON_THROW_ON_ERROR) : null);
     }
 }
