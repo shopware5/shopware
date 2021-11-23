@@ -10,19 +10,35 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Deprecations
 
-* Deprecated `\Shopware_Controllers_Frontend_Checkout::getTaxRates`, it will be removed in the next minor version v5.8. Use `TaxAggregator::taxSum` instead.
+* Deprecated `\Shopware_Controllers_Frontend_Checkout::getTaxRates`, it will be removed in the next minor version v5.8.
+Use `TaxAggregator::taxSum` instead.
 
 ### Additions
 
 * Added `\Shopware\Components\Cart\TaxAggregatorInterface`
 * Added `\Shopware\Components\Cart\TaxAggregator` as a default implementation, extracting the tax aggregation logic from the checkout controller
 * Added a new component to the update process. The `.htaccess`-file now contains a section dedicated to the Shopware core.
+* Added new polyfill dependencies which were indirect dependencies before
+  * `symfony/polyfill-php80` version 1.23.1
+  * `symfony/polyfill-php81` version 1.23.0
 
 ### Changes
 
 * Changed `\Shopware_Controllers_Frontend_Checkout::getTaxRates`, this method uses the `TaxAggregator::taxSum` now
 * Changed `\Shopware_Models_Document_Order::processOrder`, this method uses the `TaxAggregator::shippingCostsTaxSum` method now
 * Changed `\Shopware_Models_Document_Order::processPositions`, this method uses the `TaxAggregator::positionsTaxSum` method now
+* Updated `league/flysystem` to version 1.1.6
+* Updated `symfony/config` to version 4.4.34
+* Updated `symfony/console` to version 4.4.34
+* Updated `symfony/dependency-injection` to version 4.4.34
+* Updated `symfony/expression-language` to version 4.4.34
+* Updated `symfony/form` to version 4.4.34
+* Updated `symfony/http-foundation` to version 4.4.34
+* Updated `symfony/http-kernel` to version 4.4.34
+* Updated `symfony/process` to version 4.4.34
+* Updated `symfony/serializer` to version 5.3.12
+* Updated `symfony/validator` to version 4.4.34
+* Updated several indirect dependencies
 
 ### Removals
 
@@ -54,7 +70,8 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Breaks
 
-* In case you have extended the `frontend_listing_actions_filter` block to override the include of the button template, please extend the `frontend_listing_actions_filter_include` block from now on instead
+* In case you have extended the `frontend_listing_actions_filter` block to override the "include" of the button template,
+please extend the `frontend_listing_actions_filter_include` block from now on instead.
 
 ### Changes
 
@@ -169,9 +186,12 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Added Symfony session to `Request` object
 * Added new user interface for the sitemap configuration. It's available in the backend performance module
 * Added `Shopware\Bundle\SitemapBundle\ConfigHandler\Database` to save and read the sitemap configuration from the database
-* Added new doctrine model `Shopware\Models\Emotion\LandingPage`, which extends from `Shopware\Models\Emotion\Emotion`. It's needed to search for landing pages only using the backend store `Shopware.store.Search`
+* Added new doctrine model `Shopware\Models\Emotion\LandingPage`, which extends from `Shopware\Models\Emotion\Emotion`.
+It's needed to search for landing pages only using the backend store `Shopware.store.Search`
 * Added new doctrine models `Shopware\Models\Sitemap\CustomUrl` and `Shopware\Models\Sitemap\ExcludeUrl`
-* Added new ExtJS component `Shopware.grid.Searchable`. Using it you can search for different entities in a single grid, such as products, categories, blogs, etc. Have a look at the new sitemap UI to see what it looks like
+* Added new ExtJS component `Shopware.grid.Searchable`.
+Using it you can search for different entities in a single grid, such as products, categories, blogs, etc.
+Have a look at the new sitemap UI to see what it looks like
 * Added `Shopware-Listing-Total` header to ajax listing loading
 * Added database transaction around plugin uninstall, activate and deactivate
 * Added support for MySQL 8 `sql_require_primary_key`
@@ -316,7 +336,10 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Deprecations
 
-* Deprecated the class `Shopware\Bundle\SitemapBundle\ConfigHandler\File`. It will be removed in Shopware 5.8. Use `Shopware\Bundle\SitemapBundle\ConfigHandler\Database` instead.
+* Deprecated the class `Shopware\Bundle\SitemapBundle\ConfigHandler\File`.
+It will be removed in Shopware 5.8. Use `Shopware\Bundle\SitemapBundle\ConfigHandler\Database` instead.
 * Deprecated getting plugin config from `Shopware_Components_Config` without plugin namespace, use `SwagTestPlugin:MyConfigName` instead
-* Deprecated the class `\Shopware\Components\Plugin\DBALConfigReader`. It will be removed in Shopware 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
-* Deprecated the class `\Shopware\Components\Plugin\CachedConfigReader`. It will be removed in Shopware 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
+* Deprecated the class `\Shopware\Components\Plugin\DBALConfigReader`.
+It will be removed in Shopware 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
+* Deprecated the class `\Shopware\Components\Plugin\CachedConfigReader`.
+It will be removed in Shopware 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
