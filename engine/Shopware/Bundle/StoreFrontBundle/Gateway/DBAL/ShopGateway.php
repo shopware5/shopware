@@ -28,24 +28,14 @@ use Doctrine\DBAL\Connection;
 use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ShopHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class ShopGateway implements ShopGatewayInterface
 {
-    /**
-     * @var FieldHelper
-     */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var ShopHydrator
-     */
-    private $hydrator;
+    private ShopHydrator $hydrator;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         ShopHydrator $hydrator,
@@ -57,11 +47,6 @@ class ShopGateway implements ShopGatewayInterface
         $this->connection = $connection;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Shop
-     */
     public function get($id)
     {
         $shops = $this->getList([$id]);
@@ -69,11 +54,6 @@ class ShopGateway implements ShopGatewayInterface
         return array_shift($shops);
     }
 
-    /**
-     * @param int[] $ids
-     *
-     * @return Shop[] indexed by id
-     */
     public function getList($ids)
     {
         $shops = $this->getShops($ids);
@@ -109,9 +89,9 @@ class ShopGateway implements ShopGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return array[]
+     * @return array<array<string, mixed>>
      */
-    private function getShops($ids)
+    private function getShops(array $ids): array
     {
         $query = $this->connection->createQueryBuilder();
         $query

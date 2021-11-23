@@ -212,6 +212,11 @@
 
         <service class="Shopware\Bundle\ESIndexingBundle\Commands\IndexPopulateCommand"
                  id="shopware_elastic_search.commands.index_populate_command">
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_elastic_search.shop_indexer"/>
+            <argument type="service" id="shopware_elastic_search.console.console_evaluation_helper"/>
+            <argument type="service" id="shopware_elastic_search.identifier_selector"/>
+            <argument type="service" id="shopware_storefront.shop_gateway_dbal"/>
             <tag name="console.command" command="sw:es:index:populate"/>
         </service>
 
