@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,11 +26,18 @@
 
 namespace Shopware\Tests\Functional\Api;
 
+use Enlight_Controller_Response_ResponseTestCase;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Property\Option;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+
 /**
  * @covers \Shopware_Controllers_Api_Articles
  */
 class ArticleTest extends AbstractApiTestCase
 {
+    use ContainerTrait;
+
     public function testRequestWithoutAuthenticationShouldReturnError(): void
     {
         $this->client->request('GET', '/api/articles/');
@@ -39,7 +48,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals(401, $response->getStatusCode());
 
         $result = $response->getContent();
-
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -60,7 +69,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals(404, $response->getStatusCode());
 
         $result = $response->getContent();
-
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -69,7 +78,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testPostArticlesShouldBeSuccessful(): string
+    public function testPostArticlesShouldBeSuccessful(): int
     {
         $requestData = [
             'name' => 'Testartikel',
@@ -78,7 +87,7 @@ class ArticleTest extends AbstractApiTestCase
             'active' => true,
             'pseudoSales' => 999,
             'highlight' => true,
-            'keywords' => 'test, testarticle',
+            'keywords' => 'test, testproduct',
 
             'filterGroupId' => 1,
 
@@ -127,7 +136,7 @@ class ArticleTest extends AbstractApiTestCase
             ],
 
             'configuratorSet' => [
-                'name' => 'MeinKonf',
+                'name' => 'MyConfigurator',
                 'groups' => [
                     [
                         'name' => 'Farbe',
@@ -137,7 +146,7 @@ class ArticleTest extends AbstractApiTestCase
                         ],
                     ],
                     [
-                        'name' => 'Gräße',
+                        'name' => 'Größe',
                         'options' => [
                             ['name' => 'L'],
                             ['name' => 'XL'],
@@ -273,15 +282,18 @@ class ArticleTest extends AbstractApiTestCase
         static::assertArrayHasKey('location', $response->headers->all());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
 
         $location = $response->headers->get('location');
-        $identifier = array_pop(explode('/', $location));
+        static::assertIsString($location);
+        $locationPars = explode('/', $location);
+        $identifier = (int) array_pop($locationPars);
 
-        static::assertGreaterThan(0, (int) $identifier);
+        static::assertGreaterThan(0, $identifier);
 
         return $identifier;
     }
@@ -300,6 +312,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals(400, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -310,9 +323,9 @@ class ArticleTest extends AbstractApiTestCase
     /**
      * @depends testPostArticlesShouldBeSuccessful
      */
-    public function testGetArticlesWithIdShouldBeSuccessful(string $id): void
+    public function testGetArticlesWithIdShouldBeSuccessful(int $id): void
     {
-        $this->authenticatedApiRequest('GET', '/api/articles/' . $id, []);
+        $this->authenticatedApiRequest('GET', '/api/articles/' . $id);
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
@@ -320,6 +333,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals(200, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -338,7 +352,7 @@ class ArticleTest extends AbstractApiTestCase
     /**
      * @depends testPostArticlesShouldBeSuccessful
      */
-    public function testPutArticlesWithInvalidDataShouldReturnError($id): void
+    public function testPutArticlesWithInvalidDataShouldReturnError(int $id): void
     {
         // required field name is blank
         $testData = [
@@ -355,6 +369,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals(400, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -366,7 +381,7 @@ class ArticleTest extends AbstractApiTestCase
     /**
      * @depends testPostArticlesShouldBeSuccessful
      */
-    public function testPutArticlesShouldBeSuccessful(string $id): void
+    public function testPutArticlesShouldBeSuccessful(int $id): void
     {
         $testData = [
             'name' => 'Update',
@@ -408,6 +423,7 @@ class ArticleTest extends AbstractApiTestCase
         );
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -415,10 +431,11 @@ class ArticleTest extends AbstractApiTestCase
 
         static::assertArrayHasKey('data', $result);
 
-        $this->authenticatedApiRequest('GET', '/api/articles/' . $id, []);
+        $this->authenticatedApiRequest('GET', '/api/articles/' . $id);
         $response = $this->client->getResponse();
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         $article = $result['data'];
@@ -440,12 +457,10 @@ class ArticleTest extends AbstractApiTestCase
 
     /**
      * @depends testPostArticlesShouldBeSuccessful
-     *
-     * @param int $id
      */
-    public function testChangeVariantArticleMainVariantShouldBeSuccessful(string $id): void
+    public function testChangeVariantArticleMainVariantShouldBeSuccessful(int $id): void
     {
-        $this->authenticatedApiRequest('GET', '/api/articles/' . $id, []);
+        $this->authenticatedApiRequest('GET', '/api/articles/' . $id);
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
@@ -453,6 +468,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals(200, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         $variantNumbers = array_map(static function ($item) {
@@ -478,17 +494,19 @@ class ArticleTest extends AbstractApiTestCase
             static::assertNull($response->headers->get('Set-Cookie'));
             static::assertEquals(200, $response->getStatusCode());
             $result = $response->getContent();
+            static::assertIsString($result);
             $result = json_decode($result, true);
             static::assertArrayHasKey('success', $result);
             static::assertTrue($result['success']);
 
-            $this->authenticatedApiRequest('GET', '/api/articles/' . $id, []);
+            $this->authenticatedApiRequest('GET', '/api/articles/' . $id);
             $response = $this->client->getResponse();
 
             static::assertEquals('application/json', $response->headers->get('Content-Type'));
             static::assertNull($response->headers->get('Set-Cookie'));
             static::assertEquals(200, $response->getStatusCode());
             $result = $response->getContent();
+            static::assertIsString($result);
             $result = json_decode($result, true);
 
             static::assertEquals($variantNumber, $result['data']['mainDetail']['number']);
@@ -506,7 +524,7 @@ class ArticleTest extends AbstractApiTestCase
     /**
      * @depends testPostArticlesShouldBeSuccessful
      */
-    public function testReplaceArticleImagesWithUrlAndMediaId($articleId): void
+    public function testReplaceArticleImagesWithUrlAndMediaId(int $productId): void
     {
         $requestData = [
             '__options_images' => [
@@ -525,12 +543,13 @@ class ArticleTest extends AbstractApiTestCase
             ],
         ];
 
-        $this->authenticatedApiRequest('PUT', '/api/articles/' . $articleId, [], $requestData);
+        $this->authenticatedApiRequest('PUT', '/api/articles/' . $productId, [], $requestData);
         $response = $this->client->getResponse();
 
         static::assertEquals(200, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -540,13 +559,13 @@ class ArticleTest extends AbstractApiTestCase
 
         $data = $result['data'];
         static::assertIsArray($data);
-        static::assertEquals($articleId, $data['id']);
+        static::assertEquals($productId, $data['id']);
     }
 
     /**
      * @depends testPostArticlesShouldBeSuccessful
      */
-    public function testReplaceArticleImagesWithInvalidPayload($articleId): void
+    public function testReplaceArticleImagesWithInvalidPayload(int $productId): void
     {
         $requestData = [
             '__options_images' => [
@@ -560,12 +579,13 @@ class ArticleTest extends AbstractApiTestCase
             ],
         ];
 
-        $this->authenticatedApiRequest('PUT', '/api/articles/' . $articleId, [], $requestData);
+        $this->authenticatedApiRequest('PUT', '/api/articles/' . $productId, [], $requestData);
         $response = $this->client->getResponse();
 
         static::assertEquals(400, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -576,14 +596,10 @@ class ArticleTest extends AbstractApiTestCase
 
     /**
      * @depends testPostArticlesShouldBeSuccessful
-     *
-     * @param int $id
-     *
-     * @return
      */
-    public function testDeleteArticlesShouldBeSuccessful($id): int
+    public function testDeleteArticlesShouldBeSuccessful(int $id): int
     {
-        $this->authenticatedApiRequest('DELETE', '/api/articles/' . $id, []);
+        $this->authenticatedApiRequest('DELETE', '/api/articles/' . $id);
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
@@ -591,6 +607,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals(200, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -603,7 +620,7 @@ class ArticleTest extends AbstractApiTestCase
     {
         $id = 99999999;
 
-        $this->authenticatedApiRequest('DELETE', '/api/articles/' . $id, []);
+        $this->authenticatedApiRequest('DELETE', '/api/articles/' . $id);
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
@@ -611,6 +628,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals(404, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -635,6 +653,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals(404, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -645,14 +664,15 @@ class ArticleTest extends AbstractApiTestCase
 
     public function testGetArticlesShouldBeSuccessful(): void
     {
-        $this->authenticatedApiRequest('GET', '/api/articles/', []);
+        $this->authenticatedApiRequest('GET', '/api/articles/');
         $response = $this->client->getResponse();
-
+        static::assertInstanceOf(Enlight_Controller_Response_ResponseTestCase::class, $response);
         static::assertEquals('application/json', $response->getHeader('Content-Type'));
         static::assertNull($response->getHeader('Set-Cookie'));
         static::assertEquals(200, $response->getStatusCode());
 
         $response = $response->getBody();
+        static::assertIsString($response);
         $response = json_decode($response, true);
 
         static::assertArrayHasKey('success', $response);
@@ -664,6 +684,9 @@ class ArticleTest extends AbstractApiTestCase
         static::assertIsInt($response['total']);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getSimpleArticleData(): array
     {
         return [
@@ -766,6 +789,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals(200, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -775,5 +799,33 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals('create', $result['data'][1]['operation']);
         static::assertEquals('create', $result['data'][2]['operation']);
         static::assertEquals('update', $result['data'][3]['operation']);
+    }
+
+    public function testPropertyOptionFilterableIsSetCorrectly(): void
+    {
+        $productIdAperitif = 3;
+        $optionIdAlcoholAmount = 1;
+        $data = [
+            'propertyValues' => [
+                [
+                    'value' => 'foo',
+                    'option' => [
+                        'id' => $optionIdAlcoholAmount,
+                    ],
+                ],
+            ],
+        ];
+        $this->authenticatedApiRequest('PUT', sprintf('/api/articles/%s', $productIdAperitif), [], $data);
+        $response = $this->client->getResponse();
+        static::assertEquals(200, $response->getStatusCode());
+        $result = $response->getContent();
+        static::assertIsString($result);
+        $result = json_decode($result, true);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
+
+        $option = $this->getContainer()->get(ModelManager::class)->getRepository(Option::class)->find($optionIdAlcoholAmount);
+        static::assertInstanceOf(Option::class, $option);
+        static::assertTrue($option->isFilterable());
     }
 }

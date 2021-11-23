@@ -1702,7 +1702,7 @@ class Article extends Resource implements BatchInterface
                         throw new RuntimeException('An option should be available at this point');
                     }
                     $option->fromArray($valueData['option']);
-                    if (!\array_key_exists('filterable', $valueData['option'])) {
+                    if (!\is_bool($option->isFilterable())) {
                         $option->setFilterable(false);
                     }
                 } else {
