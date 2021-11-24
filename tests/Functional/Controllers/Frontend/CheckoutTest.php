@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,34 +26,47 @@
 
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
+use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Plugin_TestCase;
 use Enlight_Controller_Request_RequestHttp;
+use Enlight_View_Default;
 use LogicException;
 use Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
-use Shopware\Models\Customer\Group;
+use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Order\Order;
-use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
 {
-    public const ARTICLE_NUMBER = 'SW10239';
-    public const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
+    use ContainerTrait;
+
+    private const PRODUCT_NUMBER = 'SW10239';
+    private const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
+
+    private Connection $connection;
+
+    protected function setUp(): void
+    {
+        $this->connection = $this->getContainer()->get(Connection::class);
+        parent::setUp();
+    }
 
     /**
-     * Reads the user agent black list and test if the bot can add an article
+     * Reads the user agent black list and test if the bot can add a product
      *
      * @ticket SW-6411
      */
-    public function testBotAddBasketArticle()
+    public function testBotAddBasketProduct(): void
     {
         $botBlackList = ['digout4u', 'fast-webcrawler', 'googlebot', 'ia_archiver', 'w3m2', 'frooglebot'];
         foreach ($botBlackList as $userAgent) {
             if (!empty($userAgent)) {
-                $sessionId = $this->addBasketArticle($userAgent);
+                $sessionId = $this->addBasketProduct($userAgent);
                 static::assertNotEmpty($sessionId);
-                $basketId = Shopware()->Db()->fetchOne(
+                $basketId = $this->connection->fetchOne(
                     'SELECT id FROM s_order_basket WHERE sessionID = ?',
                     [$sessionId]
                 );
@@ -59,78 +74,77 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
             }
         }
 
-        Shopware()->Modules()->Basket()->sDeleteBasket();
+        $this->getContainer()->get('modules')->Basket()->sDeleteBasket();
     }
 
     /**
-     * Test if an normal user can add an article
+     * Test if a normal user can add a product
      *
      * @ticket SW-6411
      */
-    public function testAddBasketArticle()
+    public function testAddBasketProduct(): void
     {
-        $sessionId = $this->addBasketArticle(include __DIR__ . '/fixtures/UserAgent.php');
+        $sessionId = $this->addBasketProduct(self::USER_AGENT);
         static::assertNotEmpty($sessionId);
-        $basketId = Shopware()->Db()->fetchOne(
+        $basketId = $this->connection->fetchOne(
             'SELECT id FROM s_order_basket WHERE sessionID = ?',
             [$sessionId]
         );
         static::assertNotEmpty($basketId);
 
-        Shopware()->Modules()->Basket()->sDeleteBasket();
+        $this->getContainer()->get('modules')->Basket()->sDeleteBasket();
     }
 
     /**
      * Tests that price calculations of the basket do not differ from the price calculation in the Order
      * for customer group
      */
-    public function testCheckoutForNetOrders()
+    public function testCheckoutForNetOrders(): void
     {
-        $net = true;
-        $this->runCheckoutTest($net);
+        $this->runCheckoutTest(true);
     }
 
     /**
      * Tests that price calculations of the basket do not differ from the price calculation in the Order
      * for customer group
      */
-    public function testCheckoutForGrossOrders()
+    public function testCheckoutForGrossOrders(): void
     {
-        $net = false;
-        $this->runCheckoutTest($net);
+        $this->runCheckoutTest(false);
     }
 
     /**
      * Tests that the addArticle-Action returns HTML
      */
-    public function testAddToBasketReturnsHtml()
+    public function testAddToBasketReturnsHtml(): void
     {
         $this->reset();
         $this->Request()->setMethod('POST');
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setParam('sQuantity', 5);
-        $this->Request()->setParam('sAdd', self::ARTICLE_NUMBER);
+        $this->Request()->setParam('sAdd', self::PRODUCT_NUMBER);
         $this->Request()->setParam('isXHR', 1);
 
-        $response = $this->dispatch('/checkout/addArticle', true);
-        static::assertStringContainsString('<div class="modal--checkout-add-article">', $response->getBody());
+        $responseText = $this->dispatch('/checkout/addArticle', true)->getBody();
+        static::assertIsString($responseText);
+        static::assertStringContainsString('<div class="modal--checkout-add-article">', $responseText);
 
-        Shopware()->Modules()->Basket()->sDeleteBasket();
+        $this->getContainer()->get('modules')->Basket()->sDeleteBasket();
     }
 
     /**
      * Tests that products can't add to basket over HTTP-GET
      */
-    public function testAddBasketOverGetFails()
+    public function testAddBasketOverGetFails(): void
     {
         $this->expectException(LogicException::class);
 
         $this->reset();
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setParam('sQuantity', 5);
-        $this->dispatch('/checkout/addArticle/sAdd/' . self::ARTICLE_NUMBER);
+        $this->dispatch('/checkout/addArticle/sAdd/' . self::PRODUCT_NUMBER);
 
-        Shopware()->Modules()->Basket()->sDeleteBasket();
+        $this->getContainer()->get('modules')->Basket()->sDeleteBasket();
     }
 
     public function testRequestPaymentWithoutAGB(): void
@@ -138,8 +152,8 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         // Login
         $this->loginFrontendUser();
 
-        // Add article to basket
-        $this->addBasketArticle(self::USER_AGENT, 5);
+        // Add product to basket
+        $this->addBasketProduct(self::USER_AGENT, 5);
 
         // Confirm checkout
         $this->reset();
@@ -159,7 +173,7 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertSame('confirm', $this->Request()->getActionName());
 
         // Logout frontend user
-        Shopware()->Modules()->Admin()->logout();
+        $this->getContainer()->get('modules')->Admin()->logout();
     }
 
     public function testRequestPaymentWithoutServiceAgreement(): void
@@ -167,12 +181,12 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         // Login
         $this->loginFrontendUser();
 
-        // Add article to basket
-        $this->addBasketArticle(self::USER_AGENT, 5);
+        // Add product to basket
+        $this->addBasketProduct(self::USER_AGENT, 5);
 
-        Shopware()->Db()->beginTransaction();
+        $this->connection->beginTransaction();
         $this->setConfig('serviceAttrField', 'attr1');
-        Shopware()->Db()->exec('UPDATE s_articles_attributes SET attr1 = 1');
+        $this->connection->executeStatement('UPDATE s_articles_attributes SET attr1 = 1');
 
         // Confirm checkout
         $this->reset();
@@ -188,7 +202,7 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         $this->dispatch('/checkout/payment');
 
         $this->setConfig('serviceAttrField', null);
-        Shopware()->Db()->rollBack();
+        $this->connection->rollBack();
 
         static::assertFalse($this->View()->getAssign('sAGBError'));
 
@@ -196,7 +210,7 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertSame('confirm', $this->Request()->getActionName());
 
         // Logout frontend user
-        Shopware()->Modules()->Admin()->logout();
+        $this->getContainer()->get('modules')->Admin()->logout();
     }
 
     /**
@@ -205,19 +219,20 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
      * Order/Order::calculateInvoiceAmount (Which will be called when one changes / saves the order in the backend).
      *
      * Also covers a complete checkout process
-     *
-     * @param bool $net
      */
-    public function runCheckoutTest($net = false)
+    private function runCheckoutTest(bool $net): void
     {
         $tax = $net === true ? 0 : 1;
 
         // Set net customer group
-        $defaultShop = Shopware()->Models()->getRepository(Shop::class)->find(1);
-        $previousCustomerGroup = $defaultShop->getCustomerGroup()->getKey();
-        $netCustomerGroup = Shopware()->Models()->getRepository(Group::class)->findOneBy(['tax' => $tax])->getKey();
+        $shop = $this->getContainer()->get(ModelManager::class)->getRepository(Shop::class)->find(1);
+        static::assertInstanceOf(Shop::class, $shop);
+        $previousCustomerGroup = $shop->getCustomerGroup()->getKey();
+        $customerGroup = $this->getContainer()->get(ModelManager::class)->getRepository(CustomerGroup::class)->findOneBy(['tax' => $tax]);
+        static::assertInstanceOf(CustomerGroup::class, $customerGroup);
+        $netCustomerGroup = $customerGroup->getKey();
         static::assertNotEmpty($netCustomerGroup);
-        Shopware()->Db()->query(
+        $this->connection->executeStatement(
             'UPDATE s_user SET customergroup = ? WHERE id = 1',
             [$netCustomerGroup]
         );
@@ -227,8 +242,8 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         // Login
         $this->loginFrontendUser();
 
-        // Add article to basket
-        $this->addBasketArticle(self::USER_AGENT, 5);
+        // Add product to basket
+        $this->addBasketProduct(self::USER_AGENT, 5);
 
         // Confirm checkout
         $this->reset();
@@ -244,28 +259,27 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         $this->dispatch('/checkout/finish');
 
         // Logout frontend user
-        Shopware()->Modules()->Admin()->logout();
+        $this->getContainer()->get('modules')->Admin()->logout();
 
         // Revert customer group
-        Shopware()->Db()->query(
+        $this->connection->executeStatement(
             'UPDATE s_user SET customergroup = ? WHERE id = 1',
             [$previousCustomerGroup]
         );
 
         // Fetch created order
-        $orderId = Shopware()->Db()->fetchOne(
+        $orderId = $this->connection->fetchOne(
             'SELECT id FROM s_order ORDER BY ID DESC LIMIT 1'
         );
-        /** @var Order $order */
-        $order = Shopware()->Models()->getRepository(Order::class)->find($orderId);
+        $order = $this->getContainer()->get(ModelManager::class)->getRepository(Order::class)->find($orderId);
+        static::assertInstanceOf(Order::class, $order);
 
         // Save invoiceAmounts for comparison
         $previousInvoiceAmount = $order->getInvoiceAmount();
         $previousInvoiceAmountNet = $order->getInvoiceAmountNet();
 
         // Simulate backend order save
-        /** @var CalculationServiceInterface $calculationService */
-        $calculationService = Shopware()->Container()->get(CalculationServiceInterface::class);
+        $calculationService = $this->getContainer()->get(CalculationServiceInterface::class);
         $calculationService->recalculateOrderTotals($order);
 
         // Assert messages
@@ -276,10 +290,10 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertEquals($order->getInvoiceAmount(), $previousInvoiceAmount, $message);
         static::assertEquals($order->getInvoiceAmountNet(), $previousInvoiceAmountNet, $messageNet);
 
-        Shopware()->Modules()->Basket()->sDeleteBasket();
+        $this->getContainer()->get('modules')->Basket()->sDeleteBasket();
     }
 
-    public function testRedirectShippingPaymentPageOnEmptyBasket()
+    public function testRedirectShippingPaymentPageOnEmptyBasket(): void
     {
         $this->loginFrontendUser();
 
@@ -298,47 +312,52 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertStringContainsString('/checkout/cart', $locationHeader['value']);
     }
 
-    /**
-     * Login as a frontend user
-     */
-    public function loginFrontendUser()
+    public function testCorrectRenderingOfErrorSnippet(): void
     {
-        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
-        $user = Shopware()->Db()->fetchRow(
-            'SELECT id, email, password, subshopID, language FROM s_user WHERE id = 1'
-        );
-
-        /** @var Repository $repository */
-        $repository = Shopware()->Models()->getRepository(Shop::class);
-        $shop = $repository->getActiveById($user['language']);
-
-        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
-
-        Shopware()->Session()->set('Admin', true);
-        Shopware()->System()->_POST = [
-            'email' => $user['email'],
-            'passwordMD5' => $user['password'],
-        ];
-        Shopware()->Modules()->Admin()->sLogin(true);
+        $view = new Enlight_View_Default($this->getContainer()->get('template'));
+        $view->assign('sInvalidCartItems', ['foo', 'test']);
+        $template = $view->fetch('frontend/checkout/error_messages.tpl');
+        static::assertStringContainsString('Folgende Produkte sind nicht mehr verfügbar', $template);
+        static::assertStringContainsString('<li>foo</li><li>test</li>', $template);
     }
 
     /**
-     * Fires the add article request with the given user agent
-     *
-     * @param string $userAgent
-     * @param int    $quantity
+     * Login as a frontend user
+     */
+    private function loginFrontendUser(): void
+    {
+        $user = $this->connection->fetchAssociative(
+            'SELECT id, email, password, subshopID, language FROM s_user WHERE id = 1'
+        );
+        static::assertIsArray($user);
+
+        $shop = $this->getContainer()->get(ModelManager::class)->getRepository(Shop::class)->getActiveById($user['language']);
+        static::assertInstanceOf(Shop::class, $shop);
+
+        $this->getContainer()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
+
+        $request = new Enlight_Controller_Request_RequestHttp();
+        $request->setPost('email', $user['email']);
+        $request->setPost('passwordMD5', $user['password']);
+        $this->getContainer()->get('front')->setRequest($request);
+        $this->getContainer()->get('session')->set('Admin', true);
+        $this->getContainer()->get('modules')->Admin()->sLogin(true);
+    }
+
+    /**
+     * Fires the add product request with the given user agent
      *
      * @return string session id
      */
-    private function addBasketArticle($userAgent, $quantity = 1)
+    private function addBasketProduct(string $userAgent, int $quantity = 1): string
     {
         $this->reset();
         $this->Request()->setMethod('POST');
         $this->Request()->setHeader('User-Agent', $userAgent);
         $this->Request()->setParam('sQuantity', $quantity);
-        $this->Request()->setParam('sAdd', self::ARTICLE_NUMBER);
+        $this->Request()->setParam('sAdd', self::PRODUCT_NUMBER);
         $this->dispatch('/checkout/addArticle', true);
 
-        return Shopware()->Container()->get('sessionid');
+        return $this->getContainer()->get('session')->getId();
     }
 }
