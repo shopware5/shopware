@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,16 +31,18 @@ use Shopware\Components\Captcha\DefaultCaptcha;
 
 class RegisterWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
 {
+    private const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
+
     public static function tearDownAfterClass(): void
     {
-        static::saveConfig('registerCaptcha', 'nocaptcha');
+        self::saveRegisterCaptchaConfig('nocaptcha');
     }
 
-    public function testValidateCaptchaIsUninstalled()
+    public function testValidateCaptchaIsUninstalled(): void
     {
-        static::saveConfig('registerCaptcha', 'uninstalledCaptchaName');
+        self::saveRegisterCaptchaConfig('uninstalledCaptchaName');
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
-        $this->Request()->setHeader('User-Agent', include __DIR__ . '/fixtures/UserAgent.php');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setMethod('POST');
         $this->Request()->setPost($postParameter);
 
@@ -50,12 +54,12 @@ class RegisterWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertArrayNotHasKey('errors', $viewVariables);
     }
 
-    public function testNoCaptcha()
+    public function testNoCaptcha(): void
     {
-        static::saveConfig('registerCaptcha', 'nocaptcha');
+        self::saveRegisterCaptchaConfig('nocaptcha');
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
 
-        $this->Request()->setHeader('User-Agent', include __DIR__ . '/fixtures/UserAgent.php');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setMethod('POST');
         $this->Request()->setPost($postParameter);
 
@@ -67,12 +71,12 @@ class RegisterWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertArrayNotHasKey('errors', $viewVariables);
     }
 
-    public function testHoneypot()
+    public function testHoneypot(): void
     {
-        static::saveConfig('registerCaptcha', 'honeypot');
+        self::saveRegisterCaptchaConfig('honeypot');
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
 
-        $this->Request()->setHeader('User-Agent', include __DIR__ . '/fixtures/UserAgent.php');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setMethod('POST');
         $this->Request()->setPost($postParameter);
 
@@ -84,9 +88,9 @@ class RegisterWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertArrayNotHasKey('errors', $viewVariables);
     }
 
-    public function testDefault()
+    public function testDefault(): void
     {
-        static::saveConfig('registerCaptcha', 'default');
+        self::saveRegisterCaptchaConfig('default');
         $random = md5(uniqid());
         $sessionVars = ['sCaptcha' => $random, $random => true];
 
@@ -95,7 +99,7 @@ class RegisterWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
         $postParameter['sCaptcha'] = $random;
 
-        $this->Request()->setHeader('User-Agent', include __DIR__ . '/fixtures/UserAgent.php');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setMethod('POST');
         $this->Request()->setPost($postParameter);
 
@@ -107,13 +111,13 @@ class RegisterWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertArrayNotHasKey('errors', $viewVariables);
     }
 
-    public function testInvalidHoneypot()
+    public function testInvalidHoneypot(): void
     {
-        static::saveConfig('registerCaptcha', 'honeypot');
+        self::saveRegisterCaptchaConfig('honeypot');
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
         $postParameter['first_name_confirmation'] = uniqid();
 
-        $this->Request()->setHeader('User-Agent', include __DIR__ . '/fixtures/UserAgent.php');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setMethod('POST');
         $this->Request()->setPost($postParameter);
 
@@ -124,9 +128,9 @@ class RegisterWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertArrayHasKey('errors', $viewVariables);
     }
 
-    public function testInvalidDefault()
+    public function testInvalidDefault(): void
     {
-        static::saveConfig('registerCaptcha', 'default');
+        self::saveRegisterCaptchaConfig('default');
         $random = md5(uniqid());
         $sessionVars = ['sCaptcha' => $random];
 
@@ -135,7 +139,7 @@ class RegisterWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
         $postParameter['sCaptcha'] = $random;
 
-        $this->Request()->setHeader('User-Agent', include __DIR__ . '/fixtures/UserAgent.php');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setMethod('POST');
         $this->Request()->setPost($postParameter);
 
@@ -146,12 +150,12 @@ class RegisterWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertArrayHasKey('errors', $viewVariables);
     }
 
-    private static function saveConfig($name, $value)
+    private static function saveRegisterCaptchaConfig(string $value): void
     {
         $formattedValue = sprintf('s:%d:"%s";', \strlen($value), $value);
         Shopware()->Db()->query(
             'UPDATE s_core_config_elements SET value = ? WHERE name = ?',
-            [$formattedValue, $name]
+            [$formattedValue, 'registerCaptcha']
         );
         Shopware()->Container()->get('cache')->clean();
     }

@@ -173,7 +173,7 @@
                 {* Product with invalid category got removed *}
                 {block name="frontend_basket_basket_is_empty_product_with_invalid_category"}
                     <div class="basket--info-messages">
-                        {if $removedProductWithInvalidCategory}
+                        {if $sInvalidCartItems}
                             {s name="InvalidCategoryMessage" assign="snippetInvalidCategory" namespace="frontend/checkout/error_messages"}{/s}
                             {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetInvalidCategory}
                         {/if}
