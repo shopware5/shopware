@@ -36,7 +36,7 @@ fix-code-style:
 	php -d memory_limit=-1 ./vendor/bin/php-cs-fixer fix -v --config engine/Library/Enlight/.php-cs-fixer.php
 
 check-phpstan:
-	php -d memory_limit=4G ./vendor/bin/phpstan analyze -c .phpstan.neon --no-progress --error-format=table
+	php ./vendor/bin/phpstan analyze -c .phpstan.neon
 
 check-eslint-frontend:
 	npm run lint --prefix ./themes

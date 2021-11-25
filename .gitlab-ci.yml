@@ -41,6 +41,8 @@ default:
 # Stage: static
 
 PHP analyze:
+    tags:
+        - m5.large
     stage: Static analysis
     script:
         - make init
@@ -50,6 +52,8 @@ PHP analyze:
             alias: mysql
 
 JavaScript analyze:
+    tags:
+        - t3.nano
     stage: Static analysis
     image: node:alpine
     before_script:
@@ -59,6 +63,8 @@ JavaScript analyze:
         - make check-js-code
 
 Code Coverage:
+    tags:
+        - t3.medium
     stage: Static analysis
     script:
         - make init
@@ -83,6 +89,8 @@ Code Coverage:
 
 # stage: Unit
 .phpunit_base:
+    tags:
+        - t3.medium
     stage: Unit
     services:
         -   name: mysql:5.7
@@ -96,6 +104,8 @@ Code Coverage:
             junit: build/artifacts/test-log.xml
 
 .phpunit_es_base:
+    tags:
+        - t3.medium
     extends: .phpunit_base
     stage: Elasticsearch
     script:
@@ -179,6 +189,8 @@ Elasticsearch 7:
 #            command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
 
 .mink_base:
+    tags:
+        - m5.large
     extends: .phpunit_base
     stage: End-to-end testing
     artifacts:
@@ -218,16 +230,3 @@ Mink:
         - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
           when: manual
           allow_failure: true
-
-RIPS security:
-    stage: Security
-    image: php:7.4-alpine
-    before_script: [ ]
-    only:
-        variables:
-            - $RIPS_SCAN == "1"
-    script:
-        - apk add --no-cache libzip-dev && docker-php-ext-configure zip --with-libzip=/usr/include && docker-php-ext-install zip
-        - wget https://github.com/rips/rips-cli/releases/download/3.2.0/rips-cli.phar -O /usr/bin/rips-cli
-        - chmod 755 /usr/bin/rips-cli
-        - rips-cli rips:scan:start -p . -C 20  -a ${RIPS_APP_ID} -T ${CI_COMMIT_REF_NAME} --progress
