@@ -376,7 +376,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         $this->duplicateArticleData($productId);
-        $newProductId = Shopware()->Db()->lastInsertId('s_articles');
+        $newProductId = (int) Shopware()->Db()->lastInsertId('s_articles');
         $this->duplicateArticleCategories($productId, $newProductId);
         $this->duplicateArticleCustomerGroups($productId, $newProductId);
         $this->duplicateArticleRelated($productId, $newProductId);
@@ -2923,7 +2923,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 WHERE source.id = ?";
 
         Shopware()->Db()->query($sql, [$oldSetId]);
-        $newSetId = Shopware()->Db()->lastInsertId('s_article_configurator_sets');
+        $newSetId = (int) Shopware()->Db()->lastInsertId('s_article_configurator_sets');
 
         $sql = 'INSERT INTO s_article_configurator_set_group_relations
                 SELECT ?, group_id

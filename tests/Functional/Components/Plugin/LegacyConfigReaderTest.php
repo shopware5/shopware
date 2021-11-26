@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,7 +29,6 @@ namespace Shopware\Tests\Functional\Components\Plugin;
 use DateTime;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Configuration\ReaderInterface;
 use Shopware\Components\Plugin\DBALConfigReader;
 use Shopware\Models\Shop\Shop;
@@ -40,44 +41,21 @@ class LegacyConfigReaderTest extends TestCase
 
     private const NUMBER_CONFIGURATION_NAME = 'numberConfiguration';
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    private DBALConfigReader $configReader;
 
-    /**
-     * @var DBALConfigReader
-     */
-    private $configReader;
+    private int $configElementId;
 
-    /**
-     * @var int
-     */
-    private $configElementId;
+    private Shop $installationShop;
 
-    /**
-     * @var Shop
-     */
-    private $installationShop;
+    private Shop $subShop;
 
-    /**
-     * @var Shop
-     */
-    private $subShop;
-
-    /**
-     * @var Shop
-     */
-    private $languageShop;
+    private Shop $languageShop;
 
     public function setUp(): void
     {
-        $this->modelManager = Shopware()->Container()->get('models');
+        $modelManager = Shopware()->Container()->get('models');
         $this->connection = Shopware()->Container()->get('dbal_connection');
 
         // setup plugin
@@ -121,11 +99,13 @@ class LegacyConfigReaderTest extends TestCase
             'position' => 0,
             'scope' => 1,
         ]);
-        $this->configElementId = $this->connection->lastInsertId();
+        $this->configElementId = (int) $this->connection->lastInsertId();
 
         // setup shops
         // assume shop by id 1 exists
-        $this->installationShop = $this->modelManager->find(Shop::class, 1);
+        $shop = $modelManager->find(Shop::class, 1);
+        static::assertInstanceOf(Shop::class, $shop);
+        $this->installationShop = $shop;
 
         $this->connection->insert('s_core_shops', [
             'name' => 'Sub Shop',
@@ -136,7 +116,9 @@ class LegacyConfigReaderTest extends TestCase
             '`default`' => 0,
             'active' => 1,
         ]);
-        $this->subShop = $this->modelManager->find(Shop::class, $this->connection->lastInsertId());
+        $subShop = $modelManager->find(Shop::class, $this->connection->lastInsertId());
+        static::assertInstanceOf(Shop::class, $subShop);
+        $this->subShop = $subShop;
 
         $this->connection->insert('s_core_shops', [
             'name' => 'Sub Shop',
@@ -148,25 +130,27 @@ class LegacyConfigReaderTest extends TestCase
             'active' => 1,
             'main_id' => $this->subShop->getId(),
         ]);
-        $this->languageShop = $this->modelManager->find(Shop::class, $this->connection->lastInsertId());
+        $languageShop = $modelManager->find(Shop::class, $this->connection->lastInsertId());
+        static::assertInstanceOf(Shop::class, $languageShop);
+        $this->languageShop = $languageShop;
 
         $this->configReader = new DBALConfigReader(Shopware()->Container()->get(ReaderInterface::class));
     }
 
-    public function testReadElementDefault()
+    public function testReadElementDefault(): void
     {
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME),
-            [self::NUMBER_CONFIGURATION_NAME => 1]
+            [self::NUMBER_CONFIGURATION_NAME => 1],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
-            [self::NUMBER_CONFIGURATION_NAME => 1]
+            [self::NUMBER_CONFIGURATION_NAME => 1],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop)
         );
     }
 
-    public function testReadValueForInstallation()
+    public function testReadValueForInstallation(): void
     {
         $this->connection->insert('s_core_config_values', [
             'element_id' => $this->configElementId,
@@ -175,27 +159,27 @@ class LegacyConfigReaderTest extends TestCase
         ]);
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop)
         );
     }
 
-    public function testReadValueForSubShop()
+    public function testReadValueForSubShop(): void
     {
         $this->connection->insert('s_core_config_values', [
             'element_id' => $this->configElementId,
@@ -210,27 +194,27 @@ class LegacyConfigReaderTest extends TestCase
         ]);
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
-            [self::NUMBER_CONFIGURATION_NAME => 3]
+            [self::NUMBER_CONFIGURATION_NAME => 3],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop),
-            [self::NUMBER_CONFIGURATION_NAME => 3]
+            [self::NUMBER_CONFIGURATION_NAME => 3],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop)
         );
     }
 
-    public function testReadValueForLanguageShop()
+    public function testReadValueForLanguageShop(): void
     {
         $this->connection->insert('s_core_config_values', [
             'element_id' => $this->configElementId,
@@ -251,23 +235,23 @@ class LegacyConfigReaderTest extends TestCase
         ]);
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
-            [self::NUMBER_CONFIGURATION_NAME => 3]
+            [self::NUMBER_CONFIGURATION_NAME => 3],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop),
-            [self::NUMBER_CONFIGURATION_NAME => 4]
+            [self::NUMBER_CONFIGURATION_NAME => 4],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop)
         );
     }
 }

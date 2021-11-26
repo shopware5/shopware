@@ -636,7 +636,7 @@ class sOrder implements Enlight_Hook
         try {
             $this->db->beginTransaction();
             $affectedRows = $this->db->insert('s_order', $orderParams);
-            $orderID = $this->db->lastInsertId();
+            $orderID = (int) $this->db->lastInsertId();
             $this->db->commit();
         } catch (Exception $e) {
             $this->db->rollBack();
@@ -747,7 +747,7 @@ class sOrder implements Enlight_Hook
 
             try {
                 $this->db->executeUpdate($sql);
-                $orderdetailsID = $this->db->lastInsertId();
+                $orderdetailsID = (int) $this->db->lastInsertId();
             } catch (Exception $e) {
                 throw new Enlight_Exception(sprintf('Shopware Order Fatal-Error %s :%s', $_SERVER['HTTP_HOST'], $e->getMessage()), 0, $e);
             }

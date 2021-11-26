@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,14 +29,16 @@ namespace Shopware\Tests\Functional\Components\Api;
 use DateTime;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Api\Resource\Resource;
-use Shopware\Components\Api\Resource\User;
+use Shopware\Components\Api\Resource\User as UserResource;
+use Shopware\Models\User\User;
 use Shopware_Components_Acl;
 
 class UserTest extends TestCase
 {
     /**
-     * @var User
+     * @var UserResource
      */
     protected $resource;
 
@@ -45,16 +49,16 @@ class UserTest extends TestCase
     }
 
     /**
-     * @return User
+     * @return UserResource
      */
     public function createResource()
     {
-        return new User();
+        return new UserResource();
     }
 
-    public function testCreateWithNonUniqueEmailShouldThrowException()
+    public function testCreateWithNonUniqueEmailShouldThrowException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $this->resource->setRole('create');
 
         $testData = [
@@ -69,7 +73,7 @@ class UserTest extends TestCase
         $this->resource->create($testData);
     }
 
-    public function testCreateShouldBeSuccessful()
+    public function testCreateShouldBeSuccessful(): int
     {
         $this->resource->setRole('create');
 
@@ -98,10 +102,9 @@ class UserTest extends TestCase
             'disabledCache' => true,
         ];
 
-        /** @var \Shopware\Models\User\User $user */
         $user = $this->resource->create($testData);
 
-        static::assertInstanceOf('\Shopware\Models\User\User', $user);
+        static::assertInstanceOf(User::class, $user);
         static::assertGreaterThan(0, $user->getId());
 
         // Test default values
@@ -128,32 +131,33 @@ class UserTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetOneShouldBeSuccessful($id)
+    public function testGetOneShouldBeSuccessful(int $id): void
     {
         $this->resource->setRole('read');
 
         $user = $this->resource->getOne($id);
+        static::assertIsArray($user);
         static::assertGreaterThan(0, $user['id']);
     }
 
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetOneShouldBeAbleToReturnObject($id)
+    public function testGetOneShouldBeAbleToReturnObject(int $id): void
     {
         $this->resource->setRole('read');
 
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $user = $this->resource->getOne($id);
 
-        static::assertInstanceOf('\Shopware\Models\User\User', $user);
+        static::assertInstanceOf(User::class, $user);
         static::assertGreaterThan(0, $user->getId());
     }
 
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetListShouldBeSuccessful()
+    public function testGetListShouldBeSuccessful(): void
     {
         $this->resource->setRole('read');
 
@@ -169,7 +173,7 @@ class UserTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetListShouldBeAbleToReturnObjects()
+    public function testGetListShouldBeAbleToReturnObjects(): void
     {
         $this->resource->setRole('read');
 
@@ -182,12 +186,12 @@ class UserTest extends TestCase
         static::assertGreaterThanOrEqual(1, $result['total']);
         static::assertGreaterThanOrEqual(1, $result['data']);
 
-        static::assertInstanceOf('\Shopware\Models\User\User', $result['data'][0]);
+        static::assertInstanceOf(User::class, $result['data'][0]);
     }
 
-    public function testCreateWithInvalidDataShouldThrowValidationException()
+    public function testCreateWithInvalidDataShouldThrowValidationException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $this->resource->setRole('create');
 
         $testData = [
@@ -203,7 +207,7 @@ class UserTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testUpdateShouldBeSuccessful($id)
+    public function testUpdateShouldBeSuccessful(int $id): int
     {
         $this->resource->setRole('update');
 
@@ -214,7 +218,7 @@ class UserTest extends TestCase
 
         $user = $this->resource->update($id, $testData);
 
-        static::assertInstanceOf('\Shopware\Models\User\User', $user);
+        static::assertInstanceOf(User::class, $user);
         static::assertEquals($id, $user->getId());
 
         static::assertEquals($user->getUsername(), $testData['username']);
@@ -226,9 +230,9 @@ class UserTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testUpdateWithInvalidDataShouldThrowValidationException($id)
+    public function testUpdateWithInvalidDataShouldThrowValidationException(int $id): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $this->resource->setRole('update');
 
         $testData = [
@@ -238,32 +242,32 @@ class UserTest extends TestCase
         $this->resource->update($id, $testData);
     }
 
-    public function testUpdateWithInvalidIdShouldThrowNotFoundException()
+    public function testUpdateWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->setRole('update');
 
         $this->resource->update(9999999, []);
     }
 
-    public function testUpdateWithMissingIdShouldThrowParameterMissingException()
+    public function testUpdateWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->setRole('update');
 
-        $this->resource->update('', []);
+        $this->resource->update(0, []);
     }
 
     /**
      * @depends testUpdateShouldBeSuccessful
      */
-    public function testDeleteShouldBeSuccessful($id): void
+    public function testDeleteShouldBeSuccessful(int $id): void
     {
         $this->resource->setRole('delete');
 
         $user = $this->resource->delete($id);
 
-        static::assertInstanceOf(\Shopware\Models\User\User::class, $user);
+        static::assertInstanceOf(User::class, $user);
         static::assertSame(0, (int) $user->getId());
     }
 
@@ -281,7 +285,7 @@ class UserTest extends TestCase
 
         $this->resource->setRole('delete');
 
-        $this->resource->delete('');
+        $this->resource->delete(0);
     }
 
     public function testCreateWithUserRoleId(): void
@@ -300,7 +304,7 @@ class UserTest extends TestCase
         static::assertEquals(1, $user->getRole()->getId());
     }
 
-    public function testCreateWithUserRoleName()
+    public function testCreateWithUserRoleName(): void
     {
         $this->resource->setRole('create');
 
@@ -316,7 +320,7 @@ class UserTest extends TestCase
         static::assertEquals('local_admins', $user->getRole()->getName());
     }
 
-    public function testCreateWithLocaleId()
+    public function testCreateWithLocaleId(): void
     {
         $this->resource->setRole('create');
 
@@ -333,7 +337,7 @@ class UserTest extends TestCase
         static::assertEquals(2, $user->getLocaleId());
     }
 
-    public function testCreateWithLocaleName()
+    public function testCreateWithLocaleName(): void
     {
         $this->resource->setRole('create');
 
@@ -350,30 +354,28 @@ class UserTest extends TestCase
         static::assertEquals(2, $user->getLocaleId());
     }
 
-    public function testGetOneWithMissingIdShouldThrowParameterMissingException()
+    public function testGetOneWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->setRole('read');
-        $this->resource->getOne('');
+        $this->resource->getOne(0);
     }
 
-    public function testGetOneWithInvalidIdShouldThrowNotFoundException()
+    public function testGetOneWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->setRole('read');
         $this->resource->getOne(9999999);
     }
 
-    protected function getAclMockAllowEverything()
+    protected function getAclMockAllowEverything(): Shopware_Components_Acl
     {
         $aclMock = $this->createMock(Shopware_Components_Acl::class);
 
-        $aclMock->expects(static::any())
-            ->method('has')
+        $aclMock->method('has')
             ->willReturn(true);
 
-        $aclMock->expects(static::any())
-            ->method('isAllowed')
+        $aclMock->method('isAllowed')
             ->willReturn(true);
 
         return $aclMock;

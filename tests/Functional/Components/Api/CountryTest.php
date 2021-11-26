@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,25 +26,27 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
-use Shopware\Components\Api\Resource\Country;
+use Shopware\Components\Api\Resource\Country as CountryResource;
+use Shopware\Models\Country\Area;
+use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 
 class CountryTest extends TestCase
 {
     /**
-     * @var \Shopware\Components\Api\Resource\Country
+     * @var CountryResource
      */
     protected $resource;
 
     /**
-     * @var array
+     * @var array<int>
      */
-    private static $existingCountryIds = 0;
+    private static $existingCountryIds = [];
 
     /**
-     * @var array
+     * @var array<int>
      */
-    private static $existingStatesIds = 0;
+    private static $existingStatesIds = [];
 
     /**
      * Saves the IDs of currently existing countries and states.
@@ -80,17 +84,14 @@ class CountryTest extends TestCase
     }
 
     /**
-     * @return \Shopware\Components\Api\Resource\Country
+     * @return CountryResource
      */
     public function createResource()
     {
-        return new Country();
+        return new CountryResource();
     }
 
-    /**
-     * @return \Shopware\Models\Country\Country
-     */
-    public function testCreate()
+    public function testCreate(): Country
     {
         $area = $this->getArea();
         $data = [
@@ -114,10 +115,7 @@ class CountryTest extends TestCase
         return $country;
     }
 
-    /**
-     * @return \Shopware\Models\Country\Country
-     */
-    public function testCreateWithState()
+    public function testCreateWithState(): Country
     {
         $state = new State();
         $state->fromArray([
@@ -153,7 +151,7 @@ class CountryTest extends TestCase
         static::assertNotNull($country->getArea());
         static::assertEquals($country->getArea()->getId(), $area->getId());
 
-        static::assertEquals($country->getStates()->count(), 1);
+        static::assertEquals(1, $country->getStates()->count());
         $assignedState = $country->getStates()->first();
         static::assertEquals($assignedState->getId(), $data['states'][0]['id']);
         static::assertEquals($assignedState->getName(), $data['states'][0]['name']);
@@ -164,18 +162,18 @@ class CountryTest extends TestCase
 
     /**
      * @depends testCreateWithState
-     *
-     * @return \Shopware\Models\Country\Country
      */
-    public function testGetOne(\Shopware\Models\Country\Country $country)
+    public function testGetOne(Country $country): Country
     {
         $countryData = $this->resource->getOne($country->getId());
+        static::assertIsArray($countryData);
 
         static::assertEquals($countryData['id'], $country->getId());
         static::assertEquals($countryData['name'], $country->getName());
         static::assertEquals($countryData['iso'], $country->getIso());
         static::assertEquals($countryData['iso3'], $country->getIso3());
         static::assertEquals($countryData['isoName'], $country->getIsoName());
+        static::assertInstanceOf(Area::class, $country->getArea());
         static::assertEquals($countryData['areaId'], $country->getArea()->getId());
 
         static::assertArrayHasKey('states', $countryData);
@@ -191,10 +189,8 @@ class CountryTest extends TestCase
 
     /**
      * @depends testGetOne
-     *
-     * @return \Shopware\Models\Country\Country
      */
-    public function testUpdate(\Shopware\Models\Country\Country $country)
+    public function testUpdate(Country $country): Country
     {
         $oldState = $country->getStates()->first();
         $state = new State();
@@ -234,7 +230,7 @@ class CountryTest extends TestCase
         static::assertNotNull($country->getArea());
         static::assertEquals($country->getArea()->getId(), $area->getId());
 
-        static::assertEquals($country->getStates()->count(), 2);
+        static::assertEquals(2, $country->getStates()->count());
         $oldAssignedState = $country->getStates()->first();
         static::assertEquals($oldAssignedState->getId(), $data['states'][0]['id']);
         static::assertEquals($oldAssignedState->getName(), $oldState->getName());
@@ -249,10 +245,8 @@ class CountryTest extends TestCase
 
     /**
      * @depends testUpdate
-     *
-     * @return \Shopware\Models\Country\Country
      */
-    public function testGetList(\Shopware\Models\Country\Country $country)
+    public function testGetList(Country $country): Country
     {
         $countryData = $this->resource->getList(0, 1000);
 
@@ -267,22 +261,17 @@ class CountryTest extends TestCase
     /**
      * @depends testGetList
      */
-    public function testDelete(\Shopware\Models\Country\Country $country)
+    public function testDelete(Country $country): void
     {
         $deletedCountry = $this->resource->delete($country->getId());
 
-        static::assertInstanceOf('\Shopware\Models\Country\Country', $deletedCountry);
-        static::assertNull($deletedCountry->getId());
+        static::assertInstanceOf(Country::class, $deletedCountry);
+        static::assertSame(0, (int) $deletedCountry->getId());
     }
 
-    /**
-     * @param int $index
-     *
-     * @return \Shopware\Models\Country\Area
-     */
-    private function getArea($index = 0)
+    private function getArea(int $index = 0): Area
     {
-        $areas = Shopware()->Models()->getRepository('Shopware\Models\Country\Area')->findAll();
+        $areas = Shopware()->Models()->getRepository(Area::class)->findAll();
 
         return $areas[$index];
     }

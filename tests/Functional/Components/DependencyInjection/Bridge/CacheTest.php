@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -33,14 +35,14 @@ class CacheTest extends TestCase
 {
     use DirectoryDeletionTrait;
 
-    private $release;
+    private ShopwareReleaseStruct $release;
 
     public function setUp(): void
     {
         $this->release = new ShopwareReleaseStruct('5.5.0', '', '4711');
     }
 
-    public function testWorldReadWriteExecutable()
+    public function testWorldReadWriteExecutable(): void
     {
         $testDir = sys_get_temp_dir() . '/umask-test';
         $options = [
@@ -73,7 +75,7 @@ class CacheTest extends TestCase
         $this->deleteDirectory($testDir);
     }
 
-    public function testUserReadWriteExecutable()
+    public function testUserReadWriteExecutable(): void
     {
         $testDir = sys_get_temp_dir() . '/umask-test';
         $options = [
@@ -106,7 +108,7 @@ class CacheTest extends TestCase
         $this->deleteDirectory($testDir);
     }
 
-    public function testMixedReadWriteExecutable()
+    public function testMixedReadWriteExecutable(): void
     {
         $testDir = sys_get_temp_dir() . '/umask-test';
         $options = [
@@ -139,7 +141,7 @@ class CacheTest extends TestCase
         $this->deleteDirectory($testDir);
     }
 
-    public function testWorldReadWriteExecutableAsString()
+    public function testWorldReadWriteExecutableAsString(): void
     {
         $testDir = sys_get_temp_dir() . '/umask-test';
         $options = [

@@ -26,16 +26,13 @@ namespace Shopware\Tests\Functional\Traits;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use SplFileInfo;
 
 trait DirectoryDeletionTrait
 {
     /**
      * Deletes a directory recursively, no matter if it contains anything or not
-     *
-     * @param string $dir
      */
-    protected function deleteDirectory($dir)
+    protected function deleteDirectory(string $dir): void
     {
         if (!file_exists($dir)) {
             return;
@@ -46,7 +43,6 @@ trait DirectoryDeletionTrait
             RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        /** @var SplFileInfo $path */
         foreach ($iterator as $path) {
             if ($path->getFilename() === '.gitkeep') {
                 continue;

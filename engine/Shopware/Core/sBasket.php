@@ -1663,7 +1663,7 @@ SQL;
      * @throws \Zend_Db_Adapter_Exception
      * @throws \Enlight_Exception         If database could not be updated
      *
-     * @return bool
+     * @return false|null
      */
     public function sUpdateArticle($id, $quantity)
     {
@@ -1684,7 +1684,7 @@ SQL;
      * @throws Enlight_Exception
      * @throws Zend_Db_Adapter_Exception
      *
-     * @return bool|null
+     * @return false|null
      */
     public function updateCartItems(array $cartItems)
     {

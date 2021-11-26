@@ -107,7 +107,7 @@ class MailTest extends Enlight_Components_Test_TestCase
         foreach ($this->testData as $field => $value) {
             $setMethod = 'set' . ucfirst($field);
 
-            if (substr($field, 0, 2) === 'is') {
+            if (str_starts_with($field, 'is')) {
                 $getMethod = $field;
             } else {
                 $getMethod = 'get' . ucfirst($field);
@@ -127,11 +127,11 @@ class MailTest extends Enlight_Components_Test_TestCase
         $mail = new Mail();
         $mail->fromArray($this->testData);
 
-        foreach ($this->testData as $fieldname => $value) {
-            if (substr($fieldname, 0, 2) === 'is') {
-                $getMethod = $fieldname;
+        foreach ($this->testData as $fieldName => $value) {
+            if (str_starts_with($fieldName, 'is')) {
+                $getMethod = $fieldName;
             } else {
-                $getMethod = 'get' . ucfirst($fieldname);
+                $getMethod = 'get' . ucfirst($fieldName);
             }
 
             static::assertEquals($mail->$getMethod(), $value);
@@ -149,13 +149,11 @@ class MailTest extends Enlight_Components_Test_TestCase
         $mail->fromArray($this->testData);
         $mail->setTranslation($this->translation);
 
-        $testData = array_merge($this->testData, $this->translation);
-
-        foreach ($testData as $fieldname => $value) {
-            if (substr($fieldname, 0, 2) === 'is') {
-                $getMethod = $fieldname;
+        foreach (array_merge($this->testData, $this->translation) as $fieldName => $value) {
+            if (str_starts_with($fieldName, 'is')) {
+                $getMethod = $fieldName;
             } else {
-                $getMethod = 'get' . ucfirst($fieldname);
+                $getMethod = 'get' . ucfirst($fieldName);
             }
 
             static::assertEquals($value, $mail->$getMethod());
@@ -181,11 +179,11 @@ class MailTest extends Enlight_Components_Test_TestCase
 
         $mail = $this->repo->find($mailId);
 
-        foreach ($this->testData as $fieldname => $value) {
-            if (substr($fieldname, 0, 2) === 'is') {
-                $getMethod = $fieldname;
+        foreach ($this->testData as $fieldName => $value) {
+            if (str_starts_with($fieldName, 'is')) {
+                $getMethod = $fieldName;
             } else {
-                $getMethod = 'get' . ucfirst($fieldname);
+                $getMethod = 'get' . ucfirst($fieldName);
             }
 
             static::assertEquals($mail->$getMethod(), $value);
@@ -198,7 +196,7 @@ class MailTest extends Enlight_Components_Test_TestCase
     public function testGetAttachmentShouldReturnEmptyArrayInitial(): void
     {
         $mail = new Mail();
-        static::assertEquals($mail->getAttachments(), []);
+        static::assertEquals([], $mail->getAttachments());
     }
 
     /**
@@ -207,7 +205,7 @@ class MailTest extends Enlight_Components_Test_TestCase
     public function testGetStateShouldReturnNullInitial(): void
     {
         $mail = new Mail();
-        static::assertEquals($mail->getStatus(), null);
+        static::assertNull($mail->getStatus());
     }
 
     /**
@@ -227,9 +225,9 @@ class MailTest extends Enlight_Components_Test_TestCase
     {
         $statusMock = $this->createMock(Status::class);
 
-        $statusMock->expects(static::any())
-                ->method('getGroup')
-                ->willReturn(Status::GROUP_STATE);
+        $statusMock
+            ->method('getGroup')
+            ->willReturn(Status::GROUP_STATE);
 
         $mail = new Mail();
         $mail->setStatus($statusMock);
@@ -272,9 +270,8 @@ class MailTest extends Enlight_Components_Test_TestCase
     {
         $statusMock = $this->createMock(Status::class);
 
-        $statusMock->expects(static::any())
-                   ->method('getGroup')
-                   ->willReturn(Status::GROUP_STATE);
+        $statusMock->method('getGroup')
+            ->willReturn(Status::GROUP_STATE);
 
         $mail = new Mail();
         $mail->setMailtype(Mail::MAILTYPE_STATE);
@@ -293,9 +290,8 @@ class MailTest extends Enlight_Components_Test_TestCase
     {
         $statusMock = $this->createMock(Status::class);
 
-        $statusMock->expects(static::any())
-                ->method('getGroup')
-                ->willReturn(Status::GROUP_PAYMENT);
+        $statusMock->method('getGroup')
+            ->willReturn(Status::GROUP_PAYMENT);
 
         $mail = new Mail();
         $mail->setMailtype(Mail::MAILTYPE_STATE);

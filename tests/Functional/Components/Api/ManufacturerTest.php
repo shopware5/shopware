@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -41,15 +43,12 @@ class ManufacturerTest extends TestCase
      */
     protected $resource;
 
-    /**
-     * @return Manufacturer
-     */
-    public function createResource()
+    public function createResource(): Manufacturer
     {
         return new Manufacturer();
     }
 
-    public function testCreateShouldBeSuccessful()
+    public function testCreateShouldBeSuccessful(): int
     {
         $date = new DateTime();
         $date->modify('-3 day');
@@ -72,7 +71,7 @@ class ManufacturerTest extends TestCase
 
         $manufacturer = $this->resource->create($testData);
 
-        static::assertInstanceOf('\Shopware\Models\Article\Supplier', $manufacturer);
+        static::assertInstanceOf(Supplier::class, $manufacturer);
         static::assertGreaterThan(0, $manufacturer->getId());
         static::assertNotEmpty($manufacturer->getImage());
 
@@ -84,16 +83,17 @@ class ManufacturerTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetOneShouldBeSuccessful($id)
+    public function testGetOneShouldBeSuccessful(int $id): void
     {
         $manufacturer = $this->resource->getOne($id);
+        static::assertIsArray($manufacturer);
         static::assertGreaterThan(0, $manufacturer['id']);
     }
 
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetListShouldBeSuccessful()
+    public function testGetListShouldBeSuccessful(): void
     {
         $result = $this->resource->getList();
 
@@ -107,7 +107,7 @@ class ManufacturerTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testUpdateShouldBeSuccessful($id)
+    public function testUpdateShouldBeSuccessful(int $id): int
     {
         $testData = [
             'name' => uniqid((string) rand()) . 'foobar supplier',
@@ -115,7 +115,7 @@ class ManufacturerTest extends TestCase
 
         $manufacturer = $this->resource->update($id, $testData);
 
-        static::assertInstanceOf('\Shopware\Models\Article\Supplier', $manufacturer);
+        static::assertInstanceOf(Supplier::class, $manufacturer);
         static::assertEquals($id, $manufacturer->getId());
 
         static::assertEquals($manufacturer->getName(), $testData['name']);
@@ -123,22 +123,22 @@ class ManufacturerTest extends TestCase
         return $id;
     }
 
-    public function testUpdateWithInvalidIdShouldThrowNotFoundException()
+    public function testUpdateWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->update(9999999, []);
     }
 
-    public function testUpdateWithMissingIdShouldThrowParameterMissingException()
+    public function testUpdateWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
-        $this->resource->update('', []);
+        $this->expectException(ParameterMissingException::class);
+        $this->resource->update(0, []);
     }
 
     /**
      * @depends testUpdateShouldBeSuccessful
      */
-    public function testDeleteShouldBeSuccessful($id): void
+    public function testDeleteShouldBeSuccessful(int $id): void
     {
         $manufacturer = $this->resource->delete($id);
 
@@ -155,10 +155,10 @@ class ManufacturerTest extends TestCase
     public function testDeleteWithMissingIdShouldThrowParameterMissingException(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $this->resource->delete('');
+        $this->resource->delete(0);
     }
 
-    public function testMediaUploadOnCreate()
+    public function testMediaUploadOnCreate(): void
     {
         $manufacturer = $this->resource->create([
             'name' => 'foo',
@@ -173,10 +173,10 @@ class ManufacturerTest extends TestCase
         $media = $repo->findOneBy(['path' => $manufacturer->getImage()]);
         static::assertNotNull($media);
 
-        static::assertEquals($media->getAlbumId(), Album::ALBUM_SUPPLIER);
+        static::assertEquals(Album::ALBUM_SUPPLIER, $media->getAlbumId());
     }
 
-    public function testMediaUploadOnUpdate()
+    public function testMediaUploadOnUpdate(): void
     {
         $manufacturer = $this->resource->create([
             'name' => 'bar',
@@ -191,6 +191,7 @@ class ManufacturerTest extends TestCase
 
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $manufacturer = $this->resource->getOne($manufacturer->getId());
+        static::assertInstanceOf(Supplier::class, $manufacturer);
         static::assertNotEmpty($manufacturer->getImage());
 
         $repo = Shopware()->Container()->get(ModelManager::class)->getRepository(Media::class);
@@ -198,6 +199,6 @@ class ManufacturerTest extends TestCase
         $media = $repo->findOneBy(['path' => $manufacturer->getImage()]);
         static::assertNotNull($media);
 
-        static::assertEquals($media->getAlbumId(), Album::ALBUM_SUPPLIER);
+        static::assertEquals(Album::ALBUM_SUPPLIER, $media->getAlbumId());
     }
 }

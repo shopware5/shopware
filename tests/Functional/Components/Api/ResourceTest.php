@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,6 +27,7 @@
 namespace Shopware\Tests\Functional\Components\Api;
 
 use Enlight_Components_Test_TestCase;
+use Shopware\Components\Api\Exception\PrivilegeException;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware_Components_Acl;
 
@@ -45,45 +48,45 @@ class ResourceTest extends Enlight_Components_Test_TestCase
 
         Shopware()->Models()->clear();
 
-        $this->resource = $this->getMockForAbstractClass('\Shopware\Components\Api\Resource\Resource');
+        $this->resource = $this->getMockForAbstractClass(Resource::class);
 
         $this->resource->setManager(Shopware()->Models());
     }
 
-    public function testResultModeShouldDefaultToArray()
+    public function testResultModeShouldDefaultToArray(): void
     {
-        static::assertEquals($this->resource->getResultMode(), Resource::HYDRATE_ARRAY);
+        static::assertEquals(Resource::HYDRATE_ARRAY, $this->resource->getResultMode());
     }
 
-    public function testSetResultModeShouldShouldWork()
+    public function testSetResultModeShouldShouldWork(): void
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
 
-        static::assertEquals($this->resource->getResultMode(), Resource::HYDRATE_OBJECT);
+        static::assertEquals(Resource::HYDRATE_OBJECT, $this->resource->getResultMode());
     }
 
-    public function testAutoFlushShouldDefaultToTrue()
+    public function testAutoFlushShouldDefaultToTrue(): void
     {
-        static::assertEquals($this->resource->getAutoFlush(), true);
+        static::assertTrue($this->resource->getAutoFlush());
     }
 
-    public function testSetAutoFlushShouldWork()
+    public function testSetAutoFlushShouldWork(): void
     {
         $this->resource->setAutoFlush(false);
 
-        static::assertEquals($this->resource->getAutoFlush(), false);
+        static::assertFalse($this->resource->getAutoFlush());
     }
 
-    public function testCheckPrivilegeShouldThrowException()
+    public function testCheckPrivilegeShouldThrowException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\PrivilegeException');
+        $this->expectException(PrivilegeException::class);
         $aclMock = $this->createMock(Shopware_Components_Acl::class);
 
-        $aclMock->expects(static::any())
+        $aclMock
                 ->method('has')
                 ->willReturn(true);
 
-        $aclMock->expects(static::any())
+        $aclMock
                 ->method('isAllowed')
                 ->willReturn(false);
 
@@ -93,11 +96,11 @@ class ResourceTest extends Enlight_Components_Test_TestCase
         $this->resource->checkPrivilege('test');
     }
 
-    public function testFooFlushShouldWork()
+    public function testFooFlushShouldWork(): void
     {
         $aclMock = $this->createMock(Shopware_Components_Acl::class);
 
-        $aclMock->expects(static::any())
+        $aclMock
                 ->method('isAllowed')
                 ->willReturn(true);
 
