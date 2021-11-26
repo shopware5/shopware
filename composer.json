@@ -99,7 +99,7 @@
         "behat/mink": "1.8.1",
         "behat/mink-selenium2-driver": "1.4.0",
         "friends-of-behat/mink-extension": "2.5.0",
-        "friendsofphp/php-cs-fixer": "3.2.1",
+        "friendsofphp/php-cs-fixer": "3.3.1",
         "kubawerlos/php-cs-fixer-custom-fixers": "3.0.2",
         "php-parallel-lint/php-var-dump-check": "^0.5",
         "phpspec/prophecy-phpunit": "^2.0",

@@ -381,7 +381,7 @@ abstract class Resource implements ContainerAwareInterface
             $resource = $this->getContainer()->get('shopware.api.' . strtolower($name));
         } catch (ServiceNotFoundException $e) {
             $name = ucfirst($name);
-            /** @var class-string<Resource> $class */
+            /** @var class-string<self> $class */
             $class = __NAMESPACE__ . '\\Resource\\' . $name;
 
             $resource = new $class();

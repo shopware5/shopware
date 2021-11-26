@@ -275,11 +275,6 @@ parameters:
 			path: engine/Library/Enlight/Components/Cron/Job.php
 
 		-
-			message: "#^Method Enlight_Components_Cron_Job\\:\\:getName\\(\\) should return String but returns string\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Cron/Job.php
-
-		-
 			message: "#^Method Enlight_Components_Cron_Job\\:\\:getNext\\(\\) should return Zend_Date but returns string\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Cron/Job.php
@@ -326,11 +321,6 @@ parameters:
 
 		-
 			message: "#^Property Enlight_Components_Cron_Job\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Cron/Job.php
-
-		-
-			message: "#^Return typehint of method Enlight_Components_Cron_Job\\:\\:getName\\(\\) has invalid type String\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Cron/Job.php
 
