@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cf1532ab52156a446f54c8ec2e8e0463",
+    "content-hash": "5f814dc2b3f64da6557e40588191544e",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -7810,16 +7810,16 @@
         },
         {
             "name": "kubawerlos/php-cs-fixer-custom-fixers",
-            "version": "v3.0.2",
+            "version": "v3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers.git",
-                "reference": "26e6a733b3871fe118e8237f02081ee83b966c40"
+                "reference": "c8f4d1100c4d98ea38959e8cc508c2c0889fdfc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/26e6a733b3871fe118e8237f02081ee83b966c40",
-                "reference": "26e6a733b3871fe118e8237f02081ee83b966c40",
+                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/c8f4d1100c4d98ea38959e8cc508c2c0889fdfc4",
+                "reference": "c8f4d1100c4d98ea38959e8cc508c2c0889fdfc4",
                 "shasum": ""
             },
             "require": {
@@ -7835,7 +7835,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "PhpCsFixerCustomFixers\\": "./src"
+                    "PhpCsFixerCustomFixers\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -7851,9 +7851,9 @@
             "description": "A set of custom fixers for PHP CS Fixer",
             "support": {
                 "issues": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/issues",
-                "source": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/tree/v3.0.2"
+                "source": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/tree/v3.4.1"
             },
-            "time": "2021-09-20T16:33:05+00:00"
+            "time": "2021-11-22T21:48:43+00:00"
         },
         {
             "name": "nikic/php-parser",

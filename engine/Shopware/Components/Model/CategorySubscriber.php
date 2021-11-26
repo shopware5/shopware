@@ -33,9 +33,6 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * CategorySubscriber
- */
 class CategorySubscriber implements BaseEventSubscriber
 {
     /**
