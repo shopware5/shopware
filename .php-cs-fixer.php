@@ -1,10 +1,12 @@
 <?php
 
 use PhpCsFixer\Config;
+use PhpCsFixer\Fixer\PhpUnit\PhpUnitDedicateAssertFixer;
 use PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer;
 use PhpCsFixerCustomFixers\Fixer\NoUselessParenthesisFixer;
 use PhpCsFixerCustomFixers\Fixer\NoUselessStrlenFixer;
 use PhpCsFixerCustomFixers\Fixer\PhpdocParamTypeFixer;
+use PhpCsFixerCustomFixers\Fixer\PhpUnitDedicatedAssertFixer;
 use PhpCsFixerCustomFixers\Fixer\SingleSpaceAfterStatementFixer;
 use PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer;
 use PhpCsFixerCustomFixers\Fixer\NoSuperfluousConcatenationFixer;
@@ -88,5 +90,6 @@ return (new Config())
         NoSuperfluousConcatenationFixer::name() => true,
         NoUselessStrlenFixer::name() => true,
         NoUselessParenthesisFixer::name() => true,
+        PhpUnitDedicatedAssertFixer::name() => true,
     ])
     ->setFinder($finder);

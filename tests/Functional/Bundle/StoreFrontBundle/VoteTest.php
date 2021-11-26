@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,12 +29,11 @@ namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Vote;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware_Components_Config;
 
 class VoteTest extends TestCase
 {
-    public function testVoteList()
+    public function testVoteList(): void
     {
         $number = 'testVoteList';
         $context = $this->getContext();
@@ -54,7 +55,7 @@ class VoteTest extends TestCase
         }
     }
 
-    public function testVoteAverage()
+    public function testVoteAverage(): void
     {
         $number = 'testVoteAverage';
         $context = $this->getContext();
@@ -86,7 +87,7 @@ class VoteTest extends TestCase
         }
     }
 
-    public function testAverage()
+    public function testAverage(): void
     {
         $this->assertShopVotes(
             __FUNCTION__,
@@ -98,7 +99,7 @@ class VoteTest extends TestCase
         );
     }
 
-    public function testSimpleShopVotes()
+    public function testSimpleShopVotes(): void
     {
         $this->assertShopVotes(
             __FUNCTION__,
@@ -110,7 +111,7 @@ class VoteTest extends TestCase
         );
     }
 
-    public function testShopVotes()
+    public function testShopVotes(): void
     {
         $this->assertShopVotes(
             __FUNCTION__,
@@ -126,7 +127,7 @@ class VoteTest extends TestCase
         );
     }
 
-    public function testLegacyVotes()
+    public function testLegacyVotes(): void
     {
         $this->assertShopVotes(
             __FUNCTION__,
@@ -145,7 +146,7 @@ class VoteTest extends TestCase
         );
     }
 
-    public function testMixedVotes()
+    public function testMixedVotes(): void
     {
         $this->assertShopVotes(
             __FUNCTION__,
@@ -162,7 +163,7 @@ class VoteTest extends TestCase
         );
     }
 
-    public function testDisabledConfig()
+    public function testDisabledConfig(): void
     {
         $this->assertShopVotes(
             __FUNCTION__,
@@ -180,12 +181,11 @@ class VoteTest extends TestCase
     }
 
     /**
-     * @param string $number
-     * @param array  $points
-     * @param array  $expected
-     * @param array  $configs
+     * @param array<array<int>>                                                     $points
+     * @param array<int, array{count: int, average: int, points?: array<int, int>}> $expected
+     * @param array<string, bool>                                                   $configs
      */
-    private function assertShopVotes($number, $points = [], $expected = [], $configs = [])
+    private function assertShopVotes(string $number, array $points = [], array $expected = [], array $configs = []): void
     {
         //switch config values
         $config = Shopware()->Container()->get(Shopware_Components_Config::class);
@@ -203,7 +203,7 @@ class VoteTest extends TestCase
         //generate shop specified votes generated
         foreach ($points as $shopId => $shopPoints) {
             //fix for shop id = null as array key
-            if (!$shopId) {
+            if (!\is_int($shopId)) {
                 $shopId = null;
             }
             $this->helper->createVotes($product->getId(), $shopPoints, $shopId);
@@ -221,7 +221,7 @@ class VoteTest extends TestCase
             //validate vote count of provided shop
             if (\array_key_exists('count', $data)) {
                 $votes = $service->get($product, $context);
-                static::assertEquals($data['count'], \count($votes), sprintf('Vote count %s for shop %s of product %s not match', $data['count'], $shopId, $product->getNumber()));
+                static::assertCount($data['count'], $votes, sprintf('Vote count %s for shop %s of product %s not match', $data['count'], $shopId, $product->getNumber()));
             }
 
             //validates provided average value of provided shop

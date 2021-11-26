@@ -52432,11 +52432,6 @@ parameters:
 			path: tests/Functional/Bundle/MediaBundle/GarbageCollectorFactoryTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\MediaBundle\\\\GarbageCollectorFactoryTest\\:\\:testTextAttributesAreCollected\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/MediaBundle/GarbageCollectorFactoryTest.php
-
-		-
 			message: "#^Cannot call method getExtension\\(\\) on Shopware\\\\Models\\\\Media\\\\Media\\|null\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/MediaBundle/MediaReplaceServiceTest.php
@@ -53680,71 +53675,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TranslationTest\\:\\:testUnitTranslation\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/TranslationTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\VoteTest\\:\\:assertShopVotes\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\VoteTest\\:\\:assertShopVotes\\(\\) has parameter \\$configs with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\VoteTest\\:\\:assertShopVotes\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\VoteTest\\:\\:assertShopVotes\\(\\) has parameter \\$points with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\VoteTest\\:\\:testAverage\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\VoteTest\\:\\:testDisabledConfig\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\VoteTest\\:\\:testLegacyVotes\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\VoteTest\\:\\:testMixedVotes\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\VoteTest\\:\\:testShopVotes\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\VoteTest\\:\\:testSimpleShopVotes\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\VoteTest\\:\\:testVoteAverage\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\VoteTest\\:\\:testVoteList\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$shopId of method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\Helper\\:\\:createVotes\\(\\) expects int\\|null, int\\<min, \\-1\\>\\|int\\<1, max\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/VoteTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Components\\\\AclTest\\:\\:testAclShouldContainResources\\(\\) has no return typehint specified\\.$#"

@@ -226,7 +226,7 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
         $this->dispatch('backend/UserManager/getUsers');
         static::assertTrue($this->View()->success);
         static::assertGreaterThan(0, \count($this->View()->data));
-        static::assertEquals($this->View()->total, \count($this->View()->data));
+        static::assertCount($this->View()->total, $this->View()->data);
     }
 
     /**
@@ -262,7 +262,7 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
 
         static::assertTrue($this->View()->success);
         static::assertGreaterThan(0, \count($this->View()->data));
-        static::assertEquals($this->View()->total, \count($this->View()->data));
+        static::assertCount($this->View()->total, $this->View()->data);
     }
 
     /**
