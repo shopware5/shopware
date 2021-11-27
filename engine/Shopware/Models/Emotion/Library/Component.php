@@ -51,7 +51,7 @@ class Component extends ModelEntity
      * with xtype: 'emotion-article-search' (the shopware article suggest search with a individual configuration for the
      * backend module) to configure which article has to been displayed.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\Library\Field>
+     * @var ArrayCollection<array-key, Field>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Field", mappedBy="component", orphanRemoval=true, cascade={"persist"})
      */
@@ -135,7 +135,7 @@ class Component extends ModelEntity
      * Private var that holds the max position value of the form fields
      * The value is kept up to date on a "best effort" policy
      *
-     * @var int
+     * @var int|null
      */
     private $maxFieldPositionValue;
 
@@ -151,7 +151,7 @@ class Component extends ModelEntity
      * with xtype: 'emotion-article-search' (the shopware article suggest search with a individual configuration for the
      * backend module) to configure which article has to been displayed.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\Library\Field>
+     * @return ArrayCollection<array-key, Field>
      */
     public function getFields()
     {
@@ -165,13 +165,13 @@ class Component extends ModelEntity
      * with xtype: 'emotion-article-search' (the shopware article suggest search with a individual configuration for the
      * backend module) to configure which article has to been displayed.
      *
-     * @param \Shopware\Models\Emotion\Library\Field[]|array|null $fields
+     * @param ArrayCollection<array-key, Field>|Field[] $fields
      *
      * @return Component
      */
     public function setFields($fields)
     {
-        return $this->setOneToMany($fields, \Shopware\Models\Emotion\Library\Field::class, 'fields', 'component');
+        return $this->setOneToMany($fields, Field::class, 'fields', 'component');
     }
 
     /**
@@ -313,7 +313,7 @@ class Component extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Plugin\Plugin|null
+     * @return Plugin|null
      */
     public function getPlugin()
     {
@@ -321,7 +321,7 @@ class Component extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Plugin\Plugin|null $plugin
+     * @param Plugin|null $plugin
      */
     public function setPlugin($plugin)
     {
@@ -367,12 +367,13 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.Checkbox element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Checkbox
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     * options {
+     *     string $name       Required; Logical name of the component field
+     *     string $fieldLabel optional; Ext JS form field label
+     *     string $allowBlank Optional; Defines if the value can contain null
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
      *
      * @return Field
      */
@@ -398,15 +399,16 @@ class Component extends ModelEntity
      *  - displayField
      *  - valueField
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $store              Required; Store class which used for the combo class
-     *     @var string $displayField       Required; Field name of the model which displays as text
-     *     @var string $valueField         Required; Identifier field of the combo box
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     * options {
+     *     string $name         Required; Logical name of the component field
+     *     string $store        Required; Store class which used for the combo class
+     *     string $displayField Required; Field name of the model which displays as text
+     *     string $valueField   Required; Identifier field of the combo box
+     *     string $fieldLabel   optional; Ext JS form field label
+     *     string $allowBlank   Optional; Defines if the value can contain null
      * }
+     *
+     * @param array{name: string, store: string, displayField: string, valueField: string, fieldLabel?: string, allowBlank?: string} $options
      *
      * @return Field
      */
@@ -426,13 +428,14 @@ class Component extends ModelEntity
      * This field type supports the following parameters which can be set
      * as options array value:
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
-     *     @var string $defaultValue       Optional; date string in format Y-m-d
+     * options {
+     *      string $name         Required; Logical name of the component field
+     *      string $fieldLabel   optional; Ext JS form field label
+     *      string $allowBlank   Optional; Defines if the value can contain null
+     *      string $defaultValue Optional; date string in format Y-m-d
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string, defaultValue?: string} $options
      *
      * @return Field
      */
@@ -452,12 +455,13 @@ class Component extends ModelEntity
      * This field type supports the following parameters which can be set
      * as options array value:
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     * options {
+     *     string $name       Required; Logical name of the component field
+     *     string $fieldLabel optional; Ext JS form field label
+     *     string $allowBlank Optional; Defines if the value can contain null
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
      *
      * @return Field
      */
@@ -474,12 +478,13 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.Hidden element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Hidden
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     * options {
+     *     string $name       Required; Logical name of the component field
+     *     string $fieldLabel optional; Ext JS form field label
+     *     string $allowBlank Optional; Defines if the value can contain null
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
      *
      * @return Field
      */
@@ -496,12 +501,13 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.HtmlEditor element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.HtmlEditor
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     * options {
+     *     string $name       Required; Logical name of the component field
+     *     string $fieldLabel optional; Ext JS form field label
+     *     string $allowBlank Optional; Defines if the value can contain null
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
      *
      * @return Field
      */
@@ -518,12 +524,13 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.Number element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Number
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     * options {
+     *     string $name       Required; Logical name of the component field
+     *     string $fieldLabel optional; Ext JS form field label
+     *     string $allowBlank Optional; Defines if the value can contain null
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
      *
      * @return Field
      */
@@ -540,12 +547,13 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.Radio element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Radio
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     * options {
+     *     string $name       Required; Logical name of the component field
+     *     string $fieldLabel optional; Ext JS form field label
+     *     string $allowBlank Optional; Defines if the value can contain null
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
      *
      * @return Field
      */
@@ -562,12 +570,13 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.Text element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Text
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     * options {
+     *     string $name       Required; Logical name of the component field
+     *     string $fieldLabel optional; Ext JS form field label
+     *     string $allowBlank Optional; Defines if the value can contain null
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
      *
      * @return Field
      */
@@ -584,12 +593,13 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.TextArea element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.TextArea
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     * options {
+     *     string $name       Required; Logical name of the component field
+     *     string $fieldLabel optional; Ext JS form field label
+     *     string $allowBlank Optional; Defines if the value can contain null
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
      *
      * @return Field
      */
@@ -606,13 +616,14 @@ class Component extends ModelEntity
      * Creates a Ext.form.field.Time element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Time
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
-     *     @var string $defaultValue       Optional; default value as string in format H:i
+     * options {
+     *      string $name         Required; Logical name of the component field
+     *      string $fieldLabel   optional; Ext JS form field label
+     *      string $allowBlank   Optional; Defines if the value can contain null
+     *      string $defaultValue Optional; default value as string in format H:i
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string, defaultValue?: string} $options
      *
      * @return Field
      */
@@ -628,12 +639,13 @@ class Component extends ModelEntity
     /**
      * Creates a code mirror component field.
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     * options {
+     *     string $name       Required; Logical name of the component field
+     *     string $fieldLabel optional; Ext JS form field label
+     *     string $allowBlank Optional; Defines if the value can contain null
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
      *
      * @return Field
      */
@@ -649,12 +661,13 @@ class Component extends ModelEntity
     /**
      * Creates a tiny mce component field.
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     * options {
+     *     string $name       Required; Logical name of the component field
+     *     string $fieldLabel optional; Ext JS form field label
+     *     string $allowBlank Optional; Defines if the value can contain null
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
      *
      * @return Field
      */
@@ -670,12 +683,13 @@ class Component extends ModelEntity
     /**
      * Creates a media selection component field.
      *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         optional; Ext JS form field label
-     *     @var string $allowBlank         Optional; Defines if the value can contains null
+     * options {
+     *     string $name       Required; Logical name of the component field
+     *     string $fieldLabel optional; Ext JS form field label
+     *     string $allowBlank Optional; Defines if the value can contain null
      * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
      *
      * @return Field
      */

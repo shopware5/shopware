@@ -50,8 +50,11 @@ class ReleaseDateConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        if (!$condition instanceof ReleaseDateCondition) {
+            return;
+        }
+
         $date = new DateTime();
-        /** @var ReleaseDateCondition $condition */
         $intervalSpec = 'P' . $condition->getDays() . 'D';
         $interval = new DateInterval($intervalSpec);
 

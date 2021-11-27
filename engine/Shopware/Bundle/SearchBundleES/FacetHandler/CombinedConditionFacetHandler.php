@@ -38,10 +38,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    /**
-     * @var CombinedConditionQueryBuilder
-     */
-    private $combinedConditionQueryBuilder;
+    private CombinedConditionQueryBuilder $combinedConditionQueryBuilder;
 
     public function __construct(CombinedConditionQueryBuilder $combinedConditionQueryBuilder)
     {
@@ -65,7 +62,10 @@ class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorI
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var CombinedConditionFacet $criteriaPart */
+        if (!$criteriaPart instanceof CombinedConditionFacet) {
+            return;
+        }
+
         $query = $this->combinedConditionQueryBuilder->build(
             $criteriaPart->getConditions(),
             $criteria,
@@ -104,8 +104,10 @@ class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorI
                 continue;
             }
 
-            /** @var CombinedConditionFacet $facet */
             $facet = $criteria->getFacet($key);
+            if (!$facet instanceof CombinedConditionFacet) {
+                continue;
+            }
 
             $result->addFacet(
                 new BooleanFacetResult(

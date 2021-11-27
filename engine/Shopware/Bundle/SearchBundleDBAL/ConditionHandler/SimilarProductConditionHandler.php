@@ -48,7 +48,10 @@ class SimilarProductConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /** @var SimilarProductCondition $condition */
+        if (!$condition instanceof SimilarProductCondition) {
+            return;
+        }
+
         $productId = $condition->getProductId();
 
         $query->innerJoin(

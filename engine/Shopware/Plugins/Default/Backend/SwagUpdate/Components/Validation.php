@@ -24,7 +24,6 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components;
 
-use Enlight_Components_Snippet_Namespace;
 use Exception;
 
 /**
@@ -49,40 +48,39 @@ class Validation
     public const REQUIREMENT_CRITICAL = 20;
 
     /**
-     * @var Enlight_Components_Snippet_Namespace
-     */
-    private $namespace;
-
-    /**
-     * @var CheckInterface[]
+     * @var array<CheckInterface>
      */
     private $checks;
 
-    public function __construct(Enlight_Components_Snippet_Namespace $namespace, array $checks)
+    /**
+     * @param array<CheckInterface> $checks
+     */
+    public function __construct(array $checks)
     {
-        $this->namespace = $namespace;
         $this->checks = $checks;
     }
 
     /**
-     * @param array $requirements {
+     * requirements {
+     *      string type => Type of the requirement check
+     *      array  directories [optional] => Array of directories which should be iterated
+     *      string errorLevel => Flag how critical the error is (1 => Warning, 2 => Exception)
+     *      string errorMessage => Error message which can be set for the validation, 1x %s will be replaced with all found files
+     *      string value => Only used for regular expressions, contains the regular expression
+     *      string fileRegex [optional] => Regular expression for file types.
+     * }
      *
-     * @var string type => Type of the requirement check
-     * @var array  directories => Array of directories which should be iterated
-     * @var string errorLevel => Flag how critical the error is (1 => Warning, 2 => Exception)
-     * @var string errorMessage => Error message which can be set for the validation, 1x %s will be replaced with all found files
-     * @var string value [optional] => Only used for regular expressions, contains the regular expression
-     * @var string fileRegex [optional] => Regular expression for file types.
-     *             }
+     * @param array<array{type: string, value: string|array|null, level: Validation::REQUIREMENT_VALID|Validation::REQUIREMENT_WARNING|Validation::REQUIREMENT_CRITICAL}> $requirements
      *
      * @throws Exception
      *
-     * @return array {
+     * return array {
+     *      string type       => Type of the requirement check
+     *      int    errorLevel => Flag how critical the error is (1 => Warning, 2 => Exception)
+     *      string message    => Passed error message for failed checks.
+     * }
      *
-     * @var string type       => Type of the requirement check
-     * @var int    errorLevel => Flag how critical the error is (1 => Warning, 2 => Exception)
-     * @var string message    => Passed error message for failed checks.
-     *             }
+     * @return array<array{type: string, errorLevel: Validation::REQUIREMENT_VALID|Validation::REQUIREMENT_WARNING|Validation::REQUIREMENT_CRITICAL, message: string}|null>
      */
     public function checkRequirements($requirements)
     {
@@ -98,9 +96,9 @@ class Validation
     }
 
     /**
-     * @param array $requirement
+     * @param array{type: string, value: string|array|null, level: Validation::REQUIREMENT_VALID|Validation::REQUIREMENT_WARNING|Validation::REQUIREMENT_CRITICAL} $requirement
      *
-     * @return array
+     * @return array{type: string, errorLevel: Validation::REQUIREMENT_VALID|Validation::REQUIREMENT_WARNING|Validation::REQUIREMENT_CRITICAL, message: string}|null
      */
     private function handleRequirement($requirement)
     {

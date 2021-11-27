@@ -34,11 +34,13 @@ class ReflectionHelper
     /**
      * Create a class instance from a class name string
      *
-     * @param string $className
-     * @param array  $arguments
-     * @param bool   $secure      Make sure that the class is a valid shopware class
-     * @param string $docPath     Optional document root parameter where the class should be found
-     * @param array  $directories an array of directories in which the class should be found
+     * @template TClass of object
+     *
+     * @param class-string<TClass> $className
+     * @param array                $arguments
+     * @param bool                 $secure      Make sure that the class is a valid shopware class
+     * @param string               $docPath     Optional document root parameter where the class should be found
+     * @param array                $directories an array of directories in which the class should be found
      *
      * @see \Shopware\Components\ReflectionHelper::verifyClass()
      *
@@ -46,7 +48,7 @@ class ReflectionHelper
      * @throws InvalidArgumentException
      * @throws RuntimeException         If the class has no namespace
      *
-     * @return object
+     * @return TClass
      */
     public function createInstanceFromNamedArguments($className, $arguments, $secure = true, $docPath = null, array $directories = [])
     {
@@ -105,13 +107,13 @@ class ReflectionHelper
      * Verify that a given ReflectionClass object is within the documentroot (docPath)
      * and (optionally) that said class belongs to certain directories.
      *
-     * @param string $docPath     Path to the project's document root
-     * @param array  $directories Set of directories in which the class file should be in
+     * @param string        $docPath     Path to the project's document root
+     * @param array<string> $directories Set of directories in which the class file should be in
      *
      * @throws InvalidArgumentException If the class is out of scope (docpath mismatch)   (code: 1)
      * @throws InvalidArgumentException If the class is out of scope (directory mismatch) (code: 2)
      */
-    private function verifyClass(ReflectionClass $class, $docPath, array $directories)
+    private function verifyClass(ReflectionClass $class, string $docPath, array $directories): void
     {
         $fileName = $class->getFileName();
         if ($fileName === false) {

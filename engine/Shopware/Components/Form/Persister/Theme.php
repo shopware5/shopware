@@ -84,13 +84,15 @@ class Theme implements Form\Interfaces\Persister
                 break;
 
             case Tab::class:
-                /** @var Form\Container\Tab $container */
-                $entity = $this->saveTab($entity, $container);
+                if ($container instanceof Tab) {
+                    $entity = $this->saveTab($entity, $container);
+                }
                 break;
 
             case FieldSet::class:
-                /** @var Form\Container\FieldSet $container */
-                $entity = $this->saveFieldSet($entity, $container);
+                if ($container instanceof FieldSet) {
+                    $entity = $this->saveFieldSet($entity, $container);
+                }
                 break;
         }
 

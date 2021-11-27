@@ -52,7 +52,10 @@ class CustomerGroupConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var CustomerGroupCondition $criteriaPart */
+        if (!$criteriaPart instanceof CustomerGroupCondition) {
+            return;
+        }
+
         $filter = new BoolQuery();
         $filter->add(
             new TermsQuery('blockedCustomerGroupIds', $criteriaPart->getCustomerGroupIds()),
@@ -70,7 +73,10 @@ class CustomerGroupConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var CustomerGroupCondition $criteriaPart */
+        if (!$criteriaPart instanceof CustomerGroupCondition) {
+            return;
+        }
+
         $filter = new BoolQuery();
         $filter->add(
             new TermsQuery('blockedCustomerGroupIds', $criteriaPart->getCustomerGroupIds()),

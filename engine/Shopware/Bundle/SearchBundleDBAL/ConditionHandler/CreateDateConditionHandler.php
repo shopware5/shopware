@@ -50,7 +50,10 @@ class CreateDateConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /** @var CreateDateCondition $condition */
+        if (!$condition instanceof CreateDateCondition) {
+            return;
+        }
+
         $date = new DateTime();
         $intervalSpec = 'P' . $condition->getDays() . 'D';
         $interval = new DateInterval($intervalSpec);

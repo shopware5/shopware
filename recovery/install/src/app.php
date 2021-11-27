@@ -165,7 +165,7 @@ $translationService = $container->offsetGet('translation.service');
 
 $container->offsetSet('install.language', $selectedLanguage);
 
-/** @var MenuHelper $helper */
+/** @var MenuHelper $menuHelper */
 $menuHelper = $container->offsetGet('menu.helper');
 
 // Set global variables

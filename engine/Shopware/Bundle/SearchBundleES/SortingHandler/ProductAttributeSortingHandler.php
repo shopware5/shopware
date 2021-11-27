@@ -51,7 +51,10 @@ class ProductAttributeSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var ProductAttributeSorting $criteriaPart */
+        if (!$criteriaPart instanceof ProductAttributeSorting) {
+            return;
+        }
+
         $field = 'attributes.core.' . $criteriaPart->getField();
         $search->addSort(
             new FieldSort($field, strtolower($criteriaPart->getDirection()))

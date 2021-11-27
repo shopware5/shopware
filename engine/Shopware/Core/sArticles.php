@@ -49,7 +49,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Compatibility\LegacyEventManager;
 use Shopware\Components\Compatibility\LegacyStructConverter;
@@ -344,7 +343,6 @@ class sArticles implements Enlight_Hook
         }
 
         $productContext = $this->contextService->getShopContext();
-        /** @var ProductContextInterface $productContext */
         $product = $this->listProductService->get($orderNumber, $productContext);
         if (!$product || !$product->hasProperties()) {
             return [];

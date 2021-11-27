@@ -25186,11 +25186,6 @@ parameters:
 			path: engine/Shopware/Components/Plugin/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Components_Plugin_Bootstrap\\:\\:createEmotionComponent\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Components_Plugin_Bootstrap\\:\\:createMenuItem\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/Bootstrap.php
@@ -26106,22 +26101,7 @@ parameters:
 			path: engine/Shopware/Components/ReflectionHelper.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\ReflectionHelper\\:\\:verifyClass\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ReflectionHelper.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\ReflectionHelper\\:\\:verifyClass\\(\\) has parameter \\$class with generic class ReflectionClass but does not specify its types\\: T$#"
-			count: 1
-			path: engine/Shopware/Components/ReflectionHelper.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\ReflectionHelper\\:\\:verifyClass\\(\\) has parameter \\$directories with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ReflectionHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$argument of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, string given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ReflectionHelper.php
 
@@ -31301,21 +31281,6 @@ parameters:
 
 		-
 			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Models\\\\Document\\\\Document\\:\\:setDocument\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Models\\\\Document\\\\Document\\:\\:setStyle\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Models\\\\Document\\\\Document\\:\\:setValue\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Config.php
 
@@ -43965,82 +43930,7 @@ parameters:
 			path: engine/Shopware/Models/Emotion/Emotion.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createCheckboxField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createCodeMirrorField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createComboBoxField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createDateField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createDisplayField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createField\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createHiddenField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createHtmlEditorField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createMediaField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createNumberField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createRadioField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createTextAreaField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createTextField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createTimeField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:createTinyMceField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:getFields\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Emotion/Library/Component.php
 
@@ -44086,11 +43976,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:setXType\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Library/Component.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Emotion\\\\Library\\\\Component\\:\\:\\$fields with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Emotion/Library/Component.php
 
@@ -48584,56 +48469,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Archive/Zip.php
 
 		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\CheckInterface\\:\\:canHandle\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/CheckInterface.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\CheckInterface\\:\\:check\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/CheckInterface.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\CheckInterface\\:\\:check\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/CheckInterface.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\EmotionTemplateCheck\\:\\:canHandle\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/EmotionTemplateCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\EmotionTemplateCheck\\:\\:check\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/EmotionTemplateCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\EmotionTemplateCheck\\:\\:check\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/EmotionTemplateCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\LicenseCheck\\:\\:canHandle\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/LicenseCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\LicenseCheck\\:\\:check\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/LicenseCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\LicenseCheck\\:\\:check\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/LicenseCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\LicenseCheck\\:\\:check\\(\\) should return array but returns null\\.$#"
-			count: 2
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/LicenseCheck.php
-
-		-
 			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\LicenseCheck\\:\\:getLicenseData\\(\\) has parameter \\$licenseKeys with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/LicenseCheck.php
@@ -48649,71 +48484,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/LicenseCheck.php
 
 		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\MySQLVersionCheck\\:\\:canHandle\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/MySQLVersionCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\MySQLVersionCheck\\:\\:check\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/MySQLVersionCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\MySQLVersionCheck\\:\\:check\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/MySQLVersionCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\PHPExtensionCheck\\:\\:canHandle\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/PHPExtensionCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\PHPExtensionCheck\\:\\:check\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/PHPExtensionCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\PHPExtensionCheck\\:\\:check\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/PHPExtensionCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\PHPVersionCheck\\:\\:canHandle\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/PHPVersionCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\PHPVersionCheck\\:\\:check\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/PHPVersionCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\PHPVersionCheck\\:\\:check\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/PHPVersionCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\RegexCheck\\:\\:canHandle\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/RegexCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\RegexCheck\\:\\:check\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/RegexCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\RegexCheck\\:\\:check\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/RegexCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\RegexCheck\\:\\:check\\(\\) should return array but returns null\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/RegexCheck.php
-
-		-
 			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\RegexCheck\\:\\:extractLocalizedMessage\\(\\) has parameter \\$messages with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/RegexCheck.php
@@ -48727,21 +48497,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$subject of function preg_match_all expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/RegexCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\WritableCheck\\:\\:canHandle\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/WritableCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\WritableCheck\\:\\:check\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/WritableCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\WritableCheck\\:\\:check\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/WritableCheck.php
 
 		-
 			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Download\\:\\:moveFile\\(\\) has no return typehint specified\\.$#"
@@ -48939,41 +48694,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/UpdateCheck.php
 
 		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Validation\\:\\:__construct\\(\\) has parameter \\$checks with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Validation\\:\\:checkRequirements\\(\\) has parameter \\$requirements with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Validation\\:\\:checkRequirements\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Validation\\:\\:handleRequirement\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Validation\\:\\:handleRequirement\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Validation\\:\\:handleRequirement\\(\\) should return array but returns null\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
-
-		-
-			message: "#^PHPDoc tag @var has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
-
-		-
 			message: "#^Cannot access property \\$version on ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Struct\\\\Version\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
@@ -49162,11 +48882,6 @@ parameters:
 			message: "#^Method Shopware_Plugins_Core_CronBirthday_Bootstrap\\:\\:onRun\\(\\) has parameter \\$job with no value type specified in iterable type Shopware_Components_Cron_CronJob\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/CronBirthday/Bootstrap.php
-
-		-
-			message: "#^Cannot call method getTimestamp\\(\\) on DateTimeInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/CronProductExport/Bootstrap.php
 
 		-
 			message: "#^Method Shopware_Plugins_Core_CronProductExport_Bootstrap\\:\\:exportProductFiles\\(\\) should return string but returns true\\.$#"

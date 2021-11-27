@@ -33,8 +33,6 @@ class SearchIndexer implements SearchIndexerInterface
 {
     /**
      * Percent of matches to delete search index keywords
-     *
-     * @var float
      */
     public const INDEX_DELETE_THRESHOLD = 0.9;
 

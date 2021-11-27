@@ -25,6 +25,7 @@
 namespace ShopwarePlugins\SwagUpdate\Components\Checks;
 
 use Enlight_Components_Snippet_Namespace as SnippetNamespace;
+use InvalidArgumentException;
 use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\FileSystem;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
@@ -54,7 +55,7 @@ class WritableCheck implements CheckInterface
      */
     public function canHandle($requirement)
     {
-        return $requirement['type'] == self::CHECK_TYPE;
+        return $requirement['type'] === self::CHECK_TYPE;
     }
 
     /**
@@ -67,6 +68,10 @@ class WritableCheck implements CheckInterface
 
         $successMessage = $this->namespace->get('controller/check_writable_success', 'The following directories are writeable <br/>%s');
         $failMessage = $this->namespace->get('controller/check_writable_failure', 'The following directories are not writable: <br> %s');
+
+        if (!\is_array($requirement['value'])) {
+            throw new InvalidArgumentException(__CLASS__ . ' needs an array as value for the requirement check');
+        }
 
         foreach ($requirement['value'] as $path) {
             $fullPath = rtrim(Shopware()->DocPath($path), '/');

@@ -35,10 +35,7 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
 {
     public const STATE_INCLUDES_RANKING = 'ranking';
 
-    /**
-     * @var SearchTermQueryBuilderInterface
-     */
-    private $searchTermQueryBuilder;
+    private SearchTermQueryBuilderInterface $searchTermQueryBuilder;
 
     public function __construct(SearchTermQueryBuilderInterface $searchTermQueryBuilder)
     {
@@ -61,7 +58,10 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /** @var SearchTermCondition $condition */
+        if (!$condition instanceof SearchTermCondition) {
+            return;
+        }
+
         $searchQuery = $this->searchTermQueryBuilder->buildQuery(
             $condition->getTerm()
         );

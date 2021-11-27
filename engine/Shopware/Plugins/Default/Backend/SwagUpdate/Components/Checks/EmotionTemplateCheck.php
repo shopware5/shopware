@@ -55,13 +55,11 @@ class EmotionTemplateCheck implements CheckInterface
      */
     public function canHandle($requirement)
     {
-        return $requirement['type'] == self::CHECK_TYPE;
+        return $requirement['type'] === self::CHECK_TYPE;
     }
 
     /**
-     * @param array $requirement
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function check($requirement)
     {

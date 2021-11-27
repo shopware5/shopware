@@ -66,7 +66,10 @@ class SimilarProductConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var SimilarProductCondition $criteriaPart */
+        if (!$criteriaPart instanceof SimilarProductCondition) {
+            return;
+        }
+
         $productId = $criteriaPart->getProductId();
         $productName = $criteriaPart->getProductName();
         $categories = $this->getProductCategories($productId);
@@ -99,11 +102,9 @@ class SimilarProductConditionHandler implements PartialConditionHandlerInterface
     }
 
     /**
-     * @param int $productId
-     *
      * @return int[]
      */
-    private function getProductCategories($productId)
+    private function getProductCategories(int $productId): array
     {
         $query = $this->connection->createQueryBuilder();
 

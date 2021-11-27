@@ -111,9 +111,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
             return;
         }
 
-        /**
-         * @var VariantFacet
-         */
         $facet = $criteria->getFacet('option');
         if (!$facet instanceof VariantFacet) {
             return;

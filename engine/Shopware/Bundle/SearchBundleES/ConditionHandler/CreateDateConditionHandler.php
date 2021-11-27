@@ -74,12 +74,8 @@ class CreateDateConditionHandler implements PartialConditionHandlerInterface
         );
     }
 
-    /**
-     * @return RangeQuery
-     */
-    private function createQuery(CriteriaPartInterface $criteriaPart)
+    private function createQuery(CreateDateCondition $criteriaPart): RangeQuery
     {
-        /** @var CreateDateCondition $criteriaPart */
         $date = new DateTime();
         $intervalSpec = 'P' . $criteriaPart->getDays() . 'D';
         $interval = new DateInterval($intervalSpec);
