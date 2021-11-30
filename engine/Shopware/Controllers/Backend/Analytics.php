@@ -972,7 +972,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $shopNames = $this->getShopNames();
 
             foreach ($fields as $field => $shopId) {
-                $suffix = substr($field, 0, \strlen($fields) - \strlen($shopId));
+                $suffix = substr($field, 0, \strlen($field) - \strlen($shopId));
                 $data = $this->switchArrayKeys($data, $shopNames[$shopId] . ' (' . $suffix . ')', $field);
             }
         }
