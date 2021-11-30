@@ -64,7 +64,7 @@ class Shopware_Controllers_Frontend_RobotsTxt extends Enlight_Controller_Action
 
         foreach ($allShops as $shop) {
             $detachedShop = $shopRepository->getById($shop->getId());
-            if ($detachedShop === null) {
+            if ($detachedShop === null || $detachedShop->getActive() === false) {
                 continue;
             }
 
