@@ -62394,11 +62394,6 @@ parameters:
 			path: tests/Unit/Bundle/BenchmarkBundle/ProviderTest.php
 
 		-
-			message: "#^Property Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\ContentTypeBundle\\\\DependencyInjection\\\\TypeReaderTest\\:\\:\\$mapping type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/ContentTypeBundle/DependencyInjection/TypeReaderTest.php
-
-		-
 			message: "#^Cannot call method getLabel\\(\\) on Shopware\\\\Bundle\\\\CookieBundle\\\\Structs\\\\CookieStruct\\|null\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/CookieBundle/CookieCollectionTest.php

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f814dc2b3f64da6557e40588191544e",
+    "content-hash": "ec52ae44f10df7f92e8f119b04588c1d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -7810,16 +7810,16 @@
         },
         {
             "name": "kubawerlos/php-cs-fixer-custom-fixers",
-            "version": "v3.4.1",
+            "version": "v3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers.git",
-                "reference": "c8f4d1100c4d98ea38959e8cc508c2c0889fdfc4"
+                "reference": "fd3dbbb83763f4af350ecc3fe0d923679407c63f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/c8f4d1100c4d98ea38959e8cc508c2c0889fdfc4",
-                "reference": "c8f4d1100c4d98ea38959e8cc508c2c0889fdfc4",
+                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/fd3dbbb83763f4af350ecc3fe0d923679407c63f",
+                "reference": "fd3dbbb83763f4af350ecc3fe0d923679407c63f",
                 "shasum": ""
             },
             "require": {
@@ -7851,9 +7851,9 @@
             "description": "A set of custom fixers for PHP CS Fixer",
             "support": {
                 "issues": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/issues",
-                "source": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/tree/v3.4.1"
+                "source": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/tree/v3.5.0"
             },
-            "time": "2021-11-22T21:48:43+00:00"
+            "time": "2021-11-30T18:41:07+00:00"
         },
         {
             "name": "nikic/php-parser",

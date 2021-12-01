@@ -2,6 +2,7 @@
 
 use PhpCsFixer\Config;
 use PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer;
+use PhpCsFixerCustomFixers\Fixer\NoUselessDirnameCallFixer;
 use PhpCsFixerCustomFixers\Fixer\NoUselessParenthesisFixer;
 use PhpCsFixerCustomFixers\Fixer\NoUselessStrlenFixer;
 use PhpCsFixerCustomFixers\Fixer\PhpdocNoIncorrectVarAnnotationFixer;
@@ -94,5 +95,6 @@ return (new Config())
         PhpUnitDedicatedAssertFixer::name() => true,
         PhpUnitAssertArgumentsOrderFixer::name() => true,
         PhpdocNoIncorrectVarAnnotationFixer::name() => true,
+        NoUselessDirnameCallFixer::name() => true,
     ])
     ->setFinder($finder);

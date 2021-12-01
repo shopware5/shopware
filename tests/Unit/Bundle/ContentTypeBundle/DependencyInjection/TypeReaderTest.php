@@ -31,20 +31,18 @@ use Shopware\Bundle\ContentTypeBundle\Field\TextField;
 
 class TypeReaderTest extends TestCase
 {
-    /**
-     * @var TypeReader
-     */
-    private $typeReader;
+    private TypeReader $typeReader;
 
     /**
-     * @var array
+     * @var array{text: class-string<TextField>}
      */
-    private $mapping = [];
+    private array $mapping = [
+        'text' => TextField::class,
+    ];
 
     public function setUp(): void
     {
         $this->typeReader = new TypeReader();
-        $this->mapping['text'] = TextField::class;
     }
 
     public function testGetTypesWithoutMapping(): void
@@ -52,12 +50,12 @@ class TypeReaderTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Type with name "text" does not exist');
 
-        $this->typeReader->getTypes(['SwagTest'], [\dirname(__DIR__) . '/fixtures/plugins'], []);
+        $this->typeReader->getTypes(['SwagTest'], [__DIR__ . '/../fixtures/plugins'], []);
     }
 
     public function testGetTypesWithMapping(): void
     {
-        $types = $this->typeReader->getTypes(['SwagTest'], [\dirname(__DIR__) . '/fixtures/plugins'], $this->mapping);
+        $types = $this->typeReader->getTypes(['SwagTest'], [__DIR__ . '/../fixtures/plugins'], $this->mapping);
         static::assertArrayHasKey('store', $types);
         static::assertEquals('stores', $types['store']['name']);
     }
