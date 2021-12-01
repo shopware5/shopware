@@ -71,9 +71,12 @@ class ProductDimensionsFacetHandler implements HandlerInterface, ResultHydratorI
             return;
         }
 
-        $facets = ['width', 'height', 'length', 'weight'];
         foreach ($criteria->getFacets() as $criteriaFacet) {
-            if (!\in_array($criteriaFacet->getName(), $facets, true)) {
+            if (!$criteriaFacet instanceof WeightFacet
+                && !$criteriaFacet instanceof WidthFacet
+                && !$criteriaFacet instanceof LengthFacet
+                && !$criteriaFacet instanceof HeightFacet
+            ) {
                 continue;
             }
 
@@ -93,11 +96,10 @@ class ProductDimensionsFacetHandler implements HandlerInterface, ResultHydratorI
     }
 
     /**
-     * @param WeightFacet|WidthFacet|LengthFacet|HeightFacet|FacetInterface $facet
-     *
-     * @return RangeFacetResult|null
+     * @param WeightFacet|WidthFacet|LengthFacet|HeightFacet $facet
+     * @param array<string, string>                          $stats
      */
-    private function createRangeFacet(FacetInterface $facet, array $stats, Criteria $criteria)
+    private function createRangeFacet(FacetInterface $facet, array $stats, Criteria $criteria): ?RangeFacetResult
     {
         $name = $facet->getName();
 
@@ -118,20 +120,20 @@ class ProductDimensionsFacetHandler implements HandlerInterface, ResultHydratorI
             $activeMax = $condition->$method();
         }
 
-        if ($min == $max) {
+        if ($min === $max) {
             return null;
         }
 
-        $label = $facet->getLabel();
+        $label = $facet->getLabel() ?? '';
 
         return new RangeFacetResult(
             $name,
             $criteria->hasCondition($name),
             $label,
-            (float) $min,
-            (float) $max,
-            (float) $activeMin,
-            (float) $activeMax,
+            $min,
+            $max,
+            $activeMin,
+            $activeMax,
             $minField,
             $maxField,
             [],

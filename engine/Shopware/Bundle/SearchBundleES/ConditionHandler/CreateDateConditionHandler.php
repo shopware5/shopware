@@ -55,7 +55,7 @@ class CreateDateConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         $search->addQuery(
-            $this->createQuery($criteriaPart),
+            $this->getQuery($criteriaPart),
             BoolQuery::FILTER
         );
     }
@@ -70,11 +70,11 @@ class CreateDateConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         $search->addPostFilter(
-            $this->createQuery($criteriaPart)
+            $this->getQuery($criteriaPart)
         );
     }
 
-    private function createQuery(CreateDateCondition $criteriaPart): RangeQuery
+    private function getQuery(CreateDateCondition $criteriaPart): RangeQuery
     {
         $date = new DateTime();
         $intervalSpec = 'P' . $criteriaPart->getDays() . 'D';

@@ -58,17 +58,16 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        if (!$condition instanceof SearchTermCondition) {
-            return;
-        }
+        $this->addCondition($condition, $query);
+    }
 
-        $searchQuery = $this->searchTermQueryBuilder->buildQuery(
-            $condition->getTerm()
-        );
+    private function addCondition(SearchTermCondition $condition, QueryBuilder $query): void
+    {
+        $searchQuery = $this->searchTermQueryBuilder->buildQuery($condition->getTerm());
 
         //no matching products found by the search query builder.
         //add condition that the result contains no product.
-        if ($searchQuery == null) {
+        if ($searchQuery === null) {
             $query->andWhere('0 = 1');
 
             return;

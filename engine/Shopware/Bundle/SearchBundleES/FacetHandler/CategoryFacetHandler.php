@@ -43,20 +43,11 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
     public const AGGREGATION_SIZE = 1000;
 
-    /**
-     * @var CategoryServiceInterface
-     */
-    private $categoryService;
+    private CategoryServiceInterface $categoryService;
 
-    /**
-     * @var CategoryDepthService
-     */
-    private $categoryDepthService;
+    private CategoryDepthService $categoryDepthService;
 
-    /**
-     * @var CategoryTreeFacetResultBuilder
-     */
-    private $categoryTreeFacetResultBuilder;
+    private CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder;
 
     public function __construct(
         CategoryServiceInterface $categoryService,
@@ -111,8 +102,10 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
             return;
         }
 
-        /** @var CategoryFacet $categoryFacet */
         $categoryFacet = $criteria->getFacet('category');
+        if (!$categoryFacet instanceof CategoryFacet) {
+            return;
+        }
 
         $ids = $this->filterSystemCategories($ids, $context);
         $ids = $this->categoryDepthService->get(
@@ -137,9 +130,11 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @return array
+     * @param array<int> $ids
+     *
+     * @return array<int>
      */
-    private function filterSystemCategories(array $ids, ShopContextInterface $context)
+    private function filterSystemCategories(array $ids, ShopContextInterface $context): array
     {
         $system = array_merge(
             [$context->getShop()->getCategory()->getId()],
@@ -154,7 +149,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     /**
      * @return int[]
      */
-    private function getFilteredIds(Criteria $criteria)
+    private function getFilteredIds(Criteria $criteria): array
     {
         $active = [];
         foreach ($criteria->getUserConditions() as $condition) {

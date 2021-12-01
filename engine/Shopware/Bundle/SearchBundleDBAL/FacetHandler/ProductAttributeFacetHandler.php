@@ -37,6 +37,7 @@ use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
+use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
@@ -71,10 +72,18 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        if (!$facet instanceof ProductAttributeFacet) {
-            return null;
-        }
+        return $this->getFacet($facet, $reverted, $criteria, $context);
+    }
 
+    /**
+     * @return BooleanFacetResult|RadioFacetResult|RangeFacetResult|ValueListFacetResult|null
+     */
+    private function getFacet(
+        ProductAttributeFacet $facet,
+        Criteria $reverted,
+        Criteria $criteria,
+        ShopContextInterface $context
+    ): ?FacetResultInterface {
         $query = $this->queryBuilderFactory->createQuery($reverted, $context);
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
@@ -129,7 +138,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         ProductAttributeFacet $facet,
         Criteria $criteria,
         Struct\ShopContextInterface $context
-    ) {
+    ): ?FacetResultInterface {
         $sqlField = 'productAttribute.' . $facet->getField();
 
         $query->addSelect($sqlField)
@@ -294,6 +303,9 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
     }
 
+    /**
+     * @param array<string, string> $row
+     */
     private function extractTranslations(array $row, string $fieldName): ?string
     {
         $translation = $this->unserializeTranslation($row, '__attribute_translation', $fieldName);
@@ -301,6 +313,9 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         return $translation ?? $this->unserializeTranslation($row, '__attribute_translation_fallback', $fieldName);
     }
 
+    /**
+     * @param array<string, string> $row
+     */
     private function unserializeTranslation(array $row, string $key, string $fieldName): ?string
     {
         if (!isset($row[$key])) {

@@ -35,15 +35,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PriceSortingHandler implements SortingHandlerInterface, CriteriaAwareInterface
 {
-    /**
-     * @var Criteria
-     */
-    private $criteria;
+    private Criteria $criteria;
 
-    /**
-     * @var ListingPriceSwitcher
-     */
-    private $listingPriceSwitcher;
+    private ListingPriceSwitcher $listingPriceSwitcher;
 
     public function __construct(ListingPriceSwitcher $listingPriceSwitcher)
     {
@@ -66,13 +60,18 @@ class PriceSortingHandler implements SortingHandlerInterface, CriteriaAwareInter
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $this->listingPriceSwitcher->joinPrice($query, $this->criteria, $context);
-
-        $query->addOrderBy('listing_price.cheapest_price', $sorting->getDirection());
+        $this->addSorting($sorting, $query, $context);
     }
 
     public function setCriteria(Criteria $criteria)
     {
         $this->criteria = $criteria;
+    }
+
+    private function addSorting(PriceSorting $sorting, QueryBuilder $query, ShopContextInterface $context): void
+    {
+        $this->listingPriceSwitcher->joinPrice($query, $this->criteria, $context);
+
+        $query->addOrderBy('listing_price.cheapest_price', $sorting->getDirection());
     }
 }

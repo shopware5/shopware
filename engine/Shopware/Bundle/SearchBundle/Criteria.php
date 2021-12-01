@@ -503,7 +503,9 @@ class Criteria extends Extendable implements ReflectionAwareInterface
     }
 
     /**
-     * @param string $class
+     * @template TCondition of ConditionInterface
+     *
+     * @param class-string<TCondition> $class
      *
      * @return bool
      */
@@ -515,9 +517,11 @@ class Criteria extends Extendable implements ReflectionAwareInterface
     }
 
     /**
-     * @param string $class
+     * @template TCondition of ConditionInterface
      *
-     * @return ConditionInterface[]
+     * @param class-string<TCondition> $class
+     *
+     * @return array<TCondition>
      */
     public function getConditionsByClass($class)
     {

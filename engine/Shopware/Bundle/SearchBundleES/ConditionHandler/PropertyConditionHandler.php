@@ -52,14 +52,7 @@ class PropertyConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        if (!$criteriaPart instanceof PropertyCondition) {
-            return;
-        }
-
-        $search->addQuery(
-            new TermsQuery('properties.id', $criteriaPart->getValueIds()),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery($criteriaPart), BoolQuery::FILTER);
     }
 
     /**
@@ -71,12 +64,11 @@ class PropertyConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        if (!$criteriaPart instanceof PropertyCondition) {
-            return;
-        }
+        $search->addPostFilter($this->getQuery($criteriaPart));
+    }
 
-        $search->addPostFilter(
-            new TermsQuery('properties.id', $criteriaPart->getValueIds())
-        );
+    private function getQuery(PropertyCondition $criteriaPart): TermsQuery
+    {
+        return new TermsQuery('properties.id', $criteriaPart->getValueIds());
     }
 }

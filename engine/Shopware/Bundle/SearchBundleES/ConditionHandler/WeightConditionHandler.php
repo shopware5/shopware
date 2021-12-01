@@ -46,10 +46,7 @@ class WeightConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            $this->createQuery($criteriaPart),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery($criteriaPart), BoolQuery::FILTER);
     }
 
     public function handlePostFilter(
@@ -58,16 +55,12 @@ class WeightConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(
-            $this->createQuery($criteriaPart)
-        );
+        $search->addPostFilter($this->getQuery($criteriaPart));
     }
 
-    private function createQuery(CriteriaPartInterface $criteriaPart)
+    private function getQuery(WeightCondition $criteriaPart): RangeQuery
     {
         $range = [];
-
-        /** @var WeightCondition $criteriaPart */
         if ($criteriaPart->getMinWeight()) {
             $range['gte'] = $criteriaPart->getMinWeight();
         }

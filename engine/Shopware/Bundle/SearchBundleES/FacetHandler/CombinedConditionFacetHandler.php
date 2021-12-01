@@ -62,20 +62,7 @@ class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorI
         Search $search,
         ShopContextInterface $context
     ) {
-        if (!$criteriaPart instanceof CombinedConditionFacet) {
-            return;
-        }
-
-        $query = $this->combinedConditionQueryBuilder->build(
-            $criteriaPart->getConditions(),
-            $criteria,
-            $context
-        );
-
-        $filter = new FilterAggregation($criteriaPart->getName());
-        $filter->setFilter($query);
-
-        $search->addAggregation($filter);
+        $this->addQuery($criteriaPart, $criteria, $search, $context);
     }
 
     /**
@@ -92,7 +79,7 @@ class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorI
         }
 
         foreach ($elasticResult['aggregations'] as $key => $aggregation) {
-            if (strpos($key, 'combined_facet_') === false) {
+            if (!str_contains($key, 'combined_facet_')) {
                 continue;
             }
 
@@ -118,5 +105,23 @@ class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorI
                 )
             );
         }
+    }
+
+    private function addQuery(
+        CombinedConditionFacet $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ): void {
+        $query = $this->combinedConditionQueryBuilder->build(
+            $criteriaPart->getConditions(),
+            $criteria,
+            $context
+        );
+
+        $filter = new FilterAggregation($criteriaPart->getName());
+        $filter->setFilter($query);
+
+        $search->addAggregation($filter);
     }
 }

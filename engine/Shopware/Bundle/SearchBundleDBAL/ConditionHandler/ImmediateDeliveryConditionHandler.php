@@ -38,15 +38,9 @@ class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface, Cr
 {
     public const STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS = 'ImmediateDeliveryVariants';
 
-    /**
-     * @var VariantHelperInterface
-     */
-    private $variantHelper;
+    private VariantHelperInterface $variantHelper;
 
-    /**
-     * @var Criteria
-     */
-    private $criteria;
+    private Criteria $criteria;
 
     public function __construct(VariantHelperInterface $variantHelper)
     {

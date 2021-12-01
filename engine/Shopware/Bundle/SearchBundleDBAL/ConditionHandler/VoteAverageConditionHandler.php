@@ -33,10 +33,7 @@ use Shopware_Components_Config;
 
 class VoteAverageConditionHandler implements ConditionHandlerInterface
 {
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
     public function __construct(Shopware_Components_Config $config)
     {
@@ -44,9 +41,7 @@ class VoteAverageConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * Checks if the passed condition can be handled by this class.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supportsCondition(ConditionInterface $condition)
     {
@@ -61,6 +56,14 @@ class VoteAverageConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        $this->addCondition($condition, $query, $context);
+    }
+
+    private function addCondition(
+        VoteAverageCondition $condition,
+        QueryBuilder $query,
+        ShopContextInterface $context
+    ): void {
         $shopCondition = '';
         if ($this->config->get('displayOnlySubShopVotes')) {
             $shopCondition = ' AND (vote.shop_id = :voteAverageShopId OR vote.shop_id IS NULL)';

@@ -46,10 +46,7 @@ class WidthConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            $this->createQuery($criteriaPart),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery($criteriaPart), BoolQuery::FILTER);
     }
 
     public function handlePostFilter(
@@ -58,16 +55,12 @@ class WidthConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(
-            $this->createQuery($criteriaPart)
-        );
+        $search->addPostFilter($this->getQuery($criteriaPart));
     }
 
-    private function createQuery(CriteriaPartInterface $criteriaPart)
+    private function getQuery(WidthCondition $criteriaPart): RangeQuery
     {
         $range = [];
-
-        /** @var WidthCondition $criteriaPart */
         if ($criteriaPart->getMinWidth()) {
             $range['gte'] = $criteriaPart->getMinWidth();
         }

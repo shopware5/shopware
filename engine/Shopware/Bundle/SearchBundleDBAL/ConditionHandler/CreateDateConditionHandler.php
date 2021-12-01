@@ -50,16 +50,17 @@ class CreateDateConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        if (!$condition instanceof CreateDateCondition) {
-            return;
-        }
+        $this->addCondition($condition, $query);
+    }
 
+    private function addCondition(CreateDateCondition $condition, QueryBuilder $query): void
+    {
         $date = new DateTime();
         $intervalSpec = 'P' . $condition->getDays() . 'D';
         $interval = new DateInterval($intervalSpec);
         $date->sub($interval);
 
-        $suffix = md5(json_encode($condition));
+        $suffix = md5(json_encode($condition, JSON_THROW_ON_ERROR));
         $key = ':createDateFrom' . $suffix;
 
         $query->andWhere('product.datum >= ' . $key)

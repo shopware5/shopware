@@ -51,8 +51,11 @@ class SearchRankingSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addSort(
-            new FieldSort('_score', strtolower($criteriaPart->getDirection()))
-        );
+        $search->addSort($this->getSorting($criteriaPart));
+    }
+
+    private function getSorting(SearchRankingSorting $criteriaPart): FieldSort
+    {
+        return new FieldSort('_score', strtolower($criteriaPart->getDirection()));
     }
 }

@@ -49,7 +49,12 @@ class ManufacturerConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $key = ':manufacturer' . md5(json_encode($condition));
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(ManufacturerCondition $condition, QueryBuilder $query): void
+    {
+        $key = ':manufacturer' . md5(json_encode($condition, JSON_THROW_ON_ERROR));
 
         $query->innerJoin(
             'product',

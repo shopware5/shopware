@@ -52,10 +52,7 @@ class SalesConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            new RangeQuery('sales', ['gt' => $criteriaPart->getMinSales()]),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery($criteriaPart), BoolQuery::FILTER);
     }
 
     /**
@@ -67,8 +64,11 @@ class SalesConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(
-            new RangeQuery('sales', ['gt' => $criteriaPart->getMinSales()])
-        );
+        $search->addPostFilter($this->getQuery($criteriaPart));
+    }
+
+    private function getQuery(SalesCondition $criteriaPart): RangeQuery
+    {
+        return new RangeQuery('sales', ['gt' => $criteriaPart->getMinSales()]);
     }
 }

@@ -24,12 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
-use Enlight_Components_Snippet_Namespace;
 use PDO;
-use Shopware\Bundle\SearchBundle\Condition\HeightCondition;
-use Shopware\Bundle\SearchBundle\Condition\LengthCondition;
-use Shopware\Bundle\SearchBundle\Condition\WeightCondition;
-use Shopware\Bundle\SearchBundle\Condition\WidthCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\HeightFacet;
 use Shopware\Bundle\SearchBundle\Facet\LengthFacet;
@@ -42,32 +37,18 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware_Components_Snippet_Manager;
 
 class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
 {
-    /**
-     * @var QueryBuilderFactoryInterface
-     */
-    private $queryBuilderFactory;
+    private QueryBuilderFactoryInterface $queryBuilderFactory;
 
-    /**
-     * @var Enlight_Components_Snippet_Namespace
-     */
-    private $snippetNamespace;
-
-    /**
-     * @var VariantHelperInterface
-     */
-    private $variantHelper;
+    private VariantHelperInterface $variantHelper;
 
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
-        Shopware_Components_Snippet_Manager $snippetManager,
         VariantHelperInterface $variantHelper
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
-        $this->snippetNamespace = $snippetManager->getNamespace('frontend/listing/facet_labels');
         $this->variantHelper = $variantHelper;
     }
 
@@ -102,14 +83,17 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
 
         $stats = $query->execute()->fetch(PDO::FETCH_ASSOC);
 
-        $facets = ['width', 'height', 'length', 'weight'];
         $results = [];
         foreach ($criteria->getFacets() as $criteriaFacet) {
-            if (!\in_array($criteriaFacet->getName(), $facets, true)) {
+            if (!$criteriaFacet instanceof WeightFacet
+                && !$criteriaFacet instanceof WidthFacet
+                && !$criteriaFacet instanceof LengthFacet
+                && !$criteriaFacet instanceof HeightFacet
+            ) {
                 continue;
             }
             $facetResult = $this->createRangeFacet($criteriaFacet, $stats, $criteria);
-            if (!$facetResult) {
+            if ($facetResult === null) {
                 continue;
             }
 
@@ -130,11 +114,10 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param WeightFacet|WidthFacet|LengthFacet|HeightFacet|FacetInterface $facet
-     *
-     * @return RangeFacetResult|null
+     * @param WeightFacet|WidthFacet|LengthFacet|HeightFacet $facet
+     * @param array<string, string>                          $stats
      */
-    private function createRangeFacet(FacetInterface $facet, array $stats, Criteria $criteria)
+    private function createRangeFacet(FacetInterface $facet, array $stats, Criteria $criteria): ?RangeFacetResult
     {
         $name = $facet->getName();
 
@@ -150,7 +133,6 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var WeightCondition|WidthCondition|LengthCondition|HeightCondition|null $condition */
         $condition = $criteria->getCondition($name);
         if ($condition !== null) {
             $method = 'get' . ucfirst($minField);
@@ -160,23 +142,23 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
             $activeMax = $condition->$method();
         }
 
-        if ($min == $max) {
+        if ($min === $max) {
             return null;
         }
 
         $activeMin = round($activeMin, $facet->getDigits());
         $activeMax = round($activeMax, $facet->getDigits());
 
-        $label = $facet->getLabel();
+        $label = $facet->getLabel() ?? '';
 
         return new RangeFacetResult(
             $name,
             $criteria->hasCondition($name),
             $label,
-            (float) $min,
-            (float) $max,
-            (float) $activeMin,
-            (float) $activeMax,
+            $min,
+            $max,
+            $activeMin,
+            $activeMax,
             $minField,
             $maxField,
             [],

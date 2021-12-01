@@ -52,12 +52,7 @@ class VoteAverageConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            new RangeQuery('voteAverage.average', [
-                'gte' => $criteriaPart->getAverage() * 2,
-            ]),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery($criteriaPart), BoolQuery::FILTER);
     }
 
     /**
@@ -69,10 +64,13 @@ class VoteAverageConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(
-            new RangeQuery('voteAverage.average', [
-                'gte' => $criteriaPart->getAverage() * 2,
-            ])
-        );
+        $search->addPostFilter($this->getQuery($criteriaPart));
+    }
+
+    private function getQuery(VoteAverageCondition $criteriaPart): RangeQuery
+    {
+        return new RangeQuery('voteAverage.average', [
+            'gte' => $criteriaPart->getAverage() * 2,
+        ]);
     }
 }

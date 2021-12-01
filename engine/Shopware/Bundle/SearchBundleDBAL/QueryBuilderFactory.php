@@ -276,10 +276,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
         }
     }
 
-    /**
-     * @param Criteria $criteria
-     */
-    private function prepareHandlers($criteria)
+    private function prepareHandlers(Criteria $criteria): void
     {
         $handlers = array_merge(
             $this->conditionHandlers,

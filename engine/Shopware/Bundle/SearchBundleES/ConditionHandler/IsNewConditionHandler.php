@@ -27,6 +27,7 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
+use RuntimeException;
 use Shopware\Bundle\SearchBundle\Condition\IsNewCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -36,10 +37,7 @@ use Shopware_Components_Config;
 
 class IsNewConditionHandler implements PartialConditionHandlerInterface
 {
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
     public function __construct(Shopware_Components_Config $config)
     {
@@ -63,10 +61,7 @@ class IsNewConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            $this->createQuery(),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery(), BoolQuery::FILTER);
     }
 
     /**
@@ -78,18 +73,16 @@ class IsNewConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(
-            $this->createQuery()
-        );
+        $search->addPostFilter($this->getQuery());
     }
 
-    /**
-     * @return RangeQuery
-     */
-    private function createQuery()
+    private function getQuery(): RangeQuery
     {
         $dayLimit = (int) $this->config->get('markAsNew');
         $timestamp = strtotime('-' . $dayLimit . ' days');
+        if ($timestamp === false) {
+            throw new RuntimeException(sprintf('Could not convert "-%s days" into a timestamp', $dayLimit));
+        }
 
         return new RangeQuery('formattedCreatedAt', [
             'gte' => date('Y-m-d', $timestamp),

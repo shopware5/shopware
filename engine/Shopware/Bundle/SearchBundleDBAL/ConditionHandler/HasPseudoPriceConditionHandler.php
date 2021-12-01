@@ -35,15 +35,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class HasPseudoPriceConditionHandler implements ConditionHandlerInterface, CriteriaAwareInterface
 {
-    /**
-     * @var ListingPriceSwitcher
-     */
-    private $listingPriceSwitcher;
+    private ListingPriceSwitcher $listingPriceSwitcher;
 
-    /**
-     * @var Criteria
-     */
-    private $criteria;
+    private Criteria $criteria;
 
     public function __construct(ListingPriceSwitcher $listingPriceSwitcher)
     {

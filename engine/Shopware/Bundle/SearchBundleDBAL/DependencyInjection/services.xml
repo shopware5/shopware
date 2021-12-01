@@ -108,7 +108,6 @@
         <service id="shopware_searchdbal.category_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\CategoryFacetHandler">
             <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface"/>
             <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory" />
-            <argument type="service" id="Shopware_Components_Config" />
             <argument type="service" id="shopware_storefront.category_depth_service" />
             <argument type="service" id="shopware_search.category_tree_facet_result_builder" />
             <tag name="facet_handler_dbal"/>
@@ -290,9 +289,8 @@
         </service>
 
         <service id="shopware_searchdbal.product_dimensions_facet_handler" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\ProductDimensionsFacetHandler" >
-            <argument id="Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory" type="service"/>
-            <argument id="Shopware_Components_Snippet_Manager" type="service"/>
-            <argument id="Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface" type="service"/>
+            <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory"/>
+            <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface"/>
             <tag name="facet_handler_dbal"/>
         </service>
 

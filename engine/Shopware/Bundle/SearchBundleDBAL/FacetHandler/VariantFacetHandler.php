@@ -34,7 +34,6 @@ use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListItem;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
@@ -46,25 +45,13 @@ use Shopware\Components\QueryAliasMapper;
 
 class VariantFacetHandler implements PartialFacetHandlerInterface
 {
-    /**
-     * @var QueryBuilderFactoryInterface
-     */
-    private $queryBuilderFactory;
+    private QueryBuilderFactoryInterface $queryBuilderFactory;
 
-    /**
-     * @var string
-     */
-    private $fieldName;
+    private string $fieldName;
 
-    /**
-     * @var PriceHelperInterface
-     */
-    private $helper;
+    private PriceHelperInterface $helper;
 
-    /**
-     * @var ConfiguratorOptionsGatewayInterface
-     */
-    private $gateway;
+    private ConfiguratorOptionsGatewayInterface $gateway;
 
     public function __construct(
         ConfiguratorOptionsGatewayInterface $gateway,
@@ -72,10 +59,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         QueryAliasMapper $queryAliasMapper,
         PriceHelperInterface $helper
     ) {
-        if (!$this->fieldName = $queryAliasMapper->getShortAlias('variants')) {
-            $this->fieldName = 'var';
-        }
-
+        $this->fieldName = $queryAliasMapper->getShortAlias('variants') ?? 'var';
         $this->queryBuilderFactory = $queryBuilderFactory;
         $this->helper = $helper;
         $this->gateway = $gateway;
@@ -89,20 +73,12 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         return $facet instanceof VariantFacet;
     }
 
-    /**
-     * @param FacetInterface|VariantFacet $facet
-     *
-     * @return FacetResultInterface|null
-     */
     public function generatePartialFacet(
         FacetInterface $facet,
         Criteria $reverted,
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        if (empty($facet->getGroupIds())) {
-            return null;
-        }
         $options = $this->getOptions($context, $reverted, $facet);
 
         if ($options === null) {
@@ -114,17 +90,20 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
+     * @deprecated - Will be private with Shopware 5.8
+     *
      * @return Group[]|null
      */
     protected function getOptions(ShopContextInterface $context, Criteria $queryCriteria, VariantFacet $facet)
     {
+        if (empty($facet->getGroupIds())) {
+            return null;
+        }
+
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
         $this->rebuildQuery($queryCriteria, $query, $facet);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $valueIds = $statement->fetchAll(PDO::FETCH_COLUMN);
+        $valueIds = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
 
         if (empty($valueIds)) {
             return null;
@@ -136,7 +115,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     /**
      * Modifies the query reading products from the database to reflect the selected options
      */
-    private function rebuildQuery(Criteria $criteria, QueryBuilder $query, VariantFacet $facet)
+    private function rebuildQuery(Criteria $criteria, QueryBuilder $query, VariantFacet $facet): void
     {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
         $conditions = array_filter($conditions, function (VariantCondition $condition) {
@@ -159,9 +138,9 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @return array
+     * @return array<int>
      */
-    private function getFilteredValues(Criteria $criteria)
+    private function getFilteredValues(Criteria $criteria): array
     {
         $values = [];
         foreach ($criteria->getConditions() as $condition) {
@@ -178,14 +157,12 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     /**
      * @param Group[] $groups
      * @param int[]   $actives
-     *
-     * @return FacetResultGroup|FacetResultInterface
      */
     private function createCollectionResult(
         VariantFacet $facet,
         array $groups,
         array $actives
-    ) {
+    ): FacetResultGroup {
         $results = [];
 
         foreach ($groups as $group) {

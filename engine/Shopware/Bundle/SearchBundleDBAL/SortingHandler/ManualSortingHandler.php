@@ -50,8 +50,17 @@ class ManualSortingHandler implements SortingHandlerInterface
             return;
         }
 
-        $query
-            ->leftJoin(CategoryConditionHandler::STATE_NAME, 's_categories_manual_sorting', 'manual_sorting', 'manual_sorting.product_id = product.id AND manual_sorting.category_id = ' . CategoryConditionHandler::STATE_NAME . '.categoryID')
+        $this->addSorting($sorting, $query);
+    }
+
+    private function addSorting(ManualSorting $sorting, QueryBuilder $query): void
+    {
+        $query->leftJoin(
+            CategoryConditionHandler::STATE_NAME,
+            's_categories_manual_sorting',
+            'manual_sorting',
+            'manual_sorting.product_id = product.id AND manual_sorting.category_id = ' . CategoryConditionHandler::STATE_NAME . '.categoryID'
+        )
             ->orderBy('IFNULL(manual_sorting.position, 99999)', $sorting->getDirection());
     }
 }

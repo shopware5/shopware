@@ -52,10 +52,7 @@ class IsAvailableConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            new TermQuery('hasAvailableVariant', true),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery(), BoolQuery::FILTER);
     }
 
     /**
@@ -67,8 +64,11 @@ class IsAvailableConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(
-            new TermQuery('hasAvailableVariant', true)
-        );
+        $search->addPostFilter($this->getQuery());
+    }
+
+    private function getQuery(): TermQuery
+    {
+        return new TermQuery('hasAvailableVariant', true);
     }
 }

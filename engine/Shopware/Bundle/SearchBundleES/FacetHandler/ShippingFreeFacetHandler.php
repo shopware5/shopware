@@ -41,15 +41,9 @@ use Shopware_Components_Snippet_Manager;
 
 class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    /**
-     * @var Shopware_Components_Snippet_Manager
-     */
-    private $snippetManager;
+    private Shopware_Components_Snippet_Manager $snippetManager;
 
-    /**
-     * @var QueryAliasMapper
-     */
-    private $queryAliasMapper;
+    private QueryAliasMapper $queryAliasMapper;
 
     public function __construct(
         Shopware_Components_Snippet_Manager $snippetManager,
@@ -113,18 +107,12 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
         $result->addFacet($criteriaPart);
     }
 
-    /**
-     * @return BooleanFacetResult
-     */
-    private function createFacet(Criteria $criteria)
+    private function createFacet(Criteria $criteria): BooleanFacetResult
     {
-        if (!$fieldName = $this->queryAliasMapper->getShortAlias('shippingFree')) {
-            $fieldName = 'shippingFree';
-        }
+        $fieldName = $this->queryAliasMapper->getShortAlias('shippingFree') ?? 'shippingFree';
 
-        /** @var ShippingFreeFacet|null $facet */
         $facet = $criteria->getFacet('shipping_free');
-        if ($facet && !empty($facet->getLabel())) {
+        if ($facet instanceof ShippingFreeFacet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();
         } else {
             $label = $this->snippetManager
@@ -132,13 +120,11 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
                 ->get('shipping_free', 'Shipping free');
         }
 
-        $criteriaPart = new BooleanFacetResult(
+        return new BooleanFacetResult(
             'shipping_free',
             $fieldName,
             $criteria->hasCondition('shipping_free'),
             $label
         );
-
-        return $criteriaPart;
     }
 }

@@ -31,5 +31,8 @@ use Shopware\Bundle\SearchBundle\Criteria;
  */
 interface CriteriaAwareInterface
 {
+    /**
+     * @return void
+     */
     public function setCriteria(Criteria $criteria);
 }

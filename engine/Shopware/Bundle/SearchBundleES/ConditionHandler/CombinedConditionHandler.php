@@ -50,44 +50,36 @@ class CombinedConditionHandler implements PartialConditionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handlePostFilter(
-        CriteriaPartInterface $criteriaPart,
-        Criteria $criteria,
-        Search $search,
-        ShopContextInterface $context
-    ) {
-        if (!$criteriaPart instanceof CombinedCondition) {
-            return;
-        }
-
-        $query = $this->combinedConditionQueryBuilder->build(
-            $criteriaPart->getConditions(),
-            $criteria,
-            $context
-        );
-
-        $search->addPostFilter($query);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function handleFilter(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
         ShopContextInterface $context
     ) {
-        if (!$criteriaPart instanceof CombinedCondition) {
-            return;
-        }
+        $search->addQuery($this->getQuery($criteriaPart, $criteria, $context), BoolQuery::FILTER);
+    }
 
-        $query = $this->combinedConditionQueryBuilder->build(
+    /**
+     * {@inheritdoc}
+     */
+    public function handlePostFilter(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        $search->addPostFilter($this->getQuery($criteriaPart, $criteria, $context));
+    }
+
+    private function getQuery(
+        CombinedCondition $criteriaPart,
+        Criteria $criteria,
+        ShopContextInterface $context
+    ): BoolQuery {
+        return $this->combinedConditionQueryBuilder->build(
             $criteriaPart->getConditions(),
             $criteria,
             $context
         );
-
-        $search->addQuery($query, BoolQuery::FILTER);
     }
 }

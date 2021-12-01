@@ -34,37 +34,31 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class MainVariantConditionHandler implements PartialConditionHandlerInterface
 {
-    /**
-     * Validates if the criteria part can be handled by this handler
-     *
-     * @return bool
-     */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
         return $criteriaPart instanceof MainVariantCondition;
     }
 
-    /**
-     * Handles the criteria part and adds the provided condition as post filter.
-     */
     public function handleFilter(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(new TermQuery('isMainVariant', true));
+        $search->addPostFilter($this->getQuery());
     }
 
-    /**
-     * Handles the criteria part and extends the provided search.
-     */
     public function handlePostFilter(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(new TermQuery('isMainVariant', true));
+        $search->addPostFilter($this->getQuery());
+    }
+
+    private function getQuery(): TermQuery
+    {
+        return new TermQuery('isMainVariant', true);
     }
 }

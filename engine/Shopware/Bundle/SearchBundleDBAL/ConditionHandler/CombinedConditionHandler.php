@@ -24,20 +24,18 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
-use Exception;
+use RuntimeException;
 use Shopware\Bundle\SearchBundle\Condition\CombinedCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CombinedConditionHandler implements ConditionHandlerInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
     public function __construct(ContainerInterface $container)
     {
@@ -62,6 +60,14 @@ class CombinedConditionHandler implements ConditionHandlerInterface
     ) {
         $query->addState($condition->getName());
 
+        $this->addConditions($condition, $query, $context);
+    }
+
+    private function addConditions(
+        CombinedCondition $condition,
+        QueryBuilder $query,
+        ShopContextInterface $context
+    ): void {
         foreach ($condition->getConditions() as $innerCondition) {
             $handler = $this->getConditionHandler($innerCondition);
             $handler->generateCondition($innerCondition, $query, $context);
@@ -69,14 +75,12 @@ class CombinedConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * @throws Exception
-     *
-     * @return ConditionHandlerInterface
+     * @throws RuntimeException
      */
-    private function getConditionHandler(ConditionInterface $condition)
+    private function getConditionHandler(ConditionInterface $condition): ConditionHandlerInterface
     {
         // Initialize the condition handler collection service
-        $this->container->get(\Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory::class);
+        $this->container->get(QueryBuilderFactory::class);
 
         $handlers = $this->container->get('shopware_searchdbal.condition_handlers');
 
@@ -86,6 +90,6 @@ class CombinedConditionHandler implements ConditionHandlerInterface
             }
         }
 
-        throw new Exception(sprintf('Condition %s not supported', \get_class($condition)));
+        throw new RuntimeException(sprintf('Condition %s not supported', \get_class($condition)));
     }
 }

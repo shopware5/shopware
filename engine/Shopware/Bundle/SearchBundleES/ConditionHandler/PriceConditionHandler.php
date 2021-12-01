@@ -36,10 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PriceConditionHandler implements PartialConditionHandlerInterface
 {
-    /**
-     * @var PriceFieldMapper
-     */
-    private $mapper;
+    private PriceFieldMapper $mapper;
 
     public function __construct(PriceFieldMapper $mapper)
     {
@@ -63,10 +60,7 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            $this->createQuery($criteria, $criteriaPart, $context),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery($criteriaPart, $criteria, $context), BoolQuery::FILTER);
     }
 
     /**
@@ -78,16 +72,12 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(
-            $this->createQuery($criteria, $criteriaPart, $context)
-        );
+        $search->addPostFilter($this->getQuery($criteriaPart, $criteria, $context));
     }
 
-    private function createQuery(Criteria $criteria, CriteriaPartInterface $criteriaPart, ShopContextInterface $context): RangeQuery
+    private function getQuery(PriceCondition $criteriaPart, Criteria $criteria, ShopContextInterface $context): RangeQuery
     {
         $range = [];
-
-        /** @var PriceCondition $criteriaPart */
         if ($criteriaPart->getMinPrice()) {
             $range['gte'] = $criteriaPart->getMinPrice();
         }

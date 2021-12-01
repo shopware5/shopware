@@ -41,15 +41,9 @@ use Shopware_Components_Snippet_Manager;
 
 class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    /**
-     * @var Shopware_Components_Snippet_Manager
-     */
-    private $snippetManager;
+    private Shopware_Components_Snippet_Manager $snippetManager;
 
-    /**
-     * @var QueryAliasMapper
-     */
-    private $queryAliasMapper;
+    private QueryAliasMapper $queryAliasMapper;
 
     public function __construct(
         Shopware_Components_Snippet_Manager $snippetManager,
@@ -113,14 +107,10 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
         $result->addFacet($criteriaPart);
     }
 
-    /**
-     * @return BooleanFacetResult
-     */
-    private function createFacet(Criteria $criteria)
+    private function createFacet(Criteria $criteria): BooleanFacetResult
     {
-        /** @var ImmediateDeliveryFacet|null $facet */
         $facet = $criteria->getFacet('immediate_delivery');
-        if ($facet && !empty($facet->getLabel())) {
+        if ($facet instanceof ImmediateDeliveryFacet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();
         } else {
             $label = $this->snippetManager
@@ -128,17 +118,13 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
                 ->get('immediate_delivery', 'Immediate delivery');
         }
 
-        if (!$fieldName = $this->queryAliasMapper->getShortAlias('immediateDelivery')) {
-            $fieldName = 'immediateDelivery';
-        }
+        $fieldName = $this->queryAliasMapper->getShortAlias('immediateDelivery') ?? 'immediateDelivery';
 
-        $criteriaPart = new BooleanFacetResult(
+        return new BooleanFacetResult(
             'immediate_delivery',
             $fieldName,
             $criteria->hasCondition('immediate_delivery'),
             $label
         );
-
-        return $criteriaPart;
     }
 }

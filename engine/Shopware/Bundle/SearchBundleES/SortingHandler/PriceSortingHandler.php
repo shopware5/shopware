@@ -59,12 +59,13 @@ class PriceSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        if (!$criteriaPart instanceof PriceSorting) {
-            return;
-        }
+        $search->addSort($this->getSorting($criteriaPart, $criteria, $context));
+    }
 
+    private function getSorting(PriceSorting $criteriaPart, Criteria $criteria, ShopContextInterface $context): FieldSort
+    {
         $field = $this->mapper->getPriceField($criteria, $context);
-        $sort = new FieldSort($field, strtolower($criteriaPart->getDirection()), ['unmapped_type' => 'double']);
-        $search->addSort($sort);
+
+        return new FieldSort($field, strtolower($criteriaPart->getDirection()), ['unmapped_type' => 'double']);
     }
 }

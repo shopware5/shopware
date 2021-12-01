@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
-use Exception;
 use Shopware\Bundle\SearchBundle\Sorting\ProductAttributeSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
@@ -49,11 +48,11 @@ class ProductAttributeSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /** @var ProductAttributeSorting $sorting */
-        if (!$sorting->getField()) {
-            throw new Exception('ProductAttributeSorting class requires a defined attribute field!');
-        }
+        $this->addSorting($sorting, $query);
+    }
 
+    private function addSorting(ProductAttributeSorting $sorting, QueryBuilder $query): void
+    {
         $query->addOrderBy('productAttribute.' . $sorting->getField(), $sorting->getDirection());
     }
 }

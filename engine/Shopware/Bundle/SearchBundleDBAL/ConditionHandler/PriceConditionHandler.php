@@ -68,14 +68,23 @@ class PriceConditionHandler implements ConditionHandlerInterface, CriteriaAwareI
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        $this->addCondition($condition, $query, $context);
+    }
+
+    public function setCriteria(Criteria $criteria)
+    {
+        $this->criteria = $criteria;
+    }
+
+    private function addCondition(PriceCondition $condition, QueryBuilder $query, ShopContextInterface $context): void
+    {
         $this->priceSwitcher->joinPrice($query, $this->criteria, $context);
 
-        $suffix = md5(json_encode($condition));
+        $suffix = md5(json_encode($condition, JSON_THROW_ON_ERROR));
 
         $minKey = ':priceMin' . $suffix;
         $maxKey = ':priceMax' . $suffix;
 
-        /** @var PriceCondition $condition */
         if ($condition->getMaxPrice() > 0 && $condition->getMinPrice() > 0) {
             $query->andWhere('listing_price.cheapest_price BETWEEN ' . $minKey . ' AND ' . $maxKey);
             $query->setParameter($minKey, $condition->getMinPrice());
@@ -93,13 +102,6 @@ class PriceConditionHandler implements ConditionHandlerInterface, CriteriaAwareI
         if ($condition->getMinPrice() > 0) {
             $query->andWhere('listing_price.cheapest_price >= ' . $minKey);
             $query->setParameter($minKey, $condition->getMinPrice());
-
-            return;
         }
-    }
-
-    public function setCriteria(Criteria $criteria)
-    {
-        $this->criteria = $criteria;
     }
 }
