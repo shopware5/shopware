@@ -1119,9 +1119,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     {
         $elementCollection = new ArrayCollection();
 
-        /**
-         * @var Document
-         */
         $elementModel = new DocumentElement();
         $elementModel->setName('Body');
         $elementModel->setValue('');

@@ -49,7 +49,12 @@ class ProductIdConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $key = ':productIds' . md5(json_encode($condition));
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(ProductIdCondition $condition, QueryBuilder $query): void
+    {
+        $key = ':productIds' . md5(json_encode($condition, JSON_THROW_ON_ERROR));
 
         $query->andWhere('variant.articleId IN (' . $key . ')');
 

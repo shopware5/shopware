@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\CacheManager;
+use Shopware\Components\ShopwareReleaseStruct;
 
 /**
  * Empty controller due to the fact that we've no logic here. The Shopware_Controllers_Backend_ExtJs handles the rest.
@@ -31,7 +33,7 @@ class Shopware_Controllers_Backend_Feedback extends Shopware_Controllers_Backend
 {
     public function loadAction()
     {
-        /** @var \Shopware\Components\ShopwareReleaseStruct $shopwareRelease */
+        /** @var ShopwareReleaseStruct $shopwareRelease */
         $shopwareRelease = $this->container->get('shopware.release');
 
         $this->View()->assign('SHOPWARE_VERSION', $shopwareRelease->getVersion());
@@ -43,7 +45,7 @@ class Shopware_Controllers_Backend_Feedback extends Shopware_Controllers_Backend
 
     public function disableInstallationSurveyAction()
     {
-        $conn = $this->container->get(\Doctrine\DBAL\Connection::class);
+        $conn = $this->container->get(Connection::class);
         $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "installationSurvey"');
         $valueId = $conn->fetchColumn('SELECT id FROM s_core_config_values WHERE element_id = :elementId', ['elementId' => $elementId]);
         $data = [
@@ -60,8 +62,7 @@ class Shopware_Controllers_Backend_Feedback extends Shopware_Controllers_Backend
         } else {
             $conn->insert('s_core_config_values', $data);
         }
-        /** @var CacheManager */
-        $cacheManager = $this->get(\Shopware\Components\CacheManager::class);
+        $cacheManager = $this->get(CacheManager::class);
         $cacheManager->clearConfigCache();
     }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -37,20 +39,14 @@ class CacheTest extends TestCase
     {
         parent::setUp();
 
-        /** @var string $httpCacheDir */
         $httpCacheDir = Shopware()->Container()->getParameter('shopware.httpcache.cache_dir');
-
-        /** @var string $templateCacheDir */
         $templateCacheDir = Shopware()->Container()->getParameter('shopware.template.cacheDir');
 
         @mkdir($httpCacheDir, 0777, true);
         @mkdir($templateCacheDir, 0777, true);
     }
 
-    /**
-     * @return Cache
-     */
-    public function getResource()
+    public function getResource(): Cache
     {
         return $this->resource;
     }
@@ -69,7 +65,7 @@ class CacheTest extends TestCase
     /**
      * Check if listing all caches works
      */
-    public function testGetListShouldBeSuccessFull()
+    public function testGetListShouldBeSuccessFull(): void
     {
         $caches = $this->getResource()->getList();
 
@@ -79,16 +75,16 @@ class CacheTest extends TestCase
     /**
      * Check if reading template cache infos works
      */
-    public function testGetOneShouldBeSuccessFull()
+    public function testGetOneShouldBeSuccessFull(): void
     {
         $info = $this->getResource()->getOne('template');
-        static::assertEquals($info['id'], 'template');
+        static::assertEquals('template', $info['id']);
     }
 
     /**
-     * Check if clearing the template cache is successfull
+     * Check if clearing the template cache is successful
      */
-    public function testClearTemplateCacheShouldBeSuccessFull()
+    public function testClearTemplateCacheShouldBeSuccessFull(): void
     {
         $this->getResource()->delete('template');
 
@@ -97,9 +93,9 @@ class CacheTest extends TestCase
     }
 
     /**
-     * Check if clearing the template cache is successfull
+     * Check if clearing the template cache is successful
      */
-    public function testClearHttpCacheShouldBeSuccessFull()
+    public function testClearHttpCacheShouldBeSuccessFull(): void
     {
         $this->getResource()->delete('http');
         $info = $this->getResource()->getOne('http');

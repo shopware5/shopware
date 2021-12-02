@@ -25,6 +25,7 @@
 namespace ShopwarePlugins\SwagUpdate\Components\Checks;
 
 use Enlight_Components_Snippet_Namespace as SnippetNamespace;
+use InvalidArgumentException;
 use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 
@@ -47,7 +48,7 @@ class PHPVersionCheck implements CheckInterface
      */
     public function canHandle($requirement)
     {
-        return $requirement['type'] == self::CHECK_TYPE;
+        return $requirement['type'] === self::CHECK_TYPE;
     }
 
     /**
@@ -55,6 +56,10 @@ class PHPVersionCheck implements CheckInterface
      */
     public function check($requirement)
     {
+        if (!\is_string($requirement['value'])) {
+            throw new InvalidArgumentException(__CLASS__ . ' needs a string as value for the requirement check');
+        }
+
         $minPHPVersion = $requirement['value'];
 
         $validVersion = version_compare(PHP_VERSION, $minPHPVersion) >= 0;

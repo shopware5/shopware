@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Payment\RuleSet;
+
 /**
  * This controller handles all actions made by the user in the premium module.
  * It reads all premium-articles, creates new ones, edits and deletes them.
@@ -64,7 +66,7 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
             $total = $this->get('models')->getQueryCount($builder->getQuery());
 
             // Translate the payment methods
-            $translationComponent = $this->get(\Shopware_Components_Translation::class);
+            $translationComponent = $this->get(Shopware_Components_Translation::class);
             $result = $translationComponent->translatePaymentMethods($result);
 
             $this->View()->assign(['success' => true, 'data' => $result, 'total' => $total]);
@@ -82,7 +84,7 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
         try {
             $params = $this->Request()->getParams();
 
-            $ruleModel = $this->get('models')->find('\Shopware\Models\Payment\RuleSet', $params['id']);
+            $ruleModel = $this->get('models')->find(RuleSet::class, $params['id']);
 
             $this->get('models')->remove($ruleModel);
             $this->get('models')->flush();
@@ -112,10 +114,7 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
             if ($params[0]) {
                 $data = [];
                 foreach ($params as $values) {
-                    /**
-                     * @var Shopware\Models\Payment\RuleSet
-                     */
-                    $ruleModel = $this->get('models')->find('\Shopware\Models\Payment\RuleSet', $values['id']);
+                    $ruleModel = $this->get('models')->find(RuleSet::class, $values['id']);
 
                     $ruleModel->fromArray($values);
 
@@ -125,10 +124,7 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
                 }
                 $this->View()->assign(['success' => true, 'data' => $data]);
             } else {
-                /**
-                 * @var Shopware\Models\Payment\RuleSet
-                 */
-                $ruleModel = $this->get('models')->find('\Shopware\Models\Payment\RuleSet', $params['id']);
+                $ruleModel = $this->get('models')->find(RuleSet::class, $params['id']);
 
                 $ruleModel->fromArray($params);
 
@@ -153,7 +149,7 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
         try {
             $params = $this->Request()->getParams();
 
-            $ruleModel = new Shopware\Models\Payment\RuleSet();
+            $ruleModel = new RuleSet();
             $ruleModel->fromArray($params);
 
             $this->get('models')->persist($ruleModel);

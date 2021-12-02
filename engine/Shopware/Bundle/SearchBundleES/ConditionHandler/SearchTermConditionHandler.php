@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -34,10 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class SearchTermConditionHandler implements PartialConditionHandlerInterface
 {
-    /**
-     * @var SearchTermQueryBuilderInterface
-     */
-    private $queryBuilder;
+    private SearchTermQueryBuilderInterface $queryBuilder;
 
     public function __construct(SearchTermQueryBuilderInterface $queryBuilder)
     {
@@ -61,9 +59,7 @@ class SearchTermConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            $this->queryBuilder->buildQuery($context, $criteriaPart->getTerm())
-        );
+        $search->addQuery($this->getQuery($criteriaPart, $context));
     }
 
     /**
@@ -76,5 +72,10 @@ class SearchTermConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         $this->handleFilter($criteriaPart, $criteria, $search, $context);
+    }
+
+    private function getQuery(SearchTermCondition $criteriaPart, ShopContextInterface $context): BoolQuery
+    {
+        return $this->queryBuilder->buildQuery($context, $criteriaPart->getTerm());
     }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,35 +31,40 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
-use Shopware\Components\Api\Resource\Customer;
+use Shopware\Components\Api\Exception\ValidationException;
+use Shopware\Components\Api\Resource\Customer as CustomerResource;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Random;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
+use Shopware\Models\Attribute\CustomerAddress;
+use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Group;
 
 class CustomerTest extends TestCase
 {
     /**
-     * @var Customer
+     * @var CustomerResource
      */
     protected $resource;
 
     protected function setUp(): void
     {
         parent::setUp();
-        Shopware()->Container()->get(Connection::class)->exec('UPDATE s_core_countries SET allow_shipping = 0 WHERE id = 25');
+        Shopware()->Container()->get(Connection::class)->executeStatement('UPDATE s_core_countries SET allow_shipping = 0 WHERE id = 25');
     }
 
     /**
-     * @return Customer
+     * @return CustomerResource
      */
     public function createResource()
     {
-        return new Customer();
+        return new CustomerResource();
     }
 
-    public function testCreateWithNonUniqueEmailShouldThrowException()
+    public function testCreateWithNonUniqueEmailShouldThrowException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $testData = [
             'password' => 'fooobar',
             'active' => true,
@@ -100,23 +107,25 @@ class CustomerTest extends TestCase
         $this->resource->create($testData);
     }
 
-    public function testCreateShouldBeSuccessful()
+    public function testCreateShouldBeSuccessful(): int
     {
         $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(DateTime::ISO8601);
+        $firstLogin = $date->format(DateTime::ISO8601);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(DateTime::ISO8601);
+        $lastLogin = $date->format(DateTime::ISO8601);
 
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
+        $date = DateTime::createFromFormat('Y-m-d', '1986-12-20');
+        static::assertInstanceOf(DateTime::class, $date);
+        $birthday = $date->format(DateTime::ISO8601);
 
         $testData = [
             'password' => 'fooobar',
             'email' => Random::getAlphanumericString(5) . 'test@foobar.com',
             'number' => 'testnumber' . uniqid(),
-            'firstlogin' => $firstlogin,
-            'lastlogin' => $lastlogin,
+            'firstlogin' => $firstLogin,
+            'lastlogin' => $lastLogin,
 
             'salutation' => 'mr',
             'firstname' => 'Max',
@@ -164,30 +173,29 @@ class CustomerTest extends TestCase
             ],
         ];
 
-        /** @var \Shopware\Models\Customer\Customer $customer */
         $customer = $this->resource->create($testData);
 
-        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
+        static::assertInstanceOf(Customer::class, $customer);
         static::assertGreaterThan(0, $customer->getId());
 
         // Test default values
-        static::assertEquals($customer->getShop()->getId(), 1);
-        static::assertEquals($customer->getAccountMode(), 0);
-        static::assertEquals($customer->getGroup()->getKey(), 'EK');
-        static::assertEquals($customer->getActive(), true);
+        static::assertEquals(1, $customer->getShop()->getId());
+        static::assertEquals(0, $customer->getAccountMode());
+        static::assertInstanceOf(Group::class, $customer->getGroup());
+        static::assertEquals('EK', $customer->getGroup()->getKey());
+        static::assertTrue($customer->getActive());
 
         static::assertEquals($customer->getEmail(), $testData['email']);
 
-        static::assertEquals($customer->getDefaultBillingAddress()->getFirstName(), $testData['billing']['firstname']);
+        static::assertInstanceOf(Address::class, $customer->getDefaultBillingAddress());
+        static::assertInstanceOf(Address::class, $customer->getDefaultShippingAddress());
+        static::assertInstanceOf(CustomerAddress::class, $customer->getDefaultBillingAddress()->getAttribute());
+        static::assertInstanceOf(CustomerAddress::class, $customer->getDefaultShippingAddress()->getAttribute());
+
         static::assertEquals($customer->getDefaultBillingAddress()->getFirstname(), $testData['billing']['firstname']);
-
-        static::assertEquals($customer->getDefaultBillingAddress()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
-        static::assertEquals($customer->getDefaultBillingAddress()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
-
-        static::assertEquals($customer->getDefaultShippingAddress()->getFirstName(), $testData['shipping']['firstname']);
         static::assertEquals($customer->getDefaultShippingAddress()->getFirstname(), $testData['shipping']['firstname']);
 
-        static::assertEquals($customer->getDefaultShippingAddress()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
+        static::assertEquals($customer->getDefaultBillingAddress()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
         static::assertEquals($customer->getDefaultShippingAddress()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
 
         //test additional address lines
@@ -202,41 +210,45 @@ class CustomerTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetOneShouldBeSuccessful($id)
+    public function testGetOneShouldBeSuccessful(int $id): void
     {
         $customer = $this->resource->getOne($id);
+        static::assertIsArray($customer);
         static::assertGreaterThan(0, $customer['id']);
     }
 
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetOneByNumberShouldBeSuccessful($id)
+    public function testGetOneByNumberShouldBeSuccessful(int $id): void
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $customer = $this->resource->getOne($id);
+        static::assertInstanceOf(Customer::class, $customer);
         $number = $customer->getNumber();
+        static::assertIsString($number);
 
         $customer = $this->resource->getOneByNumber($number);
+        static::assertInstanceOf(Customer::class, $customer);
         static::assertEquals($id, $customer->getId());
     }
 
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetOneShouldBeAbleToReturnObject($id)
+    public function testGetOneShouldBeAbleToReturnObject(int $id): void
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $customer = $this->resource->getOne($id);
 
-        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
+        static::assertInstanceOf(Customer::class, $customer);
         static::assertGreaterThan(0, $customer->getId());
     }
 
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetListShouldBeSuccessful()
+    public function testGetListShouldBeSuccessful(): void
     {
         $result = $this->resource->getList();
 
@@ -250,7 +262,7 @@ class CustomerTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetListShouldBeAbleToReturnObjects()
+    public function testGetListShouldBeAbleToReturnObjects(): void
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $result = $this->resource->getList();
@@ -261,12 +273,12 @@ class CustomerTest extends TestCase
         static::assertGreaterThanOrEqual(1, $result['total']);
         static::assertGreaterThanOrEqual(1, $result['data']);
 
-        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $result['data'][0]);
+        static::assertInstanceOf(Customer::class, $result['data'][0]);
     }
 
-    public function testCreateWithInvalidDataShouldThrowValidationException()
+    public function testCreateWithInvalidDataShouldThrowValidationException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $testData = [
             'active' => true,
             'email' => 'invalid',
@@ -280,9 +292,9 @@ class CustomerTest extends TestCase
         $this->resource->create($testData);
     }
 
-    public function testCreateWithInvalidDataShouldThrowValidationExceptionWithCorrectToStringMessage()
+    public function testCreateWithInvalidDataShouldThrowValidationExceptionWithCorrectToStringMessage(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessageMatches('"salutation: The value you selected is not a valid choice."');
         $testData = [
             'active' => true,
@@ -303,7 +315,7 @@ class CustomerTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testUpdateShouldBeSuccessful($id)
+    public function testUpdateShouldBeSuccessful(int $id): int
     {
         $testData = [
             'active' => true,
@@ -322,11 +334,13 @@ class CustomerTest extends TestCase
 
         $customer = $this->resource->update($id, $testData);
 
-        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
+        static::assertInstanceOf(Customer::class, $customer);
         static::assertEquals($id, $customer->getId());
 
         static::assertEquals($customer->getEmail(), $testData['email']);
-        static::assertEquals($customer->getDefaultBillingAddress()->getFirstName(), $testData['billing']['firstname']);
+        static::assertInstanceOf(Address::class, $customer->getDefaultBillingAddress());
+        static::assertInstanceOf(Address::class, $customer->getDefaultShippingAddress());
+        static::assertEquals($customer->getDefaultBillingAddress()->getFirstname(), $testData['billing']['firstname']);
 
         //test additional fields
         static::assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
@@ -341,11 +355,13 @@ class CustomerTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testUpdateByNumberShouldBeSuccessful($id)
+    public function testUpdateByNumberShouldBeSuccessful(int $id): ?string
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $customer = $this->resource->getOne($id);
+        static::assertInstanceOf(Customer::class, $customer);
         $number = $customer->getNumber();
+        static::assertIsString($number);
 
         $testData = [
             'active' => true,
@@ -358,11 +374,12 @@ class CustomerTest extends TestCase
 
         $customer = $this->resource->updateByNumber($number, $testData);
 
-        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
+        static::assertInstanceOf(Customer::class, $customer);
         static::assertEquals($id, $customer->getId());
 
         static::assertEquals($customer->getEmail(), $testData['email']);
-        static::assertEquals($customer->getDefaultBillingAddress()->getFirstName(), $testData['billing']['firstname']);
+        static::assertInstanceOf(Address::class, $customer->getDefaultBillingAddress());
+        static::assertEquals($customer->getDefaultBillingAddress()->getFirstname(), $testData['billing']['firstname']);
 
         return $number;
     }
@@ -370,9 +387,9 @@ class CustomerTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testUpdateWithInvalidDataShouldThrowValidationException($id)
+    public function testUpdateWithInvalidDataShouldThrowValidationException(int $id): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $testData = [
             'active' => true,
             'email' => 'invalid',
@@ -385,26 +402,26 @@ class CustomerTest extends TestCase
         $this->resource->update($id, $testData);
     }
 
-    public function testUpdateWithInvalidIdShouldThrowNotFoundException()
+    public function testUpdateWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->update(9999999, []);
     }
 
-    public function testUpdateWithMissingIdShouldThrowParameterMissingException()
+    public function testUpdateWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
-        $this->resource->update('', []);
+        $this->expectException(ParameterMissingException::class);
+        $this->resource->update(0, []);
     }
 
     /**
      * @depends testUpdateShouldBeSuccessful
      */
-    public function testDeleteShouldBeSuccessful($id): void
+    public function testDeleteShouldBeSuccessful(int $id): void
     {
         $customer = $this->resource->delete($id);
 
-        static::assertInstanceOf(\Shopware\Models\Customer\Customer::class, $customer);
+        static::assertInstanceOf(Customer::class, $customer);
         static::assertSame(0, (int) $customer->getId());
     }
 
@@ -417,30 +434,29 @@ class CustomerTest extends TestCase
     public function testDeleteWithMissingIdShouldThrowParameterMissingException(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $this->resource->delete('');
+        $this->resource->delete(0);
     }
 
-    /**
-     * @return int
-     */
-    public function testPostCustomersWithDebitShouldCreatePaymentData()
+    public function testPostCustomersWithDebitShouldCreatePaymentData(): void
     {
         $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(DateTime::ISO8601);
+        $firstLogin = $date->format(DateTime::ISO8601);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(DateTime::ISO8601);
+        $lastLogin = $date->format(DateTime::ISO8601);
 
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
+        $date = DateTime::createFromFormat('Y-m-d', '1986-12-20');
+        static::assertInstanceOf(DateTime::class, $date);
+        $birthday = $date->format(DateTime::ISO8601);
 
         $requestData = [
             'password' => 'fooobar',
             'active' => true,
             'email' => Random::getAlphanumericString(5) . 'test1@foobar.com',
 
-            'firstlogin' => $firstlogin,
-            'lastlogin' => $lastlogin,
+            'firstlogin' => $firstLogin,
+            'lastlogin' => $lastLogin,
 
             'salutation' => 'mr',
             'firstname' => 'Max',
@@ -477,12 +493,15 @@ class CustomerTest extends TestCase
         ];
 
         $customer = $this->resource->create($requestData);
+        static::assertInstanceOf(Customer::class, $customer);
         $identifier = $customer->getId();
 
         $this->resource->getManager()->clear();
-        $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
+        $customer = Shopware()->Models()->getRepository(Customer::class)->find($identifier);
+        static::assertInstanceOf(Customer::class, $customer);
 
-        $paymentData = array_shift($customer->getPaymentData()->toArray());
+        $paymentDataArray = $customer->getPaymentData()->toArray();
+        $paymentData = array_shift($paymentDataArray);
 
         static::assertNotNull($paymentData);
         static::assertEquals('Max Mustermann', $paymentData->getAccountHolder());
@@ -493,27 +512,26 @@ class CustomerTest extends TestCase
         $this->testDeleteShouldBeSuccessful($identifier);
     }
 
-    /**
-     * @return int
-     */
-    public function testPostCustomersWithDebitPaymentDataShouldCreateDebitData()
+    public function testPostCustomersWithDebitPaymentDataShouldCreateDebitData(): void
     {
         $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(DateTime::ISO8601);
+        $firstLogin = $date->format(DateTime::ISO8601);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(DateTime::ISO8601);
+        $lastLogin = $date->format(DateTime::ISO8601);
 
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
+        $date = DateTime::createFromFormat('Y-m-d', '1986-12-20');
+        static::assertInstanceOf(DateTime::class, $date);
+        $birthday = $date->format(DateTime::ISO8601);
 
         $requestData = [
             'password' => 'fooobar',
             'active' => true,
             'email' => Random::getAlphanumericString(5) . 'test2@foobar.com',
 
-            'firstlogin' => $firstlogin,
-            'lastlogin' => $lastlogin,
+            'firstlogin' => $firstLogin,
+            'lastlogin' => $lastLogin,
 
             'salutation' => 'mr',
             'firstname' => 'Max',
@@ -556,9 +574,11 @@ class CustomerTest extends TestCase
         $identifier = $customer->getId();
 
         $this->resource->getManager()->clear();
-        $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
+        $customer = Shopware()->Models()->getRepository(Customer::class)->find($identifier);
+        static::assertInstanceOf(Customer::class, $customer);
 
-        $paymentData = array_shift($customer->getPaymentData()->toArray());
+        $paymentDataArray = $customer->getPaymentData()->toArray();
+        $paymentData = array_shift($paymentDataArray);
 
         static::assertNotNull($paymentData);
         static::assertEquals('Max Mustermann', $paymentData->getAccountHolder());
@@ -569,7 +589,7 @@ class CustomerTest extends TestCase
         $this->testDeleteShouldBeSuccessful($identifier);
     }
 
-    public function testCreateWithDifferentCustomerGroup()
+    public function testCreateWithDifferentCustomerGroup(): void
     {
         $data = [
             'password' => 'fooobar',
@@ -591,10 +611,11 @@ class CustomerTest extends TestCase
         ];
 
         $customer = $this->resource->create($data);
+        static::assertInstanceOf(Group::class, $customer->getGroup());
         static::assertEquals('H', $customer->getGroup()->getKey());
     }
 
-    public function testCreateCustomerWithDefaultShopCustomerGroup()
+    public function testCreateCustomerWithDefaultShopCustomerGroup(): void
     {
         $context = Shopware()->Container()->get(ContextServiceInterface::class)->createShopContext(1);
         $data = [
@@ -617,13 +638,14 @@ class CustomerTest extends TestCase
         ];
 
         $customer = $this->resource->create($data);
+        static::assertInstanceOf(Group::class, $customer->getGroup());
         static::assertEquals($context->getShop()->getCustomerGroup()->getKey(), $customer->getGroup()->getKey());
     }
 
     /**
      * @group failing
      */
-    public function testCreateCustomerCreatesCustomerAttribute()
+    public function testCreateCustomerCreatesCustomerAttribute(): void
     {
         $data = [
             'email' => __FUNCTION__ . Random::getAlphanumericString(5) . '@foobar.com',

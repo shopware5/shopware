@@ -24,20 +24,16 @@
 
 namespace Shopware\Bundle\SearchBundle\Sorting;
 
+use RuntimeException;
+use Shopware\Bundle\SearchBundle\SortingInterface;
+
 class ProductAttributeSorting extends Sorting
 {
-    /**
-     * @var string
-     */
-    private $field;
+    private string $field;
 
-    /**
-     * @param string $field
-     * @param string $direction
-     */
-    public function __construct($field, $direction = 'ASC')
+    public function __construct(string $field, string $direction = SortingInterface::SORT_ASC)
     {
-        $this->field = $field;
+        $this->setField($field);
         parent::__construct($direction);
     }
 
@@ -54,6 +50,9 @@ class ProductAttributeSorting extends Sorting
      */
     public function setField($field)
     {
+        if (!\is_string($field) || $field === '') {
+            throw new RuntimeException('ProductAttributeSorting class requires a defined attribute field!');
+        }
         $this->field = $field;
     }
 

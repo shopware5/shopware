@@ -33,10 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class WidthConditionHandler implements ConditionHandlerInterface
 {
-    /**
-     * @var VariantHelperInterface
-     */
-    private $variantHelper;
+    private VariantHelperInterface $variantHelper;
 
     public function __construct(VariantHelperInterface $variantHelper)
     {
@@ -53,10 +50,15 @@ class WidthConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(WidthCondition $condition, QueryBuilder $query): void
+    {
         $this->variantHelper->joinVariants($query);
 
-        $min = ':minWidth' . md5(json_encode($condition));
-        $max = ':maxWidth' . md5(json_encode($condition));
+        $min = ':minWidth' . md5(json_encode($condition, JSON_THROW_ON_ERROR));
+        $max = ':maxWidth' . md5(json_encode($condition, JSON_THROW_ON_ERROR));
 
         if ($condition->getMinWidth() > 0) {
             $query->andWhere('allVariants.width >= ' . $min);

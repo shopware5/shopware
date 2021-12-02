@@ -35,9 +35,6 @@ use Shopware\Tests\Functional\Components\Theme\Base;
 
 class FormSynchronizerTest extends Base
 {
-    /**
-     * @var array<string, array<string, mixed>>
-     */
     public const CONFIG_1 = [
         'elements' => [
             [
@@ -54,9 +51,6 @@ class FormSynchronizerTest extends Base
         ],
     ];
 
-    /**
-     * @var array<string, array<string, mixed>>
-     */
     public const CONFIG_2 = [
         'elements' => [
             [

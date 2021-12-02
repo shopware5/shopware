@@ -30,66 +30,58 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryDepthServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware_Components_Config;
 
 class CategoryFacetHandler implements PartialFacetHandlerInterface
 {
-    /**
-     * @var CategoryServiceInterface
-     */
-    private $categoryService;
+    private CategoryServiceInterface $categoryService;
 
-    /**
-     * @var QueryBuilderFactoryInterface
-     */
-    private $queryBuilderFactory;
+    private QueryBuilderFactoryInterface $queryBuilderFactory;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private CategoryDepthServiceInterface $categoryDepthService;
 
-    /**
-     * @var CategoryDepthServiceInterface
-     */
-    private $categoryDepthService;
-
-    /**
-     * @var CategoryTreeFacetResultBuilder
-     */
-    private $categoryTreeFacetResultBuilder;
+    private CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder;
 
     public function __construct(
         CategoryServiceInterface $categoryService,
         QueryBuilderFactoryInterface $queryBuilderFactory,
-        Shopware_Components_Config $config,
         CategoryDepthServiceInterface $categoryDepthService,
         CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
     ) {
         $this->categoryService = $categoryService;
         $this->queryBuilderFactory = $queryBuilderFactory;
-        $this->config = $config;
         $this->categoryDepthService = $categoryDepthService;
         $this->categoryTreeFacetResultBuilder = $categoryTreeFacetResultBuilder;
     }
 
     /**
-     * @param FacetInterface|CategoryFacet $facet
-     *
-     * @return FacetResultInterface|null
+     * {@inheritdoc}
      */
+    public function supportsFacet(FacetInterface $facet)
+    {
+        return $facet instanceof CategoryFacet;
+    }
+
     public function generatePartialFacet(
         FacetInterface $facet,
         Criteria $reverted,
         Criteria $criteria,
         ShopContextInterface $context
     ) {
+        return $this->getFacet($facet, $reverted, $criteria, $context);
+    }
+
+    private function getFacet(
+        CategoryFacet $facet,
+        Criteria $reverted,
+        Criteria $criteria,
+        ShopContextInterface $context
+    ): ?TreeFacetResult {
         $ids = $this->fetchCategoriesOfProducts($reverted, $context);
 
         if (empty($ids)) {
@@ -115,17 +107,26 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return int[]
      */
-    public function supportsFacet(FacetInterface $facet)
+    private function fetchCategoriesOfProducts(Criteria $reverted, ShopContextInterface $context): array
     {
-        return $facet instanceof CategoryFacet;
+        $query = $this->queryBuilderFactory->createQuery($reverted, $context);
+        $query->resetQueryPart('orderBy');
+        $query->resetQueryPart('groupBy');
+        $query->select(['productCategoryFacet.categoryID']);
+        $query->innerJoin('product', 's_articles_categories_ro', 'productCategoryFacet', 'productCategoryFacet.articleID = product.id');
+        $query->groupBy('productCategoryFacet.categoryID');
+
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
-     * @return array
+     * @param array<int> $ids
+     *
+     * @return array<int>
      */
-    private function filterSystemCategories(array $ids, ShopContextInterface $context)
+    private function filterSystemCategories(array $ids, ShopContextInterface $context): array
     {
         $system = array_merge(
             [$context->getShop()->getCategory()->getId()],
@@ -140,22 +141,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     /**
      * @return int[]
      */
-    private function fetchCategoriesOfProducts(Criteria $reverted, ShopContextInterface $context)
-    {
-        $query = $this->queryBuilderFactory->createQuery($reverted, $context);
-        $query->resetQueryPart('orderBy');
-        $query->resetQueryPart('groupBy');
-        $query->select(['productCategoryFacet.categoryID']);
-        $query->innerJoin('product', 's_articles_categories_ro', 'productCategoryFacet', 'productCategoryFacet.articleID = product.id');
-        $query->groupBy('productCategoryFacet.categoryID');
-
-        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
-    }
-
-    /**
-     * @return int[]
-     */
-    private function getFilteredIds(Criteria $criteria)
+    private function getFilteredIds(Criteria $criteria): array
     {
         $active = [];
         foreach ($criteria->getUserConditions() as $condition) {

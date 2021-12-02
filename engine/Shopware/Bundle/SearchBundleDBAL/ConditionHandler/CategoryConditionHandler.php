@@ -51,6 +51,11 @@ class CategoryConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(CategoryCondition $condition, QueryBuilder $query): void
+    {
         $joinName = self::STATE_NAME;
         $counter = 1;
 

@@ -38,10 +38,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    /**
-     * @var CombinedConditionQueryBuilder
-     */
-    private $combinedConditionQueryBuilder;
+    private CombinedConditionQueryBuilder $combinedConditionQueryBuilder;
 
     public function __construct(CombinedConditionQueryBuilder $combinedConditionQueryBuilder)
     {
@@ -65,17 +62,7 @@ class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorI
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var CombinedConditionFacet $criteriaPart */
-        $query = $this->combinedConditionQueryBuilder->build(
-            $criteriaPart->getConditions(),
-            $criteria,
-            $context
-        );
-
-        $filter = new FilterAggregation($criteriaPart->getName());
-        $filter->setFilter($query);
-
-        $search->addAggregation($filter);
+        $this->addQuery($criteriaPart, $criteria, $search, $context);
     }
 
     /**
@@ -92,7 +79,7 @@ class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorI
         }
 
         foreach ($elasticResult['aggregations'] as $key => $aggregation) {
-            if (strpos($key, 'combined_facet_') === false) {
+            if (!str_contains($key, 'combined_facet_')) {
                 continue;
             }
 
@@ -104,8 +91,10 @@ class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorI
                 continue;
             }
 
-            /** @var CombinedConditionFacet $facet */
             $facet = $criteria->getFacet($key);
+            if (!$facet instanceof CombinedConditionFacet) {
+                continue;
+            }
 
             $result->addFacet(
                 new BooleanFacetResult(
@@ -116,5 +105,23 @@ class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorI
                 )
             );
         }
+    }
+
+    private function addQuery(
+        CombinedConditionFacet $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ): void {
+        $query = $this->combinedConditionQueryBuilder->build(
+            $criteriaPart->getConditions(),
+            $criteria,
+            $context
+        );
+
+        $filter = new FilterAggregation($criteriaPart->getName());
+        $filter->setFilter($query);
+
+        $search->addAggregation($filter);
     }
 }

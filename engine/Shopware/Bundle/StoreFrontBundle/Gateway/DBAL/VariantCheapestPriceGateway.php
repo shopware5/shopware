@@ -163,7 +163,6 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
 
     public function joinVariantCondition(QueryBuilder $mainQuery, QueryBuilder $cheapestPriceIdQuery, QueryBuilder $cheapestPriceQuery, VariantCondition $condition)
     {
-        /** @var VariantCondition $condition */
         $tableKey = $condition->getName();
 
         $suffix = md5(json_encode($condition));

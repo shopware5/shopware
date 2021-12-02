@@ -35,10 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CombinedConditionHandler implements PartialConditionHandlerInterface
 {
-    /**
-     * @var CombinedConditionQueryBuilder
-     */
-    private $combinedConditionQueryBuilder;
+    private CombinedConditionQueryBuilder $combinedConditionQueryBuilder;
 
     public function __construct(CombinedConditionQueryBuilder $combinedConditionQueryBuilder)
     {
@@ -53,38 +50,36 @@ class CombinedConditionHandler implements PartialConditionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handlePostFilter(
-        CriteriaPartInterface $criteriaPart,
-        Criteria $criteria,
-        Search $search,
-        ShopContextInterface $context
-    ) {
-        /** @var CombinedCondition $criteriaPart */
-        $query = $this->combinedConditionQueryBuilder->build(
-            $criteriaPart->getConditions(),
-            $criteria,
-            $context
-        );
-
-        $search->addPostFilter($query);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function handleFilter(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var CombinedCondition $criteriaPart */
-        $query = $this->combinedConditionQueryBuilder->build(
+        $search->addQuery($this->getQuery($criteriaPart, $criteria, $context), BoolQuery::FILTER);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handlePostFilter(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        $search->addPostFilter($this->getQuery($criteriaPart, $criteria, $context));
+    }
+
+    private function getQuery(
+        CombinedCondition $criteriaPart,
+        Criteria $criteria,
+        ShopContextInterface $context
+    ): BoolQuery {
+        return $this->combinedConditionQueryBuilder->build(
             $criteriaPart->getConditions(),
             $criteria,
             $context
         );
-
-        $search->addQuery($query, BoolQuery::FILTER);
     }
 }

@@ -25,36 +25,42 @@
 namespace Shopware\Tests\Functional\Bundle\MediaBundle;
 
 use Closure;
+use Doctrine\DBAL\Connection;
 use Enlight_Event_EventManager;
 use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Bundle\MediaBundle\GarbageCollector;
 use Shopware\Bundle\MediaBundle\GarbageCollectorFactory;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
 class GarbageCollectorFactoryTest extends TestCase
 {
-    public function testTextAttributesAreCollected()
+    public function testTextAttributesAreCollected(): void
     {
-        $factory = new GarbageCollectorFactory(new Enlight_Event_EventManager(), Shopware()->Container()->get(
-            \Doctrine\DBAL\Connection::class
-        ), Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class));
+        $factory = new GarbageCollectorFactory(
+            new Enlight_Event_EventManager(),
+            Shopware()->Container()->get(Connection::class),
+            Shopware()->Container()->get(MediaServiceInterface::class)
+        );
         $collector = $factory->factory();
 
         $currentCount = \count($this->getMediaPositionsFromGarbageCollector($collector));
 
-        Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class)->update('s_articles_attributes', 'foo', TypeMappingInterface::TYPE_HTML);
+        Shopware()->Container()->get(CrudServiceInterface::class)->update('s_articles_attributes', 'foo', TypeMappingInterface::TYPE_HTML);
 
         $collector = $factory->factory();
 
-        static::assertNotEquals($currentCount, \count($this->getMediaPositionsFromGarbageCollector($collector)));
+        static::assertNotCount($currentCount, $this->getMediaPositionsFromGarbageCollector($collector));
 
-        Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class)->delete('s_articles_attributes', 'foo');
+        Shopware()->Container()->get(CrudServiceInterface::class)->delete('s_articles_attributes', 'foo');
     }
 
     /**
-     * @return \Shopware\Bundle\MediaBundle\Struct\MediaPosition[]
+     * @return MediaPosition[]
      */
-    private function getMediaPositionsFromGarbageCollector(GarbageCollector $collector)
+    private function getMediaPositionsFromGarbageCollector(GarbageCollector $collector): array
     {
         $getMediaPositions = static function (GarbageCollector $collector) {
             return $collector->mediaPositions;

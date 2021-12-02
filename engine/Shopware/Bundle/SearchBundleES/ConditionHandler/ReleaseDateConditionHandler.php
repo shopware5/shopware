@@ -55,10 +55,7 @@ class ReleaseDateConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            $this->createQuery($criteriaPart),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery($criteriaPart), BoolQuery::FILTER);
     }
 
     /**
@@ -70,15 +67,10 @@ class ReleaseDateConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(
-            $this->createQuery($criteriaPart)
-        );
+        $search->addPostFilter($this->getQuery($criteriaPart));
     }
 
-    /**
-     * @return RangeQuery
-     */
-    private function createQuery(ReleaseDateCondition $criteriaPart)
+    private function getQuery(ReleaseDateCondition $criteriaPart): RangeQuery
     {
         $date = new DateTime();
         $intervalSpec = 'P' . $criteriaPart->getDays() . 'D';

@@ -34,12 +34,18 @@ class HasTotalOrderAmountConditionHandler implements ConditionHandlerInterface
 {
     use DynamicConditionParserTrait;
 
+    public function supports(ConditionInterface $condition)
+    {
+        return $condition instanceof HasTotalOrderAmountCondition;
+    }
+
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        if (!$condition instanceof HasTotalOrderAmountCondition) {
-            return;
-        }
+        $this->addCondition($condition, $query);
+    }
 
+    private function addCondition(HasTotalOrderAmountCondition $condition, QueryBuilder $query): void
+    {
         $this->parse(
             $query,
             's_customer_search_index',
@@ -48,10 +54,5 @@ class HasTotalOrderAmountConditionHandler implements ConditionHandlerInterface
             $condition->getMinimumOrderAmount(),
             $condition->getOperator() ?: ConditionInterface::OPERATOR_GTE
         );
-    }
-
-    public function supports(ConditionInterface $condition)
-    {
-        return $condition instanceof HasTotalOrderAmountCondition;
     }
 }

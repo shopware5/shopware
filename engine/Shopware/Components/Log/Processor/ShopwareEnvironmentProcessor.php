@@ -25,9 +25,6 @@
 
 namespace Shopware\Components\Log\Processor;
 
-/**
- * ShopwareEnvironmentProcessor.
- */
 class ShopwareEnvironmentProcessor
 {
     /**

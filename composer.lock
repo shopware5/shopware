@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7dbb78fa8b1077c5acad1175702c21f3",
+    "content-hash": "ec52ae44f10df7f92e8f119b04588c1d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -7657,16 +7657,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.2.1",
+            "version": "v3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "13ae36a76b6e329e44ca3cafaa784ea02db9ff14"
+                "reference": "b37bf90405cec3f7a83c18e645ef748bcb87ac11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/13ae36a76b6e329e44ca3cafaa784ea02db9ff14",
-                "reference": "13ae36a76b6e329e44ca3cafaa784ea02db9ff14",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/b37bf90405cec3f7a83c18e645ef748bcb87ac11",
+                "reference": "b37bf90405cec3f7a83c18e645ef748bcb87ac11",
                 "shasum": ""
             },
             "require": {
@@ -7675,13 +7675,14 @@
                 "doctrine/annotations": "^1.12",
                 "ext-json": "*",
                 "ext-tokenizer": "*",
-                "php": "^7.2 || ^8.0",
+                "php": "^7.2.5 || ^8.0",
                 "php-cs-fixer/diff": "^2.0",
                 "symfony/console": "^4.4.20 || ^5.1.3",
                 "symfony/event-dispatcher": "^4.4.20 || ^5.0",
                 "symfony/filesystem": "^4.4.20 || ^5.0",
                 "symfony/finder": "^4.4.20 || ^5.0",
                 "symfony/options-resolver": "^4.4.20 || ^5.0",
+                "symfony/polyfill-mbstring": "^1.23",
                 "symfony/polyfill-php72": "^1.23",
                 "symfony/polyfill-php80": "^1.23",
                 "symfony/polyfill-php81": "^1.23",
@@ -7706,8 +7707,7 @@
             },
             "suggest": {
                 "ext-dom": "For handling output formats in XML",
-                "ext-mbstring": "For handling non-UTF8 characters.",
-                "symfony/polyfill-mbstring": "When enabling `ext-mbstring` is not possible."
+                "ext-mbstring": "For handling non-UTF8 characters."
             },
             "bin": [
                 "php-cs-fixer"
@@ -7735,7 +7735,7 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues",
-                "source": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/tree/v3.2.1"
+                "source": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/tree/v3.3.1"
             },
             "funding": [
                 {
@@ -7743,7 +7743,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-05T08:12:17+00:00"
+            "time": "2021-11-15T18:01:18+00:00"
         },
         {
             "name": "instaclick/php-webdriver",
@@ -7810,16 +7810,16 @@
         },
         {
             "name": "kubawerlos/php-cs-fixer-custom-fixers",
-            "version": "v3.0.2",
+            "version": "v3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers.git",
-                "reference": "26e6a733b3871fe118e8237f02081ee83b966c40"
+                "reference": "fd3dbbb83763f4af350ecc3fe0d923679407c63f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/26e6a733b3871fe118e8237f02081ee83b966c40",
-                "reference": "26e6a733b3871fe118e8237f02081ee83b966c40",
+                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/fd3dbbb83763f4af350ecc3fe0d923679407c63f",
+                "reference": "fd3dbbb83763f4af350ecc3fe0d923679407c63f",
                 "shasum": ""
             },
             "require": {
@@ -7835,7 +7835,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "PhpCsFixerCustomFixers\\": "./src"
+                    "PhpCsFixerCustomFixers\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -7851,9 +7851,9 @@
             "description": "A set of custom fixers for PHP CS Fixer",
             "support": {
                 "issues": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/issues",
-                "source": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/tree/v3.0.2"
+                "source": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/tree/v3.5.0"
             },
-            "time": "2021-09-20T16:33:05+00:00"
+            "time": "2021-11-30T18:41:07+00:00"
         },
         {
             "name": "nikic/php-parser",

@@ -656,16 +656,16 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Creates a new component which can be used in the backend emotion
      * module.
-     *
-     * @param array $options {
-     *
-     *     @var string $name               Required; Logical name of the component
-     *     @var string $template           Required; Template class name which will be loaded in the frontend
-     *     @var string $xType              Required; Ext JS xtype for the backend module component
-     *     @var string $cls                Optional; $cls Css class which used in the frontend emotion
-     *     @var string $convertFunction    Optional; Data convert function which allows to convert the saved backend data
-     *     @var string $description        optional; Description field for the component, which displayed in the backend module.
+     * options {
+     *      string name               Required; Logical name of the component
+     *      string template           Required; Template class name which will be loaded in the frontend
+     *      string xType              Required; Ext JS xtype for the backend module component
+     *      string cls                Optional; $cls Css class which used in the frontend emotion
+     *      string convertFunction    Optional; Data convert function which allows to convert the saved backend data
+     *      string description        optional; Description field for the component, which displayed in the backend module.
      * }
+     *
+     * @param array{name: string, template: string, xType: string, cls?: string, convertFunction?: string, description?: string} $options
      *
      * @return Component
      */

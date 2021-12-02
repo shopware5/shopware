@@ -36,24 +36,13 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class IsAvailableConditionHandler implements ConditionHandlerInterface, CriteriaAwareInterface
 {
-    /**
-     * @var PriceHelperInterface
-     */
-    private $priceHelper;
+    private PriceHelperInterface $priceHelper;
 
-    /**
-     * @var Criteria
-     */
-    private $criteria;
+    private Criteria $criteria;
 
     public function __construct(PriceHelperInterface $priceHelper)
     {
         $this->priceHelper = $priceHelper;
-    }
-
-    public function setCriteria(Criteria $criteria)
-    {
-        $this->criteria = $criteria;
     }
 
     /**
@@ -87,5 +76,10 @@ class IsAvailableConditionHandler implements ConditionHandlerInterface, Criteria
 
         //variants will be displayed => add stock condition
         $query->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
+    }
+
+    public function setCriteria(Criteria $criteria)
+    {
+        $this->criteria = $criteria;
     }
 }

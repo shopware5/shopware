@@ -54,6 +54,23 @@ class ProductNameSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        $this->addSorting($sorting, $query, $context);
+    }
+
+    /**
+     * @param string $condition
+     * @param string $expression1
+     * @param string $expression2
+     *
+     * @return string
+     */
+    protected static function exprIf($condition, $expression1, $expression2)
+    {
+        return " if (($condition),($expression1),($expression2)) ";
+    }
+
+    private function addSorting(ProductNameSorting $sorting, QueryBuilder $query, ShopContextInterface $context): void
+    {
         $query->leftJoin(
             self::PRODUCT,
             's_articles_translations',
@@ -74,17 +91,5 @@ class ProductNameSortingHandler implements SortingHandlerInterface
             ),
             $sorting->getDirection()
         );
-    }
-
-    /**
-     * @param string $condition
-     * @param string $expression1
-     * @param string $expression2
-     *
-     * @return string
-     */
-    protected static function exprIf($condition, $expression1, $expression2)
-    {
-        return " if (($condition),($expression1),($expression2)) ";
     }
 }

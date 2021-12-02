@@ -27,6 +27,7 @@ namespace ShopwarePlugins\SwagUpdate\Components\Checks;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Snippet_Namespace as SnippetNamespace;
 use Exception;
+use InvalidArgumentException;
 use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 use Zend_Http_Client;
@@ -74,7 +75,7 @@ class LicenseCheck implements CheckInterface
      */
     public function canHandle($requirement)
     {
-        return $requirement['type'] == self::CHECK_TYPE;
+        return $requirement['type'] === self::CHECK_TYPE;
     }
 
     /**
@@ -82,6 +83,10 @@ class LicenseCheck implements CheckInterface
      */
     public function check($requirement)
     {
+        if (!\is_array($requirement['value'])) {
+            throw new InvalidArgumentException(__CLASS__ . ' needs an array as value for the requirement check');
+        }
+
         $licenseKeys = $requirement['value']['licenseKeys'];
 
         if (empty($licenseKeys)) {

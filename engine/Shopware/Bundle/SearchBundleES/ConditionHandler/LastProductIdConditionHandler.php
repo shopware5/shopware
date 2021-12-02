@@ -49,12 +49,7 @@ class LastProductIdConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            new RangeQuery('id', [
-                'gt' => $criteriaPart->getLastId(),
-            ]),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery($criteriaPart), BoolQuery::FILTER);
     }
 
     /**
@@ -66,10 +61,13 @@ class LastProductIdConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(
-            new RangeQuery('id', [
-                'gt' => $criteriaPart->getLastId(),
-            ])
-        );
+        $search->addPostFilter($this->getQuery($criteriaPart));
+    }
+
+    private function getQuery(LastProductIdCondition $criteriaPart): RangeQuery
+    {
+        return new RangeQuery('id', [
+            'gt' => $criteriaPart->getLastId(),
+        ]);
     }
 }

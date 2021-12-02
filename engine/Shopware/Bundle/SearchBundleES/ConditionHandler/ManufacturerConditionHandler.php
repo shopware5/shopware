@@ -52,10 +52,7 @@ class ManufacturerConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            new TermsQuery('manufacturer.id', $criteriaPart->getManufacturerIds()),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery($criteriaPart), BoolQuery::FILTER);
     }
 
     /**
@@ -67,8 +64,11 @@ class ManufacturerConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(
-            new TermsQuery('manufacturer.id', $criteriaPart->getManufacturerIds())
-        );
+        $search->addPostFilter($this->getQuery($criteriaPart));
+    }
+
+    private function getQuery(ManufacturerCondition $criteriaPart): TermsQuery
+    {
+        return new TermsQuery('manufacturer.id', $criteriaPart->getManufacturerIds());
     }
 }

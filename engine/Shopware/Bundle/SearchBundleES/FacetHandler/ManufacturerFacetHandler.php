@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
 use ONGR\ElasticsearchDSL\Aggregation\Bucketing\TermsAggregation;
 use ONGR\ElasticsearchDSL\Search;
+use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
@@ -44,20 +45,11 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
 {
     public const AGGREGATION_SIZE = 1000;
 
-    /**
-     * @var ManufacturerServiceInterface
-     */
-    private $manufacturerService;
+    private ManufacturerServiceInterface $manufacturerService;
 
-    /**
-     * @var Shopware_Components_Snippet_Manager
-     */
-    private $snippetManager;
+    private Shopware_Components_Snippet_Manager $snippetManager;
 
-    /**
-     * @var QueryAliasMapper
-     */
-    private $queryAliasMapper;
+    private QueryAliasMapper $queryAliasMapper;
 
     public function __construct(
         ManufacturerServiceInterface $manufacturerService,
@@ -123,17 +115,17 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     /**
      * @param Manufacturer[] $manufacturers
      *
-     * @return array
+     * @return array<ValueListItem>
      */
-    private function createListItems(Criteria $criteria, $manufacturers)
+    private function createListItems(Criteria $criteria, array $manufacturers): array
     {
         $actives = [];
-        if ($condition = $criteria->getCondition('manufacturer')) {
+        $condition = $criteria->getCondition('manufacturer');
+        if ($condition instanceof ManufacturerCondition) {
             $actives = $condition->getManufacturerIds();
         }
 
         $items = [];
-        /** @var Manufacturer $manufacturer */
         foreach ($manufacturers as $manufacturer) {
             $items[] = new ValueListItem(
                 $manufacturer->getId(),
@@ -152,18 +144,13 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
 
     /**
      * @param ValueListItem[] $items
-     *
-     * @return ValueListFacetResult
      */
-    private function createFacet(Criteria $criteria, $items)
+    private function createFacet(Criteria $criteria, array $items): ValueListFacetResult
     {
-        if (!$fieldName = $this->queryAliasMapper->getShortAlias('sSupplier')) {
-            $fieldName = 'sSupplier';
-        }
+        $fieldName = $this->queryAliasMapper->getShortAlias('sSupplier') ?? 'sSupplier';
 
-        /** @var ManufacturerFacet|null $facet */
         $facet = $criteria->getFacet('manufacturer');
-        if ($facet && !empty($facet->getLabel())) {
+        if ($facet instanceof ManufacturerFacet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();
         } else {
             $label = $this->snippetManager->getNamespace('frontend/listing/facet_labels')

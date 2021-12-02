@@ -35,10 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PriceSortingHandler implements HandlerInterface
 {
-    /**
-     * @var PriceFieldMapper
-     */
-    private $mapper;
+    private PriceFieldMapper $mapper;
 
     public function __construct(PriceFieldMapper $mapper)
     {
@@ -62,9 +59,13 @@ class PriceSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var PriceSorting $criteriaPart */
+        $search->addSort($this->getSorting($criteriaPart, $criteria, $context));
+    }
+
+    private function getSorting(PriceSorting $criteriaPart, Criteria $criteria, ShopContextInterface $context): FieldSort
+    {
         $field = $this->mapper->getPriceField($criteria, $context);
-        $sort = new FieldSort($field, strtolower($criteriaPart->getDirection()), ['unmapped_type' => 'double']);
-        $search->addSort($sort);
+
+        return new FieldSort($field, strtolower($criteriaPart->getDirection()), ['unmapped_type' => 'double']);
     }
 }

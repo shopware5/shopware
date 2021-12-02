@@ -507,7 +507,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         // Before we can create the status mail, we need to save the order data. Otherwise
         // the status mail would be created with the old order status and amount.
-        /** @var Order $order */
         $statusBefore = $order->getOrderStatus();
         $clearedBefore = $order->getPaymentStatus();
         $invoiceShippingBefore = $order->getInvoiceShipping();

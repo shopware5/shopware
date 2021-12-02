@@ -26,37 +26,27 @@ namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet;
+use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListItem;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\PropertyGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 class PropertyFacetHandler implements PartialFacetHandlerInterface
 {
-    /**
-     * @var PropertyGatewayInterface
-     */
-    private $propertyGateway;
+    private PropertyGatewayInterface $propertyGateway;
 
-    /**
-     * @var QueryBuilderFactoryInterface
-     */
-    private $queryBuilderFactory;
+    private QueryBuilderFactoryInterface $queryBuilderFactory;
 
-    /**
-     * @var string
-     */
-    private $fieldName;
+    private string $fieldName;
 
     public function __construct(
         PropertyGatewayInterface $propertyGateway,
@@ -65,10 +55,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     ) {
         $this->propertyGateway = $propertyGateway;
         $this->queryBuilderFactory = $queryBuilderFactory;
-
-        if (!$this->fieldName = $queryAliasMapper->getShortAlias('sFilterProperties')) {
-            $this->fieldName = 'sFilterProperties';
-        }
+        $this->fieldName = $queryAliasMapper->getShortAlias('sFilterProperties') ?? 'sFilterProperties';
     }
 
     /**
@@ -76,14 +63,9 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
      */
     public function supportsFacet(FacetInterface $facet)
     {
-        return $facet instanceof Facet\PropertyFacet;
+        return $facet instanceof PropertyFacet;
     }
 
-    /**
-     * @param FacetInterface|Facet\PropertyFacet $facet
-     *
-     * @return FacetResultInterface|null
-     */
     public function generatePartialFacet(
         FacetInterface $facet,
         Criteria $reverted,
@@ -101,17 +83,16 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @return Struct\Property\Set[]|null
+     * @deprecated - Will be private with Shopware 5.8
+     *
+     * @return Set[]|null
      */
-    protected function getProperties(Struct\ShopContextInterface $context, Criteria $queryCriteria)
+    protected function getProperties(ShopContextInterface $context, Criteria $queryCriteria)
     {
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
         $this->rebuildQuery($query);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $propertyData = $statement->fetchAll();
+        $propertyData = $query->execute()->fetchAll();
 
         $valueIds = array_column($propertyData, 'id');
         $filterGroupIds = array_keys(array_flip(array_column($propertyData, 'filterGroupId')));
@@ -120,16 +101,14 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
             return null;
         }
 
-        $properties = $this->propertyGateway->getList(
+        return $this->propertyGateway->getList(
             $valueIds,
             $context,
             $filterGroupIds
         );
-
-        return $properties;
     }
 
-    private function rebuildQuery(QueryBuilder $query)
+    private function rebuildQuery(QueryBuilder $query): void
     {
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
@@ -143,9 +122,9 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @return array
+     * @return array<int>
      */
-    private function getFilteredValues(Criteria $criteria)
+    private function getFilteredValues(Criteria $criteria): array
     {
         $values = [];
         foreach ($criteria->getConditions() as $condition) {
@@ -158,16 +137,14 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Struct\Property\Set[] $sets
-     * @param int[]                 $actives
-     *
-     * @return FacetResultGroup
+     * @param Set[] $sets
+     * @param int[] $actives
      */
     private function createCollectionResult(
-        Facet\PropertyFacet $facet,
+        PropertyFacet $facet,
         array $sets,
-        $actives
-    ) {
+        array $actives
+    ): FacetResultGroup {
         $results = [];
 
         foreach ($sets as $set) {

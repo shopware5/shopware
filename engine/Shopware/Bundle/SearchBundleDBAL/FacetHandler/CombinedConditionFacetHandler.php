@@ -35,14 +35,19 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CombinedConditionFacetHandler implements PartialFacetHandlerInterface
 {
-    /**
-     * @var QueryBuilderFactoryInterface
-     */
-    private $queryBuilderFactory;
+    private QueryBuilderFactoryInterface $queryBuilderFactory;
 
     public function __construct(QueryBuilderFactoryInterface $queryBuilderFactory)
     {
         $this->queryBuilderFactory = $queryBuilderFactory;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsFacet(FacetInterface $facet)
+    {
+        return $facet instanceof CombinedConditionFacet;
     }
 
     /**
@@ -54,6 +59,15 @@ class CombinedConditionFacetHandler implements PartialFacetHandlerInterface
         Criteria $criteria,
         ShopContextInterface $context
     ) {
+        return $this->getFacet($facet, $reverted, $criteria, $context);
+    }
+
+    private function getFacet(
+        CombinedConditionFacet $facet,
+        Criteria $reverted,
+        Criteria $criteria,
+        ShopContextInterface $context
+    ): ?BooleanFacetResult {
         $own = clone $reverted;
 
         if (!$criteria->hasCondition($facet->getName())) {
@@ -77,13 +91,5 @@ class CombinedConditionFacetHandler implements PartialFacetHandlerInterface
             $criteria->hasCondition($facet->getName()),
             $facet->getLabel()
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsFacet(FacetInterface $facet)
-    {
-        return $facet instanceof CombinedConditionFacet;
     }
 }

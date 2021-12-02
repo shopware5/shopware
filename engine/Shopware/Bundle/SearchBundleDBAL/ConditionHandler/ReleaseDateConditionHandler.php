@@ -50,16 +50,20 @@ class ReleaseDateConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(ReleaseDateCondition $condition, QueryBuilder $query): void
+    {
         $date = new DateTime();
-        /** @var ReleaseDateCondition $condition */
         $intervalSpec = 'P' . $condition->getDays() . 'D';
         $interval = new DateInterval($intervalSpec);
 
         $dateNow = new DateTime();
 
-        $min = ':releaseDateFrom' . md5(json_encode($condition));
-        $max = ':releaseDateTo' . md5(json_encode($condition));
-        $now = ':dateNow' . md5(json_encode($condition));
+        $min = ':releaseDateFrom' . md5(json_encode($condition, JSON_THROW_ON_ERROR));
+        $max = ':releaseDateTo' . md5(json_encode($condition, JSON_THROW_ON_ERROR));
+        $now = ':dateNow' . md5(json_encode($condition, JSON_THROW_ON_ERROR));
 
         switch ($condition->getDirection()) {
             case ReleaseDateCondition::DIRECTION_FUTURE:

@@ -27,10 +27,9 @@ namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 use Enlight_Components_Snippet_Namespace;
 use PDO;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet;
+use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ImmediateDeliveryConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
@@ -41,25 +40,13 @@ use Shopware_Components_Snippet_Manager;
 
 class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
 {
-    /**
-     * @var QueryBuilderFactoryInterface
-     */
-    private $queryBuilderFactory;
+    private QueryBuilderFactoryInterface $queryBuilderFactory;
 
-    /**
-     * @var Enlight_Components_Snippet_Namespace
-     */
-    private $snippetNamespace;
+    private Enlight_Components_Snippet_Namespace $snippetNamespace;
 
-    /**
-     * @var string
-     */
-    private $fieldName;
+    private string $fieldName;
 
-    /**
-     * @var VariantHelperInterface
-     */
-    private $variantHelper;
+    private VariantHelperInterface $variantHelper;
 
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
@@ -69,22 +56,33 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
         $this->snippetNamespace = $snippetManager->getNamespace('frontend/listing/facet_labels');
-
-        if (!$this->fieldName = $queryAliasMapper->getShortAlias('immediateDelivery')) {
-            $this->fieldName = 'immediateDelivery';
-        }
+        $this->fieldName = $queryAliasMapper->getShortAlias('immediateDelivery') ?? 'immediateDelivery';
         $this->variantHelper = $variantHelper;
     }
 
     /**
-     * @return FacetResultInterface|null
+     * {@inheritdoc}
      */
+    public function supportsFacet(FacetInterface $facet)
+    {
+        return $facet instanceof ImmediateDeliveryFacet;
+    }
+
     public function generatePartialFacet(
         FacetInterface $facet,
         Criteria $reverted,
         Criteria $criteria,
         ShopContextInterface $context
     ) {
+        return $this->getFacet($facet, $reverted, $criteria, $context);
+    }
+
+    private function getFacet(
+        ImmediateDeliveryFacet $facet,
+        Criteria $reverted,
+        Criteria $criteria,
+        ShopContextInterface $context
+    ): ?BooleanFacetResult {
         $query = $this->queryBuilderFactory->createQuery($reverted, $context);
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
@@ -98,16 +96,12 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
         $query->select('product.id')
             ->setMaxResults(1);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $total = $statement->fetch(PDO::FETCH_COLUMN);
+        $total = $query->execute()->fetch(PDO::FETCH_COLUMN);
 
         if ($total <= 0) {
             return null;
         }
 
-        /** @var Facet\ImmediateDeliveryFacet $facet */
         if (!empty($facet->getLabel())) {
             $label = $facet->getLabel();
         } else {
@@ -120,13 +114,5 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
             $criteria->hasCondition($facet->getName()),
             $label
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsFacet(FacetInterface $facet)
-    {
-        return $facet instanceof Facet\ImmediateDeliveryFacet;
     }
 }

@@ -141,7 +141,6 @@ class Queue
         $filterString = $this->getFilterResource()->filterArrayToString($filterArray);
 
         $query = $this->getFilterResource()->getFilterQuery($filterArray, $offset, $limit);
-        /** @var int[] $results */
         list($results, $totalCount) = $this->getFilterResource()->getPaginatedResult($query);
 
         if (!empty($queueId)) {

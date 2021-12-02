@@ -38,6 +38,11 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(SearchTermCondition $condition, QueryBuilder $query): void
+    {
         $fields = [
             'customer.email',
             'customer.title',
@@ -75,11 +80,9 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
     /**
      * Parse a string / search term into a keyword array
      *
-     * @param string $string
-     *
-     * @return array
+     * @return array<string>
      */
-    private function splitTerm($string)
+    private function splitTerm(string $string): array
     {
         $string = str_replace(
             ['Ü', 'ü', 'ä', 'Ä', 'ö', 'Ö', 'ß'],
@@ -90,10 +93,17 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
         $string = mb_strtolower(html_entity_decode($string), 'UTF-8');
 
         // Remove not required chars from string
-        $string = trim(preg_replace("/[^\pL_0-9]/u", ' ', $string));
+        $replaced = preg_replace("/[^\pL_0-9]/u", ' ', $string);
+        if (!\is_string($replaced)) {
+            return [];
+        }
+        $string = trim($replaced);
 
         // Parse string into array
         $wordsTmp = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
+        if (!\is_array($wordsTmp)) {
+            return [];
+        }
 
         if (\count($wordsTmp)) {
             $words = array_unique($wordsTmp);

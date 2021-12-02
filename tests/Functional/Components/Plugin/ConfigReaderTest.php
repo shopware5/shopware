@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -38,35 +40,17 @@ class ConfigReaderTest extends TestCase
 
     private const NUMBER_CONFIGURATION_NAME = 'numberConfiguration';
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var ReaderInterface
-     */
-    private $configReader;
+    private ReaderInterface $configReader;
 
-    /**
-     * @var int
-     */
-    private $configElementId;
+    private int $configElementId;
 
-    /**
-     * @var int
-     */
-    private $installationShopId;
+    private int $installationShopId;
 
-    /**
-     * @var int
-     */
-    private $subShopId;
+    private int $subShopId;
 
-    /**
-     * @var int
-     */
-    private $languageShopId;
+    private int $languageShopId;
 
     public function setUp(): void
     {
@@ -113,7 +97,7 @@ class ConfigReaderTest extends TestCase
             'position' => 0,
             'scope' => 1,
         ]);
-        $this->configElementId = $this->connection->lastInsertId();
+        $this->configElementId = (int) $this->connection->lastInsertId();
 
         // setup shops
         // assume shop by id 1 exists
@@ -128,7 +112,7 @@ class ConfigReaderTest extends TestCase
             '`default`' => 0,
             'active' => 1,
         ]);
-        $this->subShopId = $this->connection->lastInsertId();
+        $this->subShopId = (int) $this->connection->lastInsertId();
 
         $this->connection->insert('s_core_shops', [
             'name' => 'Sub Shop',
@@ -140,31 +124,25 @@ class ConfigReaderTest extends TestCase
             'active' => 1,
             'main_id' => $this->subShopId,
         ]);
-        $this->languageShopId = $this->connection->lastInsertId();
+        $this->languageShopId = (int) $this->connection->lastInsertId();
 
         $this->configReader = Shopware()->Container()->get(ReaderInterface::class);
     }
 
-    public function tearDown(): void
-    {
-        $this->connection = null;
-        $this->configReader = null;
-    }
-
-    public function testReadElementDefault()
+    public function testReadElementDefault(): void
     {
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME),
-            [self::NUMBER_CONFIGURATION_NAME => 1]
+            [self::NUMBER_CONFIGURATION_NAME => 1],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
-            [self::NUMBER_CONFIGURATION_NAME => 1]
+            [self::NUMBER_CONFIGURATION_NAME => 1],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId)
         );
     }
 
-    public function testReadValueForInstallation()
+    public function testReadValueForInstallation(): void
     {
         $this->connection->insert('s_core_config_values', [
             'element_id' => $this->configElementId,
@@ -173,27 +151,27 @@ class ConfigReaderTest extends TestCase
         ]);
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId)
         );
     }
 
-    public function testReadValueForSubShop()
+    public function testReadValueForSubShop(): void
     {
         $this->connection->insert('s_core_config_values', [
             'element_id' => $this->configElementId,
@@ -208,27 +186,27 @@ class ConfigReaderTest extends TestCase
         ]);
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
-            [self::NUMBER_CONFIGURATION_NAME => 3]
+            [self::NUMBER_CONFIGURATION_NAME => 3],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
-            [self::NUMBER_CONFIGURATION_NAME => 3]
+            [self::NUMBER_CONFIGURATION_NAME => 3],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId)
         );
     }
 
-    public function testReadValueForLanguageShop()
+    public function testReadValueForLanguageShop(): void
     {
         $this->connection->insert('s_core_config_values', [
             'element_id' => $this->configElementId,
@@ -249,23 +227,23 @@ class ConfigReaderTest extends TestCase
         ]);
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
-            [self::NUMBER_CONFIGURATION_NAME => 2]
+            [self::NUMBER_CONFIGURATION_NAME => 2],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
-            [self::NUMBER_CONFIGURATION_NAME => 3]
+            [self::NUMBER_CONFIGURATION_NAME => 3],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId)
         );
 
         static::assertSame(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
-            [self::NUMBER_CONFIGURATION_NAME => 4]
+            [self::NUMBER_CONFIGURATION_NAME => 4],
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId)
         );
     }
 }

@@ -38,6 +38,11 @@ class AccountModeConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(AccountModeCondition $condition, QueryBuilder $query): void
+    {
         $query->andWhere('customer.accountmode = :accountmode')
             ->setParameter(':accountmode', $condition->getAccountMode());
     }

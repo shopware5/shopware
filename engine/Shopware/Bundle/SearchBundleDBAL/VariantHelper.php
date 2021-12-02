@@ -116,13 +116,13 @@ class VariantHelper implements VariantHelperInterface
             return $this->variantFacet = null;
         }
 
+        /** @var array<class-string<VariantFacet>, array{label: string, depth: string}> $arr */
         $arr = json_decode($json, true);
 
         if (empty($arr)) {
             return $this->variantFacet = null;
         }
 
-        /** @var \Shopware\Bundle\SearchBundle\Facet\VariantFacet|null variantFacet */
         $variantFacet = $this->reflectionHelper->createInstanceFromNamedArguments(key($arr), reset($arr));
         $this->variantFacet = $variantFacet;
 
@@ -167,7 +167,6 @@ class VariantHelper implements VariantHelperInterface
      */
     public function joinVariantCondition(QueryBuilder $query, VariantCondition $condition)
     {
-        /** @var VariantCondition $condition */
         $tableKey = $condition->getName();
 
         $suffix = md5(json_encode($condition));

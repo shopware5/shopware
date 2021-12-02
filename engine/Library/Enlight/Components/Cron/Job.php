@@ -224,7 +224,7 @@ class Enlight_Components_Cron_Job
     /**
      * Returns the Name / Descriptions of the Job
      *
-     * @return \String
+     * @return string
      */
     public function getName()
     {

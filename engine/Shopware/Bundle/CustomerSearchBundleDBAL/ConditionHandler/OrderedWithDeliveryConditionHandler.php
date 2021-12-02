@@ -38,6 +38,11 @@ class OrderedWithDeliveryConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(OrderedWithDeliveryCondition $condition, QueryBuilder $query): void
+    {
         $wheres = [];
         foreach ($condition->getDispatchIds() as $i => $number) {
             $wheres[] = 'customer.ordered_with_deliveries LIKE :delivery' . $i;

@@ -41,10 +41,11 @@ class CustomerAttributeConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        if (!$condition instanceof CustomerAttributeCondition) {
-            return;
-        }
+        $this->addCondition($condition, $query);
+    }
 
+    private function addCondition(CustomerAttributeCondition $condition, QueryBuilder $query): void
+    {
         $this->parse(
             $query,
             's_user_attributes',

@@ -47,7 +47,7 @@ class DumpIterator implements SeekableIterator, Countable
     protected $position;
 
     /**
-     * @var
+     * @var string
      */
     protected $current;
 

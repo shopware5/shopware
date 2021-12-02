@@ -52,13 +52,7 @@ class CustomerGroupConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var CustomerGroupCondition $criteriaPart */
-        $filter = new BoolQuery();
-        $filter->add(
-            new TermsQuery('blockedCustomerGroupIds', $criteriaPart->getCustomerGroupIds()),
-            BoolQuery::MUST_NOT
-        );
-        $search->addQuery($filter);
+        $search->addQuery($this->getQuery($criteriaPart));
     }
 
     /**
@@ -70,12 +64,17 @@ class CustomerGroupConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var CustomerGroupCondition $criteriaPart */
+        $search->addPostFilter($this->getQuery($criteriaPart));
+    }
+
+    private function getQuery(CustomerGroupCondition $criteriaPart): BoolQuery
+    {
         $filter = new BoolQuery();
         $filter->add(
             new TermsQuery('blockedCustomerGroupIds', $criteriaPart->getCustomerGroupIds()),
             BoolQuery::MUST_NOT
         );
-        $search->addPostFilter($filter);
+
+        return $filter;
     }
 }

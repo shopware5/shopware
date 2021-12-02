@@ -38,6 +38,11 @@ class AgeSortingHandler implements SortingHandlerInterface
 
     public function handle(SortingInterface $sorting, QueryBuilder $query)
     {
+        $this->addSorting($sorting, $query);
+    }
+
+    private function addSorting(AgeSorting $sorting, QueryBuilder $query): void
+    {
         $query->addOrderBy('customer.age', $sorting->getDirection());
     }
 }

@@ -58,10 +58,10 @@ class QueryBuilderTest extends TestCase
         $parts = $this->querybuilder->getDQLPart('where')->getParts();
 
         static::assertCount(4, $parts);
-        static::assertSame(strpos($parts[0]->getRightExpr(), ':yoo'), 0);
-        static::assertSame(strpos($parts[1]->getRightExpr(), ':bar'), 0);
-        static::assertSame(strpos($parts[2]->getRightExpr(), ':yaa'), 0);
-        static::assertSame(strpos($parts[3]->getRightExpr(), ':baa'), 0);
+        static::assertSame(0, strpos($parts[0]->getRightExpr(), ':yoo'));
+        static::assertSame(0, strpos($parts[1]->getRightExpr(), ':bar'));
+        static::assertSame(0, strpos($parts[2]->getRightExpr(), ':yaa'));
+        static::assertSame(0, strpos($parts[3]->getRightExpr(), ':baa'));
 
         $result = $this->querybuilder->getParameters()->toArray();
 
@@ -102,7 +102,7 @@ class QueryBuilderTest extends TestCase
         $parts = $this->querybuilder->getDQLPart('where')->getParts();
 
         static::assertCount(1, $parts);
-        static::assertSame(strpos($parts[0]->getRightExpr(), ':name'), 0);
+        static::assertSame(0, strpos($parts[0]->getRightExpr(), ':name'));
 
         $expectedResult = [
             new Comparison('name', 'LIKE', $parts[0]->getRightExpr()),
@@ -129,8 +129,8 @@ class QueryBuilderTest extends TestCase
         $parts = $this->querybuilder->getDQLPart('where')->getParts();
 
         static::assertCount(2, $parts);
-        static::assertSame(strpos($parts[0]->getRightExpr(), ':name'), 0);
-        static::assertSame(strpos($parts[1]->getRightExpr(), ':foo'), 0);
+        static::assertSame(0, strpos($parts[0]->getRightExpr(), ':name'));
+        static::assertSame(0, strpos($parts[1]->getRightExpr(), ':foo'));
 
         $expectedResult = [
             new Comparison('name', 'LIKE', $parts[0]->getRightExpr()),
@@ -175,8 +175,8 @@ class QueryBuilderTest extends TestCase
         $parts = $this->querybuilder->getDQLPart('where')->getParts();
 
         static::assertCount(3, $parts);
-        static::assertSame(strpos($parts[0]->getRightExpr(), ':number'), 0);
-        static::assertSame(strpos($parts[1]->getRightExpr(), ':number'), 0);
+        static::assertSame(0, strpos($parts[0]->getRightExpr(), ':number'));
+        static::assertSame(0, strpos($parts[1]->getRightExpr(), ':number'));
         static::assertNotEquals($parts[0]->getRightExpr(), $parts[1]->getRightExpr());
 
         $expectedResult = [
@@ -209,7 +209,7 @@ class QueryBuilderTest extends TestCase
         $parts = $this->querybuilder->getDQLPart('where')->getParts();
 
         static::assertCount(1, $parts);
-        static::assertSame(strpos($parts[0]->getRightExpr(), ':number'), 0);
+        static::assertSame(0, strpos($parts[0]->getRightExpr(), ':number'));
 
         $expectedResult = [
             new Comparison('number', '>', $parts[0]->getRightExpr()),
@@ -240,8 +240,8 @@ class QueryBuilderTest extends TestCase
         $parts = $this->querybuilder->getDQLPart('where')->getParts();
 
         static::assertCount(2, $parts);
-        static::assertSame(strpos($parts[0]->getRightExpr(), ':number'), 0);
-        static::assertSame(strpos($parts[1]->getRightExpr(), ':name'), 0);
+        static::assertSame(0, strpos($parts[0]->getRightExpr(), ':number'));
+        static::assertSame(0, strpos($parts[1]->getRightExpr(), ':name'));
 
         $expectedResult = [
             new Comparison('number', '>', $parts[0]->getRightExpr()),
@@ -270,7 +270,7 @@ class QueryBuilderTest extends TestCase
         $parts = $this->querybuilder->getDQLPart('where')->getParts();
 
         static::assertCount(1, $parts);
-        static::assertSame(strpos($parts[0]->getRightExpr(), ':examplekey'), 0);
+        static::assertSame(0, strpos($parts[0]->getRightExpr(), ':examplekey'));
 
         $expectedResult = [
             new Comparison('examplekey', 'LIKE', $parts[0]->getRightExpr()),
@@ -313,8 +313,8 @@ class QueryBuilderTest extends TestCase
         $parts = $this->querybuilder->getDQLPart('where')->getParts();
 
         static::assertCount(2, $parts);
-        static::assertSame(strpos($parts[0]->getRightExpr(), '(:number'), 0);
-        static::assertSame(strpos($parts[1]->getRightExpr(), '(:strings'), 0);
+        static::assertSame(0, strpos($parts[0]->getRightExpr(), '(:number'));
+        static::assertSame(0, strpos($parts[1]->getRightExpr(), '(:strings'));
 
         $expectedResult = [];
         $counter = 0;
@@ -338,6 +338,8 @@ class QueryBuilderTest extends TestCase
 
     /**
      * @dataProvider getInvalidFilterDataProvider
+     *
+     * @param array<string, string|int> $filter
      */
     public function testInvalidOperatorsThrowException(array $filter): void
     {

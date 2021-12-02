@@ -30,6 +30,7 @@ use ONGR\ElasticsearchDSL\Aggregation\Bucketing\TermsAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\Metric\ValueCountAggregation;
 use ONGR\ElasticsearchDSL\Query\TermLevel\ExistsQuery;
 use ONGR\ElasticsearchDSL\Search;
+use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
@@ -55,7 +56,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     /**
      * @var array<ProductAttributeFacet>
      */
-    private $criteriaParts = [];
+    private array $criteriaParts = [];
 
     private CrudServiceInterface $crudService;
 
@@ -81,16 +82,19 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         Search $search,
         ShopContextInterface $context
     ) {
-        if (!$criteriaPart instanceof ProductAttributeFacet) {
-            return;
-        }
+        $this->addFacet($criteriaPart, $search);
+    }
 
+    private function addFacet(ProductAttributeFacet $criteriaPart, Search $search): void
+    {
         $field = 'attributes.core.' . $criteriaPart->getField();
         $type = null;
 
         try {
             $attribute = $this->crudService->get('s_articles_attributes', $criteriaPart->getField());
-            $type = $attribute->getElasticSearchType()['type'];
+            if ($attribute instanceof ConfigurationStruct) {
+                $type = $attribute->getElasticSearchType()['type'];
+            }
         } catch (Exception $e) {
         }
 
@@ -151,7 +155,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
             $attribute = $this->crudService->get('s_articles_attributes', $criteriaPart->getField());
 
-            $type = $attribute ? $attribute->getColumnType() : null;
+            $type = $attribute ? $attribute->getColumnType() : '';
 
             if (\is_array($aggregations[$key]['buckets'])) {
                 $aggregations[$key]['buckets'] = array_filter($aggregations[$key]['buckets'], function ($item) {
@@ -159,7 +163,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
                 });
             }
 
-            if (\in_array($type, [TypeMappingInterface::TYPE_DATE, TypeMappingInterface::TYPE_DATETIME])) {
+            if (\in_array($type, [TypeMappingInterface::TYPE_DATE, TypeMappingInterface::TYPE_DATETIME], true)) {
                 $aggregations[$key] = $this->formatDates($aggregations[$key]);
             }
 
@@ -193,26 +197,22 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         }
     }
 
-    private function switchTemplate(string $type, FacetResultInterface $result, ProductAttributeFacet $facet): FacetResultInterface
+    private function switchTemplate(string $type, FacetResultInterface $result, ProductAttributeFacet $facet): void
     {
         if (!$result instanceof TemplateSwitchable) {
-            return $result;
+            return;
         }
 
         if ($facet->getTemplate()) {
             $result->setTemplate($facet->getTemplate());
 
-            return $result;
+            return;
         }
 
-        $result->setTemplate(
-            $this->getTypeTemplate($type, $facet->getMode(), $result->getTemplate())
-        );
-
-        return $result;
+        $result->setTemplate($this->getTypeTemplate($type, $facet->getMode(), $result->getTemplate()));
     }
 
-    private function getTypeTemplate(string $type, string $mode, string $defaultTemplate): string
+    private function getTypeTemplate(string $type, string $mode, ?string $defaultTemplate): ?string
     {
         switch (true) {
             case $type === TypeMappingInterface::TYPE_DATE && $mode === ProductAttributeFacet::MODE_RANGE_RESULT:
@@ -269,7 +269,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
             return new ValueListItem($row, $row, \in_array($row, $actives));
         }, $values);
 
-        if ($criteriaPart->getMode() == ProductAttributeFacet::MODE_RADIO_LIST_RESULT) {
+        if ($criteriaPart->getMode() === ProductAttributeFacet::MODE_RADIO_LIST_RESULT) {
             return new RadioFacetResult(
                 $criteriaPart->getName(),
                 $criteria->hasCondition($criteriaPart->getName()),
@@ -308,6 +308,9 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         );
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     private function createRangeResult(ProductAttributeFacet $criteriaPart, array $data, Criteria $criteria): RangeFacetResult
     {
         $values = array_column($data['buckets'], 'key');
@@ -319,10 +322,10 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
         $condition = $criteria->getCondition($criteriaPart->getName());
         if ($condition instanceof ProductAttributeCondition) {
-            $data = $condition->getValue();
-            if (\is_array($data)) {
-                $activeMin = $data['min'];
-                $activeMax = $data['max'];
+            $value = $condition->getValue();
+            if (\is_array($value)) {
+                $activeMin = $value['min'];
+                $activeMax = $value['max'];
             }
         }
 

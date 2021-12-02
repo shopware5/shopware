@@ -38,6 +38,11 @@ class AverageProductAmountSortingHandler implements SortingHandlerInterface
 
     public function handle(SortingInterface $sorting, QueryBuilder $query)
     {
+        $this->addSorting($sorting, $query);
+    }
+
+    private function addSorting(AverageProductAmountSorting $sorting, QueryBuilder $query): void
+    {
         $query->addOrderBy('customer.product_avg', $sorting->getDirection());
     }
 }

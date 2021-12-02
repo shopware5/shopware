@@ -36,6 +36,7 @@ use ONGR\ElasticsearchDSL\Query\TermLevel\TermsQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\WildcardQuery;
 use ONGR\ElasticsearchDSL\Search;
 use RuntimeException;
+use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -45,10 +46,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductAttributeConditionHandler implements PartialConditionHandlerInterface
 {
-    /**
-     * @var CrudServiceInterface
-     */
-    private $attributeService;
+    private CrudServiceInterface $attributeService;
 
     public function __construct(CrudServiceInterface $attributeService)
     {
@@ -72,10 +70,7 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            $this->createQuery($criteriaPart),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery($criteriaPart), BoolQuery::FILTER);
     }
 
     /**
@@ -87,22 +82,22 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(
-            $this->createQuery($criteriaPart)
-        );
+        $search->addPostFilter($this->getQuery($criteriaPart));
     }
 
     /**
      * @return BuilderInterface
      */
-    private function createQuery(ProductAttributeCondition $criteriaPart)
+    private function getQuery(ProductAttributeCondition $criteriaPart)
     {
         $field = 'attributes.core.' . $criteriaPart->getField();
 
         $type = 'string';
         try {
             $attribute = $this->attributeService->get('s_articles_attributes', $criteriaPart->getField());
-            $type = $attribute->getElasticSearchType()['type'];
+            if ($attribute instanceof ConfigurationStruct) {
+                $type = $attribute->getElasticSearchType()['type'];
+            }
         } catch (Exception $e) {
         }
 

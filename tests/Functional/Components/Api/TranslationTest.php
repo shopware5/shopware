@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,24 +26,29 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
-use Shopware\Components\Api\Resource\Translation;
+use Shopware\Components\Api\Exception\CustomValidationException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Resource\Translation as TranslationResource;
+use Shopware\Models\Article\Article;
+use Shopware\Models\Translation\Translation;
 
 class TranslationTest extends TestCase
 {
     /**
-     * @var Translation
+     * @var TranslationResource
      */
     protected $resource;
 
     /**
-     * @return Translation
+     * @return TranslationResource
      */
     public function createResource()
     {
-        return new Translation();
+        return new TranslationResource();
     }
 
-    public function testList()
+    public function testList(): void
     {
         $list = $this->resource->getList(0, 5);
         static::assertCount(5, $list['data']);
@@ -51,33 +58,33 @@ class TranslationTest extends TestCase
         }
     }
 
-    public function testArticleTranslationList()
+    public function testArticleTranslationList(): void
     {
         $list = $this->resource->getList(0, 5, [
             [
                 'property' => 'translation.type',
-                'value' => Translation::TYPE_PRODUCT,
+                'value' => TranslationResource::TYPE_PRODUCT,
             ],
         ]);
 
         foreach ($list['data'] as $item) {
-            $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $item['key']);
+            $article = Shopware()->Models()->find(Article::class, $item['key']);
 
-            static::assertInstanceOf('Shopware\Models\Article\Article', $article);
+            static::assertInstanceOf(Article::class, $article);
 
             static::assertEquals(
-                Translation::TYPE_PRODUCT,
+                TranslationResource::TYPE_PRODUCT,
                 $item['type']
             );
         }
     }
 
-    public function testSingleArticleTranslation()
+    public function testSingleArticleTranslation(): void
     {
         $list = $this->resource->getList(0, 1, [
             [
                 'property' => 'translation.type',
-                'value' => Translation::TYPE_PRODUCT,
+                'value' => TranslationResource::TYPE_PRODUCT,
             ],
             [
                 'property' => 'translation.key',
@@ -95,7 +102,7 @@ class TranslationTest extends TestCase
         $data = $list['data'][0];
 
         static::assertEquals(
-            Translation::TYPE_PRODUCT,
+            TranslationResource::TYPE_PRODUCT,
             $data['type']
         );
 
@@ -103,14 +110,13 @@ class TranslationTest extends TestCase
         static::assertArrayHasKey('descriptionLong', $data['data']);
     }
 
-    public function testCreateArticle()
+    public function testCreateArticle(): int
     {
         $data = $this->getDummyData('article');
 
-        /** @var \Shopware\Models\Translation\Translation $translation */
         $translation = $this->resource->create($data);
 
-        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf(Translation::class, $translation);
         static::assertEquals(
             $data['key'],
             $translation->getKey(),
@@ -133,16 +139,15 @@ class TranslationTest extends TestCase
         return $translation->getKey();
     }
 
-    public function testCreateArticleByNumber()
+    public function testCreateArticleByNumber(): int
     {
         $data = $this->getDummyData('article');
         $article = Shopware()->Db()->fetchRow('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
         $data['key'] = $article['ordernumber'];
 
-        /** @var \Shopware\Models\Translation\Translation $translation */
         $translation = $this->resource->createByNumber($data);
 
-        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf(Translation::class, $translation);
 
         static::assertEquals(
             $article['articleID'],
@@ -164,25 +169,24 @@ class TranslationTest extends TestCase
             'Translation data do not match'
         );
 
-        return $article['articleID'];
+        return (int) $article['articleID'];
     }
 
     /**
      * Checks if variants can be translated
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ParameterMissingException
      */
-    public function testCreateVariantTranslationByNumber()
+    public function testCreateVariantTranslationByNumber(): void
     {
         $data = $this->getDummyData('variant');
         //Artikel mit Standardkonfigurator rot / 39
         $article = Shopware()->Db()->fetchRow("SELECT id, ordernumber, articleID FROM s_articles_details WHERE ordernumber = 'SW10201.11'");
         $data['key'] = $article['ordernumber'];
 
-        /** @var \Shopware\Models\Translation\Translation $translation */
         $translation = $this->resource->createByNumber($data);
 
-        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf(Translation::class, $translation);
 
         static::assertEquals(
             $article['id'],
@@ -208,7 +212,7 @@ class TranslationTest extends TestCase
     /**
      * @depends testCreateArticle
      */
-    public function testArticleUpdateOverride($key)
+    public function testArticleUpdateOverride(int $key): int
     {
         $this->resource->setResultMode(2);
         $translation = $this->resource->getList(0, 1, [
@@ -251,7 +255,7 @@ class TranslationTest extends TestCase
     /**
      * @depends testArticleUpdateOverride
      */
-    public function testArticleUpdateMerge($key)
+    public function testArticleUpdateMerge(int $key): void
     {
         $this->resource->setResultMode(2);
         $translation = $this->resource->getList(0, 1, [
@@ -290,7 +294,7 @@ class TranslationTest extends TestCase
         );
     }
 
-    public function testRecursiveMerge()
+    public function testRecursiveMerge(): void
     {
         $create = $this->getDummyData('article');
 
@@ -351,7 +355,7 @@ class TranslationTest extends TestCase
         );
     }
 
-    public function testBatch()
+    public function testBatch(): void
     {
         $translations = [];
         for ($i = 0; $i < 4; ++$i) {
@@ -379,41 +383,40 @@ class TranslationTest extends TestCase
     /**
      * @depends testCreateArticleByNumber
      */
-    public function testUpdateByNumber($articleId)
+    public function testUpdateByNumber(int $productId): void
     {
         $translation = $this->getDummyData('article');
-        $article = Shopware()->Db()->fetchRow(
+        $product = Shopware()->Db()->fetchRow(
             'SELECT ordernumber, articleID
             FROM s_articles_details
             WHERE articleID = :articleId
             LIMIT 1',
-            [':articleId' => $articleId]
+            [':articleId' => $productId]
         );
-        $translation['key'] = $article['ordernumber'];
+        $translation['key'] = $product['ordernumber'];
 
         foreach ($translation['data'] as &$data) {
             $data .= '-UpdateByNumber';
         }
 
-        /** @var \Shopware\Models\Translation\Translation $result */
-        $result = $this->resource->updateByNumber($article['ordernumber'], $translation);
+        $result = $this->resource->updateByNumber($product['ordernumber'], $translation);
 
-        static::assertInstanceOf('Shopware\Models\Translation\Translation', $result);
-        static::assertEquals($result->getKey(), $article['articleID']);
+        static::assertInstanceOf(Translation::class, $result);
+        static::assertEquals($result->getKey(), $product['articleID']);
         $data = unserialize($result->getData());
 
         foreach ($data as $item) {
-            $isInString = strpos($item, '-UpdateByNumber') !== false;
+            $isInString = str_contains($item, '-UpdateByNumber');
             static::assertTrue($isInString);
         }
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $data = $this->getDummyData('article');
         $translation = $this->resource->create($data);
 
-        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf(Translation::class, $translation);
 
         unset($data['data']);
 
@@ -422,7 +425,7 @@ class TranslationTest extends TestCase
         static::assertTrue($result);
     }
 
-    public function testDeleteByNumber()
+    public function testDeleteByNumber(): void
     {
         $data = $this->getDummyData('article');
 
@@ -435,7 +438,7 @@ class TranslationTest extends TestCase
 
         $translation = $this->resource->create($data);
 
-        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf(Translation::class, $translation);
 
         unset($data['data']);
 
@@ -444,139 +447,139 @@ class TranslationTest extends TestCase
         static::assertTrue($result);
     }
 
-    public function testLinkNumber()
+    public function testLinkNumber(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
+        $this->expectException(CustomValidationException::class);
         $data = $this->getDummyData('link');
         $this->resource->createByNumber($data);
     }
 
-    public function testDownloadNumber()
+    public function testDownloadNumber(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
+        $this->expectException(CustomValidationException::class);
         $data = $this->getDummyData('download');
         $this->resource->createByNumber($data);
     }
 
-    public function testManufacturerNumber()
+    public function testManufacturerNumber(): void
     {
         $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_supplier LIMIT 1');
-        $this->numberCreate('supplier', $entity['id'], $entity['name']);
-        $this->numberUpdate('supplier', $entity['id'], $entity['name']);
+        $this->numberCreate('supplier', (int) $entity['id'], $entity['name']);
+        $this->numberUpdate('supplier', (int) $entity['id'], $entity['name']);
         $this->numberDelete('supplier', $entity['name']);
     }
 
-    public function testCountryName()
+    public function testCountryName(): void
     {
         $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries LIMIT 1');
-        $this->numberCreate('config_countries', $entity['id'], $entity['countryname']);
-        $this->numberUpdate('config_countries', $entity['id'], $entity['countryname']);
+        $this->numberCreate('config_countries', (int) $entity['id'], $entity['countryname']);
+        $this->numberUpdate('config_countries', (int) $entity['id'], $entity['countryname']);
         $this->numberDelete('config_countries', $entity['countryname']);
     }
 
-    public function testCountryIso()
+    public function testCountryIso(): void
     {
         $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries LIMIT 1');
-        $this->numberCreate('config_countries', $entity['id'], $entity['countryiso']);
-        $this->numberUpdate('config_countries', $entity['id'], $entity['countryiso']);
+        $this->numberCreate('config_countries', (int) $entity['id'], $entity['countryiso']);
+        $this->numberUpdate('config_countries', (int) $entity['id'], $entity['countryiso']);
         $this->numberDelete('config_countries', $entity['countryiso']);
     }
 
-    public function testCountryStateName()
+    public function testCountryStateName(): void
     {
         $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries_states LIMIT 1');
-        $this->numberCreate('config_country_states', $entity['id'], $entity['name']);
-        $this->numberUpdate('config_country_states', $entity['id'], $entity['name']);
+        $this->numberCreate('config_country_states', (int) $entity['id'], $entity['name']);
+        $this->numberUpdate('config_country_states', (int) $entity['id'], $entity['name']);
         $this->numberDelete('config_country_states', $entity['name']);
     }
 
-    public function testCountryStateCode()
+    public function testCountryStateCode(): void
     {
         $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries_states LIMIT 1');
-        $this->numberCreate('config_country_states', $entity['id'], $entity['shortcode']);
-        $this->numberUpdate('config_country_states', $entity['id'], $entity['shortcode']);
+        $this->numberCreate('config_country_states', (int) $entity['id'], $entity['shortcode']);
+        $this->numberUpdate('config_country_states', (int) $entity['id'], $entity['shortcode']);
         $this->numberDelete('config_country_states', $entity['shortcode']);
     }
 
-    public function testDispatchName()
+    public function testDispatchName(): void
     {
         $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_premium_dispatch LIMIT 1');
-        $this->numberCreate('config_dispatch', $entity['id'], $entity['name']);
-        $this->numberUpdate('config_dispatch', $entity['id'], $entity['name']);
+        $this->numberCreate('config_dispatch', (int) $entity['id'], $entity['name']);
+        $this->numberUpdate('config_dispatch', (int) $entity['id'], $entity['name']);
         $this->numberDelete('config_dispatch', $entity['name']);
     }
 
-    public function testPaymentName()
+    public function testPaymentName(): void
     {
         $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans LIMIT 1');
-        $this->numberCreate('config_payment', $entity['id'], $entity['name']);
-        $this->numberUpdate('config_payment', $entity['id'], $entity['name']);
+        $this->numberCreate('config_payment', (int) $entity['id'], $entity['name']);
+        $this->numberUpdate('config_payment', (int) $entity['id'], $entity['name']);
         $this->numberDelete('config_payment', $entity['name']);
     }
 
-    public function testPaymentDescription()
+    public function testPaymentDescription(): void
     {
         $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans LIMIT 1');
-        $this->numberCreate('config_payment', $entity['id'], $entity['description']);
-        $this->numberUpdate('config_payment', $entity['id'], $entity['description']);
+        $this->numberCreate('config_payment', (int) $entity['id'], $entity['description']);
+        $this->numberUpdate('config_payment', (int) $entity['id'], $entity['description']);
         $this->numberDelete('config_payment', $entity['description']);
     }
 
-    public function testFilterSetNumber()
+    public function testFilterSetNumber(): void
     {
         $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_filter LIMIT 1');
 
-        $this->numberCreate('propertygroup', $entity['id'], $entity['name']);
-        $this->numberUpdate('propertygroup', $entity['id'], $entity['name']);
+        $this->numberCreate('propertygroup', (int) $entity['id'], $entity['name']);
+        $this->numberUpdate('propertygroup', (int) $entity['id'], $entity['name']);
         $this->numberDelete('propertygroup', $entity['name']);
     }
 
-    public function testFilterGroupNumber()
+    public function testFilterGroupNumber(): void
     {
         $entity = $this->getFilterGroupName();
 
-        $this->numberCreate('propertyoption', $entity['id'], $entity['name']);
-        $this->numberUpdate('propertyoption', $entity['id'], $entity['name']);
+        $this->numberCreate('propertyoption', (int) $entity['id'], $entity['name']);
+        $this->numberUpdate('propertyoption', (int) $entity['id'], $entity['name']);
         $this->numberDelete('propertyoption', $entity['name']);
     }
 
-    public function testFilterOptionNumber()
+    public function testFilterOptionNumber(): void
     {
         $entity = $this->getFilterOptionName();
 
-        $this->numberCreate('propertyvalue', $entity['id'], $entity['name']);
-        $this->numberUpdate('propertyvalue', $entity['id'], $entity['name']);
+        $this->numberCreate('propertyvalue', (int) $entity['id'], $entity['name']);
+        $this->numberUpdate('propertyvalue', (int) $entity['id'], $entity['name']);
         $this->numberDelete('propertyvalue', $entity['name']);
     }
 
-    public function testConfiguratorGroupNumber()
+    public function testConfiguratorGroupNumber(): void
     {
         $entity = Shopware()->Db()->fetchRow('
             SELECT * FROM s_article_configurator_groups
         ');
 
-        $this->numberCreate('configuratorgroup', $entity['id'], $entity['name']);
-        $this->numberUpdate('configuratorgroup', $entity['id'], $entity['name']);
+        $this->numberCreate('configuratorgroup', (int) $entity['id'], $entity['name']);
+        $this->numberUpdate('configuratorgroup', (int) $entity['id'], $entity['name']);
         $this->numberDelete('configuratorgroup', $entity['name']);
     }
 
-    public function testConfiguratorOptionNumber()
+    public function testConfiguratorOptionNumber(): void
     {
         $entity = $this->getConfiguratorOptionName();
 
-        $this->numberCreate('configuratoroption', $entity['id'], $entity['name']);
-        $this->numberUpdate('configuratoroption', $entity['id'], $entity['name']);
+        $this->numberCreate('configuratoroption', (int) $entity['id'], $entity['name']);
+        $this->numberUpdate('configuratoroption', (int) $entity['id'], $entity['name']);
         $this->numberDelete('configuratoroption', $entity['name']);
     }
 
-    public function numberCreate($type, $id, $number)
+    private function numberCreate(string $type, int $id, string $number): void
     {
         $data = $this->getDummyData($type);
         $data['key'] = $number;
 
         $translation = $this->resource->createByNumber($data);
 
-        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf(Translation::class, $translation);
 
         static::assertEquals($id, $translation->getKey());
 
@@ -590,7 +593,7 @@ class TranslationTest extends TestCase
         }
     }
 
-    public function numberUpdate($type, $id, $number)
+    private function numberUpdate(string $type, int $id, string $number): void
     {
         $data = $this->getDummyData($type);
         foreach ($data['data'] as &$item) {
@@ -599,7 +602,7 @@ class TranslationTest extends TestCase
 
         $translation = $this->resource->updateByNumber($number, $data);
 
-        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf(Translation::class, $translation);
 
         static::assertEquals($id, $translation->getKey());
 
@@ -613,67 +616,67 @@ class TranslationTest extends TestCase
         }
     }
 
-    public function numberDelete($type, $number)
+    private function numberDelete(string $type, string $number): void
     {
         $data = $this->getDummyData($type);
         $result = $this->resource->deleteByNumber($number, $data);
         static::assertTrue($result);
     }
 
-    public function testCreateMissingKey()
+    public function testCreateMissingKey(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $data = $this->getDummyData('article');
         unset($data['key']);
         $this->resource->create($data);
     }
 
-    public function testCreateByNumberMissingKey()
+    public function testCreateByNumberMissingKey(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $data = $this->getDummyData('article');
         unset($data['key']);
         $this->resource->createByNumber($data);
     }
 
-    public function testUpdateMissingId()
+    public function testUpdateMissingId(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $data = $this->getDummyData('article');
-        $this->resource->update(null, $data);
+        $this->resource->update(0, $data);
     }
 
-    public function testUpdateByNumberMissingId()
+    public function testUpdateByNumberMissingId(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $data = $this->getDummyData('article');
-        $this->resource->updateByNumber(null, $data);
+        $this->resource->updateByNumber('', $data);
     }
 
-    public function testDeleteMissingId()
+    public function testDeleteMissingId(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $data = $this->getDummyData('article');
-        $this->resource->delete(null, $data);
+        $this->resource->delete(0, $data);
     }
 
-    public function testDeleteByNumberMissingId()
+    public function testDeleteByNumberMissingId(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $data = $this->getDummyData('article');
-        $this->resource->deleteByNumber(null, $data);
+        $this->resource->deleteByNumber('', $data);
     }
 
-    public function testDeleteInvalidTranslation()
+    public function testDeleteInvalidTranslation(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('article');
         $this->resource->delete(-200, $data);
     }
 
-    public function testDeleteByNumberInvalidTranslation()
+    public function testDeleteByNumberInvalidTranslation(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('article');
 
         $article = Shopware()->Db()->fetchRow('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
@@ -686,73 +689,73 @@ class TranslationTest extends TestCase
         $this->resource->deleteByNumber($article['ordernumber'], $data);
     }
 
-    public function testInvalidTypeByNumber()
+    public function testInvalidTypeByNumber(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
+        $this->expectException(CustomValidationException::class);
         $data = $this->getDummyData('article');
         $data['type'] = 'Invalid';
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidArticleNumber()
+    public function testInvalidArticleNumber(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('article');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidManufacturerNumber()
+    public function testInvalidManufacturerNumber(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('supplier');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidCountryNumber()
+    public function testInvalidCountryNumber(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('config_countries');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidCountryStateNumber()
+    public function testInvalidCountryStateNumber(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('config_country_states');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidDispatchNumber()
+    public function testInvalidDispatchNumber(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('config_dispatch');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidPaymentNumber()
+    public function testInvalidPaymentNumber(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('config_payment');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidFilterSetNumber()
+    public function testInvalidFilterSetNumber(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('propertygroup');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidFilterGroupSyntax()
+    public function testInvalidFilterGroupSyntax(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
+        $this->expectException(CustomValidationException::class);
         $data = $this->getDummyData('propertyoption');
 
         $name = $this->getFilterGroupName();
@@ -761,35 +764,35 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidFilterGroupSetName()
+    public function testInvalidFilterGroupSetName(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('propertyoption');
         $name = $this->getFilterGroupName();
         $tmp = explode('|', $name['name']);
-        $tmp[0] = $tmp[0] . '-INVALID';
+        $tmp[0] .= '-INVALID';
         $name = implode('|', $tmp);
         $data['key'] = $name;
 
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidFilterGroupName()
+    public function testInvalidFilterGroupName(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('propertyoption');
         $name = $this->getFilterGroupName();
         $tmp = explode('|', $name['name']);
-        $tmp[1] = $tmp[1] . '-INVALID';
+        $tmp[1] .= '-INVALID';
         $name = implode('|', $tmp);
         $data['key'] = $name;
 
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidFilterOptionSyntax()
+    public function testInvalidFilterOptionSyntax(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
+        $this->expectException(CustomValidationException::class);
         $data = $this->getDummyData('propertyvalue');
 
         $name = $this->getFilterOptionName();
@@ -798,120 +801,119 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidFilterOptionSetName()
+    public function testInvalidFilterOptionSetName(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('propertyvalue');
         $name = $this->getFilterOptionName();
         $tmp = explode('|', $name['name']);
-        $tmp[0] = $tmp[0] . '-INVALID';
+        $tmp[0] .= '-INVALID';
         $name = implode('|', $tmp);
         $data['key'] = $name;
 
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidFilterOptionGroupName()
+    public function testInvalidFilterOptionGroupName(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('propertyvalue');
         $name = $this->getFilterOptionName();
         $tmp = explode('|', $name['name']);
-        $tmp[1] = $tmp[1] . '-INVALID';
+        $tmp[1] .= '-INVALID';
         $name = implode('|', $tmp);
         $data['key'] = $name;
 
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidFilterOptionName()
+    public function testInvalidFilterOptionName(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('propertyvalue');
         $name = $this->getFilterOptionName();
         $tmp = explode('|', $name['name']);
-        $tmp[2] = $tmp[2] . '-INVALID';
+        $tmp[2] .= '-INVALID';
         $name = implode('|', $tmp);
         $data['key'] = $name;
 
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidConfiguratorGroupName()
+    public function testInvalidConfiguratorGroupName(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('configuratorgroup');
         $data['key'] = 'INVALID_NAME';
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidConfiguratorOptionSyntax()
+    public function testInvalidConfiguratorOptionSyntax(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
+        $this->expectException(CustomValidationException::class);
         $data = $this->getDummyData('configuratoroption');
         $entity = $this->getConfiguratorOptionName();
 
-        $name = str_replace('|', '>', $entity['name']);
-        $data['key'] = $name;
+        $data['key'] = str_replace('|', '>', $entity['name']);
 
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidConfiguratorOptionWithGroupName()
+    public function testInvalidConfiguratorOptionWithGroupName(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('configuratoroption');
         $entity = $this->getConfiguratorOptionName();
 
         $name = explode('|', $entity['name']);
-        $name[0] = $name[0] . '-INVALID';
+        $name[0] .= '-INVALID';
         $name = implode('|', $name);
         $data['key'] = $name;
 
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidConfiguratorOptionWithOptionName()
+    public function testInvalidConfiguratorOptionWithOptionName(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $data = $this->getDummyData('configuratoroption');
         $entity = $this->getConfiguratorOptionName();
 
         $name = explode('|', $entity['name']);
-        $name[1] = $name[1] . '-INVALID';
+        $name[1] .= '-INVALID';
         $name = implode('|', $name);
         $data['key'] = $name;
 
         $this->resource->createByNumber($data);
     }
 
-    public function testMissingTypeException()
+    public function testMissingTypeException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $data = $this->getDummyData('article');
         unset($data['type']);
         $this->resource->create($data);
     }
 
-    public function testMissingshopIdException()
+    public function testMissingshopIdException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $data = $this->getDummyData('article');
         unset($data['shopId']);
         $this->resource->create($data);
     }
 
-    public function testMissingDataException()
+    public function testMissingDataException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $data = $this->getDummyData('article');
         unset($data['data']);
         $this->resource->create($data);
     }
 
-    public function testMissingDataIsArrayException()
+    public function testMissingDataIsArrayException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
+        $this->expectException(CustomValidationException::class);
         $data = $this->getDummyData('article');
         $data['data'] = 1;
         $this->resource->create($data);
@@ -920,7 +922,7 @@ class TranslationTest extends TestCase
     /**
      * @group disable
      */
-    public function testGetOneWithMissingPrivilegeShouldThrowPrivilegeException()
+    public function testGetOneWithMissingPrivilegeShouldThrowPrivilegeException(): void
     {
         static::assertTrue(true);
     }
@@ -928,7 +930,7 @@ class TranslationTest extends TestCase
     /**
      * @group disable
      */
-    public function testGetOneWithInvalidIdShouldThrowNotFoundException()
+    public function testGetOneWithInvalidIdShouldThrowNotFoundException(): void
     {
         static::assertTrue(true);
     }
@@ -936,12 +938,15 @@ class TranslationTest extends TestCase
     /**
      * @group disable
      */
-    public function testGetOneWithMissingIdShouldThrowParameterMissingException()
+    public function testGetOneWithMissingIdShouldThrowParameterMissingException(): void
     {
         static::assertTrue(true);
     }
 
-    protected function getDummyData($type, $shopId = 2)
+    /**
+     * @return array{type: string, key: int, data: array, shopId: int}
+     */
+    private function getDummyData(string $type, int $shopId = 2): array
     {
         return [
             'type' => $type,
@@ -951,7 +956,10 @@ class TranslationTest extends TestCase
         ];
     }
 
-    protected function getTypeFields($type)
+    /**
+     * @return array<string, string>
+     */
+    private function getTypeFields(string $type): array
     {
         switch (strtolower($type)) {
             case 'article':
@@ -999,46 +1007,51 @@ class TranslationTest extends TestCase
         }
     }
 
-    protected function getFilterGroupName()
+    /**
+     * @return array<string, string>
+     */
+    private function getFilterGroupName(): array
     {
-        return Shopware()->Db()->fetchRow("
-            SELECT fo.id,
-                   CONCAT(f.name, '|', fo.name) as name
-            FROM s_filter_options as fo
+        return Shopware()->Db()->fetchRow(
+            "SELECT fo.id, CONCAT(f.name, '|', fo.name) as name
+             FROM s_filter_options as fo
                 INNER JOIN s_filter_relations as fr
                     ON fr.optionID = fo.id
                 INNER JOIN s_filter as f
                     ON f.id = fr.groupID
-            LIMIT 1
-        ");
+             LIMIT 1"
+        );
     }
 
-    protected function getFilterOptionName()
+    /**
+     * @return array<string, string>
+     */
+    private function getFilterOptionName(): array
     {
-        return Shopware()->Db()->fetchRow("
-            SELECT fv.id,
-                   CONCAT(f.name, '|', fo.name, '|', fv.value) as name
-            FROM s_filter_values as fv
-                INNER JOIN s_filter_options as fo
-                    ON fo.id = fv.optionID
-                INNER JOIN s_filter_relations as fr
-                    ON fr.optionID = fo.id
-                INNER JOIN s_filter as f
-                    ON f.id = fr.groupID
-            LIMIT 1
-        ");
+        return Shopware()->Db()->fetchRow(
+            "SELECT fv.id, CONCAT(f.name, '|', fo.name, '|', fv.value) as name
+             FROM s_filter_values as fv
+                 INNER JOIN s_filter_options as fo
+                     ON fo.id = fv.optionID
+                 INNER JOIN s_filter_relations as fr
+                     ON fr.optionID = fo.id
+                 INNER JOIN s_filter as f
+                     ON f.id = fr.groupID
+             LIMIT 1"
+        );
     }
 
-    protected function getConfiguratorOptionName()
+    /**
+     * @return array<string, string>
+     */
+    private function getConfiguratorOptionName(): array
     {
-        return Shopware()->Db()->fetchRow("
-            SELECT co.id,
-                   CONCAT(cg.name, '|', co.name) as name
-
-            FROM s_article_configurator_groups as cg
-                INNER JOIN s_article_configurator_options as co
-                    ON co.group_id = cg.id
-            LIMIT 1
-        ");
+        return Shopware()->Db()->fetchRow(
+            "SELECT co.id, CONCAT(cg.name, '|', co.name) as name
+             FROM s_article_configurator_groups as cg
+                 INNER JOIN s_article_configurator_options as co
+                     ON co.group_id = cg.id
+             LIMIT 1"
+        );
     }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\tests\Unit\Components\Template;
+namespace Shopware\Tests\Functional\Components\Template;
 
 use Enlight_Class;
 use Enlight_Template_Manager;
@@ -40,9 +42,8 @@ class TemplateManagerTest extends TestCase
     /**
      * Tests whether the directories added to a cloned TemplateManager are recognized as secure dirs by SmartySecurity
      */
-    public function testCloningTemplateManagerWithEnabledSmartySecurity()
+    public function testCloningTemplateManagerWithEnabledSmartySecurity(): void
     {
-        /** @var string $rootDir */
         $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
 
         // Create a dummy file
@@ -50,21 +51,19 @@ class TemplateManagerTest extends TestCase
         $tempFile = $tempDir . '/template.tpl';
         file_put_contents($tempFile, 'test');
 
-        /** @var Enlight_Template_Manager $templateManager */
         $templateManager = clone Shopware()->Container()->get(Enlight_Template_Manager::class);
         $templateManager->addTemplateDir($tempDir);
         $renderingResult = $templateManager->fetch('template.tpl');
 
         // The actual thing to test here is that there is no SmartyException thrown here
-        static::assertEquals($renderingResult, 'test');
+        static::assertEquals('test', $renderingResult);
     }
 
     /**
      * Tests where invalid file in extends has occurred SmartySecurity errors
      */
-    public function testFetchInvalidExtends()
+    public function testFetchInvalidExtends(): void
     {
-        /** @var string $rootDir */
         $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
 
         // Create a dummy file
@@ -75,9 +74,9 @@ class TemplateManagerTest extends TestCase
         }
 
         $tempFile = $tempDir . 'index.tpl';
+        // intended typo
         file_put_contents($tempFile, '{extends file="parent:frontent/detail/index.tpl"}');
 
-        /** @var Enlight_Template_Manager $templateManager */
         $templateManager = clone Shopware()->Container()->get(Enlight_Template_Manager::class);
         $templateManager->addTemplateDir($rootDir . '/media/temp/');
 
@@ -87,7 +86,7 @@ class TemplateManagerTest extends TestCase
         $templateManager->fetch('frontend/detail2/index.tpl');
     }
 
-    public function testValidPermissionsAreSet()
+    public function testValidPermissionsAreSet(): void
     {
         $testDir = sys_get_temp_dir() . '/tpl-test';
         $backendOptions = [

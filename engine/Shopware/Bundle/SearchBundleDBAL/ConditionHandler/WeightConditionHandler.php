@@ -33,10 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class WeightConditionHandler implements ConditionHandlerInterface
 {
-    /**
-     * @var VariantHelperInterface
-     */
-    private $variantHelper;
+    private VariantHelperInterface $variantHelper;
 
     public function __construct(VariantHelperInterface $variantHelper)
     {
@@ -53,10 +50,15 @@ class WeightConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(WeightCondition $condition, QueryBuilder $query): void
+    {
         $this->variantHelper->joinVariants($query);
 
-        $min = ':minLength' . md5(json_encode($condition));
-        $max = ':maxLength' . md5(json_encode($condition));
+        $min = ':minLength' . md5(json_encode($condition, JSON_THROW_ON_ERROR));
+        $max = ':maxLength' . md5(json_encode($condition, JSON_THROW_ON_ERROR));
 
         if ($condition->getMinWeight() > 0) {
             $query->andWhere('allVariants.weight >= ' . $min);

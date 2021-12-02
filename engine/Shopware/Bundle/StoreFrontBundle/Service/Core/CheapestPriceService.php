@@ -127,7 +127,6 @@ class CheapestPriceService implements CheapestPriceServiceInterface
                 continue;
             }
 
-            /** @var PriceRule $price */
             $discount = $this->getHighestQuantityDiscount($product, $context, $price->getFrom());
 
             if (!$discount) {

@@ -41,15 +41,9 @@ use Shopware_Components_Snippet_Manager;
 
 class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    /**
-     * @var Shopware_Components_Snippet_Manager
-     */
-    private $snippetManager;
+    private Shopware_Components_Snippet_Manager $snippetManager;
 
-    /**
-     * @var QueryAliasMapper
-     */
-    private $queryAliasMapper;
+    private QueryAliasMapper $queryAliasMapper;
 
     public function __construct(
         Shopware_Components_Snippet_Manager $snippetManager,
@@ -107,22 +101,20 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
     }
 
     /**
-     * @return RadioFacetResult
+     * @param array<string, mixed> $buckets
      */
-    private function createFacet(Criteria $criteria, array $buckets)
+    private function createFacet(Criteria $criteria, array $buckets): RadioFacetResult
     {
         $activeAverage = null;
-        if ($criteria->hasCondition('vote_average')) {
-            /** @var VoteAverageCondition $condition */
-            $condition = $criteria->getCondition('vote_average');
+        $condition = $criteria->getCondition('vote_average');
+        if ($condition instanceof VoteAverageCondition) {
             $activeAverage = $condition->getAverage();
         }
 
         $values = $this->buildItems($buckets, $activeAverage);
 
-        /** @var VoteAverageFacet|null $facet */
         $facet = $criteria->getFacet('vote_average');
-        if ($facet && !empty($facet->getLabel())) {
+        if ($facet instanceof VoteAverageFacet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();
         } else {
             $label = $this->snippetManager
@@ -130,9 +122,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
                 ->get('vote_average', 'Ranking');
         }
 
-        if (!$fieldName = $this->queryAliasMapper->getShortAlias('rating')) {
-            $fieldName = 'rating';
-        }
+        $fieldName = $this->queryAliasMapper->getShortAlias('rating') ?? 'rating';
 
         return new RadioFacetResult(
             'vote_average',
@@ -145,6 +135,11 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
         );
     }
 
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<ValueListItem>
+     */
     private function buildItems(array $data, ?float $activeAverage): array
     {
         usort($data, static function ($a, $b) {

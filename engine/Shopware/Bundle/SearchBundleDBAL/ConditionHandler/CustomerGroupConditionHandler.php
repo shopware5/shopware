@@ -49,7 +49,12 @@ class CustomerGroupConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $key = ':customerGroupIds' . md5(json_encode($condition));
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(CustomerGroupCondition $condition, QueryBuilder $query): void
+    {
+        $key = ':customerGroupIds' . md5(json_encode($condition, JSON_THROW_ON_ERROR));
 
         $query->leftJoin(
             'product',

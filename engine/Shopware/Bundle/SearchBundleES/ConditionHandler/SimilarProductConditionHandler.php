@@ -39,10 +39,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class SimilarProductConditionHandler implements PartialConditionHandlerInterface
 {
-    /**
-     * @var Connection
-     */
-    protected $connection;
+    protected Connection $connection;
 
     public function __construct(Connection $connection)
     {
@@ -66,7 +63,23 @@ class SimilarProductConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var SimilarProductCondition $criteriaPart */
+        $this->addQuery($criteriaPart, $search);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handlePostFilter(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        $this->handleFilter($criteriaPart, $criteria, $search, $context);
+    }
+
+    private function addQuery(SimilarProductCondition $criteriaPart, Search $search): void
+    {
         $productId = $criteriaPart->getProductId();
         $productName = $criteriaPart->getProductName();
         $categories = $this->getProductCategories($productId);
@@ -87,27 +100,12 @@ class SimilarProductConditionHandler implements PartialConditionHandlerInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function handlePostFilter(
-        CriteriaPartInterface $criteriaPart,
-        Criteria $criteria,
-        Search $search,
-        ShopContextInterface $context
-    ) {
-        $this->handleFilter($criteriaPart, $criteria, $search, $context);
-    }
-
-    /**
-     * @param int $productId
-     *
      * @return int[]
      */
-    private function getProductCategories($productId)
+    private function getProductCategories(int $productId): array
     {
-        $query = $this->connection->createQueryBuilder();
-
-        return $query->select('categoryID')
+        return $this->connection->createQueryBuilder()
+            ->select('categoryID')
             ->from('s_articles_categories', 'category')
             ->where('articleID = :productId')
             ->setParameter(':productId', $productId)

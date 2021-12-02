@@ -116,7 +116,7 @@ class TaxAggregator implements TaxAggregatorInterface
         $result = [];
 
         if (!empty($cart[CheckoutKey::SHIPPING_COSTS_TAX_PROPORTIONAL])) {
-            /** @var callable(array<numeric-string, float> $carry, Price $shippingTax): array<numeric-string, float> */
+            /** @var callable(array<numeric-string, float> $carry, Price $shippingTax): array<numeric-string, float> $callback */
             $callback = static function (array $carry, Price $shippingTax) {
                 /** @var numeric-string $taxRate */
                 $taxRate = number_format($shippingTax->getTaxRate(), 2);

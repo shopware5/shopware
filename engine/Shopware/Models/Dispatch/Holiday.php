@@ -30,8 +30,6 @@ use Shopware\Components\Model\ModelEntity;
 
 /**
  * The Shopware Model represents the Holidays stored in the DB.
- * Holiday
- * The Shopware Model represents the Holidays stored in the DB.
  * <br>
  * The Holiday Table contain methods to calculate some holidays.
  *

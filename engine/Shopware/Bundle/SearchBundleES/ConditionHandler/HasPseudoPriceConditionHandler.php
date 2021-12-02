@@ -52,13 +52,7 @@ class HasPseudoPriceConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addQuery(
-            new RangeQuery(
-                $this->getPseudoPriceField($context),
-                ['gt' => 0]
-            ),
-            BoolQuery::FILTER
-        );
+        $search->addQuery($this->getQuery($context), BoolQuery::FILTER);
     }
 
     /**
@@ -70,18 +64,18 @@ class HasPseudoPriceConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(
-            new RangeQuery(
-                $this->getPseudoPriceField($context),
-                ['gt' => 0]
-            )
+        $search->addPostFilter($this->getQuery($context));
+    }
+
+    private function getQuery(ShopContextInterface $context): RangeQuery
+    {
+        return new RangeQuery(
+            $this->getPseudoPriceField($context),
+            ['gt' => 0]
         );
     }
 
-    /**
-     * @return string
-     */
-    private function getPseudoPriceField(ShopContextInterface $context)
+    private function getPseudoPriceField(ShopContextInterface $context): string
     {
         $key = $context->getCurrentCustomerGroup()->getKey();
         $currency = $context->getCurrency()->getId();

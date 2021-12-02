@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,30 +24,20 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Modules\Articles;
+namespace Shopware\Tests\Functional\Modules\Articles;
 
 use Enlight_Components_Test_TestCase;
 use sArticles;
 
 class CompareTest extends Enlight_Components_Test_TestCase
 {
-    /**
-     * Module instance
-     *
-     * @var sArticles
-     */
-    protected $module;
+    protected sArticles $module;
 
     /**
-     * Test article ids
-     *
-     * @var array
+     * @var array<string>
      */
-    protected $testArticleIds;
+    protected array $testProductIds;
 
-    /**
-     * Test set up method
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -55,88 +47,60 @@ class CompareTest extends Enlight_Components_Test_TestCase
         Shopware()->Container()->get('session')->offsetSet('sessionId', uniqid((string) rand()));
         $sql = 'SELECT `id` FROM `s_articles` WHERE `active` =1';
         $sql = Shopware()->Db()->limit($sql, 5);
-        $this->testArticleIds = Shopware()->Db()->fetchCol($sql);
+        $this->testProductIds = Shopware()->Db()->fetchCol($sql);
     }
 
-    /**
-     * Cleaning up testData
-     */
     protected function tearDown(): void
     {
         parent::tearDown();
         $this->module->sDeleteComparisons();
     }
 
-    /**
-     * Retrieve module instance
-     *
-     * @return sArticles
-     */
-    public function Module()
+    public function Module(): sArticles
     {
         return $this->module;
     }
 
-    /**
-     * Test case method
-     */
-    public function testDeleteComparison()
+    public function testDeleteComparison(): void
     {
-        $article = $this->getTestArticleId();
+        $article = $this->getTestProductId();
         static::assertTrue($this->Module()->sAddComparison($article));
         $this->Module()->sDeleteComparison($article);
         static::assertEmpty($this->Module()->sGetComparisons());
     }
 
-    /**
-     * Test case method
-     */
-    public function testDeleteComparisons()
+    public function testDeleteComparisons(): void
     {
-        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
+        static::assertTrue($this->Module()->sAddComparison($this->getTestProductId()));
+        static::assertTrue($this->Module()->sAddComparison($this->getTestProductId()));
+        static::assertTrue($this->Module()->sAddComparison($this->getTestProductId()));
 
         $this->Module()->sDeleteComparisons();
         static::assertEmpty($this->Module()->sGetComparisons());
     }
 
-    /**
-     * Test case method
-     */
-    public function testAddComparison()
+    public function testAddComparison(): void
     {
-        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
+        static::assertTrue($this->Module()->sAddComparison($this->getTestProductId()));
         static::assertNotEmpty($this->Module()->sGetComparisons());
     }
 
-    /**
-     * Test case method
-     */
-    public function testGetComparisons()
+    public function testGetComparisons(): void
     {
-        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        static::assertEquals(\count($this->Module()->sGetComparisons()), 2);
+        static::assertTrue($this->Module()->sAddComparison($this->getTestProductId()));
+        static::assertTrue($this->Module()->sAddComparison($this->getTestProductId()));
+        static::assertCount(2, $this->Module()->sGetComparisons());
     }
 
-    /**
-     * Test case method
-     */
-    public function testGetComparisonList()
+    public function testGetComparisonList(): void
     {
-        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        static::assertEquals(\count($this->Module()->sGetComparisonList()), 2);
+        static::assertTrue($this->Module()->sAddComparison($this->getTestProductId()));
+        static::assertTrue($this->Module()->sAddComparison($this->getTestProductId()));
+        static::assertCount(2, $this->Module()->sGetComparisonList());
     }
 
-    /**
-     * Returns a test article id
-     *
-     * @return int
-     */
-    protected function getTestArticleId()
+    protected function getTestProductId(): int
     {
-        return array_shift($this->testArticleIds);
+        return (int) array_shift($this->testProductIds);
     }
 }

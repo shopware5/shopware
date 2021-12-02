@@ -51,8 +51,11 @@ class ProductNumberSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addSort(
-            new FieldSort('number', strtolower($criteriaPart->getDirection()))
-        );
+        $search->addSort($this->getSorting($criteriaPart));
+    }
+
+    private function getSorting(ProductNumberSorting $criteriaPart): FieldSort
+    {
+        return new FieldSort('number', strtolower($criteriaPart->getDirection()));
     }
 }

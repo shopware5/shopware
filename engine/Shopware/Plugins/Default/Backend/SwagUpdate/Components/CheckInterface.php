@@ -27,16 +27,16 @@ namespace ShopwarePlugins\SwagUpdate\Components;
 interface CheckInterface
 {
     /**
-     * @param array $requirement
+     * @param array{type: string, value: string|array|null, level: Validation::REQUIREMENT_VALID|Validation::REQUIREMENT_WARNING|Validation::REQUIREMENT_CRITICAL} $requirement
      *
      * @return bool
      */
     public function canHandle($requirement);
 
     /**
-     * @param array $requirement
+     * @param array{type: string, value: string|array|null, level: Validation::REQUIREMENT_VALID|Validation::REQUIREMENT_WARNING|Validation::REQUIREMENT_CRITICAL} $requirement
      *
-     * @return array
+     * @return array{type: string, errorLevel: Validation::REQUIREMENT_VALID|Validation::REQUIREMENT_WARNING|Validation::REQUIREMENT_CRITICAL, message: string}|null
      */
     public function check($requirement);
 }

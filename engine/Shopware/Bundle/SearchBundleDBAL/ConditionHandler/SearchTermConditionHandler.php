@@ -35,10 +35,7 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
 {
     public const STATE_INCLUDES_RANKING = 'ranking';
 
-    /**
-     * @var SearchTermQueryBuilderInterface
-     */
-    private $searchTermQueryBuilder;
+    private SearchTermQueryBuilderInterface $searchTermQueryBuilder;
 
     public function __construct(SearchTermQueryBuilderInterface $searchTermQueryBuilder)
     {
@@ -61,14 +58,16 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /** @var SearchTermCondition $condition */
-        $searchQuery = $this->searchTermQueryBuilder->buildQuery(
-            $condition->getTerm()
-        );
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(SearchTermCondition $condition, QueryBuilder $query): void
+    {
+        $searchQuery = $this->searchTermQueryBuilder->buildQuery($condition->getTerm());
 
         //no matching products found by the search query builder.
         //add condition that the result contains no product.
-        if ($searchQuery == null) {
+        if ($searchQuery === null) {
             $query->andWhere('0 = 1');
 
             return;

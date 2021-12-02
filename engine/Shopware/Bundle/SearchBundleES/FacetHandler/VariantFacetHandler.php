@@ -34,7 +34,6 @@ use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListItem;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
-use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
@@ -45,40 +44,23 @@ use Shopware\Components\QueryAliasMapper;
 
 class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
-    /**
-     * @var ConfiguratorOptionsGatewayInterface
-     */
-    private $gateway;
+    private ConfiguratorOptionsGatewayInterface $gateway;
 
-    /**
-     * @var string|null
-     */
-    private $fieldName;
+    private string $fieldName;
 
     public function __construct(
         ConfiguratorOptionsGatewayInterface $gateway,
         QueryAliasMapper $queryAliasMapper
     ) {
-        if (!$this->fieldName = $queryAliasMapper->getShortAlias('variants')) {
-            $this->fieldName = 'var';
-        }
-
+        $this->fieldName = $queryAliasMapper->getShortAlias('variants') ?? 'var';
         $this->gateway = $gateway;
     }
 
-    /**
-     * Validates if the criteria part can be handled by this handler
-     *
-     * @return bool
-     */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
         return $criteriaPart instanceof VariantFacet;
     }
 
-    /**
-     * Handles the criteria part and extends the provided search.
-     */
     public function handle(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
@@ -91,10 +73,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
         $search->addAggregation($aggregation);
     }
 
-    /**
-     * Hydrates the Elasticsearch result to extend the product number search result
-     * with facets or attributes.
-     */
     public function hydrate(
         array $elasticResult,
         ProductNumberSearchResult $result,
@@ -111,9 +89,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
             return;
         }
 
-        /**
-         * @var VariantFacet
-         */
         $facet = $criteria->getFacet('option');
         if (!$facet instanceof VariantFacet) {
             return;
@@ -137,14 +112,12 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     /**
      * @param Group[] $groups
      * @param int[]   $actives
-     *
-     * @return FacetResultGroup|FacetResultInterface
      */
     private function createCollectionResult(
         VariantFacet $facet,
         array $groups,
         array $actives
-    ) {
+    ): FacetResultGroup {
         $results = [];
 
         foreach ($groups as $group) {
@@ -192,14 +165,13 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @return array
+     * @return array<int>
      */
-    private function getFilteredValues(Criteria $criteria)
+    private function getFilteredValues(Criteria $criteria): array
     {
         $values = [];
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
 
-        /** @var VariantCondition $condition */
         foreach ($conditions as $condition) {
             foreach ($condition->getOptionIds() as $id) {
                 $values[] = $id;

@@ -81,15 +81,13 @@ class CombinedConditionFacet implements FacetInterface
      */
     public function getName()
     {
-        $classes = array_map(function ($class) {
-            return \get_class($class);
-        }, $this->conditions);
+        $classes = array_map('\get_class', $this->conditions);
 
         return 'combined_facet_' . md5(json_encode($this->conditions) . json_encode($classes));
     }
 
     /**
-     * @return \Shopware\Bundle\SearchBundle\ConditionInterface[]
+     * @return ConditionInterface[]
      */
     public function getConditions()
     {
@@ -123,12 +121,12 @@ class CombinedConditionFacet implements FacetInterface
         if (empty($serialized)) {
             return [];
         }
-        /** @var array<int, ConditionInterface> $sortings */
+
         $sortings = [];
         foreach ($serialized as $className => $arguments) {
             $className = explode('|', $className);
+            /** @var class-string<ConditionInterface> $className */
             $className = $className[0];
-            /** @var ConditionInterface $condition */
             $condition = $reflector->createInstanceFromNamedArguments($className, $arguments);
             $sortings[] = $condition;
         }

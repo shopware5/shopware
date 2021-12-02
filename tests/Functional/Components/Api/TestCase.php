@@ -25,6 +25,9 @@
 namespace Shopware\Tests\Functional\Components\Api;
 
 use Enlight_Components_Test_TestCase;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\PrivilegeException;
 use Shopware\Components\Api\Resource\Resource as APIResource;
 use Shopware_Components_Acl;
 
@@ -58,37 +61,38 @@ abstract class TestCase extends Enlight_Components_Test_TestCase
      */
     abstract public function createResource();
 
-    public function testGetOneWithMissingPrivilegeShouldThrowPrivilegeException()
+    public function testGetOneWithMissingPrivilegeShouldThrowPrivilegeException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\PrivilegeException');
+        $this->expectException(PrivilegeException::class);
         $this->resource->setRole('dummy');
         $this->resource->setAcl($this->getAclMock());
 
+        static::assertTrue(method_exists($this->resource, 'getOne'));
         $this->resource->getOne(1);
     }
 
-    public function testGetOneWithInvalidIdShouldThrowNotFoundException()
+    public function testGetOneWithInvalidIdShouldThrowNotFoundException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
+        static::assertTrue(method_exists($this->resource, 'getOne'));
         $this->resource->getOne(9999999);
     }
 
-    public function testGetOneWithMissingIdShouldThrowParameterMissingException()
+    public function testGetOneWithMissingIdShouldThrowParameterMissingException(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
-        $this->resource->getOne('');
+        $this->expectException(ParameterMissingException::class);
+        static::assertTrue(method_exists($this->resource, 'getOne'));
+        $this->resource->getOne(0);
     }
 
-    protected function getAclMock()
+    protected function getAclMock(): Shopware_Components_Acl
     {
         $aclMock = $this->createMock(Shopware_Components_Acl::class);
 
-        $aclMock->expects(static::any())
-                ->method('has')
+        $aclMock->method('has')
                 ->willReturn(true);
 
-        $aclMock->expects(static::any())
-                ->method('isAllowed')
+        $aclMock->method('isAllowed')
                 ->willReturn(false);
 
         return $aclMock;

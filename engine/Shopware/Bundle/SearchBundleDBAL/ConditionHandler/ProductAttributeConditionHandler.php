@@ -50,10 +50,11 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        if (!$condition instanceof ProductAttributeCondition) {
-            return;
-        }
+        $this->addCondition($condition, $query);
+    }
 
+    private function addCondition(ProductAttributeCondition $condition, QueryBuilder $query): void
+    {
         $this->parse(
             $query,
             's_articles_attributes',

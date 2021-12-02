@@ -26,6 +26,8 @@ namespace Shopware\Components;
 
 use Exception;
 use Psr\Log\LoggerInterface;
+use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 
 class LogawareReflectionHelper
 {
@@ -57,6 +59,7 @@ class LogawareReflectionHelper
 
         foreach ($serialized as $className => $arguments) {
             $className = explode('|', $className);
+            /** @var class-string<SortingInterface|FacetInterface> $className */
             $className = $className[0];
 
             try {

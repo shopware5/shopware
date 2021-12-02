@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkDataResult;
 use Shopware\Components\CacheManager;
 
@@ -37,7 +38,7 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
                 'success' => true,
                 'data' => array_values($benchmarkRepository->getShopConfigs(true)),
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
     }
@@ -53,7 +54,7 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
             $benchmarkRepository->save($benchmarkConfig);
 
             $this->View()->assign('success', true);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
     }
@@ -69,7 +70,7 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
             $benchmarkRepository->save($benchmarkConfig);
 
             $this->View()->assign('success', true);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
     }
@@ -85,14 +86,14 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
             $benchmarkRepository->save($benchmarkConfig);
 
             $this->View()->assign('success', true);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 
     public function disableBenchmarkTeaserAction()
     {
-        $conn = $this->container->get(\Doctrine\DBAL\Connection::class);
+        $conn = $this->container->get(Connection::class);
         $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "benchmarkTeaser"');
         $valueId = $conn->fetchColumn(
             'SELECT id FROM s_core_config_values WHERE element_id = :elementId',
@@ -114,8 +115,7 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
         } else {
             $conn->insert('s_core_config_values', $data);
         }
-        /** @var CacheManager */
-        $cacheManager = $this->get(\Shopware\Components\CacheManager::class);
+        $cacheManager = $this->get(CacheManager::class);
         $cacheManager->clearConfigCache();
     }
 
@@ -127,7 +127,7 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
         try {
             /** @var BenchmarkDataResult $result */
             $result = $this->get('shopware.benchmark_bundle.benchmark_statistics')->handleTransmission();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $message = $e->getMessage();
         }
 

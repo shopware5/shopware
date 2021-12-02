@@ -81,7 +81,6 @@ class CustomerEmailValidator extends ConstraintValidator
             return;
         }
 
-        /** @var CustomerEmail $constraint */
         $shop = $constraint->getShop();
 
         $customerId = $constraint->getCustomerId();

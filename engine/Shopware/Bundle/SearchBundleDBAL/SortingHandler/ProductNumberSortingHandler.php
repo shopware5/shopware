@@ -48,6 +48,11 @@ class ProductNumberSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        $this->addSorting($sorting, $query);
+    }
+
+    private function addSorting(ProductNumberSorting $sorting, QueryBuilder $query): void
+    {
         $query->addOrderBy('variant.ordernumber', $sorting->getDirection());
     }
 }

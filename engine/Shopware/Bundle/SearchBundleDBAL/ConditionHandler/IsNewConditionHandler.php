@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
+use RuntimeException;
 use Shopware\Bundle\SearchBundle\Condition\IsNewCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
@@ -33,10 +34,7 @@ use Shopware_Components_Config;
 
 class IsNewConditionHandler implements ConditionHandlerInterface
 {
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
     public function __construct(Shopware_Components_Config $config)
     {
@@ -59,10 +57,13 @@ class IsNewConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $key = ':isNewDate' . md5(json_encode($condition));
+        $key = ':isNewDate' . md5(json_encode($condition, JSON_THROW_ON_ERROR));
 
         $dayLimit = (int) $this->config->get('markAsNew');
         $timestamp = strtotime('-' . $dayLimit . ' days');
+        if ($timestamp === false) {
+            throw new RuntimeException(sprintf('Could not convert "-%s days" into a timestamp', $dayLimit));
+        }
 
         $query->andWhere('product.datum >= ' . $key)
             ->setParameter($key, date('Y-m-d', $timestamp));
