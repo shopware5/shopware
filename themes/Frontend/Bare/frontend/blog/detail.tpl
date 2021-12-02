@@ -45,7 +45,10 @@
                                 {* Author *}
                                 {block name='frontend_blog_detail_author'}
                                     {if $sArticle.author.name}
-                                        <span class="blog--metadata-author blog--metadata is--first" itemprop="author" itemscope itemtype="https://schema.org/Person">{s name="BlogInfoFrom"}{/s}: <span itemprop="name">{$sArticle.author.name}</span></span>
+                                        <span class="blog--metadata-author blog--metadata is--first" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                                        <meta itemprop="url" content="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}">
+                                        {s name="BlogInfoFrom"}{/s}: <span itemprop="name">{$sArticle.author.name}
+                                        </span></span>
                                     {/if}
                                 {/block}
 
