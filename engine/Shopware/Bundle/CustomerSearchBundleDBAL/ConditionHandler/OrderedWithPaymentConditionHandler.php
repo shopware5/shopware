@@ -38,6 +38,11 @@ class OrderedWithPaymentConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(OrderedWithPaymentCondition $condition, QueryBuilder $query): void
+    {
         $wheres = [];
         foreach ($condition->getPaymentIds() as $i => $number) {
             $wheres[] = 'customer.ordered_with_payments LIKE :payment' . $i;

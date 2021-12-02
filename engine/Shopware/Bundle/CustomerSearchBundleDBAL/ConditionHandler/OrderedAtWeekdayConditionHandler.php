@@ -38,10 +38,11 @@ class OrderedAtWeekdayConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        if (!$condition instanceof OrderedAtWeekdayCondition) {
-            return;
-        }
+        $this->addCondition($condition, $query);
+    }
 
+    private function addCondition(OrderedAtWeekdayCondition $condition, QueryBuilder $query): void
+    {
         $wheres = [];
         foreach ($condition->getWeekdays() as $i => $id) {
             $wheres[] = 'customer.ordered_at_weekdays LIKE :weekday' . $i;

@@ -39,6 +39,11 @@ class SalutationConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(SalutationCondition $condition, QueryBuilder $query): void
+    {
         $query->andWhere('customer.salutation IN (:salutations)');
 
         $query->setParameter(':salutations', $condition->getSalutations(), Connection::PARAM_STR_ARRAY);

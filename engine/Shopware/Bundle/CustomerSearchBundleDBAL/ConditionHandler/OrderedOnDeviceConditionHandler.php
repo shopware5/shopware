@@ -38,6 +38,11 @@ class OrderedOnDeviceConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(OrderedOnDeviceCondition $condition, QueryBuilder $query): void
+    {
         $wheres = [];
         foreach ($condition->getDevices() as $i => $id) {
             $wheres[] = 'customer.ordered_on_devices LIKE :device' . $i;

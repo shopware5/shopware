@@ -41,10 +41,11 @@ class AgeConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        if (!$condition instanceof AgeCondition) {
-            return;
-        }
+        $this->addCondition($condition, $query);
+    }
 
+    private function addCondition(AgeCondition $condition, QueryBuilder $query): void
+    {
         $this->parse(
             $query,
             's_customer_search_index',

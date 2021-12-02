@@ -38,6 +38,11 @@ class OrderedInShopConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(OrderedInShopCondition $condition, QueryBuilder $query): void
+    {
         $wheres = [];
         foreach ($condition->getShopIds() as $i => $id) {
             $wheres[] = 'customer.ordered_in_shops LIKE :shop' . $i;

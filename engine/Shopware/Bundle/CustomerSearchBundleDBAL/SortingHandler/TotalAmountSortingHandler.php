@@ -38,6 +38,11 @@ class TotalAmountSortingHandler implements SortingHandlerInterface
 
     public function handle(SortingInterface $sorting, QueryBuilder $query)
     {
+        $this->addSorting($sorting, $query);
+    }
+
+    private function addSorting(TotalAmountSorting $sorting, QueryBuilder $query): void
+    {
         $query->addOrderBy('customer.invoice_amount_sum', $sorting->getDirection());
     }
 }

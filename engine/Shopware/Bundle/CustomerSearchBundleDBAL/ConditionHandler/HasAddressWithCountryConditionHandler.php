@@ -39,6 +39,11 @@ class HasAddressWithCountryConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(HasAddressWithCountryCondition $condition, QueryBuilder $query): void
+    {
         $query->innerJoin(
             'customer',
             's_user_addresses',

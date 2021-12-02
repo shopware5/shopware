@@ -123,9 +123,15 @@ parameters:
             message: '#Call to static method PHPUnit\\Framework\\Assert::assertIsArray\(\) with true|null will always evaluate to false#'
             count: 4
             path: tests/Functional/Core/BasketTest.php
-        - # PHPStan has issues to recognize the inheritance of SortingInterface
+        - # PHPStan has issues to recognize the inheritance of SortingInterface and ConditionInterface
             message: '#Parameter \#1 \$criteriaPart of method Shopware\\Bundle\\SearchBundleES\\SortingHandler\\.*SortingHandler::getSorting\(\) expects Shopware\\Bundle\\SearchBundle\\Sorting\\.*Sorting, Shopware\\Bundle\\SearchBundle\\CriteriaPartInterface given#'
             path: engine/Shopware/Bundle/SearchBundleES/SortingHandler
         -
             message: '#Parameter \#1 \$sorting of method Shopware\\Bundle\\SearchBundleDBAL\\SortingHandler\\.*SortingHandler::addSorting\(\) expects Shopware\\Bundle\\SearchBundle\\Sorting\\.*Sorting, Shopware\\Bundle\\SearchBundle\\SortingInterface given#'
             path: engine/Shopware/Bundle/SearchBundleDBAL/SortingHandler
+        -
+            message: '#Parameter \#1 \$condition of method Shopware\\Bundle\\CustomerSearchBundleDBAL\\ConditionHandler\\.*ConditionHandler::addCondition\(\) expects Shopware\\Bundle\\CustomerSearchBundle\\Condition\\.*Condition, Shopware\\Bundle\\SearchBundle\\ConditionInterface given#'
+            path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/ConditionHandler
+        -
+            message: '#Parameter \#1 \$sorting of method Shopware\\Bundle\\CustomerSearchBundleDBAL\\SortingHandler\\.*SortingHandler::addSorting\(\) expects Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\.*Sorting, Shopware\\Bundle\\SearchBundle\\SortingInterface given#'
+            path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler

@@ -38,6 +38,11 @@ class LastNameSortingHandler implements SortingHandlerInterface
 
     public function handle(SortingInterface $sorting, QueryBuilder $query)
     {
+        $this->addSorting($sorting, $query);
+    }
+
+    private function addSorting(LastNameSorting $sorting, QueryBuilder $query): void
+    {
         $query->addOrderBy('customer.lastname', $sorting->getDirection());
     }
 }

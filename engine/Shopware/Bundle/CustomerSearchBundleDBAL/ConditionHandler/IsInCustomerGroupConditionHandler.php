@@ -39,7 +39,16 @@ class IsInCustomerGroupConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(IsInCustomerGroupCondition $condition, QueryBuilder $query): void
+    {
         $query->andWhere('customer.customer_group_id IN (:IsInCustomerGroupCondition)');
-        $query->setParameter(':IsInCustomerGroupCondition', $condition->getCustomerGroupIds(), Connection::PARAM_INT_ARRAY);
+        $query->setParameter(
+            ':IsInCustomerGroupCondition',
+            $condition->getCustomerGroupIds(),
+            Connection::PARAM_INT_ARRAY
+        );
     }
 }

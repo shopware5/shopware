@@ -38,6 +38,11 @@ class OrderedProductOfManufacturerConditionHandler implements ConditionHandlerIn
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $this->addCondition($condition, $query);
+    }
+
+    private function addCondition(OrderedProductOfManufacturerCondition $condition, QueryBuilder $query): void
+    {
         $wheres = [];
         foreach ($condition->getManufacturerIds() as $i => $id) {
             $wheres[] = 'customer.ordered_products_of_manufacturer LIKE :manufacturer' . $i;
