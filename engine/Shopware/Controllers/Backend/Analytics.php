@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,46 +28,67 @@
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Analytics\Repository as AnalyticsRepository;
 use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
+    /**
+     * @deprecated - Will be private in Shopware 5.8
+     *
+     * @var array<string>
+     */
     protected $dateFields = [
         'date', 'displayDate',  'firstLogin', 'birthday', 'orderTime',
     ];
 
+    /**
+     * @deprecated - Will be private in Shopware 5.8
+     *
+     * @var array<string>
+     */
     protected $shopFields = [
         'amount', 'count', 'totalImpressions', 'totalVisits', 'orderCount', 'visitors',
     ];
 
     /**
-     * Entity Manager
+     * @deprecated - Will be private in Shopware 5.8
      *
-     * @var ModelManager
+     * @var ModelManager|null
      */
     protected $manager;
 
     /**
-     * @var ShopRepository
+     * @deprecated - Will be private in Shopware 5.8
+     *
+     * @var ShopRepository|null
      */
     protected $shopRepository;
 
     /**
+     * @deprecated - Will be private in Shopware 5.8
+     *
      * @var AnalyticsRepository|null
      */
     protected $repository;
 
     /**
+     * @deprecated - Will be private in Shopware 5.8
+     *
      * @var string
      */
-    protected $format;
+    protected $format = '';
 
+    /**
+     * @return void
+     */
     public function preDispatch()
     {
         if ($this->Request()->has('format')) {
-            $this->format = $this->Request()->getParam('format');
+            $this->format = (string) $this->Request()->getParam('format');
 
             // Remove limit parameter to export all data.
             $this->Request()->setParam('limit', null);
@@ -72,6 +96,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         parent::preDispatch();
     }
 
+    /**
+     * @return void
+     */
     public function init()
     {
         parent::init();
@@ -117,15 +144,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     }
 
     /**
-     * @deprecated since 5.6 will be private in 5.8
+     * @deprecated - Will be private in Shopware 5.8
      * Helper Method to get access to the shop repository.
      *
      * @return ShopRepository
      */
     public function getShopRepository()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         if ($this->shopRepository === null) {
             $this->shopRepository = $this->getManager()->getRepository(Shop::class);
         }
@@ -136,12 +161,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * @return AnalyticsRepository
      *
-     * @deprecated since 5.6, will be private in 5.8
+     * @deprecated - Will be private in Shopware 5.8
      */
     public function getRepository()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         if (!$this->repository) {
             $this->repository = new AnalyticsRepository(
                 $this->get(ModelManager::class)->getConnection(),
@@ -154,6 +177,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     /**
      * Get a list of installed shops
+     *
+     * @return void
      */
     public function shopListAction()
     {
@@ -167,6 +192,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function getOverviewAction()
     {
         $turnover = $this->getRepository()->getDailyTurnover(
@@ -212,13 +240,16 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $values = array_values($data);
         $splice = array_splice(
             $values,
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', $limit)
+            (int) $this->Request()->getParam('start'),
+            (int) $this->Request()->getParam('limit', $limit)
         );
 
         $this->send($splice, \count($data));
     }
 
+    /**
+     * @return void
+     */
     public function getRatingAction()
     {
         $shopIds = $this->getSelectedShopIds();
@@ -289,10 +320,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->send($splice, \count($data));
     }
 
+    /**
+     * @return void
+     */
     public function getReferrerRevenueAction()
     {
         $shop = $this->getManager()->getRepository(Shop::class)->getActiveDefault();
-        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        $this->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $result = $this->getRepository()->getReferrerRevenue(
             $shop,
@@ -304,6 +338,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $customers = [];
         foreach ($result->getData() as $row) {
             $url = parse_url($row['referrer']);
+            if (!\is_array($url) || !\array_key_exists('host', $url)) {
+                continue;
+            }
             $host = $url['host'];
 
             if (!\array_key_exists($host, $referrer)) {
@@ -362,15 +399,18 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->send(
             array_values($referrer),
-            $this->Request()->getParam('limit', 25)
+            (int) $this->Request()->getParam('limit', 25)
         );
     }
 
+    /**
+     * @return void
+     */
     public function getPartnerRevenueAction()
     {
         $result = $this->getRepository()->getPartnerRevenue(
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit'),
+            (int) $this->Request()->getParam('start', 0),
+            $this->getLimit(),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -389,6 +429,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->send($data, $result->getTotalCount());
     }
 
+    /**
+     * @return void
+     */
     public function getCustomerGroupAmountAction()
     {
         $result = $this->getRepository()->getCustomerGroupAmount(
@@ -403,11 +446,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * @return void
+     */
     public function getReferrerVisitorsAction()
     {
         $result = $this->getRepository()->getVisitedReferrer(
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit'),
+            (int) $this->Request()->getParam('start', 0),
+            $this->getLimit(),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -416,8 +462,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $referrer = [];
         foreach ($data as &$row) {
-            $host = parse_url($row['referrer']);
-            $host = str_replace('www.', '', $host['host']);
+            $url = parse_url($row['referrer']);
+            if (!\is_array($url) || !\array_key_exists('host', $url)) {
+                continue;
+            }
+            $host = str_replace('www.', '', $url['host']);
+            if (!\is_string($host)) {
+                continue;
+            }
 
             if (!\array_key_exists($host, $referrer)) {
                 $referrer[$host] = [
@@ -432,11 +484,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->send(array_values($referrer), $result->getTotalCount());
     }
 
+    /**
+     * @return void
+     */
     public function getArticleSalesAction()
     {
         $result = $this->getRepository()->getProductSales(
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit'),
+            (int) $this->Request()->getParam('start', 0),
+            $this->getLimit(),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -444,6 +499,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->send($result->getData(), $result->getTotalCount());
     }
 
+    /**
+     * @return void
+     */
     public function getCustomersAction()
     {
         $result = $this->getRepository()->getOrdersOfCustomers(
@@ -451,9 +509,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate()
         );
 
-        /** @var array<string, mixed> $customers */
         $customers = [];
-        /** @var array<string, mixed> $users */
         $users = [];
 
         foreach ($result->getData() as $row) {
@@ -463,6 +519,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $customers[$week]['female'] = (int) $customers[$week]['female'];
             $customers[$week]['male'] = (int) $customers[$week]['male'];
             $customers[$week]['registration'] = (int) $customers[$week]['registration'];
+            $customers[$week]['newCustomersOrders'] = (int) $customers[$week]['newCustomersOrders'];
+            $customers[$week]['oldCustomersOrders'] = (int) $customers[$week]['oldCustomersOrders'];
             $users[$week] = (array) $users[$week];
 
             switch (strtolower($row['salutation'])) {
@@ -489,10 +547,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->send(
             array_values($customers),
-            $this->Request()->getParam('limit', 25)
+            (int) $this->Request()->getParam('limit', 25)
         );
     }
 
+    /**
+     * @return void
+     */
     public function getCustomerAgeAction()
     {
         $shopIds = $this->getSelectedShopIds();
@@ -535,7 +596,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
 
         foreach ($ages as &$age) {
-            if ($result->getTotalCount() != 0) {
+            if ((int) $result->getTotalCount() !== 0) {
                 $age['percent'] = round($age['count'] / $result->getTotalCount() * 100, 2);
             } else {
                 $age['percent'] = 0;
@@ -554,10 +615,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->send(
             array_values($ages),
-            $this->Request()->getParam('limit', 0)
+            (int) $this->Request()->getParam('limit', 0)
         );
     }
 
+    /**
+     * @return void
+     */
     public function getMonthAction()
     {
         $result = $this->getRepository()->getAmountPerMonth(
@@ -572,6 +636,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * @return void
+     */
     public function getCalendarWeeksAction()
     {
         $result = $this->getRepository()->getAmountPerCalendarWeek(
@@ -582,10 +649,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->send(
             $this->formatOrderAnalyticsData($result->getData()),
-            $this->Request()->getParam('limit', 0)
+            (int) $this->Request()->getParam('limit', 0)
         );
     }
 
+    /**
+     * @return void
+     */
     public function getWeekdaysAction()
     {
         $result = $this->getRepository()->getAmountPerWeekday(
@@ -600,6 +670,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * @return void
+     */
     public function getTimeAction()
     {
         $result = $this->getRepository()->getAmountPerHour(
@@ -614,6 +687,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * @return void
+     */
     public function getCategoriesAction()
     {
         $node = $this->Request()->getParam('node', 'root');
@@ -631,6 +707,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * @return void
+     */
     public function getCountriesAction()
     {
         $result = $this->getRepository()->getAmountPerCountry(
@@ -645,6 +724,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * @return void
+     */
     public function getPaymentAction()
     {
         $result = $this->getRepository()->getAmountPerPayment(
@@ -659,6 +741,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * @return void
+     */
     public function getShippingMethodsAction()
     {
         $result = $this->getRepository()->getAmountPerShipping(
@@ -673,11 +758,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * @return void
+     */
     public function getVendorsAction()
     {
         $result = $this->getRepository()->getProductAmountPerManufacturer(
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit'),
+            (int) $this->Request()->getParam('start', 0),
+            $this->getLimit(),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -690,6 +778,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     /**
      * Returns the sales amount grouped per device type
+     *
+     * @return void
      */
     public function getDeviceAction()
     {
@@ -705,11 +795,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * @return void
+     */
     public function getSearchTermsAction()
     {
         $result = $this->getRepository()->getSearchTerms(
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit'),
+            (int) $this->Request()->getParam('start', 0),
+            $this->getLimit(),
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', [
@@ -727,11 +820,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * @return void
+     */
     public function getVisitorsAction()
     {
         $result = $this->getRepository()->getVisitorImpressions(
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit'),
+            (int) $this->Request()->getParam('start'),
+            $this->getLimit(),
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', [
@@ -749,11 +845,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * @return void
+     */
     public function getArticleImpressionsAction()
     {
         $result = $this->getRepository()->getProductImpressions(
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit'),
+            (int) $this->Request()->getParam('start', 0),
+            $this->getLimit(),
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', [
@@ -771,6 +870,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * @return void
+     */
     public function getReferrerSearchTermsAction()
     {
         $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
@@ -787,7 +889,11 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $ref = $matches[2][0];
             $ref = html_entity_decode(rawurldecode(strtolower($ref)));
             $ref = str_replace('+', ' ', $ref);
-            $ref = trim(preg_replace('/\s\s+/', ' ', $ref));
+            $replaced = preg_replace('/\s\s+/', ' ', $ref);
+            if (!\is_string($replaced)) {
+                continue;
+            }
+            $ref = trim($replaced);
 
             if (!\array_key_exists($ref, $keywords)) {
                 $keywords[$ref] = [
@@ -804,14 +910,17 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->send($keywords, \count($keywords));
     }
 
+    /**
+     * @return void
+     */
     public function getSearchUrlsAction()
     {
         $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
 
         $result = $this->getRepository()->getReferrerUrls(
             $selectedReferrer,
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit')
+            (int) $this->Request()->getParam('start', 0),
+            $this->getLimit(),
         );
 
         $this->View()->assign([
@@ -821,6 +930,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         ]);
     }
 
+    /**
+     * @return void
+     */
     protected function initAcl()
     {
         // read
@@ -833,9 +945,17 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->addAclPermission('conversionRate', 'read', 'Insufficient Permissions');
     }
 
+    /**
+     * @deprecated - Will be private in Shopware 5.8
+     *
+     * @param array<array<string, string|int|float>> $data
+     * @param int                                    $totalCount
+     *
+     * @return void
+     */
     protected function send($data, $totalCount)
     {
-        if (strtolower($this->format) == 'csv') {
+        if (strtolower($this->format) === 'csv') {
             $data = $this->formatCsvData($data);
             $this->exportCSV($data);
         } else {
@@ -847,12 +967,23 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
     }
 
+    /**
+     * @deprecated - Will be private in Shopware 5.8
+     *
+     * @param array<string, string|int|float>|null $data
+     *
+     * @return array<string, int>
+     */
     protected function getShopFields($data)
     {
+        if (!\is_array($data)) {
+            return [];
+        }
+
         $ids = $this->getSelectedShopIds();
         $fields = [];
         foreach (array_keys($data) as $key) {
-            if (\in_array($key, $this->shopFields)) {
+            if (\in_array($key, $this->shopFields, true)) {
                 foreach ($ids as $id) {
                     if (\array_key_exists($key . $id, $data)) {
                         $fields[$key . $id] = $id;
@@ -864,8 +995,19 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $fields;
     }
 
+    /**
+     * @deprecated - Will be private in Shopware 5.8
+     *
+     * @param array<string, string|int|float>|null $data
+     *
+     * @return array<string>
+     */
     protected function getDateFields($data)
     {
+        if (!\is_array($data)) {
+            return [];
+        }
+
         $fields = [];
         foreach (array_keys($data) as $key) {
             if (\in_array($key, $this->dateFields)) {
@@ -876,6 +1018,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $fields;
     }
 
+    /**
+     * @deprecated - Will be private in Shopware 5.8
+     *
+     * @param array<array<string, string|int|float>> $data
+     *
+     * @return void
+     */
     protected function exportCSV($data)
     {
         $this->Front()->Plugins()->Json()->setRenderer(false);
@@ -884,8 +1033,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');
+        if (!\is_resource($fp)) {
+            throw new RuntimeException('Could not open stream');
+        }
 
-        fputcsv($fp, array_keys($data[0]), ';');
+        if (\is_array($data[0])) {
+            fputcsv($fp, array_keys($data[0]), ';');
+        }
 
         foreach ($data as $value) {
             if (empty($value)) {
@@ -898,10 +1052,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     /**
      * Internal helper function to get access to the entity manager.
-     *
-     * @return ModelManager
      */
-    private function getManager()
+    private function getManager(): ModelManager
     {
         if ($this->manager === null) {
             $this->manager = $this->get('models');
@@ -932,7 +1084,12 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $builder;
     }
 
-    private function formatOrderAnalyticsData($data)
+    /**
+     * @param array<array<string, string|int|float>> $data
+     *
+     * @return array<array<string, string|int|float>>
+     */
+    private function formatOrderAnalyticsData(array $data): array
     {
         $shopIds = $this->getSelectedShopIds();
 
@@ -942,7 +1099,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
             if (!empty($row['date'])) {
                 $row['normal'] = $row['date'];
-                $row['date'] = strtotime($row['date']);
+                $row['date'] = strtotime((string) $row['date']);
             }
 
             if (!empty($shopIds)) {
@@ -956,23 +1113,30 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $data;
     }
 
-    private function formatCsvData($data)
+    /**
+     * @param array<array<string, string|int|float>> $data
+     *
+     * @return array<array<string, string|int|float>>
+     */
+    private function formatCsvData(array $data): array
     {
-        if ($fields = $this->getDateFields($data[0])) {
+        $fields = $this->getDateFields($data[0]);
+        if ($fields !== []) {
             foreach ($data as &$row) {
                 foreach ($fields as $field) {
                     if (\array_key_exists($field, $row)) {
-                        $row[$field] = date('Y-m-d H:i:s', $row[$field]);
+                        $row[$field] = date('Y-m-d H:i:s', (int) $row[$field]);
                     }
                 }
             }
         }
 
-        if ($fields = $this->getShopFields($data[0])) {
+        $fields = $this->getShopFields($data[0]);
+        if ($fields !== []) {
             $shopNames = $this->getShopNames();
 
             foreach ($fields as $field => $shopId) {
-                $suffix = substr($field, 0, \strlen($field) - \strlen($shopId));
+                $suffix = substr($field, 0, \strlen($field) - \strlen((string) $shopId));
                 $data = $this->switchArrayKeys($data, $shopNames[$shopId] . ' (' . $suffix . ')', $field);
             }
         }
@@ -980,7 +1144,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $data;
     }
 
-    private function switchArrayKeys($array, $newKey, $oldKey)
+    /**
+     * The `$array` parameter has the "hacky" `array<mixed>` annotation because of the recursion in this method
+     *
+     * @param array<array<string, string|int|float>>|array<mixed> $array
+     *
+     * @return array<array<string, string|int|float>>
+     */
+    private function switchArrayKeys(array $array, string $newKey, string $oldKey): array
     {
         foreach ($array as $key => $value) {
             if (\is_array($value)) {
@@ -994,6 +1165,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $array;
     }
 
+    /**
+     * @return array<int, string>
+     */
     private function getShopNames(): array
     {
         $builder = $this->getManager()->getDBALQueryBuilder();
@@ -1002,133 +1176,103 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             ->orderBy('s.default', 'DESC')
             ->addOrderBy('s.name');
 
-        $statement = $builder->execute();
-
-        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
+        return $builder->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
     private function getCsvFileName(): string
     {
         $name = $this->Request()->getActionName();
-        if (strpos($name, 'get') === 0) {
+        if (str_starts_with($name, 'get')) {
             $name = substr($name, 3);
         }
 
-        return $this->underscoreToCamelCase($name) . '.csv';
+        return $this->camelCaseToUnderscore($name) . '.csv';
     }
 
-    private function underscoreToCamelCase($str)
+    private function camelCaseToUnderscore(string $str): string
     {
-        $str[0] = strtolower($str[0]);
-        $func = static function ($c) {
-            return '_' . strtolower($c[1]);
-        };
-
-        return preg_replace_callback('/([A-Z])/', $func, $str);
+        return (new CamelCaseToSnakeCaseNameConverter())->normalize($str);
     }
 
     /**
      * helper to get the selected shop ids
      * if no shop is selected the ids of all shops are returned
      *
-     * return array | shopIds
+     * @return array<int>
      */
-    private function getSelectedShopIds()
+    private function getSelectedShopIds(): array
     {
         $selectedShopIds = (string) $this->Request()->getParam('selectedShops');
 
-        if (!empty($selectedShopIds)) {
-            return explode(',', $selectedShopIds);
+        if ($selectedShopIds !== '') {
+            $shopIds = explode(',', $selectedShopIds);
+
+            return array_map('\intval', $shopIds);
         }
 
         return [];
     }
 
-    /**
-     * helper to get the from date in the right format
-     *
-     * return \DateTimeInterface | fromDate
-     */
-    private function getFromDate()
+    private function getFromDate(): DateTime
     {
         $fromDate = $this->Request()->getParam('fromDate');
         if (empty($fromDate)) {
-            $fromDate = new \DateTime();
-            $fromDate = $fromDate->sub(new \DateInterval('P1M'));
+            $fromDate = new DateTime();
+            $fromDate = $fromDate->sub(new DateInterval('P1M'));
         } else {
-            $fromDate = new \DateTime($fromDate);
+            $fromDate = new DateTime($fromDate);
         }
 
         return $fromDate;
     }
 
-    /**
-     * helper to get the to date in the right format
-     *
-     * return DateTime | toDate
-     */
-    private function getToDate()
+    private function getToDate(): DateTime
     {
-        //if a to date passed, format it over the \DateTime object. Otherwise create a new date with today
+        //if a "to" date passed, format it over the \DateTime object. Otherwise, create a new date with today
         $toDate = $this->Request()->getParam('toDate');
         if (empty($toDate)) {
-            $toDate = new \DateTime();
+            $toDate = new DateTime();
         } else {
-            $toDate = new \DateTime($toDate);
+            $toDate = new DateTime($toDate);
         }
         //to get the right value cause 2012-02-02 is smaller than 2012-02-02 15:33:12
-        $toDate = $toDate->add(new \DateInterval('P1D'));
-        $toDate = $toDate->sub(new \DateInterval('PT1S'));
+        $toDate = $toDate->add(new DateInterval('P1D'));
 
-        return $toDate;
+        return $toDate->sub(new DateInterval('PT1S'));
     }
 
     /**
      * fills empty array elements for the csv export
      *
-     * @param array $data
+     * @param array<string, array{orderCount?: string, turnover?: string, clicks?: string, visits?: string, registrations?: string, customers?: string}> $data
      *
-     * @return array
+     * @return array<string, array{orderCount: int, turnover: float, clicks: int, visits: int, registrations: int, customers: int}>
      */
-    private function prepareOverviewData($data)
+    private function prepareOverviewData(array $data): array
     {
-        foreach ($data as &$row) {
-            if (!isset($row['orderCount'])) {
-                $row = $this->insertArrayAtPosition(['orderCount' => 0], $row, 0);
-            }
-            if (!isset($row['turnover'])) {
-                $row = $this->insertArrayAtPosition(['turnover' => 0], $row, 1);
-            }
-            if (!isset($row['clicks'])) {
-                $row = $this->insertArrayAtPosition(['clicks' => 0], $row, 2);
-            }
-            if (!isset($row['visits'])) {
-                $row = $this->insertArrayAtPosition(['visits' => 0], $row, 3);
-            }
-            if (!isset($row['registrations'])) {
-                $row = $this->insertArrayAtPosition(['registrations' => 0], $row, 4);
-            }
-            if (!isset($row['customers'])) {
-                $row = $this->insertArrayAtPosition(['customers' => 0], $row, 5);
-            }
+        $preparedData = [];
+        foreach ($data as $key => $row) {
+            $newRow = [];
+
+            $newRow['orderCount'] = isset($row['orderCount']) ? (int) $row['orderCount'] : 0;
+            $newRow['turnover'] = isset($row['turnover']) ? (float) $row['turnover'] : 0.0;
+            $newRow['clicks'] = isset($row['clicks']) ? (int) $row['clicks'] : 0;
+            $newRow['visits'] = isset($row['visits']) ? (int) $row['visits'] : 0;
+            $newRow['registrations'] = isset($row['registrations']) ? (int) $row['registrations'] : 0;
+            $newRow['customers'] = isset($row['customers']) ? (int) $row['customers'] : 0;
+
+            $preparedData[$key] = $newRow;
         }
 
-        return $data;
+        return $preparedData;
     }
 
-    /**
-     * helper method which allows to insert an array element with a key
-     *
-     * @param array $insertValue
-     * @param array $array
-     * @param int   $position
-     *
-     * @return array
-     */
-    private function insertArrayAtPosition($insertValue, $array, $position)
+    private function getLimit(): ?int
     {
-        return \array_slice($array, 0, $position, true) +
-                $insertValue +
-                \array_slice($array, $position, \count($array), true);
+        if (!$this->Request()->has('limit')) {
+            return null;
+        }
+
+        return (int) $this->Request()->getParam('limit');
     }
 }
