@@ -373,7 +373,7 @@ class Component extends ModelEntity
      *     string $allowBlank Optional; Defines if the value can contain null
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool} $options
      *
      * @return Field
      */
@@ -401,14 +401,14 @@ class Component extends ModelEntity
      *
      * options {
      *     string $name         Required; Logical name of the component field
-     *     string $store        Required; Store class which used for the combo class
      *     string $displayField Required; Field name of the model which displays as text
      *     string $valueField   Required; Identifier field of the combo box
      *     string $fieldLabel   optional; Ext JS form field label
+     *     string $store        optional; Store class which used for the combo class
      *     string $allowBlank   Optional; Defines if the value can contain null
      * }
      *
-     * @param array{name: string, store: string, displayField: string, valueField: string, fieldLabel?: string, allowBlank?: string} $options
+     * @param array{name: string, displayField: string, valueField: string, store?: string, fieldLabel?: string, allowBlank?: bool} $options
      *
      * @return Field
      */
@@ -435,7 +435,7 @@ class Component extends ModelEntity
      *      string $defaultValue Optional; date string in format Y-m-d
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string, defaultValue?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool, defaultValue?: string} $options
      *
      * @return Field
      */
@@ -461,7 +461,7 @@ class Component extends ModelEntity
      *     string $allowBlank Optional; Defines if the value can contain null
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool} $options
      *
      * @return Field
      */
@@ -484,7 +484,7 @@ class Component extends ModelEntity
      *     string $allowBlank Optional; Defines if the value can contain null
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool} $options
      *
      * @return Field
      */
@@ -507,7 +507,7 @@ class Component extends ModelEntity
      *     string $allowBlank Optional; Defines if the value can contain null
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool} $options
      *
      * @return Field
      */
@@ -530,7 +530,7 @@ class Component extends ModelEntity
      *     string $allowBlank Optional; Defines if the value can contain null
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool} $options
      *
      * @return Field
      */
@@ -553,7 +553,7 @@ class Component extends ModelEntity
      *     string $allowBlank Optional; Defines if the value can contain null
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool} $options
      *
      * @return Field
      */
@@ -576,7 +576,7 @@ class Component extends ModelEntity
      *     string $allowBlank Optional; Defines if the value can contain null
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool} $options
      *
      * @return Field
      */
@@ -599,7 +599,7 @@ class Component extends ModelEntity
      *     string $allowBlank Optional; Defines if the value can contain null
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool} $options
      *
      * @return Field
      */
@@ -623,7 +623,7 @@ class Component extends ModelEntity
      *      string $defaultValue Optional; default value as string in format H:i
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string, defaultValue?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool, defaultValue?: string} $options
      *
      * @return Field
      */
@@ -645,7 +645,7 @@ class Component extends ModelEntity
      *     string $allowBlank Optional; Defines if the value can contain null
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool} $options
      *
      * @return Field
      */
@@ -667,7 +667,7 @@ class Component extends ModelEntity
      *     string $allowBlank Optional; Defines if the value can contain null
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool} $options
      *
      * @return Field
      */
@@ -689,7 +689,7 @@ class Component extends ModelEntity
      *     string $allowBlank Optional; Defines if the value can contain null
      * }
      *
-     * @param array{name: string, fieldLabel?: string, allowBlank?: string} $options
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool} $options
      *
      * @return Field
      */
