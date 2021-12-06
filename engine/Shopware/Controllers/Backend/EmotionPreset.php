@@ -26,16 +26,23 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
+use Shopware\Components\Api\Resource\EmotionPreset;
+use Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformerInterface;
 use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
+use Shopware\Components\Emotion\Preset\PresetDataSynchronizerInterface;
+use Shopware\Components\Emotion\Preset\PresetLoader;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Preset;
+use Shopware\Models\Shop\Locale as ShopLocale;
 
 class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Backend_ExtJs
 {
+    /**
+     * @return void
+     */
     public function listAction()
     {
-        $resource = $this->container->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
-
-        $presets = $resource->getList($this->getLocale(), false);
+        $presets = $this->container->get(EmotionPreset::class)->getList($this->getLocale(), false);
 
         $presets = $this->enrichImagePaths($presets);
         $presets = $this->enrichPlugins($presets);
@@ -46,6 +53,9 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function previewAction()
     {
         $id = $this->Request()->getParam('id');
@@ -58,7 +68,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             return;
         }
 
-        $previewData = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Preset::class)->createQueryBuilder('preset')
+        $previewData = $this->container->get(ModelManager::class)->getRepository(Preset::class)->createQueryBuilder('preset')
             ->select('preset.presetData, preset.preview')
             ->where('preset.id = :id')
             ->setParameter('id', $id)
@@ -73,6 +83,11 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         ]);
     }
 
+    /**
+     * @throws Enlight_Controller_Exception
+     *
+     * @return void
+     */
     public function loadPresetAction()
     {
         if (!$this->_isAllowed('save', 'emotion')) {
@@ -89,7 +104,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             return;
         }
 
-        $loader = $this->container->get(\Shopware\Components\Emotion\Preset\PresetLoader::class);
+        $loader = $this->container->get(PresetLoader::class);
 
         try {
             $presetData = $loader->load($id);
@@ -111,6 +126,10 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
     /**
      * Model event listener function which fired when the user configure an emotion preset over the backend
      * module and clicks the save button.
+     *
+     * @throws Enlight_Controller_Exception
+     *
+     * @return void
      */
     public function saveAction()
     {
@@ -118,8 +137,8 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             throw new Enlight_Controller_Exception('You do not have sufficient rights to save a preset.', 401);
         }
 
-        $resource = $this->container->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
-        $transformer = $this->container->get(\Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformerInterface::class);
+        $resource = $this->container->get(EmotionPreset::class);
+        $transformer = $this->container->get(EmotionToPresetDataTransformerInterface::class);
         $data = $this->Request()->getParams();
 
         if (!$data['emotionId']) {
@@ -139,6 +158,11 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         $this->View()->assign(['success' => true]);
     }
 
+    /**
+     * @throws Enlight_Controller_Exception
+     *
+     * @return void
+     */
     public function deleteAction()
     {
         if (!$this->_isAllowed('delete', 'emotion')) {
@@ -147,7 +171,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
 
         $id = $this->Request()->getParam('id');
 
-        $resource = $this->container->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
+        $resource = $this->container->get(EmotionPreset::class);
 
         $resource->delete($id);
 
@@ -157,6 +181,10 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
     /**
      * Imports preset assets and synchronizes media path inside the
      * preset data based on unique asset key.
+     *
+     * @throws Enlight_Controller_Exception
+     *
+     * @return void
      */
     public function importAssetAction()
     {
@@ -173,16 +201,15 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             return;
         }
 
-        /** @var Preset|null $preset */
-        $preset = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Preset::class)->find($id);
+        $preset = $this->container->get(ModelManager::class)->getRepository(Preset::class)->find($id);
 
-        if (!$preset || $preset->getAssetsImported()) {
+        if (!$preset instanceof Preset || $preset->getAssetsImported()) {
             $this->View()->assign(['success' => false]);
 
             return;
         }
 
-        $synchronizerService = $this->container->get(\Shopware\Components\Emotion\Preset\PresetDataSynchronizerInterface::class);
+        $synchronizerService = $this->container->get(PresetDataSynchronizerInterface::class);
 
         try {
             $synchronizerService->importElementAssets($preset, $syncKey);
@@ -198,21 +225,20 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         $this->View()->assign(['success' => true]);
     }
 
-    /**
-     * @return string
-     */
-    private function getLocale()
+    private function getLocale(): string
     {
-        if (!$auth = $this->container->get('auth')) {
+        $auth = $this->container->get('auth');
+        if (!$auth instanceof Shopware_Components_Auth) {
             return 'de_DE';
         }
-        /** @var Shopware_Components_Auth $auth */
-        if (!$identity = $auth->getIdentity()) {
+
+        $identity = $auth->getIdentity();
+        if (!$identity instanceof stdClass) {
             return 'de_DE';
         }
-        /** @var \Shopware\Models\Shop\Locale|null $locale */
+
         $locale = $identity->locale;
-        if (!$locale) {
+        if (!$locale instanceof ShopLocale) {
             return 'de_DE';
         }
 
@@ -220,9 +246,11 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
     }
 
     /**
-     * @return array
+     * @param array<array<string, string>> $presets
+     *
+     * @return array<array<string, string>>
      */
-    private function enrichImagePaths(array $presets)
+    private function enrichImagePaths(array $presets): array
     {
         foreach ($presets as &$preset) {
             $preset['thumbnailUrl'] = $this->getImagePath($preset['thumbnail']);
@@ -232,33 +260,34 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         return $presets;
     }
 
-    /**
-     * @param string $path
-     *
-     * @return string
-     */
-    private function getImagePath($path)
+    private function getImagePath(?string $path): string
     {
         if (empty($path)) {
             return '';
         }
 
         // check if image is base64 encoded
-        if (strpos($path, 'data:image') === 0) {
+        if (str_starts_with($path, 'data:image')) {
             return $path;
         }
 
-        /** @var MediaServiceInterface $mediaService */
-        $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = $this->container->get(MediaServiceInterface::class);
 
-        if (strpos($path, 'media') === 0) {
+        if (str_starts_with($path, 'media')) {
             $path = $mediaService->getUrl($path);
         }
 
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = file_get_contents($path);
+        if (!\is_string($path)) {
+            return '';
+        }
 
-        if (!$data || !$type) {
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        if (!\is_string($type)) {
+            return '';
+        }
+
+        $data = file_get_contents($path);
+        if (!\is_string($data)) {
             return '';
         }
 
@@ -270,13 +299,13 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
      *
      * @return array[]
      */
-    private function enrichPlugins(array $presets)
+    private function enrichPlugins(array $presets): array
     {
         $pluginManager = $this->container->get('shopware_plugininstaller.plugin_service_view');
         $shopwareVersion = $this->container->getParameter('shopware.release.version');
 
         if (!\is_string($shopwareVersion)) {
-            throw new \RuntimeException('Parameter shopware.release.version has to be an string');
+            throw new RuntimeException('Parameter shopware.release.version has to be an string');
         }
 
         $names = [];
@@ -291,7 +320,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             $plugins = $pluginManager->getPlugins(
                 new PluginsByTechnicalNameRequest($this->getLocale(), $shopwareVersion, $names)
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // catch store exception and continue.
             // Plugin store information is only used to display required plugins in plugin manager
             $plugins = [];

@@ -53,6 +53,8 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
     /**
      * Do authentication and return result in json-format
      * Check if account is blocked
+     *
+     * @return void
      */
     public function loginAction()
     {
@@ -65,28 +67,37 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        /** @var Shopware_Components_Auth $auth */
         $auth = Shopware()->Container()->get('auth');
         $result = $auth->login($username, $password);
         $user = $auth->getIdentity();
+        if (!$user instanceof stdClass) {
+            $this->View()->assign(['success' => false]);
+
+            return;
+        }
+
         if (!empty($user->roleID)) {
             $user->role = $this->get('models')->find(
                 Role::class,
                 $user->roleID
             );
         }
-        if ($user && ($locale = $this->Request()->get('locale')) !== null) {
+
+        $locale = $this->Request()->get('locale');
+        if ($locale !== null) {
             $user->locale = $this->get('models')->getRepository(
                 Locale::class
             )->find($locale);
         }
+
         if (!isset($user->locale) && !empty($user->localeID)) {
             $user->locale = $this->get('models')->find(
                 Locale::class,
                 $user->localeID
             );
         }
-        if ($user && !isset($user->locale)) {
+
+        if (!isset($user->locale)) {
             $user->locale = $this->get('models')->getRepository(
                 Locale::class
             )->find($this->getPlugin()->getDefaultLocale());
@@ -109,6 +120,8 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
 
     /**
      * On logout destroy session and redirect to auth controller
+     *
+     * @return void
      */
     public function logoutAction()
     {
@@ -131,6 +144,8 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
      * friendly format
      *
      * Note that this function returns sample data to build up the module.
+     *
+     * @return void
      */
     public function getLocalesAction()
     {
@@ -160,6 +175,8 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
 
     /**
      * Gets the current login status of the user.
+     *
+     * @return void
      */
     public function getLoginStatusAction()
     {
@@ -168,7 +185,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         if ($auth->hasIdentity()) {
             $refresh = $auth->refresh();
         }
-        if ($auth->hasIdentity()) {
+        if ($refresh instanceof Zend_Auth_Result && $auth->hasIdentity()) {
             $messages = $refresh->getMessages();
             $this->View()->assign([
                 'success' => true,
@@ -182,9 +199,11 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         }
     }
 
+    /**
+     * @return void
+     */
     public function validatePasswordAction()
     {
-        /** @var Shopware_Components_Auth $auth */
         $auth = Shopware()->Container()->get('auth');
         $username = $auth->getIdentity()->username;
         $password = $this->Request()->get('password');

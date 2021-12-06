@@ -34,6 +34,8 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
     /**
      * Enable script renderer and json request plugin
      * Do acl checks
+     *
+     * @return void
      */
     public function init()
     {
