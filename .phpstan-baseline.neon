@@ -35638,11 +35638,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Register.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_RobotsTxt\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/RobotsTxt.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Search\\:\\:convertProducts\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Search.php
@@ -55564,31 +55559,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringNotContainsString\\(\\) expects string, array\\|string\\|null given\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Frontend/ListingTest.php
-
-		-
-			message: "#^Method RobotsTxtTest\\:\\:formatRobotsTxt\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/RobotsTxtTest.php
-
-		-
-			message: "#^Method RobotsTxtTest\\:\\:sitemapTest\\(\\) has parameter \\$response with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/RobotsTxtTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$url of method Enlight_Components_Test_Controller_TestCase\\:\\:dispatch\\(\\) expects string\\|null, string\\|false\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/RobotsTxtTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, array\\|string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/RobotsTxtTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, array\\|string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/RobotsTxtTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SearchTest\\:\\:searchTermProvider\\(\\) has no return typehint specified\\.$#"

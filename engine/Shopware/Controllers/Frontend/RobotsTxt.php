@@ -29,6 +29,9 @@ use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Frontend_RobotsTxt extends Enlight_Controller_Action
 {
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $shop = $this->get('shop');
@@ -63,8 +66,8 @@ class Shopware_Controllers_Frontend_RobotsTxt extends Enlight_Controller_Action
         $allShops[] = $mainShop;
 
         foreach ($allShops as $shop) {
-            $detachedShop = $shopRepository->getById($shop->getId());
-            if ($detachedShop === null || $detachedShop->getActive() === false) {
+            $detachedShop = $shopRepository->getActiveById($shop->getId());
+            if ($detachedShop === null) {
                 continue;
             }
 
