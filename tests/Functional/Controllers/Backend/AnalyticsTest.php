@@ -27,15 +27,22 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use DateTime;
-use Enlight_Components_Test_Controller_TestCase;
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
+use Shopware\Components\ContainerAwareEventManager;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Analytics\Repository;
 use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
+class AnalyticsTest extends ControllerTestCase
 {
     use DatabaseTransactionBehaviour;
+    use ContainerTrait;
+
+    private Connection $connection;
 
     private Repository $repository;
 
@@ -51,18 +58,16 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
 
     private ?int $productVariantId = null;
 
-    /**
-     * Standard set up for every test - just disable auth
-     */
     public function setUp(): void
     {
         parent::setUp();
 
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAuth();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAcl();
 
-        $this->repository = new Repository(Shopware()->Models()->getConnection(), Shopware()->Events());
+        $this->connection = $this->getContainer()->get(Connection::class);
+        $this->repository = new Repository($this->connection, $this->getContainer()->get(ContainerAwareEventManager::class));
 
         $this->orderNumber = uniqid('SW');
         $this->productId = 0;
@@ -137,6 +142,23 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
         );
     }
 
+    public function testGetVisitorAsCSV(): void
+    {
+        $this->createVisitors();
+
+        $this->Request()->setParams([
+            'fromDate' => '2013-01-01',
+            'toDate' => '2014-01-01',
+            'selectedShops' => '1',
+            'format' => 'csv',
+        ]);
+
+        $this->dispatch('backend/analytics/getVisitors');
+
+        static::assertSame('text/csv; charset=utf-8', $this->Response()->getHeader('Content-Type'));
+        static::assertSame('attachment;filename=visitors.csv', $this->Response()->getHeader('content-disposition'));
+    }
+
     public function testGetOrdersOfCustomers(): void
     {
         $this->createCustomer();
@@ -165,8 +187,8 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
         $this->createCustomer();
         $this->createOrders();
 
-        $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
-        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
+        $shop = $this->getContainer()->get(ModelManager::class)->getRepository(Shop::class)->getActiveDefault();
+        $this->getContainer()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $result = $this->repository->getReferrerRevenue(
             $shop,
@@ -793,7 +815,7 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
     {
         $this->customerNumber = uniqid((string) rand());
 
-        Shopware()->Db()->insert(
+        $this->connection->insert(
             's_user',
             [
                 'password' => '098f6bcd4621d373cade4e832627b4f6', // md5('test')
@@ -810,9 +832,9 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
                 'birthday' => '1990-01-01',
             ]
         );
-        $this->userId = (int) Shopware()->Db()->lastInsertId();
+        $this->userId = (int) $this->connection->lastInsertId();
 
-        Shopware()->Db()->insert('s_user_addresses', [
+        $this->connection->insert('s_user_addresses', [
             'user_id' => $this->userId,
             'company' => 'PHPUNIT',
             'salutation' => 'mr',
@@ -823,19 +845,19 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
             'country_id' => 2,
             'state_id' => 3,
         ]);
-        $addressId = Shopware()->Db()->lastInsertId();
+        $addressId = $this->connection->lastInsertId();
 
-        Shopware()->Db()->update('s_user', [
+        $this->connection->update('s_user', [
             'default_billing_address_id' => $addressId,
             'default_shipping_address_id' => $addressId,
         ], [
-            'id = ?' => $this->userId,
+            'id' => $this->userId,
         ]);
     }
 
     private function createProduct(): void
     {
-        Shopware()->Db()->insert(
+        $this->connection->insert(
             's_articles',
             [
                 'supplierID' => 1,
@@ -846,9 +868,9 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
                 'main_detail_id' => 9999,
             ]
         );
-        $this->productId = (int) Shopware()->Db()->lastInsertId();
+        $this->productId = (int) $this->connection->lastInsertId();
 
-        Shopware()->Db()->insert(
+        $this->connection->insert(
             's_articles_details',
             [
                 'articleID' => $this->productId,
@@ -858,18 +880,18 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
                 'instock' => 1,
             ]
         );
-        $this->productVariantId = (int) Shopware()->Db()->lastInsertId();
+        $this->productVariantId = (int) $this->connection->lastInsertId();
 
-        Shopware()->Db()->update(
+        $this->connection->update(
             's_articles',
             ['main_detail_id' => $this->productVariantId],
-            'id = ' . $this->productId
+            ['id' => $this->productId]
         );
     }
 
     private function createCategory(): void
     {
-        Shopware()->Db()->insert(
+        $this->connection->insert(
             's_categories',
             [
                 'description' => 'phpunit category',
@@ -877,9 +899,9 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
                 'active' => 1,
             ]
         );
-        $this->categoryId = (int) Shopware()->Db()->lastInsertId();
+        $this->categoryId = (int) $this->connection->lastInsertId();
 
-        Shopware()->Db()->insert(
+        $this->connection->insert(
             's_articles_categories_ro',
             [
                 'articleID' => $this->productId,
@@ -934,8 +956,8 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
         ];
 
         foreach ($orders as $order) {
-            Shopware()->Db()->insert('s_order', $order);
-            $orderIds[] = Shopware()->Db()->lastInsertId();
+            $this->connection->insert('s_order', $order);
+            $orderIds[] = $this->connection->lastInsertId();
         }
 
         $orderDetails = [
@@ -961,7 +983,7 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
             ],
         ];
         foreach ($orderDetails as $detail) {
-            Shopware()->Db()->insert('s_order_details', $detail);
+            $this->connection->insert('s_order_details', $detail);
         }
 
         $userBillingAddress = [
@@ -1001,7 +1023,7 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
             ],
         ];
         foreach ($orderBillingAddresses as $address) {
-            Shopware()->Db()->insert('s_order_billingaddress', $address);
+            $this->connection->insert('s_order_billingaddress', $address);
         }
     }
 
@@ -1022,13 +1044,13 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
             ],
         ];
         foreach ($visitors as $visitor) {
-            Shopware()->Db()->insert('s_statistics_visitors', $visitor);
+            $this->connection->insert('s_statistics_visitors', $visitor);
         }
     }
 
     private function createImpressions(): void
     {
-        Shopware()->Db()->insert(
+        $this->connection->insert(
             's_statistics_article_impression',
             [
                 'articleId' => $this->productId,
@@ -1041,7 +1063,7 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
 
     private function createSearchTerms(): void
     {
-        Shopware()->Db()->insert(
+        $this->connection->insert(
             's_statistics_search',
             [
                 'datum' => '2013-06-15 10:11:12',
@@ -1053,7 +1075,7 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
 
     private function createReferrer(): void
     {
-        Shopware()->Db()->insert(
+        $this->connection->insert(
             's_statistics_referer',
             [
                 'datum' => '2013-06-15',
@@ -1065,32 +1087,36 @@ class AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
     private function removeDemoData(): void
     {
         if ($this->userId) {
-            Shopware()->Db()->delete('s_user', 'id = ' . $this->userId);
-            Shopware()->Db()->delete('s_user_addresses', 'user_id = ' . $this->userId);
-            Shopware()->Db()->delete('s_order', 'userID = ' . $this->userId);
-            Shopware()->Db()->delete('s_order_billingaddress', 'userID = ' . $this->userId);
+            $this->connection->delete('s_user', ['id' => $this->userId]);
+            $this->connection->delete('s_user_addresses', ['user_id' => $this->userId]);
+            $this->connection->delete('s_order', ['userID' => $this->userId]);
+            $this->connection->delete('s_order_billingaddress', ['userID' => $this->userId]);
         }
 
         if ($this->productVariantId) {
-            Shopware()->Db()->delete('s_articles_details', 'id = ' . $this->productVariantId);
+            $this->connection->delete('s_articles_details', ['id' => $this->productVariantId]);
         }
 
         if ($this->productId) {
-            Shopware()->Db()->delete('s_articles', 'id = ' . $this->productId);
-            Shopware()->Db()->delete('s_statistics_article_impression', 'articleId = ' . $this->productId);
-            Shopware()->Db()->delete('s_order_details', 'articleID = ' . $this->productId);
+            $this->connection->delete('s_articles', ['id' => $this->productId]);
+            $this->connection->delete('s_statistics_article_impression', ['articleId' => $this->productId]);
+            $this->connection->delete('s_order_details', ['articleID' => $this->productId]);
         }
 
         if ($this->categoryId) {
             if ($this->productId) {
-                Shopware()->Db()->delete('s_articles_categories_ro', 'articleID = ' . $this->productId);
+                $this->connection->delete('s_articles_categories_ro', ['articleID' => $this->productId]);
             }
-            Shopware()->Db()->delete('s_categories', 'id = ' . $this->categoryId);
+            $this->connection->delete('s_categories', ['id' => $this->categoryId]);
         }
 
-        Shopware()->Db()->delete('s_statistics_visitors', "shopID = 1 AND datum = '2013-06-01' OR datum = '2013-06-15'");
-        Shopware()->Db()->delete('s_statistics_search', "searchterm = 'phpunit search term'");
-        Shopware()->Db()->delete('s_statistics_referer', "referer = 'https://www.google.de/?q=phpunit'");
+        $this->connection->createQueryBuilder()
+            ->delete('s_statistics_visitors')
+            ->where('shopID = 1')
+            ->andWhere('datum = "2013-06-01" OR datum = "2013-06-15"')
+            ->execute();
+        $this->connection->delete('s_statistics_search', ['searchterm' => 'phpunit search term']);
+        $this->connection->delete('s_statistics_referer', ['referer' => 'https://www.google.de/?q=phpunit']);
     }
 
     private function getSearchTermFromReferrerUrl(string $url): string

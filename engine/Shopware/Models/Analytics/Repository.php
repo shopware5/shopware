@@ -198,8 +198,8 @@ class Repository
     /**
      * Returns a result object which displays all referrers url and the call count.
      *
-     * @param int $offset
-     * @param int $limit
+     * @param int      $offset
+     * @param int|null $limit
      *
      * @return Result
      *                array (
@@ -239,8 +239,8 @@ class Repository
     /**
      * Returns a result which displays the revenue of each partner
      *
-     * @param int $offset
-     * @param int $limit
+     * @param int      $offset
+     * @param int|null $limit
      *
      * @return Result
      */
@@ -260,8 +260,8 @@ class Repository
     /**
      * Returns a result which displays the sell count of each product.
      *
-     * @param int $offset
-     * @param int $limit
+     * @param int      $offset
+     * @param int|null $limit
      *
      * @return Result
      *                array (
@@ -407,7 +407,7 @@ class Repository
             ->groupBy('articles.supplierID')
             ->orderBy('turnover', 'DESC');
 
-        $this->addPagination($builder, $offset, $limit);
+        $this->addPagination($builder, (int) $offset, $limit);
 
         $builder = $this->eventManager->filter('Shopware_Analytics_ProductAmountPerManufacturer', $builder, [
             'subject' => $this,
@@ -452,10 +452,10 @@ class Repository
      * The data result contains the executed search term, the count of request
      * which sends this search term and how many result are returned for this term.
      *
-     * @param int   $offset  numeric value which defines the query start page
-     * @param int   $limit   numeric value which defines the query limit
-     * @param array $sort
-     * @param int[] $shopIds
+     * @param int                                               $offset  numeric value which defines the query start page
+     * @param int|null                                          $limit   numeric value which defines the query limit
+     * @param array<array{property: string, direction: string}> $sort
+     * @param int[]                                             $shopIds
      *
      * @return Result
      *                array (
@@ -498,7 +498,7 @@ class Repository
                 ->setParameter('shopIds', $shopIds, Connection::PARAM_INT_ARRAY);
         }
 
-        $this->addDateRangeCondition($builder, $from, $to, 'datum');
+        $this->addDateRangeCondition($builder, 'datum', $from, $to);
 
         $builder = $this->eventManager->filter('Shopware_Analytics_SearchTerms', $builder, [
             'subject' => $this,
@@ -510,9 +510,9 @@ class Repository
     /**
      * Returns a result object which displays all referrers url and the call count.
      *
-     * @param string $referrer
-     * @param int    $offset
-     * @param int    $limit
+     * @param string   $referrer
+     * @param int      $offset
+     * @param int|null $limit
      *
      * @return Result
      *                array (
@@ -570,10 +570,10 @@ class Repository
      * The described [shopId] placeholder, will be replaced with the passed shop id.
      * The sort parameter allows to sort the data result by different conditions.
      *
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $sort
-     * @param int[] $shopIds
+     * @param int                                               $offset
+     * @param int|null                                          $limit
+     * @param array<array{property: string, direction: string}> $sort
+     * @param int[]                                             $shopIds
      *
      * @return Result
      *                array (
@@ -927,9 +927,10 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param int   $offset
-     * @param int   $limit
-     * @param int[] $shopIds
+     * @param int                                               $offset
+     * @param int|null                                          $limit
+     * @param array<array{property: string, direction: string}> $sort
+     * @param int[]                                             $shopIds
      *
      * @return Result
      *                array (
@@ -954,15 +955,15 @@ class Repository
     {
         $builder = $this->createProductImpressionBuilder($offset, $limit);
 
-        if ($from) {
+        if ($from instanceof DateTimeInterface) {
             $builder->andWhere('articleImpression.date >= :fromDate')
                 ->setParameter(':fromDate', $from->format('Y-m-d H:i:s'));
         }
-        if ($to) {
+        if ($to instanceof DateTimeInterface) {
             $builder->andWhere('articleImpression.date <= :toDate')
                 ->setParameter(':toDate', $to->format('Y-m-d H:i:s'));
         }
-        if ($sort) {
+        if ($sort !== []) {
             $this->addSort($builder, $sort);
         }
         if (!empty($shopIds)) {
@@ -1053,7 +1054,7 @@ class Repository
             ->orderBy('orders.ordertime', 'DESC')
             ->groupBy('DATE(orders.ordertime)');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'DATE(orders.ordertime)');
+        $this->addDateRangeCondition($builder, 'DATE(orders.ordertime)', $from, $to);
 
         return $builder;
     }
@@ -1083,7 +1084,7 @@ class Repository
             ->orderBy('DATE(orders.ordertime)', 'DESC')
             ->groupBy('DATE(orders.ordertime)');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'orderTime');
+        $this->addDateRangeCondition($builder, 'orderTime', $from, $to);
 
         return $builder;
     }
@@ -1113,7 +1114,7 @@ class Repository
             ->orderBy('visitor.datum', 'DESC')
             ->groupBy('visitor.datum');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'visitor.datum');
+        $this->addDateRangeCondition($builder, 'visitor.datum', $from, $to);
 
         return $builder;
     }
@@ -1149,7 +1150,7 @@ class Repository
             ->orderBy('users.firstlogin', 'DESC')
             ->groupBy('users.firstlogin');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'users.firstlogin');
+        $this->addDateRangeCondition($builder, 'users.firstlogin', $from, $to);
 
         return $builder;
     }
@@ -1157,8 +1158,9 @@ class Repository
     /**
      * Returns a result which displays the impressions of each product.
      *
-     * @param int $offset
-     * @param int $limit
+     * @param int                                               $offset
+     * @param int|null                                          $limit
+     * @param array<array{property: string, direction: string}> $sort
      *
      * @return DBALQueryBuilder
      */
@@ -1203,7 +1205,7 @@ class Repository
             ->where('orders.status NOT IN (4, -1)')
             ->orderBy('name');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
+        $this->addDateRangeCondition($builder, 'orders.ordertime', $from, $to);
 
         return $builder;
     }
@@ -1241,7 +1243,7 @@ class Repository
             ->leftJoin('billing', 's_core_countries', 'country', 'billing.countryID = country.id')
             ->where('orders.status NOT IN (4, -1)');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
+        $this->addDateRangeCondition($builder, 'orders.ordertime', $from, $to);
 
         if (!empty($shopIds)) {
             foreach ($shopIds as $shopId) {
@@ -1263,12 +1265,11 @@ class Repository
      * in the passed date range.
      * The sort parameter allows to sort the data result by different conditions.
      *
-     * @param int               $offset
-     * @param int               $limit
-     * @param DateTimeInterface $from
-     * @param DateTimeInterface $to
+     * @param int                                               $offset
+     * @param int|null                                          $limit
+     * @param array<array{property: string, direction: string}> $sort
      *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @return DBALQueryBuilder
      */
     protected function createVisitorImpressionBuilder($offset, $limit, DateTimeInterface $from = null, DateTimeInterface $to = null, array $sort = [])
     {
@@ -1290,7 +1291,7 @@ class Repository
             ->groupBy('visitors.datum');
 
         $this->addSort($builder, $sort)
-            ->addDateRangeCondition($builder, $from, $to, 'datum')
+            ->addDateRangeCondition($builder, 'datum', $from, $to)
             ->addPagination($builder, $offset, $limit);
 
         return $builder;
@@ -1305,7 +1306,7 @@ class Repository
      */
     protected function createAgeOfCustomersBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null, array $shopIds = [])
     {
-        $builder = $builder = $this->connection->createQueryBuilder();
+        $builder = $this->connection->createQueryBuilder();
         $builder->select([
             'users.firstlogin as firstLogin',
             'users.birthday',
@@ -1315,7 +1316,7 @@ class Repository
             ->andWhere("users.birthday != '0000-00-00'")
             ->orderBy('users.birthday', 'DESC');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'users.firstlogin');
+        $this->addDateRangeCondition($builder, 'users.firstlogin', $from, $to);
 
         if (!empty($shopIds)) {
             foreach ($shopIds as $shopId) {
@@ -1350,7 +1351,7 @@ class Repository
             ->andWhere('orders.status NOT IN (-1, 4)')
             ->orderBy('orderTime', 'ASC');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
+        $this->addDateRangeCondition($builder, 'orders.ordertime', $from, $to);
 
         return $builder;
     }
@@ -1362,7 +1363,7 @@ class Repository
      */
     protected function createProductSalesBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
-        $builder = $builder = $this->connection->createQueryBuilder();
+        $builder = $this->connection->createQueryBuilder();
         $builder->select([
             'SUM(details.quantity) AS sales',
             'articles.name',
@@ -1376,7 +1377,7 @@ class Repository
             ->groupBy('articles.id')
             ->orderBy('sales', 'DESC');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
+        $this->addDateRangeCondition($builder, 'orders.ordertime', $from, $to);
 
         return $builder;
     }
@@ -1388,7 +1389,7 @@ class Repository
      */
     protected function createPartnerRevenueBuilder(DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
-        $builder = $builder = $this->connection->createQueryBuilder();
+        $builder = $this->connection->createQueryBuilder();
         $builder->select([
             'SUM(orders.invoice_amount / orders.currencyFactor) AS turnover',
             'partners.company AS partner',
@@ -1402,7 +1403,7 @@ class Repository
             ->groupBy('orders.partnerID')
             ->orderBy('turnover', 'DESC');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
+        $this->addDateRangeCondition($builder, 'orders.ordertime', $from, $to);
 
         return $builder;
     }
@@ -1414,7 +1415,7 @@ class Repository
      */
     protected function createReferrerRevenueBuilder(Shop $shop = null, DateTimeInterface $from = null, DateTimeInterface $to = null)
     {
-        $builder = $builder = $this->connection->createQueryBuilder();
+        $builder = $this->connection->createQueryBuilder();
         $builder->select([
             'ROUND(orders.invoice_amount / orders.currencyFactor, 2) AS turnover',
             'users.id as userID',
@@ -1428,7 +1429,7 @@ class Repository
             ->andWhere("orders.referer LIKE 'http%//%'")
             ->orderBy('turnover');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
+        $this->addDateRangeCondition($builder, 'orders.ordertime', $from, $to);
 
         if ($shop instanceof Shop && $shop->getHost()) {
             $builder->andWhere('orders.referer NOT LIKE :hostname')
@@ -1454,7 +1455,7 @@ class Repository
             ->groupBy('referer')
             ->orderBy('count', 'DESC');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'referrers.datum');
+        $this->addDateRangeCondition($builder, 'referrers.datum', $from, $to);
 
         return $builder;
     }
@@ -1480,19 +1481,15 @@ class Repository
             ->orderBy('turnover', 'DESC')
             ->groupBy('users.customergroup');
 
-        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
+        $this->addDateRangeCondition($builder, 'orders.ordertime', $from, $to);
 
         return $builder;
     }
 
     /**
      * Helper function which adds the date range condition to an aggregate order query.
-     *
-     * @param string|null $column
-     *
-     * @return Repository
      */
-    private function addDateRangeCondition(DBALQueryBuilder $builder, DateTimeInterface $from = null, DateTimeInterface $to = null, $column = null)
+    private function addDateRangeCondition(DBALQueryBuilder $builder, string $column, DateTimeInterface $from = null, DateTimeInterface $to = null): Repository
     {
         if ($from instanceof DateTimeInterface) {
             $builder->andWhere($column . ' >= :fromDate')
@@ -1509,11 +1506,9 @@ class Repository
     /**
      * Helper function which iterates all sort arrays and at them as order by condition.
      *
-     * @param array $sort
-     *
-     * @return Repository
+     * @param array<array{property: string, direction: string}> $sort
      */
-    private function addSort(DBALQueryBuilder $builder, $sort)
+    private function addSort(DBALQueryBuilder $builder, array $sort): Repository
     {
         if (empty($sort)) {
             return $this;
@@ -1531,13 +1526,8 @@ class Repository
 
     /**
      * Small helper function which adds the first and max result to the query builder.
-     *
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return Repository
      */
-    private function addPagination(DBALQueryBuilder $builder, $offset, $limit)
+    private function addPagination(DBALQueryBuilder $builder, int $offset, ?int $limit): Repository
     {
         $builder->setFirstResult($offset)
             ->setMaxResults($limit);
