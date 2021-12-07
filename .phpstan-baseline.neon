@@ -3270,11 +3270,6 @@ parameters:
 			path: engine/Library/Enlight/Template/Plugins/function.compileJavascript.php
 
 		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/function.compileJavascript.php
-
-		-
 			message: "#^Cannot call method assign\\(\\) on array\\.$#"
 			count: 2
 			path: engine/Library/Enlight/Template/Plugins/function.compileLess.php
@@ -3296,11 +3291,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$template of method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:compileLess\\(\\) expects Shopware\\\\Models\\\\Shop\\\\Template, Shopware\\\\Models\\\\Shop\\\\Template\\|null given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/function.compileLess.php
-
-		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Plugins/function.compileLess.php
 
@@ -3355,27 +3345,7 @@ parameters:
 			path: engine/Library/Enlight/Template/Plugins/function.flink.php
 
 		-
-			message: "#^Cannot call method getBasePath\\(\\) on object\\|null\\.$#"
-			count: 2
-			path: engine/Library/Enlight/Template/Plugins/function.flink.php
-
-		-
-			message: "#^Cannot call method getHost\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/function.flink.php
-
-		-
-			message: "#^Cannot call method getSecure\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/function.flink.php
-
-		-
 			message: "#^Function smarty_function_flink\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/function.flink.php
-
-		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Plugins/function.flink.php
 
@@ -13394,11 +13364,6 @@ parameters:
 			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/ConfiguratorService.php
 
 		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/ContextService.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\Core\\\\CustomFacetService\\:\\:getFacetsOfCategories\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StoreFrontBundle/Service/Core/CustomFacetService.php
@@ -16953,11 +16918,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Exception/ValidationException.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Manager.php
-
-		-
 			message: "#^Cannot call method setAcl\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Manager.php
@@ -16969,11 +16929,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Manager\\:\\:getResource\\(\\) should return Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource but returns object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Manager.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Manager.php
 
@@ -20474,11 +20429,6 @@ parameters:
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Config.php
 
 		-
-			message: "#^Cannot call method getCurrency\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Currency.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Db\\:\\:buildConnectionString\\(\\) has parameter \\$dbConfig with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Db.php
@@ -20502,11 +20452,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Front\\:\\:factory\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Front.php
-
-		-
-			message: "#^Cannot call method getLocale\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Locale.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Mail\\:\\:factory\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
@@ -20594,22 +20539,12 @@ parameters:
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Router.php
 
 		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Router.php
-
-		-
 			message: "#^Cannot call method setSession\\(\\) on Symfony\\\\Component\\\\HttpFoundation\\\\Request\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
 
 		-
 			message: "#^Parameter \\#2 \\$resource of method Shopware\\\\Components\\\\DependencyInjection\\\\Container\\:\\:set\\(\\) expects object\\|null, string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
-
-		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
 
@@ -20632,11 +20567,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Template\\:\\:factory\\(\\) has parameter \\$templateConfig with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Template.php
-
-		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/TemplateMail.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Validator\\:\\:create\\(\\) has no return typehint specified\\.$#"
@@ -21759,11 +21689,6 @@ parameters:
 			path: engine/Shopware/Components/Filesystem/PublicUrlGenerator.php
 
 		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Filesystem/PublicUrlGenerator.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Form\\\\Base\\:\\:fromArray\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Form/Base.php
@@ -22209,11 +22134,6 @@ parameters:
 			path: engine/Shopware/Components/HttpCache/InvalidationDate/ListingDateFrontpage.php
 
 		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/InvalidationDate/ListingDateFrontpage.php
-
-		-
 			message: "#^Cannot call method getParam\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/HttpCache/InvalidationDate/ProductDetailDate.php
@@ -22534,11 +22454,6 @@ parameters:
 			path: engine/Shopware/Components/Install/Database.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/LastArticlesSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\LastArticlesSubscriber\\:\\:cleanupLastProducts\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/LastArticlesSubscriber.php
@@ -22570,11 +22485,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\LastArticlesSubscriber\\:\\:setLastProductById\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/LastArticlesSubscriber.php
-
-		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
 			count: 1
 			path: engine/Shopware/Components/LastArticlesSubscriber.php
 
@@ -26899,11 +26809,6 @@ parameters:
 			path: engine/Shopware/Components/Theme/EventListener/ConfigLoader.php
 
 		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/EventListener/ConfigLoader.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Generator\\:\\:createThemeDirectory\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/Generator.php
@@ -27642,20 +27547,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, bool\\|string given\\.$#"
 			count: 2
 			path: engine/Shopware/Components/Thumbnail/Manager.php
-		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Translation.php
-
-		-
-			message: "#^Cannot call method getLocale\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Translation.php
-
-		-
-			message: "#^Cannot call method hasIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Translation.php
 
 		-
 			message: "#^Method Shopware_Components_Translation\\:\\:addProductTranslation\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
@@ -27808,11 +27699,6 @@ parameters:
 			path: engine/Shopware/Components/Translation.php
 
 		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Translation.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Translation\\\\ObjectTranslator\\:\\:translateObjectProperty\\(\\) has parameter \\$object with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Translation/ObjectTranslator.php
@@ -27938,11 +27824,6 @@ parameters:
 			path: engine/Shopware/Controllers/Api/Media.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Rest.php
-
-		-
 			message: "#^Method Shopware_Controllers_Api_Rest\\:\\:batchAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/Rest.php
@@ -27964,11 +27845,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware_Controllers_Api_Rest\\:\\:\\$apiBaseUrl has no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Rest.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/Rest.php
 
@@ -27996,16 +27872,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Api_Translations\\:\\:putAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/Translations.php
-
-		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Users.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Users.php
 
 		-
 			message: "#^Call to an undefined method Symfony\\\\Component\\\\Form\\\\FormError\\|Symfony\\\\Component\\\\Form\\\\FormErrorIterator\\:\\:getMessage\\(\\)\\.$#"
@@ -28194,11 +28060,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getSortConditions\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:init\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Application.php
 
@@ -29423,11 +29284,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Banner.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Banner\\:\\:init\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Banner.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Banner\\:\\:initAcl\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Banner.php
@@ -29633,11 +29489,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Base.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Base\\:\\:init\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Base.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Base\\:\\:prepareParam\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Base.php
@@ -29814,11 +29665,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_CSRFToken\\:\\:generateAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CSRFToken.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CSRFToken\\:\\:init\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CSRFToken.php
 
@@ -30178,16 +30024,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Config.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Cannot call method hasIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:beforeSaveElement\\(\\) has parameter \\$elementData with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Config.php
@@ -30363,11 +30199,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Config.php
 
 		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 4
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_CoreLicense\\:\\:checkLicenseAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CoreLicense.php
@@ -30469,11 +30300,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Customer\\:\\:getOrdersAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Customer.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Customer\\:\\:init\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Customer.php
 
@@ -30803,11 +30629,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Document.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:afterImportAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
@@ -31023,66 +30844,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
 		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_EmotionPreset\\:\\:deleteAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_EmotionPreset\\:\\:enrichImagePaths\\(\\) has parameter \\$presets with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_EmotionPreset\\:\\:enrichImagePaths\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_EmotionPreset\\:\\:importAssetAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_EmotionPreset\\:\\:listAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_EmotionPreset\\:\\:loadPresetAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_EmotionPreset\\:\\:previewAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_EmotionPreset\\:\\:saveAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function file_get_contents expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of function pathinfo expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/EmotionPreset.php
-
-		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$feedID\\.$#"
 			count: 2
 			path: engine/Shopware/Controllers/Backend/Export.php
@@ -31133,11 +30894,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/ExtJs.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:addAclPermission\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ExtJs.php
@@ -31154,11 +30910,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:init\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ExtJs.php
 
@@ -31183,11 +30934,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/ExtJs.php
 
 		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Feedback\\:\\:disableInstallationSurveyAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Feedback.php
@@ -31200,11 +30946,6 @@ parameters:
 		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\LocaleStruct\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
-
-		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
 
 		-
@@ -31263,16 +31004,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
 
 		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
-
-		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/FirstRunWizardPluginManager.php
-
-		-
 			message: "#^Cannot call method getName\\(\\) on Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\LocaleStruct\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/FirstRunWizardPluginManager.php
@@ -31309,11 +31040,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_FirstRunWizardPluginManager\\:\\:getRecommendedPluginsAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/FirstRunWizardPluginManager.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/FirstRunWizardPluginManager.php
 
@@ -31508,66 +31234,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Logger.php
 
 		-
-			message: "#^Access to an undefined property object\\:\\:\\$locale\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
-			message: "#^Access to an undefined property object\\:\\:\\$role\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
-			message: "#^Cannot call method clearIdentity\\(\\) on object\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
-			message: "#^Cannot call method hasIdentity\\(\\) on object\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
-			message: "#^Cannot call method refresh\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Login\\:\\:getLocalesAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Login\\:\\:getLoginStatusAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Login\\:\\:init\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Login\\:\\:loginAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Login\\:\\:logoutAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Login\\:\\:validatePasswordAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 4
-			path: engine/Shopware/Controllers/Backend/Login.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Mail\\:\\:addAttachmentAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Mail.php
@@ -31679,11 +31345,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Media\\\\Album\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
@@ -31903,11 +31564,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
 		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
 			message: "#^Argument of an invalid type array\\|true supplied for foreach, only iterables are supported\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
@@ -31920,11 +31576,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Enlight_Plugin_Bootstrap\\:\\:getId\\(\\)\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
-			message: "#^Cannot call method hasIdentity\\(\\) on object\\|null\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
 
 		-
@@ -32120,11 +31771,6 @@ parameters:
 		-
 			message: "#^Parameter \\#4 \\$col of function imagefill expects int, int\\|false given\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
 
 		-
@@ -33068,16 +32714,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/PluginInstaller.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/PluginManager.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/PluginManager.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Premium\\:\\:createPremiumArticleAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Premium.php
@@ -33877,11 +33513,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Translation.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_UpdateWizard\\:\\:handleException\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
@@ -33902,16 +33533,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
 
 		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
-
-		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/UserConfig.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_UserConfig\\:\\:getAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/UserConfig.php
@@ -33919,11 +33540,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_UserConfig\\:\\:saveAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/UserConfig.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Backend/UserConfig.php
 
 		-
@@ -34272,16 +33888,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Widgets.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Cannot call method hasIdentity\\(\\) on object\\|null\\.$#"
-			count: 5
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
 			message: "#^Cannot call method setColumn\\(\\) on Shopware\\\\Models\\\\Widget\\\\View\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Widgets.php
@@ -34399,11 +34005,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, Shopware\\\\Models\\\\Widget\\\\View\\|null given\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 5
 			path: engine/Shopware/Controllers/Backend/Widgets.php
 
 		-
@@ -36037,11 +35638,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Register.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_RobotsTxt\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/RobotsTxt.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Search\\:\\:convertProducts\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Search.php
@@ -36179,11 +35775,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$encoded_string of function parse_str expects string, string\\|false\\|null given\\.$#"
 			count: 2
-			path: engine/Shopware/Controllers/Frontend/Sitemap.php
-
-		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
-			count: 4
 			path: engine/Shopware/Controllers/Frontend/Sitemap.php
 
 		-
@@ -36413,11 +36004,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$template of method Shopware\\\\Components\\\\Theme\\\\Inheritance\\:\\:getSmartyDirectories\\(\\) expects Shopware\\\\Models\\\\Shop\\\\Template, Shopware\\\\Models\\\\Shop\\\\Template\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Listing.php
 
@@ -37301,11 +36887,6 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Cannot call method getName\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Core/sArticles.php
@@ -37717,11 +37298,6 @@ parameters:
 
 		-
 			message: "#^Property sArticles\\:\\:\\$searchService \\(Shopware\\\\Bundle\\\\SearchBundle\\\\ProductSearch\\) does not accept Shopware\\\\Bundle\\\\SearchBundle\\\\VariantSearch\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
 
@@ -38856,11 +38432,6 @@ parameters:
 		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
 			count: 2
-			path: engine/Shopware/Core/sRewriteTable.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on object\\|null\\.$#"
-			count: 1
 			path: engine/Shopware/Core/sRewriteTable.php
 
 		-
@@ -44718,18 +44289,8 @@ parameters:
 			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Order\\\\OrderHistorySubscriber\\:\\:preUpdate\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 3
 			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
 
 		-
@@ -47247,11 +46808,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
 
 		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Backend_SwagUpdate_Bootstrap\\:\\:afterInit\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
@@ -47417,16 +46973,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/FileSystem.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/PluginCheck.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/PluginCheck.php
-
-		-
 			message: "#^Cannot access property \\$sha1 on array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Steps/DownloadStep.php
@@ -47552,11 +47098,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:changelogAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
@@ -47609,11 +47150,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:unpackAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 3
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
 
 		-
@@ -47700,16 +47236,6 @@ parameters:
 			message: "#^Method Shopware_Plugins_Core_ControllerBase_Bootstrap\\:\\:onPostDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/ControllerBase/Bootstrap.php
-
-		-
-			message: "#^Cannot call method hasIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/Cron/Bootstrap.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/Cron/Bootstrap.php
 
 		-
 			message: "#^Call to an undefined method Enlight_Controller_Response_Response\\:\\:setStatusCode\\(\\)\\.$#"
@@ -49320,11 +48846,6 @@ parameters:
 			path: engine/Shopware/Shopware.php
 
 		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
-			count: 1
-			path: engine/Shopware/Shopware.php
-
-		-
 			message: "#^Service \"system\" is not registered in the container\\.$#"
 			count: 1
 			path: engine/Shopware/Shopware.php
@@ -49418,11 +48939,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
 			count: 2
 			path: tests/Functional/Api/GenerateArticleImagesTest.php
-
-		-
-			message: "#^Service \"shop\" is not registered in the container\\.$#"
-			count: 1
-			path: tests/Functional/Api/HttpKernelBrowser.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\ManufacturerTest\\:\\:testPostManufacturersShouldBeSuccessful\\(\\) should return string but returns int\\.$#"
@@ -55060,11 +54576,6 @@ parameters:
 			path: tests/Functional/Controllers/Backend/ConfigGetFormTest.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:checkGetTableListConfigPagination\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/ConfigTest.php
@@ -55131,11 +54642,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\$tableListName of method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:checkGetTableListConfigPagination\\(\\) has invalid typehint type Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\strin\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/ConfigTest.php
 
@@ -55400,11 +54906,6 @@ parameters:
 			path: tests/Functional/Controllers/Backend/OrderTest.php
 
 		-
-			message: "#^Cannot call method getIdentity\\(\\) on object\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:assertElementWithKeyValuePairExists\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/OrderTest.php
@@ -55487,11 +54988,6 @@ parameters:
 		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, array\\|string\\|null given\\.$#"
 			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Service \"auth\" is not registered in the container\\.$#"
-			count: 2
 			path: tests/Functional/Controllers/Backend/OrderTest.php
 
 		-
@@ -56063,31 +55559,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringNotContainsString\\(\\) expects string, array\\|string\\|null given\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Frontend/ListingTest.php
-
-		-
-			message: "#^Method RobotsTxtTest\\:\\:formatRobotsTxt\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/RobotsTxtTest.php
-
-		-
-			message: "#^Method RobotsTxtTest\\:\\:sitemapTest\\(\\) has parameter \\$response with no typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/RobotsTxtTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$url of method Enlight_Components_Test_Controller_TestCase\\:\\:dispatch\\(\\) expects string\\|null, string\\|false\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/RobotsTxtTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, array\\|string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/RobotsTxtTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, array\\|string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/RobotsTxtTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SearchTest\\:\\:searchTermProvider\\(\\) has no return typehint specified\\.$#"

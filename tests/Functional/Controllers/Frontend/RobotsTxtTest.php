@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,25 +25,32 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Controllers\Frontend;
+
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class RobotsTxtTest extends \Enlight_Components_Test_Controller_TestCase
+class RobotsTxtTest extends ControllerTestCase
 {
+    use ContainerTrait;
     use DatabaseTransactionBehaviour;
 
     public function testRobotsTxtTwoShops(): void
     {
-        Shopware()->Db()->query('
-        SET FOREIGN_KEY_CHECKS = 0;
-        DELETE FROM s_core_shops;
-        INSERT INTO s_core_shops (id, name, position, host, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
-        VALUES (1, "Deutsch", 0, ?, "/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
-        INSERT INTO s_core_shops (id, main_id, name, title, position, base_url, hosts, secure, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
-        VALUES (2, 1, "English", "English", 0, "/en", "", 0, 39, 2, 1, 1, 0, 0, 1);
-        SET FOREIGN_KEY_CHECKS = 1;
-        ', [
-            Shopware()->Shop()->getHost(),
-        ]);
+        $this->getContainer()->get(Connection::class)->executeStatement(
+            <<<'SQL'
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM s_core_shops;
+INSERT INTO s_core_shops (id, name, position, host, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (1, "Deutsch", 0, ?, "/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
+INSERT INTO s_core_shops (id, main_id, name, title, position, base_url, hosts, secure, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (2, 1, "English", "English", 0, "/en", "", 0, 39, 2, 1, 1, 0, 0, 1);
+SET FOREIGN_KEY_CHECKS = 1;
+SQL,
+            [$this->getContainer()->get('shop')->getHost()]
+        );
 
         $this->dispatch('/de/robots.txt');
         $robotsTxt = $this->formatRobotsTxt();
@@ -63,20 +73,60 @@ class RobotsTxtTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('Disallow: /en/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /en/ticket/', $robotsTxt);
 
-        $this->sitemapTest($this->Response()->getBody());
+        $this->sitemapTest();
+    }
+
+    public function testRobotsTxtTwoShopsButOneIsInactive(): void
+    {
+        $this->getContainer()->get(Connection::class)->executeStatement(
+            <<<'SQL'
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM s_core_shops;
+INSERT INTO s_core_shops (id, name, position, host, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (1, "Deutsch", 0, ?, "/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
+INSERT INTO s_core_shops (id, main_id, name, title, position, base_url, hosts, secure, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (2, 1, "English", "English", 0, "/en", "", 0, 39, 2, 1, 1, 0, 0, 0);
+SET FOREIGN_KEY_CHECKS = 1;
+SQL,
+            [$this->getContainer()->get('shop')->getHost()]
+        );
+
+        $this->dispatch('/de/robots.txt');
+        $robotsTxt = $this->formatRobotsTxt();
+        static::assertArrayHasKey('Disallow: /de/compare/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/checkout/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/register/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/account/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/address/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/note/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/widgets/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/listing/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/ticket/', $robotsTxt);
+        static::assertArrayNotHasKey('Disallow: /en/compare/', $robotsTxt);
+        static::assertArrayNotHasKey('Disallow: /en/checkout/', $robotsTxt);
+        static::assertArrayNotHasKey('Disallow: /en/register/', $robotsTxt);
+        static::assertArrayNotHasKey('Disallow: /en/account/', $robotsTxt);
+        static::assertArrayNotHasKey('Disallow: /en/address/', $robotsTxt);
+        static::assertArrayNotHasKey('Disallow: /en/note/', $robotsTxt);
+        static::assertArrayNotHasKey('Disallow: /en/widgets/', $robotsTxt);
+        static::assertArrayNotHasKey('Disallow: /en/listing/', $robotsTxt);
+        static::assertArrayNotHasKey('Disallow: /en/ticket/', $robotsTxt);
+
+        $this->sitemapTest();
     }
 
     public function testRobotsTxtOneShop(): void
     {
-        Shopware()->Db()->query('
-        SET FOREIGN_KEY_CHECKS = 0;
-        DELETE FROM s_core_shops;
-        INSERT INTO s_core_shops (id, name, position, host, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
-        VALUES (1, "Deutsch", 0, ?, "/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
-        SET FOREIGN_KEY_CHECKS = 1;
-        ', [
-            Shopware()->Shop()->getHost(),
-        ]);
+        $this->getContainer()->get(Connection::class)->executeStatement(
+            <<<'SQL'
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM s_core_shops;
+INSERT INTO s_core_shops (id, name, position, host, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (1, "Deutsch", 0, ?, "/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
+SET FOREIGN_KEY_CHECKS = 1;
+SQL,
+            [$this->getContainer()->get('shop')->getHost()]
+        );
 
         $this->dispatch('/robots.txt');
 
@@ -92,20 +142,21 @@ class RobotsTxtTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('Disallow: /de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/ticket/', $robotsTxt);
 
-        $this->sitemapTest($this->Response()->getBody());
+        $this->sitemapTest();
     }
 
     public function testRobotsTxtBasePathOneShop(): void
     {
-        Shopware()->Db()->query('
-        SET FOREIGN_KEY_CHECKS = 0;
-        DELETE FROM s_core_shops;
-        INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
-        VALUES (1, "Deutsch", 0, ?, "/foo", "/foo/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
-        SET FOREIGN_KEY_CHECKS = 1;
-        ', [
-            Shopware()->Shop()->getHost(),
-        ]);
+        $this->getContainer()->get(Connection::class)->executeStatement(
+            <<<'SQL'
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM s_core_shops;
+INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (1, "Deutsch", 0, ?, "/foo", "/foo/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
+SET FOREIGN_KEY_CHECKS = 1;
+SQL,
+            [$this->getContainer()->get('shop')->getHost()]
+        );
 
         $this->dispatch('/foo/robots.txt');
 
@@ -121,22 +172,23 @@ class RobotsTxtTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('Disallow: /foo/de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/ticket/', $robotsTxt);
 
-        $this->sitemapTest($this->Response()->getBody());
+        $this->sitemapTest();
     }
 
     public function testRobotsTxtBasePathTwoShops(): void
     {
-        Shopware()->Db()->query('
-        SET FOREIGN_KEY_CHECKS = 0;
-        DELETE FROM s_core_shops;
-        INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
-        VALUES (1, "Deutsch", 0, ?, "/foo", "/foo/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
-        INSERT INTO s_core_shops (id, main_id, name, title, position, base_url, hosts, secure, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
-        VALUES (2, 1, "English", "English", 0, "/en", "", 0, 39, 2, 1, 1, 0, 0, 1);
-        SET FOREIGN_KEY_CHECKS = 1;
-        ', [
-            Shopware()->Shop()->getHost(),
-        ]);
+        $this->getContainer()->get(Connection::class)->executeStatement(
+            <<<'SQL'
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM s_core_shops;
+INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (1, "Deutsch", 0, ?, "/foo", "/foo/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
+INSERT INTO s_core_shops (id, main_id, name, title, position, base_url, hosts, secure, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (2, 1, "English", "English", 0, "/en", "", 0, 39, 2, 1, 1, 0, 0, 1);
+SET FOREIGN_KEY_CHECKS = 1;
+SQL,
+            [$this->getContainer()->get('shop')->getHost()]
+        );
 
         $this->dispatch('/foo/robots.txt');
 
@@ -152,22 +204,23 @@ class RobotsTxtTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('Disallow: /foo/de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/ticket/', $robotsTxt);
 
-        $this->sitemapTest($this->Response()->getBody());
+        $this->sitemapTest();
     }
 
     public function testLanguageShopWithoutVirtualUrl(): void
     {
-        Shopware()->Db()->query('
-        SET FOREIGN_KEY_CHECKS = 0;
-        DELETE FROM s_core_shops;
-        INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
-        VALUES (1, "Deutsch", 0, ?, "/foo", "/foo/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
-        INSERT INTO s_core_shops (id, main_id, name, title, position, base_url, hosts, secure, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
-        VALUES (2, 1, "English", "English", 0, "", "", 0, 39, 2, 1, 1, 0, 0, 1);
-        SET FOREIGN_KEY_CHECKS = 1;
-        ', [
-            Shopware()->Shop()->getHost(),
-        ]);
+        $this->getContainer()->get(Connection::class)->executeStatement(
+            <<<'SQL'
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM s_core_shops;
+INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (1, "Deutsch", 0, ?, "/foo", "/foo/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
+INSERT INTO s_core_shops (id, main_id, name, title, position, base_url, hosts, secure, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (2, 1, "English", "English", 0, "", "", 0, 39, 2, 1, 1, 0, 0, 1);
+SET FOREIGN_KEY_CHECKS = 1;
+SQL,
+            [$this->getContainer()->get('shop')->getHost()]
+        );
 
         $this->dispatch('/foo/robots.txt');
 
@@ -183,20 +236,21 @@ class RobotsTxtTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('Disallow: /foo/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/ticket/', $robotsTxt);
 
-        $this->sitemapTest($this->Response()->getBody());
+        $this->sitemapTest();
     }
 
     public function testMainShopWithPath(): void
     {
-        Shopware()->Db()->query('
-        SET FOREIGN_KEY_CHECKS = 0;
-        DELETE FROM s_core_shops;
-        INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
-        VALUES (1, "Deutsch", 0, ?, "/foo", "", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
-        SET FOREIGN_KEY_CHECKS = 1;
-        ', [
-            Shopware()->Shop()->getHost(),
-        ]);
+        $this->getContainer()->get(Connection::class)->executeStatement(
+            <<<'SQL'
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM s_core_shops;
+INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (1, "Deutsch", 0, ?, "/foo", "", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
+SET FOREIGN_KEY_CHECKS = 1;
+SQL,
+            [$this->getContainer()->get('shop')->getHost()]
+        );
 
         $this->dispatch('/foo/robots.txt');
 
@@ -212,22 +266,23 @@ class RobotsTxtTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('Disallow: /foo/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/ticket/', $robotsTxt);
 
-        $this->sitemapTest($this->Response()->getBody());
+        $this->sitemapTest();
     }
 
     public function testLanguageShopWithVirtualUrlsAndRequestNormalRobotsTxt(): void
     {
-        Shopware()->Db()->query('
-        SET FOREIGN_KEY_CHECKS = 0;
-        DELETE FROM s_core_shops;
-        INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
-        VALUES (1, "Deutsch", 0, ?, "/foo", "/foo/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
-        INSERT INTO s_core_shops (id, main_id, name, title, position, base_url, hosts, secure, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
-        VALUES (2, 1, "English", "English", 0, "", "/foo/en", 0, 39, 2, 1, 1, 0, 0, 1);
-        SET FOREIGN_KEY_CHECKS = 1;
-        ', [
-            Shopware()->Shop()->getHost(),
-        ]);
+        $this->getContainer()->get(Connection::class)->executeStatement(
+            <<<'SQL'
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM s_core_shops;
+INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (1, "Deutsch", 0, ?, "/foo", "/foo/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
+INSERT INTO s_core_shops (id, main_id, name, title, position, base_url, hosts, secure, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+VALUES (2, 1, "English", "English", 0, "", "/foo/en", 0, 39, 2, 1, 1, 0, 0, 1);
+SET FOREIGN_KEY_CHECKS = 1;
+SQL,
+            [$this->getContainer()->get('shop')->getHost()]
+        );
 
         $this->dispatch('/robots.txt');
 
@@ -243,11 +298,14 @@ class RobotsTxtTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('Disallow: /foo/de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/ticket/', $robotsTxt);
 
-        $this->sitemapTest($this->Response()->getBody());
+        $this->sitemapTest();
     }
 
-    public function sitemapTest($response): void
+    public function sitemapTest(): void
     {
+        $response = $this->Response()->getBody();
+        static::assertIsString($response);
+
         $re = '/^\s*Sitemap:\s*(?<url>http.*)$/m';
         preg_match_all($re, $response, $matches, PREG_SET_ORDER, 0);
 
@@ -255,18 +313,28 @@ class RobotsTxtTest extends \Enlight_Components_Test_Controller_TestCase
 
         foreach ($matches as $match) {
             $url = parse_url($match['url'], PHP_URL_PATH);
+            static::assertIsString($url);
 
             $this->reset();
 
             $this->dispatch($url);
 
-            static::assertStringContainsString($expected, $this->Response()->getBody());
+            $response = $this->Response()->getBody();
+            static::assertIsString($response);
+
+            static::assertStringContainsString($expected, $response);
         }
     }
 
+    /**
+     * @return array<string, int>
+     */
     private function formatRobotsTxt(): array
     {
-        $rows = explode("\n", $this->Response()->getBody());
+        $content = $this->Response()->getBody();
+        static::assertIsString($content);
+
+        $rows = explode("\n", $content);
 
         return array_flip(array_filter(array_map('trim', $rows)));
     }
