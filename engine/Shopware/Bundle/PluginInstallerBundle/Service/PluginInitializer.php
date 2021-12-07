@@ -24,28 +24,25 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use Composer\Autoload\ClassLoader;
 use DirectoryIterator;
 use PDO;
 use RuntimeException;
 use Shopware\Components\Plugin;
-use Symfony\Component\ClassLoader\Psr4ClassLoader;
 
 class PluginInitializer
 {
-    /**
-     * @var PDO
-     */
-    private $connection;
+    private PDO $connection;
 
     /**
      * @var string[]
      */
-    private $pluginDirectories;
+    private array $pluginDirectories;
 
     /**
-     * @var array[]
+     * @var array<string, string>
      */
-    private $activePlugins = [];
+    private array $activePlugins = [];
 
     /**
      * @var callable|null
@@ -74,17 +71,20 @@ class PluginInitializer
         $shopwarePlugins = [];
         $pluginsAvailable = [];
 
-        // @todo: Replace me in Shopware 5.7
-        $classLoader = new Psr4ClassLoader();
+        $classLoader = new ClassLoader();
         $classLoader->register(true);
 
-        // Clearing the deprecation notice in the error stack from the deprecated classloader above
-        error_clear_last();
-
         $stmt = $this->connection->query('SELECT `name`, `version`, `namespace` FROM s_core_plugins WHERE `active` = 1 AND `installation_date` IS NOT NULL;');
-        $this->activePlugins = $stmt->fetchAll(PDO::FETCH_UNIQUE);
+        if ($stmt === false) {
+            throw new RuntimeException('Could not load plugins from database');
+        }
 
-        foreach ($this->activePlugins as $pluginName => &$pluginData) {
+        $activePlugins = $stmt->fetchAll(PDO::FETCH_UNIQUE);
+        if (!\is_array($activePlugins)) {
+            throw new RuntimeException('Could not load plugins from database');
+        }
+
+        foreach ($activePlugins as $pluginName => &$pluginData) {
             if (\in_array($pluginData['namespace'], ['ShopwarePlugins', 'ProjectPlugins'], true)) {
                 $shopwarePlugins[] = $pluginName;
             }
@@ -92,10 +92,12 @@ class PluginInitializer
         }
         unset($pluginData);
 
-        // As first we register all plugin namespaces, to make sure to all namespaces are available on plugin construction
+        $this->activePlugins = $activePlugins;
+
+        // At first, we register all plugin namespaces, to make sure to all namespaces are available on plugin construction
         foreach ($this->pluginDirectories as $pluginNamespace => $pluginDirectory) {
             foreach (new DirectoryIterator($pluginDirectory) as $pluginDir) {
-                if ($pluginDir->isFile() || strpos($pluginDir->getBasename(), '.') === 0) {
+                if ($pluginDir->isFile() || str_starts_with($pluginDir->getBasename(), '.')) {
                     continue;
                 }
 
@@ -105,7 +107,7 @@ class PluginInitializer
                     continue;
                 }
 
-                $classLoader->addPrefix($pluginName, $pluginDir->getPathname());
+                $classLoader->addPsr4($pluginName . '\\', $pluginDir->getPathname());
 
                 $pluginsAvailable[$pluginName] = [
                     'className' => '\\' . $pluginName . '\\' . $pluginName,
@@ -121,7 +123,6 @@ class PluginInitializer
                 throw new RuntimeException(sprintf('Unable to load class %s for plugin %s in file %s', $pluginDetails['className'], $pluginName, $pluginDetails['pluginFile']));
             }
 
-            /** @var Plugin $plugin */
             $plugin = new $pluginDetails['className']($pluginDetails['isActive'], $pluginDetails['pluginNamespace']);
 
             if (!$plugin instanceof Plugin) {
@@ -137,7 +138,7 @@ class PluginInitializer
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
     public function getActivePlugins()
     {
@@ -147,7 +148,7 @@ class PluginInitializer
     /**
      * This early error handler help us to avoid plugin warnings, which still use old registerCommands method in Plugin.
      *
-     * @deprecated Remove with Shopware 5.7
+     * @deprecated Remove with Shopware 5.8
      *
      * @return mixed|void
      */

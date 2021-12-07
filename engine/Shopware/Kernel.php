@@ -130,7 +130,7 @@ class Kernel extends SymfonyKernel
     protected $container;
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private $activePlugins = [];
 

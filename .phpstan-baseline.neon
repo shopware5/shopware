@@ -9926,26 +9926,6 @@ parameters:
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginExtractor.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInitializer.php
-
-		-
-			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInitializer.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInitializer\\:\\:getActivePlugins\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInitializer.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInitializer\\:\\:\\$activePlugins \\(array\\<array\\>\\) does not accept array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInitializer.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:installCronjob\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
@@ -61709,11 +61689,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\Strategy\\\\PlainStrategyTest\\:\\:testNotEncodedPath\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/MediaBundle/Strategy/PlainStrategyTest.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstallerTest\\:\\:testRefreshPluginList\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/PluginInstallerBundle/PluginInstallerTest.php
 
 		-
 			message: "#^Method UniqueIdGeneratorTest\\:\\:testReturnUniqueIdFromDb\\(\\) has no return typehint specified\\.$#"

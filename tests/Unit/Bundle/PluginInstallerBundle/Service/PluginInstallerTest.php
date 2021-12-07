@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\PluginInstallerBundle\Service;
+namespace Shopware\Tests\Unit\Bundle\PluginInstallerBundle\Service;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
@@ -31,6 +33,7 @@ use Enlight_Event_EventManager;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Shopware\Bundle\PluginInstallerBundle\Service\PluginInstaller;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\RequirementValidator;
 use Shopware\Components\ShopwareReleaseStruct;
@@ -39,7 +42,7 @@ use Shopware\Kernel;
 
 class PluginInstallerTest extends TestCase
 {
-    public function testRefreshPluginList()
+    public function testRefreshPluginList(): void
     {
         $dateTime = new DateTimeImmutable();
 
@@ -89,7 +92,7 @@ class PluginInstallerTest extends TestCase
             $requirementValidator,
             $pdo,
             new Enlight_Event_EventManager(),
-            ['ShopwarePlugins' => __DIR__ . '/Fixtures'],
+            ['ShopwarePlugins' => __DIR__ . '/../Fixtures'],
             new ShopwareReleaseStruct($releaseArray['version'], $releaseArray['version_text'], $releaseArray['revision']),
             new NullLogger(),
             $kernel
