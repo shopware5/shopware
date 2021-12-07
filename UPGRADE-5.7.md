@@ -42,6 +42,8 @@ Use `TaxAggregator::taxSum` instead.
 
 ### Removals
 
+* Removed deprecated composer dependency `symfony/class-loader`. Use Composer ClassLoader instead
+
 ## 5.7.6
 
 [View all changes from v5.7.5...v5.7.6](https://github.com/shopware/shopware/compare/v5.7.5...v5.7.6)
