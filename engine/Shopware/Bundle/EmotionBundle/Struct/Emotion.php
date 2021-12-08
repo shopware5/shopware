@@ -28,9 +28,12 @@ use DateTimeInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class Emotion extends Extendable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var int
      */
@@ -698,13 +701,5 @@ class Emotion extends Extendable
     public function setPreviewSecret($previewSecret)
     {
         $this->previewSecret = $previewSecret;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

@@ -25,9 +25,12 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class PictureStruct implements JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var int
      */
@@ -89,13 +92,5 @@ class PictureStruct implements JsonSerializable
     public function setCover($cover)
     {
         $this->cover = $cover;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

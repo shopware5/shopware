@@ -64,18 +64,18 @@ class StockServiceTest extends TestCase
         $sql = 'SELECT * FROM s_order WHERE id = :orderId';
         $result = $modelManager->getConnection()->executeQuery($sql, ['orderId' => $order->getId()])->fetch();
 
-        static::assertSame('1', $result['userID']);
-        static::assertSame('131.81', $result['invoice_amount']);
-        static::assertSame('110.76', $result['invoice_amount_net']);
-        static::assertSame('2.8', $result['invoice_shipping']);
-        static::assertSame('2.35', $result['invoice_shipping_net']);
-        static::assertSame('19', $result['invoice_shipping_tax_rate']);
-        static::assertSame('4', $result['paymentID']);
-        static::assertSame('1', $result['language']);
-        static::assertSame('9', $result['dispatchID']);
+        static::assertSame(1, (int) $result['userID']);
+        static::assertSame(131.81, (float) $result['invoice_amount']);
+        static::assertSame(110.76, (float) $result['invoice_amount_net']);
+        static::assertSame(2.8, (float) $result['invoice_shipping']);
+        static::assertSame(2.35, (float) $result['invoice_shipping_net']);
+        static::assertSame(19.0, (float) $result['invoice_shipping_tax_rate']);
+        static::assertSame(4, (int) $result['paymentID']);
+        static::assertSame(1, (int) $result['language']);
+        static::assertSame(9, (int) $result['dispatchID']);
         static::assertSame('EUR', $result['currency']);
-        static::assertSame('1', $result['currencyFactor']);
-        static::assertSame('1', $result['subshopID']);
+        static::assertSame(1.0, (float) $result['currencyFactor']);
+        static::assertSame(1, (int) $result['subshopID']);
         static::assertSame('Backend', $result['deviceType']);
     }
 

@@ -99,42 +99,62 @@ class Attribute extends Struct implements JsonSerializable, ArrayAccess
     }
 
     /**
-     * {@inheritdoc}
+     * @return array<string, mixed>
+     *
+     * @deprecated - Native return type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->storage;
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed $offset attribute name
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return $this->exists($offset);
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed $offset attribute name
+     *
+     * @return mixed attribute value
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->get($offset);
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed $offset attribute name
+     * @param mixed $value  attribute value
      *
-     * @throws InvalidArgumentException
+     * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->set($offset, $value);
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed $offset attribute name
+     *
+     * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         if ($this->exists($offset)) {

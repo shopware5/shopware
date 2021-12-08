@@ -212,12 +212,4 @@ class ShopContext extends Extendable implements ShopContextInterface, ProductCon
     {
         return $this->customerStreamIds;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

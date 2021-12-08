@@ -24,6 +24,9 @@
 
 namespace Shopware\Components\BasketSignature;
 
+/**
+ * @phpstan-import-type CheckoutBasketArray from \Shopware_Controllers_Frontend_Checkout
+ */
 interface BasketSignatureGeneratorInterface
 {
     /**
@@ -31,7 +34,10 @@ interface BasketSignatureGeneratorInterface
      * Signature can be used to verify if basket content changed between
      * payment process and checkout finish.
      *
-     * @param int $customerId
+     * @phpstan-param CheckoutBasketArray $basket
+     *
+     * @param array<string, mixed> $basket
+     * @param int                  $customerId
      *
      * @return string
      */

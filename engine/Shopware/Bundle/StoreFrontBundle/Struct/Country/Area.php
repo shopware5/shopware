@@ -69,12 +69,4 @@ class Area extends Extendable
     {
         return $this->name;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

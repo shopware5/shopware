@@ -331,6 +331,9 @@ class Product extends ListProduct
         $this->hasStock = $hasStock;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function jsonSerialize(): array
     {
         $data = parent::jsonSerialize();

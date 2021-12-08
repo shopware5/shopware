@@ -137,12 +137,4 @@ class Group extends Extendable
     {
         $this->selected = $selected;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

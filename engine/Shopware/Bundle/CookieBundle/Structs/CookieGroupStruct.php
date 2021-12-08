@@ -28,9 +28,12 @@ namespace Shopware\Bundle\CookieBundle\Structs;
 
 use JsonSerializable;
 use Shopware\Bundle\CookieBundle\CookieCollection;
+use Shopware\Components\ObjectJsonSerializeTrait;
 
 class CookieGroupStruct implements JsonSerializable
 {
+    use ObjectJsonSerializeTrait;
+
     public const TECHNICAL = 'technical';
     public const COMFORT = 'comfort';
     public const PERSONALIZATION = 'personalization';
@@ -116,10 +119,5 @@ class CookieGroupStruct implements JsonSerializable
     public function addCookie(CookieStruct $cookieStruct): void
     {
         $this->cookies->add($cookieStruct);
-    }
-
-    public function jsonSerialize(): array
-    {
-        return get_object_vars($this);
     }
 }

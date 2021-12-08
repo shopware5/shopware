@@ -192,8 +192,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @deprecated in 5.6, will be private in 5.8
-     *
      * Returns listing breadcrumb
      *
      * @param int $categoryId
@@ -206,8 +204,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     public function getBreadcrumb($categoryId)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $breadcrumb = Shopware()->Modules()->Categories()->sGetCategoriesByParent($categoryId);
 
         return array_reverse($breadcrumb);

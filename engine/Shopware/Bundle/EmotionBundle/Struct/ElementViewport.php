@@ -25,9 +25,12 @@
 namespace Shopware\Bundle\EmotionBundle\Struct;
 
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class ElementViewport implements JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var int
      */
@@ -215,13 +218,5 @@ class ElementViewport implements JsonSerializable
     public function setVisible($visible)
     {
         $this->visible = $visible;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

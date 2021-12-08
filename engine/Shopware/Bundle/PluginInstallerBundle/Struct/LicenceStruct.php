@@ -26,9 +26,12 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 use DateTimeInterface;
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class LicenceStruct implements JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var string
      */
@@ -215,14 +218,6 @@ class LicenceStruct implements JsonSerializable
     public function setPriceModel($priceModel)
     {
         $this->priceModel = $priceModel;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 
     /**

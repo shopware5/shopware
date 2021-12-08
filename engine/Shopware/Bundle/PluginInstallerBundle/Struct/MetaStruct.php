@@ -25,9 +25,12 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class MetaStruct implements JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var string
      */
@@ -121,10 +124,5 @@ class MetaStruct implements JsonSerializable
     public function getTechnicalName()
     {
         return $this->technicalName;
-    }
-
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

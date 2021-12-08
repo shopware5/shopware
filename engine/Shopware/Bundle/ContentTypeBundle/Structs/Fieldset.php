@@ -25,9 +25,12 @@
 namespace Shopware\Bundle\ContentTypeBundle\Structs;
 
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTrait;
 
 class Fieldset implements JsonSerializable
 {
+    use ObjectJsonSerializeTrait;
+
     /**
      * @var string|null
      */
@@ -80,10 +83,5 @@ class Fieldset implements JsonSerializable
         $this->options = $options;
 
         return $this;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return get_object_vars($this);
     }
 }

@@ -90,12 +90,4 @@ class VoteAverage extends Extendable
     {
         $this->pointCount = $pointCount;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

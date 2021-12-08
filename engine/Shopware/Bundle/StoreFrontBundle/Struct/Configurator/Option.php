@@ -133,12 +133,4 @@ class Option extends Extendable
     {
         $this->active = $active;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

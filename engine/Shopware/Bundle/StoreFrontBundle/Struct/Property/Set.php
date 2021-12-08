@@ -163,12 +163,4 @@ class Set extends Extendable
     {
         return $this->comparable;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

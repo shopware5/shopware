@@ -49,7 +49,10 @@ abstract class Adapter implements SeekableIterator, Countable
 
     /**
      * @return int
+     *
+     * @deprecated - Native return type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->count;

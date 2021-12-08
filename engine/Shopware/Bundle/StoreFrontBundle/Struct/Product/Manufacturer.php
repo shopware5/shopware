@@ -291,12 +291,4 @@ class Manufacturer extends Extendable
 
         return $this;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

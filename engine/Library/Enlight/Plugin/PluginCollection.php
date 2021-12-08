@@ -34,7 +34,7 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
     /**
      * Property which contains all registered plugins.
      *
-     * @var ArrayObject
+     * @var ArrayObject<array-key, Enlight_Plugin_Bootstrap|Enlight_Plugin_Namespace>
      */
     protected $plugins;
 
@@ -53,7 +53,7 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
      * @param string     $name
      * @param array|null $args
      *
-     * @return \Enlight_Plugin_Bootstrap|\Enlight_Plugin_Namespace
+     * @return Enlight_Plugin_Bootstrap|Enlight_Plugin_Namespace
      */
     public function __call($name, $args = null)
     {
@@ -72,7 +72,7 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
      * set into the plugin by using the Enlight_Plugin_Bootstrap::setCollection() method.
      * The name of the plugin is used as array key.
      *
-     * @return Enlight_Plugin_PluginManager
+     * @return Enlight_Plugin_PluginCollection
      */
     public function registerPlugin(Enlight_Plugin_Bootstrap $plugin)
     {
@@ -85,8 +85,11 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
     /**
      * Getter method for the plugin list.
      *
-     * @return ArrayObject
+     * @return Traversable<Enlight_Plugin_Bootstrap|Enlight_Plugin_Namespace>
+     *
+     * @deprecated - Native return type will be added with Shopware 5.8
      */
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         return $this->plugins;
@@ -99,7 +102,7 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
      * @param string $name
      * @param bool   $throwException
      *
-     * @return \Enlight_Plugin_Bootstrap|\Enlight_Plugin_Namespace|null
+     * @return Enlight_Plugin_Bootstrap|Enlight_Plugin_Namespace|null
      */
     public function get($name, $throwException = false)
     {
@@ -132,7 +135,7 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
     /**
      * Removes all stored plugins.
      *
-     * @return Enlight_Plugin_PluginManager
+     * @return Enlight_Plugin_PluginCollection
      */
     public function reset()
     {

@@ -245,12 +245,4 @@ class Group extends Extendable
     {
         $this->minimumOrderValue = $minimumOrderValue;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

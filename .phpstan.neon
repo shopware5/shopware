@@ -77,11 +77,6 @@ parameters:
                 - engine/Shopware/Controllers/Backend/Search.php
 
         # Some day this should be specified
-        - '#no value type specified in iterable type Enlight_Components_Snippet_Namespace#'
-        - '#no value type specified in iterable type Enlight_Config#'
-        - '#no value type specified in iterable type Enlight_Plugin_PluginCollection#'
-        - '#no value type specified in iterable type Enlight_Plugin_PluginManager#'
-        - '#no value type specified in iterable type Enlight_Event_EventArgs#'
         - '#no value type specified in iterable type Doctrine\\#'
 
         # This method does not exists, but it does not throw an error. Needs to be checked
@@ -137,3 +132,7 @@ parameters:
         -
             message: '#Parameter \#1 \$sorting of method Shopware\\Bundle\\CustomerSearchBundleDBAL\\SortingHandler\\.*SortingHandler::addSorting\(\) expects Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\.*Sorting, Shopware\\Bundle\\SearchBundle\\SortingInterface given#'
             path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler
+
+        - # For testing it is not necessary to declare the whole basket array correctly
+            message: '#Parameter \#1 \$basket of method Shopware\\Components\\BasketSignature\\BasketSignatureGenerator::generateSignature\(\) expects array.*, array.* given#'
+            path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php

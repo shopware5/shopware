@@ -70,8 +70,8 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
     {
         $this->dispatch(sprintf('search?sSearch=%s', $term));
 
-        static::assertStringContainsString($filtered, $this->Response()->getBody());
-        static::assertStringNotContainsString($term, $this->Response()->getBody());
+        static::assertStringContainsString($filtered, $this->Response()->getBody(), sprintf('Expected filtered term "%s" not found on search page', $filtered));
+        static::assertStringNotContainsString($term, $this->Response()->getBody(), sprintf('Malicious term "%s" found on search page', $term));
     }
 
     public function searchTermProvider()
@@ -82,11 +82,14 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
             ['<tags></tags>', htmlentities(strip_tags('<tags></tags>'))],
             ['<tag/>', htmlentities(strip_tags('<tag/>'))],
             ['&#x3c;tag>', htmlentities(strip_tags('Suchergebnisse | Shopware Demo'))], // This is stripped completely
-            ["<script>
+            [
+                "<script>
 x='<%'
 </script> %>/
 alert(2)
-</script>", "r _x='"],
+</script>",
+                'r _x=',
+            ],
         ];
     }
 

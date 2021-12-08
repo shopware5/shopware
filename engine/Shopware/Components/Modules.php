@@ -78,32 +78,51 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     }
 
     /**
-     * @param string $offset
+     * @param string|mixed $offset module name
+     * @param mixed        $value  module
+     *
+     * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
     }
 
     /**
-     * @param string $offset
+     * @param string|mixed $offset module name
      *
      * @return bool
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return (bool) $this->getModule($offset);
     }
 
     /**
-     * @param string $offset
+     * @param string|mixed $offset module name
+     *
+     * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
     }
 
     /**
-     * @param string $offset
+     * @param string|mixed $offset module name
+     *
+     * @return mixed module
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->getModule($offset);

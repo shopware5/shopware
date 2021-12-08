@@ -22,40 +22,21 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle\Condition;
-
-use Assert\Assertion;
-use JsonSerializable;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
+namespace Shopware\Components;
 
 /**
- * @deprecated in 5.6, will be removed in 5.8, without replacement
+ * @deprecated - With Shopware 5.8 all occurrences of this trait will be replaced with `Shopware\Components\ObjectJsonSerializeTrait`
  */
-class SimpleCondition implements ConditionInterface, JsonSerializable
+trait ObjectJsonSerializeTraitDeprecated
 {
-    use ObjectJsonSerializeTraitDeprecated;
-
     /**
-     * @var string
+     * @return array<string, mixed>
+     *
+     * @deprecated - Native return type will be added with Shopware 5.8
      */
-    protected $name;
-
-    /**
-     * @param string $name
-     */
-    public function __construct($name)
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
     {
-        Assertion::string($name);
-        Assertion::notEmpty($name);
-        $this->name = $name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return $this->name;
+        return get_object_vars($this);
     }
 }

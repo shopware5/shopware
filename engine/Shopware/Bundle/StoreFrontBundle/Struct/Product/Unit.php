@@ -255,12 +255,4 @@ class Unit extends Extendable
     {
         return $this->purchaseStep;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

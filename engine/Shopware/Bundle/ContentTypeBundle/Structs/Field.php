@@ -267,6 +267,9 @@ class Field implements JsonSerializable
         return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function jsonSerialize(): array
     {
         $vars = get_object_vars($this);

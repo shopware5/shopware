@@ -51,7 +51,7 @@ class State extends Extendable
     /**
      * @var bool
      */
-    private $active;
+    protected $active;
 
     /**
      * @param int $id
@@ -99,14 +99,6 @@ class State extends Extendable
     public function setCode($code)
     {
         $this->code = $code;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 
     /**

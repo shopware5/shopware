@@ -26,9 +26,12 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 use DateTimeInterface;
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class PluginStruct implements JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var int
      *
@@ -381,14 +384,6 @@ class PluginStruct implements JsonSerializable
     public function setInstallationManual($installationManual)
     {
         $this->installationManual = $installationManual;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 
     /**

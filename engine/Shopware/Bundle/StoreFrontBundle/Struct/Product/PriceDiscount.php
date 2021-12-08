@@ -112,12 +112,4 @@ class PriceDiscount extends Extendable
     {
         return $this->percent;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

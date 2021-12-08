@@ -26,9 +26,12 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 
 use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class HeightCondition implements ConditionInterface, JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     private const NAME = 'height';
 
     /**
@@ -70,13 +73,5 @@ class HeightCondition implements ConditionInterface, JsonSerializable
     public function getMaxHeight()
     {
         return $this->maxHeight;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

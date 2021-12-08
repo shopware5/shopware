@@ -57,7 +57,7 @@ class CountryTest extends Enlight_Components_Test_Controller_TestCase
             // allow_shipping not set intentionally
         ]);
 
-        $id = $connection->lastInsertId();
+        $id = (int) $connection->lastInsertId();
 
         $statement = $connection->prepare('SELECT * FROM `s_core_countries` WHERE id = :id');
         $statement->execute([
@@ -71,7 +71,7 @@ class CountryTest extends Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('iso3', $result[0]);
         static::assertArrayHasKey('active', $result[0]);
         static::assertArrayHasKey('allow_shipping', $result[0]);
-        static::assertSame($id, $result[0]['id']);
+        static::assertSame($id, (int) $result[0]['id']);
         static::assertSame('Test Country', $result[0]['countryname']);
         static::assertSame('TS', $result[0]['countryiso']);
         static::assertSame('TST', $result[0]['iso3']);

@@ -25,9 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct\Product;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class MarketingAttribute extends Attribute
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var bool
      */
@@ -89,13 +92,5 @@ class MarketingAttribute extends Attribute
     public function isTopSeller()
     {
         return $this->isTopSeller;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

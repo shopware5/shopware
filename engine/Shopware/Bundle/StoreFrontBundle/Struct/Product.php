@@ -272,12 +272,4 @@ class Product extends ListProduct
 
         return $selection;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

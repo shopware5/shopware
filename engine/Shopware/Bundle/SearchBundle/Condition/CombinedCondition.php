@@ -26,9 +26,12 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 
 use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class CombinedCondition implements ConditionInterface, JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var ConditionInterface[]
      */
@@ -60,13 +63,5 @@ class CombinedCondition implements ConditionInterface, JsonSerializable
     public function getConditions()
     {
         return $this->conditions;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

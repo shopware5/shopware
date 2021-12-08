@@ -33,14 +33,14 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
     /**
      * This property contains all added elements.
      *
-     * @var array
+     * @var array<mixed>
      */
     protected $_elements;
 
     /**
      * Expects an array as a parameter with default elements.
      *
-     * @param array $elements
+     * @param array<mixed> $elements
      */
     public function __construct($elements = [])
     {
@@ -122,7 +122,10 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Counts the stored items.
      *
      * @return int
+     *
+     * @deprecated - Native return type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return \count($this->_elements);
@@ -146,10 +149,12 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Returns a value of an element in the list.
      *
      * @param string $key
+     *
+     * @return mixed|null
      */
     public function get($key)
     {
-        return isset($this->_elements[$key]) ? $this->_elements[$key] : null;
+        return $this->_elements[$key] ?? null;
     }
 
     /**
@@ -181,10 +186,13 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
     /**
      * Checks whether an element with a given name is stored.
      *
-     * @param string $key
+     * @param string|mixed $key to check
      *
      * @return bool
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return $this->containsKey($key);
@@ -193,8 +201,13 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
     /**
      * Deletes an item from the list.
      *
-     * @param unknown_type $key
+     * @param string|mixed $key to unset
+     *
+     * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         $this->remove($key);
@@ -203,8 +216,13 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
     /**
      * Returns a value of an element in the list.
      *
-     * @param string $key
+     * @param string|mixed $key to get
+     *
+     * @return mixed value to get
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return $this->get($key);
@@ -213,8 +231,14 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
     /**
      * Sets a value of an element in the list.
      *
-     * @param string $key
+     * @param string|mixed $key   to set
+     * @param mixed        $value to set
+     *
+     * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         $this->set($key, $value);
@@ -223,8 +247,11 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
     /**
      * Returns the iterator instance for the list.
      *
-     * @return Iterator
+     * @return Traversable<mixed>
+     *
+     * @deprecated - Native return type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $ref = &$this->_elements;

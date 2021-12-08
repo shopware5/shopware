@@ -1034,11 +1034,11 @@ SQL;
      * Get productId of all products from cart
      * Used in CheckoutController
      *
-     * @return array|null List of product ids in current basket, or null if none
+     * @return array<int>|null List of product ids in current basket, or null if none
      */
     public function sGetBasketIds()
     {
-        $products = $this->db->fetchCol(
+        $productIds = $this->db->fetchCol(
             'SELECT DISTINCT articleID
                 FROM s_order_basket
                 WHERE sessionID = ?
@@ -1046,8 +1046,13 @@ SQL;
                 ORDER BY modus ASC, datum DESC',
             [$this->session->get('sessionId')]
         );
+        if (empty($productIds)) {
+            return null;
+        }
 
-        return empty($products) ? null : $products;
+        return array_map(static function ($productId) {
+            return (int) $productId;
+        }, $productIds);
     }
 
     /**

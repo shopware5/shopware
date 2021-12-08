@@ -25,9 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 abstract class Extendable extends Struct implements JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * Contains an array of attribute structs.
      *
@@ -91,13 +94,5 @@ abstract class Extendable extends Struct implements JsonSerializable
     public function getAttributes()
     {
         return $this->attributes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

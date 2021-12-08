@@ -112,12 +112,4 @@ class Esd extends Extendable
     {
         return $this->createdAt;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }
