@@ -28,7 +28,6 @@ use DateInterval;
 use DateTime;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase;
-use Enlight_Plugin_Bootstrap;
 use Enlight_Plugin_Namespace;
 use Enlight_Plugin_PluginManager;
 use Enlight_View;
@@ -50,9 +49,6 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
     private string $userId;
 
-    /**
-     * @var Enlight_Plugin_PluginManager<Enlight_Plugin_Bootstrap>
-     */
     private Enlight_Plugin_PluginManager $pluginManager;
 
     private Shopware_Plugins_Backend_Auth_Bootstrap $authPlugin;

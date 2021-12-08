@@ -133,6 +133,14 @@ PHP 8.0:
         -   name: mysql:5.7
             alias: mysql
 
+PHP 8.1:
+    extends: .phpunit_base
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.1
+    stage: Unit
+    services:
+        -   name: mysql:5.7
+            alias: mysql
+
 MySQL 5.7:
     extends: .phpunit_base
     stage: Unit

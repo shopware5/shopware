@@ -27,9 +27,12 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Assert\Assertion;
 use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class CustomerGroupCondition implements ConditionInterface, JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     private const NAME = 'customer_group';
 
     /**
@@ -61,13 +64,5 @@ class CustomerGroupCondition implements ConditionInterface, JsonSerializable
     public function getCustomerGroupIds()
     {
         return $this->customerGroupIds;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

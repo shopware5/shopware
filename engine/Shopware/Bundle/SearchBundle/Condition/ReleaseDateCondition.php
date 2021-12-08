@@ -27,9 +27,12 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Assert\Assertion;
 use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class ReleaseDateCondition implements ConditionInterface, JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     public const DIRECTION_PAST = 'past';
     public const DIRECTION_FUTURE = 'future';
     private const NAME = 'release_date_condition';
@@ -80,13 +83,5 @@ class ReleaseDateCondition implements ConditionInterface, JsonSerializable
     public function getDays()
     {
         return $this->days;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

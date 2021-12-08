@@ -168,12 +168,4 @@ class Price extends Extendable
     {
         return $this->rule->getTo();
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

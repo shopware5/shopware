@@ -25,12 +25,15 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 /**
- * @deprecated in 5.6, will be removed in 5.7 without replacement
+ * @deprecated in 5.6, will be removed in 5.8 without replacement
  */
 class SubscriptionStateStruct implements JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var bool
      */
@@ -59,7 +62,7 @@ class SubscriptionStateStruct implements JsonSerializable
      */
     public function __construct($isShopUpgraded, $notUpgradedPlugins, $wrongVersionPlugins, $expiredPluginSubscriptions)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         $this->isShopUpgraded = $isShopUpgraded;
         $this->notUpgradedPlugins = $notUpgradedPlugins;
@@ -68,21 +71,11 @@ class SubscriptionStateStruct implements JsonSerializable
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
-        return get_object_vars($this);
-    }
-
-    /**
      * @return bool
      */
     public function getIsShopUpgraded()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         return $this->isShopUpgraded;
     }
@@ -92,7 +85,7 @@ class SubscriptionStateStruct implements JsonSerializable
      */
     public function getNotUpgradedPlugins()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         return $this->notUpgradedPlugins;
     }
@@ -102,7 +95,7 @@ class SubscriptionStateStruct implements JsonSerializable
      */
     public function getWrongVersionPlugins()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         return $this->wrongVersionPlugins;
     }
@@ -112,7 +105,7 @@ class SubscriptionStateStruct implements JsonSerializable
      */
     public function getExpiredPluginSubscriptions()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         return $this->expiredPluginSubscriptions;
     }

@@ -1053,14 +1053,6 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
-
-    /**
      * @return VoteAverage|null
      */
     public function getVoteAverage()

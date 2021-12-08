@@ -25,9 +25,12 @@
 namespace Shopware\Components\Theme;
 
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class Configuration implements JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var string[]
      */
@@ -122,13 +125,5 @@ class Configuration implements JsonSerializable
     public function getInheritancePath()
     {
         return $this->inheritancePath;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

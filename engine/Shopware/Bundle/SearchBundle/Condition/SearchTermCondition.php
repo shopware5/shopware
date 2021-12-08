@@ -27,9 +27,12 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Assert\Assertion;
 use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class SearchTermCondition implements ConditionInterface, JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     private const NAME = 'search';
 
     /**
@@ -60,13 +63,5 @@ class SearchTermCondition implements ConditionInterface, JsonSerializable
     public function getTerm()
     {
         return $this->term;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

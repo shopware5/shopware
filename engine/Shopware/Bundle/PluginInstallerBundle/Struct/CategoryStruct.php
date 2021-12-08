@@ -25,9 +25,12 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class CategoryStruct implements JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var int
      */
@@ -110,13 +113,5 @@ class CategoryStruct implements JsonSerializable
     public function setChildren($children)
     {
         $this->children = $children;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

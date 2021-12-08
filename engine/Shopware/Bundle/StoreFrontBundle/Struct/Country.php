@@ -106,7 +106,7 @@ class Country extends Extendable
     /**
      * @var int
      */
-    private $areaId;
+    protected $areaId;
 
     /**
      * @param int $id
@@ -298,14 +298,6 @@ class Country extends Extendable
     public function allowShipping()
     {
         return $this->allowShipping;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 
     /**

@@ -27,9 +27,12 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Assert\Assertion;
 use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class PropertyCondition implements ConditionInterface, JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * Each value id is combined via OR expression to restrict the criteria.
      *
@@ -61,13 +64,5 @@ class PropertyCondition implements ConditionInterface, JsonSerializable
     public function getValueIds()
     {
         return $this->valueIds;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

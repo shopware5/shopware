@@ -68,14 +68,6 @@ class ProductSearchResult extends ProductNumberSearchResult
         return $this->products;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
-
     public function getContext()
     {
         return $this->context;

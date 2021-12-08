@@ -184,8 +184,13 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
-     * @param string $name
+     * @param string|mixed $name config name
+     *
+     * @return mixed config value
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($name)
     {
         if (!isset($this->_data[$name])) {
@@ -200,18 +205,26 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
-     * @param string $name
+     * @param string|mixed $name config name
+     *
+     * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($name)
     {
         $this->_data[$name] = null;
     }
 
     /**
-     * @param string $name
+     * @param string|mixed $name config name
      *
      * @return bool
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($name)
     {
         if (!isset($this->_data[$name])) {
@@ -224,8 +237,13 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
-     * @param string $name
+     * @param string|mixed $name  config name
+     * @param mixed        $value config value
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
+     * @deprecated - Will not return anything anymore with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($name, $value)
     {
         $baseName = $this->formatName($name);

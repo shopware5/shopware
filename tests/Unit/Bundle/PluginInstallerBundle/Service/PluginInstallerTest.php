@@ -28,9 +28,9 @@ namespace Shopware\Tests\Unit\Bundle\PluginInstallerBundle\Service;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Statement;
 use Enlight_Event_EventManager;
 use PDO;
+use PDOStatement;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInstaller;
@@ -77,7 +77,7 @@ class PluginInstallerTest extends TestCase
         $databaseHandler = $this->createMock(DatabaseHandler::class);
         $requirementValidator = $this->createMock(RequirementValidator::class);
 
-        $statement = $this->createMock(Statement::class);
+        $statement = $this->createMock(PDOStatement::class);
         $statement->expects(static::once())->method('fetchAll')->willReturn([]);
 
         $pdo = $this->createMock(PDO::class);

@@ -94,12 +94,4 @@ class Tax extends Extendable
     {
         return $this->tax;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

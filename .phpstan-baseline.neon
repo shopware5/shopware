@@ -91,11 +91,6 @@ parameters:
 			path: engine/Library/Enlight/Collection/ArrayCollection.php
 
 		-
-			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:__construct\\(\\) has parameter \\$elements with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
 			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:__get\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Collection/ArrayCollection.php
@@ -111,52 +106,7 @@ parameters:
 			path: engine/Library/Enlight/Collection/ArrayCollection.php
 
 		-
-			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:get\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
-			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Iterator\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
-			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:offsetGet\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
-			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:offsetSet\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
-			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:remove\\(\\) return type has no value type specified in iterable type Enlight_Collection_ArrayCollection\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
 			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:set\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
-			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:set\\(\\) return type has no value type specified in iterable type Enlight_Collection_ArrayCollection\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
-			message: "#^Parameter \\#1 \\$key of method Enlight_Collection_ArrayCollection\\:\\:remove\\(\\) expects string, unknown_type given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
-			message: "#^Parameter \\$key of method Enlight_Collection_ArrayCollection\\:\\:offsetUnset\\(\\) has invalid typehint type unknown_type\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
-			message: "#^Property Enlight_Collection_ArrayCollection\\:\\:\\$_elements type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Collection/ArrayCollection.php
 
@@ -341,11 +291,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param for parameter \\$eventManager with type Enlight_Event_EventManager\\|null is not subtype of native type Enlight_Event_EventManager\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Cron/Manager.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$jobArgs has no value type specified in iterable type Enlight_Components_Cron_EventArgs\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Cron/Manager.php
 
@@ -760,11 +705,6 @@ parameters:
 			path: engine/Library/Enlight/Config.php
 
 		-
-			message: "#^Method Enlight_Config\\:\\:offsetSet\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
 			message: "#^Method Enlight_Config\\:\\:set\\(\\) has parameter \\$value with no typehint specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Config.php
@@ -905,11 +845,6 @@ parameters:
 			path: engine/Library/Enlight/Config/BaseConfig.php
 
 		-
-			message: "#^Method Enlight_Config_BaseConfig\\:\\:current\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config/BaseConfig.php
-
-		-
 			message: "#^Method Enlight_Config_BaseConfig\\:\\:get\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Config/BaseConfig.php
@@ -921,11 +856,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Config_BaseConfig\\:\\:getExtends\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config/BaseConfig.php
-
-		-
-			message: "#^Method Enlight_Config_BaseConfig\\:\\:key\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Config/BaseConfig.php
 
@@ -1260,11 +1190,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Front.php
 
 		-
-			message: "#^Method Enlight_Controller_Front\\:\\:Plugins\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Loader\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Front.php
-
-		-
 			message: "#^Method Enlight_Controller_Front\\:\\:getParam\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Front.php
@@ -1286,11 +1211,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Controller_Front\\:\\:setParams\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Front.php
-
-		-
-			message: "#^Method Enlight_Controller_Front\\:\\:setPlugins\\(\\) has parameter \\$plugins with no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Front.php
 
@@ -1326,11 +1246,6 @@ parameters:
 
 		-
 			message: "#^Property Enlight_Controller_Front\\:\\:\\$plugins \\(Enlight_Plugin_Namespace_Loader\\) does not accept Enlight_Plugin_Namespace\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Front.php
-
-		-
-			message: "#^Property Enlight_Controller_Front\\:\\:\\$plugins type has no value type specified in iterable type Enlight_Plugin_Namespace_Loader\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Front.php
 
@@ -2300,17 +2215,7 @@ parameters:
 			path: engine/Library/Enlight/Event/Handler/Plugin.php
 
 		-
-			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:__construct\\(\\) has parameter \\$namespace with no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler/Plugin.php
-
-		-
 			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:execute\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler/Plugin.php
-
-		-
-			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:setNamespace\\(\\) has parameter \\$namespace with no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Event/Handler/Plugin.php
 
@@ -2321,11 +2226,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$position of method Enlight_Event_Handler\\:\\:setPosition\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler/Plugin.php
-
-		-
-			message: "#^Property Enlight_Event_Handler_Plugin\\:\\:\\$namespace type has no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Event/Handler/Plugin.php
 
@@ -2440,11 +2340,6 @@ parameters:
 			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
 
 		-
-			message: "#^Property Enlight_Event_Subscriber_Plugin\\:\\:\\$namespace type has no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
-
-		-
 			message: "#^Method Enlight_Hook_HookArgs\\:\\:__construct\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Hook/HookArgs.php
@@ -2460,17 +2355,7 @@ parameters:
 			path: engine/Library/Enlight/Hook/HookArgs.php
 
 		-
-			message: "#^Method Enlight_Hook_HookArgs\\:\\:remove\\(\\) return type has no value type specified in iterable type Enlight_Hook_HookArgs\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Hook/HookArgs.php
-
-		-
 			message: "#^Method Enlight_Hook_HookArgs\\:\\:set\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Hook/HookArgs.php
-
-		-
-			message: "#^Method Enlight_Hook_HookArgs\\:\\:set\\(\\) return type has no value type specified in iterable type Enlight_Hook_HookArgs\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Hook/HookArgs.php
 
@@ -2501,11 +2386,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$name of method Enlight_Hook_HookManager\\:\\:getAlias\\(\\) expects string, class\\-string\\|false given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Hook/HookExecutionContext.php
-
-		-
-			message: "#^Property Enlight_Hook_HookExecutionContext\\:\\:\\$args type has no value type specified in iterable type Enlight_Hook_HookArgs\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Hook/HookExecutionContext.php
 
@@ -2725,11 +2605,6 @@ parameters:
 			path: engine/Library/Enlight/Plugin/Bootstrap.php
 
 		-
-			message: "#^Method Enlight_Plugin_Bootstrap_Config\\:\\:Collection\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Config\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
-
-		-
 			message: "#^Method Enlight_Plugin_Bootstrap_Config\\:\\:install\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
@@ -2741,11 +2616,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#4 \\$listener of class Enlight_Event_Handler_Plugin constructor expects string\\|null, \\(callable\\)\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
-
-		-
-			message: "#^Property Enlight_Plugin_Bootstrap_Config\\:\\:\\$collection type has no value type specified in iterable type Enlight_Plugin_Namespace_Config\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
 
@@ -2785,11 +2655,6 @@ parameters:
 			path: engine/Library/Enlight/Plugin/Namespace/Config.php
 
 		-
-			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:read\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Config\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace/Config.php
-
-		-
 			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:setConfig\\(\\) has parameter \\$config with no typehint specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Namespace/Config.php
@@ -2800,17 +2665,7 @@ parameters:
 			path: engine/Library/Enlight/Plugin/Namespace/Config.php
 
 		-
-			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:setConfig\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Config\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace/Config.php
-
-		-
 			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace/Config.php
-
-		-
-			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:write\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Config\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Namespace/Config.php
 
@@ -2818,36 +2673,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$options of class Enlight_Event_Subscriber_Plugin constructor expects null, Enlight_Config given\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Namespace/Config.php
-
-		-
-			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:Json\\(\\) should return Enlight_Controller_Plugins_Json_Bootstrap but returns Enlight_Plugin_Bootstrap\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
-
-		-
-			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:JsonRequest\\(\\) should return Enlight_Controller_Plugins_JsonRequest_Bootstrap but returns Enlight_Plugin_Bootstrap\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
-
-		-
-			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:ScriptRenderer\\(\\) should return Enlight_Controller_Plugins_ScriptRenderer_Bootstrap but returns Enlight_Plugin_Bootstrap\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
-
-		-
-			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:ViewRenderer\\(\\) should return Enlight_Controller_Plugins_ViewRenderer_Bootstrap but returns Enlight_Plugin_Bootstrap\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
-
-		-
-			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:addPrefixPath\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
-
-		-
-			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:initPlugin\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Loader\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace/Loader.php
 
 		-
 			message: "#^Method Enlight_Plugin_Namespace_Loader\\:\\:load\\(\\) should return Enlight_Plugin_PluginCollection but return statement is missing\\.$#"
@@ -2875,22 +2700,7 @@ parameters:
 			path: engine/Library/Enlight/Plugin/PluginCollection.php
 
 		-
-			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:__call\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/PluginCollection.php
-
-		-
 			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:__call\\(\\) should return Enlight_Plugin_Bootstrap\\|Enlight_Plugin_Namespace but returns Enlight_Plugin_Bootstrap\\|Enlight_Plugin_Namespace\\|null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/PluginCollection.php
-
-		-
-			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:get\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/PluginCollection.php
-
-		-
-			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:getIterator\\(\\) return type with generic class ArrayObject does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/PluginCollection.php
 
@@ -2903,26 +2713,6 @@ parameters:
 			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:load\\(\\) has parameter \\$throwException with no typehint specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/PluginCollection.php
-
-		-
-			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:registerPlugin\\(\\) should return Enlight_Plugin_PluginManager but returns \\$this\\(Enlight_Plugin_PluginCollection\\)\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/PluginCollection.php
-
-		-
-			message: "#^Method Enlight_Plugin_PluginCollection\\:\\:reset\\(\\) should return Enlight_Plugin_PluginManager but returns \\$this\\(Enlight_Plugin_PluginCollection\\)\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/PluginCollection.php
-
-		-
-			message: "#^Property Enlight_Plugin_PluginCollection\\:\\:\\$plugins with generic class ArrayObject does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/PluginCollection.php
-
-		-
-			message: "#^Method Enlight_Plugin_PluginManager\\:\\:registerNamespace\\(\\) has parameter \\$namespace with no value type specified in iterable type Enlight_Plugin_Namespace\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/PluginManager.php
 
 		-
 			message: "#^Method Enlight_Template_Default\\:\\:Engine\\(\\) should return Enlight_Template_Manager but returns Smarty\\.$#"
@@ -6097,11 +5887,6 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Structs/Field.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Structs\\\\Field\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Structs/Field.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Structs\\\\Field\\:\\:setCustom\\(\\) has parameter \\$custom with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Structs/Field.php
@@ -6157,11 +5942,6 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Structs/Fieldset.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Structs\\\\Fieldset\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Structs/Fieldset.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Structs\\\\Fieldset\\:\\:setFields\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Structs/Fieldset.php
@@ -6183,11 +5963,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Structs\\\\Type\\:\\:getCustom\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Structs/Type.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Structs\\\\Type\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Structs/Type.php
 
@@ -6252,17 +6027,7 @@ parameters:
 			path: engine/Shopware/Bundle/CookieBundle/CookieCollection.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/CookieCollection.php
-
-		-
 			message: "#^Class Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection extends generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/CookieGroupCollection.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CookieBundle/CookieGroupCollection.php
 
@@ -6387,19 +6152,9 @@ parameters:
 			path: engine/Shopware/Bundle/CookieBundle/Structs/CookieGroupStruct.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Structs\\\\CookieGroupStruct\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Structs/CookieGroupStruct.php
-
-		-
 			message: "#^Property Shopware\\\\Bundle\\\\CookieBundle\\\\Structs\\\\CookieGroupStruct\\:\\:\\$cookies type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CookieBundle/Structs/CookieGroupStruct.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Structs\\\\CookieStruct\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Structs/CookieStruct.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundle\\\\Condition\\\\AgeCondition\\:\\:__construct\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
@@ -7727,11 +7482,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\Struct\\\\Product\\:\\:getVisibility\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/Struct/Product.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\Struct\\\\Product\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ESIndexingBundle/Struct/Product.php
 
@@ -9806,16 +9556,6 @@ parameters:
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginInstaller.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$collection has no value type specified in iterable type Shopware_Components_Plugin_Namespace\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginInstaller.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$namespace has no value type specified in iterable type Shopware_Components_Plugin_Namespace\\.$#"
-			count: 3
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginInstaller.php
-
-		-
 			message: "#^Parameter \\#1 \\$bootstrap of method Shopware_Components_Plugin_Namespace\\:\\:installPlugin\\(\\) expects Shopware_Components_Plugin_Bootstrap, Shopware_Components_Plugin_Bootstrap\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginInstaller.php
@@ -10133,11 +9873,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CommentStruct\\:\\:setText\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/CommentStruct.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\DomainStruct\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/DomainStruct.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\LicenceStruct\\:\\:setBinaryLink\\(\\) has no return typehint specified\\.$#"
@@ -10763,11 +10498,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductSearch\\:\\:assignAttributes\\(\\) should return array\\<Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct\\> but returns array\\<string, Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct\\|null\\>\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundle/BatchProductSearch.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\Condition\\\\LastProductIdCondition\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/Condition/LastProductIdCondition.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\Condition\\\\ProductAttributeCondition\\:\\:__construct\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
@@ -13839,36 +13569,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Attribute\\:\\:isValid\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Struct/Attribute.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Attribute\\:\\:offsetExists\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Struct/Attribute.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Attribute\\:\\:offsetGet\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Struct/Attribute.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Attribute\\:\\:offsetGet\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Struct/Attribute.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Attribute\\:\\:offsetSet\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Struct/Attribute.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Attribute\\:\\:offsetSet\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Struct/Attribute.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Attribute\\:\\:offsetUnset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StoreFrontBundle/Struct/Attribute.php
 
@@ -19026,26 +18726,6 @@ parameters:
 			path: engine/Shopware/Components/BasketSignature/BasketPersister.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\BasketSignature\\\\BasketSignatureGenerator\\:\\:generateSignature\\(\\) has parameter \\$basket with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/BasketSignature/BasketSignatureGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\BasketSignature\\\\BasketSignatureGenerator\\:\\:sortItems\\(\\) has parameter \\$items with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/BasketSignature/BasketSignatureGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\BasketSignature\\\\BasketSignatureGenerator\\:\\:sortItems\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/BasketSignature/BasketSignatureGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\BasketSignature\\\\BasketSignatureGeneratorInterface\\:\\:generateSignature\\(\\) has parameter \\$basket with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/BasketSignature/BasketSignatureGeneratorInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\BasketSignature\\\\CleanupSignatureSubscriber\\:\\:cleanup\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/BasketSignature/CleanupSignatureSubscriber.php
@@ -19062,11 +18742,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\CSRFTokenValidator\\:\\:checkBackendTokenValidation\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CSRFTokenValidator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\CSRFTokenValidator\\:\\:checkBackendTokenValidation\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Components/CSRFTokenValidator.php
 
@@ -20131,16 +19806,6 @@ parameters:
 			path: engine/Shopware/Components/Config.php
 
 		-
-			message: "#^Method Shopware_Components_Config\\:\\:offsetGet\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Config.php
-
-		-
-			message: "#^Method Shopware_Components_Config\\:\\:offsetSet\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Config.php
-
-		-
 			message: "#^Method Shopware_Components_Config\\:\\:offsetSet\\(\\) with return type void returns mixed but should not return anything\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Config.php
@@ -20250,11 +19915,6 @@ parameters:
 			path: engine/Shopware/Components/Cron/CronJob.php
 
 		-
-			message: "#^Method Shopware_Components_Cron_CronJob\\:\\:set\\(\\) return type has no value type specified in iterable type Shopware_Components_Cron_CronJob\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cron/CronJob.php
-
-		-
 			message: "#^Argument of an invalid type int\\|false\\|null supplied for foreach, only iterables are supported\\.$#"
 			count: 1
 			path: engine/Shopware/Components/CsvIterator.php
@@ -20341,11 +20001,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\CustomerStream\\\\CookieSubscriber\\:\\:checkCookie\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CustomerStream/CookieSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\CustomerStream\\\\CookieSubscriber\\:\\:checkCookie\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Components/CustomerStream/CookieSubscriber.php
 
@@ -20505,11 +20160,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Router\\:\\:onPreDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Router.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Router\\:\\:onPreDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Router.php
 
@@ -21539,11 +21189,6 @@ parameters:
 			path: engine/Shopware/Components/ErrorSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\ErrorSubscriber\\:\\:handleError\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ErrorSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Filesystem\\\\Exception\\\\AdapterFactoryNotFoundException\\:\\:fromAdapterType\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Filesystem/Exception/AdapterFactoryNotFoundException.php
@@ -21892,7 +21537,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Form\\\\Persister\\\\Theme\\:\\:save\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Form/Persister/Theme.php
-
 		-
 			message: "#^Call to an undefined method Symfony\\\\Component\\\\HttpKernel\\\\HttpCache\\\\StoreInterface\\:\\:purgeAll\\(\\)\\.$#"
 			count: 1
@@ -21920,51 +21564,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\AppCache\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/AppCache.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\AppCache\\:\\:checkSltCookie\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/AppCache.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\AppCache\\:\\:filterHttp2ServerPushHeader\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/AppCache.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\AppCache\\:\\:getPurgeAllowedIPs\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/AppCache.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\AppCache\\:\\:store\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/AppCache.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$cookieGroupCollection has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/AppCache.php
-
-		-
-			message: "#^Parameter \\#1 \\$ip of method Shopware\\\\Components\\\\HttpCache\\\\AppCache\\:\\:isPurgeIPAllowed\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/AppCache.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/AppCache.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function base64_decode expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/AppCache.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/HttpCache/AppCache.php
 
@@ -22444,17 +22043,7 @@ parameters:
 			path: engine/Shopware/Components/LastArticlesSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\LastArticlesSubscriber\\:\\:onPostDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Components/LastArticlesSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\LastArticlesSubscriber\\:\\:onRefreshStatistics\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/LastArticlesSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\LastArticlesSubscriber\\:\\:onRefreshStatistics\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Components/LastArticlesSubscriber.php
 
@@ -23419,16 +23008,6 @@ parameters:
 			path: engine/Shopware/Components/Modules.php
 
 		-
-			message: "#^Method Shopware_Components_Modules\\:\\:offsetGet\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Modules.php
-
-		-
-			message: "#^Method Shopware_Components_Modules\\:\\:offsetSet\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Modules.php
-
-		-
 			message: "#^Method Shopware_Components_Modules\\:\\:setSystem\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Modules.php
@@ -24319,11 +23898,6 @@ parameters:
 			path: engine/Shopware/Components/Plugin/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Components_Plugin_Bootstrap\\:\\:extendsEmotionTemplates\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Components_Plugin_Bootstrap\\:\\:registerCustomModels\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/Bootstrap.php
@@ -24335,11 +23909,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$directory of class DirectoryIterator constructor expects string, string\\|true given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Bootstrap.php
-
-		-
-			message: "#^Property Shopware_Components_Plugin_Bootstrap\\:\\:\\$collection type has no value type specified in iterable type Shopware_Components_Plugin_Namespace\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/Bootstrap.php
 
@@ -24502,31 +24071,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\Configuration\\\\WriterInterface\\:\\:setByPluginName\\(\\) has parameter \\$shopId with no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/Configuration/WriterInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\Context\\\\InstallContext\\:\\:getScheduled\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Context/InstallContext.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\Context\\\\InstallContext\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Context/InstallContext.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\Context\\\\InstallContext\\:\\:scheduleClearCache\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Context/InstallContext.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\Context\\\\InstallContext\\:\\:scheduleMessage\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Context/InstallContext.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\Plugin\\\\Context\\\\InstallContext\\:\\:\\$scheduled type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Context/InstallContext.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\CronjobSynchronizer\\:\\:addCronjob\\(\\) has no return typehint specified\\.$#"
@@ -24709,22 +24253,12 @@ parameters:
 			path: engine/Shopware/Components/Plugin/Namespace.php
 
 		-
-			message: "#^Method Shopware_Components_Plugin_Namespace\\:\\:setShop\\(\\) return type has no value type specified in iterable type Shopware_Components_Plugin_Namespace\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Namespace.php
-
-		-
 			message: "#^Method Shopware_Components_Plugin_Namespace\\:\\:uninstallPlugin\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/Namespace.php
 
 		-
 			message: "#^Method Shopware_Components_Plugin_Namespace\\:\\:updatePlugin\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Namespace.php
-
-		-
-			message: "#^Method Shopware_Components_Plugin_Namespace\\:\\:write\\(\\) return type has no value type specified in iterable type Enlight_Plugin_Namespace_Config\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/Namespace.php
 
@@ -24760,11 +24294,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\ResourceSubscriber\\:\\:onCollectJavascript\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/ResourceSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\ResourceSubscriber\\:\\:onRegisterControllerTemplate\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/ResourceSubscriber.php
 
@@ -25000,11 +24529,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Privacy\\\\CookieRemoveSubscriber\\:\\:convertToArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Privacy/CookieRemoveSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Privacy\\\\CookieRemoveSubscriber\\:\\:onPostDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Privacy/CookieRemoveSubscriber.php
 
@@ -25255,11 +24779,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:getParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Routing/Context.php
 
@@ -25750,11 +25269,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Symfony\\\\Component\\\\DependencyInjection\\\\ContainerInterface\\:\\:reset\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ShopRegistrationService.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$pluginNamespace has no value type specified in iterable type Shopware_Components_Plugin_Namespace\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ShopRegistrationService.php
 
@@ -26769,11 +26283,6 @@ parameters:
 			path: engine/Shopware/Components/Theme/EventListener/BackendTheme.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\EventListener\\\\BackendTheme\\:\\:registerBackendTheme\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/EventListener/BackendTheme.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Theme\\\\EventListener\\\\ConfigLoader\\:\\:onDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/EventListener/ConfigLoader.php
@@ -27705,11 +27214,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\UploadMaxSizeValidator\\:\\:validateContentLength\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/UploadMaxSizeValidator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\UploadMaxSizeValidator\\:\\:validateContentLength\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Components/UploadMaxSizeValidator.php
 
@@ -31674,11 +31178,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$namespace has no value type specified in iterable type Shopware_Components_Plugin_Namespace\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
 			message: "#^PHPDoc tag @var for variable \\$voucher has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
@@ -34908,7 +34407,7 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Property sMarketing\\:\\:\\$sBlacklist \\(array\\) does not accept array\\|null\\.$#"
+			message: "#^Property sMarketing\\:\\:\\$sBlacklist \\(array\\) does not accept array<int>\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
@@ -37601,11 +37100,6 @@ parameters:
 			path: engine/Shopware/Core/sBasket.php
 		-
 			message: "#^Method sBasket\\:\\:sGetBasketData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sBasket.php
-
-		-
-			message: "#^Method sBasket\\:\\:sGetBasketIds\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sBasket.php
 
@@ -46803,11 +46297,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Backend_SwagUpdate_Bootstrap\\:\\:onBackendIndexPostDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Backend_SwagUpdate_Bootstrap\\:\\:onInitUpdateCheck\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
@@ -47238,22 +46727,12 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/CronBirthday/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_CronBirthday_Bootstrap\\:\\:onRun\\(\\) has parameter \\$job with no value type specified in iterable type Shopware_Components_Cron_CronJob\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/CronBirthday/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_CronProductExport_Bootstrap\\:\\:exportProductFiles\\(\\) should return string but returns true\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/CronProductExport/Bootstrap.php
 
 		-
 			message: "#^Method Shopware_Plugins_Core_CronProductExport_Bootstrap\\:\\:onRun\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/CronProductExport/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_CronProductExport_Bootstrap\\:\\:onRun\\(\\) has parameter \\$job with no value type specified in iterable type Enlight_Components_Cron_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/CronProductExport/Bootstrap.php
 
@@ -47293,11 +46772,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/CronRating/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_CronRating_Bootstrap\\:\\:onRun\\(\\) has parameter \\$job with no value type specified in iterable type Enlight_Components_Cron_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/CronRating/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_CronRating_Bootstrap\\:\\:structurePositionsArray\\(\\) has parameter \\$orderPositions with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/CronRating/Bootstrap.php
@@ -47313,11 +46787,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/CronStock/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_CronStock_Bootstrap\\:\\:onRun\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Components_Cron_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/CronStock/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_ErrorHandler_Bootstrap\\:\\:errorHandler\\(\\) should return bool but empty return statement found\\.$#"
 			count: 2
 			path: engine/Shopware/Plugins/Default/Core/ErrorHandler/Bootstrap.php
@@ -47329,11 +46798,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Plugins_Core_ErrorHandler_Bootstrap\\:\\:onDispatchLoopShutdown\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/ErrorHandler/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_ErrorHandler_Bootstrap\\:\\:onDispatchLoopShutdown\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/ErrorHandler/Bootstrap.php
 
@@ -47423,11 +46887,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onClearHttpCache\\(\\) has parameter \\$job with no value type specified in iterable type Shopware_Components_Cron_CronJob\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onClearHttpCache\\(\\) should return string but return statement is missing\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
@@ -47443,22 +46902,12 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onPostDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onPostPersist\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
 			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onPreDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onPreDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
@@ -48253,11 +47702,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/RebuildIndex/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_RebuildIndex_Bootstrap\\:\\:onAfterSendResponse\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RebuildIndex/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_RebuildIndex_Bootstrap\\:\\:subscribeSearchIndexEvents\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/RebuildIndex/Bootstrap.php
@@ -48397,17 +47841,7 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_RestApi_Bootstrap\\:\\:onDispatchLoopStartup\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_RestApi_Bootstrap\\:\\:onFrontPreDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_RestApi_Bootstrap\\:\\:onFrontPreDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
 
@@ -48457,17 +47891,7 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/Router/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_Router_Bootstrap\\:\\:onRouteShutdown\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/Router/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_Router_Bootstrap\\:\\:onRouteStartup\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/Router/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_Router_Bootstrap\\:\\:onRouteStartup\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/Router/Bootstrap.php
 
@@ -48498,11 +47922,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Plugins_Core_System_Bootstrap\\:\\:onDispatchLoopShutdown\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/System/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_System_Bootstrap\\:\\:onDispatchLoopShutdown\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/System/Bootstrap.php
 
@@ -48591,19 +48010,9 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Frontend/AdvancedMenu/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap\\:\\:onPostDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/AdvancedMenu/Bootstrap.php
-
-		-
 			message: "#^Parameter \\#2 \\$depth of method Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap\\:\\:getCategoryIdsOfDepth\\(\\) expects int, int\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/AdvancedMenu/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_CronRefresh_Bootstrap\\:\\:onCronJobClearing\\(\\) has parameter \\$job with no value type specified in iterable type Shopware_Components_Cron_CronJob\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/CronRefresh/Bootstrap.php
 
 		-
 			message: "#^Method Shopware_Plugins_Frontend_CronRefresh_Bootstrap\\:\\:onCronJobClearing\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -48614,16 +48023,6 @@ parameters:
 			message: "#^Method Shopware_Plugins_Frontend_CronRefresh_Bootstrap\\:\\:onCronJobSearch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/CronRefresh/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_CronRefresh_Bootstrap\\:\\:onCronJobSearch\\(\\) has parameter \\$job with no value type specified in iterable type Shopware_Components_Cron_CronJob\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/CronRefresh/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_InputFilter_Bootstrap\\:\\:onRouteShutdown\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/InputFilter/Bootstrap.php
 
 		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_POST\\.$#"
@@ -48661,11 +48060,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Frontend_Notification_Bootstrap\\:\\:onRunCronJob\\(\\) has parameter \\$job with no value type specified in iterable type Shopware_Components_Cron_CronJob\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
-
-		-
 			message: "#^PHPDoc tag @return has invalid value \\(\\)\\: Unexpected token \"\\\\n     \", expected type at offset 147$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
@@ -48677,11 +48071,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Plugins_Frontend_RouterRewrite_Bootstrap\\:\\:onPreDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/RouterRewrite/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_RouterRewrite_Bootstrap\\:\\:onPreDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/RouterRewrite/Bootstrap.php
 
@@ -48712,11 +48101,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Plugins_Frontend_Seo_Bootstrap\\:\\:onPostDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Seo/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_Seo_Bootstrap\\:\\:onPostDispatch\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/Seo/Bootstrap.php
 
@@ -53924,11 +53308,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Privacy\\\\ConfigDependentIpAnonymizerTest\\:\\:testDispatchLogLocalhostIpv4\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Privacy/ConfigDependentIpAnonymizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Privacy\\\\CookieRemoveSubscriberTest\\:\\:getEventArgs\\(\\) return type has no value type specified in iterable type Enlight_Controller_ActionEventArgs\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/CookieRemoveSubscriberTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Privacy\\\\PreserveCookieFromRemovingSubscriber\\:\\:addCookie\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
@@ -62961,11 +62340,6 @@ parameters:
 			path: tests/Unit/Components/Hook/HookManagerTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Hook\\\\HookManagerTest\\:\\:assertHookArgs\\(\\) has parameter \\$args with no value type specified in iterable type Enlight_Hook_HookArgs\\.$#"
-			count: 1
-			path: tests/Unit/Components/Hook/HookManagerTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Hook\\\\HookManagerTest\\:\\:testCanCreateInstance\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Hook/HookManagerTest.php
@@ -64009,11 +63383,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Test\\\\Theme\\\\PathResolverTest\\:\\:testFiles\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Theme/PathResolverTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\UploadMaxSizeValidatorTest\\:\\:getMockEnlightControllerEventArgs\\(\\) return type has no value type specified in iterable type Enlight_Controller_EventArgs\\.$#"
-			count: 1
-			path: tests/Unit/Components/UploadMaxSizeValidatorTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\UploadMaxSizeValidatorTest\\:\\:testContentLengthInRange\\(\\) has no return typehint specified\\.$#"

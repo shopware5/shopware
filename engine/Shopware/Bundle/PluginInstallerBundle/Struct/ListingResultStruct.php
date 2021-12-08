@@ -25,9 +25,12 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class ListingResultStruct implements JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var PluginStruct[]
      */
@@ -62,13 +65,5 @@ class ListingResultStruct implements JsonSerializable
     public function getTotalCount()
     {
         return $this->totalCount;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

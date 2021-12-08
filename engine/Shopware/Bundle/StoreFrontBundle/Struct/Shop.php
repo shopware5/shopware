@@ -301,14 +301,6 @@ class Shop extends Extendable
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
-
-    /**
      * @param int $fallbackId
      */
     public function setFallbackId($fallbackId)

@@ -25,13 +25,16 @@
 namespace Shopware\Bundle\ContentTypeBundle\Structs;
 
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTrait;
 
 class Type implements JsonSerializable
 {
+    use ObjectJsonSerializeTrait;
+
     /**
      * @var string
      */
-    protected $internalName;
+    protected $internalName = '';
 
     /**
      * @var string
@@ -354,10 +357,5 @@ class Type implements JsonSerializable
         $this->seoRobots = $seoRobots;
 
         return $this;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return get_object_vars($this);
     }
 }

@@ -217,12 +217,4 @@ class Vote extends Extendable
     {
         return $this->answeredAt;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

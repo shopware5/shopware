@@ -26,9 +26,12 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 
 use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class IsAvailableCondition implements ConditionInterface, JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     private const NAME = 'is_available_condition';
 
     /**
@@ -37,13 +40,5 @@ class IsAvailableCondition implements ConditionInterface, JsonSerializable
     public function getName()
     {
         return self::NAME;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

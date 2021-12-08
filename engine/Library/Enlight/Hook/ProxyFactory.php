@@ -17,9 +17,9 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use Laminas\Code\Generator\ClassGenerator;
 use Laminas\Code\Generator\PropertyGenerator;
 use Laminas\Code\Reflection\MethodReflection;
-use ProxyManager\Generator\ClassGenerator;
 use ProxyManager\Generator\MethodGenerator;
 use ProxyManager\Generator\Util\ClassGeneratorUtils;
 use ProxyManager\ProxyGenerator\Assertion\CanProxyAssertion;

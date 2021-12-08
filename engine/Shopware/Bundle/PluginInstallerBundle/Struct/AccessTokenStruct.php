@@ -26,9 +26,12 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 use DateTimeInterface;
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class AccessTokenStruct implements JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var string
      */
@@ -72,14 +75,6 @@ class AccessTokenStruct implements JsonSerializable
         $this->userId = $userId;
         $this->locale = $locale;
         $this->shopwareId = $shopwareId;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 
     /**

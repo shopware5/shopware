@@ -90,14 +90,6 @@ class Option extends Extendable
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
-
-    /**
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media|null
      */
     public function getMedia()

@@ -89,12 +89,4 @@ class ProductNumberSearchResult extends Extendable
     {
         return $this->totalCount;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

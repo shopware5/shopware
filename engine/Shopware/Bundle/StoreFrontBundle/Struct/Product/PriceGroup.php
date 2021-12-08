@@ -76,14 +76,6 @@ class PriceGroup extends Extendable
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
-
-    /**
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount[]
      */
     public function getDiscounts()

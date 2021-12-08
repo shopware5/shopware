@@ -1462,11 +1462,11 @@ class BasketTest extends TestCase
         $basketIds = $this->module->sGetBasketIds();
         static::assertIsArray($basketIds);
         static::assertContains(
-            (string) $randomProducts[0]['articleID'],
+            $randomProducts[0]['articleID'],
             $basketIds
         );
         static::assertContains(
-            (string) $randomProducts[1]['articleID'],
+            $randomProducts[1]['articleID'],
             $basketIds
         );
 
@@ -2492,7 +2492,7 @@ class BasketTest extends TestCase
 
         $this->connection->executeStatement('UPDATE s_articles_details SET minpurchase = 0 WHERE ordernumber = "SW10239"');
 
-        static::assertSame('4', $this->module->sGetBasketData()['content'][0]['quantity']);
+        static::assertSame(4, (int) $this->module->sGetBasketData()['content'][0]['quantity']);
     }
 
     private function generateBasketSession(): string

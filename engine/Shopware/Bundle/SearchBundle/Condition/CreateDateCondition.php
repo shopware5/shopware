@@ -27,9 +27,12 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Assert\Assertion;
 use JsonSerializable;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class CreateDateCondition implements ConditionInterface, JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     private const NAME = 'create_date_condition';
 
     /**
@@ -60,13 +63,5 @@ class CreateDateCondition implements ConditionInterface, JsonSerializable
     public function getDays()
     {
         return $this->days;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

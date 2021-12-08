@@ -25,9 +25,12 @@
 namespace Shopware\Bundle\CustomerSearchBundle;
 
 use JsonSerializable;
+use Shopware\Components\ObjectJsonSerializeTraitDeprecated;
 
 class CustomerNumberSearchResult implements JsonSerializable
 {
+    use ObjectJsonSerializeTraitDeprecated;
+
     /**
      * @var BaseCustomer[]
      */
@@ -92,10 +95,5 @@ class CustomerNumberSearchResult implements JsonSerializable
         return array_map(function (BaseCustomer $customer) {
             return $customer->getId();
         }, $this->customers);
-    }
-
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

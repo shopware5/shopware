@@ -183,12 +183,4 @@ class PriceRule extends Extendable
     {
         return $this->unit;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

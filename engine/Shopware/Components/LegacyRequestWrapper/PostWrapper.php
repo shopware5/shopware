@@ -30,34 +30,21 @@ use Exception;
 
 class PostWrapper implements ArrayAccess
 {
-    /**
-     * @var Enlight_Controller_Request_Request
-     */
-    private $request;
+    private Enlight_Controller_Request_Request $request;
 
-    /**
-     * @param Enlight_Controller_Request_Request $request The request object
-     */
     public function __construct(Enlight_Controller_Request_Request $request)
     {
         $this->request = $request;
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Whether a offset exists
+     * @param mixed $offset an offset to check for
      *
-     * @see http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @return bool true on success or false on failure. The return value will be casted to boolean if non-boolean was returned
      *
-     * @param mixed $offset <p>
-     *                      An offset to check for.
-     *                      </p>
-     *
-     * @return bool true on success or false on failure.
-     *              </p>
-     *              <p>
-     *              The return value will be casted to boolean if non-boolean was returned
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         $postData = $this->request->getPost();
@@ -66,52 +53,42 @@ class PostWrapper implements ArrayAccess
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Offset to retrieve
-     *
-     * @see http://php.net/manual/en/arrayaccess.offsetget.php
-     *
-     * @param mixed $offset <p>
-     *                      The offset to retrieve.
-     *                      </p>
+     * @param mixed $offset the offset to retrieve
      *
      * @return mixed can return all value types
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->request->getPost($offset);
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Offset to set
+     * @param mixed $offset the offset to assign the value to
+     * @param mixed $value  the value to set
      *
-     * @see http://php.net/manual/en/arrayaccess.offsetset.php
+     * @return void
      *
-     * @param mixed $offset <p>
-     *                      The offset to assign the value to.
-     *                      </p>
-     * @param mixed $value  <p>
-     *                      The value to set.
-     *                      </p>
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->request->setPost($offset, $value);
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Offset to unset
-     *
-     * @see http://php.net/manual/en/arrayaccess.offsetunset.php
-     *
-     * @param mixed $offset <p>
-     *                      The offset to unset.
-     *                      </p>
+     * @param mixed $offset the offset to unset
      *
      * @throws Exception
+     *
+     * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $this->request->setPost($offset, null);

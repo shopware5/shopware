@@ -111,12 +111,4 @@ class Download extends Extendable
     {
         return $this->size;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

@@ -155,14 +155,6 @@ class Currency extends Extendable
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
-
-    /**
      * @return string
      */
     public function getSymbolPosition()

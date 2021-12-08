@@ -34,6 +34,7 @@ use Shopware\Bundle\SitemapBundle\Service\UrlFilter;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlFilter\Base;
 use Shopware\Bundle\SitemapBundle\UrlFilter\UrlFilterException;
+use Traversable;
 
 class UrlFilterTest extends TestCase
 {
@@ -255,7 +256,7 @@ class UrlFilterTest extends TestCase
 
 class FilterHandlers implements IteratorAggregate
 {
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator([
             'foo' => new Foo(),

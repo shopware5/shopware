@@ -38,12 +38,15 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Payment\Payment;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Config;
 use Shopware_Components_Snippet_Manager;
 use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 
 class AdminTest extends TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     private sAdmin $module;
 
     private sBasket $basketModule;
@@ -900,7 +903,7 @@ class AdminTest extends TestCase
 
         // Test with translations and states
         $result = $this->module->sGetCountryList();
-        $country = array_shift($result); // Germany
+        $country = $result[2]; // Germany with ID 2
         static::assertArrayHasKey('id', $country);
         static::assertArrayHasKey('countryname', $country);
         static::assertArrayHasKey('countryiso', $country);
@@ -1147,7 +1150,7 @@ class AdminTest extends TestCase
         $result = $this->module->sGetOpenOrderData();
         $result = $result['orderData'];
 
-        static::assertCount(2, $result);
+        static::assertCount(1, $result);
         foreach ($result as $order) {
             static::assertArrayHasKey('id', $order);
             static::assertArrayHasKey('ordernumber', $order);
@@ -1321,7 +1324,7 @@ class AdminTest extends TestCase
             ],
             'additional' => [
                 'country' => [
-                    'countryname' => 'Germany',
+                    'countryname' => 'Deutschland',
                     'countryiso' => 'DE',
                     'areaID' => '1',
                     'countryen' => 'GERMANY',

@@ -113,6 +113,9 @@ class CookieStruct implements JsonSerializable
         $this->group = $group;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function jsonSerialize(): array
     {
         $data = get_object_vars($this);

@@ -449,12 +449,4 @@ class Payment extends Extendable
     {
         $this->mobileInactive = $mobileInactive;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

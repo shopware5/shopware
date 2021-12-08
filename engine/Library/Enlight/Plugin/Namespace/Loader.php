@@ -43,7 +43,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
      * @param string $name
      * @param bool   $throwException
      *
-     * @return Enlight_Plugin_Bootstrap
+     * @return Enlight_Plugin_Bootstrap|null
      */
     public function get($name, $throwException = true)
     {
@@ -51,11 +51,20 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
             $this->load($name, $throwException);
         }
 
-        return $this->plugins->offsetGet($name);
+        $plugin = $this->plugins->offsetGet($name);
+        if ($plugin instanceof Enlight_Plugin_Bootstrap) {
+            return $plugin;
+        }
+
+        if ($throwException) {
+            throw new Enlight_Exception('Plugin "' . $name . '" in namespace "' . $this->getName() . '" not found');
+        }
+
+        return null;
     }
 
     /**
-     * Adds a prefix path to the plugin namespace. Is used for the auto loading of plugins.
+     * Adds a prefix path to the plugin namespace. Is used to autoload plugins.
      *
      * @param string $prefix
      * @param string $path
@@ -149,7 +158,12 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
      */
     public function Json()
     {
-        return $this->get(__FUNCTION__);
+        $jsonPlugin = $this->get(__FUNCTION__);
+        if (!$jsonPlugin instanceof Enlight_Controller_Plugins_Json_Bootstrap) {
+            throw new Enlight_Exception('Plugin "Enlight_Controller_Plugins_Json_Bootstrap" not found');
+        }
+
+        return $jsonPlugin;
     }
 
     /**
@@ -157,7 +171,12 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
      */
     public function ViewRenderer()
     {
-        return $this->get(__FUNCTION__);
+        $viewRendererPlugin = $this->get(__FUNCTION__);
+        if (!$viewRendererPlugin instanceof Enlight_Controller_Plugins_ViewRenderer_Bootstrap) {
+            throw new Enlight_Exception('Plugin "Enlight_Controller_Plugins_ViewRenderer_Bootstrap" not found');
+        }
+
+        return $viewRendererPlugin;
     }
 
     /**
@@ -165,7 +184,12 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
      */
     public function ScriptRenderer()
     {
-        return $this->get(__FUNCTION__);
+        $scriptRendererPlugin = $this->get(__FUNCTION__);
+        if (!$scriptRendererPlugin instanceof Enlight_Controller_Plugins_ScriptRenderer_Bootstrap) {
+            throw new Enlight_Exception('Plugin "Enlight_Controller_Plugins_ScriptRenderer_Bootstrap" not found');
+        }
+
+        return $scriptRendererPlugin;
     }
 
     /**
@@ -173,6 +197,11 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
      */
     public function JsonRequest()
     {
-        return $this->get(__FUNCTION__);
+        $jsonRequestPlugin = $this->get(__FUNCTION__);
+        if (!$jsonRequestPlugin instanceof Enlight_Controller_Plugins_JsonRequest_Bootstrap) {
+            throw new Enlight_Exception('Plugin "Enlight_Controller_Plugins_JsonRequest_Bootstrap" not found');
+        }
+
+        return $jsonRequestPlugin;
     }
 }

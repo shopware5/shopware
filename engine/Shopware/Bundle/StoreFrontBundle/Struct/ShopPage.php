@@ -507,12 +507,4 @@ class ShopPage extends Extendable
     {
         $this->childrenCount = $childrenCount;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

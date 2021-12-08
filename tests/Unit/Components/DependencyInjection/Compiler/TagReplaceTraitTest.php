@@ -29,6 +29,9 @@ use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * @deprecated in 5.6, will be removed in 5.8
+ */
 class TagReplaceTraitTest extends TestCase
 {
     public function testReplacementWithPriority()

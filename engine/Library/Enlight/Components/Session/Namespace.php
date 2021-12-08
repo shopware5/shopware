@@ -84,7 +84,10 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
      * @param mixed $key a key to check for
      *
      * @return bool returns true on success or false on failure
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return $this->has($key);
@@ -93,8 +96,13 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
     /**
      * Unset the given offset.
      *
-     * @param string $key key to unset
+     * @param mixed $key key to unset
+     *
+     * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         $this->remove($key);
@@ -106,7 +114,10 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
      * @param mixed $key the offset to retrieve
      *
      * @return mixed can return all value types
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return $this->get($key);
@@ -117,7 +128,12 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
      *
      * @param mixed $key   the offset to assign the value to
      * @param mixed $value the value to set
+     *
+     * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         $this->set($key, $value);
@@ -126,11 +142,11 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
     /**
      * Clear session
      *
-     * @deprecated since 5.7, and will be removed with 5.9. Use clear instead.
+     * @deprecated since 5.7, and will be removed with 5.8. Use clear instead.
      */
     public function unsetAll()
     {
-        trigger_error('Enlight_Components_Session_Namespace::unsetAll is deprecated since 5.7 and will be removed with 5.9. Use Enlight_Components_Session_Namespace::clear instead', E_USER_DEPRECATED);
+        trigger_error('Enlight_Components_Session_Namespace::unsetAll is deprecated since 5.7 and will be removed with 5.8. Use Enlight_Components_Session_Namespace::clear instead', E_USER_DEPRECATED);
 
         return $this->clear();
     }

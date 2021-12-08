@@ -127,12 +127,4 @@ class Set extends Extendable
 
         return true;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }
