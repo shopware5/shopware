@@ -26,6 +26,7 @@ namespace Shopware\Tests\Components\Router;
 
 use Enlight_Components_Test_TestCase;
 use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\RouterInterface;
 
 class RouterTest extends Enlight_Components_Test_TestCase
 {
@@ -34,7 +35,7 @@ class RouterTest extends Enlight_Components_Test_TestCase
      */
     public function testSeoRouteGeneration(): void
     {
-        $router = Shopware()->Container()->get(\Shopware\Components\Routing\RouterInterface::class);
+        $router = Shopware()->Container()->get(RouterInterface::class);
         $localRouter = clone $router;
 
         $context = new Context();
@@ -52,7 +53,7 @@ class RouterTest extends Enlight_Components_Test_TestCase
      */
     public function testDeactivatingSeoRouteGeneration(): void
     {
-        $router = Shopware()->Container()->get(\Shopware\Components\Routing\RouterInterface::class);
+        $router = Shopware()->Container()->get(RouterInterface::class);
         $localRouter = clone $router;
 
         $context = new Context();
@@ -70,7 +71,7 @@ class RouterTest extends Enlight_Components_Test_TestCase
      */
     public function testNoneExistingSeoRouteGeneration(): void
     {
-        $router = Shopware()->Container()->get(\Shopware\Components\Routing\RouterInterface::class);
+        $router = Shopware()->Container()->get(RouterInterface::class);
         $localRouter = clone $router;
 
         $context = new Context();
@@ -93,7 +94,7 @@ class RouterTest extends Enlight_Components_Test_TestCase
      */
     public function testDefaultActionDoesntMatter(): void
     {
-        $router = Shopware()->Container()->get(\Shopware\Components\Routing\RouterInterface::class);
+        $router = Shopware()->Container()->get(RouterInterface::class);
         $localRouter = clone $router;
 
         $context = new Context();
