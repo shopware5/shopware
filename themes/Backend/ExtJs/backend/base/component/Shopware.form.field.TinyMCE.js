@@ -129,7 +129,7 @@ Ext.define('Shopware.form.field.TinyMCE',
             invalid_elements:'script,applet',
 
             /** {if $user->extended_editor eq 1} */
-            plugins: "media_selection,safari,pagebreak,style,layer,table,iespell,inlinepopups,insertdatetime,preview,searchreplace,print,contextmenu,paste,directionality,fullscreen,visualchars,nonbreaking,xhtmlxtras,template",
+            plugins: "media_selection,safari,pagebreak,style,layer,table,iespell,insertdatetime,preview,searchreplace,print,contextmenu,paste,directionality,fullscreen,visualchars,nonbreaking,xhtmlxtras,template",
             /** {else} */
             plugins: "media_selection,fullscreen",
             /** {/if} */
