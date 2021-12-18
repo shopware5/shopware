@@ -116,7 +116,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 break;
 
             case self::TYPE_STATIC_PRODUCT:
-                $products = $element->getConfig()->get('selected_articles', []);
+                $products = $element->getConfig()->get('selected_articles', '');
                 $productNumbers = array_filter(explode('|', $products));
                 if (empty($productNumbers)) {
                     $productNumbers = [];
@@ -156,7 +156,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 break;
 
             case self::TYPE_STATIC_PRODUCT:
-                $products = $element->getConfig()->get('selected_articles', []);
+                $products = $element->getConfig()->get('selected_articles', '');
                 $productNumbers = array_filter(explode('|', $products));
                 $listProducts = $collection->getBatchResult()->get($key);
 
