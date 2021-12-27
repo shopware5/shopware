@@ -147,7 +147,11 @@
     "config": {
         "autoloader-suffix": "Shopware",
         "optimize-autoloader": true,
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "phpstan/extension-installer": true
+        }
     },
     "scripts": {
         "cs-check": "php-cs-fixer fix --dry-run -v",
