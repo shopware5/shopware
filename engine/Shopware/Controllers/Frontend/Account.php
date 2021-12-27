@@ -725,6 +725,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if ($form->isSubmitted() && $form->isValid()) {
             $this->customerService->update($customer);
 
+            /*
+             * Formatting the date as 'Y-m-d H:i:s' is needed, since it is read
+             * directly from the DB in sAdmin::loginUser.
+             */
+            $this->get('session')->offsetSet('sUserPasswordChangeDate', $customer->getPasswordChangeDate()->format('Y-m-d H:i:s'));
+
             $this->redirect(['controller' => 'account', 'action' => 'profile', 'success' => true, 'section' => 'password']);
 
             return;

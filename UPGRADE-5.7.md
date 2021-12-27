@@ -42,6 +42,18 @@ Use `TaxAggregator::taxSum` instead.
 
 * Removed deprecated composer dependency `symfony/class-loader`. Use Composer ClassLoader instead
 
+### Session validation
+
+With v5.7.7 the session validation was adjusted, so that sessions created prior
+to the latest password change of a customer account can't be used to login with
+said account. This also means, that upon a password change, all existing
+sessions for a given customer account are automatically considered invalid.
+
+All sessions created prior to v5.7.7 are lacking the timestamp of the latest
+password change and are therefore not considered valid anymore. **After an
+upgrade to v5.7.7, all customers who have a session in the given shop, will need
+to log in again.**
+
 ## 5.7.6
 
 [View all changes from v5.7.5...v5.7.6](https://github.com/shopware/shopware/compare/v5.7.5...v5.7.6)
