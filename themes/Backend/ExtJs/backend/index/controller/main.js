@@ -421,24 +421,24 @@ createKeyNavOverlay = function() {
             fields: [ 'name', 'key', 'alt', 'ctrl' ],
             data: [
                 /*{if {acl_is_allowed privilege=read resource=article}}*/
-                { name: '{s name="title/article"}Article{/s}', key: 'n', alt: true , ctrl: true },
+                { name: '{s name="title/article"}Article{/s}', key: 'n', alt: true, ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=read resource=articlelist}}*/
-                { name: '{s name="title/article_overview"}Article overview{/s}', key: 'o', alt: true , ctrl: true },
+                { name: '{s name="title/article_overview"}Article overview{/s}', key: 'o', alt: true, ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=read resource=order}}*/
-                { name: '{s name="title/order"}Order{/s}', key: 'b', alt: true , ctrl: true },
+                { name: '{s name="title/order"}Order{/s}', key: 'b', alt: true, ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=read resource=customer}}*/
-                { name: '{s name="title/customer"}Customer{/s}', key: 'k', alt: true , ctrl: true },
+                { name: '{s name="title/customer"}Customer{/s}', key: 'k', alt: true, ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=read resource=pluginmanager}}*/
-                { name: '{s name="title/plugin_manager"}Plugin manager{/s}', key: 'p', alt: true , ctrl: true },
+                { name: '{s name="title/plugin_manager"}Plugin manager{/s}', key: 'p', alt: true, ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=clear resource=performance}}*/
-                { name: '{s name="title/cache_template"}Clear template cache{/s}', key: 't', alt: true , ctrl: true },
-                { name: '{s name="title/cache_config"}Clear config cache{/s}', key: 'x', alt: true , ctrl: true },
-                { name: '{s name="title/cache_frontend"}Clear shop cache{/s}', key: 'f', alt: true , ctrl: true }
+                { name: '{s name="title/cache_template"}Clear template cache{/s}', key: 't', alt: true, ctrl: true },
+                { name: '{s name="title/cache_config"}Clear config cache{/s}', key: 'x', alt: true, ctrl: true },
+                { name: '{s name="title/cache_frontend"}Clear shop cache{/s}', key: 'f', alt: true, ctrl: true }
                 /*{/if}*/
             ]
         }),

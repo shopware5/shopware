@@ -187,18 +187,18 @@ Ext.define('Shopware.DataView.GooglePreview',
             date = '';
 
             if (title != '') {
-                title = title.substr(0,50)+'...';
+                title = title.substr(0, 50)+'...';
                 date = new Date().toLocaleDateString();
                 date = date+" - ";
             }
             if (url != '') {
                 url = "www.example.com/"+url;
-                url = url.substr(0,35)+'...';
+                url = url.substr(0, 35)+'...';
                 url = url.toLowerCase();
                 url = url.replace(/\s/g, '-');
             }
             if (metaDescription != '') {
-                metaDescription = metaDescription.substr(0,70)+'...';
+                metaDescription = metaDescription.substr(0, 70)+'...';
             }
 
         return {

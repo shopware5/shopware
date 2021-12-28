@@ -349,7 +349,7 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
                     editable: false,
                     xtype: 'combobox',
                     queryMode: 'local',
-                    store: grid.statusStore ,
+                    store: grid.statusStore,
                     displayField: 'description',
                     valueField: 'id'
                 }

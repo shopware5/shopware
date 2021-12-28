@@ -226,7 +226,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                     costsMatrixModel.destroy({
                         success: function () {
                             store.load();
-                            Shopware.Msg.createGrowlMessage('','{s name="dialog_success"}Costs entry has been deleted successfully{/s}', '{s name="title"}{/s}')
+                            Shopware.Msg.createGrowlMessage('', '{s name="dialog_success"}Costs entry has been deleted successfully{/s}', '{s name="title"}{/s}')
                         },
                         failure: function () {
                             Shopware.Msg.createGrowlMessage('', '{s name="dialog_error"}An error occurred while deleting the costs entry{/s}', '{s name="title"}{/s}');

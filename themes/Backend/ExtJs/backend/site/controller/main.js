@@ -174,11 +174,11 @@ Ext.define('Shopware.apps.Site.controller.Main', {
                         me.getStore('Nodes').load();
                         tree.getSelectionModel().deselectAll();
                         me.getDetailForm().getForm().reset();
-                        Shopware.Notification.createGrowlMessage('','{s name="onDeleteSiteSuccess"}The Site has been deleted successfully.{/s}', '{s name="mainWindowTitle"}{/s}');
+                        Shopware.Notification.createGrowlMessage('', '{s name="onDeleteSiteSuccess"}The Site has been deleted successfully.{/s}', '{s name="mainWindowTitle"}{/s}');
                     },
                     failure: function(response) {
                         var errorMsg = response.proxy.reader.jsonData.message;
-                        Shopware.Notification.createGrowlMessage('','{s name="onDeleteSiteError"}An error has occurred while trying to delete the site: {/s}' + errorMsg, '{s name="mainWindowTitle"}{/s}');
+                        Shopware.Notification.createGrowlMessage('', '{s name="onDeleteSiteError"}An error has occurred while trying to delete the site: {/s}' + errorMsg, '{s name="mainWindowTitle"}{/s}');
                     }
                 });
             }

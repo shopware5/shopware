@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
 
     models: [
         'main.Form', 'main.Navigation',
-        'main.Element' , 'main.Value',
+        'main.Element', 'main.Value',
         'main.ElementTranslation', 'main.FormTranslation'
     ],
 

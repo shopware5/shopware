@@ -172,7 +172,7 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
                 dataIndex: 'date',
                 sortable: true,
                 flex: 2
-            } , {
+            }, {
                 header: me.snippets.columns.serials,
                 renderer: me.serialsColumnRenderer,
                 flex: 2

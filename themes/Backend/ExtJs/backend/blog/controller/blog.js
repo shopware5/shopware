@@ -153,7 +153,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
         me.detailRecord = null;
 
         if (me.selectedCategoryRecord && me.selectedCategoryRecord.get("blog")) {
-            model.set("categoryId",me.selectedCategoryRecord.getId());
+            model.set("categoryId", me.selectedCategoryRecord.getId());
         }
 
         me.getView('blog.Window').create({
@@ -255,7 +255,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
             store = me.subApplication.listStore;
         store.filters.clear();
         store.currentPage = 1;
-        store.filter('filter',searchString);
+        store.filter('filter', searchString);
     },
 
     /**
@@ -285,9 +285,9 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
                             rawData = record.getProxy().getReader().rawData;
 
                     if ( operation.success === true ) {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleBlogArticleSuccess, me.snippets.growlMessage);
+                        Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleBlogArticleSuccess, me.snippets.growlMessage);
                     } else {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleBlogArticleError + rawData.errorMsg, me.snippets.growlMessage);
+                        Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleBlogArticleError + rawData.errorMsg, me.snippets.growlMessage);
                     }
                 }
             });
@@ -327,7 +327,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
                             store.load();
                             Shopware.Notification.createGrowlMessage('', me.snippets.deleteMultipleBlogArticlesSuccess, me.snippets.growlMessage);
                         } else {
-                            Shopware.Notification.createGrowlMessage('',me.snippets.deleteMultipleBlogArticlesError + rawData.errorMsg , me.snippets.growlMessage);
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteMultipleBlogArticlesError + rawData.errorMsg, me.snippets.growlMessage);
                         }
                     }
                 });
@@ -417,7 +417,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
 
         // Check if all required fields are valid
         if (!form.isValid()) {
-            Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesNotValid, me.snippets.growlMessage);
+            Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesNotValid, me.snippets.growlMessage);
             return;
         }
 
@@ -429,7 +429,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
         record.set('authorId', values.authorId);
 
         record.save({
-            callback: function (self,operation) {
+            callback: function (self, operation) {
                 if (operation.success) {
                     // save attributes
                     var response = Ext.JSON.decode(operation.response.responseText);
@@ -445,9 +445,9 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
                     me.getCommentPanel().enable();
                     listStore.load();
                     // To remove all red flags
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
                 } else {
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
                 }
             }
         });

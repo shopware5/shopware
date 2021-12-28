@@ -330,7 +330,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
         return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'bottom',
             cls: 'toolbar',
-            items: [ cancelButton , '->', me.applyButton]
+            items: [ cancelButton, '->', me.applyButton]
         });
     },
 

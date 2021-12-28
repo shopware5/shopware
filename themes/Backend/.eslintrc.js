@@ -8,5 +8,6 @@ module.exports = {
         'no-multiple-empty-lines': ['error', { "max": 1 }],
         'func-call-spacing': 'error',
         'keyword-spacing': 'error',
+        'comma-spacing': 'error',
     }
 };

@@ -131,14 +131,14 @@ Ext.define('Shopware.apps.Order.view.detail.Window', {
                     record: me.record,
                     orderStatusStore: me.orderStatusStore,
                     paymentStatusStore: me.paymentStatusStore
-                }), Ext.create('Shopware.apps.Order.view.detail.Detail',{
+                }), Ext.create('Shopware.apps.Order.view.detail.Detail', {
                     title: me.snippets.details,
                     record: me.record,
                     paymentsStore: me.paymentsStore,
                     dispatchesStore: me.dispatchesStore,
                     shopsStore: me.shopsStore,
                     countriesStore: me.countriesStore
-                }), Ext.create('Shopware.apps.Order.view.detail.Communication',{
+                }), Ext.create('Shopware.apps.Order.view.detail.Communication', {
                     title: me.snippets.communication,
                     record: me.record
                 }), Ext.create('Shopware.apps.Order.view.detail.Position', {
@@ -146,7 +146,7 @@ Ext.define('Shopware.apps.Order.view.detail.Window', {
                     record: me.record,
                     taxStore: me.taxStore,
                     statusStore: me.statusStore
-                }), Ext.create('Shopware.apps.Order.view.detail.Document',{
+                }), Ext.create('Shopware.apps.Order.view.detail.Document', {
                     record: me.record,
                     documentTypesStore: me.documentTypesStore
                 }), Ext.create('Shopware.apps.Order.view.detail.OrderHistory', {

@@ -535,7 +535,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                 fieldLabel: me.snippets.groups.name,
                 name: 'name'
             }
-        } , {
+        }, {
             dataIndex: 'description',
             flex: 2,
             text: me.snippets.groups.description,
@@ -546,12 +546,12 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                 name: 'description'
             },
             hidden: true
-        },{
+        }, {
             dataIndex: 'optionCount',
             flex: 1,
             text: me.snippets.groups.options.header,
             renderer: me.optionCountColumnRenderer
-        } , {
+        }, {
             /**
              * Special column type which provides clickable icons in each row
              */
@@ -564,7 +564,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('deleteGroup', record);
                 }
-            } , {
+            }, {
                 iconCls: 'sprite-pencil',
                 action: 'editGroup',
                 tooltip: me.snippets.groups.edit,
@@ -817,7 +817,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                 fieldLabel: me.snippets.groups.name,
                 name: 'name'
             }
-        } , {
+        }, {
             /**
              * Special column type which provides clickable icons in each row
              */

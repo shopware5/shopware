@@ -279,7 +279,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
     onSaveVariantInline: function(record) {
         var me = this;
 
-        me.saveVariant(record,null, {
+        me.saveVariant(record, null, {
             callback: function() {
                 me.getVariantListing().getSelectionModel().deselectAll();
 
@@ -1415,7 +1415,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
      * @param form
      * @param variant
      */
-    onSaveVariant: function(win, form,variant) {
+    onSaveVariant: function(win, form, variant) {
         var me = this, priceStore, number;
 
         if (!form.getForm().isValid()) {
@@ -1423,7 +1423,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         }
         if (form && variant) {
             form.getForm().updateRecord(variant);
-            me.saveVariant(variant,win);
+            me.saveVariant(variant, win);
         }
     },
 

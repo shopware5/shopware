@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Article', {
             fromTitle: '{s name="tab/title/article_available"}Articles available{/s}',
             toTitle: '{s name="tab/title/article_chosen"}Blocked articles{/s}',
             fromStore: me.articleStore,
-            buttons: [ 'add','remove' ],
+            buttons: [ 'add', 'remove' ],
             gridHeight: 270,
             selectedItems: me.record.getArticles(),
             fromFieldDockedItems: [ me.getToolbar() ],

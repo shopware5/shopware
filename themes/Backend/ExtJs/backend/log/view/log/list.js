@@ -130,7 +130,7 @@ Ext.define('Shopware.apps.Log.view.log.List', {
      * Creates the selectionModel of the grid with a listener to enable the delete-button
      */
     getGridSelModel: function(){
-        return Ext.create('Ext.selection.CheckboxModel',{
+        return Ext.create('Ext.selection.CheckboxModel', {
             listeners: {
                 selectionchange: function(sm, selections) {
                     var owner = this.view.ownerCt,
@@ -159,7 +159,7 @@ Ext.define('Shopware.apps.Log.view.log.List', {
             flex: 1,
             xtype: 'datecolumn',
             renderer: me.renderDate
-        },{
+        }, {
             header: '{s name="grid/column_user"}User{/s}',
             dataIndex: 'user',
             flex: 1

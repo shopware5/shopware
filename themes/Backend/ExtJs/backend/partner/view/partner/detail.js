@@ -205,7 +205,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
         var me = this;
         var customerStore = Ext.create('Shopware.attribute.SelectionFactory').createEntitySearchStore('Shopware\\Models\\Customer\\Customer');
 
-        me.customerMapping = Ext.create('Shopware.form.field.CustomerSingleSelection',{
+        me.customerMapping = Ext.create('Shopware.form.field.CustomerSingleSelection', {
             fieldLabel: '{s name="detail_general/field/customer_account"}Customer account{/s}',
             name: 'customerId',
             store: customerStore,

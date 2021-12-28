@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.Shipping.model.Dispatch', {
             model: 'Shopware.apps.Base.model.Country',
             name: 'getCountries',
             associationKey: 'countries'
-        } , {
+        }, {
             type: 'hasMany',
             model: 'Shopware.apps.Shipping.model.Holiday',
             name: 'getHolidays',

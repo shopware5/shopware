@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
             }
         }
         /* {if {acl_is_allowed privilege=delete}} */
-        ,{
+        , {
             xtype: 'actioncolumn',
             width: 50,
             items: [{
@@ -160,7 +160,7 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
             }
         /* {/if} */
             /* {if {acl_is_allowed privilege=delete}} */
-            ,{
+            , {
                 iconCls: 'sprite-minus-circle',
                 text: '{s name="roleslist/deleterole"}{/s}',
                 disabled: true,

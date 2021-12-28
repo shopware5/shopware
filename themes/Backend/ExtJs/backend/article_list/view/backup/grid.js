@@ -58,20 +58,20 @@ Ext.define('Shopware.apps.ArticleList.view.Backup.Grid', {
             format: 'Y-m-d H:i',
             menuDisabled: true,
             sortable: true
-        },{
+        }, {
             width: 120,
             header: '{s name="backup/items"}Affected products{/s}',
             dataIndex: 'items',
             menuDisabled: true,
             sortable: true
-        },{
+        }, {
             flex: 1,
             header: '{s name="backup/filter"}Filter string{/s}',
             dataIndex: 'filterString',
             menuDisabled: true,
             sortable: false,
             renderer: me.nl2brRenderer
-        },{
+        }, {
             flex: 1,
             header: '{s name="backup/operations"}Operations applied{/s}',
             dataIndex: 'operationString',

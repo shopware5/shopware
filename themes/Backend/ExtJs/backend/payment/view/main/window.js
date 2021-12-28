@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.Payment.view.main.Window', {
 
         var buttons = ['->'];
         /*{if {acl_is_allowed privilege=update}}*/
-        buttons.push(Ext.create('Ext.button.Button',{
+        buttons.push(Ext.create('Ext.button.Button', {
             text: '{s name="button_save"}Save{/s}',
             cls: 'primary',
             action: 'save',
@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.Payment.view.main.Window', {
             }
         }));
         /*{/if}*/
-        return Ext.create('Ext.toolbar.Toolbar',{
+        return Ext.create('Ext.toolbar.Toolbar', {
             name: 'gridToolBar',
             region: 'south',
             ui: 'shopware-ui',
@@ -139,12 +139,12 @@ Ext.define('Shopware.apps.Payment.view.main.Window', {
             paymentStore: me.paymentStore
         });
 
-        me.subshopSelection = Ext.create('Shopware.apps.Payment.view.payment.SubshopList',{
+        me.subshopSelection = Ext.create('Shopware.apps.Payment.view.payment.SubshopList', {
             record: me.record,
             paymentStore: me.paymentStore
         });
 
-        me.surcharge = Ext.create('Shopware.apps.Payment.view.payment.Surcharge',{
+        me.surcharge = Ext.create('Shopware.apps.Payment.view.payment.Surcharge', {
             record: me.record,
             paymentStore: me.paymentStore
         });

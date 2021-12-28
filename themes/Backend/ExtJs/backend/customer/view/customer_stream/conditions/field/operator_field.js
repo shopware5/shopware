@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Operato
     allowBlank: false,
     name: 'operator',
 
-    allowedOperators: ['=','!=','<','<=','BETWEEN','>','>=','IN','STARTS_WITH','ENDS_WITH','CONTAINS'],
+    allowedOperators: ['=', '!=', '<', '<=', 'BETWEEN', '>', '>=', 'IN', 'STARTS_WITH', 'ENDS_WITH', 'CONTAINS'],
 
     initComponent: function() {
         var me = this;

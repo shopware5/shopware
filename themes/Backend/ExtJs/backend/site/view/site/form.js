@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
         var me = this,
             items = [];
 
-        me.saveButton = Ext.create('Ext.button.Button',{
+        me.saveButton = Ext.create('Ext.button.Button', {
             text: '{s name="formLinkFieldSaveButtonText"}Save{/s}',
             action: 'onSaveSite',
             cls: 'primary'
@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
         /*{if {acl_is_allowed privilege=createSite} || {acl_is_allowed privilege=updateSite}}*/
         items.push(me.saveButton);
         /*{/if}*/
-        return Ext.create('Ext.toolbar.Toolbar',{
+        return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'bottom',
             ui: 'shopware-ui',
             items: items
@@ -290,7 +290,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
             toTitle: '{s name="site/ddselector/toTitle"}Assigned groups{/s}',
             dataIndex: 'groupName',
             fromStore: me.groupStore,
-            buttons: [ 'add','remove' ],
+            buttons: [ 'add', 'remove' ],
             gridHeight: 125,
             selectedItems: me.selectedStore,
             buttonsText: {

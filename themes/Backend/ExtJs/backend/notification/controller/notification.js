@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.Notification.controller.Notification', {
         store.filters.clear();
         store.currentPage = 1;
         searchString = searchString + "%";
-        store.filter('search',searchString);
+        store.filter('search', searchString);
     },
 
     /**
@@ -133,7 +133,7 @@ Ext.define('Shopware.apps.Notification.controller.Notification', {
         store.filters.clear();
         store.currentPage = 1;
         searchString = "%" + searchString + "%";
-        store.filter('search',searchString);
+        store.filter('search', searchString);
     }
 });
 //{/block}

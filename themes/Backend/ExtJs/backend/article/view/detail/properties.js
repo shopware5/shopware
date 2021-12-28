@@ -383,7 +383,7 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
                     header: me.snippets.name,
                     dataIndex: 'name',
                     width: 155
-                } , {
+                }, {
                     header: me.snippets.value,
                     dataIndex: 'value',
                     flex: 1,

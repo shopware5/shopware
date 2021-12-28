@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerForm', {
             layout: 'column',
             anchor: '100%',
             items: [
-                ,me.validFromField,
+                , me.validFromField,
             {
                 margin: '0 0 0 10',
                 submitFormat: 'H:i',

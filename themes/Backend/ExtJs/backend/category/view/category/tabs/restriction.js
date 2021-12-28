@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.restriction', {
     getItems: function () {
         var me = this;
 
-        me.ddSelector = Ext.create('Shopware.DragAndDropSelector',{
+        me.ddSelector = Ext.create('Shopware.DragAndDropSelector', {
             fromTitle: me.snippets.availableCustomerGroups,
             toTitle: me.snippets.chosenCustomerGroups,
             fromStore: me.customerGroupsStore,

@@ -113,7 +113,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
             region: 'center',
             tpl: me.getBannerListTemplate(),
             multiSelect: true,
-            height: '100%',//just for the selector plugin
+            height: '100%', //just for the selector plugin
             trackOver: true,
             overItemCls: 'x-item-over',
             itemSelector: 'div.thumb-wrap',
@@ -137,7 +137,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
         });
 
         return Ext.create('Ext.panel.Panel', {
-            cls: 'banner-images-view',//only for the css styling
+            cls: 'banner-images-view', //only for the css styling
             region: 'center',
             unstyled: true,
             style: 'border-top: 1px solid #c7c7c7',

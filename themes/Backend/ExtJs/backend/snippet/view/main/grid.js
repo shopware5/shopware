@@ -226,7 +226,7 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
                 xtype: 'textfield',
                 allowBlank: false
             }
-        },{
+        }, {
             header: me.snippets.columnName,
             dataIndex: 'name',
             flex: 1,

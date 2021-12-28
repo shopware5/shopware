@@ -90,11 +90,11 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Optimizerlist', {
                 header: '{s name="optimizer_grid/column/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1
-            },{
+            }, {
                 header: '{s name="optimizer_grid/column/mimetype"}Mime-Type{/s}',
                 dataIndex: 'mimeTypes',
                 flex: 1
-            },{
+            }, {
                 header: '{s name="optimizer_grid/column/runnable"}Runnable{/s}',
                 dataIndex: 'runnable',
                 flex: 1,

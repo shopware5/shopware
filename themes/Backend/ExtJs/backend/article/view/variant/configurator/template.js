@@ -474,7 +474,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
                 xtype: 'textfield',
                 name: 'supplierNumber',
                 fieldLabel: me.snippets.settings.supplierNumber
-            } , {
+            }, {
                 xtype: 'numberfield',
                 name: 'weight',
                 submitLocaleSeparator: false,

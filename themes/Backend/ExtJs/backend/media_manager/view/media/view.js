@@ -174,23 +174,23 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     createMediaViewTemplate: function() {
         var me = this,
             tSize = me.thumbnailSize,
-            tStyle = Ext.String.format('style="width:[0]px;height:[0]px;"',tSize),
-            imgStyle = Ext.String.format('style="max-width:[0]px;max-height:[0]px"',tSize-2);
+            tStyle = Ext.String.format('style="width:[0]px;height:[0]px;"', tSize),
+            imgStyle = Ext.String.format('style="max-width:[0]px;max-height:[0]px"', tSize-2);
 
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-            Ext.String.format('<div class="thumb-wrap" id="{name}" [0]>',tStyle),
+            Ext.String.format('<div class="thumb-wrap" id="{name}" [0]>', tStyle),
             // If the type is image, then show the image
             '<tpl if="this.isImage(type, extension)">',
-            Ext.String.format('<div class="thumb" [0]>',tStyle),
-            Ext.String.format('<div class="inner-thumb" [0]>',tStyle),
+            Ext.String.format('<div class="thumb" [0]>', tStyle),
+            Ext.String.format('<div class="inner-thumb" [0]>', tStyle),
             Ext.String.format('<img src="{thumbnail}?{timestamp}" title="{name}" [0] /></div>', imgStyle),
             '</div>',
             '</tpl>',
 
             // All other types should render an icon
             '<tpl if="!this.isImage(type, extension)">',
-            Ext.String.format('<div class="thumb icon" [0]>',tStyle),
+            Ext.String.format('<div class="thumb icon" [0]>', tStyle),
             '<div class="icon-{[values.type.toLowerCase()]}">&nbsp;</div>',
             '</div>',
             '</tpl>',
@@ -609,7 +609,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
          * Initialize the display type button
          */
 
-        me.displayTypeBtn = Ext.create('Ext.button.Cycle',{
+        me.displayTypeBtn = Ext.create('Ext.button.Cycle', {
             showText: true,
             prependText: '{s name="toolbar/view"}Display as{/s} ',
             action: 'mediamanager-media-view-layout',
@@ -621,7 +621,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                     text: '{s name="toolbar/view_chart"}Grid{/s}',
                     layout: 'grid',
                     iconCls: 'sprite-application-icon-large'
-                },{
+                }, {
                     text: '{s name="toolbar/view_table"}Table{/s}',
                     layout: 'table',
                     checked: true,

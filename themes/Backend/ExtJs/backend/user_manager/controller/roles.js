@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.UserManager.controller.Roles', {
      * @param view
      * @param rowIndex - index of role in store
      */
-    onDeleteRole: function(view,rowIndex){
+    onDeleteRole: function(view, rowIndex){
         var me = this,
         roleStore = me.getStore('Roles'),
         message,

@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Translation.view.main.Window',
             xtype: 'translation-main-toolbar',
             dock: 'top',
             region: 'north'
-        },{
+        }, {
             xtype: 'translation-main-navigation',
             treeStore: me.treeStore,
             region: 'west'

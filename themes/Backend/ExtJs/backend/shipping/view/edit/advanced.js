@@ -138,11 +138,11 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 xtype: 'combobox',
                 name: 'bindShippingFree',
                 fieldLabel: '{s name="bind_shippingfree_label"}Support articles free of shipping costs{/s}',
-                store: Ext.create('Ext.data.Store',{
+                store: Ext.create('Ext.data.Store', {
                     fields: ['id', 'name'],
-                    data: [{ id: 0 , name: '{s name="bind_shippingfree_data_support"}Support{/s}' },
-                            { id: 1 , name: '{s name="bind_shippingfree_data_not_support_lock"}do not support and lock shipping type{/s}' },
-                            { id: 2 , name: '{s name="bind_shippingfree_data_support_calc_costs"}Support but add shipping costs nevertheless.{/s}' }]
+                    data: [{ id: 0, name: '{s name="bind_shippingfree_data_support"}Support{/s}' },
+                            { id: 1, name: '{s name="bind_shippingfree_data_not_support_lock"}do not support and lock shipping type{/s}' },
+                            { id: 2, name: '{s name="bind_shippingfree_data_support_calc_costs"}Support but add shipping costs nevertheless.{/s}' }]
                 }),
                 valueField: 'id',
                 displayField: 'name',
@@ -158,7 +158,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 xtype: 'combobox',
                 name: 'bindInStock',
                 fieldLabel: '{s name="bind_instock_label"}Stock larger than{/s}',
-                store: Ext.create('Ext.data.Store',{
+                store: Ext.create('Ext.data.Store', {
                     fields: ['id', 'name'],
                     data: [
                             { id: 0, name: '{s name="bind_instock_data_no_selection"}No selection{/s}' },
@@ -176,9 +176,9 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 width: 200
             }, {
                     items: me.getBindTime()
-            },{
+            }, {
                     items: me.getBindWeight()
-            },{
+            }, {
                     items: me.getBindPrice()
             }, {
                     items: me.getBindWeekday()
@@ -339,7 +339,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
 
         dayNames.push(sunday);
         //add default value
-        dayStore.push([0,'{s name="bind_weekday_from_none_value"}no selection{/s}']);
+        dayStore.push([0, '{s name="bind_weekday_from_none_value"}no selection{/s}']);
         Ext.each(dayNames, function(name) {
             counter++;
             dayStore.push([counter, name]);
@@ -360,7 +360,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                     minWidth: 80,
                     style: 'margin-right: 5px',
                     store: new Ext.data.ArrayStore({
-                            fields: ['id','name'],
+                            fields: ['id', 'name'],
                             data: dayStore
                     }),
                     displayField: 'name',
@@ -373,7 +373,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                     fieldLabel: '{s name="bind_weekday_to_label"}to{/s}',
                     labelWidth: 20,
                     store: new Ext.data.ArrayStore({
-                            fields: ['id','name'],
+                            fields: ['id', 'name'],
                             data: dayStore
                     }),
                     displayField: 'name',

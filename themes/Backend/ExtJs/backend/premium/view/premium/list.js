@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
      * Creates the selectionModel of the grid with a listener to enable the delete-button
      */
     getGridSelModel: function(){
-        var selModel = Ext.create('Ext.selection.CheckboxModel',{
+        var selModel = Ext.create('Ext.selection.CheckboxModel', {
             listeners: {
                 selectionchange: function(sm, selections){
                     var owner = this.view.ownerCt,
@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
                 flex: 1,
                 //Renderer to format the column
                 renderer: this.nameColumn
-            },{
+            }, {
                 header: '{s name="column/export_ordernumber"}Export order number{/s}',
                 dataIndex: 'orderNumberExport',
                 flex: 1
@@ -194,7 +194,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
                 dataIndex: 'subShopName',
                 flex: 1,
                 renderer: this.renderSubShop
-            },{
+            }, {
                 header: '{s name="column/startprice"}Minimum order value{/s}',
                 dataIndex: 'startPrice',
                 flex: 1
@@ -208,7 +208,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
         return columns;
     },
 
-    renderSubShop: function(value,a,record){
+    renderSubShop: function(value, a, record){
         if (value){
             return value;
         } else if (record.data.shopId == 0){
@@ -221,7 +221,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
      */
     getToolbar: function(){
 
-        var searchField = Ext.create('Ext.form.field.Text',{
+        var searchField = Ext.create('Ext.form.field.Text', {
             name: 'searchfield',
             cls: 'searchfield',
             action: 'searchPremiumArticle',
@@ -243,14 +243,14 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
         searchField.addEvents('fieldchange');
         var items = [];
         /*{if {acl_is_allowed privilege=create}}*/
-            items.push(Ext.create('Ext.button.Button',{
+            items.push(Ext.create('Ext.button.Button', {
                 iconCls: 'sprite-plus-circle',
                 text: '{s name="toolbar/add"}Add{/s}',
                 action: 'add'
             }));
         /*{/if}*/
         /*{if {acl_is_allowed privilege=delete}}*/
-        items.push(Ext.create('Ext.button.Button',{
+        items.push(Ext.create('Ext.button.Button', {
             iconCls: 'sprite-minus-circle',
             text: '{s name="toolbar/delete"}Delete selected articles{/s}',
             disabled: true,
@@ -279,7 +279,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
     * @param value
     * @return [string]
     */
-    nameColumn: function(value,metaData,record) {
+    nameColumn: function(value, metaData, record) {
             return Ext.String.format('<b>{literal}{0}</b> <span>({1}){/literal}</span>', value, record.data.orderNumber);
     }
 

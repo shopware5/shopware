@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
                 summaryType: 'sum',
                 summaryRenderer: function(value, summaryData, dataIndex) {
                     return me.summaryRenderer(me, value, summaryData, dataIndex);
-                } ,
+                },
                 flex: 1
             },
             {
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
                 summaryType: 'sum',
                 summaryRenderer: function(value, summaryData, dataIndex) {
                     return me.summaryRenderer(me, value, summaryData, dataIndex);
-                } ,
+                },
                 flex: 1
             }
         ];

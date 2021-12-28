@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.Index.view.merchant.Window', {
             items: [{
                 xtype: 'hidden',
                 name: 'userId'
-            },{
+            }, {
                 xtype: 'hidden',
                 name: 'status'
             }, {

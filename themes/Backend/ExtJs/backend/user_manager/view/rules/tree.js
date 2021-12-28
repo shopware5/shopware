@@ -375,7 +375,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
 
         return [{
             xtype: 'treecolumn',
-            text: me.snippets.columns.name ,
+            text: me.snippets.columns.name,
             flex: 1,
             sortable: true,
             dataIndex: 'name'

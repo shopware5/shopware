@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Config.view.form.CronJob', {
             xtype: 'config-base-table',
             store: 'form.CronJob',
             columns: me.getColumns()
-        },{
+        }, {
             xtype: 'config-base-detail',
             items: me.getFormItems()
         }];
@@ -80,43 +80,43 @@ Ext.define('Shopware.apps.Config.view.form.CronJob', {
             name: 'name',
             allowBlank: false,
             fieldLabel: '{s name="detail/name_label"}Name{/s}'
-        },{
+        }, {
             readOnly: true,
             isReadOnlyField: true,
             allowBlank: false,
             name: 'action',
             fieldLabel: '{s name="detail/action_label"}Action{/s}'
-        },{
+        }, {
             xtype: 'config-element-textarea',
             name: 'data',
             readOnly: true,
             isReadOnlyField: true,
             fieldLabel: '{s name="detail/data_label"}Data{/s}'
-        },{
+        }, {
             xtype: 'config-element-datetime',
             name: 'start',
             fieldLabel: '{s name="detail/last_label"}Last{/s}'
-        },{
+        }, {
             xtype: 'config-element-datetime',
             name: 'next',
             fieldLabel: '{s name="detail/next_label"}Next{/s}'
-        },{
+        }, {
             xtype: 'config-element-interval',
             name: 'interval',
             allowBlank: false,
             fieldLabel: '{s name="detail/interval_label"}Interval{/s}'
-        },{
+        }, {
             xtype: 'config-element-boolean',
             name: 'active',
             fieldLabel: '{s name="detail/active_label"}Active{/s}'
-        },{
+        }, {
             xtype: 'config-element-boolean',
             name: 'disableOnError',
             fieldLabel: '{s name="detail/disable_on_error_label"}Disable on error{/s}'
-        },{
+        }, {
             name: 'informMail',
             fieldLabel: '{s name="detail/inform_mail_label"}Email recipient{/s}'
-        },{
+        }, {
             name: 'informTemplate',
             fieldLabel: '{s name="detail/inform_template_label"}Email template{/s}'
         }];

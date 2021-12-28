@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Config.view.priceGroup.Discount', {
         var me = this,
             topBar = me.callParent();
 
-        me.addButton = Ext.apply(topBar[0],{ disabled: true });
+        me.addButton = Ext.apply(topBar[0], { disabled: true });
 
         topBar.push({
             xtype: 'config-element-select',

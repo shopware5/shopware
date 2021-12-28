@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Pathlist', {
                 header: '{s name="path_grid/column/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1
-            },{
+            }, {
                 header: '{s name="path_grid/column/status"}Status{/s}',
                 dataIndex: 'result',
                 flex: 1,

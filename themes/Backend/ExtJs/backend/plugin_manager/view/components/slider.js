@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.Slider', {
         var me = this,
             left = 0,
             nextPosition,
-            itemsPerPage = Math.floor(me.getWidth() / me.itemWidth) ,
+            itemsPerPage = Math.floor(me.getWidth() / me.itemWidth),
             pageWidth;
 
         if (itemsPerPage < 1) itemsPerPage = 1;

@@ -242,7 +242,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
             store = me.getStore('List');
         store.filters.clear();
         store.currentPage = 1;
-        store.filter('filter',searchString);
+        store.filter('filter', searchString);
     },
     /**
      * Event listener which deletes a single voucher based on the passed
@@ -272,7 +272,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
                     callback: function (batch) {
                         var rawData = batch.proxy.getReader().rawData;
                         if (rawData.success === true) {
-                            Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleVoucherSuccess, me.snippets.growlMessage);
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleVoucherSuccess, me.snippets.growlMessage);
                         }
                         voucherGrid.setLoading(false);
                         store.load();
@@ -280,7 +280,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
                     }
                 });
             } catch (e) {
-                Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleVoucherError + e.message, me.snippets.growlMessage);
+                Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleVoucherError + e.message, me.snippets.growlMessage);
             }
 
         });
@@ -314,9 +314,9 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
                     callback: function(batch) {
                         var rawData = batch.proxy.getReader().rawData;
                         if (rawData.success === true) {
-                            Shopware.Notification.createGrowlMessage('',me.snippets.deleteMultipleVoucherSuccess, me.snippets.growlMessage);
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteMultipleVoucherSuccess, me.snippets.growlMessage);
                         } else {
-                            Shopware.Notification.createGrowlMessage('',me.snippets.deleteMultipleVoucherError + rawData.errorMsg, me.snippets.growlMessage);
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteMultipleVoucherError + rawData.errorMsg, me.snippets.growlMessage);
                         }
                         grid.setLoading(false);
                         store.load();
@@ -355,7 +355,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
         record.set('bindToSupplier', values.bindToSupplier);
 
         record.save({
-            callback: function (self,operation) {
+            callback: function (self, operation) {
                 if (operation.success) {
                     var response = Ext.JSON.decode(operation.response.responseText);
                     var data = response.data;
@@ -365,12 +365,12 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
                         attributeForm.loadAttribute(data.id);
                     });
 
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveVoucherSuccess, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveVoucherSuccess, me.snippets.growlMessage);
                     if (self.data.modus) {
                         me.getCodesGrid().enable();
                     }
                 } else {
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveVoucherError, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveVoucherError, me.snippets.growlMessage);
                     me.getStore("List").load();
                 }
             }

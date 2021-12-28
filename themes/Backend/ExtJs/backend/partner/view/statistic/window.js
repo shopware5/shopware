@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.Window', {
             labelWidth: 45,
             name: 'fromDate',
             fieldLabel: '{s name="statistic/window/date/from"}From{/s}',
-            value: new Date(today.getFullYear() - 1, today.getMonth() , today.getDate())
+            value: new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
         });
 
         me.toDateField = Ext.create('Ext.form.field.Date', {

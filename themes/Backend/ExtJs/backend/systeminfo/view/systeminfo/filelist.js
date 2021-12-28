@@ -98,12 +98,12 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Filelist', {
                 header: '{s name="file_grid/column/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1
-            },{
+            }, {
                 header: '{s name="file_grid/column/required"}Available{/s}',
                 dataIndex: 'available',
                 width: '65px',
                 renderer: me.renderStatus
-           },{
+           }, {
                 header: '{s name="file_grid/column/status"}Status{/s}',
                 dataIndex: 'result',
                 width: '65px',

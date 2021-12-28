@@ -366,7 +366,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
 
         me.calculationField = Ext.create('Ext.form.field.ComboBox', defaultConfig);
         return me.calculationField;
-    }  ,
+    },
     /**
      * Returns the field which contains the calculation combo box
      * @return Ext.form.ComboBox

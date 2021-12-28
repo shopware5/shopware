@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
     createStore: function() {
         var me = this;
 
-        return Ext.create('Ext.data.Store',{
+        return Ext.create('Ext.data.Store', {
             model: 'Shopware.apps.Emotion.model.Emotion',
             data: [ me.emotion ]
         });

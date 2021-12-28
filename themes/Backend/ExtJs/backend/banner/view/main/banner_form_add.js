@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
             items: me.createActionButtons()
         }];
         me.callParent(arguments);
-        me.record.set('categoryId' , me.category.get('id'));
+        me.record.set('categoryId', me.category.get('id'));
 
         me.formPanel.loadRecord(me.record);
         me.linkTarget.setValue('_blank');
@@ -164,7 +164,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
     },
 
     onExtensionError: function() {
-        Shopware.Msg.createGrowlMessage('','{s name="extension_error"}Incorrect MIME Type{/s}','{s name="main_title"}{/s}');
+        Shopware.Msg.createGrowlMessage('', '{s name="extension_error"}Incorrect MIME Type{/s}', '{s name="main_title"}{/s}');
     },
 
     /**
@@ -227,7 +227,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
             layout: 'column',
             anchor: '100%',
             items: [
-                ,me.validFromField,
+                , me.validFromField,
             {
                 margin: '0 0 0 10',
                 submitFormat: 'H:i',

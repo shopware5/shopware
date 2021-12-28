@@ -244,7 +244,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
                                 disabled: true,
                                 handler: me.moveFirst,
                                 scope: me
-                            },{
+                            }, {
                                 itemId: 'prev',
                                 hidden: !pagingComboBox.pagingBarConfig.prev,
                                 tooltip: me.prevText,
@@ -276,7 +276,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
                                     keydown: me.onPagingKeyDown,
                                     blur: me.onPagingBlur
                                 }
-                            },{
+                            }, {
                                 xtype: 'tbtext',
                                 itemId: 'afterTextItem',
                                 hidden: !pagingComboBox.pagingBarConfig.jumpTo,
@@ -292,7 +292,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
                                 hidden: !pagingComboBox.pagingBarConfig.next,
                                 handler: me.moveNext,
                                 scope: me
-                            },{
+                            }, {
                                 itemId: 'last',
                                 tooltip: me.lastText,
                                 overflowText: me.lastText,

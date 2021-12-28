@@ -130,7 +130,7 @@ Ext.define('Shopware.apps.Translation.view.main.Services',
             handler: function() {
                 me.destroy();
             }
-        },{
+        }, {
             text: '{s name="button/start_translation"}Start translation{/s}',
             cls: 'primary',
             action: 'translation-main-services-window-translate'

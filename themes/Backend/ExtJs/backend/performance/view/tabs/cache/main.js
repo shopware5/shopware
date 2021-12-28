@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
             flex: 1
         }
         /*{if {acl_is_allowed privilege=clear}}*/
-        ,{
+        , {
             xtype: 'performance-tabs-cache-form',
             flex: 1
         }
@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
             text: '{s name="form/buttons/select_all"}Select all{/s}',
             action: 'select-all',
             cls: 'secondary'
-        },{
+        }, {
             text: '{s name="form/buttons/submit"}Clear{/s}',
             action: 'clear',
             cls: 'primary'

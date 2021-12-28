@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Mail.controller.Attachment', {
         deleteSuccessMessage: '{s name="message_delete_success_title"}Attachments have been removed{/s}',
 
         deleteErrorTitle: '{s name="message_delete_error_title"}Error{/s}',
-        deleteErrorMessage: '{s name="message_delete_error_message"}An error has occurred while deleting.{/s}'  ,
+        deleteErrorMessage: '{s name="message_delete_error_message"}An error has occurred while deleting.{/s}',
 
         singleDeleteTitle: '{s name="message_delete_single_title"}Delete selected attachment{/s}',
         singleDeletMessage: '{s name="message_delete_single_content"}Are you sure that you want to delete the selected attachment?{/s}',

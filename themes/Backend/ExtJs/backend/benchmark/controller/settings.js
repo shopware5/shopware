@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Benchmark.controller.Settings', {
 
                 Shopware.Notification.createGrowlMessage(
                     '{s name="growlMessage/industry_window/error/title"}Error saving the industry{/s}',
-                    responseData.message ,
+                    responseData.message,
                     'BenchmarkIndustryWindow'
                 );
             }

@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.Notification', {
      * Required views
      * @array
      */
-    views: [ 'main.Window', 'notification.Article' , 'notification.Customer' ],
+    views: [ 'main.Window', 'notification.Article', 'notification.Customer' ],
 
     /**
      * Returns the main application window for this is expected

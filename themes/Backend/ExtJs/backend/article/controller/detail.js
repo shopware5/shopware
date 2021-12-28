@@ -548,7 +548,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
         // Use the model from the record because article in split view mode can be outdated
         if (articleModel instanceof Ext.data.Model && articleModel.get('id') > 0) {
-            Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.removeArticle , function (response) {
+            Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.removeArticle, function (response) {
                 if ( response !== 'yes' ) {
                     return;
                 }

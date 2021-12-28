@@ -166,14 +166,14 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                         mainWindow.setLoading(false);
                         var rawData = operation.records[0].proxy.reader.rawData
                         if (operation.success) {
-                            Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
                             store.load({ node: parentNode });
                             me.disableForm();
                         } else {
                             if (rawData.message) {
-                                Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemFailure + '<br>' + rawData.message, me.snippets.growlMessage);
+                                Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleItemFailure + '<br>' + rawData.message, me.snippets.growlMessage);
                             } else {
-                                Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemFailure, me.snippets.growlMessage);
+                                Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleItemFailure, me.snippets.growlMessage);
                             }
                         }
                     }
@@ -560,7 +560,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 } else {
                     var rawData = self.proxy.reader.rawData;
                     if (rawData.message) {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError + '<br>' +  rawData.message, me.snippets.growlMessage);
+                        Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError + '<br>' +  rawData.message, me.snippets.growlMessage);
                     } else {
                         Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
                     }

@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.ArticleList.controller.SplitView', {
 
         // Prepare the article list
         me.getSidebar().collapse();
-        mainWindow.setPosition(0,0);
+        mainWindow.setPosition(0, 0);
         mainWindow.setSize(Ext.Element.getViewportWidth() / 2, Ext.Element.getViewportHeight() - 90);
 
         // Open the product module and set it up for the splitview mode

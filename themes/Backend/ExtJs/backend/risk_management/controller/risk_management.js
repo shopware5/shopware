@@ -299,7 +299,7 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
                 subShopStore: me.subApplication.subShopStore
             }));
             //"OR"-Container
-            panel.riskFieldSet.add(Ext.create('Ext.container.Container',{
+            panel.riskFieldSet.add(Ext.create('Ext.container.Container', {
                 html: '<b>{s name="container_or"}OR{/s}</b>',
                 width: 165,
                 style: {

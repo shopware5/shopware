@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Supplier', {
      * @array
      */
     views: [
-        'Main', 'main.List','main.Edit',
+        'Main', 'main.List', 'main.Edit',
         'main.Create', 'main.Detail', 'main.Toolbar'
     ],
 

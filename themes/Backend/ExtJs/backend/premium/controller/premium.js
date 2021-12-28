@@ -215,7 +215,7 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
             //This won't reload the store
             store.filters.clear();
             //Loads the store with a special filter
-            store.filter('searchValue',field.getValue());
+            store.filter('searchValue', field.getValue());
         }
     }
 });

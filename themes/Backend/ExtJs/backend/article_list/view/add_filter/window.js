@@ -242,7 +242,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
                 tabConfig: {
                     tooltip: '{s name="addFilter/advancedTooltip"}In advanced mode, you can define and combine your conditions very free{/s}'
                 }
-            },{
+            }, {
                 xtype: 'multi-edit-add-filter-grid',
                 internalTitle: 'simple',
                 filterableColumns: me.filterableColumns,

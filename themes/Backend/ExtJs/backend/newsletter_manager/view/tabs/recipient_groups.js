@@ -206,7 +206,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.RecipientGroups', {
     getToolbar: function() {
         var me = this;
 
-        me.deleteSelected = Ext.create('Ext.button.Button',{
+        me.deleteSelected = Ext.create('Ext.button.Button', {
             text: '{s name="deleteSelected"}Delete selected{/s}',
             iconCls: 'sprite-minus-circle',
             disabled: true,

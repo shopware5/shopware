@@ -177,7 +177,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             grid = me.getListing(),
             store = grid.getStore();
 
-        Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.confirmMessage , function (response) {
+        Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.confirmMessage, function (response) {
             if ( response !== 'yes' ) {
                 return;
             }

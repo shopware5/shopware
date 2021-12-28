@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.UpdateWizard.view.Login', {
             padding: '20 0',
             background: '#fff',
             height: 120,
-            items: [ cancelButton ,'->', applyButton]
+            items: [ cancelButton, '->', applyButton]
         });
     },
 

@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Window', {
     createList: function() {
         var me = this;
 
-        me.listPanel = Ext.create('Shopware.apps.Emotion.view.presets.List',{
+        me.listPanel = Ext.create('Shopware.apps.Emotion.view.presets.List', {
             region: 'center',
             flex: 3,
             store: Ext.create('Shopware.apps.Emotion.store.Presets', {

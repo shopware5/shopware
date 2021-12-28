@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                 handler: me.close
             }
         /* {if {acl_is_allowed privilege=create}} */
-            ,{
+            , {
                 text: '{s name="create_user/save"}Save{/s}',
                 action: 'save',
                 cls: 'primary',
@@ -222,7 +222,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
      * @return
      */
     getUserPasswordFieldRepeat: function () {
-        return Ext.create('Ext.form.field.Text',{
+        return Ext.create('Ext.form.field.Text', {
             inputType: 'password',
             fieldLabel: '{s name="create_user/repeat_password"}Repeat password{/s}',
             name: 'password2',

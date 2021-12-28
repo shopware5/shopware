@@ -239,7 +239,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
      * @param view
      * @param rowIndex
      */
-    onDeleteUser: function (view,rowIndex){
+    onDeleteUser: function (view, rowIndex){
         var me = this,
         userStore = me.getStore('User'),
         message,

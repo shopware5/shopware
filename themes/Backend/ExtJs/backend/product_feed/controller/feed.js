@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         //reset the detail Record
         me.detailRecord = null;
 
-        model.set("hash",me.createRandomHash());
+        model.set("hash", me.createRandomHash());
         me.getView('feed.Window').create({
             record: model,
             supplierStore: me.subApplication.supplierStore,
@@ -215,7 +215,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
             scope: this,
             callback: function (records) {
                 me.detailRecord = records[0];
-                me.detailRecord.set("hash",me.createRandomHash());
+                me.detailRecord.set("hash", me.createRandomHash());
                 me.detailRecord.data.id = '';
                 //reset the id
                 store.getProxy().extraParams = {};
@@ -253,13 +253,13 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
             }
             store.remove(record);
             store.save({
-                callback: function (self,operation) {
+                callback: function (self, operation) {
                     if (operation.success) {
                         store.load();
-                        Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
+                        Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
                         me.getProductFeedWindow().destroy();
                     } else {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemError, me.snippets.growlMessage);
+                        Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleItemError, me.snippets.growlMessage);
                     }
                 }
             });
@@ -344,18 +344,18 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         categories.add(checked);
 
         record.save({
-            callback: function (self,operation) {
+            callback: function (self, operation) {
                 if (operation.success) {
                     listStore.load();
                     var response = Ext.JSON.decode(operation.response.responseText);
                     var data = response.data;
                     attributeForm.saveAttribute(data.id);
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
                     if (!Ext.isDefined(keepOpened) || !keepOpened){
                         me.getProductFeedWindow().destroy();
                     }
                 } else {
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
                 }
             }
         });

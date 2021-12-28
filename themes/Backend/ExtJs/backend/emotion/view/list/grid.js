@@ -200,7 +200,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             draggable: false,
             sortable: false,
             groupable: false
-        },{
+        }, {
             header: '{s name="list/visibility_in_categories"}{/s}',
             dataIndex: 'listingVisibility',
             width: 115,

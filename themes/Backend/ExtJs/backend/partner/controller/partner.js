@@ -196,9 +196,9 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
                         rawData = record.getProxy().getReader().rawData;
 
                     if ( operation.success === true ) {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
+                        Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
                     } else {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemFailure + ' ' + rawData.message, me.snippets.growlMessage);
+                        Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleItemFailure + ' ' + rawData.message, me.snippets.growlMessage);
                     }
                 }
             });
@@ -230,14 +230,14 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
         form.updateRecord(record);
 
         record.save({
-            callback: function (self,operation) {
+            callback: function (self, operation) {
                 if (operation.success) {
                     attributeForm.saveAttribute(record.get('id'));
                     listStore.load();
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
                     me.getDetailWindow().destroy();
                 } else {
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
                 }
             }
         });

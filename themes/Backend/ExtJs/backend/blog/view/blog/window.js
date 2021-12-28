@@ -118,7 +118,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
      */
     createFormPanel: function() {
         var me = this;
-        me.mainView = Ext.create('Shopware.apps.Blog.view.blog.detail.Main',{
+        me.mainView = Ext.create('Shopware.apps.Blog.view.blog.detail.Main', {
             flex: 5,
             record: me.record
         });
@@ -190,7 +190,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
                 }
             }
         /* {if {acl_is_allowed privilege=create}} */
-            ,{
+            , {
                 text: '{s name="detail_general/button/save"}Save{/s}',
                 action: 'save',
                 cls: 'primary'

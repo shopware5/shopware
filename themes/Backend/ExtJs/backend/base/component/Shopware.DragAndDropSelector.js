@@ -270,7 +270,7 @@ Ext.define('Shopware.DragAndDropSelector',
      */
     getMiddleButtons: function() {
         var me = this;
-        return Ext.create('Ext.container.Container',{
+        return Ext.create('Ext.container.Container', {
             margins: '0 4',
             width: 22,
             layout: {

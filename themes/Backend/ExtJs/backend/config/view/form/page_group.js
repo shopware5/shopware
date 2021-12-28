@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Config.view.form.PageGroup', {
             xtype: 'config-base-table',
             store: 'form.PageGroup',
             columns: me.getColumns()
-        },{
+        }, {
             xtype: 'config-base-detail',
             store: 'detail.PageGroup',
             items: me.getFormItems()
@@ -73,16 +73,16 @@ Ext.define('Shopware.apps.Config.view.form.PageGroup', {
             name: 'name',
             fieldLabel: '{s name="page_group/detail/name_label"}Name{/s}',
             allowBlank: false
-        },{
+        }, {
             name: 'key',
             fieldLabel: '{s name="page_group/detail/key_label"}Template key{/s}',
             allowBlank: false
-        },{
+        }, {
             xtype: 'config-element-select',
             name: 'mappingId',
             fieldLabel: '{s name="page_group/detail/mapping_label"}Mapping{/s}',
             store: 'base.PageGroup'
-        },{
+        }, {
             xtype: 'config-element-boolean',
             name: 'active',
             fieldLabel: '{s name="page_group/detail/active_label"}Active{/s}'

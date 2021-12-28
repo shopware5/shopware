@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
                 ui: 'shopware-ui',
                 cls: 'shopware-toolbar',
                 style: 'background: transparent;box-shadow: none',
-                items: ['->',{
+                items: ['->', {
                     xtype: 'button',
                     cls: 'primary',
                     text: '{s name="button/login"}Login{/s}',

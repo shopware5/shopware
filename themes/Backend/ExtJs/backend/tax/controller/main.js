@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
                success: function(response){
                    // Update tree-node text
                    this.getNavigationTree().store.load();
-                   Shopware.Msg.createGrowlMessage('','{s name="groupList/renameSuccessfully"}Group has been created{/s}', '{s name="window_title"}{/s}');},
+                   Shopware.Msg.createGrowlMessage('', '{s name="groupList/renameSuccessfully"}Group has been created{/s}', '{s name="window_title"}{/s}');},
                failure: function(){
                    Shopware.Msg.createGrowlMessage('', '{s name="groupList/renameError"}Error while creating group{/s}', '{s name="window_title"}{/s}');
                },
@@ -115,7 +115,7 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
          if (response !== 'yes')  return false;
          record.destroy({
              success: function () {
-                 Shopware.Msg.createGrowlMessage('','{s name="tree/deletedSuccessfully"}Tax group was deleted{/s}', '{s name="window_title"}{/s}')
+                 Shopware.Msg.createGrowlMessage('', '{s name="tree/deletedSuccessfully"}Tax group was deleted{/s}', '{s name="window_title"}{/s}')
              },
              failure: function () {
                  Shopware.Msg.createGrowlMessage('', '{s name="tree/deletedError"}Error while deleting tax group{/s}', '{s name="window_title"}{/s}');
@@ -123,7 +123,7 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
          });
         });
     },
-    onDeleteRule: function(view,rowIndex){
+    onDeleteRule: function(view, rowIndex){
         var me = this,
         rulesStore = me.getStore('Rules'),
         message,
@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
          record.destroy({
              success: function () {
                  rulesStore.load();
-                 Shopware.Msg.createGrowlMessage('','{s name="ruleslist/deletedSuccessfully"}Rule was deleted{/s}', '{s name="window_title"}{/s}');
+                 Shopware.Msg.createGrowlMessage('', '{s name="ruleslist/deletedSuccessfully"}Rule was deleted{/s}', '{s name="window_title"}{/s}');
              },
              failure: function () {
                  Shopware.Msg.createGrowlMessage('', '{s name="ruleslist/deletedError"}An error has occured while deleting rule{/s}', '{s name="window_title"}{/s}');
@@ -154,10 +154,10 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
               name: 'Enter name...'
           }
         );
-        ruleStore.insert(0,newRule);
+        ruleStore.insert(0, newRule);
         grid.rowEditing.startEdit(0, 0);
     },
-    onItemDblClick: function(tree,record){
+    onItemDblClick: function(tree, record){
         Ext.MessageBox.prompt('Name', 'Change name:', function(result, value){
             if (result !== 'ok') {
                 return;
@@ -170,16 +170,16 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
                 },
                 success: function(response){
                     // Update tree-node text
-                    this.getNavigationTree().getRootNode().findChild('id',record.data.id,true).set('text',value);
-                    Shopware.Msg.createGrowlMessage('','{s name="groupList/renameSuccessfully"}Group was renamed{/s}', '{s name="window_title"}{/s}');},
+                    this.getNavigationTree().getRootNode().findChild('id', record.data.id, true).set('text', value);
+                    Shopware.Msg.createGrowlMessage('', '{s name="groupList/renameSuccessfully"}Group was renamed{/s}', '{s name="window_title"}{/s}');},
                 failure: function(){
                     Shopware.Msg.createGrowlMessage('', '{s name="groupList/renameError"}Error while renaming group{/s}', '{s name="window_title"}{/s}');
                 },
                 scope: this
             });
-        }, this,false,record.data.text);
+        }, this, false, record.data.text);
     },
-    onItemClick: function(item,record) {
+    onItemClick: function(item, record) {
         var me = this;
 
         me.getDeleteGroupButton().enable();

@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Sidebar', {
                     }
                 ] }
         /*{if {acl_is_allowed privilege=doMultiEdit}}*/
-        ,{ xtype: 'multi-edit-menu' }
+        , { xtype: 'multi-edit-menu' }
         /*{/if}*/
         ];
     }

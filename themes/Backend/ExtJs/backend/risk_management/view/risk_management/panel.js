@@ -128,12 +128,12 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
                 }
             ]
         });
-        me.riskFieldSet = Ext.create('Ext.form.FieldSet',{
+        me.riskFieldSet = Ext.create('Ext.form.FieldSet', {
             hidden: true,
             title: '{s name="riskFieldSet/title"}Disable payment if{/s}'
         });
 
-        me.exampleFieldSet = Ext.create('Ext.form.FieldSet',{
+        me.exampleFieldSet = Ext.create('Ext.form.FieldSet', {
             hidden: true,
             cls: Ext.baseCSSPrefix + 'example-table',
             title: '{s name="exampleFieldSet/title"}Examples{/s}',

@@ -110,11 +110,11 @@ Ext.define('Shopware.apps.Order.controller.Filter', {
                 //the article search needs a special handling.
                 if (key === 'hidden-article-search') {
                     if (tmpValue.length > 0 && values["live-article-search"].length > 0) {
-                        filters.push(Ext.create('Ext.util.Filter',{ property: 'details.articleNumber', value: value }));
+                        filters.push(Ext.create('Ext.util.Filter', { property: 'details.articleNumber', value: value }));
                     }
                 } else {
                     if (tmpValue.length > 0) {
-                        filters.push(Ext.create('Ext.util.Filter',{ property: key, value: value }));
+                        filters.push(Ext.create('Ext.util.Filter', { property: key, value: value }));
                     }
                 }
             }

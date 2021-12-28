@@ -143,7 +143,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
                     me.onCostsMatrixSave(button, rawData.data.id);
                 }
                 me.getStore('Dispatch').load();
-                Shopware.Notification.createGrowlMessage('','{s name="growl_save_success"}The settings have been saved successfully.{/s}', '{s name="title"}{/s}');
+                Shopware.Notification.createGrowlMessage('', '{s name="growl_save_success"}The settings have been saved successfully.{/s}', '{s name="title"}{/s}');
              }
         });
     },

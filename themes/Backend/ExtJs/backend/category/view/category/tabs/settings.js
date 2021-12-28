@@ -310,14 +310,14 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             addSubCategoryItems = [];
 
         /*{if {acl_is_allowed privilege=create}}*/
-        addSubCategoryItems.push(Ext.create('Ext.button.Button',{
+        addSubCategoryItems.push(Ext.create('Ext.button.Button', {
             text: me.snippets.createSubCategoryButton,
             action: 'addCategory',
             cls: 'small primary',
             flex: 1
         }));
         /* {/if} */
-        return Ext.create('Ext.form.FieldSet',{
+        return Ext.create('Ext.form.FieldSet', {
             title: me.snippets.createSubCategoryTitle,
             anchor: '100%',
             defaults: me.defaults,
@@ -562,7 +562,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
     getCmsSettings: function()
     {
         var me = this;
-        return Ext.create('Ext.form.FieldSet',{
+        return Ext.create('Ext.form.FieldSet', {
             title: me.snippets.cmsTitle,
             anchor: '100%',
             defaults: me.defaults,
@@ -574,7 +574,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                     name: 'cmsHeadline',
                     translatable: true,
                     translationName: 'cmsheadline'
-                } , {
+                }, {
                     xtype: 'tinymce',
                     fieldLabel: me.snippets.cmsTextLabel,
                     height: 100,
@@ -597,7 +597,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
     getMetaInfo: function()
     {
         var me = this;
-        return Ext.create('Ext.form.FieldSet',{
+        return Ext.create('Ext.form.FieldSet', {
             title: me.snippets.metaGroupTitle,
             anchor: '100%',
             defaults: me.defaults,
@@ -608,7 +608,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 name: 'metaTitle',
                 translatable: true,
                 translationName: 'metatitle'
-            },{
+            }, {
                 xtype: 'textareafield',
                 fieldLabel: me.snippets.metaDescription,
                 name: 'metaDescription',

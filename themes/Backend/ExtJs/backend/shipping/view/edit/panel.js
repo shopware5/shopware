@@ -264,7 +264,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
     createAdvancedTab: function() {
         this.availableHolidays.load();
 
-        return Ext.create('Shopware.apps.Shipping.view.edit.Advanced',{
+        return Ext.create('Shopware.apps.Shipping.view.edit.Advanced', {
             store: this.mainStore,
             dispatchId: this.dispatchId,
             record: this.editRecord,

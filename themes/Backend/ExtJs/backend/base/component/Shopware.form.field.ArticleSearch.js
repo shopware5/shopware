@@ -221,7 +221,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
      *
      * @array
      */
-    searchScope: ['articles','variants','configurator'],
+    searchScope: ['articles', 'variants', 'configurator'],
 
     /**
      * Form field configuration

@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
             text: '{s name="form/reset_text"}Reset{/s}',
             cls: 'secondary',
             action: 'reset'
-        },{
+        }, {
             text: '{s name="form/save_text"}Save{/s}',
             cls: 'primary',
             action: 'save'

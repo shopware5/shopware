@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Base.store.Category', {
     filters: [{
         property: 'c.active',
         value: 1
-    },{
+    }, {
         property: 'c.parentId',
         expression: '>=',
         value: 1

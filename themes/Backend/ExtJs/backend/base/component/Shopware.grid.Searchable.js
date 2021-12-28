@@ -267,7 +267,7 @@ Ext.define('Shopware.grid.Searchable', {
      * @returns { Ext.button.Button }
      */
     createActionBarDeleteButton: function () {
-        this.deleteButton = Ext.create('Ext.button.Button',{
+        this.deleteButton = Ext.create('Ext.button.Button', {
             text: '{s name="button/deleteSelectedEntries"}Delete selected entries{/s}',
             iconCls: 'sprite-minus-circle',
             disabled: true,

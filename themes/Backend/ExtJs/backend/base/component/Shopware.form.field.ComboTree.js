@@ -97,7 +97,7 @@ Ext.define('Shopware.form.field.ComboTree', {
                 expanded: true
             }
         }, me.treeConfig);
-        me.treePanel = Ext.create('Ext.tree.Panel',treeConfig);
+        me.treePanel = Ext.create('Ext.tree.Panel', treeConfig);
         return me.treePanel;
     },
 

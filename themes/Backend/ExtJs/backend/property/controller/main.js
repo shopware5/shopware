@@ -227,7 +227,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                 var optionId = item.data.optionId;
                 if (record.data.id == item.data.optionId) {
                     //record already assigned
-                    Shopware.Notification.createGrowlMessage(me.snippets.deleteGroupErrorTitle,me.snippets.groupAlreadyAssigned, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage(me.snippets.deleteGroupErrorTitle, me.snippets.groupAlreadyAssigned, me.snippets.growlMessage);
                     me.subApplication.groupStore.load();
                     assignStore.load();
                     alreadyAssigned = true;
@@ -244,7 +244,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                     success: function(response, opts) {
                         me.subApplication.groupStore.load();
                         assignStore.load();
-                        Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.groupSuccessfulAssigned, me.snippets.growlMessage);
+                        Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle, me.snippets.groupSuccessfulAssigned, me.snippets.growlMessage);
                     }
                 });
             }
@@ -281,7 +281,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                 data: Ext.encode(orderedItems)
             },
             success: function(response, opts) {
-                Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.groupSuccessfulSorted, me.snippets.growlMessage);
+                Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle, me.snippets.groupSuccessfulSorted, me.snippets.growlMessage);
             }
         });
     },
@@ -353,7 +353,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             },
             success: function(response, opts) {
                 if (showSuccessMessage) {
-                    Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.optionSuccessfulSorted, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle, me.snippets.optionSuccessfulSorted, me.snippets.growlMessage);
                 }
             }
         });
@@ -399,7 +399,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                 optionId: record.get('id')
             },
             success: function(response, opts) {
-                Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.successfulRemovedAssignment, me.snippets.growlMessage);
+                Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle, me.snippets.successfulRemovedAssignment, me.snippets.growlMessage);
                 me.subApplication.setAssignStore.load();
             }
         });
@@ -426,7 +426,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
 
         record.save({
             callback: function() {
-                Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.successfulSavedSet, me.snippets.growlMessage);
+                Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle, me.snippets.successfulSavedSet, me.snippets.growlMessage);
                 me.subApplication.setStore.load();
                 me.getSetGrid().addBtn.enable();
 
@@ -692,7 +692,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             store = me.subApplication.groupStore;
         store.filters.clear();
         store.currentPage = 1;
-        store.filter('filter',searchString);
+        store.filter('filter', searchString);
     },
 
     /**
@@ -708,7 +708,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             store = me.subApplication.setStore;
         store.filters.clear();
         store.currentPage = 1;
-        store.filter('filter',searchString);
+        store.filter('filter', searchString);
     },
 
     openGroupWindow: function (record) {

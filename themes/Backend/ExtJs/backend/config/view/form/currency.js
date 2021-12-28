@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Config.view.form.Currency', {
             xtype: 'config-base-table',
             store: 'form.Currency',
             columns: me.getColumns()
-        },{
+        }, {
             xtype: 'config-base-detail',
             items: me.getFormItems()
         }];
@@ -65,17 +65,17 @@ Ext.define('Shopware.apps.Config.view.form.Currency', {
             name: 'name',
             fieldLabel: '{s name="currency/detail/name_label"}Name{/s}',
             allowBlank: false
-        },{
+        }, {
             name: 'currency',
             allowBlank: false,
             fieldLabel: '{s name="currency/detail/iso_label"}ISO{/s}',
             minLength: 3,
             maxLength: 3
-        },{
+        }, {
             name: 'symbol',
             fieldLabel: '{s name="currency/detail/symbol_label"}Symbol{/s}',
             allowBlank: false
-        },{
+        }, {
             xtype: 'combobox',
             name: 'symbolPosition',
             fieldLabel: '{s name="currency/detail/symbol_position_label"}Symbol position{/s}',
@@ -84,18 +84,18 @@ Ext.define('Shopware.apps.Config.view.form.Currency', {
                 [16, '{s name="currency/detail/symbol_position_right"}Right{/s}'],
                 [32, '{s name="currency/detail/symbol_position_left"}Left{/s}']
             ]
-        },{
+        }, {
             xtype: 'config-element-boolean',
             name: 'default',
             readOnly: true,
             fieldLabel: '{s name="currency/detail/default_label"}Default{/s}'
-        },{
+        }, {
             xtype: 'config-element-number',
             name: 'factor',
             decimalPrecision: 10,
             fieldLabel: '{s name="currency/detail/factor_label"}Factor{/s}',
             allowBlank: false
-        },{
+        }, {
             xtype: 'config-element-number',
             name: 'position',
             decimalPrecision: 0,

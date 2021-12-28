@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Config.view.form.Widget', {
             store: 'form.WidgetView',
             searchField: 'label',
             columns: me.getColumns()
-        },{
+        }, {
             xtype: 'config-base-detail',
             items: me.getFormItems()
         }];
@@ -71,14 +71,14 @@ Ext.define('Shopware.apps.Config.view.form.Widget', {
             fieldLabel: 'Widget',
             store: 'form.Widget',
             displayField: 'label'
-        },{
+        }, {
             name: 'label',
             fieldLabel: 'Label'
-        },{
+        }, {
             xtype: 'config-element-number',
             name: 'column',
             fieldLabel: 'Column'
-        },{
+        }, {
             xtype: 'config-element-number',
             name: 'position',
             fieldLabel: 'Position'

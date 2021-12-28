@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Config.view.form.Shop', {
                 ptype: 'grid-attributes',
                 table: 's_core_shops_attributes'
             }]
-        },{
+        }, {
             xtype: 'config-shop-detail'
         }];
     },

@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Customers', {
                 align: 'left',
                 renderer: function(value) {
                     if (value == null) {
-                        var date = new Date(2000,1,1,1,0,0);
+                        var date = new Date(2000, 1, 1, 1, 0, 0);
                         return Ext.util.Format.date(date);
                     }
                     return Ext.util.Format.date(value);

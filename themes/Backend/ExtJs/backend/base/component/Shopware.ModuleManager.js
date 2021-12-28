@@ -384,7 +384,7 @@ Ext.define('Shopware.ModuleManager', {
             return false;
         }
 
-        me.sendMessageToFrame(result, error, data.id, data.instance,data.component);
+        me.sendMessageToFrame(result, error, data.id, data.instance, data.component);
     },
 
     /**

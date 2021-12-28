@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
                 startBatchMoveMedia: me.moveMedias
 
         /* {if {acl_is_allowed privilege=upload}} */
-                ,reload: me.onTreeLoad
+                , reload: me.onTreeLoad
         /* {/if} */
             },
             'mediamanager-media-view': {

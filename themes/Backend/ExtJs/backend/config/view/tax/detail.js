@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Config.view.tax.Detail', {
         return [{
             name: 'name',
             fieldLabel: '{s name="tax/detail/name_label"}Name{/s}'
-        },{
+        }, {
             xtype: 'config-element-number',
             name: 'tax',
             decimalPrecision: 2,

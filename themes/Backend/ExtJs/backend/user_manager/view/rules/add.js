@@ -193,7 +193,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Add', {
         return [
             this.closeBtn
         /* {if {acl_is_allowed privilege=create}} */
-            ,this.addBtn
+            , this.addBtn
         /* {/if} */ ];
 
     }

@@ -340,7 +340,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
 
         me.createBatchWindow();
 
-        me.runBatchProcess(queueId, config,0 )
+        me.runBatchProcess(queueId, config, 0 )
     },
 
     /**

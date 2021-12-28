@@ -85,12 +85,12 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
         this.areaCombo = Ext.create('Ext.form.field.ComboBox',
         {
                 allowBlank: true,
-                store: this.areaStore ,
+                store: this.areaStore,
                 displayField: 'name',
                 valueField: 'id',
                 emptyText: 'No area restriction',
                 listeners: {
-                    'change': function (field,newValue,oldValue,options){
+                    'change': function (field, newValue, oldValue, options){
                         var countryStore = this.countryStore;
                         countryStore.clearFilter(true);
                         this.stateStore.clearFilter(true);
@@ -117,14 +117,14 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
         this.countryCombo = Ext.create('Ext.form.field.ComboBox',
         {
                 allowBlank: true,
-                store: this.countryStore ,
+                store: this.countryStore,
                 displayField: 'name',
                 valueField: 'id',
                 emptyText: 'All',
                 valueNotFoundText: 'All',
                 editable: false,
                 listeners: {
-                   'change': function (field,newValue,oldValue,options){
+                   'change': function (field, newValue, oldValue, options){
                        var stateStore = this.stateStore;
                        stateStore.clearFilter(true);
 
@@ -153,12 +153,12 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
         this.stateCombo = Ext.create('Ext.form.field.ComboBox',
         {
                 allowBlank: true,
-                store: this.stateStore ,
+                store: this.stateStore,
                 displayField: 'name',
                 valueField: 'id',
                 emptyText: 'All',
                 listeners: {
-                     'change': function (field,newValue,oldValue,options){
+                     'change': function (field, newValue, oldValue, options){
                          // The field has changed
 
                          if (!field.getValue()) {
@@ -259,7 +259,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
     areaRenderer: function (value){
 
         this.areaStore.clearFilter(true);
-        var index = this.areaCombo.store.find(this.areaCombo.valueField,value);
+        var index = this.areaCombo.store.find(this.areaCombo.valueField, value);
         if (index == -1) return 0;
         var record = this.areaCombo.store.getAt(index);
         var comboValue = record.get(this.areaCombo.displayField);
@@ -267,7 +267,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
     },
     countryRenderer: function (value){
        this.countryStore.clearFilter(true);
-       var index = this.countryCombo.store.find(this.countryCombo.valueField,value);
+       var index = this.countryCombo.store.find(this.countryCombo.valueField, value);
        if (index == -1) return 0;
        var record = this.countryCombo.store.getAt(index);
        var comboValue = record.get(this.countryCombo.displayField);
@@ -275,7 +275,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
     },
     stateRenderer: function (value){
       this.stateStore.clearFilter(true);
-      var index = this.stateCombo.store.find(this.stateCombo.valueField,value);
+      var index = this.stateCombo.store.find(this.stateCombo.valueField, value);
       if (index == -1) return 0;
       var record = this.stateCombo.store.getAt(index);
       var comboValue = record.get(this.stateCombo.displayField);

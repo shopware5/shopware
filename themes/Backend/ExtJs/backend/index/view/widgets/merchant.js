@@ -208,7 +208,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
                         }
                     });
                 }
-            },{
+            }, {
                 iconCls: 'sprite-tick-circle',
                 tooltip: me.snippets.tooltips.unlock,
                 handler: function(view, rowIndex, colIndex, item, event, record) {

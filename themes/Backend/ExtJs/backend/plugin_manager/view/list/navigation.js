@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.Navigation', {
                 xtype: 'component',
                 cls: 'picture',
                 html: '&nbsp;'
-            },{
+            }, {
                 cls: 'headline',
                 xtype: 'component',
                 html: '{s name="account"}Account{/s}'

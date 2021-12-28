@@ -54,11 +54,11 @@ Ext.define('Shopware.apps.Shipping.store.Tax', {
          * @return void
          */
         load: function(store) {
-            var defaultTax = Ext.create('Shopware.apps.Shipping.model.Tax',{
+            var defaultTax = Ext.create('Shopware.apps.Shipping.model.Tax', {
                 id: 0,
                 name: '{s name="right_empty_tax"}Highest tax{/s}'
             });
-            store.insert(0,defaultTax);
+            store.insert(0, defaultTax);
         }
     }
 });

@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Supplier', {
             fromTitle: '{s name="tab/title/supplier_available"}Available suppliers{/s}',
             toTitle: '{s name="tab/title/supplier_chosen"}Blocked suppliers{/s}',
             fromStore: me.supplierStore,
-            buttons: [ 'add','remove' ],
+            buttons: [ 'add', 'remove' ],
             gridHeight: 270,
             selectedItems: me.record.getSuppliers(),
             fromFieldDockedItems: [ me.getToolbar() ],

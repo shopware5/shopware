@@ -266,7 +266,7 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
 
                 var result = Ext.decode(response.responseText);
                 message = Ext.String.format(message, result.counter);
-                Shopware.Notification.createGrowlMessage('',message);
+                Shopware.Notification.createGrowlMessage('', message);
 
                 //reload the stores for the paging bar information
                 mapping.toGrid.getStore().load({
@@ -284,7 +284,7 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
 
                 var result = Ext.decode(response.responseText);
                 failure = failure + '<br>' + result.error;
-                Shopware.Notification.createGrowlMessage('',message);
+                Shopware.Notification.createGrowlMessage('', message);
                 mapping.fireEvent('sendRequestFailure', result);
             }
         });

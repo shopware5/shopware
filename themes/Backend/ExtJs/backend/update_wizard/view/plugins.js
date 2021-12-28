@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.UpdateWizard.view.Plugins', {
         });
 
         return [
-            me.headline ,
+            me.headline,
             me.updateNotice,
             me.pluginManagerButton,
             me.notUpdatableNotice,

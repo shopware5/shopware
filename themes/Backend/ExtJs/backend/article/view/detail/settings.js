@@ -236,7 +236,7 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
                 xtype: 'numberfield',
                 name: 'pseudoSales',
                 fieldLabel: me.snippets.pseudoSales
-            } , {
+            }, {
                xtype: 'numberfield',
                name: 'mainDetail[minPurchase]',
                decimalPrecision: 0,

@@ -273,7 +273,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
         }
 
         /*{if {acl_is_allowed privilege=createupdate}}*/
-        ,{
+        , {
             /**
              * Special column type which provides
              * clickable icons in each row

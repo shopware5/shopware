@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.ArticleList', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'Main', 'List', 'Filter', 'Suggest', 'BatchProcess' , 'Backup', 'CategoryFilter', 'SplitView', 'ArticleCrud' ],
+    controllers: [ 'Main', 'List', 'Filter', 'Suggest', 'BatchProcess', 'Backup', 'CategoryFilter', 'SplitView', 'ArticleCrud' ],
 
     /**
      * Returns the main application window for this is expected

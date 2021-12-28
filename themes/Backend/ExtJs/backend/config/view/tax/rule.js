@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
             dataIndex: 'name',
             flex: 1.5,
             field: 'textfield'
-        },{
+        }, {
             header: '{s name="tax/rules/area_header"}Area{/s}',
             dataIndex: 'areaId',
             flex: 1,
@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
                 }
             },
             renderer: me.onComboRenderer
-        },{
+        }, {
             header: '{s name="tax/rules/country_header"}Country{/s}',
             dataIndex: 'countryId',
             flex: 1,
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
                 }
             },
             renderer: me.onComboRenderer
-        },{
+        }, {
             header: '{s name="tax/rules/state_header"}State{/s}',
             dataIndex: 'stateId',
             flex: 1,
@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
                 }
             },
             renderer: me.onComboRenderer
-        },{
+        }, {
             header: '{s name="tax/rules/tax_header"}Tax{/s}',
             dataIndex: 'tax',
             flex: 1,
@@ -214,7 +214,7 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
     getTopBar: function () {
         var me = this,
             topBar = me.callParent();
-        me.addButton = Ext.apply(topBar[0],{ disabled: true });
+        me.addButton = Ext.apply(topBar[0], { disabled: true });
 
         topBar.push({
             xtype: 'config-element-select',

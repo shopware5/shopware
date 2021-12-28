@@ -242,7 +242,7 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
                     win.close();
                     detailViewData.update(record);
                     detailView.collapse(false);
-                    Shopware.Msg.createGrowlMessage('',me.messages.saveDialogSuccess, me.messages.growlMessage);
+                    Shopware.Msg.createGrowlMessage('', me.messages.saveDialogSuccess, me.messages.growlMessage);
                 }
             });
         }
@@ -425,7 +425,7 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
                 record.destroy({
                     success: function () {
                         store.load();
-                        Shopware.Msg.createGrowlMessage('',me.messages.deleteDialogSuccess, me.messages.growlMessage);
+                        Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogSuccess, me.messages.growlMessage);
                     },
                     failure: function () {
                         Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure, me.messages.growlMessage);
