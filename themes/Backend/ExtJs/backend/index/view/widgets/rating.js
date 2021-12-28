@@ -136,7 +136,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Rating', {
     refreshView: function() {
         var me = this;
 
-        if(!me.ratingStore) {
+        if (!me.ratingStore) {
             return false;
         }
         me.ratingStore.load();

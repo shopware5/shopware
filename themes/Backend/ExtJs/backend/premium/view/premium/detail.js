@@ -129,7 +129,7 @@ Ext.define('Shopware.apps.Premium.view.premium.Detail', {
             ]
         });
 
-        if(me.record){
+        if (me.record){
             premiumForm.loadRecord(me.record);
         }
 

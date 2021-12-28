@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
             nextItem = comboBox.up('container').items.items[indexOfNextItem];
 
         //If the user selected the risk ZONEIS or ZONEISNOT, add a comboBox instead of a textField
-        if(['ZONEIS', 'ZONEISNOT', 'BILLINGZONEIS', 'BILLINGZONEISNOT'].indexOf(newValue) >= 0) {
+        if (['ZONEIS', 'ZONEISNOT', 'BILLINGZONEIS', 'BILLINGZONEISNOT'].indexOf(newValue) >= 0) {
             var newComboBox = Ext.create('Ext.form.field.ComboBox', {
                 store: me.subApplication.areasStore,
                 displayField: 'name',
@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
             });
             comboBox.up('container').remove(nextItem);
             comboBox.up('container').insert(indexOfNextItem, newComboBox);
-        }else if(newValue == 'SUBSHOP' || newValue=='SUBSHOPNOT'){
+        } else if (newValue == 'SUBSHOP' || newValue=='SUBSHOPNOT'){
             var newComboBox = Ext.create('Ext.form.field.ComboBox', {
                 store: me.subApplication.subShopStore,
                 displayField: 'name',
@@ -110,8 +110,8 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
             });
             comboBox.up('container').remove(nextItem);
             comboBox.up('container').insert(indexOfNextItem, newComboBox);
-        }else{
-            if(nextItem.xtype != 'textfield'){
+        } else {
+            if (nextItem.xtype != 'textfield'){
                 var newComboBox = Ext.create('Ext.form.field.Text', {
                     columnWidth: 0.1,
                     style: {
@@ -123,10 +123,10 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
             }
         }
 
-        if(newValue == 'INKASSO'){
+        if (newValue == 'INKASSO'){
             nextItem.hide();
             nextItem.setValue('1');
-        }else{
+        } else {
             nextItem.show();
         }
     },
@@ -140,7 +140,7 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
         var me = this,
             comboBox = me.panel.paymentFieldSet.items.items[0],
             newSelection = me.subApplication.paymentStore.data.findBy(function(item){
-                if(item.internalId == comboBox.getValue()) {
+                if (item.internalId == comboBox.getValue()) {
                     return true;
                 }
             }),
@@ -150,7 +150,7 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
         //foreach container/rule-row
         Ext.each(me.panel.riskFieldSet.items.items, function(item){
             // Fix: Not all containers in this fieldset are of interest
-            if(item.xtype != 'risk_management-main-container') {
+            if (item.xtype != 'risk_management-main-container') {
                 return;
             }
 
@@ -162,19 +162,19 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
 
             var model = Ext.create('Shopware.apps.RiskManagement.model.Rule');
 
-            if(rule1 !== Ext.undefined && value1 !== Ext.undefined) {
+            if (rule1 !== Ext.undefined && value1 !== Ext.undefined) {
                 model.set('rule1', rule1.getValue());
                 model.set('value1', value1.getValue());
             }
 
-            if(rule2 !== Ext.undefined && value2 !== Ext.undefined) {
+            if (rule2 !== Ext.undefined && value2 !== Ext.undefined) {
                 model.set('rule2', rule2.getValue());
                 model.set('value2', value2.getValue());
             }
             model.set('paymentId', comboBox.getValue());
             model.setId(id.getValue());
             //Checks, if the model is in the store and if it changed
-            if(me.isChanged(ruleStore, model)){
+            if (me.isChanged(ruleStore, model)){
                 changedModels.push(model);
             }
         });
@@ -182,13 +182,13 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
         //Foreach changed model, change the corresponding model in the store
         Ext.each(changedModels, function(model){
             var match = ruleStore.findBy(function(item){
-                if(item.getId() == model.getId()){
+                if (item.getId() == model.getId()){
                     return true;
                 }
             });
             ruleStore.data.items[match] = model;
 
-            if(model.getId() === 0 && model.get('rule1') != ""){
+            if (model.getId() === 0 && model.get('rule1') != ""){
                 ruleStore.data.items.push(model);
             }
         });
@@ -200,10 +200,10 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
                         var records = operation.getRecords(),
                             record = records[0],
                             rawData = record.getProxy().getReader().rawData;
-                        if(operation.success){
+                        if (operation.success){
                             me.onChangePayment(me.panel, me.panel.paymentFieldSet.items.items[0].getValue());
                             Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/saveRuleSuccess"}Rule successfully saved{/s}', '{s name="growlMessage_message/saveRuleSuccess"}The rules were successfully saved.{/s}', '{s name="window_title"}{/s}');
-                        }else{
+                        } else {
                             Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/saveRuleError"}An error occurred{/s}', rawData.errorMsg, '{s name="window_title"}{/s}');
                         }
                     }
@@ -223,10 +223,10 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
         var data = [];
         Ext.each(store.data.items, function(item){
             //if the itemID and the modelID are the same => it's the matching item in the store
-            if(item.getId() == model.getId()){
+            if (item.getId() == model.getId()){
                 //Check each value of the two models, to get changes
                 Ext.Object.each(item.data, function(key, value){
-                    if(value != model.get(key) && key!='shopware.apps.riskmanagement.model.payment_id'){
+                    if (value != model.get(key) && key!='shopware.apps.riskmanagement.model.payment_id'){
                         data.push(model);
                     }
                 });
@@ -234,11 +234,11 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
         });
 
         //If the ID is 0, so this is a new model, which has data
-        if(model.getId() === 0 && model.get('rule1') != "" ){
+        if (model.getId() === 0 && model.get('rule1') != "" ){
             data.push(model);
         }
 
-        if(data[0]){
+        if (data[0]){
             return true;
         }
 
@@ -262,10 +262,10 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
                         var records = operation.getRecords(),
                             record = records[0],
                             rawData = record.getProxy().getReader().rawData;
-                        if(operation.success){
+                        if (operation.success){
                             me.onChangePayment(me.panel, me.panel.paymentFieldSet.items.items[0].getValue());
                             Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/deleteRuleSuccess"}Rules successfully deleted{/s}', '{s name="growlMessage_message/deleteRuleSuccess"}The rule was successfully deleted.{/s}', '{s name="window_title"}{/s}');
-                        } else{
+                        } else {
                             Shopware.Notification.createGrowlMessage('{s name="growlMessage_title/deleteRuleError"}An error occurred{/s}', rawData.errorMsg, '{s name="window_title"}{/s}');
                         }
                     }
@@ -284,7 +284,7 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
             newSelection;
         me.panel = panel;
         newSelection = me.subApplication.paymentStore.data.findBy(function(item){
-            if(item.internalId == newValue) {
+            if (item.internalId == newValue) {
                 return true;
             }
         });

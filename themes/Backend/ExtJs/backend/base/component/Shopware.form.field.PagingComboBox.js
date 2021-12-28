@@ -191,7 +191,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
         var pagingComboBox = this,
             me = pagingComboBox;
 
-        if(me.store.pageSize && !me.forceDefaultPageSize) {
+        if (me.store.pageSize && !me.forceDefaultPageSize) {
             me.pageSize = me.store.pageSize;
         } else {
             me.pageSize = me.defaultPageSize;

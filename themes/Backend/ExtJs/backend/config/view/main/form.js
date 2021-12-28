@@ -78,13 +78,13 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
             form = me.formRecord;
 
         var formDescription = form.get('description');
-        if(form.associations.containsKey('getTranslation')) {
-            if(form.getTranslation().getAt(0) && form.getTranslation().getAt(0).get('description')) {
+        if (form.associations.containsKey('getTranslation')) {
+            if (form.getTranslation().getAt(0) && form.getTranslation().getAt(0).get('description')) {
                 formDescription = form.getTranslation().getAt(0).get('description');
             }
         }
 
-        if(formDescription) {
+        if (formDescription) {
             items.push({
                 xtype: 'fieldset',
                 margin: 10,
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
                 value = element.getValues().find('shopId', shop.getId(), 0, false, true, true);
                 value = element.getValues().getAt(value);
                 var initialValue = value;
-                if(!value && shop.getId() !== 1) {
+                if (!value && shop.getId() !== 1) {
                     value = element.getValues().find('shopId', 1, 0, false, true, true);
                     value = element.getValues().getAt(value);
                 }
@@ -116,12 +116,12 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
                 elementName = element.get('name');
                 elementLabel = element.get('label');
                 elementDescription = element.get('description');
-                if(element.associations.containsKey('getTranslation')) {
-                    if(element.getTranslation().getAt(0) && element.getTranslation().getAt(0).get('label')) {
+                if (element.associations.containsKey('getTranslation')) {
+                    if (element.getTranslation().getAt(0) && element.getTranslation().getAt(0).get('label')) {
                         elementLabel = element.getTranslation().getAt(0).get('label');
                     }
 
-                    if(element.getTranslation().getAt(0) && element.getTranslation().getAt(0).get('description')) {
+                    if (element.getTranslation().getAt(0) && element.getTranslation().getAt(0).get('description')) {
                         elementDescription = element.getTranslation().getAt(0).get('description');
                     }
                 }
@@ -151,7 +151,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
 
                 fields.push(field);
             });
-            if(fields.length > 0) {
+            if (fields.length > 0) {
                 tabs.push({
                     xtype: 'config-fieldset',
                     title: shop.get('name'),
@@ -160,7 +160,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
             }
         });
 
-        if(tabs.length > 1) {
+        if (tabs.length > 1) {
             items.push({
                 xtype: 'tabpanel',
                 bodyStyle: 'background-color: transparent !important',
@@ -171,7 +171,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
                 items: tabs
             });
         } else {
-            if(tabs.length > 0) {
+            if (tabs.length > 0) {
                 delete tabs[0].title;
             }
             items.push({

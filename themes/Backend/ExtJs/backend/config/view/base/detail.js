@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.Config.view.base.Detail', {
 
     loadRecord: function(record) {
         var form = this.getForm();
-        if(record) {
+        if (record) {
             form._record = record;
             form.setValues(record.data);
         } else {

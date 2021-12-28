@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
             codePatternField = me.getCodePatternField(),
             codePatternFieldValue = codePatternField.getValue();
 
-        if(countCodes > 0) {
+        if (countCodes > 0) {
             Ext.MessageBox.confirm(
                 me.snippets.confirmCreateNewVoucherCodesTitle,
                 me.snippets.confirmCreateNewVoucherCodes, function (response) {
@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                     me.generateCodes(codePatternFieldValue);
                 }
             );
-        }else{
+        } else {
             me.generateCodes(codePatternFieldValue);
         }
     },
@@ -191,7 +191,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                     numberOfCodesToGenerate = numberOfAllCodes - status.generatedVoucherCodes;
                     timeLeft = (numberOfAllCodes - status.generatedVoucherCodes) * overAllTimeToGenerate / status.generatedVoucherCodes;
 
-                    if(!deletePreviousVoucherCodes) {
+                    if (!deletePreviousVoucherCodes) {
                         var hours   = Math.floor(timeLeft / 3600);
                         var minutes = Math.floor((timeLeft - (hours * 3600)) / 60);
                         var seconds = timeLeft - (hours * 3600) - (minutes * 60);
@@ -199,7 +199,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                     }
                     progressBar.updateProgress(status.generatedVoucherCodes / numberOfAllCodes, status.generatedVoucherCodes + ' {s name="progress/text/out_of"}out of{/s} ' + numberOfAllCodes + ' {s name="progress/text/voucher_code_created"}voucher codes created{/s} ' + timeString, true);
 
-                    if(numberOfCodesToGenerate > 0) {
+                    if (numberOfCodesToGenerate > 0) {
                         me.batchProcessing(voucherId, codePattern, numberOfCodesToGenerate, numberOfAllCodes, false, overAllTimeToGenerate);
                     }
                     else {
@@ -231,7 +231,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
         var me = this;
 
         //only on the code panel
-        if(newCard.alias[0] == "widget.voucher-code-list"){
+        if (newCard.alias[0] == "widget.voucher-code-list"){
 
             var store = me.subApplication.getStore('Code'),
                 formRecord = me.getVoucherBaseConfiguration().getForm().getRecord();

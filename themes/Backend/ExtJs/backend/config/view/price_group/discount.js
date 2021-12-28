@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Config.view.priceGroup.Discount', {
             listeners: {
                 enable: function() {
                     // Preselect first item
-                    if(this.store.getAt('0')) {
+                    if (this.store.getAt('0')) {
                         this.setValue(this.store.getAt('0').get('id'));
                     }
                 }

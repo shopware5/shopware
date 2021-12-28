@@ -215,17 +215,17 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             assignStore = me.subApplication.setAssignStore,
             alreadyAssigned = false;
 
-        if(element.records.length == 0){
+        if (element.records.length == 0){
             return;
         }
         var record = element.records[0],
             setId = assignStore.getProxy().extraParams.setId;
 
-        if(element.view.ownerCt.alias == "widget.property-main-groupGrid") {
+        if (element.view.ownerCt.alias == "widget.property-main-groupGrid") {
 
             assignStore.each(function(item) {
                 var optionId = item.data.optionId;
-                if(record.data.id == item.data.optionId) {
+                if (record.data.id == item.data.optionId) {
                     //record already assigned
                     Shopware.Notification.createGrowlMessage(me.snippets.deleteGroupErrorTitle,me.snippets.groupAlreadyAssigned, me.snippets.growlMessage);
                     me.subApplication.groupStore.load();
@@ -233,7 +233,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                     alreadyAssigned = true;
                 }
             });
-            if(!alreadyAssigned) {
+            if (!alreadyAssigned) {
                 //save group assignment
                 Ext.Ajax.request({
                     url: '{url controller="property" action="onAddAssignment"}',
@@ -260,7 +260,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      */
     saveAssignmentPosition: function(store) {
         var me = this;
-        if(store.getProxy().extraParams.length == 0) {
+        if (store.getProxy().extraParams.length == 0) {
             return;
         }
         var orderedItems = [],
@@ -352,7 +352,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                 data: Ext.encode(orderedItems)
             },
             success: function(response, opts) {
-                if(showSuccessMessage) {
+                if (showSuccessMessage) {
                     Shopware.Notification.createGrowlMessage(me.snippets.successfulTitle,me.snippets.optionSuccessfulSorted, me.snippets.growlMessage);
                 }
             }

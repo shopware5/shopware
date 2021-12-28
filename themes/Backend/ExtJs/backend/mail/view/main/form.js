@@ -115,7 +115,7 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
         return;
         /*{/if}*/
 
-        if(record.get('type') !== 'userMail') {
+        if (record.get('type') !== 'userMail') {
             form.findField('name').setReadOnly(true);
         } else {
             form.findField('name').setReadOnly(false);

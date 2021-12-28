@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
     initComponent: function() {
         var me = this;
 
-        if(Ext.ieVersion === 0 || Ext.ieVersion >= 9) {
+        if (Ext.ieVersion === 0 || Ext.ieVersion >= 9) {
             // Create the headline
             me.headline = Ext.create('Ext.container.Container', {
                 html: '<h1>{s name="title/login"}Login Shopware Backend{/s}</h1>'
@@ -123,7 +123,7 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
         me.callParent(arguments);
 
         // Show hint if the browser is not Google Chrome
-        if(!Ext.isChrome) {
+        if (!Ext.isChrome) {
             me.chromeHint = Ext.create('Ext.container.Container', {
                 cls: Ext.baseCSSPrefix + 'google-chrome-hint',
                 html: me.getInfoTemplate().applyTemplate({

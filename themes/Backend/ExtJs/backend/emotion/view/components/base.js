@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         var me = this;
 
         // If we're having items already, don't override them
-        if(!me.items) {
+        if (!me.items) {
             me.items = [];
         }
 
@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
             items: me.createGlobalFormElements()
         });
 
-        if(me.getSettings('component', true).description.length) {
+        if (me.getSettings('component', true).description.length) {
             me.items.push(me.createDescriptionContainer());
         }
         me.items.push(me.elementFieldset);
@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                     value = Ext.Date.parse(item.value, 'Y-m-d');
                 }
                 field.setValue(value);
-            } catch(e) { }
+            } catch (e) { }
         });
     },
 
@@ -186,7 +186,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                         constructedItem.value = date;
                     }
                 } catch (e) {}
-            } else if(xtype === 'radiofield') {
+            } else if (xtype === 'radiofield') {
                 if (!radios[constructedItem.name]) {
                     radios[constructedItem.name] = {
                         xtype: 'radiogroup',
@@ -262,15 +262,15 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                     return true;
                 }
 
-                if(!value.match(/^[A-Za-z0-9-_ ]+$/)) {
+                if (!value.match(/^[A-Za-z0-9-_ ]+$/)) {
                     return '{s name="base/validator_special_character_error"}The input value can not contain any special characters.{/s}';
                 }
 
-                if(value.match(/\s([-_ 0-9])/)) {
+                if (value.match(/\s([-_ 0-9])/)) {
                     return '{s name="base/validator_first_character_error"}Class names can not start with a number, whitespace, underscore or hyphen.{/s}';
                 }
 
-                if(value.match(/^[-_ 0-9]/)) {
+                if (value.match(/^[-_ 0-9]/)) {
                     return '{s name="base/validator_first_character_error"}Class names can not start with a number, whitespace, underscore or hyphen.{/s}';
                 }
 
@@ -310,9 +310,9 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
      * @return [object|boolean] settings or false
      */
     getSettings: function(type, data) {
-        if(type) {
+        if (type) {
             var settings = this.settings[type];
-            if(data) {
+            if (data) {
                 return (!settings) ? false : (this.settings[type].data.items) ? this.settings[type].data.items : this.settings[type].data;
             }
             return this.settings[type];

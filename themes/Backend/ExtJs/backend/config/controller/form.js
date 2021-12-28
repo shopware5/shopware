@@ -241,15 +241,15 @@ Ext.define('Shopware.apps.Config.controller.Form', {
                         deleteButton = baseForm.getDeleteButton(),
                         record = records.length ? records[0] : null,
                         formPanel = baseForm.getDetail(), action;
-                    if(record) {
+                    if (record) {
                         me.doEditEntry(baseForm, record);
-                        if(deleteButton) {
+                        if (deleteButton) {
                             action = record.get('deletable') !== false;
                             action = action ? 'enable' : 'disable';
                             deleteButton[action]();
                         }
                     } else {
-                        if(deleteButton) {
+                        if (deleteButton) {
                             deleteButton.disable();
                         }
                         formPanel.disable();
@@ -264,11 +264,11 @@ Ext.define('Shopware.apps.Config.controller.Form', {
                     var me = this,
                         table = field.up('grid'),
                         store = table.getStore(), model;
-                    if(!records.length) {
+                    if (!records.length) {
                         return;
                     }
                     model = records[0];
-                    if(!store.getById(model.getId())) {
+                    if (!store.getById(model.getId())) {
                         store.add(model.data);
                     }
                     field.reset();
@@ -281,7 +281,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
                         store = table.getStore(),
                         filter = field.getModelData();
                     store.clearFilter(true);
-                    for(var key in filter) {
+                    for (var key in filter) {
                         var keyFilter = new Ext.util.Filter({
                             filterFn: function(item) {
                                 return item.get(key) === filter[key];
@@ -329,7 +329,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
 
     onKeyHandler: function(key, event) {
         var me = this, baseForm = me.getDetail();
-        switch(key) {
+        switch (key) {
             case 83:
                 me.onSaveEntry(baseForm);
                 break;
@@ -353,7 +353,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
             fields, record;
 
         // Get the detail store, if available
-        if(formPanel.store) {
+        if (formPanel.store) {
             formStore = me.getStore(formPanel.store);
         }
 
@@ -363,7 +363,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
 
         // Focus an first field
         fields = basicForm.getFields();
-        if(fields.getCount() > 0) {
+        if (fields.getCount() > 0) {
             fields.first().focus();
         }
     },
@@ -391,25 +391,25 @@ Ext.define('Shopware.apps.Config.controller.Form', {
             store = table.getStore(),
             formStore = store;
 
-        if(!basicForm.isValid()) {
+        if (!basicForm.isValid()) {
             return;
         }
 
-        if(formPanel.store) {
+        if (formPanel.store) {
             formStore = me.getStore(formPanel.store);
         }
-        if(!record) {
+        if (!record) {
             return;
         }
 
         formPanel.updateRecord();
-        if(!record.store) {
+        if (!record.store) {
             formStore.add(record);
         }
 
         //todo@hl
         var values = formPanel.getValues();
-        if(values['elements']){
+        if (values['elements']){
             var elementFieldSet = formPanel.down('fieldset[name=elementFieldSet]'),
                 elementComboBox = elementFieldSet.down('combo'),
                 elementStore = elementComboBox.getStore(),
@@ -439,7 +439,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
             },
             failure: function (batch) {
                 message = me.messages.saveEntryError;
-                if(batch.proxy.reader.rawData.message) {
+                if (batch.proxy.reader.rawData.message) {
                     message += '<br />' + batch.proxy.reader.rawData.message;
                 }
                 me.createGrowlMessage(record, title, message);
@@ -464,7 +464,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
             table = baseForm.getTable();
         var selectionModel = table.getSelectionModel(),
             record = selectionModel.getLastSelected();
-        if(!record) {
+        if (!record) {
             return;
         }
         me.doDeleteEntry(record);
@@ -492,7 +492,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
                 },
                 failure: function (batch) {
                     message = me.messages.deleteEntryError;
-                    if(batch.proxy.reader.rawData.message) {
+                    if (batch.proxy.reader.rawData.message) {
                         message += '<br />' + batch.proxy.reader.rawData.message;
                     }
                     me.createGrowlMessage(record, title, message);
@@ -505,13 +505,13 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         var me = this,
             formPanel = baseForm.getDetail(),
             formStore;
-        if(!formPanel) {
+        if (!formPanel) {
             return;
         }
-        if(formPanel.store) {
+        if (formPanel.store) {
             formStore = me.getStore(formPanel.store);
         }
-        if(record && formStore) {
+        if (record && formStore) {
             formStore.load({
                 filters: [{
                     property: 'id',
@@ -534,14 +534,14 @@ Ext.define('Shopware.apps.Config.controller.Form', {
             formPanel = baseForm.getDetail(),
             basicForm = formPanel.getForm();
 
-        if(!record) {
+        if (!record) {
             record = basicForm.getRecord();
         }
 
         formPanel.enable();
         formPanel.loadRecord(record);
 
-        if(record) {
+        if (record) {
             record.associations.each(function(association) {
                 var store = record[association.name](),
                     associationKey = association.associationKey,
@@ -550,19 +550,19 @@ Ext.define('Shopware.apps.Config.controller.Form', {
                     filter;
 
                 //Bind the association store to the combobox
-                if(combo && store) {
+                if (combo && store) {
                     combo.setValue(null);
                     combo.bindStore(store);
                     record.setDirty();
                 }
 
-                if(grid && store) {
+                if (grid && store) {
                     grid.reconfigure(store);
                     record.setDirty();
                     filter = grid.down('[isPropertyFilter]');
-                    if(filter) {
+                    if (filter) {
                         filter = filter.getModelData();
-                        for(var key in filter) {
+                        for (var key in filter) {
                             var keyFilter = new Ext.util.Filter({
                                 filterFn: function(item) {
                                     return item.get(key) === filter[key];
@@ -581,7 +581,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
             table = button.up('grid'),
             fields = table.query('[isFormField]'),
             data = { }, fieldData;
-        if(!table) {
+        if (!table) {
             return;
         }
         Ext.each(fields, function(field) {

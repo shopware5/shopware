@@ -487,7 +487,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
     onMediaUpload: function(field) {
         var dropZone = this.getMediaDropZone(), me = this;
 
-        if(Ext.isIE || Ext.isSafari) {
+        if (Ext.isIE || Ext.isSafari) {
             var form = field.ownerCt;
             form.submit({
                 success: function() {

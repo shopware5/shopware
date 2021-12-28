@@ -176,7 +176,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
         me.callParent(arguments);
 
         me.mainWindow = me.subApplication.articleWindow;
-        if(me.mainWindow.hasOwnProperty('unitStore')) {
+        if (me.mainWindow.hasOwnProperty('unitStore')) {
             me.unitComboBox.bindStore(me.mainWindow.unitStore);
         }
 

@@ -769,7 +769,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             optionListing.activeGroup = record;
             optionListing.reconfigure(optionStore);
             optionStore.each(function(item) {
-                if(item.get('active')) {
+                if (item.get('active')) {
                     optionListing.getSelectionModel().select(item, true, true);
                 }
             });
@@ -934,7 +934,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         var me = this;
 
         Ext.MessageBox.confirm(me.snippets.messages.warningTitle, me.snippets.messages.saveArticleBefore, function(btn) {
-            if(btn == 'yes') {
+            if (btn == 'yes') {
                 var detailController = me.getController('Detail');
                 detailController.onSaveArticle(null, me.subApplication.article, {
                     callback: function(article, success, failure) {
@@ -1122,7 +1122,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         });
 
         // SW-4440 There cannot be two options with the same name
-        if(optionListing.getStore().findRecord('name', name, 0, false, false, true )) {
+        if (optionListing.getStore().findRecord('name', name, 0, false, false, true )) {
             Shopware.Notification.createGrowlMessage(me.snippets.failure.title, Ext.String.format(me.snippets.messages.optionExists, name), me.snippets.growlMessage);
             return;
         }
@@ -1322,7 +1322,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             articleButton = me.getSaveArticleButton(),
             configuratorButton = me.getSaveConfiguratorButton();
 
-        if(articleButton){
+        if (articleButton){
             if (hideArticleButton) {
                 articleButton.hide();
             } else {

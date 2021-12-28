@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
             numberfields =  me.query('numberfield');
 
         Ext.each(numberfields, function(field) {
-            if(!field.getValue()) {
+            if (!field.getValue()) {
                 field.setValue(500);
             }
         });
@@ -318,13 +318,13 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
             elementStore = me.getSettings('record').get('data'), bannerSlider;
 
         Ext.each(elementStore, function(element) {
-            if(element.key === 'banner_slider') {
+            if (element.key === 'banner_slider') {
                 bannerSlider = element;
                 return false;
             }
         });
 
-        if(bannerSlider && bannerSlider.value) {
+        if (bannerSlider && bannerSlider.value) {
             Ext.each(bannerSlider.value, function(item) {
                 me.bannerStore.add(Ext.create('Shopware.apps.Emotion.model.BannerSlider', item));
             });

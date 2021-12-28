@@ -209,7 +209,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         var me = this;
         Ext.Msg.prompt('{s name="view/add_dialog_headline"}Enter category name{/s}', '{s name="view/add_dialog_label"}Category name{/s}', function (btn, text) {
             if (btn == 'ok') {
-                if(text == "") {
+                if (text == "") {
                     //you can not save categories with empty names try it again
                     me.onOpenNameDialog();
                 }
@@ -270,7 +270,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 }
 
                 // Just create the selection view once, if created just refresh the stores and the detail record.
-                if(!me.productMappingRendered) {
+                if (!me.productMappingRendered) {
                     me.selectorView = Ext.create('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
                         availableProductsStore: me.subApplication.availableProductsStore,
                         assignedProductsStore: me.subApplication.assignedProductsStore,
@@ -369,7 +369,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 
                 me.saveNewChildPositions(newParent);
 
-                if(!Ext.isEmpty(operation.response)) {
+                if (!Ext.isEmpty(operation.response)) {
                     var responseObject = Ext.decode(operation.response.responseText);
 
                     if (responseObject.needsRebuild) {
@@ -477,7 +477,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             duplicateButton = me.getDuplicateButton(),
             selectedNode = selection[0];
         // do not delete the root node
-        if(selection.length > 0 && ! selectedNode.isRoot() ) {
+        if (selection.length > 0 && ! selectedNode.isRoot() ) {
             deleteButton.enable();
             duplicateButton.enable();
         } else {
@@ -522,7 +522,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         if (form.isValid() && newCategoryNameField.value != "") {
             me.saveCategory(newCategoryNameField.value, values);
             newCategoryNameField.reset();
-        }else{
+        } else {
             // SW-3377. Set allowBlank to false only temporarily as it is not required for the whole form.
             newCategoryNameField.allowBlank = false;
             newCategoryNameField.validate();
@@ -548,7 +548,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             'text': categoryName
         });
 
-        if(parentNode.isLeaf) {
+        if (parentNode.isLeaf) {
             //setting the node to an folder
             parentNode.data.leaf = false;
         }
@@ -648,7 +648,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             treeStore = me.subApplication.treeStore,
             selection = tree.getSelectionModel().getSelection();
         // check if we have a selection otherwise we have to add the new category to the root node.
-        if(selection.length > 0 && !isNaN(selection[0].get('id')) ) {
+        if (selection.length > 0 && !isNaN(selection[0].get('id')) ) {
             return treeStore.getNodeById(selection[0].get('id'));
         } else {
             return treeStore.getRootNode();
@@ -662,7 +662,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             store = me.getStore('Tree'),
             batch;
 
-        if(!values.categoryId) {
+        if (!values.categoryId) {
             values.categoryId = NaN;
         }
 

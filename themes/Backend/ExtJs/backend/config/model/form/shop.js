@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Config.model.form.Shop', {
             // The default value determines if a newly created shop is either a subshop (sub) or a language shop (lang).
             // record.phantom is set automatically on new, unsaved records by ExtJs.
             //{block name="backend/config/model/form/shop/fields/typeSwitch/defaultValue"}
-            if(record.phantom){
+            if (record.phantom){
                 return 'lang';
             }
             //{/block}

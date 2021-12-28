@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
             url: '{url controller="Category" action="getIdPath"}',
             params: { 'categoryIds[]': ids },
             success: function(result) {
-                if(!result.responseText) {
+                if (!result.responseText) {
                     return ;
                 }
                 result =  Ext.JSON.decode(result.responseText);

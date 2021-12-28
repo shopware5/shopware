@@ -186,18 +186,18 @@ Ext.define('Shopware.DataView.GooglePreview',
             metaDescription = me.descriptionField.getValue(),
             date = '';
 
-            if(title != '') {
+            if (title != '') {
                 title = title.substr(0,50)+'...';
                 date = new Date().toLocaleDateString();
                 date = date+" - ";
             }
-            if(url != '') {
+            if (url != '') {
                 url = "www.example.com/"+url;
                 url = url.substr(0,35)+'...';
                 url = url.toLowerCase();
                 url = url.replace(/\s/g, '-');
             }
-            if(metaDescription != '') {
+            if (metaDescription != '') {
                 metaDescription = metaDescription.substr(0,70)+'...';
             }
 

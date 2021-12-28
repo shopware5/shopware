@@ -425,7 +425,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      * @param metaData
      */
     categoryFolderRenderer: function (value, metaData, record) {
-        if(!record.data.active && !record.data.root) {
+        if (!record.data.active && !record.data.root) {
             metaData.tdAttr = 'style="opacity:0.4"';
         }
         return value;

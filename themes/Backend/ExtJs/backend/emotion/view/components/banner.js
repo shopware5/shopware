@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
         me.mediaSelection.albumId = -3;
 
         me.bannerFile = me.getFieldByName('file');
-        if(me.bannerFile && me.bannerFile.value && me.bannerFile.value.length) {
+        if (me.bannerFile && me.bannerFile.value && me.bannerFile.value.length) {
             me.onSelectMedia('', me.bannerFile.value);
         }
 
@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
             storeField;
 
         Ext.each(items, function(item) {
-            if(item.name === name) {
+            if (item.name === name) {
                 storeField = item;
                 return false;
             }
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
             }
         }
 
-        if(!me.previewFieldset) {
+        if (!me.previewFieldset) {
             me.previewFieldset = me.createPreviewImageWithMapping(media);
             me.add(me.previewFieldset);
         } else {
@@ -170,7 +170,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
             me.bannerPositionField.setValue(position);
         }, me, { delegate: '.preview-image--col' });
 
-        if(me.bannerPositionField) {
+        if (me.bannerPositionField) {
             var val = me.bannerPositionField.getValue();
 
             Ext.each(el.dom.querySelectorAll('.preview-image--col'), function() {

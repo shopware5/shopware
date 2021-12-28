@@ -195,7 +195,7 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
 
         // show details and enable delete button
         if (selection.length > 0 ) {
-            if(allowDelete) {
+            if (allowDelete) {
                 deleteButton.setDisabled(false);
             }
         } else {
@@ -265,7 +265,7 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
             domEl = event.getTarget(),
             element = Ext.get(domEl);
 
-        if(!element.hasCls('x-grid-row-checker')) {
+        if (!element.hasCls('x-grid-row-checker')) {
             if (!record.get('description')) {
                 record.data.description = me.messages.noDescriptionFound;
             }

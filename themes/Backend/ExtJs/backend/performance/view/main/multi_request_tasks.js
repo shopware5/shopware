@@ -616,7 +616,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                     Ext.Msg.confirm('{s name="progress/confirmCacheClearTitle"}{/s}', '{s name="progress/confirmCacheClearText"}{/s}', function (response) {
                         if (response === 'yes') { // Clear cache and start
                             me.clearHttpCacheAndStart();
-                        } else if(response === 'no') { // Just start
+                        } else if (response === 'no') { // Just start
                             me.fireEvent('startHttpCacheWarmUp', me);
                         } else { // Cancel
                             me.startButton.show();

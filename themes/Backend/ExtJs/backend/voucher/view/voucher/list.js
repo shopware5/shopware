@@ -317,7 +317,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
      * @param value
      */
     modeRenderer: function (value) {
-        if(value!=1){
+        if (value!=1){
             return '{s name="list/render_value/mode/general"}General{/s}';
         }
         return '{s name="list/render_value/mode/individual"}Individual{/s}';
@@ -327,7 +327,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
      * @param value
      */
     valueRenderer: function (value,p,r) {
-        if(r.data.percental == 1){
+        if (r.data.percental == 1){
             return value.replace(/[.,]/, Ext.util.Format.decimalSeparator)+" %";
         }
         return value.replace(/[.,]/, Ext.util.Format.decimalSeparator);

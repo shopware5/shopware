@@ -390,14 +390,14 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
      * @param [string] record   - The whole data model
      */
     typeColumn: function(value, metaData, record) {
-        if(!record) {
+        if (!record) {
             return false;
         }
 
         var type = '{s name="grid/renderer/emotion"}Emotion{/s}';
 
         // Type detection
-        if(record.get('isLandingPage')) {
+        if (record.get('isLandingPage')) {
             type = '{s name="grid/renderer/landingpage"}Landingpage{/s}'
         }
 
@@ -438,7 +438,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
     },
 
     deviceColumn: function(value, metaData, record) {
-        if(!record) {
+        if (!record) {
             return false;
         }
 
@@ -454,19 +454,19 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         };
 
         // Device detection
-        if(value.indexOf('0') >= 0) {
+        if (value.indexOf('0') >= 0) {
             devices += '<div class="sprite-imac" style="' + iconStyling + '" title="' + snippets.desktop + '">&nbsp;</div>';
         }
-        if(value.indexOf('1') >= 0) {
+        if (value.indexOf('1') >= 0) {
             devices += '<div class="sprite-ipad--landscape" style="' + iconStyling + '" title="' + snippets.tabletLandscape + '">&nbsp;</div>';
         }
-        if(value.indexOf('2') >= 0) {
+        if (value.indexOf('2') >= 0) {
             devices += '<div class="sprite-ipad--portrait" style="' + iconStyling + '" title="' + snippets.tablet + '">&nbsp;</div>';
         }
-        if(value.indexOf('3') >= 0) {
+        if (value.indexOf('3') >= 0) {
             devices += '<div class="sprite-iphone--landscape" style="' + iconStyling + '" title="' + snippets.mobileLandscape + '">&nbsp;</div>';
         }
-        if(value.indexOf('4') >= 0) {
+        if (value.indexOf('4') >= 0) {
             devices += '<div class="sprite-iphone--portrait" style="' + iconStyling + '" title="' + snippets.mobile + '">&nbsp;</div>';
         }
 

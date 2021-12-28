@@ -134,11 +134,11 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.InfoPanel', {
                     var html = '';
                     var count = 0;
                     points = points/2;
-                    for(var i=0; i<points; i++){
-                        if((i-points) == -0.5) {
+                    for (var i=0; i<points; i++){
+                        if ((i-points) == -0.5) {
                             //create half-star
                             html = html + '<div style="height: 16px; width: 16px; display: inline-block;" class="sprite-star-half"></div>';
-                        }else{
+                        } else {
                             //create full stars
                             html = html + '<div style="height: 16px; width: 16px; display: inline-block;" class="sprite-star"></div>';
                         }
@@ -146,7 +146,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.InfoPanel', {
                     }
 
                     //add empty stars, so 5 stars are displayed
-                    for(var i=0; i<(5-count); i++){
+                    for (var i=0; i<(5-count); i++){
                         html = html + '<div style="height: 16px; width: 16px; display: inline-block;" class="sprite-star-empty"></div>';
                     }
                     return html;

@@ -98,9 +98,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.RecipientGroups', {
                 '<span>&nbsp;({ rows.length } ' + me.snippets.numberOfGroups + ')</span>',
                 {
                     formatHeader: function(field) {
-                        if(field === false) {
+                        if (field === false) {
                             return '{s name="ownNewsletterGroups"}Own recipient groups{/s}';
-                        }else{
+                        } else {
                             return '{s name="customerGroups"}Customer groups{/s}';
                         }
                     }
@@ -122,7 +122,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.RecipientGroups', {
                 selectionchange: function (sm, selections) {
                     var changed = 0;
                     Ext.each(selections, function(record){
-                        if(record.get('isCustomerGroup') == true){
+                        if (record.get('isCustomerGroup') == true){
                             sm.deselect(record);
                             changed++;
                         }
@@ -188,7 +188,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.RecipientGroups', {
                 },
                 // Hide the "delete" button if the current row does not contain a valid customer
                 getClass: function(value, metaData, record) {
-                    if(record.get('isCustomerGroup') == true) {
+                    if (record.get('isCustomerGroup') == true) {
                         return 'x-hide-display';
                     }
                 }

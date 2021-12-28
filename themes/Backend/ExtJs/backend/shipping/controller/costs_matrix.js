@@ -131,7 +131,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
             columns = obj.grid.getColumns(),
             fromEditor = columns[0];
 
-        if('to' == options.field)
+        if ('to' == options.field)
         {
             editor.decimalPrecision = config.decimalPrecision;
             fromEditor.decimalPrecision = config.decimalPrecision;
@@ -157,9 +157,9 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
              config =  mainController.getConfig(calculationType),
              fieldOriginal = options.originalValue;
 
-        if('to' == field) {
+        if ('to' == field) {
             // If the entered value is smaller than the value in the from field
-            if((options.value <= fromValue) ) {
+            if ((options.value <= fromValue) ) {
                 var errorText = '{s name="dialog_text"}Value must higher than ([0]){/s}';
                 toField.setRawValue(fieldOriginal);
                 rec.set('to', 0);
@@ -168,23 +168,23 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                 return false;
             }
             // check if there are more rows
-            if(datakeys[options.rowIdx+1]) {
+            if (datakeys[options.rowIdx+1]) {
                 // iterate through all rows
-                while(datakeys[options.rowIdx+1]) {
+                while (datakeys[options.rowIdx+1]) {
                     var recordID = datakeys[options.rowIdx+1];
                     var nextRecord = editor.grid.store.getById(recordID);
                     // remove everthing higher than the new value
                     if ((null != nextRecord) && nextRecord.get("to") && nextRecord.get("to") <= options.value) {
                         options.grid.store.remove(nextRecord);
                     } else {
-                        if(null != nextRecord) {
+                        if (null != nextRecord) {
                             nextRecord.set("from", options.value);
                         }
                         break;
                     }
                 }
             } else {
-                if(options.originalValue === 0) {
+                if (options.originalValue === 0) {
                     editor.decimalPrecision = config.decimalPrecision;
                     var newValue  = Ext.util.Format.round(options.value + config.minChange, config.decimalPrecision);
                     editor.completeEdit();
@@ -218,7 +218,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                     return false;
                 }
                 // Row has been created, but not yet saved, so we just remove it
-                if(record.phantom) {
+                if (record.phantom) {
                     record.store.remove(record);
                 } else {
                     var costsMatrixModel = me.getModel('Costsmatrix').create();

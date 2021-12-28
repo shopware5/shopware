@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         me.createPreviewSizeComboBox(me.bbar);
 
         // Are we're having file extensions which should filter the store?
-        if(me.validTypes) {
+        if (me.validTypes) {
             var proxy = me.mediaStore.getProxy();
             proxy.extraParams.validTypes = me.setValidTypes();
         }
@@ -134,7 +134,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         // Create the items of the container
         me.items = [ me.cardContainer ];
 
-        if(me.createInfoPanel) {
+        if (me.createInfoPanel) {
             var infoPnl = me.createInfoPanel();
             me.items.push(infoPnl);
         }
@@ -222,7 +222,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         var me = this;
 
         var multiSelect = true;
-        if(Ext.isBoolean(me.selectionMode)) {
+        if (Ext.isBoolean(me.selectionMode)) {
             multiSelect = me.selectionMode;
         }
 
@@ -420,7 +420,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                     var result = '';
 
                     extension = extension.toUpperCase();
-                    switch(type) {
+                    switch (type) {
                         case 'VIDEO':
                             result = extension + me.snippets.formatTypes.video;
                             break;
@@ -521,7 +521,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     createActionToolbar: function() {
         var me = this;
         /* {if {acl_is_allowed privilege=create}} */
-        if(Ext.isIE) {
+        if (Ext.isIE) {
             me.addBtn = Ext.create('Shopware.app.FileUpload', {
                 requestURL: '{url controller="mediaManager" action="upload"}',
                 padding: '6 0 0',
@@ -591,7 +591,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         });
 
         /* {if {acl_is_allowed privilege=delete}} */
-        if(this.createDeleteButton) {
+        if (this.createDeleteButton) {
             this.deleteBtn = Ext.create('Ext.button.Button', {
                 text: me.snippets.fieldsText.deleteButton,
                 iconCls: 'sprite-minus-circle-frame',
@@ -685,7 +685,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             height: 35
         });
 
-        if(me.createMediaQuantitySelection) {
+        if (me.createMediaQuantitySelection) {
             toolbar.add('->', pageSize, { xtype: 'tbspacer', width: 6 });
         }
 
@@ -742,7 +742,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
 
         iterations = iterations || 9;
 
-        for( ; i < iterations; i++) {
+        for ( ; i < iterations; i++) {
             size = imageSize * i;
             imageSizeData.push({ value: size, name: size + 'x' + size + 'px' });
         }
@@ -768,7 +768,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         me.onUnlockDeleteButton();
         me.unlockReplaceMediaButton();
 
-        if(me.infoView) {
+        if (me.infoView) {
             me.infoView.update(record.data);
             me.attributeButton.setRecord(record);
         }
@@ -780,7 +780,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * @return void
      */
     onUnlockDeleteButton: function() {
-        if(this.deleteBtn) {
+        if (this.deleteBtn) {
             this.deleteBtn.setDisabled(false);
         }
     },
@@ -821,7 +821,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * @return void
      */
     onLockDeleteButton: function(rowModel) {
-        if(this.deleteBtn) {
+        if (this.deleteBtn) {
             this.deleteBtn.setDisabled(!rowModel.getSelection().length);
         }
     },
@@ -878,7 +878,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                     var selected = selModel.getSelection(),
                         record = view.getRecord(sourceEl);
 
-                    if(!selected.length) {
+                    if (!selected.length) {
                         selModel.select(record);
                         selected = selModel.getSelection();
                     }

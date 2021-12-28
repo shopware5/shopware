@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
         });
         me.formStore.on('load', me.onLoadForm, me);
 
-        if(me.action) {
+        if (me.action) {
             me.formStore.load({
                 filters: [{
                     property: Ext.isNumeric(me.action) ? 'id' : 'name',
@@ -135,13 +135,13 @@ Ext.define('Shopware.apps.Config.controller.Main', {
         }
         form = records[0];
 
-        if(form.associations.containsKey('getTranslation')) {
-            if(form.getTranslation().getAt(0) && form.getTranslation().getAt(0).get('label')) {
+        if (form.associations.containsKey('getTranslation')) {
+            if (form.getTranslation().getAt(0) && form.getTranslation().getAt(0).get('label')) {
                 form.data.label = form.getTranslation().getAt(0).get('label');
             }
         }
 
-        if(form.get('name') == 'Document') {
+        if (form.get('name') == 'Document') {
             controller = 'Document';
             me.getController('Form');
         } else {
@@ -154,10 +154,10 @@ Ext.define('Shopware.apps.Config.controller.Main', {
 
     onSelectForm: function(tree, record) {
         var me = this;
-        if(!record.data.id) {
+        if (!record.data.id) {
             return;
         }
-        if(!record.get('leaf')) {
+        if (!record.get('leaf')) {
             record.expand();
             return;
         }
@@ -202,7 +202,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
             me.shopStore.each(function(shop) {
                 fieldName = 'values[' + shop.get('id') + ']['+ element.get('id') + ']';
                 fieldValue = values[fieldName];
-                if(fieldValue !== null) {
+                if (fieldValue !== null) {
                     valueStore.add({
                         shopId: shop.get('id'),
                         value: fieldValue
@@ -230,7 +230,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
                     message = template.applyTemplate({
                         name: form.data.label || form.data.name
                     });
-                if(batch.proxy.reader.rawData.message) {
+                if (batch.proxy.reader.rawData.message) {
                     message += '<br />' + batch.proxy.reader.rawData.message;
                 }
                 Shopware.Notification.createGrowlMessage(title, message, win.title);
@@ -247,7 +247,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
             win = me.mainWindow,
             panel = win.contentPanel;
 
-        if(me.shopStore.isLoading()) {
+        if (me.shopStore.isLoading()) {
             Ext.defer(me.initForm, 100, me, [ form ]);
             return false;
         }

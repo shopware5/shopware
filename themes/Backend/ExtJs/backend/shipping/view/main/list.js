@@ -301,7 +301,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * @param [object] record - current record
      */
     activeColumn: function (value, metaData, record) {
-        if(record.get('active') == 0) {
+        if (record.get('active') == 0) {
             return '{s name="grid_active_false_label"}Inactive{/s}';
         }
         return '{s name="grid_active_true_label"}Active{/s}';

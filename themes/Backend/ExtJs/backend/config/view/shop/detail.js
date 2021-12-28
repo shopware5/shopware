@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                         mainIdField,
                         type;
 
-                    if(Ext.isEmpty(value)) {
+                    if (Ext.isEmpty(value)) {
                         form.getForm().reset();
                         typeSwitchField.setDisabled(false);
                         return;
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                         mainAction = value === 'sub' ? 'show' : 'hide',
                         langAction = value === 'lang' ? 'show' : 'hide';
 
-                    if(value === 'sub') {
+                    if (value === 'sub') {
                         mainIdField.clearValue();
                     } else {
                         mainIdField.setValue(1);

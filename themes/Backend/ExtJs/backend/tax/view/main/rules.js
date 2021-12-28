@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
     viewConfig: {
         getRowClass: function(record, rowIndex, rp, ds){ // rp = rowParams
 
-            if(record.data.areaId == 0){
+            if (record.data.areaId == 0){
                 return Ext.baseCSSPrefix + 'grid-row-selected';
             }
         }
@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
                        );
 
                        // The field has changed
-                       if(!field.getValue()) {
+                       if (!field.getValue()) {
                            field.setRawValue(0);
                            field.setValue('', true);
                        }
@@ -161,7 +161,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
                      'change': function (field,newValue,oldValue,options){
                          // The field has changed
 
-                         if(!field.getValue()) {
+                         if (!field.getValue()) {
                              field.setRawValue(0);
                              field.setValue('', true);
                          }

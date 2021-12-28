@@ -132,7 +132,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
                             });
                         };
 
-                switch(true) {
+                switch (true) {
                     case record.allowUpdate():
                         return Ext.create('PluginManager.container.Container', {
                             cls: 'button update',

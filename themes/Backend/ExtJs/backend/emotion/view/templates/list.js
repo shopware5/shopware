@@ -202,7 +202,7 @@ Ext.define('Shopware.apps.Emotion.view.templates.List', {
      * @returns { String } formatted output
      */
     fileRenderer: function(value) {
-        if(!value) {
+        if (!value) {
             return 'index.tpl'
         }
         return value;

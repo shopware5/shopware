@@ -166,7 +166,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
     },
 
     onDateRenderer: function(value) {
-        if(!value) {
+        if (!value) {
             return;
         }
         return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);

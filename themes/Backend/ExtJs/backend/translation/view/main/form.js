@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Translation.view.main.Form',
         Ext.each(me.translatableFields, function(currentField) {
            var elementType = currentField.xtype || '';
 
-           switch(elementType) {
+           switch (elementType) {
                 case 'ace-editor' :
                 case 'codemirror' :
                 case 'codemirrorfield' :

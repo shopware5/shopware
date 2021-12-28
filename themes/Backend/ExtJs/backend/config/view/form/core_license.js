@@ -288,7 +288,7 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
 
         me.licenseField.setDisabled(true);
 
-        if(!license){
+        if (!license){
             Shopware.Notification.createGrowlMessage(
                 '{s name="errors/common/heading"}Error{/s}',
                 '{s name="errors/license/common"}License key could not be validated{/s}',
@@ -358,7 +358,7 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
             return;
         }
 
-        if(jsonData.success === false){
+        if (jsonData.success === false){
             me.savedLicenseData = me.emptyLicenseData;
             me.licenseStatus.update({
                 license: '',
@@ -418,7 +418,7 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
         var me = this,
             classes = Ext.getBody().getAttribute('class').split(" ");
 
-        if(!edition){
+        if (!edition){
             edition = 'ce';
         }
 

@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
         var detailForm = me.getDetailWindow().formPanel;
 
         detailForm.getForm().getFields().each(function(field) {
-            if(data.hasOwnProperty(field.name)) {
+            if (data.hasOwnProperty(field.name)) {
                 field.setValue(data[field.name]);
             }
         });

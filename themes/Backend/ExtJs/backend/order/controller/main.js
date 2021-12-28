@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.Order.controller.Main', {
                     me.documentTypesStore = storeData.getDocumentTypes();
 
                     billingStore = record.getBilling();
-                    if(billingStore !== null){
+                    if (billingStore !== null){
                         if (billingStore.getCount() === 0) {
                             billing = Ext.create('Shopware.apps.Order.model.Billing', {
                                 orderId: record.get('id'),
@@ -164,7 +164,7 @@ Ext.define('Shopware.apps.Order.controller.Main', {
                     }
 
                     shippingStore = record.getShipping();
-                    if(shippingStore !== null && billingStore !== null) {
+                    if (shippingStore !== null && billingStore !== null) {
                         if (shippingStore.getCount() === 0) {
                             shipping = Ext.create('Shopware.apps.Order.model.Shipping', billing.data);
                             shippingStore.add(shipping);

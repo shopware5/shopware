@@ -194,7 +194,7 @@ Ext.define('Shopware.form.plugin.SnippetTranslation',
      * @returns string
      */
     getGlobeElementStyle: function(field) {
-        switch(this.getFieldType(field)) {
+        switch (this.getFieldType(field)) {
             case 'tinymce':
                 return 'top: 3px; right: 3px';
             case 'codemirror':
@@ -233,23 +233,23 @@ Ext.define('Shopware.form.plugin.SnippetTranslation',
         var type = null;
 
         Ext.each(field.alternateClassName, function(className) {
-            if(className === 'Ext.form.TextField') {
+            if (className === 'Ext.form.TextField') {
                 type = 'textfield';
             }
 
-            if(className === 'Shopware.form.TinyMCE') {
+            if (className === 'Shopware.form.TinyMCE') {
                 type = 'tinymce';
             }
 
-            if(className === 'Shopware.form.CodeMirror') {
+            if (className === 'Shopware.form.CodeMirror') {
                 type = 'codemirror';
             }
 
-            if(className === 'Ext.form.TextArea') {
+            if (className === 'Ext.form.TextArea') {
                 type = 'textarea';
             }
 
-            if(className === 'Ext.form.TriggerField'
+            if (className === 'Ext.form.TriggerField'
                 || className === 'Ext.form.ComboBox'
                 || className === 'Ext.form.DateField'
                 || className === 'Ext.form.Picker'

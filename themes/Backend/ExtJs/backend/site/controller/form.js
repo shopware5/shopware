@@ -108,9 +108,9 @@ Ext.define('Shopware.apps.Site.controller.Form', {
         }
         var grouping;
         Ext.each(toStore.data.items, function(item){
-            if(grouping){
+            if (grouping){
                 grouping = grouping + ',' + item.get('templateVariable');
-            }else{
+            } else {
                 grouping = item.get('templateVariable');
             }
         });

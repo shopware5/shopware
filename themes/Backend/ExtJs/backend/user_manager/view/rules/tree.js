@@ -116,12 +116,12 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         me.on('checkchange', function (node, checked) {
             me.suspendLayouts();
             if (checked) {
-                if(!Ext.isEmpty(node.get('requirements'))) {
+                if (!Ext.isEmpty(node.get('requirements'))) {
                     me.checkRequiredNodes(node, true);
                 }
 
                 Ext.each(node.childNodes, function(childNode) {
-                    if(!Ext.isEmpty(childNode.get('requirements'))) {
+                    if (!Ext.isEmpty(childNode.get('requirements'))) {
                         me.checkRequiredNodes(childNode, true);
                     }
                     childNode.set('checked', true);
@@ -146,7 +146,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         Ext.each(node.get('requirements'), function(nodeId) {
             me.getStore().getRootNode().eachChild(function(element) {
                 element.eachChild(function (child) {
-                    if(child.data.helperId === nodeId) {
+                    if (child.data.helperId === nodeId) {
                         if (child && child.get('checked') !== check) {
                             child.set('checked', true);
                             child.parentNode.expand();

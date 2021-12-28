@@ -104,18 +104,18 @@ Ext.define('Shopware.apps.ArticleList.controller.SplitView', {
                 y: tmpPosition[1] - 40
             };
 
-        if(!record) {
+        if (!record) {
             return;
         }
 
         // Is a split view already been up and running...
-        if(me.splitViewMode) {
+        if (me.splitViewMode) {
             Ext.MessageBox.alert('{s name="splitview_title"}Split-View{/s}', '{s name="split_view_already_active"}The split view mode has already been activated. Please close the product mask window and start a new instance of the split view.{/s}');
             return false;
         }
 
         // Add inidicator to the class that the split view mode is up and running...
-        if(!me.hasOwnProperty('splitViewMode') || !me.splitViewMode) {
+        if (!me.hasOwnProperty('splitViewMode') || !me.splitViewMode) {
             me.splitViewMode = true;
         }
 
@@ -153,7 +153,7 @@ Ext.define('Shopware.apps.ArticleList.controller.SplitView', {
             record = selection[0];
 
         // No record was selected...
-        if(!record) {
+        if (!record) {
             return false;
         }
 

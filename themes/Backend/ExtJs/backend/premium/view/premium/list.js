@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
                             btn = owner.down('button[action=deleteMultipleArticles]');
 
                     //If no article is marked
-                    if(btn){
+                    if (btn){
                         btn.setDisabled(selections.length == 0);
                     }
                 }
@@ -209,9 +209,9 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
     },
 
     renderSubShop: function(value,a,record){
-        if(value){
+        if (value){
             return value;
-        }else if(record.data.shopId == 0){
+        } else if (record.data.shopId == 0){
             return '{s name="premium/subShop/comboBox_general"}Universally valid{/s}';
         }
     },
@@ -231,7 +231,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
             listeners: {
                 buffer: 500,
                 keyup: function() {
-                    if(this.getValue().length >= 3 || this.getValue().length<1) {
+                    if (this.getValue().length >= 3 || this.getValue().length<1) {
                         /**
                          * @param this Contains the searchfield
                          */

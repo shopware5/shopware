@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Config.view.base.Form', {
     getActionColumn: function() {
         var me = this,
             items = [];
-        if(me.deletable) {
+        if (me.deletable) {
         /*{if {acl_is_allowed privilege=delete}}*/
             items.push({
                 iconCls: 'sprite-minus-circle-frame',
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Config.view.base.Form', {
             });
         /* {/if} */
         }
-        if(true) {
+        if (true) {
         /*{if {acl_is_allowed privilege=update}}*/
             items.push({
                 iconCls: 'sprite-pencil',

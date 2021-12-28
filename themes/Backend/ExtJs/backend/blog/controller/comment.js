@@ -230,7 +230,7 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;
 
-                if(operation.success){
+                if (operation.success){
                     Shopware.Notification.createGrowlMessage('', me.snippets.acceptSingleBlogCommentSuccess, me.snippets.growlMessage);
                     store.load();
                 } else {

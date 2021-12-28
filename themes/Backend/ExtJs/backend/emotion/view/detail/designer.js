@@ -478,7 +478,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                     if (alias === me.grid.state) {
                         cls += ' is--active';
 
-                    } else if(me.grid.stateConnections.indexOf(alias) !== -1) {
+                    } else if (me.grid.stateConnections.indexOf(alias) !== -1) {
                         cls += ' is--connected';
                     }
 

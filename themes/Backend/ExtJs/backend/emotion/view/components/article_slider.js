@@ -74,20 +74,20 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
         me.categoryFilter.allowBlank = true;
         me.streamSelection.hide();
 
-        if(!me.articleType.getValue()) {
+        if (!me.articleType.getValue()) {
             me.maxCountField.hide();
             me.categoryFilter.hide();
             me.articleGrid.hide();
             me.variantGrid.hide();
         }
-        if(me.articleType.getValue() === 'selected_article') {
+        if (me.articleType.getValue() === 'selected_article') {
             me.maxCountField.hide();
             me.categoryFilter.hide();
             me.variantGrid.hide();
             me.articleGrid.show();
             me.streamSelection.allowBlank = true;
             me.categoryFilter.allowBlank = true;
-        } else if(me.articleType.getValue() === 'selected_variant') {
+        } else if (me.articleType.getValue() === 'selected_variant') {
             me.maxCountField.hide();
             me.categoryFilter.hide();
             me.articleGrid.hide();
@@ -206,24 +206,24 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             checkboxes = me.query('checkbox');
 
         Ext.each(numberfields, function(field) {
-            if(field.getName() === 'article_slider_max_number') {
+            if (field.getName() === 'article_slider_max_number') {
                 me.maxCountField = field;
-                if(!field.getValue()) {
+                if (!field.getValue()) {
                     field.setValue(25);
                 }
             }
 
-            if(field.getName() === 'article_slider_rotatespeed') {
+            if (field.getName() === 'article_slider_rotatespeed') {
                 me.rotateSpeed = field;
             }
 
-            if(!field.getValue()) {
+            if (!field.getValue()) {
                 field.setValue(500);
             }
         });
 
         Ext.each(checkboxes, function(field) {
-            if(field.getName() === 'article_slider_rotation') {
+            if (field.getName() === 'article_slider_rotation') {
                 me.rotation = field;
             }
         });

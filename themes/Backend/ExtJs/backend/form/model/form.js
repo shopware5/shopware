@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Form.model.Form', {
             method: 'POST',
             params: { id: this.data.id },
             success: function(response, opts) {
-                if(typeof callback !== 'function') {
+                if (typeof callback !== 'function') {
                     return false;
                 }
 

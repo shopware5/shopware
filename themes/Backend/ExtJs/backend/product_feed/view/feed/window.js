@@ -72,10 +72,10 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
         me.callParent(arguments);
 
         // Load form data if we're having a record
-        if(me.record){
+        if (me.record){
             //set the default value
-            if(me.record.data.encodingId == 0) me.record.data.encodingId = 1;
-            if(me.record.data.formatId == 0) me.record.data.formatId = 1;
+            if (me.record.data.encodingId == 0) me.record.data.encodingId = 1;
+            if (me.record.data.formatId == 0) me.record.data.formatId = 1;
 
             me.formPanel.loadRecord(me.record);
             me.attributeForm.loadAttribute(me.record.get('id'));

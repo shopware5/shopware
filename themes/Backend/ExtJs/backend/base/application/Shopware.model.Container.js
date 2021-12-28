@@ -702,7 +702,7 @@ Ext.define('Shopware.model.Container', {
             );
 
             //check if the component creation was canceled, or throws an exception
-            if(item) {
+            if (item) {
                 items.push(item);
                 me.associationComponents[association.associationKey] = item;
             }

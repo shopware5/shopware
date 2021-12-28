@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
         me.callParent(arguments);
 
         //have to load it here because in some cases the view is not totally created before the record starts loading
-        if(me.record) {
+        if (me.record) {
             me.formPanel.loadRecord(me.record);
             me.attributeForm.loadAttribute(me.record.get('id'));
         }

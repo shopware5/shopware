@@ -257,7 +257,7 @@ Ext.define('Ext.ux.ButtonColumn', {
             triggerMatch = target.className.match(me.triggerRe);
         /* mouseover && mouseout doesn't work in 4.2 -just 'mouseout' get fired then we enter cell, no events fired if move mouse inside grid cell
          * I have to reset { @link Ext.view.View} mouseOverItem attribute - this is only way to make events fired correctly*/
-        if(me.extMinor === 2 && !view.mouseOverOutBuffer){
+        if (me.extMinor === 2 && !view.mouseOverOutBuffer){
             view.mouseOverItem = undefined;
         }
         //Ext.log("EVENT TYPE: " + e.type);
@@ -297,7 +297,7 @@ Ext.define('Ext.ux.ButtonColumn', {
                 }
                 /* mouseover && mouseout doesn't work good in 4.2 with  mouseover buffering */
             } else if (type == 'mouseover' && (me.extMinor !== 2 || (me.extMinor === 2 && !view.mouseOverOutBuffer))) {
-                if(!me.menu || !me.menu.isVisible()){
+                if (!me.menu || !me.menu.isVisible()){
                     btnEl.addCls(me.getBtnGroupCls('over'));
                 }
             } else if (type == 'mouseout' && (me.extMinor !== 2 || (me.extMinor === 2 && !view.mouseOverOutBuffer))) {

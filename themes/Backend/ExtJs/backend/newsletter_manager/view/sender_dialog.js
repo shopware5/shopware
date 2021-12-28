@@ -58,9 +58,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.SenderDialog', {
     initComponent: function() {
         var me = this;
 
-        if(me.record == null) {
+        if (me.record == null) {
             me.title = '{s name="title/newSender"}Create new sender{/s}'
-        }else{
+        } else {
             me.title = '{s name="title/editSender"}Edit sender{/s}'
         }
 
@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.SenderDialog', {
             }]
         });
 
-        if(me.record) {
+        if (me.record) {
             me.form.getForm().loadRecord(me.record);
         }
         return me.form;

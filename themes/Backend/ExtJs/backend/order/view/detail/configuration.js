@@ -219,9 +219,9 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
         var me = this, vatId,
             billing = me.record.getBilling();
 
-        if(billing == null || billing.first() == null) {
+        if (billing == null || billing.first() == null) {
             vatId = me.snippets.vatId.empty;
-        }else{
+        } else {
             billing = billing.first();
             if (Ext.isEmpty(billing.get('vatId'))) {
                 vatId = me.snippets.vatId.empty;

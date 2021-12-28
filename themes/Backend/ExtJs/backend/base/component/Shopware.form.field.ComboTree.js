@@ -125,7 +125,7 @@ Ext.define('Shopware.form.field.ComboTree', {
     afterRender: function() {
         var me = this;
 
-        if(me.selectedRecord) {
+        if (me.selectedRecord) {
             var value = me.selectedRecord.get(me.treeField || me.displayField);
             me.inputEl.dom.value = value;
             me.setFieldValue(value);
@@ -141,7 +141,7 @@ Ext.define('Shopware.form.field.ComboTree', {
      */
     setFieldValue: function(value, label) {
         var me = this;
-        if(!label) {
+        if (!label) {
             label = value;
         }
         me.setValue(value);
@@ -190,7 +190,7 @@ Ext.define('Shopware.form.field.ComboTree', {
      * @return Ext.value
      */
     getRawValue: function(){
-        if(this.inputEl){
+        if (this.inputEl){
             return this.inputEl.dom.value;
         }
         return 0;
@@ -206,10 +206,10 @@ Ext.define('Shopware.form.field.ComboTree', {
         var me = this,
                 activeRecord;
 
-        if(me.value) {
+        if (me.value) {
             activeRecord = store.getNodeById(me.value);
 
-            if(!activeRecord) {
+            if (!activeRecord) {
                 return;
             }
             me.setRawValue(activeRecord.get(me.displayField));
@@ -223,7 +223,7 @@ Ext.define('Shopware.form.field.ComboTree', {
      */
     getSubmitValue: function() {
         var me = this;
-        if(!me.getRawValue()) {
+        if (!me.getRawValue()) {
             return "";
         }
         return this.value;

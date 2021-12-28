@@ -131,8 +131,8 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
         var node = store.getNodeById(record.get('resourceId')),
             found = false;
         rootNode.eachChild(function(ch) {
-          if(ch.get('id') === record.get('resourceId')){
-              if(ch.findChild('name', record.get('name')) !== null) {
+          if (ch.get('id') === record.get('resourceId')){
+              if (ch.findChild('name', record.get('name')) !== null) {
                   Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, '{s name="privilege/alreadyExistingMessage"}A privilege with this name is already existing{/s}', me.snippets.growlMessage);
                   window.destroy();
                   found = true;
@@ -141,7 +141,7 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
           }
         });
 
-        if(found === true) {
+        if (found === true) {
             return;
         }
 
@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
         }
 
         // Prevent the user from creating multiple resources with the same name
-        if(rootNode.findChild('name', record.get('name')) !== null) {
+        if (rootNode.findChild('name', record.get('name')) !== null) {
             Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, '{s name="resource/alreadyExistingMessage"}A resource with this name is already existing{/s}', me.snippets.growlMessage);
             window.destroy();
             return;

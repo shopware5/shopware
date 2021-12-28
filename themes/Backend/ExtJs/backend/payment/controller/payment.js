@@ -95,16 +95,16 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
             paymentStore = this.subApplication.paymentStore,
             tabPanel = win.down('tabpanel');
 
-        if(selection[0].data.source == 1){
+        if (selection[0].data.source == 1){
             selection[0].destroy({
                 callback: function(data, operation){
                     var records = operation.getRecords(),
                         record = records[0],
                         rawData = record.getProxy().getReader().rawData;
 
-                    if(operation.success){
+                    if (operation.success){
                         Shopware.Notification.createGrowlMessage('{s name="delete_growlMessage_subject"}Delete payment{/s}', '{s name="delete_growlMessage_content"}The payment has been successfully deleted.{/s}', '{s name="payment_title"}{/s}');
-                    }else{
+                    } else {
                         Shopware.Notification.createGrowlMessage('{s name="delete_growlMessage_subject"}Delete payment{/s}', rawData.errorMsg.errorInfo[2], '{s name="payment_title"}{/s}');
                     }
 
@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
             callback: function(){
                 var matches = [];
                 //Selects each country and sets the surcharge
-                if(recordStore){
+                if (recordStore){
                     Ext.each(recordStore.data.items, function(item){
                         var tmpRecord = store.getById(item.get('id'));
                         matches.push(tmpRecord);
@@ -206,7 +206,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
 
         //Creates a string with the surcharges and the iso of the countries
         Ext.each(surchargeStore.data.items, function(item){
-            if(item.data.surcharge) {
+            if (item.data.surcharge) {
                 surchargeString = surchargeString + item.data.iso + ":" + item.data.surcharge + ";";
             }
         });
@@ -219,23 +219,23 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
             subshopStore = record['getShopsStore'];
 
         //If the tab is activated at least once, so changes could be made
-        if(subShopGrid.rendered) {
+        if (subShopGrid.rendered) {
             subshopStore.removeAll();
             subshopStore.add(subshops);
         }
 
         //If the tab is activated at least once, so changes could be made
-        if(countryGrid.rendered) {
+        if (countryGrid.rendered) {
             var updated = surchargeGrid.getStore().getUpdatedRecords(),
                 selection = countryGrid.getSelectionModel().getSelection();
 
             // Merge updated records to the main countyStore
-            if(updated.length) {
+            if (updated.length) {
                 Ext.each(updated, function(record) {
                     var id = record.get('id');
 
                     Ext.each(selection, function(tmpRecord) {
-                        if(tmpRecord.get('id') === id) {
+                        if (tmpRecord.get('id') === id) {
                             tmpRecord.set('surcharge', record.get('surcharge'));
 
                             // Clear dirty state
@@ -256,7 +256,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;
 
-                if(operation.success){
+                if (operation.success){
                     me.getAttributeForm().saveAttribute(record.get('id'));
                     paymentStore.load({
                         callback: function (records) {
@@ -301,9 +301,9 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
 
         surchargeGrid.reconfigure(Ext.clone(record.getCountriesStore));
 
-        if(record.get('source') == 1){
+        if (record.get('source') == 1){
             btnDelete.enable();
-        }else{
+        } else {
             btnDelete.disable();
         }
 

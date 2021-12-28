@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.CategoryImageType', {
         var me = this;
 
         // Terminate the article search field
-        if(!me.mediaSelection) {
+        if (!me.mediaSelection) {
             me.mediaSelection = me.up('fieldset').down('mediaselectionfield');
         }
 

@@ -137,7 +137,7 @@ Ext.define('Shopware.apps.Log.view.log.List', {
                         btn = owner.down('button[action=deleteMultipleLogs]');
 
                     //If no log is marked
-                    if(btn) {
+                    if (btn) {
                         btn.setDisabled(selections.length == 0);
                     }
                 }

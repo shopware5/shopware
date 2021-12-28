@@ -190,7 +190,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
 
         value += '?' + record.data.created.getTime();
 
-        switch(type) {
+        switch (type) {
            case 'video':
                result = '<div class="sprite-blue-document-film" style="height:16px; width:16px;display:inline-block"></div>';
                break;
@@ -267,7 +267,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
      * @returns { String }
      */
     pixelRenderer: function(value) {
-        if(value) {
+        if (value) {
             return value + 'px';
         }
         return '-';
@@ -283,7 +283,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
         var result = '',
             type = value.toLowerCase();
 
-        switch(type) {
+        switch (type) {
             case 'pdf': // Explicit fall-throughs
             case 'video':
             case 'music':

@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.CanceledOrder.model.Voucher', {
                     return value;
                 }
 
-                if(record && record.get('id') == -1) {
+                if (record && record.get('id') == -1) {
                     return value;
                 }
                 if (record.get('percental') == 1) {

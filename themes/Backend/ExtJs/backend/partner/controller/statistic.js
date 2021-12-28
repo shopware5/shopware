@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
         var chartStore = me.subApplication.statisticChartStore;
         var listStore = me.subApplication.statisticListStore;
 
-        if(field.name == "toDate") {
+        if (field.name == "toDate") {
             extraParams = {
                 partnerId: chartStore.getProxy().extraParams.partnerId,
                 toDate: value,
@@ -118,12 +118,12 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
         requestStringFromDate = '',
         requestStringToDate = '';
 
-        if(fromDate != "undefined" && fromDate != null) {
+        if (fromDate != "undefined" && fromDate != null) {
             fromDate = me.convertDate(fromDate);
             requestStringFromDate = '&fromDate='+fromDate;
         }
 
-        if(toDate != "undefined" && toDate != null) {
+        if (toDate != "undefined" && toDate != null) {
             toDate = me.convertDate(toDate);
             requestStringToDate = '&toDate='+toDate;
         }

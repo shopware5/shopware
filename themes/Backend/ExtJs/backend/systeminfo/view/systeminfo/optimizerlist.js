@@ -104,9 +104,9 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Optimizerlist', {
     },
 
     renderStatus: function(value){
-        if(value){
+        if (value){
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>')
-        }else{
+        } else {
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
         }
     }

@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
         me.registerEvents();
         me.items = [ me.columns ];
         // check for emtpy stores (e.g. create scenario)
-        if(me.store.getCount() == 0) {
+        if (me.store.getCount() == 0) {
             me.store.add(Ext.create('Shopware.apps.Shipping.model.Costsmatrix', {
                 'dispatchId': me.dispatchId
             }));
@@ -207,7 +207,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
     onActionRender: function(val, meta, rec, row) {
         var me = this;
         /* {if {acl_is_allowed privilege=delete}} */
-        if(rec.get('to') == '') {
+        if (rec.get('to') == '') {
 
 //            return Ext.DomHelper.markup({
 //                tag     : 'img',

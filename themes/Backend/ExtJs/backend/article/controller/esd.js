@@ -268,7 +268,7 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
             saveButton = me.getSaveButton(),
             cardToRemove = esdTab.getLayout().getActiveItem();
 
-        if(cardToRemove.$className === 'Shopware.apps.Article.view.esd.List') {
+        if (cardToRemove.$className === 'Shopware.apps.Article.view.esd.List') {
             return false;
         }
         esdTab.getLayout().setActiveItem(0);

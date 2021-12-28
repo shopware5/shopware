@@ -233,7 +233,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 ctrl: true,
                 alt: true,
                 handler: function(keyCode, e) {
-                    switch(keyCode) {
+                    switch (keyCode) {
                         // Frontend Cache - CTRL + ALT + F
                         case 70: var action = 'Frontend'; break;
                         // Template Cache - CTRL + ALT + T
@@ -267,7 +267,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                     success: function(response) {
                         var json = Ext.decode(response.responseText);
 
-                        if(!json.success) {
+                        if (!json.success) {
                             window.location.href = '{url controller=index}';
                         }
                     },
@@ -505,7 +505,7 @@ openSearchResult = function(module, id) {
         Shopware.searchField.searchDropDown.hide();
     }, 100);
 
-    switch(module) {
+    switch (module) {
         case 'articles':
             Shopware.app.Application.addSubApplication({
                 name: 'Shopware.apps.Article',

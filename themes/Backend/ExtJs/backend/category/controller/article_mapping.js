@@ -95,13 +95,13 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
             activeBtn, inactiveBtn;
 
         // Prevent the grid to get a little sluggish
-        if(!selection.length) {
+        if (!selection.length) {
             return false;
         }
 
         inactiveGrid = (activeGrid.internalTitle === 'from') ? view.toGrid : view.fromGrid;
 
-        if(activeGrid.internalTitle === 'from') {
+        if (activeGrid.internalTitle === 'from') {
             activeBtn = me.getAddButton();
             inactiveBtn = me.getRemoveButton();
         } else {
@@ -154,7 +154,7 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
             selection = activeGrid.getSelectionModel().getSelection(),
             ids = [], categoryId;
 
-        if(!selection.length) {
+        if (!selection.length) {
             return false;
         }
 
@@ -190,7 +190,7 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
             selection = activeGrid.getSelectionModel().getSelection(),
             ids = [], categoryId;
 
-        if(!selection.length) {
+        if (!selection.length) {
             return false;
         }
 
@@ -251,7 +251,7 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
         var message = '{s name="category/action/add/success"}[0]x articles assigned{/s}';
         var failure = '{s name="category/action/add/failure"}The following error occurred while adding the articles:{/s}';
 
-        if(action === 'remove') {
+        if (action === 'remove') {
             message = '{s name="category/action/remove/success"}[0]x articles assignments removed{/s}';
             failure = '{s name="category/action/remove/failure"}The following error occurred while removing the articles:{/s}';
 

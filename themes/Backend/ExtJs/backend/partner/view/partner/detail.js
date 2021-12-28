@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
 
         me.registerEvents();
 
-        if(me.record){
+        if (me.record){
             me.partnerId = me.record.data.id;
         }
 

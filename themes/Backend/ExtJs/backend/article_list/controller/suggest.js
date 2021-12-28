@@ -125,9 +125,9 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
             success: function (response, request) {
                 var result = Ext.JSON.decode(response.responseText);
 
-                if(!result) {
+                if (!result) {
                     me.showError(response.responseText);
-                }else if(result.success) {
+                } else if (result.success) {
                     var grammar = me.prepareGrammar(result.data);
 
                     me.parser = new Parser(grammar);
@@ -139,7 +139,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
 
             },
             failure: function (response, request) {
-                if(response.responseText) {
+                if (response.responseText) {
                     me.showError(response.responseText);
                 } else {
                     me.showError('{s name="unknownError"}An unknown error occurred, please check your server logs{/s}');

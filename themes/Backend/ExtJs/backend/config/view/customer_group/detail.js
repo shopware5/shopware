@@ -68,9 +68,9 @@ Ext.define('Shopware.apps.Config.view.customerGroup.Detail', {
 
         groupKeyField = me.down('field[name=key]');
 
-        if(record && record.get('id') === 1 && groupKeyField) {
+        if (record && record.get('id') === 1 && groupKeyField) {
             groupKeyField.setDisabled(true);
-        }else if(groupKeyField) {
+        } else if (groupKeyField) {
             groupKeyField.setDisabled(false);
         }
 
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Config.view.customerGroup.Detail', {
             handler: function(button, value) {
                 var form = button.up('form'),
                     discount = form.down('field[name=discount]');
-                if(value) {
+                if (value) {
                     discount.show();
                 } else {
                     discount.hide();

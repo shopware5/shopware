@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Config.controller.Document', {
                         styleField = elementFieldSet.down('textarea[name$=Style]');
 
                     Ext.each(elementFieldSet.items.items, function(item){
-                        if(item.xtype === 'tinymce' || item.xtype === 'textarea'){
+                        if (item.xtype === 'tinymce' || item.xtype === 'textarea'){
                             item.hide();
                             item.setValue(null);
                         }
@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Config.controller.Document', {
 
     onSelectElement: function(combo, newValue, oldValue){
         //If there is no new value selected, so the event got fired otherwise
-        if(!newValue){
+        if (!newValue){
             return;
         }
         var me = this,
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Config.controller.Document', {
             elementStore = elementComboBox.getStore();
         //Checks if there was an value selected before changing it
         //Needed to save the values to the record
-        if(oldValue){
+        if (oldValue){
             var oldRecord = elementStore.getById(oldValue),
                 oldFieldName = oldRecord.get('name'),
                 oldContentField = elementFieldSet.down('tinymce[name=' + oldFieldName + '_Value]'),

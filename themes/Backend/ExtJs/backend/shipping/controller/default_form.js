@@ -122,7 +122,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
             return;
         }
 
-        if(record.get('clone')){
+        if (record.get('clone')){
             record.set('id', '');
         }
 
@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
                         record = records[0],
                         rawData = record.getProxy().getReader().rawData;
                     // Prevent cloned records from creating new records on each save-action
-                    if(record.get('clone')){
+                    if (record.get('clone')){
                         record.set('id', rawData.data.id);
                         record.set('clone', false);
                     }
@@ -215,8 +215,8 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
                 }));
                 var gridColumns = costsMatrixGrid.getColumns();
                 Ext.each(gridColumns, function(column){
-                    if(column.editor) {
-                        if('from' == column.dataIndex || 'to' == column.dataIndex)
+                    if (column.editor) {
+                        if ('from' == column.dataIndex || 'to' == column.dataIndex)
                         {
                             column.editor.decimalPrecision = me.currentConfig.decimalPrecision;
                         }
@@ -238,7 +238,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
             me    = this,
             form  = form1.getForm();
         me.resetDefaultForm(form);
-        switch(value) {
+        switch (value) {
             case 1: // alternate delivery mode
                 form.findField('multiShopId').disable();
                 form.findField('customerGroupId').disable();

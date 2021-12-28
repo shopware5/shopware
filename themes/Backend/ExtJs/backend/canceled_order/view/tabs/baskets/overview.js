@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Overview', {
                     return total;
                 },
                 summaryRenderer: function(value, summaryData, dataIndex) {
-                    if(Ext.isNumber(value) || Ext.isString(value)) {
+                    if (Ext.isNumber(value) || Ext.isString(value)) {
                         return '<b>' + Ext.util.Format.currency(value)+ '</b>';
                     }
 
@@ -173,7 +173,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Overview', {
         }
         value = record.get('price');
 
-        if(Ext.isNumber(value) || Ext.isString(value)) {
+        if (Ext.isNumber(value) || Ext.isString(value)) {
             return Ext.util.Format.currency(value);
         }
 

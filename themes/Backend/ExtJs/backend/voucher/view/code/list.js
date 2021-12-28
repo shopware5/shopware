@@ -254,7 +254,7 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
      * @param value
      */
     cashedRenderer: function (value) {
-        if(value==1){
+        if (value==1){
              return '{s name="list/render_value/cashed/yes"}Yes{/s}';
          }
 

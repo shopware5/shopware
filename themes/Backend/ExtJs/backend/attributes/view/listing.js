@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.Attributes.view.Listing', {
                 '{literal}{name:this.formatName} ({rows.length}{/literal} {s name="grouping_suffix"}{/s})',
                 {
                     formatName: function(value) {
-                        switch(value) {
+                        switch (value) {
                             case true:
                                 return '{s name="grouping_configured"}{/s}';
                             case false:

@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
         // Reset the detail Record
         me.detailRecord = null;
 
-        if(me.selectedCategoryRecord && me.selectedCategoryRecord.get("blog")) {
+        if (me.selectedCategoryRecord && me.selectedCategoryRecord.get("blog")) {
             model.set("categoryId",me.selectedCategoryRecord.getId());
         }
 

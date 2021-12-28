@@ -188,7 +188,7 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
                     field.getStore().load();
                 },
                 specialkey: function(field, event) {
-                    if(event.getKey() === Ext.EventObject.ENTER && event.ctrlKey === true) {
+                    if (event.getKey() === Ext.EventObject.ENTER && event.ctrlKey === true) {
                         event.stopEvent();
                         me.assignValuesToStore();
                     }
@@ -408,7 +408,7 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
             result = [ Ext.String.format('<ul class="[0]item-bubble-list">', Ext.baseCSSPrefix) ];
 
         Ext.each(values, function(value) {
-            if(!value) {
+            if (!value) {
                 return;
             }
 
@@ -497,7 +497,7 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
             notFound = false;
         }
 
-        if(notFound) {
+        if (notFound) {
             return;
         }
 
@@ -508,20 +508,20 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
         valueId = ~~(1 * element.getAttribute('data-value-id'));
         rowId = ~~(1 * element.getAttribute('data-row-id'));
 
-        if(!valueId) {
-            for(var i in element.dom.attributes) {
+        if (!valueId) {
+            for (var i in element.dom.attributes) {
                 var attr = element.dom.attributes[i];
-                if(attr.name == 'data-value-id') {
+                if (attr.name == 'data-value-id') {
                     valueId = parseInt(attr.value, 10);
                     break;
                 }
             }
         }
 
-        if(!rowId) {
-            for(var i in element.dom.attributes) {
+        if (!rowId) {
+            for (var i in element.dom.attributes) {
                 var attr = element.dom.attributes[i];
-                if(attr.name == 'data-row-id') {
+                if (attr.name == 'data-row-id') {
                     rowId = parseInt(attr.value, 10);
                     break;
                 }

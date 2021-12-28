@@ -54,7 +54,7 @@ Ext.define('Shopware.form.field.VoucherGrid', {
 
     valueRenderer: function(value, meta, record) {
         value = '{s name="voucher/grid/value_prefix"}{/s}: ' + value + '';
-        if(record.get('percental')){
+        if (record.get('percental')){
             return value.replace(/[.,]/, Ext.util.Format.decimalSeparator) + " %";
         }
         return value.replace(/[.,]/, Ext.util.Format.decimalSeparator);

@@ -165,7 +165,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
         };
 
         var form = me.formPanel.getForm();
-        if(!me.editRecord.get('surchargeCalculation')) {
+        if (!me.editRecord.get('surchargeCalculation')) {
             form.findField('surchargeCalculation').setValue(0);
         } else {
             form.findField('surchargeCalculation').setValue(me.editRecord.get('surchargeCalculation'));

@@ -189,7 +189,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Widgets', {
 
                 proxyEl.getEl().addCls(Ext.baseCSSPrefix + 'shopware-dd-proxy');
 
-                if(!sourceEl || !element) {
+                if (!sourceEl || !element) {
                     return false;
                 }
 

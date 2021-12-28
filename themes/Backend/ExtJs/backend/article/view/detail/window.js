@@ -195,7 +195,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.changeTitle();
 
         // A incompatible plugin was found, throw a alert to inform the user.
-        if(me._invalidPlugin) {
+        if (me._invalidPlugin) {
             Ext.MessageBox.alert(me.snippets.titleGeneral, Ext.String.format(me.snippets.invalidPlugin, '"' + me['_invalidClassName'] + '"'));
         }
 
@@ -368,7 +368,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.setTitle(title);
 
         // Change the title of the footer button
-        if(me._toolbarBtn) {
+        if (me._toolbarBtn) {
             footerButton = me._toolbarBtn;
             footerButton.setText(title);
         }
@@ -941,7 +941,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.attributeForm.loadAttribute(article.get('mainDetailId'));
         me.attributeForm.disableForm(false);
 
-        if(me.subApp.splitViewActive) {
+        if (me.subApp.splitViewActive) {
             me.variantTab.setDisabled(true);
         }
     },
@@ -1018,7 +1018,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             }, availableStores;
 
         // We're having no options for the new tab, so raise an error...
-        if(!opts || opts.length) {
+        if (!opts || opts.length) {
             Ext.Error.raise({
                 sourceClass: me.$className,
                 sourceMethod: 'registerAdditionalTab',
@@ -1030,7 +1030,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         }
 
         // Check if the user configuration includes an `contentFn` which creates the content of the tab
-        if(!opts || !opts.hasOwnProperty('contentFn')) {
+        if (!opts || !opts.hasOwnProperty('contentFn')) {
             Ext.Error.raise({
                 sourceClass: me.$className,
                 sourceMethod: 'registerAdditionalTab',
@@ -1041,7 +1041,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         }
 
         // Modify the passed parameter(s)
-        if(containerType && !containerType.match(/^(Ext|Shopware)/)) {
+        if (containerType && !containerType.match(/^(Ext|Shopware)/)) {
 
             // Support for passing a `xtype` for the containerType
             containerType = Ext.ClassManager.getNameByAlias(containerType);
@@ -1058,7 +1058,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         }));
 
         // Add the tab container to the main tab panel
-        if(cfg.insertIndex >= 0) {
+        if (cfg.insertIndex >= 0) {
             tabPanel.insert(cfg.insertIndex, tabContainer);
         } else {
             tabPanel.add(tabContainer);

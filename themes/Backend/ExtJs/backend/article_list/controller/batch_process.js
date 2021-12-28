@@ -261,13 +261,13 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
 
                 var result = Ext.JSON.decode(response.responseText);
 
-                if(!result) {
+                if (!result) {
                     me.progressWindow.close();
                     me.showError(response.responseText);
-                }else if(!result.success) {
+                } else if (!result.success) {
                     me.progressWindow.close();
                     me.showError(result.message);
-                }else{
+                } else {
                     if (result.data.offset < result.data.totalCount) {
                         var eta = me.getETA(startTime, result.data.offset, result.data.totalCount);
                         var progressText =  Ext.String.format(
@@ -277,7 +277,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
                         me.progressWindow.progressBar.updateProgress(result.data.offset/result.data.totalCount, progressText);
 
                         me.addToQueue(config, result.data.offset, result.data.queueId, startTime);
-                    }else{
+                    } else {
                         Shopware.Notification.createStickyGrowlMessage({
                                 title: '{s name="createdQueueTitle"}Created queue{/s}',
                                 text: Ext.String.format('{s name="createdQueueMessage"}Created queue for [0] items for this filter: [1]{/s}', result.data.totalCount, me.filterArrayToString(Ext.JSON.decode(config.filterArray))),
@@ -302,7 +302,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
 
             },
             failure: function (response, request) {
-                if(response.responseText) {
+                if (response.responseText) {
                     me.showError(response.responseText);
                 } else {
                     me.showError('{s name="unknownError"}An unknown error occurred, please check your server logs{/s}');
@@ -378,13 +378,13 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
 
                 var result = Ext.JSON.decode(response.responseText);
 
-                if(!result) {
+                if (!result) {
                     me.progressWindow.close();
                     me.showError(response.responseText);
-                }else if(!result.success) {
+                } else if (!result.success) {
                     me.progressWindow.close();
                     me.showError(result.message);
-                }else{
+                } else {
                     if (!result.data.done) {
                         var eta = me.getETA(startTime, result.data.processed, result.data.totalCount);
                         var progressText =  Ext.String.format(
@@ -394,7 +394,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
                         me.progressWindow.progressBar.updateProgress(result.data.processed/result.data.totalCount, progressText);
 
                         me.runBatchProcess(queueId, config, startTime);
-                    }else{
+                    } else {
                         me.progressWindow.close();
                         me.getMainGrid().store.reload();
                         operationString = Ext.JSON.encode(config.operations);
@@ -414,7 +414,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
 
             },
             failure: function (response, request) {
-                if(response.responseText) {
+                if (response.responseText) {
                     me.showError(response.responseText);
                 } else {
                     me.showError('{s name="unknownError"}An unknown error occurred, please check your server logs{/s}');

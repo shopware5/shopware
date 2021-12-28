@@ -180,7 +180,7 @@ Ext.define('Shopware.apps.Notification.view.notification.Customer', {
      * @param value
      */
     notifiedRenderer: function (value, p, r) {
-        if(value!=1){
+        if (value!=1){
             return '<span style="color:red;">{s name="list/render_value/notified/no"}No{/s}</span>';
         }
         return '<span style="color:green;">{s name="list/render_value/notified/yes"}Yes{/s}</span>';

@@ -158,7 +158,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
     refreshView: function() {
         var me = this;
 
-        if(!me.merchantStore) {
+        if (!me.merchantStore) {
             return false;
         }
         me.merchantStore.load();

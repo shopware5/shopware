@@ -126,17 +126,17 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
     onComboEdit: function(plugin, event) {
         var me = this,
             column = me.columns[event.colIdx];
-        if(!column || !column.editor && !column._editor) {
+        if (!column || !column.editor && !column._editor) {
             return;
         }
-        if(!column._editor) {
+        if (!column._editor) {
             column._editor = column.editor;
         }
         var editor = column._editor,
             store = editor.store,
             record = event.record,
             filter, value, filters;
-        switch(event.field) {
+        switch (event.field) {
             case 'areaId':
                 record.set('countryId', null);
                 record.set('stateId', null);
@@ -149,10 +149,10 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
                 filter = 'countryId';
                 break;
         }
-        if(filter) {
+        if (filter) {
             value = record.get(filter);
         }
-        if(value) {
+        if (value) {
             filters = [{
                 property: filter,
                 value: value
@@ -188,23 +188,23 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
     onComboRenderer: function(value, metadata, record, rowIndex, colIndex) {
         var me = this,
             column = me.columns[colIndex];
-        if(!column.editor && !column._editor) {
+        if (!column.editor && !column._editor) {
             return value;
         }
-        if(!column._editor) {
+        if (!column._editor) {
             column._editor = column.editor;
         }
         var editor = column._editor,
             store = column._editor.store,
             index, record;
 
-        if(!value) {
+        if (!value) {
             return editor.emptyText;
         }
         store.clearFilter(true);
         index = store.find(editor.valueField, value);
         record = store.getAt(index);
-        if(!record) {
+        if (!record) {
             return editor.emptyText;
         }
         value = record.get(editor.displayField);
@@ -226,7 +226,7 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
             listeners: {
                 enable: function() {
                     // if available get the first entry
-                    if(this.store.getAt('0')) {
+                    if (this.store.getAt('0')) {
                         this.setValue(this.store.getAt('0').get('id'));
                     }
                 }

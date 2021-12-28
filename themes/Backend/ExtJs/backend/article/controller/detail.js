@@ -345,11 +345,11 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var me = this,
             subApps = Shopware.app.Application.subApplications,
             articleList = subApps.findBy(function(item) {
-                if(item.$className === 'Shopware.apps.ArticleList') {
+                if (item.$className === 'Shopware.apps.ArticleList') {
                     return true;
                 }
             });
-        if(articleList) {
+        if (articleList) {
             var grid = articleList.articleGrid,
                 selModel = grid.getSelectionModel(),
                 selection = selModel.getLastSelected();
@@ -703,7 +703,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 }
             };
 
-        if(article.get('id')) {
+        if (article.get('id')) {
             propertyStore.getProxy().extraParams.articleId = article.get('id');
         }
         propertyStore.each(function(property) {
@@ -832,7 +832,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
         if (firstPrice === price) {
             firstRecord.set('percent', null);
-        } else if(event.value > 0) {
+        } else if (event.value > 0) {
             price = firstPrice / 100 * (100 - event.value);
             price = price.toFixed(2);
             record.set('price', price);
@@ -859,11 +859,11 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             pseudoPrice = record.get('pseudoPrice'),
             percentPseudo = record.get('percentPseudo');
 
-        if(price && previousPrice && previousPrice.get('price') < price) {
+        if (price && previousPrice && previousPrice.get('price') < price) {
             record.set('price', previousPrice.get('price') - 0.01);
             // We need to trigger update on PriceField without copy&paste all that checks and updates
             me.updatedPriceField(event);
-        } else if(price && firstPrice > price) {
+        } else if (price && firstPrice > price) {
             percent = (firstPrice - price) / firstPrice * 100;
             percent = percent.toFixed(2);
             record.set('percent', percent);
@@ -871,7 +871,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             record.set('percent', null);
         }
 
-        if(price && pseudoPrice > 0) {
+        if (price && pseudoPrice > 0) {
             percentPseudo = 100 - 100 / pseudoPrice * price;
             percentPseudo = percentPseudo.toFixed(2);
             record.set('percentPseudo', percentPseudo);
@@ -892,11 +892,11 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             price = record.get('price'),
             pseudoPrice = record.get('pseudoPrice');
 
-        if(pseudoPrice > 0) {
+        if (pseudoPrice > 0) {
             // If the user enters 0 or nothing, the price has to be the pseudoPrice
-            if(!Ext.isNumeric(event.value) || event.value === 0) {
+            if (!Ext.isNumeric(event.value) || event.value === 0) {
                 record.set('pseudoPrice', null);
-            } else if(event.value > 0) {
+            } else if (event.value > 0) {
                 pseudoPrice = (price / (100 - event.value)) * 100;
                 pseudoPrice = pseudoPrice.toFixed(2);
                 record.set('pseudoPrice', pseudoPrice);
@@ -925,9 +925,9 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             percentPseudo = record.get('percentPseudo');
 
         // If the user enters 0 or nothing, the percentPseudo has to be 0
-        if(!Ext.isNumeric(event.value) || event.value === 0) {
+        if (!Ext.isNumeric(event.value) || event.value === 0) {
             record.set('percentPseudo', 0);
-        } else if(event.value > 0) {
+        } else if (event.value > 0) {
             percentPseudo = 100 - (100 / event.value * price);
             percentPseudo = percentPseudo.toFixed(2);
             record.set('percentPseudo', percentPseudo);

@@ -616,7 +616,7 @@ Ext.define('Shopware.grid.Controller', {
      * @param itemCount int
      */
     reloadStoreAfterDelete: function(store, itemCount) {
-        switch(true) {
+        switch (true) {
             case (store.data.length !== itemCount):
             case store.currentPage === 1:
                 store.load();

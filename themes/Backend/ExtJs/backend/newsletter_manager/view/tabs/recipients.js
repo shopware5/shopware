@@ -137,7 +137,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
         me.on('validateedit', function(editor, event) {
             var newGroupId = event.newValues['address.groupId'],
             newMail = event.newValues['address.email'];
-            if(newMail == "" || newGroupId == null) {
+            if (newMail == "" || newGroupId == null) {
                 event.cancel = true;
                 return false;
             }
@@ -267,7 +267,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
             lastNewsletterId = record.get('lastNewsletterId');
 
         lastNewsletter = me.mailingStore.getById(lastNewsletterId);
-        if(lastNewsletter instanceof Ext.data.Model) {
+        if (lastNewsletter instanceof Ext.data.Model) {
             return lastNewsletter.get('subject');
         }
 
@@ -293,23 +293,23 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
         }
 
         // Recipient is a customer
-        if(customer !== null && customer.first() instanceof Ext.data.Model) {
+        if (customer !== null && customer.first() instanceof Ext.data.Model) {
             return "<strong>" + customer.first().get('groupKey') + '{s name="customerGroup"} (Customer group){/s}</strong>' ;
         }
 
         //  Non-Customer recipient
         group = me.newsletterGroupStore.findRecord('id', record.get('groupId'));
-        if(group !== null) {
+        if (group !== null) {
             return group.get('name');
         }
 
-        if(group !== null && group.first() instanceof Ext.data.Model) {
+        if (group !== null && group.first() instanceof Ext.data.Model) {
             return group.first().get('name');
 //            return group.first().get('id');
         }
 
         // If the customer wasn't found, print this in order to prevent confusion.
-        if(isCustomer && !customer) {
+        if (isCustomer && !customer) {
             return 'Customer not found';
         }
 
@@ -336,7 +336,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
                 // Hide the "view customer" button if the current row does not contain a valid customer
                 getClass: function(value, metaData, record) {
                     var customer = record.getCustomer();
-                    if(customer === Ext.undefined || customer.first() === Ext.undefined) {
+                    if (customer === Ext.undefined || customer.first() === Ext.undefined) {
                         return 'x-hide-display';
                     }
                 }

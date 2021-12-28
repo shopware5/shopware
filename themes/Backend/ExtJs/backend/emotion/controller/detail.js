@@ -422,7 +422,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             cssField,
             xtype, compField;
 
-        if(!formPanel.getForm().isValid()) {
+        if (!formPanel.getForm().isValid()) {
             Shopware.Notification.createGrowlMessage(
                 win.title,
                 me.snippets.saveComponentAlert
@@ -1429,7 +1429,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             callback: function(operation, success, response) {
                 var response = Ext.decode(response.responseText);
 
-                if(!response.success) {
+                if (!response.success) {
                     Shopware.Notification.createGrowlMessage(
                         me.snippets.growlMessage,
                         me.snippets.duplicateErrorMsg

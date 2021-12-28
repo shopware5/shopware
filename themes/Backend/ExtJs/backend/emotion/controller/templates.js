@@ -145,7 +145,7 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
             grid = editor.grid,
             record = values.record;
 
-        if(!record) {
+        if (!record) {
             return false;
         }
         grid.setLoading(true);
@@ -171,7 +171,7 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
     onDuplicate: function(grid, rec) {
         var me = this;
 
-        if(!rec) {
+        if (!rec) {
             return false;
         }
 
@@ -205,13 +205,13 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
         var me = this,
             store = grid.getStore();
 
-        if(rec.data.id < 2) {
+        if (rec.data.id < 2) {
             Ext.Msg.alert(me.snippets.title, me.snippets.alert.default_remove);
             return false;
         }
 
         Ext.Msg.confirm(me.snippets.title, Ext.String.format(me.snippets.confirm.remove, rec.get('name')), function(btn) {
-            if(btn !== 'yes') {
+            if (btn !== 'yes') {
                 return false;
             }
 
@@ -241,12 +241,12 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
             selected = selModel.getSelection();
 
         Ext.Msg.confirm(me.snippets.title, me.snippets.confirm.marked_remove, function(btn) {
-            if(btn !== 'yes') {
+            if (btn !== 'yes') {
                 return false;
             }
 
             Ext.each(selected, function(item) {
-                if(item.data.id > 1) {
+                if (item.data.id > 1) {
                     item.destroy();
                 }
             });
@@ -285,12 +285,12 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
             newRec = false;
 
         btn.setDisabled(true);
-        if(!form.getForm().isValid()) {
+        if (!form.getForm().isValid()) {
             btn.setDisabled(false);
             return false;
         }
 
-        if(rec) {
+        if (rec) {
             form.getForm().updateRecord(rec);
         } else {
             rec = Ext.create('Shopware.apps.Emotion.model.Template', form.getForm().getValues());
@@ -299,7 +299,7 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
 
         rec.save({
             callback: function() {
-                if(newRec) {
+                if (newRec) {
                     me.getList().getStore().add(rec);
                 }
                 Shopware.Notification.createGrowlMessage(me.snippets.title, Ext.String.format(me.snippets.edited, rec.get('name')));
@@ -324,7 +324,7 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
             defaultSelected;
 
         Ext.each(selection, function(item) {
-            if(item.data.id < 2) {
+            if (item.data.id < 2) {
                 defaultSelected = true;
                 return false;
             }
@@ -348,7 +348,7 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
             grid = me.getList(),
             store = grid.getStore();
 
-        if(!value.length) {
+        if (!value.length) {
             store.clearFilter();
         } else {
             store.clearFilter(true);

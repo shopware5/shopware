@@ -124,7 +124,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
                 editor = editorField.editor,
                 scroller;
 
-            if(!editor || !editor.hasOwnProperty('display')) {
+            if (!editor || !editor.hasOwnProperty('display')) {
                 return false;
             }
 

@@ -245,12 +245,12 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
             record;
 
         // SW-3289 If we have no valid taxId, return the taxRate
-        if(value == 0 || value == null || value == Ext.undefined) {
+        if (value == 0 || value == null || value == Ext.undefined) {
             return rowRecord.get('taxRate').toString().replace(/[.,]/, Ext.util.Format.decimalSeparator)+'%';
         }
 
         record = me.taxStore.findRecord('id', value);
-        if(record instanceof Ext.data.Model && record.get('tax') != Ext.undefined && record.get('tax') != null) {
+        if (record instanceof Ext.data.Model && record.get('tax') != Ext.undefined && record.get('tax') != null) {
             var tax = record.get('tax')+'%';
             return tax.replace(/[.,]/, Ext.util.Format.decimalSeparator);
         }
@@ -263,9 +263,9 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
             record;
 
         record = me.statusStore.getAt(value);
-        if(record !== Ext.undefined) {
+        if (record !== Ext.undefined) {
             return record.get('description');
-        }else{
+        } else {
             return value;
         }
     },

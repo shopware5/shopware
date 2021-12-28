@@ -134,9 +134,9 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Configlist', {
      * @param value The value of the field
      */
     renderStatus: function(value, meta, record){
-        if(value === 'ok') {
+        if (value === 'ok') {
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>')
-        } else if(value === 'warning') {
+        } else if (value === 'warning') {
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-exclamation" title="' + record.get('notice')  + '"></div>')
         } else {
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
@@ -148,11 +148,11 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Configlist', {
      * @param value The value of the field
      */
     renderVersion: function(value){
-        if(value==true){
+        if (value==true){
             return 1
-        }else if(value==false){
+        } else if (value==false){
             return 0
-        }else{
+        } else {
             return value;
         }
     }

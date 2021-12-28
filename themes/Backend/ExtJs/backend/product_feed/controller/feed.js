@@ -351,7 +351,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                     var data = response.data;
                     attributeForm.saveAttribute(data.id);
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
-                    if(!Ext.isDefined(keepOpened) || !keepOpened){
+                    if (!Ext.isDefined(keepOpened) || !keepOpened){
                         me.getProductFeedWindow().destroy();
                     }
                 } else {
@@ -369,7 +369,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         var me = this,
             ids = [],
             selectedTreeItemCounter = 0;
-        if(me.detailRecord) {
+        if (me.detailRecord) {
             var lockedCategoriesStore =  me.detailRecord.getCategories();
             lockedCategoriesStore.each(function(element) {
                 ids.push(element.get('id'));
@@ -380,7 +380,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
             url: '{url controller="Category" action="getIdPath"}',
             params: { 'categoryIds[]': ids },
             success: function(result){
-                if(!result.responseText) {
+                if (!result.responseText) {
                     return ;
                 }
                 result =  Ext.JSON.decode(result.responseText);
@@ -388,7 +388,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                 Ext.each(result.data, function(item) {
                     tree.expandPath('/1' + item, 'id', '/', function (records) {
                             selectedTreeItemCounter++;
-                            if(selectedTreeItemCounter == resultCount) {
+                            if (selectedTreeItemCounter == resultCount) {
                                 //tree completely expanded
                                 me.getProductFeedSaveButton().enable();
                                 me.getProductFeedUpdateButton().enable();

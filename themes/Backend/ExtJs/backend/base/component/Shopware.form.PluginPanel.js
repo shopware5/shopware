@@ -99,7 +99,7 @@ Ext.define('Shopware.form.PluginPanel',
         var me = this;
 
         // Check if we're having a plugin form id
-        if(!me.formId) {
+        if (!me.formId) {
             Ext.Error.raise(me.noFormIdConfiguredErrorText);
             return false;
         }
@@ -107,7 +107,7 @@ Ext.define('Shopware.form.PluginPanel',
         // Cast the id to an integer
         me.formId = ~~(1 * me.formId);
 
-        if(!me.shopStore.getCount()) {
+        if (!me.shopStore.getCount()) {
             me.shopStore.load();
         }
 
@@ -161,12 +161,12 @@ Ext.define('Shopware.form.PluginPanel',
         var me = this;
 
         // If the shop store isn't fully loaded yet, defer the "initForm"-call
-        if(me.shopStore.isLoading() || !me.rendered) {
+        if (me.shopStore.isLoading() || !me.rendered) {
             Ext.defer(me.initForm, 100, me, [ form ]);
             return false;
         }
 
-        if(me.injectActionButtons) {
+        if (me.injectActionButtons) {
             me.addDocked(me.getButtons());
         }
         me.add(me.getItems(form));
@@ -215,9 +215,9 @@ Ext.define('Shopware.form.PluginPanel',
             items = [],
             tabs = [], options;
 
-        if(form.get('description') && me.descriptionField) {
+        if (form.get('description') && me.descriptionField) {
 
-            if(!me._descriptionAdded) {
+            if (!me._descriptionAdded) {
                 items.push({
                     xtype: 'fieldset',
                     margin: 10,
@@ -247,12 +247,12 @@ Ext.define('Shopware.form.PluginPanel',
                 elementName = element.get('name');
                 elementLabel = element.get('label');
                 elementDescription = element.get('description');
-                if(element.associations.containsKey('getTranslation')) {
-                    if(element.getTranslation().getAt(0) && element.getTranslation().getAt(0).get('label')) {
+                if (element.associations.containsKey('getTranslation')) {
+                    if (element.getTranslation().getAt(0) && element.getTranslation().getAt(0).get('label')) {
                         elementLabel = element.getTranslation().getAt(0).get('label');
                     }
 
-                    if(element.getTranslation().getAt(0) && element.getTranslation().getAt(0).get('description')) {
+                    if (element.getTranslation().getAt(0) && element.getTranslation().getAt(0).get('description')) {
                         elementDescription = element.getTranslation().getAt(0).get('description');
                     }
                 }
@@ -284,7 +284,7 @@ Ext.define('Shopware.form.PluginPanel',
                 fields.push(field);
 
             });
-            if(fields.length > 0) {
+            if (fields.length > 0) {
                 tabs.push({
                     xtype: 'base-element-fieldset',
                     title: shop.get('name'),
@@ -293,7 +293,7 @@ Ext.define('Shopware.form.PluginPanel',
             }
         });
 
-        if(tabs.length > 1) {
+        if (tabs.length > 1) {
             items.push({
                 xtype: 'tabpanel',
                 bodyStyle: 'background-color: transparent !important',
@@ -304,8 +304,8 @@ Ext.define('Shopware.form.PluginPanel',
                 items: tabs,
                 plain: true
             });
-        } else if(tabs.length == 1) {
-            if(tabs[0].title) {
+        } else if (tabs.length == 1) {
+            if (tabs[0].title) {
                 delete tabs[0].title;
             }
             items.push({
@@ -379,7 +379,7 @@ Ext.define('Shopware.form.PluginPanel',
             me.shopStore.each(function(shop) {
                 fieldName = 'values[' + shop.get('id') + ']['+ element.get('id') + ']';
                 fieldValue = values[fieldName];
-                if(fieldValue !== '' && fieldValue !== null) {
+                if (fieldValue !== '' && fieldValue !== null) {
                     valueStore.add({
                         shopId: shop.get('id'),
                         value: fieldValue
@@ -400,10 +400,10 @@ Ext.define('Shopware.form.PluginPanel',
                         name: form.data.label || form.data.name
                     });
                 Shopware.Notification.createGrowlMessage(title, message, win.title);
-                if(closeWindow) {
+                if (closeWindow) {
                     win.destroy();
                 }
-                if(callback) {
+                if (callback) {
                     callback.apply(me, records, operation);
                 }
             },

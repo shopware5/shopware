@@ -7,5 +7,6 @@ module.exports = {
         'object-curly-newline': ['error', {'consistent': true}],
         'no-multiple-empty-lines': ['error', { "max": 1 }],
         'func-call-spacing': 'error',
+        'keyword-spacing': 'error',
     }
 };

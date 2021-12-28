@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
             value: firstOfMonth,
             listeners: {
                 specialkey: function(field, event) {
-                    if( event.getKey() == event.ENTER) {
+                    if ( event.getKey() == event.ENTER) {
                         me.fireEvent('dateEnter', me.fromDate.getValue(), me.toDate.getValue());
                     }
                 }
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
             value: today,
             listeners: {
                 specialkey: function(field, event) {
-                    if( event.getKey() == event.ENTER) {
+                    if ( event.getKey() == event.ENTER) {
                         me.fireEvent('dateEnter', me.fromDate.getValue(), me.toDate.getValue());
                     }
                 }

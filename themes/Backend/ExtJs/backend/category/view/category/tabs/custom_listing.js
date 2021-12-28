@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
             },
             sorters: [{
                 sorterFn: function(facet1, facet2){
-                    if(!me.facets) {
+                    if (!me.facets) {
                         return;
                     }
 
@@ -380,7 +380,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
         if (hasFacets) {
             me.facets = category.get('facetIds').split('|').filter(
                 function(i) {
-                    if(i.length){
+                    if (i.length){
                         return i;
                     }
                 });

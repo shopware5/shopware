@@ -295,7 +295,7 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
 
         //Creates an array like this:
         //[0] => One item of each array rules/syntax/example
-        for(var i=0; i<example.length; i++){
+        for (var i=0; i<example.length; i++){
             data[i] = [rules[i], syntax[i], example[i]]
         }
         return data;

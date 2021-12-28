@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Blog', {
 
         me.numberField = me.down('numberfield');
 
-        if(!me.numberField.getValue()) {
+        if (!me.numberField.getValue()) {
             me.numberField.setValue(1);
         }
     }

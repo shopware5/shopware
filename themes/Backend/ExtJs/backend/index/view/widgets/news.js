@@ -124,7 +124,7 @@ Ext.define('Shopware.apps.Index.view.widgets.News', {
             timestampKey = me.newsStore.getProxy().id + '-timestamp',
             lastRefresh = new Date().getTime() - window.localStorage.getItem(timestampKey);
 
-        if(me.newsStore.count() === 0 || lastRefresh >= 86400000 || forceRefresh === true) {
+        if (me.newsStore.count() === 0 || lastRefresh >= 86400000 || forceRefresh === true) {
             me.syncRemoteToLocal();
             window.localStorage.setItem(timestampKey, new Date().getTime());
         }

@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.Statistics', {
         }
         value = record.get('paymentValue');
 
-        if(Ext.isNumber(value) || Ext.isString(value)) {
+        if (Ext.isNumber(value) || Ext.isString(value)) {
             return Ext.util.Format.currency(value);
         }
 

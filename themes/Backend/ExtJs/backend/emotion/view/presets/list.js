@@ -343,7 +343,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
             parent = el.parent('.preset--outer-container');
             presetContainer = parent.down('.preset--container');
 
-            if(parent.hasCls('x-grid-group-hd-collapsed')) {
+            if (parent.hasCls('x-grid-group-hd-collapsed')) {
                 parent.removeCls('x-grid-group-hd-collapsed');
                 presetContainer.setStyle('display', 'block');
             } else {

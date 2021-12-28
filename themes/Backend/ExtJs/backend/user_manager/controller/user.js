@@ -272,7 +272,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
             records = view.getSelectionModel().getSelection(),
             userStore = me.getStore('User');
 
-        if(records.length > 0) {
+        if (records.length > 0) {
             Ext.MessageBox.confirm('{s name="user/titleDeleteUser"}Delete user{/s}', '{s name="user/messageDeleteMultipleUsers"}Are you sure you want delete these users?{/s}', function (response) {
                 if (response !== 'yes') return false;
 
