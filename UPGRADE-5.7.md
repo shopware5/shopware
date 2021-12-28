@@ -6,8 +6,6 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 [View all changes from v5.7.6...v5.7.7](https://github.com/shopware/shopware/compare/v5.7.5...v5.7.6)
 
-### Breaks
-
 ### Deprecations
 
 * Deprecated `\Shopware_Controllers_Frontend_Checkout::getTaxRates`, it will be removed in the next minor version v5.8.
