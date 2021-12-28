@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
         }
 
         me.ignoreToken = true;
-        me.setValue (value + suggestion + " " + rest);
+        me.setValue(value + suggestion + " " + rest);
 
     },
 

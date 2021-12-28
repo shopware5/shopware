@@ -6,5 +6,6 @@ module.exports = {
         'key-spacing': 'error',
         'object-curly-newline': ['error', {'consistent': true}],
         'no-multiple-empty-lines': ['error', { "max": 1 }],
+        'func-call-spacing': 'error',
     }
 };
