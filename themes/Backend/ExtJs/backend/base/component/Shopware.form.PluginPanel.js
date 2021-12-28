@@ -27,9 +27,9 @@
  * @author shopware AG
  */
 //{namespace name="backend/config/controller/main"}
-Ext.define('Shopware.form.PluginPanel',
-/** @lends Ext.form.Panel# */
-{
+Ext.define('Shopware.form.PluginPanel', {
+    /** @lends Ext.form.Panel# */
+
     /**
      * The parent class that this class extends.
      * @string

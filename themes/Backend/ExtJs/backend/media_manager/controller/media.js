@@ -82,9 +82,9 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
                 itemclick: me.onChangeMediaAlbum,
                 startBatchMoveMedia: me.moveMedias
 
-        /* {if {acl_is_allowed privilege=upload}} */
+                /* {if {acl_is_allowed privilege=upload}} */
                 , reload: me.onTreeLoad
-        /* {/if} */
+                /* {/if} */
             },
             'mediamanager-media-view': {
                 editLabel: me.onEditLabel,
@@ -102,11 +102,11 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
             'mediamanager-media-view html5fileupload': {
                 uploadReady: me.onReload
             },
-        /* {if {acl_is_allowed privilege=upload}} */
+            /* {if {acl_is_allowed privilege=upload}} */
             'mediamanager-media-view filefield': {
                 change: me.onMediaUpload
             },
-        /* {/if} */
+            /* {/if} */
             'mediamanager-selection-window textfield[action=mediamanager-selection-window-searchfield]': {
                 change: me.onSearchMedia
             },
@@ -283,7 +283,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         store.currentPage = 1;
         store.load();
 
-         // Re initial the plugin to fix the drag selector zone
+        // Re initial the plugin to fix the drag selector zone
         var dragSelector = mediaView.dataView.plugins[0];
         dragSelector.reInit();
     },
@@ -308,7 +308,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
                     me.deleteMedia();
                 }
             },
-        this);
+            this
+        );
     },
 
     /**

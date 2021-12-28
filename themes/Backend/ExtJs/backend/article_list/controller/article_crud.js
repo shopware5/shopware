@@ -159,11 +159,11 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
             success: function(record, operation) {
                 if (operation.success) {
                     Shopware.Notification.createGrowlMessage(
-                            '{s name="successTitle"}Success{/s}',
-                            Ext.String.format('{s name="successMessage"}Saved [0]{/s}', record.get('Article_name')),
-                            'ArticleList',
-                            'growl',
-                            true
+                        '{s name="successTitle"}Success{/s}',
+                        Ext.String.format('{s name="successMessage"}Saved [0]{/s}', record.get('Article_name')),
+                        'ArticleList',
+                        'growl',
+                        true
                     );
 
                     if (isActiveChange && me.getShowVariantsCheckbox().getValue()) {

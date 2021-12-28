@@ -809,14 +809,14 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         }
 
         return Ext.Msg.confirm(
-           '{s name="preset/required_plugins_title"}{/s}',
+            '{s name="preset/required_plugins_title"}{/s}',
             Ext.String.format('{s name="preset/required_plugins_confirmation"}{/s}', pluginInfo.join('<br>')),
             function(btn) {
-               if (btn === 'yes') {
-                   Shopware.app.Application.addSubApplication({
-                       name: 'Shopware.apps.PluginManager'
-                   });
-               }
+                if (btn === 'yes') {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.PluginManager'
+                    });
+                }
             }
         );
     },

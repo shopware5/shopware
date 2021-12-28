@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
 
     /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
     plugins: [{
-         // Includes the default translation plugin
+        // Includes the default translation plugin
         pluginId: 'my-translation',
         ptype: 'translation',
         translationType: 'config_mails'

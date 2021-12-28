@@ -72,11 +72,11 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
 
     },
 
-   /**
-    * Opens the detail-window
-    * @event click
-    * @return void
-    */
+    /**
+     * Opens the detail-window
+     * @event click
+     * @return void
+     */
     onOpenCreateWindow: function(){
         this.getView('premium.Detail').create();
     },
@@ -136,12 +136,12 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
      */
     onDeleteMultipleArticles: function(btn){
         var win = btn.up('window'),
-                grid = win.down('grid'),
-                selModel = grid.selModel,
-                store = grid.getStore(),
-                selection = selModel.getSelection(),
-                me = this,
-                message = Ext.String.format('{s name="messagebox_multipleDelete/message"}You have marked [0] articles. Are you sure you want to delete them?{/s}', selection.length);
+            grid = win.down('grid'),
+            selModel = grid.selModel,
+            store = grid.getStore(),
+            selection = selModel.getSelection(),
+            me = this,
+            message = Ext.String.format('{s name="messagebox_multipleDelete/message"}You have marked [0] articles. Are you sure you want to delete them?{/s}', selection.length);
 
         //Create a message-box, which has to be confirmed by the user
         Ext.MessageBox.confirm('{s name="messagebox_multipleDelete/title"}Delete articles{/s}', message, function (response){

@@ -204,17 +204,17 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
 
         return [
             {
-               fieldLabel: '{s name="formSettingsFieldPositionLabel"}Position{/s}',
-               xtype: 'textfield',
-               name: 'position',
-               anchor: '100%'
+                fieldLabel: '{s name="formSettingsFieldPositionLabel"}Position{/s}',
+                xtype: 'textfield',
+                name: 'position',
+                anchor: '100%'
             },
             {
-               fieldLabel: '{s name="formSettingsFieldEmbedCodeLabel"}Embed-Code{/s}',
-               xtype: 'textfield',
-               name: 'embedCode',
-               readOnly: true,
-               anchor: '100%'
+                fieldLabel: '{s name="formSettingsFieldEmbedCodeLabel"}Embed-Code{/s}',
+                xtype: 'textfield',
+                name: 'embedCode',
+                readOnly: true,
+                anchor: '100%'
             },
             {
                 fieldLabel: '{s name="formSettingsFieldTplVariableLabel_1"}Tpl. Variable 1{/s}',
@@ -229,16 +229,16 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 anchor: '100%'
             },
             {
-               fieldLabel: '{s name="formSettingsFieldTplVariableLabel_2"}Tpl. Variable 2{/s}',
-               xtype: 'textfield',
-               name: 'tpl2variable',
-               anchor: '100%'
+                fieldLabel: '{s name="formSettingsFieldTplVariableLabel_2"}Tpl. Variable 2{/s}',
+                xtype: 'textfield',
+                name: 'tpl2variable',
+                anchor: '100%'
             },
             {
-               fieldLabel: '{s name="formSettingsFieldTplPathLabel_2"}Tpl. Path 2{/s}',
-               xtype: 'textfield',
-               name: 'tpl2path',
-               anchor: '100%'
+                fieldLabel: '{s name="formSettingsFieldTplPathLabel_2"}Tpl. Path 2{/s}',
+                xtype: 'textfield',
+                name: 'tpl2path',
+                anchor: '100%'
             },
             {
                 fieldLabel: '{s name="formSettingsFieldTplVariableLabel_3"}Tpl. Variable 3{/s}',

@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Payment', {
     * @array
     */
     controllers: [ 'Payment', 'Main' ],
-        /**
+    /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.
      * The class sets a new event listener on the "destroy" event of

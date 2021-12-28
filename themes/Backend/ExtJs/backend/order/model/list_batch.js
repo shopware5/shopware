@@ -43,15 +43,15 @@ Ext.define('Shopware.apps.Order.model.ListBatch', {
     */
     extend: 'Ext.data.Model',
 
-   /**
-    * The batch model is only a data container which contains all
-    * data for the global stores in the model association data.
-    * An Ext.data.Model needs one field.
-    * @array
-    */
+    /**
+     * The batch model is only a data container which contains all
+     * data for the global stores in the model association data.
+     * An Ext.data.Model needs one field.
+     * @array
+     */
     fields: [
-       //{block name="backend/order/model/list_batch/fields"}{/block}
-       'id'
+        //{block name="backend/order/model/list_batch/fields"}{/block}
+        'id'
     ],
 
     /**

@@ -37,10 +37,10 @@
 //{block name="backend/category/view/tabs/article_mapping"}
 Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
 
-   /**
-    * Parent Element Ext.container.Container
-    * @string
-    */
+    /**
+     * Parent Element Ext.container.Container
+     * @string
+     */
     extend: 'Ext.form.Panel',
 
     /**

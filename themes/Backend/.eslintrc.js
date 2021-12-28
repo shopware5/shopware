@@ -4,10 +4,11 @@ module.exports = {
         'linebreak-style': ['error', 'unix'],
         'object-curly-spacing': ['error', 'always'],
         'key-spacing': 'error',
-        'object-curly-newline': ['error', {'consistent': true}],
-        'no-multiple-empty-lines': ['error', { "max": 1 }],
+        'object-curly-newline': ['error', { 'consistent': true }],
+        'no-multiple-empty-lines': ['error', { 'max': 1 }],
         'func-call-spacing': 'error',
         'keyword-spacing': 'error',
         'comma-spacing': 'error',
+        'indent': ['error', 4, { 'SwitchCase': 1 }],
     }
 };

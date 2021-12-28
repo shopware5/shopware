@@ -54,10 +54,10 @@ Ext.define('Shopware.apps.Config.view.variantFilter.ExpandGroupsGrid', {
             gridColumns = grid.columns;
 
         Ext.each(gridColumns, function (column) {
-           Ext.apply(column, {
-               hideable: false,
-               sortable: false
-           });
+            Ext.apply(column, {
+                hideable: false,
+                sortable: false
+            });
         });
 
         return grid;

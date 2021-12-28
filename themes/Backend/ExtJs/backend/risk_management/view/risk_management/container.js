@@ -77,30 +77,30 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
             newContainer = true;
         }
         var comboBox1 = Ext.create('Ext.form.field.ComboBox', {
-            store: Ext.create('Shopware.apps.RiskManagement.store.Risks'),
-            displayField: 'description',
-            valueField: 'value',
-            editable: false,
-            value: (me.values && me.values.rule1) ? me.values.rule1 : '',
-            listeners: {
-                'change': function(comboBox, newValue){
-                    me.fireEvent('onChangeRisk', this, newValue, 1)
+                store: Ext.create('Shopware.apps.RiskManagement.store.Risks'),
+                displayField: 'description',
+                valueField: 'value',
+                editable: false,
+                value: (me.values && me.values.rule1) ? me.values.rule1 : '',
+                listeners: {
+                    'change': function(comboBox, newValue){
+                        me.fireEvent('onChangeRisk', this, newValue, 1)
+                    }
                 }
-            }
-        }),
+            }),
 
-        comboBox2 = Ext.create('Ext.form.field.ComboBox', {
-            store: Ext.create('Shopware.apps.RiskManagement.store.Risks'),
-            displayField: 'description',
-            valueField: 'value',
-            editable: false,
-            value: (me.values && me.values.rule2) ? me.values.rule2 : '',
-            listeners: {
-                'change': function(comboBox, newValue){
-                    me.fireEvent('onChangeRisk', this, newValue, 4)
+            comboBox2 = Ext.create('Ext.form.field.ComboBox', {
+                store: Ext.create('Shopware.apps.RiskManagement.store.Risks'),
+                displayField: 'description',
+                valueField: 'value',
+                editable: false,
+                value: (me.values && me.values.rule2) ? me.values.rule2 : '',
+                listeners: {
+                    'change': function(comboBox, newValue){
+                        me.fireEvent('onChangeRisk', this, newValue, 4)
+                    }
                 }
-            }
-        });
+            });
         if (me.values && ['ZONEIS', 'ZONEISNOT', 'BILLINGZONEIS', 'BILLINGZONEISNOT'].indexOf(me.values.rule1) >= 0){
             var field1 = Ext.create('Ext.form.field.ComboBox', {
                 store: me.areasStore,
@@ -119,7 +119,7 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
                 displayField: 'name',
                 valueField: 'id',
                 editable: false,
-//                value: (me.values && me.values.value1) ? me.subShopStore.findRecord('id', me.values.value1).get('name') : '',
+                //                value: (me.values && me.values.value1) ? me.subShopStore.findRecord('id', me.values.value1).get('name') : '',
                 columnWidth: 0.1,
                 style: {
                     marginLeft: '10px'
@@ -165,7 +165,7 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
                 displayField: 'name',
                 valueField: 'id',
                 editable: false,
-//                value: (me.values && me.values.value2) ?  me.subShopStore.findRecord('id', me.values.value2).get('name') : '',
+                //                value: (me.values && me.values.value2) ?  me.subShopStore.findRecord('id', me.values.value2).get('name') : '',
                 columnWidth: 0.1,
                 style: {
                     marginLeft: '10px'

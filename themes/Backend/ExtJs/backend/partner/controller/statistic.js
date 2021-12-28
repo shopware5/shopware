@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
      */
     onChangeDate: function (field, value) {
         var me = this,
-        extraParams = null;
+            extraParams = null;
         if ( Ext.typeOf(value) != 'date' ) {
             return;
         }
@@ -112,11 +112,11 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
     onDownloadStatistic: function () {
         var me = this;
         var listStore = me.subApplication.statisticListStore,
-        partnerId = listStore.getProxy().extraParams.partnerId,
-        fromDate = listStore.getProxy().extraParams.fromDate,
-        toDate = listStore.getProxy().extraParams.toDate,
-        requestStringFromDate = '',
-        requestStringToDate = '';
+            partnerId = listStore.getProxy().extraParams.partnerId,
+            fromDate = listStore.getProxy().extraParams.fromDate,
+            toDate = listStore.getProxy().extraParams.toDate,
+            requestStringFromDate = '',
+            requestStringToDate = '';
 
         if (fromDate != "undefined" && fromDate != null) {
             fromDate = me.convertDate(fromDate);

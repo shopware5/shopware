@@ -39,12 +39,12 @@ Ext.define('Shopware.form.field.PartnerSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<div class="x-boundlist-item">{literal}{idCode} - <i>{company} / {email}</i>{/literal}</div>',
+            '<div class="x-boundlist-item">{literal}{idCode} - <i>{company} / {email}</i>{/literal}</div>',
             '</tpl>'
         );
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '{literal}{idCode} - {company} / {email}{/literal}',
+            '{literal}{idCode} - {company} / {email}{/literal}',
             '</tpl>'
         );
         return config;

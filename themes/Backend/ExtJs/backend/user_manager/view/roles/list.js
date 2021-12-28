@@ -152,20 +152,20 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
             dock: 'top',
             ui: 'shopware-ui',
             items: [
-        /* {if {acl_is_allowed privilege=create}} */
-            {
-                iconCls: 'sprite-plus-circle',
-                text: '{s name="roleslist/addrole"}{/s}',
-                action: 'addRole'
-            }
-        /* {/if} */
-            /* {if {acl_is_allowed privilege=delete}} */
-            , {
-                iconCls: 'sprite-minus-circle',
-                text: '{s name="roleslist/deleterole"}{/s}',
-                disabled: true,
-                action: 'deleteRole'
-            }
+                /* {if {acl_is_allowed privilege=create}} */
+                {
+                    iconCls: 'sprite-plus-circle',
+                    text: '{s name="roleslist/addrole"}{/s}',
+                    action: 'addRole'
+                }
+                /* {/if} */
+                /* {if {acl_is_allowed privilege=delete}} */
+                , {
+                    iconCls: 'sprite-minus-circle',
+                    text: '{s name="roleslist/deleterole"}{/s}',
+                    disabled: true,
+                    action: 'deleteRole'
+                }
             /* {/if} */
             ]
         });

@@ -165,36 +165,36 @@ Ext.define('Shopware.apps.Form.view.main.List', {
             ui: 'shopware-ui',
             items: [
 
-            /*{if {acl_is_allowed privilege=createupdate}}*/
-            {
-                iconCls: 'sprite-plus-circle-frame',
-                text: '{s name="toolbar_add_form"}Add{/s}',
-                action: 'add'
-            },
-            /*{/if}*/
+                /*{if {acl_is_allowed privilege=createupdate}}*/
+                {
+                    iconCls: 'sprite-plus-circle-frame',
+                    text: '{s name="toolbar_add_form"}Add{/s}',
+                    action: 'add'
+                },
+                /*{/if}*/
 
-            /*{if {acl_is_allowed privilege=delete}}*/
-            {
-                iconCls: 'sprite-minus-circle-frame',
-                text: '{s name="toolbar_delete"}Delete all selected{/s}',
-                disabled: true,
-                action: 'delete'
-            },
-            /*{/if}*/
+                /*{if {acl_is_allowed privilege=delete}}*/
+                {
+                    iconCls: 'sprite-minus-circle-frame',
+                    text: '{s name="toolbar_delete"}Delete all selected{/s}',
+                    disabled: true,
+                    action: 'delete'
+                },
+                /*{/if}*/
 
-            '->', {
-                xtype: 'textfield',
-                name: 'searchfield',
-                action: 'searchForms',
-                width: 170,
-                cls: 'searchfield',
-                enableKeyEvents: true,
-                checkChangeBuffer: 500,
-                emptyText: '{s name="toolbar_search"}Search...{/s}'
-            }, {
-                xtype: 'tbspacer',
-                width: 6
-            }]
+                '->', {
+                    xtype: 'textfield',
+                    name: 'searchfield',
+                    action: 'searchForms',
+                    width: 170,
+                    cls: 'searchfield',
+                    enableKeyEvents: true,
+                    checkChangeBuffer: 500,
+                    emptyText: '{s name="toolbar_search"}Search...{/s}'
+                }, {
+                    xtype: 'tbspacer',
+                    width: 6
+                }]
         });
     },
 

@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
      */
     getActionColumnItems: function () {
         var me = this,
-                actionColumnData = [];
+            actionColumnData = [];
 
         actionColumnData.push({
             iconCls: 'sprite-pencil',
@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
      * @return Ext.toolbar.Paging The paging toolbar for the customer grid
      */
     getFeatures: function () {
-       return [{
+        return [{
             ftype: 'summary'
         }];
     }

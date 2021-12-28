@@ -74,17 +74,17 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
      */
     registerEvents: function () {
         this.addEvents(
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event customerLink
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'openCustomerAccount'
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event customerLink
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'openCustomerAccount'
         );
 
         return true;
@@ -255,10 +255,10 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
      */
     cashedRenderer: function (value) {
         if (value==1){
-             return '{s name="list/render_value/cashed/yes"}Yes{/s}';
-         }
+            return '{s name="list/render_value/cashed/yes"}Yes{/s}';
+        }
 
-         return '{s name="list/render_value/cashed/no"}No{/s}';
-     }
+        return '{s name="list/render_value/cashed/no"}No{/s}';
+    }
 });
 //{/block}

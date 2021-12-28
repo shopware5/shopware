@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
 
     snippets: {
         buttons: {
-           save: '{s name="config/buttons/save"}Save{/s}',
+            save: '{s name="config/buttons/save"}Save{/s}',
             skip: '{s name="config/buttons/skip"}Skip{/s}'
         },
         content: {

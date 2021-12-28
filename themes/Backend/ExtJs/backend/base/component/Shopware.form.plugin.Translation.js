@@ -37,9 +37,9 @@
 
 //{block name="backend/base/component/form_plugin_translation"}
 
-Ext.define('Shopware.form.plugin.Translation',
-/** @lends Ext.AbstractPlugin# */
-{
+Ext.define('Shopware.form.plugin.Translation', {
+    /** @lends Ext.AbstractPlugin# */
+
     /**
      * Extends the abstact plugin component
      * @string

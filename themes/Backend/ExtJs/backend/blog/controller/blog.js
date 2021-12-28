@@ -132,11 +132,11 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
     onItemClick: function (view, record) {
         var me = this,
             listStore = me.subApplication.listStore;
-            me.selectedCategoryRecord = record;
-            listStore.getProxy().extraParams = {
-                categoryId: record.getId()
-            };
-            listStore.load();
+        me.selectedCategoryRecord = record;
+        listStore.getProxy().extraParams = {
+            categoryId: record.getId()
+        };
+        listStore.load();
     },
 
     /**
@@ -268,31 +268,31 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      */
     onDeleteSingleBlogArticle: function (grid, rowIndex) {
         var me = this,
-                store = me.subApplication.listStore,
-                record = store.getAt(rowIndex);
+            store = me.subApplication.listStore,
+            record = store.getAt(rowIndex);
         store.currentPage = 1;
         // we do not just delete - we are polite and ask the user if he is sure.
         Ext.MessageBox.confirm(
             me.snippets.confirmDeleteSingleBlogArticleTitle,
             Ext.String.format(me.snippets.confirmDeleteSingleBlogArticle, record.get('title')), function (response) {
-            if (response !== 'yes') {
-                return false;
-            }
-            record.destroy({
-                callback: function (data, operation) {
-                    var records = operation.getRecords(),
+                if (response !== 'yes') {
+                    return false;
+                }
+                record.destroy({
+                    callback: function (data, operation) {
+                        var records = operation.getRecords(),
                             record = records[0],
                             rawData = record.getProxy().getReader().rawData;
 
-                    if ( operation.success === true ) {
-                        Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleBlogArticleSuccess, me.snippets.growlMessage);
-                    } else {
-                        Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleBlogArticleError + rawData.errorMsg, me.snippets.growlMessage);
+                        if ( operation.success === true ) {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleBlogArticleSuccess, me.snippets.growlMessage);
+                        } else {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleBlogArticleError + rawData.errorMsg, me.snippets.growlMessage);
+                        }
                     }
-                }
+                });
+                store.load();
             });
-            store.load();
-        });
 
     },
 
@@ -303,36 +303,36 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      */
     onDeleteMultipleBlogArticles: function () {
         var me = this,
-                grid = me.getGrid(),
-                sm = grid.getSelectionModel(),
-                selection = sm.getSelection(),
-                store = me.subApplication.listStore,
-                noOfElements = selection.length;
+            grid = me.getGrid(),
+            sm = grid.getSelectionModel(),
+            selection = sm.getSelection(),
+            store = me.subApplication.listStore,
+            noOfElements = selection.length;
 
         store.currentPage = 1;
 
         // Get the user to confirm the delete process
         Ext.MessageBox.confirm(
-                me.snippets.confirmDeleteSingleBlogArticleTitle,
-                Ext.String.format(me.snippets.confirmDeleteMultipleBlogArticles, noOfElements), function (response) {
-            if (response !== 'yes') {
-                return false;
-            }
-            if (selection.length > 0) {
-                store.remove(selection);
-                store.save({
-                    callback: function(batch) {
-                        var rawData = batch.proxy.getReader().rawData;
-                        if (rawData.success === true) {
-                            store.load();
-                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteMultipleBlogArticlesSuccess, me.snippets.growlMessage);
-                        } else {
-                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteMultipleBlogArticlesError + rawData.errorMsg, me.snippets.growlMessage);
+            me.snippets.confirmDeleteSingleBlogArticleTitle,
+            Ext.String.format(me.snippets.confirmDeleteMultipleBlogArticles, noOfElements), function (response) {
+                if (response !== 'yes') {
+                    return false;
+                }
+                if (selection.length > 0) {
+                    store.remove(selection);
+                    store.save({
+                        callback: function(batch) {
+                            var rawData = batch.proxy.getReader().rawData;
+                            if (rawData.success === true) {
+                                store.load();
+                                Shopware.Notification.createGrowlMessage('', me.snippets.deleteMultipleBlogArticlesSuccess, me.snippets.growlMessage);
+                            } else {
+                                Shopware.Notification.createGrowlMessage('', me.snippets.deleteMultipleBlogArticlesError + rawData.errorMsg, me.snippets.growlMessage);
+                            }
                         }
-                    }
-                });
-            }
-        })
+                    });
+                }
+            })
     },
 
     /**

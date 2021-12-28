@@ -486,38 +486,38 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
             active = me.getCurrentTab(),
             title = active.internalTitle;
 
-            switch (title) {
-                case 'orders':
-                    var store = me.subApplication.canceledOrderStore;
-                    break;
-                case 'statistics':
-                    var store = me.subApplication.canceledOrderStatistic;
-                    break;
-                case 'overview':
-                    var store = me.subApplication.canceledOrderBasket;
-                    break;
-                case 'articles':
-                    var store = me.subApplication.canceledOrderArticles;
-                    break;
-                case 'viewports':
-                    var store = me.subApplication.canceledOrderViewports;
-                    break;
-                case 'default':
-                    return;
-            }
+        switch (title) {
+            case 'orders':
+                var store = me.subApplication.canceledOrderStore;
+                break;
+            case 'statistics':
+                var store = me.subApplication.canceledOrderStatistic;
+                break;
+            case 'overview':
+                var store = me.subApplication.canceledOrderBasket;
+                break;
+            case 'articles':
+                var store = me.subApplication.canceledOrderArticles;
+                break;
+            case 'viewports':
+                var store = me.subApplication.canceledOrderViewports;
+                break;
+            case 'default':
+                return;
+        }
 
-            //scroll the store to first page
-            store.currentPage = 1;
+        //scroll the store to first page
+        store.currentPage = 1;
 
-            //If the search-value is empty, reset the filter
-            if ( searchString.length === 0 ) {
-                store.clearFilter();
-            } else {
-                //This won't reload the store
-                store.filters.clear();
-                //Loads the store with a special filter
-                store.filter('filter', searchString);
-            }
+        //If the search-value is empty, reset the filter
+        if ( searchString.length === 0 ) {
+            store.clearFilter();
+        } else {
+            //This won't reload the store
+            store.filters.clear();
+            //Loads the store with a special filter
+            store.filter('filter', searchString);
+        }
     }
 
 });

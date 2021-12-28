@@ -191,46 +191,46 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
         value += '?' + record.data.created.getTime();
 
         switch (type) {
-           case 'video':
-               result = '<div class="sprite-blue-document-film" style="height:16px; width:16px;display:inline-block"></div>';
-               break;
+            case 'video':
+                result = '<div class="sprite-blue-document-film" style="height:16px; width:16px;display:inline-block"></div>';
+                break;
 
-           case 'music':
-               result = '<div class="sprite-blue-document-music" style="height:16px; width:16px;display:inline-block"></div>';
-               break;
+            case 'music':
+                result = '<div class="sprite-blue-document-music" style="height:16px; width:16px;display:inline-block"></div>';
+                break;
 
-           case 'archive':
-               result = '<div class="sprite-blue-document-zipper" style="height:16px; width:16px;display:inline-block"></div>';
-               break;
+            case 'archive':
+                result = '<div class="sprite-blue-document-zipper" style="height:16px; width:16px;display:inline-block"></div>';
+                break;
 
-           case 'pdf':
-               result = '<div class="sprite-blue-document-pdf-text" style="height:16px; width:16px;display:inline-block"></div>';
-               break;
+            case 'pdf':
+                result = '<div class="sprite-blue-document-pdf-text" style="height:16px; width:16px;display:inline-block"></div>';
+                break;
 
-           case 'vector':
-               result = '<div class="sprite-blue-document-illustrator" style="height:16px; width:16px;display:inline-block"></div>';
-               if (Ext.Array.contains(['svg'], record.data.extension)) {
-                   // Fix styling for SVG images
-                   var style = Ext.String.format('width:[0]px;max-height:[0]px', this.selectedPreviewSize);
-                   if (record.get('height') > record.get('width')) {
-                       style = Ext.String.format('max-width:[0]px;height:[0]px', this.selectedPreviewSize);
-                   }
-                   result = Ext.String.format('<div class="small-preview-image"><img src="[0]" style="[1]" alt="[2]" /></div>', value, style, record.get('name'));
-               }
-            break;
+            case 'vector':
+                result = '<div class="sprite-blue-document-illustrator" style="height:16px; width:16px;display:inline-block"></div>';
+                if (Ext.Array.contains(['svg'], record.data.extension)) {
+                    // Fix styling for SVG images
+                    var style = Ext.String.format('width:[0]px;max-height:[0]px', this.selectedPreviewSize);
+                    if (record.get('height') > record.get('width')) {
+                        style = Ext.String.format('max-width:[0]px;height:[0]px', this.selectedPreviewSize);
+                    }
+                    result = Ext.String.format('<div class="small-preview-image"><img src="[0]" style="[1]" alt="[2]" /></div>', value, style, record.get('name'));
+                }
+                break;
 
-           case 'image':
-               if (Ext.Array.contains(['tif', 'tiff'], record.data.extension)) {
-                   result = '<div class="sprite-blue-document-image" style="height:16px; width:16px;display:inline-block"></div>';
-               } else {
-                   result = Ext.String.format('<div class="small-preview-image"><img src="[0]" style="max-width:[1]px;max-height:[1]px" alt="[2]" /></div>', value, this.selectedPreviewSize, record.get('name'));
-               }
-               break;
+            case 'image':
+                if (Ext.Array.contains(['tif', 'tiff'], record.data.extension)) {
+                    result = '<div class="sprite-blue-document-image" style="height:16px; width:16px;display:inline-block"></div>';
+                } else {
+                    result = Ext.String.format('<div class="small-preview-image"><img src="[0]" style="max-width:[1]px;max-height:[1]px" alt="[2]" /></div>', value, this.selectedPreviewSize, record.get('name'));
+                }
+                break;
 
-           default:
-               result = '<div class="sprite-blue-document-text" style="height:16px; width:16px;display:inline-block"></div>';
-               break;
-       }
+            default:
+                result = '<div class="sprite-blue-document-text" style="height:16px; width:16px;display:inline-block"></div>';
+                break;
+        }
 
         return result;
 

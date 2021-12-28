@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.Chart', {
                             return '';
                         }
                         var amount = storeItem.get('netTurnOver'),
-                                date = storeItem.get('date');
+                            date = storeItem.get('date');
 
                         if ( amount && date ) {
                             this.setTitle(Ext.util.Format.date(date, 'M, Y') + ' : ' + Ext.util.Format.currency(amount));

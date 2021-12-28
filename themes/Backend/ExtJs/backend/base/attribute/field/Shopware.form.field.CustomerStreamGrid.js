@@ -77,7 +77,7 @@ Ext.define('Shopware.form.field.CustomerStreamGrid', {
             items = me.callParent(arguments);
 
         /*{if {acl_is_allowed resource=customerstream privilege=read}}*/
-            items.push(me.createModuleIcon());
+        items.push(me.createModuleIcon());
         /*{/if}*/
 
         return items;

@@ -192,33 +192,33 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
     registerEvents: function () {
         var me = this;
 
-            me.addEvents(
-                    /**
-                     * Event will be fired when the user clicks the delete icon in the
-                     * action column
-                     *
-                     * @event deleteColumn
-                     * @param [object] View - Associated Ext.view.Table
-                     * @param [integer] rowIndex - Row index
-                     * @param [integer] colIndex - Column index
-                     * @param [object] item - Associated HTML DOM node
-                     */
-                    'deleteUser',
+        me.addEvents(
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'deleteUser',
 
-                    /**
-                     * Event will be fired when the user clicks the delete icon in the
-                     * action column
-                     *
-                     * @event deleteColumn
-                     * @param [object] View - Associated Ext.view.Table
-                     * @param [integer] rowIndex - Row index
-                     * @param [integer] colIndex - Column index
-                     * @param [object] item - Associated HTML DOM node
-                     */
-                    'editUser'
-            );
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'editUser'
+        );
 
-            return true;
+        return true;
     },
 
     /**

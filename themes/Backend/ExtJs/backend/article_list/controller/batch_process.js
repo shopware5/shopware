@@ -279,11 +279,11 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
                         me.addToQueue(config, result.data.offset, result.data.queueId, startTime);
                     } else {
                         Shopware.Notification.createStickyGrowlMessage({
-                                title: '{s name="createdQueueTitle"}Created queue{/s}',
-                                text: Ext.String.format('{s name="createdQueueMessage"}Created queue for [0] items for this filter: [1]{/s}', result.data.totalCount, me.filterArrayToString(Ext.JSON.decode(config.filterArray))),
-                                log: true
-                            },
-                            'ArticleList'
+                            title: '{s name="createdQueueTitle"}Created queue{/s}',
+                            text: Ext.String.format('{s name="createdQueueMessage"}Created queue for [0] items for this filter: [1]{/s}', result.data.totalCount, me.filterArrayToString(Ext.JSON.decode(config.filterArray))),
+                            log: true
+                        },
+                        'ArticleList'
                         );
 
                         me.progressWindow.progressBar.updateProgress(1, "Done");
@@ -399,15 +399,15 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
                         me.getMainGrid().store.reload();
                         operationString = Ext.JSON.encode(config.operations);
                         Shopware.Notification.createStickyGrowlMessage({
-                                title: '{s name="batchDoneTitle"}Done{/s}',
-                                text: Ext.String.format(
-                                        '{s name="batchDoneMessage"}Processed [0] items with following rules: [1]{/s}\n',
-                                        result.data.totalCount,
-                                        me.operationsToString(config.operations)
-                                ),
-                                log: true
-                            },
-                            'ArticleList'
+                            title: '{s name="batchDoneTitle"}Done{/s}',
+                            text: Ext.String.format(
+                                '{s name="batchDoneMessage"}Processed [0] items with following rules: [1]{/s}\n',
+                                result.data.totalCount,
+                                me.operationsToString(config.operations)
+                            ),
+                            log: true
+                        },
+                        'ArticleList'
                         );
                     }
                 }
@@ -609,7 +609,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
                         console.log('Unknown column: ', column.type);
                         break;
                 }
-            break;
+                break;
         }
     },
 

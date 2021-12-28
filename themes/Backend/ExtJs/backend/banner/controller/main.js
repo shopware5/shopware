@@ -74,9 +74,9 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
                 itemclick: me.onTreeClick
             },
             'banner-view-main-panel panel dataview': {
-              /*{if {acl_is_allowed privilege=update}}*/
+                /*{if {acl_is_allowed privilege=update}}*/
                 itemdblclick: me.onBannerClick,
-              /* {/if} */
+                /* {/if} */
                 selectionchange: me.onBannerSelection
             },
             'banner-view-main-panel button[action=addBanner]': {
@@ -237,7 +237,7 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
                         Shopware.Msg.createGrowlMessage('', '{s name="delete_error"}Not every banner could be deleted:{/s} ' + e.message, '{s name="main_title"}{/s}');
                     }
                 }
-        });
+            });
     },
 
     /**
@@ -292,9 +292,9 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
             params: { categoryId: categoryId }
         });
 
-/*{if {acl_is_allowed privilege=create}}*/
+        /*{if {acl_is_allowed privilege=create}}*/
         bannerBtn.setDisabled(false);
-/* {/if} */
+        /* {/if} */
 
     },
 
@@ -313,13 +313,13 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
         var me          = this,
             deleteBtn   = me.getDeleteBannerButton(),
             editButton = me.getEditBannerButton();
-/*{if {acl_is_allowed privilege=delete}}*/
+        /*{if {acl_is_allowed privilege=delete}}*/
         deleteBtn.setDisabled((selection.length > 0) ? false : true);
-/* {/if} */
-/*{if {acl_is_allowed privilege=update}}*/
+        /* {/if} */
+        /*{if {acl_is_allowed privilege=update}}*/
         // rule on when the edit button should be enabled.
         editButton.setDisabled((selection.length == 1) ? false : true);
-/* {/if} */
+        /* {/if} */
 
     }
 });

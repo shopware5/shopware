@@ -331,15 +331,15 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
         var me = this,
             imageUrl = me.record.get('image'),
             image = Ext.create('Ext.Img', {
-                    src: imageUrl,
-                    maxWidth: 120,
-                    width: 120,
-                    maxHeight: 80,
-                    margin: '0 auto',
-                    name: 'image',
-                    itemId: 'supplierFormPanelLogo',
-                    style: 'height: 80px; width: 120px;'
-                }
+                src: imageUrl,
+                maxWidth: 120,
+                width: 120,
+                maxHeight: 80,
+                margin: '0 auto',
+                name: 'image',
+                itemId: 'supplierFormPanelLogo',
+                style: 'height: 80px; width: 120px;'
+            }
             );
 
         return image;

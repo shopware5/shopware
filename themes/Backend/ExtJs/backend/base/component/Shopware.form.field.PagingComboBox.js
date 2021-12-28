@@ -35,8 +35,7 @@
  * todo@all: Documentation
  */
 //{block name="backend/base/Shopware.form.field.PagingComboBox"}
-Ext.define('Shopware.form.field.PagingComboBox',
-{
+Ext.define('Shopware.form.field.PagingComboBox', {
     /**
      * The shopware PagingComboBox is an extension of the extJs 4 combo box
      * @string

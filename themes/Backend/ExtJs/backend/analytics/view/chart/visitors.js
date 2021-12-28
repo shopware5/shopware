@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 width: 580,
                 height: 130,
                 items: {
-                xtype: 'container',
+                    xtype: 'container',
                     layout: 'fit',
                     items: [ me.impressionGrid ]
                 },

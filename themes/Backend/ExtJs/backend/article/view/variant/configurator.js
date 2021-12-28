@@ -923,9 +923,9 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
 
         if (options && options.getCount() > 0) {
             options.each(function(item) {
-                 if (item.get('active')) {
-                     counter++;
-                 }
+                if (item.get('active')) {
+                    counter++;
+                }
             });
             return counter + info;
         } else {

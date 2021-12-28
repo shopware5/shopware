@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Tax.view.main.Tree', {
     },
 
     viewConfig: {
-      toggleOnDblClick: false
+        toggleOnDblClick: false
     },
 
     initComponent: function() {

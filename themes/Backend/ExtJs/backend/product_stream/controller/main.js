@@ -114,7 +114,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         record.save({
             callback: function() {
                 var productGrid = me.getProductStreamGrid(),
-                        store = productGrid.store;
+                    store = productGrid.store;
 
                 me.saveAttributes(record);
 
@@ -124,8 +124,8 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
                     }
                 });
                 Shopware.Notification.createGrowlMessage(
-                        '{s name="stream_saved_title"}Product stream{/s}',
-                        '{s name="stream_saved_description"}Stream saved{/s}'
+                    '{s name="stream_saved_title"}Product stream{/s}',
+                    '{s name="stream_saved_description"}Stream saved{/s}'
                 );
             }
         });
@@ -171,8 +171,8 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
                     }
                 });
                 Shopware.Notification.createGrowlMessage(
-                        '{s name="stream_saved_title"}Product stream{/s}',
-                        '{s name="stream_saved_description"}Stream saved{/s}'
+                    '{s name="stream_saved_title"}Product stream{/s}',
+                    '{s name="stream_saved_description"}Stream saved{/s}'
                 );
             }
         });
@@ -255,8 +255,8 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
     onDuplicateItem: function(grid, record) {
         var showNotificationAndRefresh = function() {
             Shopware.Notification.createGrowlMessage(
-                    '{s name="stream_saved_title"}Product stream{/s}',
-                    '{s name="stream_saved_description"}Stream saved{/s}'
+                '{s name="stream_saved_title"}Product stream{/s}',
+                '{s name="stream_saved_description"}Stream saved{/s}'
             );
             grid.getStore().load();
         };

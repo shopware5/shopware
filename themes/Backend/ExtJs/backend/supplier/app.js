@@ -78,12 +78,12 @@ Ext.define('Shopware.apps.Supplier', {
     * Required stores for controller
     * @array
     */
-   stores: [ 'Supplier' ],
-   /**
+    stores: [ 'Supplier' ],
+    /**
     * Required models for controller
     * @array
     */
-   models: ['Supplier'],
+    models: ['Supplier'],
     /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.

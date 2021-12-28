@@ -189,7 +189,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
                     this.destroy();
                 }
             }
-        /* {if {acl_is_allowed privilege=create}} */
+            /* {if {acl_is_allowed privilege=create}} */
             , {
                 text: '{s name="detail_general/button/save"}Save{/s}',
                 action: 'save',

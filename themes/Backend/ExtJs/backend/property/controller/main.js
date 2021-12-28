@@ -327,7 +327,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
      */
     onDropOption: function (node, data, overModel, dropPosition) {
         var me = this;
-            me.saveOptionPosition(true);
+        me.saveOptionPosition(true);
     },
 
     /**

@@ -80,23 +80,23 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Supplier', {
      */
     getToolbar: function () {
         return Ext.create('Ext.toolbar.Toolbar', {
-                    dock: 'top',
-                    ui: 'shopware-ui',
-                    items: [
-                        '->',
-                        {
-                            xtype: 'textfield',
-                            name: 'searchfield',
-                            action: 'searchSupplier',
-                            width: 170,
-                            cls: 'searchfield',
-                            enableKeyEvents: true,
-                            checkChangeBuffer: 500,
-                            emptyText: '{s name="tab/supplier/search"}Search...{/s}'
-                        },
-                        { xtype: 'tbspacer', width: 6 }
-                    ]
-                }
+            dock: 'top',
+            ui: 'shopware-ui',
+            items: [
+                '->',
+                {
+                    xtype: 'textfield',
+                    name: 'searchfield',
+                    action: 'searchSupplier',
+                    width: 170,
+                    cls: 'searchfield',
+                    enableKeyEvents: true,
+                    checkChangeBuffer: 500,
+                    emptyText: '{s name="tab/supplier/search"}Search...{/s}'
+                },
+                { xtype: 'tbspacer', width: 6 }
+            ]
+        }
         );
     }
 });

@@ -42,24 +42,24 @@ Ext.define('Shopware.apps.PluginManager.model.Basket', {
     ],
 
     associations: [
-    {
-        type: 'hasMany',
-        model: 'Shopware.apps.PluginManager.model.BasketPosition',
-        name: 'getPositions',
-        associationKey: 'positions'
-    },
-    {
-        type: 'hasMany',
-        model: 'Shopware.apps.PluginManager.model.Domain',
-        name: 'getDomains',
-        associationKey: 'domains'
-    },
-    {
-        type: 'hasMany',
-        model: 'Shopware.apps.PluginManager.model.Address',
-        name: 'getAddress',
-        associationKey: 'address'
-    }
+        {
+            type: 'hasMany',
+            model: 'Shopware.apps.PluginManager.model.BasketPosition',
+            name: 'getPositions',
+            associationKey: 'positions'
+        },
+        {
+            type: 'hasMany',
+            model: 'Shopware.apps.PluginManager.model.Domain',
+            name: 'getDomains',
+            associationKey: 'domains'
+        },
+        {
+            type: 'hasMany',
+            model: 'Shopware.apps.PluginManager.model.Address',
+            name: 'getAddress',
+            associationKey: 'address'
+        }
     ]
 
 });

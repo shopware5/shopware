@@ -298,7 +298,7 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
                     /**
                      * Override
                      */
-                   // me.setValue(me.value);
+                    // me.setValue(me.value);
                 }
             }
         }

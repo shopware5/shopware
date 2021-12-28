@@ -39,12 +39,12 @@ Ext.define('Shopware.form.field.MailSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<div class="x-boundlist-item">{literal}{subject} <i>({name})</i>{/literal}</div>',
+            '<div class="x-boundlist-item">{literal}{subject} <i>({name})</i>{/literal}</div>',
             '</tpl>'
         );
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '{literal}{subject} ({name}){/literal}',
+            '{literal}{subject} ({name}){/literal}',
             '</tpl>'
         );
         return config;

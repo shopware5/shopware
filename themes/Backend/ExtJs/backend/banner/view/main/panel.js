@@ -126,11 +126,11 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
             *
             * @param data
             */
-             prepareData: function(data) {
+            prepareData: function(data) {
                 Ext.apply(data, {
                     description: Ext.util.Format.ellipsis(data.description, 27),
                     img: data.image,
-                   id: data.id
+                    id: data.id
                 });
                 return data;
             }
@@ -154,10 +154,10 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
         var basePath = '';
         return [
             '<tpl for=".">',
-                '<div class="thumb-wrap" id="{literal}{id}{/literal}">',
-                    '<div class="thumb"><img src="{literal}{image}{/literal}" title="{literal}{description}{/literal}"></div>',
-                    '<span class="x-editable">{literal}{description}{/literal}</span>',
-                '</div>',
+            '<div class="thumb-wrap" id="{literal}{id}{/literal}">',
+            '<div class="thumb"><img src="{literal}{image}{/literal}" title="{literal}{description}{/literal}"></div>',
+            '<span class="x-editable">{literal}{description}{/literal}</span>',
+            '</div>',
             '</tpl>',
             '<div class="x-clear"></div>'
         ];

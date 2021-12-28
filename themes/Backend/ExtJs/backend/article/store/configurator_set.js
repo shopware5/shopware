@@ -60,10 +60,10 @@ Ext.define('Shopware.apps.Article.store.ConfiguratorSet', {
          * @object
          */
         api: {
-             read: '{url action="getConfiguratorSets"}',
-             create: '{url action="saveConfiguratorSet"}',
-             update: '{url action="saveConfiguratorSet"}'
-         },
+            read: '{url action="getConfiguratorSets"}',
+            create: '{url action="saveConfiguratorSet"}',
+            update: '{url action="saveConfiguratorSet"}'
+        },
         reader: {
             type: 'json',
             root: 'data',

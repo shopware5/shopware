@@ -118,9 +118,9 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Overview', {
                 // This way the proper record is extracted
                 summaryType: function(records){
                     var i = 0,
-                            length = records.length,
-                            total = 0,
-                            record;
+                        length = records.length,
+                        total = 0,
+                        record;
                     for (; i < length; i++){
                         record = records[i];
                         total += record.get('price');

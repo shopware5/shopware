@@ -81,8 +81,8 @@ Ext.define('Shopware.apps.Blog.controller.Media', {
      */
     onMediaAdded: function(dropZone, images, selModel) {
         var me = this,
-                mediaList = me.getMediaList(),
-                store = mediaList.getStore();
+            mediaList = me.getMediaList(),
+            store = mediaList.getStore();
 
         if (images.length === 0) {
             return true;

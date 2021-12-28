@@ -12,15 +12,15 @@ $(function () {
         damping = 0.05,
         showIndicators = false;
     mouseX = 0,
-        mouseY = 0,
-        relMouseX = 0,
-        relMouseY = 0,
-        mouseLastX = 0,
-        mouseLastY = 0,
-        mouseDirectionX = 0,
-        mouseDirectionY = 0,
-        mouseSpeedX = 0,
-        mouseSpeedY = 0;
+    mouseY = 0,
+    relMouseX = 0,
+    relMouseY = 0,
+    mouseLastX = 0,
+    mouseLastY = 0,
+    mouseDirectionX = 0,
+    mouseDirectionY = 0,
+    mouseSpeedX = 0,
+    mouseSpeedY = 0;
 
     /**
      * Get mouse direction

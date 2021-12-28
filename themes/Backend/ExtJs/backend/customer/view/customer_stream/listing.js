@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
             columns = me.callParent(arguments);
 
         /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
-            return columns;
+        return columns;
         /*{/if}*/
 
         columns.push({
@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
         });
 
         /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
-            return items;
+        return items;
         /*{/if}*/
 
         items.push({

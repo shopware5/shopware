@@ -196,7 +196,7 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
      */
     highlightPaymentComboBox: function (field) {
         var store = field.getStore();
-            var selectedRecord = store.findRecord('id', field.getValue()),
+        var selectedRecord = store.findRecord('id', field.getValue()),
             input = Ext.get(field.getEl().down('.x-form-field'));
 
         if (!selectedRecord || !selectedRecord.get('active')) {

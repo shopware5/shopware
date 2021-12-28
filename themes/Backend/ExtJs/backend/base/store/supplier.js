@@ -49,11 +49,11 @@ Ext.define('Shopware.apps.Base.store.Supplier', {
      */
     storeId: 'base.Supplier',
 
-   /**
-    * Auto load the store after the component
-    * is initialized
-    * @boolean
-    */
+    /**
+     * Auto load the store after the component
+     * is initialized
+     * @boolean
+     */
     autoLoad: false,
 
     /**
@@ -66,30 +66,30 @@ Ext.define('Shopware.apps.Base.store.Supplier', {
      */
     remoteFilter: true,
 
-   /**
-    * Define the used model for this store
-    * @string
-    */
+    /**
+     * Define the used model for this store
+     * @string
+     */
     model: 'Shopware.apps.Base.model.Supplier',
 
-   /**
-    * Configure the data communication
-    * @object
-    */
+    /**
+     * Configure the data communication
+     * @object
+     */
     proxy: {
         type: 'ajax',
 
-       /**
-        * Configure the url mapping for the different
-        * store operations based on
-        * @object
-        */
+        /**
+         * Configure the url mapping for the different
+         * store operations based on
+         * @object
+         */
         url: '{url action="getSuppliers"}',
 
-       /**
-        * Configure the data reader
-        * @object
-        */
+        /**
+         * Configure the data reader
+         * @object
+         */
         reader: {
             type: 'json',
             root: 'data',

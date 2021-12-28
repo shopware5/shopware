@@ -58,25 +58,25 @@ Ext.define('Shopware.apps.Config.view.form.Country', {
     getColumns: function() {
         var me = this;
         return [
-        {
-            dataIndex: 'name',
-            text: '{s name="country/table/name_text"}Name{/s}',
-            flex: 1
-        }, {
-            dataIndex: 'area',
-            text: '{s name="country/table/area_text"}Area{/s}',
-            renderer: function(v) { return v && (v.charAt(0).toUpperCase() + v.substr(1)); },
-            flex: 1
-        }, {
-            dataIndex: 'iso',
-            text: '{s name="country/table/iso_text"}Short code{/s}',
-            flex: 1
-        }, {
-            dataIndex: 'position',
-            text: '{s name="country/table/position_text"}Position{/s}',
-            flex: 1
-        },
-        me.getActionColumn()];
+            {
+                dataIndex: 'name',
+                text: '{s name="country/table/name_text"}Name{/s}',
+                flex: 1
+            }, {
+                dataIndex: 'area',
+                text: '{s name="country/table/area_text"}Area{/s}',
+                renderer: function(v) { return v && (v.charAt(0).toUpperCase() + v.substr(1)); },
+                flex: 1
+            }, {
+                dataIndex: 'iso',
+                text: '{s name="country/table/iso_text"}Short code{/s}',
+                flex: 1
+            }, {
+                dataIndex: 'position',
+                text: '{s name="country/table/position_text"}Position{/s}',
+                flex: 1
+            },
+            me.getActionColumn()];
     },
 
     getFormItems: function() {

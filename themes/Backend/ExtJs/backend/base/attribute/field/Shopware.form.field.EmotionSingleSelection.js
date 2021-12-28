@@ -47,7 +47,7 @@ Ext.define('Shopware.form.field.EmotionSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<div class="x-boundlist-item">' +
+            '<div class="x-boundlist-item">' +
                 '{literal}' +
                     '{name}   {[this.getDevices(values)]}' +
                 '{/literal}' +
@@ -81,7 +81,7 @@ Ext.define('Shopware.form.field.EmotionSingleSelection', {
 
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '{literal}{name}{/literal}',
+            '{literal}{name}{/literal}',
             '</tpl>'
         );
 

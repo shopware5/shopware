@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
             listeners: {
                 selectionchange: function(sm, selections){
                     var owner = this.view.ownerCt,
-                            btn = owner.down('button[action=deleteMultipleArticles]');
+                        btn = owner.down('button[action=deleteMultipleArticles]');
 
                     //If no article is marked
                     if (btn){
@@ -120,29 +120,29 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
     registerEvents: function () {
         this.addEvents(
 
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event deleteColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'deleteColumn',
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'deleteColumn',
 
-                /**
-                 * Event will be fired when the user clicks the edit icon in the
-                 * action column
-                 *
-                 * @event editColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'editColumn'
+            /**
+             * Event will be fired when the user clicks the edit icon in the
+             * action column
+             *
+             * @event editColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'editColumn'
         );
 
         return true;
@@ -243,11 +243,11 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
         searchField.addEvents('fieldchange');
         var items = [];
         /*{if {acl_is_allowed privilege=create}}*/
-            items.push(Ext.create('Ext.button.Button', {
-                iconCls: 'sprite-plus-circle',
-                text: '{s name="toolbar/add"}Add{/s}',
-                action: 'add'
-            }));
+        items.push(Ext.create('Ext.button.Button', {
+            iconCls: 'sprite-plus-circle',
+            text: '{s name="toolbar/add"}Add{/s}',
+            action: 'add'
+        }));
         /*{/if}*/
         /*{if {acl_is_allowed privilege=delete}}*/
         items.push(Ext.create('Ext.button.Button', {
@@ -280,7 +280,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
     * @return [string]
     */
     nameColumn: function(value, metaData, record) {
-            return Ext.String.format('<b>{literal}{0}</b> <span>({1}){/literal}</span>', value, record.data.orderNumber);
+        return Ext.String.format('<b>{literal}{0}</b> <span>({1}){/literal}</span>', value, record.data.orderNumber);
     }
 
 });

@@ -74,22 +74,22 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
         var info = '{s name="cache/info/text"}Erfahre genaueres über das Performance-Modul in der <a href=\'https://docs.shopware.com/de/shopware-5-de/einstellungen/cache-performance-modul\' title=\'Shopware Performance-Modul\' target=\'_blank\'>Dokumentation</a>{/s}';
 
         return [
-        {
-            xtype: 'container',
-            html: info,
-            height: 30,
-            padding: 10
-        },
-        {
-            xtype: 'performance-tabs-cache-info',
-            store: me.infoStore,
-            flex: 1
-        }
-        /*{if {acl_is_allowed privilege=clear}}*/
-        , {
-            xtype: 'performance-tabs-cache-form',
-            flex: 1
-        }
+            {
+                xtype: 'container',
+                html: info,
+                height: 30,
+                padding: 10
+            },
+            {
+                xtype: 'performance-tabs-cache-info',
+                store: me.infoStore,
+                flex: 1
+            }
+            /*{if {acl_is_allowed privilege=clear}}*/
+            , {
+                xtype: 'performance-tabs-cache-form',
+                flex: 1
+            }
         /*{/if}*/
         ];
     },

@@ -160,7 +160,7 @@ Ext.define('Shopware.apps.Article.view.category.List', {
      * @return array
      */
     getColumns: function() {
-       var me = this;
+        var me = this;
 
         return [
             {

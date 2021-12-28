@@ -143,11 +143,11 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             inputValue: true,
             uncheckedValue: false,
             /*{if !{acl_is_allowed resource=customerstream privilege=search_index}}*/
-                hidden: true,
+            hidden: true,
             /*{/if}*/
 
             /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
-                hidden: true,
+            hidden: true,
             /*{/if}*/
 
             value: value,
@@ -167,7 +167,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             text: '{s name="analyse_customer"}{/s}',
             action: 'index',
             /*{if !{acl_is_allowed resource=customerstream privilege=search_index}}*/
-                hidden: true,
+            hidden: true,
             /*{/if}*/
 
             handler: Ext.bind(me.onIndexSearch, me)
@@ -313,7 +313,7 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             cls: 'primary',
             anchor: '100%',
             /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
-                hidden: true,
+            hidden: true,
             /*{/if}*/
             handler: Ext.bind(me.onSaveStream, me)
         });

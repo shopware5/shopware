@@ -153,27 +153,27 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
             ui: 'shopware-ui',
             items: [
             /*{if {acl_is_allowed privilege=delete}}*/
-            {
-                xtype: 'button',
-                itemId: 'deletebutton',
-                iconCls: 'sprite-minus-circle',
-                text: '{s name="presetlist/delete_preset"}{/s}',
-                disabled: true,
-                handler: function() {
-                    me.fireEvent('deletepreset', me.store, me.selectedPreset);
-                }
-            },
-            /*{/if}*/
-            '->', {
-                xtype: 'textfield',
-                cls: 'searchfield',
-                emptyText: '{s name="search"}Search...{/s}',
-                width: 170,
-                enableKeyEvents: true,
-                listeners: {
-                    change: Ext.bind(me.search, me)
-                }
-            }]
+                {
+                    xtype: 'button',
+                    itemId: 'deletebutton',
+                    iconCls: 'sprite-minus-circle',
+                    text: '{s name="presetlist/delete_preset"}{/s}',
+                    disabled: true,
+                    handler: function() {
+                        me.fireEvent('deletepreset', me.store, me.selectedPreset);
+                    }
+                },
+                /*{/if}*/
+                '->', {
+                    xtype: 'textfield',
+                    cls: 'searchfield',
+                    emptyText: '{s name="search"}Search...{/s}',
+                    width: 170,
+                    enableKeyEvents: true,
+                    listeners: {
+                        change: Ext.bind(me.search, me)
+                    }
+                }]
         });
 
         return [

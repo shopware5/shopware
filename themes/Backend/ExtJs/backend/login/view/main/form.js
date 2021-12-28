@@ -137,14 +137,14 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
     getIEWarning: function() {
         return new Ext.Template(
             '<div class="inner">',
-                '<h2 class="teaser">{s name="content/ie/teaser"}{/s}</h2>',
-                '<p>{s name="content/ie/text"}{/s}</p>',
-                '<ul class="browsers">',
-                    '<li class="chrome"><a href="{s name="content/ie/link/chrome"}http://www.google.com/chrome{/s}" target="_blank"></a></li>',
-                    '<li class="firefox"><a href="{s name="content/ie/link/firefox"}http://www.mozilla.org/de/firefox/new/{/s}" target="_blank"></a></li>',
-                    '<li class="safari"><a href="{s name="content/ie/link/safari"}http://www.apple.com/safari/{/s}" target="_blank"></a></li>',
-                    '<li class="ie"><a href="{s name="content/ie/link/ie"}http://windows.microsoft.com/de-DE/internet-explorer/downloads/ie{/s}" target="_blank"></a></li>',
-                '</ul>',
+            '<h2 class="teaser">{s name="content/ie/teaser"}{/s}</h2>',
+            '<p>{s name="content/ie/text"}{/s}</p>',
+            '<ul class="browsers">',
+            '<li class="chrome"><a href="{s name="content/ie/link/chrome"}http://www.google.com/chrome{/s}" target="_blank"></a></li>',
+            '<li class="firefox"><a href="{s name="content/ie/link/firefox"}http://www.mozilla.org/de/firefox/new/{/s}" target="_blank"></a></li>',
+            '<li class="safari"><a href="{s name="content/ie/link/safari"}http://www.apple.com/safari/{/s}" target="_blank"></a></li>',
+            '<li class="ie"><a href="{s name="content/ie/link/ie"}http://windows.microsoft.com/de-DE/internet-explorer/downloads/ie{/s}" target="_blank"></a></li>',
+            '</ul>',
             '</div>'
         )
     },
@@ -152,9 +152,9 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
     getInfoTemplate: function() {
         return new Ext.Template(
             '<div class="inner">',
-                '<a href="http://www.google.com/chrome" class="logo-chrome" target="_blank">&nbsp;</a>',
-                '<div class="right-content">{s name="content/google_chrome_hint"}For optimum browser performance we recommend using [link].{/s}</div>',
-                '<div class="x-clear"></div>',
+            '<a href="http://www.google.com/chrome" class="logo-chrome" target="_blank">&nbsp;</a>',
+            '<div class="right-content">{s name="content/google_chrome_hint"}For optimum browser performance we recommend using [link].{/s}</div>',
+            '<div class="x-clear"></div>',
             '</div>'
         );
     }

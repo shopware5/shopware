@@ -48,8 +48,7 @@
  * }
  * });
  */
-Ext.define('Shopware.DragAndDropSelector',
-{
+Ext.define('Shopware.DragAndDropSelector', {
     /**
      * Based on Ext.panel.Panel
      */

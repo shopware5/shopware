@@ -39,14 +39,14 @@ Ext.define('Shopware.apps.Article.model.Field', {
     */
     extend: 'Ext.data.Model',
 
-   /**
-    * The batch model is only a data container which contains all
-    * data for the global stores in the model association data.
-    * An Ext.data.Model needs one field.
-    * @array
-    */
+    /**
+     * The batch model is only a data container which contains all
+     * data for the global stores in the model association data.
+     * An Ext.data.Model needs one field.
+     * @array
+     */
     fields: [
-       //{block name="backend/article/model/field/fields"}{/block}
+        //{block name="backend/article/model/field/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'default',  type: 'string' },
         { name: 'type',  type: 'string' },

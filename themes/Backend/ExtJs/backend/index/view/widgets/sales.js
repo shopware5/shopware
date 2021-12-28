@@ -209,10 +209,10 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
         return new Ext.XTemplate(
             '{literal}',
             '<tpl for=".">',
-                '<div class="conversation-rate">',
-                    '<strong class="title">' + me.snippets.conversation_rate + ':</strong>',
-                    '<span class="rate">{conversationRate}%</span>',
-                '</div>',
+            '<div class="conversation-rate">',
+            '<strong class="title">' + me.snippets.conversation_rate + ':</strong>',
+            '<span class="rate">{conversationRate}%</span>',
+            '</div>',
             '</tpl>',
             '{/literal}'
         );

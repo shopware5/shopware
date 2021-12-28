@@ -178,16 +178,16 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
     createInfoPanelTemplate: function() {
         return new Ext.XTemplate(
             '<tpl for=".">',
-                '<div class="article-thumb-wrap">',
-                    // If the type is image, then show the image
-                    '<div class="thumb">',
-                        '<div class="inner-thumb"><img src="',
-                            '<tpl if="original">',
-                                '{literal}{original}{/literal}',
-                            '</tpl>',
-                        '" /></div>',
-                    '</div>',
-                '</div>',
+            '<div class="article-thumb-wrap">',
+            // If the type is image, then show the image
+            '<div class="thumb">',
+            '<div class="inner-thumb"><img src="',
+            '<tpl if="original">',
+            '{literal}{original}{/literal}',
+            '</tpl>',
+            '" /></div>',
+            '</div>',
+            '</div>',
             '</tpl>',
             '<div class="x-clear"></div>'
         );
@@ -258,15 +258,15 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
         return new Ext.XTemplate(
             // Check if any data was applied at all, but show only once as title
             '<tpl if="hasItems">',
-                '<div class="image-variant-info-title">',
-                    '{s name="image/variant_info/title"}Assigned variant configurations{/s}',
-                '</div>',
+            '<div class="image-variant-info-title">',
+            '{s name="image/variant_info/title"}Assigned variant configurations{/s}',
+            '</div>',
             '</tpl>',
             '<tpl for="items">',
-                '<div class="image-variant-info-row">',
-                    '<span class="sprite-tick-small image-variant-info-icon"></span>',
-                    '{ assignedVariants }',
-                '</div>',
+            '<div class="image-variant-info-row">',
+            '<span class="sprite-tick-small image-variant-info-icon"></span>',
+            '{ assignedVariants }',
+            '</div>',
             '</tpl>'
         );
     }

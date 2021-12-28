@@ -42,11 +42,11 @@ Ext.define('Shopware.apps.ArticleList.store.Operator', {
      */
     pageSize: 100,
 
-   /**
-    * Auto load the store after the component
-    * is initialized
-    * @boolean
-    */
+    /**
+     * Auto load the store after the component
+     * is initialized
+     * @boolean
+     */
     autoLoad: false,
 
     /**
@@ -59,10 +59,10 @@ Ext.define('Shopware.apps.ArticleList.store.Operator', {
      */
     remoteFilter: false,
 
-   /**
-    * Define the used model for this store
-    * @string
-    */
+    /**
+     * Define the used model for this store
+     * @string
+     */
     model: 'Shopware.apps.ArticleList.model.Operator',
 
     mode: 'local',

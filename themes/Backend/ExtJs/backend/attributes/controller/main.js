@@ -375,7 +375,7 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
                 record.merge(column);
 
                 me.saveColumn(record, function() {
-                     me.updateDependingTables(column, tables, callback);
+                    me.updateDependingTables(column, tables, callback);
                 });
             }
         });

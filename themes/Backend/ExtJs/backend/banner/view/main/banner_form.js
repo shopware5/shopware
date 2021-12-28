@@ -160,21 +160,21 @@ Ext.define('Shopware.apps.Banner.view.main.BannerForm', {
         var me = this;
 
         me.validFromField = Ext.create('Ext.form.field.Date', {
-                submitFormat: 'd.m.Y',
-                fieldLabel: '{s name="form_add/from_label"}Active from{/s}',
-                name: 'validFromDate',
-                supportText: '{s name="form_add/from_support"}Format: dd.mm.jjjj{/s}',
-                columnWidth: .6,
-                labelWidth: 155,
-                minValue: new Date(),
-                value: new Date(),
-                allowBlank: true,
-                listeners: {
-                    change: function(field, newValue) {
-                        me.validToField.setMinValue(newValue);
-                    }
+            submitFormat: 'd.m.Y',
+            fieldLabel: '{s name="form_add/from_label"}Active from{/s}',
+            name: 'validFromDate',
+            supportText: '{s name="form_add/from_support"}Format: dd.mm.jjjj{/s}',
+            columnWidth: .6,
+            labelWidth: 155,
+            minValue: new Date(),
+            value: new Date(),
+            allowBlank: true,
+            listeners: {
+                change: function(field, newValue) {
+                    me.validToField.setMinValue(newValue);
                 }
             }
+        }
         );
 
         return Ext.create('Ext.container.Container', {
@@ -182,15 +182,15 @@ Ext.define('Shopware.apps.Banner.view.main.BannerForm', {
             anchor: '100%',
             items: [
                 , me.validFromField,
-            {
-                margin: '0 0 0 10',
-                submitFormat: 'H:i',
-                xtype: 'timefield',
-                name: 'validFromTime',
-                supportText: '{s name="form_add/from_time_support"}Format: hh:mm{/s}',
-                columnWidth: .4,
-                minDate: new Date()
-            }]
+                {
+                    margin: '0 0 0 10',
+                    submitFormat: 'H:i',
+                    xtype: 'timefield',
+                    name: 'validFromTime',
+                    supportText: '{s name="form_add/from_time_support"}Format: hh:mm{/s}',
+                    columnWidth: .4,
+                    minDate: new Date()
+                }]
         })
     },
 
@@ -222,14 +222,14 @@ Ext.define('Shopware.apps.Banner.view.main.BannerForm', {
             anchor: '100%',
             items: [
                 me.validToField,
-            {
-                margin: '0 0 0 10',
-                xtype: 'timefield',
-                name: 'validToTime',
-                submitFormat: 'H:i',
-                supportText: '{s name="form_add/to_time_support"}Format: hh:mm{/s}',
-                columnWidth: .40
-            }]
+                {
+                    margin: '0 0 0 10',
+                    xtype: 'timefield',
+                    name: 'validToTime',
+                    submitFormat: 'H:i',
+                    supportText: '{s name="form_add/to_time_support"}Format: hh:mm{/s}',
+                    columnWidth: .40
+                }]
         })
     },
 

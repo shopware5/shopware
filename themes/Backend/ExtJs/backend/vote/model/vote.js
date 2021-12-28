@@ -67,22 +67,22 @@ Ext.define('Shopware.apps.Vote.model.Vote', {
 
     associations: [
     //{block name="backend/vote/model/vote/associations"}{/block}
-    {
-        relation: 'ManyToOne',
-        field: 'shopId',
+        {
+            relation: 'ManyToOne',
+            field: 'shopId',
 
-        type: 'hasMany',
-        model: 'Shopware.apps.Base.model.Shop',
-        name: 'getShop',
-        associationKey: 'shop'
-    }, {
-        relation: 'ManyToOne',
-        field: 'articleId',
+            type: 'hasMany',
+            model: 'Shopware.apps.Base.model.Shop',
+            name: 'getShop',
+            associationKey: 'shop'
+        }, {
+            relation: 'ManyToOne',
+            field: 'articleId',
 
-        type: 'hasMany',
-        model: 'Shopware.apps.Base.model.Article',
-        name: 'getArticle',
-        associationKey: 'article'
-    }]
+            type: 'hasMany',
+            model: 'Shopware.apps.Base.model.Article',
+            name: 'getArticle',
+            associationKey: 'article'
+        }]
 });
 //{/block}

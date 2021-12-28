@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Shipping.store.Payment', {
      * @string
      */
     model: 'Shopware.apps.Base.model.Payment',
-        /**
+    /**
      * Configure the data communication
      * @object
      */

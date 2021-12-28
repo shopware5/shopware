@@ -35,9 +35,9 @@
  */
 
 //{block name="backend/translation/app"}
-Ext.define('Shopware.apps.Translation',
-/** @lends Enlight.app.SubApplication# */
-{
+Ext.define('Shopware.apps.Translation', {
+    /** @lends Enlight.app.SubApplication# */
+
     /**
      * Extends from our special controller, which handles the
      * sub-application behavior and the event bus

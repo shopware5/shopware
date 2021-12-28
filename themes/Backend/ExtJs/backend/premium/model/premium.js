@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Premium.model.Premium', {
             //edit articles
             update: '{url controller="premium" action="editPremiumArticle"}',
             //function to delete articles
-          destroy: '{url controller="premium" action="deletePremiumArticle"}'
+            destroy: '{url controller="premium" action="deletePremiumArticle"}'
         },
         /**
         * Configure the data reader

@@ -205,7 +205,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         var me = this;
 
         /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
-            return;
+        return;
         /*{/if}*/
 
         me.indexStream(stream, function() {
@@ -270,7 +270,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 }
 
                 /*{if !{acl_is_allowed resource=customerstream privilege=search_index}}*/
-                    return;
+                return;
                 /*{/if}*/
 
                 streamView.indexSearchButton.setIconCls('sprite-exclamation');
@@ -317,7 +317,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             case 'amount_chart':
 
                 /*{if !{acl_is_allowed resource=customerstream privilege=charts}}*/
-                    return;
+                return;
                 /*{/if}*/
 
                 streamView.cardContainer.getLayout().setActiveItem(1);
@@ -327,7 +327,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
             case 'stream_chart':
                 /*{if !{acl_is_allowed resource=customerstream privilege=charts}}*/
-                    return;
+                return;
                 /*{/if}*/
                 streamView.cardContainer.getLayout().setActiveItem(2);
                 me.loadStreamChart();
@@ -342,7 +342,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             streamChartContainer = streamView.streamChartContainer;
 
         /*{if !{acl_is_allowed resource=customerstream privilege=charts}}*/
-            return;
+        return;
         /*{/if}*/
 
         streamChartContainer.removeAll();
@@ -364,7 +364,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         }
 
         /*{if !{acl_is_allowed resource=customerstream privilege=charts}}*/
-            return;
+        return;
         /*{/if}*/
         streamView.metaChartStore.load();
         me.loadStreamChart();
@@ -422,7 +422,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             streamDetailForm = me.getStreamDetailForm();
 
         /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
-            return;
+        return;
         /*{/if}*/
 
         if (!streamView.formPanel.getForm().isValid()) {
@@ -554,7 +554,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             record = streamView.formPanel.getForm().getRecord();
 
         /*{if !{acl_is_allowed resource=customerstream privilege=charts}}*/
-            return;
+        return;
         /*{/if}*/
 
         metaChartStore.getProxy().extraParams = { };
@@ -572,7 +572,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         var me = this;
 
         /*{if !{acl_is_allowed resource=customerstream privilege=save}}*/
-            return;
+        return;
         /*{/if}*/
 
         if (record.get('static') || record.get('id') === null) {
@@ -607,7 +607,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         var me = this;
 
         /*{if !{acl_is_allowed resource=customerstream privilege=search_index}}*/
-            return;
+        return;
         /*{/if}*/
 
         me.initProgressbar();

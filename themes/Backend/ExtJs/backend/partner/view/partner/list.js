@@ -67,41 +67,41 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
     registerEvents: function () {
         this.addEvents(
 
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event deleteColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'deleteColumn',
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'deleteColumn',
 
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event editColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'editColumn',
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event editColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'editColumn',
 
-                /**
-                 * Event will be fired when the user clicks the exectue icon in the
-                 * action column
-                 *
-                 * @event statistic
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'statistic'
+            /**
+             * Event will be fired when the user clicks the exectue icon in the
+             * action column
+             *
+             * @event statistic
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'statistic'
         );
 
         return true;
@@ -190,39 +190,39 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
         var me = this,
             actionColumnData = [];
 
-            /*{if {acl_is_allowed privilege=update}}*/
-            actionColumnData.push({
-                iconCls: 'sprite-pencil',
-                cls: 'editBtn',
-                tooltip: '{s name="list/action_column/edit"}Edit partner{/s}',
-                handler: function (view, rowIndex, colIndex, item) {
-                    me.fireEvent('editColumn', view, rowIndex, colIndex, item);
-                }
-            });
-            /*{/if}*/
+        /*{if {acl_is_allowed privilege=update}}*/
+        actionColumnData.push({
+            iconCls: 'sprite-pencil',
+            cls: 'editBtn',
+            tooltip: '{s name="list/action_column/edit"}Edit partner{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
+                me.fireEvent('editColumn', view, rowIndex, colIndex, item);
+            }
+        });
+        /*{/if}*/
 
-            /*{if {acl_is_allowed privilege=delete}}*/
-            actionColumnData.push({
-               iconCls: 'sprite-minus-circle-frame',
-               action: 'delete',
-               cls: 'delete',
-               tooltip: '{s name="list/action_column/delete"}Delete partner{/s}',
-               handler: function (view, rowIndex, colIndex, item) {
-                   me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
-               }
-            });
-            /*{/if}*/
+        /*{if {acl_is_allowed privilege=delete}}*/
+        actionColumnData.push({
+            iconCls: 'sprite-minus-circle-frame',
+            action: 'delete',
+            cls: 'delete',
+            tooltip: '{s name="list/action_column/delete"}Delete partner{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
+                me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
+            }
+        });
+        /*{/if}*/
 
-            /*{if {acl_is_allowed privilege=statistic}}*/
-            actionColumnData.push({
-                iconCls: 'sprite-partner-stats',
-                cls: 'chart-up-color',
-                tooltip: '{s name="list/action_column/statistic"}Statistics{/s}',
-                handler: function (view, rowIndex, colIndex, item) {
-                    me.fireEvent('statistic', view, rowIndex, colIndex, item);
-                }
-            });
-            /*{/if}*/
+        /*{if {acl_is_allowed privilege=statistic}}*/
+        actionColumnData.push({
+            iconCls: 'sprite-partner-stats',
+            cls: 'chart-up-color',
+            tooltip: '{s name="list/action_column/statistic"}Statistics{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
+                me.fireEvent('statistic', view, rowIndex, colIndex, item);
+            }
+        });
+        /*{/if}*/
         return actionColumnData;
     },
     /**

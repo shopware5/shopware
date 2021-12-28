@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
                 change: function (value){
                     me.fireEvent('search', value)
                 }
-             }
+            }
         }
     }
 });

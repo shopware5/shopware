@@ -39,9 +39,9 @@ Ext.define('Shopware.apps.Shipping.model.CategoryTree', {
      * @string
      */
     extend: 'Ext.data.Model',
-     /**
+    /**
      * Set an alias to make the handling a bit easier
-      * @string
+     * @string
      */
     alias: 'model.categorymodel',
     /**

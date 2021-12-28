@@ -40,12 +40,12 @@ Ext.define('Shopware.apps.Config.view.form.CountryArea', {
             columns: me.getColumns()
         }, {
             xtype: 'config-base-detail',
-//            plugins: [{
-//                ptype: 'translation',
-//                pluginId: 'translation',
-//                translationType: 'config_areas',
-//                translationMerge: true
-//            }],
+            //            plugins: [{
+            //                ptype: 'translation',
+            //                pluginId: 'translation',
+            //                translationType: 'config_areas',
+            //                translationMerge: true
+            //            }],
             items: me.getFormItems()
         }];
     },

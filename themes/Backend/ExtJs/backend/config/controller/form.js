@@ -370,7 +370,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
 
     onSelectCustomerGroupOnTax: function(field, newValue, oldValue) {
         var me = this,
-        addButton = me.getTaxRuleAddButton();
+            addButton = me.getTaxRuleAddButton();
         addButton.setDisabled(!newValue);
     },
 

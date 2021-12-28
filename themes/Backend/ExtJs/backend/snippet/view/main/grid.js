@@ -188,15 +188,15 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
 
         /*{if {acl_is_allowed privilege=update}}*/
         actionColumnItems.push({
-                action: 'translate',
-                cls: 'translateBtn',
-                iconCls: 'sprite-globe',
-                tooltip: me.snippets.tooltipTranslateSnippet,
-                handler: function(grid, rowIndex) {
-                    var record = grid.getStore().getAt(rowIndex);
-                    me.fireEvent('translateSnippet', record);
-                }
+            action: 'translate',
+            cls: 'translateBtn',
+            iconCls: 'sprite-globe',
+            tooltip: me.snippets.tooltipTranslateSnippet,
+            handler: function(grid, rowIndex) {
+                var record = grid.getStore().getAt(rowIndex);
+                me.fireEvent('translateSnippet', record);
             }
+        }
         );
         /*{/if}*/
 

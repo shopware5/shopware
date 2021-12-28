@@ -54,11 +54,11 @@ Ext.define('Shopware.apps.Base.store.User', {
      */
     pageSize: 10,
 
-   /**
-    * Auto load the store after the component
-    * is initialized
-    * @boolean
-    */
+    /**
+     * Auto load the store after the component
+     * is initialized
+     * @boolean
+     */
     autoLoad: false,
 
     /**
@@ -71,10 +71,10 @@ Ext.define('Shopware.apps.Base.store.User', {
      */
     remoteFilter: true,
 
-   /**
-    * Define the used model for this store
-    * @string
-    */
+    /**
+     * Define the used model for this store
+     * @string
+     */
     model: 'Shopware.apps.Base.model.User',
 
     /**

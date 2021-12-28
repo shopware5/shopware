@@ -117,16 +117,16 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
      */
     registerEvents: function () {
         this.addEvents(
-                /**
-                 * Event will be fired when the user changes the customer-account field
-                 *
-                 * @event mapCustomerAccount
-                 * @param [Ext.form.field.Field] this
-                 * @param [object] newValue
-                 * @param [object] oldValue
-                 * @param [object] eOpts
-                 */
-                'mapCustomerAccount'
+            /**
+             * Event will be fired when the user changes the customer-account field
+             *
+             * @event mapCustomerAccount
+             * @param [Ext.form.field.Field] this
+             * @param [object] newValue
+             * @param [object] oldValue
+             * @param [object] eOpts
+             */
+            'mapCustomerAccount'
         );
 
         return true;

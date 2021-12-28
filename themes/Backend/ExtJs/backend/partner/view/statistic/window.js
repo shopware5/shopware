@@ -71,16 +71,16 @@ Ext.define('Shopware.apps.Partner.view.statistic.Window', {
      */
     registerEvents: function () {
         this.addEvents(
-                /**
-                 * Event will be fired wenn the downloadStatistic Button is clicked
-                 *
-                 * @event downloadStatistic
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'downloadStatistic'
+            /**
+             * Event will be fired wenn the downloadStatistic Button is clicked
+             *
+             * @event downloadStatistic
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'downloadStatistic'
         );
 
         return true;

@@ -35,18 +35,18 @@
 //{block name="backend/order/model/order_history"}
 Ext.define('Shopware.apps.Order.model.OrderHistory', {
 
-   /**
-    * Extends the standard Ext Model
-    * @string
-    */
+    /**
+     * Extends the standard Ext Model
+     * @string
+     */
     extend: 'Ext.data.Model',
 
-   /**
-    * The fields used for this model
-    * @array
-    */
+    /**
+     * The fields used for this model
+     * @array
+     */
     fields: [
-       //{block name="backend/order/model/history/fields"}{/block}
+        //{block name="backend/order/model/history/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'userName', type: 'string' },
         { name: 'changeDate', type: 'date' },

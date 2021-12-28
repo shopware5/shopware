@@ -37,9 +37,9 @@
 
 //{block name="backend/base/component/form_plugin_sinppet_translation"}
 
-Ext.define('Shopware.form.plugin.SnippetTranslation',
-/** @lends Ext.AbstractPlugin# */
-{
+Ext.define('Shopware.form.plugin.SnippetTranslation', {
+    /** @lends Ext.AbstractPlugin# */
+
     /**
      * Extends the abstact plugin component
      * @string

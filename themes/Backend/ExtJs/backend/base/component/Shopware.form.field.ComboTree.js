@@ -161,10 +161,10 @@ Ext.define('Shopware.form.field.ComboTree', {
             inputEl.removeCls(me.emptyCls);
         }
         me.value = value;
-        
-        if (inputEl && !Ext.isEmpty(value)){
-            me.setRawValue(value); 
-        }  
+
+        if (inputEl && !Ext.isEmpty(value)){
+            me.setRawValue(value);
+        }
 
         me.applyEmptyText();
     },
@@ -204,7 +204,7 @@ Ext.define('Shopware.form.field.ComboTree', {
      */
     onStoreHasLoaded: function(store) {
         var me = this,
-                activeRecord;
+            activeRecord;
 
         if (me.value) {
             activeRecord = store.getNodeById(me.value);
@@ -236,8 +236,8 @@ Ext.define('Shopware.form.field.ComboTree', {
      * @return void
      */
     destroy: function() {
-//        this.fromStore.destroy();
-//        Ext.destroyMembers(this, 'fromField', 'toField');
+        //        this.fromStore.destroy();
+        //        Ext.destroyMembers(this, 'fromField', 'toField');
         this.callParent();
     }
 });

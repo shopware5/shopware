@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
          * Makes sure that all checked nodes will expand
          */
         me.control({
-             'shipping-view-edit-categories-tree': {
+            'shipping-view-edit-categories-tree': {
                 afterrender: me.onAfterRender
             }
         });

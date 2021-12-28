@@ -64,17 +64,17 @@ Ext.define('Shopware.apps.Notification.view.notification.Customer', {
     registerEvents: function () {
         this.addEvents(
 
-                /**
-                 * Event will be fired when the user clicks the customer icon in the
-                 * action column
-                 *
-                 * @event deleteColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'openCustomerAccount'
+            /**
+             * Event will be fired when the user clicks the customer icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'openCustomerAccount'
         );
 
         return true;
@@ -140,24 +140,24 @@ Ext.define('Shopware.apps.Notification.view.notification.Customer', {
      */
     getToolbar: function () {
         return Ext.create('Ext.toolbar.Toolbar',
-                {
-                    dock: 'top',
-                    ui: 'shopware-ui',
-                    items: [
-                        '->',
-                        {
-                            xtype: 'textfield',
-                            name: 'searchField',
-                            action: 'searchCustomer',
-                            width: 170,
-                            cls: 'searchfield',
-                            enableKeyEvents: true,
-                            checkChangeBuffer: 500,
-                            emptyText: '{s name="list/field/search_customer"}Search...{/s}'
-                        },
-                        { xtype: 'tbspacer', width: 6 }
-                    ]
-                });
+            {
+                dock: 'top',
+                ui: 'shopware-ui',
+                items: [
+                    '->',
+                    {
+                        xtype: 'textfield',
+                        name: 'searchField',
+                        action: 'searchCustomer',
+                        width: 170,
+                        cls: 'searchfield',
+                        enableKeyEvents: true,
+                        checkChangeBuffer: 500,
+                        emptyText: '{s name="list/field/search_customer"}Search...{/s}'
+                    },
+                    { xtype: 'tbspacer', width: 6 }
+                ]
+            });
     },
     /**
      * Creates the paging toolbar for the grid to allow

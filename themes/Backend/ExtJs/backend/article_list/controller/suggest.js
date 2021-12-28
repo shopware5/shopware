@@ -202,16 +202,16 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
         lastSeenAttribute = lastSeenAttribute.toUpperCase();
 
         for (i=0;i<attributesLength;i++) {
-           if (lastSeenAttribute == attributes[i].toUpperCase()) {
-               // Get the suggested values from remote
-               var params = {
-                   resource: 'product',
-                   attribute: lastSeenAttribute
-               };
+            if (lastSeenAttribute == attributes[i].toUpperCase()) {
+                // Get the suggested values from remote
+                var params = {
+                    resource: 'product',
+                    attribute: lastSeenAttribute
+                };
 
-               combo.showRemoteSuggestion(params, lastToken, lastValidToken);
-               return;
-           }
+                combo.showRemoteSuggestion(params, lastToken, lastValidToken);
+                return;
+            }
         }
 
         // If attribute was not valid, collapse suggestion box

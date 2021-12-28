@@ -443,12 +443,12 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         Shopware.app.Application.addSubApplication({
             name: 'Shopware.apps.PluginManager'
         },
-            undefined,
-            function() {
-                Ext.Function.defer(function () {
-                    Shopware.app.Application.fireEvent('display-installed-plugins');
-                }, 2000);
-            }
+        undefined,
+        function() {
+            Ext.Function.defer(function () {
+                Shopware.app.Application.fireEvent('display-installed-plugins');
+            }, 2000);
+        }
         );
     }
 });

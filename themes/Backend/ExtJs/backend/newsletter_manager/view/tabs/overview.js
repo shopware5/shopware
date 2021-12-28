@@ -232,30 +232,30 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                     },
                     handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                         /*{if {acl_is_allowed privilege=write}}*/
-                            if (record.get('status') == 2) {
-                                Shopware.Notification.createGrowlMessage(me.snippets.error.active_title, me.snippets.error.active_text);
-                                return false;
-                            }
+                        if (record.get('status') == 2) {
+                            Shopware.Notification.createGrowlMessage(me.snippets.error.active_title, me.snippets.error.active_text);
+                            return false;
+                        }
 
-                            if (record.get('status') == 1) {
-                                Ext.Msg.show({
-                                    title: '{s name="cancel_sending/title"}Cancel sending{/s}',
-                                    msg: '{s name="cancel_sending/msg"}Do you want to cancel the sending of the newsletter?{/s}',
-                                    buttons: Ext.Msg.YESNO,
-                                    icon: Ext.Msg.QUESTION,
-                                    fn: function(response) {
-                                        if (response == 'yes') {
-                                            me.fireEvent('releaseNewsletter', record, grid, rowIndex);
-                                        } else {
-                                            return false;
-                                        }
+                        if (record.get('status') == 1) {
+                            Ext.Msg.show({
+                                title: '{s name="cancel_sending/title"}Cancel sending{/s}',
+                                msg: '{s name="cancel_sending/msg"}Do you want to cancel the sending of the newsletter?{/s}',
+                                buttons: Ext.Msg.YESNO,
+                                icon: Ext.Msg.QUESTION,
+                                fn: function(response) {
+                                    if (response == 'yes') {
+                                        me.fireEvent('releaseNewsletter', record, grid, rowIndex);
+                                    } else {
+                                        return false;
                                     }
-                                });
-                            } else {
-                                me.fireEvent('releaseNewsletter', record, grid, rowIndex);
-                            }
+                                }
+                            });
+                        } else {
+                            me.fireEvent('releaseNewsletter', record, grid, rowIndex);
+                        }
                         /*{else}*/
-                            Shopware.Notification.createGrowlMessage(me.snippets.error.privilege_title, me.snippets.error.privilege_text);
+                        Shopware.Notification.createGrowlMessage(me.snippets.error.privilege_title, me.snippets.error.privilege_text);
                         /*{/if}*/
 
                     }
@@ -313,14 +313,14 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
             },
             /*{/if}*/
 
-//            {
-//                iconCls:'sprite-documents',
-//                action:'duplicate',
-//                tooltip:'{s name="action/duplicateNewsletter"}Duplicate newsletter{/s}',
-//                handler: function (view, rowIndex, colIndex, item, opts, record) {
-//                    me.fireEvent('duplicateNewsletter', record);
-//                }
-//            },
+            //            {
+            //                iconCls:'sprite-documents',
+            //                action:'duplicate',
+            //                tooltip:'{s name="action/duplicateNewsletter"}Duplicate newsletter{/s}',
+            //                handler: function (view, rowIndex, colIndex, item, opts, record) {
+            //                    me.fireEvent('duplicateNewsletter', record);
+            //                }
+            //            },
             /*{if {acl_is_allowed privilege=write}}*/
             {
                 iconCls: 'sprite-mail-send',

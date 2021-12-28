@@ -54,20 +54,20 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
     ],
 
     snippets: {
-            title: '{s name="global/title"}Shopping worlds{/s}',
-            copie: '{s name="global/copie"}Copie{/s}',
-            edited: '{s name="global/edited"}The template [0] was successfully edited.{/s}',
-            duplicated: '{s name="global/duplicated"}The template [0] was successfully duplicated.{/s}',
-            removed: '{s name="global/removed"}The template [0] was successfully removed.{/s}',
-            marked_removed: '{s name="global/marked_removed"}The selected template are successfully removed.{/s}',
-            confirm: {
-                remove: '{s name="global/confirm/remove"}Are you sure you want to remove the template [0]?{/s}',
-                marked_remove: '{s name="global/confirm/marked_remove"}Are you sure you want to remove the selected template(s)?{/s}'
-            },
-            alert: {
-                default_remove: '{s name="global/alert"}Default templates could not be removed.{/s}'
-            }
+        title: '{s name="global/title"}Shopping worlds{/s}',
+        copie: '{s name="global/copie"}Copie{/s}',
+        edited: '{s name="global/edited"}The template [0] was successfully edited.{/s}',
+        duplicated: '{s name="global/duplicated"}The template [0] was successfully duplicated.{/s}',
+        removed: '{s name="global/removed"}The template [0] was successfully removed.{/s}',
+        marked_removed: '{s name="global/marked_removed"}The selected template are successfully removed.{/s}',
+        confirm: {
+            remove: '{s name="global/confirm/remove"}Are you sure you want to remove the template [0]?{/s}',
+            marked_remove: '{s name="global/confirm/marked_remove"}Are you sure you want to remove the selected template(s)?{/s}'
         },
+        alert: {
+            default_remove: '{s name="global/alert"}Default templates could not be removed.{/s}'
+        }
+    },
 
     /**
      * Creates the necessary event listener for this
@@ -216,13 +216,13 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
             }
 
             store.remove(rec);
-                grid.setLoading(true);
-                rec.destroy({
-                    callback: function() {
-                        Shopware.Notification.createGrowlMessage(me.snippets.title, Ext.String.format(me.snippets.removed, rec.get('name')));
-                        grid.setLoading(false);
-                    }
-                });
+            grid.setLoading(true);
+            rec.destroy({
+                callback: function() {
+                    Shopware.Notification.createGrowlMessage(me.snippets.title, Ext.String.format(me.snippets.removed, rec.get('name')));
+                    grid.setLoading(false);
+                }
+            });
         });
     },
 

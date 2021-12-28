@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.Tree', {
     width: 220,
     rootNodeName: 'Shopware',
 
-     /**
+    /**
      * Initialize the controller and defines the necessary default configuration
      */
     initComponent: function() {
@@ -82,13 +82,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.Tree', {
         me.selModel = Ext.create('Ext.selection.RowModel', {
         });
 
-         me.columns = [{
-             xtype: 'treecolumn',
-             text: 'test',
-             flex: 2,
-             sortable: false,
-             dataIndex: 'name'
-         }];
+        me.columns = [{
+            xtype: 'treecolumn',
+            text: 'test',
+            flex: 2,
+            sortable: false,
+            dataIndex: 'name'
+        }];
 
         me.callParent(arguments);
 

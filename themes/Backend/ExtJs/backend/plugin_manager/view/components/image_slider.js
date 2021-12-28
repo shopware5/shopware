@@ -163,9 +163,9 @@ Ext.define('Shopware.apps.PluginManager.view.components.ImageSlider', {
     createPreviewTemplate: function() {
         return new Ext.XTemplate(
             '{literal}',
-                '<tpl for=".">',
-                    '<img class="preview-image" src="{remoteLink}" />',
-                '</tpl>',
+            '<tpl for=".">',
+            '<img class="preview-image" src="{remoteLink}" />',
+            '</tpl>',
             '{/literal}'
         );
     },

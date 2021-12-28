@@ -353,14 +353,14 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
             ui: 'shopware-ui',
             items: [
                 me.roleCombo,
-        /* {if {acl_is_allowed privilege=update}} */
+                /* {if {acl_is_allowed privilege=update}} */
                 { xtype: 'tbspacer', width: 6 },
                 me.saveRoleButton,
-        /* {/if} */
-        /* {if {acl_is_allowed privilege=create}} */
+                /* {/if} */
+                /* {if {acl_is_allowed privilege=create}} */
                 me.addResourceButton,
                 me.addPrivilegeButton,
-        /* {/if} */
+                /* {/if} */
             ]
         });
     },

@@ -412,25 +412,25 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                         { dataIndex: 'name', flex: 1 }
                     ];
 
-                    if (urlColumn) {
-                        columns.push({
-                            dataIndex: 'seoUrl',
-                            flex: 2,
-                            editor: {
-                                xtype: 'textfield',
-                                readOnly: true,
-                                selectOnFocus: true
-                            },
-                            renderer: function(value, metaData) {
-                                if (value) {
-                                    metaData.tdAttr = 'data-qtip="' + value + '"';
-                                    return value;
-                                }
+                if (urlColumn) {
+                    columns.push({
+                        dataIndex: 'seoUrl',
+                        flex: 2,
+                        editor: {
+                            xtype: 'textfield',
+                            readOnly: true,
+                            selectOnFocus: true
+                        },
+                        renderer: function(value, metaData) {
+                            if (value) {
+                                metaData.tdAttr = 'data-qtip="' + value + '"';
+                                return value;
                             }
-                        })
-                    }
+                        }
+                    })
+                }
 
-                    columns.push(me.createActionColumn());
+                columns.push(me.createActionColumn());
 
                 return columns;
             }

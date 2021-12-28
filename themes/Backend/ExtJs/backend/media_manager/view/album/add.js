@@ -88,11 +88,11 @@ Ext.define('Shopware.apps.MediaManager.view.album.Add', {
 
         me.items = [ me.formPanel ];
         me.dockedItems = [{
-           xtype: 'toolbar',
-           dock: 'bottom',
-           ui: 'shopware-ui',
-           cls: 'shopware-toolbar',
-           items: me.createActionButtons()
+            xtype: 'toolbar',
+            dock: 'bottom',
+            ui: 'shopware-ui',
+            cls: 'shopware-toolbar',
+            items: me.createActionButtons()
         }];
 
         me.on('show', function() {

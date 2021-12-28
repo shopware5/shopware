@@ -47,8 +47,8 @@ Ext.define('Shopware.apps.Article.model.PriceGroup', {
      */
     fields: [
         //{block name="backend/article/model/price_group/fields"}{/block}
-       { name: 'id', type: 'int' },
-       { name: 'name', type: 'string' }
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' }
     ]
 
 });

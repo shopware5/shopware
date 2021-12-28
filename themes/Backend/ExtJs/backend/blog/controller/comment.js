@@ -146,27 +146,27 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
         store.currentPage = 1;
         // we do not just delete - we are polite and ask the user if he is sure.
         Ext.MessageBox.confirm(
-                me.snippets.confirmDeleteSingleBlogCommentTitle,
-                Ext.String.format(me.snippets.confirmDeleteSingleBlogComment, record.get('headline')), function (response) {
-                    if (response !== 'yes') {
-                        return false;
-                    }
-                    record.destroy({
-                        callback: function (data, operation) {
-                            var records = operation.getRecords(),
-                                    record = records[0],
-                                    rawData = record.getProxy().getReader().rawData;
+            me.snippets.confirmDeleteSingleBlogCommentTitle,
+            Ext.String.format(me.snippets.confirmDeleteSingleBlogComment, record.get('headline')), function (response) {
+                if (response !== 'yes') {
+                    return false;
+                }
+                record.destroy({
+                    callback: function (data, operation) {
+                        var records = operation.getRecords(),
+                            record = records[0],
+                            rawData = record.getProxy().getReader().rawData;
 
-                            if ( operation.success === true ) {
-                                Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleBlogCommentSuccess, me.snippets.growlMessage);
-                            } else {
-                                Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleBlogCommentError + rawData.errorMsg, me.snippets.growlMessage);
-                            }
-
-                            store.load();
+                        if ( operation.success === true ) {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleBlogCommentSuccess, me.snippets.growlMessage);
+                        } else {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleBlogCommentError + rawData.errorMsg, me.snippets.growlMessage);
                         }
-                    });
+
+                        store.load();
+                    }
                 });
+            });
 
     },
 
@@ -247,11 +247,11 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
      */
     onAcceptMultipleBlogComments: function () {
         var me = this,
-                grid = me.getCommentGrid(),
-                sm = grid.getSelectionModel(),
-                selection = sm.getSelection(),
-                store = me.subApplication.commentStore,
-                noOfElements = selection.length;
+            grid = me.getCommentGrid(),
+            sm = grid.getSelectionModel(),
+            selection = sm.getSelection(),
+            store = me.subApplication.commentStore,
+            noOfElements = selection.length;
 
         // Get the user to confirm the delete process
         Ext.MessageBox.confirm(

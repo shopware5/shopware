@@ -177,11 +177,11 @@ Ext.define('Shopware.apps.PluginManager.view.list.Slider', {
 
         return new Ext.XTemplate(
             '{literal}',
-                '<tpl for=".">',
-                    '<div class="plugin">',
-                        me.itemTemplate,
-                    '</div>',
-                '</tpl>',
+            '<tpl for=".">',
+            '<div class="plugin">',
+            me.itemTemplate,
+            '</div>',
+            '</tpl>',
             '{/literal}'
         );
     }

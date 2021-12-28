@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      */
     extend: 'Ext.app.Controller',
 
-     /**
+    /**
      * Define references for the different parts of our application. The
      * references are parsed by ExtJS and Getter methods are automatically created.
      *
@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         { ref: 'saveCategoryButton', selector: 'button[action=saveDetail]' },
         { ref: 'settingsForm', selector: 'category-category-tabs-settings' },
         { ref: 'articleMappingForm', selector: 'category-category-tabs-article_mapping' }
-     ],
+    ],
 
     /**
      * Translations
@@ -111,11 +111,11 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 //
                 'beforeDropCategory': function() { me._destroyOtherModuleInstances(me.onBeforeDrop, arguments) }
             },
-             // Add Category from a dialog window, route event to the tree controller
+            // Add Category from a dialog window, route event to the tree controller
             'category-category-tree button[action=addCategory]': {
                 'click': function() { me._destroyOtherModuleInstances(me.onOpenNameDialog, arguments) }
             },
-             // Add Category in settings tab
+            // Add Category in settings tab
             'category-category-tabs-settings [action=addCategory]': {
                 'click': function() { me._destroyOtherModuleInstances(me.onAddCategory, arguments) }
             },
@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                     return false;
                 }
                 var record = selection[0],
-                parentNode = record.parentNode;
+                    parentNode = record.parentNode;
 
                 record.removeAll();
                 record.childNodes = [];
@@ -331,7 +331,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 } else {
                     dropHandlers.cancelDrop();
                 }
-             }
+            }
         );
     },
 
@@ -441,9 +441,9 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         return inBlackList;
     },
 
-   /**
-    * @param parent
-    */
+    /**
+     * @param parent
+     */
     saveNewChildPositions: function(parent) {
         var me = this,
             url = '{url controller=Category action=saveNewChildPositions}',
@@ -539,8 +539,8 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
      */
     saveCategory: function(categoryName, attributeValues){
         var me = this,
-        selectedNode = me.getSelectedNode(),
-        parentNode = selectedNode.parentNode || selectedNode;
+            selectedNode = me.getSelectedNode(),
+            parentNode = selectedNode.parentNode || selectedNode;
 
         var newCategory = me.getModel('Tree').create({
             'parentId': selectedNode.getId(),

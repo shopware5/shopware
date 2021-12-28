@@ -244,11 +244,11 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
                         me.runRestore(config, result.data.offset);
                     } else {
                         Shopware.Notification.createStickyGrowlMessage({
-                                title: '{s name="restoredBackup"}Backup restored{/s}',
-                                text: Ext.String.format('{s name="createdRestoreMessage"}The following changes have been undone:<br>[0]{/s}', config.operationString),
-                                log: true
-                            },
-                            'ArticleList'
+                            title: '{s name="restoredBackup"}Backup restored{/s}',
+                            text: Ext.String.format('{s name="createdRestoreMessage"}The following changes have been undone:<br>[0]{/s}', config.operationString),
+                            log: true
+                        },
+                        'ArticleList'
                         );
 
                         me.progressWindow.progressBar.updateProgress(1, "Done");

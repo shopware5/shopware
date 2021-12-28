@@ -300,7 +300,7 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
             ),
             tpl: Ext.create('Ext.XTemplate',
                 '<tpl for=".">',
-                    '{literal}' +
+                '{literal}' +
                         '<div class="x-boundlist-item">{name}' +
                         '<tpl if="additionalText">' +
                             '<span style="font-size:10px; font-weight: 800;"> - {additionalText}</span>' +

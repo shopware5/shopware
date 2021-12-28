@@ -64,9 +64,9 @@
  *     height: 100
  * });
  */
-Ext.define('Shopware.form.field.TinyMCE',
-/** @lends Ext.form.field.TextArea# */
-{
+Ext.define('Shopware.form.field.TinyMCE', {
+    /** @lends Ext.form.field.TextArea# */
+
     /**
      * Extends the default textarea to provide the
      * TinyMCE form field

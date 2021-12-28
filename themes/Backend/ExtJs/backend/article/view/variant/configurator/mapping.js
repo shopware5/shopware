@@ -169,28 +169,28 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
         });
 
         return [notice,
-        {
-            name: 'prices',
-            fieldLabel: me.snippets.prices
-        }, {
-            name: 'basePrice',
-            fieldLabel: me.snippets.basePrice
-        }, {
-            name: 'purchasePrice',
-            fieldLabel: me.snippets.purchasePrice
-        }, {
-            name: 'settings',
-            fieldLabel: me.snippets.settings
-        }, {
-            name: 'stock',
-            fieldLabel: me.snippets.stock
-        }, {
-            name: 'attributes',
-            fieldLabel: me.snippets.attribute
-        }, {
-            name: 'translations',
-            fieldLabel: me.snippets.translations
-        }];
+            {
+                name: 'prices',
+                fieldLabel: me.snippets.prices
+            }, {
+                name: 'basePrice',
+                fieldLabel: me.snippets.basePrice
+            }, {
+                name: 'purchasePrice',
+                fieldLabel: me.snippets.purchasePrice
+            }, {
+                name: 'settings',
+                fieldLabel: me.snippets.settings
+            }, {
+                name: 'stock',
+                fieldLabel: me.snippets.stock
+            }, {
+                name: 'attributes',
+                fieldLabel: me.snippets.attribute
+            }, {
+                name: 'translations',
+                fieldLabel: me.snippets.translations
+            }];
     },
 
     createToolbar: function() {

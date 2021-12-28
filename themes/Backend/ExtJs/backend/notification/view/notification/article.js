@@ -64,17 +64,17 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
      */
     registerEvents: function () {
         this.addEvents(
-                /**
-                 * Event will be fired when the user clicks the user icon in the
-                 * action column
-                 *
-                 * @event statistic
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'showCustomers'
+            /**
+             * Event will be fired when the user clicks the user icon in the
+             * action column
+             *
+             * @event statistic
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'showCustomers'
         );
 
         return true;
@@ -133,24 +133,24 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
      */
     getToolbar: function () {
         return Ext.create('Ext.toolbar.Toolbar',
-                {
-                    dock: 'top',
-                    ui: 'shopware-ui',
-                    items: [
-                        '->',
-                        {
-                            xtype: 'textfield',
-                            name: 'searchField',
-                            action: 'searchArticle',
-                            width: 170,
-                            cls: 'searchfield',
-                            enableKeyEvents: true,
-                            checkChangeBuffer: 500,
-                            emptyText: '{s name="list/field/search_article"}Search...{/s}'
-                        },
-                        { xtype: 'tbspacer', width: 6 }
-                    ]
-                });
+            {
+                dock: 'top',
+                ui: 'shopware-ui',
+                items: [
+                    '->',
+                    {
+                        xtype: 'textfield',
+                        name: 'searchField',
+                        action: 'searchArticle',
+                        width: 170,
+                        cls: 'searchfield',
+                        enableKeyEvents: true,
+                        checkChangeBuffer: 500,
+                        emptyText: '{s name="list/field/search_article"}Search...{/s}'
+                    },
+                    { xtype: 'tbspacer', width: 6 }
+                ]
+            });
     },
     /**
      * Creates the paging toolbar for the grid to allow
@@ -175,7 +175,7 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
      */
     getActionColumnItems: function () {
         var me = this,
-                actionColumnData = [];
+            actionColumnData = [];
 
         actionColumnData.push({
             iconCls: 'sprite-users',
@@ -210,12 +210,12 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
      */
     summaryRenderer: function(scope, value, summaryData, dataIndex) {
         var store = scope.getStore(),
-                proxy = store.getProxy(),
-                reader = proxy.getReader(),
-                rawData = reader.rawData;
+            proxy = store.getProxy(),
+            reader = proxy.getReader(),
+            rawData = reader.rawData;
 
-            //get the total summary out of the store to get the totals data not only the page summary
-            var summaryValue = (dataIndex === 'registered') ? rawData.totalRegistered : rawData.totalNotNotified;
+        //get the total summary out of the store to get the totals data not only the page summary
+        var summaryValue = (dataIndex === 'registered') ? rawData.totalRegistered : rawData.totalNotNotified;
 
         return '<b> {s name="list/summary/label/total"}Total:{/s} ' + summaryValue + '</b>';
     }

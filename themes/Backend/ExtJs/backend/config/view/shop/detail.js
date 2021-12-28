@@ -171,118 +171,118 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         });
 
         return [
-        me.getIdField(),
-        me.getTypeSwitchField(),
-        me.getMainField(),
-        {
-            name: 'name',
-            fieldLabel: '{s name="shop/detail/name_label"}Name{/s}',
-            allowBlank: false
-        }, {
-            name: 'title',
-            fieldLabel: '{s name="shop/detail/title_label"}Title{/s}',
-            helpText: '{s name="shop/detail/title_help"}For the output in the shop frontend.{/s}'
-        }, {
-            xtype: 'config-element-number',
-            name: 'position',
-            fieldLabel: '{s name="shop/detail/position_label"}Position{/s}',
-            helpText: '{s name="shop/detail/position_help"}Position in the shop selection.{/s}'
-        }, {
-            name: 'host',
-            emptyText: '{s name="shop/detail/host_empty_text"}example.com{/s}',
-            fieldLabel: '{s name="shop/detail/host_label"}Host{/s}',
-            helpText: '{s name="shop/detail/host_help"}{/s}',
-            isMainRequired: true,
-            isMainField: true,
-            hidden: true
-        }, {
-            name: 'baseUrl',
-            emptyText: '{s name="shop/detail/url_empty_text"}/shop/en{/s}',
-            fieldLabel: '{s name="shop/detail/url_label"}Base url{/s}'
-        }, {
-            name: 'basePath',
-            emptyText: '{s name="shop/detail/path_empty_text"}/shop{/s}',
-            fieldLabel: '{s name="shop/detail/path_label"}Base path{/s}',
-            isMainField: true,
-            hidden: true
-        }, {
-            xtype: 'config-element-boolean',
-            name: 'secure',
-            fieldLabel: '{s name="shop/detail/secure_label"}SSL support{/s}',
-            isMainField: true,
-            hidden: true
-        }, {
-            xtype: 'config-element-textarea',
-            name: 'hosts',
-            fieldLabel: '{s name="shop/detail/hosts_label"}Host aliases{/s}',
-            isMainField: true,
-            hidden: true
-        }, {
-            xtype: 'config-element-select',
-            name: 'currencyId',
-            allowBlank: false,
-            fieldLabel: '{s name="shop/detail/currency_label"}Currency{/s}',
-            store: 'base.Currency'
-        }, {
-            xtype: 'config-element-select',
-            name: 'localeId',
-            allowBlank: false,
-            fieldLabel: '{s name="shop/detail/locale_label"}Locale{/s}',
-            store: Ext.create('Shopware.apps.Base.store.Locale', {
-                remoteFilter: false
-            }),
-            queryMode: 'local',
-            forceSelection: true
-        },
-        me.categorySelect,
-        {
-            xtype: 'config-element-select',
-            name: 'templateId',
-            fieldLabel: '{s name="shop/detail/template_label"}Template{/s}',
-            store: 'base.Template',
-            isMainRequired: true,
-            isMainField: true,
-            hidden: true
-        }, {
-            xtype: 'config-element-select',
-            name: 'documentTemplateId',
-            fieldLabel: '{s name="shop/detail/document_template_label"}Document template{/s}',
-            store: 'base.Template',
-            isMainRequired: true,
-            isMainField: true,
-            hidden: true
-        }, {
-            xtype: 'config-element-select',
-            name: 'customerGroupId',
-            allowBlank: false,
-            fieldLabel: '{s name="shop/detail/customer_group_label"}Customer group{/s}',
-            store: 'base.CustomerGroup'
-        }, {
-            xtype: 'config-element-select',
-            name: 'fallbackId',
-            fieldLabel: '{s name="shop/detail/fallback_label"}Translation fallback{/s}',
-            helpText: '{s name="shop/detail/fallback_help"}Fallback for translations.{/s}',
-            store: 'base.Translation'
-        }, {
-            xtype: 'config-element-boolean',
-            name: 'customerScope',
-            fieldLabel: '{s name="shop/detail/customer_scope_label"}Customer scope{/s}',
-            helpText: '{s name="shop/detail/customer_scope_help"}Limit the customer registry for the current shop.{/s}',
-            isMainField: true,
-            hidden: true
-        }, {
-            xtype: 'config-element-boolean',
-            name: 'active',
-            fieldLabel: '{s name="shop/detail/active_label"}Active{/s}'
-        },
-        me.getDefaultField(),
-        {
-            xtype: 'config-shop-currency',
-            isMainField: true,
-            hidden: true
-        }, {
-            xtype: 'config-shop-page'
-        }]
+            me.getIdField(),
+            me.getTypeSwitchField(),
+            me.getMainField(),
+            {
+                name: 'name',
+                fieldLabel: '{s name="shop/detail/name_label"}Name{/s}',
+                allowBlank: false
+            }, {
+                name: 'title',
+                fieldLabel: '{s name="shop/detail/title_label"}Title{/s}',
+                helpText: '{s name="shop/detail/title_help"}For the output in the shop frontend.{/s}'
+            }, {
+                xtype: 'config-element-number',
+                name: 'position',
+                fieldLabel: '{s name="shop/detail/position_label"}Position{/s}',
+                helpText: '{s name="shop/detail/position_help"}Position in the shop selection.{/s}'
+            }, {
+                name: 'host',
+                emptyText: '{s name="shop/detail/host_empty_text"}example.com{/s}',
+                fieldLabel: '{s name="shop/detail/host_label"}Host{/s}',
+                helpText: '{s name="shop/detail/host_help"}{/s}',
+                isMainRequired: true,
+                isMainField: true,
+                hidden: true
+            }, {
+                name: 'baseUrl',
+                emptyText: '{s name="shop/detail/url_empty_text"}/shop/en{/s}',
+                fieldLabel: '{s name="shop/detail/url_label"}Base url{/s}'
+            }, {
+                name: 'basePath',
+                emptyText: '{s name="shop/detail/path_empty_text"}/shop{/s}',
+                fieldLabel: '{s name="shop/detail/path_label"}Base path{/s}',
+                isMainField: true,
+                hidden: true
+            }, {
+                xtype: 'config-element-boolean',
+                name: 'secure',
+                fieldLabel: '{s name="shop/detail/secure_label"}SSL support{/s}',
+                isMainField: true,
+                hidden: true
+            }, {
+                xtype: 'config-element-textarea',
+                name: 'hosts',
+                fieldLabel: '{s name="shop/detail/hosts_label"}Host aliases{/s}',
+                isMainField: true,
+                hidden: true
+            }, {
+                xtype: 'config-element-select',
+                name: 'currencyId',
+                allowBlank: false,
+                fieldLabel: '{s name="shop/detail/currency_label"}Currency{/s}',
+                store: 'base.Currency'
+            }, {
+                xtype: 'config-element-select',
+                name: 'localeId',
+                allowBlank: false,
+                fieldLabel: '{s name="shop/detail/locale_label"}Locale{/s}',
+                store: Ext.create('Shopware.apps.Base.store.Locale', {
+                    remoteFilter: false
+                }),
+                queryMode: 'local',
+                forceSelection: true
+            },
+            me.categorySelect,
+            {
+                xtype: 'config-element-select',
+                name: 'templateId',
+                fieldLabel: '{s name="shop/detail/template_label"}Template{/s}',
+                store: 'base.Template',
+                isMainRequired: true,
+                isMainField: true,
+                hidden: true
+            }, {
+                xtype: 'config-element-select',
+                name: 'documentTemplateId',
+                fieldLabel: '{s name="shop/detail/document_template_label"}Document template{/s}',
+                store: 'base.Template',
+                isMainRequired: true,
+                isMainField: true,
+                hidden: true
+            }, {
+                xtype: 'config-element-select',
+                name: 'customerGroupId',
+                allowBlank: false,
+                fieldLabel: '{s name="shop/detail/customer_group_label"}Customer group{/s}',
+                store: 'base.CustomerGroup'
+            }, {
+                xtype: 'config-element-select',
+                name: 'fallbackId',
+                fieldLabel: '{s name="shop/detail/fallback_label"}Translation fallback{/s}',
+                helpText: '{s name="shop/detail/fallback_help"}Fallback for translations.{/s}',
+                store: 'base.Translation'
+            }, {
+                xtype: 'config-element-boolean',
+                name: 'customerScope',
+                fieldLabel: '{s name="shop/detail/customer_scope_label"}Customer scope{/s}',
+                helpText: '{s name="shop/detail/customer_scope_help"}Limit the customer registry for the current shop.{/s}',
+                isMainField: true,
+                hidden: true
+            }, {
+                xtype: 'config-element-boolean',
+                name: 'active',
+                fieldLabel: '{s name="shop/detail/active_label"}Active{/s}'
+            },
+            me.getDefaultField(),
+            {
+                xtype: 'config-shop-currency',
+                isMainField: true,
+                hidden: true
+            }, {
+                xtype: 'config-shop-page'
+            }]
     },
 
     loadRecord: function() {

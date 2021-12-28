@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Shipping.store.Dispatch', {
      * @boolean
      */
     autoLoad: false,
-     /**
+    /**
      * enables the remote filter system
      * @boolen
      */

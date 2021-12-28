@@ -807,7 +807,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 icon.addCls('sprite-minus-circle-frame');
             }
         } else if ( event.field === 'price') {
-           this.updatedPriceField(event);
+            this.updatedPriceField(event);
             // If the user has edit the percent column, we have to calculate the price
         } else if (event.field === 'percent') {
             this.updatedPercentField(event);

@@ -36,7 +36,7 @@
  */
 //{block name="backend/shipping/view/edit/categories_tree"}
 Ext.define('Shopware.apps.Shipping.view.edit.CategoriesTree', {
-     /**
+    /**
      * Based on Ext.form.Panel
      */
     extend: 'Ext.form.Panel',

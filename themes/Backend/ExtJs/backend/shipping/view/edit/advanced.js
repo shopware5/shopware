@@ -141,8 +141,8 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 store: Ext.create('Ext.data.Store', {
                     fields: ['id', 'name'],
                     data: [{ id: 0, name: '{s name="bind_shippingfree_data_support"}Support{/s}' },
-                            { id: 1, name: '{s name="bind_shippingfree_data_not_support_lock"}do not support and lock shipping type{/s}' },
-                            { id: 2, name: '{s name="bind_shippingfree_data_support_calc_costs"}Support but add shipping costs nevertheless.{/s}' }]
+                        { id: 1, name: '{s name="bind_shippingfree_data_not_support_lock"}do not support and lock shipping type{/s}' },
+                        { id: 2, name: '{s name="bind_shippingfree_data_support_calc_costs"}Support but add shipping costs nevertheless.{/s}' }]
                 }),
                 valueField: 'id',
                 displayField: 'name',
@@ -161,9 +161,9 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 store: Ext.create('Ext.data.Store', {
                     fields: ['id', 'name'],
                     data: [
-                            { id: 0, name: '{s name="bind_instock_data_no_selection"}No selection{/s}' },
-                            { id: 1, name: '{s name="bind_instock_data_order_quantity"}Order quantity{/s}' },
-                            { id: 2, name: '{s name="bind_instock_data_order_quantity_minimum"}Order quantity + minimum stock{/s}' }]
+                        { id: 0, name: '{s name="bind_instock_data_no_selection"}No selection{/s}' },
+                        { id: 1, name: '{s name="bind_instock_data_order_quantity"}Order quantity{/s}' },
+                        { id: 2, name: '{s name="bind_instock_data_order_quantity_minimum"}Order quantity + minimum stock{/s}' }]
                 }),
                 valueField: 'id',
                 displayField: 'name',
@@ -175,19 +175,19 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 typeAhead: false,
                 width: 200
             }, {
-                    items: me.getBindTime()
+                items: me.getBindTime()
             }, {
-                    items: me.getBindWeight()
+                items: me.getBindWeight()
             }, {
-                    items: me.getBindPrice()
+                items: me.getBindPrice()
             }, {
-                    items: me.getBindWeekday()
+                items: me.getBindWeekday()
             }
         ];
     },
     getFormElementsRight: function() {
         var me = this,
-           preselectedStore = me.record.getHolidays(),
+            preselectedStore = me.record.getHolidays(),
             ids = [];
 
         if (preselectedStore.getCount() > 0) {
@@ -203,7 +203,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 name: 'bindSql',
                 hidden: true,
                 /*{if {acl_is_allowed privilege=sql_rule}}*/
-                    hidden: false,
+                hidden: false,
                 /*{/if}*/
                 fieldLabel: '{s name="bind_sql_label"}Own terms{/s}',
                 mode: 'sql',
@@ -213,7 +213,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 name: 'calculationSql',
                 hidden: true,
                 /*{if {acl_is_allowed privilege=sql_rule}}*/
-                    hidden: false,
+                hidden: false,
                 /*{/if}*/
                 fieldLabel: '{s name="bind_calculation_sql_label"}Own calculations{/s}',
                 mode: 'sql',
@@ -352,42 +352,42 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
             },
             height: 28,
             items: [{
-                    xtype: 'combobox',
-                    name: 'bindWeekdayFrom',
-                    fieldLabel: '{s name="bind_weekday_from_label"}Weekdays to{/s}',
-                    labelStyle: 'font-weight: 700; text-align: left;',
-                    labelWidth: 155,
-                    minWidth: 80,
-                    style: 'margin-right: 5px',
-                    store: new Ext.data.ArrayStore({
-                            fields: ['id', 'name'],
-                            data: dayStore
-                    }),
-                    displayField: 'name',
-                    flex: 2,
-                    valueField: 'id'
-                },
-                {
-                    xtype: 'combobox',
-                    name: 'bindWeekdayTo',
-                    fieldLabel: '{s name="bind_weekday_to_label"}to{/s}',
-                    labelWidth: 20,
-                    store: new Ext.data.ArrayStore({
-                            fields: ['id', 'name'],
-                            data: dayStore
-                    }),
-                    displayField: 'name',
-                    valueField: 'id',
-                    labelPad: 0,
-                    labelSeparator: '',
-                    flex: 1,
-                    labelStyle: 'font-weight: 700; text-align: left;margin-left: 0px; margin-right: 0;',
-                    minWidth: 80
-                }]
+                xtype: 'combobox',
+                name: 'bindWeekdayFrom',
+                fieldLabel: '{s name="bind_weekday_from_label"}Weekdays to{/s}',
+                labelStyle: 'font-weight: 700; text-align: left;',
+                labelWidth: 155,
+                minWidth: 80,
+                style: 'margin-right: 5px',
+                store: new Ext.data.ArrayStore({
+                    fields: ['id', 'name'],
+                    data: dayStore
+                }),
+                displayField: 'name',
+                flex: 2,
+                valueField: 'id'
+            },
+            {
+                xtype: 'combobox',
+                name: 'bindWeekdayTo',
+                fieldLabel: '{s name="bind_weekday_to_label"}to{/s}',
+                labelWidth: 20,
+                store: new Ext.data.ArrayStore({
+                    fields: ['id', 'name'],
+                    data: dayStore
+                }),
+                displayField: 'name',
+                valueField: 'id',
+                labelPad: 0,
+                labelSeparator: '',
+                flex: 1,
+                labelStyle: 'font-weight: 700; text-align: left;margin-left: 0px; margin-right: 0;',
+                minWidth: 80
+            }]
         });
     },
 
-     /**
+    /**
      * Returns the selection box
      * //todo@js this must be replaced due an bug where this element wont scale to the right size
      * @param ids array of integers

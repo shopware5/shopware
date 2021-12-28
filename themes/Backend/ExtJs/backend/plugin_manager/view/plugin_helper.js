@@ -346,7 +346,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
                 me.hideLoadingMask();
 
                 if (Ext.isFunction(declineCallback)) {
-                     declineCallback();
+                    declineCallback();
                 }
 
                 return;

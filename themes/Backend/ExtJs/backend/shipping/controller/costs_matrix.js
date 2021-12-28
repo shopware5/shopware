@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
 
         switch (item.iconCls) {
             case 'sprite-minus-circle-frame':
-                 var store = view.getStore(),
+                var store = view.getStore(),
                     record = store.getAt(rowIndex);
                 me.onDeleteCostsMatrixEntry(rowIndex, record);
                 break;
@@ -145,17 +145,17 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      * @return boolean
      */
     onCostMatrixEdit: function(editor, options) {
-         var rec = options.record,
-             me = this,
-             field = options.field,
-             fromValue  = 1*rec.get('from'),
-             datakeys = options.grid.store.data.keys,
-             toField = options.column.field,
-             mainController = me.getController('Main'),
-             calculationTypeField = me.getCalculationField(),
-             calculationType = calculationTypeField.value,
-             config =  mainController.getConfig(calculationType),
-             fieldOriginal = options.originalValue;
+        var rec = options.record,
+            me = this,
+            field = options.field,
+            fromValue  = 1*rec.get('from'),
+            datakeys = options.grid.store.data.keys,
+            toField = options.column.field,
+            mainController = me.getController('Main'),
+            calculationTypeField = me.getCalculationField(),
+            calculationType = calculationTypeField.value,
+            config =  mainController.getConfig(calculationType),
+            fieldOriginal = options.originalValue;
 
         if ('to' == field) {
             // If the entered value is smaller than the value in the from field
@@ -209,7 +209,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
     onDeleteCostsMatrixEntry: function(rowIndex, record) {
         /* {if {acl_is_allowed privilege=delete}} */
         var me = this,
-        store = record.store;
+            store = record.store;
 
         Ext.MessageBox.confirm('{s name="delete_dialog_title"}Delete selected Costs Entry?{/s}',
             '{s name="delete_dialog_body"}Do you really want delete this entry?{/s}',
@@ -246,9 +246,9 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      */
     addCostsMatrixEntry: function(from, store) {
         var me = this,
-        last = store.getCount(),
-        lastEntry = store.getAt(last-1),
-        from  = 1*from;
+            last = store.getCount(),
+            lastEntry = store.getAt(last-1),
+            from  = 1*from;
         // Create a model instance
         var newCosts =  Ext.create('Shopware.apps.Shipping.model.Costsmatrix', {
             from: from,

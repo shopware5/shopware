@@ -43,11 +43,11 @@ Ext.define('Shopware.apps.ArticleList.store.Filter', {
      */
     pageSize: 100,
 
-   /**
-    * Auto load the store after the component
-    * is initialized
-    * @boolean
-    */
+    /**
+     * Auto load the store after the component
+     * is initialized
+     * @boolean
+     */
     autoLoad: false,
 
     /**
@@ -62,10 +62,10 @@ Ext.define('Shopware.apps.ArticleList.store.Filter', {
 
     groupField: 'groupName',
 
-   /**
-    * Define the used model for this store
-    * @string
-    */
+    /**
+     * Define the used model for this store
+     * @string
+     */
     model: 'Shopware.apps.ArticleList.model.Filter',
 
     /**

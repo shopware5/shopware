@@ -248,16 +248,16 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
 
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<div class="' + gridCls + '" style="{[this.getGridStyles()]}">',
+            '<div class="' + gridCls + '" style="{[this.getGridStyles()]}">',
 
-                    // layer for grid drop zones
-                    '<div class="' + layerGridCls + '">',
-                        '{[this.getGridRows()]}',
-                    '</div>',
+            // layer for grid drop zones
+            '<div class="' + layerGridCls + '">',
+            '{[this.getGridRows()]}',
+            '</div>',
 
-                    // layer for grid elements
-                    '<div class="' + layerElCls + '"></div>',
-                '</div>',
+            // layer for grid elements
+            '<div class="' + layerElCls + '"></div>',
+            '</div>',
             '</tpl>{/literal}',
             {
                 parentId: view.getId(),

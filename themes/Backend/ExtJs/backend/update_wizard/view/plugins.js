@@ -113,14 +113,14 @@ Ext.define('Shopware.apps.UpdateWizard.view.Plugins', {
         var me = this;
 
         Shopware.app.Application.addSubApplication({
-                name: 'Shopware.apps.PluginManager'
-            },
-            undefined,
-            function() {
-                Shopware.app.Application.on('load-update-listing', function() {
-                    Shopware.app.Application.fireEvent('plugin-manager-display-updates');
-                }, me, { single: true });
-            }
+            name: 'Shopware.apps.PluginManager'
+        },
+        undefined,
+        function() {
+            Shopware.app.Application.on('load-update-listing', function() {
+                Shopware.app.Application.fireEvent('plugin-manager-display-updates');
+            }, me, { single: true });
+        }
         );
     }
 });

@@ -65,28 +65,28 @@ Ext.define('Shopware.apps.Emotion.view.presets.Info', {
     createTemplate: function() {
         return new Ext.XTemplate(
             '<tpl for=".">',
-                '<div class="item">',
-                    '{literal}<div class="screen"><img src="{previewUrl}" alt="{label}" /></div>{/literal}',
-                    '<div class="info-item"> <p class="label">{s name="name"}{/s}:</p> <p class="value">{literal}{label}{/literal}</p></div>',
-                    '<div class="info-item"> <p class="label">{s name="description"}{/s}:</p> <p class="value">{literal}{description}{/literal}</p></div>',
-                    '<tpl if="this.hasRequiredPlugins(values.requiredPlugins)">',
-                        '<div class="info-item">',
-                            '<p class="label" style="margin-bottom: 5px;">{s name="required_plugins"}{/s}:</p>',
-                            '<ul>',
-                                '<tpl for="requiredPlugins">',
-                                    '<li class="required-plugin" style="cursor: pointer; margin-left: 10px; margin-bottom: 5px;" id="{literal}{name}{/literal}" data-in-store="{literal}{in_store}{/literal}">' +
+            '<div class="item">',
+            '{literal}<div class="screen"><img src="{previewUrl}" alt="{label}" /></div>{/literal}',
+            '<div class="info-item"> <p class="label">{s name="name"}{/s}:</p> <p class="value">{literal}{label}{/literal}</p></div>',
+            '<div class="info-item"> <p class="label">{s name="description"}{/s}:</p> <p class="value">{literal}{description}{/literal}</p></div>',
+            '<tpl if="this.hasRequiredPlugins(values.requiredPlugins)">',
+            '<div class="info-item">',
+            '<p class="label" style="margin-bottom: 5px;">{s name="required_plugins"}{/s}:</p>',
+            '<ul>',
+            '<tpl for="requiredPlugins">',
+            '<li class="required-plugin" style="cursor: pointer; margin-left: 10px; margin-bottom: 5px;" id="{literal}{name}{/literal}" data-in-store="{literal}{in_store}{/literal}">' +
                                         '<tpl if="valid">' +
                                             '<span style="width: 16px; height: 16px; display: inline-block; line-height: 15px;" class="sprite-ui-check-box">&nbsp;</span>' +
                                         '<tpl else>' +
                                             '<span style="width: 16px; height: 16px; display: inline-block; line-height: 15px;" class="sprite-ui-check-box-uncheck">&nbsp;</span>' +
                                         '</tpl>',
-                                        '<span>{literal}{[this.getPluginName(values)]} ({version}){/literal}</span>' +
+            '<span>{literal}{[this.getPluginName(values)]} ({version}){/literal}</span>' +
                                     '</li>',
-                                '</tpl>',
-                            '</ul>',
-                        '</div>',
-                    '</tpl>',
-                '</div>',
+            '</tpl>',
+            '</ul>',
+            '</div>',
+            '</tpl>',
+            '</div>',
             '</tpl>',
             {
                 hasRequiredPlugins: function(requiredPlugins) {

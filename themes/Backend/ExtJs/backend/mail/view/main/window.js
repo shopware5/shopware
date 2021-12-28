@@ -89,32 +89,32 @@ Ext.define('Shopware.apps.Mail.view.main.Window', {
         var items = [];
 
         /*{if {acl_is_allowed privilege=create}}*/
-            items.push({
-                xtype: 'button',
-                iconCls: 'sprite-mail--plus',
-                text: '{s name="button_add_template"}Add template{/s}',
-                action: 'mail-window-add'
-            });
+        items.push({
+            xtype: 'button',
+            iconCls: 'sprite-mail--plus',
+            text: '{s name="button_add_template"}Add template{/s}',
+            action: 'mail-window-add'
+        });
         /*{/if}*/
 
         /*{if {acl_is_allowed privilege=delete}}*/
-            items.push({
-                xtype: 'button',
-                iconCls: 'sprite-mail--minus',
-                text: '{s name="button_delete_templates"}Delete selected templates{/s}',
-                action: 'mail-window-delete',
-                disabled: true
-            });
+        items.push({
+            xtype: 'button',
+            iconCls: 'sprite-mail--minus',
+            text: '{s name="button_delete_templates"}Delete selected templates{/s}',
+            action: 'mail-window-delete',
+            disabled: true
+        });
         /*{/if}*/
 
         /*{if {acl_is_allowed privilege=create}}*/
-            items.push({
-                xtype: 'button',
-                iconCls: 'sprite-blue-document-copy',
-                text: '{s name="button_duplicate_templates"}Duplicate selected templates{/s}',
-                action: 'mail-window-copy',
-                disabled: true
-            });
+        items.push({
+            xtype: 'button',
+            iconCls: 'sprite-blue-document-copy',
+            text: '{s name="button_duplicate_templates"}Duplicate selected templates{/s}',
+            action: 'mail-window-copy',
+            disabled: true
+        });
         /*{/if}*/
 
         items.push('->');
@@ -149,22 +149,22 @@ Ext.define('Shopware.apps.Mail.view.main.Window', {
         items.push('->');
 
         /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
-            items.push({
-                xtype: 'button',
-                text: '{s name="button_reset_template"}Reset template{/s}',
-                action: 'mail-window-reset',
-                cls: 'secondary',
-                disabled: true
-            });
+        items.push({
+            xtype: 'button',
+            text: '{s name="button_reset_template"}Reset template{/s}',
+            action: 'mail-window-reset',
+            cls: 'secondary',
+            disabled: true
+        });
         /*{/if}*/
 
         /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
-            items.push(Ext.create('Ext.button.Button', {
-                text: '{s name="button_save_template"}Save template{/s}',
-                action: 'mail-window-save',
-                cls: 'primary',
-                formBind: true
-            }));
+        items.push(Ext.create('Ext.button.Button', {
+            text: '{s name="button_save_template"}Save template{/s}',
+            action: 'mail-window-save',
+            cls: 'primary',
+            formBind: true
+        }));
         /*{/if}*/
 
         return items;

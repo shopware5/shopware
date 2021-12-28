@@ -53,44 +53,44 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
             text: '{s name="navigation/general"}General{/s}',
             expanded: true,
             children: [
-            {
-                text: '{s name="navigation/home"}Performance checks{/s}',
-                leaf: true,
-                internalName: 'performance-tabs-settings-home'
-            },
-            {
-                text: '{s name="navigation/cache"}HTTP Cache{/s}',
-                leaf: true,
-                internalName: 'performance-tabs-settings-http-cache'
-            }, {
-                text: '{s name="navigation/theme_cache"}Theme cache{/s}',
-                leaf: true,
-                internalName: 'performance-tabs-settings-theme-cache'
-            }, {
-                text: '{s name="navigation/seo"}SEO{/s}',
-                leaf: true,
-                internalName: 'performance-tabs-settings-seo'
-            }, {
-                text: '{s name="navigation/search"}Search{/s}',
-                leaf: true,
-                internalName: 'performance-tabs-settings-search'
-            }, {
-                text: '{s name="navigation/categories"}Categories{/s}',
-                leaf: true,
-                internalName: 'performance-tabs-settings-categories'
-            }, {
-                text: '{s name="navigation/filter"}Filters{/s}',
-                leaf: true,
-                internalName: 'performance-tabs-settings-filter'
-            }, {
-                text: '{s name="navigation/sitemap"}Sitemap{/s}',
-                leaf: true,
-                internalName: 'performance-tabs-settings-sitemap'
-            }, {
-                text: '{s name="navigation/various"}Various{/s}',
-                leaf: true,
-                internalName: 'performance-tabs-settings-various'
-            }]
+                {
+                    text: '{s name="navigation/home"}Performance checks{/s}',
+                    leaf: true,
+                    internalName: 'performance-tabs-settings-home'
+                },
+                {
+                    text: '{s name="navigation/cache"}HTTP Cache{/s}',
+                    leaf: true,
+                    internalName: 'performance-tabs-settings-http-cache'
+                }, {
+                    text: '{s name="navigation/theme_cache"}Theme cache{/s}',
+                    leaf: true,
+                    internalName: 'performance-tabs-settings-theme-cache'
+                }, {
+                    text: '{s name="navigation/seo"}SEO{/s}',
+                    leaf: true,
+                    internalName: 'performance-tabs-settings-seo'
+                }, {
+                    text: '{s name="navigation/search"}Search{/s}',
+                    leaf: true,
+                    internalName: 'performance-tabs-settings-search'
+                }, {
+                    text: '{s name="navigation/categories"}Categories{/s}',
+                    leaf: true,
+                    internalName: 'performance-tabs-settings-categories'
+                }, {
+                    text: '{s name="navigation/filter"}Filters{/s}',
+                    leaf: true,
+                    internalName: 'performance-tabs-settings-filter'
+                }, {
+                    text: '{s name="navigation/sitemap"}Sitemap{/s}',
+                    leaf: true,
+                    internalName: 'performance-tabs-settings-sitemap'
+                }, {
+                    text: '{s name="navigation/various"}Various{/s}',
+                    leaf: true,
+                    internalName: 'performance-tabs-settings-various'
+                }]
         }, {
             text: '{s name="navigation/crossselling"}Marketing{/s}',
             expanded: true,

@@ -39,20 +39,20 @@ Ext.define('Shopware.form.field.NewsletterSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<tpl if="senderName">',
-                    '<div class="x-boundlist-item">{literal}{subject} <i>({senderName})</i>{/literal}</div>',
-                '<tpl else>',
-                    '<div class="x-boundlist-item">{literal}{subject}{/literal}</div>',
-                '</tpl>',
+            '<tpl if="senderName">',
+            '<div class="x-boundlist-item">{literal}{subject} <i>({senderName})</i>{/literal}</div>',
+            '<tpl else>',
+            '<div class="x-boundlist-item">{literal}{subject}{/literal}</div>',
+            '</tpl>',
             '</tpl>'
         );
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<tpl if="senderName">',
-                    '{literal}{subject} ({senderName}){/literal}',
-                '<tpl else>',
-                    '{literal}{subject}{/literal}',
-                '</tpl>',
+            '<tpl if="senderName">',
+            '{literal}{subject} ({senderName}){/literal}',
+            '<tpl else>',
+            '{literal}{subject}{/literal}',
+            '</tpl>',
             '</tpl>'
         );
         return config;

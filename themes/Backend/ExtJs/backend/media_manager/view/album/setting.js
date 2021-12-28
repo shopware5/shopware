@@ -403,16 +403,17 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             defaults: {
                 labelStyle: 'font-weight: 700; text-align: right;'
             },
-            items: [{
-                xtype: 'container',
-                layout: 'hbox',
-                padding: '0 0 8',
-                items: [
-                    me.thumbnailField,
-                    me.thumbnailSubmit,
-                    me.thumbnailGenerate
-                ]
-            },
+            items: [
+                {
+                    xtype: 'container',
+                    layout: 'hbox',
+                    padding: '0 0 8',
+                    items: [
+                        me.thumbnailField,
+                        me.thumbnailSubmit,
+                        me.thumbnailGenerate
+                    ]
+                },
                 {
                     xtype: 'container',
                     layout: 'anchor',

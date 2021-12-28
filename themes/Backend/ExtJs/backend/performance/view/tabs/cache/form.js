@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
      */
     submit: function(options) {
         var me = this;
-            options = options || {};
+        options = options || {};
         Ext.applyIf(options, {
             url: me.url,
             waitMsg: me.waitMsg

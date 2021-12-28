@@ -78,37 +78,37 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
      */
     registerEvents: function () {
         this.addEvents(
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event deleteBlogComment
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'deleteBlogComment',
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteBlogComment
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'deleteBlogComment',
 
-                /**
-                 * Event will be fired when the user clicks the accept icon in the
-                 * action column
-                 *
-                 * @event acceptBlogComment
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'acceptBlogComment',
+            /**
+             * Event will be fired when the user clicks the accept icon in the
+             * action column
+             *
+             * @event acceptBlogComment
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'acceptBlogComment',
 
-                /**
-                 * Event will be fired when the changed the selection
-                 *
-                 * @event acceptBlogComment
-                 * @param [integer] sm - selection model
-                 * @param [object] selection
-                 */
-                'selectionChange'
+            /**
+             * Event will be fired when the changed the selection
+             *
+             * @event acceptBlogComment
+             * @param [integer] sm - selection model
+             * @param [object] selection
+             */
+            'selectionChange'
         );
     },
     /**
@@ -220,14 +220,14 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
     getGridSelModel: function () {
         var me = this,
             selModel = Ext.create('Ext.selection.CheckboxModel', {
-            listeners: {
+                listeners: {
                 // Unlocks the delete button if the user has checked at least one checkbox
-                selectionchange: function (sm, selections) {
-                    me.fireEvent('selectionChange', sm, selections);
+                    selectionchange: function (sm, selections) {
+                        me.fireEvent('selectionChange', sm, selections);
 
+                    }
                 }
-            }
-        });
+            });
         return selModel;
     },
 

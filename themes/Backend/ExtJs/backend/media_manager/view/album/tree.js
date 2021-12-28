@@ -245,15 +245,15 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
 
         return Ext.create('Ext.toolbar.Toolbar', {
             items: [
-        /* {if {acl_is_allowed privilege=create}} */
+                /* {if {acl_is_allowed privilege=create}} */
                 '',
                 me.addBtn,
-        /* {/if} */
-        /* {if {acl_is_allowed privilege=delete}} */
+                /* {/if} */
+                /* {if {acl_is_allowed privilege=delete}} */
                 '->',
                 me.deleteBtn,
                 ''
-        /* {/if} */
+                /* {/if} */
             ]
         });
     },

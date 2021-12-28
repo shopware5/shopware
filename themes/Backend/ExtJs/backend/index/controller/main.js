@@ -59,17 +59,17 @@ Ext.define('Shopware.apps.Index.controller.Main', {
             Ext.util.Cookies.set('firstRunWizardStep', firstRunWizardStep);
 
             Shopware.app.Application.addSubApplication({
-                    name: 'Shopware.apps.PluginManager',
-                    params: {
-                        hidden: true
-                    }
-                },
-                undefined,
-                function() {
-                    Shopware.app.Application.addSubApplication({
-                        name: 'Shopware.apps.FirstRunWizard'
-                    });
+                name: 'Shopware.apps.PluginManager',
+                params: {
+                    hidden: true
                 }
+            },
+            undefined,
+            function() {
+                Shopware.app.Application.addSubApplication({
+                    name: 'Shopware.apps.FirstRunWizard'
+                });
+            }
             );
 
         } else {
@@ -191,7 +191,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
             /*{/if}*/
 
             /*{if {acl_is_allowed privilege=read resource=customer}}*/
-             // Order overview - CTRL + ALT + K
+            // Order overview - CTRL + ALT + K
             {
                 key: "k",
                 ctrl: true,
@@ -444,26 +444,26 @@ createKeyNavOverlay = function() {
         }),
         tpl = new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<div class="row">',
-                    '<span class="title">{name}:</span>',
-                    '<div class="keys">',
+            '<div class="row">',
+            '<span class="title">{name}:</span>',
+            '<div class="keys">',
 
-                        // Ctrl key
-                        '<tpl if="ctrl === true">',
-                            '<span class="sprite-key_ctrl_alternative">ctrl</span>',
-                        '</tpl>',
+            // Ctrl key
+            '<tpl if="ctrl === true">',
+            '<span class="sprite-key_ctrl_alternative">ctrl</span>',
+            '</tpl>',
 
-                        // Alt key
-                        '<tpl if="alt === true">',
-                            '<span class="key_sep">+</span>',
-                            '<span class="sprite-key_alt_alternative">alt</span>',
-                        '</tpl>',
+            // Alt key
+            '<tpl if="alt === true">',
+            '<span class="key_sep">+</span>',
+            '<span class="sprite-key_alt_alternative">alt</span>',
+            '</tpl>',
 
-                        // Output the actual key
-                        '<span class="key_sep">+</span>',
-                        '<span class="sprite-key_{key}">{key}</span>',
-                    '</div>',
-                '</div>',
+            // Output the actual key
+            '<span class="key_sep">+</span>',
+            '<span class="sprite-key_{key}">{key}</span>',
+            '</div>',
+            '</div>',
             '</tpl>{/literal}'
         ),
         emptyTpl = '<span class="no-shortcuts">{s name="shortcuts/no_shortcuts_acl"}Due to your permissions, there are no shortcuts available{/s}</span>',

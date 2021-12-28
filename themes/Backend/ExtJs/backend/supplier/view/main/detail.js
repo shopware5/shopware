@@ -75,21 +75,21 @@ Ext.define('Shopware.apps.Supplier.view.main.Detail', {
     getTemplate: function() {
         return [
             '{literal}',
-                // Check if we're having a logo
-                '<tpl if="image">',
-                    '<div class="supplier-logo">',
-                        '<img src="{literal}{image}{/literal}" alt="{name}" style="max-height: 200px; max-width: 150px" />',
-                    '</div>',
-                '</tpl>',
-                '<div class="supplier-info">',
-                    '<div class="supplier-desc">{description}</div>',
-                    // Check if we're having a link here
-                    '<tpl if="link">',
-                        '<p class="action">',
-                            '{/literal}{s name="moreinfo"}More information at{/s}{literal} <a href="{link}" title="{name}">{link}</a>',
-                        '</p>',
-                    '</tpl>',
-                '</div>',
+            // Check if we're having a logo
+            '<tpl if="image">',
+            '<div class="supplier-logo">',
+            '<img src="{literal}{image}{/literal}" alt="{name}" style="max-height: 200px; max-width: 150px" />',
+            '</div>',
+            '</tpl>',
+            '<div class="supplier-info">',
+            '<div class="supplier-desc">{description}</div>',
+            // Check if we're having a link here
+            '<tpl if="link">',
+            '<p class="action">',
+            '{/literal}{s name="moreinfo"}More information at{/s}{literal} <a href="{link}" title="{name}">{link}</a>',
+            '</p>',
+            '</tpl>',
+            '</div>',
             '{/literal}'
         ];
     }

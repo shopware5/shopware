@@ -39,12 +39,12 @@ Ext.define('Shopware.form.field.PremiumSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<div class="x-boundlist-item">{literal}{orderNumberExport} - (<b>{number}</b> - {name}){/literal}</div>',
+            '<div class="x-boundlist-item">{literal}{orderNumberExport} - (<b>{number}</b> - {name}){/literal}</div>',
             '</tpl>'
         );
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '{literal}{orderNumberExport} - ({number} - {name}){/literal}',
+            '{literal}{orderNumberExport} - ({number} - {name}){/literal}',
             '</tpl>'
         );
         return config;

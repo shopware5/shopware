@@ -55,10 +55,10 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
 
     plugins: [
         Ext.create('Ext.grid.plugin.RowEditing', {
-           clicksToEdit: 2,
+            clicksToEdit: 2,
             autoCancel: true
         }
-    )
+        )
     ],
 
     /**
@@ -136,7 +136,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
         });
         me.on('validateedit', function(editor, event) {
             var newGroupId = event.newValues['address.groupId'],
-            newMail = event.newValues['address.email'];
+                newMail = event.newValues['address.email'];
             if (newMail == "" || newGroupId == null) {
                 event.cancel = true;
                 return false;
@@ -305,7 +305,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
 
         if (group !== null && group.first() instanceof Ext.data.Model) {
             return group.first().get('name');
-//            return group.first().get('id');
+            //            return group.first().get('id');
         }
 
         // If the customer wasn't found, print this in order to prevent confusion.

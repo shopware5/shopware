@@ -356,9 +356,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             groupGrid = me.getConfiguratorGroupListing();
 
         groupGrid.getStore().each(function(group) {
-             if (group.get('active')) {
-                 groups.push(group);
-             }
+            if (group.get('active')) {
+                groups.push(group);
+            }
         });
         return groups;
     },
@@ -926,10 +926,10 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         groupListing.reconfigure(groupListing.getStore());
     },
 
-   /**
-    * Event will be fired over the save button if the user is on the configurator tab.
-    * Fired from the detail.window component
-    */
+    /**
+     * Event will be fired over the save button if the user is on the configurator tab.
+     * Fired from the detail.window component
+     */
     onCreateVariants: function(article) {
         var me = this;
 
@@ -1167,9 +1167,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
     * @param record - The selected grid record
     */
     onDeleteGroup: function(record) {
-       var me = this, articleString, message,
-           groupListing = me.getConfiguratorGroupListing(),
-           optionListing = me.getConfiguratorOptionListing();
+        var me = this, articleString, message,
+            groupListing = me.getConfiguratorGroupListing(),
+            optionListing = me.getConfiguratorOptionListing();
 
         if (!(record instanceof Ext.data.Model)) {
             return;
@@ -1220,7 +1220,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 });
             }
         });
-   },
+    },
 
     /**
     * Event will be fired when the user clicks the delete column in the option grid.
@@ -1228,9 +1228,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
     * @param record - The selected grid record
     */
     onDeleteOption: function(record) {
-       var me = this, articleString, message, name,
-           groupListing = me.getConfiguratorGroupListing(),
-           optionListing = me.getConfiguratorOptionListing();
+        var me = this, articleString, message, name,
+            groupListing = me.getConfiguratorGroupListing(),
+            optionListing = me.getConfiguratorOptionListing();
 
         if ( !(record instanceof Ext.data.Model) ) {
             return;
@@ -1254,7 +1254,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                     },
                     failure: function (record, operation) {
                         var rawData = record.getProxy().getReader().rawData,
-                                articles = rawData.articles;
+                            articles = rawData.articles;
 
                         message = rawData.message + '';
                         if ( articles.length > 0 ) {
@@ -1404,7 +1404,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                             win.attributeForm.saveAttribute(newArticle.getConfiguratorTemplate().first().get('id'));
                         }
                     }
-            });
+                });
             win.destroy();
         }
     },

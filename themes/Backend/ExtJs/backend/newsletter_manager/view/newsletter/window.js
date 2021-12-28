@@ -62,17 +62,17 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Window', {
         me.bbar = me.getBottomToolbar();
 
         me.addEvents(
-                /**
-                 * Fired when the data needs to be loaded
-                 */
-                'loadData'
+            /**
+             * Fired when the data needs to be loaded
+             */
+            'loadData'
         );
 
         if (me.record === null) {
             me.record = Ext.create('Shopware.apps.NewsletterManager.model.Mailing');
         }
 
-//        me.dockedItems = me.createNoticeContainer();
+        //        me.dockedItems = me.createNoticeContainer();
         me.items = me.createTab();
 
         me.callParent(arguments);

@@ -36,9 +36,9 @@
  */
 
 //{block name="backend/translation/controller/main"}
-Ext.define('Shopware.apps.Translation.controller.Main',
-/** @lends Ext.app.Controller# */
-{
+Ext.define('Shopware.apps.Translation.controller.Main', {
+    /** @lends Ext.app.Controller# */
+
     /**
      * Extend from the standard ExtJS 4 controller
      * @string

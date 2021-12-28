@@ -308,8 +308,8 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
             valueField: 'type',
             editable: false,
             store: new Ext.data.SimpleStore({
-               fields: ['type', 'name'],
-               data: this.dispatchTypeData
+                fields: ['type', 'name'],
+                data: this.dispatchTypeData
             }),
             displayField: 'name',
             mode: 'local',
@@ -375,24 +375,24 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
         var me = this,
             defaultConfig;
         defaultConfig = {
-                name: 'surchargeCalculation',
-                hiddenName: 'surchargeCalculation',
-                emptyText: '{s name="right_choose"}Choose...{/s}',
-                fieldLabel: '{s name="right_surcharge"}Surcharge type{/s}',
-                valueField: 'surchargeCalculation',
-                editable: false,
-                store: new Ext.data.SimpleStore({
-                   fields: ['surchargeCalculation', 'name'],
-                   data: this.dispatchSurchargeCalculationData
-                }),
-                displayField: 'name',
-                mode: 'local',
-                selectOnFocus: true,
-                allowBlank: false,
-                typeAhead: false,
-                triggerAction: 'all',
-                forceSelection: true
-            };
+            name: 'surchargeCalculation',
+            hiddenName: 'surchargeCalculation',
+            emptyText: '{s name="right_choose"}Choose...{/s}',
+            fieldLabel: '{s name="right_surcharge"}Surcharge type{/s}',
+            valueField: 'surchargeCalculation',
+            editable: false,
+            store: new Ext.data.SimpleStore({
+                fields: ['surchargeCalculation', 'name'],
+                data: this.dispatchSurchargeCalculationData
+            }),
+            displayField: 'name',
+            mode: 'local',
+            selectOnFocus: true,
+            allowBlank: false,
+            typeAhead: false,
+            triggerAction: 'all',
+            forceSelection: true
+        };
         defaultConfig = Ext.apply(defaultConfig, me.defaults);
 
         me.surchargeField = Ext.create('Ext.form.field.ComboBox', defaultConfig);

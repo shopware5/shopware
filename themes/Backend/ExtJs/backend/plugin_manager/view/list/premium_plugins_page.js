@@ -124,13 +124,13 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
             },
             createButton: function() {
                 var me = this,
-                         cls,
-                         text,
-                         handlerCallback = function() {
-                            me.displayPluginEvent(record, function(detailWindow) {
-                                detailWindow.setActivePriceTab('test');
-                            });
-                        };
+                    cls,
+                    text,
+                    handlerCallback = function() {
+                        me.displayPluginEvent(record, function(detailWindow) {
+                            detailWindow.setActivePriceTab('test');
+                        });
+                    };
 
                 switch (true) {
                     case record.allowUpdate():

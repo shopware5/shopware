@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      */
     rootNodeName: 'Shopware',
 
-     /**
+    /**
      * Initialize the controller and defines the necessary default configuration
      */
     initComponent: function() {
@@ -173,11 +173,11 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
             menuElements = [];
         /*{if {acl_is_allowed privilege=create}}*/
         menuElements.push({
-                text: me.snippets.contextAddSubCategory,
-                iconCls: 'sprite-plus-circle',
-                handler: function() {
-                    me.fireEvent('addSubCategory', record, item, index);
-                }
+            text: me.snippets.contextAddSubCategory,
+            iconCls: 'sprite-plus-circle',
+            handler: function() {
+                me.fireEvent('addSubCategory', record, item, index);
+            }
         });
         /* {/if} */
         /*{if {acl_is_allowed privilege=create}}*/
@@ -192,20 +192,20 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
         /* {/if} */
         /* {if {acl_is_allowed privilege=delete}} */
         menuElements.push({
-                text: me.snippets.contextDeleteSubCategory,
-                iconCls: 'sprite-minus-circle',
-                disabled: disableStatus,
-                handler: function() {
-                    me.fireEvent('deleteSubCategory', me, view, record, item, index);
-                }
-            });
+            text: me.snippets.contextDeleteSubCategory,
+            iconCls: 'sprite-minus-circle',
+            disabled: disableStatus,
+            handler: function() {
+                me.fireEvent('deleteSubCategory', me, view, record, item, index);
+            }
+        });
         /* {/if} */
         var menu = Ext.create('Ext.menu.Menu', {
             items: menuElements
         });
         menu.showAt(event.getPageX(), event.getPageY());
     },
-     /**
+    /**
      * Event listener method which fires when the user performs a right click
      * on the Ext.tree.Panel.
      *
@@ -221,31 +221,31 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      * @param [object] event - The fired Ext.EventObject
      * @return void
      */
-     onOpenContainerContextMenu: function(view, event) {
-         event.preventDefault(true);
-         var me = this,
-             menuElements = [];
-         /* {if {acl_is_allowed privilege=create}} */
-         menuElements.push({
-             text: me.snippets.contextAddSubCategory,
-             iconCls: 'sprite-plus-circle',
-             handler: function () {
-                 me.fireEvent('addSubCategory');
-             }
-         });
-         /* {/if} */
-         menuElements.push({
-             text: me.snippets.contextReloadTree,
-             iconCls: 'sprite-arrow-circle-315',
-             handler: function () {
-                 me.fireEvent('reload', me, view);
-             }
-         });
+    onOpenContainerContextMenu: function(view, event) {
+        event.preventDefault(true);
+        var me = this,
+            menuElements = [];
+        /* {if {acl_is_allowed privilege=create}} */
+        menuElements.push({
+            text: me.snippets.contextAddSubCategory,
+            iconCls: 'sprite-plus-circle',
+            handler: function () {
+                me.fireEvent('addSubCategory');
+            }
+        });
+        /* {/if} */
+        menuElements.push({
+            text: me.snippets.contextReloadTree,
+            iconCls: 'sprite-arrow-circle-315',
+            handler: function () {
+                me.fireEvent('reload', me, view);
+            }
+        });
 
-         var menu = Ext.create('Ext.menu.Menu', {
-             items: menuElements
-         });
-         menu.showAt(event.getPageX(), event.getPageY());
+        var menu = Ext.create('Ext.menu.Menu', {
+            items: menuElements
+        });
+        menu.showAt(event.getPageX(), event.getPageY());
     },
 
     /**
@@ -314,7 +314,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
 
         return columns;
     },
-     /**
+    /**
      * Defines additional events which will be
      * fired from the component
      *

@@ -156,8 +156,8 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
                 sortable: false,
                 renderer: me.onRenderZeroValueEmptyReturn,
                 editor: {
-                   xtype: 'numberfield',
-                   allowBlank: false
+                    xtype: 'numberfield',
+                    allowBlank: false
                 }
             },
             {
@@ -168,8 +168,8 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
                 sortable: false,
                 renderer: me.onRenderZeroValueEmptyReturn,
                 editor: {
-                   xtype: 'numberfield',
-                   allowBlank: false
+                    xtype: 'numberfield',
+                    allowBlank: false
                 }
             },
             {
@@ -209,15 +209,15 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
         /* {if {acl_is_allowed privilege=delete}} */
         if (rec.get('to') == '') {
 
-//            return Ext.DomHelper.markup({
-//                tag     : 'img',
-//                'class'   : 'sprite-minus-circle-frame x-action-col-icon delete ',
-//                cls     : 'delete',
-//                style   : 'margin-left: 10px',
-//                tooltip : '{s name="delete"}Delete this entry.{/s}',
-//                // actionColum
-//                onclick : "Ext.getCmp('shipping-view-edit-costs-matrix').onDeleteClick(" + row + ");"
-//            });
+            //            return Ext.DomHelper.markup({
+            //                tag     : 'img',
+            //                'class'   : 'sprite-minus-circle-frame x-action-col-icon delete ',
+            //                cls     : 'delete',
+            //                style   : 'margin-left: 10px',
+            //                tooltip : '{s name="delete"}Delete this entry.{/s}',
+            //                // actionColum
+            //                onclick : "Ext.getCmp('shipping-view-edit-costs-matrix').onDeleteClick(" + row + ");"
+            //            });
         }
         /* {/if} */
     },
@@ -244,7 +244,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.DispatchCostsMatrix', {
         return value;
     },
 
-     /**
+    /**
      * This method is called through the actionbar handler
      * @param editorMode
      */

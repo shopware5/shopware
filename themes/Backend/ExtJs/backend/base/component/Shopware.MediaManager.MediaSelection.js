@@ -40,9 +40,9 @@
  *
  * @example Ext.create('Shopware.MediaManager.MediaSelection');
  */
-Ext.define('Shopware.MediaManager.MediaSelection',
-/** @lends Ext.form.field.Trigger */
-{
+Ext.define('Shopware.MediaManager.MediaSelection', {
+    /** @lends Ext.form.field.Trigger */
+
     extend: 'Ext.form.field.Trigger',
     alternateClassName: [ 'Shopware.form.field.MediaSelection', 'Shopware.MediaSelection' ],
     alias: [ 'widget.mediafield', 'widget.mediaselectionfield' ],
@@ -299,7 +299,7 @@ Ext.define('Shopware.MediaManager.MediaSelection',
             me.inputEl.dom.value = selected.get(me.returnValue);
         }
 
-//        me.window.setLoading(false);
+        //        me.window.setLoading(false);
         win.close();
     },
 
@@ -334,12 +334,12 @@ Ext.define('Shopware.MediaManager.MediaSelection',
         this.disableItems();
     },
 
-//    /**
-//     * Overridden to do nothing
-//     *
-//     * @private
-//     */
-//    setValue: Ext.emptyFn,
+    //    /**
+    //     * Overridden to do nothing
+    //     *
+    //     * @private
+    //     */
+    //    setValue: Ext.emptyFn,
 
     /**
      * Resets the input field

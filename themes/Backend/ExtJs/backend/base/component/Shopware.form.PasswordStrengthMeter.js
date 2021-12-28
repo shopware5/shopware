@@ -39,7 +39,7 @@ Ext.define('Shopware.form.PasswordStrengthMeter', {
         this.callParent();
         this.updateMeter();
     },
-//{literal}
+    //{literal}
     fieldSubTpl: [
         '<div><input id="{id}" type="{type}" ',
         '<tpl if="name">name="{name}" </tpl>',
@@ -54,7 +54,7 @@ Ext.define('Shopware.form.PasswordStrengthMeter', {
             disableFormats: true
         }
     ],
-//{/literal}
+    //{/literal}
     // private
     onChange: function(newValue, oldValue) {
         this.updateMeter(newValue);

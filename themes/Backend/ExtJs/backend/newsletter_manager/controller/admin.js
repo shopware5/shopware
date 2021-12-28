@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
             errorTitle: '{s name="deleteRecipient/errorTitle"}Error{/s}',
             errorMessage: '{s name="deleteRecipient/errorMessage"}An error occured while deleting the recipient(s){/s}'
         },
-    growl: '{s name="title"}Newsletter Manager{/s}'
+        growl: '{s name="title"}Newsletter Manager{/s}'
     },
 
     /**
@@ -123,18 +123,18 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
             searchString = Ext.String.trim(field.getValue()),
             store = me.subApplication.recipientStore;
 
-            //scroll the store to first page
-            store.currentPage = 1;
+        //scroll the store to first page
+        store.currentPage = 1;
 
-            //If the search-value is empty, reset the filter
-            if ( searchString.length === 0 ) {
-                store.clearFilter();
-            } else {
-                //This won't reload the store
-                store.filters.clear();
-                //Loads the store with a special filter
-                store.filter('filter', searchString);
-            }
+        //If the search-value is empty, reset the filter
+        if ( searchString.length === 0 ) {
+            store.clearFilter();
+        } else {
+            //This won't reload the store
+            store.filters.clear();
+            //Loads the store with a special filter
+            store.filter('filter', searchString);
+        }
     },
 
     /**
@@ -348,7 +348,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
                         store.add(record);
                     }
                     store.save();
-//                    me.subApplication.senderStore.reload();
+                    //                    me.subApplication.senderStore.reload();
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.saveSender.errorTitle, me.snippets.saveSender.errorMessage, me.snippets.growl);
                 }

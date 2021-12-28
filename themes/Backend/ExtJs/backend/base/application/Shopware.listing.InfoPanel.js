@@ -349,9 +349,9 @@ Ext.define('Shopware.listing.InfoPanel', {
 
         return new Ext.XTemplate(
             '<tpl for=".">',
-                '<div class="item" style="">',
-                    fields.join(''),
-                '</div>',
+            '<div class="item" style="">',
+            fields.join(''),
+            '</div>',
             '</tpl>'
         );
     },

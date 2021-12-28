@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Systeminfo.controller.Main', {
             fileStore = me.subApplication.getStore('Files'),
             //Contains the necessary versions
             versionStore = me.subApplication.getStore('Versions');
-            optimizerStore = me.subApplication.getStore('Optimizers');
+        optimizerStore = me.subApplication.getStore('Optimizers');
         me.mainWindow = me.getView('main.Window').create({
             configStore: configStore,
             pathsStore: pathStore,

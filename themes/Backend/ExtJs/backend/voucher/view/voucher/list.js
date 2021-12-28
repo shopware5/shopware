@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
     autoScroll: true,
     store: 'List',
     ui: 'shopware-ui',
-     //to select text like the voucher code
+    //to select text like the voucher code
     selType: 'cellmodel',
     /*{if {acl_is_allowed privilege=update}}*/
     plugins: [
@@ -84,41 +84,41 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
     registerEvents: function () {
         this.addEvents(
 
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event deleteColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'deleteColumn',
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'deleteColumn',
 
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event deleteColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'editColumn',
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'editColumn',
 
-                /**
-                 * Event will be fired when the user clicks the duplicate icon in the
-                 * action column
-                 *
-                 * @event duplicateColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'duplicateColumn'
+            /**
+             * Event will be fired when the user clicks the duplicate icon in the
+             * action column
+             *
+             * @event duplicateColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'duplicateColumn'
         );
 
         return true;
@@ -196,40 +196,40 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
         var me = this,
             actionColumnData = [];
 
-            /*{if {acl_is_allowed privilege=update}}*/
-            actionColumnData.push({
-                iconCls: 'sprite-pencil',
-                cls: 'editBtn',
-                tooltip: '{s name="list/action_column/edit"}Edit this voucher{/s}',
-                handler: function (view, rowIndex, colIndex, item) {
-                    me.fireEvent('editColumn', view, rowIndex, colIndex, item);
-                }
-            });
-            /*{/if}*/
+        /*{if {acl_is_allowed privilege=update}}*/
+        actionColumnData.push({
+            iconCls: 'sprite-pencil',
+            cls: 'editBtn',
+            tooltip: '{s name="list/action_column/edit"}Edit this voucher{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
+                me.fireEvent('editColumn', view, rowIndex, colIndex, item);
+            }
+        });
+        /*{/if}*/
 
-            /*{if {acl_is_allowed privilege=delete}}*/
-            actionColumnData.push({
-               iconCls: 'sprite-minus-circle-frame',
-               action: 'delete',
-               cls: 'delete',
-               tooltip: '{s name="list/action_column/delete"}Delete this voucher{/s}',
-               handler: function (view, rowIndex, colIndex, item) {
-                   me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
-               }
-            });
-            /*{/if}*/
+        /*{if {acl_is_allowed privilege=delete}}*/
+        actionColumnData.push({
+            iconCls: 'sprite-minus-circle-frame',
+            action: 'delete',
+            cls: 'delete',
+            tooltip: '{s name="list/action_column/delete"}Delete this voucher{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
+                me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
+            }
+        });
+        /*{/if}*/
 
-            /*{if {acl_is_allowed privilege=create}}*/
-            actionColumnData.push({
-                iconCls: 'sprite-blue-document-copy',
-                cls: 'duplicate',
-                tooltip: '{s name="list/action_column/duplicate"}Duplicate this voucher{/s}',
-                handler: function (view, rowIndex, colIndex, item) {
-                    me.fireEvent('duplicateColumn', view, rowIndex, colIndex, item);
-                }
+        /*{if {acl_is_allowed privilege=create}}*/
+        actionColumnData.push({
+            iconCls: 'sprite-blue-document-copy',
+            cls: 'duplicate',
+            tooltip: '{s name="list/action_column/duplicate"}Duplicate this voucher{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
+                me.fireEvent('duplicateColumn', view, rowIndex, colIndex, item);
+            }
 
-            });
-            /*{/if}*/
+        });
+        /*{/if}*/
         return actionColumnData;
     },
     /**
@@ -301,7 +301,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
                 // Unlocks the save button if the user has checked at least one checkbox
                 selectionchange: function (sm, selections) {
                     var owner = this.view.ownerCt,
-                    btn = owner.down('button[action=deleteVoucher]');
+                        btn = owner.down('button[action=deleteVoucher]');
                     btn.setDisabled(selections.length == 0);
                 }
             }

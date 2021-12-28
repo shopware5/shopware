@@ -53,10 +53,10 @@ Ext.define('Shopware.apps.ArticleList.store.EditableColumns', {
      */
     remoteFilter: false,
 
-   /**
-    * Define the used model for this store
-    * @string
-    */
+    /**
+     * Define the used model for this store
+     * @string
+     */
     model: 'Shopware.apps.ArticleList.model.EditableColumn',
 
     mode: 'local',

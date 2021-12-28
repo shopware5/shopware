@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
             buttonRename: '{s name="esd/detail/fileupload/buttonRename"}Rename{/s}',
             buttonCancel: '{s name="esd/detail/fileupload/buttonCancel"}Cancel{/s}',
             renameMessage: '{s name="esd/detail/fileupload/reanameMessage"}You file has been renamed to [0]{/s}'
-    },
+        },
 
         fileChoose: {
             title: '{s name="esd/detail/filechoose/title"}Choose File{/s}',

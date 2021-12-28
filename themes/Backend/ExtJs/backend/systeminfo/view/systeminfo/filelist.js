@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Filelist', {
                 dataIndex: 'available',
                 width: '65px',
                 renderer: me.renderStatus
-           }, {
+            }, {
                 header: '{s name="file_grid/column/status"}Status{/s}',
                 dataIndex: 'result',
                 width: '65px',

@@ -294,7 +294,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 }
             ]
         },
-            me.createCopyDropdown()
+        me.createCopyDropdown()
         ];
     },
 
@@ -446,11 +446,11 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             iconStyling = 'width:16px; height:16px; display:inline-block; margin-right:5px;';
 
         var snippets = {
-                desktop: '{s name="grid/renderer/desktop"}For desktop{/s}',
-                tabletLandscape: '{s name="grid/renderer/tabletLandscape"}For tablet landscape{/s}',
-                tablet: '{s name="grid/renderer/tablet"}For tablet{/s}',
-                mobileLandscape: '{s name="grid/renderer/mobileLandscape"}For mobile landscape{/s}',
-                mobile: '{s name="grid/renderer/mobile"}For mobile{/s}'
+            desktop: '{s name="grid/renderer/desktop"}For desktop{/s}',
+            tabletLandscape: '{s name="grid/renderer/tabletLandscape"}For tablet landscape{/s}',
+            tablet: '{s name="grid/renderer/tablet"}For tablet{/s}',
+            mobileLandscape: '{s name="grid/renderer/mobileLandscape"}For mobile landscape{/s}',
+            mobile: '{s name="grid/renderer/mobile"}For mobile{/s}'
         };
 
         // Device detection

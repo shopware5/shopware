@@ -36,10 +36,10 @@
  */
 //{block name="backend/category/view/tabs/restriction"}
 Ext.define('Shopware.apps.Category.view.category.tabs.restriction', {
-   /**
-    * Parent Element Ext.container.Container
-    * @string
-    */
+    /**
+     * Parent Element Ext.container.Container
+     * @string
+     */
     extend: 'Ext.form.Panel',
     /**
      * Register the alias for this class.

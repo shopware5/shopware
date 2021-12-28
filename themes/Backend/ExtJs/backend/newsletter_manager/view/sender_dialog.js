@@ -45,8 +45,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.SenderDialog', {
     stateful: true,
     stateId: 'shopware-newsletter-manager-sender_dialog',
 
-//    modal: true,
-//    footerButton: false,
+    //    modal: true,
+    //    footerButton: false,
 
     autoShow: true,
 
@@ -84,10 +84,10 @@ Ext.define('Shopware.apps.NewsletterManager.view.SenderDialog', {
 
         me.form = Ext.create('Ext.form.Panel', {
             layout: {
-                  type: 'vbox',       // Arrange child items vertically
-                  align: 'stretch',    // Each takes up full width
-                  padding: 5
-              },
+                type: 'vbox',       // Arrange child items vertically
+                align: 'stretch',    // Each takes up full width
+                padding: 5
+            },
             // The fields
             defaultType: 'textfield',
             items: [{

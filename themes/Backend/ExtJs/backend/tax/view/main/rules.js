@@ -52,12 +52,12 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
     },
 
     createDockedToolBar: function(){
-          return [{
-                dock: 'bottom',
-                xtype: 'pagingtoolbar',
-                displayInfo: true,
-                store: this.ruleStore
-          }];
+        return [{
+            dock: 'bottom',
+            xtype: 'pagingtoolbar',
+            displayInfo: true,
+            store: this.ruleStore
+        }];
     },
 
     /**
@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
         }).load();
 
         this.areaCombo = Ext.create('Ext.form.field.ComboBox',
-        {
+            {
                 allowBlank: true,
                 store: this.areaStore,
                 displayField: 'name',
@@ -110,12 +110,12 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
                     scope: this
                 }
 
-        }
+            }
         );
 
         this.countryStore =  Ext.create('Shopware.apps.Tax.store.Countries').load();
         this.countryCombo = Ext.create('Ext.form.field.ComboBox',
-        {
+            {
                 allowBlank: true,
                 store: this.countryStore,
                 displayField: 'name',
@@ -124,118 +124,118 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
                 valueNotFoundText: 'All',
                 editable: false,
                 listeners: {
-                   'change': function (field, newValue, oldValue, options){
-                       var stateStore = this.stateStore;
-                       stateStore.clearFilter(true);
+                    'change': function (field, newValue, oldValue, options){
+                        var stateStore = this.stateStore;
+                        stateStore.clearFilter(true);
 
-                       stateStore.filter(
-                           Ext.create('Ext.util.Filter', { filterFn: function(item) {
-                               return item["data"]["countryId"] == newValue || item["data"]["countryId"] == 0;
-                           }, root: 'data' })
-                       );
+                        stateStore.filter(
+                            Ext.create('Ext.util.Filter', { filterFn: function(item) {
+                                return item["data"]["countryId"] == newValue || item["data"]["countryId"] == 0;
+                            }, root: 'data' })
+                        );
 
-                       // The field has changed
-                       if (!field.getValue()) {
-                           field.setRawValue(0);
-                           field.setValue('', true);
-                       }
+                        // The field has changed
+                        if (!field.getValue()) {
+                            field.setRawValue(0);
+                            field.setValue('', true);
+                        }
 
-                       this.stateCombo.setRawValue(0);
-                       this.stateCombo.setValue('', true);
-                   },
-                   scope: this
-               }
+                        this.stateCombo.setRawValue(0);
+                        this.stateCombo.setValue('', true);
+                    },
+                    scope: this
+                }
 
-        }
+            }
         );
 
         this.stateStore =  Ext.create('Shopware.apps.Tax.store.States').load();
         this.stateCombo = Ext.create('Ext.form.field.ComboBox',
-        {
+            {
                 allowBlank: true,
                 store: this.stateStore,
                 displayField: 'name',
                 valueField: 'id',
                 emptyText: 'All',
                 listeners: {
-                     'change': function (field, newValue, oldValue, options){
-                         // The field has changed
+                    'change': function (field, newValue, oldValue, options){
+                        // The field has changed
 
-                         if (!field.getValue()) {
-                             field.setRawValue(0);
-                             field.setValue('', true);
-                         }
-                     },
-                     scope: this
-                 }
+                        if (!field.getValue()) {
+                            field.setRawValue(0);
+                            field.setValue('', true);
+                        }
+                    },
+                    scope: this
+                }
 
-        }
+            }
         );
 
         // Define the columns and renderers
         this.columns = [
 
-        {
-            header: '{s name="ruleslist/colname"}Name{/s}',
-            dataIndex: 'name',
-            width: 200,
-            field: 'textfield'
-        },
-        {
-            xtype: 'booleancolumn',
-            header: '{s name="ruleslist/colactive"}Enabled{/s}',
-            dataIndex: 'active',
-            flex: 1,
-            editor: {
-                xtype: 'checkbox',
-                inputValue: 'true',
-                uncheckedValue: 'false'
-            }
-        },
-        {
-            header: '{s name="ruleslist/colarea"}Area{/s}',
-            dataIndex: 'areaId',
-            flex: 1,
-            editor: this.areaCombo,
-            renderer: this.areaRenderer
-        },
-        {
-            header: '{s name="ruleslist/colcountry"}Country{/s}',
-            dataIndex: 'countryId',
-            flex: 1,
-            editor: this.countryCombo,
-            renderer: this.countryRenderer
-        },
-        {
-           header: '{s name="ruleslist/colstate"}State{/s}',
-           dataIndex: 'stateId',
-           flex: 1,
-           editor: this.stateCombo,
-           renderer: this.stateRenderer
-        },
-        {
-           header: '{s name="ruleslist/coltax"}Tax{/s}',
-           dataIndex: 'tax',
-           flex: 1,
-           xtype: 'numbercolumn', format: '00.00',
-           editor: {
-                xtype: 'numberfield',
-                allowBlank: false,
-                decimalPrecision: 2
-           }
-        },
-        {
-            xtype: 'actioncolumn',
-            width: 50,
-            items: [{
-                iconCls: 'sprite-minus-circle',
-                cls: 'delete',
-                tooltip: '{s name="ruleslist/colactiondelete"}Delete this rule{/s}',
-                handler: function (view, rowIndex, colIndex, item) {
-                    me.fireEvent('deleteRule', view, rowIndex, colIndex, item);
+            {
+                header: '{s name="ruleslist/colname"}Name{/s}',
+                dataIndex: 'name',
+                width: 200,
+                field: 'textfield'
+            },
+            {
+                xtype: 'booleancolumn',
+                header: '{s name="ruleslist/colactive"}Enabled{/s}',
+                dataIndex: 'active',
+                flex: 1,
+                editor: {
+                    xtype: 'checkbox',
+                    inputValue: 'true',
+                    uncheckedValue: 'false'
                 }
-            }]
-        }];
+            },
+            {
+                header: '{s name="ruleslist/colarea"}Area{/s}',
+                dataIndex: 'areaId',
+                flex: 1,
+                editor: this.areaCombo,
+                renderer: this.areaRenderer
+            },
+            {
+                header: '{s name="ruleslist/colcountry"}Country{/s}',
+                dataIndex: 'countryId',
+                flex: 1,
+                editor: this.countryCombo,
+                renderer: this.countryRenderer
+            },
+            {
+                header: '{s name="ruleslist/colstate"}State{/s}',
+                dataIndex: 'stateId',
+                flex: 1,
+                editor: this.stateCombo,
+                renderer: this.stateRenderer
+            },
+            {
+                header: '{s name="ruleslist/coltax"}Tax{/s}',
+                dataIndex: 'tax',
+                flex: 1,
+                xtype: 'numbercolumn', format: '00.00',
+                editor: {
+                    xtype: 'numberfield',
+                    allowBlank: false,
+                    decimalPrecision: 2
+                }
+            },
+            {
+                xtype: 'actioncolumn',
+                width: 50,
+                items: [{
+                    iconCls: 'sprite-minus-circle',
+                    cls: 'delete',
+                    tooltip: '{s name="ruleslist/colactiondelete"}Delete this rule{/s}',
+                    handler: function (view, rowIndex, colIndex, item) {
+                        me.fireEvent('deleteRule', view, rowIndex, colIndex, item);
+                    }
+                }]
+            }];
 
         var notice = Shopware.Notification.createBlockMessage('You have not defined a fallback tax rule.', 'warning');
         notice.hide();
@@ -266,20 +266,20 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
         return comboValue.substr(0, 1).toUpperCase() + comboValue.substr(1);
     },
     countryRenderer: function (value){
-       this.countryStore.clearFilter(true);
-       var index = this.countryCombo.store.find(this.countryCombo.valueField, value);
-       if (index == -1) return 0;
-       var record = this.countryCombo.store.getAt(index);
-       var comboValue = record.get(this.countryCombo.displayField);
-       return comboValue.substr(0, 1).toUpperCase() + comboValue.substr(1);
+        this.countryStore.clearFilter(true);
+        var index = this.countryCombo.store.find(this.countryCombo.valueField, value);
+        if (index == -1) return 0;
+        var record = this.countryCombo.store.getAt(index);
+        var comboValue = record.get(this.countryCombo.displayField);
+        return comboValue.substr(0, 1).toUpperCase() + comboValue.substr(1);
     },
     stateRenderer: function (value){
-      this.stateStore.clearFilter(true);
-      var index = this.stateCombo.store.find(this.stateCombo.valueField, value);
-      if (index == -1) return 0;
-      var record = this.stateCombo.store.getAt(index);
-      var comboValue = record.get(this.stateCombo.displayField);
-      return comboValue.substr(0, 1).toUpperCase() + comboValue.substr(1);
+        this.stateStore.clearFilter(true);
+        var index = this.stateCombo.store.find(this.stateCombo.valueField, value);
+        if (index == -1) return 0;
+        var record = this.stateCombo.store.getAt(index);
+        var comboValue = record.get(this.stateCombo.displayField);
+        return comboValue.substr(0, 1).toUpperCase() + comboValue.substr(1);
     },
     /**
      * Event listener method which will be fired when the user

@@ -130,7 +130,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
 
             // Do not add empty rows to the result set.
             if (record.get('column').length > 0) {
-                 // Concat and push the results
+                // Concat and push the results
                 result.push(record.get('column') + ' ' + record.get('operator') + value);
             }
         });

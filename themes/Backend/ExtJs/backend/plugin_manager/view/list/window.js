@@ -174,7 +174,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.Window', {
 
     createExpiredPluginsPage: function() {
         this.createExpiredPluginsPage = Ext.create('Shopware.apps.PluginManager.view.list.ExpiredPluginsPage', {
-           cardIndex: 7
+            cardIndex: 7
         });
 
         return this.createExpiredPluginsPage;

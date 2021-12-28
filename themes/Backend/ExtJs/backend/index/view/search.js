@@ -35,9 +35,9 @@ Ext.define('Shopware.apps.Index.view.Search', {
     cls: 'searchfield-container',
 
     /*{if $esEnabled}*/
-        minSearchLength: 2,
+    minSearchLength: 2,
     /*{else}*/
-        minSearchLength: 4,
+    minSearchLength: 4,
     /*{/if}*/
 
     /**

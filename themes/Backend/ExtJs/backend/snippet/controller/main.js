@@ -466,7 +466,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         });
 
         me.getSnippetPanel().enableExpertMode(isPressed);
-   },
+    },
 
     /**
      * Fires when the 'Add Snippet' button is clicked

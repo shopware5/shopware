@@ -71,12 +71,12 @@ Ext.define('Shopware.apps.Config.view.base.Property', {
             xtype: 'actioncolumn',
             width: 25,
             items: [{
-              iconCls: 'sprite-minus-circle-frame',
-              action: 'delete',
-              tooltip: '{s name="property_table/delete_tooltip"}Delete entry{/s}',
-              handler: function (view, rowIndex, colIndex, item, opts, record) {
-                  me.fireEvent('delete', view, record, rowIndex);
-              }
+                iconCls: 'sprite-minus-circle-frame',
+                action: 'delete',
+                tooltip: '{s name="property_table/delete_tooltip"}Delete entry{/s}',
+                handler: function (view, rowIndex, colIndex, item, opts, record) {
+                    me.fireEvent('delete', view, record, rowIndex);
+                }
             }]
         };
     },

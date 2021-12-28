@@ -44,23 +44,23 @@ Ext.define('Shopware.apps.Tax.store.Rules', {
          * if not display notice to user
          * @param store
          */
-      'datachanged': function (store){
-          var foundDefaultRule = false;
-          // Store.grid pointer is defined in main/rules.js
-          store.grid.toolbar.items.items[1].hide();
+        'datachanged': function (store){
+            var foundDefaultRule = false;
+            // Store.grid pointer is defined in main/rules.js
+            store.grid.toolbar.items.items[1].hide();
 
-          Ext.Array.each(store.data.items, function(item){
-              var data = item.data;
-               if (data.areaId == 0 && data.countryId == 0 && data.stateId == 0){
-                   foundDefaultRule = true;
-               }
-          });
+            Ext.Array.each(store.data.items, function(item){
+                var data = item.data;
+                if (data.areaId == 0 && data.countryId == 0 && data.stateId == 0){
+                    foundDefaultRule = true;
+                }
+            });
 
-          if (!foundDefaultRule){
-              store.grid.toolbar.items.items[1].show();
-          }
+            if (!foundDefaultRule){
+                store.grid.toolbar.items.items[1].show();
+            }
 
-      }
+        }
     }
 
 });

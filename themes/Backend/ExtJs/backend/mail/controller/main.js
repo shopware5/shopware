@@ -537,7 +537,7 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
      */
     onCheckChange: function(node, checked) {
         /*{if !{acl_is_allowed privilege=create} && !{acl_is_allowed privilege=update}}*/
-            return;
+        return;
         /*{/if}*/
 
         var me           = this,
@@ -562,7 +562,7 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
      */
     onDirtyChange: function(form, dirty) {
         /*{if !{acl_is_allowed privilege=create} && !{acl_is_allowed privilege=update}}*/
-            return;
+        return;
         /*{/if}*/
 
         var me           = this,
@@ -577,7 +577,7 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
      */
     setupState: function() {
         /*{if !{acl_is_allowed privilege=create} && !{acl_is_allowed privilege=update}}*/
-            return;
+        return;
         /*{/if}*/
 
         var me        = this,

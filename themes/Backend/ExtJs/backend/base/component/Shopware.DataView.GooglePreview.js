@@ -46,8 +46,7 @@
      refreshButtonText: 'Generate Preview'
  }
  */
-Ext.define('Shopware.DataView.GooglePreview',
-{
+Ext.define('Shopware.DataView.GooglePreview', {
     /**
      * Based on Ext.panel.Panel
      */
@@ -162,14 +161,14 @@ Ext.define('Shopware.DataView.GooglePreview',
         return new Ext.XTemplate(
             '{literal}' +
             '<tpl for=".">',
-                '<div class="preview">',
-                    '<strong class="title">{title}</strong>',
-                    '<span class="url">{url}</span>',
-                    '<div class="desc">',
-                        '<span class="date">{date}</span>',
-                        '{metaDescription}',
-                    '</div>',
-                '</div>',
+            '<div class="preview">',
+            '<strong class="title">{title}</strong>',
+            '<span class="url">{url}</span>',
+            '<div class="desc">',
+            '<span class="date">{date}</span>',
+            '{metaDescription}',
+            '</div>',
+            '</div>',
             '</tpl>',
             '{/literal}'
         );
@@ -186,20 +185,20 @@ Ext.define('Shopware.DataView.GooglePreview',
             metaDescription = me.descriptionField.getValue(),
             date = '';
 
-            if (title != '') {
-                title = title.substr(0, 50)+'...';
-                date = new Date().toLocaleDateString();
-                date = date+" - ";
-            }
-            if (url != '') {
-                url = "www.example.com/"+url;
-                url = url.substr(0, 35)+'...';
-                url = url.toLowerCase();
-                url = url.replace(/\s/g, '-');
-            }
-            if (metaDescription != '') {
-                metaDescription = metaDescription.substr(0, 70)+'...';
-            }
+        if (title != '') {
+            title = title.substr(0, 50)+'...';
+            date = new Date().toLocaleDateString();
+            date = date+" - ";
+        }
+        if (url != '') {
+            url = "www.example.com/"+url;
+            url = url.substr(0, 35)+'...';
+            url = url.toLowerCase();
+            url = url.replace(/\s/g, '-');
+        }
+        if (metaDescription != '') {
+            metaDescription = metaDescription.substr(0, 70)+'...';
+        }
 
         return {
             title: title,

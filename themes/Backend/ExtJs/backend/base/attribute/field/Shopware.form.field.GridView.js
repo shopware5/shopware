@@ -107,7 +107,7 @@ Ext.define('Shopware.form.field.GridView', {
 
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<div class="item">' +
+            '<div class="item">' +
                     me.createItemTemplate() +
                 '</div>' +
             '</tpl>{/literal}'

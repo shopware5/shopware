@@ -39,7 +39,7 @@ Ext.define('Shopware.form.field.OrderDetailSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<div class="x-boundlist-item">{literal}<b>{quantity}x {articleNumber}</b> ({[this.formatPrice(values.price)]}) - {articleName}{/literal}</div>',
+            '<div class="x-boundlist-item">{literal}<b>{quantity}x {articleNumber}</b> ({[this.formatPrice(values.price)]}) - {articleName}{/literal}</div>',
             '</tpl>',
             {
                 formatPrice: function(value) {
@@ -52,7 +52,7 @@ Ext.define('Shopware.form.field.OrderDetailSingleSelection', {
         );
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                    '{literal}{quantity}x {articleNumber}</b> ({[this.formatPrice(values.price)]}) - {articleName}{/literal}',
+            '{literal}{quantity}x {articleNumber}</b> ({[this.formatPrice(values.price)]}) - {articleName}{/literal}',
             '</tpl>',
             {
                 formatPrice: function(value) {

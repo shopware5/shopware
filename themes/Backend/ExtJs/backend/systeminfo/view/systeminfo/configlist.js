@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Configlist', {
         translations['extension'] = '{s name="systeminfo/groupingFeature_extension"}Extensions{/s}';
         translations['other'] = '{s name="systeminfo/groupingFeature_other"}Other{/s}';
 
-//        Row grouping
+        //        Row grouping
         this.groupingFeature = Ext.create('Ext.grid.feature.Grouping', {
             groupHeaderTpl: Ext.create('Ext.XTemplate',
                 '{literal}<div>{name:this.formatName}</div>{/literal}',

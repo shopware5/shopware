@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
         [2, '{s name="dispatch_calculation_data_count"}Number of articles{/s}'],
         [3, '{s name="dispatch_calculation_data_own"}Own calculation{/s}']
     ],
-     /**
+    /**
      * Translation Object
      * @object
      */

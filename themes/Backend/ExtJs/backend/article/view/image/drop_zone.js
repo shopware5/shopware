@@ -117,15 +117,15 @@ Ext.define('Shopware.apps.Article.view.image.DropZone', {
     createMediaDropZone: function() {
         var me = this,
             defaultConfig = {
-            requestURL: '{url controller="mediaManager" action="upload"}?albumID=-1',
-            showInput: false,
-            padding: 0,
-            checkSize: false,
-            checkType: false,
-            checkAmount: false,
-            enablePreviewImage: false,
-            dropZoneText: me.snippets.dropZone
-        };
+                requestURL: '{url controller="mediaManager" action="upload"}?albumID=-1',
+                showInput: false,
+                padding: 0,
+                checkSize: false,
+                checkType: false,
+                checkAmount: false,
+                enablePreviewImage: false,
+                dropZoneText: me.snippets.dropZone
+            };
 
         defaultConfig = Ext.apply(defaultConfig, me.dropZoneConfig);
         return Ext.create('Shopware.app.FileUpload', defaultConfig);

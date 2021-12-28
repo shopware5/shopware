@@ -43,9 +43,9 @@
  */
 
 //{namespace name="base/login/view/main"}
-Ext.define('Shopware.container.Viewport',
-/** @lends Ext.container.Container# */
-{
+Ext.define('Shopware.container.Viewport', {
+    /** @lends Ext.container.Container# */
+
     /**
      * The parent class that this class extends.
      * @string
@@ -462,18 +462,18 @@ Ext.define('Shopware.container.Viewport',
     createDesktop: function(title) {
         var me = this,
             desktop = Ext.create(me.desktopComponentName, {
-            renderTo: me.getEl(),
-            region: 'center',
-            x: 0,
-            y: 40,
-            width: Ext.Element.getViewportWidth(),
-            height: Ext.Element.getViewportHeight() - 80,
-            layout: 'fit',
-            title: title,
-            floating: true,
-            style: 'z-index: 10',
-            cls: 'desktop-pnl'
-        });
+                renderTo: me.getEl(),
+                region: 'center',
+                x: 0,
+                y: 40,
+                width: Ext.Element.getViewportWidth(),
+                height: Ext.Element.getViewportHeight() - 80,
+                layout: 'fit',
+                title: title,
+                floating: true,
+                style: 'z-index: 10',
+                cls: 'desktop-pnl'
+            });
 
         me.desktops.add(desktop);
 

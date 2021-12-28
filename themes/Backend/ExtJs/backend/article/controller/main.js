@@ -232,7 +232,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         // Get the store for the global configurator groups.
         var configuratorGroupStore = data.getConfiguratorGroups();
         configuratorGroupStore.each(function(item) {
-             item.set('active', false);
+            item.set('active', false);
         });
 
         if (article) {

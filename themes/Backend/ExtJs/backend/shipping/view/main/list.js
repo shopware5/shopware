@@ -137,7 +137,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
                 xtype: 'actioncolumn',
                 width: 80,
                 items: [
-                     /* {if {acl_is_allowed privilege=delete}} */
+                    /* {if {acl_is_allowed privilege=delete}} */
                     {
                         iconCls: 'sprite-minus-circle-frame',
                         action: 'delete',
@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
                         tooltip: '{s name="grid_edit_tooltip"}Edit these shipping costs{/s}'
                     },
                     /* {/if} */
-                     /* {if {acl_is_allowed privilege=create}} */
+                    /* {if {acl_is_allowed privilege=create}} */
                     {
                         iconCls: 'sprite-blue-document-copy',
                         cls: 'cloneButton',
