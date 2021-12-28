@@ -270,7 +270,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
 
                     if (Ext.isDefined(userID)) {
                         var template = new Ext.Template(
-                            "{literal}<h1>"+me.snippets.mappedToCustomer+"</h1> {0} {/literal}"
+                            "{literal}<h1>" + me.snippets.mappedToCustomer + "</h1> {0} {/literal}"
                         );
                         supportTextEl.update(template.apply([mappingText]));
                     } else {

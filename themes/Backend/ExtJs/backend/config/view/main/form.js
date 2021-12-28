@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
 
                 type = element.get('type').toLowerCase();
                 type = 'base-element-' + type;
-                name = 'values[' + shop.get('id') + ']['+ element.get('id') + ']';
+                name = 'values[' + shop.get('id') + '][' + element.get('id') + ']';
 
                 options = element.get('options');
                 options = Ext.isObject(options) ? options : {};

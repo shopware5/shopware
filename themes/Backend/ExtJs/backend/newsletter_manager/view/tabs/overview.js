@@ -167,7 +167,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                             if (!recipients || !recipients > 0) {
                                 percentage = 0;
                             } else {
-                                percentage = done/recipients*100;
+                                percentage = done / recipients * 100;
                             }
                             // sw-3197: Percentage might become > 100% if recipients are deleted after sending a mail
                             // as the recipient-count in the mail data is constant

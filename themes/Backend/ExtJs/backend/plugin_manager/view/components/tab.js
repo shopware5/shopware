@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.Tab', {
             var container = Ext.create('PluginManager.container.Container', {
                 cls: cls,
                 definition: tab,
-                html: '<span>'+tab.title+'</span>',
+                html: '<span>' + tab.title + '</span>',
                 height: 38,
                 index: index,
                 listeners: {

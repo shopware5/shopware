@@ -208,7 +208,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.ExpiredPlugin', {
         if (me.record.get('id')) {
             items.push({
                 cls: 'installed badge',
-                html: template + 'v '+ me.record.get('version') +'</div>'
+                html: template + 'v ' + me.record.get('version') + '</div>'
             });
         }
 

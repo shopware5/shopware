@@ -365,7 +365,7 @@ Ext.define('Shopware.listing.InfoPanel', {
     createTemplateForField: function(model, field) {
         var me = this;
 
-        return '<p style="padding: 2px"><b>' + me.getHumanReadableWord(field.name) +':</b> {literal}{' + field.name + '}{/literal}</p>'
+        return '<p style="padding: 2px"><b>' + me.getHumanReadableWord(field.name) + ':</b> {literal}{' + field.name + '}{/literal}</p>'
     },
 
     /**

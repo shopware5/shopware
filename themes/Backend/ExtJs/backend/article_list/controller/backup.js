@@ -239,7 +239,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
                 } else {
                     if (result.data.offset < result.data.totalCount) {
                         progressText =  Ext.String.format('{s name="backup/alreadyRestored"}[0] out of [1] deltas restored{/s}', result.data.offset, result.data.totalCount);
-                        me.progressWindow.progressBar.updateProgress(result.data.offset/result.data.totalCount, progressText);
+                        me.progressWindow.progressBar.updateProgress(result.data.offset / result.data.totalCount, progressText);
 
                         me.runRestore(config, result.data.offset);
                     } else {

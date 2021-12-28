@@ -418,7 +418,7 @@ Ext.define('Shopware.apps.Translation.controller.Main', {
 
         text = Ext.String.trim(Ext.util.Format.stripTags(text));
         text = Ext.String.htmlDecode(text);
-        url =Ext.String.format(win.serviceInfo.tpl, fromLanguage, toLanguage, Ext.String.trim(Ext.util.Format.stripTags(text)));
+        url = Ext.String.format(win.serviceInfo.tpl, fromLanguage, toLanguage, Ext.String.trim(Ext.util.Format.stripTags(text)));
 
         window.open(url);
     }

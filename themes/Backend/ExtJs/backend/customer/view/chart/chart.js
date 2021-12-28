@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
 
                     this.setTitle(
                         '<div class="customer-stream-chart-tip">' +
-                            '<span class="customer-stream-chart-tip-label">' + this.fieldTitle + ':</span>&nbsp;'+
+                            '<span class="customer-stream-chart-tip-label">' + this.fieldTitle + ':</span>&nbsp;' +
                             '<span class="customer-stream-chart-tip-amount">' + value + '</span>' +
                         '</div>'
                     );

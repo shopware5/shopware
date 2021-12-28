@@ -569,7 +569,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
     onDocumentPreview: function(order, config, panel) {
         window.open('{url action="createDocument"}' + '' +
                 '?orderId=' + order.get('id') +
-                '&preview=1'+ '' +
+                '&preview=1' + '' +
                 '&taxFree=' + config.get('taxFree') +
                 '&temp=1' +
                 '&documentType=' + config.get('documentType') )

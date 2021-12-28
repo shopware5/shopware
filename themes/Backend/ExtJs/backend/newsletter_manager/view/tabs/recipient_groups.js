@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.RecipientGroups', {
                         }
                     });
 
-                    me.deleteSelected.setDisabled(selections.length-changed == 0);
+                    me.deleteSelected.setDisabled(selections.length - changed == 0);
                 }
             }
         });

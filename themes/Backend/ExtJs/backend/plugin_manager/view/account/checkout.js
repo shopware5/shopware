@@ -114,7 +114,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
                   '<div>' + address.get('firstName') + ' ' + address.get('lastName') + '</div>' +
                   '<div>' + address.get('street')  + '</div>' +
                   '<div>' + address.get('zipCode') + ' ' + address.get('city') + '</div>' +
-                  '<div>' + address.get('countryName') +'</div>'
+                  '<div>' + address.get('countryName') + '</div>'
         });
 
         me.licenceDomain = Ext.create('Ext.container.Container', {
@@ -231,8 +231,8 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
                 cls: 'plugin-data',
                 width: 500,
                 html: '<div class="name">' + plugin.get('label') + '</div>' +
-                '<div class="number">{s name="product_number"}Article nr.:{/s}'+ plugin.get('code') + '</div>' +
-                '<div class="type">'+ type +'</div>'
+                '<div class="number">{s name="product_number"}Article nr.:{/s}' + plugin.get('code') + '</div>' +
+                '<div class="type">' + type + '</div>'
             });
 
             var price = Ext.create('Ext.Component', {
@@ -267,20 +267,20 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
         var total = Ext.create('Ext.Component', {
             cls: 'amount',
             html: '<div class="label">{s name="total_amount"}Total amount{/s}</div>' +
-                  '<div class="value">'+ me.formatPrice(me.basket.get('grossPrice')) +'</div>'
+                  '<div class="value">' + me.formatPrice(me.basket.get('grossPrice')) + '</div>'
         });
         items.push(total);
 
         var net = Ext.create('Ext.Component', {
             cls: 'amount-net',
             html: '<div class="label">{s name="total_amount_without_tax"}Total amount excl. VAT:{/s}</div>' +
-                  '<div class="value">'+ me.formatPrice(me.basket.get('netPrice')) +'</div>'
+                  '<div class="value">' + me.formatPrice(me.basket.get('netPrice')) + '</div>'
         });
 
         var tax =  Ext.create('Ext.Component', {
             cls: 'tax',
-            html: '<div class="label">{s name="tax_rate_label"}plus{/s} '+ me.basket.get('taxRate') +'% {s name="tax_value_label"}VAT:{/s}</div>' +
-                  '<div class="value">'+ me.formatPrice(me.basket.get('taxPrice')) +'</div>'
+            html: '<div class="label">{s name="tax_rate_label"}plus{/s} ' + me.basket.get('taxRate') + '% {s name="tax_value_label"}VAT:{/s}</div>' +
+                  '<div class="value">' + me.formatPrice(me.basket.get('taxPrice')) + '</div>'
         });
 
         if (me.basket.get('taxPrice') > 0) {

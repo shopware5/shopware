@@ -359,7 +359,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         var me = this, title, footerButton;
 
         title = me.snippets.titleNew;
-        if (me.article && me.article.get('id')>0) {
+        if (me.article && me.article.get('id') > 0) {
             title = Ext.String.format(
                 me.snippets.titleEdit,
                 Ext.String.htmlEncode(me.article.get('name'))
@@ -1023,7 +1023,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 sourceClass: me.$className,
                 sourceMethod: 'registerAdditionalTab',
                 msg: 'The method needs at least a configuration object as a first parameter which ' +
-                     'includes the name of the tab and the callback method which inserts the content into '+
+                     'includes the name of the tab and the callback method which inserts the content into ' +
                      'the newly created tab. Please see the example usage.'
             });
             return false;

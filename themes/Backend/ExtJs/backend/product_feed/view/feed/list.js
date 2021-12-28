@@ -272,8 +272,8 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
      */
     fileNameRenderer: function (value, p, record) {
         /*{if {acl_is_allowed privilege=generate}}*/
-        return '<a href="{url controller=export}' + '/index/'+record.get('fileName')+
-                '?feedID='+record.get('id')+'&hash='+ record.get('hash') + '" target="_blank">' + value + '</a>';
+        return '<a href="{url controller=export}' + '/index/' + record.get('fileName') +
+                '?feedID=' + record.get('id') + '&hash=' + record.get('hash') + '" target="_blank">' + value + '</a>';
         /*{else}*/
         return value;
         /*{/if}*/
@@ -287,7 +287,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
         if (!value) {
             cls = 'sprite-cross-small';
         }
-        return '<div class="'+cls+'" style="width: 16px; height: 16px; margin-left: 9px;">&nbsp;</div>';
+        return '<div class="' + cls + '" style="width: 16px; height: 16px; margin-left: 9px;">&nbsp;</div>';
     }
 });
 //{/block}

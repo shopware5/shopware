@@ -162,7 +162,7 @@ Ext.define('Shopware.form.plugin.SnippetTranslation', {
         snippetGlobeIcon = new Ext.Element(document.createElement('span'));
         snippetGlobeIcon.set({
             cls: 'settings--snippets',
-            style: 'position: absolute;width: 16px; height: 16px;display:block;cursor:pointer;'+style
+            style: 'position: absolute;width: 16px; height: 16px;display:block;cursor:pointer;' + style
         });
 
         snippetGlobeIcon.addListener('click', function() {

@@ -159,7 +159,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         Ext.each(types, function(typ) {
             filters += typ + '|';
         });
-        filters = filters.substr(0, filters.length-1);
+        filters = filters.substr(0, filters.length - 1);
 
         return filters;
     },

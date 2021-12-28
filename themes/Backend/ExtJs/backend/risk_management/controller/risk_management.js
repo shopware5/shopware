@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
             });
             comboBox.up('container').remove(nextItem);
             comboBox.up('container').insert(indexOfNextItem, newComboBox);
-        } else if (newValue == 'SUBSHOP' || newValue=='SUBSHOPNOT'){
+        } else if (newValue == 'SUBSHOP' || newValue == 'SUBSHOPNOT'){
             var newComboBox = Ext.create('Ext.form.field.ComboBox', {
                 store: me.subApplication.subShopStore,
                 displayField: 'name',
@@ -226,7 +226,7 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
             if (item.getId() == model.getId()){
                 //Check each value of the two models, to get changes
                 Ext.Object.each(item.data, function(key, value){
-                    if (value != model.get(key) && key!='shopware.apps.riskmanagement.model.payment_id'){
+                    if (value != model.get(key) && key != 'shopware.apps.riskmanagement.model.payment_id'){
                         data.push(model);
                     }
                 });

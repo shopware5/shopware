@@ -238,7 +238,7 @@ Ext.define('Shopware.form.PluginPanel', {
                 var initialValue = value;
                 type = element.get('type').toLowerCase();
                 type = 'base-element-' + type;
-                name = 'values[' + shop.get('id') + ']['+ element.get('id') + ']';
+                name = 'values[' + shop.get('id') + '][' + element.get('id') + ']';
 
                 options = element.get('options');
                 options = options || {};
@@ -377,7 +377,7 @@ Ext.define('Shopware.form.PluginPanel', {
             valueStore = element.getValues();
             valueStore.removeAll();
             me.shopStore.each(function(shop) {
-                fieldName = 'values[' + shop.get('id') + ']['+ element.get('id') + ']';
+                fieldName = 'values[' + shop.get('id') + '][' + element.get('id') + ']';
                 fieldValue = values[fieldName];
                 if (fieldValue !== '' && fieldValue !== null) {
                     valueStore.add({

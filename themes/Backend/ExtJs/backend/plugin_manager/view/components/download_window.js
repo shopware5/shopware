@@ -171,7 +171,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.DownloadWindow', {
         return Ext.create('Ext.Component', {
             width: 128,
             height: 128,
-            html: '<img src="'+ me.icon +'" />'
+            html: '<img src="' + me.icon + '" />'
         });
     },
 

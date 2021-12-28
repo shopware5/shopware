@@ -52,13 +52,13 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Meta', {
 
         items.push({
             html: '<div class="label">{s name="version"}Version{/s}:</div>' +
-            '<div class="value">'+ me.plugin.get('version') +'</div>'
+            '<div class="value">' + me.plugin.get('version') + '</div>'
         });
 
         items.push({
             html: '<div class="label">{s name="rating_short"}Rating{/s}:</div>' +
-                '<div class="value">'+
-                    '<div class="store-plugin-rating star' + me.plugin.get('rating') + '">('+commentCount+')</div>' +
+                '<div class="value">' +
+                    '<div class="store-plugin-rating star' + me.plugin.get('rating') + '">(' + commentCount + ')</div>' +
                 '</div>'
         });
 
@@ -77,11 +77,11 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Meta', {
 
                 if (expiration) {
                     var date = me.formatDate(expiration.date);
-                    result += '<span class="date"> ({s name="till"}until{/s}: '+ Ext.util.Format.date(date) + ')</span>';
+                    result += '<span class="date"> ({s name="till"}until{/s}: ' + Ext.util.Format.date(date) + ')</span>';
                 }
 
                 items.push({
-                    html: '<div class="label">{s name="licence"}License{/s}:</div><div class="value">'+result+'</div>'
+                    html: '<div class="label">{s name="licence"}License{/s}:</div><div class="value">' + result + '</div>'
                 });
             } catch (e) {
 

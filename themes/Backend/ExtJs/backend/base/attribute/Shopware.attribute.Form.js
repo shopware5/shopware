@@ -126,7 +126,7 @@ Ext.define('Shopware.attribute.Form', {
 
     loadAttribute: function(foreignKey, callback) {
         var me = this;
-        callback = callback ? callback: Ext.emptyFn;
+        callback = callback ? callback : Ext.emptyFn;
 
         if (!foreignKey) {
             me.disableForm(true);

@@ -129,7 +129,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Overview', {
                 },
                 summaryRenderer: function(value, summaryData, dataIndex) {
                     if (Ext.isNumber(value) || Ext.isString(value)) {
-                        return '<b>' + Ext.util.Format.currency(value)+ '</b>';
+                        return '<b>' + Ext.util.Format.currency(value) + '</b>';
                     }
 
                     return value

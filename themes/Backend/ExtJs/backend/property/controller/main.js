@@ -269,7 +269,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
 
         store.each(function(item) {
             orderedItems[index] = item.get('id');
-            index +=1;
+            index += 1;
         });
 
         // Send current positions to backend
@@ -341,7 +341,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
 
         store.each(function(item) {
             orderedItems[index] = item.data.id;
-            index +=1;
+            index += 1;
         });
 
         // Send current positions to backend

@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
      * Create and configure the RowEditing feature.
      */
     setupRowEditor: function() {
-        var me =this;
+        var me = this;
 
         me.rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
             clicksToEdit: 1

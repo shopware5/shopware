@@ -203,7 +203,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
     createAddButton: function() {
         var me = this;
 
-        me.addButton =Ext.create('Ext.button.Split', {
+        me.addButton = Ext.create('Ext.button.Split', {
             text: '{s name="add_condition"}Add condition{/s}',
             iconCls: 'sprite-plus-circle-frame',
             menu: me.createMenu()

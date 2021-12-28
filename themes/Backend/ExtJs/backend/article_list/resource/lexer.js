@@ -122,7 +122,7 @@ Ext.define('Lexer', {
         }
 
         // Step through all the tokens
-        for (i=0;i<tokenLength;i++) {
+        for (i = 0;i < tokenLength;i++) {
             token = tokens[i];
 
             if (me.canceled) {

@@ -317,7 +317,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
      * @param value
      */
     modeRenderer: function (value) {
-        if (value!=1){
+        if (value != 1){
             return '{s name="list/render_value/mode/general"}General{/s}';
         }
         return '{s name="list/render_value/mode/individual"}Individual{/s}';
@@ -328,7 +328,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
      */
     valueRenderer: function (value, p, r) {
         if (r.data.percental == 1){
-            return value.replace(/[.,]/, Ext.util.Format.decimalSeparator)+" %";
+            return value.replace(/[.,]/, Ext.util.Format.decimalSeparator) + " %";
         }
         return value.replace(/[.,]/, Ext.util.Format.decimalSeparator);
     },
@@ -353,7 +353,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
     checkedInRenderer: function (value, p, r) {
         var numberOfUnits = r.data.numberOfUnits;
         if (value < numberOfUnits) {
-            return '<span style="color:green;">' + value + ' / '  + numberOfUnits +'</span>';
+            return '<span style="color:green;">' + value + ' / '  + numberOfUnits + '</span>';
         }
         else {
             return '<span style="color:red;">' + value + ' / '  + numberOfUnits + '</span>';

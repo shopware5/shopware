@@ -377,7 +377,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
      */
     nameColumn: function(value, metaData, record) {
         if (record.get('isLandingPage') && !record.get('parentId')) {
-            return '<strong>'+value+'</strong>';
+            return '<strong>' + value + '</strong>';
         } else {
             return value;
         }
@@ -495,7 +495,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         if (!value) {
             cls = 'sprite-cross-small';
         }
-        return '<div class="'+ cls +'" style="width: 16px; height: 16px; margin-left: 9px;">&nbsp;</div>';
+        return '<div class="' + cls + '" style="width: 16px; height: 16px; margin-left: 9px;">&nbsp;</div>';
     },
 
     /**

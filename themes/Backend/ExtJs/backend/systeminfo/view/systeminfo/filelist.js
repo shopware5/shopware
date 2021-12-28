@@ -118,7 +118,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Filelist', {
      * @param value The value of the field
      */
     renderStatus: function(value){
-        if (value==1){
+        if (value == 1){
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>')
         } else {
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')

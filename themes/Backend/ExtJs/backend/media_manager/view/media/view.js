@@ -161,7 +161,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         Ext.each(types, function(typ) {
             filters += typ + '|';
         });
-        filters = filters.substr(0, filters.length-1);
+        filters = filters.substr(0, filters.length - 1);
 
         return filters;
     },
@@ -175,7 +175,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         var me = this,
             tSize = me.thumbnailSize,
             tStyle = Ext.String.format('style="width:[0]px;height:[0]px;"', tSize),
-            imgStyle = Ext.String.format('style="max-width:[0]px;max-height:[0]px"', tSize-2);
+            imgStyle = Ext.String.format('style="max-width:[0]px;max-height:[0]px"', tSize - 2);
 
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
@@ -228,7 +228,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
 
         me.dataView = Ext.create('Ext.view.View', {
             itemSelector: '.thumb-wrap',
-            emptyText: '<div class="empty-text"><span>'+me.snippets.noMediaFound+'</span></div>',
+            emptyText: '<div class="empty-text"><span>' + me.snippets.noMediaFound + '</span></div>',
             multiSelect: multiSelect,
             store: me.mediaStore,
             tpl: me.createMediaViewTemplate(),
@@ -322,34 +322,34 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             '<a class="link" target="_blank" href="{/literal}{url controller=MediaManager action=download}{literal}?mediaId={id}" title="{name}">{name}</a>',
             '</p>',
             '<p>',
-            '<strong>'+me.snippets.mediaInfo.name+'</strong>',
+            '<strong>' + me.snippets.mediaInfo.name + '</strong>',
             '<input type="text" disabled="disabled" value="{name}" />',
             '</p>',
             '<p>',
-            '<strong>'+me.snippets.mediaInfo.uploadedon+'</strong>',
+            '<strong>' + me.snippets.mediaInfo.uploadedon + '</strong>',
             '<span>{[this.formatDate(values.created)]}</span>',
             '</p>',
             '<p>',
-            '<strong>'+me.snippets.mediaInfo.type+'</strong>',
+            '<strong>' + me.snippets.mediaInfo.type + '</strong>',
             '<span>{[this.formatDataType(values.type, values.extension)]}</span>',
             '</p>',
             '<tpl if="width">',
             '<p>',
-            '<strong>'+me.snippets.mediaInfo.resolution+'</strong>',
+            '<strong>' + me.snippets.mediaInfo.resolution + '</strong>',
             '<span>{width} x {height} Pixel</span>',
             '</p>',
             '</tpl>',
 
             '<tpl>',
             '<p>',
-            '<strong>'+me.snippets.mediaInfo.adress+'</strong>',
-            '<a class="link" target="_blank" href="{path}" title="{name}">'+ me.snippets.mediaInfo.mediaLink +'</a>',
+            '<strong>' + me.snippets.mediaInfo.adress + '</strong>',
+            '<a class="link" target="_blank" href="{path}" title="{name}">' + me.snippets.mediaInfo.mediaLink + '</a>',
             '</p>',
             '</tpl>',
 
             '<tpl if="thumbnails">',
             '<p>',
-            '<strong>'+me.snippets.mediaInfo.thumbnails+'</strong>',
+            '<strong>' + me.snippets.mediaInfo.thumbnails + '</strong>',
             '{[this.getThumbnailSizes(values.thumbnails)]}',
             '</p>',
             '</tpl>',
@@ -664,14 +664,14 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             store: Ext.create('Ext.data.Store', {
                 fields: [ 'value', 'name' ],
                 data: [
-                    { value: '20', name: '20 '+me.snippets.fieldsText.itemCount },
-                    { value: '40', name: '40 '+me.snippets.fieldsText.itemCount },
-                    { value: '60', name: '60 '+me.snippets.fieldsText.itemCount },
-                    { value: '80', name: '80 '+me.snippets.fieldsText.itemCount },
-                    { value: '100', name: '100 '+me.snippets.fieldsText.itemCount },
-                    { value: '150', name: '150 '+me.snippets.fieldsText.itemCount },
-                    { value: '200', name: '200 '+me.snippets.fieldsText.itemCount },
-                    { value: '250', name: '250 '+me.snippets.fieldsText.itemCount }
+                    { value: '20', name: '20 ' + me.snippets.fieldsText.itemCount },
+                    { value: '40', name: '40 ' + me.snippets.fieldsText.itemCount },
+                    { value: '60', name: '60 ' + me.snippets.fieldsText.itemCount },
+                    { value: '80', name: '80 ' + me.snippets.fieldsText.itemCount },
+                    { value: '100', name: '100 ' + me.snippets.fieldsText.itemCount },
+                    { value: '150', name: '150 ' + me.snippets.fieldsText.itemCount },
+                    { value: '200', name: '200 ' + me.snippets.fieldsText.itemCount },
+                    { value: '250', name: '250 ' + me.snippets.fieldsText.itemCount }
                 ]
             }),
             displayField: 'name',

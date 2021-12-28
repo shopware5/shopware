@@ -188,9 +188,9 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         var me = this,
             record = me.getStore('List').getAt(rowIndex);
         window.open(
-            '{url controller=export}' + '/index/'+record.get('fileName')+
-                '?feedID='+record.get('id')+
-                '&hash='+ record.get('hash')
+            '{url controller=export}' + '/index/' + record.get('fileName') +
+                '?feedID=' + record.get('id') +
+                '&hash=' + record.get('hash')
         );
     },
 
@@ -420,7 +420,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         var chars = "abcdef1234567890",
             pass = "";
         for (var x = 0; x < 32; x++) {
-            pass += chars.charAt(Math.floor((Math.random()*chars.length)));
+            pass += chars.charAt(Math.floor((Math.random() * chars.length)));
         }
         return pass;
     }

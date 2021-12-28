@@ -167,7 +167,7 @@ Ext.define('Ext.ux.ButtonColumn', {
             data.disabledCls = me.isDisabledFn && me.isDisabledFn.apply(me,
                 arguments) ? me.disabledCls + ' ' + me.getBtnGroupCls('disabled').join(' ')/*(Ext.isIE7 ? me.disabledCls : me.disabledCls + ' ' + me.getBtnCls('disabled').join(' '))*/ : '';
             v = Ext.isFunction(cfg.renderer) ? cfg.renderer.apply(this, arguments) : v;
-            data.text = Ext.isEmpty(v) ? me.buttonText || '&#160;': v;
+            data.text = Ext.isEmpty(v) ? me.buttonText || '&#160;' : v;
             // Apply the renderData to the template args
             Ext.applyIf(data, me.getTemplateArgs());
             return me.btnTpl.apply(data);
@@ -186,7 +186,7 @@ Ext.define('Ext.ux.ButtonColumn', {
             iconUrl: '',
             baseCls: me.baseCls,
             splitCls: me.getSplitCls(),
-            btnCls: me.extMinor === 1 ? me.getBtnCls() :''
+            btnCls: me.extMinor === 1 ? me.getBtnCls() : ''
         };
     },
 
@@ -195,19 +195,19 @@ Ext.define('Ext.ux.ButtonColumn', {
         var me = this,
             mainDivStr = '<div class="x-btn x-btn-default-small {literal}{iconClsBtn} {disabledCls}{/literal}"{literal} {tooltip}{/literal}>{literal}{0}{/literal}</div>',
             btnFrameTpl = '<TABLE  class="x-table-plain" cellPadding=0><TBODY><TR>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px -6px"' : '') + ' class="x-frame-tl x-btn-tl x-btn-default-small-tl" role=presentation></TD>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px 0px; HEIGHT: 3px"' : '')  + ' class="x-frame-tc x-btn-tc x-btn-default-small-tc" role=presentation></TD>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: right -9px"' : '')  + ' class="x-frame-tr x-btn-tr x-btn-default-small-tr" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px -6px"' : '') + ' class="x-frame-tl x-btn-tl x-btn-default-small-tl" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px 0px; HEIGHT: 3px"' : '')  + ' class="x-frame-tc x-btn-tc x-btn-default-small-tc" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: right -9px"' : '')  + ' class="x-frame-tr x-btn-tr x-btn-default-small-tr" role=presentation></TD>' +
                 '</TR><TR>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px 0px"' : '')  + ' class="x-frame-ml x-btn-ml x-btn-default-small-ml" role=presentation></TD>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px 0px"' : '')  + ' class="x-frame-mc x-btn-mc x-btn-default-small-mc" role=presentation>' +
+                '<TD' + (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px 0px"' : '')  + ' class="x-frame-ml x-btn-ml x-btn-default-small-ml" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px 0px"' : '')  + ' class="x-frame-mc x-btn-mc x-btn-default-small-mc" role=presentation>' +
                 '{literal}{0}{/literal}' +
                 '</TD>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: right 0px"' : '')  + ' class="x-frame-mr x-btn-mr x-btn-default-small-mr" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: right 0px"' : '')  + ' class="x-frame-mr x-btn-mr x-btn-default-small-mr" role=presentation></TD>' +
                 '</TR><TR>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px -12px"' : '')  + ' class="x-frame-bl x-btn-bl x-btn-default-small-bl" role=presentation></TD>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px -3px; HEIGHT: 3px"' : '')  + ' class="x-frame-bc x-btn-bc x-btn-default-small-bc" role=presentation></TD>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: right -15px"' : '')  + ' class="x-frame-br x-btn-br x-btn-default-small-br" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px -12px"' : '')  + ' class="x-frame-bl x-btn-bl x-btn-default-small-bl" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px -3px; HEIGHT: 3px"' : '')  + ' class="x-frame-bc x-btn-bc x-btn-default-small-bc" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: right -15px"' : '')  + ' class="x-frame-br x-btn-br x-btn-default-small-br" role=presentation></TD>' +
                 '</TR></TBODY></TABLE>'
         if (Ext.supports.CSS3BorderRadius) {
             me.btnTpl = Ext.create('Ext.XTemplate', Ext.String.format(mainDivStr, me.btnTpl))
@@ -333,5 +333,5 @@ Ext.define('Ext.ux.ButtonColumn', {
     this.prototype.btnTpl = Ext.isArray(buttonPrototype.renderTpl) ? buttonPrototype.renderTpl.join('') : buttonPrototype.renderTpl;
     //borrow buttons methods
     this.prototype.getSplitCls = buttonPrototype.getSplitCls;
-    this.prototype.getBtnCls= buttonPrototype.getBtnCls;
+    this.prototype.getBtnCls = buttonPrototype.getBtnCls;
 });

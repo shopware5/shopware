@@ -271,7 +271,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
                 if (currentRow[2]) {
                     var token = currentRow[2]['token'];
                     if (token.substring(0, 1) == token.substring(token.length - 1) && token.substring(0, 1) == '"') {
-                        token = token.substring(1, token.length-1);
+                        token = token.substring(1, token.length - 1);
                     }
                     record.set('value', token);
                 }
@@ -479,7 +479,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
         }
 
         // If any binaryOperators is associated with the value field, enable it
-        for (var i=0;i<operators.length;i++) {
+        for (var i = 0;i < operators.length;i++) {
             var operator = operators[i];
             if (binaryOperators.indexOf(operator) != -1) {
                 valueColumn.setEditor(grid.getDefaultValueEditor());
@@ -528,7 +528,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
             valueColumn.setEditor(false);
 
             // If any binaryOperators is associated with the value field, enable it
-            for (var i=0;i<operators.length;i++) {
+            for (var i = 0;i < operators.length;i++) {
                 var operator = operators[i];
                 if (binaryOperators.indexOf(operator) != -1) {
                     valueColumn.setEditor(grid.getDefaultValueEditor());

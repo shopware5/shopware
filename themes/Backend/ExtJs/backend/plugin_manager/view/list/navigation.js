@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.Navigation', {
             me.localUpdatesLink.disable();
         } else {
             me.localUpdatesLink.update(
-                '<div class="content has-badge">{s name="updates"}Updates{/s}<div class="badge">'+count+'</div></div>'
+                '<div class="content has-badge">{s name="updates"}Updates{/s}<div class="badge">' + count + '</div></div>'
             );
             me.localUpdatesLink.enable();
         }

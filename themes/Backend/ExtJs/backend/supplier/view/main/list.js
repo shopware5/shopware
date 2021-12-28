@@ -206,7 +206,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
      * @return String
      */
     urlColumn: function (value) {
-        return Ext.String.format('{literal}<a h'+'ref="{0}" target="_blank">{1}</a>{/literal}', value, value);
+        return Ext.String.format('{literal}<a h' + 'ref="{0}" target="_blank">{1}</a>{/literal}', value, value);
     },
 
     /**

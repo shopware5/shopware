@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
             var items = grammar.binaryOperators[key];
 
             Ext.each(items, function(item, idx) {
-                if (item.charAt(item.length-1) == '/' && item.charAt(0) == '/') {
+                if (item.charAt(item.length - 1) == '/' && item.charAt(0) == '/') {
 
                     grammar.binaryOperators[key][idx] = new RegExp(item.slice(1).slice(0, -1));
                 }
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
         });
 
         Ext.each(grammar.values, function(item, idx) {
-            if (item.charAt(item.length-1) == '/' && item.charAt(0) == '/') {
+            if (item.charAt(item.length - 1) == '/' && item.charAt(0) == '/') {
 
                 grammar.values[idx] = new RegExp(item.slice(1).slice(0, -1));
             }
@@ -201,7 +201,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
 
         lastSeenAttribute = lastSeenAttribute.toUpperCase();
 
-        for (i=0;i<attributesLength;i++) {
+        for (i = 0;i < attributesLength;i++) {
             if (lastSeenAttribute == attributes[i].toUpperCase()) {
                 // Get the suggested values from remote
                 var params = {

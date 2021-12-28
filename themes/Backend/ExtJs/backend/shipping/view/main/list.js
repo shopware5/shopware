@@ -267,7 +267,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
         if (null == record.get('customerGroupId') || null == customerGroup) {
             return me.emptyCustomerGroupText;
         }
-        return customerGroup.get('name') + ' ('+customerGroup.get('key')+')';
+        return customerGroup.get('name') + ' (' + customerGroup.get('key') + ')';
     },
 
     /**

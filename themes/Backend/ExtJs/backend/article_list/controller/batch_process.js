@@ -274,7 +274,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
                             '{s name="processedItems"}[0] / [1] processed. [2]:[3]:[4] remaining{/s}',
                             result.data.offset, result.data.totalCount, eta.hours, eta.minutes, eta.seconds
                         );
-                        me.progressWindow.progressBar.updateProgress(result.data.offset/result.data.totalCount, progressText);
+                        me.progressWindow.progressBar.updateProgress(result.data.offset / result.data.totalCount, progressText);
 
                         me.addToQueue(config, result.data.offset, result.data.queueId, startTime);
                     } else {
@@ -321,7 +321,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
         var filterLength = filterArray.length,
             result = [];
 
-        for (var i=0;i<filterLength;i++) {
+        for (var i = 0;i < filterLength;i++) {
             result.push(filterArray[i]['token']);
         }
         return result.join(' ');
@@ -391,7 +391,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
                             '{s name="processedItems"}[0] / [1] processed. [2]:[3]:[4] remaining{/s}',
                             result.data.processed, result.data.totalCount, eta.hours, eta.minutes, eta.seconds
                         );
-                        me.progressWindow.progressBar.updateProgress(result.data.processed/result.data.totalCount, progressText);
+                        me.progressWindow.progressBar.updateProgress(result.data.processed / result.data.totalCount, progressText);
 
                         me.runBatchProcess(queueId, config, startTime);
                     } else {
@@ -433,7 +433,7 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
         var operationsLength = operations.length,
             result = [];
 
-        for (var i=0;i<operationsLength;i++) {
+        for (var i = 0;i < operationsLength;i++) {
             if (operations[i]['column'] != '' && operations[i]['operation'] != '') {
                 result.push(Ext.String.format('[0] [1] [2]', operations[i]['column'], operations[i]['operator'], operations[i]['value']));
             }
@@ -452,12 +452,12 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
      */
     getETA: function(startTime, processedItems, totalItems) {
         var remainingItems = totalItems - processedItems,
-            passedSeconds = new Date().getTime()/1000 - startTime,
+            passedSeconds = new Date().getTime() / 1000 - startTime,
             perSecond = passedSeconds  / processedItems,
             remainingSeconds = remainingItems * perSecond,
             hours = ~~(remainingSeconds / 3600),
-            minutes = ~~((remainingSeconds - hours*3600)/60),
-            seconds = ~~(remainingSeconds - -hours*3600 - minutes*60);
+            minutes = ~~((remainingSeconds - hours * 3600) / 60),
+            seconds = ~~(remainingSeconds - -hours * 3600 - minutes * 60);
 
         return {
             hours: hours < 10 ? '0' + hours : hours,

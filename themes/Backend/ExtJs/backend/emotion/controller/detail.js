@@ -418,7 +418,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             formPanel = win.down('form'),
             form = formPanel.getForm(),
             formFields = form.getFields(),
-            data= [],
+            data = [],
             cssField,
             xtype, compField;
 

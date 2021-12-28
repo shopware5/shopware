@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.Config.view.variantFilter.ExpandGroupsGrid', {
             header: '{s name="variant_facet/header/label"}Group{/s}'
         });
 
-        columns = Ext.Array.insert(columns, columns.length -1, [{
+        columns = Ext.Array.insert(columns, columns.length - 1, [{
             xtype: 'actioncolumn',
             name: 'expandGroupIds',
             dataIndex: 'expandGroup',

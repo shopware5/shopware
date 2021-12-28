@@ -148,7 +148,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
         var rec = options.record,
             me = this,
             field = options.field,
-            fromValue  = 1*rec.get('from'),
+            fromValue  = 1 * rec.get('from'),
             datakeys = options.grid.store.data.keys,
             toField = options.column.field,
             mainController = me.getController('Main'),
@@ -168,10 +168,10 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                 return false;
             }
             // check if there are more rows
-            if (datakeys[options.rowIdx+1]) {
+            if (datakeys[options.rowIdx + 1]) {
                 // iterate through all rows
-                while (datakeys[options.rowIdx+1]) {
-                    var recordID = datakeys[options.rowIdx+1];
+                while (datakeys[options.rowIdx + 1]) {
+                    var recordID = datakeys[options.rowIdx + 1];
                     var nextRecord = editor.grid.store.getById(recordID);
                     // remove everthing higher than the new value
                     if ((null != nextRecord) && nextRecord.get("to") && nextRecord.get("to") <= options.value) {
@@ -247,8 +247,8 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
     addCostsMatrixEntry: function(from, store) {
         var me = this,
             last = store.getCount(),
-            lastEntry = store.getAt(last-1),
-            from  = 1*from;
+            lastEntry = store.getAt(last - 1),
+            from  = 1 * from;
         // Create a model instance
         var newCosts =  Ext.create('Shopware.apps.Shipping.model.Costsmatrix', {
             from: from,

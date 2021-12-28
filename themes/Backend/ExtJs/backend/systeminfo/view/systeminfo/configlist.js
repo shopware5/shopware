@@ -148,9 +148,9 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Configlist', {
      * @param value The value of the field
      */
     renderVersion: function(value){
-        if (value==true){
+        if (value == true){
             return 1
-        } else if (value==false){
+        } else if (value == false){
             return 0
         } else {
             return value;

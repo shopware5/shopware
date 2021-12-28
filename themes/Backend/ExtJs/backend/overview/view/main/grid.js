@@ -191,7 +191,7 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
             }
 
             if (icon) {
-                value = '<span class="' + icon +'" style="padding-right: 25px"></span>' + value;
+                value = '<span class="' + icon + '" style="padding-right: 25px"></span>' + value;
             }
         }
 

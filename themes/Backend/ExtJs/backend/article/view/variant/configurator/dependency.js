@@ -283,7 +283,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
             }
         });
 
-        if (record && record.get('id')>0) {
+        if (record && record.get('id') > 0) {
             removeButtonDisabled = false;
         }
 

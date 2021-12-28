@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.ContentTypeManager.view.field_handler.ComboboxHandler'
             iconCls: 'sprite-plus-circle-frame',
             handler: function () {
                 me.grid.store.add({});
-                var record = me.grid.store.getAt(me.grid.store.count() -1);
+                var record = me.grid.store.getAt(me.grid.store.count() - 1);
                 me.rowEditing.startEdit(record, 0);
             }
         });

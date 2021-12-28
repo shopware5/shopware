@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
         var timeValue = storeItem.get('date');
         timeValue.setMinutes(0);
         tip.setTitle(
-            Ext.util.Format.date(timeValue, timeFormat)+
+            Ext.util.Format.date(timeValue, timeFormat) +
             '<br><br>&nbsp;' + sales
         );
     }

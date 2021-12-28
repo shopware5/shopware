@@ -222,7 +222,7 @@ Ext.define('Shopware.form.field.ColorField', {
             supportText = new Ext.Element(document.createElement('div'));
 
         supportText.set({
-            cls: Ext.baseCSSPrefix +'form-support-text'
+            cls: Ext.baseCSSPrefix + 'form-support-text'
         });
 
         if (me.supportText) {

@@ -182,7 +182,7 @@ Ext.define('Shopware.form.plugin.Translation', {
         globeIcon = new Ext.Element(document.createElement('span'));
         globeIcon.set({
             cls: Ext.baseCSSPrefix + 'translation-globe sprite-globe',
-            style: 'position: absolute;width: 16px; height: 16px;display:block;cursor:pointer;'+style
+            style: 'position: absolute;width: 16px; height: 16px;display:block;cursor:pointer;' + style
         });
 
         globeIcon.addListener('click', function() {

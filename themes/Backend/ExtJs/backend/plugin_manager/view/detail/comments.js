@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Comments', {
             cls: 'rating-average',
             html: '<div class="label">{s name="rating_average"}Average customer rating:{/s}</div>' +
                     '<div class="store-plugin-rating star' + me.plugin.get('rating') + '">&nbsp;</div>' +
-                    '<div class="suffix">('+ me.commentCount +' {s name="rating"}customer reviews{/s})</div>'
+                    '<div class="suffix">(' + me.commentCount + ' {s name="rating"}customer reviews{/s})</div>'
         });
 
         if (me.plugin['getCommentsStore']) {

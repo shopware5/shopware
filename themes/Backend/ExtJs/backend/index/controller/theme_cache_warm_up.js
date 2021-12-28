@@ -166,10 +166,10 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
                 }
 
                 if (success && json.success) {
-                    if (offset+2 == batchSize) {
+                    if (offset + 2 == batchSize) {
                         if (me.window.progressBar) {
                             me.window.progressBar.updateProgress(
-                                (offset+1) / batchSize,
+                                (offset + 1) / batchSize,
                                 Ext.String.format('{s name="progress_bar/clearing_http_cache"}Clearing HTTP cache{/s}'),
                                 true
                             );
@@ -179,7 +179,7 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
                             me.clearHttpCache();
                         });
                     } else {
-                        me.runRequest(shops, offset+1);
+                        me.runRequest(shops, offset + 1);
                     }
                 } else {
                     message = Ext.String.format('{s name="response/error/detail"}A server error occurred while processing your request for shop [0]{/s}', shop.get('name'));

@@ -173,7 +173,7 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
 
             //build and set the embed code
             //the preceding '<' is necessary to display the string without interference from the script renderer
-            var embedCode = '<' + 'a href="{literal}{url controller=custom sCustom={/literal}' + record.data.helperId + '}" title="' + record.data.description + '">' + record.data.description +'</a>';
+            var embedCode = '<' + 'a href="{literal}{url controller=custom sCustom={/literal}' + record.data.helperId + '}" title="' + record.data.description + '">' + record.data.description + '</a>';
             form.down('textfield[name=embedCode]').setValue(embedCode);
 
         } else {

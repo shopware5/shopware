@@ -439,7 +439,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
 
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-            '<div class="thumb-wrap-tiny" title="'+title+'">',
+            '<div class="thumb-wrap-tiny" title="' + title + '">',
             '<div class="thumb"><span class="number">{index}</span></div>',
             '<input class="x-form-field x-form-text x-editable" value="{value}" />',
             '</div></tpl>',

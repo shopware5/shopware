@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
             flex: 1,
             listeners: {
                 change: function() {
-                    me.toField.setMinValue(me.fromField.getValue() -1);
+                    me.toField.setMinValue(me.fromField.getValue() - 1);
                 }
             }
         });

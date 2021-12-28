@@ -231,7 +231,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
             listeners: {
                 buffer: 500,
                 keyup: function() {
-                    if (this.getValue().length >= 3 || this.getValue().length<1) {
+                    if (this.getValue().length >= 3 || this.getValue().length < 1) {
                         /**
                          * @param this Contains the searchfield
                          */

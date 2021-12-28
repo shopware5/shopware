@@ -199,7 +199,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
         Ext.MessageBox.prompt('{s name="newGroup"}Create new newsletter group{/s}', '{s name="enterNameOfGroup"}Please enter the name of the new group{/s}', function(btn, newGroupName) {
             if (btn == 'ok' && newGroupName != '') {
                 // Make sure that there is no group with this name
-                found = store.find('name', newGroupName, caseSensitive=false);
+                found = store.find('name', newGroupName, caseSensitive = false);
                 if (found != -1){
                     Shopware.Notification.createGrowlMessage('{s name="alreadyExisting"}Already existing{/s}', '{s name="groupAlreadyExisting"}A group with this name is already existing{/s}', me.snippets.growl);
                     return;

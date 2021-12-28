@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Order.controller.Filter', {
     onAcceptFilters: function(values) {
         var me = this,
             store = me.subApplication.getStore('Order'),
-            filters= [];
+            filters = [];
 
         Ext.Object.each(values, function(key, value) {
             //format the value to an string, to check if the value length is greater than one

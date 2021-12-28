@@ -179,7 +179,7 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
      * @return { String }
      */
     partnerLinkRenderer: function(value) {
-        return '<a href="{url controller=partner action=redirectToPartnerLink}' + '?sPartner='+ value + '" target="_blank">' + 'link' + '</a>';
+        return '<a href="{url controller=partner action=redirectToPartnerLink}' + '?sPartner=' + value + '" target="_blank">' + 'link' + '</a>';
     },
     /**
      * Creates the items of the action column

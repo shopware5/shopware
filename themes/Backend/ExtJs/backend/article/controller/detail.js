@@ -739,10 +739,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     onRemovePrice: function(record, view, rowIndex) {
         var me = this,
             store = view.getStore(),
-            previousPrice = store.getAt(rowIndex-1);
+            previousPrice = store.getAt(rowIndex - 1);
 
         if (rowIndex > 1) {
-            var column = view.panel.columns[view.panel.columns.length-1],
+            var column = view.panel.columns[view.panel.columns.length - 1],
                 cell = view.getCell(previousPrice, column),
                 icon = Ext.get(cell.query('.x-action-col-icon'));
 
@@ -853,7 +853,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             store = event.grid.store,
             firstRecord = store.getAt(0),
             firstPrice = firstRecord.get('price'),
-            previousPrice = store.getAt(event.rowIdx -1),
+            previousPrice = store.getAt(event.rowIdx - 1),
             price = record.get('price'),
             percent,
             pseudoPrice = record.get('pseudoPrice'),
@@ -951,7 +951,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             minValue = 1,
             price = event.record,
             editor = event.column.getEditor(event.record),
-            previousPrice = store.getAt(event.rowIdx -1),
+            previousPrice = store.getAt(event.rowIdx - 1),
             nextPrice = store.getAt(event.rowIdx + 1);
 
         // Check if the current row is the last row

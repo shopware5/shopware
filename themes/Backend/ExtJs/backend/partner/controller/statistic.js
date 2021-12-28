@@ -120,15 +120,15 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
 
         if (fromDate != "undefined" && fromDate != null) {
             fromDate = me.convertDate(fromDate);
-            requestStringFromDate = '&fromDate='+fromDate;
+            requestStringFromDate = '&fromDate=' + fromDate;
         }
 
         if (toDate != "undefined" && toDate != null) {
             toDate = me.convertDate(toDate);
-            requestStringToDate = '&toDate='+toDate;
+            requestStringToDate = '&toDate=' + toDate;
         }
 
-        window.open(' {url action="downloadStatistic"}?partnerId='+partnerId+requestStringFromDate+requestStringToDate);
+        window.open(' {url action="downloadStatistic"}?partnerId=' + partnerId + requestStringFromDate + requestStringToDate);
     },
 
     /**
@@ -138,10 +138,10 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
      */
     convertDate: function(date){
         var day = (date.getDate() < 10) ? "0" + date.getDate() : date.getDate();
-        var month = (date.getMonth() +1 < 10) ? "0" + (date.getMonth() +1) : date.getMonth() +1;
+        var month = (date.getMonth() + 1 < 10) ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
         var year = date.getFullYear();
 
-        return year+"-"+month+"-"+day;
+        return year + "-" + month + "-" + day;
     }
 });
 //{/block}

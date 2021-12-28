@@ -80,7 +80,7 @@ Ext.define('Shopware.form.field.ColorSelection', {
         var me = this,
             bEvent = event.browserEvent,
             x = (typeof bEvent.offsetX !== 'undefined') ? bEvent.offsetX : bEvent.layerX,
-            y = (typeof bEvent.offsetY !== 'undefined') ? bEvent.offsetY: bEvent.layerY,
+            y = (typeof bEvent.offsetY !== 'undefined') ? bEvent.offsetY : bEvent.layerY,
             imageData = ctx.getImageData(x, y, 1, 1),
             data = imageData.data;
 

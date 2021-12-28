@@ -1297,7 +1297,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 variantListing.getSelectionModel().deselectAll();
                 variantListing.getStore().load({
                     callback: function() {
-                        if (variantListing.getStore().getCount()===0) {
+                        if (variantListing.getStore().getCount() === 0) {
                             configuratorTabPanel.setActiveTab(1);
                             me.selectAllActiveRows();
                         } else {

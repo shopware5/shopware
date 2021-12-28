@@ -56,7 +56,7 @@ window.events = (function() {
             if (!hOP.call(topics, topic)) topics[topic] = [];
 
             // Add the listener to queue
-            var index = topics[topic].push(listener) -1;
+            var index = topics[topic].push(listener) - 1;
 
             // Provide handle back for removal of topic
             return {

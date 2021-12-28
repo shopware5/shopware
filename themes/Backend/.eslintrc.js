@@ -24,5 +24,6 @@ module.exports = {
             "ignoreComments": false,
         }],
         'operator-linebreak': ['error', 'after', { 'overrides': { '?': 'before', ':': 'before' } }],
+        'space-infix-ops': 'error',
     }
 };

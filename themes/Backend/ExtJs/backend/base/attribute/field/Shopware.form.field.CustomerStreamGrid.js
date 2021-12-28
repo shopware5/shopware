@@ -55,7 +55,7 @@ Ext.define('Shopware.form.field.CustomerStreamGrid', {
             qtip += '<p>{s name="frozen"}{/s}: ' + Ext.util.Format.date(record.get('freezeUp')) + '</p>';
         }
 
-        qtip += '<br><p>' + record.get('description') +'</p>';
+        qtip += '<br><p>' + record.get('description') + '</p>';
 
         meta.tdAttr = 'data-qtip="' + qtip + '"';
 

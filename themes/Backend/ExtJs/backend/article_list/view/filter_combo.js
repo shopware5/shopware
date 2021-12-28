@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
             position = me.inputEl.dom.selectionStart;
 
         rest = value.substring(position);
-        value = value.substring(0, position-tokenLength);
+        value = value.substring(0, position - tokenLength);
 
         if (suggestion.get('addQuotes')) {
             suggestion = '"' + suggestion.get('title') + '"';
@@ -161,7 +161,7 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
 
         me.store.clearFilter(true);
 
-        if (!me.getValue() || me.getValue().substring(position-1, position).trim() == "") {
+        if (!me.getValue() || me.getValue().substring(position - 1, position).trim() == "") {
             token = undefined;
         }
 

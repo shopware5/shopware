@@ -334,7 +334,7 @@ Ext.define('Shopware.ModuleManager', {
 
         // Was the message sent using our api?
         subModule = me.modules.get(data.instance);
-        if (!data.instance || !subModule ||(subModule.instance !== data.instance)) {
+        if (!data.instance || !subModule || (subModule.instance !== data.instance)) {
             return;
         }
         component = subModule.windows.get(data.component);
@@ -462,7 +462,7 @@ Ext.define('Shopware.ModuleManager', {
         var subModule, component;
 
         subModule = this.modules.get(instance);
-        if (!instance || !subModule ||(subModule.instance !== instance)) {
+        if (!instance || !subModule || (subModule.instance !== instance)) {
             return;
         }
         component = subModule.windows.get(comp);

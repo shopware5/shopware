@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.Article.view.statistics.Chart', {
                 var labels = this.labels = [];
                 var monthArray = Ext.Array.map(Ext.Date.monthNames, function (e) { return [e]; });
                 store.each(function(item) {
-                    labels.push(monthArray[item.get('month')-1]);
+                    labels.push(monthArray[item.get('month') - 1]);
                 });
             }
         }];

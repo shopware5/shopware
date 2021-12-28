@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
         var me = this;
         var form = me.getVoucherBaseConfiguration().getForm(),
             record = form.getRecord();
-        window.open(' {url action="exportVoucherCode"}?voucherId='+record.data.id);
+        window.open(' {url action="exportVoucherCode"}?voucherId=' + record.data.id);
     },
 
     /**

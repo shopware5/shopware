@@ -174,7 +174,7 @@ Ext.define('Shopware.form.field.ComboTree', {
      * @param value
      */
     setRawValue: function(value){
-        this.inputEl.dom.value = value==null?"":value;
+        this.inputEl.dom.value = value == null ? "" : value;
     },
 
     /**

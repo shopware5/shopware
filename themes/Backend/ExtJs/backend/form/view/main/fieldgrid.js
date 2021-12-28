@@ -384,7 +384,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
      * @return string
      */
     renderSorthandleColumn: function (value,  metadata) {
-        metadata.tdAttr = 'data-qtip="' + this.messages.hintDragDrop +'"';
+        metadata.tdAttr = 'data-qtip="' + this.messages.hintDragDrop + '"';
 
         return '<div style="cursor: n-resize;">&#009868;</div>';
     },

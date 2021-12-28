@@ -566,7 +566,7 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
         } else {
             // SW-3289);
             if (value == 0 || value == null) {
-                return rowRecord.get('taxRate')+'%';
+                return rowRecord.get('taxRate') + '%';
             }
             return value;
         }

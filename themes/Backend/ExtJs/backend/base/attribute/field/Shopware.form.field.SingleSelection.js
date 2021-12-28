@@ -89,8 +89,8 @@ Ext.define('Shopware.form.field.SingleSelection', {
 
     createSupportText: function(supportText) {
         return Ext.create('Ext.Component', {
-            html: '<div>'+supportText+'</div>',
-            cls: Ext.baseCSSPrefix +'form-support-text'
+            html: '<div>' + supportText + '</div>',
+            cls: Ext.baseCSSPrefix + 'form-support-text'
         });
     },
 

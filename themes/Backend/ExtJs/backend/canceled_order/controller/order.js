@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
             record = null;
 
         if (Ext.isArray(selected)) {
-            record = selected[selected.length-1];
+            record = selected[selected.length - 1];
         } else {
             record = selected;
         }

@@ -196,7 +196,7 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
      * @return Array
      */
     createLeftElements: function() {
-        var me =this;
+        var me = this;
 
         return [
             {
