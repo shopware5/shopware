@@ -477,7 +477,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             duplicateButton = me.getDuplicateButton(),
             selectedNode = selection[0];
         // do not delete the root node
-        if (selection.length > 0 && ! selectedNode.isRoot() ) {
+        if (selection.length > 0 && !selectedNode.isRoot() ) {
             deleteButton.enable();
             duplicateButton.enable();
         } else {
