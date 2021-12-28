@@ -352,7 +352,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         });
     },
 
-
     /**
      * Changes the title of the article detail window header and the footer button.
      */
@@ -467,7 +466,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     createPriceFieldSet: function() {
         return Ext.create('Shopware.apps.Article.view.detail.Prices');
     },
-
 
     /**
      * Creates the field set for the article base price calculation.
@@ -777,7 +775,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         return me.configuratorTab;
     },
-
 
     /**
      * Creates the listing component for the variant tab.

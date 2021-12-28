@@ -62,7 +62,6 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
         });
     },
 
-
     /**
      * Event listener method which is fired when the user change
      * the to date field to filter the order chart data.

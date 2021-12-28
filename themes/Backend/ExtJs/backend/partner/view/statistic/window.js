@@ -114,7 +114,6 @@ Ext.define('Shopware.apps.Partner.view.statistic.Window', {
         });
     },
 
-
     /**
      * Creates the toolbar for the order tab.
      * The toolbar contains two date fields (from, to) which allows the user to filter the chart store.
@@ -138,8 +137,6 @@ Ext.define('Shopware.apps.Partner.view.statistic.Window', {
             fieldLabel: '{s name="statistic/window/date/to"}To{/s}',
             value: today
         });
-
-
 
         return Ext.create('Ext.toolbar.Toolbar', {
             ui: 'shopware-ui',

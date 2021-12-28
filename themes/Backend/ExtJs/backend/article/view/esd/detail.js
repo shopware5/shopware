@@ -224,7 +224,6 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
         };
     },
 
-
     /**
      * Creates the XTemplate for the file information panel
      *
@@ -278,7 +277,6 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
         };
     },
 
-
     /**
      * Creates the drop zone for article images
      * @return Shopware.app.FileUpload
@@ -326,7 +324,6 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
                     if (!response.hasOwnProperty('newName')) {
                         return;
                     }
-
 
                     Ext.Msg.alert('{s name="esd/detail/rename/title"}Upload{/s}', Ext.String.format(me.snippets.fileUpload.renameMessage, response.newName));
                 }

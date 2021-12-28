@@ -169,7 +169,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         var article = Ext.create('Shopware.apps.Article.model.Article', articleData),
             detail = Ext.create('Shopware.apps.Article.model.Detail', articleData );
 
-
         article.set('taxId', firstTax.get('id'));
         detail.set('kind', 1);
 

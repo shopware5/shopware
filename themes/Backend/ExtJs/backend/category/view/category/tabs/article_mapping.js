@@ -102,7 +102,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
         remove: '{s name="tabs/article_mapping/button_remove"}Remove{/s}'
     },
 
-
     /**
      * Initialize the Shopware.apps.Category.view.category.tabs.ArticleMapping and defines the necessary
      * default configuration
@@ -202,7 +201,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             });
             me.actionButtons.push(button);
         });
-
 
         return Ext.create('Ext.container.Container', {
             margins: '0 4',

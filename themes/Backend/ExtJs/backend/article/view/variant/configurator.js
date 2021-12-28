@@ -173,7 +173,6 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
              */
             'defineConfiguratorTemplate',
 
-
             /**
              * Event will be fired when the user clicks on the "create" button in the
              * group panel. If the user choose "create & activate" the "activate" parameter
@@ -400,8 +399,6 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
         return me.groupGrid;
     },
 
-
-
     /**
      * Creates the drag and drop zone for the Ext.view.View to allow
      */
@@ -496,7 +493,6 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
             }
         });
     },
-
 
     /**
      * Creates the grouping feature for the attribute group grid.
@@ -646,7 +642,6 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
         });
     },
 
-
     /**OPTION PANEL DECLARATION*/
 
     /**
@@ -762,7 +757,6 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
 
         });
     },
-
 
     /**
      * Creates the grid selection model for checkboxes
@@ -938,7 +932,6 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
             return 0 + info;
         }
     }
-
 
 });
 //{/block}

@@ -709,7 +709,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         return configuratorSet;
     },
 
-
     /**
      * Internal helper function to save the configurator set changes.
      */
@@ -1128,7 +1127,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             return;
         }
 
-
         var record = Ext.create('Shopware.apps.Article.model.ConfiguratorOption', {
             name: name,
             active: activate,
@@ -1291,8 +1289,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             variantListing = me.getVariantListing(),
             configuratorTabPanel = me.getConfiguratorTabPanel();
 
-
-
         //if the user want to change to the variant tab, load the store of the variant listing.
         if (newTab.name === 'variant-tab') {
             if (variantListing.getStore().getCount() > 0) {
@@ -1384,7 +1380,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             });
         });
     },
-
 
     /*********************************************************************************************
      *************************EVENTS OF THE VARIANT DETAIL PAGE***********************************
@@ -1562,8 +1557,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         record.save();
     },
 
-
-
     /*********************************************************************************************
      *******************EVENTS OF THE DEPENDENCY AND PRICE VARIATION COMPONENT********************
      *********************************************************************************************/
@@ -1617,7 +1610,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             variantListing = me.getVariantListing(),
             newRow, fieldSet = me.getDependencyFieldSet(),
             dependencyWindow = me.getDependencyWindow();
-
 
         if (!record) {
             record = Ext.create('Shopware.apps.Article.model.Dependency');
@@ -1918,7 +1910,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             }
         });
     },
-
 
     /**
      * Displays the mapping window to apply data from the

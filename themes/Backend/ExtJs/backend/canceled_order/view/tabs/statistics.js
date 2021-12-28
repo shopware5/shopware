@@ -56,7 +56,6 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.Statistics', {
         }
     },
 
-
     /**
      * Initializes the component, adds panel and tool
      *
@@ -112,7 +111,6 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.Statistics', {
 
         return grid;
     },
-
 
     /**
      * Creates the grid columns

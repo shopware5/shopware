@@ -131,7 +131,6 @@ Ext.define('Shopware.DragAndDropSelector',
      */
     toTitle: '',
 
-
     /**
      * default columns for the from grid
      */

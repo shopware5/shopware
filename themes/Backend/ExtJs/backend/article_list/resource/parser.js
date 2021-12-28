@@ -43,7 +43,6 @@ Ext.define('Parser', {
         me.tokens = me.constructValidTokensFromGrammar(grammar);
     },
 
-
     /**
      * Returns a tokenizer instance
      *
@@ -78,7 +77,6 @@ Ext.define('Parser', {
         unaryOperators.sort(function(a, b){
             return b.length - a.length;
         });
-
 
         var nullaryOperators = Object.keys(grammar.nullaryOperators);
         nullaryOperators.sort(function(a, b){
@@ -172,7 +170,6 @@ Ext.define('Parser', {
         me.tokenizer = me.createTokenizer();
         me.lexer = me.createLexer();
     },
-
 
     /**
      * Getter for the last seen attribute of the lexer

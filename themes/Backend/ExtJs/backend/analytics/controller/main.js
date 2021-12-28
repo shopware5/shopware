@@ -135,7 +135,6 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
             }
         });
 
-
         me.getNavigation().getSelectionModel().select(
             me.navigationStore.getNodeById('overview')
         );

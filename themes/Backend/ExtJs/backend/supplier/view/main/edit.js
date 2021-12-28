@@ -124,8 +124,6 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
         };
     },
 
-
-
     /**
      * Return the entire form
      *

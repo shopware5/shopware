@@ -95,7 +95,6 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
             paymentStore = this.subApplication.paymentStore,
             tabPanel = win.down('tabpanel');
 
-
         if(selection[0].data.source == 1){
             selection[0].destroy({
                 callback: function(data, operation){
@@ -117,7 +116,6 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
             });
         }
     },
-
 
     /**
      * Is fired, when the tab is changed

@@ -38,7 +38,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Sidebar', {
 
     title: '{s name="categoriesAndFilters"}Categories & Filters{/s}',
 
-
     initComponent: function () {
         var me = this;
 

@@ -289,7 +289,6 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
         return randomstring;
     },
 
-
     /**
      * Creates the container for the password field and the generateApiKey button.
      * @return [Ext.container.Container] - Contains the text field and the button
@@ -330,8 +329,6 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
             items: [ me.apiKeyField, me.apiKeyButton ]
         });
     },
-
-
 
     /**
      * @return

@@ -102,7 +102,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Rating', {
         me.createTaskRunner();
         me.callParent(arguments);
 
-
         Shopware.app.Application.on('vote-save-successfully', function () {
             me.refreshView();
         })

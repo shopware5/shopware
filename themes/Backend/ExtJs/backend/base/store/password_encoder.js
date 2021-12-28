@@ -27,7 +27,6 @@
  * @author shopware AG
  */
 
-
 Ext.define('Shopware.apps.Base.store.PasswordEncoder', {
     extend: 'Ext.data.Store',
 

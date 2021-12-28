@@ -31,7 +31,6 @@ Ext.define('Ext.ux.ButtonColumnMenuItem', {
     }
 });
 
-
 Ext.define('Ext.ux.ButtonColumn', {
     extend: 'Ext.grid.column.Column',
     alias: ['widget.buttoncolumn'],
@@ -46,8 +45,6 @@ Ext.define('Ext.ux.ButtonColumn', {
      * A CSS class to apply to the button. To determine the class dynamically, configure the Column with
      * a `{ @link #getClass }` function.
      */
-
-
 
     /**
      * @cfg { Function } handler
@@ -64,7 +61,6 @@ Ext.define('Ext.ux.ButtonColumn', {
      * The scope (**this** reference) in which the `{ @link #handler}` and `{ @link #getClass}` fuctions are executed.
      * Defaults to this Column.
      */
-
 
     /**
      * @cfg { Function } isDisabledFn
@@ -91,7 +87,6 @@ Ext.define('Ext.ux.ButtonColumn', {
      * @cfg { Object} setupMenu.recordIndex The index of the current row
      * @cfg Ext.menu.Item[]/Ext.Action[]/Object[] setupMenu.return array of menuItems config options.
      */
-
 
     /*
      * @cfg { Boolean} [stopSelection=true]
@@ -131,7 +126,6 @@ Ext.define('Ext.ux.ButtonColumn', {
      * The className used for the inner arrow element if the button has a menu.
      */
     arrowCls: 'split',
-
 
     /**
      * @cfg { String} textAlign
@@ -180,7 +174,6 @@ Ext.define('Ext.ux.ButtonColumn', {
         };
     },
 
-
     getTemplateArgs: function () {
         var me = this;
         return {
@@ -196,9 +189,6 @@ Ext.define('Ext.ux.ButtonColumn', {
             btnCls: me.extMinor === 1 ? me.getBtnCls() :''
         };
     },
-
-
-
 
     //private
     initBtnTpl: function () {
@@ -236,7 +226,6 @@ Ext.define('Ext.ux.ButtonColumn', {
         return cls;
     },
 
-
     showMenu: function (el) {
         var me = this;
         if (me.rendered && me.menu) {
@@ -247,7 +236,6 @@ Ext.define('Ext.ux.ButtonColumn', {
         }
         return me;
     },
-
 
     destroy: function () {
         delete this.items;

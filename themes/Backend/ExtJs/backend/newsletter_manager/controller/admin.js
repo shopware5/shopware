@@ -224,7 +224,6 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
                 });
             }
 
-
         });
     },
 
@@ -302,7 +301,6 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
             Shopware.Notification.createGrowlMessage(me.snippets.deleteRecipient.successTitle, me.snippets.deleteRecipient.successMessage, me.snippets.growl);
             store.save();
         });
-
 
     },
 
@@ -408,7 +406,6 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
             //                        Shopware.Notification.createGrowlMessage(me.snippets.deleteSender.errorTitle, me.snippets.deleteSender.errorMessage, me.snippets.growl);
             store.save();
         });
-
 
     }
 

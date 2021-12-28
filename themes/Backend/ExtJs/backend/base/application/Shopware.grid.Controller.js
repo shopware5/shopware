@@ -549,7 +549,6 @@ Ext.define('Shopware.grid.Controller', {
         return events;
     },
 
-
     /**
      * Event listener function of the { @link Shopware.grid.Panel } component.
      * This event is fired when the user uses the "delete items" button within the grid toolbar
@@ -703,7 +702,6 @@ Ext.define('Shopware.grid.Controller', {
         });
     },
 
-
     /**
      * Event listener function of the { @link Shopware.grid.Panel:selectionModel } component.
      * Fired when the user change the selection over the checkbox selection model.
@@ -726,7 +724,6 @@ Ext.define('Shopware.grid.Controller', {
 
         return Shopware.app.Application.fireEvent(me.getEventName('after-selection-changed'), me, grid, selModel, selection);
     },
-
 
     /**
      * Event listener function of the { @link Shopware.grid.Panel:addButton }.
@@ -832,7 +829,6 @@ Ext.define('Shopware.grid.Controller', {
         });
     },
 
-
     /**
      * Event listener function of the { @link Shopware.grid.Panel:pageSizeCombo }.
      * The event is fired when the user change the combo box value to change the
@@ -859,7 +855,6 @@ Ext.define('Shopware.grid.Controller', {
 
         return Shopware.app.Application.fireEvent(me.getEventName('after-page-size-changed'), me, grid, combo, records);
     },
-
 
     /**
      * Event listener function of the { @link Shopware.grid.Panel:editColumn }.
@@ -948,7 +943,6 @@ Ext.define('Shopware.grid.Controller', {
 
         return window;
     },
-
 
     /**
      * Helper function to prefix the passed event name with the event alias.

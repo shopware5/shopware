@@ -1,5 +1,4 @@
 
-
 //{namespace name="backend/application/main"}
 //{block name="backend/application/Shopware.window.Progress"}
 
@@ -495,7 +494,6 @@ Ext.define('Shopware.window.Progress', {
         return items;
     },
 
-
     /**
      * Creates the bottom toolbar for the batch window.
      * The toolbar contains as default a cancel button to cancel the batch process
@@ -560,7 +558,6 @@ Ext.define('Shopware.window.Progress', {
 
         return items;
     },
-
 
     /**
      * Creates the result grid which displays each request and response of each single task.
@@ -628,7 +625,6 @@ Ext.define('Shopware.window.Progress', {
         ];
     },
 
-
     /**
      * Creates an Ext.container.Container for the info text which will
      * be displayed at top of the window.
@@ -641,7 +637,6 @@ Ext.define('Shopware.window.Progress', {
             style: 'line-height:20px;'
         });
     },
-
 
     /**
      * Creates a progress bar for the passed task object.
@@ -708,7 +703,6 @@ Ext.define('Shopware.window.Progress', {
         //get next record of the data array of the current task.
         record = current.data.shift();
         me.updateProgressBar(current, current.text);
-
 
         /**
          * The progress window don't know, how to handle the data operation. Delete, update, create, save?
@@ -778,7 +772,6 @@ Ext.define('Shopware.window.Progress', {
         );
     },
 
-
     /**
      * Creates a response record for the result grid.
      *
@@ -832,7 +825,6 @@ Ext.define('Shopware.window.Progress', {
         });
     },
 
-
     /**
      * Success renderer function of the result grid which displayed
      * an tick icon if the request was successfully and a red cross
@@ -850,7 +842,6 @@ Ext.define('Shopware.window.Progress', {
         }
         return '<span style="display:block; margin: 0 auto; height:16px; width:16px;" class="' + css + '"></span>';
     },
-
 
     /**
      * Grid column renderer function for the request column.

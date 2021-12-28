@@ -22,7 +22,6 @@ Ext.define('Shopware.window.Detail', {
     height: '90%',
     alias: 'widget.shopware-window-detail',
 
-
     /**
      * Internal collection of all created association components
      * which created in this component.
@@ -256,7 +255,6 @@ Ext.define('Shopware.window.Detail', {
         var me = this;
         return me._opts[prop];
     },
-
 
     /**
      * The initComponent template method is an important initialization step for a Component.
@@ -523,7 +521,6 @@ Ext.define('Shopware.window.Detail', {
         return me.callParent(arguments);
     },
 
-
     /**
      * Creates the form and tab panel for the window. The form panel
      * are used to send the model data back to the php controller.
@@ -671,7 +668,6 @@ Ext.define('Shopware.window.Detail', {
         return item;
     },
 
-
     /**
      * Helper function which creates all model components.
      *
@@ -736,7 +732,6 @@ Ext.define('Shopware.window.Detail', {
         });
 
         me.fireEvent(me.getEventName('after-association-component-created'), me, component, type, model, store);
-
 
         return component;
     },
@@ -821,7 +816,6 @@ Ext.define('Shopware.window.Detail', {
         return items;
     },
 
-
     /**
      * Creates the cancel button which will be displayed
      * in the bottom toolbar of the detail window.
@@ -866,7 +860,6 @@ Ext.define('Shopware.window.Detail', {
         return me.saveButton;
     },
 
-
     /**
      * Helper function to load the detail window record.
      */
@@ -885,7 +878,6 @@ Ext.define('Shopware.window.Detail', {
 
         this.loadAssociationData(record);
     },
-
 
     /**
      * Helper function to reload the associated data of the passed record.
@@ -939,7 +931,6 @@ Ext.define('Shopware.window.Detail', {
         me.fireEvent(me.getEventName('after-load-associations'), me, record);
     },
 
-
     /**
      * Event listener which called when the detail window tab panel changes
      * the active tab item.
@@ -981,8 +972,6 @@ Ext.define('Shopware.window.Detail', {
     getEventName: function (name) {
         return this.eventAlias + '-' + name;
     },
-
-
 
 });
 //{/block}

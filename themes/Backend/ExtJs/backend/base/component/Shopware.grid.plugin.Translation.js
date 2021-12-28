@@ -245,7 +245,6 @@ Ext.define('Shopware.grid.plugin.Translation', {
         return translationItemExist;
     },
 
-
     /**
      * Updates the action column for the grid panel.
      * The passed actionColumn parameter can contains an already existing action column.
@@ -349,7 +348,6 @@ Ext.define('Shopware.grid.plugin.Translation', {
         });
         return true;
     },
-
 
     /**
      * @method

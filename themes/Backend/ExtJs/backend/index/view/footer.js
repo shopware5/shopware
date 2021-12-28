@@ -55,7 +55,6 @@ Ext.define('Shopware.apps.Index.view.Footer', {
         close_all: '{s name="footer/close_all"}Close all{/s}'
     },
 
-
     /**
      * Initialize the footer toolbar
      *

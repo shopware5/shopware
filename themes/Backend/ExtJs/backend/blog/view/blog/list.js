@@ -168,7 +168,6 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
         var me = this,
             actionColumnData = [];
 
-
         actionColumnData.push({
             iconCls: 'sprite-pencil',
             cls: 'editBtn',

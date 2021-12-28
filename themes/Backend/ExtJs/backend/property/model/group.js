@@ -73,8 +73,6 @@ Ext.define('Shopware.apps.Property.model.Group', {
             destroy: '{url controller="property" action="deleteGroup"}'
         },
 
-
-
         /**
          * Configure the data reader
          * @object

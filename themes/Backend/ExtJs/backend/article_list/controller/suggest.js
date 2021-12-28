@@ -21,7 +21,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 //{namespace name="backend/article_list/main"}
 
 /**
@@ -87,7 +86,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
      */
     prepareGrammar: function(grammar)  {
         var me = this;
-
 
         Ext.each(Object.keys(grammar.binaryOperators), function(key) {
             var items = grammar.binaryOperators[key];
@@ -175,7 +173,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
         var me = this;
         return me.parser;
     },
-
 
     /**
      * Actually do show suggestions in the combobox; depending on the type of suggestion, local or remote
@@ -405,7 +402,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
         } catch (e) {
             // The picker might not be available
         }
-
 
     }
 });

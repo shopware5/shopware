@@ -55,7 +55,6 @@ Ext.define('Shopware.apps.UserManager.view.main.Window', {
         }
     },
 
-
     /**
      * Initializes the component and builds up the main interface
      *

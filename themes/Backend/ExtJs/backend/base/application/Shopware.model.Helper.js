@@ -115,7 +115,6 @@ Ext.define('Shopware.model.Helper', {
         return associations;
     },
 
-
     /**
      * Helper function which returns the associated store of the passed association.
      * If the passed records contains no instance of the association, the function
@@ -315,8 +314,6 @@ Ext.define('Shopware.model.Helper', {
         return Ext.util.Format.number(value, '0');
     },
 
-
-
     /**
      * Adds the shopware default form field configuration for integer form field.
      * The field configuration will be applied to the passed field object.
@@ -382,7 +379,6 @@ Ext.define('Shopware.model.Helper', {
         return field;
     },
 
-
     /**
      * Helper function to get the component type for the passed
      * association.
@@ -403,7 +399,6 @@ Ext.define('Shopware.model.Helper', {
         }
         return false;
     },
-
 
     /**
      * Creates an store for association search fields like many to one association
@@ -462,7 +457,6 @@ Ext.define('Shopware.model.Helper', {
             toString: function() { return this.name + ": " + this.message }
         };
     },
-
 
     /**
      * Helper function which validates if the passed component

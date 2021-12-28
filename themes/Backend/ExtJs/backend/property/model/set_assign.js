@@ -53,6 +53,5 @@ Ext.define('Shopware.apps.Property.model.SetAssign', {
         { name: 'name', type: 'string' }
     ]
 
-
 });
 //{/block}

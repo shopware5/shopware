@@ -121,7 +121,6 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
             })
         );
 
-
         buttons.push('->');
 
         buttons.push({

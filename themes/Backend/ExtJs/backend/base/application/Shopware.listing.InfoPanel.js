@@ -204,7 +204,6 @@ Ext.define('Shopware.listing.InfoPanel', {
         me.callParent(arguments);
     },
 
-
     /**
      * Helper function to get config access.
      *

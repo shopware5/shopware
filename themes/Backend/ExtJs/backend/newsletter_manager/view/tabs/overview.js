@@ -99,7 +99,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
              */
             'deleteNewsletter',
 
-
             /**
              * Fired when the honorable user chooses to duplicate a newsletter
              * @param record
@@ -115,7 +114,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
 
         me.callParent(arguments);
     },
-
 
     /**
      * Creates the grid columns
@@ -259,7 +257,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                         /*{else}*/
                             Shopware.Notification.createGrowlMessage(me.snippets.error.privilege_title, me.snippets.error.privilege_text);
                         /*{/if}*/
-
 
                     }
                 }]

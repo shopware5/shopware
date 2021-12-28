@@ -137,7 +137,6 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
         })
     },
 
-
     /**
      * Called after the user edited a grow in the main grid
      *

@@ -262,7 +262,6 @@ Ext.define('Shopware.apps.Form.controller.Fields', {
         view.getPlugin('my-gridviewdragdrop').disable();
     },
 
-
     /**
      * Validates the record
      *

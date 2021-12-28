@@ -64,7 +64,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
         me.callParent(arguments);
     },
 
-
     /**
      * Register events
      */

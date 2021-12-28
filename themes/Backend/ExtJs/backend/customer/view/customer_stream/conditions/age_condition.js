@@ -53,7 +53,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.AgeCondition'
             allowedOperators: ['=','<','<=','BETWEEN','>','>=']
         });
 
-
         var valueField = Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.field.AttributeValue', {
             name: 'value',
             operatorField: operatorField,

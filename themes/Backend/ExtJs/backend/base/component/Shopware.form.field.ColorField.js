@@ -21,7 +21,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 //{namespace name="backend/base/color_components"}
 
 //{block name="backend/base/color_field"}

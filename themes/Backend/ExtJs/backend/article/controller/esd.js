@@ -574,7 +574,6 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
         record.set('file', filename);
     },
 
-
     onUploadReady: function() {
         var me = this;
 

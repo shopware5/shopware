@@ -101,7 +101,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
             ]
         });
 
-
     },
 
     /**

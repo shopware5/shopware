@@ -59,7 +59,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.main.Window', {
         me.callParent(arguments);
     },
 
-
     /**
      * Creates the tab panel for the main window
      */

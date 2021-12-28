@@ -135,8 +135,6 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
         );
     },
 
-
-
     /**
      * Creates the grid columns
      *
@@ -295,8 +293,6 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
         }
         return Ext.util.Format.currency(value);
     }
-
-
 
 });
 //{/block}

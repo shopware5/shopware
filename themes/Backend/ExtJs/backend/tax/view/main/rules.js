@@ -106,7 +106,6 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
                         this.countryCombo.setValue('', true);
                         this.stateCombo.setValue('', true);
 
-
                     },
                     scope: this
                 }
@@ -251,7 +250,6 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
             }, notice
             ]
         });
-
 
         this.dockedItems = Ext.clone(this.dockedItems);
         this.dockedItems.push(this.toolbar);

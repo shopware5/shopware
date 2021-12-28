@@ -94,7 +94,6 @@ Ext.define('Shopware.apps.Property.view.main.SetAssignGrid', {
         );
     },
 
-
     /**
      * Creates the grid columns
      *

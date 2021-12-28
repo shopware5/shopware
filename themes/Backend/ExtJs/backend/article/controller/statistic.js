@@ -72,7 +72,6 @@ Ext.define('Shopware.apps.Article.controller.Statistic', {
         me.callParent(arguments);
     },
 
-
     /**
      * Event listener function of the main tab panel in the detail window.
      * Fired when the user changes the tab.

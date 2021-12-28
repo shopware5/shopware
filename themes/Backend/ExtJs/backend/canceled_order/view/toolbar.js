@@ -50,7 +50,6 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
         }
     },
 
-
     /**
      * Initializes the component and registers some events
      *

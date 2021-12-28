@@ -80,7 +80,6 @@ Ext.define('Shopware.apps.ProductFeed', {
      */
     stores: [ 'List', 'Detail', 'Category', 'Supplier', 'Article', 'CategoryForComboTree', 'Shop'],
 
-
     /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.

@@ -42,7 +42,6 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Main', {
         bodyBorder: 0
     },
 
-
     layout: 'fit',
 
     snippets: {
@@ -120,7 +119,6 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Main', {
         ];
 
     },
-
 
     /**
      * Create the basket overview

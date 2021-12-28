@@ -134,7 +134,6 @@ Ext.define('Shopware.apps.Performance.view.main.Categories', {
         me.callParent(arguments);
     },
 
-
     /**
      * Registers additional component events.
      */

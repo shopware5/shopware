@@ -77,7 +77,6 @@ Ext.define('Shopware.apps.Partner', {
      */
     views: ['main.Window', 'partner.List', 'partner.Window', 'partner.Detail', 'statistic.Window', 'statistic.List', 'statistic.Chart'],
 
-
     /**
      * Requires models for sub-application
      * @array

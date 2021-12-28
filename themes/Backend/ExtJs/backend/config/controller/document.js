@@ -116,7 +116,6 @@ Ext.define('Shopware.apps.Config.controller.Document', {
             newContentField = elementFieldSet.down('tinymce[name=' + newFieldName + '_Value]'),
             newStyleField = elementFieldSet.down('textarea[name=' + newFieldName + '_Style]');
 
-
         //Show the dynamical fields and fill them
         newContentField.show();
         newStyleField.show();

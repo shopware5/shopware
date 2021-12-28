@@ -170,7 +170,6 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
         var me = this,
             actionColumnData = [];
 
-
         actionColumnData.push({
             iconCls: 'sprite-plus-circle',
             cls: 'addBtn',

@@ -113,7 +113,6 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
         ];
     },
 
-
     /**
      * creates the form panel
      */

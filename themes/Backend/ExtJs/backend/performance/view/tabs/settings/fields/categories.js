@@ -110,6 +110,5 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
         ];
     }
 
-
 });
 //{/block}

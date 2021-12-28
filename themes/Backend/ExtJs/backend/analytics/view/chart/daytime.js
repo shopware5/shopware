@@ -39,7 +39,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
     },
     animate: true,
 
-
     initComponent: function () {
         var me = this;
 

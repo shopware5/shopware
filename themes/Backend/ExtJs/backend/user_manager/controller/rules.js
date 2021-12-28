@@ -110,8 +110,6 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
        });
     },
 
-
-
     /**
      * Event will be fired when the user want to create a new privilege.
      *
@@ -327,7 +325,6 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
             });
         });
 
-
     },
 
     /**
@@ -388,7 +385,6 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
             ruleStore: store
         }).show();
     },
-
 
     /**
      * Event will be fired when the user clicks on the "add privilege button"

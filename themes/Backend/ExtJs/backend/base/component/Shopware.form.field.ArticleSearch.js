@@ -668,7 +668,6 @@ Ext.define('Shopware.form.field.ArticleSearch',
             curIndex = me.dropDownStore.indexOf(record),
             lastIndex = me.dropDownStore.getCount() - 1;
 
-
         // Keyboard up pressed
         if(event.keyCode === Ext.EventObject.UP) {
             if(curIndex === undefined) {

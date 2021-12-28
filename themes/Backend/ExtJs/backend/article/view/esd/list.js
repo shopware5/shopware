@@ -212,7 +212,6 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
         ];
     },
 
-
     /**
      * Creates the grid selection model for checkboxes
      *
@@ -316,7 +315,6 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
                 }
             }
         });
-
 
         return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'top',

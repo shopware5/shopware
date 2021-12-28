@@ -1,5 +1,4 @@
 
-
 //{namespace name="backend/application/main"}
 
 //{block name="backend/application/Shopware.data.Model"}
@@ -230,7 +229,6 @@ Ext.define('Shopware.data.Model', {
             me.proxy.api[key] = value;
         });
     },
-
 
     /**
      * Helper function to load the model detail data.

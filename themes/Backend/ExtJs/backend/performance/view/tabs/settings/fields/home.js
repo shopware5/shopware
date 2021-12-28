@@ -138,7 +138,5 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Home', {
         return Ext.String.format('<div class="[0]" title="[1]" style="width:16px; height:16px;"></div>', sprite, record.get('description'));
     }
 
-
-
 });
 //{/block}

@@ -98,6 +98,5 @@ Ext.define('Shopware.apps.Payment.model.Payment', {
         }
     }
 
-
 });
 //{/block}

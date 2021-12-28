@@ -152,7 +152,6 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
     createFilterForm: function() {
         var me = this;
 
-
         me.filterForm = Ext.create('Ext.form.Panel', {
             border: false,
             cls: Ext.baseCSSPrefix + 'filter-form',
@@ -286,7 +285,6 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
             fieldLabel: me.snippets.dispatchName
         });
     },
-
 
     createCustomerGroupField: function() {
         var me = this;

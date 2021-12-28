@@ -235,7 +235,6 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
         return me.saveButton;
     },
 
-
     /**
      * Creates the cancel button which fire the cancel event, the cancel event is handled in the detail controller.
      * @return Ext.button.Button

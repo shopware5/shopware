@@ -364,7 +364,6 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
         });
     },
 
-
     /**
      * Checks if the shipping and billing address is different by comparing all their fields, except for the ids.
      * If this is the case, the panel title is colored red and an icon will be displayed to its right.

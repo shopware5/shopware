@@ -390,7 +390,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             configurator = me.getConfigurator(),
             priceFieldSet = me.getPriceFieldSet();
 
-
         if (article === null && me.subApplication.article) {
             me.reloadArticle(me.subApplication.article.get('id'));
             return;

@@ -58,6 +58,5 @@ Ext.define('Shopware.apps.Form.view.main.Mainwindow', {
         me.callParent(arguments);
     }
 
-
 });
 //{/block}

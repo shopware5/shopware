@@ -111,7 +111,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerAge', {
             ];
         }
 
-
         me.callParent(arguments);
     }
 });

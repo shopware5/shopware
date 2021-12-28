@@ -203,7 +203,6 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
         return columns;
     },
 
-
     /**
      * Creates the paging toolbar for the grid to allow
      * and store paging. The paging toolbar uses the same store as the Grid

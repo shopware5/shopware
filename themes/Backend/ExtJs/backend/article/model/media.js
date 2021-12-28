@@ -62,7 +62,6 @@ Ext.define('Shopware.apps.Article.model.Media', {
             }
         },
 
-
         {
             name: 'original',
             type: 'string'

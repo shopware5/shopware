@@ -292,7 +292,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 verticalHandle = 's',
                 horizontalHandle = 'e';
 
-
             if (dock.indexOf('b') != -1) {
                 verticalHandle = 'n';
             }

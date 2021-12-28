@@ -546,7 +546,6 @@ Ext.define('Shopware.apps.ArticleList.controller.BatchProcess', {
         });
     },
 
-
     /**
      * Helper method which returns a rowEditing.editor for a given column.
      *

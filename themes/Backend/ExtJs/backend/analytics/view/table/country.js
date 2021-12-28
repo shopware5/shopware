@@ -71,7 +71,6 @@ Ext.define('Shopware.apps.Analytics.view.table.Country', {
         ];
     },
 
-
     currencyRenderer: function(value) {
         var me = this;
 

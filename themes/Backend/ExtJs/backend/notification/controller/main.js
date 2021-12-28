@@ -49,7 +49,6 @@ Ext.define('Shopware.apps.Notification.controller.Main', {
      */
     stores: [ 'Article' ],
 
-
     /**
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window
@@ -59,7 +58,6 @@ Ext.define('Shopware.apps.Notification.controller.Main', {
      */
     init: function() {
         var me = this;
-
 
         /** me.subApplication.articleStore stores the list data*/
         me.subApplication.articleStore =  me.subApplication.getStore('Article');

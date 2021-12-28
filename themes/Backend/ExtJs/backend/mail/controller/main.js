@@ -232,7 +232,6 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
         return false;
     },
 
-
     /**
      * @event click
      * @param [object] btn - the btn that fired the event
@@ -297,7 +296,6 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
 
                     formPanel.getForm().reset();
 
-
                     infoPanel.updateContext(records[0].get('contextPath'));
 
                     me.getPreviewBtn().setDisabled(false);
@@ -309,7 +307,6 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
             }
         });
     },
-
 
     /**
      * Resets the form
@@ -625,7 +622,6 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
             }
         });
     },
-
 
     /**
      * Reloads attachments

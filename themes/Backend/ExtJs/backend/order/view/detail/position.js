@@ -79,7 +79,6 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
         remove: '{s name="position/button_delete"}Delete all selected{/s}'
     },
 
-
     /**
      * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
@@ -142,7 +141,6 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
             me.articleNameSearch.getDropDownMenu().hide();
         }, me);
     },
-
 
     /**
      * Defines additional events which will be
@@ -238,7 +236,6 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
              * @param [object] record - Selected record
              */
             'articleNumberSelect',
-
 
             /**
              * Event will be fired when the user clicks the "Save button" button.

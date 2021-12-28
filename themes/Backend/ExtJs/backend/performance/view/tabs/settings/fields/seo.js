@@ -51,7 +51,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
      */
     caption: '{s name="tabs/settings/seo/title"}SEO{/s}',
 
-
     /**
      * Component event method which is fired when the component
      * is initials. The component is initials when the user

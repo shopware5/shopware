@@ -26,7 +26,6 @@
 Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
     extend: 'Ext.grid.Panel',
 
-
     alias: 'widget.multi-edit-batch-process-grid',
 
     initComponent: function() {
@@ -43,7 +42,6 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
 
         me.callParent(arguments);
     },
-
 
     /**
      * Creates the grid toolbar

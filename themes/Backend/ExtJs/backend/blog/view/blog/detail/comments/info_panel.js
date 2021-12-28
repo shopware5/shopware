@@ -49,7 +49,6 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.InfoPanel', {
     collapsible: true,
     autoScroll: true,
 
-
     initComponent: function(){
         var me = this;
 

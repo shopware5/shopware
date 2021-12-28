@@ -76,7 +76,6 @@ Ext.define('Shopware.apps.ArticleList', {
 
     ],
 
-
     /**
      * Array of models to require from AppName.model namespace.
      * @array

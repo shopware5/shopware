@@ -73,6 +73,5 @@ Ext.define('Shopware.apps.Performance.controller.Main', {
         }
     }
 
-
 });
 //{/block}

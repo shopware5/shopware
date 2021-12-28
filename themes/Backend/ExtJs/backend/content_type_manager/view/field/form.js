@@ -158,7 +158,6 @@ Ext.define('Shopware.apps.ContentTypeManager.view.field.Form', {
                 me.down('[name="searchAble"]')
             ];
 
-
             if (record.get('hasResolver')) {
                 disableFields.forEach(function (item) {
                     me.record.set(item.getName(), false);

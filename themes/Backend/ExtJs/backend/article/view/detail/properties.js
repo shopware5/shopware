@@ -462,7 +462,6 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
             }
         });
 
-
         if (me.article.get('filterGroupId')) {
             me.propertySetStore.load({
                 id: me.article.get('filterGroupId')

@@ -91,7 +91,6 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
             self.listingContainer.add(plugins);
         };
 
-
         return listing;
     },
 
@@ -177,7 +176,6 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
                             handler: handlerCallback
                         });
                 }
-
 
                 return Ext.create('PluginManager.container.Container', {
                     cls: 'button configure',

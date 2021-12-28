@@ -92,6 +92,5 @@ Ext.define('Shopware.apps.Order.model.Configuration', {
         }
     }
 
-
 });
 //{/block}

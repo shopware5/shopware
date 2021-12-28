@@ -282,7 +282,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
         simpleGrid.getStore().commitChanges();
     },
 
-
     /**
      * Called, when the user clicks the 'save' button in the 'addFilter' dialog and is in advanced filter context
      *

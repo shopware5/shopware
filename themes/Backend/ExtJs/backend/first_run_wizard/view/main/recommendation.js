@@ -104,7 +104,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Recommendation', {
             me.createIntegratedPluginsListing()
         ];
 
-
         me.callParent(arguments);
     },
 

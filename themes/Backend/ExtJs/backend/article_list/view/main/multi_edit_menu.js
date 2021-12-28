@@ -40,7 +40,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.MultiEditMenu', {
 
         me.items = me.getItems();
 
-
         me.addEvents(
                 /**
                  * Fired when the user clicks the "batch process" button
@@ -59,7 +58,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.MultiEditMenu', {
     getItems: function () {
         var me = this,
                 items = [];
-
 
         /*{if {acl_is_allowed privilege=doMultiEdit}}*/
         items.push(
@@ -88,7 +86,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.MultiEditMenu', {
             iconCls: 'sprite-arrow-circle-225-left'
         });
         /*{/if}*/
-
 
         return items;
     }

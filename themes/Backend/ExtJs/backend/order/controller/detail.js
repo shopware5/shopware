@@ -378,7 +378,6 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         editor.context.record.set('articleDetailID', record.get('id'));
     },
 
-
     /**
      * Event will be fired when the user clicks the add button to add an order position.
      *
@@ -467,7 +466,6 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             });
         });
     },
-
 
     /**
      * Event will be fired when the user change the payment combo box which
@@ -818,7 +816,6 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             }
         });
     },
-
 
     /**
      * Event listener method which fired when the user clicks the pencil button

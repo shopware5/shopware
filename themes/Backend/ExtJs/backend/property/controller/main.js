@@ -97,7 +97,6 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         deleteSetErrorTitle: '{s name="message/delete_group_error_title"}Error{/s}',
         deleteSetErrorMessage: '{s name="message/delete_group_error_message"}An error has occurred.{/s}',
 
-
         // set assigned
         groupAlreadyAssigned: '{s name="message/group_already_assigned"}The group was already assigned.{/s}',
         groupSuccessfulAssigned: '{s name="message/group_successful_assigned"}Group successful assigned.{/s}',
@@ -255,7 +254,6 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             me.saveAssignmentPosition(assignStore);
         }
     },
-
 
     /**
      * Internal helper function to save current postion of values
@@ -436,7 +434,6 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         });
     },
 
-
     /**
      * Event will be fired when the selected option changes
      *
@@ -507,8 +504,6 @@ Ext.define('Shopware.apps.Property.controller.Main', {
             }
         });
     },
-
-
 
     /**
      * Event will be fired when the user clicks the delete icon in theconfig
@@ -646,7 +641,6 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         });
     },
 
-
     /**
      * Fired after a row is edited and passes validation. This event is fired
      * after the store's update event is fired with this edit.
@@ -700,7 +694,6 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         store.currentPage = 1;
         store.filter('filter',searchString);
     },
-
 
     /**
      * Filters the grid with the passed search value to find the right item

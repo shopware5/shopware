@@ -133,7 +133,6 @@ Ext.define('Shopware.apps.Notification.view.notification.Customer', {
         return columnsData;
     },
 
-
     /**
      * Creates the grid toolbar with search field
      *

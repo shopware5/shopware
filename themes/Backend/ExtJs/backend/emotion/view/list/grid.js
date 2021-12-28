@@ -383,7 +383,6 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         }
     },
 
-
     /**
      * Column renderer function for the emotion type column.
      * @param [string] value    - The field value

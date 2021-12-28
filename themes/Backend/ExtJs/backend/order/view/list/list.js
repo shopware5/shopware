@@ -405,7 +405,6 @@ Ext.define('Shopware.apps.Order.view.list.List', {
         }
     },
 
-
     createDeleteOrderColumn: function() {
         var me = this;
         return {
@@ -443,7 +442,6 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             }
         };
     },
-
 
     /**
      * Creates the grid selection model for checkboxes

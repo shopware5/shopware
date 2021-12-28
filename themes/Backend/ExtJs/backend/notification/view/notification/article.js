@@ -126,7 +126,6 @@ Ext.define('Shopware.apps.Notification.view.notification.Article', {
         return columnsData;
     },
 
-
     /**
      * Creates the grid toolbar with search field
      *

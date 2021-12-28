@@ -106,7 +106,6 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Range', {
             return;
         }
 
-
         if (value.hasOwnProperty(me.minField)) {
             me.fromField.setValue(value[me.minField]);
         }

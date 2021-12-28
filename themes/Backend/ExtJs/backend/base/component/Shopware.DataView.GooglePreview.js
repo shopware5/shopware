@@ -65,7 +65,6 @@ Ext.define('Shopware.DataView.GooglePreview',
      */
     cls: Ext.baseCSSPrefix + 'dataview-google-preview',
 
-
     /**
      * the fieldSet in which the preview will be shown
      */
@@ -141,7 +140,6 @@ Ext.define('Shopware.DataView.GooglePreview',
         me.callParent(arguments);
     },
 
-
     createPreviewView: function() {
         var me = this;
 
@@ -150,7 +148,6 @@ Ext.define('Shopware.DataView.GooglePreview',
             name: 'google-preview-view',
             tpl: me.createPreviewTemplate()
         });
-
 
         return me.previewView;
     },

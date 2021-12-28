@@ -27,7 +27,6 @@
  * @author shopware AG
  */
 
-
 /**
  * Shopware Application - Notification backend module
  *

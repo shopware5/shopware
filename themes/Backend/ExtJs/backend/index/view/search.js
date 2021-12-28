@@ -132,7 +132,6 @@ Ext.define('Shopware.apps.Index.view.Search', {
                     left = parent.dom.offsetLeft,
                     top = parent.dom.offsetTop;
 
-
                 me.searchDropDown.update(html);
                 me.searchDropDown.getEl().applyStyles({
                     top: top + 'px',

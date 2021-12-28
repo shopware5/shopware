@@ -263,7 +263,6 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             }
         });
 
-
         if (me.record.data.id === 0) {
             pwRequired = true;
         }

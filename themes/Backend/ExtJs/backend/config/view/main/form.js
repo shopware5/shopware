@@ -77,7 +77,6 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
             elementName,
             form = me.formRecord;
 
-
         var formDescription = form.get('description');
         if(form.associations.containsKey('getTranslation')) {
             if(form.getTranslation().getAt(0) && form.getTranslation().getAt(0).get('description')) {

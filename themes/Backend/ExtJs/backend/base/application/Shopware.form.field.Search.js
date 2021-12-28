@@ -107,7 +107,6 @@ Ext.define('Shopware.form.field.Search', {
             return config;
         },
 
-
         /**
          * Static function which sets the property value of
          * the passed property and value in the display configuration.
@@ -139,7 +138,6 @@ Ext.define('Shopware.form.field.Search', {
         return { };
     },
 
-
     /**
      * Helper function to get config access.
      *
@@ -150,7 +148,6 @@ Ext.define('Shopware.form.field.Search', {
         var me = this;
         return me._opts[prop];
     },
-
 
     /**
      * Class constructor which merges the different configurations.
@@ -189,7 +186,6 @@ Ext.define('Shopware.form.field.Search', {
         });
         me.callParent(arguments);
     },
-
 
     /**
      * Creates a listing configuration for the search combo box.

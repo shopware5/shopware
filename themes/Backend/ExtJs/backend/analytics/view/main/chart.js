@@ -44,7 +44,6 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
         me.callParent(arguments);
     },
 
-
     initMultipleShopTipsStores: function () {
         var me = this;
 
@@ -216,7 +215,6 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
 
         return titles;
     }
-
 
 });
 //{/block}

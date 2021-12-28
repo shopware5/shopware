@@ -70,7 +70,6 @@ Ext.define('Shopware.apps.Tax', {
 
     models: [ 'Groups','Rules','Areas','Countries','States' ],
 
-
     /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.

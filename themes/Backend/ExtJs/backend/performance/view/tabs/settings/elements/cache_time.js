@@ -45,7 +45,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
      */
     title: '{s name="grid/cacheTime"}Define cache times for controller (actions) here{/s}',
 
-
     /**
      * Initialize the Shopware.apps.Customer.view.main.List and defines the necessary
      * default configuration

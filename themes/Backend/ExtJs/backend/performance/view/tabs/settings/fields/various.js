@@ -131,6 +131,5 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
         ];
     }
 
-
 });
 //{/block}

@@ -147,7 +147,6 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
         }
         /* {/if} */];
 
-
         // Toolbar
         me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
             dock: 'top',
@@ -170,7 +169,6 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
             /* {/if} */
             ]
         });
-
 
         me.dockedItems = Ext.clone(me.dockedItems);
         me.dockedItems.push(me.toolbar);

@@ -26,7 +26,6 @@
 Ext.define('Shopware.apps.ArticleList.view.Backup.Grid', {
     extend: 'Ext.grid.Panel',
 
-
     alias: 'widget.multi-edit-backup-grid',
 
     /**
@@ -130,7 +129,6 @@ Ext.define('Shopware.apps.ArticleList.view.Backup.Grid', {
         value = value.replace(' OR ', "\nOR\n");
         return value.replace(/[\r\n]+/g, "<br>");
     },
-
 
     /**
      * Creates pagingbar

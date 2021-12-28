@@ -170,7 +170,6 @@ Ext.define('Lexer', {
                 me.buildSimpleResult(token, tokenType);
             }
 
-
             me.addToAst(token, originalToken, tokenType);
 
             if (me.inList && token == ')') {
@@ -201,7 +200,6 @@ Ext.define('Lexer', {
             return finalCheck;
         }
     },
-
 
     /**
      * Mark the query-string as not being simple
@@ -446,7 +444,6 @@ Ext.define('Lexer', {
             me.setSuggestion(me.grammar.boolOperators.concat([')']));
             return { rules: me.grammar.boolOperators.concat([')']), message: '{s name="lexer/boolOperatorsOrBrace"}boolOperators or ){/s}' };
         }
-
 
         /**
          * Last token:  double sided operator

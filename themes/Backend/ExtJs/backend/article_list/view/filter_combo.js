@@ -136,7 +136,6 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
         me.store.remoteFilter = true;
         me.queryCaching = true;
 
-
         // Setting the filter this way ensures the filter to be replaced
         me.store.clearFilter(true);
         me.store.filter({ id: 'filter', property: 'filter', value: token ? token.replace('"', "") : token });
@@ -162,7 +161,6 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
 
         me.store.clearFilter(true);
 
-
         if (!me.getValue() || me.getValue().substring(position-1, position).trim() == "") {
             token = undefined;
         }
@@ -183,7 +181,6 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
         me.store.clearFilter(true);
         me.store.filter({ id: 'filter', anyMatch: true, property: 'title', value: token ? token.replace('"', "") : '' });
     },
-
 
     /**
      * Override the key up callback: We trigger the queries on our own!

@@ -170,8 +170,6 @@ Ext.define('Shopware.apps.Order.controller.Filter', {
             store.load();
         }
 
-
-
     }
 });
 //{/block}

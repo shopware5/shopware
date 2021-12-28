@@ -115,7 +115,6 @@ Ext.define('Shopware.apps.Performance.view.main.Window', {
     initComponent: function () {
         var me = this;
 
-
         //add the customer list grid panel and set the store
         me.items = me.getTabPanel();
         me.callParent(arguments);

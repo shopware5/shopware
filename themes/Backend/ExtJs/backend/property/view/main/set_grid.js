@@ -68,7 +68,6 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
 
         me.registerEvents();
 
-
         me.sortModeEditor = Ext.create('Ext.form.field.ComboBox', {
             store: new Ext.data.SimpleStore({
                 fields: ['id', 'label'],
@@ -85,7 +84,6 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
             displayField: 'label',
             valueField: 'id'
         });
-
 
         me.store = me.setStore;
 
@@ -262,7 +260,6 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
             }]
         }];
     },
-
 
     /**
     * Creates the paging toolbar for the grid to allow

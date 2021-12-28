@@ -407,7 +407,6 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
         });
     },
 
-
     /**
      * Little helper functions that returns the current panel of a tab.
      * @return tab.Panel

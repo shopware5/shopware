@@ -37,7 +37,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
         position: 'right'
     },
 
-
     initComponent: function () {
         var me = this,
             desktopImpressionTip = { },
@@ -480,7 +479,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
 
         me.callParent(arguments);
     },
-
 
     getSubShopData: function(storeItem, field) {
         var me = this, data = [];

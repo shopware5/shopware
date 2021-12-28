@@ -102,7 +102,6 @@ Ext.define('Shopware.apps.Category.controller.ManualSorting', {
             data[droppedItem.get('id')] = pageIndex + (store.indexOf(droppedItem) + 1)
         });
 
-
         Ext.Ajax.request({
             url: '{url controller=ManualSorting action=assignPosition}?' + Ext.urlEncode(this.getTable().getStore().getProxy().extraParams),
             jsonData: JSON.stringify({

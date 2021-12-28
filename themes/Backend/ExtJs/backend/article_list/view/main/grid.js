@@ -238,7 +238,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
     getActionColumn: function () {
         var me = this;
 
-
         return {
             xtype: 'actioncolumn',
             width: 60,
@@ -314,7 +313,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             if (renderer = me.getRendererForColumn(column)) {
                 columnDefinition.renderer = renderer;
             }
-
 
             if (width = me.getWidthForColumn(column)) {
                 columnDefinition.width = width;
@@ -621,7 +619,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 break;
         }
     },
-
 
     /**
      * Creates the grid toolbar

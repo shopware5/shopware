@@ -40,7 +40,6 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      */
     extend: 'Ext.app.Controller',
 
-
     /**
      * Some references to get a better grip of the single elements
      */

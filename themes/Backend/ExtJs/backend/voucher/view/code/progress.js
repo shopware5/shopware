@@ -52,7 +52,6 @@ Ext.define('Shopware.apps.Voucher.view.code.Progress', {
     maximizable: false,
     minimizable: false,
 
-
     initComponent: function () {
         var me = this;
 

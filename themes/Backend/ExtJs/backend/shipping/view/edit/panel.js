@@ -139,7 +139,6 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      */
     costMatrixStore: null,
 
-
     /**
      * Initialize the Shopware.apps.Supplier.view.main.List and defines the necessary
      * default configuration.
@@ -320,7 +319,6 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
             record: this.editRecord
         });
     },
-
 
     /**
      * Creates and returns the default action button - save and cancel

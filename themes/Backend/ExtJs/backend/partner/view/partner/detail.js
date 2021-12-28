@@ -132,7 +132,6 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
         return true;
     },
 
-
     /**
      * creates the general form and layout
      *
@@ -198,7 +197,6 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
 
         return [ leftContainer, rightContainer ];
     },
-
 
     /**
      * Creates all fields for the general form on the left side

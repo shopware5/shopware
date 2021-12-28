@@ -57,7 +57,6 @@ Ext.define('Shopware.apps.Partner.controller.Main', {
      */
     stores: [ 'List', 'Detail'],
 
-
     /**
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window

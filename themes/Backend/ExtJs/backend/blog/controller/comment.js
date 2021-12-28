@@ -131,8 +131,6 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
         acceptButton.setDisabled(!selections.length);
     },
 
-
-
     /**
      * Event listener which deletes a single blog based on the passed
      * grid (e.g. the grid store) and the row index
@@ -295,7 +293,6 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
 
         infoView.update(record.data);
     }
-
 
 });
 //{/block}

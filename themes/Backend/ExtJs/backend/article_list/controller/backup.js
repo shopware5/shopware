@@ -131,7 +131,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
         'ArticleList');
     },
 
-
     /**
      * Callback method triggered, after the user presses the 'reset' action button.
      */
@@ -195,7 +194,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
         // workaround to set the height of the MessageBox
         me.progressWindow.setSize(500, 150);
         me.progressWindow.doLayout();
-
 
         me.progressWindow.progressBar.reset();
         me.progressWindow.progressBar.animate = true;

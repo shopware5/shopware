@@ -95,6 +95,5 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Admin', {
         ];
     }
 
-
 });
 //{/block}

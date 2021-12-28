@@ -117,7 +117,6 @@ Ext.define('Shopware.apps.Article.view.category.Seo', {
         }];
     },
 
-
     categoryRenderer: function(value, meta, record) {
         var me = this;
 

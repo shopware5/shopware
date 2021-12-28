@@ -95,7 +95,6 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
         window.destroy();
     },
 
-
     onLoadConfigSets: function(window, theme) {
         var me = this;
 
@@ -112,7 +111,6 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
             }
         });
     },
-
 
     /**
      * Event listener of the toolbar "configure button".
@@ -384,7 +382,6 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
             me.getShopCombo().getValue()
         );
     }
-
 
 });
 

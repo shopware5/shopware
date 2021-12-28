@@ -135,7 +135,6 @@ Ext.define('Shopware.apps.Form.controller.Main', {
         }
     },
 
-
     /**
      * @event beforeclose
      * @return void
@@ -267,7 +266,6 @@ Ext.define('Shopware.apps.Form.controller.Main', {
             }
         });
     },
-
 
     /**
      * Opens the Ext.window.window to add a new form

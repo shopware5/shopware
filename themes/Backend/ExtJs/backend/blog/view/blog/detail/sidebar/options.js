@@ -139,7 +139,6 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
         return true;
     },
 
-
     /**
      * creates the general form and layout
      *

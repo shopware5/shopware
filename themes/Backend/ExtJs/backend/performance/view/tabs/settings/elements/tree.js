@@ -82,7 +82,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.Tree', {
         me.selModel = Ext.create('Ext.selection.RowModel', {
         });
 
-
          me.columns = [{
              xtype: 'treecolumn',
              text: 'test',
@@ -90,7 +89,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.Tree', {
              sortable: false,
              dataIndex: 'name'
          }];
-
 
         me.callParent(arguments);
 

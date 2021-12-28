@@ -211,7 +211,6 @@ window.postMessageApi = function (api, win) {
                 componentName = component || 'main';
             }
 
-
             if (params.async) {
                 this.opts.async = params.async;
                 delete params.async;
@@ -668,7 +667,6 @@ window.postMessageApi = function (api, win) {
 
                 return request;
             },
-
 
             /**
              * Sets the height of the backend window.

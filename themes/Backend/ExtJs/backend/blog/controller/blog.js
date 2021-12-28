@@ -204,7 +204,6 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
         });
     },
 
-
     /**
      * Opens the Ext.window.window which displays
      * the Ext.form.Panel to duplicate an existing blog article

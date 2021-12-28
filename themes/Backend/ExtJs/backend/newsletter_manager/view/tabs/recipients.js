@@ -87,14 +87,12 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
              */
             'deleteRecipient',
 
-
             /**
              * Fired when the user double clicks a recipient row, edits the data and clicks "update"
              * @param editor
              * @param event
              */
             'saveRecipient',
-
 
             /**
              * Fired when the user double clicks a row in order to edit it
@@ -166,7 +164,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
             }
         });
     },
-
 
     /**
      * Creates the grid columns
@@ -256,7 +253,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
             }
         ];
     },
-
 
     /**
      * Returns the subject of the last read mail

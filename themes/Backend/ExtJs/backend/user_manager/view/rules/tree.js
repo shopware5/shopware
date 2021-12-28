@@ -405,6 +405,5 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         /* {/if} */];
     }
 
-
 });
 //{/block}

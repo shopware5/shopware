@@ -35,9 +35,7 @@ Ext.define('Shopware.apps.ArticleList.view.QueryField', {
 
     border: false,
 
-
     padding: '10 10 0 10',
-
 
     /**
      * Initializes the component, sets up toolbar and pagingbar and and registers some events
@@ -173,7 +171,6 @@ Ext.define('Shopware.apps.ArticleList.view.QueryField', {
 
         me.fireEvent('suggest', text, position);
     }
-
 
 });
 //{/block}

@@ -48,7 +48,6 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
             }
         };
 
-
         me.initShopColumns([
             {
                 dataIndex: 'basketConversion',

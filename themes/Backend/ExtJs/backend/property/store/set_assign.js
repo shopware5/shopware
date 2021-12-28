@@ -54,8 +54,6 @@ Ext.define('Shopware.apps.Property.store.SetAssign', {
             read: '{url controller="property" action="getSetAssigns"}'
         },
 
-
-
         /**
          * Configure the data reader
          * @object

@@ -66,7 +66,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
     initComponent: function () {
         var me = this;
 
-
         me.series = [
             me.createLineSeries(
                 { xField: 'week', yField: 'newCustomersPercent', title: '{s name="chart/customers/new_customers_legend"}New customers{/s}' },

@@ -522,7 +522,6 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             );
         }
 
-
         // Checks if the user clicks the cancel button on the detail window.
         if (me.currentStatus === me.processStatus.cancel) {
 

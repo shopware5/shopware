@@ -112,8 +112,6 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
         });
     },
 
-
-
     displayResponseMessage: function(response, successMessage) {
         var data = response;
 
@@ -383,7 +381,6 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
         });
     },
 
-
     onResetClick: function() {
         var me = this;
         var detailForm = me.getDetailForm();
@@ -421,7 +418,6 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
             }
         );
     },
-
 
     sendAjaxRequest: function(url, params, callback) {
         var me = this;

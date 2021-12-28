@@ -122,7 +122,6 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
         }
     },
 
-
     /**
      * Initializes the component and builds up the main interface
      *

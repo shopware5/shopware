@@ -51,6 +51,5 @@ Ext.define('Shopware.apps.Article.model.Template', {
         { name: 'name', type: 'string' }
     ]
 
-
 });
 //{/block}

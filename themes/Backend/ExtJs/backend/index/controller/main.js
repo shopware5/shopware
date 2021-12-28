@@ -72,7 +72,6 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 }
             );
 
-
         } else {
             me.initBackendDesktop();
 
@@ -359,7 +358,6 @@ Ext.define('Shopware.apps.Index.view.Main', {
     layout: 'fit',
     bodyStyle: 'background: transparent'
 });
-
 
 /**
  * Wrapper methods which allows to open deprecated

@@ -129,7 +129,6 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
         return items;
     },
 
-
     createConfigSetButton: function () {
         var me = this;
 
@@ -143,7 +142,6 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
         });
         return me.cancelButton;
     },
-
 
     /**
      * Creates the cancel button which will be displayed

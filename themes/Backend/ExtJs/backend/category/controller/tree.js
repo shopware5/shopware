@@ -134,8 +134,6 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         me.callParent(arguments);
     },
 
-
-
     /**
      * Deletes one category tree node and its children
      *
@@ -606,7 +604,6 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         }
         store.load(options);
     },
-
 
     /**
      * updates the given tab and add or remove it to the tabpanel

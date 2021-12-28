@@ -51,7 +51,6 @@ Ext.define('Shopware.apps.Performance', {
         'Start'
     ],
 
-
     /**
      * The detail controller knows all form field sets and the detail window component
      * @array

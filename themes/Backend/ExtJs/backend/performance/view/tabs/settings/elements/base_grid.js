@@ -154,6 +154,5 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
         });
     }
 
-
 });
 //{/block}

@@ -65,7 +65,6 @@ Ext.define('Shopware.apps.Banner.view.main.BannerForm', {
             items: me.createActionButtons()
         }];
 
-
         me.callParent(arguments);
         // Load record
         me.formPanel.getForm().loadRecord(this.record);
@@ -118,7 +117,6 @@ Ext.define('Shopware.apps.Banner.view.main.BannerForm', {
             displayField: 'display',
             editable: false
         });
-
 
         // Get timing containers
         validFrom   = me.createValidFromContainer();

@@ -73,7 +73,6 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
         return [ me.formPanel ];
     },
 
-
     createFieldSet: function(theme) {
         var me = this;
 
@@ -110,7 +109,6 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
         });
     },
 
-
     /**
      * Creates the window toolbar.
      *
@@ -143,7 +141,6 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
 
         return items;
     },
-
 
     /**
      * Creates the cancel button which will be displayed
