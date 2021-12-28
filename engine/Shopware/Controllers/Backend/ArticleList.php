@@ -173,12 +173,12 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
     public function listAction()
     {
-        $resource = $this->Request()->getParam('resource');
+        $resourceClass = $this->Request()->getParam('resource');
         $limit = $this->Request()->getParam('limit', 25);
         $offset = ($this->Request()->getParam('page', 1) - 1) * $limit;
 
         /** @var ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->container->get('multi_edit.' . $resourceClass);
         $result = $resource->listBackups($offset, $limit);
         $result['success'] = true;
 
@@ -190,7 +190,9 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
 
     /**
-     * Currently returns an array of an hardcoded default operation. Might be use for storing operations in the future
+     * Currently returns an array of a hardcoded default operation. Might be use for storing operations in the future
+     *
+     * @return void
      */
     public function getOperationsAction()
     {

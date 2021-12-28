@@ -140,6 +140,7 @@ parameters:
             message: '#Missing call to parent::setUp\(\) method#'
             paths:
                 - tests/Functional/Core/sCoreTest.php
+                - tests/Functional/Controllers/Backend/OrderTest.php
                 - tests/Functional/Controllers/Backend/UserManagerTest.php
         - # Some class properties do not have a getter or setter, but they are needed for the Doctrine column declaration
             message: '#Property Shopware\\Models\\.*::\$.* is never written, only read#'

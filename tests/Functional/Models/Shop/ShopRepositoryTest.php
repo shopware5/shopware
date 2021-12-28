@@ -26,13 +26,14 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models\Shop;
 
-use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Components_Mail;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Enlight_Controller_Request_RequestTestCase;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
-class ShopRepositoryTest extends Enlight_Components_Test_Controller_TestCase
+class ShopRepositoryTest extends ControllerTestCase
 {
     private Repository $shopRepository;
 
@@ -237,12 +238,14 @@ class ShopRepositoryTest extends Enlight_Components_Test_Controller_TestCase
 
         // Load arbitrary order
         $order = Shopware()->Models()->getRepository(Order::class)->find(57);
+        static::assertInstanceOf(Order::class, $order);
 
         // Modify order entity to trigger an update action, when the entity is flushed to the database
         $order->setComment('Dummy');
 
         // Send order status mail to customer, this will invoke the fixActive()-method
         $mail = Shopware()->Modules()->Order()->createStatusMail($order->getId(), 7);
+        static::assertInstanceOf(Enlight_Components_Mail::class, $mail);
         Shopware()->Modules()->Order()->sendStatusMail($mail);
 
         // Flush changes changed order to the database

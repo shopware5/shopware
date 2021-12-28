@@ -167,7 +167,7 @@ class Order extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection<Detail>
+     * @var ArrayCollection<array-key, Detail>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Detail", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      */
@@ -198,14 +198,14 @@ class Order extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection<Document>
+     * @var ArrayCollection<array-key, Document>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Document\Document", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      */
     protected $documents;
 
     /**
-     * @var ArrayCollection<History>
+     * @var ArrayCollection<array-key, History>
      *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Order\History", mappedBy="order", orphanRemoval=true)
      * @ORM\JoinColumn(name="id", referencedColumnName="orderID")
@@ -222,7 +222,7 @@ class Order extends ModelEntity
     protected $esd;
 
     /**
-     * @var ArrayCollection<PaymentInstance>
+     * @var ArrayCollection<array-key, PaymentInstance>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="order")
      */
@@ -625,6 +625,8 @@ class Order extends ModelEntity
 
     /**
      * @param float|null $invoiceShippingTaxRate
+     *
+     * @return void
      */
     public function setInvoiceShippingTaxRate($invoiceShippingTaxRate)
     {
@@ -638,7 +640,7 @@ class Order extends ModelEntity
      */
     public function setOrderTime($orderTime)
     {
-        if (!$orderTime instanceof DateTimeInterface && \is_string($orderTime)) {
+        if (\is_string($orderTime)) {
             $orderTime = new DateTime($orderTime);
         }
         $this->orderTime = $orderTime;
@@ -821,7 +823,7 @@ class Order extends ModelEntity
      */
     public function setClearedDate($clearedDate)
     {
-        if (!$clearedDate instanceof DateTimeInterface && \is_string($clearedDate)) {
+        if (\is_string($clearedDate)) {
             $clearedDate = new DateTime($clearedDate);
         }
         $this->clearedDate = $clearedDate;
@@ -947,6 +949,8 @@ class Order extends ModelEntity
 
     /**
      * @param Customer|null $customer
+     *
+     * @return void
      */
     public function setCustomer($customer)
     {
@@ -963,6 +967,8 @@ class Order extends ModelEntity
 
     /**
      * @param Payment $payment
+     *
+     * @return void
      */
     public function setPayment($payment)
     {
@@ -979,6 +985,8 @@ class Order extends ModelEntity
 
     /**
      * @param Dispatch $dispatch
+     *
+     * @return void
      */
     public function setDispatch($dispatch)
     {
@@ -995,6 +1003,8 @@ class Order extends ModelEntity
 
     /**
      * @param Status $paymentStatus
+     *
+     * @return void
      */
     public function setPaymentStatus($paymentStatus)
     {
@@ -1011,6 +1021,8 @@ class Order extends ModelEntity
 
     /**
      * @param Status $orderStatus
+     *
+     * @return void
      */
     public function setOrderStatus($orderStatus)
     {
@@ -1027,6 +1039,8 @@ class Order extends ModelEntity
 
     /**
      * @param Shop $shop
+     *
+     * @return void
      */
     public function setShop($shop)
     {
@@ -1078,7 +1092,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<array-key, Detail>|array<array-key, Detail> $details
+     * @param ArrayCollection<array-key, Detail>|array<Detail> $details
      *
      * @return Order
      */
@@ -1088,7 +1102,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<History>
+     * @return ArrayCollection<array-key, History>
      */
     public function getHistory()
     {
@@ -1096,7 +1110,9 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<History> $history
+     * @param ArrayCollection<array-key, History> $history
+     *
+     * @return void
      */
     public function setHistory($history)
     {
@@ -1108,6 +1124,8 @@ class Order extends ModelEntity
      * order positions.
      *
      * @deprecated since 5.7 will be removed in version 5.8 - Please use the service \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class.
+     *
+     * @return void
      */
     public function calculateInvoiceAmount()
     {
@@ -1132,7 +1150,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param OrderAttribute|array|null $attribute
+     * @param OrderAttribute|array<string, mixed>|null $attribute
      *
      * @return Order
      */
@@ -1151,6 +1169,8 @@ class Order extends ModelEntity
 
     /**
      * @param Partner|null $partner
+     *
+     * @return void
      */
     public function setPartner($partner)
     {
@@ -1158,7 +1178,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<array-key, Document>
      */
     public function getDocuments()
     {
@@ -1177,6 +1197,8 @@ class Order extends ModelEntity
 
     /**
      * @param Esd|null $esd
+     *
+     * @return void
      */
     public function setEsd($esd)
     {
@@ -1193,6 +1215,8 @@ class Order extends ModelEntity
 
     /**
      * @param Shop $languageSubShop
+     *
+     * @return void
      */
     public function setLanguageSubShop($languageSubShop)
     {
@@ -1208,7 +1232,9 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection $paymentInstances
+     * @param ArrayCollection<array-key, PaymentInstance> $paymentInstances
+     *
+     * @return void
      */
     public function setPaymentInstances($paymentInstances)
     {
@@ -1216,7 +1242,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<array-key, PaymentInstance>
      */
     public function getPaymentInstances()
     {
@@ -1225,6 +1251,8 @@ class Order extends ModelEntity
 
     /**
      * @param string|null $deviceType
+     *
+     * @return void
      */
     public function setDeviceType($deviceType)
     {
@@ -1252,6 +1280,8 @@ class Order extends ModelEntity
 
     /**
      * @param bool $proportionalCalculation
+     *
+     * @return void
      */
     public function setIsProportionalCalculation($proportionalCalculation)
     {
@@ -1261,6 +1291,8 @@ class Order extends ModelEntity
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
+     *
+     * @return void
      */
     public function updateChangedTimestamp()
     {
