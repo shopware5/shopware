@@ -665,9 +665,9 @@ Ext.define('Shopware.apps.Article.controller.Media', {
     onMediaMoved: function(mediaStore, draggedRecord, targetRecord) {
         var index, indexOfDragged;
 
-        if (!mediaStore instanceof Ext.data.Store
-                || !draggedRecord instanceof Ext.data.Model
-                || !targetRecord instanceof Ext.data.Model) {
+        if (!mediaStore instanceof Ext.data.Store ||
+                !draggedRecord instanceof Ext.data.Model ||
+                !targetRecord instanceof Ext.data.Model) {
             return false;
         }
         index = mediaStore.indexOf(targetRecord);

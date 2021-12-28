@@ -848,9 +848,9 @@ Ext.define('Shopware.Notification', {
      * @returns { boolean }
      */
     displayBrowserNotification: function () {
-        return !(window.document.hasFocus()
-            || !('Notification' in window)
-            || Notification.permission === 'denied'
-            || document.location.protocol !== 'https:');
+        return !(window.document.hasFocus() ||
+            !('Notification' in window) ||
+            Notification.permission === 'denied' ||
+            document.location.protocol !== 'https:');
     }
 });

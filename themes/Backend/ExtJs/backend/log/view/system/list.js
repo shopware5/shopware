@@ -118,8 +118,8 @@ Ext.define('Shopware.apps.Log.view.system.List', {
             disabled: true,
             handler: function () {
                 var file = me.logFileCombo.getValue(),
-                    link = "{url action=downloadLogFile}"
-                        + "?logFile=" + encodeURIComponent(file);
+                    link = "{url action=downloadLogFile}" +
+                        "?logFile=" + encodeURIComponent(file);
                 window.open(link, '_blank');
             }
         });

@@ -870,9 +870,9 @@ Ext.define('Shopware.window.Progress', {
         //check which object contains the request url.
         if (Ext.isObject(value) && value.hasOwnProperty('url')) {
             url = value.url;
-        } else if (Ext.isObject(value)
-            && value.hasOwnProperty('options')
-            && value.options.hasOwnProperty('url')) {
+        } else if (Ext.isObject(value) &&
+            value.hasOwnProperty('options') &&
+            value.options.hasOwnProperty('url')) {
             url = value.options.url;
         }
 

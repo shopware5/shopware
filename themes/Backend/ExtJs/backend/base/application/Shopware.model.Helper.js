@@ -489,8 +489,8 @@ Ext.define('Shopware.model.Helper', {
             return false;
         }
 
-        return (component.getStore() instanceof Shopware.store.Association)
-            || (me.hasModelAction(component.getStore(), 'read') !== undefined);
+        return (component.getStore() instanceof Shopware.store.Association) ||
+            (me.hasModelAction(component.getStore(), 'read') !== undefined);
     }
 });
 

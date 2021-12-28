@@ -249,14 +249,14 @@ Ext.define('Shopware.form.plugin.SnippetTranslation', {
                 type = 'textarea';
             }
 
-            if (className === 'Ext.form.TriggerField'
-                || className === 'Ext.form.ComboBox'
-                || className === 'Ext.form.DateField'
-                || className === 'Ext.form.Picker'
-                || className === 'Ext.form.Spinner'
-                || className === 'Ext.form.NumberField'
-                || className === 'Ext.form.Number'
-                || className === 'Ext.form.TimeField') {
+            if (className === 'Ext.form.TriggerField' ||
+                className === 'Ext.form.ComboBox' ||
+                className === 'Ext.form.DateField' ||
+                className === 'Ext.form.Picker' ||
+                className === 'Ext.form.Spinner' ||
+                className === 'Ext.form.NumberField' ||
+                className === 'Ext.form.Number' ||
+                className === 'Ext.form.TimeField') {
                 type = 'trigger';
             }
         });

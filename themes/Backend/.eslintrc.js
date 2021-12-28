@@ -10,5 +10,6 @@ module.exports = {
         'keyword-spacing': 'error',
         'comma-spacing': 'error',
         'indent': ['error', 4, { 'SwitchCase': 1 }],
+        'operator-linebreak': ['error', 'after', { 'overrides': { '?': 'before', ':': 'before' } }],
     }
 };

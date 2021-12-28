@@ -60,8 +60,8 @@ Ext.define('Shopware.apps.Base.view.element.SelectTree', {
         var me = this,
             store = me.store;
 
-        if (value && !store.loading
-          && (!store.getCount() || !store.getNodeById(me.value))) {
+        if (value && !store.loading &&
+          (!store.getCount() || !store.getNodeById(me.value))) {
             store.load({
                 filters: [{
                     property: 'id',

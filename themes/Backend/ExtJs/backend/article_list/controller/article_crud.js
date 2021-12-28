@@ -149,8 +149,8 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
             isActiveChange = false,
             changes = record.getChanges();
 
-        isActiveChange = typeof changes.Article_active !== 'undefined'
-                         && record.raw.Article_active != changes.Article_active;
+        isActiveChange = typeof changes.Article_active !== 'undefined' &&
+                         record.raw.Article_active != changes.Article_active;
 
         record.save({
             params: {

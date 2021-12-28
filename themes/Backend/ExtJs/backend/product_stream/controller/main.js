@@ -94,8 +94,8 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         var formPanel = me.getFormPanel();
 
         var valid = (
-            conditionPanel.getForm().isValid() == true
-            && formPanel.getForm().isValid() == true
+            conditionPanel.getForm().isValid() == true &&
+            formPanel.getForm().isValid() == true
         );
 
         if (!valid) {

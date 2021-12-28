@@ -65,9 +65,9 @@ Ext.define('Shopware.apps.Theme.view.detail.fields.Suffix', {
             value = me.fallbackValue;
         }
 
-        if (value.length > 0
-                && me.suffix !== Ext.undefined
-                && value.indexOf(me.suffix) == -1) {
+        if (value.length > 0 &&
+                me.suffix !== Ext.undefined &&
+                value.indexOf(me.suffix) == -1) {
 
             value = value + me.suffix;
         }

@@ -104,19 +104,19 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
 
     allowInstall: function() {
         return (
-            !this.allowDummyUpdate()
-            && (this.get('id') > 0)
-            && this.get('capabilityInstall')
-            && this.get('installationDate') == null
+            !this.allowDummyUpdate() &&
+            (this.get('id') > 0) &&
+            this.get('capabilityInstall') &&
+            this.get('installationDate') == null
         );
     },
 
     allowUninstall: function () {
         return (
-            !this.allowDummyUpdate()
-            && (this.get('id') > 0)
-            && this.get('capabilityInstall')
-            && this.get('installationDate') != null
+            !this.allowDummyUpdate() &&
+            (this.get('id') > 0) &&
+            this.get('capabilityInstall') &&
+            this.get('installationDate') != null
         );
     },
 
@@ -130,10 +130,10 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
 
     allowReinstall: function () {
         return (
-            !this.allowDummyUpdate()
-            && (this.get('id') > 0)
-            && this.get('capabilityInstall')
-            && this.get('installationDate') != null
+            !this.allowDummyUpdate() &&
+            (this.get('id') > 0) &&
+            this.get('capabilityInstall') &&
+            this.get('installationDate') != null
         );
     },
 
@@ -148,30 +148,30 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
 
     allowActivate: function () {
         return (
-            !this.allowDummyUpdate()
-            && (this.get('id') > 0)
-            && this.get('capabilityActivate')
-            && this.get('installationDate') !== null
-            && this.get('active') == false
+            !this.allowDummyUpdate() &&
+            (this.get('id') > 0) &&
+            this.get('capabilityActivate') &&
+            this.get('installationDate') !== null &&
+            this.get('active') == false
         );
     },
 
     allowDeactivate: function () {
         return (
-            !this.allowDummyUpdate()
-            && (this.get('id') > 0)
-            && this.get('capabilityActivate')
-            && this.get('installationDate') !== null
-            && this.get('active') == true
+            !this.allowDummyUpdate() &&
+            (this.get('id') > 0) &&
+            this.get('capabilityActivate') &&
+            this.get('installationDate') !== null &&
+            this.get('active') == true
         );
     },
 
     allowUpdate: function () {
         return (
-            !this.allowDummyUpdate()
-            && (this.get('id') > 0)
-            && this.get('availableVersion') !== null
-            && this.get('version') !== this.get('availableVersion')
+            !this.allowDummyUpdate() &&
+            (this.get('id') > 0) &&
+            this.get('availableVersion') !== null &&
+            this.get('version') !== this.get('availableVersion')
         );
     },
 
@@ -185,19 +185,19 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
 
     allowConfigure: function () {
         return (
-            !this.allowDummyUpdate()
-            && (this.get('id') > 0)
-            && (this.get('formId') > 0)
-            && this.get('installationDate') != null
+            !this.allowDummyUpdate() &&
+            (this.get('id') > 0) &&
+            (this.get('formId') > 0) &&
+            this.get('installationDate') != null
         );
     },
 
     allowDelete: function () {
         return (
-            !this.allowDummyUpdate()
-            && (this.get('id') > 0)
-            && this.get('installationDate') == null
-            && this.get('source') != 'Default'
+            !this.allowDummyUpdate() &&
+            (this.get('id') > 0) &&
+            this.get('installationDate') == null &&
+            this.get('source') != 'Default'
         );
     },
 

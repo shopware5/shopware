@@ -137,8 +137,7 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
             },
             function(response) {
                 callback(
-                    (response.exists === false)
-                    ||
+                    (response.exists === false) ||
                     (record.get('columnName') == record.get('originalName')),
                     response.table
                 );

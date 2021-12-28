@@ -42,8 +42,7 @@ Ext.define('Shopware.attribute.AbstractEntityFieldHandler', {
             return false;
         }
         return (
-            (attribute.get('columnType') === 'multi_selection' || attribute.get('columnType') === 'single_selection')
-            &&
+            (attribute.get('columnType') === 'multi_selection' || attribute.get('columnType') === 'single_selection') &&
             (attribute.get('entity') == this.entity)
         );
     },

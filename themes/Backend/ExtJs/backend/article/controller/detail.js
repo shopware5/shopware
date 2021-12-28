@@ -576,9 +576,9 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             return;
         }
 
-        var url = '{url action=previewDetail}'
-            + '?shopId=' + shopId
-            + '&articleId=' + article.get('id');
+        var url = '{url action=previewDetail}' +
+            '?shopId=' + shopId +
+            '&articleId=' + article.get('id');
         window.open(url);
     },
 
