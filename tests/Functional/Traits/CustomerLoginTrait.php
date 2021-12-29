@@ -36,6 +36,7 @@ trait CustomerLoginTrait
         string $sessionId = 'sessionId',
         int $customerId = 1,
         string $email = 'test@example.com',
+        ?string $passwordChangeDate = null,
         int $countryId = 2,
         int $areaId = 3,
         string $customerGroupKey = 'EK',
@@ -47,9 +48,21 @@ trait CustomerLoginTrait
             throw new RuntimeException('Cannot initialize session');
         }
 
+        if ($passwordChangeDate === null) {
+            $result = Shopware()->Container()->get('dbal_connection')->fetchFirstColumn(
+                'SELECT `password_change_date` FROM `s_user` WHERE `id` = :customerId;',
+                [
+                    'customerId' => $customerId,
+                ]
+            );
+
+            $passwordChangeDate = array_pop($result);
+        }
+
         $session->offsetSet('sessionId', $sessionId);
         $session->offsetSet('sUserId', $customerId);
         $session->offsetSet('sUserMail', $email);
+        $session->offsetSet('sUserPasswordChangeDate', $passwordChangeDate);
         $session->offsetSet('sCountry', $countryId);
         $session->offsetSet('sArea', $areaId);
         $session->offsetSet('sUserGroup', $customerGroupKey);
@@ -72,6 +85,7 @@ trait CustomerLoginTrait
         $session->offsetUnset('sessionId');
         $session->offsetUnset('sUserId');
         $session->offsetUnset('sUserMail');
+        $session->offsetUnset('sUserPasswordChangeDate');
         $session->offsetUnset('sUserGroup');
         $session->offsetUnset('sCountry');
         $session->offsetUnset('sArea');
