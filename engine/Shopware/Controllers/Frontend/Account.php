@@ -501,7 +501,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function resetPasswordAction()
     {
-        $hash = $this->Request()->getParam('hash');
+        $hash = $this->Request()->getParam('hash', '');
         $this->View()->assign('hash', $hash);
         $customer = null;
 

@@ -134,6 +134,14 @@ class AccountTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertEquals($before, $changed);
     }
 
+    public function testNoServerErrorOnMissingHashParameter(): void
+    {
+        $this->Request()->setMethod('GET');
+        $response = $this->dispatch('account/resetPassword');
+
+        static::assertNotNull($response);
+    }
+
     private function getConnection(): Connection
     {
         return Shopware()->Container()->get('dbal_connection');
