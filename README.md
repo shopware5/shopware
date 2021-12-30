@@ -1,4 +1,13 @@
+# Shopware 6
+
 <a href="https://github.com/shopware/platform"><img src="https://s3.eu-central-1.amazonaws.com/shopware-platform-assets/github-platform/readme/discover_sw6.png" align="right" height="39" /></a>
+
+<p align="center">
+<img src="https://www.shopware.com/media/image/8a/cf/98/open-commerce-platform.png" width=500>
+</p>
+
+
+The completely newly developed successor "Shopware 6" is based entirely on the Symfony Framework and VueJS and is available under MIT licence at https://github.com/shopware/platform
 
 # Shopware 5
 
@@ -22,6 +31,8 @@ Based on technologies like `Symfony 4`, `Doctrine 2` & `Zend Framework` Shopware
 Furthermore, Shopware 5 provides an event-driven plugin system and an advanced hook system, giving you the ability to customize every part of the platform.
 
 Visit the forum at <https://forum.shopware.com/>
+
+----
 
 ### Shopware Server Requirements
 
