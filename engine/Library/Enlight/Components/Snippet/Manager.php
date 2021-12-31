@@ -41,7 +41,7 @@ class Enlight_Components_Snippet_Manager extends Enlight_Class
     protected $namespaces = [];
 
     /**
-     * @var string Default config class
+     * @var class-string<Enlight_Components_Snippet_Namespace> Default config class
      */
     protected $defaultNamespaceClass = 'Enlight_Components_Snippet_Namespace';
 

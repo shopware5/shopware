@@ -24,11 +24,7 @@
  * checks whether bootstrap files are present. If a bootstrap is found loaded via
  * the Enlight_Loader the corresponding class.
  *
- * @category   Enlight
  * @package    Enlight_Plugin
- *
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
 {
@@ -91,6 +87,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
      */
     protected function initPlugin($name, $prefix, $file = null)
     {
+        /** @var class-string<Enlight_Plugin_Bootstrap|Enlight_Plugin_Namespace> $class */
         $class = implode('_', [$prefix, $name, 'Bootstrap']);
         if (!class_exists($class, false)) {
             Shopware()->Loader()->loadClass($class, $file);

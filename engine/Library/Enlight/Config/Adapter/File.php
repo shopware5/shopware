@@ -22,11 +22,6 @@
  *
  * The Enlight_Config_Adapter_File is an adapter to write the enlight configuration to a file and read this.
  * The adapter use the zend config writer.
- *
- * @category   Enlight
- *
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
 {
@@ -234,6 +229,7 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
     protected function readBase($filename)
     {
         if (file_exists($filename)) {
+            /** @var class-string<Enlight_Config> $reader */
             $reader = 'Enlight_Config_Format_' . ucfirst($this->_configType);
             $base = new $reader($filename, null, [
                     'skipExtends' => true,

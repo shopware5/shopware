@@ -24,12 +24,7 @@
  * The Enlight_View_Default represents the interface between the template manager of smarty and
  * the internal smarty template. This class is responsible for passing the variables to the loaded template,
  * switch the caching or extends the template blocks.
- * Instead to access the template class directly, this manager will be used so the template can be modified afterwards.
- *
- * @category   Enlight
- *
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * Instead of accessing the template class directly, this manager will be used so the template can be modified afterwards.
  */
 class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
 {
@@ -43,7 +38,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * The loaded template instance.
      *
-     * @var Enlight_Template_Default
+     * @var Enlight_Template_Default|null
      */
     protected $template;
 

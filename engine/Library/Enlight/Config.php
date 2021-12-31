@@ -20,11 +20,6 @@
 /**
  * The Enlight_Config capsules the configuration parameter,
  * which can be used to initialize the different enlight components
- *
- * @category   Enlight
- *
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
 {
@@ -69,12 +64,12 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     protected $_sectionSeparator = ':';
 
     /**
-     * @var Enlight_Config_Adapter
+     * @var Enlight_Config_Adapter|null
      */
     protected static $_defaultAdapter;
 
     /**
-     * @var Enlight_Config_Adapter
+     * @var Enlight_Config_Adapter|null
      */
     protected $_adapter;
 
@@ -437,7 +432,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     /**
      * Returns the current config adapter.
      *
-     * @return Enlight_Config_Adapter
+     * @return Enlight_Config_Adapter|null
      */
     public function getAdapter()
     {
@@ -447,7 +442,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     /**
      * Returns the default config adapter.
      *
-     * @return Enlight_Config_Adapter
+     * @return Enlight_Config_Adapter|null
      */
     public static function getDefaultAdapter()
     {
