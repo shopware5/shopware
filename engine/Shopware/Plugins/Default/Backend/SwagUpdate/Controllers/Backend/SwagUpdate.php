@@ -125,7 +125,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $conn = $this->get(Connection::class);
         $checks = [
             new RegexCheck($userLang),
-            new MySQLVersionCheck($conn, $namespace),
+            new MySQLVersionCheck($namespace),
             new PHPVersionCheck($namespace),
             new EmotionTemplateCheck($conn, $namespace),
             new PHPExtensionCheck($namespace),
@@ -374,41 +374,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             $fs->mkdir($destinationDirectory);
             $fs->rename($sourceFile, $destinationFile, true);
         }
-    }
-
-    /**
-     * Checks if two file handles contain the identical bytes.
-     *
-     * Warning:
-     * The file handles are being rewound and closed afterwards.
-     *
-     * @param resource $fp1
-     * @param resource $fp2
-     *
-     * @return bool
-     */
-    private function checkIdentical($fp1, $fp2)
-    {
-        $blockSize = 4096;
-        rewind($fp1);
-        rewind($fp2);
-
-        $same = true;
-        while (!feof($fp1) && !feof($fp2)) {
-            if (fread($fp1, $blockSize) !== fread($fp2, $blockSize)) {
-                $same = false;
-                break;
-            }
-        }
-
-        if (feof($fp1) !== feof($fp2)) {
-            $same = false;
-        }
-
-        fclose($fp1);
-        fclose($fp2);
-
-        return $same;
     }
 
     /**

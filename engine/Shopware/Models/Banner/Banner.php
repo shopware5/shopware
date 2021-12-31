@@ -269,7 +269,7 @@ class Banner extends ModelEntity
     {
         if (!empty($image)) {
             $fileInfo = pathinfo($image);
-            $this->extension = $fileInfo['extension'];
+            $this->extension = $fileInfo['extension'] ?? '';
             $this->image = $image;
         } else {
             $this->extension = '';

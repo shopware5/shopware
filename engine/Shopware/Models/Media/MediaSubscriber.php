@@ -28,6 +28,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Exception;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\DependencyInjection\Container;
 use SimpleXMLElement;
 
@@ -86,14 +87,18 @@ class MediaSubscriber implements EventSubscriber
             return;
         }
 
-        $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = $this->container->get(MediaServiceInterface::class);
 
         if ((!$media->getHeight() || !$media->getWidth()) && $mediaService->has($media->getPath())) {
             switch ($media->getType()) {
                 case Media::TYPE_IMAGE:
-                    list($width, $height) = getimagesizefromstring($mediaService->read($media->getPath()));
-                    break;
+                    $imageSize = getimagesizefromstring($mediaService->read($media->getPath()));
+                    if (\is_array($imageSize)) {
+                        [$width, $height] = $imageSize;
+                        break;
+                    }
 
+                    // no break
                 case Media::TYPE_VECTOR:
                     if (
                         $media->getExtension() === 'svg'

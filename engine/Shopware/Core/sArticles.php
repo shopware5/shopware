@@ -1153,7 +1153,7 @@ class sArticles implements Enlight_Hook
              * 2. $number is equals to $productNumber (if the order number is invalid or inactive fallback to main variant)
              * 3. $configuration is empty (Customer hasn't not set an own configuration)
              */
-            if ($providedNumber && $providedNumber == $productNumber && empty($configuration) || $type === 0) {
+            if ($providedNumber && $providedNumber == $productNumber && empty($selection) || $type === 0) {
                 $selection = $product->getSelectedOptions();
             }
         }
@@ -1942,7 +1942,6 @@ class sArticles implements Enlight_Hook
                 unset($sArticle['image']);
 
                 $positions = [];
-                $debug = false;
 
                 foreach ($sArticle['images'] as $imageKey => $image) {
                     if (empty($image['src']['original']) || empty($image['relations'])) {
@@ -1973,18 +1972,12 @@ class sArticles implements Enlight_Hook
                         }
                     }
                     if ($relation === '||' && \count($imageFailedCheck) && \count($imageFailedCheck) >= 1 && \count($available) >= 1) { // OR combination
-                        if (!empty($debug)) {
-                            echo $string . " matching combination\n";
-                        }
                         $sArticle['images'][$imageKey]['relations'] = '';
                         $positions[$image['position']] = $imageKey;
                     } elseif ($relation === '&' && \count($imageFailedCheck) === \count($available)) { // AND combination
                         $sArticle['images'][$imageKey]['relations'] = '';
                         $positions[$image['position']] = $imageKey;
                     } else {
-                        if (!empty($debug)) {
-                            echo $string . " doesnt match combination\n";
-                        }
                         unset($sArticle['images'][$imageKey]);
                     }
                 }

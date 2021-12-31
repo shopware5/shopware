@@ -1294,23 +1294,16 @@ class Media extends ModelEntity
 
     /**
      * Searches all album settings for thumbnail sizes
-     *
-     * @return array
      */
-    private function getAllThumbnailSizes()
+    private function getAllThumbnailSizes(): array
     {
-        /** @var Connection $connection */
-        $connection = Shopware()->Container()->get(Connection::class);
-        $joinedSizes = $connection
-            ->query('SELECT DISTINCT thumbnail_size FROM s_media_album_settings WHERE thumbnail_size != ""')
+        $joinedSizes = Shopware()->Container()->get(Connection::class)
+            ->executeQuery('SELECT DISTINCT thumbnail_size FROM s_media_album_settings WHERE thumbnail_size != ""')
             ->fetchAll(PDO::FETCH_COLUMN);
 
         $sizes = [];
         foreach ($joinedSizes as $sizeItem) {
             $explodedSizes = explode(';', $sizeItem);
-            if (empty($explodedSizes)) {
-                continue;
-            }
 
             $sizes = array_merge($sizes, array_flip($explodedSizes));
         }

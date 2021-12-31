@@ -85,10 +85,13 @@ class PluginCheck
                     'id' => sprintf('plugin_incompatible-%s', $name),
                     'technicalName' => $technicalName,
                     'errorLevel' => $targetVersionUpdateAvailable ? Validation::REQUIREMENT_VALID : Validation::REQUIREMENT_WARNING,
+                    'success' => true,
                 ];
             }
         } catch (Exception $e) {
             $results[] = [
+                'inStore' => false,
+                'success' => false,
                 'name' => 'Error',
                 'message' => 'Could not query plugins which are available for your shopware version',
                 'details' => $e->getCode() . ': ' . $e->getMessage(),

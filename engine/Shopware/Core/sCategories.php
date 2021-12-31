@@ -22,28 +22,32 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
+use Shopware\Components\Compatibility\LegacyStructConverter;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Category\Category as CategoryModel;
+use Shopware\Models\Category\Repository as CategoryRepository;
 
 /**
  * Shopware Class that handles categories
  */
-class sCategories implements \Enlight_Hook
+class sCategories implements Enlight_Hook
 {
     /**
-     * @deprecated in 5.6, will be removed in 5.7 without replacement
+     * @deprecated in 5.6, will be removed in 5.8 without replacement
      */
     public $sSYSTEM;
 
     /**
-     * @var Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     public $manager;
 
     /**
-     * @var Shopware\Models\Category\Repository
+     * @var CategoryRepository
      */
     public $repository;
 
@@ -78,16 +82,7 @@ class sCategories implements \Enlight_Hook
     private $db;
 
     /**
-     * Shopware configuration object which used for
-     * each config access in this class.
-     * Injected over the class constructor
-     *
-     * @var Shopware_Components_Config
-     */
-    private $config;
-
-    /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private $connection;
 
@@ -102,27 +97,22 @@ class sCategories implements \Enlight_Hook
     private $contextService;
 
     /**
-     * @var Enlight_Controller_Front
-     */
-    private $frontController;
-
-    /**
      * @throws Exception
      */
     public function __construct()
     {
+        $config = Shopware()->Container()->get(Shopware_Components_Config::class);
+
         $this->db = Shopware()->Container()->get('db');
-        $this->config = Shopware()->Container()->get(\Shopware_Components_Config::class);
-        $this->manager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
+        $this->manager = Shopware()->Container()->get(ModelManager::class);
         $this->repository = $this->manager->getRepository(CategoryModel::class);
-        $this->baseUrl = $this->config->get('baseFile') . '?sViewport=cat&sCategory=';
-        $this->blogBaseUrl = $this->config->get('baseFile') . '?sViewport=blog&sCategory=';
+        $this->baseUrl = $config->get('baseFile') . '?sViewport=cat&sCategory=';
+        $this->blogBaseUrl = $config->get('baseFile') . '?sViewport=blog&sCategory=';
         $this->baseId = (int) Shopware()->Shop()->get('parentID');
         $this->customerGroupId = (int) (Shopware()->Modules()->System()->sUSERGROUPDATA['id'] ?? 0);
-        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
-        $this->categoryService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface::class);
-        $this->contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
-        $this->frontController = Shopware()->Container()->get('front');
+        $this->connection = Shopware()->Container()->get(Connection::class);
+        $this->categoryService = Shopware()->Container()->get(CategoryServiceInterface::class);
+        $this->contextService = Shopware()->Container()->get(ContextServiceInterface::class);
     }
 
     /**
@@ -349,12 +339,12 @@ class sCategories implements \Enlight_Hook
         }
 
         $context = $this->contextService->getShopContext();
-        $category = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface::class)->get($id, $context);
+        $category = Shopware()->Container()->get(CategoryServiceInterface::class)->get($id, $context);
         if (empty($category)) {
             return null;
         }
 
-        return Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertCategoryStruct($category);
+        return Shopware()->Container()->get(LegacyStructConverter::class)->convertCategoryStruct($category);
     }
 
     /**
@@ -475,7 +465,7 @@ class sCategories implements \Enlight_Hook
             ->where('parent IN ( :ids )')
             ->andWhere('category.active = 1')
             ->groupBy('parent')
-            ->setParameter(':ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /** @var PDOStatement $statement */
         $statement = $query->execute();
@@ -504,7 +494,7 @@ class sCategories implements \Enlight_Hook
             ->andWhere('category.shops IS NULL OR category.shops LIKE :shopId')
             ->orderBy('category.position', 'ASC')
             ->addOrderBy('category.id')
-            ->setParameter(':parentId', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+            ->setParameter(':parentId', $ids, Connection::PARAM_INT_ARRAY)
             ->setParameter(':shopId', '%|' . $shopId . '|%');
 
         /** @var PDOStatement $statement */

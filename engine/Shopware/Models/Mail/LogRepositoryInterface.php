@@ -29,6 +29,9 @@ use Doctrine\Common\Collections\Selectable;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ObjectRepository;
 
+/**
+ * @extends ObjectRepository<Log>
+ */
 interface LogRepositoryInterface extends ObjectRepository, Selectable
 {
     /**
