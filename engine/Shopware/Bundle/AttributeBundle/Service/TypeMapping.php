@@ -25,14 +25,38 @@
 namespace Shopware\Bundle\AttributeBundle\Service;
 
 use Doctrine\DBAL\Types\Type;
+use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Supplier;
+use Shopware\Models\Blog\Blog;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Customer\Customer;
+use Shopware\Models\CustomerStream\CustomerStream;
+use Shopware\Models\Dispatch\Dispatch;
+use Shopware\Models\Emotion\Emotion;
+use Shopware\Models\Form\Form;
+use Shopware\Models\Mail\Mail;
+use Shopware\Models\Media\Media;
+use Shopware\Models\Newsletter\Newsletter;
+use Shopware\Models\Partner\Partner;
+use Shopware\Models\Payment\Payment;
+use Shopware\Models\Premium\Premium;
+use Shopware\Models\ProductFeed\ProductFeed;
+use Shopware\Models\ProductStream\ProductStream;
+use Shopware\Models\Property\Option;
+use Shopware\Models\Property\Value;
+use Shopware\Models\Shop\Shop;
+use Shopware\Models\Site\Site;
+use Shopware\Models\Voucher\Voucher;
 use Shopware_Components_Snippet_Manager;
 
 class TypeMapping implements TypeMappingInterface
 {
     /**
-     * @var array
+     * @var array<string, array{sql: string, dbal: string, allowDefaultValue: bool, quoteDefaultValue: bool, elastic: array}>
      */
-    private $types = [
+    private array $types = [
         TypeMappingInterface::TYPE_STRING => [
             'sql' => 'TEXT',
             'dbal' => 'string',
@@ -113,9 +137,9 @@ class TypeMapping implements TypeMappingInterface
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
-    private $dbalTypes = [
+    private array $dbalTypes = [
         'array' => TypeMappingInterface::TYPE_TEXT,
         'simple_array' => TypeMappingInterface::TYPE_TEXT,
         'json_array' => TypeMappingInterface::TYPE_TEXT,
@@ -137,10 +161,7 @@ class TypeMapping implements TypeMappingInterface
         'guid' => TypeMappingInterface::TYPE_TEXT,
     ];
 
-    /**
-     * @var Shopware_Components_Snippet_Manager
-     */
-    private $snippets;
+    private Shopware_Components_Snippet_Manager $snippets;
 
     public function __construct(Shopware_Components_Snippet_Manager $snippets)
     {
@@ -169,30 +190,30 @@ class TypeMapping implements TypeMappingInterface
         $snippets = $this->snippets->getNamespace('backend/attributes/main');
 
         $entities = [
-            'Shopware\Models\Article\Article',
-            'Shopware\Models\Article\Detail',
-            'Shopware\Models\Media\Media',
-            'Shopware\Models\ProductStream\ProductStream',
-            'Shopware\Models\Property\Option',
-            'Shopware\Models\Property\Value',
-            'Shopware\Models\Category\Category',
-            'Shopware\Models\Article\Supplier',
-            'Shopware\Models\Blog\Blog',
-            'Shopware\Models\Form\Form',
-            'Shopware\Models\Customer\Customer',
-            'Shopware\Models\CustomerStream\CustomerStream',
-            'Shopware\Models\Dispatch\Dispatch',
-            'Shopware\Models\Payment\Payment',
-            'Shopware\Models\Mail\Mail',
-            'Shopware\Models\Emotion\Emotion',
-            'Shopware\Models\Premium\Premium',
-            'Shopware\Models\Voucher\Voucher',
-            'Shopware\Models\ProductFeed\ProductFeed',
-            'Shopware\Models\Newsletter\Newsletter',
-            'Shopware\Models\Partner\Partner',
-            'Shopware\Models\Shop\Shop',
-            'Shopware\Models\Site\Site',
-            'Shopware\Models\Country\Country',
+            Article::class,
+            Detail::class,
+            Media::class,
+            ProductStream::class,
+            Option::class,
+            Value::class,
+            Category::class,
+            Supplier::class,
+            Blog::class,
+            Form::class,
+            Customer::class,
+            CustomerStream::class,
+            Dispatch::class,
+            Payment::class,
+            Mail::class,
+            Emotion::class,
+            Premium::class,
+            Voucher::class,
+            ProductFeed::class,
+            Newsletter::class,
+            Partner::class,
+            Shop::class,
+            Site::class,
+            Country::class,
         ];
 
         $result = [];
@@ -210,11 +231,7 @@ class TypeMapping implements TypeMappingInterface
     {
         $name = strtolower($type->getName());
 
-        if (!isset($this->dbalTypes)) {
-            return 'string';
-        }
-
-        return $this->dbalTypes[$name];
+        return $this->dbalTypes[$name] ?? TypeMappingInterface::TYPE_STRING;
     }
 
     /**

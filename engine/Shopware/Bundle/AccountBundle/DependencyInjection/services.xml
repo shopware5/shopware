@@ -14,7 +14,6 @@
 
         <service id="shopware_account.address_validator" class="Shopware\Bundle\AccountBundle\Service\Validator\AddressValidator">
             <argument type="service" id="validator" />
-            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface" />
             <argument type="service" id="Shopware_Components_Config" />
         </service>
 

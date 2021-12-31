@@ -27,8 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\VariantCheapestPriceGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface;
@@ -40,40 +38,17 @@ use Shopware_Components_Config;
 
 class VariantListingPriceService implements VariantListingPriceServiceInterface
 {
-    /**
-     * @var VariantHelperInterface
-     */
-    private $helper;
+    private VariantCheapestPriceGatewayInterface $variantCheapestPriceGateway;
 
-    /**
-     * @var QueryBuilderFactoryInterface
-     */
-    private $factory;
+    private PriceCalculationServiceInterface $priceCalculationService;
 
-    /**
-     * @var VariantCheapestPriceGatewayInterface
-     */
-    private $variantCheapestPriceGateway;
-
-    /**
-     * @var PriceCalculationServiceInterface
-     */
-    private $priceCalculationService;
-
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
     public function __construct(
-        QueryBuilderFactoryInterface $factory,
-        VariantHelperInterface $helper,
         VariantCheapestPriceGatewayInterface $variantCheapestPriceGateway,
         PriceCalculationServiceInterface $priceCalculationService,
         Shopware_Components_Config $config
     ) {
-        $this->helper = $helper;
-        $this->factory = $factory;
         $this->variantCheapestPriceGateway = $variantCheapestPriceGateway;
         $this->priceCalculationService = $priceCalculationService;
         $this->config = $config;

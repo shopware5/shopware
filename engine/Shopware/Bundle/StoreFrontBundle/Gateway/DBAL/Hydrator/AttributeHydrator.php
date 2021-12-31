@@ -24,27 +24,17 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
+use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class AttributeHydrator extends Hydrator
 {
     /**
-     * @var FieldHelper
-     */
-    private $fieldHelper;
-
-    public function __construct(FieldHelper $fieldHelper)
-    {
-        $this->fieldHelper = $fieldHelper;
-    }
-
-    /**
-     * @return Struct\Attribute
+     * @return Attribute
      */
     public function hydrate(array $data)
     {
-        $attribute = new Struct\Attribute();
+        $attribute = new Attribute();
         $translation = $this->getTranslation($data, null);
         $translation = $this->extractFields('___attribute_', $translation);
         unset($data['translation'], $data['translation_fallback']);
@@ -65,8 +55,10 @@ class AttributeHydrator extends Hydrator
      * @param string      $arrayKey
      * @param string      $attributeKey
      * @param string|null $translationKey
+     *
+     * @return void
      */
-    public function addAttribute(Struct\Extendable $struct, $data, $arrayKey, $attributeKey = null, $translationKey = null)
+    public function addAttribute(Extendable $struct, $data, $arrayKey, $attributeKey = null, $translationKey = null)
     {
         $arrayKey = '__' . $arrayKey . '_';
         $attribute = $this->extractFields($arrayKey, $data);

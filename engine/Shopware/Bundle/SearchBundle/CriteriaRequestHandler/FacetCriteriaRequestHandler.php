@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 
-use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\CombinedCondition;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
@@ -39,29 +38,16 @@ use Shopware_Components_Config;
 
 class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
-    /**
-     * @var CustomFacetServiceInterface
-     */
-    private $facetService;
-
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private CustomFacetServiceInterface $facetService;
 
     public function __construct(
         Shopware_Components_Config $config,
-        CustomFacetServiceInterface $facetService,
-        Connection $connection
+        CustomFacetServiceInterface $facetService
     ) {
         $this->config = $config;
         $this->facetService = $facetService;
-        $this->connection = $connection;
     }
 
     /**

@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 
 interface CategoryServiceInterface
 {
@@ -36,7 +37,7 @@ interface CategoryServiceInterface
      *
      * @param int[] $ids
      *
-     * @return Struct\Category[] indexed by the category id
+     * @return Category[] indexed by the category id
      */
     public function getList($ids, Struct\ShopContextInterface $context);
 
@@ -48,7 +49,7 @@ interface CategoryServiceInterface
      *
      * @param int $id
      *
-     * @return Struct\Category
+     * @return Category|null
      */
     public function get($id, Struct\ShopContextInterface $context);
 

@@ -22,7 +22,6 @@
             <argument type="tagged" tag="shopware_elastic_search.data_indexer"/>
             <argument type="tagged" tag="shopware_elastic_search.mapping"/>
             <argument type="tagged" tag="shopware_elastic_search.settings"/>
-            <argument>%shopware.es.version%</argument>
         </service>
 
         <service id="shopware_elastic_search.shop_indexer" class="Shopware\Bundle\ESIndexingBundle\ShopIndexer">
@@ -41,11 +40,7 @@
             <argument type="service" id="Elasticsearch\Client"/>
         </service>
 
-        <service id="shopware_elastic_search.text_mapping_factory"
-                 class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\TextMappingFactory">
-            <argument>%shopware.es.enabled%</argument>
-            <argument type="expression">container.hasParameter('shopware.es.version') ? parameter('shopware.es.version') : null</argument>
-        </service>
+        <service id="shopware_elastic_search.text_mapping_factory" class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\TextMappingFactory"/>
 
         <service id="shopware_elastic_search.index_factory" class="Shopware\Bundle\ESIndexingBundle\IndexFactory">
             <argument>%shopware.es.prefix%</argument>

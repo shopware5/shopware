@@ -27,14 +27,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ConfiguratorOptionsGateway implements Gateway\ConfiguratorOptionsGatewayInterface
 {
-    /**
-     * @var Hydrator\ConfiguratorHydrator
-     */
-    private $hydrator;
+    private ConfiguratorHydrator $hydrator;
 
     /**
      * The FieldHelper class is used for the
@@ -46,34 +44,19 @@ class ConfiguratorOptionsGateway implements Gateway\ConfiguratorOptionsGatewayIn
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var Gateway\MediaGatewayInterface
-     */
-    private $mediaGateway;
-
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\ConfiguratorHydrator $configuratorHydrator,
-        Gateway\MediaGatewayInterface $mediaGateway
+        ConfiguratorHydrator $configuratorHydrator
     ) {
         $this->connection = $connection;
         $this->hydrator = $configuratorHydrator;
         $this->fieldHelper = $fieldHelper;
-        $this->mediaGateway = $mediaGateway;
     }
 
     /**

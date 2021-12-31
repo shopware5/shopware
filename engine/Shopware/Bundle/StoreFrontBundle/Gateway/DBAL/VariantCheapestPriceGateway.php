@@ -29,17 +29,16 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
 class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGatewayInterface
 {
-    /**
-     * @var Hydrator\PriceHydrator
-     */
-    private $priceHydrator;
+    private PriceHydrator $priceHydrator;
 
     /**
      * The FieldHelper class is used for the
@@ -51,47 +50,32 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
-     * @var VariantHelperInterface
-     */
-    private $variantHelper;
+    private Connection $connection;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\PriceHydrator $priceHydrator,
-        Shopware_Components_Config $config,
-        VariantHelperInterface $variantHelper
+        PriceHydrator $priceHydrator,
+        Shopware_Components_Config $config
     ) {
         $this->connection = $connection;
         $this->priceHydrator = $priceHydrator;
         $this->fieldHelper = $fieldHelper;
         $this->config = $config;
-        $this->variantHelper = $variantHelper;
     }
 
     /**
      * {@inheritdoc}
      */
     public function get(
-        Struct\BaseProduct $product,
-        Struct\ShopContextInterface $context,
-        Struct\Customer\Group $customerGroup,
+        BaseProduct $product,
+        ShopContextInterface $context,
+        Group $customerGroup,
         Criteria $criteria
     ) {
         $prices = $this->getList([$product], $context, $customerGroup, $criteria);
@@ -104,11 +88,11 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
      */
     public function getList(
         $products,
-        Struct\ShopContextInterface $context,
-        Struct\Customer\Group $customerGroup,
+        ShopContextInterface $context,
+        Group $customerGroup,
         Criteria $criteria
     ) {
-        $variantIds = array_map(function (Struct\BaseProduct $product) {
+        $variantIds = array_map(function (BaseProduct $product) {
             return $product->getVariantId();
         }, $products);
 
@@ -144,10 +128,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
             ->setParameter(':variants', $variantIds, Connection::PARAM_INT_ARRAY)
             ->setParameter(':priceGroupCustomerGroup', $customerGroup->getId());
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $mainQuery->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $mainQuery->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $prices = [];
         foreach ($data as $row) {
@@ -161,8 +142,12 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         return $prices;
     }
 
-    public function joinVariantCondition(QueryBuilder $mainQuery, QueryBuilder $cheapestPriceIdQuery, QueryBuilder $cheapestPriceQuery, VariantCondition $condition)
-    {
+    public function joinVariantCondition(
+        QueryBuilder $mainQuery,
+        QueryBuilder $cheapestPriceIdQuery,
+        QueryBuilder $cheapestPriceQuery,
+        VariantCondition $condition
+    ) {
         $tableKey = $condition->getName();
 
         $suffix = md5(json_encode($condition));
@@ -217,11 +202,9 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
     }
 
     /**
-     * Pre selection of the cheapest prices.
-     *
-     * @return QueryBuilder
+     * Pre-selection of the cheapest prices.
      */
-    private function getCheapestPriceQuery(QueryBuilder $mainQuery, Criteria $criteria)
+    private function getCheapestPriceQuery(QueryBuilder $mainQuery, Criteria $criteria): QueryBuilder
     {
         /*
          * Query to get the cheapest price
@@ -294,7 +277,6 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         $cheapestPriceIdQuery = $this->connection->createQueryBuilder();
 
         $joinCondition = ' cheapestPrices.articleID = details.articleID ';
-        /** @var VariantCondition $condition */
         foreach ($criteria->getConditionsByClass(VariantCondition::class) as $condition) {
             if ($condition->expandVariants()) {
                 $joinCondition = $this->joinVariantCondition($mainQuery, $cheapestPriceIdQuery, $cheapestPriceQuery, $condition) . $joinCondition;

@@ -217,7 +217,6 @@
             <argument id="Doctrine\DBAL\Connection" type="service"/>
             <argument id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper" type="service"/>
             <argument id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator" type="service"/>
-            <argument id="Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface" type="service"/>
         </service>
 
         <service id="shopware_storefront.graduated_prices_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\GraduatedPricesGateway">
@@ -245,7 +244,6 @@
             <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
             <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator"/>
             <argument type="service" id="Shopware_Components_Config" />
-            <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface"/>
         </service>
 
         <service id="shopware_storefront.price_group_discount_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\PriceGroupDiscountGateway">
@@ -356,7 +354,6 @@
         </service>
 
         <service id="shopware_storefront.price_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator">
-            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerGroupHydrator"/>
             <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\UnitHydrator"/>
             <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
             <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ProductHydrator" />
@@ -401,10 +398,7 @@
             <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
         </service>
 
-        <service id="shopware_storefront.attribute_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator">
-            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper" />
-        </service>
-
+        <service id="shopware_storefront.attribute_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
         <service id="shopware_storefront.tax_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\TaxHydrator"/>
         <service id="shopware_storefront.unit_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\UnitHydrator"/>
 
@@ -537,8 +531,6 @@
         </service>
 
         <service id="shopware_storefront.variant_listing_price_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\VariantListingPriceService">
-            <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory"/>
-            <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface"/>
             <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\VariantCheapestPriceGatewayInterface"/>
             <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface"/>
             <argument type="service" id="Shopware_Components_Config"/>

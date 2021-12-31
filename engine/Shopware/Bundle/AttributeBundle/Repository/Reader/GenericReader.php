@@ -61,7 +61,9 @@ class GenericReader implements ReaderInterface
         $data = $query->getQuery()->getArrayResult();
         $result = [];
 
-        $identifiers = array_map('strtolower', $identifiers);
+        $identifiers = array_map(function ($identifier): string {
+            return strtolower((string) $identifier);
+        }, $identifiers);
         $data = array_change_key_case($data, CASE_LOWER);
         $identifierFields = explode('.', $this->getIdentifierField());
         $identifierField = array_pop($identifierFields);

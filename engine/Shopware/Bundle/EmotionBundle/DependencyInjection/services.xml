@@ -52,9 +52,8 @@
 
         <service id="shopware_emotion.emotion_struct_converter" class="Shopware\Bundle\EmotionBundle\Service\StructConverter">
             <argument type="service" id="Shopware\Components\Compatibility\LegacyStructConverter" />
-            <argument type="service" id="Shopware\Bundle\MediaBundle\MediaServiceInterface" />
             <argument type="service" id="Shopware\Components\ContainerAwareEventManager" />
-            <argument type="service" id="service_container" />
+            <argument type="service" id="config" />
         </service>
 
         <!-- ComponentHandler -->

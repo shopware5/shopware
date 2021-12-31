@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\AccountBundle\Service\Validator;
 
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
@@ -36,33 +35,17 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AddressValidator implements AddressValidatorInterface
 {
-    /**
-     * @var ValidatorInterface
-     */
-    private $validator;
+    private ValidatorInterface $validator;
 
-    /**
-     * @var ContextServiceInterface
-     */
-    private $context;
+    private Shopware_Components_Config $config;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
-
-    /**
-     * @var ContextualValidatorInterface
-     */
-    private $validationContext;
+    private ?ContextualValidatorInterface $validationContext = null;
 
     public function __construct(
         ValidatorInterface $validator,
-        ContextServiceInterface $context,
         Shopware_Components_Config $config
     ) {
         $this->validator = $validator;
-        $this->context = $context;
         $this->config = $config;
     }
 
@@ -99,7 +82,7 @@ class AddressValidator implements AddressValidatorInterface
             }
         }
 
-        if ($this->validationContext->getViolations()->count()) {
+        if ($this->validationContext && $this->validationContext->getViolations()->count()) {
             throw new ValidationException($this->validationContext->getViolations());
         }
     }
@@ -122,15 +105,17 @@ class AddressValidator implements AddressValidatorInterface
      * @param string|object|null $value
      * @param Constraint[]       $constraints
      */
-    private function validateField(string $property, $value, array $constraints)
+    private function validateField(string $property, $value, array $constraints): void
     {
-        $this->validationContext->atPath($property)->validate($value, $constraints);
+        if ($this->validationContext !== null) {
+            $this->validationContext->atPath($property)->validate($value, $constraints);
+        }
     }
 
     /**
      * @return Constraint[]
      */
-    private function getPhoneConstraints()
+    private function getPhoneConstraints(): array
     {
         $constraints = [];
 
@@ -144,7 +129,7 @@ class AddressValidator implements AddressValidatorInterface
     /**
      * @return Constraint[]
      */
-    private function getAdditionalAddressline1Constraints()
+    private function getAdditionalAddressline1Constraints(): array
     {
         $constraints = [];
 
@@ -158,7 +143,7 @@ class AddressValidator implements AddressValidatorInterface
     /**
      * @return Constraint[]
      */
-    private function getAdditionalAddressline2Constraints()
+    private function getAdditionalAddressline2Constraints(): array
     {
         $constraints = [];
 
