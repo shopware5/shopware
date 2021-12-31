@@ -50,7 +50,6 @@ Ext.define('Shopware.apps.ContentTypeManager.view.list.Grid', {
             addButton: false,
             /* {/if} */
 
-
             pagingbar: false,
             columns: {
                 name: {},

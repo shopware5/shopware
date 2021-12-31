@@ -51,7 +51,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
      */
     caption: '{s name="tabs/settings/seo/title"}SEO{/s}',
 
-
     /**
      * Component event method which is fired when the component
      * is initials. The component is initials when the user
@@ -117,12 +116,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
                         name: 'seo[routercache]',
                         xtype: 'numberfield',
                         minValue: 3600
-                    } , {
+                    }, {
                         fieldLabel: '{s name="fieldset/seo/lastUpdate"}Last update{/s}',
                         name: 'seo[routerlastupdateDate]',
                         submitFormat: 'd.m.Y',
                         xtype: 'datefield'
-                    } , {
+                    }, {
                         fieldLabel: ' ',
                         labelSeparator: '',
                         name: 'seo[routerlastupdateTime]',

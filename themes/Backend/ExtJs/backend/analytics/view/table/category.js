@@ -76,6 +76,5 @@ Ext.define('Shopware.apps.Analytics.view.table.Category', {
         );
     }
 
-
 });
 //{/block}

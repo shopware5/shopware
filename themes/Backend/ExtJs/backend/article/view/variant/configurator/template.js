@@ -176,7 +176,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
         me.callParent(arguments);
 
         me.mainWindow = me.subApplication.articleWindow;
-        if(me.mainWindow.hasOwnProperty('unitStore')) {
+        if (me.mainWindow.hasOwnProperty('unitStore')) {
             me.unitComboBox.bindStore(me.mainWindow.unitStore);
         }
 
@@ -234,7 +234,6 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
 
         return me.saveButton;
     },
-
 
     /**
      * Creates the cancel button which fire the cancel event, the cancel event is handled in the detail controller.
@@ -475,7 +474,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
                 xtype: 'textfield',
                 name: 'supplierNumber',
                 fieldLabel: me.snippets.settings.supplierNumber
-            } , {
+            }, {
                 xtype: 'numberfield',
                 name: 'weight',
                 submitLocaleSeparator: false,

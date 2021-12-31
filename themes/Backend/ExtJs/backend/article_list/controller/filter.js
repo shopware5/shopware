@@ -130,7 +130,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
 
             // Do not add empty rows to the result set.
             if (record.get('column').length > 0) {
-                 // Concat and push the results
+                // Concat and push the results
                 result.push(record.get('column') + ' ' + record.get('operator') + value);
             }
         });
@@ -271,7 +271,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
                 if (currentRow[2]) {
                     var token = currentRow[2]['token'];
                     if (token.substring(0, 1) == token.substring(token.length - 1) && token.substring(0, 1) == '"') {
-                        token = token.substring(1, token.length-1);
+                        token = token.substring(1, token.length - 1);
                     }
                     record.set('value', token);
                 }
@@ -281,7 +281,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
 
         simpleGrid.getStore().commitChanges();
     },
-
 
     /**
      * Called, when the user clicks the 'save' button in the 'addFilter' dialog and is in advanced filter context
@@ -480,7 +479,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
         }
 
         // If any binaryOperators is associated with the value field, enable it
-        for (var i=0;i<operators.length;i++) {
+        for (var i = 0;i < operators.length;i++) {
             var operator = operators[i];
             if (binaryOperators.indexOf(operator) != -1) {
                 valueColumn.setEditor(grid.getDefaultValueEditor());
@@ -529,7 +528,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
             valueColumn.setEditor(false);
 
             // If any binaryOperators is associated with the value field, enable it
-            for (var i=0;i<operators.length;i++) {
+            for (var i = 0;i < operators.length;i++) {
                 var operator = operators[i];
                 if (binaryOperators.indexOf(operator) != -1) {
                     valueColumn.setEditor(grid.getDefaultValueEditor());

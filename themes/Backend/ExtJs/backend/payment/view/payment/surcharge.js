@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Payment.view.payment.Surcharge', {
             header: '{s name="column_countrySurcharge_name"}Name{/s}',
             flex: 1,
             dataIndex: 'name'
-        },{
+        }, {
             header: '{s name="column_countrySurcharge_surcharge"}Surcharge (in %){/s}',
             flex: 1,
             dataIndex: 'surcharge',

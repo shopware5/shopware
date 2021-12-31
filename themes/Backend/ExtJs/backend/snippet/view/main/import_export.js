@@ -174,7 +174,6 @@ Ext.define('Shopware.apps.Snippet.view.main.ImportExport', {
         };
     },
 
-
     /**
      * Creates store object used for the typ column
      *

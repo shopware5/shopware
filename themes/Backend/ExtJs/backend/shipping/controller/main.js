@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
      */
     mainWindow: null,
 
-     /**
+    /**
      * Contains all text messages for this controller
      * @object
      */
@@ -144,20 +144,20 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
         Ext.MessageBox.confirm(
             me.messages.deleteDialogTitle,
             Ext.String.format(me.messages.deleteDialogMessageSingle, record.get('name')), function (response) {
-            if (response !== 'yes') {
-                return false;
-            }
-            store.remove(record);
-            store.sync({
-                callback: function() {
-                    Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogSuccess, '{s name="title"}{/s}');
-                    Ext.Error.handle = function() {
-                        Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure + e.message, '{s name="title"}{/s}');
-                    }
-                    store.load();
+                if (response !== 'yes') {
+                    return false;
                 }
+                store.remove(record);
+                store.sync({
+                    callback: function() {
+                        Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogSuccess, '{s name="title"}{/s}');
+                        Ext.Error.handle = function() {
+                            Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure + e.message, '{s name="title"}{/s}');
+                        }
+                        store.load();
+                    }
+                });
             });
-        });
 
     },
 
@@ -199,7 +199,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
                         }
                     });
                 }
-        });
+            });
     },
 
     /**
@@ -281,7 +281,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
         });
     },
 
-     /**
+    /**
      * Helper method which handles all clicks of the action column in the main view
      *
      * @param [object] view - The view
@@ -299,7 +299,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
                 break;
             case 'sprite-minus-circle-frame':
                 me.onDeleteSingleShipping(view, rowIndex);
-            break;
+                break;
             case 'sprite-blue-document-copy':
                 me.onCloneShippingCosts(view, item, rowIndex);
                 break;
@@ -383,7 +383,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
         });
 
         // save costsmatrix for further reference
-//        me.costsmatrix = costsmatrix;
+        //        me.costsmatrix = costsmatrix;
 
         me.getGrid().setLoading(true);
 
@@ -417,12 +417,12 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
         switch (calculationType)
         {
             case 1:
-            return {
-                decimalPrecision: 2,
-                minChange: 0.01,
-                startValue: 0
-            };
-            break;
+                return {
+                    decimalPrecision: 2,
+                    minChange: 0.01,
+                    startValue: 0
+                };
+                break;
             case 2:
             case 3:
                 return {

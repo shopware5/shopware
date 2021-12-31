@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
             items: me.createActionButtons()
         }];
         me.callParent(arguments);
-        me.record.set('categoryId' , me.category.get('id'));
+        me.record.set('categoryId', me.category.get('id'));
 
         me.formPanel.loadRecord(me.record);
         me.linkTarget.setValue('_blank');
@@ -164,7 +164,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
     },
 
     onExtensionError: function() {
-        Shopware.Msg.createGrowlMessage('','{s name="extension_error"}Incorrect MIME Type{/s}','{s name="main_title"}{/s}');
+        Shopware.Msg.createGrowlMessage('', '{s name="extension_error"}Incorrect MIME Type{/s}', '{s name="main_title"}{/s}');
     },
 
     /**
@@ -206,37 +206,37 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
         var me = this;
 
         me.validFromField = Ext.create('Ext.form.field.Date', {
-                submitFormat: 'd.m.Y',
-                fieldLabel: '{s name="form_add/from_label"}Active from{/s}',
-                name: 'validFromDate',
-                supportText: '{s name="form_add/from_support"}Format: dd.mm.jjjj{/s}',
-                columnWidth: .6,
-                labelWidth: 155,
-                minValue: new Date(),
-                value: new Date(),
-                allowBlank: true,
-                listeners: {
-                    change: function(field, newValue) {
-                        me.validToField.setMinValue(newValue);
-                    }
+            submitFormat: 'd.m.Y',
+            fieldLabel: '{s name="form_add/from_label"}Active from{/s}',
+            name: 'validFromDate',
+            supportText: '{s name="form_add/from_support"}Format: dd.mm.jjjj{/s}',
+            columnWidth: .6,
+            labelWidth: 155,
+            minValue: new Date(),
+            value: new Date(),
+            allowBlank: true,
+            listeners: {
+                change: function(field, newValue) {
+                    me.validToField.setMinValue(newValue);
                 }
             }
+        }
         );
 
         return Ext.create('Ext.container.Container', {
             layout: 'column',
             anchor: '100%',
             items: [
-                ,me.validFromField,
-            {
-                margin: '0 0 0 10',
-                submitFormat: 'H:i',
-                xtype: 'timefield',
-                name: 'validFromTime',
-                supportText: '{s name="form_add/from_time_support"}Format: hh:mm{/s}',
-                columnWidth: .4,
-                minDate: new Date()
-            }]
+                , me.validFromField,
+                {
+                    margin: '0 0 0 10',
+                    submitFormat: 'H:i',
+                    xtype: 'timefield',
+                    name: 'validFromTime',
+                    supportText: '{s name="form_add/from_time_support"}Format: hh:mm{/s}',
+                    columnWidth: .4,
+                    minDate: new Date()
+                }]
         })
     },
 
@@ -268,14 +268,14 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
             anchor: '100%',
             items: [
                 me.validToField,
-            {
-                margin: '0 0 0 10',
-                xtype: 'timefield',
-                name: 'validToTime',
-                submitFormat: 'H:i',
-                supportText: '{s name="form_add/to_time_support"}Format: hh:mm{/s}',
-                columnWidth: .40
-            }]
+                {
+                    margin: '0 0 0 10',
+                    xtype: 'timefield',
+                    name: 'validToTime',
+                    submitFormat: 'H:i',
+                    supportText: '{s name="form_add/to_time_support"}Format: hh:mm{/s}',
+                    columnWidth: .40
+                }]
         })
     },
 

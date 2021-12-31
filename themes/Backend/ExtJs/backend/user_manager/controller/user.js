@@ -129,7 +129,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
             // check which field is not valid in order to tell the user, why the customer cannot be saved
             // SW-4322
             formPnl.getForm().getFields().each(function(f){
-                 if (!f.validate()){
+                if (!f.validate()){
                     if (f.fieldLabel){
                         missingField = f.fieldLabel;
                     } else if (f.name){
@@ -137,9 +137,9 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
                     }
                     Shopware.Notification.createGrowlMessage(me.snippets.form.errorTitle, Ext.String.format(me.snippets.form.errorMessage, missingField), me.snippets.growlMessage)
                     return false;
-                 }
+                }
 
-             });
+            });
             return;
 
         }
@@ -164,9 +164,9 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
                     formPnl.up('window').destroy();
 
                     Shopware.Notification.createGrowlMessage(
-                            '{s name="user/Success"}Successful{/s}',
-                            Ext.String.format('{s name="user/editSuccessful"}User \'[0]\' was updated{/s}', formPnl.getForm().getValues().name),
-                            '{s name="user/userManager"}User Manager{/s}'
+                        '{s name="user/Success"}Successful{/s}',
+                        Ext.String.format('{s name="user/editSuccessful"}User \'[0]\' was updated{/s}', formPnl.getForm().getValues().name),
+                        '{s name="user/userManager"}User Manager{/s}'
                     );
                     Ext.Ajax.request({
                         url: '{url controller=login action=getLoginStatus}',
@@ -239,11 +239,11 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
      * @param view
      * @param rowIndex
      */
-    onDeleteUser: function (view,rowIndex){
+    onDeleteUser: function (view, rowIndex){
         var me = this,
-        userStore = me.getStore('User'),
-        message,
-        record = userStore.getAt(rowIndex);
+            userStore = me.getStore('User'),
+            message,
+            record = userStore.getAt(rowIndex);
 
         message = Ext.String.format('{s name="user/messageDeleteUser"}Are you sure you want to delete the user [0]?{/s}', record.data.username);
         Ext.MessageBox.confirm('{s name="user/titleDeleteUser"}Delete user{/s}', message, function (response){
@@ -272,7 +272,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
             records = view.getSelectionModel().getSelection(),
             userStore = me.getStore('User');
 
-        if(records.length > 0) {
+        if (records.length > 0) {
             Ext.MessageBox.confirm('{s name="user/titleDeleteUser"}Delete user{/s}', '{s name="user/messageDeleteMultipleUsers"}Are you sure you want delete these users?{/s}', function (response) {
                 if (response !== 'yes') return false;
 

@@ -124,7 +124,6 @@ Ext.define('Shopware.apps.Vote.view.detail.Vote', {
         return value;
     },
 
-
     dateRenderer: function(value) {
         if (!value) {
             return '';

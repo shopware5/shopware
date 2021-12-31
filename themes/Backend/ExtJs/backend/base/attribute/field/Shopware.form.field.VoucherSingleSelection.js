@@ -39,20 +39,20 @@ Ext.define('Shopware.form.field.VoucherSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<tpl if="voucherCode">',
-                    '<div class="x-boundlist-item">{literal}{description} <i>({voucherCode})</i>{/literal}</div>',
-                '<tpl else>',
-                    '<div class="x-boundlist-item">{literal}{description}{/literal}</div>',
-                '</tpl>',
+            '<tpl if="voucherCode">',
+            '<div class="x-boundlist-item">{literal}{description} <i>({voucherCode})</i>{/literal}</div>',
+            '<tpl else>',
+            '<div class="x-boundlist-item">{literal}{description}{/literal}</div>',
+            '</tpl>',
             '</tpl>'
         );
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<tpl if="voucherCode">',
-                    '{literal}{description} ({voucherCode}){/literal}',
-                '<tpl else>',
-                    '{literal}{description}{/literal}',
-                '</tpl>',
+            '<tpl if="voucherCode">',
+            '{literal}{description} ({voucherCode}){/literal}',
+            '<tpl else>',
+            '{literal}{description}{/literal}',
+            '</tpl>',
             '</tpl>'
         );
         return config;

@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Base.view.element.Button', {
         me.disabled = false;
 
         // Move field label to button text
-        if(me.fieldLabel) {
+        if (me.fieldLabel) {
             me.text = me.fieldLabel;
             delete me.fieldLabel;
         }

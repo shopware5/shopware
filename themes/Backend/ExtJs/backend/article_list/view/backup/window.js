@@ -89,7 +89,6 @@ Ext.define('Shopware.apps.ArticleList.view.Backup.Window', {
      */
     layout: 'fit',
 
-
     /**
      * Initializes the component.
      *
@@ -98,7 +97,6 @@ Ext.define('Shopware.apps.ArticleList.view.Backup.Window', {
      */
     initComponent: function () {
         var me = this;
-
 
         me.items = [{
             xtype: 'container',

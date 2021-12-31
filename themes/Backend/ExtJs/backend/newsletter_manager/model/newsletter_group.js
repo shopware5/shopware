@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.NewsletterManager.model.NewsletterGroup', {
         api: {
             create: '{url action="createNewsletterGroup"}',
             update: '{url action="updateNewsletterGroup"}',
-//            destroy:'{url action="deleteNewsletterGroup"}'
+            //            destroy:'{url action="deleteNewsletterGroup"}'
         },
 
         /**

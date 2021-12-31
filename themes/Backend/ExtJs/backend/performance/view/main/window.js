@@ -115,7 +115,6 @@ Ext.define('Shopware.apps.Performance.view.main.Window', {
     initComponent: function () {
         var me = this;
 
-
         //add the customer list grid panel and set the store
         me.items = me.getTabPanel();
         me.callParent(arguments);
@@ -143,7 +142,7 @@ Ext.define('Shopware.apps.Performance.view.main.Window', {
                 infoStore: me.infoStore
             }
             /*{if {acl_is_allowed privilege=update}}*/
-            ,{
+            , {
                 xtype: 'performance-tabs-settings-main'
             }
             /*{/if}*/

@@ -105,30 +105,30 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
 
-                // Preview of the element
-                '<div class="' + elementPreviewCls + '">',
-                    me.createPreview(),
-                '</div>',
+            // Preview of the element
+            '<div class="' + elementPreviewCls + '">',
+            me.createPreview(),
+            '</div>',
 
-                '<div class="' + elementOverlayCls + '">',
-                    '<div class="' + elementInfoCls + '">',
+            '<div class="' + elementOverlayCls + '">',
+            '<div class="' + elementInfoCls + '">',
 
-                        '<div class="' + elementIconCls + '">',
-                            '<img src="' + me.getIcon() + '" />',
-                        '</div>',
+            '<div class="' + elementIconCls + '">',
+            '<img src="' + me.getIcon() + '" />',
+            '</div>',
 
-                        // Label of the element
-                        '<div class="' + elementLabelCls + '">',
-                            me.getLabel(),
-                        '</div>',
+            // Label of the element
+            '<div class="' + elementLabelCls + '">',
+            me.getLabel(),
+            '</div>',
 
-                        // Option buttons of the element
-                        '<div class="' + elementOptionsCls + '">',
-                            me.createOptions(),
-                        '</div>',
+            // Option buttons of the element
+            '<div class="' + elementOptionsCls + '">',
+            me.createOptions(),
+            '</div>',
 
-                    '</div>',
-                '</div>',
+            '</div>',
+            '</div>',
             '</tpl>{/literal}');
     },
 

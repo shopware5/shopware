@@ -75,38 +75,38 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
                     title: '{s name="window/tabpanel/config_tab/title"}Server-Configs{/s}',
                     items: [{
                         xtype: 'systeminfo-main-timezone'
-                    },{
+                    }, {
                         xtype: 'systeminfo-main-configlist'
                     }]
-                },{
+                }, {
                     xtype: 'container',
                     overflowY: 'scroll',
                     title: '{s name="window/tabpanel/path_tab/title"}Shopware-Paths{/s}',
                     items: [{
                         xtype: 'systeminfo-main-pathlist'
                     }]
-                },{
+                }, {
                     xtype: 'container',
                     overflowY: 'scroll',
                     title: '{s name="window/tabpanel/file_tab/title"}Shopware-Files{/s}',
                     items: [{
                         xtype: 'systeminfo-main-filelist'
                     }]
-                },{
+                }, {
                     xtype: 'container',
                     overflowY: 'scroll',
                     title: '{s name="window/tabpanel/version_tab/title"}Version-info{/s}',
                     items: [{
                         xtype: 'systeminfo-main-versionlist'
                     }]
-                },{
+                }, {
                     xtype: 'container',
                     layout: 'fit',
                     title: '{s name="window/tabpanel/optimizer_tab/title"}Optimizer{/s}',
                     items: [{
                         xtype: 'systeminfo-main-optimizerlist'
                     }]
-                },{
+                }, {
                     xtype: 'container',
                     layout: 'fit',
                     overflowY: 'hidden',

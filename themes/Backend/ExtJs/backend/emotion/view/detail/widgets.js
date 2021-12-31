@@ -80,25 +80,25 @@ Ext.define('Shopware.apps.Emotion.view.detail.Widgets', {
     createElementLibraryTemplate: function() {
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<tpl if="children.length &gt; 0">',
-                '<fieldset class="x-fieldset x-fieldset-with-title x-fieldset-with-legend x-fieldset-default">',
-                    '<legend class="x-fieldset-header x-fieldset-header-default">',
-                        '<div class="x-component x-fieldset-header-text x-component-default">{headline}:</div>',
-                    '</legend>',
-                    '<div class="x-library-elements">',
-                        '<ul>',
-                            '<tpl for="children">',
-                                '<li class="x-library-element" data-componentId="{data.id}">',
-                                    '<span class="x-library-element-icon">',
-                                        '{[this.getElementIcon(values)]}',
-                                    '</span>',
-                                    '<span class="x-library-element-label">{data.fieldLabel}</span>',
-                                '</li>',
-                            '</tpl>',
-                        '</ul>',
-                    '</div>',
-                '</fieldset>',
-                '</tpl>',
+            '<tpl if="children.length &gt; 0">',
+            '<fieldset class="x-fieldset x-fieldset-with-title x-fieldset-with-legend x-fieldset-default">',
+            '<legend class="x-fieldset-header x-fieldset-header-default">',
+            '<div class="x-component x-fieldset-header-text x-component-default">{headline}:</div>',
+            '</legend>',
+            '<div class="x-library-elements">',
+            '<ul>',
+            '<tpl for="children">',
+            '<li class="x-library-element" data-componentId="{data.id}">',
+            '<span class="x-library-element-icon">',
+            '{[this.getElementIcon(values)]}',
+            '</span>',
+            '<span class="x-library-element-label">{data.fieldLabel}</span>',
+            '</li>',
+            '</tpl>',
+            '</ul>',
+            '</div>',
+            '</fieldset>',
+            '</tpl>',
             '</tpl>{/literal}',
             {
                 getElementIcon: function(values) {
@@ -189,7 +189,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Widgets', {
 
                 proxyEl.getEl().addCls(Ext.baseCSSPrefix + 'shopware-dd-proxy');
 
-                if(!sourceEl || !element) {
+                if (!sourceEl || !element) {
                     return false;
                 }
 

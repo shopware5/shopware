@@ -90,7 +90,6 @@ Ext.define('Shopware.apps.Article.view.image.NewRule', {
      */
     stateId: 'shopware-article-image-rule-window',
 
-
     /**
      * Contains all snippets for this component
      * @object
@@ -219,7 +218,6 @@ Ext.define('Shopware.apps.Article.view.image.NewRule', {
             ]
         });
     }
-
 
 });
 //{/block}

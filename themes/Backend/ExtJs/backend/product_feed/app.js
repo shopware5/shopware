@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.ProductFeed', {
      * Requires models for sub-application
      * @array
      */
-    models: ['Detail','Main','Category','CategoryForComboTree', 'Shop'],
+    models: ['Detail', 'Main', 'Category', 'CategoryForComboTree', 'Shop'],
 
     /**
      * Required views for this sub-application
@@ -79,7 +79,6 @@ Ext.define('Shopware.apps.ProductFeed', {
      * @array
      */
     stores: [ 'List', 'Detail', 'Category', 'Supplier', 'Article', 'CategoryForComboTree', 'Shop'],
-
 
     /**
      * Returns the main application window for this is expected

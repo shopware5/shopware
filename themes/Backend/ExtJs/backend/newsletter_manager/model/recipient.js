@@ -54,7 +54,6 @@ Ext.define('Shopware.apps.NewsletterManager.model.Recipient', {
         { name: 'doubleOptinConfirmed', type: 'date' }
     ],
 
-
     /**
      * Configure the data communication
      * @object

@@ -85,15 +85,15 @@ Ext.define('Shopware.apps.Emotion.view.components.ManufacturerSlider', {
         var me = this,
             numberfields =  me.query('numberfield');
 
-        if(!me.manufacturerType.getValue() || me.manufacturerType.getValue() === 'selected_manufacturers') {
+        if (!me.manufacturerType.getValue() || me.manufacturerType.getValue() === 'selected_manufacturers') {
             me.categorySelect.hide().disable();
         }
-        if(!me.manufacturerType.getValue() || me.manufacturerType.getValue() !== 'selected_manufacturers') {
+        if (!me.manufacturerType.getValue() || me.manufacturerType.getValue() !== 'selected_manufacturers') {
             me.supplierFieldset.hide().disable();
         }
 
         Ext.each(numberfields, function(field) {
-            if(!field.getValue()) {
+            if (!field.getValue()) {
                 field.setValue(500);
             }
         });
@@ -222,7 +222,7 @@ Ext.define('Shopware.apps.Emotion.view.components.ManufacturerSlider', {
     onChangeType: function(field, newValue) {
         var me = this;
 
-        if(newValue === 'manufacturers_by_cat') {
+        if (newValue === 'manufacturers_by_cat') {
             me.categorySelect.show().enable();
             me.supplierFieldset.hide().disable();
         } else {
@@ -300,13 +300,13 @@ Ext.define('Shopware.apps.Emotion.view.components.ManufacturerSlider', {
             elementStore = me.getSettings('record').get('data'), supplierSlider;
 
         Ext.each(elementStore, function(element) {
-            if(element.key === 'selected_manufacturers') {
+            if (element.key === 'selected_manufacturers') {
                 supplierSlider = element;
                 return false;
             }
         });
 
-        if(supplierSlider && supplierSlider.value) {
+        if (supplierSlider && supplierSlider.value) {
             Ext.each(supplierSlider.value, function(item) {
                 me.supplierStore.add(Ext.create('Shopware.apps.Emotion.model.ManufacturerSlider', item));
             });

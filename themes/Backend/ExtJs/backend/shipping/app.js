@@ -126,7 +126,7 @@ Ext.define('Shopware.apps.Shipping', {
      */
     launch: function() {
         var me = this,
-        mainController = me.getController('Main');
+            mainController = me.getController('Main');
 
         return mainController.mainWindow;
     }

@@ -32,7 +32,6 @@ Ext.define('Shopware.apps.Emotion.view.components.ContentType', {
         mode: '{s name="sorting"}{/s}'
     },
 
-
     initComponent: function() {
         var me = this;
         this.callParent(arguments);

@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Config.view.form.PriceGroup', {
             xtype: 'config-base-table',
             store: 'form.PriceGroup',
             columns: me.getColumns()
-        },{
+        }, {
             xtype: 'config-base-detail',
             store: 'detail.PriceGroup',
             items: me.getFormItems()

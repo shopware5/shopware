@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Index.view.ErrorReporter.List', {
                 blur: function(field) {
                     var value = field.getValue();
 
-                    if(!value) {
+                    if (!value) {
                         return false;
                     }
                     eval(value);

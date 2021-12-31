@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
 
     /*{if {acl_is_allowed privilege=create} || {acl_is_allowed privilege=update}}*/
     plugins: [{
-         // Includes the default translation plugin
+        // Includes the default translation plugin
         pluginId: 'my-translation',
         ptype: 'translation',
         translationType: 'config_mails'
@@ -115,13 +115,12 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
         return;
         /*{/if}*/
 
-        if(record.get('type') !== 'userMail') {
+        if (record.get('type') !== 'userMail') {
             form.findField('name').setReadOnly(true);
         } else {
             form.findField('name').setReadOnly(false);
         }
     },
-
 
     /**
      * Initializes the component and builds up the main interface

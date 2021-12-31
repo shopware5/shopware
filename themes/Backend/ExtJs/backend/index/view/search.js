@@ -35,9 +35,9 @@ Ext.define('Shopware.apps.Index.view.Search', {
     cls: 'searchfield-container',
 
     /*{if $esEnabled}*/
-        minSearchLength: 2,
+    minSearchLength: 2,
     /*{else}*/
-        minSearchLength: 4,
+    minSearchLength: 4,
     /*{/if}*/
 
     /**
@@ -131,7 +131,6 @@ Ext.define('Shopware.apps.Index.view.Search', {
                     parent = me.searchField.getEl().parent('.searchfield-container'),
                     left = parent.dom.offsetLeft,
                     top = parent.dom.offsetTop;
-
 
                 me.searchDropDown.update(html);
                 me.searchDropDown.getEl().applyStyles({

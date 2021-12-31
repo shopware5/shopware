@@ -388,7 +388,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
                 url: '{url controller="MediaManager" action="emptyTrash"}',
                 success: function(response) {
                     var responseText = Ext.JSON.decode(response.responseText);
-                    if(responseText.success) {
+                    if (responseText.success) {
                         me.onReload();
                         me.getController('Media').onReload();
                     }

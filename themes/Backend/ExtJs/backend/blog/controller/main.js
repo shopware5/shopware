@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Blog.controller.Main', {
             templateStore: me.subApplication.templateStore,
             commentStore: me.subApplication.commentStore
 
-    });
+        });
         me.callParent(arguments);
     }
 });

@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Base.view.element.DateTime', {
     },
 
     formatValue: function(value) {
-        if(!value) {
+        if (!value) {
             return null;
         } else if (typeof value === 'string') {
             value = value.replace(' ', 'T');

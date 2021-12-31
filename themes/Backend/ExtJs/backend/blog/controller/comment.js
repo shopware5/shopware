@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
             store = me.subApplication.commentStore;
         store.filters.clear();
         store.currentPage = 1;
-        store.filter('filter',searchString);
+        store.filter('filter', searchString);
     },
 
     /**
@@ -131,8 +131,6 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
         acceptButton.setDisabled(!selections.length);
     },
 
-
-
     /**
      * Event listener which deletes a single blog based on the passed
      * grid (e.g. the grid store) and the row index
@@ -148,27 +146,27 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
         store.currentPage = 1;
         // we do not just delete - we are polite and ask the user if he is sure.
         Ext.MessageBox.confirm(
-                me.snippets.confirmDeleteSingleBlogCommentTitle,
-                Ext.String.format(me.snippets.confirmDeleteSingleBlogComment, record.get('headline')), function (response) {
-                    if (response !== 'yes') {
-                        return false;
-                    }
-                    record.destroy({
-                        callback: function (data, operation) {
-                            var records = operation.getRecords(),
-                                    record = records[0],
-                                    rawData = record.getProxy().getReader().rawData;
+            me.snippets.confirmDeleteSingleBlogCommentTitle,
+            Ext.String.format(me.snippets.confirmDeleteSingleBlogComment, record.get('headline')), function (response) {
+                if (response !== 'yes') {
+                    return false;
+                }
+                record.destroy({
+                    callback: function (data, operation) {
+                        var records = operation.getRecords(),
+                            record = records[0],
+                            rawData = record.getProxy().getReader().rawData;
 
-                            if ( operation.success === true ) {
-                                Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleBlogCommentSuccess, me.snippets.growlMessage);
-                            } else {
-                                Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleBlogCommentError + rawData.errorMsg, me.snippets.growlMessage);
-                            }
-
-                            store.load();
+                        if ( operation.success === true ) {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleBlogCommentSuccess, me.snippets.growlMessage);
+                        } else {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleBlogCommentError + rawData.errorMsg, me.snippets.growlMessage);
                         }
-                    });
+
+                        store.load();
+                    }
                 });
+            });
 
     },
 
@@ -232,7 +230,7 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;
 
-                if(operation.success){
+                if (operation.success){
                     Shopware.Notification.createGrowlMessage('', me.snippets.acceptSingleBlogCommentSuccess, me.snippets.growlMessage);
                     store.load();
                 } else {
@@ -249,11 +247,11 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
      */
     onAcceptMultipleBlogComments: function () {
         var me = this,
-                grid = me.getCommentGrid(),
-                sm = grid.getSelectionModel(),
-                selection = sm.getSelection(),
-                store = me.subApplication.commentStore,
-                noOfElements = selection.length;
+            grid = me.getCommentGrid(),
+            sm = grid.getSelectionModel(),
+            selection = sm.getSelection(),
+            store = me.subApplication.commentStore,
+            noOfElements = selection.length;
 
         // Get the user to confirm the delete process
         Ext.MessageBox.confirm(
@@ -295,7 +293,6 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
 
         infoView.update(record.data);
     }
-
 
 });
 //{/block}

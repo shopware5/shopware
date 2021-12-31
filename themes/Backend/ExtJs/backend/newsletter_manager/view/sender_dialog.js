@@ -45,8 +45,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.SenderDialog', {
     stateful: true,
     stateId: 'shopware-newsletter-manager-sender_dialog',
 
-//    modal: true,
-//    footerButton: false,
+    //    modal: true,
+    //    footerButton: false,
 
     autoShow: true,
 
@@ -58,9 +58,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.SenderDialog', {
     initComponent: function() {
         var me = this;
 
-        if(me.record == null) {
+        if (me.record == null) {
             me.title = '{s name="title/newSender"}Create new sender{/s}'
-        }else{
+        } else {
             me.title = '{s name="title/editSender"}Edit sender{/s}'
         }
 
@@ -84,10 +84,10 @@ Ext.define('Shopware.apps.NewsletterManager.view.SenderDialog', {
 
         me.form = Ext.create('Ext.form.Panel', {
             layout: {
-                  type: 'vbox',       // Arrange child items vertically
-                  align: 'stretch',    // Each takes up full width
-                  padding: 5
-              },
+                type: 'vbox',       // Arrange child items vertically
+                align: 'stretch',    // Each takes up full width
+                padding: 5
+            },
             // The fields
             defaultType: 'textfield',
             items: [{
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.SenderDialog', {
                 checkChangeBuffer: 500,
                 validationUrl: '{url controller="base" action="validateEmail"}',
                 validationErrorMsg: '{s name=invalid_email namespace=backend/base/vtype}The email address entered is not valid{/s}',
-            },{
+            }, {
                 fieldLabel: 'Name',
                 name: 'name',
                 allowBlank: false
@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.SenderDialog', {
             }]
         });
 
-        if(me.record) {
+        if (me.record) {
             me.form.getForm().loadRecord(me.record);
         }
         return me.form;

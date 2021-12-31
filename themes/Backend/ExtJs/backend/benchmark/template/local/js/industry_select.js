@@ -209,7 +209,6 @@
             $infoText,
             name, translation;
 
-
         this.$shopEntries.each(function (index, shopEntry) {
             $shopEntry = $(shopEntry);
             shopId = $shopEntry.find('.entry-shop-id').val();

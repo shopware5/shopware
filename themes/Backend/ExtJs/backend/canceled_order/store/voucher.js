@@ -29,7 +29,6 @@
 
 //{namespace name="backend/canceled_order/store/voucher"}
 
-
 /**
  * Shopware Store - Voucher store
  */

@@ -233,7 +233,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
                     pluginName: pluginName,
                     store: me.localeStore
                 }).show();
-            } catch(e) {
+            } catch (e) {
                 // Locale not supported
             }
         }

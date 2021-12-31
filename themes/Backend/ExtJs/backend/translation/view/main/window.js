@@ -35,9 +35,9 @@
  * todo@all: Documentation
  */
 //{block name="backend/translation/view/main/window"}
-Ext.define('Shopware.apps.Translation.view.main.Window',
-/** @lends Enlight.app.Window# */
-{
+Ext.define('Shopware.apps.Translation.view.main.Window', {
+    /** @lends Enlight.app.Window# */
+
     extend: 'Enlight.app.Window',
     title: '{s name="window_title"}Translation{/s}',
     cls: Ext.baseCSSPrefix + 'translation-manager-window',
@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Translation.view.main.Window',
             xtype: 'translation-main-toolbar',
             dock: 'top',
             region: 'north'
-        },{
+        }, {
             xtype: 'translation-main-navigation',
             treeStore: me.treeStore,
             region: 'west'

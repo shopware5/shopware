@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
         var me = this,
             items = [];
 
-        me.saveButton = Ext.create('Ext.button.Button',{
+        me.saveButton = Ext.create('Ext.button.Button', {
             text: '{s name="formLinkFieldSaveButtonText"}Save{/s}',
             action: 'onSaveSite',
             cls: 'primary'
@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
         /*{if {acl_is_allowed privilege=createSite} || {acl_is_allowed privilege=updateSite}}*/
         items.push(me.saveButton);
         /*{/if}*/
-        return Ext.create('Ext.toolbar.Toolbar',{
+        return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'bottom',
             ui: 'shopware-ui',
             items: items
@@ -204,17 +204,17 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
 
         return [
             {
-               fieldLabel: '{s name="formSettingsFieldPositionLabel"}Position{/s}',
-               xtype: 'textfield',
-               name: 'position',
-               anchor: '100%'
+                fieldLabel: '{s name="formSettingsFieldPositionLabel"}Position{/s}',
+                xtype: 'textfield',
+                name: 'position',
+                anchor: '100%'
             },
             {
-               fieldLabel: '{s name="formSettingsFieldEmbedCodeLabel"}Embed-Code{/s}',
-               xtype: 'textfield',
-               name: 'embedCode',
-               readOnly: true,
-               anchor: '100%'
+                fieldLabel: '{s name="formSettingsFieldEmbedCodeLabel"}Embed-Code{/s}',
+                xtype: 'textfield',
+                name: 'embedCode',
+                readOnly: true,
+                anchor: '100%'
             },
             {
                 fieldLabel: '{s name="formSettingsFieldTplVariableLabel_1"}Tpl. Variable 1{/s}',
@@ -229,16 +229,16 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 anchor: '100%'
             },
             {
-               fieldLabel: '{s name="formSettingsFieldTplVariableLabel_2"}Tpl. Variable 2{/s}',
-               xtype: 'textfield',
-               name: 'tpl2variable',
-               anchor: '100%'
+                fieldLabel: '{s name="formSettingsFieldTplVariableLabel_2"}Tpl. Variable 2{/s}',
+                xtype: 'textfield',
+                name: 'tpl2variable',
+                anchor: '100%'
             },
             {
-               fieldLabel: '{s name="formSettingsFieldTplPathLabel_2"}Tpl. Path 2{/s}',
-               xtype: 'textfield',
-               name: 'tpl2path',
-               anchor: '100%'
+                fieldLabel: '{s name="formSettingsFieldTplPathLabel_2"}Tpl. Path 2{/s}',
+                xtype: 'textfield',
+                name: 'tpl2path',
+                anchor: '100%'
             },
             {
                 fieldLabel: '{s name="formSettingsFieldTplVariableLabel_3"}Tpl. Variable 3{/s}',
@@ -290,7 +290,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
             toTitle: '{s name="site/ddselector/toTitle"}Assigned groups{/s}',
             dataIndex: 'groupName',
             fromStore: me.groupStore,
-            buttons: [ 'add','remove' ],
+            buttons: [ 'add', 'remove' ],
             gridHeight: 125,
             selectedItems: me.selectedStore,
             buttonsText: {

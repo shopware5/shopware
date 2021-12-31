@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Header', {
                 cls: 'headline-image',
                 width: 128,
                 height: 128,
-                html: '<img src="'+ me.plugin.get('iconPath') +'" />'
+                html: '<img src="' + me.plugin.get('iconPath') + '" />'
             };
         }
 
@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Header', {
             items: [
                 {
                     xtype: 'component',
-                    html: '<div>'+ me.plugin.get('label') + '</div>',
+                    html: '<div>' + me.plugin.get('label') + '</div>',
                     cls: 'headline-name',
                     width: 750
                 },

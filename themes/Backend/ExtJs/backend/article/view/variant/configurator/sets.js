@@ -79,7 +79,6 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Sets', {
      */
     height: 200,
 
-
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */

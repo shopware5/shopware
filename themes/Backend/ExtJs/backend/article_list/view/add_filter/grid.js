@@ -121,7 +121,6 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
             })
         );
 
-
         buttons.push('->');
 
         buttons.push({
@@ -192,14 +191,14 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
             dataIndex: 'column',
             menuDisabled: true,
             sortable: false
-        },{
+        }, {
             flex: 1,
             header: 'Operator',
             editor: me.getDefaultOperatorEditor(),
             dataIndex: 'operator',
             menuDisabled: true,
             sortable: false
-        },{
+        }, {
             flex: 1,
             editor: me.getDefaultValueEditor(),
             header: 'Value',

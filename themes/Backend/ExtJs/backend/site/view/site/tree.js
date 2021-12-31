@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Site.view.site.Tree', {
     getBottomToolbar: function() {
         var buttons = [];
         /*{if {acl_is_allowed privilege=createGroup}}*/
-        buttons.push(Ext.create("Ext.button.Button",{
+        buttons.push(Ext.create("Ext.button.Button", {
             text: '{s name="treeCreateGroupButton"}Add group{/s}',
             iconCls: 'sprite-blue-folder--plus',
             cls: 'small secondary',
@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Site.view.site.Tree', {
         /*{/if}*/
         /*{if {acl_is_allowed privilege=deleteGroup}}*/
         buttons.push('->');
-        buttons.push(Ext.create("Ext.button.Button",{
+        buttons.push(Ext.create("Ext.button.Button", {
             text: '{s name="treeDeleteGroupButton"}Delete group{/s}',
             action: 'onDeleteGroup',
             cls: 'small secondary',

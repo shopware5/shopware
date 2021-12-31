@@ -35,9 +35,9 @@
  * todo@all: Documentation
  */
 //{block name="backend/translation/view/main/form"}
-Ext.define('Shopware.apps.Translation.view.main.Form',
-/** @lends Ext.form.Panel# */
-{
+Ext.define('Shopware.apps.Translation.view.main.Form', {
+    /** @lends Ext.form.Panel# */
+
     extend: 'Ext.form.Panel',
     alias: 'widget.translation-main-form',
     bodyPadding: 10,
@@ -78,9 +78,9 @@ Ext.define('Shopware.apps.Translation.view.main.Form',
         var me = this, items = [];
         me.originalTitle = me.title;
         Ext.each(me.translatableFields, function(currentField) {
-           var elementType = currentField.xtype || '';
+            var elementType = currentField.xtype || '';
 
-           switch(elementType) {
+            switch (elementType) {
                 case 'ace-editor' :
                 case 'codemirror' :
                 case 'codemirrorfield' :

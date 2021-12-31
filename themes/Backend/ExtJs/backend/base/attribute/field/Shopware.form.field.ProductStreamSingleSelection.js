@@ -39,12 +39,12 @@ Ext.define('Shopware.form.field.ProductStreamSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<div class="x-boundlist-item">{literal}{name} <i>({description})</i>{/literal}</div>',
+            '<div class="x-boundlist-item">{literal}{name} <i>({description})</i>{/literal}</div>',
             '</tpl>'
         );
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '{literal}{name} ({description}){/literal}',
+            '{literal}{name} ({description}){/literal}',
             '</tpl>'
         );
         return config;

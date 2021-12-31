@@ -39,7 +39,6 @@ Ext.define('Shopware.apps.Index.view.widgets.bi.Base', {
             store = me.subApp.getStore('Shopware.apps.Base.store.ShopLanguage'),
             record;
 
-
         if (!me.widgetRecord.data || !me.widgetRecord.data.shopId) {
             me.callParent();
             return;

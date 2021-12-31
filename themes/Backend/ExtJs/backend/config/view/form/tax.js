@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Config.view.form.Tax', {
             xtype: 'config-base-table',
             store: 'form.Tax',
             columns: me.getColumns()
-        },{
+        }, {
             xtype: 'config-tax-detail'
         }];
     },
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Config.view.form.Tax', {
             dataIndex: 'name',
             text: '{s name="tax/table/name_text"}Name{/s}',
             flex: 1
-        },{
+        }, {
             xtype: 'numbercolumn',
             dataIndex: 'tax',
             text: '{s name="tax/table/tax_text"}Default tax{/s}',

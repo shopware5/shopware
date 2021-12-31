@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.PluginManager.view.loading.Mask', {
         return Ext.create('Ext.Component', {
             width: 128,
             height: 128,
-            html: '<img src="'+ path +'" />'
+            html: '<img src="' + path + '" />'
         });
     },
 

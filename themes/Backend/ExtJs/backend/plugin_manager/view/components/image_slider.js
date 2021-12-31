@@ -163,9 +163,9 @@ Ext.define('Shopware.apps.PluginManager.view.components.ImageSlider', {
     createPreviewTemplate: function() {
         return new Ext.XTemplate(
             '{literal}',
-                '<tpl for=".">',
-                    '<img class="preview-image" src="{remoteLink}" />',
-                '</tpl>',
+            '<tpl for=".">',
+            '<img class="preview-image" src="{remoteLink}" />',
+            '</tpl>',
             '{/literal}'
         );
     },
@@ -257,7 +257,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.ImageSlider', {
 
         var count = Math.ceil(store.getCount() / size);
 
-        for (var i=1; i<= count; i++) {
+        for (var i = 1; i <= count; i++) {
             items.push(
                 store.getRange(start, size + start - 1)
             );

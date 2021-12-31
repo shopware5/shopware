@@ -206,18 +206,18 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         var me = this;
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<div class="article-thumb-wrap middle" >',
-                    // If the type is image, then show the image
-                    '<div class="thumb">',
-                        '<div class="inner-thumb"><img src="{literal}{thumbnail}{/literal}" /></div>',
-                        '<tpl if="main===1">',
-                            '<div class="preview"><span>' + me.snippets.mainImage  + '</span></div>',
-                        '</tpl>',
-                        '<tpl if="hasConfig">',
-                            '<div class="mapping-config">&nbsp;</div>',
-                        '</tpl>',
-                    '</div>',
-                '</div>',
+            '<div class="article-thumb-wrap middle" >',
+            // If the type is image, then show the image
+            '<div class="thumb">',
+            '<div class="inner-thumb"><img src="{literal}{thumbnail}{/literal}" /></div>',
+            '<tpl if="main===1">',
+            '<div class="preview"><span>' + me.snippets.mainImage  + '</span></div>',
+            '</tpl>',
+            '<tpl if="hasConfig">',
+            '<div class="mapping-config">&nbsp;</div>',
+            '</tpl>',
+            '</div>',
+            '</div>',
             '</tpl>',
             '<div class="x-clear"></div>{/literal}'
         );

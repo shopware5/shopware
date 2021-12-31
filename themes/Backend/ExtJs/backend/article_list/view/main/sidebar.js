@@ -38,7 +38,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Sidebar', {
 
     title: '{s name="categoriesAndFilters"}Categories & Filters{/s}',
 
-
     initComponent: function () {
         var me = this;
 
@@ -65,9 +64,9 @@ Ext.define('Shopware.apps.ArticleList.view.main.Sidebar', {
                         xtype: 'multi-edit-navigation-grid'
                     }
                 ] }
-        /*{if {acl_is_allowed privilege=doMultiEdit}}*/
-        ,{ xtype: 'multi-edit-menu' }
-        /*{/if}*/
+            /*{if {acl_is_allowed privilege=doMultiEdit}}*/
+            , { xtype: 'multi-edit-menu' }
+            /*{/if}*/
         ];
     }
 

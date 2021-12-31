@@ -35,8 +35,7 @@
  * todo@all: Documentation
  */
 //{block name="backend/base/Shopware.form.field.PagingComboBox"}
-Ext.define('Shopware.form.field.PagingComboBox',
-{
+Ext.define('Shopware.form.field.PagingComboBox', {
     /**
      * The shopware PagingComboBox is an extension of the extJs 4 combo box
      * @string
@@ -191,7 +190,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
         var pagingComboBox = this,
             me = pagingComboBox;
 
-        if(me.store.pageSize && !me.forceDefaultPageSize) {
+        if (me.store.pageSize && !me.forceDefaultPageSize) {
             me.pageSize = me.store.pageSize;
         } else {
             me.pageSize = me.defaultPageSize;
@@ -244,7 +243,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
                                 disabled: true,
                                 handler: me.moveFirst,
                                 scope: me
-                            },{
+                            }, {
                                 itemId: 'prev',
                                 hidden: !pagingComboBox.pagingBarConfig.prev,
                                 tooltip: me.prevText,
@@ -276,7 +275,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
                                     keydown: me.onPagingKeyDown,
                                     blur: me.onPagingBlur
                                 }
-                            },{
+                            }, {
                                 xtype: 'tbtext',
                                 itemId: 'afterTextItem',
                                 hidden: !pagingComboBox.pagingBarConfig.jumpTo,
@@ -292,7 +291,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
                                 hidden: !pagingComboBox.pagingBarConfig.next,
                                 handler: me.moveNext,
                                 scope: me
-                            },{
+                            }, {
                                 itemId: 'last',
                                 tooltip: me.lastText,
                                 overflowText: me.lastText,

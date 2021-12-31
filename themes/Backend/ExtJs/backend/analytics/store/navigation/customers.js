@@ -50,7 +50,6 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Customers', {
             return male / order * 100;
         } },
 
-
         { name: 'newCustomersPercent', type: 'float', convert: function(value, record) {
             var male = record.get('newCustomersOrders');
             var order = record.get('orderCount');
@@ -70,7 +69,6 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Customers', {
 
             return female / order * 100;
         } }
-
 
     ],
     proxy: {

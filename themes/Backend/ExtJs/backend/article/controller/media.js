@@ -487,7 +487,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
     onMediaUpload: function(field) {
         var dropZone = this.getMediaDropZone(), me = this;
 
-        if(Ext.isIE || Ext.isSafari) {
+        if (Ext.isIE || Ext.isSafari) {
             var form = field.ownerCt;
             form.submit({
                 success: function() {
@@ -665,9 +665,9 @@ Ext.define('Shopware.apps.Article.controller.Media', {
     onMediaMoved: function(mediaStore, draggedRecord, targetRecord) {
         var index, indexOfDragged;
 
-        if (!mediaStore instanceof Ext.data.Store
-                || !draggedRecord instanceof Ext.data.Model
-                || !targetRecord instanceof Ext.data.Model) {
+        if (!mediaStore instanceof Ext.data.Store ||
+                !draggedRecord instanceof Ext.data.Model ||
+                !targetRecord instanceof Ext.data.Model) {
             return false;
         }
         index = mediaStore.indexOf(targetRecord);

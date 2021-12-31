@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Order.model.Tax', {
          * Specific urls to call on CRUD action methods "create", "read", "update" and "destroy".
          * @object
          */
-         url: '{url action="getTax"}',
+        url: '{url action="getTax"}',
 
         /**
          * The Ext.data.reader.Reader to use to decode the server's

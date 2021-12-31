@@ -49,8 +49,8 @@ Ext.define('Shopware.form.field.GridView', {
 
     createSupportText: function(supportText) {
         return Ext.create('Ext.Component', {
-            html: '<div>'+supportText+'</div>',
-            cls: Ext.baseCSSPrefix +'form-support-text'
+            html: '<div>' + supportText + '</div>',
+            cls: Ext.baseCSSPrefix + 'form-support-text'
         });
     },
 
@@ -107,7 +107,7 @@ Ext.define('Shopware.form.field.GridView', {
 
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<div class="item">' +
+            '<div class="item">' +
                     me.createItemTemplate() +
                 '</div>' +
             '</tpl>{/literal}'

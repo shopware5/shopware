@@ -195,7 +195,7 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
 
         // show details and enable delete button
         if (selection.length > 0 ) {
-            if(allowDelete) {
+            if (allowDelete) {
                 deleteButton.setDisabled(false);
             }
         } else {
@@ -242,7 +242,7 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
                     win.close();
                     detailViewData.update(record);
                     detailView.collapse(false);
-                    Shopware.Msg.createGrowlMessage('',me.messages.saveDialogSuccess, me.messages.growlMessage);
+                    Shopware.Msg.createGrowlMessage('', me.messages.saveDialogSuccess, me.messages.growlMessage);
                 }
             });
         }
@@ -265,7 +265,7 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
             domEl = event.getTarget(),
             element = Ext.get(domEl);
 
-        if(!element.hasCls('x-grid-row-checker')) {
+        if (!element.hasCls('x-grid-row-checker')) {
             if (!record.get('description')) {
                 record.data.description = me.messages.noDescriptionFound;
             }
@@ -417,21 +417,21 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
         if (record.get('articleCounter') === 0) {
             // we do not just delete - we are polite and ask the user if he is sure.
             Ext.MessageBox.confirm(me.messages.deleteDialogTitle,
-                 Ext.String.format(me.messages.deleteDialogMessage, record.get('name')),
+                Ext.String.format(me.messages.deleteDialogMessage, record.get('name')),
                 function (response) {
                     if (response !== 'yes') {
                         return false;
                     }
-                record.destroy({
-                    success: function () {
-                        store.load();
-                        Shopware.Msg.createGrowlMessage('',me.messages.deleteDialogSuccess, me.messages.growlMessage);
-                    },
-                    failure: function () {
-                        Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure, me.messages.growlMessage);
-                    }
+                    record.destroy({
+                        success: function () {
+                            store.load();
+                            Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogSuccess, me.messages.growlMessage);
+                        },
+                        failure: function () {
+                            Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure, me.messages.growlMessage);
+                        }
+                    });
                 });
-            });
         } else {
             Shopware.Msg.createGrowlMessage(
                 me.messages.deleteDialogTitle,

@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Index.view.merchant.Window', {
 
         me.callParent(arguments);
 
-        if(me.record) {
+        if (me.record) {
             me.formPanel.loadRecord(me.record);
         }
     },
@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.Index.view.merchant.Window', {
             items: [{
                 xtype: 'hidden',
                 name: 'userId'
-            },{
+            }, {
                 xtype: 'hidden',
                 name: 'status'
             }, {
@@ -146,7 +146,7 @@ Ext.define('Shopware.apps.Index.view.merchant.Window', {
             form = me.formPanel.getForm(),
             messages = me.snippets.messages;
 
-        if(!form.isValid()) {
+        if (!form.isValid()) {
             return false;
         }
 
@@ -155,7 +155,7 @@ Ext.define('Shopware.apps.Index.view.merchant.Window', {
             success: function(form, operation) {
                 var response = operation.result;
                 me.setLoading(false);
-                if(!response.success) {
+                if (!response.success) {
                     Shopware.Notification.createGrowlMessage(me.title, messages.error);
                     return false;
                 }

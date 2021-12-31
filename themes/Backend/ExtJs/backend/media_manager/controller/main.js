@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Main', {
                     me.settingRecord.set(loadedSettings)
                 }
 
-                if(me.subApplication.layout && me.subApplication.layout === 'small') {
+                if (me.subApplication.layout && me.subApplication.layout === 'small') {
                     me.mainWindow = me.getView('main.Selection').create({
                         albumStore: albumStore,
                         mediaStore: mediaStore,
@@ -145,7 +145,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Main', {
         // Sets the number of items displayed
         view.mediaStore.pageSize = this.settingRecord.get('itemsPerPage');
         view.pageSize.store.each(function(item) {
-            if(parseInt(item.raw.value) === parseInt(me.settingRecord.get('itemsPerPage'))) {
+            if (parseInt(item.raw.value) === parseInt(me.settingRecord.get('itemsPerPage'))) {
                 view.pageSize.reset();
                 view.pageSize.setValue(item.raw.name);
 

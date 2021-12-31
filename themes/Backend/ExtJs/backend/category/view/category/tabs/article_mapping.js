@@ -37,10 +37,10 @@
 //{block name="backend/category/view/tabs/article_mapping"}
 Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
 
-   /**
-    * Parent Element Ext.container.Container
-    * @string
-    */
+    /**
+     * Parent Element Ext.container.Container
+     * @string
+     */
     extend: 'Ext.form.Panel',
 
     /**
@@ -101,7 +101,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
         add: '{s name="tabs/article_mapping/button_add"}Add{/s}',
         remove: '{s name="tabs/article_mapping/button_remove"}Remove{/s}'
     },
-
 
     /**
      * Initialize the Shopware.apps.Category.view.category.tabs.ArticleMapping and defines the necessary
@@ -202,7 +201,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.ArticleMapping', {
             });
             me.actionButtons.push(button);
         });
-
 
         return Ext.create('Ext.container.Container', {
             margins: '0 4',

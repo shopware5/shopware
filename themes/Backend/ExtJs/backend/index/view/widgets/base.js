@@ -79,7 +79,7 @@ Ext.define('Ext.chart.theme.Widget', {
                 fill: '#2EDC79'
             }, {
                 fill: '#13C6A2'
-            },{
+            }, {
                 fill: '#2EDC79'
             }, {
                 fill: '#13C6A2'

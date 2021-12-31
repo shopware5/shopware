@@ -34,11 +34,11 @@ Ext.define('Shopware.apps.Vote.view.PointHelper', {
         var count = 0;
         var i;
 
-        for(i=0; i<points; i++){
-            if((i-points) == -0.5) {
+        for (i = 0; i < points; i++){
+            if ((i - points) == -0.5) {
                 //create half-star
                 html = html + '<div style="height: 16px; width: 16px; display: inline-block;" class="sprite-star-half"></div>';
-            }else{
+            } else {
                 //create full stars
                 html = html + '<div style="height: 16px; width: 16px; display: inline-block;" class="sprite-star"></div>';
             }
@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Vote.view.PointHelper', {
         }
 
         //add empty stars, so 5 stars are displayed
-        for(i=0; i<(5-count); i++){
+        for (i = 0; i < (5 - count); i++){
             html = html + '<div style="height: 16px; width: 16px; display: inline-block;" class="sprite-star-empty"></div>';
         }
         return html;

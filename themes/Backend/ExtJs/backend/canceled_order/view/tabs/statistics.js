@@ -56,7 +56,6 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.Statistics', {
         }
     },
 
-
     /**
      * Initializes the component, adds panel and tool
      *
@@ -113,7 +112,6 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.Statistics', {
         return grid;
     },
 
-
     /**
      * Creates the grid columns
      *
@@ -149,7 +147,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.Statistics', {
         }
         value = record.get('paymentValue');
 
-        if(Ext.isNumber(value) || Ext.isString(value)) {
+        if (Ext.isNumber(value) || Ext.isString(value)) {
             return Ext.util.Format.currency(value);
         }
 

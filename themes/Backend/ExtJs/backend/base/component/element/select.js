@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
         if (typeof me.store === 'string' && me.store.indexOf('new ') !== -1) {
             eval('me.store = ' + me.store + ';');
             // if is no custom store remove value field for reasons of compatibility
-            if(!me.isCustomStore) {
+            if (!me.isCustomStore) {
                 me.valueField = me.displayField;
             }
         } else if (typeof me.store === 'string' && me.store.substring(0, 5) !== 'base.') {
@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
         if (value !== null && !me.store.loading && me.store.getCount() == 0) {
             me.store.load({
                 callback: function () {
-                    if(me.store.getCount() > 0) {
+                    if (me.store.getCount() > 0) {
                         me.setValue(value);
                     } else {
                         me.setValue(null);

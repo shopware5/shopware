@@ -180,8 +180,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Thumbnail', {
      */
     runRequest: function (offset, win) {
         var me = this,
-                config = me.batchConfig,
-                params = config.params;
+            config = me.batchConfig,
+            params = config.params;
 
         me.errors = me.errors || [];
 
@@ -194,13 +194,13 @@ Ext.define('Shopware.apps.MediaManager.controller.Thumbnail', {
         if (config.progress) {
             // sets a new progress status
             config.progress.updateProgress(
-                    (offset + config.batchSize) / config.totalCount,
-                    Ext.String.format(
-                            config.snippet,
-                            (offset + config.batchSize) > config.totalCount ? config.totalCount : (offset + config.batchSize),
-                            config.totalCount
-                    ),
-                    true
+                (offset + config.batchSize) / config.totalCount,
+                Ext.String.format(
+                    config.snippet,
+                    (offset + config.batchSize) > config.totalCount ? config.totalCount : (offset + config.batchSize),
+                    config.totalCount
+                ),
+                true
             );
         }
 

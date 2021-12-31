@@ -136,7 +136,6 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
         me.callParent(arguments);
     },
 
-
     /**
      * Creates the save and cancel button for the form panel.
      *

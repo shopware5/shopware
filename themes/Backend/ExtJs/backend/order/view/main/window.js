@@ -100,7 +100,6 @@ Ext.define('Shopware.apps.Order.view.main.Window', {
      */
     title: '{s name="window_title"}Order list{/s}',
 
-
     /**
      * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
@@ -112,10 +111,10 @@ Ext.define('Shopware.apps.Order.view.main.Window', {
      * @return void
      */
     initComponent: function () {
-      var me = this;
+        var me = this;
 
-      //add the order list grid panel and set the store
-      me.items = [
+        //add the order list grid panel and set the store
+        me.items = [
             {
                 xtype: 'container',
                 layout: {
@@ -144,10 +143,10 @@ Ext.define('Shopware.apps.Order.view.main.Window', {
                 orderStatusStore: me.orderStatusStore,
                 paymentStatusStore: me.paymentStatusStore
             })
-      ];
+        ];
 
-      me.callParent(arguments);
-  }
+        me.callParent(arguments);
+    }
 
 });
 //{/block}

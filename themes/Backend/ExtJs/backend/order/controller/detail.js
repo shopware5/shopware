@@ -268,8 +268,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             columns = editor.editor.items.items,
             articleId = e.record.get('articleId');
 
-            columns[1].setValue(e.record.get('articleNumber'));
-            columns[2].setValue(e.record.get('articleName'));
+        columns[1].setValue(e.record.get('articleNumber'));
+        columns[2].setValue(e.record.get('articleName'));
 
     },
 
@@ -378,7 +378,6 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         editor.context.record.set('articleDetailID', record.get('id'));
     },
 
-
     /**
      * Event will be fired when the user clicks the add button to add an order position.
      *
@@ -467,7 +466,6 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             });
         });
     },
-
 
     /**
      * Event will be fired when the user change the payment combo box which
@@ -571,7 +569,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
     onDocumentPreview: function(order, config, panel) {
         window.open('{url action="createDocument"}' + '' +
                 '?orderId=' + order.get('id') +
-                '&preview=1'+ '' +
+                '&preview=1' + '' +
                 '&taxFree=' + config.get('taxFree') +
                 '&temp=1' +
                 '&documentType=' + config.get('documentType') )
@@ -818,7 +816,6 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             }
         });
     },
-
 
     /**
      * Event listener method which fired when the user clicks the pencil button

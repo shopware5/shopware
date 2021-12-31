@@ -40,7 +40,7 @@ Ext.define('Shopware.form.field.ProductSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<div class="x-boundlist-item">' +
+            '<div class="x-boundlist-item">' +
                     //active renderer
                     '<tpl if="articleActive && variantActive">' +
                         '[{s name="active_single_selection"}{/s}]' +
@@ -55,13 +55,13 @@ Ext.define('Shopware.form.field.ProductSingleSelection', {
                     '<tpl if="additionalText">' +
                         '<i>{literal} ({additionalText})</i>{/literal}' +
                     '</tpl>',
-                '</div>',
+            '</div>',
             '</tpl>'
         );
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                //active renderer
-                '<tpl if="articleActive && variantActive">' +
+            //active renderer
+            '<tpl if="articleActive && variantActive">' +
                     '[{s name="active_single_selection"}{/s}]' +
                 '<tpl else>' +
                     '[{s name="inactive_single_selection"}{/s}]' +

@@ -153,27 +153,27 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
             ui: 'shopware-ui',
             items: [
             /*{if {acl_is_allowed privilege=delete}}*/
-            {
-                xtype: 'button',
-                itemId: 'deletebutton',
-                iconCls: 'sprite-minus-circle',
-                text: '{s name="presetlist/delete_preset"}{/s}',
-                disabled: true,
-                handler: function() {
-                    me.fireEvent('deletepreset', me.store, me.selectedPreset);
-                }
-            },
-            /*{/if}*/
-            '->', {
-                xtype: 'textfield',
-                cls: 'searchfield',
-                emptyText: '{s name="search"}Search...{/s}',
-                width: 170,
-                enableKeyEvents: true,
-                listeners: {
-                    change: Ext.bind(me.search, me)
-                }
-            }]
+                {
+                    xtype: 'button',
+                    itemId: 'deletebutton',
+                    iconCls: 'sprite-minus-circle',
+                    text: '{s name="presetlist/delete_preset"}{/s}',
+                    disabled: true,
+                    handler: function() {
+                        me.fireEvent('deletepreset', me.store, me.selectedPreset);
+                    }
+                },
+                /*{/if}*/
+                '->', {
+                    xtype: 'textfield',
+                    cls: 'searchfield',
+                    emptyText: '{s name="search"}Search...{/s}',
+                    width: 170,
+                    enableKeyEvents: true,
+                    listeners: {
+                        change: Ext.bind(me.search, me)
+                    }
+                }]
         });
 
         return [
@@ -287,10 +287,10 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                                 '<div class="preset-teaser-container">' +
                                     '<fieldset class="x-fieldset x-base-field-set x-fieldset-with-title x-fieldset-with-legend x-fieldset-default preset-teaser-fieldset">' +
                                         '<legend class="x-fieldset-header x-fieldset-header-default">' +
-                                            '<div class="x-component x-fieldset-header-text x-component-default">' + header +'</div>' +
+                                            '<div class="x-component x-fieldset-header-text x-component-default">' + header + '</div>' +
                                             '<div class="x-clear"></div>' +
                                         '</legend>' +
-                                        '<div class="x-fieldset-body preset-teaser-fieldset-body">'+ message + '</div>' +
+                                        '<div class="x-fieldset-body preset-teaser-fieldset-body">' + message + '</div>' +
                                     '</fieldset>' +
                                 '</div>' +
                             '</div>';
@@ -343,7 +343,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
             parent = el.parent('.preset--outer-container');
             presetContainer = parent.down('.preset--container');
 
-            if(parent.hasCls('x-grid-group-hd-collapsed')) {
+            if (parent.hasCls('x-grid-group-hd-collapsed')) {
                 parent.removeCls('x-grid-group-hd-collapsed');
                 presetContainer.setStyle('display', 'block');
             } else {

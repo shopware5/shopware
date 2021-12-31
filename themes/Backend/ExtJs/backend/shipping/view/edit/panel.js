@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
         [2, '{s name="dispatch_calculation_data_count"}Number of articles{/s}'],
         [3, '{s name="dispatch_calculation_data_own"}Own calculation{/s}']
     ],
-     /**
+    /**
      * Translation Object
      * @object
      */
@@ -139,7 +139,6 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      */
     costMatrixStore: null,
 
-
     /**
      * Initialize the Shopware.apps.Supplier.view.main.List and defines the necessary
      * default configuration.
@@ -166,7 +165,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
         };
 
         var form = me.formPanel.getForm();
-        if(!me.editRecord.get('surchargeCalculation')) {
+        if (!me.editRecord.get('surchargeCalculation')) {
             form.findField('surchargeCalculation').setValue(0);
         } else {
             form.findField('surchargeCalculation').setValue(me.editRecord.get('surchargeCalculation'));
@@ -265,7 +264,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
     createAdvancedTab: function() {
         this.availableHolidays.load();
 
-        return Ext.create('Shopware.apps.Shipping.view.edit.Advanced',{
+        return Ext.create('Shopware.apps.Shipping.view.edit.Advanced', {
             store: this.mainStore,
             dispatchId: this.dispatchId,
             record: this.editRecord,
@@ -320,7 +319,6 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
             record: this.editRecord
         });
     },
-
 
     /**
      * Creates and returns the default action button - save and cancel

@@ -231,7 +231,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
 
                 if (!Ext.isDefined(me.value)) {
                     value = me.noMedia;
-                } else if(Ext.form.VTypes.url(me.value) || me.value.indexOf('data:image') !== -1) {
+                } else if (Ext.form.VTypes.url(me.value) || me.value.indexOf('data:image') !== -1) {
                     value = me.value;
                 } else {
                     value = me.mediaPath + me.value;

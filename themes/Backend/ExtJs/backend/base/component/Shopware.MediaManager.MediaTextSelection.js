@@ -40,9 +40,9 @@
  *
  * @example Ext.create('Shopware.MediaManager.MediaSelection');
  */
-Ext.define('Shopware.MediaManager.MediaTextSelection',
-/** @lends Shopware.MediaManager.MediaSelection */
-{
+Ext.define('Shopware.MediaManager.MediaTextSelection', {
+    /** @lends Shopware.MediaManager.MediaSelection */
+
     extend: 'Shopware.MediaManager.MediaSelection',
     alternateClassName: [ 'Shopware.form.field.MediaTextSelection', 'Shopware.MediaTextSelection' ],
     alias: [ 'widget.mediatextfield', 'widget.mediatextselectionfield' ],

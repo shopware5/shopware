@@ -112,8 +112,6 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
         });
     },
 
-
-
     displayResponseMessage: function(response, successMessage) {
         var data = response;
 
@@ -139,8 +137,7 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
             },
             function(response) {
                 callback(
-                    (response.exists === false)
-                    ||
+                    (response.exists === false) ||
                     (record.get('columnName') == record.get('originalName')),
                     response.table
                 );
@@ -377,12 +374,11 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
                 record.merge(column);
 
                 me.saveColumn(record, function() {
-                     me.updateDependingTables(column, tables, callback);
+                    me.updateDependingTables(column, tables, callback);
                 });
             }
         });
     },
-
 
     onResetClick: function() {
         var me = this;
@@ -421,7 +417,6 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
             }
         );
     },
-
 
     sendAjaxRequest: function(url, params, callback) {
         var me = this;

@@ -47,7 +47,6 @@ Ext.define('Shopware.filter.Field', {
         helper: 'Shopware.model.Helper'
     },
 
-
     /**
      * Instance of the prepended checkbox. The checkbox is used
      * to enable or disable the filter field. A disabled filter field
@@ -97,7 +96,6 @@ Ext.define('Shopware.filter.Field', {
         displayConfig: {
         },
 
-
         /**
          * Static function to merge the different configuration values
          * which passed in the class constructor.
@@ -118,7 +116,6 @@ Ext.define('Shopware.filter.Field', {
 
             return config;
         },
-
 
         /**
          * Static function which sets the property value of
@@ -159,7 +156,6 @@ Ext.define('Shopware.filter.Field', {
         me._opts = me.statics().getDisplayConfig(opts, this);
         me.callParent(arguments);
     },
-
 
     /**
      * Helper function to get config access.

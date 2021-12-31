@@ -38,14 +38,14 @@ Ext.define('Shopware.apps.Config.view.form.CountryArea', {
             xtype: 'config-base-table',
             store: 'form.CountryArea',
             columns: me.getColumns()
-        },{
+        }, {
             xtype: 'config-base-detail',
-//            plugins: [{
-//                ptype: 'translation',
-//                pluginId: 'translation',
-//                translationType: 'config_areas',
-//                translationMerge: true
-//            }],
+            //            plugins: [{
+            //                ptype: 'translation',
+            //                pluginId: 'translation',
+            //                translationType: 'config_areas',
+            //                translationMerge: true
+            //            }],
             items: me.getFormItems()
         }];
     },
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Config.view.form.CountryArea', {
             fieldLabel: '{s name="country_area/detail/name_label"}Name{/s}',
             translatable: true,
             allowBlank: false
-        },{
+        }, {
             xtype: 'config-element-boolean',
             name: 'active',
             fieldLabel: '{s name="country_area/detail/active_label"}Active{/s}'

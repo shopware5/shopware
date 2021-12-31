@@ -61,13 +61,13 @@ Ext.define('Shopware.apps.Emotion.view.components.CategoryTeaser', {
 
         var value = '';
         Ext.each(me.getSettings('record').get('data'), function(item) {
-            if(item.key == 'image_type') {
+            if (item.key == 'image_type') {
                 value = item.value;
                 return false;
             }
         });
 
-        if(!value || value !== 'selected_image') {
+        if (!value || value !== 'selected_image') {
             me.mediaSelection.hide();
         }
     }

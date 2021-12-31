@@ -95,13 +95,12 @@ Ext.define('Shopware.apps.Category.controller.ManualSorting', {
     },
 
     drop: function (store, droppedItems) {
-        var pageIndex = (store.currentPage - 1)* store.pageSize,
+        var pageIndex = (store.currentPage - 1) * store.pageSize,
             data = {};
 
         Ext.each(droppedItems, function (droppedItem) {
             data[droppedItem.get('id')] = pageIndex + (store.indexOf(droppedItem) + 1)
         });
-
 
         Ext.Ajax.request({
             url: '{url controller=ManualSorting action=assignPosition}?' + Ext.urlEncode(this.getTable().getStore().getProxy().extraParams),
@@ -137,7 +136,7 @@ Ext.define('Shopware.apps.Category.controller.ManualSorting', {
         var selectedRecord = this.getGrid().dataView.getSelectionModel().getSelection()[0],
             store = this.getGrid().store,
             newPage = store.currentPage + 1,
-            newPosition = ((newPage -1) * store.pageSize) + 1;
+            newPosition = ((newPage - 1) * store.pageSize) + 1;
 
         selectedRecord.set('position', newPosition);
 
@@ -148,7 +147,7 @@ Ext.define('Shopware.apps.Category.controller.ManualSorting', {
         var selectedRecord = this.getGrid().dataView.getSelectionModel().getSelection()[0],
             store = this.getGrid().store,
             newPage = store.currentPage - 1,
-            newPosition = ((newPage -1) * store.pageSize) + 1;
+            newPosition = ((newPage - 1) * store.pageSize) + 1;
 
         selectedRecord.set('position', newPosition);
 
@@ -158,7 +157,7 @@ Ext.define('Shopware.apps.Category.controller.ManualSorting', {
     tableMoveToPrevPage: function(record) {
         var store = this.getTable().store,
             newPage = store.currentPage - 1,
-            newPosition = ((newPage -1) * store.pageSize) + 1;
+            newPosition = ((newPage - 1) * store.pageSize) + 1;
 
         record.set('position', newPosition);
 
@@ -168,7 +167,7 @@ Ext.define('Shopware.apps.Category.controller.ManualSorting', {
     tableMoveToNextPage: function(record) {
         var store = this.getTable().store,
             newPage = store.currentPage + 1,
-            newPosition = ((newPage -1) * store.pageSize) + 1;
+            newPosition = ((newPage - 1) * store.pageSize) + 1;
 
         record.set('position', newPosition);
 
@@ -189,7 +188,7 @@ Ext.define('Shopware.apps.Category.controller.ManualSorting', {
             },
             success: function () {
                 var data = {};
-                data[record.get('id')] = ((store.currentPage -1) * store.pageSize) + 1;
+                data[record.get('id')] = ((store.currentPage - 1) * store.pageSize) + 1;
 
                 Ext.Ajax.request({
                     url: '{url controller=ManualSorting action=assignPosition}?' + Ext.urlEncode(extraParams),

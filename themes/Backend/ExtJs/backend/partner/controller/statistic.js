@@ -62,7 +62,6 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
         });
     },
 
-
     /**
      * Event listener method which is fired when the user change
      * the to date field to filter the order chart data.
@@ -74,14 +73,14 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
      */
     onChangeDate: function (field, value) {
         var me = this,
-        extraParams = null;
+            extraParams = null;
         if ( Ext.typeOf(value) != 'date' ) {
             return;
         }
         var chartStore = me.subApplication.statisticChartStore;
         var listStore = me.subApplication.statisticListStore;
 
-        if(field.name == "toDate") {
+        if (field.name == "toDate") {
             extraParams = {
                 partnerId: chartStore.getProxy().extraParams.partnerId,
                 toDate: value,
@@ -113,23 +112,23 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
     onDownloadStatistic: function () {
         var me = this;
         var listStore = me.subApplication.statisticListStore,
-        partnerId = listStore.getProxy().extraParams.partnerId,
-        fromDate = listStore.getProxy().extraParams.fromDate,
-        toDate = listStore.getProxy().extraParams.toDate,
-        requestStringFromDate = '',
-        requestStringToDate = '';
+            partnerId = listStore.getProxy().extraParams.partnerId,
+            fromDate = listStore.getProxy().extraParams.fromDate,
+            toDate = listStore.getProxy().extraParams.toDate,
+            requestStringFromDate = '',
+            requestStringToDate = '';
 
-        if(fromDate != "undefined" && fromDate != null) {
+        if (fromDate != "undefined" && fromDate != null) {
             fromDate = me.convertDate(fromDate);
-            requestStringFromDate = '&fromDate='+fromDate;
+            requestStringFromDate = '&fromDate=' + fromDate;
         }
 
-        if(toDate != "undefined" && toDate != null) {
+        if (toDate != "undefined" && toDate != null) {
             toDate = me.convertDate(toDate);
-            requestStringToDate = '&toDate='+toDate;
+            requestStringToDate = '&toDate=' + toDate;
         }
 
-        window.open(' {url action="downloadStatistic"}?partnerId='+partnerId+requestStringFromDate+requestStringToDate);
+        window.open(' {url action="downloadStatistic"}?partnerId=' + partnerId + requestStringFromDate + requestStringToDate);
     },
 
     /**
@@ -139,10 +138,10 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
      */
     convertDate: function(date){
         var day = (date.getDate() < 10) ? "0" + date.getDate() : date.getDate();
-        var month = (date.getMonth() +1 < 10) ? "0" + (date.getMonth() +1) : date.getMonth() +1;
+        var month = (date.getMonth() + 1 < 10) ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
         var year = date.getFullYear();
 
-        return year+"-"+month+"-"+day;
+        return year + "-" + month + "-" + day;
     }
 });
 //{/block}

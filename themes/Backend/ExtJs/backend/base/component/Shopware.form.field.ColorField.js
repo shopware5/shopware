@@ -21,7 +21,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 //{namespace name="backend/base/color_components"}
 
 //{block name="backend/base/color_field"}
@@ -223,10 +222,10 @@ Ext.define('Shopware.form.field.ColorField', {
             supportText = new Ext.Element(document.createElement('div'));
 
         supportText.set({
-            cls: Ext.baseCSSPrefix +'form-support-text'
+            cls: Ext.baseCSSPrefix + 'form-support-text'
         });
 
-        if(me.supportText) {
+        if (me.supportText) {
             supportText.update(me.supportText);
         }
 
@@ -234,17 +233,17 @@ Ext.define('Shopware.form.field.ColorField', {
 
         // If we're finding more than one item, just use the first one :)
         var element = me.getEl().select('tbody');
-        if(element.elements.length > 1) {
+        if (element.elements.length > 1) {
             element = element.elements[0];
         }
 
-        if(me.fieldLabel || !me.hideEmptyLabel) {
+        if (me.fieldLabel || !me.hideEmptyLabel) {
             fillCell.appendTo(row);
         }
 
         cell.appendTo(row);
 
-        if(me.helpText) {
+        if (me.helpText) {
             var tmpCell = new Ext.Element(document.createElement('td'));
             tmpCell.appendTo(row);
         }

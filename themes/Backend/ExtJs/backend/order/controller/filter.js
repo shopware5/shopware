@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Order.controller.Filter', {
     onAcceptFilters: function(values) {
         var me = this,
             store = me.subApplication.getStore('Order'),
-            filters= [];
+            filters = [];
 
         Ext.Object.each(values, function(key, value) {
             //format the value to an string, to check if the value length is greater than one
@@ -110,11 +110,11 @@ Ext.define('Shopware.apps.Order.controller.Filter', {
                 //the article search needs a special handling.
                 if (key === 'hidden-article-search') {
                     if (tmpValue.length > 0 && values["live-article-search"].length > 0) {
-                        filters.push(Ext.create('Ext.util.Filter',{ property: 'details.articleNumber', value: value }));
+                        filters.push(Ext.create('Ext.util.Filter', { property: 'details.articleNumber', value: value }));
                     }
                 } else {
                     if (tmpValue.length > 0) {
-                        filters.push(Ext.create('Ext.util.Filter',{ property: key, value: value }));
+                        filters.push(Ext.create('Ext.util.Filter', { property: key, value: value }));
                     }
                 }
             }
@@ -169,8 +169,6 @@ Ext.define('Shopware.apps.Order.controller.Filter', {
         } else {
             store.load();
         }
-
-
 
     }
 });

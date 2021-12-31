@@ -48,8 +48,7 @@
  * }
  * });
  */
-Ext.define('Shopware.DragAndDropSelector',
-{
+Ext.define('Shopware.DragAndDropSelector', {
     /**
      * Based on Ext.panel.Panel
      */
@@ -130,7 +129,6 @@ Ext.define('Shopware.DragAndDropSelector',
      * @string
      */
     toTitle: '',
-
 
     /**
      * default columns for the from grid
@@ -271,7 +269,7 @@ Ext.define('Shopware.DragAndDropSelector',
      */
     getMiddleButtons: function() {
         var me = this;
-        return Ext.create('Ext.container.Container',{
+        return Ext.create('Ext.container.Container', {
             margins: '0 4',
             width: 22,
             layout: {
@@ -414,10 +412,10 @@ Ext.define('Shopware.DragAndDropSelector',
     refreshStore: function() {
         var me = this,
             ids = [];
-        if(me.toStore != null) {
+        if (me.toStore != null) {
             me.selectedItems = me.toStore;
         }
-        if(me.selectedItems != null){
+        if (me.selectedItems != null){
             me.selectedItems.each(function(element) {
                 ids.push(element.get('id'));
             });
@@ -434,10 +432,10 @@ Ext.define('Shopware.DragAndDropSelector',
         var toRemove = [];
 
         //performance fix because ext js is slow in removing single things
-        for(var i in storeItems) {
+        for (var i in storeItems) {
             var select = storeItems[i];
             Ext.each(selected, function(item) {
-                if(select.get('id') === item.get('id')) {
+                if (select.get('id') === item.get('id')) {
                     toRemove.unshift(i);
                 }
             });

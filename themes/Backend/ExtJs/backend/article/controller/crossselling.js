@@ -194,7 +194,7 @@ Ext.define('Shopware.apps.Article.controller.Crossselling', {
         }
 
         streamModel = streamSelection.store.getById(values.id);
-        if(streamModel instanceof Ext.data.Model) {
+        if (streamModel instanceof Ext.data.Model) {
             values.description = streamModel.get('description');
             values.name = streamModel.get('name');
         }

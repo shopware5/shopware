@@ -92,6 +92,6 @@ Ext.define('Shopware.apps.Emotion.view.components.HtmlVideo', {
             fieldLabel: '{s name="originLeft/label"}Left scale origin{/s}',
             supportText: '{s name="originLeft/support"}Sets the left origin for the scaling of the video. The value is given in percentage.{/s}'
         }
-}
+    }
 });
 //{/block}

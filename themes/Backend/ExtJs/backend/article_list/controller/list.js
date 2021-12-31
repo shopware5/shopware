@@ -41,7 +41,6 @@ Ext.define('Shopware.apps.ArticleList.controller.List', {
         { ref: 'navigationGrid', selector: 'multi-edit-navigation-grid' }
     ],
 
-
     /**
      * A template method that is called when your application boots.
      * It is called before the Application's launch function is executed
@@ -59,7 +58,6 @@ Ext.define('Shopware.apps.ArticleList.controller.List', {
         });
 
         me.subApplication.on('grammarProcessed', function(grammar) { this.grammar = grammar; }, me);
-
 
         me.callParent(arguments);
     },

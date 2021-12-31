@@ -82,12 +82,12 @@ Ext.define('Shopware.apps.Blog.view.blog.Tree', {
      */
     rootNodeName: 'Shopware',
 
-     /**
+    /**
      * Initialize the controller and defines the necessary default configuration
      */
     initComponent: function() {
         var me = this;
-         me.store = me.treeStore;
+        me.store = me.treeStore;
 
         // rename root node to shopware.
         var rootNode = me.treeStore.getRootNode();

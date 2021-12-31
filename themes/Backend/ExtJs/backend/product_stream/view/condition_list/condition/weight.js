@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Weight', {
             minField: 'minWeight',
             maxField: 'maxWeight',
             decimalPrecision: 3,
-            name: 'condition.'+ this.getName(),
+            name: 'condition.' + this.getName(),
             flex: 1
         });
     }

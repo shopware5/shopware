@@ -110,7 +110,6 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
         return true;
     },
 
-
     /**
      * creates the general form and layout
      *

@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         me.subApplication.on('batchStoreLoaded', me.onBatchStoreLoaded, me);
 
         // Check if the module is running in split view mode...
-        if(me.subApplication.params && me.subApplication.params.hasOwnProperty('splitViewMode')) {
+        if (me.subApplication.params && me.subApplication.params.hasOwnProperty('splitViewMode')) {
             me.subApplication.splitViewActive = true;
             Shopware.app.Application.on('moduleConnector:splitView', me.onSplitViewStoreChange, me);
         } else {
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
         //article id passed? Then open the detail page with the passed article id
         if (me.subApplication.params && me.subApplication.params.articleId > 0) {
-            if(me.subApplication.params.needGenerate){
+            if (me.subApplication.params.needGenerate){
                 Ext.Msg.alert(me.snippets.generateNeeded.title, me.snippets.generateNeeded.message);
             }
             me.openExistingArticle(me.subApplication.params.articleId);
@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         me.mainWindow.insert(0, tabPanel);
 
         // Place the module to the right of the visible screen real estate...
-        if(me.subApplication.params && me.subApplication.params.hasOwnProperty('splitViewMode')) {
+        if (me.subApplication.params && me.subApplication.params.hasOwnProperty('splitViewMode')) {
             me.mainWindow.setPosition(Ext.Element.getViewportWidth() / 2, 0);
             me.mainWindow.setSize(Ext.Element.getViewportWidth() / 2, Ext.Element.getViewportHeight() - 90);
             // set initial destroy event
@@ -168,7 +168,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
         var article = Ext.create('Shopware.apps.Article.model.Article', articleData),
             detail = Ext.create('Shopware.apps.Article.model.Detail', articleData );
-
 
         article.set('taxId', firstTax.get('id'));
         detail.set('kind', 1);
@@ -233,7 +232,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         // Get the store for the global configurator groups.
         var configuratorGroupStore = data.getConfiguratorGroups();
         configuratorGroupStore.each(function(item) {
-             item.set('active', false);
+            item.set('active', false);
         });
 
         if (article) {
@@ -341,7 +340,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             // Prepare the associated stores to use them in the detail page
             stores = me.prepareAssociationStores(storeData);
 
-            if(edit) {
+            if (edit) {
                 article = storeData.getArticle().first();
             } else {
                 article = me.prepareArticleDefaults(storeData, stores);
@@ -362,7 +361,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 configuratorGroupStore: stores['configuratorGroups']
             });
 
-            if(edit) {
+            if (edit) {
                 //detailCtrl.loadPropertyStore(article);
                 me.mainWindow.changeTitle();
             }
@@ -391,17 +390,17 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             form = mainWindow.detailForm;
 
         // No article was passed...
-        if(!options.hasOwnProperty('articleId')) {
+        if (!options.hasOwnProperty('articleId')) {
             return false;
         }
 
-        if(!me.subApplication.hasOwnProperty('splitViewActive') || !me.subApplication.splitViewActive) {
+        if (!me.subApplication.hasOwnProperty('splitViewActive') || !me.subApplication.splitViewActive) {
             return false;
         }
 
         // Cache the last selected row, so the user will not be
         // interrupted in the split view mode
-        if(options.hasOwnProperty('selection')) {
+        if (options.hasOwnProperty('selection')) {
             me.subApplication.lastSelection = options.selection;
         }
 
@@ -409,7 +408,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         try {
             mainWindow.saveButton.setDisabled(true);
             mainWindow.on('destroy', me.onCloseSplitViewMode, me, { single: true });
-        } catch(err) {  }
+        } catch (err) {  }
 
         me.detailStore = me.getStore('Detail');
         me.detailStore.getProxy().extraParams.articleId = options.articleId;
@@ -430,14 +429,14 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 me.getVariantListing().reconfigure(variantStore);
                 me.getVariantTab().setDisabled(true);
 
-                if(me.getEsdTab().tab.active) {
+                if (me.getEsdTab().tab.active) {
                     // Only reload the esd if the tab is activated
                     me.getEsdListing().getStore().load();
                 }
                 me.getController('Esd').resetToList();
 
                 var statisticList = me.getStatisticList();
-                if(me.getStatisticTab().tab.active) {
+                if (me.getStatisticTab().tab.active) {
                     var statisticListStore = statisticList.getStore(),
                         statisticChartStore = me.getStatisticChart().getStore();
 

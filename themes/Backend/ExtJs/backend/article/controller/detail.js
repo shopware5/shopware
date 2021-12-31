@@ -345,11 +345,11 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var me = this,
             subApps = Shopware.app.Application.subApplications,
             articleList = subApps.findBy(function(item) {
-                if(item.$className === 'Shopware.apps.ArticleList') {
+                if (item.$className === 'Shopware.apps.ArticleList') {
                     return true;
                 }
             });
-        if(articleList) {
+        if (articleList) {
             var grid = articleList.articleGrid,
                 selModel = grid.getSelectionModel(),
                 selection = selModel.getLastSelected();
@@ -389,7 +389,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             variantListing = me.getVariantListing(),
             configurator = me.getConfigurator(),
             priceFieldSet = me.getPriceFieldSet();
-
 
         if (article === null && me.subApplication.article) {
             me.reloadArticle(me.subApplication.article.get('id'));
@@ -549,7 +548,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
         // Use the model from the record because article in split view mode can be outdated
         if (articleModel instanceof Ext.data.Model && articleModel.get('id') > 0) {
-            Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.removeArticle , function (response) {
+            Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.removeArticle, function (response) {
                 if ( response !== 'yes' ) {
                     return;
                 }
@@ -577,9 +576,9 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             return;
         }
 
-        var url = '{url action=previewDetail}'
-            + '?shopId=' + shopId
-            + '&articleId=' + article.get('id');
+        var url = '{url action=previewDetail}' +
+            '?shopId=' + shopId +
+            '&articleId=' + article.get('id');
         window.open(url);
     },
 
@@ -704,7 +703,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 }
             };
 
-        if(article.get('id')) {
+        if (article.get('id')) {
             propertyStore.getProxy().extraParams.articleId = article.get('id');
         }
         propertyStore.each(function(property) {
@@ -740,10 +739,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     onRemovePrice: function(record, view, rowIndex) {
         var me = this,
             store = view.getStore(),
-            previousPrice = store.getAt(rowIndex-1);
+            previousPrice = store.getAt(rowIndex - 1);
 
         if (rowIndex > 1) {
-            var column = view.panel.columns[view.panel.columns.length-1],
+            var column = view.panel.columns[view.panel.columns.length - 1],
                 cell = view.getCell(previousPrice, column),
                 icon = Ext.get(cell.query('.x-action-col-icon'));
 
@@ -808,7 +807,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 icon.addCls('sprite-minus-circle-frame');
             }
         } else if ( event.field === 'price') {
-           this.updatedPriceField(event);
+            this.updatedPriceField(event);
             // If the user has edit the percent column, we have to calculate the price
         } else if (event.field === 'percent') {
             this.updatedPercentField(event);
@@ -833,7 +832,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
         if (firstPrice === price) {
             firstRecord.set('percent', null);
-        } else if(event.value > 0) {
+        } else if (event.value > 0) {
             price = firstPrice / 100 * (100 - event.value);
             price = price.toFixed(2);
             record.set('price', price);
@@ -854,17 +853,17 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             store = event.grid.store,
             firstRecord = store.getAt(0),
             firstPrice = firstRecord.get('price'),
-            previousPrice = store.getAt(event.rowIdx -1),
+            previousPrice = store.getAt(event.rowIdx - 1),
             price = record.get('price'),
             percent,
             pseudoPrice = record.get('pseudoPrice'),
             percentPseudo = record.get('percentPseudo');
 
-        if(price && previousPrice && previousPrice.get('price') < price) {
+        if (price && previousPrice && previousPrice.get('price') < price) {
             record.set('price', previousPrice.get('price') - 0.01);
             // We need to trigger update on PriceField without copy&paste all that checks and updates
             me.updatedPriceField(event);
-        } else if(price && firstPrice > price) {
+        } else if (price && firstPrice > price) {
             percent = (firstPrice - price) / firstPrice * 100;
             percent = percent.toFixed(2);
             record.set('percent', percent);
@@ -872,7 +871,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             record.set('percent', null);
         }
 
-        if(price && pseudoPrice > 0) {
+        if (price && pseudoPrice > 0) {
             percentPseudo = 100 - 100 / pseudoPrice * price;
             percentPseudo = percentPseudo.toFixed(2);
             record.set('percentPseudo', percentPseudo);
@@ -893,11 +892,11 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             price = record.get('price'),
             pseudoPrice = record.get('pseudoPrice');
 
-        if(pseudoPrice > 0) {
+        if (pseudoPrice > 0) {
             // If the user enters 0 or nothing, the price has to be the pseudoPrice
-            if(!Ext.isNumeric(event.value) || event.value === 0) {
+            if (!Ext.isNumeric(event.value) || event.value === 0) {
                 record.set('pseudoPrice', null);
-            } else if(event.value > 0) {
+            } else if (event.value > 0) {
                 pseudoPrice = (price / (100 - event.value)) * 100;
                 pseudoPrice = pseudoPrice.toFixed(2);
                 record.set('pseudoPrice', pseudoPrice);
@@ -926,9 +925,9 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             percentPseudo = record.get('percentPseudo');
 
         // If the user enters 0 or nothing, the percentPseudo has to be 0
-        if(!Ext.isNumeric(event.value) || event.value === 0) {
+        if (!Ext.isNumeric(event.value) || event.value === 0) {
             record.set('percentPseudo', 0);
-        } else if(event.value > 0) {
+        } else if (event.value > 0) {
             percentPseudo = 100 - (100 / event.value * price);
             percentPseudo = percentPseudo.toFixed(2);
             record.set('percentPseudo', percentPseudo);
@@ -952,7 +951,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             minValue = 1,
             price = event.record,
             editor = event.column.getEditor(event.record),
-            previousPrice = store.getAt(event.rowIdx -1),
+            previousPrice = store.getAt(event.rowIdx - 1),
             nextPrice = store.getAt(event.rowIdx + 1);
 
         // Check if the current row is the last row

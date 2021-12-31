@@ -122,20 +122,20 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
             return;
         }
 
-        if(record.get('clone')){
+        if (record.get('clone')){
             record.set('id', '');
         }
 
         // save the rest
         record.save({
-             callback: function(answer, answerConfig) {
+            callback: function(answer, answerConfig) {
                 // save costs matrix
                 if (answerConfig.success ) {
                     var records = answerConfig.getRecords(),
                         record = records[0],
                         rawData = record.getProxy().getReader().rawData;
                     // Prevent cloned records from creating new records on each save-action
-                    if(record.get('clone')){
+                    if (record.get('clone')){
                         record.set('id', rawData.data.id);
                         record.set('clone', false);
                     }
@@ -143,8 +143,8 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
                     me.onCostsMatrixSave(button, rawData.data.id);
                 }
                 me.getStore('Dispatch').load();
-                Shopware.Notification.createGrowlMessage('','{s name="growl_save_success"}The settings have been saved successfully.{/s}', '{s name="title"}{/s}');
-             }
+                Shopware.Notification.createGrowlMessage('', '{s name="growl_save_success"}The settings have been saved successfully.{/s}', '{s name="title"}{/s}');
+            }
         });
     },
 
@@ -215,8 +215,8 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
                 }));
                 var gridColumns = costsMatrixGrid.getColumns();
                 Ext.each(gridColumns, function(column){
-                    if(column.editor) {
-                        if('from' == column.dataIndex || 'to' == column.dataIndex)
+                    if (column.editor) {
+                        if ('from' == column.dataIndex || 'to' == column.dataIndex)
                         {
                             column.editor.decimalPrecision = me.currentConfig.decimalPrecision;
                         }
@@ -238,11 +238,11 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
             me    = this,
             form  = form1.getForm();
         me.resetDefaultForm(form);
-        switch(value) {
+        switch (value) {
             case 1: // alternate delivery mode
                 form.findField('multiShopId').disable();
                 form.findField('customerGroupId').disable();
-               break;
+                break;
             case 2: // surcharge
             case 3: // discount
             case 4: // surcharge

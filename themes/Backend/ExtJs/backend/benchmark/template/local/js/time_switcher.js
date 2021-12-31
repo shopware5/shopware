@@ -145,7 +145,6 @@
         $rootEl.append($labelEl);
         $rootEl.append($buttonLabel);
 
-
         return $rootEl;
     };
 

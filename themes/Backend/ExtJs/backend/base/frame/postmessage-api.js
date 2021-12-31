@@ -53,10 +53,10 @@ window.events = (function() {
          */
         subscribe: function(topic, listener) {
             // Create the topic's object if not yet created
-            if(!hOP.call(topics, topic)) topics[topic] = [];
+            if (!hOP.call(topics, topic)) topics[topic] = [];
 
             // Add the listener to queue
-            var index = topics[topic].push(listener) -1;
+            var index = topics[topic].push(listener) - 1;
 
             // Provide handle back for removal of topic
             return {
@@ -79,7 +79,7 @@ window.events = (function() {
          */
         publish: function(topic, info) {
             // If the topic doesn't exist, or there's no listeners in queue, just leave
-            if(!hOP.call(topics, topic)) return;
+            if (!hOP.call(topics, topic)) return;
 
             // Cycle through topics queue, fire!
             topics[topic].forEach(function(item) {
@@ -207,10 +207,9 @@ window.postMessageApi = function (api, win) {
 
             params = params || {};
 
-            if(!componentName) {
+            if (!componentName) {
                 componentName = component || 'main';
             }
-
 
             if (params.async) {
                 this.opts.async = params.async;
@@ -668,7 +667,6 @@ window.postMessageApi = function (api, win) {
 
                 return request;
             },
-
 
             /**
              * Sets the height of the backend window.

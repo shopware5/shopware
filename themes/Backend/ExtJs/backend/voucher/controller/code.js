@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
             codePatternField = me.getCodePatternField(),
             codePatternFieldValue = codePatternField.getValue();
 
-        if(countCodes > 0) {
+        if (countCodes > 0) {
             Ext.MessageBox.confirm(
                 me.snippets.confirmCreateNewVoucherCodesTitle,
                 me.snippets.confirmCreateNewVoucherCodes, function (response) {
@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                     me.generateCodes(codePatternFieldValue);
                 }
             );
-        }else{
+        } else {
             me.generateCodes(codePatternFieldValue);
         }
     },
@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
         var me = this;
         var form = me.getVoucherBaseConfiguration().getForm(),
             record = form.getRecord();
-        window.open(' {url action="exportVoucherCode"}?voucherId='+record.data.id);
+        window.open(' {url action="exportVoucherCode"}?voucherId=' + record.data.id);
     },
 
     /**
@@ -191,15 +191,15 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                     numberOfCodesToGenerate = numberOfAllCodes - status.generatedVoucherCodes;
                     timeLeft = (numberOfAllCodes - status.generatedVoucherCodes) * overAllTimeToGenerate / status.generatedVoucherCodes;
 
-                    if(!deletePreviousVoucherCodes) {
+                    if (!deletePreviousVoucherCodes) {
                         var hours   = Math.floor(timeLeft / 3600);
                         var minutes = Math.floor((timeLeft - (hours * 3600)) / 60);
                         var seconds = timeLeft - (hours * 3600) - (minutes * 60);
-                        timeString =  + Math.round(minutes) + ' {s name="progress/text/time_minutes_and"}minute(s) and{/s} "+ Math.round(seconds) +" {s name="progress/text/time_seconds_remaining"}second(s) remaining{/s}';
+                        timeString =  +Math.round(minutes) + ' {s name="progress/text/time_minutes_and"}minute(s) and{/s} "+ Math.round(seconds) +" {s name="progress/text/time_seconds_remaining"}second(s) remaining{/s}';
                     }
                     progressBar.updateProgress(status.generatedVoucherCodes / numberOfAllCodes, status.generatedVoucherCodes + ' {s name="progress/text/out_of"}out of{/s} ' + numberOfAllCodes + ' {s name="progress/text/voucher_code_created"}voucher codes created{/s} ' + timeString, true);
 
-                    if(numberOfCodesToGenerate > 0) {
+                    if (numberOfCodesToGenerate > 0) {
                         me.batchProcessing(voucherId, codePattern, numberOfCodesToGenerate, numberOfAllCodes, false, overAllTimeToGenerate);
                     }
                     else {
@@ -231,7 +231,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
         var me = this;
 
         //only on the code panel
-        if(newCard.alias[0] == "widget.voucher-code-list"){
+        if (newCard.alias[0] == "widget.voucher-code-list"){
 
             var store = me.subApplication.getStore('Code'),
                 formRecord = me.getVoucherBaseConfiguration().getForm().getRecord();
@@ -265,7 +265,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
         var me = this,
             searchString = Ext.String.trim(value),
             store = me.subApplication.getStore('Code');
-        store.filter('filter',searchString);
+        store.filter('filter', searchString);
         store.filters.clear();
     },
 

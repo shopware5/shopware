@@ -91,7 +91,6 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
             self.listingContainer.add(plugins);
         };
 
-
         return listing;
     },
 
@@ -125,15 +124,15 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
             },
             createButton: function() {
                 var me = this,
-                         cls,
-                         text,
-                         handlerCallback = function() {
-                            me.displayPluginEvent(record, function(detailWindow) {
-                                detailWindow.setActivePriceTab('test');
-                            });
-                        };
+                    cls,
+                    text,
+                    handlerCallback = function() {
+                        me.displayPluginEvent(record, function(detailWindow) {
+                            detailWindow.setActivePriceTab('test');
+                        });
+                    };
 
-                switch(true) {
+                switch (true) {
                     case record.allowUpdate():
                         return Ext.create('PluginManager.container.Container', {
                             cls: 'button update',
@@ -177,7 +176,6 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
                             handler: handlerCallback
                         });
                 }
-
 
                 return Ext.create('PluginManager.container.Container', {
                     cls: 'button configure',

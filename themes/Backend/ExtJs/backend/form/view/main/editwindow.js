@@ -57,14 +57,14 @@ Ext.define('Shopware.apps.Form.view.main.Editwindow', {
         me.items = [{
             xtype: 'tabpanel',
             items: [{
-                    xtype: 'form-main-formpanel',
-                    record: me.formRecord,
-                    shopStore: me.shopStore
-                }, {
-                    xtype: 'form-main-fieldgrid',
-                    fieldStore: me.fieldStore,
-                    disabled: true
-                }
+                xtype: 'form-main-formpanel',
+                record: me.formRecord,
+                shopStore: me.shopStore
+            }, {
+                xtype: 'form-main-fieldgrid',
+                fieldStore: me.fieldStore,
+                disabled: true
+            }
             ]
         }];
 

@@ -44,7 +44,6 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
         me.callParent(arguments);
     },
 
-
     initMultipleShopTipsStores: function () {
         var me = this;
 
@@ -154,22 +153,22 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
 
     createLineSeries: function(config, tips) {
         var defaultConfig = {
-            type: 'line',
-            axis: [ 'left', 'bottom' ],
-            highlight: true,
-            fill: true,
-            smooth: true
-        },
-        tipsConfig = {
-            trackMouse: true,
-            height: 60,
-            width: 120,
-            layout: 'fit',
-            highlight: {
-                size: 7,
-                radius: 7
-            }
-        };
+                type: 'line',
+                axis: [ 'left', 'bottom' ],
+                highlight: true,
+                fill: true,
+                smooth: true
+            },
+            tipsConfig = {
+                trackMouse: true,
+                height: 60,
+                width: 120,
+                layout: 'fit',
+                highlight: {
+                    size: 7,
+                    radius: 7
+                }
+            };
 
         if (Ext.isObject(config)) {
             defaultConfig = Ext.apply({ }, config, defaultConfig);
@@ -216,7 +215,6 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
 
         return titles;
     }
-
 
 });
 //{/block}

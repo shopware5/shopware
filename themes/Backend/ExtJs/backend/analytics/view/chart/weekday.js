@@ -113,7 +113,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
         me.callParent(arguments);
     },
 
-
     renderShopData: function(storeItem, tip, shop) {
         var me = this,
             field = 'turnover';

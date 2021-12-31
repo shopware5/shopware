@@ -165,9 +165,9 @@ Ext.define('Shopware.apps.Emotion.view.templates.List', {
     createPagingToolbar: function() {
         var me = this,
             toolbar = Ext.create('Ext.toolbar.Paging', {
-            store: me.store,
-            pageSize: 20
-        });
+                store: me.store,
+                pageSize: 20
+            });
 
         return toolbar;
     },
@@ -202,7 +202,7 @@ Ext.define('Shopware.apps.Emotion.view.templates.List', {
      * @returns { String } formatted output
      */
     fileRenderer: function(value) {
-        if(!value) {
+        if (!value) {
             return 'index.tpl'
         }
         return value;

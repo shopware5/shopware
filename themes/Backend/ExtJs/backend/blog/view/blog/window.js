@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
         me.callParent(arguments);
 
         //have to load it here because in some cases the view is not totally created before the record starts loading
-        if(me.record) {
+        if (me.record) {
             me.formPanel.loadRecord(me.record);
             me.attributeForm.loadAttribute(me.record.get('id'));
         }
@@ -113,13 +113,12 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
         ];
     },
 
-
     /**
      * creates the form panel
      */
     createFormPanel: function() {
         var me = this;
-        me.mainView = Ext.create('Shopware.apps.Blog.view.blog.detail.Main',{
+        me.mainView = Ext.create('Shopware.apps.Blog.view.blog.detail.Main', {
             flex: 5,
             record: me.record
         });
@@ -190,8 +189,8 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
                     this.destroy();
                 }
             }
-        /* {if {acl_is_allowed privilege=create}} */
-            ,{
+            /* {if {acl_is_allowed privilege=create}} */
+            , {
                 text: '{s name="detail_general/button/save"}Save{/s}',
                 action: 'save',
                 cls: 'primary'

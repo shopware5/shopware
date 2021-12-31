@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Site.view.main.Window', {
             buttons = [];
 
         /*{if {acl_is_allowed privilege=createSite}}*/
-        buttons.push(Ext.create("Ext.button.Button",{
+        buttons.push(Ext.create("Ext.button.Button", {
             text: '{s name="mainWindowCreateSiteButton"}New site{/s}',
             action: 'onCreateSite',
             iconCls: 'sprite-blue-document--plus'
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Site.view.main.Window', {
         /*{/if}*/
 
         /*{if {acl_is_allowed privilege=deleteSite}}*/
-        buttons.push(Ext.create("Ext.button.Button",{
+        buttons.push(Ext.create("Ext.button.Button", {
             text: '{s name="mainWindowDeleteSiteButton"}Delete site{/s}',
             action: 'onDeleteSite',
             iconCls: 'sprite-blue-document--minus',

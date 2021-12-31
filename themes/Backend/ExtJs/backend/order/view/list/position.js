@@ -135,8 +135,6 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
         );
     },
 
-
-
     /**
      * Creates the grid columns
      *
@@ -199,21 +197,21 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
                 width: 90,
                 items: [
                     /*{if {acl_is_allowed privilege=update}}*/
-                        {
-                            iconCls: 'sprite-minus-circle-frame',
-                            action: 'deletePosition',
-                            tooltip: me.snippets.deletePosition,
-                            /**
+                    {
+                        iconCls: 'sprite-minus-circle-frame',
+                        action: 'deletePosition',
+                        tooltip: me.snippets.deletePosition,
+                        /**
                              * Add button handler to fire the deleteOrder event which is handled
                              * in the list controller.
                              */
-                            handler: function (view, rowIndex, colIndex, item) {
-                                var store = view.getStore(),
-                                    record = store.getAt(rowIndex);
+                        handler: function (view, rowIndex, colIndex, item) {
+                            var store = view.getStore(),
+                                record = store.getAt(rowIndex);
 
-                                me.fireEvent('deletePosition', record, store);
-                            }
-                        },
+                            me.fireEvent('deletePosition', record, store);
+                        }
+                    },
                     /*{/if}*/
                     {
                         iconCls: 'sprite-inbox',
@@ -230,10 +228,10 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
                             me.fireEvent('openArticle', record);
                         },
                         getClass: function(value, metadata, record) {
-                             if (!record.get('articleId') || record.get('mode') !== 0)  {
-                                 return 'x-hidden';
-                             }
-                         }
+                            if (!record.get('articleId') || record.get('mode') !== 0)  {
+                                return 'x-hidden';
+                            }
+                        }
                     }
                 ]
             }
@@ -247,13 +245,13 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
             record;
 
         // SW-3289 If we have no valid taxId, return the taxRate
-        if(value == 0 || value == null || value == Ext.undefined) {
-            return rowRecord.get('taxRate').toString().replace(/[.,]/, Ext.util.Format.decimalSeparator)+'%';
+        if (value == 0 || value == null || value == Ext.undefined) {
+            return rowRecord.get('taxRate').toString().replace(/[.,]/, Ext.util.Format.decimalSeparator) + '%';
         }
 
         record = me.taxStore.findRecord('id', value);
-        if(record instanceof Ext.data.Model && record.get('tax') != Ext.undefined && record.get('tax') != null) {
-            var tax = record.get('tax')+'%';
+        if (record instanceof Ext.data.Model && record.get('tax') != Ext.undefined && record.get('tax') != null) {
+            var tax = record.get('tax') + '%';
             return tax.replace(/[.,]/, Ext.util.Format.decimalSeparator);
         }
 
@@ -265,9 +263,9 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
             record;
 
         record = me.statusStore.getAt(value);
-        if(record !== Ext.undefined) {
+        if (record !== Ext.undefined) {
             return record.get('description');
-        }else{
+        } else {
             return value;
         }
     },
@@ -295,8 +293,6 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
         }
         return Ext.util.Format.currency(value);
     }
-
-
 
 });
 //{/block}

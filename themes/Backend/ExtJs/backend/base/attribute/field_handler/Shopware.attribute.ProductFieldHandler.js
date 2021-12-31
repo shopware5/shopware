@@ -35,8 +35,7 @@ Ext.define('Shopware.attribute.ProductFieldHandler', {
 
     supports: function(attribute) {
         return (
-            (attribute.get('columnType') == 'multi_selection' || attribute.get('columnType') == 'single_selection')
-            &&
+            (attribute.get('columnType') == 'multi_selection' || attribute.get('columnType') == 'single_selection') &&
             (attribute.get('entity') == "Shopware\\Models\\Article\\Article" || attribute.get('entity') == "Shopware\\Models\\Article\\Detail")
         );
     },

@@ -97,7 +97,7 @@ Ext.define('Shopware.app.Growl', {
             [{
                 tag: 'div',
                 cls: 'sw4-growl',
-                style: 'top:' + top +'px',
+                style: 'top:' + top + 'px',
                 children: [{
                     tag: 'div',
                     cls: 'icon' + iconCls

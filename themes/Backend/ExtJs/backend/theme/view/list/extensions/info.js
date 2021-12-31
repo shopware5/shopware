@@ -109,7 +109,6 @@ Ext.define('Shopware.apps.Theme.view.list.extensions.Info', {
             }
         });
 
-
         return me.assignButton;
     },
 

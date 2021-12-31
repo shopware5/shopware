@@ -61,8 +61,8 @@ Ext.define('Shopware.apps.Article.model.Dependency', {
                 }
                 return null;
             }
-       },
-       {
+        },
+        {
             name: 'childGroupId',
             type: 'integer',
             convert: function(value, record) {
@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Article.model.Dependency', {
                 }
                 return null;
             }
-       }
+        }
     ],
 
     associations: [
@@ -88,8 +88,6 @@ Ext.define('Shopware.apps.Article.model.Dependency', {
             destroy: '{url action="deleteConfiguratorDependency"}'
         }
     }
-
-
 
 });
 //{/block}

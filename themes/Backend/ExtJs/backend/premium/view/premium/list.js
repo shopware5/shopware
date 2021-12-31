@@ -95,14 +95,14 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
      * Creates the selectionModel of the grid with a listener to enable the delete-button
      */
     getGridSelModel: function(){
-        var selModel = Ext.create('Ext.selection.CheckboxModel',{
+        var selModel = Ext.create('Ext.selection.CheckboxModel', {
             listeners: {
                 selectionchange: function(sm, selections){
                     var owner = this.view.ownerCt,
-                            btn = owner.down('button[action=deleteMultipleArticles]');
+                        btn = owner.down('button[action=deleteMultipleArticles]');
 
                     //If no article is marked
-                    if(btn){
+                    if (btn){
                         btn.setDisabled(selections.length == 0);
                     }
                 }
@@ -120,29 +120,29 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
     registerEvents: function () {
         this.addEvents(
 
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event deleteColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'deleteColumn',
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'deleteColumn',
 
-                /**
-                 * Event will be fired when the user clicks the edit icon in the
-                 * action column
-                 *
-                 * @event editColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'editColumn'
+            /**
+             * Event will be fired when the user clicks the edit icon in the
+             * action column
+             *
+             * @event editColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'editColumn'
         );
 
         return true;
@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
                 flex: 1,
                 //Renderer to format the column
                 renderer: this.nameColumn
-            },{
+            }, {
                 header: '{s name="column/export_ordernumber"}Export order number{/s}',
                 dataIndex: 'orderNumberExport',
                 flex: 1
@@ -194,7 +194,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
                 dataIndex: 'subShopName',
                 flex: 1,
                 renderer: this.renderSubShop
-            },{
+            }, {
                 header: '{s name="column/startprice"}Minimum order value{/s}',
                 dataIndex: 'startPrice',
                 flex: 1
@@ -208,10 +208,10 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
         return columns;
     },
 
-    renderSubShop: function(value,a,record){
-        if(value){
+    renderSubShop: function(value, a, record){
+        if (value){
             return value;
-        }else if(record.data.shopId == 0){
+        } else if (record.data.shopId == 0){
             return '{s name="premium/subShop/comboBox_general"}Universally valid{/s}';
         }
     },
@@ -221,7 +221,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
      */
     getToolbar: function(){
 
-        var searchField = Ext.create('Ext.form.field.Text',{
+        var searchField = Ext.create('Ext.form.field.Text', {
             name: 'searchfield',
             cls: 'searchfield',
             action: 'searchPremiumArticle',
@@ -231,7 +231,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
             listeners: {
                 buffer: 500,
                 keyup: function() {
-                    if(this.getValue().length >= 3 || this.getValue().length<1) {
+                    if (this.getValue().length >= 3 || this.getValue().length < 1) {
                         /**
                          * @param this Contains the searchfield
                          */
@@ -243,14 +243,14 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
         searchField.addEvents('fieldchange');
         var items = [];
         /*{if {acl_is_allowed privilege=create}}*/
-            items.push(Ext.create('Ext.button.Button',{
-                iconCls: 'sprite-plus-circle',
-                text: '{s name="toolbar/add"}Add{/s}',
-                action: 'add'
-            }));
+        items.push(Ext.create('Ext.button.Button', {
+            iconCls: 'sprite-plus-circle',
+            text: '{s name="toolbar/add"}Add{/s}',
+            action: 'add'
+        }));
         /*{/if}*/
         /*{if {acl_is_allowed privilege=delete}}*/
-        items.push(Ext.create('Ext.button.Button',{
+        items.push(Ext.create('Ext.button.Button', {
             iconCls: 'sprite-minus-circle',
             text: '{s name="toolbar/delete"}Delete selected articles{/s}',
             disabled: true,
@@ -279,8 +279,8 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
     * @param value
     * @return [string]
     */
-    nameColumn: function(value,metaData,record) {
-            return Ext.String.format('<b>{literal}{0}</b> <span>({1}){/literal}</span>', value, record.data.orderNumber);
+    nameColumn: function(value, metaData, record) {
+        return Ext.String.format('<b>{literal}{0}</b> <span>({1}){/literal}</span>', value, record.data.orderNumber);
     }
 
 });

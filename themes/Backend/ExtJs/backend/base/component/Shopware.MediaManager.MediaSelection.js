@@ -40,9 +40,9 @@
  *
  * @example Ext.create('Shopware.MediaManager.MediaSelection');
  */
-Ext.define('Shopware.MediaManager.MediaSelection',
-/** @lends Ext.form.field.Trigger */
-{
+Ext.define('Shopware.MediaManager.MediaSelection', {
+    /** @lends Ext.form.field.Trigger */
+
     extend: 'Ext.form.field.Trigger',
     alternateClassName: [ 'Shopware.form.field.MediaSelection', 'Shopware.MediaSelection' ],
     alias: [ 'widget.mediafield', 'widget.mediaselectionfield' ],
@@ -138,7 +138,7 @@ Ext.define('Shopware.MediaManager.MediaSelection',
         }
 
         inputEl = me.inputEl;
-        if(me.buttonOnly) {
+        if (me.buttonOnly) {
             inputEl.setDisplayed(false);
         }
 
@@ -207,7 +207,7 @@ Ext.define('Shopware.MediaManager.MediaSelection',
      * @return [array|false] Array of the selected records e.g. Ext.data.Model's
      */
     getRecords: function() {
-        if(!this.selectedRecords) {
+        if (!this.selectedRecords) {
             return false;
         }
 
@@ -220,7 +220,7 @@ Ext.define('Shopware.MediaManager.MediaSelection',
      * @return [integer]
      */
     getRecordsCount: function() {
-        if(!this.selectedRecords) {
+        if (!this.selectedRecords) {
             return 0;
         }
 
@@ -270,7 +270,7 @@ Ext.define('Shopware.MediaManager.MediaSelection',
             dataPnl = win.down('.mediamanager-media-view'),
             selModel, selected;
 
-        if(dataPnl.selectedLayout === 'grid') {
+        if (dataPnl.selectedLayout === 'grid') {
             dataPnl = dataPnl.dataView;
         } else {
             dataPnl = dataPnl.cardContainer.getLayout().getActiveItem();
@@ -282,7 +282,7 @@ Ext.define('Shopware.MediaManager.MediaSelection',
         me.selectedRecords = selected;
         me.fireEvent('selectMedia', me, me.selectedRecords, selModel);
 
-        if(me.selectedRecords.length > 1) {
+        if (me.selectedRecords.length > 1) {
 
             // Multi selection
             var paths = [];
@@ -299,7 +299,7 @@ Ext.define('Shopware.MediaManager.MediaSelection',
             me.inputEl.dom.value = selected.get(me.returnValue);
         }
 
-//        me.window.setLoading(false);
+        //        me.window.setLoading(false);
         win.close();
     },
 
@@ -334,12 +334,12 @@ Ext.define('Shopware.MediaManager.MediaSelection',
         this.disableItems();
     },
 
-//    /**
-//     * Overridden to do nothing
-//     *
-//     * @private
-//     */
-//    setValue: Ext.emptyFn,
+    //    /**
+    //     * Overridden to do nothing
+    //     *
+    //     * @private
+    //     */
+    //    setValue: Ext.emptyFn,
 
     /**
      * Resets the input field

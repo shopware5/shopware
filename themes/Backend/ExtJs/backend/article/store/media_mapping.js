@@ -60,8 +60,8 @@ Ext.define('Shopware.apps.Article.store.MediaMapping', {
          * @object
          */
         api: {
-             create: '{url action="saveMediaMapping"}',
-             update: '{url action="saveMediaMapping"}'
+            create: '{url action="saveMediaMapping"}',
+            update: '{url action="saveMediaMapping"}'
         },
         reader: {
             type: 'json',

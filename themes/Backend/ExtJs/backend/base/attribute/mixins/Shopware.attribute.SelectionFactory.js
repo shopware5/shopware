@@ -29,7 +29,7 @@
 
 Ext.define('Shopware.attribute.SelectionFactory', {
     getRelevantFields: function() {
-        return ['label', 'name', 'title', 'number', 'description','value'];
+        return ['label', 'name', 'title', 'number', 'description', 'value'];
     },
 
     getLabelField: function(record) {

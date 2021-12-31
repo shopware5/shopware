@@ -59,19 +59,18 @@ Ext.define('Shopware.apps.Index.controller.Main', {
             Ext.util.Cookies.set('firstRunWizardStep', firstRunWizardStep);
 
             Shopware.app.Application.addSubApplication({
-                    name: 'Shopware.apps.PluginManager',
-                    params: {
-                        hidden: true
-                    }
-                },
-                undefined,
-                function() {
-                    Shopware.app.Application.addSubApplication({
-                        name: 'Shopware.apps.FirstRunWizard'
-                    });
+                name: 'Shopware.apps.PluginManager',
+                params: {
+                    hidden: true
                 }
+            },
+            undefined,
+            function() {
+                Shopware.app.Application.addSubApplication({
+                    name: 'Shopware.apps.FirstRunWizard'
+                });
+            }
             );
-
 
         } else {
             me.initBackendDesktop();
@@ -192,7 +191,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
             /*{/if}*/
 
             /*{if {acl_is_allowed privilege=read resource=customer}}*/
-             // Order overview - CTRL + ALT + K
+            // Order overview - CTRL + ALT + K
             {
                 key: "k",
                 ctrl: true,
@@ -234,7 +233,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 ctrl: true,
                 alt: true,
                 handler: function(keyCode, e) {
-                    switch(keyCode) {
+                    switch (keyCode) {
                         // Frontend Cache - CTRL + ALT + F
                         case 70: var action = 'Frontend'; break;
                         // Template Cache - CTRL + ALT + T
@@ -268,7 +267,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                     success: function(response) {
                         var json = Ext.decode(response.responseText);
 
-                        if(!json.success) {
+                        if (!json.success) {
                             window.location.href = '{url controller=index}';
                         }
                     },
@@ -360,7 +359,6 @@ Ext.define('Shopware.apps.Index.view.Main', {
     bodyStyle: 'background: transparent'
 });
 
-
 /**
  * Wrapper methods which allows to open deprecated
  * modules in the new ExtJS 4 structure.
@@ -423,49 +421,49 @@ createKeyNavOverlay = function() {
             fields: [ 'name', 'key', 'alt', 'ctrl' ],
             data: [
                 /*{if {acl_is_allowed privilege=read resource=article}}*/
-                { name: '{s name="title/article"}Article{/s}', key: 'n', alt: true , ctrl: true },
+                { name: '{s name="title/article"}Article{/s}', key: 'n', alt: true, ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=read resource=articlelist}}*/
-                { name: '{s name="title/article_overview"}Article overview{/s}', key: 'o', alt: true , ctrl: true },
+                { name: '{s name="title/article_overview"}Article overview{/s}', key: 'o', alt: true, ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=read resource=order}}*/
-                { name: '{s name="title/order"}Order{/s}', key: 'b', alt: true , ctrl: true },
+                { name: '{s name="title/order"}Order{/s}', key: 'b', alt: true, ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=read resource=customer}}*/
-                { name: '{s name="title/customer"}Customer{/s}', key: 'k', alt: true , ctrl: true },
+                { name: '{s name="title/customer"}Customer{/s}', key: 'k', alt: true, ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=read resource=pluginmanager}}*/
-                { name: '{s name="title/plugin_manager"}Plugin manager{/s}', key: 'p', alt: true , ctrl: true },
+                { name: '{s name="title/plugin_manager"}Plugin manager{/s}', key: 'p', alt: true, ctrl: true },
                 /*{/if}*/
                 /*{if {acl_is_allowed privilege=clear resource=performance}}*/
-                { name: '{s name="title/cache_template"}Clear template cache{/s}', key: 't', alt: true , ctrl: true },
-                { name: '{s name="title/cache_config"}Clear config cache{/s}', key: 'x', alt: true , ctrl: true },
-                { name: '{s name="title/cache_frontend"}Clear shop cache{/s}', key: 'f', alt: true , ctrl: true }
+                { name: '{s name="title/cache_template"}Clear template cache{/s}', key: 't', alt: true, ctrl: true },
+                { name: '{s name="title/cache_config"}Clear config cache{/s}', key: 'x', alt: true, ctrl: true },
+                { name: '{s name="title/cache_frontend"}Clear shop cache{/s}', key: 'f', alt: true, ctrl: true }
                 /*{/if}*/
             ]
         }),
         tpl = new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<div class="row">',
-                    '<span class="title">{name}:</span>',
-                    '<div class="keys">',
+            '<div class="row">',
+            '<span class="title">{name}:</span>',
+            '<div class="keys">',
 
-                        // Ctrl key
-                        '<tpl if="ctrl === true">',
-                            '<span class="sprite-key_ctrl_alternative">ctrl</span>',
-                        '</tpl>',
+            // Ctrl key
+            '<tpl if="ctrl === true">',
+            '<span class="sprite-key_ctrl_alternative">ctrl</span>',
+            '</tpl>',
 
-                        // Alt key
-                        '<tpl if="alt === true">',
-                            '<span class="key_sep">+</span>',
-                            '<span class="sprite-key_alt_alternative">alt</span>',
-                        '</tpl>',
+            // Alt key
+            '<tpl if="alt === true">',
+            '<span class="key_sep">+</span>',
+            '<span class="sprite-key_alt_alternative">alt</span>',
+            '</tpl>',
 
-                        // Output the actual key
-                        '<span class="key_sep">+</span>',
-                        '<span class="sprite-key_{key}">{key}</span>',
-                    '</div>',
-                '</div>',
+            // Output the actual key
+            '<span class="key_sep">+</span>',
+            '<span class="sprite-key_{key}">{key}</span>',
+            '</div>',
+            '</div>',
             '</tpl>{/literal}'
         ),
         emptyTpl = '<span class="no-shortcuts">{s name="shortcuts/no_shortcuts_acl"}Due to your permissions, there are no shortcuts available{/s}</span>',
@@ -507,7 +505,7 @@ openSearchResult = function(module, id) {
         Shopware.searchField.searchDropDown.hide();
     }, 100);
 
-    switch(module) {
+    switch (module) {
         case 'articles':
             Shopware.app.Application.addSubApplication({
                 name: 'Shopware.apps.Article',

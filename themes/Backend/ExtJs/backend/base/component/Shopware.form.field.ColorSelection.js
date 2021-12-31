@@ -40,8 +40,8 @@ Ext.define('Shopware.form.field.ColorSelection', {
         N = Math.min(N, 255);
         N = Math.round(N);
 
-        return "0123456789ABCDEF".charAt((N - N % 16) / 16)
-            + "0123456789ABCDEF".charAt(N % 16);
+        return "0123456789ABCDEF".charAt((N - N % 16) / 16) +
+            "0123456789ABCDEF".charAt(N % 16);
     },
 
     createPicker: function (canvas) {
@@ -80,7 +80,7 @@ Ext.define('Shopware.form.field.ColorSelection', {
         var me = this,
             bEvent = event.browserEvent,
             x = (typeof bEvent.offsetX !== 'undefined') ? bEvent.offsetX : bEvent.layerX,
-            y = (typeof bEvent.offsetY !== 'undefined') ? bEvent.offsetY: bEvent.layerY,
+            y = (typeof bEvent.offsetY !== 'undefined') ? bEvent.offsetY : bEvent.layerY,
             imageData = ctx.getImageData(x, y, 1, 1),
             data = imageData.data;
 

@@ -27,7 +27,6 @@
  * @author shopware AG
  */
 
-
 /**
  * Shopware Model -  notification article
  * The notification article model of the notification module contains some additional statistics data for the article grid.

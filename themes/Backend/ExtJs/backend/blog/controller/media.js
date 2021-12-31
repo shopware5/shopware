@@ -81,8 +81,8 @@ Ext.define('Shopware.apps.Blog.controller.Media', {
      */
     onMediaAdded: function(dropZone, images, selModel) {
         var me = this,
-                mediaList = me.getMediaList(),
-                store = mediaList.getStore();
+            mediaList = me.getMediaList(),
+            store = mediaList.getStore();
 
         if (images.length === 0) {
             return true;
@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.Blog.controller.Media', {
         if (!(selected instanceof Ext.data.Model)) {
             return false;
         }
-        changeMain = (selected.get('preview')===true);
+        changeMain = (selected.get('preview') === true);
 
         store.remove(selected);
         if (!changeMain) {
@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.Blog.controller.Media', {
         previewButton.setDisabled(disabled);
         if (!disabled) {
             var selected = dataViewModel.selected.first();
-            previewButton.setDisabled(selected.get('preview')===1);
+            previewButton.setDisabled(selected.get('preview') === 1);
         }
     }
 

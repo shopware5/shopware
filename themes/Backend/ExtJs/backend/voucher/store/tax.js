@@ -69,22 +69,22 @@ Ext.define('Shopware.apps.Voucher.store.Tax', {
          * @return void
          */
         load: function(store) {
-            var defaultTaxModel = Ext.create('Shopware.apps.Voucher.model.Tax',{
-                id: 'default',
-                name: '{s name="detail_general/tax_combo_box/standard"}Standard{/s}'
-            }),
-            autoTaxModel = Ext.create('Shopware.apps.Voucher.model.Tax',{
-                id: 'auto',
-                name: '{s name="detail_general/tax_combo_box/auto"}Auto detection{/s}'
-            }),
-            noneTaxModel = Ext.create('Shopware.apps.Voucher.model.Tax',{
-                id: 'none',
-                name: '{s name="detail_general/tax_combo_box/tax_free"}Tax-free{/s}'
-            });
+            var defaultTaxModel = Ext.create('Shopware.apps.Voucher.model.Tax', {
+                    id: 'default',
+                    name: '{s name="detail_general/tax_combo_box/standard"}Standard{/s}'
+                }),
+                autoTaxModel = Ext.create('Shopware.apps.Voucher.model.Tax', {
+                    id: 'auto',
+                    name: '{s name="detail_general/tax_combo_box/auto"}Auto detection{/s}'
+                }),
+                noneTaxModel = Ext.create('Shopware.apps.Voucher.model.Tax', {
+                    id: 'none',
+                    name: '{s name="detail_general/tax_combo_box/tax_free"}Tax-free{/s}'
+                });
 
             //insert the models at first position to the tax combobox
-            store.insert(0,autoTaxModel);
-            store.insert(0,defaultTaxModel);
+            store.insert(0, autoTaxModel);
+            store.insert(0, defaultTaxModel);
             //insert his model to the end of the list
             store.add(noneTaxModel);
         }

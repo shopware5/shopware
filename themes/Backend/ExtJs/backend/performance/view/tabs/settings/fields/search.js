@@ -65,7 +65,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
         me.callParent(arguments);
     },
 
-
     getItems: function() {
         var me = this;
 

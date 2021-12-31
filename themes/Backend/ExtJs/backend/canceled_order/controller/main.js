@@ -76,6 +76,5 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Main', {
         me.callParent(arguments);
     }
 
-
 });
 //{/block}

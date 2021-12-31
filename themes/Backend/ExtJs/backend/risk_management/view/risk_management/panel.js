@@ -47,7 +47,6 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
     extend: 'Ext.panel.Panel',
     bodyPadding: 10,
 
-
     /**
     * Alias name for the view. Could be used to get an instance
     * of the view through Ext.widget('risk_management-main-panel')
@@ -98,20 +97,20 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
                     emptyText: '{s name="paymentFieldSet/comboBox/emptyText"}Please select{/s}',
                     tpl: Ext.create('Ext.XTemplate',
                         '<tpl for=".">',
-                            '<div class="x-boundlist-item"',
-                                '<tpl if="this.doHighlight(id)">',
-                                    ' style="background-color:#f08080;"',
-                                '</tpl>',
-                            '>',
-                            '<div class="',
-                                '<tpl if="active">',
-                                    'sprite-tick-small',
-                                '<tpl else>',
-                                    'sprite-cross-small',
-                                '</tpl>',
-                                '" style="width:12px;height:12px;display:inline-block;margin:0 6px 5px 0;vertical-align:middle;">&nbsp;</div>',
-                                '{literal}{description}{/literal}',
-                            '</div>',
+                        '<div class="x-boundlist-item"',
+                        '<tpl if="this.doHighlight(id)">',
+                        ' style="background-color:#f08080;"',
+                        '</tpl>',
+                        '>',
+                        '<div class="',
+                        '<tpl if="active">',
+                        'sprite-tick-small',
+                        '<tpl else>',
+                        'sprite-cross-small',
+                        '</tpl>',
+                        '" style="width:12px;height:12px;display:inline-block;margin:0 6px 5px 0;vertical-align:middle;">&nbsp;</div>',
+                        '{literal}{description}{/literal}',
+                        '</div>',
                         '</tpl>',
                         {
                             doHighlight: function(id) {
@@ -129,12 +128,12 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
                 }
             ]
         });
-        me.riskFieldSet = Ext.create('Ext.form.FieldSet',{
+        me.riskFieldSet = Ext.create('Ext.form.FieldSet', {
             hidden: true,
             title: '{s name="riskFieldSet/title"}Disable payment if{/s}'
         });
 
-        me.exampleFieldSet = Ext.create('Ext.form.FieldSet',{
+        me.exampleFieldSet = Ext.create('Ext.form.FieldSet', {
             hidden: true,
             cls: Ext.baseCSSPrefix + 'example-table',
             title: '{s name="exampleFieldSet/title"}Examples{/s}',
@@ -218,7 +217,6 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
         rules.push('<b> {s name="exampleFieldSet/rules/customerAttributeIs"}{/s}</b>');
         rules.push('<b> {s name="exampleFieldSet/rules/customerAttributeIsNot"}{/s}</b>');
 
-
         syntax.push('<b> {s name="exampleFieldSet/syntax/syntax"}Syntax{/s} </b>');
         syntax.push('{s name="exampleFieldSet/syntax/numericalValue"}Value numerical{/s}');
         syntax.push('{s name="exampleFieldSet/syntax/numericalValue"}Value numerical{/s}');
@@ -256,7 +254,6 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
         syntax.push('{s name="exampleFieldSet/syntax/attributes"}attr*1-20*|5{/s}');
         syntax.push('{s name="exampleFieldSet/syntax/customerAttribute"}attr1|1{/s}');
         syntax.push('{s name="exampleFieldSet/syntax/customerAttribute"}attr1|1{/s}');
-
 
         example.push('<b> {s name="exampleFieldSet/example/example"}Example{/s} </b>');
         example.push('500.50');
@@ -298,7 +295,7 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
 
         //Creates an array like this:
         //[0] => One item of each array rules/syntax/example
-        for(var i=0; i<example.length; i++){
+        for (var i = 0; i < example.length; i++){
             data[i] = [rules[i], syntax[i], example[i]]
         }
         return data;

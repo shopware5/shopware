@@ -55,12 +55,12 @@ Ext.define('Shopware.apps.Shipping.store.Holiday', {
      * @string
      */
     model: 'Shopware.apps.Shipping.model.Holiday',
-     /**
+    /**
      * enables the remote filter system
      * @boolen
      */
     remoteFilter: true,
-     /**
+    /**
      * Configure the data communication
      * @object
      */

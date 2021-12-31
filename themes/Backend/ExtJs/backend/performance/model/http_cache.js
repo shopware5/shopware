@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Performance.model.HttpCache', {
         model: 'Shopware.apps.Performance.model.KeyValue',
         name: 'getCacheControllers',
         associationKey: 'cacheControllers'
-    },{
+    }, {
         type: 'hasMany',
         model: 'Shopware.apps.Performance.model.KeyValue',
         name: 'getNoCacheControllers',

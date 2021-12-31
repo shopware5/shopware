@@ -196,7 +196,7 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
      * @return Array
      */
     createLeftElements: function() {
-        var me =this;
+        var me = this;
 
         return [
             {
@@ -236,24 +236,24 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
                 xtype: 'numberfield',
                 name: 'pseudoSales',
                 fieldLabel: me.snippets.pseudoSales
-            } , {
-               xtype: 'numberfield',
-               name: 'mainDetail[minPurchase]',
-               decimalPrecision: 0,
-               minValue: 1,
-               value: 1,
-               fieldLabel: me.snippets.minimumOrder
-           }, {
-               xtype: 'numberfield',
-               name: 'mainDetail[purchaseSteps]',
-               decimalPrecision: 0,
-               fieldLabel: me.snippets.graduation
-           }, {
-               xtype: 'numberfield',
-               name: 'mainDetail[maxPurchase]',
-               decimalPrecision: 0,
-               fieldLabel: me.snippets.maximumOrder
-           }
+            }, {
+                xtype: 'numberfield',
+                name: 'mainDetail[minPurchase]',
+                decimalPrecision: 0,
+                minValue: 1,
+                value: 1,
+                fieldLabel: me.snippets.minimumOrder
+            }, {
+                xtype: 'numberfield',
+                name: 'mainDetail[purchaseSteps]',
+                decimalPrecision: 0,
+                fieldLabel: me.snippets.graduation
+            }, {
+                xtype: 'numberfield',
+                name: 'mainDetail[maxPurchase]',
+                decimalPrecision: 0,
+                fieldLabel: me.snippets.maximumOrder
+            }
         ];
     },
 

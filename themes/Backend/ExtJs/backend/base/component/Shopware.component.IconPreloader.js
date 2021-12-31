@@ -61,7 +61,7 @@ Ext.define('Shopware.component.IconPreloader', {
     constructor: function(options) {
         var me = this, task;
 
-        if(!options.hasOwnProperty('loadPath')) {
+        if (!options.hasOwnProperty('loadPath')) {
             Ext.Error.raise({
                 sourceClass: me.$className,
                 sourceMethod: "constructor",
@@ -91,7 +91,7 @@ Ext.define('Shopware.component.IconPreloader', {
      * @returns { Boolean } Truthy if the path was setted, otherwise falsy
      */
     setLoadPath: function(path) {
-        if(!path.length) {
+        if (!path.length) {
             return false;
         }
         this.loadPath = path;
@@ -133,7 +133,7 @@ Ext.define('Shopware.component.IconPreloader', {
             'href': me.loadPath + '/' + sheet + me.extension + "?" + Ext.shopwareRevision
         });
 
-        for(var key in basicOpts) {
+        for (var key in basicOpts) {
             el.setAttribute(key, basicOpts[key]);
         }
 

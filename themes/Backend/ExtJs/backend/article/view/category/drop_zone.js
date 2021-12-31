@@ -142,7 +142,7 @@ Ext.define('Shopware.apps.Article.view.category.DropZone', {
         var me = this;
 
         me.on('afterrender', function() {
-             me.ddZone = new Ext.dd.DropZone(me.dropZone.getEl(), {
+            me.ddZone = new Ext.dd.DropZone(me.dropZone.getEl(), {
                 ddGroup: 'Category',
 
                 // If the mouse is over the drop zone container, return that container. This is
@@ -176,7 +176,7 @@ Ext.define('Shopware.apps.Article.view.category.DropZone', {
 
                     return true;
                 }
-             });
+            });
         });
     }
 });

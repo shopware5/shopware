@@ -198,7 +198,6 @@ Ext.define('Shopware.grid.Association', {
             return config;
         },
 
-
         /**
          * Static function which sets the property value of
          * the passed property and value in the display configuration.
@@ -333,7 +332,6 @@ Ext.define('Shopware.grid.Association', {
         return items;
     },
 
-
     /**
      * Creates the search combo box item of the toolbar.
      * The combo box allows the user to search new items for the grid panel.
@@ -359,8 +357,6 @@ Ext.define('Shopware.grid.Association', {
             }
         });
     },
-
-
 
     /**
      * Event listener function of the combo box.

@@ -106,8 +106,8 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
             }
         }
 
-        if(record.getId() != me.subApplication.defaultRootNodeId){
-            if(~~(1 * record.get('parentId')) === 1 || store.count() === 1) {
+        if (record.getId() != me.subApplication.defaultRootNodeId){
+            if (~~(1 * record.get('parentId')) === 1 || store.count() === 1) {
                 form.templateComboBox.hide();
             } else {
                 form.templateComboBox.show();
@@ -118,15 +118,15 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
             activeTab = me.getMainWindow().tabPanel.getActiveTab();
 
             //to select the settings if the tree element is not a leaf
-            if(!treeRecord.get('leaf') && activeTab.name !== 'custom-listing'){
+            if (!treeRecord.get('leaf') && activeTab.name !== 'custom-listing'){
                 me.getMainWindow().tabPanel.setActiveTab(0);
             }
 
             //show or hide the emotionNotice if an emotion is mapped to this category
-            if(record.getEmotion().count()){
+            if (record.getEmotion().count()){
                 form.emotionNotice.show();
             }
-            else{
+            else {
                 form.emotionNotice.hide();
             }
             me.enableForm();

@@ -53,9 +53,9 @@ Ext.define('Shopware.data.reader.Application', {
 
             if (!node.isModel) {
                 //SW FIX
-                    //internal reference of convertRecordData function lost
-                    //reproducible if you load a one to many association and additionally a many to one association
-                    me.setModel(modelIteration, true);
+                //internal reference of convertRecordData function lost
+                //reproducible if you load a one to many association and additionally a many to one association
+                me.setModel(modelIteration, true);
                 //fix end
 
                 record = new Model(undefined, me.getId(node), node, convertedValues = {});

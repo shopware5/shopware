@@ -64,12 +64,11 @@ Ext.define('Shopware.apps.Tax', {
      */
     controllers: [ 'Main' ],
 
-    stores: [ 'Groups', 'Rules' ,'Areas','Countries', 'States'],
+    stores: [ 'Groups', 'Rules', 'Areas', 'Countries', 'States'],
 
-    views: [ 'main.Window', 'main.Tree','main.Rules' ],
+    views: [ 'main.Window', 'main.Tree', 'main.Rules' ],
 
-    models: [ 'Groups','Rules','Areas','Countries','States' ],
-
+    models: [ 'Groups', 'Rules', 'Areas', 'Countries', 'States' ],
 
     /**
      * Returns the main application window for this is expected

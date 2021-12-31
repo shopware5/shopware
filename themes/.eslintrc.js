@@ -13,9 +13,5 @@ module.exports = {
         Overlay: true,
         Shopware: true,
         Ext: true
-    },
-    rules: {
-        'key-spacing': 2,
-        'object-curly-newline': ['error', {'consistent': true}]
     }
 };

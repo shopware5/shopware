@@ -66,7 +66,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
         me.callParent(arguments);
     },
 
-
     /**
      * Registers the "openOrder" event which is fired when
      * the user clicks on the action column of the grid

@@ -139,7 +139,7 @@ Ext.define('Shopware.apps.Category.controller.MultiRequest', {
         });
     },
 
-     /**
+    /**
      * Runs the actual request
      * Method is called recursively until all data was processed
      */

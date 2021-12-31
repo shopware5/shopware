@@ -46,7 +46,6 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerGroup', {
             }
         };
 
-
         me.initShopColumns([
             {
                 text: '{s name="general/turnover"}Turnover{/s}: [0]',

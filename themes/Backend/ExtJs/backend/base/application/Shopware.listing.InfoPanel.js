@@ -204,7 +204,6 @@ Ext.define('Shopware.listing.InfoPanel', {
         me.callParent(arguments);
     },
 
-
     /**
      * Helper function to get config access.
      *
@@ -350,9 +349,9 @@ Ext.define('Shopware.listing.InfoPanel', {
 
         return new Ext.XTemplate(
             '<tpl for=".">',
-                '<div class="item" style="">',
-                    fields.join(''),
-                '</div>',
+            '<div class="item" style="">',
+            fields.join(''),
+            '</div>',
             '</tpl>'
         );
     },
@@ -366,7 +365,7 @@ Ext.define('Shopware.listing.InfoPanel', {
     createTemplateForField: function(model, field) {
         var me = this;
 
-        return '<p style="padding: 2px"><b>' + me.getHumanReadableWord(field.name) +':</b> {literal}{' + field.name + '}{/literal}</p>'
+        return '<p style="padding: 2px"><b>' + me.getHumanReadableWord(field.name) + ':</b> {literal}{' + field.name + '}{/literal}</p>'
     },
 
     /**

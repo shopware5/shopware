@@ -141,7 +141,7 @@ Ext.define('Shopware.grid.HeaderToolTip', {
      */
     getToolTip: function() {
         var me = this;
-            headerCt = me.client.headerCt;
+        headerCt = me.client.headerCt;
 
         return Ext.create('Ext.tip.ToolTip', {
             target: headerCt.el,
@@ -163,7 +163,7 @@ Ext.define('Shopware.grid.HeaderToolTip', {
         var me = this;
         headerCt = me.client.headerCt;
 
-        var column = headerCt.down('gridcolumn[id=' + tip.triggerElement.id  +']');
+        var column = headerCt.down('gridcolumn[id=' + tip.triggerElement.id  + ']');
 
         if (column && column.tooltip) {
             tip.update(Ext.util.Format.htmlEncode(column.tooltip));

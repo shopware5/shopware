@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Config.view.form.CustomerGroup', {
                 ptype: 'grid-attributes',
                 table: 's_core_customergroups_attributes'
             }]
-        },{
+        }, {
             xtype: 'config-customergroup-detail'
         }];
     },

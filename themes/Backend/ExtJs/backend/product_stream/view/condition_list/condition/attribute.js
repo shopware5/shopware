@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Attribute'
     },
 
     updateTitle: function(container, name) {
-        if(name.column !== undefined) {
+        if (name.column !== undefined) {
             container.setTitle(this.getLabel() + ': ' + name.column);
         } else {
             container.setTitle(this.getLabel() + ': ' + name.field);

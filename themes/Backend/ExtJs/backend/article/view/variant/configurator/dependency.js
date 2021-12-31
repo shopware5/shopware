@@ -210,7 +210,6 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
             margin: '0 0 15 0'
         });
 
-
         leftGroupCombo = Ext.create('Ext.form.field.ComboBox', {
             emptyText: me.snippets.group,
             flex: 1,
@@ -284,7 +283,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
             }
         });
 
-        if (record && record.get('id')>0) {
+        if (record && record.get('id') > 0) {
             removeButtonDisabled = false;
         }
 

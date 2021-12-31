@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
             position = me.inputEl.dom.selectionStart;
 
         rest = value.substring(position);
-        value = value.substring(0, position-tokenLength);
+        value = value.substring(0, position - tokenLength);
 
         if (suggestion.get('addQuotes')) {
             suggestion = '"' + suggestion.get('title') + '"';
@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
         }
 
         me.ignoreToken = true;
-        me.setValue (value + suggestion + " " + rest);
+        me.setValue(value + suggestion + " " + rest);
 
     },
 
@@ -135,7 +135,6 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
         me.store.proxy.extraParams = params;
         me.store.remoteFilter = true;
         me.queryCaching = true;
-
 
         // Setting the filter this way ensures the filter to be replaced
         me.store.clearFilter(true);
@@ -162,8 +161,7 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
 
         me.store.clearFilter(true);
 
-
-        if (!me.getValue() || me.getValue().substring(position-1, position).trim() == "") {
+        if (!me.getValue() || me.getValue().substring(position - 1, position).trim() == "") {
             token = undefined;
         }
 
@@ -183,7 +181,6 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
         me.store.clearFilter(true);
         me.store.filter({ id: 'filter', anyMatch: true, property: 'title', value: token ? token.replace('"', "") : '' });
     },
-
 
     /**
      * Override the key up callback: We trigger the queries on our own!
@@ -301,7 +298,7 @@ Ext.define('Shopware.apps.ArticleList.view.FilterCombo', {
                     /**
                      * Override
                      */
-                   // me.setValue(me.value);
+                    // me.setValue(me.value);
                 }
             }
         }

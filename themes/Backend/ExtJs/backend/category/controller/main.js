@@ -159,7 +159,7 @@ Ext.define('Shopware.apps.Category.controller.Main', {
             } else {
                 var rawData = self.proxy.reader.rawData;
                 if (rawData.message) {
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError + '<br>' +  rawData.message, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError + '<br>' +  rawData.message, me.snippets.growlMessage);
                 } else {
                     Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
                 }

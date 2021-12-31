@@ -54,7 +54,6 @@ Ext.define('Shopware.apps.Vote.controller.Main', {
             });
             store.load();
 
-
             return;
         }
 

@@ -54,11 +54,10 @@ Ext.define('Shopware.apps.NewsletterManager.view.main.Window', {
          * @return void
          */
         var me = this;
-//        me.dockedItems = me.createNoticeContainer();
+        //        me.dockedItems = me.createNoticeContainer();
         me.items = me.createTab();
         me.callParent(arguments);
     },
-
 
     /**
      * Creates the tab panel for the main window

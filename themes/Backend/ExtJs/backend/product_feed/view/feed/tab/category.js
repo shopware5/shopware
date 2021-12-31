@@ -50,14 +50,14 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Category', {
     initComponent: function() {
         var me = this,
             ids = [];
-        if(me.record && me.record.getCategoriesStore) {
+        if (me.record && me.record.getCategoriesStore) {
             var lockedCategoriesStore = me.record.getCategoriesStore;
             lockedCategoriesStore.each(function(element) {
                 ids.push(element.get('id'));
             });
         }
         // make sure we have at least one element.
-        if(ids.length == 0) {
+        if (ids.length == 0) {
             ids.push('0');
         }
         me.availableCategoriesTree.getProxy().extraParams = {

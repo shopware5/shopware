@@ -39,12 +39,12 @@ Ext.define('Shopware.form.field.PaymentSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<div class="x-boundlist-item">{literal}<i>{name}</i> - {description}{/literal}</div>',
+            '<div class="x-boundlist-item">{literal}<i>{name}</i> - {description}{/literal}</div>',
             '</tpl>'
         );
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '{literal}{name} - {description}{/literal}',
+            '{literal}{name} - {description}{/literal}',
             '</tpl>'
         );
         return config;

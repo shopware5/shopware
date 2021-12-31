@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
          * Makes sure that all checked nodes will expand
          */
         me.control({
-             'shipping-view-edit-categories-tree': {
+            'shipping-view-edit-categories-tree': {
                 afterrender: me.onAfterRender
             }
         });
@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
             url: '{url controller="Category" action="getIdPath"}',
             params: { 'categoryIds[]': ids },
             success: function(result) {
-                if(!result.responseText) {
+                if (!result.responseText) {
                     return ;
                 }
                 result =  Ext.JSON.decode(result.responseText);

@@ -27,7 +27,6 @@
  * @author shopware AG
  */
 
-
 Ext.define('Shopware.apps.Base.store.CookieMode', {
     extend: 'Ext.data.Store',
     model: 'Shopware.apps.Base.model.CookieMode',

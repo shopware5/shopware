@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Config.view.form.Locale', {
             store: 'form.Locale',
             searchField: 'language',
             columns: me.getColumns()
-        },{
+        }, {
             xtype: 'config-base-detail',
             items: me.getFormItems()
         }];
@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Config.view.form.Locale', {
             dataIndex: 'language',
             text: '{s name="locale/table/name_text"}Name{/s}',
             flex: 1,
-            renderer: function (v,p,record){
+            renderer: function (v, p, record){
                 return record.data.language + ' (' + record.data.territory + ')';
             }
         }, {
@@ -70,11 +70,11 @@ Ext.define('Shopware.apps.Config.view.form.Locale', {
             name: 'language',
             fieldLabel: '{s name="locale/detail/language_text"}Language{/s}',
             allowBlank: false
-        },{
+        }, {
             name: 'territory',
             fieldLabel: '{s name="locale/detail/territory_text"}Territory{/s}',
             allowBlank: false
-        },{
+        }, {
             name: 'locale',
             fieldLabel: '{s name="locale/detail/iso_text"}ISO{/s}',
             minLength: 4,

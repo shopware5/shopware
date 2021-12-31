@@ -308,7 +308,6 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         win.destroy();
     },
 
-
     /**
      * Function to save a form
      *
@@ -363,7 +362,6 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         // some more cleanup to do?
         win.destroy();
     },
-
 
     /**
      * Function to save a form
@@ -468,7 +466,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         });
 
         me.getSnippetPanel().enableExpertMode(isPressed);
-   },
+    },
 
     /**
      * Fires when the 'Add Snippet' button is clicked

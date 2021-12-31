@@ -158,7 +158,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
      */
     onShowStatistic: function (view, rowIndex) {
         var me = this,
-        record = me.subApplication.listStore.getAt(rowIndex);
+            record = me.subApplication.listStore.getAt(rowIndex);
         //reset the detail Record
         me.subApplication.statisticListStore.getProxy().extraParams =
                 me.subApplication.statisticChartStore.getProxy().extraParams = { partnerId: record.get('id') };
@@ -186,24 +186,24 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
         Ext.MessageBox.confirm(
             me.snippets.confirmDeleteSingleItem,
             Ext.String.format(me.snippets.confirmDeleteSingle, record.get('company')), function (response) {
-            if (response !== 'yes') {
-                return false;
-            }
-            record.destroy({
-                callback: function (data, operation) {
-                    var records = operation.getRecords(),
-                        record = records[0],
-                        rawData = record.getProxy().getReader().rawData;
-
-                    if ( operation.success === true ) {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
-                    } else {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemFailure + ' ' + rawData.message, me.snippets.growlMessage);
-                    }
+                if (response !== 'yes') {
+                    return false;
                 }
+                record.destroy({
+                    callback: function (data, operation) {
+                        var records = operation.getRecords(),
+                            record = records[0],
+                            rawData = record.getProxy().getReader().rawData;
+
+                        if ( operation.success === true ) {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
+                        } else {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleItemFailure + ' ' + rawData.message, me.snippets.growlMessage);
+                        }
+                    }
+                });
+                store.load();
             });
-            store.load();
-        });
     },
 
     /**
@@ -230,14 +230,14 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
         form.updateRecord(record);
 
         record.save({
-            callback: function (self,operation) {
+            callback: function (self, operation) {
                 if (operation.success) {
                     attributeForm.saveAttribute(record.get('id'));
                     listStore.load();
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
                     me.getDetailWindow().destroy();
                 } else {
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
                 }
             }
         });
@@ -256,29 +256,29 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
      */
     mapCustomerAccount: function (field, newValue) {
         var me = this;
-            Ext.Ajax.request({
-                url: '{url action="mapCustomerAccount"}',
-                params: {
-                    mapCustomerAccountValue: newValue
-                },
-                success: function (response) {
-                    var supportTextEl = field.up().items.items[1];
-                    if (response.length !== 0) {
-                        var mappingData = response.responseText.split("|"),
+        Ext.Ajax.request({
+            url: '{url action="mapCustomerAccount"}',
+            params: {
+                mapCustomerAccountValue: newValue
+            },
+            success: function (response) {
+                var supportTextEl = field.up().items.items[1];
+                if (response.length !== 0) {
+                    var mappingData = response.responseText.split("|"),
                         mappingText = mappingData[0],
                         userID = mappingData[1];
 
-                        if (Ext.isDefined(userID)) {
-                            var template = new Ext.Template(
-                                "{literal}<h1>"+me.snippets.mappedToCustomer+"</h1> {0} {/literal}"
-                            );
-                            supportTextEl.update(template.apply([mappingText]));
-                        } else {
-                            supportTextEl.update('{s name="detail_general/supportText/noCustomerMapped"}No customer account has been linked{/s}');
-                        }
+                    if (Ext.isDefined(userID)) {
+                        var template = new Ext.Template(
+                            "{literal}<h1>" + me.snippets.mappedToCustomer + "</h1> {0} {/literal}"
+                        );
+                        supportTextEl.update(template.apply([mappingText]));
+                    } else {
+                        supportTextEl.update('{s name="detail_general/supportText/noCustomerMapped"}No customer account has been linked{/s}');
                     }
                 }
-            });
+            }
+        });
     },
 
     /**

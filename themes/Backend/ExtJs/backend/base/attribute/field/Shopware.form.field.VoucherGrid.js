@@ -54,7 +54,7 @@ Ext.define('Shopware.form.field.VoucherGrid', {
 
     valueRenderer: function(value, meta, record) {
         value = '{s name="voucher/grid/value_prefix"}{/s}: ' + value + '';
-        if(record.get('percental')){
+        if (record.get('percental')){
             return value.replace(/[.,]/, Ext.util.Format.decimalSeparator) + " %";
         }
         return value.replace(/[.,]/, Ext.util.Format.decimalSeparator);
@@ -63,7 +63,7 @@ Ext.define('Shopware.form.field.VoucherGrid', {
     orderedRenderer: function(value, meta, record) {
         var numberOfUnits = record.get('numberOfUnits');
         if (value < numberOfUnits) {
-            return '<span style="color:green;">' + value + ' / '  + numberOfUnits +'</span>';
+            return '<span style="color:green;">' + value + ' / '  + numberOfUnits + '</span>';
         }
         else {
             return '<span style="color:red;">' + value + ' / '  + numberOfUnits + '</span>';

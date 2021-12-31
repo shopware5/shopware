@@ -78,6 +78,5 @@ Ext.define('Shopware.apps.Analytics.view.chart.PartnerRevenue', {
         me.callParent(arguments);
     }
 
-
 });
 //{/block}

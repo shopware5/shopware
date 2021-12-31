@@ -61,7 +61,6 @@ Ext.define('Shopware.apps.Form', {
      */
     bulkLoad: true,
 
-
     /**
      * Required controllers
      * @array

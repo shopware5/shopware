@@ -200,7 +200,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             draggable: false,
             sortable: false,
             groupable: false
-        },{
+        }, {
             header: '{s name="list/visibility_in_categories"}{/s}',
             dataIndex: 'listingVisibility',
             width: 115,
@@ -294,7 +294,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 }
             ]
         },
-            me.createCopyDropdown()
+        me.createCopyDropdown()
         ];
     },
 
@@ -377,12 +377,11 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
      */
     nameColumn: function(value, metaData, record) {
         if (record.get('isLandingPage') && !record.get('parentId')) {
-            return '<strong>'+value+'</strong>';
+            return '<strong>' + value + '</strong>';
         } else {
             return value;
         }
     },
-
 
     /**
      * Column renderer function for the emotion type column.
@@ -391,14 +390,14 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
      * @param [string] record   - The whole data model
      */
     typeColumn: function(value, metaData, record) {
-        if(!record) {
+        if (!record) {
             return false;
         }
 
         var type = '{s name="grid/renderer/emotion"}Emotion{/s}';
 
         // Type detection
-        if(record.get('isLandingPage')) {
+        if (record.get('isLandingPage')) {
             type = '{s name="grid/renderer/landingpage"}Landingpage{/s}'
         }
 
@@ -439,7 +438,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
     },
 
     deviceColumn: function(value, metaData, record) {
-        if(!record) {
+        if (!record) {
             return false;
         }
 
@@ -447,27 +446,27 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             iconStyling = 'width:16px; height:16px; display:inline-block; margin-right:5px;';
 
         var snippets = {
-                desktop: '{s name="grid/renderer/desktop"}For desktop{/s}',
-                tabletLandscape: '{s name="grid/renderer/tabletLandscape"}For tablet landscape{/s}',
-                tablet: '{s name="grid/renderer/tablet"}For tablet{/s}',
-                mobileLandscape: '{s name="grid/renderer/mobileLandscape"}For mobile landscape{/s}',
-                mobile: '{s name="grid/renderer/mobile"}For mobile{/s}'
+            desktop: '{s name="grid/renderer/desktop"}For desktop{/s}',
+            tabletLandscape: '{s name="grid/renderer/tabletLandscape"}For tablet landscape{/s}',
+            tablet: '{s name="grid/renderer/tablet"}For tablet{/s}',
+            mobileLandscape: '{s name="grid/renderer/mobileLandscape"}For mobile landscape{/s}',
+            mobile: '{s name="grid/renderer/mobile"}For mobile{/s}'
         };
 
         // Device detection
-        if(value.indexOf('0') >= 0) {
+        if (value.indexOf('0') >= 0) {
             devices += '<div class="sprite-imac" style="' + iconStyling + '" title="' + snippets.desktop + '">&nbsp;</div>';
         }
-        if(value.indexOf('1') >= 0) {
+        if (value.indexOf('1') >= 0) {
             devices += '<div class="sprite-ipad--landscape" style="' + iconStyling + '" title="' + snippets.tabletLandscape + '">&nbsp;</div>';
         }
-        if(value.indexOf('2') >= 0) {
+        if (value.indexOf('2') >= 0) {
             devices += '<div class="sprite-ipad--portrait" style="' + iconStyling + '" title="' + snippets.tablet + '">&nbsp;</div>';
         }
-        if(value.indexOf('3') >= 0) {
+        if (value.indexOf('3') >= 0) {
             devices += '<div class="sprite-iphone--landscape" style="' + iconStyling + '" title="' + snippets.mobileLandscape + '">&nbsp;</div>';
         }
-        if(value.indexOf('4') >= 0) {
+        if (value.indexOf('4') >= 0) {
             devices += '<div class="sprite-iphone--portrait" style="' + iconStyling + '" title="' + snippets.mobile + '">&nbsp;</div>';
         }
 
@@ -496,7 +495,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         if (!value) {
             cls = 'sprite-cross-small';
         }
-        return '<div class="'+ cls +'" style="width: 16px; height: 16px; margin-left: 9px;">&nbsp;</div>';
+        return '<div class="' + cls + '" style="width: 16px; height: 16px; margin-left: 9px;">&nbsp;</div>';
     },
 
     /**

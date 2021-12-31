@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Login.controller.Main', {
                     var form = field.up('form'),
                         btn = form.down('button');
 
-                    if(event.getKey() !== event.ENTER) {
+                    if (event.getKey() !== event.ENTER) {
                         return false;
                     }
                     me.onLogin(btn);
@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Login.controller.Main', {
             form = formPnl.getForm(),
             values = form.getValues();
 
-        if(!form.isValid() || !values.password.length || !values.username.length) {
+        if (!form.isValid() || !values.password.length || !values.username.length) {
             return false;
         }
         form.submit({
@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Login.controller.Main', {
             },
             failure: function(form, action) {
                 var lockedUntil, message;
-                if(action.result.lockedUntil) {
+                if (action.result.lockedUntil) {
                     action.result.lockedUntil = new Date(action.result.lockedUntil);
                     message = '{"failure/locked_message"|snippet|escape}';
                     message = new Ext.Template(message);

@@ -33,7 +33,6 @@ Ext.define('Shopware.detail.Controller', {
      */
     violationErrorTitle: '{s name="detail_controller/violation_error_title"}Violation errors{/s}',
 
-
     /**
      * Title of the Shopware growl message, which displayed when the user
      * tries to save the detail data but the form panel contains invalid data.
@@ -129,7 +128,6 @@ Ext.define('Shopware.detail.Controller', {
             return config;
         },
 
-
         /**
          * Static function which sets the property value of
          * the passed property and value in the display configuration.
@@ -169,7 +167,6 @@ Ext.define('Shopware.detail.Controller', {
         me._opts = me.statics().getDisplayConfig(opts, this);
         me.callParent(arguments);
     },
-
 
     /**
      * Helper function to get config access.
@@ -339,7 +336,6 @@ Ext.define('Shopware.detail.Controller', {
 
         return controls;
     },
-
 
     /**
      * Creates all event listener definitions for the detail window events.

@@ -71,11 +71,11 @@ Ext.define('Shopware.apps.UserManager.controller.Roles', {
      * @param view
      * @param rowIndex - index of role in store
      */
-    onDeleteRole: function(view,rowIndex){
+    onDeleteRole: function(view, rowIndex){
         var me = this,
-        roleStore = me.getStore('Roles'),
-        message,
-        record = roleStore.getAt(rowIndex);
+            roleStore = me.getStore('Roles'),
+            message,
+            record = roleStore.getAt(rowIndex);
 
         message = Ext.String.format('{s name="roles_list/messageDeleteRole"}Are you sure you want to delete the role [0]?{/s}', record.data.name);
         Ext.MessageBox.confirm('{s name="roles_list/titleDeleteRole"}Delete role{/s}', message, function (response){

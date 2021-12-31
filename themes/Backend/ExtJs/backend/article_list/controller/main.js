@@ -186,12 +186,12 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
      */
     createDetailModel: function (data) {
         var me = this,
-                fields = [
-            { name: 'imageSrc', type: 'string' },
-            { name: 'hasConfigurator', type: 'boolean' },
-            { name: 'hasCategories', type: 'boolean' },
-            { name: 'Detail_additionalText_dynamic', type: 'string' }
-        ];
+            fields = [
+                { name: 'imageSrc', type: 'string' },
+                { name: 'hasConfigurator', type: 'boolean' },
+                { name: 'hasCategories', type: 'boolean' },
+                { name: 'Detail_additionalText_dynamic', type: 'string' }
+            ];
 
         for (var i = 0; i < data.length; i++) {
             var column = data[i];
@@ -258,8 +258,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         me.subApplication.setAppWindow(me.mainWindow);
 
         var grid = me.getGrid(),
-                navigationGrid = me.getNavigationGrid(),
-                toolbar = me.getPagingToolBar();
+            navigationGrid = me.getNavigationGrid(),
+            toolbar = me.getPagingToolBar();
 
         me.subApplication.articleGrid = grid;
 
@@ -295,9 +295,9 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
      */
     onSearch: function (searchTerm) {
         var me = this,
-                filter,
-                result,
-                currentFilter = me.subApplication.currentFilterString;
+            filter,
+            result,
+            currentFilter = me.subApplication.currentFilterString;
 
         if (me.lastSearchFilter.length > 0) {
             currentFilter = currentFilter.replace(me.lastSearchFilter, '');

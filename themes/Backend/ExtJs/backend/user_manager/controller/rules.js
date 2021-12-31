@@ -107,10 +107,8 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
                 savePrivilege: me.onSavePrivilege
             }
 
-       });
+        });
     },
-
-
 
     /**
      * Event will be fired when the user want to create a new privilege.
@@ -133,17 +131,17 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
         var node = store.getNodeById(record.get('resourceId')),
             found = false;
         rootNode.eachChild(function(ch) {
-          if(ch.get('id') === record.get('resourceId')){
-              if(ch.findChild('name', record.get('name')) !== null) {
-                  Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, '{s name="privilege/alreadyExistingMessage"}A privilege with this name is already existing{/s}', me.snippets.growlMessage);
-                  window.destroy();
-                  found = true;
-                  return false;
-              }
-          }
+            if (ch.get('id') === record.get('resourceId')){
+                if (ch.findChild('name', record.get('name')) !== null) {
+                    Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, '{s name="privilege/alreadyExistingMessage"}A privilege with this name is already existing{/s}', me.snippets.growlMessage);
+                    window.destroy();
+                    found = true;
+                    return false;
+                }
+            }
         });
 
-        if(found === true) {
+        if (found === true) {
             return;
         }
 
@@ -151,8 +149,8 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
             record.save({
                 callback: function (data, operation) {
                     var records = operation.getRecords(),
-                            record = records[0],
-                            rawData = record.getProxy().getReader().rawData;
+                        record = records[0],
+                        rawData = record.getProxy().getReader().rawData;
 
                     if (operation.success === true) {
                         Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.privilegeSave.successMessage, me.snippets.growlMessage);
@@ -183,7 +181,7 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
         }
 
         // Prevent the user from creating multiple resources with the same name
-        if(rootNode.findChild('name', record.get('name')) !== null) {
+        if (rootNode.findChild('name', record.get('name')) !== null) {
             Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, '{s name="resource/alreadyExistingMessage"}A resource with this name is already existing{/s}', me.snippets.growlMessage);
             window.destroy();
             return;
@@ -193,8 +191,8 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
             record.save({
                 callback: function (data, operation) {
                     var records = operation.getRecords(),
-                            record = records[0],
-                            rawData = record.getProxy().getReader().rawData;
+                        record = records[0],
+                        rawData = record.getProxy().getReader().rawData;
 
                     if (operation.success === true) {
                         Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.resourceSave.successMessage, me.snippets.growlMessage);
@@ -228,7 +226,7 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
             roleStore.load({
                 callback: function () {
                     var role = roleStore.getById(roleId),
-                            privilegeStore = role['getPrivilegeStore'];
+                        privilegeStore = role['getPrivilegeStore'];
 
                     privilegeStore.removeAll();
                     Ext.each(checkedNodes, function (item, key) {
@@ -249,8 +247,8 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
                     role.save({
                         callback: function (data, operation) {
                             var records = operation.getRecords(),
-                                    record = records[0],
-                                    rawData = record.getProxy().getReader().rawData;
+                                record = records[0],
+                                rawData = record.getProxy().getReader().rawData;
 
                             if (operation.success === true) {
                                 Shopware.Notification.createGrowlMessage(me.snippets.successTitle, Ext.String.format(me.snippets.roleSave.successMessage, rawData.data.name), me.snippets.growlMessage);
@@ -313,8 +311,8 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
                 model.destroy({
                     callback: function (data, operation) {
                         var records = operation.getRecords(),
-                                record = records[0],
-                                rawData = record.getProxy().getReader().rawData;
+                            record = records[0],
+                            rawData = record.getProxy().getReader().rawData;
 
                         if (operation.success === true) {
                             Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.resourceDelete.successMessage, me.snippets.growlMessage);
@@ -326,7 +324,6 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
                 });
             });
         });
-
 
     },
 
@@ -357,8 +354,8 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
                 model.destroy({
                     callback: function (data, operation) {
                         var records = operation.getRecords(),
-                                record = records[0],
-                                rawData = record.getProxy().getReader().rawData;
+                            record = records[0],
+                            rawData = record.getProxy().getReader().rawData;
 
                         if (operation.success === true) {
                             Shopware.Notification.createGrowlMessage(me.snippets.privilegeDelete.successTitle, me.snippets.privilegeDelete.successMessage, me.snippets.growlMessage);
@@ -388,7 +385,6 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
             ruleStore: store
         }).show();
     },
-
 
     /**
      * Event will be fired when the user clicks on the "add privilege button"

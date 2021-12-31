@@ -135,7 +135,6 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestDialog', {
         me.callParent(arguments);
     },
 
-
     /**
      * Registers additional component events.
      */

@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Pathlist', {
                 header: '{s name="path_grid/column/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1
-            },{
+            }, {
                 header: '{s name="path_grid/column/status"}Status{/s}',
                 dataIndex: 'result',
                 flex: 1,
@@ -110,9 +110,9 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Pathlist', {
      * @param value The value of the field
      */
     renderStatus: function(value){
-        if(value==1){
+        if (value == 1){
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>')
-        }else{
+        } else {
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
         }
     }

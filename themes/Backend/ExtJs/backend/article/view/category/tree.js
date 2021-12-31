@@ -137,7 +137,7 @@ Ext.define('Shopware.apps.Article.view.category.Tree', {
      * @return array
      */
     getColumns: function() {
-       var me = this;
+        var me = this;
 
         return [
             {
@@ -146,7 +146,7 @@ Ext.define('Shopware.apps.Article.view.category.Tree', {
                 flex: 2,
                 sortable: true,
                 dataIndex: 'name'
-            },{
+            }, {
                 xtype: 'actioncolumn',
                 width: 30,
                 items: [{

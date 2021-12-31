@@ -39,9 +39,9 @@ Ext.define('Shopware.apps.Payment.model.Payment', {
      * @string
      */
     extend: 'Ext.data.Model',
-     /**
+    /**
      * Set an alias to make the handling a bit easier
-      * @string
+     * @string
      */
     alias: 'model.payment',
     /**
@@ -97,7 +97,6 @@ Ext.define('Shopware.apps.Payment.model.Payment', {
             root: 'data'
         }
     }
-
 
 });
 //{/block}

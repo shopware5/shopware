@@ -241,7 +241,6 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Window', {
                 }
             });
 
-
             me.close();
             return;
         }

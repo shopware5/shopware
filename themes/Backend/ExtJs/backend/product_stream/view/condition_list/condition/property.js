@@ -99,7 +99,6 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Property',
         return store;
     },
 
-
     updateTitle: function(container, name) {
         container.setTitle(this.getLabel() + ': ' + name);
     }

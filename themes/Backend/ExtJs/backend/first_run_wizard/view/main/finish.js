@@ -85,33 +85,33 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
 
     createTiles: function () {
         var tileData = [
-            {
-                'link': '{s name="finish/links/store"}https://store.shopware.com/{/s}',
-                'icon': 'store',
-                'text': '{s name="finish/tile/store"}Community Store{/s}',
-                'description': '{s name="finish/tile/storeDescription"}Hierin findest Du tausende Plugins und Themes, mit denen Du Deinen Onlineshop sinnvoll erweitern kannst. Viele davon sind sogar kostenfrei.{/s}'
-            },
-            {
-                'link': '{s name="finish/links/account"}https://account.shopware.com/{/s}',
-                'icon': 'account',
-                'text': '{s name="finish/tile/account"}Dein persönlicher Shopware-Account{/s}',
-                'description': '{s name="finish/tile/accountDescription"}Dies ist Dein zentraler Dreh- und Angelpunkt für alle Serviceleistungen rund um Shopware und Deinen Shop. So kannst Du hier z.B. direkt von uns als Hersteller Support beantragen, Dein Newsletter-Interessensprofil pflegen oder Deine eingesetzten Erweiterungen aus dem Community Store verwalten.{/s}'
-            },
-            {
-                'link': '{s name="finish/links/forum"}https://forum.shopware.com/?locale=de-DE{/s}',
-                'icon': 'forum',
-                'text': '{s name="finish/tile/forum"}Shopware-Forum{/s}',
-                'description': '{s name="finish/tile/forumDescription"}Wir leben eine offene Community. Deswegen kannst Du Dich in unserem Forum mit unserer weltweiten Community zu Shopware oder zu allgemeinen eCommerce-Themen austauschen. Ein Archiv von tausenden Beiträgen liefert Dir wertvolle Infos und Antworten auf Deine Fragen.{/s}'
-            },
-            {
-                'link': '{s name="finish/links/docs"}https://docs.shopware.com/en/shopware-5-en{/s}',
-                'icon': 'help',
-                'text': '{s name="finish/tile/docs"}Shopware-Dokumentation{/s}',
-                'description': '{s name="finish/tile/docsDescription"}Von der Installation über die Anwendung bis hin zur Entwicklung, Anpassung und Erweiterung von Shopware findest Du in der Doku alles, was Du für Deine tägliche Arbeit mit Shopware benötigst.{/s}'
-            }
+                {
+                    'link': '{s name="finish/links/store"}https://store.shopware.com/{/s}',
+                    'icon': 'store',
+                    'text': '{s name="finish/tile/store"}Community Store{/s}',
+                    'description': '{s name="finish/tile/storeDescription"}Hierin findest Du tausende Plugins und Themes, mit denen Du Deinen Onlineshop sinnvoll erweitern kannst. Viele davon sind sogar kostenfrei.{/s}'
+                },
+                {
+                    'link': '{s name="finish/links/account"}https://account.shopware.com/{/s}',
+                    'icon': 'account',
+                    'text': '{s name="finish/tile/account"}Dein persönlicher Shopware-Account{/s}',
+                    'description': '{s name="finish/tile/accountDescription"}Dies ist Dein zentraler Dreh- und Angelpunkt für alle Serviceleistungen rund um Shopware und Deinen Shop. So kannst Du hier z.B. direkt von uns als Hersteller Support beantragen, Dein Newsletter-Interessensprofil pflegen oder Deine eingesetzten Erweiterungen aus dem Community Store verwalten.{/s}'
+                },
+                {
+                    'link': '{s name="finish/links/forum"}https://forum.shopware.com/?locale=de-DE{/s}',
+                    'icon': 'forum',
+                    'text': '{s name="finish/tile/forum"}Shopware-Forum{/s}',
+                    'description': '{s name="finish/tile/forumDescription"}Wir leben eine offene Community. Deswegen kannst Du Dich in unserem Forum mit unserer weltweiten Community zu Shopware oder zu allgemeinen eCommerce-Themen austauschen. Ein Archiv von tausenden Beiträgen liefert Dir wertvolle Infos und Antworten auf Deine Fragen.{/s}'
+                },
+                {
+                    'link': '{s name="finish/links/docs"}https://docs.shopware.com/en/shopware-5-en{/s}',
+                    'icon': 'help',
+                    'text': '{s name="finish/tile/docs"}Shopware-Dokumentation{/s}',
+                    'description': '{s name="finish/tile/docsDescription"}Von der Installation über die Anwendung bis hin zur Entwicklung, Anpassung und Erweiterung von Shopware findest Du in der Doku alles, was Du für Deine tägliche Arbeit mit Shopware benötigst.{/s}'
+                }
 
-        ],
-        tiles = [];
+            ],
+            tiles = [];
 
         Ext.each(tileData, function (tile) {
             tiles.push(Ext.String.format(

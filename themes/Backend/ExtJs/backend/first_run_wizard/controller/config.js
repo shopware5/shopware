@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
             success: function(response) {
                 var result = Ext.JSON.decode(response.responseText);
 
-                if(result.success) {
+                if (result.success) {
                     var formData = result.data;
 
                     configPanel.themeDesktopLogo.setValue(formData.desktopLogo);
@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
                         Ext.String.format(me.snippets.configFormValidation.errorServerMessage, result.message),
                         me.snippets.growlMessage
                     );
-                } else if(result.success) {
+                } else if (result.success) {
                     Shopware.Notification.createGrowlMessage(
                         me.snippets.configFormValidation.successTitle,
                         me.snippets.configFormValidation.successMessage,

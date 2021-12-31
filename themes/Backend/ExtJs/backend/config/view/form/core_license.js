@@ -131,23 +131,23 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
                     '<p class="x-form-item-label">' +
                       me.infoLabels.heading +
                     '</p>' +
-                    '<br />'+
+                    '<br />' +
                     '<div class="x-panel" style="width:100%;display:{display};">' +
-                        '<div style="height: 100px;">'+
+                        '<div style="height: 100px;">' +
                             '<table style="width:400px;">' +
                                 '<tr>' +
                                     '<td>' + me.infoLabels.license + ':</td>' +
                                     '<td><b>{license}</b></td>' +
-                                '</tr>'+
+                                '</tr>' +
                                 '<tr>' +
                                     '<td>' + me.infoLabels.registeredTo + ':</td>' +
                                     '<td>{host}</td>' +
-                                '</tr>'+
+                                '</tr>' +
                                 '<tr>' +
                                     '<td>' + me.infoLabels.createdAt + ':</td>' +
                                     '<td>{[this.formatDate(values.licenseDate)]}</td>' +
-                                '</tr>'+
-                            '</table>'+
+                                '</tr>' +
+                            '</table>' +
                         '</div>' +
                     '</div>' +
                 '</div>',
@@ -288,7 +288,7 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
 
         me.licenseField.setDisabled(true);
 
-        if(!license){
+        if (!license){
             Shopware.Notification.createGrowlMessage(
                 '{s name="errors/common/heading"}Error{/s}',
                 '{s name="errors/license/common"}License key could not be validated{/s}',
@@ -358,7 +358,7 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
             return;
         }
 
-        if(jsonData.success === false){
+        if (jsonData.success === false){
             me.savedLicenseData = me.emptyLicenseData;
             me.licenseStatus.update({
                 license: '',
@@ -418,7 +418,7 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
         var me = this,
             classes = Ext.getBody().getAttribute('class').split(" ");
 
-        if(!edition){
+        if (!edition){
             edition = 'ce';
         }
 
@@ -438,7 +438,7 @@ Ext.define('Shopware.apps.Config.view.form.CoreLicense', {
      * @returns string
      */
     getErrorMessage: function (errorType) {
-        var me= this,
+        var me = this,
             message;
 
         switch (errorType) {

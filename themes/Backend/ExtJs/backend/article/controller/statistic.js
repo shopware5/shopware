@@ -72,7 +72,6 @@ Ext.define('Shopware.apps.Article.controller.Statistic', {
         me.callParent(arguments);
     },
 
-
     /**
      * Event listener function of the main tab panel in the detail window.
      * Fired when the user changes the tab.
@@ -86,7 +85,7 @@ Ext.define('Shopware.apps.Article.controller.Statistic', {
             statisticListStore = me.getStatisticList().getStore(),
             statisticChartStore = me.getStatisticChart().getStore();
 
-        if(!Ext.isEmpty(me.getMainWindow()) && !Ext.isEmpty(me.getMainWindow().article) && !Ext.isEmpty(me.getMainWindow().article.get('id'))) {
+        if (!Ext.isEmpty(me.getMainWindow()) && !Ext.isEmpty(me.getMainWindow().article) && !Ext.isEmpty(me.getMainWindow().article.get('id'))) {
             //set the new article id to the extra params
             statisticListStore.getProxy().extraParams.articleId = me.getMainWindow().article.get('id');
             statisticChartStore.getProxy().extraParams.articleId = me.getMainWindow().article.get('id');

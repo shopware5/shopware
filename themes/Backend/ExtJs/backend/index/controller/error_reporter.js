@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Index.controller.ErrorReporter', {
     init: function() {
         var me = this;
 
-        if(!me.useDefaultErrorHandler) {
+        if (!me.useDefaultErrorHandler) {
             me.bindCustomErrorHandler();
         }
     },

@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Base.view.element.SelectTree', {
     initComponent: function () {
         var me = this;
 
-        if(me.store) {
+        if (me.store) {
             me.store = Ext.data.StoreManager.lookup(me.store)
         }
 
@@ -60,8 +60,8 @@ Ext.define('Shopware.apps.Base.view.element.SelectTree', {
         var me = this,
             store = me.store;
 
-        if (value && !store.loading
-          && (!store.getCount() || !store.getNodeById(me.value))) {
+        if (value && !store.loading &&
+          (!store.getCount() || !store.getNodeById(me.value))) {
             store.load({
                 filters: [{
                     property: 'id',
@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.Base.view.element.SelectTree', {
     onStoreHasLoaded: function(store) {
         var me = this;
         me.callParent(arguments);
-        if(store.filters && store.filters.getCount()) {
+        if (store.filters && store.filters.getCount()) {
             store.load();
         }
     }

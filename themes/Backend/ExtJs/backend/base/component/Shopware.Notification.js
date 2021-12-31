@@ -156,17 +156,17 @@ Ext.define('Shopware.Notification', {
      */
     alertMsgTpl: [
         '{literal}<tpl for=".">',
-            '<div class="{type}">',
-                '<tpl if="closeBtn">',
-                    '<a href="#" class="close close-alert">x</a>',
-                '</tpl>',
-                '<p>',
-                    '<tpl if="title">',
-                        '<strong>[Ext.String.getText(title)]</strong>&nbsp;',
-                    '</tpl>',
-                    '{text}',
-                '</p>',
-            '</div>',
+        '<div class="{type}">',
+        '<tpl if="closeBtn">',
+        '<a href="#" class="close close-alert">x</a>',
+        '</tpl>',
+        '<p>',
+        '<tpl if="title">',
+        '<strong>[Ext.String.getText(title)]</strong>&nbsp;',
+        '</tpl>',
+        '{text}',
+        '</p>',
+        '</div>',
         '</tpl>{/literal}'
     ],
 
@@ -177,9 +177,9 @@ Ext.define('Shopware.Notification', {
      */
     blockMsgTpl: [
         '{literal}<tpl for=".">',
-            '<p>',
-                '{text}',
-            '</p>',
+        '<p>',
+        '{text}',
+        '</p>',
         '</tpl>{/literal}'
     ],
 
@@ -190,13 +190,13 @@ Ext.define('Shopware.Notification', {
      */
     growlMsgTpl: [
         '{literal}<tpl for=".">',
-            '<div class="growl-icon {iconCls}"></div>',
-            '<div class="alert">',
-                '<tpl if="title">',
-                    '<div class="title">{title}</div>',
-                '</tpl>',
-                '<p class="text">{text}</p>',
-            '</div>',
+        '<div class="growl-icon {iconCls}"></div>',
+        '<div class="alert">',
+        '<tpl if="title">',
+        '<div class="title">{title}</div>',
+        '</tpl>',
+        '<p class="text">{text}</p>',
+        '</div>',
         '</tpl>{/literal}'
     ],
 
@@ -848,9 +848,9 @@ Ext.define('Shopware.Notification', {
      * @returns { boolean }
      */
     displayBrowserNotification: function () {
-        return !(window.document.hasFocus()
-            || !('Notification' in window)
-            || Notification.permission === 'denied'
-            || document.location.protocol !== 'https:');
+        return !(window.document.hasFocus() ||
+            !('Notification' in window) ||
+            Notification.permission === 'denied' ||
+            document.location.protocol !== 'https:');
     }
 });

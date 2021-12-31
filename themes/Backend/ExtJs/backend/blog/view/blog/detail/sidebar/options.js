@@ -139,7 +139,6 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
         return true;
     },
 
-
     /**
      * creates the general form and layout
      *
@@ -245,18 +244,18 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
     createMediaViewTemplate: function() {
         var me = this;
         return new Ext.XTemplate(
-                '{literal}<tpl for=".">',
-                    '<div class="article-thumb-wrap small">',
-                        '<div class="thumb">',
-                            '<div class="inner-thumb"><img src="{path}" style="height: 70px; width: 90px;" />' +
+            '{literal}<tpl for=".">',
+            '<div class="article-thumb-wrap small">',
+            '<div class="thumb">',
+            '<div class="inner-thumb"><img src="{path}" style="height: 70px; width: 90px;" />' +
                                 '<tpl if="preview===true">',
-                                    '<div class="preview"><span>{/literal}{s name="detail/sidebar/options/preview"}Preview{/s}{literal}</span></div>' +
+            '<div class="preview"><span>{/literal}{s name="detail/sidebar/options/preview"}Preview{/s}{literal}</span></div>' +
                                 '</tpl>',
-                            '</div>',
-                        '</div>',
-                    '</div>',
-                '</tpl>',
-                '<div class="x-clear"></div>{/literal}'
+            '</div>',
+            '</div>',
+            '</div>',
+            '</tpl>',
+            '<div class="x-clear"></div>{/literal}'
         );
     },
 

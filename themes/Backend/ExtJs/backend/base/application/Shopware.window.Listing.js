@@ -21,7 +21,6 @@ Ext.define('Shopware.window.Listing', {
 
     alias: 'widget.shopware-window-listing',
 
-
     /**
      * Contains the generated event alias.
      * If the { @link #configure } function returns an eventAlias
@@ -237,7 +236,6 @@ Ext.define('Shopware.window.Listing', {
         me._opts = me.statics().getDisplayConfig(opts, this);
         me.callParent(arguments);
     },
-
 
     /**
      * Helper function to get config access.

@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Config.view.form.Number', {
             store: 'form.Number',
             searchField: 'description',
             columns: me.getColumns()
-        },{
+        }, {
             xtype: 'config-base-detail',
             items: me.getFormItems()
         }];
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Config.view.form.Number', {
             name: 'description',
             fieldLabel: '{s name="number/detail/description_text"}Description{/s}',
             allowBlank: false
-        },{
+        }, {
             xtype: 'numberfield',
             name: 'number',
             decimalPrecision: 0,

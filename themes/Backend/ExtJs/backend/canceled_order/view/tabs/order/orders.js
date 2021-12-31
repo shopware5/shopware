@@ -192,7 +192,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
      * @return string
      */
     paymentRenderer: function(value, metaDate, record) {
-        if(!record.getPayment() || !record.getPayment().first()) {
+        if (!record.getPayment() || !record.getPayment().first()) {
             return '';
         }
 
@@ -208,7 +208,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
      * @return string
      */
     customerRenderer: function(value, metaData, record) {
-        if(!record.getCustomer() || !record.getCustomer().first()) {
+        if (!record.getCustomer() || !record.getCustomer().first()) {
             return '';
         }
 
@@ -230,7 +230,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
         }
         value = record.get('orderTime');
 
-        if(Ext.isDate(value) || Ext.isString(value)) {
+        if (Ext.isDate(value) || Ext.isString(value)) {
             return Ext.util.Format.date(value)
         }
 
@@ -250,7 +250,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
         }
         value = record.get('invoiceAmount');
 
-        if(Ext.isNumber(value) || Ext.isString(value)) {
+        if (Ext.isNumber(value) || Ext.isString(value)) {
             return Ext.util.Format.currency(value);
         }
 
@@ -313,9 +313,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
     getToolbar: function() {
         var me = this;
 
-
-
-        me.deleteSelectedOrdersButton =Ext.create('Ext.button.Button', {
+        me.deleteSelectedOrdersButton = Ext.create('Ext.button.Button', {
             text: '{s name="order_delete_button"}Delete selected orders{/s}',
             iconCls: 'sprite-minus-circle-frame',
             disabled: true,

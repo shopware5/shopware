@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Category.store.Template', {
      */
     proxy: {
         type: 'ajax',
-         /**
+        /**
          * Configure the url mapping for the different
          * store operations based on
          * @object

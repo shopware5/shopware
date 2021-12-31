@@ -235,9 +235,9 @@ Ext.define('Shopware.apps.Emotion.view.translation.Window', {
         Ext.each(translations, function(translation, index) {
             var mappingRecord,
                 mappingIdx = mappingStore.findBy(function(record, index) {
-                    return !Ext.isEmpty(record.get('mappedShop'))
-                        && record.get('locale') === translation['locale']
-                        && record.get('shop') === translation['shop'];
+                    return !Ext.isEmpty(record.get('mappedShop')) &&
+                        record.get('locale') === translation['locale'] &&
+                        record.get('shop') === translation['shop'];
                 });
 
             if (mappingIdx !== -1) {

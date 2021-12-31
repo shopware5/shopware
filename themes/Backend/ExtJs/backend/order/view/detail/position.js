@@ -79,7 +79,6 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
         remove: '{s name="position/button_delete"}Delete all selected{/s}'
     },
 
-
     /**
      * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
@@ -142,7 +141,6 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
             me.articleNameSearch.getDropDownMenu().hide();
         }, me);
     },
-
 
     /**
      * Defines additional events which will be
@@ -238,7 +236,6 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
              * @param [object] record - Selected record
              */
             'articleNumberSelect',
-
 
             /**
              * Event will be fired when the user clicks the "Save button" button.
@@ -352,7 +349,7 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
                     editable: false,
                     xtype: 'combobox',
                     queryMode: 'local',
-                    store: grid.statusStore ,
+                    store: grid.statusStore,
                     displayField: 'description',
                     valueField: 'id'
                 }
@@ -386,25 +383,25 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
                 width: 90,
                 items: [
                     /*{if {acl_is_allowed privilege=update}}*/
-                        {
-                            iconCls: 'sprite-minus-circle-frame',
-                            action: 'deletePosition',
-                            tooltip: grid.snippets.deletePosition,
-                            /**
+                    {
+                        iconCls: 'sprite-minus-circle-frame',
+                        action: 'deletePosition',
+                        tooltip: grid.snippets.deletePosition,
+                        /**
                              * Add button handler to fire the deleteOrder event which is handled
                              * in the list controller.
                              */
-                            handler: function (view, rowIndex, colIndex, item) {
-                                var store = view.getStore(),
-                                    position = store.getAt(rowIndex);
+                        handler: function (view, rowIndex, colIndex, item) {
+                            var store = view.getStore(),
+                                position = store.getAt(rowIndex);
 
-                                grid.fireEvent('deletePosition', position, store, {
-                                    callback: function(order) {
-                                        me.fireEvent('updateForms', order, me.up('window'));
-                                    }
-                                });
-                            }
-                        },
+                            grid.fireEvent('deletePosition', position, store, {
+                                callback: function(order) {
+                                    me.fireEvent('updateForms', order, me.up('window'));
+                                }
+                            });
+                        }
+                    },
                     /*{/if}*/
                     {
                         iconCls: 'sprite-inbox',
@@ -421,9 +418,9 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
                             grid.fireEvent('openArticle', record);
                         },
                         getClass: function(value, metadata, record) {
-                             if (!record.get('articleId') || record.get('mode') !== 0)  {
-                                 return 'x-hidden';
-                             }
+                            if (!record.get('articleId') || record.get('mode') !== 0)  {
+                                return 'x-hidden';
+                            }
                         }
                     }, {
                         iconCls: 'sprite-attributes',
@@ -525,7 +522,7 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
             items: [
                 me.addPositionButton,
                 /*{if {acl_is_allowed privilege=save}}*/
-                    me.deletePositionsButton
+                me.deletePositionsButton
                 /*{/if}*/
             ]
         });
@@ -568,8 +565,8 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
             return record.get('name');
         } else {
             // SW-3289);
-            if(value == 0 || value == null) {
-                return rowRecord.get('taxRate')+'%';
+            if (value == 0 || value == null) {
+                return rowRecord.get('taxRate') + '%';
             }
             return value;
         }

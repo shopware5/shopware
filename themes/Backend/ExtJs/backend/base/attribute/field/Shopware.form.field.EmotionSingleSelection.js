@@ -47,7 +47,7 @@ Ext.define('Shopware.form.field.EmotionSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<div class="x-boundlist-item">' +
+            '<div class="x-boundlist-item">' +
                 '{literal}' +
                     '{name}   {[this.getDevices(values)]}' +
                 '{/literal}' +
@@ -58,19 +58,19 @@ Ext.define('Shopware.form.field.EmotionSingleSelection', {
                     var devices = '';
 
                     // Device detection
-                    if(values.device.indexOf('0') >= 0) {
+                    if (values.device.indexOf('0') >= 0) {
                         devices += '<div class="sprite-imac" style="' + me.iconStyling + '" title="' + me.snippets.desktop + '">&nbsp;</div>';
                     }
-                    if(values.device.indexOf('1') >= 0) {
+                    if (values.device.indexOf('1') >= 0) {
                         devices += '<div class="sprite-ipad--landscape" style="' + me.iconStyling + '" title="' + me.snippets.tabletLandscape + '">&nbsp;</div>';
                     }
-                    if(values.device.indexOf('2') >= 0) {
+                    if (values.device.indexOf('2') >= 0) {
                         devices += '<div class="sprite-ipad--portrait" style="' + me.iconStyling + '" title="' + me.snippets.tablet + '">&nbsp;</div>';
                     }
-                    if(values.device.indexOf('3') >= 0) {
+                    if (values.device.indexOf('3') >= 0) {
                         devices += '<div class="sprite-iphone--landscape" style="' + me.iconStyling + '" title="' + me.snippets.mobileLandscape + '">&nbsp;</div>';
                     }
-                    if(values.device.indexOf('4') >= 0) {
+                    if (values.device.indexOf('4') >= 0) {
                         devices += '<div class="sprite-iphone--portrait" style="' + me.iconStyling + '" title="' + me.snippets.mobile + '">&nbsp;</div>';
                     }
 
@@ -81,7 +81,7 @@ Ext.define('Shopware.form.field.EmotionSingleSelection', {
 
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '{literal}{name}{/literal}',
+            '{literal}{name}{/literal}',
             '</tpl>'
         );
 

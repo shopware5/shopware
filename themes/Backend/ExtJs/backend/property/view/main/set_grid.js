@@ -68,7 +68,6 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
 
         me.registerEvents();
 
-
         me.sortModeEditor = Ext.create('Ext.form.field.ComboBox', {
             store: new Ext.data.SimpleStore({
                 fields: ['id', 'label'],
@@ -85,7 +84,6 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
             displayField: 'label',
             valueField: 'id'
         });
-
 
         me.store = me.setStore;
 
@@ -113,15 +111,15 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
      */
     registerEvents: function () {
         this.addEvents(
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event deleteOption
-                 * @param [object] record
-                 * @param [object] grid - Associated Ext.view.Table
-                 */
-                'deleteOption'
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteOption
+             * @param [object] record
+             * @param [object] grid - Associated Ext.view.Table
+             */
+            'deleteOption'
         );
     },
 
@@ -142,7 +140,7 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
                     scope: me,
                     fn: function (editor, event) {
                         var me = this,
-                                store = me.store;
+                            store = me.store;
 
                         store.each(function (record) {
                             if (record.phantom) {
@@ -263,7 +261,6 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
         }];
     },
 
-
     /**
     * Creates the paging toolbar for the grid to allow
     * and store paging. The paging toolbar uses the same store as the Grid
@@ -317,7 +314,7 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
      */
     getToolbar: function () {
         var me = this,
-                items = [];
+            items = [];
 
         me.addBtn = Ext.create('Ext.button.Button', {
             xtype: 'button',
@@ -335,17 +332,17 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
 
         items.push(me.addBtn);
         items.push(
-                '->',
-                {
-                    xtype: 'textfield',
-                    name: 'searchfield',
-                    action: 'searchSets',
-                    width: 100,
-                    cls: 'searchfield',
-                    enableKeyEvents: true,
-                    checkChangeBuffer: 500,
-                    emptyText: me.snippets.search
-                }
+            '->',
+            {
+                xtype: 'textfield',
+                name: 'searchfield',
+                action: 'searchSets',
+                width: 100,
+                cls: 'searchfield',
+                enableKeyEvents: true,
+                checkChangeBuffer: 500,
+                emptyText: me.snippets.search
+            }
         );
 
         return Ext.create('Ext.toolbar.Toolbar', {

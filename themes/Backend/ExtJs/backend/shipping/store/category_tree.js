@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Shipping.store.CategoryTree', {
      */
     proxy: {
         type: 'ajax',
-         /**
+        /**
          * Configure the url mapping for the different
          * store operations based on
          * @object

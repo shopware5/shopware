@@ -44,13 +44,13 @@ Ext.define('Shopware.apps.Config.model.main.Form', {
 
     associations: [
         {
-        type: 'hasMany', model: 'Shopware.apps.Config.model.main.Element',
-        name: 'getElements', associationKey: 'elements'
-    },
-    {
-        type: 'hasMany', model: 'Shopware.apps.Config.model.main.FormTranslation',
-        name: 'getTranslation', associationKey: 'translations'
-    }
+            type: 'hasMany', model: 'Shopware.apps.Config.model.main.Element',
+            name: 'getElements', associationKey: 'elements'
+        },
+        {
+            type: 'hasMany', model: 'Shopware.apps.Config.model.main.FormTranslation',
+            name: 'getTranslation', associationKey: 'translations'
+        }
     ]
 });
 //{/block}

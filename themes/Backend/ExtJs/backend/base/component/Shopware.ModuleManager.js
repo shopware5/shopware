@@ -284,12 +284,12 @@ Ext.define('Shopware.ModuleManager', {
         }
 
         module = me.modules.get(instance);
-        if(!module) {
+        if (!module) {
             return false;
         }
 
         contentWindow = module.windows.get(payload.component);
-        if(contentWindow === null) {
+        if (contentWindow === null) {
             return false;
         }
 
@@ -334,7 +334,7 @@ Ext.define('Shopware.ModuleManager', {
 
         // Was the message sent using our api?
         subModule = me.modules.get(data.instance);
-        if (!data.instance || !subModule ||(subModule.instance !== data.instance)) {
+        if (!data.instance || !subModule || (subModule.instance !== data.instance)) {
             return;
         }
         component = subModule.windows.get(data.component);
@@ -349,7 +349,7 @@ Ext.define('Shopware.ModuleManager', {
             data.params.id = data.id;
         }
 
-        if(data.async === true) {
+        if (data.async === true) {
             data.params._component = data.component;
         }
 
@@ -363,7 +363,7 @@ Ext.define('Shopware.ModuleManager', {
                     (data.params !== null ? JSON.stringify(data.params) : '')
                 )
             );
-        } catch(err) {
+        } catch (err) {
             // We're using a -32000 error code which means custom error + the error message of the JavaScript parser
             // due to the fact that an error occurs most of the times when calling an undefined method.
             // See: http://www.jsonrpc.org/specification#error_object
@@ -384,7 +384,7 @@ Ext.define('Shopware.ModuleManager', {
             return false;
         }
 
-        me.sendMessageToFrame(result, error, data.id, data.instance,data.component);
+        me.sendMessageToFrame(result, error, data.id, data.instance, data.component);
     },
 
     /**
@@ -462,13 +462,13 @@ Ext.define('Shopware.ModuleManager', {
         var subModule, component;
 
         subModule = this.modules.get(instance);
-        if (!instance || !subModule ||(subModule.instance !== instance)) {
+        if (!instance || !subModule || (subModule.instance !== instance)) {
             return;
         }
         component = subModule.windows.get(comp);
 
         // Always sending back a response to the frame when it's available
-        if(!component.content.dom || !component.content.dom.contentWindow) {
+        if (!component.content.dom || !component.content.dom.contentWindow) {
             return;
         }
 

@@ -116,12 +116,12 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         me.on('checkchange', function (node, checked) {
             me.suspendLayouts();
             if (checked) {
-                if(!Ext.isEmpty(node.get('requirements'))) {
+                if (!Ext.isEmpty(node.get('requirements'))) {
                     me.checkRequiredNodes(node, true);
                 }
 
                 Ext.each(node.childNodes, function(childNode) {
-                    if(!Ext.isEmpty(childNode.get('requirements'))) {
+                    if (!Ext.isEmpty(childNode.get('requirements'))) {
                         me.checkRequiredNodes(childNode, true);
                     }
                     childNode.set('checked', true);
@@ -146,7 +146,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         Ext.each(node.get('requirements'), function(nodeId) {
             me.getStore().getRootNode().eachChild(function(element) {
                 element.eachChild(function (child) {
-                    if(child.data.helperId === nodeId) {
+                    if (child.data.helperId === nodeId) {
                         if (child && child.get('checked') !== check) {
                             child.set('checked', true);
                             child.parentNode.expand();
@@ -353,14 +353,14 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
             ui: 'shopware-ui',
             items: [
                 me.roleCombo,
-        /* {if {acl_is_allowed privilege=update}} */
+                /* {if {acl_is_allowed privilege=update}} */
                 { xtype: 'tbspacer', width: 6 },
                 me.saveRoleButton,
-        /* {/if} */
-        /* {if {acl_is_allowed privilege=create}} */
+                /* {/if} */
+                /* {if {acl_is_allowed privilege=create}} */
                 me.addResourceButton,
                 me.addPrivilegeButton,
-        /* {/if} */
+                /* {/if} */
             ]
         });
     },
@@ -375,7 +375,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
 
         return [{
             xtype: 'treecolumn',
-            text: me.snippets.columns.name ,
+            text: me.snippets.columns.name,
             flex: 1,
             sortable: true,
             dataIndex: 'name'
@@ -404,7 +404,6 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         }
         /* {/if} */];
     }
-
 
 });
 //{/block}

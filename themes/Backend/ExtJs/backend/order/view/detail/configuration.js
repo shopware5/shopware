@@ -219,9 +219,9 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
         var me = this, vatId,
             billing = me.record.getBilling();
 
-        if(billing == null || billing.first() == null) {
+        if (billing == null || billing.first() == null) {
             vatId = me.snippets.vatId.empty;
-        }else{
+        } else {
             billing = billing.first();
             if (Ext.isEmpty(billing.get('vatId'))) {
                 vatId = me.snippets.vatId.empty;
@@ -313,8 +313,8 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
         return [
             me.resetButton,
             /*{if {acl_is_allowed privilege=update}}*/
-                me.previewButton,
-                me.createButton
+            me.previewButton,
+            me.createButton
             /*{/if}*/
         ];
     }

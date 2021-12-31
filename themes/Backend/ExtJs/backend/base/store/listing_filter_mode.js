@@ -27,7 +27,6 @@
  * @author shopware AG
  */
 
-
 //{namespace name="backend/base/listing_filter_mode"}
 
 Ext.define('Shopware.apps.Base.store.ListingFilterMode', {

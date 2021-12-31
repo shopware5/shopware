@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Config.view.form.Unit', {
             xtype: 'config-base-table',
             store: 'form.Unit',
             columns: me.getColumns()
-        },{
+        }, {
             xtype: 'config-base-detail',
             items: me.getFormItems(),
             plugins: [{
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Config.view.form.Unit', {
             fieldLabel: '{s name="unit/detail/name_label"}Name{/s}',
             translatable: true,
             allowBlank: false
-        },{
+        }, {
             name: 'unit',
             fieldLabel: '{s name="unit/detail/unit_label"}Unit{/s}',
             translatable: true,

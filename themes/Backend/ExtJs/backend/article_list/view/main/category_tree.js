@@ -84,8 +84,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
                     listeners: {
                         'change': function (field, newValue) {
                             var tree = me.up().down('treepanel'),
-                                    selection = tree.getSelectionModel(),
-                                    categoryId;
+                                selection = tree.getSelectionModel(),
+                                categoryId;
 
                             if (selection.selected.items.length <= 0) {
                                 categoryId = 0;
@@ -101,7 +101,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
             ]
         });
 
-
     },
 
     /**
@@ -111,7 +110,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
      */
     createTree: function () {
         var me = this,
-                tree;
+            tree;
 
         me.categoryStore = Ext.create('Shopware.store.CategoryTree');
 
@@ -131,8 +130,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
                 itemclick: {
                     fn: function (view, record) {
                         var me = this,
-                                showVariants,
-                                categoryId = record.get('id') === 'root' ? 0 : record.get('id');
+                            showVariants,
+                            categoryId = record.get('id') === 'root' ? 0 : record.get('id');
 
                         showVariants = me.up().down('checkbox').getValue();
 

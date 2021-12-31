@@ -144,6 +144,5 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Topseller', {
         ];
     }
 
-
 });
 //{/block}

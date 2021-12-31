@@ -37,9 +37,9 @@
  */
 
 //{block name="backend/base/Shopware.form.field.ArticleSearch"}
-Ext.define('Shopware.form.field.ArticleSearch',
-/** @lends Ext.container.Container# */
-{
+Ext.define('Shopware.form.field.ArticleSearch', {
+    /** @lends Ext.container.Container# */
+
     /**
      * Extends the default container to provide an
      * container for the different search components.
@@ -221,7 +221,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
      *
      * @array
      */
-    searchScope: ['articles','variants','configurator'],
+    searchScope: ['articles', 'variants', 'configurator'],
 
     /**
      * Form field configuration
@@ -294,7 +294,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
         me.items = [ me.hiddenField, me.searchField, me.dropDownMenu ];
 
         // Create an store and a grid for the selected articles
-        if(!me.multiSelect) {
+        if (!me.multiSelect) {
             delete me.multiSelectStore;
         } else {
             me.multiSelectGrid = me.createMultiSelectGrid();
@@ -302,7 +302,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
         }
 
         // Are we're having an store to preselect articles?
-        if(me.articleStore && me.multiSelect) {
+        if (me.articleStore && me.multiSelect) {
             me.multiSelectGrid.show();
         }
         me.dropDownStore.on('datachanged', me.onSearchFinish, me);
@@ -382,8 +382,8 @@ Ext.define('Shopware.form.field.ArticleSearch',
     createHiddenField: function() {
         var me = this,
             input = Ext.create('Ext.form.field.Hidden', {
-            name: me.hiddenFieldName
-        });
+                name: me.hiddenFieldName
+            });
         return input;
     },
 
@@ -463,29 +463,29 @@ Ext.define('Shopware.form.field.ArticleSearch',
     createDropDownMenu: function() {
         var me = this,
             view = Ext.create('Ext.view.View', {
-            floating: true,
-            autoShow: false,
-            autoRender: true,
-            hidden: true,
-            shadow: false,
-            width: 222,
-            toFrontOnShow: true,
-            focusOnToFront: false,
-            store: me.dropDownStore,
-            cls: Ext.baseCSSPrefix + 'search-article-live-drop-down',
-            overItemCls: Ext.baseCSSPrefix + 'drop-down-over',
-            selectedItemCls: Ext.baseCSSPrefix + 'drop-down-over',
-            trackOver: true,
-            itemSelector: 'div.item',
-            singleSelect: true,
-            listeners: {
-                scope: me,
-                itemclick: function(view, record) {
-                    me.onSelectArticle(view, record);
-                }
-            },
-            tpl: me.createDropDownMenuTpl()
-        });
+                floating: true,
+                autoShow: false,
+                autoRender: true,
+                hidden: true,
+                shadow: false,
+                width: 222,
+                toFrontOnShow: true,
+                focusOnToFront: false,
+                store: me.dropDownStore,
+                cls: Ext.baseCSSPrefix + 'search-article-live-drop-down',
+                overItemCls: Ext.baseCSSPrefix + 'drop-down-over',
+                selectedItemCls: Ext.baseCSSPrefix + 'drop-down-over',
+                trackOver: true,
+                itemSelector: 'div.item',
+                singleSelect: true,
+                listeners: {
+                    scope: me,
+                    itemclick: function(view, record) {
+                        me.onSelectArticle(view, record);
+                    }
+                },
+                tpl: me.createDropDownMenuTpl()
+            });
 
         return view;
     },
@@ -511,20 +511,20 @@ Ext.define('Shopware.form.field.ArticleSearch',
 
         return new Ext.XTemplate(
             '<div class="header">',
-                '<div class="header-inner">',
-                    '<div class="arrow">&nbsp;</div>',
-                    '<span class="title">',
-                    me.snippets.dropDownTitle,
-                    '</span>',
-                '</div>',
+            '<div class="header-inner">',
+            '<div class="arrow">&nbsp;</div>',
+            '<span class="title">',
+            me.snippets.dropDownTitle,
+            '</span>',
+            '</div>',
             '</div>',
             '<div class="content">',
-                '{literal}<tpl for=".">',
-                    '<div class="item">',
-                        '<strong class="name">{name}</strong>',
-                        '<span class="ordernumber">{number}</span>',
-                    '</div>',
-                '</tpl>{/literal}',
+            '{literal}<tpl for=".">',
+            '<div class="item">',
+            '<strong class="name">{name}</strong>',
+            '<span class="ordernumber">{number}</span>',
+            '</div>',
+            '</tpl>{/literal}',
             '</div>'
         );
     },
@@ -654,7 +654,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
         clearTimeout(me.searchTimeout);
 
         // Check if we've a value and the user did press the ESC key
-        if(event.keyCode === Ext.EventObject.ESC || !el.value) {
+        if (event.keyCode === Ext.EventObject.ESC || !el.value) {
             event.preventDefault();
             el.setValue('');
             me.dropDownStore.filters.clear();
@@ -668,10 +668,9 @@ Ext.define('Shopware.form.field.ArticleSearch',
             curIndex = me.dropDownStore.indexOf(record),
             lastIndex = me.dropDownStore.getCount() - 1;
 
-
         // Keyboard up pressed
-        if(event.keyCode === Ext.EventObject.UP) {
-            if(curIndex === undefined) {
+        if (event.keyCode === Ext.EventObject.UP) {
+            if (curIndex === undefined) {
                 selModel.select(0);
             } else {
                 selModel.select(curIndex === 0 ? lastIndex : (curIndex - 1));
@@ -679,8 +678,8 @@ Ext.define('Shopware.form.field.ArticleSearch',
         }
 
         // Keyboard down pressed
-        else if(event.keyCode === Ext.EventObject.DOWN) {
-            if(curIndex == undefined) {
+        else if (event.keyCode === Ext.EventObject.DOWN) {
+            if (curIndex == undefined) {
                 selModel.select(0);
             } else {
                 selModel.select(curIndex === lastIndex ? 0 : (curIndex + 1));
@@ -688,7 +687,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
         }
 
         // Keyboard enter pressed
-        else if(event.keyCode === Ext.EventObject.ENTER) {
+        else if (event.keyCode === Ext.EventObject.ENTER) {
             event.preventDefault();
             record && me.onSelectArticle(null, record);
         }
@@ -717,7 +716,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
         var records = store.data.items,
             me = this;
 
-        if(records.length === 0) {
+        if (records.length === 0) {
             me.getDropDownMenu().hide();
         } else {
             me.fireEvent('search', me, records);
@@ -738,13 +737,13 @@ Ext.define('Shopware.form.field.ArticleSearch',
     onSelectArticle: function(view, record) {
         var me = this;
 
-        if(!me.multiSelect) {
+        if (!me.multiSelect) {
             me.getSearchField().setValue(record.get(me.returnValue));
             me.getHiddenField().setValue(record.get(me.hiddenReturnValue));
             me.returnRecord = record;
             me.getDropDownMenu().hide();
         } else {
-            if(me.getMultiSelectGrid().isHidden()) {
+            if (me.getMultiSelectGrid().isHidden()) {
                 me.getMultiSelectGrid().show();
             }
             delete record.internalId;
@@ -770,11 +769,11 @@ Ext.define('Shopware.form.field.ArticleSearch',
         silent = silent || false;
 
         store.remove(record);
-        if(!store.getCount()) {
+        if (!store.getCount()) {
             grid.hide();
         }
 
-        if(!silent) {
+        if (!silent) {
             me.fireEvent('deleteArticle', me, record, store, grid);
         }
     },

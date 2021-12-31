@@ -37,11 +37,11 @@ Ext.define('Shopware.apps.Base.store.PositionStatus', {
      * Define that this component is an extension of the Ext.data.Store
      */
     extend: 'Ext.data.Store',
-   /**
-    * Auto load the store after the component
-    * is initialized
-    * @boolean
-    */
+    /**
+     * Auto load the store after the component
+     * is initialized
+     * @boolean
+     */
     autoLoad: false,
 
     /**

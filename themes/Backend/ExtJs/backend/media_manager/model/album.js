@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.MediaManager.model.Album', {
         'createThumbnails',
         'thumbnailSize',
         'iconCls',
-        'albumID' ,
+        'albumID',
         'thumbnailHighDpi',
         'thumbnailQuality',
         'thumbnailHighDpiQuality'

@@ -26,7 +26,6 @@
 Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
     extend: 'Ext.grid.Panel',
 
-
     alias: 'widget.multi-edit-batch-process-grid',
 
     initComponent: function() {
@@ -43,7 +42,6 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
 
         me.callParent(arguments);
     },
-
 
     /**
      * Creates the grid toolbar
@@ -75,7 +73,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
      * Create and configure the RowEditing feature.
      */
     setupRowEditor: function() {
-        var me =this;
+        var me = this;
 
         me.rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
             clicksToEdit: 1
@@ -137,7 +135,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
             dataIndex: 'column',
             menuDisabled: true,
             sortable: false
-        },{
+        }, {
             flex: 1,
             header: '{s name="multiEdit/operation"}Operation{/s}',
             editor: {
@@ -154,7 +152,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
             dataIndex: 'operator',
             menuDisabled: true,
             sortable: false
-        },{
+        }, {
             flex: 1,
             editor: {
                 xtype: 'textfield'

@@ -38,7 +38,6 @@ Ext.define('Shopware.apps.Article.store.EsdFile', {
      */
     extend: 'Ext.data.Store',
 
-
     /**
      * Define the used model for this store
      * @string

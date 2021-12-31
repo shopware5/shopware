@@ -115,7 +115,7 @@ Ext.define('Shopware.apps.Tax.view.main.Window', {
             region: 'north',
             padding: '5',
             items: [ notice ]
-        },{
+        }, {
             xtype: 'tax-tree',
             region: 'west',
             store: me.treeStore

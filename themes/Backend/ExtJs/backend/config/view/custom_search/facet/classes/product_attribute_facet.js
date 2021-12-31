@@ -104,7 +104,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.ProductAttribu
             forceSelection: true,
             tpl: Ext.create('Ext.XTemplate',
                 '<tpl for=".">',
-                    '<div class="x-boundlist-item">{literal}{[this.getRecordLabel(values)]}{/literal}</div>',
+                '<div class="x-boundlist-item">{literal}{[this.getRecordLabel(values)]}{/literal}</div>',
                 '</tpl>',
                 {
                     getRecordLabel: function(values) {
@@ -114,7 +114,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.ProductAttribu
             ),
             displayTpl: Ext.create('Ext.XTemplate',
                 '<tpl for=".">',
-                    '{literal}{[this.getRecordLabel(values)]}{/literal}',
+                '{literal}{[this.getRecordLabel(values)]}{/literal}',
                 '</tpl>',
                 {
                     getRecordLabel: function(values) {

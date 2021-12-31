@@ -118,9 +118,9 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Overview', {
                 // This way the proper record is extracted
                 summaryType: function(records){
                     var i = 0,
-                            length = records.length,
-                            total = 0,
-                            record;
+                        length = records.length,
+                        total = 0,
+                        record;
                     for (; i < length; i++){
                         record = records[i];
                         total += record.get('price');
@@ -128,8 +128,8 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Overview', {
                     return total;
                 },
                 summaryRenderer: function(value, summaryData, dataIndex) {
-                    if(Ext.isNumber(value) || Ext.isString(value)) {
-                        return '<b>' + Ext.util.Format.currency(value)+ '</b>';
+                    if (Ext.isNumber(value) || Ext.isString(value)) {
+                        return '<b>' + Ext.util.Format.currency(value) + '</b>';
                     }
 
                     return value
@@ -173,7 +173,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Overview', {
         }
         value = record.get('price');
 
-        if(Ext.isNumber(value) || Ext.isString(value)) {
+        if (Ext.isNumber(value) || Ext.isString(value)) {
             return Ext.util.Format.currency(value);
         }
 

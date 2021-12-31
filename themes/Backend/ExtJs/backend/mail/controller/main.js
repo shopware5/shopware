@@ -232,7 +232,6 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
         return false;
     },
 
-
     /**
      * @event click
      * @param [object] btn - the btn that fired the event
@@ -297,7 +296,6 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
 
                     formPanel.getForm().reset();
 
-
                     infoPanel.updateContext(records[0].get('contextPath'));
 
                     me.getPreviewBtn().setDisabled(false);
@@ -309,7 +307,6 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
             }
         });
     },
-
 
     /**
      * Resets the form
@@ -540,7 +537,7 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
      */
     onCheckChange: function(node, checked) {
         /*{if !{acl_is_allowed privilege=create} && !{acl_is_allowed privilege=update}}*/
-            return;
+        return;
         /*{/if}*/
 
         var me           = this,
@@ -565,7 +562,7 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
      */
     onDirtyChange: function(form, dirty) {
         /*{if !{acl_is_allowed privilege=create} && !{acl_is_allowed privilege=update}}*/
-            return;
+        return;
         /*{/if}*/
 
         var me           = this,
@@ -580,7 +577,7 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
      */
     setupState: function() {
         /*{if !{acl_is_allowed privilege=create} && !{acl_is_allowed privilege=update}}*/
-            return;
+        return;
         /*{/if}*/
 
         var me        = this,
@@ -625,7 +622,6 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
             }
         });
     },
-
 
     /**
      * Reloads attachments

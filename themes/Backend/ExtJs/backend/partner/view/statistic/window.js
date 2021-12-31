@@ -71,16 +71,16 @@ Ext.define('Shopware.apps.Partner.view.statistic.Window', {
      */
     registerEvents: function () {
         this.addEvents(
-                /**
-                 * Event will be fired wenn the downloadStatistic Button is clicked
-                 *
-                 * @event downloadStatistic
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'downloadStatistic'
+            /**
+             * Event will be fired wenn the downloadStatistic Button is clicked
+             *
+             * @event downloadStatistic
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'downloadStatistic'
         );
 
         return true;
@@ -114,7 +114,6 @@ Ext.define('Shopware.apps.Partner.view.statistic.Window', {
         });
     },
 
-
     /**
      * Creates the toolbar for the order tab.
      * The toolbar contains two date fields (from, to) which allows the user to filter the chart store.
@@ -129,7 +128,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.Window', {
             labelWidth: 45,
             name: 'fromDate',
             fieldLabel: '{s name="statistic/window/date/from"}From{/s}',
-            value: new Date(today.getFullYear() - 1, today.getMonth() , today.getDate())
+            value: new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
         });
 
         me.toDateField = Ext.create('Ext.form.field.Date', {
@@ -138,8 +137,6 @@ Ext.define('Shopware.apps.Partner.view.statistic.Window', {
             fieldLabel: '{s name="statistic/window/date/to"}To{/s}',
             value: today
         });
-
-
 
         return Ext.create('Ext.toolbar.Toolbar', {
             ui: 'shopware-ui',

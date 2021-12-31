@@ -331,41 +331,41 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
         return new Ext.XTemplate(
             '{literal}',
 
-                '<div class="x-designer-actions-toolbar">',
-                    '<button data-qtip="{[this.getPreviewBtnTooltip()]}" class="{[this.getPreviewBtnCls()]}">',
-                        '<span class="preview-btn-toggle"></span>' + me.snippets.preview + '',
-                    '</button>',
+            '<div class="x-designer-actions-toolbar">',
+            '<button data-qtip="{[this.getPreviewBtnTooltip()]}" class="{[this.getPreviewBtnCls()]}">',
+            '<span class="preview-btn-toggle"></span>' + me.snippets.preview + '',
+            '</button>',
 
-                    '<button class="{[this.getDisconnectBtnCls()]}">',
-                        '<span class="disconnect-btn-icon"></span>' + me.snippets.disconnectLabel,
-                    '</button>',
-                '</div>',
+            '<button class="{[this.getDisconnectBtnCls()]}">',
+            '<span class="disconnect-btn-icon"></span>' + me.snippets.disconnectLabel,
+            '</button>',
+            '</div>',
 
-                '<div class="x-designer-viewports-toolbar">',
-                    '<div class="x-designer-viewports">',
-                        '<tpl for=".">',
-                            '<div class="x-designer-viewport">',
-                                '<div class="{[this.getViewportBtnCls(values.alias)]}">',
-                                    '<div class="{[this.getLabelCls(values.deviceId)]}" data-viewport="{alias}" data-qtip="{[this.getLabelTooltip(values.deviceId)]}">{label}</div>',
-                                    '<div class="{[this.getCounterCls(values.alias, values.hiddenCounter, values)]}" data-viewport="{alias}" data-qtip="{[this.getHiddenElTooltip()]}">',
-                                        '<span class="counter--value">{hiddenCounter}</span>',
-                                    '</div>',
-                                    '<div class="{[this.getConnectCls(values.alias)]}" data-viewport="{alias}" data-qtip="{[this.getConnectTooltip(values.alias)]}"></div>',
-                                '</div>',
-                            '</div>',
-                        '</tpl>',
-                    '</div>',
-                '</div>',
+            '<div class="x-designer-viewports-toolbar">',
+            '<div class="x-designer-viewports">',
+            '<tpl for=".">',
+            '<div class="x-designer-viewport">',
+            '<div class="{[this.getViewportBtnCls(values.alias)]}">',
+            '<div class="{[this.getLabelCls(values.deviceId)]}" data-viewport="{alias}" data-qtip="{[this.getLabelTooltip(values.deviceId)]}">{label}</div>',
+            '<div class="{[this.getCounterCls(values.alias, values.hiddenCounter, values)]}" data-viewport="{alias}" data-qtip="{[this.getHiddenElTooltip()]}">',
+            '<span class="counter--value">{hiddenCounter}</span>',
+            '</div>',
+            '<div class="{[this.getConnectCls(values.alias)]}" data-viewport="{alias}" data-qtip="{[this.getConnectTooltip(values.alias)]}"></div>',
+            '</div>',
+            '</div>',
+            '</tpl>',
+            '</div>',
+            '</div>',
 
-                '<div class="x-designer-viewport-lines">',
-                    '<div class="x-designer-viewport-base-line">',
-                        '<tpl for=".">',
-                            '<div class="{[this.getLineCls(values.alias)]}" style="width: {[values.maxWidth - values.minWidth]}px; left: {minWidth}px;">',
-                                '<div class="x-designer-viewport-line-inner"></div>',
-                            '</div>',
-                        '</tpl>',
-                    '</div>',
-                '</div>',
+            '<div class="x-designer-viewport-lines">',
+            '<div class="x-designer-viewport-base-line">',
+            '<tpl for=".">',
+            '<div class="{[this.getLineCls(values.alias)]}" style="width: {[values.maxWidth - values.minWidth]}px; left: {minWidth}px;">',
+            '<div class="x-designer-viewport-line-inner"></div>',
+            '</div>',
+            '</tpl>',
+            '</div>',
+            '</div>',
             '{/literal}',
             {
                 getPreviewBtnTooltip: function() {
@@ -478,7 +478,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                     if (alias === me.grid.state) {
                         cls += ' is--active';
 
-                    } else if(me.grid.stateConnections.indexOf(alias) !== -1) {
+                    } else if (me.grid.stateConnections.indexOf(alias) !== -1) {
                         cls += ' is--connected';
                     }
 

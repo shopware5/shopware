@@ -172,7 +172,7 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
                 dataIndex: 'date',
                 sortable: true,
                 flex: 2
-            } , {
+            }, {
                 header: me.snippets.columns.serials,
                 renderer: me.serialsColumnRenderer,
                 flex: 2
@@ -211,7 +211,6 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
             }
         ];
     },
-
 
     /**
      * Creates the grid selection model for checkboxes
@@ -301,7 +300,7 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
             ),
             tpl: Ext.create('Ext.XTemplate',
                 '<tpl for=".">',
-                    '{literal}' +
+                '{literal}' +
                         '<div class="x-boundlist-item">{name}' +
                         '<tpl if="additionalText">' +
                             '<span style="font-size:10px; font-weight: 800;"> - {additionalText}</span>' +
@@ -316,7 +315,6 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
                 }
             }
         });
-
 
         return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'top',

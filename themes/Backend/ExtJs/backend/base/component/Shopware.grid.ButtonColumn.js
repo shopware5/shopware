@@ -31,7 +31,6 @@ Ext.define('Ext.ux.ButtonColumnMenuItem', {
     }
 });
 
-
 Ext.define('Ext.ux.ButtonColumn', {
     extend: 'Ext.grid.column.Column',
     alias: ['widget.buttoncolumn'],
@@ -46,8 +45,6 @@ Ext.define('Ext.ux.ButtonColumn', {
      * A CSS class to apply to the button. To determine the class dynamically, configure the Column with
      * a `{ @link #getClass }` function.
      */
-
-
 
     /**
      * @cfg { Function } handler
@@ -64,7 +61,6 @@ Ext.define('Ext.ux.ButtonColumn', {
      * The scope (**this** reference) in which the `{ @link #handler}` and `{ @link #getClass}` fuctions are executed.
      * Defaults to this Column.
      */
-
 
     /**
      * @cfg { Function } isDisabledFn
@@ -91,7 +87,6 @@ Ext.define('Ext.ux.ButtonColumn', {
      * @cfg { Object} setupMenu.recordIndex The index of the current row
      * @cfg Ext.menu.Item[]/Ext.Action[]/Object[] setupMenu.return array of menuItems config options.
      */
-
 
     /*
      * @cfg { Boolean} [stopSelection=true]
@@ -131,7 +126,6 @@ Ext.define('Ext.ux.ButtonColumn', {
      * The className used for the inner arrow element if the button has a menu.
      */
     arrowCls: 'split',
-
 
     /**
      * @cfg { String} textAlign
@@ -173,13 +167,12 @@ Ext.define('Ext.ux.ButtonColumn', {
             data.disabledCls = me.isDisabledFn && me.isDisabledFn.apply(me,
                 arguments) ? me.disabledCls + ' ' + me.getBtnGroupCls('disabled').join(' ')/*(Ext.isIE7 ? me.disabledCls : me.disabledCls + ' ' + me.getBtnCls('disabled').join(' '))*/ : '';
             v = Ext.isFunction(cfg.renderer) ? cfg.renderer.apply(this, arguments) : v;
-            data.text = Ext.isEmpty(v) ? me.buttonText || '&#160;': v;
+            data.text = Ext.isEmpty(v) ? me.buttonText || '&#160;' : v;
             // Apply the renderData to the template args
             Ext.applyIf(data, me.getTemplateArgs());
             return me.btnTpl.apply(data);
         };
     },
-
 
     getTemplateArgs: function () {
         var me = this;
@@ -193,31 +186,28 @@ Ext.define('Ext.ux.ButtonColumn', {
             iconUrl: '',
             baseCls: me.baseCls,
             splitCls: me.getSplitCls(),
-            btnCls: me.extMinor === 1 ? me.getBtnCls() :''
+            btnCls: me.extMinor === 1 ? me.getBtnCls() : ''
         };
     },
-
-
-
 
     //private
     initBtnTpl: function () {
         var me = this,
             mainDivStr = '<div class="x-btn x-btn-default-small {literal}{iconClsBtn} {disabledCls}{/literal}"{literal} {tooltip}{/literal}>{literal}{0}{/literal}</div>',
             btnFrameTpl = '<TABLE  class="x-table-plain" cellPadding=0><TBODY><TR>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px -6px"' : '') + ' class="x-frame-tl x-btn-tl x-btn-default-small-tl" role=presentation></TD>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px 0px; HEIGHT: 3px"' : '')  + ' class="x-frame-tc x-btn-tc x-btn-default-small-tc" role=presentation></TD>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: right -9px"' : '')  + ' class="x-frame-tr x-btn-tr x-btn-default-small-tr" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px -6px"' : '') + ' class="x-frame-tl x-btn-tl x-btn-default-small-tl" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px 0px; HEIGHT: 3px"' : '')  + ' class="x-frame-tc x-btn-tc x-btn-default-small-tc" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: right -9px"' : '')  + ' class="x-frame-tr x-btn-tr x-btn-default-small-tr" role=presentation></TD>' +
                 '</TR><TR>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px 0px"' : '')  + ' class="x-frame-ml x-btn-ml x-btn-default-small-ml" role=presentation></TD>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px 0px"' : '')  + ' class="x-frame-mc x-btn-mc x-btn-default-small-mc" role=presentation>' +
+                '<TD' + (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px 0px"' : '')  + ' class="x-frame-ml x-btn-ml x-btn-default-small-ml" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px 0px"' : '')  + ' class="x-frame-mc x-btn-mc x-btn-default-small-mc" role=presentation>' +
                 '{literal}{0}{/literal}' +
                 '</TD>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: right 0px"' : '')  + ' class="x-frame-mr x-btn-mr x-btn-default-small-mr" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: right 0px"' : '')  + ' class="x-frame-mr x-btn-mr x-btn-default-small-mr" role=presentation></TD>' +
                 '</TR><TR>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px -12px"' : '')  + ' class="x-frame-bl x-btn-bl x-btn-default-small-bl" role=presentation></TD>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px -3px; HEIGHT: 3px"' : '')  + ' class="x-frame-bc x-btn-bc x-btn-default-small-bc" role=presentation></TD>' +
-                '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: right -15px"' : '')  + ' class="x-frame-br x-btn-br x-btn-default-small-br" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px -12px"' : '')  + ' class="x-frame-bl x-btn-bl x-btn-default-small-bl" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px -3px; HEIGHT: 3px"' : '')  + ' class="x-frame-bc x-btn-bc x-btn-default-small-bc" role=presentation></TD>' +
+                '<TD' + (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: right -15px"' : '')  + ' class="x-frame-br x-btn-br x-btn-default-small-br" role=presentation></TD>' +
                 '</TR></TBODY></TABLE>'
         if (Ext.supports.CSS3BorderRadius) {
             me.btnTpl = Ext.create('Ext.XTemplate', Ext.String.format(mainDivStr, me.btnTpl))
@@ -236,7 +226,6 @@ Ext.define('Ext.ux.ButtonColumn', {
         return cls;
     },
 
-
     showMenu: function (el) {
         var me = this;
         if (me.rendered && me.menu) {
@@ -247,7 +236,6 @@ Ext.define('Ext.ux.ButtonColumn', {
         }
         return me;
     },
-
 
     destroy: function () {
         delete this.items;
@@ -266,10 +254,10 @@ Ext.define('Ext.ux.ButtonColumn', {
         var me = this,
             target = e.getTarget();
         btnMatch = target.className.match(me.btnRe) || target.localName == 'button' || target.nodeName == 'BUTTON',
-            triggerMatch = target.className.match(me.triggerRe);
+        triggerMatch = target.className.match(me.triggerRe);
         /* mouseover && mouseout doesn't work in 4.2 -just 'mouseout' get fired then we enter cell, no events fired if move mouse inside grid cell
          * I have to reset { @link Ext.view.View} mouseOverItem attribute - this is only way to make events fired correctly*/
-        if(me.extMinor === 2 && !view.mouseOverOutBuffer){
+        if (me.extMinor === 2 && !view.mouseOverOutBuffer){
             view.mouseOverItem = undefined;
         }
         //Ext.log("EVENT TYPE: " + e.type);
@@ -309,7 +297,7 @@ Ext.define('Ext.ux.ButtonColumn', {
                 }
                 /* mouseover && mouseout doesn't work good in 4.2 with  mouseover buffering */
             } else if (type == 'mouseover' && (me.extMinor !== 2 || (me.extMinor === 2 && !view.mouseOverOutBuffer))) {
-                if(!me.menu || !me.menu.isVisible()){
+                if (!me.menu || !me.menu.isVisible()){
                     btnEl.addCls(me.getBtnGroupCls('over'));
                 }
             } else if (type == 'mouseout' && (me.extMinor !== 2 || (me.extMinor === 2 && !view.mouseOverOutBuffer))) {
@@ -345,5 +333,5 @@ Ext.define('Ext.ux.ButtonColumn', {
     this.prototype.btnTpl = Ext.isArray(buttonPrototype.renderTpl) ? buttonPrototype.renderTpl.join('') : buttonPrototype.renderTpl;
     //borrow buttons methods
     this.prototype.getSplitCls = buttonPrototype.getSplitCls;
-    this.prototype.getBtnCls= buttonPrototype.getBtnCls;
+    this.prototype.getBtnCls = buttonPrototype.getBtnCls;
 });

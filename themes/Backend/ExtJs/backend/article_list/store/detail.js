@@ -43,21 +43,21 @@ Ext.define('Shopware.apps.ArticleList.store.Detail', {
      */
     pageSize: 25,
 
-   /**
-    * Auto load the store after the component
-    * is initialized
-    * @boolean
-    */
+    /**
+     * Auto load the store after the component
+     * is initialized
+     * @boolean
+     */
     autoLoad: false,
 
     remoteSort: true,
 
     remoteFilter: false,
 
-   /**
-    * Define the used model for this store
-    * @string
-    */
+    /**
+     * Define the used model for this store
+     * @string
+     */
     model: 'Shopware.apps.ArticleList.model.Detail',
 
     /**

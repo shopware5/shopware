@@ -182,7 +182,6 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
         return [leftContainer, rightContainer, me.attributeForm];
     },
 
-
     /**
      * Creates the left container of the shipping field set.
      *

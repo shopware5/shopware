@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.Config.view.base.Detail', {
 
     loadRecord: function(record) {
         var form = this.getForm();
-        if(record) {
+        if (record) {
             form._record = record;
             form.setValues(record.data);
         } else {
@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Config.view.base.Detail', {
             text: '{s name="detail/reset_text"}Reset{/s}',
             cls: 'secondary',
             action: 'reset'
-        },{
+        }, {
             text: '{s name="detail/save_text"}Save{/s}',
             cls: 'primary',
             tooltip: '{s name="detail/save_tooltip"}Save (CTRL + S){/s}',

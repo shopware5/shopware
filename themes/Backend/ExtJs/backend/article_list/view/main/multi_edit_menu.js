@@ -40,12 +40,11 @@ Ext.define('Shopware.apps.ArticleList.view.main.MultiEditMenu', {
 
         me.items = me.getItems();
 
-
         me.addEvents(
-                /**
-                 * Fired when the user clicks the "batch process" button
-                 */
-                'openBatchProcessWindow'
+            /**
+             * Fired when the user clicks the "batch process" button
+             */
+            'openBatchProcessWindow'
         );
 
         me.callParent(arguments);
@@ -58,22 +57,21 @@ Ext.define('Shopware.apps.ArticleList.view.main.MultiEditMenu', {
      */
     getItems: function () {
         var me = this,
-                items = [];
-
+            items = [];
 
         /*{if {acl_is_allowed privilege=doMultiEdit}}*/
         items.push(
-                Ext.create('Ext.button.Button', {
-                    text: '{s name="window/multiEdit"}Mehrfachänderung{/s}',
-                    action: 'batchEdit',
-                    padding: '10px',
-                    margin: '5px',
-                    name: 'batchEdit',
-                    iconCls: 'sprite-multi-edit',
-                    handler: function () {
-                        me.fireEvent('openBatchProcessWindow');
-                    }
-                })
+            Ext.create('Ext.button.Button', {
+                text: '{s name="window/multiEdit"}Mehrfachänderung{/s}',
+                action: 'batchEdit',
+                padding: '10px',
+                margin: '5px',
+                name: 'batchEdit',
+                iconCls: 'sprite-multi-edit',
+                handler: function () {
+                    me.fireEvent('openBatchProcessWindow');
+                }
+            })
         );
         /*{/if}*/
 
@@ -88,7 +86,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.MultiEditMenu', {
             iconCls: 'sprite-arrow-circle-225-left'
         });
         /*{/if}*/
-
 
         return items;
     }

@@ -138,7 +138,6 @@ Ext.define('Shopware.apps.Article.view.variant.NumberProgress', {
         me.callParent(arguments);
     },
 
-
     /**
      * Registers additional component events.
      */

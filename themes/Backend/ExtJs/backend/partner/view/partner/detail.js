@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
 
         me.registerEvents();
 
-        if(me.record){
+        if (me.record){
             me.partnerId = me.record.data.id;
         }
 
@@ -117,21 +117,20 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
      */
     registerEvents: function () {
         this.addEvents(
-                /**
-                 * Event will be fired when the user changes the customer-account field
-                 *
-                 * @event mapCustomerAccount
-                 * @param [Ext.form.field.Field] this
-                 * @param [object] newValue
-                 * @param [object] oldValue
-                 * @param [object] eOpts
-                 */
-                'mapCustomerAccount'
+            /**
+             * Event will be fired when the user changes the customer-account field
+             *
+             * @event mapCustomerAccount
+             * @param [Ext.form.field.Field] this
+             * @param [object] newValue
+             * @param [object] oldValue
+             * @param [object] eOpts
+             */
+            'mapCustomerAccount'
         );
 
         return true;
     },
-
 
     /**
      * creates the general form and layout
@@ -199,7 +198,6 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
         return [ leftContainer, rightContainer ];
     },
 
-
     /**
      * Creates all fields for the general form on the left side
      */
@@ -207,7 +205,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
         var me = this;
         var customerStore = Ext.create('Shopware.attribute.SelectionFactory').createEntitySearchStore('Shopware\\Models\\Customer\\Customer');
 
-        me.customerMapping = Ext.create('Shopware.form.field.CustomerSingleSelection',{
+        me.customerMapping = Ext.create('Shopware.form.field.CustomerSingleSelection', {
             fieldLabel: '{s name="detail_general/field/customer_account"}Customer account{/s}',
             name: 'customerId',
             store: customerStore,

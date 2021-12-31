@@ -37,9 +37,9 @@
 
 //{block name="backend/base/component/form_plugin_translation"}
 
-Ext.define('Shopware.form.plugin.Translation',
-/** @lends Ext.AbstractPlugin# */
-{
+Ext.define('Shopware.form.plugin.Translation', {
+    /** @lends Ext.AbstractPlugin# */
+
     /**
      * Extends the abstact plugin component
      * @string
@@ -182,7 +182,7 @@ Ext.define('Shopware.form.plugin.Translation',
         globeIcon = new Ext.Element(document.createElement('span'));
         globeIcon.set({
             cls: Ext.baseCSSPrefix + 'translation-globe sprite-globe',
-            style: 'position: absolute;width: 16px; height: 16px;display:block;cursor:pointer;'+style
+            style: 'position: absolute;width: 16px; height: 16px;display:block;cursor:pointer;' + style
         });
 
         globeIcon.addListener('click', function() {
@@ -214,7 +214,7 @@ Ext.define('Shopware.form.plugin.Translation',
      * @returns string
      */
     getGlobeElementStyle: function(field) {
-        switch(this.getFieldType(field)) {
+        switch (this.getFieldType(field)) {
             case 'tinymce':
                 return 'top: 3px; right: 3px';
             case 'codemirror':
@@ -319,30 +319,30 @@ Ext.define('Shopware.form.plugin.Translation',
         var type = null;
 
         Ext.each(field.alternateClassName, function(className) {
-            if(className === 'Ext.form.TextField') {
+            if (className === 'Ext.form.TextField') {
                 type = 'textfield';
             }
 
-            if(className === 'Shopware.form.TinyMCE') {
+            if (className === 'Shopware.form.TinyMCE') {
                 type = 'tinymce';
             }
 
-            if(className === 'Shopware.form.CodeMirror') {
+            if (className === 'Shopware.form.CodeMirror') {
                 type = 'codemirror';
             }
 
-            if(className === 'Ext.form.TextArea') {
+            if (className === 'Ext.form.TextArea') {
                 type = 'textarea';
             }
 
-            if(className === 'Ext.form.TriggerField'
-                || className === 'Ext.form.ComboBox'
-                || className === 'Ext.form.DateField'
-                || className === 'Ext.form.Picker'
-                || className === 'Ext.form.Spinner'
-                || className === 'Ext.form.NumberField'
-                || className === 'Ext.form.Number'
-                || className === 'Ext.form.TimeField') {
+            if (className === 'Ext.form.TriggerField' ||
+                className === 'Ext.form.ComboBox' ||
+                className === 'Ext.form.DateField' ||
+                className === 'Ext.form.Picker' ||
+                className === 'Ext.form.Spinner' ||
+                className === 'Ext.form.NumberField' ||
+                className === 'Ext.form.Number' ||
+                className === 'Ext.form.TimeField') {
                 type = 'trigger';
             }
         });

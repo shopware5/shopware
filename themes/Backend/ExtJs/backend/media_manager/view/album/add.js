@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Add', {
         });
 
         // If we're adding a sub album, we need the parent id
-        if(me.parentId) {
+        if (me.parentId) {
             me.parentIdField = Ext.create('Ext.form.field.Hidden', {
                 name: 'parentId',
                 value: me.parentId
@@ -88,11 +88,11 @@ Ext.define('Shopware.apps.MediaManager.view.album.Add', {
 
         me.items = [ me.formPanel ];
         me.dockedItems = [{
-           xtype: 'toolbar',
-           dock: 'bottom',
-           ui: 'shopware-ui',
-           cls: 'shopware-toolbar',
-           items: me.createActionButtons()
+            xtype: 'toolbar',
+            dock: 'bottom',
+            ui: 'shopware-ui',
+            cls: 'shopware-toolbar',
+            items: me.createActionButtons()
         }];
 
         me.on('show', function() {

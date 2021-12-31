@@ -34,9 +34,9 @@
  */
 
 //{block name="backend/translation/model/language"}
-Ext.define('Shopware.apps.Translation.model.Language',
-/** @lends Ext.data.Model# */
-{
+Ext.define('Shopware.apps.Translation.model.Language', {
+    /** @lends Ext.data.Model# */
+
     /**
      * The parent class that this class extends
      * @string

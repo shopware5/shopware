@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
         me.mediaSelection.albumId = -3;
 
         me.bannerFile = me.getFieldByName('file');
-        if(me.bannerFile && me.bannerFile.value && me.bannerFile.value.length) {
+        if (me.bannerFile && me.bannerFile.value && me.bannerFile.value.length) {
             me.onSelectMedia('', me.bannerFile.value);
         }
 
@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
             storeField;
 
         Ext.each(items, function(item) {
-            if(item.name === name) {
+            if (item.name === name) {
                 storeField = item;
                 return false;
             }
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
             }
         }
 
-        if(!me.previewFieldset) {
+        if (!me.previewFieldset) {
             me.previewFieldset = me.createPreviewImageWithMapping(media);
             me.add(me.previewFieldset);
         } else {
@@ -113,10 +113,10 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
     createPreviewImage: function(media) {
         var me = this,
             tpl = new Ext.Template(
-            '<div>',
+                '<div>',
                 '<img class="preview-image--media" src="[src]" alt="Preview Banner">',
-            '</div>'
-        );
+                '</div>'
+            );
 
         return me.previewImage = Ext.create('Ext.container.Container', {
             tpl: tpl,
@@ -170,7 +170,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
             me.bannerPositionField.setValue(position);
         }, me, { delegate: '.preview-image--col' });
 
-        if(me.bannerPositionField) {
+        if (me.bannerPositionField) {
             var val = me.bannerPositionField.getValue();
 
             Ext.each(el.dom.querySelectorAll('.preview-image--col'), function() {
@@ -188,45 +188,45 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
     getPreviewImageTemplate: function() {
         return new Ext.Template(
             '<div class="preview-image--container">',
-                '<img class="preview-image--media" src="[src]" alt="Preview Banner">',
+            '<img class="preview-image--media" src="[src]" alt="Preview Banner">',
 
-                '<div class="preview-image--grid">',
-                    '<div class="preview-image--row">',
-                        '<div class="preview-image--col" data-position="top left">&nbsp;</div>',
-                        '<div class="preview-image--col" data-position="top center">&nbsp;</div>',
-                        '<div class="preview-image--col" data-position="top right">&nbsp;</div>',
-                    '</div>',
+            '<div class="preview-image--grid">',
+            '<div class="preview-image--row">',
+            '<div class="preview-image--col" data-position="top left">&nbsp;</div>',
+            '<div class="preview-image--col" data-position="top center">&nbsp;</div>',
+            '<div class="preview-image--col" data-position="top right">&nbsp;</div>',
+            '</div>',
 
-                    '<div class="preview-image--row">',
-                        '<div class="preview-image--col" data-position="center left">&nbsp;</div>',
-                        '<div class="preview-image--col is--active" data-position="center">&nbsp;</div>',
-                        '<div class="preview-image--col" data-position="center right">&nbsp;</div>',
-                    '</div>',
+            '<div class="preview-image--row">',
+            '<div class="preview-image--col" data-position="center left">&nbsp;</div>',
+            '<div class="preview-image--col is--active" data-position="center">&nbsp;</div>',
+            '<div class="preview-image--col" data-position="center right">&nbsp;</div>',
+            '</div>',
 
-                    '<div class="preview-image--row">',
-                        '<div class="preview-image--col" data-position="bottom left">&nbsp;</div>',
-                        '<div class="preview-image--col" data-position="bottom center">&nbsp;</div>',
-                        '<div class="preview-image--col" data-position="bottom right">&nbsp;</div>',
-                    '</div>',
-                '</div>',
+            '<div class="preview-image--row">',
+            '<div class="preview-image--col" data-position="bottom left">&nbsp;</div>',
+            '<div class="preview-image--col" data-position="bottom center">&nbsp;</div>',
+            '<div class="preview-image--col" data-position="bottom right">&nbsp;</div>',
+            '</div>',
+            '</div>',
             '</div>'
         );
     },
 
     createMappingButton: function() {
-       var me = this,
-           button = Ext.create('Ext.button.Button', {
-               text: '{s name="mapping"}Create image mapping{/s}',
-               iconCls: 'sprite-layer-select',
-               cls: 'small secondary',
-               handler: function() {
+        var me = this,
+            button = Ext.create('Ext.button.Button', {
+                text: '{s name="mapping"}Create image mapping{/s}',
+                iconCls: 'sprite-layer-select',
+                cls: 'small secondary',
+                handler: function() {
                     me.fireEvent('openMappingWindow', me, me.selectedMedia, me.previewImageWithMapping, me.getSettings('record'));
-               }
-           });
+                }
+            });
 
-       return Ext.create('Ext.container.Container', {
-           margin: '0 0 10',
-           items: [ button ]
-       });
+        return Ext.create('Ext.container.Container', {
+            margin: '0 0 10',
+            items: [ button ]
+        });
     }
 });

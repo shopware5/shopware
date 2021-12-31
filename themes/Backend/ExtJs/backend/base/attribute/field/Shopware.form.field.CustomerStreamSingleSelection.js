@@ -42,24 +42,24 @@ Ext.define('Shopware.form.field.CustomerStreamSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<div class="x-boundlist-item">{literal}{name} - {customer_count}{/literal} {s name="customer_count_suffix"}{/s}</div>',
+            '<div class="x-boundlist-item">{literal}{name} - {customer_count}{/literal} {s name="customer_count_suffix"}{/s}</div>',
             '</tpl>'
         );
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '{literal}{name} - {customer_count}{/literal} {s name="customer_count_suffix"}{/s}',
+            '{literal}{name} - {customer_count}{/literal} {s name="customer_count_suffix"}{/s}',
             '</tpl>'
         );
 
         if (me.displayNewsletterCount) {
             config.tpl = Ext.create('Ext.XTemplate',
                 '<tpl for=".">',
-                    '<div class="x-boundlist-item">{literal}{name} - {newsletter_count}{/literal} {s name="newsletter_count_suffix"}{/s}</div>',
+                '<div class="x-boundlist-item">{literal}{name} - {newsletter_count}{/literal} {s name="newsletter_count_suffix"}{/s}</div>',
                 '</tpl>'
             );
             config.displayTpl = Ext.create('Ext.XTemplate',
                 '<tpl for=".">',
-                    '{literal}{name} - {newsletter_count}{/literal} {s name="newsletter_count_suffix"}{/s}',
+                '{literal}{name} - {newsletter_count}{/literal} {s name="newsletter_count_suffix"}{/s}',
                 '</tpl>'
             );
         }

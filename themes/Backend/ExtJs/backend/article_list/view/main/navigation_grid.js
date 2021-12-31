@@ -64,7 +64,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
         me.callParent(arguments);
     },
 
-
     /**
      * Register events
      */
@@ -219,7 +218,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
             action: 'addFilter',
             cls: 'small secondary',
             flex: 1
-//            iconCls: 'sprite-plus-circle-frame'
         });
         /*{/if}*/
         buttons.push({

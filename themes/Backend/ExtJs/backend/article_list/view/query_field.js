@@ -35,9 +35,7 @@ Ext.define('Shopware.apps.ArticleList.view.QueryField', {
 
     border: false,
 
-
     padding: '10 10 0 10',
-
 
     /**
      * Initializes the component, sets up toolbar and pagingbar and and registers some events
@@ -74,11 +72,11 @@ Ext.define('Shopware.apps.ArticleList.view.QueryField', {
             },
             items: [
                 me.getFilterInputField(),
-            {
-                xtype: 'label',
-                name: 'status-label',
-                text: '{s name="queryField/enterQuery"}Enter your Query here:{/s}'
-            }]
+                {
+                    xtype: 'label',
+                    name: 'status-label',
+                    text: '{s name="queryField/enterQuery"}Enter your Query here:{/s}'
+                }]
         }];
 
     },
@@ -143,8 +141,8 @@ Ext.define('Shopware.apps.ArticleList.view.QueryField', {
                 loadingText: 'Searching...',
                 emptyText: 'No matching posts found.',
 
-            pageSize: 10
-        },
+                pageSize: 10
+            },
 
             // override default onSelect to do redirect
             listeners: {
@@ -173,7 +171,6 @@ Ext.define('Shopware.apps.ArticleList.view.QueryField', {
 
         me.fireEvent('suggest', text, position);
     }
-
 
 });
 //{/block}

@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
         });
 
         // Create toolbars
-        if(me.createToolbars) {
+        if (me.createToolbars) {
             me.tbar = me.createSearchToolbar();
             me.bbar = me.createActionToolbar();
         }
@@ -245,15 +245,15 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
 
         return Ext.create('Ext.toolbar.Toolbar', {
             items: [
-        /* {if {acl_is_allowed privilege=create}} */
+                /* {if {acl_is_allowed privilege=create}} */
                 '',
                 me.addBtn,
-        /* {/if} */
-        /* {if {acl_is_allowed privilege=delete}} */
+                /* {/if} */
+                /* {if {acl_is_allowed privilege=delete}} */
                 '->',
                 me.deleteBtn,
                 ''
-        /* {/if} */
+                /* {/if} */
             ]
         });
     },
@@ -273,15 +273,15 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
         var sel = selModel.getSelection(),
             id = ~~(1 * record.get('id'));
 
-        if(sel.length > 0 && id > 0 && record.data.leaf == true) {
-            if(this.deleteBtn) {
+        if (sel.length > 0 && id > 0 && record.data.leaf == true) {
+            if (this.deleteBtn) {
                 this.deleteBtn.setDisabled(false);
             }
 
             return true;
         }
 
-        if(this.deleteBtn) {
+        if (this.deleteBtn) {
             this.deleteBtn.setDisabled(true);
         }
     },
@@ -345,7 +345,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
             /* {/if} */
         ];
 
-        if(isTrash) {
+        if (isTrash) {
             menuItems = [
                 {
                     text: me.snippets.tree.emptyTrash,
@@ -430,7 +430,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
                     store;
 
                 // The event was fired from the list view
-                if(!models) {
+                if (!models) {
                     models = data.records;
                 }
                 store = models[0].store;

@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Tax.model.Rules', {
     extend: 'Ext.data.Model',
     fields: [
         //{block name="backend/tax/model/rules/fields"}{/block}
-        'id', 'areaId','countryId','stateId','groupId',{ name: 'tax',  type: 'number' },'name','active'],
+        'id', 'areaId', 'countryId', 'stateId', 'groupId', { name: 'tax',  type: 'number' }, 'name', 'active'],
     proxy: {
         type: 'ajax',
         api: {

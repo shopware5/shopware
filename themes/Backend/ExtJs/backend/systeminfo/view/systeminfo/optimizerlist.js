@@ -90,11 +90,11 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Optimizerlist', {
                 header: '{s name="optimizer_grid/column/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1
-            },{
+            }, {
                 header: '{s name="optimizer_grid/column/mimetype"}Mime-Type{/s}',
                 dataIndex: 'mimeTypes',
                 flex: 1
-            },{
+            }, {
                 header: '{s name="optimizer_grid/column/runnable"}Runnable{/s}',
                 dataIndex: 'runnable',
                 flex: 1,
@@ -104,9 +104,9 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Optimizerlist', {
     },
 
     renderStatus: function(value){
-        if(value){
+        if (value){
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>')
-        }else{
+        } else {
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
         }
     }

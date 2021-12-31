@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
     initComponent: function() {
         var me = this;
 
-        if(Ext.ieVersion === 0 || Ext.ieVersion >= 9) {
+        if (Ext.ieVersion === 0 || Ext.ieVersion >= 9) {
             // Create the headline
             me.headline = Ext.create('Ext.container.Container', {
                 html: '<h1>{s name="title/login"}Login Shopware Backend{/s}</h1>'
@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
                 ui: 'shopware-ui',
                 cls: 'shopware-toolbar',
                 style: 'background: transparent;box-shadow: none',
-                items: ['->',{
+                items: ['->', {
                     xtype: 'button',
                     cls: 'primary',
                     text: '{s name="button/login"}Login{/s}',
@@ -123,7 +123,7 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
         me.callParent(arguments);
 
         // Show hint if the browser is not Google Chrome
-        if(!Ext.isChrome) {
+        if (!Ext.isChrome) {
             me.chromeHint = Ext.create('Ext.container.Container', {
                 cls: Ext.baseCSSPrefix + 'google-chrome-hint',
                 html: me.getInfoTemplate().applyTemplate({
@@ -137,14 +137,14 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
     getIEWarning: function() {
         return new Ext.Template(
             '<div class="inner">',
-                '<h2 class="teaser">{s name="content/ie/teaser"}{/s}</h2>',
-                '<p>{s name="content/ie/text"}{/s}</p>',
-                '<ul class="browsers">',
-                    '<li class="chrome"><a href="{s name="content/ie/link/chrome"}http://www.google.com/chrome{/s}" target="_blank"></a></li>',
-                    '<li class="firefox"><a href="{s name="content/ie/link/firefox"}http://www.mozilla.org/de/firefox/new/{/s}" target="_blank"></a></li>',
-                    '<li class="safari"><a href="{s name="content/ie/link/safari"}http://www.apple.com/safari/{/s}" target="_blank"></a></li>',
-                    '<li class="ie"><a href="{s name="content/ie/link/ie"}http://windows.microsoft.com/de-DE/internet-explorer/downloads/ie{/s}" target="_blank"></a></li>',
-                '</ul>',
+            '<h2 class="teaser">{s name="content/ie/teaser"}{/s}</h2>',
+            '<p>{s name="content/ie/text"}{/s}</p>',
+            '<ul class="browsers">',
+            '<li class="chrome"><a href="{s name="content/ie/link/chrome"}http://www.google.com/chrome{/s}" target="_blank"></a></li>',
+            '<li class="firefox"><a href="{s name="content/ie/link/firefox"}http://www.mozilla.org/de/firefox/new/{/s}" target="_blank"></a></li>',
+            '<li class="safari"><a href="{s name="content/ie/link/safari"}http://www.apple.com/safari/{/s}" target="_blank"></a></li>',
+            '<li class="ie"><a href="{s name="content/ie/link/ie"}http://windows.microsoft.com/de-DE/internet-explorer/downloads/ie{/s}" target="_blank"></a></li>',
+            '</ul>',
             '</div>'
         )
     },
@@ -152,9 +152,9 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
     getInfoTemplate: function() {
         return new Ext.Template(
             '<div class="inner">',
-                '<a href="http://www.google.com/chrome" class="logo-chrome" target="_blank">&nbsp;</a>',
-                '<div class="right-content">{s name="content/google_chrome_hint"}For optimum browser performance we recommend using [link].{/s}</div>',
-                '<div class="x-clear"></div>',
+            '<a href="http://www.google.com/chrome" class="logo-chrome" target="_blank">&nbsp;</a>',
+            '<div class="right-content">{s name="content/google_chrome_hint"}For optimum browser performance we recommend using [link].{/s}</div>',
+            '<div class="x-clear"></div>',
             '</div>'
         );
     }

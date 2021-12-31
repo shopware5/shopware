@@ -130,9 +130,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
             listeners: {
                 change: function (elem, newValue, oldValue) {
                     if (
-                        !Ext.isEmpty(oldValue.productiveMode)
-                        && !Ext.isEmpty(newValue.productiveMode)
-                        && oldValue.productiveMode !== newValue.productiveMode
+                        !Ext.isEmpty(oldValue.productiveMode) &&
+                        !Ext.isEmpty(newValue.productiveMode) &&
+                        oldValue.productiveMode !== newValue.productiveMode
                     ) {
                         me.fireEvent('toggle-productive', me)
                     }

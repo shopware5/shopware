@@ -158,7 +158,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
     refreshView: function() {
         var me = this;
 
-        if(!me.merchantStore) {
+        if (!me.merchantStore) {
             return false;
         }
         me.merchantStore.load();
@@ -208,7 +208,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
                         }
                     });
                 }
-            },{
+            }, {
                 iconCls: 'sprite-tick-circle',
                 tooltip: me.snippets.tooltips.unlock,
                 handler: function(view, rowIndex, colIndex, item, event, record) {

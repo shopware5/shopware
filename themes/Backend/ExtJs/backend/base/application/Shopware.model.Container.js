@@ -47,7 +47,6 @@ Ext.define('Shopware.model.Container', {
      */
     record: undefined,
 
-
     /**
      * List of classes to mix into this class.
      * @type { Object }
@@ -209,7 +208,6 @@ Ext.define('Shopware.model.Container', {
              */
             associations: [  ],
 
-
             /**
              * @required - For associated models
              * @optional - For the base model
@@ -291,7 +289,6 @@ Ext.define('Shopware.model.Container', {
             }
             return config;
         },
-
 
         /**
          * Static function which sets the property value of
@@ -625,7 +622,6 @@ Ext.define('Shopware.model.Container', {
         );
     },
 
-
     /**
      * Creates all components for this container.
      * Shopware creates as default only a field set with the model
@@ -706,7 +702,7 @@ Ext.define('Shopware.model.Container', {
             );
 
             //check if the component creation was canceled, or throws an exception
-            if(item) {
+            if (item) {
                 items.push(item);
                 me.associationComponents[association.associationKey] = item;
             }
@@ -783,7 +779,6 @@ Ext.define('Shopware.model.Container', {
         return component;
     },
 
-
     /**
      * Creates an Ext.form.FieldSet for the passed model.
      * The fields are created in the { @link #createModelFields } function.
@@ -808,7 +803,6 @@ Ext.define('Shopware.model.Container', {
         if (!me.fireEvent(me.eventAlias + '-before-model-field-set-created', me, fieldSet, items, model)) {
             return fieldSet;
         }
-
 
         var splitFields = me.getConfig('splitFields');
         if (customConfig.hasOwnProperty('splitFields')) {

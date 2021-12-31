@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Attributes.view.Listing', {
             deleteButton: false,
 
             /*{if !{acl_is_allowed privilege=update}}*/
-                addButton: false,
+            addButton: false,
             /*{/if}*/
 
             columns: {
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Attributes.view.Listing', {
 
         column.getClass = function(value, metaData, record) {
             /*{if !{acl_is_allowed privilege=update}}*/
-                return 'x-hidden';
+            return 'x-hidden';
             /*{/if}*/
 
             if (!record.allowDelete()) {
@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.Attributes.view.Listing', {
                 '{literal}{name:this.formatName} ({rows.length}{/literal} {s name="grouping_suffix"}{/s})',
                 {
                     formatName: function(value) {
-                        switch(value) {
+                        switch (value) {
                             case true:
                                 return '{s name="grouping_configured"}{/s}';
                             case false:
@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.Attributes.view.Listing', {
         });
 
         /*{if {acl_is_allowed privilege=update}}*/
-            items.push(me.generateModelButton);
+        items.push(me.generateModelButton);
         /*{/if}*/
 
         me.tableComboBox = me.createTableComboBox();

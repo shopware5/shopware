@@ -68,9 +68,9 @@ Ext.define('Shopware.apps.Config.view.customerGroup.Detail', {
 
         groupKeyField = me.down('field[name=key]');
 
-        if(record && record.get('id') === 1 && groupKeyField) {
+        if (record && record.get('id') === 1 && groupKeyField) {
             groupKeyField.setDisabled(true);
-        }else if(groupKeyField) {
+        } else if (groupKeyField) {
             groupKeyField.setDisabled(false);
         }
 
@@ -83,44 +83,44 @@ Ext.define('Shopware.apps.Config.view.customerGroup.Detail', {
             name: 'name',
             fieldLabel: me.snippets.items.name,
             allowBlank: false
-        },{
+        }, {
             name: 'key',
             fieldLabel: me.snippets.items.key,
             allowBlank: false,
             maxLength: 15
-        },{
+        }, {
             xtype: 'config-element-boolean',
             name: 'taxInput',
             fieldLabel: me.snippets.items.taxInput
-        },{
+        }, {
             xtype: 'config-element-boolean',
             name: 'tax',
             fieldLabel: me.snippets.items.taxOutput
-        },{
+        }, {
             xtype: 'config-element-boolean',
             name: 'mode',
             fieldLabel: me.snippets.items.discountMode,
             handler: function(button, value) {
                 var form = button.up('form'),
                     discount = form.down('field[name=discount]');
-                if(value) {
+                if (value) {
                     discount.show();
                 } else {
                     discount.hide();
                 }
             }
-        },{
+        }, {
             xtype: 'config-element-number',
             name: 'discount',
             decimalPrecision: 2,
             fieldLabel: me.snippets.items.discount,
             hidden: true
-        },{
+        }, {
             xtype: 'config-element-number',
             name: 'minimumOrder',
             decimalPrecision: 2,
             fieldLabel: me.snippets.items.minimumOrder
-        },{
+        }, {
             xtype: 'config-element-number',
             name: 'minimumOrderSurcharge',
             decimalPrecision: 2,

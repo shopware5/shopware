@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
                 summaryType: 'sum',
                 summaryRenderer: function(value, summaryData, dataIndex) {
                     return me.summaryRenderer(me, value, summaryData, dataIndex);
-                } ,
+                },
                 flex: 1
             },
             {
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
                 summaryType: 'sum',
                 summaryRenderer: function(value, summaryData, dataIndex) {
                     return me.summaryRenderer(me, value, summaryData, dataIndex);
-                } ,
+                },
                 flex: 1
             }
         ];
@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
      */
     getActionColumnItems: function () {
         var me = this,
-                actionColumnData = [];
+            actionColumnData = [];
 
         actionColumnData.push({
             iconCls: 'sprite-pencil',
@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.Partner.view.statistic.List', {
      * @return Ext.toolbar.Paging The paging toolbar for the customer grid
      */
     getFeatures: function () {
-       return [{
+        return [{
             ftype: 'summary'
         }];
     }

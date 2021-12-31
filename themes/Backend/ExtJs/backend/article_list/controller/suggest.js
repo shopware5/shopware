@@ -21,7 +21,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 //{namespace name="backend/article_list/main"}
 
 /**
@@ -88,22 +87,21 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
     prepareGrammar: function(grammar)  {
         var me = this;
 
-
         Ext.each(Object.keys(grammar.binaryOperators), function(key) {
             var items = grammar.binaryOperators[key];
 
             Ext.each(items, function(item, idx) {
-                if (item.charAt(item.length-1) == '/' && item.charAt(0) == '/') {
+                if (item.charAt(item.length - 1) == '/' && item.charAt(0) == '/') {
 
-                    grammar.binaryOperators[key][idx] = new RegExp(item.slice(1).slice(0,-1));
+                    grammar.binaryOperators[key][idx] = new RegExp(item.slice(1).slice(0, -1));
                 }
             });
         });
 
         Ext.each(grammar.values, function(item, idx) {
-            if (item.charAt(item.length-1) == '/' && item.charAt(0) == '/') {
+            if (item.charAt(item.length - 1) == '/' && item.charAt(0) == '/') {
 
-                grammar.values[idx] = new RegExp(item.slice(1).slice(0,-1));
+                grammar.values[idx] = new RegExp(item.slice(1).slice(0, -1));
             }
         });
 
@@ -127,9 +125,9 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
             success: function (response, request) {
                 var result = Ext.JSON.decode(response.responseText);
 
-                if(!result) {
+                if (!result) {
                     me.showError(response.responseText);
-                }else if(result.success) {
+                } else if (result.success) {
                     var grammar = me.prepareGrammar(result.data);
 
                     me.parser = new Parser(grammar);
@@ -141,7 +139,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
 
             },
             failure: function (response, request) {
-                if(response.responseText) {
+                if (response.responseText) {
                     me.showError(response.responseText);
                 } else {
                     me.showError('{s name="unknownError"}An unknown error occurred, please check your server logs{/s}');
@@ -176,7 +174,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
         return me.parser;
     },
 
-
     /**
      * Actually do show suggestions in the combobox; depending on the type of suggestion, local or remote
      * suggestions are shown
@@ -204,17 +201,17 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
 
         lastSeenAttribute = lastSeenAttribute.toUpperCase();
 
-        for (i=0;i<attributesLength;i++) {
-           if (lastSeenAttribute == attributes[i].toUpperCase()) {
-               // Get the suggested values from remote
-               var params = {
-                   resource: 'product',
-                   attribute: lastSeenAttribute
-               };
+        for (i = 0;i < attributesLength;i++) {
+            if (lastSeenAttribute == attributes[i].toUpperCase()) {
+                // Get the suggested values from remote
+                var params = {
+                    resource: 'product',
+                    attribute: lastSeenAttribute
+                };
 
-               combo.showRemoteSuggestion(params, lastToken, lastValidToken);
-               return;
-           }
+                combo.showRemoteSuggestion(params, lastToken, lastValidToken);
+                return;
+            }
         }
 
         // If attribute was not valid, collapse suggestion box
@@ -405,7 +402,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
         } catch (e) {
             // The picker might not be available
         }
-
 
     }
 });

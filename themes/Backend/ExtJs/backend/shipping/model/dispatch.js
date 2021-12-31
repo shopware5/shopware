@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Shipping.model.Dispatch', {
      * @string
      */
     extend: 'Shopware.apps.Shipping.model.DispatchList',
-     /**
+    /**
      * Configure the data communication
      * @object
      */
@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Shipping.model.Dispatch', {
         }
     },
 
-     /**
+    /**
      * Define the associations of the dispatch model.
      * One dispatch has one or many allowed means of payment, blocked categories, allowed countries and holidays
      * @array
@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.Shipping.model.Dispatch', {
             model: 'Shopware.apps.Base.model.Country',
             name: 'getCountries',
             associationKey: 'countries'
-        } , {
+        }, {
             type: 'hasMany',
             model: 'Shopware.apps.Shipping.model.Holiday',
             name: 'getHolidays',

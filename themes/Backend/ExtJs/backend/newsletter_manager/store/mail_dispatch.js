@@ -46,6 +46,5 @@ Ext.define('Shopware.apps.NewsletterManager.store.MailDispatch', {
         { id: '2', name: '{s name="plaintext"}Plaintext{/s}' }
     ]
 
-
 });
 //{/block}

@@ -170,10 +170,10 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
         return new Ext.XTemplate(
             '{literal}',
             '<tpl for=".">',
-                '<div class="visitors-online">',
-                    '<span class="visitors">{visitors}</span>',
-                    '<strong class="title">' + me.snippets.visitors_online + '</strong>',
-                '</div>',
+            '<div class="visitors-online">',
+            '<span class="visitors">{visitors}</span>',
+            '<strong class="title">' + me.snippets.visitors_online + '</strong>',
+            '</div>',
             '</tpl>',
             '{/literal}'
         );

@@ -62,7 +62,6 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Viewports', {
         me.callParent(arguments);
     },
 
-
     /**
      * Creates the grid columns
      * Data indices where chosen in order to match the database scheme for sorting in the PHP backend.

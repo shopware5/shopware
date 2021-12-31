@@ -68,53 +68,53 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
     registerEvents: function () {
         this.addEvents(
 
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event deleteColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'deleteColumn',
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'deleteColumn',
 
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event deleteColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'editColumn',
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'editColumn',
 
-                /**
-                 * Event will be fired when the user clicks the duplicate icon in the
-                 * action column
-                 *
-                 * @event duplicateColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'duplicateColumn',
+            /**
+             * Event will be fired when the user clicks the duplicate icon in the
+             * action column
+             *
+             * @event duplicateColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'duplicateColumn',
 
-                /**
-                 * Event will be fired when the user clicks the exectue icon in the
-                 * action column
-                 *
-                 * @event executeFeed
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'executeFeed'
+            /**
+             * Event will be fired when the user clicks the exectue icon in the
+             * action column
+             *
+             * @event executeFeed
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'executeFeed'
         );
 
         return true;
@@ -166,7 +166,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
     },
 
     onDateRenderer: function(value) {
-        if(!value) {
+        if (!value) {
             return;
         }
         return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
@@ -180,51 +180,51 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
         var me = this,
             actionColumnData = [];
 
-            /*{if {acl_is_allowed privilege=update}}*/
-            actionColumnData.push({
-                iconCls: 'sprite-pencil',
-                cls: 'editBtn',
-                tooltip: '{s name="list/action_column/edit"}Edit this product feed{/s}',
-                handler: function (view, rowIndex, colIndex, item) {
-                    me.fireEvent('editColumn', view, rowIndex, colIndex, item);
-                }
-            });
-            /*{/if}*/
+        /*{if {acl_is_allowed privilege=update}}*/
+        actionColumnData.push({
+            iconCls: 'sprite-pencil',
+            cls: 'editBtn',
+            tooltip: '{s name="list/action_column/edit"}Edit this product feed{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
+                me.fireEvent('editColumn', view, rowIndex, colIndex, item);
+            }
+        });
+        /*{/if}*/
 
-            /*{if {acl_is_allowed privilege=delete}}*/
-            actionColumnData.push({
-               iconCls: 'sprite-minus-circle-frame',
-               action: 'delete',
-               cls: 'delete',
-               tooltip: '{s name="list/action_column/delete"}Delete this feed{/s}',
-               handler: function (view, rowIndex, colIndex, item) {
-                   me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
-               }
-            });
-            /*{/if}*/
+        /*{if {acl_is_allowed privilege=delete}}*/
+        actionColumnData.push({
+            iconCls: 'sprite-minus-circle-frame',
+            action: 'delete',
+            cls: 'delete',
+            tooltip: '{s name="list/action_column/delete"}Delete this feed{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
+                me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
+            }
+        });
+        /*{/if}*/
 
-            /*{if {acl_is_allowed privilege=create}}*/
-            actionColumnData.push({
-                iconCls: 'sprite-blue-document-copy',
-                cls: 'duplicate',
-                tooltip: '{s name="list/action_column/duplicate"}Duplicate this feed{/s}',
-                handler: function (view, rowIndex, colIndex, item) {
-                    me.fireEvent('duplicateColumn', view, rowIndex, colIndex, item);
-                }
+        /*{if {acl_is_allowed privilege=create}}*/
+        actionColumnData.push({
+            iconCls: 'sprite-blue-document-copy',
+            cls: 'duplicate',
+            tooltip: '{s name="list/action_column/duplicate"}Duplicate this feed{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
+                me.fireEvent('duplicateColumn', view, rowIndex, colIndex, item);
+            }
 
-            });
-            /*{/if}*/
+        });
+        /*{/if}*/
 
-            /*{if {acl_is_allowed privilege=generate}}*/
-            actionColumnData.push({
-                iconCls: 'sprite-lightning',
-                cls: 'arrow-lightning',
-                tooltip: '{s name="list/action_column/execute"}Execute feed{/s}',
-                handler: function (view, rowIndex, colIndex, item) {
-                    me.fireEvent('executeFeed', view, rowIndex, colIndex, item);
-                }
-            });
-            /*{/if}*/
+        /*{if {acl_is_allowed privilege=generate}}*/
+        actionColumnData.push({
+            iconCls: 'sprite-lightning',
+            cls: 'arrow-lightning',
+            tooltip: '{s name="list/action_column/execute"}Execute feed{/s}',
+            handler: function (view, rowIndex, colIndex, item) {
+                me.fireEvent('executeFeed', view, rowIndex, colIndex, item);
+            }
+        });
+        /*{/if}*/
         return actionColumnData;
     },
     /**
@@ -272,22 +272,22 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
      */
     fileNameRenderer: function (value, p, record) {
         /*{if {acl_is_allowed privilege=generate}}*/
-        return '<a href="{url controller=export}' + '/index/'+record.get('fileName')+
-                '?feedID='+record.get('id')+'&hash='+ record.get('hash') + '" target="_blank">' + value + '</a>';
+        return '<a href="{url controller=export}' + '/index/' + record.get('fileName') +
+                '?feedID=' + record.get('id') + '&hash=' + record.get('hash') + '" target="_blank">' + value + '</a>';
         /*{else}*/
         return value;
         /*{/if}*/
     },
 
-     /**
+    /**
       * @param [object] - value
       */
-     activeColumnRenderer: function(value) {
-         var cls = 'sprite-ui-check-box';
-         if (!value) {
+    activeColumnRenderer: function(value) {
+        var cls = 'sprite-ui-check-box';
+        if (!value) {
             cls = 'sprite-cross-small';
-         }
-         return '<div class="'+cls+'" style="width: 16px; height: 16px; margin-left: 9px;">&nbsp;</div>';
-     }
+        }
+        return '<div class="' + cls + '" style="width: 16px; height: 16px; margin-left: 9px;">&nbsp;</div>';
+    }
 });
 //{/block}

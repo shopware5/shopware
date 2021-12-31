@@ -127,11 +127,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
 
         me.modeSelectionTpl = new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<div class="x-layout-mode-selection-item x-boundlist-item">',
-                    '<div class="x-selection-item-icon icon--{value}"></div>',
-                    '<div class="x-selection-item-label">{display}</div>',
-                    '<div class="x-selection-item-description">{supportText}</div>',
-                '</div>',
+            '<div class="x-layout-mode-selection-item x-boundlist-item">',
+            '<div class="x-selection-item-icon icon--{value}"></div>',
+            '<div class="x-selection-item-label">{display}</div>',
+            '<div class="x-selection-item-description">{supportText}</div>',
+            '</div>',
             '</tpl>{/literal}'
         );
 

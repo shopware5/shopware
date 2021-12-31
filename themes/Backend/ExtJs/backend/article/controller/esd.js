@@ -268,7 +268,7 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
             saveButton = me.getSaveButton(),
             cardToRemove = esdTab.getLayout().getActiveItem();
 
-        if(cardToRemove.$className === 'Shopware.apps.Article.view.esd.List') {
+        if (cardToRemove.$className === 'Shopware.apps.Article.view.esd.List') {
             return false;
         }
         esdTab.getLayout().setActiveItem(0);
@@ -343,7 +343,7 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
 
         if (records.length > 0) {
             // we do not just delete - we are polite and ask the user if he is sure.
-            Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.messages.esdRemove , function (response) {
+            Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.messages.esdRemove, function (response) {
                 if ( response !== 'yes' ) {
                     return;
                 }
@@ -456,7 +456,7 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
     onDeleteUnusedSerials: function() {
         var me = this;
 
-        Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.messages.serialsRemoveUnused , function (response) {
+        Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.messages.serialsRemoveUnused, function (response) {
             if ( response !== 'yes' ) {
                 return;
             }
@@ -485,7 +485,7 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
             store = serialsListing.getStore();
 
         if (records.length > 0) {
-            Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.messages.serialRemove , function (response) {
+            Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.messages.serialRemove, function (response) {
                 if ( response !== 'yes' ) {
                     return;
                 }
@@ -573,7 +573,6 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
 
         record.set('file', filename);
     },
-
 
     onUploadReady: function() {
         var me = this;

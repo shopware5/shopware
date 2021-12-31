@@ -173,7 +173,6 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
              */
             'defineConfiguratorTemplate',
 
-
             /**
              * Event will be fired when the user clicks on the "create" button in the
              * group panel. If the user choose "create & activate" the "activate" parameter
@@ -400,8 +399,6 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
         return me.groupGrid;
     },
 
-
-
     /**
      * Creates the drag and drop zone for the Ext.view.View to allow
      */
@@ -497,7 +494,6 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
         });
     },
 
-
     /**
      * Creates the grouping feature for the attribute group grid.
      * Groups the records by the active flag and display "active groups" and "inactive groups" as group header.
@@ -539,7 +535,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                 fieldLabel: me.snippets.groups.name,
                 name: 'name'
             }
-        } , {
+        }, {
             dataIndex: 'description',
             flex: 2,
             text: me.snippets.groups.description,
@@ -550,12 +546,12 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                 name: 'description'
             },
             hidden: true
-        },{
+        }, {
             dataIndex: 'optionCount',
             flex: 1,
             text: me.snippets.groups.options.header,
             renderer: me.optionCountColumnRenderer
-        } , {
+        }, {
             /**
              * Special column type which provides clickable icons in each row
              */
@@ -568,7 +564,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('deleteGroup', record);
                 }
-            } , {
+            }, {
                 iconCls: 'sprite-pencil',
                 action: 'editGroup',
                 tooltip: me.snippets.groups.edit,
@@ -645,7 +641,6 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
             ]
         });
     },
-
 
     /**OPTION PANEL DECLARATION*/
 
@@ -763,7 +758,6 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
         });
     },
 
-
     /**
      * Creates the grid selection model for checkboxes
      *
@@ -823,7 +817,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                 fieldLabel: me.snippets.groups.name,
                 name: 'name'
             }
-        } , {
+        }, {
             /**
              * Special column type which provides clickable icons in each row
              */
@@ -929,16 +923,15 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
 
         if (options && options.getCount() > 0) {
             options.each(function(item) {
-                 if (item.get('active')) {
-                     counter++;
-                 }
+                if (item.get('active')) {
+                    counter++;
+                }
             });
             return counter + info;
         } else {
             return 0 + info;
         }
     }
-
 
 });
 //{/block}

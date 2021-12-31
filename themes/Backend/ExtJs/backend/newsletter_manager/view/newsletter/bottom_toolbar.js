@@ -80,17 +80,17 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.BottomToolbar', {
         });
 
         return [
-                '->',
-                {
-                    xtype: 'button',
-                    cls: 'secondary',
-                    text: '{s name="backToOverview"}Back to overview{/s}',
-                    handler: function() {
-                        me.fireEvent('backToOverview');
-                    }
-                },
-                me.saveButton
-            ];
+            '->',
+            {
+                xtype: 'button',
+                cls: 'secondary',
+                text: '{s name="backToOverview"}Back to overview{/s}',
+                handler: function() {
+                    me.fireEvent('backToOverview');
+                }
+            },
+            me.saveButton
+        ];
     }
 
 });

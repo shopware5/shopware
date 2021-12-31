@@ -237,7 +237,7 @@ Ext.define('Shopware.apps.Article.view.resources.Downloads', {
                         {
                             iconCls: 'sprite-minus-circle-frame',
                             tooltip: me.snippets.grid.delete,
-                            handler: function (view, rowIndex, colIndex, item,opts, record) {
+                            handler: function (view, rowIndex, colIndex, item, opts, record) {
                                 me.fireEvent('removeDownload', me.downloadGrid, record)
                             }
                         }

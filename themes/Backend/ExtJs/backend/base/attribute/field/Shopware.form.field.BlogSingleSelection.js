@@ -39,20 +39,20 @@ Ext.define('Shopware.form.field.BlogSingleSelection', {
 
         config.tpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<tpl if="authorName">',
-                    '<div class="x-boundlist-item">{literal}<i>{authorName}</i> - {title}{/literal}</div>',
-                '<tpl else>',
-                    '<div class="x-boundlist-item">{literal}{title}{/literal}</div>',
-                '</tpl>',
+            '<tpl if="authorName">',
+            '<div class="x-boundlist-item">{literal}<i>{authorName}</i> - {title}{/literal}</div>',
+            '<tpl else>',
+            '<div class="x-boundlist-item">{literal}{title}{/literal}</div>',
+            '</tpl>',
             '</tpl>'
         );
         config.displayTpl = Ext.create('Ext.XTemplate',
             '<tpl for=".">',
-                '<tpl if="authorName">',
-                    '{literal}{authorName} - {title}{/literal}',
-                '<tpl else>',
-                    '{literal}{title}{/literal}',
-                '</tpl>',
+            '<tpl if="authorName">',
+            '{literal}{authorName} - {title}{/literal}',
+            '<tpl else>',
+            '{literal}{title}{/literal}',
+            '</tpl>',
             '</tpl>'
         );
         return config;

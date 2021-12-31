@@ -39,23 +39,23 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerList', {
             displayProgressOnSingleDelete: false,
 
             /* {if {acl_is_allowed privilege=delete}} */
-                deleteButton: true,
-                deleteColumn: true,
+            deleteButton: true,
+            deleteColumn: true,
             /* {else} */
-                deleteButton: false,
-                deleteColumn: false,
+            deleteButton: false,
+            deleteColumn: false,
             /* {/if} */
 
             /* {if {acl_is_allowed privilege=detail}} */
-                editColumn: true,
+            editColumn: true,
             /* {else} */
-                editColumn: false,
+            editColumn: false,
             /* {/if} */
 
             /* {if {acl_is_allowed privilege=update}} */
-                addButton: true,
+            addButton: true,
             /* {else} */
-                addButton: false,
+            addButton: false,
             /* {/if} */
 
             columns: {

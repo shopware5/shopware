@@ -100,13 +100,13 @@ Ext.define('Shopware.apps.Article.view.statistics.List', {
      */
     registerEvents: function () {
         this.addEvents(
-                /**
-                 * Event will be fired when the user clicks the delete button in the toolbar or
-                 * use the action column of the grid to remove one or multiple statistics
-                 * @event deleteEsd
-                 * @param [array] Record - The selected records
-                 */
-                'dateChange'
+            /**
+             * Event will be fired when the user clicks the delete button in the toolbar or
+             * use the action column of the grid to remove one or multiple statistics
+             * @event deleteEsd
+             * @param [array] Record - The selected records
+             */
+            'dateChange'
         );
     },
 
@@ -150,8 +150,8 @@ Ext.define('Shopware.apps.Article.view.statistics.List', {
      */
     getToolbar: function () {
         var me   = this,
-        theFirst = new Date(),
-        today    = new Date();
+            theFirst = new Date(),
+            today    = new Date();
 
         theFirst.setDate(1);
 

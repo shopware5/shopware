@@ -81,6 +81,5 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerAge', {
         return value + ' %';
     }
 
-
 });
 //{/block}

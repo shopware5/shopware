@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.ImportExportTeaserPage', {
                 items: [{
                     xtype: 'container',
                     margins: '0 0 0 140px;',
-                    html: '<img class="teaser-icon" src="'+ image1 +'" />'
+                    html: '<img class="teaser-icon" src="' + image1 + '" />'
                 }, {
                     xtype: 'container',
                     flex: 1,
@@ -114,7 +114,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.ImportExportTeaserPage', {
                 items: [{
                     xtype: 'container',
                     margins: '0 0 0 140px;',
-                    html: '<img class="teaser-icon" src="'+ image2 +'" />'
+                    html: '<img class="teaser-icon" src="' + image2 + '" />'
                 }, {
                     xtype: 'container',
                     flex: 1,

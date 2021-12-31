@@ -76,12 +76,12 @@ Ext.define('Shopware.apps.Premium.store.Subshops', {
          * @return void
          */
         load: function(store) {
-            var defaultSubShop = Ext.create('Shopware.apps.Premium.model.Subshop',{
+            var defaultSubShop = Ext.create('Shopware.apps.Premium.model.Subshop', {
                 id: 0,
                 name: '{s name="premium/subShop/comboBox_general"}Universally valid{/s}'
             });
 
-            store.insert(0,defaultSubShop);
+            store.insert(0, defaultSubShop);
         }
     }
 });

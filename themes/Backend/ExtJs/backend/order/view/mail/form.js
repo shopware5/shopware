@@ -281,7 +281,6 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         return this.mailTemplateComboBox;
     },
 
-
     /**
      * Create the text field for text emails
      *

@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         tabs.push(me.quickView);
 
         /*{if {acl_is_allowed resource=customerstream privilege=read}}*/
-            tabs.push(me.streamView);
+        tabs.push(me.streamView);
         /*{/if}*/
 
         me.tabPanel = Ext.create('Ext.tab.Panel', {

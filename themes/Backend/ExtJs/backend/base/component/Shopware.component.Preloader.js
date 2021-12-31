@@ -119,18 +119,18 @@ Ext.define('Shopware.component.Preloader', {
         var me = this,
             clsName = subApp.$className;
 
-        if(me.finished) {
+        if (me.finished) {
             return;
         }
 
-        if(!me.requiredComponents[me.activePrio].hasOwnProperty(clsName)) {
+        if (!me.requiredComponents[me.activePrio].hasOwnProperty(clsName)) {
             return;
         }
         me.requiredComponents[me.activePrio][clsName] = true;
 
-        if(me.isPrioLoaded(me.activePrio)) {
+        if (me.isPrioLoaded(me.activePrio)) {
             me.activePrio += 1;
-            if(!me.requiredComponents[me.activePrio]) {
+            if (!me.requiredComponents[me.activePrio]) {
                 me.finished = true;
                 me.eventProvider.removeListener('subAppLoaded', me.onSubAppLoaded, me);
                 return;
@@ -151,7 +151,7 @@ Ext.define('Shopware.component.Preloader', {
             allLoaded = true;
 
         Ext.iterate(prioGroup, function(index, item) {
-            if(!item) {
+            if (!item) {
                 allLoaded = false;
                 return false;
             }
@@ -170,7 +170,7 @@ Ext.define('Shopware.component.Preloader', {
             prioGroup = me.requiredComponents[me.activePrio];
 
         Ext.iterate(prioGroup, function(name, item) {
-            if(!Ext.ClassManager.isCreated(name)) {
+            if (!Ext.ClassManager.isCreated(name)) {
                 Ext.require(name);
             }
         });

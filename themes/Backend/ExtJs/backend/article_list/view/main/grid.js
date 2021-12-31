@@ -238,7 +238,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
     getActionColumn: function () {
         var me = this;
 
-
         return {
             xtype: 'actioncolumn',
             width: 60,
@@ -280,15 +279,15 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      */
     getColumns: function () {
         var me = this,
-                colLength,
-                i,
-                column,
-                stateColumn,
-                columnDefinition,
-                width,
-                xtype,
-                renderer,
-                columns = [ ];
+            colLength,
+            i,
+            column,
+            stateColumn,
+            columnDefinition,
+            width,
+            xtype,
+            renderer,
+            columns = [ ];
 
         colLength = me.columnConfig.length;
         for (i = 0; i < colLength; i++) {
@@ -314,7 +313,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             if (renderer = me.getRendererForColumn(column)) {
                 columnDefinition.renderer = renderer;
             }
-
 
             if (width = me.getWidthForColumn(column)) {
                 columnDefinition.width = width;
@@ -410,8 +408,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      */
     infoColumnRenderer: function (value, metaData, record) {
         var me = this,
-                result = '',
-                title;
+            result = '',
+            title;
 
         var style = 'style="width: 25px; height: 25px; display: inline-block; margin-right: 3px;"';
 
@@ -622,7 +620,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         }
     },
 
-
     /**
      * Creates the grid toolbar
      *
@@ -638,7 +635,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             enableToggle: true,
             handler: function () {
                 var selectionModel = me.getSelectionModel(),
-                        record = selectionModel.getSelection()[0];
+                    record = selectionModel.getSelection()[0];
 
                 me.fireEvent('triggerSplitView', this, record);
             }
@@ -648,16 +645,16 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
         /*{if {acl_is_allowed resource=article privilege=save}}*/
         buttons.push(
-                Ext.create('Ext.button.Button', {
-                    text: '{s name="addProduct"}Add{/s}',
-                    iconCls: 'sprite-plus-circle-frame',
-                    handler: function () {
-                        Shopware.app.Application.addSubApplication({
-                            name: 'Shopware.apps.Article',
-                            action: 'detail'
-                        });
-                    }
-                })
+            Ext.create('Ext.button.Button', {
+                text: '{s name="addProduct"}Add{/s}',
+                iconCls: 'sprite-plus-circle-frame',
+                handler: function () {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.Article',
+                        action: 'detail'
+                    });
+                }
+            })
         );
         /*{/if}*/
 
@@ -668,7 +665,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             disabled: true,
             handler: function () {
                 var selectionModel = me.getSelectionModel(),
-                        records = selectionModel.getSelection();
+                    records = selectionModel.getSelection();
 
                 if (records.length > 0) {
                     me.fireEvent('deleteMultipleProducts', records);
@@ -694,7 +691,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             listeners: {
                 'change': function (field, value) {
                     var store = me.store,
-                            searchString = Ext.String.trim(value);
+                        searchString = Ext.String.trim(value);
 
                     me.fireEvent('search', searchString);
                 }
@@ -714,7 +711,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      */
     getPagingbar: function () {
         var me = this,
-                productSnippet = '{s name="pagingCombo/products"}products{/s}';
+            productSnippet = '{s name="pagingCombo/products"}products{/s}';
 
         var pageSize = Ext.create('Ext.form.field.ComboBox', {
             labelWidth: 120,
@@ -765,7 +762,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      */
     onPageSizeChange: function (combo, records) {
         var record = records[0],
-                me = this;
+            me = this;
 
         me.store.pageSize = record.get('value');
         if (!me.store.getProxy().extraParams.ast) {

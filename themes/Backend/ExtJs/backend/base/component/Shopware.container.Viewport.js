@@ -43,9 +43,9 @@
  */
 
 //{namespace name="base/login/view/main"}
-Ext.define('Shopware.container.Viewport',
-/** @lends Ext.container.Container# */
-{
+Ext.define('Shopware.container.Viewport', {
+    /** @lends Ext.container.Container# */
+
     /**
      * The parent class that this class extends.
      * @string
@@ -242,7 +242,7 @@ Ext.define('Shopware.container.Viewport',
      */
     getHiddenLayer: function() {
         var me = this;
-        if(!me.hiddenLayer) {
+        if (!me.hiddenLayer) {
             me.createHiddenLayer();
         }
 
@@ -352,7 +352,7 @@ Ext.define('Shopware.container.Viewport',
     _rearrangeVisibleWindows: function() {
         var activeWindows = Shopware.app.Application.getActiveWindows();
         Ext.each(activeWindows, function(win) {
-            if(win.hidden) {
+            if (win.hidden) {
                 return;
             }
 
@@ -362,7 +362,7 @@ Ext.define('Shopware.container.Viewport',
             win.center();
             win.setPosition(position[0], (win.maximized) ? 0 : 15, false);
 
-            if(win.maximized) {
+            if (win.maximized) {
                 size.height -= 50;
                 win.setSize(size);
             }
@@ -462,18 +462,18 @@ Ext.define('Shopware.container.Viewport',
     createDesktop: function(title) {
         var me = this,
             desktop = Ext.create(me.desktopComponentName, {
-            renderTo: me.getEl(),
-            region: 'center',
-            x: 0,
-            y: 40,
-            width: Ext.Element.getViewportWidth(),
-            height: Ext.Element.getViewportHeight() - 80,
-            layout: 'fit',
-            title: title,
-            floating: true,
-            style: 'z-index: 10',
-            cls: 'desktop-pnl'
-        });
+                renderTo: me.getEl(),
+                region: 'center',
+                x: 0,
+                y: 40,
+                width: Ext.Element.getViewportWidth(),
+                height: Ext.Element.getViewportHeight() - 80,
+                layout: 'fit',
+                title: title,
+                floating: true,
+                style: 'z-index: 10',
+                cls: 'desktop-pnl'
+            });
 
         me.desktops.add(desktop);
 
@@ -493,7 +493,7 @@ Ext.define('Shopware.container.Viewport',
      */
     removeDesktop: function(desktop) {
         var me = this, removedDesktop;
-        if(Ext.isNumeric(desktop)) {
+        if (Ext.isNumeric(desktop)) {
             removedDesktop = me.getDesktop(desktop);
             me.desktops.removeAt(desktop);
         } else {
@@ -560,9 +560,9 @@ Ext.define('Shopware.container.Viewport',
             width = Ext.Element.getViewportWidth(),
             pos = me.getActiveDesktopPosition();
 
-        if(direction === 'left' && pos - 1 > -1) {
+        if (direction === 'left' && pos - 1 > -1) {
             pos -= 1;
-        } else if(direction === 'right' && me.getDesktopCount() > pos + 1) {
+        } else if (direction === 'right' && me.getDesktopCount() > pos + 1) {
             pos += 1;
         } else {
             return false;
@@ -595,14 +595,14 @@ Ext.define('Shopware.container.Viewport',
             width = Ext.Element.getViewportWidth(),
             maxPos = me.getDesktopCount();
 
-        if(noAnim) {
+        if (noAnim) {
             html.setStyle('left', -(width * index));
             me.activeDesktop = index;
             me.fireEvent('afterscroll', me, this, index);
             return true;
         }
 
-        if(index < 0 && index < maxPos) {
+        if (index < 0 && index < maxPos) {
             return false;
         }
 

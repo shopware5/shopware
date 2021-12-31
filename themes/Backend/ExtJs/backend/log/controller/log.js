@@ -94,10 +94,10 @@ Ext.define('Shopware.apps.Log.controller.Log', {
             store.sync({
                 callback: function(batch, operation) {
                     var rawData = batch.proxy.getReader().rawData;
-                    if(rawData.success){
+                    if (rawData.success){
                         Shopware.Notification.createGrowlMessage('{s name="growlMessage/deleteMultipleLogs/success/title"}Logs deleted{/s}', '{s name="growlMessage/deleteMultipleLogs/success/content"}The logs were successfully deleted{/s}', '{s name="window_title"}{/s}');
                         grid.getStore().load();
-                    }else{
+                    } else {
                         Shopware.Notification.createGrowlMessage('{s name="growlMessage/deleteMultipleLogs/error/title"}An error occurred{/s}');
                     }
                 }
@@ -127,9 +127,9 @@ Ext.define('Shopware.apps.Log.controller.Log', {
                     var records = operation.getRecords(),
                         record = records[0],
                         rawData = record.getProxy().getReader().rawData;
-                    if(operation.success){
+                    if (operation.success){
                         Shopware.Notification.createGrowlMessage('{s name="growlMessage/deleteSingleLog/success/title"}Log deleted{/s}', '{s name="growlMessage/deleteSingleLog/success/content"}The log has been deleted successfully.{/s}', '{s name="window_title"}{/s}');
-                    }else{
+                    } else {
                         Shopware.Notification.createGrowlMessage('{s name="growlMessage/deleteSingleLog/error/title"}An error has occurred{/s}', rawData.errorMsg, '{s name="window_title"}{/s}');
                     }
                     store.load();

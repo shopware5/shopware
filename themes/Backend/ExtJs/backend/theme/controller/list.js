@@ -173,7 +173,6 @@ Ext.define('Shopware.apps.Theme.controller.List', {
         });
     },
 
-
     /**
      * Event listener function of the "preview theme" listing toolbar button.
      */
@@ -339,7 +338,6 @@ Ext.define('Shopware.apps.Theme.controller.List', {
             me.getShopCombo().getValue()
         );
     }
-
 
 });
 

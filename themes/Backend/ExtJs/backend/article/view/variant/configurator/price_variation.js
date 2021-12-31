@@ -180,7 +180,6 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.PriceVariation', {
             store: me.modeStore
         });
 
-
         me.mappingGridEditor = Ext.create('Ext.grid.plugin.RowEditing', {
             clicksToEdit: 2,
             listeners: {

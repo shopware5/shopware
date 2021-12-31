@@ -131,7 +131,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
         'ArticleList');
     },
 
-
     /**
      * Callback method triggered, after the user presses the 'reset' action button.
      */
@@ -196,7 +195,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
         me.progressWindow.setSize(500, 150);
         me.progressWindow.doLayout();
 
-
         me.progressWindow.progressBar.reset();
         me.progressWindow.progressBar.animate = true;
         me.progressWindow.progressBar.updateProgress(0, '{s name="startingRevert"}Begin restoring the selected file…{/s}');
@@ -232,25 +230,25 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
 
                 var result = Ext.JSON.decode(response.responseText);
 
-                if(!result) {
+                if (!result) {
                     me.progressWindow.close();
                     me.showError(response.responseText);
-                }else if(!result.success) {
+                } else if (!result.success) {
                     me.progressWindow.close();
                     me.showError(result.message);
-                }else{
+                } else {
                     if (result.data.offset < result.data.totalCount) {
                         progressText =  Ext.String.format('{s name="backup/alreadyRestored"}[0] out of [1] deltas restored{/s}', result.data.offset, result.data.totalCount);
-                        me.progressWindow.progressBar.updateProgress(result.data.offset/result.data.totalCount, progressText);
+                        me.progressWindow.progressBar.updateProgress(result.data.offset / result.data.totalCount, progressText);
 
                         me.runRestore(config, result.data.offset);
-                    }else{
+                    } else {
                         Shopware.Notification.createStickyGrowlMessage({
-                                title: '{s name="restoredBackup"}Backup restored{/s}',
-                                text: Ext.String.format('{s name="createdRestoreMessage"}The following changes have been undone:<br>[0]{/s}', config.operationString),
-                                log: true
-                            },
-                            'ArticleList'
+                            title: '{s name="restoredBackup"}Backup restored{/s}',
+                            text: Ext.String.format('{s name="createdRestoreMessage"}The following changes have been undone:<br>[0]{/s}', config.operationString),
+                            log: true
+                        },
+                        'ArticleList'
                         );
 
                         me.progressWindow.progressBar.updateProgress(1, "Done");
@@ -264,7 +262,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
                 }
             },
             failure: function (response, request) {
-                if(response.responseText) {
+                if (response.responseText) {
                     me.showError(response.responseText);
                 } else {
                     me.showError('{s name="unknownError"}An unknown error occurred, please check your server logs{/s}');

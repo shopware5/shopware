@@ -41,7 +41,6 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
     title: '{s name="listing"}Theme manager{/s}',
     minWidth: 600,
 
-
     configure: function() {
         return {
             listingGrid: 'Shopware.apps.Theme.view.list.Theme',

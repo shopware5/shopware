@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Config.view.base.Table', {
     getTopBar: function () {
         var me = this;
         var items = [];
-        if(me.addable) {
+        if (me.addable) {
             items.push({
                 iconCls: 'sprite-plus-circle-frame',
                 text: '{s name="table/add_text"}Add entry{/s}',
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Config.view.base.Table', {
                 action: 'add'
             });
         }
-        if(me.deletable) {
+        if (me.deletable) {
             items.push({
                 iconCls: 'sprite-minus-circle-frame',
                 text: '{s name="table/delete_text"}Delete entry{/s}',

@@ -279,7 +279,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
     onSaveVariantInline: function(record) {
         var me = this;
 
-        me.saveVariant(record,null, {
+        me.saveVariant(record, null, {
             callback: function() {
                 me.getVariantListing().getSelectionModel().deselectAll();
 
@@ -356,9 +356,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             groupGrid = me.getConfiguratorGroupListing();
 
         groupGrid.getStore().each(function(group) {
-             if (group.get('active')) {
-                 groups.push(group);
-             }
+            if (group.get('active')) {
+                groups.push(group);
+            }
         });
         return groups;
     },
@@ -709,7 +709,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         return configuratorSet;
     },
 
-
     /**
      * Internal helper function to save the configurator set changes.
      */
@@ -770,7 +769,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             optionListing.activeGroup = record;
             optionListing.reconfigure(optionStore);
             optionStore.each(function(item) {
-                if(item.get('active')) {
+                if (item.get('active')) {
                     optionListing.getSelectionModel().select(item, true, true);
                 }
             });
@@ -927,15 +926,15 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         groupListing.reconfigure(groupListing.getStore());
     },
 
-   /**
-    * Event will be fired over the save button if the user is on the configurator tab.
-    * Fired from the detail.window component
-    */
+    /**
+     * Event will be fired over the save button if the user is on the configurator tab.
+     * Fired from the detail.window component
+     */
     onCreateVariants: function(article) {
         var me = this;
 
         Ext.MessageBox.confirm(me.snippets.messages.warningTitle, me.snippets.messages.saveArticleBefore, function(btn) {
-            if(btn == 'yes') {
+            if (btn == 'yes') {
                 var detailController = me.getController('Detail');
                 detailController.onSaveArticle(null, me.subApplication.article, {
                     callback: function(article, success, failure) {
@@ -1123,11 +1122,10 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         });
 
         // SW-4440 There cannot be two options with the same name
-        if(optionListing.getStore().findRecord('name', name, 0, false, false, true )) {
+        if (optionListing.getStore().findRecord('name', name, 0, false, false, true )) {
             Shopware.Notification.createGrowlMessage(me.snippets.failure.title, Ext.String.format(me.snippets.messages.optionExists, name), me.snippets.growlMessage);
             return;
         }
-
 
         var record = Ext.create('Shopware.apps.Article.model.ConfiguratorOption', {
             name: name,
@@ -1169,9 +1167,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
     * @param record - The selected grid record
     */
     onDeleteGroup: function(record) {
-       var me = this, articleString, message,
-           groupListing = me.getConfiguratorGroupListing(),
-           optionListing = me.getConfiguratorOptionListing();
+        var me = this, articleString, message,
+            groupListing = me.getConfiguratorGroupListing(),
+            optionListing = me.getConfiguratorOptionListing();
 
         if (!(record instanceof Ext.data.Model)) {
             return;
@@ -1222,7 +1220,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 });
             }
         });
-   },
+    },
 
     /**
     * Event will be fired when the user clicks the delete column in the option grid.
@@ -1230,9 +1228,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
     * @param record - The selected grid record
     */
     onDeleteOption: function(record) {
-       var me = this, articleString, message, name,
-           groupListing = me.getConfiguratorGroupListing(),
-           optionListing = me.getConfiguratorOptionListing();
+        var me = this, articleString, message, name,
+            groupListing = me.getConfiguratorGroupListing(),
+            optionListing = me.getConfiguratorOptionListing();
 
         if ( !(record instanceof Ext.data.Model) ) {
             return;
@@ -1256,7 +1254,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                     },
                     failure: function (record, operation) {
                         var rawData = record.getProxy().getReader().rawData,
-                                articles = rawData.articles;
+                            articles = rawData.articles;
 
                         message = rawData.message + '';
                         if ( articles.length > 0 ) {
@@ -1291,8 +1289,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             variantListing = me.getVariantListing(),
             configuratorTabPanel = me.getConfiguratorTabPanel();
 
-
-
         //if the user want to change to the variant tab, load the store of the variant listing.
         if (newTab.name === 'variant-tab') {
             if (variantListing.getStore().getCount() > 0) {
@@ -1301,7 +1297,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 variantListing.getSelectionModel().deselectAll();
                 variantListing.getStore().load({
                     callback: function() {
-                        if (variantListing.getStore().getCount()===0) {
+                        if (variantListing.getStore().getCount() === 0) {
                             configuratorTabPanel.setActiveTab(1);
                             me.selectAllActiveRows();
                         } else {
@@ -1326,7 +1322,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             articleButton = me.getSaveArticleButton(),
             configuratorButton = me.getSaveConfiguratorButton();
 
-        if(articleButton){
+        if (articleButton){
             if (hideArticleButton) {
                 articleButton.hide();
             } else {
@@ -1385,7 +1381,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         });
     },
 
-
     /*********************************************************************************************
      *************************EVENTS OF THE VARIANT DETAIL PAGE***********************************
      *********************************************************************************************/
@@ -1409,7 +1404,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                             win.attributeForm.saveAttribute(newArticle.getConfiguratorTemplate().first().get('id'));
                         }
                     }
-            });
+                });
             win.destroy();
         }
     },
@@ -1420,7 +1415,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
      * @param form
      * @param variant
      */
-    onSaveVariant: function(win, form,variant) {
+    onSaveVariant: function(win, form, variant) {
         var me = this, priceStore, number;
 
         if (!form.getForm().isValid()) {
@@ -1428,7 +1423,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         }
         if (form && variant) {
             form.getForm().updateRecord(variant);
-            me.saveVariant(variant,win);
+            me.saveVariant(variant, win);
         }
     },
 
@@ -1562,8 +1557,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         record.save();
     },
 
-
-
     /*********************************************************************************************
      *******************EVENTS OF THE DEPENDENCY AND PRICE VARIATION COMPONENT********************
      *********************************************************************************************/
@@ -1617,7 +1610,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             variantListing = me.getVariantListing(),
             newRow, fieldSet = me.getDependencyFieldSet(),
             dependencyWindow = me.getDependencyWindow();
-
 
         if (!record) {
             record = Ext.create('Shopware.apps.Article.model.Dependency');
@@ -1918,7 +1910,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             }
         });
     },
-
 
     /**
      * Displays the mapping window to apply data from the

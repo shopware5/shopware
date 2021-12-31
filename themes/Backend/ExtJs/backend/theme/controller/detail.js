@@ -87,14 +87,13 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
         var detailForm = me.getDetailWindow().formPanel;
 
         detailForm.getForm().getFields().each(function(field) {
-            if(data.hasOwnProperty(field.name)) {
+            if (data.hasOwnProperty(field.name)) {
                 field.setValue(data[field.name]);
             }
         });
 
         window.destroy();
     },
-
 
     onLoadConfigSets: function(window, theme) {
         var me = this;
@@ -112,7 +111,6 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
             }
         });
     },
-
 
     /**
      * Event listener of the toolbar "configure button".
@@ -384,7 +382,6 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
             me.getShopCombo().getValue()
         );
     }
-
 
 });
 

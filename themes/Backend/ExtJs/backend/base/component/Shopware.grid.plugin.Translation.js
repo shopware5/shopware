@@ -245,7 +245,6 @@ Ext.define('Shopware.grid.plugin.Translation', {
         return translationItemExist;
     },
 
-
     /**
      * Updates the action column for the grid panel.
      * The passed actionColumn parameter can contains an already existing action column.
@@ -325,7 +324,7 @@ Ext.define('Shopware.grid.plugin.Translation', {
         }
 
         // Check if sub applications are supported
-        if(typeof Shopware.app.Application.addSubApplication !== 'function') {
+        if (typeof Shopware.app.Application.addSubApplication !== 'function') {
             Ext.Error.raise('Your ExtJS application does not support sub applications');
         }
 
@@ -349,7 +348,6 @@ Ext.define('Shopware.grid.plugin.Translation', {
         });
         return true;
     },
-
 
     /**
      * @method

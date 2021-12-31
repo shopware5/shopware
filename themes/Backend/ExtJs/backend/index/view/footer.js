@@ -55,7 +55,6 @@ Ext.define('Shopware.apps.Index.view.Footer', {
         close_all: '{s name="footer/close_all"}Close all{/s}'
     },
 
-
     /**
      * Initialize the footer toolbar
      *
@@ -67,7 +66,7 @@ Ext.define('Shopware.apps.Index.view.Footer', {
         me.createBasicItems();
         me.callParent(arguments);
 
-        if(Ext.isObject(Shopware.app.WindowManagement)) {
+        if (Ext.isObject(Shopware.app.WindowManagement)) {
             Shopware.app.WindowManagement.init(me);
         }
     },

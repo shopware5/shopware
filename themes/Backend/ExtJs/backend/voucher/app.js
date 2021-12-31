@@ -67,17 +67,16 @@ Ext.define('Shopware.apps.Voucher', {
      */
     views: [ 'voucher.List', 'voucher.Window', 'voucher.BaseConfiguration', 'main.Window', 'code.List', 'code.Progress' ],
 
-
     /**
      * Requires models for sub-application
      * @array
      */
-    models: ['Code','Detail','Main','Tax'],
+    models: ['Code', 'Detail', 'Main', 'Tax'],
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers: ['Voucher','Main','Code'],
+    controllers: ['Voucher', 'Main', 'Code'],
 
     /**
      * Returns the main application window for this is expected

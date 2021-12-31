@@ -49,6 +49,6 @@ Ext.define('Shopware.form.field.PremiumGrid', {
     },
 
     productRenderer: function(value, meta, record) {
-        return '<b>'+record.get('number')+'</b> - ' + value;
+        return '<b>' + record.get('number') + '</b> - ' + value;
     }
 });

@@ -137,7 +137,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
                 xtype: 'actioncolumn',
                 width: 80,
                 items: [
-                     /* {if {acl_is_allowed privilege=delete}} */
+                    /* {if {acl_is_allowed privilege=delete}} */
                     {
                         iconCls: 'sprite-minus-circle-frame',
                         action: 'delete',
@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
                         tooltip: '{s name="grid_edit_tooltip"}Edit these shipping costs{/s}'
                     },
                     /* {/if} */
-                     /* {if {acl_is_allowed privilege=create}} */
+                    /* {if {acl_is_allowed privilege=create}} */
                     {
                         iconCls: 'sprite-blue-document-copy',
                         cls: 'cloneButton',
@@ -267,7 +267,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
         if (null == record.get('customerGroupId') || null == customerGroup) {
             return me.emptyCustomerGroupText;
         }
-        return customerGroup.get('name') + ' ('+customerGroup.get('key')+')';
+        return customerGroup.get('name') + ' (' + customerGroup.get('key') + ')';
     },
 
     /**
@@ -301,7 +301,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * @param [object] record - current record
      */
     activeColumn: function (value, metaData, record) {
-        if(record.get('active') == 0) {
+        if (record.get('active') == 0) {
             return '{s name="grid_active_false_label"}Inactive{/s}';
         }
         return '{s name="grid_active_true_label"}Active{/s}';

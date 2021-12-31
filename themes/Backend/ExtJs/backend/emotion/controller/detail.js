@@ -177,7 +177,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             grid = me.getListing(),
             store = grid.getStore();
 
-        Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.confirmMessage , function (response) {
+        Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.confirmMessage, function (response) {
             if ( response !== 'yes' ) {
                 return;
             }
@@ -418,11 +418,11 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             formPanel = win.down('form'),
             form = formPanel.getForm(),
             formFields = form.getFields(),
-            data= [],
+            data = [],
             cssField,
             xtype, compField;
 
-        if(!formPanel.getForm().isValid()) {
+        if (!formPanel.getForm().isValid()) {
             Shopware.Notification.createGrowlMessage(
                 win.title,
                 me.snippets.saveComponentAlert
@@ -809,14 +809,14 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         }
 
         return Ext.Msg.confirm(
-           '{s name="preset/required_plugins_title"}{/s}',
+            '{s name="preset/required_plugins_title"}{/s}',
             Ext.String.format('{s name="preset/required_plugins_confirmation"}{/s}', pluginInfo.join('<br>')),
             function(btn) {
-               if (btn === 'yes') {
-                   Shopware.app.Application.addSubApplication({
-                       name: 'Shopware.apps.PluginManager'
-                   });
-               }
+                if (btn === 'yes') {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.PluginManager'
+                    });
+                }
             }
         );
     },
@@ -1429,7 +1429,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             callback: function(operation, success, response) {
                 var response = Ext.decode(response.responseText);
 
-                if(!response.success) {
+                if (!response.success) {
                     Shopware.Notification.createGrowlMessage(
                         me.snippets.growlMessage,
                         me.snippets.duplicateErrorMsg

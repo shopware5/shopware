@@ -59,8 +59,8 @@ Ext.define('Shopware.apps.Base.model.Tax', {
     fields: [
         //{block name="backend/base/model/tax/fields"}{/block}
         { name: 'id',  type: 'integer' },
-        { name: 'tax',type: 'float' },
-        { name: 'name',type: 'string' }
+        { name: 'tax', type: 'float' },
+        { name: 'name', type: 'string' }
     ]
 });
 //{/block}

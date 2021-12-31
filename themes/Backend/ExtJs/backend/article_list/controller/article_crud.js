@@ -137,7 +137,6 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
         })
     },
 
-
     /**
      * Called after the user edited a grow in the main grid
      *
@@ -150,8 +149,8 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
             isActiveChange = false,
             changes = record.getChanges();
 
-        isActiveChange = typeof changes.Article_active !== 'undefined'
-                         && record.raw.Article_active != changes.Article_active;
+        isActiveChange = typeof changes.Article_active !== 'undefined' &&
+                         record.raw.Article_active != changes.Article_active;
 
         record.save({
             params: {
@@ -160,11 +159,11 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
             success: function(record, operation) {
                 if (operation.success) {
                     Shopware.Notification.createGrowlMessage(
-                            '{s name="successTitle"}Success{/s}',
-                            Ext.String.format('{s name="successMessage"}Saved [0]{/s}', record.get('Article_name')),
-                            'ArticleList',
-                            'growl',
-                            true
+                        '{s name="successTitle"}Success{/s}',
+                        Ext.String.format('{s name="successMessage"}Saved [0]{/s}', record.get('Article_name')),
+                        'ArticleList',
+                        'growl',
+                        true
                     );
 
                     if (isActiveChange && me.getShowVariantsCheckbox().getValue()) {

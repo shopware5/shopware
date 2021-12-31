@@ -144,7 +144,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Notice', {
             form = me.formPanel.getForm(),
             field = me.textArea;
 
-        if(!form.isValid()) {
+        if (!form.isValid()) {
             return false;
         }
 
@@ -175,10 +175,10 @@ Ext.define('Shopware.apps.Index.view.widgets.Notice', {
             success: function(response) {
                 var response = Ext.decode(response.responseText);
 
-                if(!response.success) {
+                if (!response.success) {
                     return;
                 }
-                if(!response.notice || response.notice == 'false') {
+                if (!response.notice || response.notice == 'false') {
                     return;
                 }
                 me.textArea.setValue(response.notice);

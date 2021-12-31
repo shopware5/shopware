@@ -115,7 +115,7 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
      * @param item
      * @param record
      */
-    onItemClick: function(item,record) {
+    onItemClick: function(item, record) {
 
         var me = this,
             form = me.getDetailForm(),
@@ -173,7 +173,7 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
 
             //build and set the embed code
             //the preceding '<' is necessary to display the string without interference from the script renderer
-            var embedCode = '<' + 'a href="{literal}{url controller=custom sCustom={/literal}' + record.data.helperId + '}" title="' + record.data.description + '">' + record.data.description +'</a>';
+            var embedCode = '<' + 'a href="{literal}{url controller=custom sCustom={/literal}' + record.data.helperId + '}" title="' + record.data.description + '">' + record.data.description + '</a>';
             form.down('textfield[name=embedCode]').setValue(embedCode);
 
         } else {
@@ -226,13 +226,13 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
                         me.getStore('Groups').load();
                     },
                     success: function(){
-                        Shopware.Notification.createGrowlMessage('','{s name="onDeleteGroupSuccess"}The group has been deleted successfully.{/s}', '{s name="mainWindowTitle"}{/s}');
+                        Shopware.Notification.createGrowlMessage('', '{s name="onDeleteGroupSuccess"}The group has been deleted successfully.{/s}', '{s name="mainWindowTitle"}{/s}');
                     },
                     failure: function(response) {
                         //display an error message, followed by the actual error text
                         var responseObject = Ext.decode(response.responseText),
                             errorMsg = responseObject.message;
-                        Shopware.Notification.createGrowlMessage('','{s name="onDeleteGroupError"}An error has occurred while trying to delete the group: {/s}' + errorMsg, '{s name="mainWindowTitle"}{/s}');
+                        Shopware.Notification.createGrowlMessage('', '{s name="onDeleteGroupError"}An error has occurred while trying to delete the group: {/s}' + errorMsg, '{s name="mainWindowTitle"}{/s}');
                     }
                 });
             }
@@ -261,49 +261,49 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
             groupName = dialogWindow.down('textfield[name=description]').getValue(),
             templateVar = dialogWindow.down('textfield[name=templateVar]').getValue();
             //send ajax request containing groupName and templateVariable
-            Ext.Ajax.request({
-                url: '{url action=createGroup}',
-                scope: me,
-                params: {
-                    groupName: groupName,
-                    templateVar: templateVar
-                },
-                success: function(response){
-                    //get the response object
-                    var responseObject = Ext.decode(response.responseText);
+        Ext.Ajax.request({
+            url: '{url action=createGroup}',
+            scope: me,
+            params: {
+                groupName: groupName,
+                templateVar: templateVar
+            },
+            success: function(response){
+                //get the response object
+                var responseObject = Ext.decode(response.responseText);
 
-                    if (responseObject.success) {
-                        //destroy the window, reload the stores
-                        dialogWindow.destroy();
-                        me.getStore('Nodes').load();
-                        me.getStore('Groups').load();
+                if (responseObject.success) {
+                    //destroy the window, reload the stores
+                    dialogWindow.destroy();
+                    me.getStore('Nodes').load();
+                    me.getStore('Groups').load();
 
-                        //display a success message
-                        Shopware.Notification.createGrowlMessage('','{s name="onCreateGroupSuccess"}The group has been created successfully.{/s}', '{s name="mainWindowTitle"}{/s}');
-                    } else {
-                        if (responseObject.message == 'nameExists') {
-                            dialogWindow.destroy();
-                            Shopware.Notification.createGrowlMessage('',Ext.String.format('{s name="onCreateGroupGroupNameExisting"}The group \'[0]\' already exists.{/s}', groupName));
-                            return;
-                        }
-                        if (responseObject.message == 'variableExists') {
-                            dialogWindow.destroy();
-                            Shopware.Notification.createGrowlMessage('',Ext.String.format('{s name="onCreateGroupTemplateVariableExisting"}The template variable \'[0]\' is already in use.{/s}', templateVar));
-                            return;
-                        }
+                    //display a success message
+                    Shopware.Notification.createGrowlMessage('', '{s name="onCreateGroupSuccess"}The group has been created successfully.{/s}', '{s name="mainWindowTitle"}{/s}');
+                } else {
+                    if (responseObject.message == 'nameExists') {
                         dialogWindow.destroy();
-                        Shopware.Notification.createGrowlMessage('','{s name="onCreateGroupError"}An error has occurred while trying to create the group: {/s}' + responseObject.message, '{s name="mainWindowTitle"}{/s}');
+                        Shopware.Notification.createGrowlMessage('', Ext.String.format('{s name="onCreateGroupGroupNameExisting"}The group \'[0]\' already exists.{/s}', groupName));
+                        return;
                     }
-                },
-                failure: function(response) {
-                    //get the response object
-                    var responseObject = Ext.decode(response.responseText),
-                        errorMsg = responseObject.message;
-
-                    //display an error message followed by the actual error
-                    Shopware.Notification.createGrowlMessage('','{s name="onCreateGroupError"}An error has occurred while trying to create the group: {/s}' + errorMsg, '{s name="mainWindowTitle"}{/s}');
+                    if (responseObject.message == 'variableExists') {
+                        dialogWindow.destroy();
+                        Shopware.Notification.createGrowlMessage('', Ext.String.format('{s name="onCreateGroupTemplateVariableExisting"}The template variable \'[0]\' is already in use.{/s}', templateVar));
+                        return;
+                    }
+                    dialogWindow.destroy();
+                    Shopware.Notification.createGrowlMessage('', '{s name="onCreateGroupError"}An error has occurred while trying to create the group: {/s}' + responseObject.message, '{s name="mainWindowTitle"}{/s}');
                 }
-            });
+            },
+            failure: function(response) {
+                //get the response object
+                var responseObject = Ext.decode(response.responseText),
+                    errorMsg = responseObject.message;
+
+                //display an error message followed by the actual error
+                Shopware.Notification.createGrowlMessage('', '{s name="onCreateGroupError"}An error has occurred while trying to create the group: {/s}' + errorMsg, '{s name="mainWindowTitle"}{/s}');
+            }
+        });
     },
 
     /**

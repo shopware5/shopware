@@ -104,7 +104,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Detail', {
             handler: function () {
                 me.fireEvent('askForReason');
             }
-                });
+        });
         return me.askReasonButton;
     },
 

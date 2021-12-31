@@ -141,7 +141,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductAttri
 
     _getLabelOfObject: function(values) {
         if (values.label.length > 0) {
-            return values.label + ' - '+ values.columnName;
+            return values.label + ' - ' + values.columnName;
         }
         return values.columnName;
     }

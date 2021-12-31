@@ -61,9 +61,9 @@ Ext.define('Shopware.apps.Article.store.Group', {
          * @object
          */
         api: {
-             create: '{url action="saveConfiguratorGroup"}',
-             destroy: '{url action="deleteConfiguratorGroup"}'
-         },
+            create: '{url action="saveConfiguratorGroup"}',
+            destroy: '{url action="deleteConfiguratorGroup"}'
+        },
         reader: {
             type: 'json',
             root: 'data',

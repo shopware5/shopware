@@ -101,7 +101,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
         });
     },
 
-
     /**
      * Creates the grid columns
      * Data indices where chosen in order to match the database scheme for sorting in the PHP backend.
@@ -137,7 +136,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Sender', {
             }
         ];
     },
-
 
     /**
      * Returns an array of icons for the action column

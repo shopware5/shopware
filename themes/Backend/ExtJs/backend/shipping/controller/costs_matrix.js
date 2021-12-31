@@ -40,7 +40,6 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      */
     extend: 'Ext.app.Controller',
 
-
     /**
      * Some references to get a better grip of the single elements
      */
@@ -107,7 +106,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
 
         switch (item.iconCls) {
             case 'sprite-minus-circle-frame':
-                 var store = view.getStore(),
+                var store = view.getStore(),
                     record = store.getAt(rowIndex);
                 me.onDeleteCostsMatrixEntry(rowIndex, record);
                 break;
@@ -132,7 +131,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
             columns = obj.grid.getColumns(),
             fromEditor = columns[0];
 
-        if('to' == options.field)
+        if ('to' == options.field)
         {
             editor.decimalPrecision = config.decimalPrecision;
             fromEditor.decimalPrecision = config.decimalPrecision;
@@ -146,21 +145,21 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      * @return boolean
      */
     onCostMatrixEdit: function(editor, options) {
-         var rec = options.record,
-             me = this,
-             field = options.field,
-             fromValue  = 1*rec.get('from'),
-             datakeys = options.grid.store.data.keys,
-             toField = options.column.field,
-             mainController = me.getController('Main'),
-             calculationTypeField = me.getCalculationField(),
-             calculationType = calculationTypeField.value,
-             config =  mainController.getConfig(calculationType),
-             fieldOriginal = options.originalValue;
+        var rec = options.record,
+            me = this,
+            field = options.field,
+            fromValue  = 1 * rec.get('from'),
+            datakeys = options.grid.store.data.keys,
+            toField = options.column.field,
+            mainController = me.getController('Main'),
+            calculationTypeField = me.getCalculationField(),
+            calculationType = calculationTypeField.value,
+            config =  mainController.getConfig(calculationType),
+            fieldOriginal = options.originalValue;
 
-        if('to' == field) {
+        if ('to' == field) {
             // If the entered value is smaller than the value in the from field
-            if((options.value <= fromValue) ) {
+            if ((options.value <= fromValue) ) {
                 var errorText = '{s name="dialog_text"}Value must higher than ([0]){/s}';
                 toField.setRawValue(fieldOriginal);
                 rec.set('to', 0);
@@ -169,23 +168,23 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                 return false;
             }
             // check if there are more rows
-            if(datakeys[options.rowIdx+1]) {
+            if (datakeys[options.rowIdx + 1]) {
                 // iterate through all rows
-                while(datakeys[options.rowIdx+1]) {
-                    var recordID = datakeys[options.rowIdx+1];
+                while (datakeys[options.rowIdx + 1]) {
+                    var recordID = datakeys[options.rowIdx + 1];
                     var nextRecord = editor.grid.store.getById(recordID);
                     // remove everthing higher than the new value
                     if ((null != nextRecord) && nextRecord.get("to") && nextRecord.get("to") <= options.value) {
                         options.grid.store.remove(nextRecord);
                     } else {
-                        if(null != nextRecord) {
+                        if (null != nextRecord) {
                             nextRecord.set("from", options.value);
                         }
                         break;
                     }
                 }
             } else {
-                if(options.originalValue === 0) {
+                if (options.originalValue === 0) {
                     editor.decimalPrecision = config.decimalPrecision;
                     var newValue  = Ext.util.Format.round(options.value + config.minChange, config.decimalPrecision);
                     editor.completeEdit();
@@ -210,7 +209,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
     onDeleteCostsMatrixEntry: function(rowIndex, record) {
         /* {if {acl_is_allowed privilege=delete}} */
         var me = this,
-        store = record.store;
+            store = record.store;
 
         Ext.MessageBox.confirm('{s name="delete_dialog_title"}Delete selected Costs Entry?{/s}',
             '{s name="delete_dialog_body"}Do you really want delete this entry?{/s}',
@@ -219,7 +218,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                     return false;
                 }
                 // Row has been created, but not yet saved, so we just remove it
-                if(record.phantom) {
+                if (record.phantom) {
                     record.store.remove(record);
                 } else {
                     var costsMatrixModel = me.getModel('Costsmatrix').create();
@@ -227,7 +226,7 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
                     costsMatrixModel.destroy({
                         success: function () {
                             store.load();
-                            Shopware.Msg.createGrowlMessage('','{s name="dialog_success"}Costs entry has been deleted successfully{/s}', '{s name="title"}{/s}')
+                            Shopware.Msg.createGrowlMessage('', '{s name="dialog_success"}Costs entry has been deleted successfully{/s}', '{s name="title"}{/s}')
                         },
                         failure: function () {
                             Shopware.Msg.createGrowlMessage('', '{s name="dialog_error"}An error occurred while deleting the costs entry{/s}', '{s name="title"}{/s}');
@@ -247,9 +246,9 @@ Ext.define('Shopware.apps.Shipping.controller.CostsMatrix', {
      */
     addCostsMatrixEntry: function(from, store) {
         var me = this,
-        last = store.getCount(),
-        lastEntry = store.getAt(last-1),
-        from  = 1*from;
+            last = store.getCount(),
+            lastEntry = store.getAt(last - 1),
+            from  = 1 * from;
         // Create a model instance
         var newCosts =  Ext.create('Shopware.apps.Shipping.model.Costsmatrix', {
             from: from,

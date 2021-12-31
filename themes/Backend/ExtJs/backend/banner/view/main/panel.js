@@ -113,7 +113,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
             region: 'center',
             tpl: me.getBannerListTemplate(),
             multiSelect: true,
-            height: '100%',//just for the selector plugin
+            height: '100%', //just for the selector plugin
             trackOver: true,
             overItemCls: 'x-item-over',
             itemSelector: 'div.thumb-wrap',
@@ -126,18 +126,18 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
             *
             * @param data
             */
-             prepareData: function(data) {
+            prepareData: function(data) {
                 Ext.apply(data, {
                     description: Ext.util.Format.ellipsis(data.description, 27),
                     img: data.image,
-                   id: data.id
+                    id: data.id
                 });
                 return data;
             }
         });
 
         return Ext.create('Ext.panel.Panel', {
-            cls: 'banner-images-view',//only for the css styling
+            cls: 'banner-images-view', //only for the css styling
             region: 'center',
             unstyled: true,
             style: 'border-top: 1px solid #c7c7c7',
@@ -154,10 +154,10 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
         var basePath = '';
         return [
             '<tpl for=".">',
-                '<div class="thumb-wrap" id="{literal}{id}{/literal}">',
-                    '<div class="thumb"><img src="{literal}{image}{/literal}" title="{literal}{description}{/literal}"></div>',
-                    '<span class="x-editable">{literal}{description}{/literal}</span>',
-                '</div>',
+            '<div class="thumb-wrap" id="{literal}{id}{/literal}">',
+            '<div class="thumb"><img src="{literal}{image}{/literal}" title="{literal}{description}{/literal}"></div>',
+            '<span class="x-editable">{literal}{description}{/literal}</span>',
+            '</div>',
             '</tpl>',
             '<div class="x-clear"></div>'
         ];

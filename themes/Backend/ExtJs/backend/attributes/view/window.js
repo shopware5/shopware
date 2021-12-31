@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Attributes.view.Window', {
 
         me.listingStore = Ext.create('Shopware.apps.Attributes.store.Column');
         me.listingStore.getProxy().extraParams.raw = 1;
-        
+
         me.listing = Ext.create('Shopware.apps.Attributes.view.Listing', {
             region: 'center',
             store: me.listingStore,
@@ -95,17 +95,17 @@ Ext.define('Shopware.apps.Attributes.view.Window', {
                 xtype: 'toolbar',
                 dock: 'bottom',
                 items: [
-                '->',
-                /*{if {acl_is_allowed privilege=update}}*/
-                {
-                    xtype: 'button',
-                    cls: 'primary',
-                    text: '{s name="save_button"}{/s}',
-                    handler: function() {
-                        me.fireEvent('save-column', me.detailForm);
+                    '->',
+                    /*{if {acl_is_allowed privilege=update}}*/
+                    {
+                        xtype: 'button',
+                        cls: 'primary',
+                        text: '{s name="save_button"}{/s}',
+                        handler: function() {
+                            me.fireEvent('save-column', me.detailForm);
+                        }
                     }
-                }
-                /*{/if}*/
+                    /*{/if}*/
                 ]
             }]
         });

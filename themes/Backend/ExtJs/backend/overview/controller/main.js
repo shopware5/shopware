@@ -59,7 +59,6 @@ Ext.define('Shopware.apps.Overview.controller.Main', {
         { ref: 'gridPanel', selector: 'overview-main-grid' }
     ],
 
-
     /**
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window

@@ -38,10 +38,10 @@ Ext.define('Shopware.apps.Base.store.Variant', {
      */
     extend: 'Ext.data.Store',
 
-   /**
-    * Define the used model for this store
-    * @string
-    */
+    /**
+     * Define the used model for this store
+     * @string
+     */
     model: 'Shopware.apps.Base.model.Variant',
 
     /**

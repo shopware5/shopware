@@ -98,12 +98,12 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
 
         me.items = me.createElements();
         me.addEvents(
-                /**
-                 * Fired when the user changes his country. Used to fill the state box
-                 * @param field
-                 * @param newValue
-                 */
-                'countryChanged'
+            /**
+             * Fired when the user changes his country. Used to fill the state box
+             * @param field
+             * @param newValue
+             */
+            'countryChanged'
 
         );
         me.callParent(arguments);

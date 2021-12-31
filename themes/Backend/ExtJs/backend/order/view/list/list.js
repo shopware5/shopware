@@ -133,15 +133,15 @@ Ext.define('Shopware.apps.Order.view.list.List', {
     createPlugins: function() {
         var me = this,
             rowEditor = Ext.create('Ext.grid.plugin.RowEditing', {
-            clicksToEdit: 2,
-            autoCancel: true,
-            listeners: {
-                scope: me,
-                edit: function(editor, e) {
-                    me.fireEvent('saveOrder', editor, e, me.listStore)
+                clicksToEdit: 2,
+                autoCancel: true,
+                listeners: {
+                    scope: me,
+                    edit: function(editor, e) {
+                        me.fireEvent('saveOrder', editor, e, me.listStore)
+                    }
                 }
-            }
-        });
+            });
 
         return [ rowEditor ];
     },
@@ -378,7 +378,7 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             items: [
                 me.createOpenCustomerColumn(),
                 /*{if {acl_is_allowed privilege=delete}}*/
-                    me.createDeleteOrderColumn(),
+                me.createDeleteOrderColumn(),
                 /*{/if}*/
                 me.createEditOrderColumn()
             ]
@@ -398,13 +398,12 @@ Ext.define('Shopware.apps.Order.view.list.List', {
              */
             handler: function (view, rowIndex, colIndex, item) {
                 var store = view.getStore(),
-                        record = store.getAt(rowIndex);
+                    record = store.getAt(rowIndex);
 
                 me.fireEvent('showDetail', record);
             }
         }
     },
-
 
     createDeleteOrderColumn: function() {
         var me = this;
@@ -418,7 +417,7 @@ Ext.define('Shopware.apps.Order.view.list.List', {
              */
             handler: function (view, rowIndex, colIndex, item) {
                 var store = view.getStore(),
-                        record = store.getAt(rowIndex);
+                    record = store.getAt(rowIndex);
 
                 me.fireEvent('deleteOrder', record);
             }
@@ -437,13 +436,12 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             */
             handler: function (view, rowIndex, colIndex, item) {
                 var store = view.getStore(),
-                record = store.getAt(rowIndex);
+                    record = store.getAt(rowIndex);
 
-               me.fireEvent('openCustomer', record);
+                me.fireEvent('openCustomer', record);
             }
         };
     },
-
 
     /**
      * Creates the grid selection model for checkboxes

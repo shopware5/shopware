@@ -87,12 +87,12 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             dock: 'bottom',
             cls: 'shopware-toolbar',
             items: ['->', /*{if {acl_is_allowed privilege=createupdate}}*/
-            {
-                text: '{s name="button_save_form"}Save{/s}',
-                action: 'save',
-                cls: 'primary',
-                formBind: true
-            }
+                {
+                    text: '{s name="button_save_form"}Save{/s}',
+                    action: 'save',
+                    cls: 'primary',
+                    formBind: true
+                }
             /*{/if}*/]
         });
     },
@@ -187,7 +187,7 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             xtype: 'tinymce',
             translatable: true
         },
-            me.getShopSelector(),
+        me.getShopSelector(),
         {
             fieldLabel: '{s name="label_metatitle"}Meta title{/s}',
             name: 'metaTitle',

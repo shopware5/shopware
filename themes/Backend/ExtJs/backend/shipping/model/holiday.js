@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Shipping.model.Holiday', {
     fields: [
         //{block name="backend/shipping/model/holiday/fields"}{/block}
         { name: 'id',  type: 'integer' },
-        { name: 'name',type: 'string' }
+        { name: 'name', type: 'string' }
     ],
     /**
      * If the name of the field is 'id' extjs assumes autmagical that

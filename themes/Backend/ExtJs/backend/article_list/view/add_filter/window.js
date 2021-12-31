@@ -123,7 +123,6 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
     initComponent: function () {
         var me = this;
 
-
         me.dockedItems = [{
             xtype: 'toolbar',
             dock: 'bottom',
@@ -146,7 +145,6 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
 
     getItems: function() {
         var me = this;
-
 
         return [{
             xtype: 'form',
@@ -196,7 +194,6 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
         };
     },
 
-
     /**
      * Creates the save and cancel button for the form panel.
      *
@@ -205,7 +202,6 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
     getFormButtons: function() {
         var me = this,
             buttons = [ '->' ];
-
 
         var cancelButton = Ext.create('Ext.button.Button', {
             text: '{s name="cancel"}Cancel{/s}',
@@ -246,7 +242,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
                 tabConfig: {
                     tooltip: '{s name="addFilter/advancedTooltip"}In advanced mode, you can define and combine your conditions very free{/s}'
                 }
-            },{
+            }, {
                 xtype: 'multi-edit-add-filter-grid',
                 internalTitle: 'simple',
                 filterableColumns: me.filterableColumns,

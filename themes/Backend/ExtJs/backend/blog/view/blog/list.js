@@ -73,41 +73,41 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
      */
     registerEvents: function () {
         this.addEvents(
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event deleteColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'deleteBlogArticle',
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'deleteBlogArticle',
 
-                /**
-                 * Event will be fired when the user clicks the delete icon in the
-                 * action column
-                 *
-                 * @event deleteColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'editBlogArticle',
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'editBlogArticle',
 
-                /**
-                 * Event will be fired when the user clicks the duplicate icon in the
-                 * action column
-                 *
-                 * @event duplicateColumn
-                 * @param [object] View - Associated Ext.view.Table
-                 * @param [integer] rowIndex - Row index
-                 * @param [integer] colIndex - Column index
-                 * @param [object] item - Associated HTML DOM node
-                 */
-                'duplicateColumn'
+            /**
+             * Event will be fired when the user clicks the duplicate icon in the
+             * action column
+             *
+             * @event duplicateColumn
+             * @param [object] View - Associated Ext.view.Table
+             * @param [integer] rowIndex - Row index
+             * @param [integer] colIndex - Column index
+             * @param [object] item - Associated HTML DOM node
+             */
+            'duplicateColumn'
         );
 
         return true;
@@ -168,7 +168,6 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
         var me = this,
             actionColumnData = [];
 
-
         actionColumnData.push({
             iconCls: 'sprite-pencil',
             cls: 'editBtn',
@@ -211,14 +210,14 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
                 dock: 'top',
                 ui: 'shopware-ui',
                 items: [
-            /* {if {acl_is_allowed privilege=create}} */
+                    /* {if {acl_is_allowed privilege=create}} */
                     {
                         iconCls: 'sprite-plus-circle',
                         text: '{s name="list/button/add"}Add blog article{/s}',
                         action: 'add'
                     },
-            /* {/if} */
-            /* {if {acl_is_allowed privilege=delete}} */
+                    /* {/if} */
+                    /* {if {acl_is_allowed privilege=delete}} */
                     {
 
                         iconCls: 'sprite-minus-circle-frame',
@@ -227,7 +226,7 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
                         action: 'deleteBlogArticles'
 
                     },
-            /* {/if} */
+                    /* {/if} */
                     '->',
                     {
                         xtype: 'textfield',
@@ -269,7 +268,7 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
                 // Unlocks the delete button if the user has checked at least one checkbox
                 selectionchange: function (sm, selections) {
                     var owner = this.view.ownerCt,
-                    btn = owner.down('button[action=deleteBlogArticles]');
+                        btn = owner.down('button[action=deleteBlogArticles]');
                     btn.setDisabled(!selections.length);
                 }
             }

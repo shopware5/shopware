@@ -375,7 +375,6 @@ Ext.define('Shopware.form.field.AceEditor', {
         this.callParent(arguments);
     },
 
-
     /**
      * Ace-Editor supports only readOnly
      *

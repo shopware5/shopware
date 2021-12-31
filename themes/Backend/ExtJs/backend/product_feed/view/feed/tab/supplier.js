@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Supplier', {
             fromTitle: '{s name="tab/title/supplier_available"}Available suppliers{/s}',
             toTitle: '{s name="tab/title/supplier_chosen"}Blocked suppliers{/s}',
             fromStore: me.supplierStore,
-            buttons: [ 'add','remove' ],
+            buttons: [ 'add', 'remove' ],
             gridHeight: 270,
             selectedItems: me.record.getSuppliers(),
             fromFieldDockedItems: [ me.getToolbar() ],
@@ -80,23 +80,23 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Supplier', {
      */
     getToolbar: function () {
         return Ext.create('Ext.toolbar.Toolbar', {
-                    dock: 'top',
-                    ui: 'shopware-ui',
-                    items: [
-                        '->',
-                        {
-                            xtype: 'textfield',
-                            name: 'searchfield',
-                            action: 'searchSupplier',
-                            width: 170,
-                            cls: 'searchfield',
-                            enableKeyEvents: true,
-                            checkChangeBuffer: 500,
-                            emptyText: '{s name="tab/supplier/search"}Search...{/s}'
-                        },
-                        { xtype: 'tbspacer', width: 6 }
-                    ]
-                }
+            dock: 'top',
+            ui: 'shopware-ui',
+            items: [
+                '->',
+                {
+                    xtype: 'textfield',
+                    name: 'searchfield',
+                    action: 'searchSupplier',
+                    width: 170,
+                    cls: 'searchfield',
+                    enableKeyEvents: true,
+                    checkChangeBuffer: 500,
+                    emptyText: '{s name="tab/supplier/search"}Search...{/s}'
+                },
+                { xtype: 'tbspacer', width: 6 }
+            ]
+        }
         );
     }
 });

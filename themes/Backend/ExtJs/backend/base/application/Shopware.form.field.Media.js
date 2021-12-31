@@ -200,7 +200,6 @@ Ext.define('Shopware.form.field.Media', {
             return config;
         },
 
-
         /**
          * Static function which sets the property value of
          * the passed property and value in the display configuration.
@@ -240,7 +239,6 @@ Ext.define('Shopware.form.field.Media', {
         me._opts = me.statics().getDisplayConfig(opts, this);
         me.callParent(arguments);
     },
-
 
     /**
      * Helper function to get config access.
@@ -481,7 +479,6 @@ Ext.define('Shopware.form.field.Media', {
 
         me.fireEvent('after-open-media-manager', me);
     },
-
 
     /**
      * Event listener function of the media manager.

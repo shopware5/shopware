@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         //reset the detail Record
         me.detailRecord = null;
 
-        model.set("hash",me.createRandomHash());
+        model.set("hash", me.createRandomHash());
         me.getView('feed.Window').create({
             record: model,
             supplierStore: me.subApplication.supplierStore,
@@ -187,11 +187,11 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
     onExecuteFeed: function (view, rowIndex) {
         var me = this,
             record = me.getStore('List').getAt(rowIndex);
-            window.open(
-                    '{url controller=export}' + '/index/'+record.get('fileName')
-                            +'?feedID='+record.get('id')
-                            +'&hash='+ record.get('hash')
-            );
+        window.open(
+            '{url controller=export}' + '/index/' + record.get('fileName') +
+                '?feedID=' + record.get('id') +
+                '&hash=' + record.get('hash')
+        );
     },
 
     /**
@@ -205,8 +205,8 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      */
     onDuplicateItem: function (view, rowIndex) {
         var me = this,
-                store = me.subApplication.detailStore,
-                record = me.subApplication.listStore.getAt(rowIndex);
+            store = me.subApplication.detailStore,
+            record = me.subApplication.listStore.getAt(rowIndex);
 
         store.getProxy().extraParams = {
             feedId: record.get("id")
@@ -215,7 +215,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
             scope: this,
             callback: function (records) {
                 me.detailRecord = records[0];
-                me.detailRecord.set("hash",me.createRandomHash());
+                me.detailRecord.set("hash", me.createRandomHash());
                 me.detailRecord.data.id = '';
                 //reset the id
                 store.getProxy().extraParams = {};
@@ -248,22 +248,22 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         Ext.MessageBox.confirm(
             me.snippets.confirmDeleteSingleItem,
             Ext.String.format(me.snippets.confirmDeleteSingle, record.get('name')), function (response) {
-            if (response !== 'yes') {
-                return false;
-            }
-            store.remove(record);
-            store.save({
-                callback: function (self,operation) {
-                    if (operation.success) {
-                        store.load();
-                        Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
-                        me.getProductFeedWindow().destroy();
-                    } else {
-                        Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleItemError, me.snippets.growlMessage);
-                    }
+                if (response !== 'yes') {
+                    return false;
                 }
+                store.remove(record);
+                store.save({
+                    callback: function (self, operation) {
+                        if (operation.success) {
+                            store.load();
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleItemSuccess, me.snippets.growlMessage);
+                            me.getProductFeedWindow().destroy();
+                        } else {
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteSingleItemError, me.snippets.growlMessage);
+                        }
+                    }
+                });
             });
-        });
 
     },
 
@@ -337,25 +337,25 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         form.updateRecord(record);
 
         var tree = me.getCategoryTree(),
-        checked = tree.getChecked(),
-        categories = record.getCategories();
+            checked = tree.getChecked(),
+            categories = record.getCategories();
 
         categories.removeAll();
         categories.add(checked);
 
         record.save({
-            callback: function (self,operation) {
+            callback: function (self, operation) {
                 if (operation.success) {
                     listStore.load();
                     var response = Ext.JSON.decode(operation.response.responseText);
                     var data = response.data;
                     attributeForm.saveAttribute(data.id);
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
-                    if(!Ext.isDefined(keepOpened) || !keepOpened){
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
+                    if (!Ext.isDefined(keepOpened) || !keepOpened){
                         me.getProductFeedWindow().destroy();
                     }
                 } else {
-                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
                 }
             }
         });
@@ -369,7 +369,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         var me = this,
             ids = [],
             selectedTreeItemCounter = 0;
-        if(me.detailRecord) {
+        if (me.detailRecord) {
             var lockedCategoriesStore =  me.detailRecord.getCategories();
             lockedCategoriesStore.each(function(element) {
                 ids.push(element.get('id'));
@@ -380,20 +380,20 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
             url: '{url controller="Category" action="getIdPath"}',
             params: { 'categoryIds[]': ids },
             success: function(result){
-                if(!result.responseText) {
+                if (!result.responseText) {
                     return ;
                 }
                 result =  Ext.JSON.decode(result.responseText);
                 var resultCount = result.data.length;
                 Ext.each(result.data, function(item) {
                     tree.expandPath('/1' + item, 'id', '/', function (records) {
-                            selectedTreeItemCounter++;
-                            if(selectedTreeItemCounter == resultCount) {
-                                //tree completely expanded
-                                me.getProductFeedSaveButton().enable();
-                                me.getProductFeedUpdateButton().enable();
-                            }
+                        selectedTreeItemCounter++;
+                        if (selectedTreeItemCounter == resultCount) {
+                            //tree completely expanded
+                            me.getProductFeedSaveButton().enable();
+                            me.getProductFeedUpdateButton().enable();
                         }
+                    }
                     );
                 });
             }
@@ -420,7 +420,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         var chars = "abcdef1234567890",
             pass = "";
         for (var x = 0; x < 32; x++) {
-            pass += chars.charAt(Math.floor((Math.random()*chars.length)));
+            pass += chars.charAt(Math.floor((Math.random() * chars.length)));
         }
         return pass;
     }

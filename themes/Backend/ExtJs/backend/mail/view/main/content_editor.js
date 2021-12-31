@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
         me.editorField = null;
 
         if (this.isHtml) {
-            me.editorField= Ext.create('Shopware.form.field.CodeMirror', {
+            me.editorField = Ext.create('Shopware.form.field.CodeMirror', {
                 xtype: 'codemirrorfield',
                 mode: {
                     name: 'smarty',
@@ -124,7 +124,7 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
                 editor = editorField.editor,
                 scroller;
 
-            if(!editor || !editor.hasOwnProperty('display')) {
+            if (!editor || !editor.hasOwnProperty('display')) {
                 return false;
             }
 

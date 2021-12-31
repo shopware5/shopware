@@ -38,7 +38,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
         position: 'right'
     },
 
-
     initComponent: function () {
         var me = this;
 
@@ -148,7 +147,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
 
         tip.setTitle(Ext.Date.format(storeItem.get('normal'), 'F, Y') + '<br><br>&nbsp;' + sales);
     }
-
 
 });
 //{/block}

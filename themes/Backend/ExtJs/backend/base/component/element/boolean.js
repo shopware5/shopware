@@ -40,15 +40,15 @@ Ext.define('Shopware.apps.Base.view.element.Boolean', {
     initComponent: function () {
         var me = this;
 
-        if(me.value) {
+        if (me.value) {
             me.setValue(!!me.value);
         }
 
         // Move support text to box label
-        if(me.supportText) {
+        if (me.supportText) {
             me.boxLabel = me.supportText;
             delete me.supportText;
-        } else if(me.helpText) {
+        } else if (me.helpText) {
             me.boxLabel = me.helpText;
             delete me.helpText;
         }
