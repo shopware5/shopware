@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -121,9 +123,9 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * test savePartner controller action
      *
-     * @return string the id of the new dummy partner
+     * @return int the id of the new dummy partner
      */
-    public function testSavePartner()
+    public function testSavePartner(): int
     {
         $params = $this->dummyData;
         //test new partner
@@ -141,7 +143,7 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
         static::assertTrue($this->View()->success);
         static::assertEquals($this->updateStreet, $this->View()->data['street']);
 
-        return $this->View()->data['id'];
+        return (int) $this->View()->data['id'];
     }
 
     /**
@@ -149,11 +151,9 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @depends testSavePartner
      *
-     * @param string $id
-     *
-     * @return the id to for the testGetDetail Method
+     * @return int the id to for the testGetDetail Method
      */
-    public function testGetDetail($id)
+    public function testGetDetail(int $id): int
     {
         $filter = [['property' => 'id', 'value' => $id]];
         $params['filter'] = json_encode($filter);
@@ -189,11 +189,9 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @depends testSavePartner
      *
-     * @param string $id
-     *
-     * @return $id | dummy id
+     * @return int dummy id
      */
-    public function testValidateTrackingCode($id)
+    public function testValidateTrackingCode(int $id): int
     {
         $params['value'] = '31337';
         $params['param'] = $id;
@@ -241,10 +239,8 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
      * test deletePartner controller action
      *
      * @depends testSavePartner
-     *
-     * @param string $id
      */
-    public function testDeletePartner($id)
+    public function testDeletePartner(int $id): void
     {
         $params['id'] = $id;
         $this->Request()->setParams($params);

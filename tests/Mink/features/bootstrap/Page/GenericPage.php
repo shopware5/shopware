@@ -64,17 +64,16 @@ class GenericPage extends Page implements HelperSelectorInterface
     public function checkLink($locator, $path = null, $query = [])
     {
         $elements = Helper::findElements($this, [$locator], false);
-        $linkElement = $elements[$locator];
 
-        if ($path !== null && empty($linkElement)) {
+        if ($path !== null && empty($elements[$locator])) {
             Helper::throwException(['Link expected but not found while looking for ' . $locator]);
-        } elseif ($path === null && !empty($linkElement)) {
+        } elseif ($path === null && !empty($elements[$locator])) {
             Helper::throwException(['Link not expected but found while looking for ' . $locator]);
-        } elseif ($path === null && empty($linkElement)) {
+        } elseif ($path === null && empty($elements[$locator])) {
             return;
         }
 
-        $link = $linkElement->getAttribute('href');
+        $link = $elements[$locator]->getAttribute('href');
         $linkParts = parse_url($link);
 
         $expectedUrl = rtrim($this->getParameter('base_url'), '/') . '/' . rtrim($path, '/');
@@ -106,15 +105,13 @@ class GenericPage extends Page implements HelperSelectorInterface
     public function checkRobots($content = [])
     {
         $elements = Helper::findElements($this, ['robots']);
-        $robotsElement = $elements['robots'];
-        $robotsValue = $robotsElement->getAttribute('content');
+        $robotsValue = $elements['robots']->getAttribute('content');
+        if ($robotsValue === '') {
+            Helper::throwException(['Missing robots data']);
+        }
         $robotsParts = explode(',', $robotsValue);
 
         $robotsParts = array_map('trim', $robotsParts);
-
-        if (empty($robotsParts)) {
-            Helper::throwException(['Missing robots data']);
-        }
 
         if ($robotsParts != $content) {
             $message = sprintf(

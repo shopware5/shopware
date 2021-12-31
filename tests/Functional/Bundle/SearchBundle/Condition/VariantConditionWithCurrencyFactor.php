@@ -526,7 +526,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
         array $products,
         array $prices
     ): void {
-        $numbers = array_map(function (ListProduct $product) {
+        $numbers = array_map(function (BaseProduct $product) {
             return $product->getNumber();
         }, $products);
 

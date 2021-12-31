@@ -267,10 +267,11 @@ EOT;
         static::assertSame($expectedClass, $generatedClass);
     }
 
-    private function invokeMethod($object, $methodName, array $parameters = [])
+    private function invokeMethod($object, string $methodName, array $parameters = [])
     {
-        $reflection = new ReflectionClass(\get_class($object));
-        $method = $reflection->getMethod($methodName);
+        $className = \get_class($object);
+        static::assertIsString($className);
+        $method = (new ReflectionClass($className))->getMethod($methodName);
         $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);

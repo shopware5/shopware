@@ -49,6 +49,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
         Shopware()->Container()->reset(\Shopware\Components\Privacy\IpAnonymizerInterface::class);
         // Reset the controller as well, since it already has the service injected
         Shopware()->Container()->reset('shopware_controllers_backend_logger');
+        parent::tearDown();
     }
 
     public function testConfigActiveWorking()

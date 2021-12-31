@@ -36,8 +36,6 @@ class PostWrapperTest extends Enlight_Components_Test_Controller_TestCase
         'Articles',
         'Basket',
         'Categories',
-        'cms',
-        'Core',
         'Export',
         'Marketing',
         'Order',

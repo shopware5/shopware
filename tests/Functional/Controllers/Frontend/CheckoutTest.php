@@ -63,15 +63,13 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
     {
         $botBlackList = ['digout4u', 'fast-webcrawler', 'googlebot', 'ia_archiver', 'w3m2', 'frooglebot'];
         foreach ($botBlackList as $userAgent) {
-            if (!empty($userAgent)) {
-                $sessionId = $this->addBasketProduct($userAgent);
-                static::assertNotEmpty($sessionId);
-                $basketId = $this->connection->fetchOne(
-                    'SELECT id FROM s_order_basket WHERE sessionID = ?',
-                    [$sessionId]
-                );
-                static::assertEmpty($basketId);
-            }
+            $sessionId = $this->addBasketProduct($userAgent);
+            static::assertNotEmpty($sessionId);
+            $basketId = $this->connection->fetchOne(
+                'SELECT id FROM s_order_basket WHERE sessionID = ?',
+                [$sessionId]
+            );
+            static::assertEmpty($basketId);
         }
 
         $this->getContainer()->get('modules')->Basket()->sDeleteBasket();

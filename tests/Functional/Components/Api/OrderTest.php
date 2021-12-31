@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Functional\Components\Api;
 
 use DateTime;
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\Order;
@@ -51,12 +52,13 @@ class OrderTest extends TestCase
     {
         parent::setUp();
         $this->order = Shopware()->Db()->fetchRow('SELECT * FROM `s_order` ORDER BY id DESC LIMIT 1');
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
+        Shopware()->Container()->get(Connection::class)->beginTransaction();
     }
 
     protected function tearDown(): void
     {
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollback();
+        Shopware()->Container()->get(Connection::class)->rollback();
+        parent::tearDown();
     }
 
     public function createResource(): Order

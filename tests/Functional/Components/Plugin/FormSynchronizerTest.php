@@ -86,6 +86,7 @@ class FormSynchronizerTest extends Base
     {
         $this->form = new Form();
         $this->synchronizer = $this->getSynchronizer();
+        parent::setUp();
     }
 
     public function testAddFormItems()

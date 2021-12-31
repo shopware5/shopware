@@ -42,11 +42,13 @@ class NetRoundingTest extends Enlight_Components_Test_Controller_TestCase
 
         Shopware()->Modules()->Basket()->sAddArticle('SW10239', 2);
         Shopware()->Container()->reset('shopware.cart.net_rounding');
+        parent::setUp();
     }
 
     public function tearDown(): void
     {
         Shopware()->Db()->rollBack();
+        parent::tearDown();
     }
 
     public function testOldRounding(): void

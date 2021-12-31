@@ -48,13 +48,14 @@ class RewriteMatcherTest extends Enlight_Components_Test_TestCase
     protected function setUp(): void
     {
         $c = Shopware()->Container();
-        $this->connection = $c->get(\Doctrine\DBAL\Connection::class);
+        $this->connection = $c->get(Connection::class);
         $this->matcher = $c->get('shopware.routing.matchers.rewrite_matcher');
 
         Shopware()->Models()->clear();
         $this->connection->beginTransaction();
 
         $this->createSeoUrls();
+        parent::setUp();
     }
 
     /**

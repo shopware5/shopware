@@ -92,8 +92,8 @@ class LogRepositoryTest extends TestCase
         $this->repository = $this->entityManager->getRepository(Log::class);
 
         $oneDay = new DateInterval(sprintf('P%dD', 1));
-        $this->pastDate = new DateTime($this::PAST_DATE);
-        $this->pastDatePlusOneDay = (new DateTime($this::PAST_DATE))->add($oneDay);
+        $this->pastDate = new DateTime(self::PAST_DATE);
+        $this->pastDatePlusOneDay = (new DateTime(self::PAST_DATE))->add($oneDay);
         $this->currentDate = new DateTime('now');
         $this->currentDateMinusOneDay = (new DateTime('now'))->sub($oneDay);
 

@@ -77,6 +77,7 @@ class AnalyticsTest extends ControllerTestCase
     public function tearDown(): void
     {
         $this->removeDemoData();
+        parent::tearDown();
     }
 
     public function testGetVisitorImpressions(): void

@@ -78,6 +78,7 @@ class FilesystemTest extends Enlight_Components_Test_TestCase
                 $this->mediaService->delete($file);
             }
         }
+        parent::tearDown();
     }
 
     public function testFiles()

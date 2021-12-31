@@ -31,6 +31,7 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
     public function tearDown(): void
     {
         $this->reset();
+        parent::tearDown();
     }
 
     public function testAjaxSearch()
@@ -39,17 +40,17 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
 
         // Check for valid markup
         // Ignore whitespace, since this testcase checks wether the list is structured correctly (li following ul)
-        static::assertStringContainsStringIgnoringWhitespace(
+        self::assertStringContainsStringIgnoringWhitespace(
             ' <ul class="results--list"> <li class="list--entry block-group result--item">',
             $this->Response()->getBody()
         );
         // Check for expected search link and number of results
-        static::assertStringContainsStringIgnoringWhitespace(
+        self::assertStringContainsStringIgnoringWhitespace(
             '/search?sSearch=ipad" class="search-result--link entry--all-results-link block"> <i class="icon--arrow-right"></i> Alle Ergebnisse anzeigen </a> <span class="entry--all-results-number block"> 1 Treffer </span>',
             $this->Response()->getBody()
         );
         // Check for expected name and price
-        static::assertStringContainsStringIgnoringWhitespace(
+        self::assertStringContainsStringIgnoringWhitespace(
             ' alt="iPadtasche mit Stiftmappe" class="media--image"> </span> <span class="entry--name block"> iPadtasche mit Stiftmappe </span> <span class="entry--price block"> <div class="product--price"> <span class="price--default is--nowrap"> 39,99&nbsp;&euro; * </span> </div> <div class="price--unit" title="Inhalt"> </div> </span> </a> </li> <li class="entry--all-results block-group result--item">',
             $this->Response()->getBody()
         );

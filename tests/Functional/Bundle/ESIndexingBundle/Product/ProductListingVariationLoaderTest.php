@@ -39,6 +39,7 @@ class ProductListingVariationLoaderTest extends TestCase
     protected function tearDown(): void
     {
         $this->helper->cleanUp();
+        parent::tearDown();
     }
 
     public function testAvailabilityWithOne(): void

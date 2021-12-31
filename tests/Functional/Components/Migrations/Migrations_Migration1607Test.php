@@ -55,7 +55,7 @@ class Migrations_Migration1607Test extends TestCase
         parent::setUp();
 
         $this->migration = $this->getMigration(static::createStub(PDO::class), self::MIGRATION_NUMBER);
-        $this->connection = Shopware()->Container()->get('dbal_connection') ?? static::fail('No database connection available.');
+        $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->numberOfSubshops = (int) $this->connection->fetchOne('SELECT COUNT(`id`) FROM `s_core_shops` WHERE `main_id` IS NOT NULL;');
     }
 
