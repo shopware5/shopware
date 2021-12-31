@@ -73,7 +73,11 @@ class SnippetValidator
 
             if ($data === false) {
                 $error = error_get_last();
-                $invalidSnippets[] = $error['message'] . ' (' . $entry->getRealPath() . ')';
+                if (\is_array($error)) {
+                    $invalidSnippets[] = $error['message'] . ' (' . $entry->getRealPath() . ')';
+                } else {
+                    $invalidSnippets[] = 'Unknown error (' . $entry->getRealPath() . ')';
+                }
                 continue;
             }
 
@@ -81,7 +85,11 @@ class SnippetValidator
 
             if ($dataRaw === false) {
                 $error = error_get_last();
-                $invalidSnippets[] = $error['message'] . ' (' . $entry->getRealPath() . ')';
+                if (\is_array($error)) {
+                    $invalidSnippets[] = $error['message'] . ' (' . $entry->getRealPath() . ')';
+                } else {
+                    $invalidSnippets[] = 'Unknown error (' . $entry->getRealPath() . ')';
+                }
             } else {
                 $diffGroups = array_diff(array_keys($data), $validLocales);
                 if (\array_key_exists('default', $data)) {

@@ -30,7 +30,7 @@ use Exception;
 class DatabaseWriter
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private $db;
 
@@ -66,10 +66,6 @@ class DatabaseWriter
     {
         if (empty($data)) {
             throw new Exception('You called write() but provided no data to be written');
-        }
-
-        if (!isset($this->db)) {
-            throw new Exception('Required database connection is missing');
         }
 
         $this->db->beginTransaction();

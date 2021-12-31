@@ -25,6 +25,7 @@
 namespace Shopware\Components;
 
 use DomainException;
+use RuntimeException;
 
 /**
  * Pseudorandom number generator (PRNG).
@@ -96,7 +97,11 @@ abstract class Random
         $bytes = static::getBytes(7);
         $bytes[6] = $bytes[6] | \chr(0xF0);
         $bytes .= \chr(63); // exponent bias (1023)
-        list(, $float) = unpack('d', $bytes);
+        $unpacked = unpack('d', $bytes);
+        if (!\is_array($unpacked)) {
+            throw new RuntimeException('Cannot generate random float');
+        }
+        [, $float] = $unpacked;
 
         return $float - 1;
     }

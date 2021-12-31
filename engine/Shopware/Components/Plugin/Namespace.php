@@ -141,6 +141,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     public function initPlugin($name, $config)
     {
+        /** @var class-string<Shopware_Components_Plugin_Bootstrap> $class */
         $class = 'Shopware_Plugins_' . $this->name . '_' . $name . '_Bootstrap';
 
         return new $class($name, $config);

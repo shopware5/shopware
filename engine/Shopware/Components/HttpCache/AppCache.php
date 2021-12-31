@@ -280,6 +280,7 @@ class AppCache extends HttpCache
     protected function createStore()
     {
         if (isset($this->options['storeClass'])) {
+            /** @var class-string<StoreInterface> $class */
             $class = $this->options['storeClass'];
 
             return new $class($this->options, $this->kernel);

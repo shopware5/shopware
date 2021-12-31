@@ -77,6 +77,7 @@ class ProxyAwareRepositoryFactory implements RepositoryFactory
             $repositoryClassName = $entityManager->getConfiguration()->getDefaultRepositoryClassName();
         }
 
+        /** @var class-string<ObjectRepository> $repositoryClassName */
         $repositoryClassName = $this->hookManager->getProxy($repositoryClassName);
 
         return new $repositoryClassName($entityManager, $metadata);

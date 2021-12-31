@@ -239,7 +239,6 @@ class FormSynchronizer
                 $localeCode = 'en_GB';
             }
 
-            /** @var Locale $locale */
             $locale = $this->localeRepository->findOneBy(['locale' => $localeCode]);
             if (empty($locale)) {
                 continue;

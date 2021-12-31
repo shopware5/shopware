@@ -29,7 +29,7 @@ use Doctrine\ORM\AbstractQuery;
 use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Theme;
-use Shopware\Models\Shop;
+use Shopware\Models\Shop\Template;
 
 /**
  * The Theme\Util class is a helper class
@@ -64,7 +64,7 @@ class Util
      *
      * @return string|null
      */
-    public function getPreviewImage(Shop\Template $template)
+    public function getPreviewImage(Template $template)
     {
         return $this->getThemeImage($template);
     }
@@ -79,9 +79,10 @@ class Util
      *
      * @return Theme
      */
-    public function getThemeByTemplate(Shop\Template $template)
+    public function getThemeByTemplate(Template $template)
     {
         $namespace = 'Shopware\\Themes\\' . $template->getTemplate();
+        /** @var class-string<Theme> $class */
         $class = $namespace . '\\Theme';
 
         $directory = $this->pathResolver->getDirectory($template);
@@ -108,6 +109,7 @@ class Util
     public function getThemeByDirectory(DirectoryIterator $directory)
     {
         $namespace = 'Shopware\\Themes\\' . $directory->getFilename();
+        /** @var class-string<Theme> $class */
         $class = $namespace . '\\Theme';
 
         $file = $directory->getPathname() . DIRECTORY_SEPARATOR . 'Theme.php';
@@ -130,7 +132,7 @@ class Util
      *
      * @return string
      */
-    public function getSnippetNamespace(Shop\Template $template)
+    public function getSnippetNamespace(Template $template)
     {
         return 'themes/' . strtolower($template->getTemplate()) . '/';
     }
@@ -157,11 +159,9 @@ class Util
     /**
      * Returns the theme preview thumbnail.
      *
-     * @param \Shopware\Models\Shop\Template $theme
-     *
      * @return string|null
      */
-    private function getThemeImage(Shop\Template $theme)
+    private function getThemeImage(Template $theme)
     {
         $directory = $this->pathResolver->getDirectory($theme);
 

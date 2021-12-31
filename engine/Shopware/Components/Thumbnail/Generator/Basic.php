@@ -150,9 +150,7 @@ class Basic implements GeneratorInterface
      */
     private function getImageExtension($path)
     {
-        $pathInfo = pathinfo($path);
-
-        return $pathInfo['extension'];
+        return pathinfo($path, PATHINFO_EXTENSION);
     }
 
     /**

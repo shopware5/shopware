@@ -136,8 +136,8 @@ class StaticProvider implements UrlProviderInterface
         if (empty($custom['link']) || !$this->isShopwareLink($custom['link'])) {
             return ['sViewport' => 'custom', 'sCustom' => $custom['id']];
         }
-        $parts = parse_url($custom['link']);
-        parse_str($parts['query'], $query);
+        $parsedQuery = (string) parse_url($custom['link'], PHP_URL_QUERY);
+        parse_str($parsedQuery, $query);
 
         if (isset($query['sViewport,registerFC'])) {
             unset($query['sViewport,registerFC']);

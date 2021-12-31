@@ -130,8 +130,6 @@ EOF
         $message = null;
         if ($plugin->getSource() === 'Default') {
             $message = "'Default' Plugins may not be deleted.";
-        } elseif ($plugin->getInstalled() !== null) {
-            $message = 'Please uninstall the plugin first.';
         } elseif (!$this->deletePath($pluginPath)) {
             $message = 'Plugin path "' . $pluginPath . '" could not be deleted.';
         } else {

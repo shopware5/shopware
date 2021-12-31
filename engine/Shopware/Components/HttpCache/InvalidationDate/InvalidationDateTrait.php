@@ -41,9 +41,6 @@ trait InvalidationDateTrait
 
         // Convert all date-strings into DateTime-objects
         $dates = array_map(function ($el) use ($now) {
-            if (empty($el)) {
-                return null;
-            }
             if (!$el instanceof DateTime) {
                 $el = new DateTime($el);
             }

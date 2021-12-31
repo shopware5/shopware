@@ -9,7 +9,6 @@
         <service id="http_cache_warmer" class="Shopware\Components\HttpCache\CacheWarmer">
             <argument type="service" id="corelogger" />
             <argument type="service" id="guzzle_http_client_factory" />
-            <argument type="service" id="Shopware_Components_Config"/>
             <argument type="service" id="Shopware\Components\Model\ModelManager"/>
             <argument type="service" id="Shopware\Components\ContainerAwareEventManager"/>
         </service>
