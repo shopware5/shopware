@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopwareReleaseStruct;
@@ -131,7 +130,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $firstRunWizardEnabled = $this->isFirstRunWizardEnabled($identity);
         $sbpLogin = 0;
         if ($firstRunWizardEnabled) {
-            /** @var AccessTokenStruct $tokenData */
             $tokenData = Shopware()->BackendSession()->get('accessToken');
 
             $sbpLogin = (int) (!empty($tokenData) && $tokenData->getExpire() >= new DateTime('+30 seconds'));
@@ -140,10 +138,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $this->View()->assign('firstRunWizardEnabled', $firstRunWizardEnabled, true);
         $this->View()->assign('installationSurvey', $this->checkForInstallationSurveyNecessity($identity), true);
 
-        /** @var Shopware_Components_Config $config */
         $config = $this->get(Shopware_Components_Config::class);
 
-        /** @var ShopwareReleaseStruct $shopwareRelease */
         $shopwareRelease = $this->container->get('shopware.release');
 
         $this->View()->assign('SHOPWARE_VERSION', $shopwareRelease->getVersion());

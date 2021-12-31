@@ -910,13 +910,12 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             return false;
         }
 
-        /** @var Album|null $album */
         $album = $this->get('models')->find(Album::class, $albumId);
         $repo = $this->get('models')->getRepository(Settings::class);
         $settings = $repo->findOneBy(['albumId' => $albumId]);
 
         // Album can't be found
-        if ($album === null || empty($album)) {
+        if ($album === null) {
             $this->View()->assign(['success' => false, 'message' => 'Album not found']);
 
             return false;

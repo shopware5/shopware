@@ -47,6 +47,9 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
         $this->Response()->setHeader('x-robots-tag', 'noindex');
     }
 
+    /**
+     * @return void
+     */
     public function init()
     {
         $this->config = Shopware()->Config();

@@ -774,7 +774,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        /** @var Order $order */
         $order = $this->getRepository()->find($orderId);
         if (empty($order)) {
             $this->View()->assign([

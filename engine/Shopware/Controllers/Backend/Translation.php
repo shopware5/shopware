@@ -27,7 +27,7 @@ use Shopware\Models\Shop\Shop;
 class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * @var \Shopware_Components_Translation
+     * @var \Shopware_Components_Translation|null
      */
     protected $translation;
 
