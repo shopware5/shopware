@@ -82,6 +82,7 @@ class ContentTypeComponentHandler implements ComponentHandlerInterface
                 ],
             ];
         } elseif ($mode === self::MODE_SELECTED) {
+            $criteria->limit = null;
             $criteria->filter = [
                 [
                     'property' => 'id',
