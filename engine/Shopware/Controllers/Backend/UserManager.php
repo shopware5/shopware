@@ -78,12 +78,11 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         $calledAction = $this->Request()->getActionName();
 
-        if (
-            Shopware()->Plugins()->Backend()->Auth()->shouldAuth()
+        if (Shopware()->Plugins()->Backend()->Auth()->shouldAuth()
             && $this->isPasswordConfirmProtectedAction($calledAction)
             && !$this->container->get('backendsession')->offsetGet('passwordVerified')
         ) {
-            return $this->forward('passwordConfirmationRequired');
+            $this->forward('passwordConfirmationRequired');
         }
     }
 

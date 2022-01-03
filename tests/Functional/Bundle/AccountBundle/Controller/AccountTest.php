@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,12 +28,12 @@ namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Enlight_Components_Session_Namespace;
-use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Shopware_Components_Config;
 use Shopware_Components_Modules;
 use Symfony\Component\DependencyInjection\Container;
 
-class AccountTest extends Enlight_Components_Test_Controller_TestCase
+class AccountTest extends ControllerTestCase
 {
     private Container $container;
 
@@ -50,7 +52,7 @@ class AccountTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @ticket SW-5226
      */
-    public function testDownloadESDViaPhp()
+    public function testDownloadESDViaPhp(): void
     {
         $loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
         sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
@@ -99,7 +101,7 @@ class AccountTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @ticket SW-5409
      */
-    public function testNormalLogin()
+    public function testNormalLogin(): void
     {
         static::assertEmpty($this->session->offsetGet('sUserId'));
 
@@ -122,7 +124,7 @@ class AccountTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @ticket SW-5409
      */
-    public function testHashPostLogin()
+    public function testHashPostLogin(): void
     {
         //test with md5 password and without the ignoreAccountMode parameter
         static::assertEmpty($this->session->offsetGet('sUserId'));
@@ -141,7 +143,7 @@ class AccountTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @ticket SW-5409
      */
-    public function testWithoutIgnoreLogin()
+    public function testWithoutIgnoreLogin(): void
     {
         //test the internal call of the method with the $ignoreAccountMode parameter
 
@@ -180,7 +182,7 @@ class AccountTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @ticket SW-5409
      */
-    public function testWithIgnoreLogin()
+    public function testWithIgnoreLogin(): void
     {
         //test the internal call of the method without the $ignoreAccountMode parameter
         $this->setUserDataToPost();
@@ -201,9 +203,9 @@ class AccountTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * helper to logout the user
+     * helper to log out the user
      */
-    private function logoutUser()
+    private function logoutUser(): void
     {
         //reset the request
         $this->reset();
@@ -216,7 +218,7 @@ class AccountTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * set user data to post
      */
-    private function setUserDataToPost()
+    private function setUserDataToPost(): void
     {
         $sql = 'SELECT email, password FROM s_user WHERE id = 1';
         $database = $this->container->get('db');

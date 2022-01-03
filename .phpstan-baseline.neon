@@ -1020,16 +1020,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Action.php
 
 		-
-			message: "#^Method Enlight_Controller_Action\\:\\:postDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Action.php
-
-		-
-			message: "#^Method Enlight_Controller_Action\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Action.php
-
-		-
 			message: "#^Method Enlight_Controller_Action\\:\\:redirect\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Action.php
@@ -5303,11 +5293,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Frontend\\\\ContentType\\:\\:getFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Frontend/ContentType.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Frontend\\\\ContentType\\:\\:postDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Frontend/ContentType.php
 
@@ -27318,16 +27303,6 @@ parameters:
 			path: engine/Shopware/Controllers/Api/Rest.php
 
 		-
-			message: "#^Method Shopware_Controllers_Api_Rest\\:\\:postDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Rest.php
-
-		-
-			message: "#^Method Shopware_Controllers_Api_Rest\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Rest.php
-
-		-
 			message: "#^Property Shopware_Controllers_Api_Rest\\:\\:\\$apiBaseUrl has no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/Rest.php
@@ -27344,11 +27319,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Api_Translations\\:\\:postAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Translations.php
-
-		-
-			message: "#^Method Shopware_Controllers_Api_Translations\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/Translations.php
 
@@ -27374,11 +27344,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Address\\:\\:delete\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Address.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Address\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Address.php
 
@@ -28149,11 +28114,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:overrideVariantTranslations\\(\\) has parameter \\$variants with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
 
@@ -29188,11 +29148,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Cache.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Cache\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Cache.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Cache\\:\\:themeCacheWarmUpAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Cache.php
@@ -29808,11 +29763,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Customer.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Customer\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Customer.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Customer\\:\\:prepareCustomerData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Customer.php
@@ -30408,11 +30358,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/ExtJs.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
 			message: "#^Property Shopware_Controllers_Backend_ExtJs\\:\\:\\$aclPermissions type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ExtJs.php
@@ -30638,11 +30583,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Index.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:createLogAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Log.php
@@ -30689,11 +30629,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:initAcl\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Log.php
 
@@ -30799,11 +30734,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Controllers\\\\Backend\\\\ManualSorting\\:\\:assignPositionAction\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ManualSorting.php
-
-		-
-			message: "#^Method Shopware\\\\Controllers\\\\Backend\\\\ManualSorting\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ManualSorting.php
 
@@ -31658,11 +31588,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Order.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:prepareAddressData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Order.php
@@ -31848,11 +31773,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Partner.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:redirectToPartnerLinkAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Partner.php
@@ -31909,11 +31829,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Payment\\:\\:initAcl\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Payment.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Payment\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Payment.php
 
@@ -32143,11 +32058,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/PluginInstaller.php
 
 		-
-			message: "#^Method Shopware\\\\Controllers\\\\Backend\\\\PluginInstaller\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/PluginInstaller.php
-
-		-
 			message: "#^Method Shopware\\\\Controllers\\\\Backend\\\\PluginInstaller\\:\\:removeDirectory\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/PluginInstaller.php
@@ -32219,11 +32129,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Premium\\:\\:initAcl\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Premium.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Premium\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Premium.php
 
@@ -32503,11 +32408,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_RiskManagement\\:\\:initAcl\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/RiskManagement.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_RiskManagement\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/RiskManagement.php
 
@@ -32852,11 +32752,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Systeminfo.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Systeminfo\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
 			message: "#^Parameter \\#1 \\$timezone of function timezone_open expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Systeminfo.php
@@ -33097,16 +32992,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/UserManager.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_UserManager\\:\\:postDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/UserManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_UserManager\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/UserManager.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_UserManager\\:\\:savePrivilegeAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/UserManager.php
@@ -33288,11 +33173,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Voucher\\:\\:initAcl\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Voucher.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Voucher\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Voucher.php
 
@@ -33487,206 +33367,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Widgets.php
 
 		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$sPage\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sFormData\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sUserData\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Access to an undefined property sSystem\\:\\:\\$_POST\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Form\\\\FormError\\|Symfony\\\\Component\\\\Form\\\\FormErrorIterator\\:\\:getMessage\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Form\\\\FormError\\|Symfony\\\\Component\\\\Form\\\\FormErrorIterator\\:\\:getOrigin\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Cannot access offset 'additional' on array\\|false\\.$#"
-			count: 5
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Cannot access offset 'sErrorMessages' on array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Cannot access offset 'shippingaddress' on array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Cannot call method getEmail\\(\\) on Shopware\\\\Models\\\\Customer\\\\Customer\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Cannot call method getName\\(\\) on Symfony\\\\Component\\\\Form\\\\FormInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Cannot call method setEncoderName\\(\\) on Shopware\\\\Models\\\\Customer\\\\Customer\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:abortAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:applyTrackingUrl\\(\\) has parameter \\$orderData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:applyTrackingUrl\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:deleteExpiredOptInItems\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:downloadAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:downloadsAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:getForwardParameters\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:init\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:loginAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:logoutAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:ordersAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:partnerStatisticAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:partnerStatisticMenuItemAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:passwordAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:paymentAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:profileAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:refreshBasket\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:renderTrackingLink\\(\\) should return string but returns string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:resetPasswordAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:saveEmailAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:saveNewsletterAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:savePasswordAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:savePaymentAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:saveProfileAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Account\\:\\:sendResetPasswordConfirmationMail\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
-			message: "#^Parameter \\#2 \\$email of method sAdmin\\:\\:sUpdateNewsletter\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Account.php
-
-		-
 			message: "#^Call to an undefined method Symfony\\\\Component\\\\Form\\\\FormError\\|Symfony\\\\Component\\\\Form\\\\FormErrorIterator\\:\\:getMessage\\(\\)\\.$#"
 			count: 3
 			path: engine/Shopware/Controllers/Frontend/Address.php
@@ -33783,11 +33463,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Address\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Address.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Address\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Address.php
 
@@ -33933,11 +33608,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Blog\\:\\:init\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Blog.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Blog\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Blog.php
 
@@ -34327,16 +33997,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:postDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:resetTemporaryAddresses\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
@@ -34442,17 +34102,7 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Compare.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Compare\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Compare.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Csrftoken\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Csrftoken.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Csrftoken\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Csrftoken.php
 
@@ -34507,11 +34157,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Detail.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Detail\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Detail.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Detail\\:\\:productQuickViewAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Detail.php
@@ -34543,11 +34188,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Error\\:\\:pageNotFoundErrorAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Error.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Error\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Error.php
 
@@ -34668,11 +34308,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Index\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Index\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Index.php
 
@@ -34902,16 +34537,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Note.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Note\\:\\:postDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Note.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Note\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Note.php
-
-		-
 			message: "#^Parameter \\#2 \\$articleName of method sBasket\\:\\:sAddNote\\(\\) expects string, array\\|string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Note.php
@@ -35088,11 +34713,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Register\\:\\:isShippingProvided\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Register.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Register\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Register.php
 
@@ -35282,11 +34902,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Tellafriend\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Tellafriend\\:\\:successAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
@@ -35295,11 +34910,6 @@ parameters:
 			message: "#^Property Shopware_Controllers_Frontend_Tellafriend\\:\\:\\$sSYSTEM has no typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Tracking\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Tracking.php
 
 		-
 			message: "#^Property Shopware_Controllers_Frontend_Tracking\\:\\:\\$testRepository has no typehint specified\\.$#"
@@ -35317,22 +34927,12 @@ parameters:
 			path: engine/Shopware/Controllers/Widgets/Campaign.php
 
 		-
-			message: "#^Method Shopware_Controllers_Widgets_Campaign\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Campaign.php
-
-		-
 			message: "#^Method Shopware_Controllers_Widgets_Captcha\\:\\:getCaptchaByNameAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Captcha.php
 
 		-
 			message: "#^Method Shopware_Controllers_Widgets_Captcha\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Captcha.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Captcha\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Captcha.php
 
@@ -35352,17 +34952,7 @@ parameters:
 			path: engine/Shopware/Controllers/Widgets/Checkout.php
 
 		-
-			message: "#^Method Shopware_Controllers_Widgets_Checkout\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Checkout.php
-
-		-
 			message: "#^Method Shopware_Controllers_Widgets_Compare\\:\\:indexAction\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Compare.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Compare\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Compare.php
 
@@ -35405,11 +34995,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Widgets_Emotion\\:\\:productStreamArticleSliderAction\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Error\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Error.php
 
 		-
 			message: "#^Method Shopware_Controllers_Widgets_Error\\:\\:serviceAction\\(\\) has no return typehint specified\\.$#"
@@ -35493,11 +35078,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Widgets_Recommendation\\:\\:init\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Recommendation.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Recommendation\\:\\:preDispatch\\(\\) has no return typehint specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Recommendation.php
 
@@ -48463,41 +48043,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
 			count: 1
 			path: tests/Functional/Api/VersionTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AccountTest\\:\\:logoutUser\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AccountTest\\:\\:setUserDataToPost\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AccountTest\\:\\:testDownloadESDViaPhp\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AccountTest\\:\\:testHashPostLogin\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AccountTest\\:\\:testNormalLogin\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AccountTest\\:\\:testWithIgnoreLogin\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AccountBundle\\\\Controller\\\\AccountTest\\:\\:testWithoutIgnoreLogin\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Controller/AccountTest.php
 
 		-
 			message: "#^Cannot access offset 'path' on array\\(\\?'scheme' \\=\\> string, \\?'host' \\=\\> string, \\?'port' \\=\\> int, \\?'user' \\=\\> string, \\?'pass' \\=\\> string, \\?'path' \\=\\> string, \\?'query' \\=\\> string, \\?'fragment' \\=\\> string\\)\\|false\\.$#"

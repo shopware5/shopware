@@ -41,7 +41,12 @@
                             {block name="frontend_account_password_reset_content"}
                                 <div class="password-reset--form-content panel--body is--wide is--align-center">
                                     <p>
-                                        <input name="email" type="email" required="required" aria-required="true" class="password-reset--input" placeholder="{s name='PasswordPlaceholderMail'}{/s}" />
+                                        <input name="email"
+                                               type="email"
+                                               required="required"
+                                               aria-required="true"
+                                               class="password-reset--input{if $sErrorFlag.email} has--error{/if}"
+                                               placeholder="{s name='PasswordPlaceholderMail'}{/s}"/>
                                     </p>
                                     <p>{s name="PasswordText"}{/s}</p>
                                 </div>

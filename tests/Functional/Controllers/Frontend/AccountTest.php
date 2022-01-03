@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,16 +27,21 @@
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Test_Plugin_TestCase;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class AccountTest extends Enlight_Components_Test_Plugin_TestCase
+class AccountTest extends ControllerTestCase
 {
+    use ContainerTrait;
     use DatabaseTransactionBehaviour;
+
+    private Connection $connection;
 
     public function setUp(): void
     {
-        $this->reset();
+        $this->connection = $this->getContainer()->get(Connection::class);
+        parent::setUp();
     }
 
     public function testPasswordWillBeChanged(): void
@@ -57,7 +64,7 @@ class AccountTest extends Enlight_Components_Test_Plugin_TestCase
 
         $changed = $this->getPasswordForEmail('test@example.com');
 
-        static::assertNotEquals($before, $changed);
+        static::assertNotSame($before, $changed);
     }
 
     public function testPasswordWillNotChangeOnErrorDifferentPasswords(): void
@@ -114,8 +121,7 @@ class AccountTest extends Enlight_Components_Test_Plugin_TestCase
         $before = $this->getPasswordForEmail('test@example.com');
 
         // Make user invalid
-        $stmt = $this->getConnection()->prepare('UPDATE `s_user` SET `salutation` = null WHERE `email` = :email');
-        $stmt->execute(['email' => 'test@example.com']);
+        $this->connection->executeStatement('UPDATE `s_user` SET `salutation` = null WHERE `email` = :email', ['email' => 'test@example.com']);
 
         $this->Request()
             ->setMethod('POST')
@@ -131,7 +137,7 @@ class AccountTest extends Enlight_Components_Test_Plugin_TestCase
         $this->dispatch('account/resetPassword');
 
         $changed = $this->getPasswordForEmail('test@example.com');
-        static::assertEquals($before, $changed);
+        static::assertSame($before, $changed);
     }
 
     public function testNoServerErrorOnMissingHashParameter(): void
@@ -140,11 +146,6 @@ class AccountTest extends Enlight_Components_Test_Plugin_TestCase
         $response = $this->dispatch('account/resetPassword');
 
         static::assertNotNull($response);
-    }
-
-    private function getConnection(): Connection
-    {
-        return Shopware()->Container()->get('dbal_connection');
     }
 
     private function getNextResetHash(string $mail): string
@@ -157,16 +158,15 @@ class AccountTest extends Enlight_Components_Test_Plugin_TestCase
         $this->dispatch('account/password');
         $this->reset();
 
-        return $this->getConnection()->fetchColumn(
+        return $this->connection->fetchOne(
             'SELECT `hash` FROM `s_core_optin` WHERE `type` IN (:types) ORDER BY `datum` DESC LIMIT 1',
             [':types' => ['password', 'swPassword']],
-            0,
             [':types' => Connection::PARAM_STR_ARRAY]
         );
     }
 
     private function getPasswordForEmail(string $email): ?string
     {
-        return $this->getConnection()->fetchColumn('SELECT `password` FROM `s_user` WHERE `email` = :email', ['email' => $email]);
+        return $this->connection->fetchOne('SELECT `password` FROM `s_user` WHERE `email` = :email', ['email' => $email]);
     }
 }
