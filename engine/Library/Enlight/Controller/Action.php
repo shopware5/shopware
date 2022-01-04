@@ -125,6 +125,8 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
     /**
      * Pre dispatch method
+     *
+     * @return void
      */
     public function preDispatch()
     {
@@ -132,6 +134,8 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
     /**
      * Post dispatch method
+     *
+     * @return void
      */
     public function postDispatch()
     {
