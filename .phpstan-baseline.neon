@@ -4591,11 +4591,6 @@ parameters:
 			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/Benchmark.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Benchmark\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/Benchmark.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Benchmark\\:\\:saveIndustryAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/Benchmark.php
@@ -4626,11 +4621,6 @@ parameters:
 			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkLocalOverview.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_BenchmarkLocalOverview\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkLocalOverview.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_BenchmarkLocalOverview\\:\\:renderAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkLocalOverview.php
@@ -4652,11 +4642,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_BenchmarkOverview\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverview.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_BenchmarkOverview\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverview.php
 
@@ -8602,11 +8587,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLog\\:\\:getFilterConditions\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLog\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
 
@@ -28081,11 +28061,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:interpretNumberSyntax\\(\\) has parameter \\$commands with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
@@ -28611,22 +28586,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/ArticleList.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:getOperationsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ArticleList.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:getOperatorsAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ArticleList.php
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:getValuesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ArticleList.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ArticleList.php
 
@@ -28742,11 +28707,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Banner\\:\\:getListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Banner.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Banner\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Banner.php
 
@@ -29066,11 +29026,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Blog.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Blog\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Blog.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Blog\\:\\:prepareAssignedArticlesAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Blog.php
@@ -29147,11 +29102,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Cache\\:\\:getInfoAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Cache.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Cache\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Cache.php
 
@@ -29237,11 +29187,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:getVoucherAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
 
@@ -29367,11 +29312,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Category\\:\\:getTemplateSettingsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Category.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Category\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Category.php
 
@@ -29537,11 +29477,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:getValuesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Config.php
 
@@ -29746,11 +29681,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Customer.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Customer\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Customer.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Customer\\:\\:loadStoresAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Customer.php
@@ -29937,11 +29867,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:indexStreamAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CustomerStream.php
 
@@ -30206,11 +30131,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:libraryAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
@@ -30357,11 +30277,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ExtJs.php
 
@@ -30521,11 +30436,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Form.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Form\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Form.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Form\\:\\:prefixProperties\\(\\) has parameter \\$properties with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Form.php
@@ -30641,11 +30551,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Log.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
 			message: "#^Parameter \\#1 \\$source of function stream_copy_to_stream expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Log.php
@@ -30702,16 +30607,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Mail\\:\\:getMailsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Mail.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Mail\\:\\:getSingleMail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Mail.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Mail\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Mail.php
 
@@ -30842,11 +30737,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:getMediaUrlsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
@@ -31266,11 +31156,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/NewsletterManager.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_NewsletterManager\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/NewsletterManager.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_NewsletterManager\\:\\:listNewslettersAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/NewsletterManager.php
@@ -31346,384 +31231,9 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Notification.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Notification\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Notification.php
-
-		-
 			message: "#^PHPDoc tag @var for variable \\$filter has no value type specified in iterable type array\\.$#"
 			count: 2
 			path: engine/Shopware/Controllers/Backend/Notification.php
-
-		-
-			message: "#^Call to an undefined method DateTimeInterface\\:\\:getChanged\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Cannot access offset 'height' on array\\|bool\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Cannot access offset 'width' on array\\|bool\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Cannot call method fromArray\\(\\) on Shopware\\\\Models\\\\Order\\\\Detail\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Cannot call method getArticleNumber\\(\\) on Shopware\\\\Models\\\\Order\\\\Detail\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Cannot call method getEan\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Order\\\\Detail\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Cannot call method getOrder\\(\\) on Shopware\\\\Models\\\\Order\\\\Detail\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Cannot call method getPackUnit\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Cannot call method getUnit\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Cannot call method setOrder\\(\\) on Shopware\\\\Models\\\\Order\\\\Detail\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:addAttachments\\(\\) has parameter \\$attachments with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:assignAssociation\\(\\) has parameter \\$associations with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:assignAssociation\\(\\) has parameter \\$orders with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:assignAssociation\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:batchProcessAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:checkOrderStatus\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:createDocumentAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:createMailAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:createOrderDocuments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:deleteAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:deleteDocumentAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:deletePositionAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:downloadFileFromFilesystem\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getAssociatedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getDocument\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getDocumentFromDatabase\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getDocumentTypesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getList\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getList\\(\\) has parameter \\$sort with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getMailForOrder\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getMailTemplatesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getOrderStatusQuery\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getOrderStatusQuery\\(\\) has parameter \\$order with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getPartnersAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getPaymentStatusAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getPositionAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getPositionAssociatedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getStatusHistoryAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getTaxAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getVariantsStock\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:getVouchersAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:loadListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:loadStoresAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:mergeDocuments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:mergeDocuments\\(\\) has parameter \\$paths with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:mergeDocumentsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:openPdfAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:prepareAddressData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:prepareAddressData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:resolveSortParameter\\(\\) has parameter \\$sorts with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:resolveSortParameter\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:saveAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:savePositionAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Order\\:\\:sendMailAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Offset 'data' does not exist on array\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Offset 'mail' does not exist on array\\|null\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Parameter \\#1 \\$documentTypeId of method Shopware_Controllers_Backend_Order\\:\\:getDocument\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function fopen expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function feof expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fread expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fwrite expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Parameter \\#1 \\$language of method Shopware_Components_Translation\\:\\:read\\(\\) expects int\\|string, bool\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Parameter \\#1 \\$sort of method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addOrderBy\\(\\) expects Doctrine\\\\ORM\\\\Query\\\\Expr\\\\OrderBy\\|string, array given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Parameter \\#1 \\$source of function stream_copy_to_stream expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Parameter \\#2 \\$dest of function stream_copy_to_stream expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function fwrite expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
-
-		-
-			message: "#^Parameter \\#3 \\$key of method Shopware_Components_Translation\\:\\:read\\(\\) expects int, int\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Order.php
 
 		-
 			message: "#^Cannot call method fetch\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
@@ -31732,11 +31242,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Overview\\:\\:getOrderSummaryAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Overview.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Overview\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Overview.php
 
@@ -31811,11 +31316,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Partner.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:mapCustomerAccountAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Partner.php
@@ -31872,11 +31372,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Payment\\:\\:getPaymentsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Payment.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Payment\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Payment.php
 
@@ -31952,11 +31447,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Performance\\:\\:getShopsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Performance.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Performance\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Performance.php
 
@@ -32176,11 +31666,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Premium.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Premium\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Premium.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Premium\\:\\:validateArticleAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Premium.php
@@ -32237,11 +31722,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_ProductFeed\\:\\:getSuppliersAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductFeed.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ProductFeed\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ProductFeed.php
 
@@ -32456,11 +31936,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/RiskManagement.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_RiskManagement\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/RiskManagement.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Search\\:\\:addIdsCondition\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Search.php
@@ -32561,11 +32036,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Site.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Site\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Site.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Site\\:\\:saveSiteAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Site.php
@@ -32617,11 +32087,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Snippet\\:\\:importSnippetAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Snippet\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
@@ -32751,11 +32216,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Supplier.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Supplier\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Supplier.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Supplier\\:\\:saveSuppliers\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Supplier.php
@@ -32807,11 +32267,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Systeminfo\\:\\:infoAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Systeminfo\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Systeminfo.php
 
@@ -32883,11 +32338,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:getThemeInfo\\(\\) should return string\\|null but returns string\\|false\\.$#"
 			count: 2
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:initAcl\\(\\) has no return type specified\\.$#"
-			count: 1
 			path: engine/Shopware/Controllers/Backend/Theme.php
 
 		-
@@ -33042,11 +32492,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_UserManager\\:\\:getUsersAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/UserManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_UserManager\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/UserManager.php
 
@@ -33247,11 +32692,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Voucher\\:\\:getVoucherDetailAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Voucher.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Voucher\\:\\:initAcl\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Voucher.php
 
@@ -37468,11 +36908,6 @@ parameters:
 		-
 			message: "#^Method sOrder\\:\\:setPaymentStatus\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: engine/Shopware/Core/sOrder.php
-
-		-
-			message: "#^Parameter \\#1 \\$mail of method sOrder\\:\\:sendStatusMail\\(\\) expects Enlight_Components_Mail, Enlight_Components_Mail\\|void given\\.$#"
-			count: 2
 			path: engine/Shopware/Core/sOrder.php
 
 		-
@@ -43246,146 +42681,6 @@ parameters:
 			path: engine/Shopware/Models/Order/Number.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:calculateInvoiceAmount\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:getDocuments\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:getHistory\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:getPaymentInstances\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setAttribute\\(\\) has parameter \\$attribute with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setCustomer\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setDeviceType\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setEsd\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setHistory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setHistory\\(\\) has parameter \\$history with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setInvoiceShippingTaxRate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setIsProportionalCalculation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setLanguageSubShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setOrderStatus\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setPartner\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setPayment\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setPaymentInstances\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setPaymentInstances\\(\\) has parameter \\$paymentInstances with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setPaymentStatus\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:setShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Order\\:\\:updateChangedTimestamp\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Order\\\\Order\\:\\:\\$clearedDate \\(DateTimeInterface\\|null\\) does not accept DateTimeInterface\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Order\\\\Order\\:\\:\\$details with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Order\\\\Order\\:\\:\\$documents with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Order\\\\Order\\:\\:\\$history with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Order\\\\Order\\:\\:\\$orderTime \\(DateTimeInterface\\) does not accept DateTimeInterface\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Order\\\\Order\\:\\:\\$paymentInstances with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Order.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\User\\\\User\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
@@ -43394,36 +42689,6 @@ parameters:
 			message: "#^Method Shopware\\\\Models\\\\Order\\\\OrderHistorySubscriber\\:\\:preUpdate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
-			count: 2
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:addAliasJoin\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:filterListQuery\\(\\) has parameter \\$filters with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:getDetails\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:getDocuments\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Repository.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:getOrderStatusQuery\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
@@ -43436,17 +42701,7 @@ parameters:
 			path: engine/Shopware/Models/Order/Repository.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:getOrdersQuery\\(\\) has parameter \\$filters with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:getOrdersQuery\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:getOrdersQueryBuilder\\(\\) has parameter \\$filters with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Order/Repository.php
 
@@ -43467,11 +42722,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:getPayments\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:search\\(\\) has parameter \\$filters with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Order/Repository.php
 
@@ -54036,106 +53286,6 @@ parameters:
 			path: tests/Functional/Controllers/Backend/NotificationTest.php
 
 		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Call to method format\\(\\) on an unknown class Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\DateTime\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Cannot call method getChanged\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:assertElementWithKeyValuePairExists\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:assertElementWithKeyValuePairExists\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:assertElementWithKeyValuePairExists\\(\\) has parameter \\$expected with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:getInvoiceAmount\\(\\) should return string but returns string\\|false\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:getPostData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testBatchProcessOrderDocument\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testDeletePosition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testFilterOrdersBySupplier\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testSaveOrderOverwriteProtection\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testSavingOrderWithDifferentTimeZone\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testTranslationOfOrderList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testTranslationOfStores\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^PHPDoc tag @throws with type Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\Exception is not subtype of Throwable$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$changeDate contains unknown class Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\DateTime\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, array\\|string\\|null given\\.$#"
-			count: 4
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertCount\\(\\) expects Countable\\|iterable, array\\|false given\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, array\\|string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/OrderTest.php
-
-		-
 			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$data\\.$#"
 			count: 8
 			path: tests/Functional/Controllers/Backend/PartnerTest.php
@@ -55239,21 +54389,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, Shopware\\\\Models\\\\Order\\\\Shipping\\|null given\\.$#"
 			count: 1
 			path: tests/Functional/Models/Order/ShippingTest.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Models/Shop/ShopRepositoryTest.php
-
-		-
-			message: "#^Cannot call method setComment\\(\\) on Shopware\\\\Models\\\\Order\\\\Order\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Models/Shop/ShopRepositoryTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$mail of method sOrder\\:\\:sendStatusMail\\(\\) expects Enlight_Components_Mail, Enlight_Components_Mail\\|void given\\.$#"
-			count: 1
-			path: tests/Functional/Models/Shop/ShopRepositoryTest.php
 
 		-
 			message: "#^Method RemoveAndCreateResourceTest\\:\\:testRemoveAndCreateAresource\\(\\) has no return type specified\\.$#"

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,22 +26,49 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use DateTime;
+use DateTimeInterface;
 use DateTimeZone;
-use Enlight_Components_Test_Controller_TestCase;
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
+use Exception;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Locale;
+use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware_Plugins_Backend_Auth_Bootstrap as AuthPlugin;
+use Symfony\Component\HttpFoundation\Request;
 
-class OrderTest extends Enlight_Components_Test_Controller_TestCase
+class OrderTest extends ControllerTestCase
 {
+    use ContainerTrait;
     use DatabaseTransactionBehaviour;
+
+    private const TAX_RULE_ID = 9999;
+    private const ORDER_ID = 12345;
+    private const CUSTOMER_ID = 9999;
+
+    private Connection $connection;
+
+    private AuthPlugin $authPlugin;
+
+    private ModelManager $modelManager;
+
+    protected function setUp(): void
+    {
+        $this->connection = $this->getContainer()->get(Connection::class);
+        $this->authPlugin = $this->getContainer()->get('plugins')->Backend()->Auth();
+        $this->modelManager = $this->getContainer()->get(ModelManager::class);
+    }
 
     /**
      * Test to delete the position
      *
      * @ticket SW-6513
      */
-    public function testDeletePosition()
+    public function testDeletePosition(): void
     {
         // Insert test data
         $sql = "
@@ -53,18 +82,18 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
               (15315355, :orderId, '20003', 160, 'SW10160.1', 29.99, 1, 'Sommer Sandale Ocean Blue 36', 0, 0, 0, NULL, 0, 0, 1, 19, ''),
               (15315356, :orderId, '20003', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, NULL, 4, 0, 0, 19, '');
         ";
-        Shopware()->Db()->query($sql, ['orderId' => '15315351']);
+        $this->connection->executeStatement($sql, ['orderId' => '15315351']);
 
-        static::assertEquals('126.82', $this->getInvoiceAmount());
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        static::assertSame(126.82, $this->getInvoiceAmount());
+        $this->authPlugin->setNoAuth();
 
         // Delete the order position
         $this->Request()
-                ->setMethod('POST')
+                ->setMethod(Request::METHOD_POST)
                 ->setPost('id', '15315352')
                 ->setPost('orderID', '15315351');
         $this->dispatch('backend/Order/deletePosition');
-        static::assertEquals('106.87', $this->getInvoiceAmount());
+        static::assertSame(106.87, $this->getInvoiceAmount());
     }
 
     /**
@@ -72,16 +101,14 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @ticket SW-7670
      */
-    public function testBatchProcessOrderDocument()
+    public function testBatchProcessOrderDocument(): void
     {
         // Insert test data
-        $orderId = Shopware()->Db()->fetchOne('SELECT id FROM s_order WHERE ordernumber = 20001');
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        $orderId = $this->connection->fetchOne('SELECT id FROM s_order WHERE ordernumber = 20001');
 
         $postData = $this->getPostData();
-        $initialShopCount = Shopware()->Db()->fetchOne('SELECT count(distinct id) FROM s_core_shops');
-        $documents = Shopware()->Db()->fetchAll(
+        $initialShopCount = $this->connection->fetchOne('SELECT count(distinct id) FROM s_core_shops');
+        $documents = $this->connection->fetchAllAssociative(
             'SELECT * FROM `s_order_documents` WHERE `orderID` = :orderID',
             ['orderID' => $orderId]
         );
@@ -89,19 +116,19 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
         static::assertCount(0, $documents);
 
         $this->Request()
-            ->setMethod('POST')
+            ->setMethod(Request::METHOD_POST)
             ->setPost($postData);
 
-        $response = $this->dispatch('backend/Order/batchProcess');
-
-        $data = json_decode($response->getBody(), true);
+        $response = $this->dispatch('backend/Order/batchProcess')->getBody();
+        static::assertIsString($response);
+        $data = json_decode($response, true);
         static::assertArrayHasKey('success', $data);
         static::assertTrue($data['success']);
 
-        $finalShopCount = Shopware()->Db()->fetchOne('SELECT count(distinct id) FROM s_core_shops');
-        static::assertEquals($initialShopCount, $finalShopCount);
+        $finalShopCount = $this->connection->fetchOne('SELECT count(distinct id) FROM s_core_shops');
+        static::assertSame($initialShopCount, $finalShopCount);
 
-        $documents = Shopware()->Db()->fetchAll(
+        $documents = $this->connection->fetchAllAssociative(
             'SELECT * FROM `s_order_documents` WHERE `orderID` = :orderID',
             ['orderID' => $orderId]
         );
@@ -113,11 +140,11 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
      * Tests whether an order cannot be overwritten by a save request that bases on outdated data. (The order in the
      * database is newer than that one the request body is based on.)
      */
-    public function testSaveOrderOverwriteProtection()
+    public function testSaveOrderOverwriteProtection(): void
     {
         // Prepare data for the test
         $orderId = 16548453;
-        Shopware()->Db()->query(
+        $this->connection->executeStatement(
             "INSERT IGNORE INTO `s_order` (`id`, `ordernumber`, `userID`, `invoice_amount`, `invoice_amount_net`, `invoice_shipping`, `invoice_shipping_net`, `ordertime`, `status`, `cleared`, `paymentID`, `transactionID`, `comment`, `customercomment`, `internalcomment`, `net`, `taxfree`, `partnerID`, `temporaryID`, `referer`, `cleareddate`, `trackingcode`, `language`, `dispatchID`, `currency`, `currencyFactor`, `subshopID`, `remote_addr`, `changed`) VALUES
             (:orderId, '29996', 1, 126.82, 106.57, 3.9, 3.28, '2013-07-10 08:17:20', 0, 17, 5, '', '', '', '', 0, 0, '', '', '', NULL, '', '1', 9, 'EUR', 1, 1, '172.16.10.71', NOW());
 
@@ -127,8 +154,9 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
         );
 
         // Prepare post data for request
-        /** @var DateTime $changeDate */
-        $changeDate = Shopware()->Models()->find(Order::class, $orderId)->getChanged();
+        $order = $this->modelManager->find(Order::class, $orderId);
+        static::assertInstanceOf(Order::class, $order);
+        $changeDate = $order->getChanged();
         $postData = [
             'id' => 16548453,
             'changed' => $changeDate->format('c'),
@@ -140,64 +168,101 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
                 0 => [],
             ],
         ];
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
 
         // Try to change the entity with the correct timestamp. This should work
-        $this->Request()->setMethod('POST')->setPost($postData);
+        $this->Request()->setMethod(Request::METHOD_POST)->setPost($postData);
         $this->dispatch('backend/Order/save');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
         // Now use an outdated timestamp. The controller should detect this and fail.
         $postData['changed'] = '2008-08-07 18:11:31';
-        $this->Request()->setMethod('POST')->setPost($postData);
+        $this->Request()->setMethod(Request::METHOD_POST)->setPost($postData);
         $this->dispatch('backend/Order/batchProcess');
-        static::assertFalse($this->View()->success);
+        static::assertFalse($this->View()->getAssign('success'));
     }
 
-    public function testSavingOrderWithDifferentTimeZone()
+    public function testSavingOrderWithDifferentTimeZone(): void
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-
         $this->dispatch('/backend/order/getList');
         $data = $this->View()->getAssign('data')[0];
 
         $this->reset();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        $this->authPlugin = $this->getContainer()->get('plugins')->Backend()->Auth();
+        $this->authPlugin->setNoAuth();
 
-        /** @var \DateTime $orderTime */
         $orderTime = $data['orderTime'];
         $oldDate = clone $orderTime;
         $orderTime->setTimezone(new DateTimeZone('US/Alaska'));
 
-        $data['orderTime'] = new \DateTime($orderTime->format(\DateTime::ATOM));
-        $data['changed'] = $data['changed']->format('Y-m-d H:i:s');
+        $data['orderTime'] = new DateTime($orderTime->format(DateTime::ATOM));
+        if (isset($data['changed'])) {
+            $data['changed'] = $data['changed']->format('Y-m-d H:i:s');
+        }
 
         $data['billing'] = [$data['billing']];
         $data['shipping'] = [$data['shipping']];
-        $data['languageSubShop'] = Shopware()->Models()->find(\Shopware\Models\Shop\Shop::class, $data['languageSubShop']['id']);
+        $data['languageSubShop'] = $this->modelManager->find(Shop::class, $data['languageSubShop']['id']);
 
         $this->Request()->setParams($data);
 
         $this->dispatch('/backend/order/save');
 
         static::assertTrue($this->View()->getAssign('success'));
-        static::assertEquals($oldDate, $this->View()->getAssign('data')['orderTime']);
+        static::assertSame($oldDate->getTimestamp(), $this->View()->getAssign('data')['orderTime']->getTimestamp());
+    }
+
+    public function testSavePositionActionWithTaxRule(): void
+    {
+        $this->prepareTestSavePositionActionWithTaxRule();
+
+        $order = $this->modelManager->find(Order::class, self::ORDER_ID);
+        static::assertInstanceOf(Order::class, $order);
+
+        $this->Request()->setMethod(Request::METHOD_POST);
+        $this->Request()->setPost([
+            'id' => 0,
+            'orderId' => self::ORDER_ID,
+            'mode' => 0,
+            'articleId' => 9,
+            'articleDetailId' => null,
+            'articleNumber' => 'SW10009',
+            'articleName' => 'Special Finish Lagerkorn X.O. 32%',
+            'quantity' => 1,
+            'statusId' => 0,
+            'statusDescription' => '',
+            'price' => 28.99,
+            'taxId' => 1,
+            'taxRate' => 0,
+            'taxDescription' => '',
+            'inStock' => 0,
+            'total' => 28.99,
+            'changed' => $order->getChanged()->format(DateTimeInterface::ISO8601),
+        ]);
+
+        $this->authPlugin->setNoAuth();
+        $this->dispatch('/backend/order/savePosition');
+
+        $order = $this->modelManager->find(Order::class, self::ORDER_ID);
+        static::assertInstanceOf(Order::class, $order);
+
+        $expectedTaxRate = (float) $this->connection->executeQuery('SELECT tax FROM s_core_tax_rules WHERE id = :id', ['id' => self::TAX_RULE_ID])->fetchOne();
+
+        $data = $this->View()->getAssign('data');
+        static::assertTrue($this->View()->getAssign('success'), (string) $this->View()->getAssign('message'));
+
+        static::assertSame($expectedTaxRate, $data['taxRate']);
     }
 
     /**
      * Test the list of orders the corresponding translations
      */
-    public function testTranslationOfOrderList()
+    public function testTranslationOfOrderList(): void
     {
         // Set up
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-        Shopware()->Container()->reset('translation');
+        $this->getContainer()->reset('translation');
 
         // Login
-        $this->Request()->setMethod('POST');
+        $this->Request()->setMethod(Request::METHOD_POST);
         $this->Request()->setPost(
             [
                 'username' => 'demo',
@@ -216,17 +281,19 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
         $this->reset();
 
         // Check for English translations
-        $user = Shopware()->Container()->get('auth')->getIdentity();
-        $user->locale = Shopware()->Models()->getRepository(
+        $user = $this->getContainer()->get('auth')->getIdentity();
+        $user->locale = $this->modelManager->getRepository(
             Locale::class
         )->find(2);
 
-        $this->Request()->setMethod('GET');
+        $this->Request()->setMethod(Request::METHOD_GET);
         $getString = http_build_query($getParams);
-        $response = $this->dispatch('backend/Order/getList?' . $getString);
+        $response = $this->dispatch('backend/Order/getList?' . $getString)->getBody();
+        static::assertIsString($response);
 
         // Remove 'new Date(...)' strings from json
-        $responseStr = preg_replace('/(new Date\([-0-9]+\))/', '"$1"', $response->getBody());
+        $responseStr = preg_replace('/(new Date\([-0-9]+\))/', '"$1"', $response);
+        static::assertIsString($responseStr);
 
         $responseJSON = json_decode($responseStr, true);
         static::assertTrue($responseJSON['success']);
@@ -234,31 +301,31 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
         foreach ($responseJSON['data'] as $dataElement) {
             switch ($dataElement['payment']['id']) {
                 case 2:
-                    static::assertEquals(
+                    static::assertSame(
                         'Debit',
                         $dataElement['payment']['description']
                     );
                     break;
                 case 3:
-                    static::assertEquals(
+                    static::assertSame(
                         'Cash on delivery',
                         $dataElement['payment']['description']
                     );
                     break;
                 case 4:
-                    static::assertEquals(
+                    static::assertSame(
                         'Invoice',
                         $dataElement['payment']['description']
                     );
                     break;
                 case 5:
-                    static::assertEquals(
+                    static::assertSame(
                         'Paid in advance',
                         $dataElement['payment']['description']
                     );
                     break;
                 case 6:
-                    static::assertEquals(
+                    static::assertSame(
                         'SEPA',
                         $dataElement['payment']['description']
                     );
@@ -270,14 +337,10 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * Tests whether the order controller returns all data stores with their translations
      */
-    public function testTranslationOfStores()
+    public function testTranslationOfStores(): void
     {
-        // set up
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-
         // login
-        $this->Request()->setMethod('POST');
+        $this->Request()->setMethod(Request::METHOD_POST);
         $this->Request()->setPost(
             [
                 'username' => 'demo',
@@ -294,16 +357,17 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
         $this->reset();
 
         // Check for English translations
-        $user = Shopware()->Container()->get('auth')->getIdentity();
-        $user->locale = Shopware()->Models()->getRepository(
+        $user = $this->getContainer()->get('auth')->getIdentity();
+        $user->locale = $this->modelManager->getRepository(
             Locale::class
         )->find(2);
 
-        $this->Request()->setMethod('GET');
+        $this->Request()->setMethod(Request::METHOD_GET);
         $getString = http_build_query($getParams);
-        $response = $this->dispatch('backend/Order/loadStores?' . $getString);
+        $response = $this->dispatch('backend/Order/loadStores?' . $getString)->getBody();
+        static::assertIsString($response);
 
-        $responseJSON = json_decode($response->getBody(), true);
+        $responseJSON = json_decode($response, true);
         static::assertTrue($responseJSON['success']);
         $data = $responseJSON['data'];
 
@@ -321,19 +385,19 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
         $this->assertElementWithKeyValuePairExists('Credit', 'name', 3, $data['documentTypes']);
     }
 
-    public function testFilterOrdersBySupplier()
+    public function testFilterOrdersBySupplier(): void
     {
         $sql = "
             INSERT IGNORE INTO `s_articles_supplier` (`id`, `name`, `img`, `link`, `changed`) VALUES (:supplierId, 'TestSupplier', '', '', '2019-12-09 10:42:10');
 
             INSERT INTO `s_articles` (`id`, `supplierID`, `name`, `datum`, `taxID`, `changetime`, `pricegroupID`, `pricegroupActive`, `filtergroupID`, `laststock`, `crossbundlelook`, `notification`, `template`, `mode`) VALUES
-            (:articleId, :supplierId, 'SwagTest', '2020-03-20', '1', '2020-03-20 10:42:10', NULL, '0', NULL, '0', '0', '0', '', '0');
+            (:productId, :supplierId, 'SwagTest', '2020-03-20', '1', '2020-03-20 10:42:10', NULL, '0', NULL, '0', '0', '0', '', '0');
 
             INSERT IGNORE INTO `s_order` (`id`, `ordernumber`, `userID`, `invoice_amount`, `invoice_amount_net`, `invoice_shipping`, `invoice_shipping_net`, `ordertime`, `status`, `cleared`, `paymentID`, `transactionID`, `comment`, `customercomment`, `internalcomment`, `net`, `taxfree`, `partnerID`, `temporaryID`, `referer`, `cleareddate`, `trackingcode`, `language`, `dispatchID`, `currency`, `currencyFactor`, `subshopID`, `remote_addr`) VALUES
             (:orderId, '29996', 1, 126.82, 106.57, 3.9, 3.28, '2013-07-10 08:17:20', 0, 17, 5, '', '', '', '', 0, 0, '', '', '', NULL, '', '1', 9, 'EUR', 1, 1, '172.16.10.71');
 
             INSERT IGNORE INTO `s_order_details` (`id`, `orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `tax_rate`, `config`) VALUES
-            (15315352, :orderId, '20003', :articleId, 'SW10178', 19.95, 1, 'Strandtuch Ibiza', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
+            (15315352, :orderId, '20003', :productId, 'SW10178', 19.95, 1, 'Strandtuch Ibiza', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
             (15315353, :orderId, '20003', 177, 'SW10177', 34.99, 1, 'Strandtuch Stripes für Kinder', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
             (15315354, :orderId, '20003', 173, 'SW10173', 39.99, 1, 'Strandkleid Flower Power', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
             (15315355, :orderId, '20003', 160, 'SW10160.1', 29.99, 1, 'Sommer Sandale Ocean Blue 36', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
@@ -341,14 +405,13 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
         ";
 
         $supplierId = '81729';
-        $articleId = '91829002';
-        $orderId = '15315351';
-        Shopware()->Db()->query($sql, ['orderId' => $orderId, 'articleId' => $articleId, 'supplierId' => $supplierId]);
+        $productId = 91829002;
+        $orderId = 15315351;
+        $this->connection->executeStatement($sql, ['orderId' => $orderId, 'productId' => $productId, 'supplierId' => $supplierId]);
 
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-        // prevent breaking date formating
-        Shopware()->Front()->Plugins()->Json()->setFormatDateTime(false);
+        $this->authPlugin->setNoAuth();
+        // prevent breaking date formatting
+        $this->getContainer()->get('front')->Plugins()->Json()->setFormatDateTime(false);
 
         $filter = [[
             'property' => 'article.supplierId',
@@ -357,61 +420,59 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
             'value' => $supplierId,
         ]];
         $this->Request()
-            ->setMethod('GET')
+            ->setMethod(Request::METHOD_GET)
             ->setPost('filter', json_encode($filter));
-        $response = $this->dispatch('backend/Order/getList');
-        $data = json_decode($response->getBody(), true);
+        $response = $this->dispatch('backend/Order/getList')->getBody();
+        static::assertIsString($response);
+        $data = json_decode($response, true);
 
         static::assertIsArray($data);
         static::assertTrue($data['success']);
-        static::assertEquals(1, $data['total']);
+        static::assertSame(1, $data['total']);
         static::assertCount($data['total'], $data['data']);
 
         $order = $data['data'][0];
-        static::assertEquals($orderId, $order['id']);
+        static::assertSame($orderId, $order['id']);
         static::assertCount(5, $order['details']);
 
-        $orderArticleIds = array_map(static function ($detail) {
-            return $detail['articleId'];
-        }, $order['details']);
-        static::assertTrue(\in_array($articleId, $orderArticleIds));
+        $orderProductIds = array_column($order['details'], 'articleId');
+        static::assertContains($productId, $orderProductIds);
     }
 
     /**
      * Tests a data array for an entry with a specified key value pair
      *
-     * @param string $dataKey
-     * @param int    $id
-     * @param array  $data
+     * @param array<array<string, mixed>> $data
      *
      * @throws Exception
      */
-    private function assertElementWithKeyValuePairExists($expected, $dataKey, $id, $data)
+    private function assertElementWithKeyValuePairExists(string $expected, string $dataKey, int $id, array $data): void
     {
         foreach ($data as $entry) {
             if ($entry['id'] === $id) {
-                static::assertEquals($expected, $entry[$dataKey]);
+                static::assertSame($expected, $entry[$dataKey]);
 
                 return;
             }
         }
 
-        throw new \Exception('Entry not found');
+        throw new Exception('Entry not found');
     }
 
     /**
      * Helper method to return the order amount
-     *
-     * @return string
      */
-    private function getInvoiceAmount()
+    private function getInvoiceAmount(): float
     {
         $sql = 'SELECT invoice_amount FROM s_order WHERE id = ?';
 
-        return Shopware()->Db()->fetchOne($sql, ['15315351']);
+        return (float) $this->connection->fetchOne($sql, ['15315351']);
     }
 
-    private function getPostData()
+    /**
+     * @return array<string, mixed>
+     */
+    private function getPostData(): array
     {
         return [
             'module' => 'backend',
@@ -727,5 +788,20 @@ class OrderTest extends Enlight_Components_Test_Controller_TestCase
                 ],
             ],
         ];
+    }
+
+    private function prepareTestSavePositionActionWithTaxRule(): void
+    {
+        $taxRuleSQL = file_get_contents(__DIR__ . '/_fixtures/order/tax_rules.sql');
+        static::assertIsString($taxRuleSQL);
+        $this->connection->executeStatement($taxRuleSQL, ['taxRuleId' => self::TAX_RULE_ID]);
+
+        $customerSql = file_get_contents(__DIR__ . '/_fixtures/order/customer.sql');
+        static::assertIsString($customerSql);
+        $this->connection->executeStatement($customerSql, ['customerId' => self::CUSTOMER_ID]);
+
+        $orderSql = file_get_contents(__DIR__ . '/_fixtures/order/order.sql');
+        static::assertIsString($orderSql);
+        $this->connection->executeStatement($orderSql, ['orderId' => self::ORDER_ID, 'customerId' => self::CUSTOMER_ID]);
     }
 }

@@ -654,6 +654,8 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
      * Gets a single mail
      *
      * @param int $id
+     *
+     * @return void
      */
     protected function getSingleMail($id)
     {

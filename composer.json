@@ -154,8 +154,8 @@
         }
     },
     "scripts": {
-        "cs-check": "php-cs-fixer fix --dry-run -v",
-        "cs-fix": "php-cs-fixer fix -v",
+        "cs-check": "make check-php-cs-fixer",
+        "cs-fix": "make fix-code-style",
         "post-install-cmd": "./build/composer-post-install-cmd.sh",
         "post-update-cmd": "./build/composer-post-update-cmd.sh",
         "test": "phpunit -c tests/ --colors=always",

@@ -26,17 +26,17 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Traits;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Shopware\Components\DependencyInjection\Container;
 use TestKernel;
 use UnexpectedValueException;
 
 trait ContainerTrait
 {
-    public function getContainer(): ContainerInterface
+    public function getContainer(): Container
     {
         $container = TestKernel::getKernel()->getContainer();
 
-        if (!$container instanceof ContainerInterface) {
+        if (!$container instanceof Container) {
             throw new UnexpectedValueException('Container not found');
         }
 

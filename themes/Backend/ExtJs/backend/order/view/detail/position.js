@@ -548,28 +548,17 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
     },
 
     /**
-     * Render function for the tax column. The function parameter contains the tax id which is used
-     * to get the tax record of the grid tax store.
+     * Render function for the tax column.
      *
      * @param value
+     * @param metaData
+     * @param rowRecord
      * @return string
      */
     taxColumn: function(value, metaData, rowRecord) {
-        var me = this;
+        var orderDetailTaxRate = rowRecord.get('taxRate').toString();
 
-        if (value === Ext.undefined) {
-            return value;
-        }
-        var record =  me.taxStore.getById(value);
-        if (record instanceof Ext.data.Model) {
-            return record.get('name');
-        } else {
-            // SW-3289);
-            if (value == 0 || value == null) {
-                return rowRecord.get('taxRate') + '%';
-            }
-            return value;
-        }
+        return orderDetailTaxRate.replace(/[.,]/, Ext.util.Format.decimalSeparator) + '%';
     },
 
     /**

@@ -102,6 +102,8 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
      * $this->addAclPermission('name_of_action_with_action_prefix','name_of_assigned_privilege','optionally error message');
      * // $this->addAclPermission('indexAction','read','Ops. You have no permission to view that...');
      * </code>
+     *
+     * @return void
      */
     protected function initAcl()
     {
