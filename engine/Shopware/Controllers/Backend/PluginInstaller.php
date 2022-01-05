@@ -223,11 +223,11 @@ class PluginInstaller extends Shopware_Controllers_Backend_ExtJs
         }
 
         $information = pathinfo($file->getClientOriginalName());
-
-        if ($information['extension'] !== 'zip') {
+        $extension = $information['extension'] ?? '';
+        if ($extension !== 'zip') {
             $this->View()->assign([
                 'success' => false,
-                'message' => sprintf('Wrong archive extension %s. Zip archive expected', $information['extension']),
+                'message' => sprintf('Wrong archive extension %s. Zip archive expected', $extension),
             ]);
             unlink($file->getPathname());
 

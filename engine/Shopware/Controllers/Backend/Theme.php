@@ -36,18 +36,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Application implements CSRFWhitelistAware
 {
-    /**
-     * Model which handled through this controller
-     *
-     * @var string
-     */
     protected $model = Template::class;
 
-    /**
-     * SQL alias for the internal query builder
-     *
-     * @var string
-     */
     protected $alias = 'template';
 
     /**

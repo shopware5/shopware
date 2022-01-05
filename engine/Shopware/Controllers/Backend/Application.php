@@ -93,7 +93,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      *
      * @required
      *
-     * @var class-string model
+     * @var class-string<TEntityClass> model
      */
     protected $model;
 
@@ -396,9 +396,8 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      */
     public function save($data)
     {
-        if (!empty($data['id'])) {
-            $model = $this->getRepository()->find($data['id']);
-        } else {
+        $model = $this->getRepository()->find((int) ($data['id'] ?? 0));
+        if ($model === null) {
             $model = new $this->model();
             $this->getManager()->persist($model);
         }
@@ -408,7 +407,6 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
 
         $violations = $this->getManager()->validate($model);
         $errors = [];
-        /** @var Symfony\Component\Validator\ConstraintViolation $violation */
         foreach ($violations as $violation) {
             $errors[] = [
                 'message' => $violation->getMessage(),
@@ -421,6 +419,10 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
         }
 
         $this->getManager()->flush();
+
+        if (!method_exists($model, 'getId')) {
+            throw new RuntimeException(sprintf('Model "%s" has no "getId" method', $this->model));
+        }
 
         $detail = $this->getDetail($model->getId());
 
@@ -1136,7 +1138,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
                 //validates the date value. If the value is no date value, return
                 $date = date_parse($value);
 
-                if ($date['error_count'] > 0 || !checkdate($date['month'], $date['day'], $date['year'])) {
+                if ($date['error_count'] > 0 || !checkdate((int) $date['month'], (int) $date['day'], (int) $date['year'])) {
                     $value = '%' . $value . '%';
                     break;
                 }

@@ -35,10 +35,13 @@ use Shopware\Bundle\ContentTypeBundle\Structs\Type;
 class TypeBuilder
 {
     /**
-     * @var array
+     * @var array<string, class-string<FieldInterface>>
      */
     private $fields;
 
+    /**
+     * @param array<string, class-string<FieldInterface>> $fields
+     */
     public function __construct(array $fields, array $types)
     {
         $this->fields = $fields;
@@ -151,7 +154,7 @@ class TypeBuilder
         $class->setTypeName($field['type']);
         $className = $this->getClassByAlias($field['type']) ?: $field['type'];
 
-        if (empty($className) || !class_exists($className) || !$this->implementsFieldInterface($className)) {
+        if (!\is_string($className) || !class_exists($className) || !$this->implementsFieldInterface($className)) {
             $className = DummyField::class;
         }
 
@@ -196,11 +199,17 @@ class TypeBuilder
         return $class;
     }
 
+    /**
+     * @return class-string<FieldInterface>|null
+     */
     public function getClassByAlias(string $alias)
     {
         return $this->fields[$alias] ?? null;
     }
 
+    /**
+     * @param class-string $className
+     */
     private function implementsFieldInterface(string $className): bool
     {
         return \array_key_exists(FieldInterface::class, class_implements($className));

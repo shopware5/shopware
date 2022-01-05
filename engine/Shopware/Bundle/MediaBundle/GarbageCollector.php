@@ -164,7 +164,7 @@ class GarbageCollector
         foreach ($rows as $row) {
             $jsonValues = json_decode($row);
 
-            if (!$jsonValues || empty($jsonValues)) {
+            if (empty($jsonValues)) {
                 continue;
             }
 

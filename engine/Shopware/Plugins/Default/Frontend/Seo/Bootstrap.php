@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -76,7 +77,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             return;
         }
 
-        $config = $this->get(\Shopware_Components_Config::class);
+        $config = $this->get(Shopware_Components_Config::class);
 
         /** @var QueryAliasMapper $mapper */
         $mapper = $this->get(QueryAliasMapper::class);
@@ -127,7 +128,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             }
         }
 
-        if (!empty($controllerBlacklist) && \in_array($controller, $controllerBlacklist)) {
+        if (\in_array($controller, $controllerBlacklist, true)) {
             $metaRobots = 'noindex,follow';
         } elseif (!empty($queryBlacklist)) {
             foreach ($queryBlacklist as $queryKey) {
@@ -147,8 +148,8 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             $view->assign('SeoMetaDescription', $metaDescription);
         }
 
-        if (!$request->getParam('error_handler') && $this->get(\Shopware_Components_Config::class)->get('hrefLangEnabled')) {
-            $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        if (!$request->getParam('error_handler') && $this->get(Shopware_Components_Config::class)->get('hrefLangEnabled')) {
+            $context = $this->get(ContextServiceInterface::class)->getShopContext();
 
             $params = $request->getParams();
             $sCategoryContent = $view->getAssign('sCategoryContent');
@@ -160,7 +161,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             $view->assign('sHrefLinks', $this->get('shopware_storefront.cached_href_lang_service')->getUrls($params, $context));
         }
 
-        $view->assign('SeoDescriptionMaxLength', (int) $this->get(\Shopware_Components_Config::class)->get('metaDescriptionLength'));
+        $view->assign('SeoDescriptionMaxLength', (int) $this->get(Shopware_Components_Config::class)->get('metaDescriptionLength'));
     }
 
     /**
@@ -171,7 +172,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
     public function onFilterRender(Enlight_Event_EventArgs $args)
     {
         $source = $args->getReturn();
-        $config = $this->get(\Shopware_Components_Config::class);
+        $config = $this->get(Shopware_Components_Config::class);
 
         /** @var Enlight_Controller_Action $controller */
         $controller = $args->get('subject')->Action();

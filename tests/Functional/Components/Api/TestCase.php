@@ -54,6 +54,7 @@ abstract class TestCase extends Enlight_Components_Test_TestCase
     protected function tearDown(): void
     {
         Shopware()->Models()->clear();
+        parent::tearDown();
     }
 
     /**

@@ -1050,7 +1050,6 @@
         <service id="Shopware\Components\ManualSorting\ProductLoaderInterface" class="Shopware\Components\ManualSorting\ProductLoader">
             <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory"/>
             <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface"/>
-            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="Shopware\Bundle\MediaBundle\MediaServiceInterface"/>
         </service>
 

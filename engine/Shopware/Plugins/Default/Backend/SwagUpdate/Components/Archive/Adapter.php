@@ -85,7 +85,7 @@ abstract class Adapter implements SeekableIterator, Countable
     }
 
     /**
-     * @return array|bool
+     * @return array|false
      */
     public function each()
     {

@@ -58,6 +58,9 @@ class StreamProtocolValidator implements StreamProtocolValidatorInterface
     public function validate($url)
     {
         $urlArray = parse_url($url);
+        if (!\is_array($urlArray)) {
+            throw new InvalidArgumentException(sprintf('Invalid stream URL "%s"', $url));
+        }
 
         if (isset($urlArray['scheme']) && !\in_array($urlArray['scheme'], $this->allowedProtocols, true)) {
             throw new InvalidArgumentException(sprintf("Invalid stream protocol '%s'", $urlArray['scheme']));

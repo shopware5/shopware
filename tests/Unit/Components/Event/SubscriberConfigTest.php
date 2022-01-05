@@ -39,6 +39,7 @@ class SubscriberConfigTest extends TestCase
 
     public function setUp(): void
     {
+        // Giving "test" as parameter sets up a test storage. Even if it is not a valid value
         $this->eventManager = new Enlight_Event_Subscriber_Config('test');
     }
 

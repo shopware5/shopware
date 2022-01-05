@@ -34,40 +34,23 @@ use Shopware\Bundle\EmotionBundle\ComponentHandler\CategoryTeaserComponentHandle
 use Shopware\Bundle\EmotionBundle\ComponentHandler\ManufacturerSliderComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
-use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware_Components_Config;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class StructConverter
 {
-    /**
-     * @var LegacyStructConverter
-     */
-    private $converter;
+    private LegacyStructConverter $converter;
 
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
+    private Enlight_Event_EventManager $eventManager;
 
-    /**
-     * @var Enlight_Event_EventManager
-     */
-    private $eventManager;
+    private Shopware_Components_Config $config;
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    public function __construct(LegacyStructConverter $converter, MediaServiceInterface $mediaService, Enlight_Event_EventManager $eventManager, ContainerInterface $container)
+    public function __construct(LegacyStructConverter $converter, Enlight_Event_EventManager $eventManager, Shopware_Components_Config $config)
     {
         $this->converter = $converter;
-        $this->mediaService = $mediaService;
         $this->eventManager = $eventManager;
-        $this->container = $container;
+        $this->config = $config;
     }
 
     /**
@@ -208,7 +191,7 @@ class StructConverter
                 foreach ($element->getData()->get('manufacturers') as $manufacturer) {
                     $manufacturerArray = $this->converter->convertManufacturerStruct($manufacturer);
 
-                    $manufacturerArray['link'] = $this->container->get(Shopware_Components_Config::class)->get('baseFile') . '?controller=listing&action=manufacturer&sSupplier=' . $manufacturer->getId();
+                    $manufacturerArray['link'] = $this->config->get('baseFile') . '?controller=listing&action=manufacturer&sSupplier=' . $manufacturer->getId();
                     $manufacturerArray['website'] = $manufacturer->getLink();
 
                     $elementArray['data']['values'][$manufacturer->getId()] = $manufacturerArray;

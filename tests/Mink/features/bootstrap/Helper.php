@@ -825,7 +825,7 @@ EOD
     public static function searchElements(array $needles, MultipleElement $haystack)
     {
         self::$filterElements = $haystack;
-        $result = array_filter($needles, ['self', 'filter']);
+        $result = array_filter($needles, [__CLASS__, 'filter']);
 
         if ($result) {
             return $result;

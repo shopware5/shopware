@@ -39,27 +39,11 @@ class sCms implements \Enlight_Hook
     private $db;
 
     /**
-     * Shopware configuration object which used for
-     * each config access in this class.
-     * Injected over the class constructor
-     *
-     * @var Shopware_Components_Config
-     */
-    private $config;
-
-    /**
      * The Front controller object
      *
      * @var Enlight_Controller_Front
      */
     private $front;
-
-    /**
-     * Module manager for core class instances
-     *
-     * @var Shopware_Components_Modules
-     */
-    private $moduleManager;
 
     /**
      * @var Shopware_Components_Translation
@@ -68,15 +52,11 @@ class sCms implements \Enlight_Hook
 
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        Shopware_Components_Config $config = null,
         Enlight_Controller_Front $front = null,
-        Shopware_Components_Modules $moduleManager = null,
         Shopware_Components_Translation $translationComponent = null
     ) {
         $this->db = $db ?: Shopware()->Db();
-        $this->config = $config ?: Shopware()->Config();
         $this->front = $front ?: Shopware()->Front();
-        $this->moduleManager = $moduleManager ?: Shopware()->Modules();
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
     }
 

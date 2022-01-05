@@ -230,7 +230,7 @@ class CategoryTest extends TestCase
 
         $categoryResult = $this->resource->getOne($category->getId());
 
-        if (isset($categoryData['translations'])) {
+        if (isset($categoryResult['translations'])) {
             static::assertEquals($categoryData['translations'], $categoryResult['translations']);
         }
 
@@ -265,7 +265,7 @@ class CategoryTest extends TestCase
 
         $categoryResult = $this->resource->getOne($category->getId());
 
-        if (isset($categoryData['translations'])) {
+        if (isset($categoryResult['translations'])) {
             static::assertEquals($categoryData['translations'], $categoryResult['translations']);
         }
 
@@ -288,7 +288,7 @@ class CategoryTest extends TestCase
 
         $categoryResult = $this->resource->getOne($category->getId());
 
-        if (isset($categoryData['translations'])) {
+        if (isset($categoryResult['translations'])) {
             static::assertEquals($categoryData['translations'], $categoryResult['translations']);
         }
 

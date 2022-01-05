@@ -46,6 +46,7 @@ class OrderDocumentDocumentTest extends Enlight_Components_Test_TestCase
     protected function setUp(): void
     {
         $this->modelManager = $this->getContainer()->get(ModelManager::class);
+        parent::setUp();
     }
 
     public function testSetAttribute(): void

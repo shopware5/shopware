@@ -31,7 +31,6 @@
         <service id="shopware_search.custom_facet_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\FacetCriteriaRequestHandler">
             <argument type="service" id="Shopware_Components_Config" />
             <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface" />
-            <argument type="service" id="Doctrine\DBAL\Connection" />
 
             <tag name="criteria_request_handler" />
         </service>

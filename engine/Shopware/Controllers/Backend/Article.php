@@ -1872,7 +1872,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         // Trim every serial number
-        array_walk($serials, 'trim');
+        $serials = array_map('trim', $serials);
 
         // Remove empty serial numbers
         $serials = array_filter($serials);

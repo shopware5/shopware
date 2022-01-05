@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_RequestHttp as Request;
-use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
@@ -35,15 +34,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class VariantCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var VariantHelperInterface
-     */
-    private $variantHelper;
+    private VariantHelperInterface $variantHelper;
 
     public function __construct(Connection $connection, VariantHelperInterface $variantHelper)
     {
@@ -112,12 +105,11 @@ class VariantCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $result = [];
         foreach ($data as $value) {
             $groupId = $value['group_id'];
-            $optionIds = explode('|', $value['optionIds']);
-
-            if (empty($optionIds)) {
+            if (!\is_string($value['optionIds']) || $value['optionIds'] === '') {
                 continue;
             }
-            $result[$groupId] = $optionIds;
+
+            $result[$groupId] = explode('|', $value['optionIds']);
         }
 
         return $result;

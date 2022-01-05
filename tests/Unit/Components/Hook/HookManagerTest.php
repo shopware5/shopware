@@ -29,6 +29,7 @@ use Enlight_Hook_HookArgs;
 use Enlight_Hook_HookExecutionContext as HookExecutionContext;
 use Enlight_Hook_HookHandler as HookHandler;
 use Enlight_Hook_HookManager;
+use Enlight_Hook_Proxy;
 use Enlight_Loader;
 use PHPUnit\Framework\TestCase;
 
@@ -141,6 +142,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::TEST_METHOD_NAME,
@@ -172,6 +174,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::PROTECTED_TEST_METHOD_NAME,
@@ -203,6 +206,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::TEST_METHOD_NAME,
@@ -237,6 +241,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::TEST_METHOD_NAME,
@@ -273,6 +278,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::TEST_METHOD_NAME,
@@ -397,6 +403,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::TEST_METHOD_NAME,
@@ -497,6 +504,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::TEST_METHOD_NAME,
@@ -544,6 +552,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::TEST_METHOD_NAME,
@@ -576,6 +585,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::RECURSIVE_TEST_METHOD_NAME,
@@ -613,6 +623,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::RECURSIVE_TEST_METHOD_NAME,
@@ -721,6 +732,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::RECURSIVE_TEST_METHOD_NAME,
@@ -783,6 +795,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::RECURSIVE_TEST_METHOD_NAME,
@@ -824,6 +837,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::PROTECTED_TEST_METHOD_NAME,
@@ -855,6 +869,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::TEST_METHOD_NAME,
@@ -886,6 +901,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::PROTECTED_TEST_METHOD_NAME,
@@ -927,6 +943,7 @@ class HookManagerTest extends TestCase
         );
 
         $proxy = $this->createProxy();
+        static::assertInstanceOf(HookManagerTestTarget::class, $proxy);
         $returnValue = $this->hookManager->executeHooks(
             $proxy,
             HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME,
@@ -964,17 +981,17 @@ class HookManagerTest extends TestCase
         );
     }
 
-    /**
-     * @return Enlight_Hook_Proxy
-     */
-    private function createProxy()
+    private function createProxy(): Enlight_Hook_Proxy
     {
         $proxyClass = $this->hookManager->getProxy(HookManagerTestTarget::class);
 
-        return new $proxyClass();
+        $proxy = new $proxyClass();
+        static::assertInstanceOf(Enlight_Hook_Proxy::class, $proxy);
+
+        return $proxy;
     }
 
-    private function assertHookArgs(Enlight_Hook_HookArgs $args)
+    private function assertHookArgs(Enlight_Hook_HookArgs $args): void
     {
         static::assertEquals(self::TEST_NAME_ARG, $args->name);
         static::assertArrayHasKey('foo', $args->values);

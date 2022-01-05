@@ -243,10 +243,10 @@ class Store extends BaseStore
             return $request->getUri();
         }
 
-        $parsed = parse_url($request->getUri());
+        $parsed = (string) parse_url($request->getUri(), PHP_URL_QUERY);
         $query = [];
 
-        parse_str($parsed['query'], $query);
+        parse_str($parsed, $query);
 
         $params = array_diff_key(
             $query,

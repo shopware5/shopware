@@ -1418,7 +1418,7 @@ SQL;
             $totalAmountNet,
         ] = $this->getBasketProducts($getProducts);
 
-        if (static::roundTotal($totalAmount) < 0 || empty($totalCount)) {
+        if (self::roundTotal($totalAmount) < 0 || empty($totalCount)) {
             if (!$this->eventManager->notifyUntil('Shopware_Modules_Basket_sGetBasket_AllowEmptyBasket', [
                 'articles' => $getProducts,
                 'totalAmount' => $totalAmount,
@@ -2607,7 +2607,7 @@ SQL;
             $getProducts[$key]['shippinginfo'] = empty($getProducts[$key]['modus']);
 
             if (!empty($getProducts[$key]['releasedate'])
-                && strtotime($getProducts[$key]['releasedate']) <= time()
+                && (int) strtotime($getProducts[$key]['releasedate']) <= time()
             ) {
                 $getProducts[$key]['sReleaseDate'] = $getProducts[$key]['releasedate'] = '';
             }

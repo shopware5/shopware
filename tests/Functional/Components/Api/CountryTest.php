@@ -55,11 +55,11 @@ class CountryTest extends TestCase
     {
         parent::setUpBeforeClass();
 
-        static::$existingCountryIds = Shopware()->Db()->fetchCol(
+        self::$existingCountryIds = Shopware()->Db()->fetchCol(
             'SELECT id
              FROM s_core_countries'
         );
-        static::$existingStatesIds = Shopware()->Db()->fetchCol(
+        self::$existingStatesIds = Shopware()->Db()->fetchCol(
             'SELECT id
              FROM s_core_countries_states'
         );
@@ -75,11 +75,11 @@ class CountryTest extends TestCase
 
         Shopware()->Db()->query(
             'DELETE FROM s_core_countries
-             WHERE id NOT IN (' . implode(',', static::$existingCountryIds) . ')'
+             WHERE id NOT IN (' . implode(',', self::$existingCountryIds) . ')'
         );
         Shopware()->Db()->query(
             'DELETE FROM s_core_countries_states
-             WHERE id NOT IN (' . implode(',', static::$existingStatesIds) . ')'
+             WHERE id NOT IN (' . implode(',', self::$existingStatesIds) . ')'
         );
     }
 
@@ -252,8 +252,8 @@ class CountryTest extends TestCase
 
         static::assertArrayHasKey('data', $countryData);
         static::assertArrayHasKey('total', $countryData);
-        static::assertCount((2 + \count(static::$existingCountryIds)), $countryData['data']);
-        static::assertEquals($countryData['total'], (2 + \count(static::$existingCountryIds)));
+        static::assertCount((2 + \count(self::$existingCountryIds)), $countryData['data']);
+        static::assertEquals($countryData['total'], (2 + \count(self::$existingCountryIds)));
 
         return $country;
     }

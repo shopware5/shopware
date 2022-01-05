@@ -27,17 +27,11 @@
  * To get the configuration of the loaded plugins, the Enlight_Plugin_Namespace_Config offers
  * a function to return the config.
  * To use this directly in the plugin there is the extra extended Plugin_Bootstrap_Config component.
- *
- * @category   Enlight
- *
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
 {
     /**
-     * @var Enlight_Config Contains an instance of the Enlight_Config. Can be overwritten in the class
-     *                     constructor by using the $options["storage"] array element.
+     * @var Enlight_Config|null Contains an instance of the Enlight_Config. Can be overwritten in the class constructor by using the["storage"] array element.
      */
     protected $storage;
 
@@ -99,6 +93,10 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
      */
     public function write()
     {
+        if (!$this->storage instanceof Enlight_Config) {
+            throw new RuntimeException('Store is not set');
+        }
+
         $this->storage->plugins = $this->toArray();
         $this->storage->listeners = $this->Subscriber()->toArray();
         $this->storage->write();

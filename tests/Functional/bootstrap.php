@@ -42,10 +42,10 @@ class TestKernel extends Kernel
      */
     public static function start(): void
     {
-        static::$kernel = new self('testing', true);
-        static::$kernel->boot();
+        self::$kernel = new self('testing', true);
+        self::$kernel->boot();
 
-        $container = static::$kernel->getContainer();
+        $container = self::$kernel->getContainer();
         $container->get('plugins')->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
 
         $shop = $container->get(ModelManager::class)->getRepository(Shop::class)->getActiveDefault();
@@ -56,7 +56,7 @@ class TestKernel extends Kernel
 
     public static function getKernel(): TestKernel
     {
-        return static::$kernel;
+        return self::$kernel;
     }
 
     protected function getConfigPath(): string

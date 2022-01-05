@@ -510,7 +510,7 @@ class sAdmin implements \Enlight_Hook
 
         $sPaymentObject = new $class();
 
-        if (!$sPaymentObject) {
+        if (!$sPaymentObject instanceof BasePaymentMethod) {
             throw new Enlight_Exception('sValidateStep3 #02: Payment class not found');
         }
 

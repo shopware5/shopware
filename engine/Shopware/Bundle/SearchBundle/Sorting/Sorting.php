@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\SortingInterface;
 
 abstract class Sorting implements SortingInterface
 {
-    private const NAME = 'CHANGE ME';
+    protected const NAME = 'CHANGE ME';
 
     /**
      * @var string

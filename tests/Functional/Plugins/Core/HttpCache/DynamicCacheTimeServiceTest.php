@@ -30,6 +30,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Enlight_Controller_Request_RequestTestCase;
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller;
 use Shopware\Components\HttpCache\CacheTimeServiceInterface;
 use Shopware\Components\HttpCache\DynamicCacheTimeService;
@@ -52,21 +53,16 @@ class DynamicCacheTimeServiceTest extends TestCase
     private $defaultTime;
 
     /**
-     * @var int
-     */
-    private $defaultBlogTime;
-
-    /**
      * {@inheritdoc}
      */
     public static function setUpBeforeClass(): void
     {
-        Shopware()->Container()->reset(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
+        Shopware()->Container()->reset(InstallerService::class);
         Shopware()->Container()->reset('shopware_plugininstaller.plugin_manager');
         Shopware()->Container()->reset(LegacyPluginInstaller::class);
         Shopware()->Container()->reset('shopware_plugininstaller.legacy_plugin_installer');
 
-        $pluginManager = Shopware()->Container()->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
+        $pluginManager = Shopware()->Container()->get(InstallerService::class);
 
         /** @var Plugin $plugin */
         $plugin = $pluginManager->getPluginByName('HttpCache');
@@ -89,10 +85,9 @@ class DynamicCacheTimeServiceTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->cacheTimeService = Shopware()->Container()->get(\Shopware\Components\HttpCache\CacheTimeServiceInterface::class);
+        $this->cacheTimeService = Shopware()->Container()->get(CacheTimeServiceInterface::class);
 
         $this->defaultTime = 3600;
-        $this->defaultBlogTime = 14400;
 
         Shopware()->Models()->clear();
     }

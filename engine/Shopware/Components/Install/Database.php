@@ -69,7 +69,7 @@ class Database
     public function setupShop($url, $dbName)
     {
         $parts = parse_url($url);
-        if ($parts === false || !\array_key_exists('host', $parts)) {
+        if ($parts === false || !\array_key_exists('host', $parts) || !\array_key_exists('scheme', $parts)) {
             throw new InvalidArgumentException(sprintf('Invalid Shop URL (%s)', $url));
         }
 

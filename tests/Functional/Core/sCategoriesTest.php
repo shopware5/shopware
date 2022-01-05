@@ -32,6 +32,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     public function setUp(): void
     {
         $this->module = Shopware()->Modules()->Categories();
+        parent::setUp();
     }
 
     /**
@@ -238,6 +239,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
 
         //get "Genusswelten" this category should not have the inactive category "Tees and Zubehör" as subcategory
         $category = $this->getCategoryById($allCategories, 5);
+        static::assertIsArray($category);
         //search for Tees und Zubehör
         $result = $this->getCategoryById($category['sub'], 11);
         static::assertEmpty($result);
@@ -257,13 +259,8 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Returns a category by the category id
-     *
-     * @param array $allCategories
-     * @param int   $categoryId
-     *
-     * @return category
      */
-    private function getCategoryById($allCategories, $categoryId)
+    private function getCategoryById(array $allCategories, int $categoryId): ?array
     {
         foreach ($allCategories as $category) {
             if ($category['id'] == $categoryId) {

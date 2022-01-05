@@ -30,18 +30,14 @@
  */
 function smarty_function_action($params, Enlight_Template_Default $template)
 {
-    /** @var Enlight_Controller_Front $front */
     $front = Shopware()->Front();
     $dispatcher = clone $front->Dispatcher();
 
     $request = $front->Request();
     $response = $front->Response();
 
-    if (empty($request) || empty($response)) {
-        $e = new Exception(
-            'Action view helper requires both a registered request and response object in the front controller instance'
-        );
-        throw $e;
+    if (empty($request)) {
+        throw new Exception('Action view helper requires both a registered request and response object in the front controller instance');
     }
 
     if (isset($params['name'])) {

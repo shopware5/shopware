@@ -33,7 +33,6 @@ use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
-use Shopware_Components_Config as Config;
 
 /**
  * Shopware Application
@@ -65,27 +64,19 @@ class CacheWarmer
     private $guzzleClient;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
-
-    /**
      * @var ContainerAwareEventManager
      */
     private $eventManager;
 
-    public function __construct(LoggerInterface $logger, GuzzleFactory $guzzleFactory, Config $config, ModelManager $modelManager, ContainerAwareEventManager $eventManager)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        GuzzleFactory $guzzleFactory,
+        ModelManager $modelManager,
+        ContainerAwareEventManager $eventManager
+    ) {
         $this->connection = $modelManager->getConnection();
         $this->logger = $logger;
         $this->guzzleClient = $guzzleFactory->createClient();
-        $this->config = $config;
-        $this->modelManager = $modelManager;
         $this->eventManager = $eventManager;
     }
 

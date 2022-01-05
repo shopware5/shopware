@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use Doctrine\DBAL\Connection;
+use RuntimeException;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Components\Thumbnail\Manager;
@@ -198,7 +199,11 @@ class MediaHydrator extends Hydrator
 
     private function updateMedia(array $data): array
     {
-        list($width, $height) = getimagesizefromstring($this->mediaService->read($data['__media_path']));
+        $imageSize = getimagesizefromstring($this->mediaService->read($data['__media_path']));
+        if (!\is_array($imageSize)) {
+            throw new RuntimeException(sprintf('Could not get image size from "%s"', $data['__media_path']));
+        }
+        [$width, $height] = $imageSize;
         $this->database->executeUpdate(
             'UPDATE s_media SET width = :width, height = :height WHERE id = :id',
             [

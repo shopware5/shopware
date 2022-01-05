@@ -35,7 +35,7 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Repository as ProductModelRepository;
 use Shopware\Models\MultiEdit\Filter;
-use Shopware\Models\Shop\Repository;
+use Shopware\Models\MultiEdit\Repository;
 use Shopware\Models\Shop\Shop;
 
 /**
@@ -48,7 +48,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     /**
      * Reference to the SwagMultiEdit repository
      *
-     * @var \Shopware\Models\MultiEdit\Repository
+     * @var Repository|null
      */
     protected $multiEditRepository;
 
@@ -72,7 +72,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * @return \Shopware\Models\MultiEdit\Repository
+     * @return Repository
      */
     public function getMultiEditRepository()
     {

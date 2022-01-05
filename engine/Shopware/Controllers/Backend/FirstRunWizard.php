@@ -663,7 +663,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     private function getToken($shopwareId, $password)
     {
-        /** @var AccessTokenStruct $token */
         $token = Shopware()->BackendSession()->get('accessToken');
 
         if (empty($token) || $token->getExpire()->getTimestamp() <= strtotime('+30 seconds')) {

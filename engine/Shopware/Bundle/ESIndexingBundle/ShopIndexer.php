@@ -34,50 +34,30 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class ShopIndexer implements ShopIndexerInterface
 {
-    /**
-     * @var Client
-     */
-    private $client;
+    private Client $client;
 
-    /**
-     * @var BacklogReaderInterface
-     */
-    private $backlogReader;
+    private BacklogReaderInterface $backlogReader;
 
     /**
      * @var MappingInterface[]
      */
-    private $mappings;
+    private array $mappings;
 
     /**
      * @var DataIndexerInterface[]
      */
-    private $indexer;
+    private array $indexer;
 
     /**
      * @var SettingsInterface[]
      */
-    private $settings;
+    private array $settings;
 
-    /**
-     * @var IndexFactoryInterface
-     */
-    private $indexFactory;
+    private IndexFactoryInterface $indexFactory;
 
-    /**
-     * @var EvaluationHelperInterface
-     */
-    private $evaluation;
+    private EvaluationHelperInterface $evaluation;
 
-    /**
-     * @var BacklogProcessorInterface
-     */
-    private $backlogProcessor;
-
-    /**
-     * @var string
-     */
-    private $esVersion;
+    private BacklogProcessorInterface $backlogProcessor;
 
     /**
      * @param DataIndexerInterface[] $indexer
@@ -92,8 +72,7 @@ class ShopIndexer implements ShopIndexerInterface
         EvaluationHelperInterface $evaluation,
         array $indexer,
         array $mappings,
-        array $settings,
-        string $esVersion
+        array $settings
     ) {
         $this->client = $client;
         $this->backlogReader = $backlogReader;
@@ -103,7 +82,6 @@ class ShopIndexer implements ShopIndexerInterface
         $this->mappings = $mappings;
         $this->settings = $settings;
         $this->evaluation = $evaluation;
-        $this->esVersion = $esVersion;
     }
 
     /**

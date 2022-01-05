@@ -31,9 +31,9 @@ use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES6;
 
 class TextMappingFactoryTest extends TestCase
 {
-    public function testReturnsES6WhenESIsNotEnabled()
+    public function testReturnsES6WhenESIsNotEnabled(): void
     {
-        $factory = new TextMappingFactory(true, null);
+        $factory = new TextMappingFactory();
 
         $client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
 
@@ -42,9 +42,9 @@ class TextMappingFactoryTest extends TestCase
         static::assertInstanceOf(TextMappingES6::class, $textMapping);
     }
 
-    public function testReturnsES6WhenClientReturn6()
+    public function testReturnsES6WhenClientReturn6(): void
     {
-        $factory = new TextMappingFactory(true, null);
+        $factory = new TextMappingFactory();
 
         $client = $this->getMockBuilder(Client::class)
             ->disableOriginalConstructor()->setMethods(['info'])->getMock();
@@ -54,9 +54,9 @@ class TextMappingFactoryTest extends TestCase
         static::assertInstanceOf(TextMappingES6::class, $textMapping);
     }
 
-    public function testReturnsES6WhenVersionIs6()
+    public function testReturnsES6WhenVersionIs6(): void
     {
-        $factory = new TextMappingFactory(true, 6);
+        $factory = new TextMappingFactory();
 
         $client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
 

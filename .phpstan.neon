@@ -28,7 +28,7 @@ parameters:
         - %currentWorkingDirectory%/engine/Shopware
         - %currentWorkingDirectory%/tests
         - %currentWorkingDirectory%/engine/Library/Enlight
-    excludes_analyse:
+    excludePaths:
         - %currentWorkingDirectory%/engine/Shopware/Plugins/Community
         - %currentWorkingDirectory%/engine/Shopware/Plugins/Local
         - %currentWorkingDirectory%/engine/Shopware/Components/DependencyInjection/LegacyPhpDumper.php # is copied from Symfony. To keep it comparable, we don't change it
@@ -136,3 +136,21 @@ parameters:
         - # For testing it is not necessary to declare the whole basket array correctly
             message: '#Parameter \#1 \$basket of method Shopware\\Components\\BasketSignature\\BasketSignatureGenerator::generateSignature\(\) expects array.*, array.* given#'
             path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
+        - # Parent setUp method is not called on purpose
+            message: '#Missing call to parent::setUp\(\) method#'
+            paths:
+                - tests/Functional/Core/sCoreTest.php
+                - tests/Functional/Controllers/Backend/UserManagerTest.php
+        - # Some class properties do not have a getter or setter, but they are needed for the Doctrine column declaration
+            message: '#Property Shopware\\Models\\.*::\$.* is never written, only read#'
+            path: engine/Shopware/Models
+        - # Intended overwrite for easier testing
+            message: '#PHPDoc type string of property Shopware\\Tests\\Functional\\Bundle\\BenchmarkBundle\\Controllers\\Backend\\Mocks\\ViewMock::\$template is not covariant with PHPDoc type Enlight_Template_Default\|null of overridden property Enlight_View_Default::\$template#'
+            path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/Mocks/ViewMock.php
+        - # Intended "endless" loop which is interrupted by an exception
+            message: '#While loop condition is always true#'
+            count: 1
+            path: engine/Shopware/Bundle/BenchmarkBundle/Commands/SendStatisticsCommand.php
+        - # Giving "test" as construct parameter sets up a test storage
+            message: '#Parameter \#1 \$options of class Enlight_Event_Subscriber_Config constructor expects array\|null, string given#'
+            path: tests/Unit/Components/Event/SubscriberConfigTest.php

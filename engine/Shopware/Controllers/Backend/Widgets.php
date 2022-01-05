@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Mail\Mail;
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\User\User;
 use Shopware\Models\Widget\View;
@@ -619,8 +620,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             return false;
         }
 
-        /** @var \Shopware\Models\Mail\Mail $mailModel */
-        $mailModel = $this->getModelManager()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(
+        $mailModel = $this->getModelManager()->getRepository(Mail::class)->findOneBy(
             ['name' => $tplMail]
         );
 

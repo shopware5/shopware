@@ -45,16 +45,6 @@ class RobotsTxtGenerator implements RobotsTxtGeneratorInterface
     private $baseUrls = [];
 
     /**
-     * @var string
-     */
-    private $host = [];
-
-    /**
-     * @var bool
-     */
-    private $secure = false;
-
-    /**
      * @var Context[]
      */
     private $routerContext = [];
@@ -104,12 +94,10 @@ class RobotsTxtGenerator implements RobotsTxtGeneratorInterface
 
     public function setHost(string $host): void
     {
-        $this->host = $host;
     }
 
     public function setSecure(bool $secure): void
     {
-        $this->secure = $secure;
     }
 
     /**

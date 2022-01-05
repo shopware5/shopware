@@ -75,13 +75,11 @@ class BatchProductNumberSearch
     }
 
     /**
-     * @param string        $key
      * @param BaseProduct[] $baseProducts
-     * @param int           $numberOfProducts
      *
      * @return BaseProduct[]
      */
-    private function getBaseProductsRange($key, array $baseProducts, $numberOfProducts = 0)
+    private function getBaseProductsRange(string $key, array $baseProducts, int $numberOfProducts = 0): array
     {
         // cancel on empty results to prevent infinite loop
         if (\count($baseProducts) === 0) {
@@ -115,14 +113,13 @@ class BatchProductNumberSearch
         $optimizedCriteriaList = $this->getOptimizedCriteriaList($criteriaList);
 
         foreach ($optimizedCriteriaList as $key => $criteriaMeta) {
-            /** @var ProductNumberSearchResult $searchResult */
             $searchResult = $this->productNumberSearch->search($criteriaMeta['criteria'], $context);
             $baseProducts = $searchResult->getProducts();
 
             $this->pointer[$key] = 0;
             foreach ($criteriaMeta['requests'] as $request) {
                 $products[$request['key']] = [];
-                $productRange = $this->getBaseProductsRange($key, $baseProducts, $request['criteria']->getLimit());
+                $productRange = $this->getBaseProductsRange($key, $baseProducts, (int) $request['criteria']->getLimit());
 
                 foreach ($productRange as $product) {
                     $products[$request['key']][$product->getNumber()] = $product;
@@ -136,19 +133,16 @@ class BatchProductNumberSearch
     /**
      * @param Criteria[] $criteriaList
      *
-     * @return array
+     * @return array<array{criteria: Criteria, requests: array<array{criteria: Criteria, key: int}>}>
      */
     private function getOptimizedCriteriaList(array $criteriaList)
     {
-        /** @var array{criteria: Criteria, request: array{criteria: Criteria, key: int}} $optimizedCriteriaList */
         $optimizedCriteriaList = [];
 
         foreach ($criteriaList as $key => $originalCriteria) {
-            /** @var int|bool $criteriaPosition */
             $criteriaPosition = $this->getOptimizedCriteriaListPosition($originalCriteria, $optimizedCriteriaList);
 
             if ($criteriaPosition !== false) {
-                /** @var Criteria $existingCriteria */
                 $existingCriteria = $optimizedCriteriaList[$criteriaPosition]['criteria'];
 
                 // search requests already exists, increase limit to select more products and satisfy all requests

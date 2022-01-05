@@ -37,7 +37,7 @@ class CustomerNumberSearchTest extends TestCase
     private const COUNTRY_ID_GERMANY = 2;
     private const COUNTRY_ID_NETHERLANDS = 21;
     private const ADDRESS_COUNTRY_IDS = [self::COUNTRY_ID_GERMANY, self::COUNTRY_ID_GERMANY, self::COUNTRY_ID_NETHERLANDS];
-    private const CUSTOMERNUMBERS = ['lorem', 'ipsum', 'dolor', 'sit', 'amet'];
+    private const CUSTOMER_NUMBERS = ['lorem', 'ipsum', 'dolor', 'sit', 'amet'];
 
     /**
      * Assert, that a search using no condition returns exactly the expected customers
@@ -47,8 +47,8 @@ class CustomerNumberSearchTest extends TestCase
     {
         $result = $this->search(
             new Criteria(),
-            self::CUSTOMERNUMBERS,
-            array_map(['self', 'customerFromNumber'], self::CUSTOMERNUMBERS)
+            self::CUSTOMER_NUMBERS,
+            array_map([__CLASS__, 'customerFromNumber'], self::CUSTOMER_NUMBERS)
         );
 
         self::assertSearchResultEqualsInput($result);
@@ -67,8 +67,8 @@ class CustomerNumberSearchTest extends TestCase
 
         $result = $this->search(
             $criteria,
-            self::CUSTOMERNUMBERS,
-            array_map(['self', 'customerFromNumber'], self::CUSTOMERNUMBERS)
+            self::CUSTOMER_NUMBERS,
+            array_map([__CLASS__, 'customerFromNumber'], self::CUSTOMER_NUMBERS)
         );
 
         self::assertSearchResultEqualsInput($result);
@@ -76,8 +76,8 @@ class CustomerNumberSearchTest extends TestCase
 
     private static function assertSearchResultEqualsInput(CustomerNumberSearchResult $result): void
     {
-        static::assertCount(\count(self::CUSTOMERNUMBERS), $result->getCustomers());
-        static::assertCount(0, array_diff(self::CUSTOMERNUMBERS, self::getCustomerNumbers($result)));
+        static::assertCount(\count(self::CUSTOMER_NUMBERS), $result->getCustomers());
+        static::assertCount(0, array_diff(self::CUSTOMER_NUMBERS, self::getCustomerNumbers($result)));
     }
 
     private static function getCustomerNumbers(CustomerNumberSearchResult $searchResult): array

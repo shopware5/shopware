@@ -33,6 +33,7 @@ class sCmsTest extends Enlight_Components_Test_Controller_TestCase
     {
         $this->Front()->setRequest($this->Request());
         $this->module = Shopware()->Modules()->Cms();
+        parent::setUp();
     }
 
     /**

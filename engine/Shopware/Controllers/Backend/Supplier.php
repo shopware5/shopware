@@ -22,10 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Models\Article\Repository;
+use Shopware\Models\Article\Supplier;
+
 class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * @var \Shopware\Models\Article\Repository
+     * @var Repository
      */
     private $repository;
 
@@ -91,7 +95,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $total = $this->get('models')->getQueryCount($query);
 
         $suppliers = $query->getArrayResult();
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         foreach ($suppliers as &$supplier) {
             $supplier['description'] = strip_tags($supplier['description']);
@@ -147,13 +151,13 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
 
             return;
         }
-        /** @var \Shopware\Models\Article\Supplier $supplierModel */
+        /** @var Supplier $supplierModel */
         $supplierModel = null;
         $id = (int) $this->Request()->get('id');
         if ($id > 0) {
             $supplierModel = $this->get('models')->find('Shopware\Models\Article\Supplier', $id);
         } else {
-            $supplierModel = new \Shopware\Models\Article\Supplier();
+            $supplierModel = new Supplier();
         }
 
         $params = $this->Request()->getParams();
@@ -168,7 +172,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         }
 
         // strip full qualified url
-        $mediaService = $this->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = $this->get(MediaServiceInterface::class);
         $supplierModel->setImage($mediaService->normalize($supplierModel->getImage()));
 
         // backend checks
@@ -221,15 +225,14 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
      */
     protected function getSingleSupplier($id)
     {
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
         $data = $this->getRepository()->getSupplierQuery($id)->getArrayResult();
-        $data[0]['image'] = $data[0]['image'] ? $mediaService->getUrl($data[0]['image']) : null;
-
         if (empty($data)) {
             $this->View()->assign(['success' => false, 'message' => 'Supplier not found']);
 
             return;
         }
+        $data[0]['image'] = $data[0]['image'] ? $mediaService->getUrl($data[0]['image']) : null;
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => 1]);
     }
@@ -253,7 +256,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     /**
      * Internal helper function to get access to the form repository.
      *
-     * @return \Shopware\Models\Article\Repository
+     * @return Repository
      */
     private function getRepository()
     {

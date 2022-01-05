@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\ManualSorting;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -35,35 +34,19 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
 
 class ProductLoader implements ProductLoaderInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private MediaServiceInterface $mediaService;
 
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
+    private ContextServiceInterface $contextService;
 
-    /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
-
-    /**
-     * @var QueryBuilderFactoryInterface
-     */
-    private $queryBuilderFactory;
+    private QueryBuilderFactoryInterface $queryBuilderFactory;
 
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
         ContextServiceInterface $contextService,
-        Connection $connection,
         MediaServiceInterface $mediaService
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
         $this->contextService = $contextService;
-        $this->connection = $connection;
         $this->mediaService = $mediaService;
     }
 

@@ -304,6 +304,8 @@ class AddressTest extends Enlight_Components_Test_Controller_TestCase
             }
 
             $parts = parse_url($location);
+            static::assertIsArray($parts);
+            static::assertArrayHasKey('path', $parts);
             $followUrl = $parts['path'];
 
             if (isset($parts['query'])) {

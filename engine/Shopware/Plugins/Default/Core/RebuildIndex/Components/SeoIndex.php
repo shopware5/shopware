@@ -311,16 +311,14 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         if (empty($urls)) {
             return 0;
         }
-        $static = [];
 
-        if (!empty($urls)) {
-            foreach (explode("\n", $urls) as $url) {
-                list($key, $value) = explode(',', trim($url));
-                if (empty($key) || empty($value)) {
-                    continue;
-                }
-                $static[$key] = $value;
+        $static = [];
+        foreach (explode("\n", $urls) as $url) {
+            list($key, $value) = explode(',', trim($url));
+            if (empty($key) || empty($value)) {
+                continue;
             }
+            $static[$key] = $value;
         }
 
         return \count($static);

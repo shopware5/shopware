@@ -25,6 +25,7 @@
 use Doctrine\DBAL\Connection;
 use Shopware\Components\CacheManager;
 use Shopware\Components\ShopwareReleaseStruct;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Config Model
@@ -32,7 +33,7 @@ use Shopware\Components\ShopwareReleaseStruct;
 class Shopware_Components_Config implements ArrayAccess
 {
     /**
-     * @var Shopware\Models\Shop\Shop
+     * @var Shop|null
      */
     protected $_shop;
 
@@ -129,7 +130,7 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
-     * @param \Shopware\Models\Shop\Shop $shop
+     * @param Shop $shop
      *
      * @return Shopware_Components_Config
      */
@@ -190,7 +191,7 @@ class Shopware_Components_Config implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($name)
     {
         if (!isset($this->_data[$name])) {
@@ -211,7 +212,7 @@ class Shopware_Components_Config implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($name)
     {
         $this->_data[$name] = null;
@@ -224,7 +225,7 @@ class Shopware_Components_Config implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($name)
     {
         if (!isset($this->_data[$name])) {
@@ -243,7 +244,7 @@ class Shopware_Components_Config implements ArrayAccess
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      * @deprecated - Will not return anything anymore with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($name, $value)
     {
         $baseName = $this->formatName($name);

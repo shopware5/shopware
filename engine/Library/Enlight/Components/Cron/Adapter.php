@@ -62,7 +62,7 @@ interface Enlight_Components_Cron_Adapter
      *
      * @param int $id
      *
-     * @return Enlight_Components_Cron_Job
+     * @return Enlight_Components_Cron_Job|null
      */
     public function getJobById($id);
 
@@ -73,7 +73,7 @@ interface Enlight_Components_Cron_Adapter
      *
      * @param string $name
      *
-     * @return Enlight_Components_Cron_Job
+     * @return Enlight_Components_Cron_Job|null
      */
     public function getJobByName($name);
 
@@ -84,7 +84,7 @@ interface Enlight_Components_Cron_Adapter
      *
      * @param string $action
      *
-     * @return Enlight_Components_Cron_Job
+     * @return Enlight_Components_Cron_Job|null
      */
     public function getJobByAction($action);
 

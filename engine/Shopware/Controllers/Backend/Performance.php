@@ -330,7 +330,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             $findBy['form'] = $form;
         }
 
-        /** @var Element $element */
         $element = $elementRepository->findOneBy($findBy);
 
         // If the element is empty, the given setting does not exists. This might be the case for some plugins
@@ -391,7 +390,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             return $defaultValue;
         }
 
-        /** @var Element|null $element */
         $element = $elementRepository->findOneBy(['name' => $config, 'form' => $form]);
 
         if (!$element) {
@@ -399,7 +397,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
 
         $values = $element->getValues();
-        if (empty($values) || empty($values[0])) {
+        if ($values->count() === 0 || empty($values[0])) {
             return $element->getValue();
         }
 

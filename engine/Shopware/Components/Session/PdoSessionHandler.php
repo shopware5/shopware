@@ -310,7 +310,7 @@ class PdoSessionHandler implements SessionHandlerInterface
         // This way, pruning expired sessions does not block them from being started while the current session is used.
         $this->gcCalled = true;
 
-        return true;
+        return 1;
     }
 
     /**

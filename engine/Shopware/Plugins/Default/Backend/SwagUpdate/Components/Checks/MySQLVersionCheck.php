@@ -35,18 +35,12 @@ class MySQLVersionCheck implements CheckInterface
     public const CHECK_TYPE = 'mysqlversion';
 
     /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
      * @var SnippetNamespace
      */
     private $namespace;
 
-    public function __construct(Connection $connection, SnippetNamespace $namespace)
+    public function __construct(SnippetNamespace $namespace)
     {
-        $this->connection = $connection;
         $this->namespace = $namespace;
     }
 

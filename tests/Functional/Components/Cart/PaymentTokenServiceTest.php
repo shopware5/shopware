@@ -40,7 +40,8 @@ class PaymentTokenServiceTest extends Enlight_Components_Test_Controller_TestCas
 
     public function setUp(): void
     {
-        $this->service = Shopware()->Container()->get(\Shopware\Components\Cart\PaymentTokenService::class);
+        $this->service = Shopware()->Container()->get(PaymentTokenService::class);
+        parent::setUp();
     }
 
     public function testPaymentTokenStorage(): void

@@ -22,13 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\Form;
@@ -96,13 +100,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
 
         /** @var ShopContextInterface $context */
-        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $context = $this->get(ContextServiceInterface::class)->getShopContext();
 
         /** @var Enlight_Components_Session_Namespace $session */
         $session = $this->get('session');
 
         /** @var RegisterServiceInterface $registerService */
-        $registerService = $this->get(\Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface::class);
+        $registerService = $this->get(RegisterServiceInterface::class);
 
         $data = $this->getPostData();
 
@@ -138,7 +142,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             }
         }
 
-        $validCaptcha = $this->validateCaptcha($this->get(\Shopware_Components_Config::class)->get('registerCaptcha'), $this->request);
+        $validCaptcha = $this->validateCaptcha($this->get(Shopware_Components_Config::class)->get('registerCaptcha'), $this->request);
         if (!$validCaptcha) {
             $errors['captcha'] = [
                 $this->get('snippets')
@@ -164,7 +168,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         /** @var Address $billing */
         $billing = $billingForm->getData();
 
-        $config = $this->container->get(\Shopware_Components_Config::class);
+        $config = $this->container->get(Shopware_Components_Config::class);
 
         $accountMode = (int) $customer->getAccountMode();
         $doubleOptinWithAccount = ($accountMode === 0) && $config->get('optinregister');
@@ -246,11 +250,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
     public function confirmValidationAction()
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = $this->container->get(\Doctrine\DBAL\Connection::class);
+        /** @var Connection $connection */
+        $connection = $this->container->get(Connection::class);
 
-        /** @var \Shopware\Components\Model\ModelManager $modelManager */
-        $modelManager = $this->container->get(\Shopware\Components\Model\ModelManager::class);
+        /** @var ModelManager $modelManager */
+        $modelManager = $this->container->get(ModelManager::class);
 
         $hash = $this->Request()->get('sConfirmation');
 
@@ -271,8 +275,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
         $customerId = (int) $data['customerId'];
 
-        /** @var \DateTimeInterface $date */
-        $date = new \DateTime();
+        /** @var DateTimeInterface $date */
+        $date = new DateTime();
 
         /** @var Customer $customer */
         $customer = $modelManager->find(Customer::class, $customerId);
@@ -362,7 +366,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     private function validateCaptcha(string $captchaName, Enlight_Controller_Request_Request $request): bool
     {
-        /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
+        /** @var CaptchaValidator $captchaValidator */
         $captchaValidator = $this->container->get('shopware.captcha.validator');
 
         try {
@@ -450,7 +454,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     private function getCustomerGroupKey(): ?string
     {
         $customerGroupKey = $this->request->getParam('sValidation');
-        $customerGroupId = $this->get(\Doctrine\DBAL\Connection::class)->fetchColumn(
+        $customerGroupId = $this->get(Connection::class)->fetchColumn(
             'SELECT id FROM s_core_customergroups WHERE `groupkey` = ?',
             [$customerGroupKey]
         );
@@ -465,7 +469,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         );
 
         if ($event) {
-            return $this->get(\Shopware_Components_Config::class)->get('defaultCustomerGroup', 'EK');
+            return $this->get(Shopware_Components_Config::class)->get('defaultCustomerGroup', 'EK');
         }
 
         return $customerGroupKey;
@@ -564,23 +568,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         return $form;
     }
 
-    /**
-     * @return array
-     */
-    private function getCountries()
-    {
-        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
-        $service = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\LocationServiceInterface::class);
-        $countries = $service->getCountries($context);
-
-        return $this->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertCountryStructList($countries);
-    }
-
     private function sendRegistrationMail(Customer $customer): void
     {
         try {
             Shopware()->Modules()->Admin()->sSaveRegisterSendConfirmation($customer->getEmail());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $message = sprintf('Could not send user registration email to address %s', $customer->getEmail());
             $this->get('corelogger')->error($message, ['exception' => $e->getMessage()]);
         }

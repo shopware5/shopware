@@ -1067,7 +1067,7 @@ class Article extends Resource implements BatchInterface
 
                     if ($oldMain instanceof Detail) {
                         $oldMain->setKind(2);
-                        if ($oldMain->getNumber() && !empty($oldMain->getConfiguratorOptions())) {
+                        if ($oldMain->getNumber() && $oldMain->getConfiguratorOptions()->count() > 0) {
                             $variant = $oldMain;
                         } else {
                             $this->getManager()->remove($oldMain);
@@ -1843,7 +1843,7 @@ class Article extends Resource implements BatchInterface
                 $options->add($available);
             }
 
-            if (empty($options)) {
+            if ($options->count() === 0) {
                 throw new CustomValidationException('No available option exists');
             }
 

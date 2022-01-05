@@ -47,7 +47,7 @@ class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
      * The storage can be overwritten by the options parameter which must contain the "storage" element
      * which is an instance of the Enlight_Config.
      *
-     * @param null $options
+     * @param array|null $options
      */
     public function __construct($options = null)
     {
@@ -57,9 +57,9 @@ class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
         if (isset($options['storage']) && \is_string($options['storage'])) {
             $this->storage = new Enlight_Config($options['storage'], [
                 'allowModifications' => true,
-                'adapter' => isset($options['storageAdapter']) ? $options['storageAdapter'] : null,
-                'section' => isset($options['section']) ? $options['section'] : 'production', ]
-            );
+                'adapter' => $options['storageAdapter'] ?? null,
+                'section' => $options['section'] ?? 'production',
+            ]);
         } elseif (isset($options['storage']) && $options['storage'] instanceof Enlight_Config) {
             $this->storage = $options['storage'];
         } else {

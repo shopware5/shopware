@@ -33,10 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
@@ -48,7 +45,7 @@ class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $this->addPropertyCondition($request, $criteria);
     }
 
-    private function addPropertyCondition(Request $request, Criteria $criteria)
+    private function addPropertyCondition(Request $request, Criteria $criteria): void
     {
         $filters = $request->getParam('sFilterProperties', []);
         if (empty($filters)) {
@@ -98,12 +95,11 @@ class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $result = [];
         foreach ($data as $value) {
             $optionId = $value['optionID'];
-            $valueIds = explode('|', $value['valueIds']);
-
-            if (empty($valueIds)) {
+            if (!\is_string($value['valueIds']) || $value['valueIds'] === '') {
                 continue;
             }
-            $result[$optionId] = $valueIds;
+
+            $result[$optionId] = explode('|', $value['valueIds']);
         }
 
         return $result;

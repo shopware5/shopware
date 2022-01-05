@@ -545,6 +545,7 @@ class Kernel extends SymfonyKernel
      */
     protected function initializeContainer()
     {
+        /** @var class-string<Container> $class */
         $class = $this->getContainerClass();
 
         $cache = new ConfigCache(

@@ -30,7 +30,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundleEs\FacetHandler\_fixtures
 class ElasticResult
 {
     /**
-     * @return array<mixed,mixed>
+     * @return array<string ,mixed>
      */
     public function getResult(): array
     {

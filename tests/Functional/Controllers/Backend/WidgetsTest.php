@@ -49,8 +49,6 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
     private string $userId;
 
-    private Enlight_Plugin_PluginManager $pluginManager;
-
     private Shopware_Plugins_Backend_Auth_Bootstrap $authPlugin;
 
     public function setUp(): void
@@ -62,8 +60,6 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
         if (!($pluginManager instanceof Enlight_Plugin_PluginManager)) {
             throw new UnexpectedValueException(sprintf('Couldn\'t load %s', Enlight_Plugin_PluginManager::class));
         }
-
-        $this->pluginManager = $pluginManager;
 
         $backendPlugins = $pluginManager->get('Backend');
 
