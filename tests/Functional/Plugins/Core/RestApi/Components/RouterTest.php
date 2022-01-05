@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,14 +29,12 @@ namespace Shopware\Tests\Functional\Plugins\Core\RestApi\Components;
 use Enlight_Controller_Request_RequestTestCase;
 use Enlight_Controller_Response_ResponseTestCase;
 use Enlight_Loader;
+use PHPUnit\Framework\TestCase;
 use ShopwarePlugins\RestApi\Components\Router;
 
-class RouterTest extends \PHPUnit\Framework\TestCase
+class RouterTest extends TestCase
 {
-    /**
-     * @var Router
-     */
-    private $router;
+    private Router $router;
 
     public function setUp(): void
     {
@@ -43,37 +43,39 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
         $pluginDir = $helper->DocPath() . 'engine/Shopware/Plugins/Default/Core/RestApi';
 
-        $loader->registerNamespace(
-            'ShopwarePlugins\\RestApi\\Components',
-            $pluginDir . '/Components/'
-        );
+        $loader->registerNamespace('ShopwarePlugins\\RestApi\\Components', $pluginDir . '/Components/');
 
         $this->router = new Router();
     }
 
-    public function testCanGetInstance()
+    public function testCanGetInstance(): void
     {
-        static::assertInstanceOf('ShopwarePlugins\RestApi\Components\Router', $this->router);
+        static::assertInstanceOf(Router::class, $this->router);
     }
 
-    public function routeGetProvider()
+    /**
+     * @return array<array<string|int|bool>>
+     */
+    public function routeGetProvider(): array
     {
         return [
             ['/api/articles/', 1, 'articles', 'index', false],
             ['/api/v1/articles/', 1, 'articles', 'index',  false],
             ['/api/v2/articles/', 2, 'articles', 'index', false],
-            ['/api/articles/5', 1, 'articles', 'get', 5],
+            ['/api/articles/5', 1, 'articles', 'get', '5'],
             ['/api/articles/sw123', 1, 'articles', 'get', 'sw123'],
-            ['/api/v1/articles/5', 1, 'articles', 'get', 5],
-            ['/api/v2/articles/5', 2, 'articles', 'get', 5],
+            ['/api/v1/articles/5', 1, 'articles', 'get', '5'],
+            ['/api/v2/articles/5', 2, 'articles', 'get', '5'],
         ];
     }
 
     /**
      * @covers \ShopwarePlugins\RestApi\Components\Router::assembleRoute
      * @dataProvider routeGetProvider
+     *
+     * @param string|false $expectedId
      */
-    public function testGetRoutes($uri, $expectedVersion, $expectedController, $expectedAction, $expectedId)
+    public function testGetRoutes(string $uri, int $expectedVersion, string $expectedController, string $expectedAction, $expectedId): void
     {
         $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setMethod('GET');
@@ -83,30 +85,35 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $request->setPathInfo($uri);
         $this->router->assembleRoute($request, $response);
 
-        static::assertEquals($expectedController, $request->getControllerName());
-        static::assertEquals($expectedAction, $request->getActionName());
-        static::assertEquals($expectedVersion, $request->getParam('version'));
-        static::assertEquals($expectedId, $request->getParam('id'));
-        static::assertEquals(200, $response->getHttpResponseCode());
+        static::assertSame($expectedController, $request->getControllerName());
+        static::assertSame($expectedAction, $request->getActionName());
+        static::assertSame($expectedVersion, $request->getParam('version'));
+        static::assertSame($expectedId, $request->getParam('id'));
+        static::assertSame(200, $response->getHttpResponseCode());
     }
 
-    public function routePostProvider()
+    /**
+     * @return array<array<string|int|bool>>
+     */
+    public function routePostProvider(): array
     {
         return [
-            ['/api/articles/',     1, 'articles', 'post', false],
-            ['/api/v1/articles/',  1, 'articles', 'post', false],
-            ['/api/v2/articles/',  2, 'articles', 'post', false],
-            ['/api/articles/5',    1, 'articles', 'post', 5],
-            ['/api/v1/articles/5', 1, 'articles', 'post', 5],
-            ['/api/v2/articles/5', 2, 'articles', 'post', 5],
+            ['/api/articles/', 1, 'articles', 'post', false],
+            ['/api/v1/articles/', 1, 'articles', 'post', false],
+            ['/api/v2/articles/', 2, 'articles', 'post', false],
+            ['/api/articles/5', 1, 'articles', 'post', '5'],
+            ['/api/v1/articles/5', 1, 'articles', 'post', '5'],
+            ['/api/v2/articles/5', 2, 'articles', 'post', '5'],
         ];
     }
 
     /**
      * @covers \ShopwarePlugins\RestApi\Components\Router::assembleRoute
      * @dataProvider routePostProvider
+     *
+     * @param string|false $expectedId
      */
-    public function testPostRoutes($uri, $expectedVersion, $expectedController, $expectedAction, $expectedId)
+    public function testPostRoutes(string $uri, int $expectedVersion, string $expectedController, string $expectedAction, $expectedId): void
     {
         $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setMethod('POST');
@@ -116,29 +123,34 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $request->setPathInfo($uri);
         $this->router->assembleRoute($request, $response);
 
-        static::assertEquals($expectedController, $request->getControllerName());
-        static::assertEquals($expectedAction, $request->getActionName());
-        static::assertEquals($expectedVersion, $request->getParam('version'));
-        static::assertEquals($expectedId, $request->getParam('id'));
+        static::assertSame($expectedController, $request->getControllerName());
+        static::assertSame($expectedAction, $request->getActionName());
+        static::assertSame($expectedVersion, $request->getParam('version'));
+        static::assertSame($expectedId, $request->getParam('id'));
     }
 
-    public function routePutProvider()
+    /**
+     * @return array<array<string|int|bool>>
+     */
+    public function routePutProvider(): array
     {
         return [
-            ['/api/articles/',     1, 'articles', 'batch',  false, 200],
-            ['/api/v1/articles/',  1, 'articles', 'batch',  false, 200],
-            ['/api/v2/articles/',  2, 'articles', 'batch',  false, 200],
-            ['/api/articles/5',    1, 'articles', 'put',      5,     200],
-            ['/api/v1/articles/5', 1, 'articles', 'put',      5,     200],
-            ['/api/v2/articles/5', 2, 'articles', 'put',      5,     200],
+            ['/api/articles/', 1, 'articles', 'batch', false, 200],
+            ['/api/v1/articles/', 1, 'articles', 'batch', false, 200],
+            ['/api/v2/articles/', 2, 'articles', 'batch', false, 200],
+            ['/api/articles/5', 1, 'articles', 'put', '5', 200],
+            ['/api/v1/articles/5', 1, 'articles', 'put', '5', 200],
+            ['/api/v2/articles/5', 2, 'articles', 'put', '5', 200],
         ];
     }
 
     /**
      * @covers \ShopwarePlugins\RestApi\Components\Router::assembleRoute
      * @dataProvider routePutProvider
+     *
+     * @param string|false $expectedId
      */
-    public function testPutRoutes($uri, $expectedVersion, $expectedController, $expectedAction, $expectedId, $expectedCode)
+    public function testPutRoutes(string $uri, int $expectedVersion, string $expectedController, string $expectedAction, $expectedId, int $expectedCode): void
     {
         $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setMethod('PUT');
@@ -148,31 +160,36 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $request->setPathInfo($uri);
         $this->router->assembleRoute($request, $response);
 
-        static::assertEquals($expectedController, $request->getControllerName());
-        static::assertEquals($expectedAction, $request->getActionName());
-        static::assertEquals($expectedVersion, $request->getParam('version'));
-        static::assertEquals($expectedId, $request->getParam('id'));
-        static::assertEquals($expectedCode, $response->getHttpResponseCode());
+        static::assertSame($expectedController, $request->getControllerName());
+        static::assertSame($expectedAction, $request->getActionName());
+        static::assertSame($expectedVersion, $request->getParam('version'));
+        static::assertSame($expectedId, $request->getParam('id'));
+        static::assertSame($expectedCode, $response->getHttpResponseCode());
     }
 
-    public function routeDeleteProvider()
+    /**
+     * @return array<array<string|int|bool>>
+     */
+    public function routeDeleteProvider(): array
     {
         return [
-            ['/api/articles/',    1, 'articles', 'batchDelete', false, 200],
+            ['/api/articles/', 1, 'articles', 'batchDelete', false, 200],
             ['/api/v1/articles/', 1, 'articles', 'batchDelete', false, 200],
             ['/api/v2/articles/', 2, 'articles', 'batchDelete', false, 200],
 
-            ['/api/articles/5',    1, 'articles', 'delete', 5, 200],
-            ['/api/v1/articles/5', 1, 'articles', 'delete', 5, 200],
-            ['/api/v2/articles/5', 2, 'articles', 'delete', 5, 200],
+            ['/api/articles/5', 1, 'articles', 'delete', '5', 200],
+            ['/api/v1/articles/5', 1, 'articles', 'delete', '5', 200],
+            ['/api/v2/articles/5', 2, 'articles', 'delete', '5', 200],
         ];
     }
 
     /**
      * @covers \ShopwarePlugins\RestApi\Components\Router::assembleRoute
      * @dataProvider routeDeleteProvider
+     *
+     * @param string|false $expectedId
      */
-    public function testDeleteRoutes($uri, $expectedVersion, $expectedController, $expectedAction, $expectedId, $expectedCode)
+    public function testDeleteRoutes(string $uri, int $expectedVersion, string $expectedController, string $expectedAction, $expectedId, int $expectedCode): void
     {
         $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setMethod('DELETE');
@@ -182,10 +199,10 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $request->setPathInfo($uri);
         $this->router->assembleRoute($request, $response);
 
-        static::assertEquals($expectedController, $request->getControllerName());
-        static::assertEquals($expectedAction, $request->getActionName());
-        static::assertEquals($expectedVersion, $request->getParam('version'));
-        static::assertEquals($expectedId, $request->getParam('id'));
-        static::assertEquals($expectedCode, $response->getHttpResponseCode());
+        static::assertSame($expectedController, $request->getControllerName());
+        static::assertSame($expectedAction, $request->getActionName());
+        static::assertSame($expectedVersion, $request->getParam('version'));
+        static::assertSame($expectedId, $request->getParam('id'));
+        static::assertSame($expectedCode, $response->getHttpResponseCode());
     }
 }

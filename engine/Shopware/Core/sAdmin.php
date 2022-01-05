@@ -772,6 +772,7 @@ class sAdmin implements \Enlight_Hook
             $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get('LoginFailure', 'Wrong email or password');
             $this->session->offsetUnset('sUserMail');
+            $this->session->offsetUnset('sUserPasswordChangeDate');
             $this->session->offsetUnset('sUserId');
         }
 
@@ -799,14 +800,14 @@ class sAdmin implements \Enlight_Hook
 
         if ($ignoreAccountMode) {
             $sql = '
-                SELECT id, customergroup, password, encoder
+                SELECT id, customergroup, password, encoder, password_change_date
                 FROM s_user WHERE email = ? AND active=1
                 AND (lockeduntil < now() OR lockeduntil IS NULL) '
                 . $addScopeSql
                 . $preHashedSql;
         } else {
             $sql = '
-                SELECT id, customergroup, password, encoder
+                SELECT id, customergroup, password, encoder, password_change_date
                 FROM s_user
                 WHERE email = ? AND active=1 AND accountmode != 1
                 AND (lockeduntil < now() OR lockeduntil IS NULL) '
@@ -872,11 +873,14 @@ class sAdmin implements \Enlight_Hook
 
         $userId = $this->session->offsetGet('sUserId');
         $userMail = $this->session->offsetGet('sUserMail');
+        $passwordChangeDate = $this->session->offsetGet('sUserPasswordChangeDate');
 
         if (empty($userMail)
+            || empty($passwordChangeDate)
             || empty($userId)
         ) {
             $this->session->offsetUnset('sUserMail');
+            $this->session->offsetUnset('sUserPasswordChangeDate');
             $this->session->offsetUnset('sUserId');
 
             return false;
@@ -884,13 +888,14 @@ class sAdmin implements \Enlight_Hook
 
         $sql = '
             SELECT * FROM s_user
-            WHERE email = ? AND id = ?
+            WHERE password_change_date = ? AND email = ? AND id = ?
             AND UNIX_TIMESTAMP(lastlogin) >= (UNIX_TIMESTAMP(NOW())-?)
         ';
 
         $getUser = $this->db->fetchRow(
             $sql,
             [
+                $passwordChangeDate,
                 $userMail,
                 $userId,
                 (int) ini_get('session.gc_maxlifetime'),
@@ -928,6 +933,7 @@ class sAdmin implements \Enlight_Hook
             return true;
         }
         $this->session->offsetUnset('sUserMail');
+        $this->session->offsetUnset('sUserPasswordChangeDate');
         $this->session->offsetUnset('sUserId');
         $this->eventManager->notify(
             'Shopware_Modules_Admin_CheckUser_Failure',
@@ -3246,6 +3252,7 @@ class sAdmin implements \Enlight_Hook
         }
 
         $this->session->offsetSet('sUserMail', $email);
+        $this->session->offsetSet('sUserPasswordChangeDate', $getUser['password_change_date']);
         $this->session->offsetSet('sUserId', $userId);
         $this->session->offsetSet('sNotesQuantity', $this->moduleManager->Basket()->sCountNotes());
 
@@ -3623,6 +3630,7 @@ SQL;
         );
 
         $this->session->offsetUnset('sUserMail');
+        $this->session->offsetUnset('sUserPasswordChangeDate');
         $this->session->offsetUnset('sUserId');
 
         return $sErrorMessages;
