@@ -156,7 +156,7 @@ The changelog and all available commits are located under <https://github.com/sh
 ## Further reading
 
 * [Shopware AG](https://www.shopware.com) - Homepage of shopware AG
-* [Shopware Developer Documentation](https://devdocs.shopware.com/)
+* [Shopware Developer Documentation](https://developers.shopware.com/)
 * [Shopware Docs](https://docs.shopware.com/) - Shopware documentation
 * [Shopware Forum](https://forum.shopware.com) - Community forum
 * [Shopware Marketplace](https://store.shopware.com) - Shopware Store
