@@ -32,6 +32,7 @@ use Shopware\Bundle\CookieBundle\Structs\CookieStruct;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Shopware\Bundle\CookieBundle\Exceptions\NoCookieGroupByNameKnownException;
 
 class CookieRemoveHandler extends CookieHandler implements CookieRemoveHandlerInterface
 {
@@ -114,7 +115,12 @@ class CookieRemoveHandler extends CookieHandler implements CookieRemoveHandlerIn
 
         foreach ($preferences['groups'] as $group) {
             foreach ($group['cookies'] as $cookie) {
-                $cookieCollection = $allowedCookies->getGroupByName($group['name'])->getCookies();
+                try {
+                    $cookieCollection = $allowedCookies->getGroupByName($group['name'])->getCookies();
+                } catch (NoCookieGroupByNameKnownException $e) {
+                    unset($preferences['groups'][$group['name']]);
+                    continue;
+                }
 
                 if ($this->hasCookieWithTechnicalName($cookieCollection, $cookie['name'])) {
                     continue;
