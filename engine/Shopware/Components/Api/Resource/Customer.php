@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
@@ -32,6 +35,7 @@ use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Components\Api\Exception\CustomValidationException;
+use Shopware\Components\Api\Exception\NonUniqueIdentifierUsedException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Model\ModelManager;
@@ -67,8 +71,9 @@ class Customer extends Resource
      *
      * @param string $number
      *
+     * @throws ParameterMissingException*
+     * @throws NonUniqueIdentifierUsedException
      * @throws NotFoundException
-     * @throws ParameterMissingException
      *
      * @return int
      */
@@ -84,7 +89,12 @@ class Customer extends Resource
                 ->where('customer.number = ?1')
                 ->setParameter(1, $number);
 
-        $id = $builder->getQuery()->getOneOrNullResult();
+        try {
+            $id = $builder->getQuery()->getOneOrNullResult();
+        } catch (NonUniqueResultException $nonUniqueResultException) {
+            $ids = $builder->getQuery()->getArrayResult();
+            throw new NonUniqueIdentifierUsedException('number', (string) $number, CustomerModel::class, array_column($ids, 'id'));
+        }
 
         if (!$id) {
             throw new NotFoundException(sprintf('Customer by number %s not found', $number));
@@ -99,7 +109,7 @@ class Customer extends Resource
      * @throws NotFoundException
      * @throws ParameterMissingException
      *
-     * @return array|CustomerModel
+     * @return array<string, mixed>|CustomerModel
      */
     public function getOneByNumber($number)
     {
@@ -114,7 +124,7 @@ class Customer extends Resource
      * @throws NotFoundException
      * @throws ParameterMissingException
      *
-     * @return array|CustomerModel
+     * @return array<string, mixed>|CustomerModel
      */
     public function getOne($id)
     {
@@ -152,7 +162,6 @@ class Customer extends Resource
             ->where('customer.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var CustomerModel|null $customer */
         $customer = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$customer) {
@@ -163,10 +172,12 @@ class Customer extends Resource
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param int                                                                                     $offset
+     * @param int                                                                                     $limit
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $criteria
+     * @param array<array{property: string, direction: string}>                                       $orderBy
      *
-     * @return array
+     * @return array{data: array<array<string, mixed>|CustomerModel>, total: int}
      */
     public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
     {
@@ -195,6 +206,8 @@ class Customer extends Resource
     }
 
     /**
+     * @param array<string, mixed> $params
+     *
      * @return CustomerModel
      */
     public function create(array $params)
@@ -221,7 +234,7 @@ class Customer extends Resource
         $params = $this->prepareAssociatedData($params, $customer);
         $customer->fromArray($params);
 
-        $billing = $this->createAddress($params['billing']) ?: new AddressModel();
+        $billing = $this->createAddress($params['billing']) ?? new AddressModel();
         $shipping = $this->createAddress($params['shipping']);
 
         $registerService = $this->getContainer()->get(RegisterServiceInterface::class);
@@ -237,7 +250,8 @@ class Customer extends Resource
     }
 
     /**
-     * @param string $number
+     * @param string               $number
+     * @param array<string, mixed> $params
      *
      * @throws ParameterMissingException
      * @throws CustomValidationException
@@ -253,7 +267,8 @@ class Customer extends Resource
     }
 
     /**
-     * @param int $id
+     * @param int                  $id
+     * @param array<string, mixed> $params
      *
      * @throws CustomValidationException
      * @throws NotFoundException
@@ -269,10 +284,9 @@ class Customer extends Resource
             throw new ParameterMissingException('id');
         }
 
-        /** @var CustomerModel|null $customer */
         $customer = $this->getRepository()->find($id);
 
-        if (!$customer) {
+        if (!$customer instanceof CustomerModel) {
             throw new NotFoundException(sprintf('Customer by id %d not found', $id));
         }
 
@@ -339,7 +353,6 @@ class Customer extends Resource
             throw new ParameterMissingException('id');
         }
 
-        /** @var CustomerModel|null $customer */
         $customer = $this->getRepository()->find($id);
 
         if (!$customer) {
@@ -353,23 +366,21 @@ class Customer extends Resource
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function prepareAssociatedData($data, CustomerModel $customer)
     {
-        $data = $this->prepareCustomerPaymentData($data, $customer);
-
-        return $data;
+        return $this->prepareCustomerPaymentData($data, $customer);
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @throws CustomValidationException
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function prepareCustomerPaymentData($data, CustomerModel $customer)
     {
@@ -444,11 +455,13 @@ class Customer extends Resource
     }
 
     /**
+     * @param array<string, mixed> $params
+     *
      * @throws CustomValidationException
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function prepareCustomerData(array $params, CustomerModel $customer)
+    private function prepareCustomerData(array $params, CustomerModel $customer): array
     {
         if (\array_key_exists('groupKey', $params)) {
             $params['group'] = Shopware()->Models()->getRepository(Group::class)->findOneBy(['key' => $params['groupKey']]);
@@ -484,11 +497,9 @@ class Customer extends Resource
     /**
      * Sets the correct context for e.g. validation
      *
-     * @param int $shopId
-     *
      * @throws CustomValidationException
      */
-    private function setupContext($shopId = null)
+    private function setupContext(int $shopId = null): void
     {
         $shopRepository = $this->getContainer()->get(ModelManager::class)->getRepository(ShopModel::class);
 
@@ -505,11 +516,11 @@ class Customer extends Resource
     }
 
     /**
-     * @throws CustomValidationException
+     * @param array<string, mixed> $data
      *
-     * @return AddressModel|null
+     * @throws CustomValidationException
      */
-    private function createAddress(array $data = null)
+    private function createAddress(array $data = null): ?AddressModel
     {
         if (empty($data)) {
             return null;
@@ -530,11 +541,11 @@ class Customer extends Resource
     /**
      * Resolves ids to models
      *
-     * @param bool $filter
+     * @param array<string, mixed> $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function prepareAddressData(array $data, $filter = false)
+    private function prepareAddressData(array $data, bool $filter = false): array
     {
         $data['country'] = !empty($data['country']) ? $this->getContainer()->get(ModelManager::class)->find(CountryModel::class, (int) $data['country']) : null;
         $data['state'] = !empty($data['state']) ? $this->getContainer()->get(ModelManager::class)->find(StateModel::class, $data['state']) : null;
@@ -543,9 +554,11 @@ class Customer extends Resource
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $params
+     *
+     * @return array<string, mixed>
      */
-    private function applyAddressData(array $params, CustomerModel $customer)
+    private function applyAddressData(array $params, CustomerModel $customer): array
     {
         $billingData = [];
         $shippingData = [];
@@ -568,7 +581,13 @@ class Customer extends Resource
 
         unset($params['billing'], $params['shipping'], $params['defaultBillingAddress'], $params['defaultShippingAddress']);
 
+        if (!$customer->getDefaultBillingAddress() instanceof AddressModel) {
+            throw new CustomValidationException(sprintf('Customer with ID "%s" has no default billing address', $customer->getId()));
+        }
         $customer->getDefaultBillingAddress()->fromArray($billingData);
+        if (!$customer->getDefaultShippingAddress() instanceof AddressModel) {
+            throw new CustomValidationException(sprintf('Customer with ID "%s" has no default shipping address', $customer->getId()));
+        }
         $customer->getDefaultShippingAddress()->fromArray($shippingData);
 
         return $params;

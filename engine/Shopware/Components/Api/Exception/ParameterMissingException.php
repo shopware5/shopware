@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,36 +27,40 @@
 namespace Shopware\Components\Api\Exception;
 
 use Enlight_Exception;
+use RuntimeException;
+use Symfony\Component\HttpFoundation\Response;
 
-/**
- * API Exception
- */
-class ParameterMissingException extends Enlight_Exception
+class ParameterMissingException extends Enlight_Exception implements ApiException
 {
     /**
-     * @var string|null
+     * @var string
      */
-    protected $missingParam = null;
+    protected $missingParam;
 
     /**
-     * @param string|null $param
+     * @param string $param
      */
-    public function __construct($param = '')
+    public function __construct($param)
     {
         $this->setMissingParam($param);
-        parent::__construct(sprintf('Missing parameter %s', $param));
+        parent::__construct(sprintf('A required parameter is missing: %s', $param), Response::HTTP_BAD_REQUEST);
     }
 
     /**
-     * @param string|null $param
+     * @param string $param
+     *
+     * @return void
      */
     public function setMissingParam($param)
     {
+        if (!\is_string($param)) {
+            throw new RuntimeException('Missing Parameter needs to be configured');
+        }
         $this->missingParam = $param;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getMissingParam()
     {

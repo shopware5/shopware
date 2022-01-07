@@ -27,12 +27,33 @@ declare(strict_types=1);
 namespace Shopware\Components\Api\Exception;
 
 use Enlight_Exception;
+use Shopware\Components\Model\ModelEntity;
 use Symfony\Component\HttpFoundation\Response;
 
-class PrivilegeException extends Enlight_Exception implements ApiException
+class NonUniqueIdentifierUsedException extends Enlight_Exception implements ApiException
 {
-    public function __construct(string $message)
+    /**
+     * @var list<int>
+     */
+    private array $alternativeIds;
+
+    /**
+     * @param class-string<ModelEntity> $model
+     * @param list<int>                 $alternativeIds
+     */
+    public function __construct(string $identifier, string $identifierValue, string $model, array $alternativeIds = [])
     {
-        parent::__construct($message, Response::HTTP_FORBIDDEN);
+        $this->alternativeIds = $alternativeIds;
+
+        $message = sprintf("Identifier '%s' with value '%s' for entity '%s' is not unique.", $identifier, $identifierValue, $model);
+        parent::__construct($message, Response::HTTP_CONFLICT);
+    }
+
+    /**
+     * @return list<int>
+     */
+    public function getAlternativeIds(): array
+    {
+        return $this->alternativeIds;
     }
 }

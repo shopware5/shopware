@@ -26,13 +26,8 @@ declare(strict_types=1);
 
 namespace Shopware\Components\Api\Exception;
 
-use Enlight_Exception;
-use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
-class PrivilegeException extends Enlight_Exception implements ApiException
+interface ApiException extends Throwable
 {
-    public function __construct(string $message)
-    {
-        parent::__construct($message, Response::HTTP_FORBIDDEN);
-    }
 }

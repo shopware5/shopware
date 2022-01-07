@@ -73,7 +73,7 @@ class Order extends Resource
     public function getIdFromNumber($number)
     {
         if (empty($number)) {
-            throw new ParameterMissingException();
+            throw new ParameterMissingException('number');
         }
 
         $orderModel = $this->getRepository()->findOneBy(['number' => $number]);
@@ -113,7 +113,7 @@ class Order extends Resource
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ParameterMissingException();
+            throw new ParameterMissingException('id');
         }
 
         $filters = [['property' => 'orders.id', 'expression' => '=', 'value' => $id]];

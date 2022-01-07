@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,19 +27,19 @@
 namespace Shopware\Components\Api\Exception;
 
 use Enlight_Exception;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-/**
- * API Exception
- */
-class ValidationException extends Enlight_Exception
+class ValidationException extends Enlight_Exception implements ApiException
 {
     /**
-     * @var ConstraintViolationListInterface
+     * @deprecated - Will be native type hinted in Shopware 5.8 and not nullable anymore
+     *
+     * @var ConstraintViolationListInterface|null
      */
     protected $violations = null;
 
@@ -45,7 +47,7 @@ class ValidationException extends Enlight_Exception
     {
         $this->setViolations($violations);
 
-        parent::__construct((string) $this);
+        parent::__construct((string) $this, Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -55,7 +57,10 @@ class ValidationException extends Enlight_Exception
     {
         $output = '';
 
-        /** @var ConstraintViolationInterface $violation */
+        if (!$this->violations instanceof ConstraintViolationListInterface) {
+            return $output;
+        }
+
         foreach ($this->violations as $violation) {
             $output .= $violation->getPropertyPath() . ': ' . $violation->getMessage() . PHP_EOL;
         }
@@ -64,7 +69,11 @@ class ValidationException extends Enlight_Exception
     }
 
     /**
+     * @deprecated - Will be native type hinted in Shopware 5.8
+     *
      * @param ConstraintViolationListInterface $violations
+     *
+     * @return void
      */
     public function setViolations($violations)
     {
@@ -72,7 +81,9 @@ class ValidationException extends Enlight_Exception
     }
 
     /**
-     * @return ConstraintViolationListInterface
+     * @deprecated - Will be native type hinted in Shopware 5.8 and will not return null anymore
+     *
+     * @return ConstraintViolationListInterface|null
      */
     public function getViolations()
     {
@@ -87,15 +98,19 @@ class ValidationException extends Enlight_Exception
         $violations = [];
 
         foreach ($errors as $error) {
+            if (!$error instanceof FormError) {
+                continue;
+            }
             $message = Shopware()->Template()->fetch('string:' . $error->getMessage());
 
+            $origin = $error->getOrigin();
             $violations[] = new ConstraintViolation(
                 $message,
                 $error->getMessageTemplate(),
                 $error->getMessageParameters(),
-                $error->getOrigin()->getRoot(),
-                $error->getOrigin()->getPropertyPath(),
-                $error->getOrigin()->getData(),
+                $origin ? $origin->getRoot() : null,
+                $origin ? (string) $origin->getPropertyPath() : null,
+                $origin ? $origin->getData() : null,
                 $error->getMessagePluralization(),
                 null,
                 null,
