@@ -26,7 +26,10 @@ namespace Shopware\Components\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Comparison;
+use Doctrine\ORM\Query\Expr\OrderBy;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder as BaseQueryBuilder;
 
 /**
@@ -83,9 +86,9 @@ class QueryBuilder extends BaseQueryBuilder
      * instead or call {@link setParameters()} only once, or with all the
      * parameters.
      *
-     * @deprecated This method is deprecated since 5.4.
+     * @deprecated This method is deprecated since 5.4 and will be removed with Shopware 5.8
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|array $parameters the query parameters to set
+     * @param ArrayCollection|array $parameters the query parameters to set
      *
      * @return QueryBuilder this QueryBuilder instance
      */
@@ -110,7 +113,7 @@ class QueryBuilder extends BaseQueryBuilder
      * should only use it to quickly move backwards to the old
      * {@link setParameters()} behavior.
      *
-     * @deprecated This method is deprecated since 5.4.
+     * @deprecated This method is deprecated since 5.4. and will be removed with Shopware 5.8
      *
      * @return QueryBuilder this QueryBuilder instance
      */
@@ -128,7 +131,7 @@ class QueryBuilder extends BaseQueryBuilder
         }
 
         foreach ($parameters as $key => $value) {
-            $parameter = new \Doctrine\ORM\Query\Parameter($key, $value);
+            $parameter = new Parameter($key, $value);
             $newParameters->add($parameter);
         }
 
@@ -161,6 +164,8 @@ class QueryBuilder extends BaseQueryBuilder
      *      )));
      * </code>
      *
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filter
+     *
      * @return QueryBuilder
      */
     public function addFilter(array $filter)
@@ -177,11 +182,11 @@ class QueryBuilder extends BaseQueryBuilder
             if (\is_array($where) && isset($where['property'])) {
                 $exprKey = $where['property'];
 
-                if (isset($where['expression']) && !empty($where['expression'])) {
+                if (!empty($where['expression'])) {
                     $expression = $where['expression'];
                 }
 
-                if (isset($where['operator']) && !empty($where['operator'])) {
+                if (!empty($where['operator'])) {
                     $operator = $where['operator'];
                 }
 
@@ -255,8 +260,8 @@ class QueryBuilder extends BaseQueryBuilder
      *      )));
      * </code>
      *
-     * @param string|array $orderBy the ordering expression
-     * @param string       $order   the ordering direction
+     * @param string|OrderBy|array<array{property: string, direction: string}> $orderBy the ordering expression
+     * @param string                                                           $order   the ordering direction
      *
      * @return QueryBuilder
      */
@@ -298,7 +303,7 @@ class QueryBuilder extends BaseQueryBuilder
      * Overrides the original function to add the SQL_NO_CACHE parameter
      * for each doctrine orm query if the global shopware debug mode is activated.
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getQuery()
     {

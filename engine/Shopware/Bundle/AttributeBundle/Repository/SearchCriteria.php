@@ -52,12 +52,12 @@ class SearchCriteria
     public $term;
 
     /**
-     * @var array[]
+     * @var array<array{property: string, direction: string}>
      */
     public $sortings = [];
 
     /**
-     * @var array[]
+     * @var array<array{property: string, value: mixed, expression?: string}>
      */
     public $conditions = [];
 

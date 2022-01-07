@@ -25,7 +25,9 @@
 namespace Shopware\Models\Customer;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository for the address model (Shopware\Models\Customer\Address).
@@ -52,7 +54,7 @@ class AddressRepository extends ModelRepository
      * @param int $limit
      * @param int $offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getListQuery(array $criteria = [], array $orderBy = [], $limit = 25, $offset = 0)
     {
@@ -62,7 +64,7 @@ class AddressRepository extends ModelRepository
     /**
      * @param int $addressId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getOne($addressId)
     {
@@ -134,7 +136,7 @@ class AddressRepository extends ModelRepository
             'state',
         ]);
 
-        $builder->from(\Shopware\Models\Customer\Address::class, 'address')
+        $builder->from(Address::class, 'address')
             ->leftJoin('address.country', 'country')
             ->leftJoin('address.state', 'state')
             ->leftJoin('address.attribute', 'attribute')
@@ -149,11 +151,13 @@ class AddressRepository extends ModelRepository
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
+     * @param array<array{property: string, direction: string}> $orderBy
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     protected function getListQueryBuilder(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {
-        /** @var \Shopware\Components\Model\QueryBuilder $builder */
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $builder->select([
@@ -163,7 +167,7 @@ class AddressRepository extends ModelRepository
             'state',
         ]);
 
-        $builder->from(\Shopware\Models\Customer\Address::class, 'address')
+        $builder->from(Address::class, 'address')
             ->leftJoin('address.country', 'country')
             ->leftJoin('address.state', 'state')
             ->leftJoin('address.attribute', 'attribute');

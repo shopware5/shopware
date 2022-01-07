@@ -161,7 +161,7 @@ class Customer extends LazyFetchModelEntity
     protected $paymentInstances;
 
     /**
-     * @var ArrayCollection<PaymentData>
+     * @var ArrayCollection<array-key, PaymentData>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
@@ -1228,7 +1228,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return ArrayCollection<PaymentData>
+     * @return ArrayCollection<array-key, PaymentData>
      */
     public function getPaymentData()
     {

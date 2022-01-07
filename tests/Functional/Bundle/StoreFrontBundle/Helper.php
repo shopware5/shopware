@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Exception;
@@ -36,6 +37,8 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\PropertyService;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set as ConfiguratorSet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group as CustomerGroupStruct;
@@ -51,15 +54,17 @@ use Shopware\Components\Api\Resource\Variant as VariantResource;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Random;
 use Shopware\Kernel;
-use Shopware\Models;
 use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
+use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group as CustomerGroup;
+use Shopware\Models\Price\Discount;
 use Shopware\Models\Price\Group as PriceGroup;
 use Shopware\Models\Shop\Currency;
+use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware\Models\Tax\Tax as TaxModel;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper\ProgressHelper;
 use Shopware_Components_Config;
@@ -157,7 +162,7 @@ class Helper
             $configuratorGateway = Shopware()->Container()->get(ConfiguratorGatewayInterface::class);
         }
 
-        $service = new StoreFrontBundle\Service\Core\ConfiguratorService(
+        $service = new ConfiguratorService(
             $productConfigurationGateway,
             $configuratorGateway
         );
@@ -173,7 +178,7 @@ class Helper
         if ($productPropertyGateway === null) {
             $productPropertyGateway = Shopware()->Container()->get(ProductPropertyGatewayInterface::class);
         }
-        $service = new StoreFrontBundle\Service\Core\PropertyService($productPropertyGateway);
+        $service = new PropertyService($productPropertyGateway);
 
         return $service->get($product, $context);
     }
@@ -470,7 +475,7 @@ class Helper
         $repo = $this->entityManager->getRepository(CustomerGroup::class);
         $collection = [];
         foreach ($discounts as $data) {
-            $discount = new Models\Price\Discount();
+            $discount = new Discount();
             $discount->setCustomerGroup(
                 $repo->findOneBy(['key' => $data['key']])
             );
@@ -820,7 +825,7 @@ class Helper
 
     public function createContext(
         CustomerGroup $currentCustomerGroup,
-        Models\Shop\Shop $shop,
+        ShopModel $shop,
         array $taxes,
         CustomerGroup $fallbackCustomerGroup = null,
         ?Currency $currency = null
@@ -862,12 +867,9 @@ class Helper
         ];
     }
 
-    public function getShop(int $shopId = 1): Models\Shop\Shop
+    public function getShop(int $shopId = 1): ShopModel
     {
-        return $this->entityManager->find(
-            \Shopware\Models\Shop\Shop::class,
-            $shopId
-        );
+        return $this->entityManager->find(ShopModel::class, $shopId);
     }
 
     public function isElasticSearchEnabled(): bool
@@ -913,7 +915,6 @@ class Helper
 
         foreach ($groups as $group) {
             $options = [];
-            /** @var Models\Article\Configurator\Option $option */
             foreach ($group->getOptions() as $option) {
                 $options[] = [
                     'id' => $option->getId(),
@@ -946,15 +947,15 @@ class Helper
             $group->setPosition($groups);
             $this->db->executeQuery('DELETE FROM s_article_configurator_groups WHERE name = ?', [$groupName]);
 
-            $collection = [];
+            $collection = new ArrayCollection();
             $optionPos = 1;
             foreach ($options as $optionName) {
                 $this->db->executeQuery('DELETE FROM s_article_configurator_options WHERE name = ?', [$optionName]);
 
-                $option = new Models\Article\Configurator\Option();
+                $option = new Option();
                 $option->setName($optionName);
                 $option->setPosition($optionPos);
-                $collection[] = $option;
+                $collection->add($option);
                 ++$optionPos;
             }
             $group->setOptions($collection);
@@ -1212,7 +1213,7 @@ class Helper
     }
 
     /**
-     * @param Models\Tax\Tax[] $taxes
+     * @param TaxModel[] $taxes
      *
      * @return TaxStruct[]
      */

@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
-use Shopware\Models\Article\Configurator\Group;
+use Shopware\Models\Article\Configurator\Option;
 
 class VariantSearch implements ProductSearchInterface
 {
@@ -74,7 +74,6 @@ class VariantSearch implements ProductSearchInterface
         $configurations = $this->configuratorService->getProductsConfigurations($products, $context);
 
         $filterGroupIds = array_map(function ($variantCondition) {
-            /** @var VariantCondition $variantCondition */
             if ($variantCondition->expandVariants()) {
                 return $variantCondition->getGroupId();
             }
@@ -89,10 +88,14 @@ class VariantSearch implements ProductSearchInterface
                 }
 
                 $groups = [];
-                /** @var Group $group */
                 foreach ($configurations[$product->getNumber()] as $group) {
                     if (\in_array($group->getId(), $filterGroupIds)) {
-                        $groups[] = ['groupName' => $group->getName(), 'optionName' => $group->getOptions()[0]->getName()];
+                        $tmpGroup = ['groupName' => $group->getName()];
+                        $firstOption = $group->getOptions()[0];
+                        if ($firstOption instanceof Option) {
+                            $tmpGroup['optionName'] = $firstOption->getName();
+                        }
+                        $groups[] = $tmpGroup;
                     }
                 }
 

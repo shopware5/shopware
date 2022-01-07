@@ -138,6 +138,9 @@ class SupplierRepository extends ModelRepository
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filterBy
+     * @param array<array{property: string, direction: string}>                                       $orderBy
+     *
      * @return QueryBuilder
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy, $limit = null, $offset = null)

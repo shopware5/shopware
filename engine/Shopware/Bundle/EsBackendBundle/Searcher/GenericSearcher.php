@@ -203,7 +203,7 @@ class GenericSearcher implements SearcherInterface
                 continue;
             }
 
-            $expression = $condition['expression'] ?: '=';
+            $expression = $condition['expression'] ?? '=';
 
             switch (strtolower($expression)) {
                 case 'in':

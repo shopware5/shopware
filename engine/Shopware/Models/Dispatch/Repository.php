@@ -25,9 +25,14 @@
 namespace Shopware\Models\Dispatch;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Query\Expr\OrderBy;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Payment\Payment;
 
 /**
  * Repository for the customer model (Shopware\Models\Dispatch\Dispatch).
@@ -44,7 +49,7 @@ class Repository extends ModelRepository
      * @param int|null          $offset
      * @param int|null          $limit
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getDispatchesQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -61,8 +66,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDispatchesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array|null        $filter
-     * @param string|array|null $order
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}>|null $filter
+     * @param string|array<array{property: string, direction: string}>|null                                $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -72,7 +77,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('dispatches');
         $builder->setAlias('dispatches');
-        $builder->from(\Shopware\Models\Dispatch\Dispatch::class, 'dispatches');
+        $builder->from(Dispatch::class, 'dispatches');
         $builder->setAlias('dispatches');
 
         if (!empty($filter)) {
@@ -94,7 +99,7 @@ class Repository extends ModelRepository
      * @param int|null    $limit      - Reduce the number of returned data sets
      * @param int|null    $offset     - Start the output based on that offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getShippingCostsQuery($dispatchId = null, $filter = null, $order = [], $limit = null, $offset = null)
     {
@@ -118,7 +123,7 @@ class Repository extends ModelRepository
      * @param int|null    $limit  - Reduce the number of returned data sets
      * @param int|null    $offset - Start the output based on that offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getListQuery($filter = null, $order = [], $limit = null, $offset = null)
     {
@@ -209,7 +214,7 @@ class Repository extends ModelRepository
      * @param int|null    $limit      Count of the selected data
      * @param int|null    $offset     Start index of the selected data
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getShippingCostsMatrixQuery($dispatchId = null, $filter = null, $limit = null, $offset = null)
     {
@@ -230,7 +235,7 @@ class Repository extends ModelRepository
     public function getShippingCostsMatrixQueryBuilder($dispatchId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->from(\Shopware\Models\Dispatch\ShippingCost::class, 'shippingcosts')->select(['shippingcosts']);
+        $builder->from(ShippingCost::class, 'shippingcosts')->select(['shippingcosts']);
 
         // Assure that we will get an empty result set when no dispatch ID is provided
         if ($dispatchId === null || empty($dispatchId)) {
@@ -248,7 +253,7 @@ class Repository extends ModelRepository
      *
      * @param int $dispatchId
      *
-     * @return \Doctrine\ORM\AbstractQuery
+     * @return AbstractQuery
      */
     public function getPurgeShippingCostsMatrixQuery($dispatchId = null)
     {
@@ -265,7 +270,7 @@ class Repository extends ModelRepository
      * @param int|null   $limit
      * @param int|null   $offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getPaymentQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
@@ -301,7 +306,7 @@ class Repository extends ModelRepository
             }
         }
         // Build the query
-        $builder->from(\Shopware\Models\Payment\Payment::class, 'payment')
+        $builder->from(Payment::class, 'payment')
                 ->select(['payment']);
         // Set the order logic
         $builder = $this->sortOrderQuery($builder, 'payment', $order);
@@ -322,7 +327,7 @@ class Repository extends ModelRepository
      * @param int|null   $limit
      * @param int|null   $offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getCountryQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
@@ -358,7 +363,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         // Build the query
-        $builder->from(\Shopware\Models\Country\Country::class, 'country')
+        $builder->from(Country::class, 'country')
                 ->select(['country']);
 
         // Set the order logic
@@ -385,7 +390,7 @@ class Repository extends ModelRepository
      * @param int|null   $limit
      * @param int|null   $offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getHolidayQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
@@ -413,7 +418,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         // Build the query
-        $builder->from(\Shopware\Models\Dispatch\Holiday::class, 'holiday')
+        $builder->from(Holiday::class, 'holiday')
                 ->select(['holiday']);
 
         // Set the order logic
@@ -430,7 +435,7 @@ class Repository extends ModelRepository
     /**
      * Selects all shipping costs with a deleted shop
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getDispatchWithDeletedShopsQuery()
     {

@@ -92,7 +92,7 @@ class Article extends ModelEntity
     protected $allCategories;
 
     /**
-     * @var ArrayCollection<SeoCategory>
+     * @var ArrayCollection<array-key, SeoCategory>
      *
      * @ORM\OneToMany(
      *     targetEntity="Shopware\Models\Article\SeoCategory",
@@ -224,7 +224,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection<Download>
+     * @var ArrayCollection<array-key, Download>
      *
      * @Assert\Valid()
      *
@@ -235,7 +235,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection<Image>
+     * @var ArrayCollection<array-key, Image>
      *
      * @Assert\Valid()
      *
@@ -974,7 +974,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<Image>
+     * @return ArrayCollection<array-key, Image>
      */
     public function getImages()
     {
@@ -982,7 +982,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param Image[]|ArrayCollection<array-key, Image> $images
+     * @param array<Image>|ArrayCollection<array-key, Image> $images
      *
      * @return Article
      */
@@ -994,7 +994,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<Download>
+     * @return ArrayCollection<array-key, Download>
      */
     public function getDownloads()
     {
@@ -1002,7 +1002,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param Download[]|ArrayCollection<array-key, Download> $downloads
+     * @param array<Download>|ArrayCollection<array-key, Download> $downloads
      *
      * @return Article
      */
@@ -1263,7 +1263,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<SeoCategory>
+     * @return ArrayCollection<array-key, SeoCategory>
      */
     public function getSeoCategories()
     {
@@ -1271,7 +1271,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param SeoCategory[]|null $seoCategories
+     * @param ArrayCollection<array-key, SeoCategory>|array<SeoCategory>|null $seoCategories
      *
      * @return ModelEntity
      */

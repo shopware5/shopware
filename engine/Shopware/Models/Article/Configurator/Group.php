@@ -36,14 +36,14 @@ use Shopware\Models\Attribute\ConfiguratorGroup as ConfiguratorGroupAttribute;
 class Group extends ModelEntity
 {
     /**
-     * @var ArrayCollection<\Shopware\Models\Article\Configurator\Set>
+     * @var ArrayCollection<Set>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Set", mappedBy="groups")
      */
     protected $sets;
 
     /**
-     * @var ArrayCollection<\Shopware\Models\Article\Configurator\Option>
+     * @var ArrayCollection<array-key, Option>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Option", mappedBy="group", orphanRemoval=true, cascade={"persist"})
      */
@@ -151,7 +151,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Set>
+     * @return ArrayCollection<Set>
      */
     public function getSets()
     {
@@ -159,7 +159,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Set> $sets
+     * @param ArrayCollection<Set> $sets
      */
     public function setSets($sets)
     {
@@ -167,7 +167,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Option>
+     * @return ArrayCollection<array-key, Option>
      */
     public function getOptions()
     {
@@ -175,7 +175,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Option> $options
+     * @param ArrayCollection<array-key, Option> $options
      */
     public function setOptions($options)
     {

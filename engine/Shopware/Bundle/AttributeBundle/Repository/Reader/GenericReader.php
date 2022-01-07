@@ -26,6 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
 
 class GenericReader implements ReaderInterface
 {
@@ -39,20 +40,12 @@ class GenericReader implements ReaderInterface
      */
     protected $entityManager;
 
-    /**
-     * @param string $entity
-     */
-    public function __construct($entity, ModelManager $entityManager)
+    public function __construct(string $entity, ModelManager $entityManager)
     {
         $this->entity = $entity;
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param int[]|string[] $identifiers
-     *
-     * @return array[]
-     */
     public function getList($identifiers)
     {
         $query = $this->createListQuery();
@@ -86,11 +79,6 @@ class GenericReader implements ReaderInterface
         return $result;
     }
 
-    /**
-     * @param int|string $identifier
-     *
-     * @return array
-     */
     public function get($identifier)
     {
         $query = $this->createDetailQuery();
@@ -102,7 +90,7 @@ class GenericReader implements ReaderInterface
     }
 
     /**
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     protected function createDetailQuery()
     {
@@ -110,7 +98,7 @@ class GenericReader implements ReaderInterface
     }
 
     /**
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     protected function createListQuery()
     {

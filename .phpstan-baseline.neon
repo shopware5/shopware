@@ -3771,171 +3771,6 @@ parameters:
 			path: engine/Shopware/Bundle/AttributeBundle/Repository/ProductRepository.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\BlogReader\\:\\:createListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/BlogReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\CategoryReader\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/CategoryReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\CategoryReader\\:\\:getParents\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/CategoryReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\CategoryReader\\:\\:getPathParents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/CategoryReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\CustomerReader\\:\\:createListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/CustomerReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\CustomerStreamReader\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/CustomerStreamReader.php
-
-		-
-			message: "#^Parameter \\#1 \\$streamIds of method Shopware\\\\Models\\\\CustomerStream\\\\CustomerStreamRepositoryInterface\\:\\:fetchStreamsCustomerCount\\(\\) expects array\\<int\\>, array\\<int\\|string\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/CustomerStreamReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\GenericReader\\:\\:createListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/GenericReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\GenericReader\\:\\:get\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/GenericReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\GenericReader\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/GenericReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\MediaReader\\:\\:get\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/MediaReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\MediaReader\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/MediaReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\MediaReader\\:\\:getMediaThumbnail\\(\\) has parameter \\$media with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/MediaReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\OrderReader\\:\\:getDocuments\\(\\) has parameter \\$orders with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/OrderReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\OrderReader\\:\\:getDocuments\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/OrderReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\OrderReader\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/OrderReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\OrderReader\\:\\:getOrderDocuments\\(\\) has parameter \\$documents with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/OrderReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\OrderReader\\:\\:getOrderDocuments\\(\\) has parameter \\$row with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/OrderReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\OrderReader\\:\\:getOrderDocuments\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/OrderReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\PremiumReader\\:\\:createListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/PremiumReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\ProductReader\\:\\:assignAdditionalText\\(\\) has parameter \\$products with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/ProductReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\ProductReader\\:\\:assignAdditionalText\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/ProductReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\ProductReader\\:\\:assignCategoryIds\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/ProductReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\ProductReader\\:\\:assignCategoryIds\\(\\) has parameter \\$products with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/ProductReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\ProductReader\\:\\:assignPrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/ProductReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\ProductReader\\:\\:assignPrice\\(\\) has parameter \\$products with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/ProductReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\ProductReader\\:\\:buildListProducts\\(\\) has parameter \\$products with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/ProductReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\ProductReader\\:\\:createListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/ProductReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\ProductReader\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/ProductReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\PropertyOptionReader\\:\\:createListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/PropertyOptionReader.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\ReaderInterface\\:\\:get\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/ReaderInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\ReaderInterface\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/ReaderInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Reader\\\\ShopReader\\:\\:createListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Reader/ShopReader.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Registry\\:\\:__construct\\(\\) has parameter \\$repositories with no value type specified in iterable type IteratorAggregate\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AttributeBundle/Repository/Registry.php
@@ -3951,17 +3786,7 @@ parameters:
 			path: engine/Shopware/Bundle/AttributeBundle/Repository/RepositoryInterface.php
 
 		-
-			message: "#^Property Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\SearchCriteria\\:\\:\\$conditions type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/SearchCriteria.php
-
-		-
 			message: "#^Property Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\SearchCriteria\\:\\:\\$params type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/SearchCriteria.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\SearchCriteria\\:\\:\\$sortings type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AttributeBundle/Repository/SearchCriteria.php
 
@@ -16446,61 +16271,6 @@ parameters:
 			path: engine/Shopware/Components/Api/BatchInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Exception\\\\ParameterMissingException\\:\\:setMissingParam\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Exception/ParameterMissingException.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Form\\\\FormError\\|Symfony\\\\Component\\\\Form\\\\FormErrorIterator\\:\\:getCause\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Exception/ValidationException.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Form\\\\FormError\\|Symfony\\\\Component\\\\Form\\\\FormErrorIterator\\:\\:getMessage\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Exception/ValidationException.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Form\\\\FormError\\|Symfony\\\\Component\\\\Form\\\\FormErrorIterator\\:\\:getMessageParameters\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Exception/ValidationException.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Form\\\\FormError\\|Symfony\\\\Component\\\\Form\\\\FormErrorIterator\\:\\:getMessagePluralization\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Exception/ValidationException.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Form\\\\FormError\\|Symfony\\\\Component\\\\Form\\\\FormErrorIterator\\:\\:getMessageTemplate\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Exception/ValidationException.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Form\\\\FormError\\|Symfony\\\\Component\\\\Form\\\\FormErrorIterator\\:\\:getOrigin\\(\\)\\.$#"
-			count: 3
-			path: engine/Shopware/Components/Api/Exception/ValidationException.php
-
-		-
-			message: "#^Cannot call method getData\\(\\) on Symfony\\\\Component\\\\Form\\\\FormInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Exception/ValidationException.php
-
-		-
-			message: "#^Cannot call method getPropertyPath\\(\\) on Symfony\\\\Component\\\\Form\\\\FormInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Exception/ValidationException.php
-
-		-
-			message: "#^Cannot call method getRoot\\(\\) on Symfony\\\\Component\\\\Form\\\\FormInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Exception/ValidationException.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Exception\\\\ValidationException\\:\\:setViolations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Exception/ValidationException.php
-
-		-
 			message: "#^Cannot call method setAcl\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Manager.php
@@ -17041,11 +16811,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Cache.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Cache\\:\\:setContainer\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Cache.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\Api\\\\Resource\\\\Cache\\:\\:\\$request \\(Enlight_Controller_Request_Request\\) does not accept Enlight_Controller_Request_Request\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Cache.php
@@ -17154,116 +16919,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Country\\:\\:update\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Country.php
-
-		-
-			message: "#^Cannot call method fromArray\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:applyAddressData\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:applyAddressData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:create\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:createAddress\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:getList\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:getList\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:getListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:getOne\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:getOneByNumber\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:prepareAddressData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:prepareAddressData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:prepareAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:prepareAssociatedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:prepareCustomerData\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:prepareCustomerData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:prepareCustomerPaymentData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:prepareCustomerPaymentData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:setupContext\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:update\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Customer\\:\\:updateByNumber\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Customer.php
 
 		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
@@ -17896,81 +17551,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/PropertyGroup.php
 
 		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Validator\\\\ConstraintViolationListInterface\\:\\:getIterator\\(\\)\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Cannot call method get\\(\\) on Shopware\\\\Components\\\\DependencyInjection\\\\Container\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:checkDataReplacement\\(\\) has parameter \\$collection with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:checkDataReplacement\\(\\) return type with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:checkPrivilege\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:flush\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getCollectionElementByProperties\\(\\) has parameter \\$collection with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getCollectionElementByProperty\\(\\) has parameter \\$collection with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getManyToManySubElement\\(\\) has parameter \\$collection with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:getOneToManySubElement\\(\\) has parameter \\$collection with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:resetEntityManager\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:setAutoFlush\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:setContainer\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:setManager\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Resource\\:\\:setResultMode\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Resource.php
-
-		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\QueryBuilder\\:\\:addFilter\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Shop.php
@@ -18061,31 +17641,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Translation.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:getList\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:getList\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:getListQuery\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:getListQuery\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:getObjectTranslation\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Translation.php
@@ -18119,11 +17674,6 @@ parameters:
 			message: "#^Property Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:\\$repository with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: TEntityClass$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\User\\:\\:checkPrivilege\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/User.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\User\\:\\:create\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
@@ -18432,11 +17982,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$filename of function unlink expects string, bool\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Parameter \\#1 \\$images of method Shopware\\\\Models\\\\Article\\\\Detail\\:\\:setImages\\(\\) expects array\\<Shopware\\\\Models\\\\Article\\\\Image\\>\\|\\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Image\\>\\)\\|null, Doctrine\\\\Common\\\\Collections\\\\Collection&iterable\\<Shopware\\\\Models\\\\Article\\\\Image\\> given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Variant.php
 
@@ -22821,16 +22366,6 @@ parameters:
 			path: engine/Shopware/Components/Model/Query/SqlWalker/ForceIndexWalker.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Model\\\\QueryBuilder\\:\\:addFilter\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/QueryBuilder.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Model\\\\QueryBuilder\\:\\:addOrderBy\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/QueryBuilder.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Model\\\\QueryBuilder\\:\\:addParameters\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/QueryBuilder.php
@@ -23400,10 +22935,6 @@ parameters:
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Filter.php
 
-		-
-			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Filter\\:\\:getArticleQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/Filter.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Filter\\:\\:getFilterQuery\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
@@ -27041,31 +26572,6 @@ parameters:
 			path: engine/Shopware/Components/WebLinkManager.php
 
 		-
-			message: "#^Method Shopware_Controllers_Api_Error\\:\\:errorAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Error.php
-
-		-
-			message: "#^Method Shopware_Controllers_Api_Error\\:\\:invalidAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Error.php
-
-		-
-			message: "#^Method Shopware_Controllers_Api_Error\\:\\:noAuthAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Error.php
-
-		-
-			message: "#^Method Shopware_Controllers_Api_GenerateArticleImages\\:\\:batchAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/GenerateArticleImages.php
-
-		-
-			message: "#^Method Shopware_Controllers_Api_GenerateArticleImages\\:\\:batchDeleteAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/GenerateArticleImages.php
-
-		-
 			message: "#^Method Shopware_Controllers_Api_Media\\:\\:prepareFallbackUser\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/Media.php
@@ -27084,21 +26590,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Api_Media\\:\\:prepareUploadedFile\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/Media.php
-
-		-
-			message: "#^Method Shopware_Controllers_Api_Rest\\:\\:batchAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Rest.php
-
-		-
-			message: "#^Method Shopware_Controllers_Api_Rest\\:\\:batchDeleteAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Rest.php
-
-		-
-			message: "#^Property Shopware_Controllers_Api_Rest\\:\\:\\$apiBaseUrl has no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Api/Rest.php
 
 		-
 			message: "#^Method Shopware_Controllers_Api_Translations\\:\\:deleteAction\\(\\) has no return type specified\\.$#"
@@ -27211,11 +26702,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Application.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getDetailQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getFilterConditions\\(\\) has parameter \\$filters with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Application.php
@@ -27251,11 +26737,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Application.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getModelFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Application.php
@@ -27271,27 +26752,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Application.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getReloadAssociationQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getSearchAssociationQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getSortConditions\\(\\) has parameter \\$sort with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Application.php
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getSortConditions\\(\\) has parameter \\$whiteList with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getSortConditions\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Application.php
 
@@ -29582,11 +29048,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:getListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
 
@@ -37181,16 +36642,6 @@ parameters:
 			path: engine/Shopware/Models/Article/Article.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:getDownloads\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:getImages\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Article.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:getLinks\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Article.php
@@ -37202,11 +36653,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:getRelatedProductStreams\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Article\\:\\:getSeoCategories\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Article.php
 
@@ -37276,17 +36722,7 @@ parameters:
 			path: engine/Shopware/Models/Article/Article.php
 
 		-
-			message: "#^Property Shopware\\\\Models\\\\Article\\\\Article\\:\\:\\$downloads with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Article.php
-
-		-
 			message: "#^Property Shopware\\\\Models\\\\Article\\\\Article\\:\\:\\$esds with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Article.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Article\\\\Article\\:\\:\\$images with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Article.php
 
@@ -37307,11 +36743,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Models\\\\Article\\\\Article\\:\\:\\$relatedProductStreams with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Article.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Article\\\\Article\\:\\:\\$seoCategories with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Article.php
 
@@ -37341,11 +36772,6 @@ parameters:
 			path: engine/Shopware/Models/Article/Configurator/Dependency.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\:\\:getOptions\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Configurator/Group.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\:\\:getSets\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Configurator/Group.php
@@ -37371,11 +36797,6 @@ parameters:
 			path: engine/Shopware/Models/Article/Configurator/Group.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\:\\:setOptions\\(\\) has parameter \\$options with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Configurator/Group.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\:\\:setPosition\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Configurator/Group.php
@@ -37387,11 +36808,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\:\\:setSets\\(\\) has parameter \\$sets with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Configurator/Group.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\:\\:\\$options with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Configurator/Group.php
 
@@ -37511,11 +36927,6 @@ parameters:
 			path: engine/Shopware/Models/Article/Configurator/Set.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set\\:\\:getOptions\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Configurator/Set.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set\\:\\:setArticles\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Configurator/Set.php
@@ -37562,11 +36973,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set\\:\\:\\$groups with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Configurator/Set.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set\\:\\:\\$options with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Configurator/Set.php
 
@@ -37641,32 +37047,12 @@ parameters:
 			path: engine/Shopware/Models/Article/Configurator/Template/Template.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Detail\\:\\:getConfiguratorOptions\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Detail\\:\\:getImages\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Detail\\:\\:getPrices\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Detail.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Detail\\:\\:setAttribute\\(\\) has parameter \\$attribute with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Detail.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Detail\\:\\:setConfiguratorOptions\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Detail\\:\\:setConfiguratorOptions\\(\\) has parameter \\$configuratorOptions with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Detail.php
 
@@ -37686,11 +37072,6 @@ parameters:
 			path: engine/Shopware/Models/Article/Detail.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\Detail\\:\\:setImages\\(\\) has parameter \\$images with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Detail.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\Detail\\:\\:setLen\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Detail.php
@@ -37706,22 +37087,7 @@ parameters:
 			path: engine/Shopware/Models/Article/Detail.php
 
 		-
-			message: "#^Property Shopware\\\\Models\\\\Article\\\\Detail\\:\\:\\$configuratorOptions with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Detail.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Article\\\\Detail\\:\\:\\$images with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Detail.php
-
-		-
 			message: "#^Property Shopware\\\\Models\\\\Article\\\\Detail\\:\\:\\$notifications with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Article/Detail.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Article\\\\Detail\\:\\:\\$prices with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Article/Detail.php
 
@@ -38296,22 +37662,12 @@ parameters:
 			path: engine/Shopware/Models/Article/SupplierRepository.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\SupplierRepository\\:\\:getListQueryBuilder\\(\\) has parameter \\$filterBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Article/SupplierRepository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\SupplierRepository\\:\\:getListQueryBuilder\\(\\) has parameter \\$limit with no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Article/SupplierRepository.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Article\\\\SupplierRepository\\:\\:getListQueryBuilder\\(\\) has parameter \\$offset with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Article/SupplierRepository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Article\\\\SupplierRepository\\:\\:getListQueryBuilder\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Article/SupplierRepository.php
 
@@ -38450,10 +37806,6 @@ parameters:
 			count: 1
 			path: engine/Shopware/Models/Banner/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\Banner\\\\Repository\\:\\:getBannerMainQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Banner/Repository.php
 
 		-
 			message: "#^Parameter \\#1 \\$categoryId of method Shopware\\\\Models\\\\Banner\\\\Repository\\:\\:getBannerIds\\(\\) expects int, int\\|null given\\.$#"
@@ -38831,17 +38183,7 @@ parameters:
 			path: engine/Shopware/Models/Blog/Repository.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Blog\\\\Repository\\:\\:getBackendListQuery\\(\\) has parameter \\$order with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Blog/Repository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Blog\\\\Repository\\:\\:getBackendListQueryBuilder\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Blog/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Blog\\\\Repository\\:\\:getBackendListQueryBuilder\\(\\) has parameter \\$order with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Blog/Repository.php
 
@@ -38857,11 +38199,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Blog\\\\Repository\\:\\:getBlogCommentsByIdBuilder\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Blog/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Blog\\\\Repository\\:\\:getBlogCommentsByIdBuilder\\(\\) has parameter \\$order with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Blog/Repository.php
 
@@ -38907,11 +38244,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$filter of method Shopware\\\\Models\\\\Blog\\\\Repository\\:\\:getListQueryBuilder\\(\\) expects array, array\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Blog/Repository.php
-
-		-
-			message: "#^Parameter \\#3 \\$order of method Shopware\\\\Models\\\\Blog\\\\Repository\\:\\:getBackendListQueryBuilder\\(\\) expects array, array\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Blog/Repository.php
 
@@ -39080,20 +38412,8 @@ parameters:
 			count: 1
 			path: engine/Shopware/Models/Category/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getBackendListQuery\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Category/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getBlogCategoriesByParentBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Category/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getBlogCategoryTreeListBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Category/Repository.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getBlogCategoryTreeListQuery\\(\\) has parameter \\$filterBy with no value type specified in iterable type array\\.$#"
@@ -39140,10 +38460,6 @@ parameters:
 			count: 1
 			path: engine/Shopware/Models/Category/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getListQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Category/Repository.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getPathById\\(\\) has parameter \\$field with no value type specified in iterable type array\\.$#"
@@ -39606,11 +38922,6 @@ parameters:
 			path: engine/Shopware/Models/Customer/AddressRepository.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Customer\\\\AddressRepository\\:\\:getListQueryBuilder\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Customer/AddressRepository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Customer\\\\Customer\\:\\:addPaymentData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Customer/Customer.php
@@ -39622,11 +38933,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Customer\\\\Customer\\:\\:getOrders\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Customer/Customer.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Customer\\\\Customer\\:\\:getPaymentData\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Customer/Customer.php
 
@@ -39807,11 +39113,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Models\\\\Customer\\\\Customer\\:\\:\\$orders with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Customer/Customer.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Customer\\\\Customer\\:\\:\\$paymentData with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Customer/Customer.php
 
@@ -40147,16 +39448,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Dispatch\\\\Repository\\:\\:getDispatchesQuery\\(\\) has parameter \\$order with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Dispatch/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Dispatch\\\\Repository\\:\\:getDispatchesQueryBuilder\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Dispatch/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Dispatch\\\\Repository\\:\\:getDispatchesQueryBuilder\\(\\) has parameter \\$order with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Dispatch/Repository.php
 
@@ -40891,32 +40182,12 @@ parameters:
 			path: engine/Shopware/Models/Emotion/PresetTranslation.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Repository\\:\\:getElementsViewports\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Repository\\:\\:getEmotionById\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Repository\\:\\:getListQueryBuilder\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Repository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Repository\\:\\:getListingQuery\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Emotion/Repository.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Repository\\:\\:getNameListQuery\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Emotion/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Emotion\\\\Repository\\:\\:getNameListQueryBuilder\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Emotion/Repository.php
 
@@ -41527,26 +40798,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Media\\\\Repository\\:\\:getMediaListQuery\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Media\\\\Repository\\:\\:getMediaListQueryBuilder\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Media\\\\Repository\\:\\:getMediaListQueryBuilder\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/Repository.php
-
-		-
-			message: "#^Parameter \\#1 \\$filter of method Shopware\\\\Models\\\\Media\\\\Repository\\:\\:getMediaListQueryBuilder\\(\\) expects array, array\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/Repository.php
-
-		-
-			message: "#^Parameter \\#2 \\$orderBy of method Shopware\\\\Models\\\\Media\\\\Repository\\:\\:getMediaListQueryBuilder\\(\\) expects array, array\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Media/Repository.php
 
@@ -42501,16 +41752,6 @@ parameters:
 			path: engine/Shopware/Models/Order/Repository.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:getOrdersQuery\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:getOrdersQueryBuilder\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:getPaymentStatusQuery\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Order/Repository.php
@@ -42526,17 +41767,7 @@ parameters:
 			path: engine/Shopware/Models/Order/Repository.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:search\\(\\) has parameter \\$sortings with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:searchCustomers\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Order/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:sortListQuery\\(\\) has parameter \\$sortings with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Order/Repository.php
 
@@ -42656,27 +41887,7 @@ parameters:
 			path: engine/Shopware/Models/Partner/Repository.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Partner\\\\Repository\\:\\:getListQuery\\(\\) has parameter \\$order with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Partner/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Partner\\\\Repository\\:\\:getListQueryBuilder\\(\\) has parameter \\$order with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Partner/Repository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Partner\\\\Repository\\:\\:getStatisticListQuery\\(\\) has parameter \\$order with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Partner/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Partner\\\\Repository\\:\\:getStatisticListQueryBuilder\\(\\) has parameter \\$order with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Partner/Repository.php
-
-		-
-			message: "#^Parameter \\#1 \\$order of method Shopware\\\\Models\\\\Partner\\\\Repository\\:\\:getListQueryBuilder\\(\\) expects array, array\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Partner/Repository.php
 
@@ -43336,16 +42547,6 @@ parameters:
 			path: engine/Shopware/Models/ProductFeed/ProductFeed.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\ProductFeed\\\\Repository\\:\\:getListQuery\\(\\) has parameter \\$orderBy with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/ProductFeed/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\ProductFeed\\\\Repository\\:\\:getListQueryBuilder\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/ProductFeed/Repository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\ProductStream\\\\ProductStream\\:\\:getName\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Models/ProductStream/ProductStream.php
@@ -43421,11 +42622,6 @@ parameters:
 			path: engine/Shopware/Models/Property/Option.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Property\\\\Option\\:\\:getValues\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Property/Option.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Property\\\\Option\\:\\:setAttribute\\(\\) has parameter \\$attribute with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Property/Option.php
@@ -43437,11 +42633,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Models\\\\Property\\\\Option\\:\\:\\$relations with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Models/Property/Option.php
-
-		-
-			message: "#^Property Shopware\\\\Models\\\\Property\\\\Option\\:\\:\\$values with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Property/Option.php
 
@@ -43675,10 +42866,6 @@ parameters:
 			count: 1
 			path: engine/Shopware/Models/Shop/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\Shop\\\\Repository\\:\\:getBaseListQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Shop/Repository.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Shop\\\\Repository\\:\\:getListQuery\\(\\) has parameter \\$filterBy with no value type specified in iterable type array\\.$#"
@@ -43740,15 +42927,7 @@ parameters:
 			count: 1
 			path: engine/Shopware/Models/Shop/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\Shop\\\\Repository\\:\\:getLocalesListQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Shop/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\Shop\\\\Repository\\:\\:getMainListQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Shop/Repository.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Shop\\\\Repository\\:\\:getShopArrayByHostAlias\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -44640,70 +43819,18 @@ parameters:
 			count: 1
 			path: engine/Shopware/Models/User/Privilege.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getAdminRuleDeleteQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getAttributesQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getPrivilegeDeleteByResourceIdQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getPrivilegeDeleteQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getResourceDeleteQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getResourcesQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getResourcesWithAdminRuleQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getRoleDetailQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getRolesQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getRuleDeleteByPrivilegeIdQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getRuleDeleteByResourceIdQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getRuleDeleteByRoleIdQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getUserDetailQueryBuilder\\(\\) should return Shopware\\\\Components\\\\Model\\\\QueryBuilder but returns Doctrine\\\\ORM\\\\QueryBuilder\\.$#"
-			count: 1
-			path: engine/Shopware/Models/User/Repository.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getUsersQuery\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
@@ -47064,31 +46191,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
 			count: 1
 			path: tests/Functional/Api/CustomerGroupTest.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\HttpFoundation\\\\Response\\:\\:getBody\\(\\)\\.$#"
-			count: 1
-			path: tests/Functional/Api/GenerateArticleImagesTest.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\HttpFoundation\\\\Response\\:\\:getHeader\\(\\)\\.$#"
-			count: 1
-			path: tests/Functional/Api/GenerateArticleImagesTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\GenerateArticleImagesTest\\:\\:testBatchPutShouldFail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/GenerateArticleImagesTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\GenerateArticleImagesTest\\:\\:testRequestWithoutAuthenticationShouldReturnError\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/GenerateArticleImagesTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
-			count: 2
-			path: tests/Functional/Api/GenerateArticleImagesTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\ManufacturerTest\\:\\:testPostManufacturersShouldBeSuccessful\\(\\) should return string but returns int\\.$#"
@@ -49607,11 +48709,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, Shopware\\\\Models\\\\Tax\\\\Tax\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
-
-		-
-			message: "#^Parameter \\#1 \\$options of method Shopware\\\\Models\\\\Article\\\\Configurator\\\\Group\\:\\:setOptions\\(\\) expects Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\>, array\\<int, Shopware\\\\Models\\\\Article\\\\Configurator\\\\Option\\> given\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
 

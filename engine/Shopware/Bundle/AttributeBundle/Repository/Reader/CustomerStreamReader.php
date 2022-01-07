@@ -29,39 +29,31 @@ use Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface;
 
 class CustomerStreamReader extends GenericReader
 {
-    /**
-     * @var \Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface
-     */
-    private $repository;
+    private CustomerStreamRepositoryInterface $repository;
 
-    /**
-     * @param string $entity
-     */
-    public function __construct($entity, ModelManager $entityManager, CustomerStreamRepositoryInterface $repository)
+    public function __construct(string $entity, ModelManager $entityManager, CustomerStreamRepositoryInterface $repository)
     {
         parent::__construct($entity, $entityManager);
         $this->repository = $repository;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getList($identifiers)
     {
-        $data = parent::getList($identifiers);
+        $customerStreams = parent::getList($identifiers);
 
-        $counts = $this->repository->fetchStreamsCustomerCount($identifiers);
+        $identifiers = array_map('\intval', $identifiers);
+        $customerAndNewsletterCountByStream = $this->repository->fetchStreamsCustomerCount($identifiers);
 
-        foreach ($data as &$row) {
-            $id = (int) $row['id'];
-            if (!\array_key_exists($id, $counts)) {
-                $row['customer_count'] = 0;
-                $row['newsletter_count'] = 0;
+        foreach ($customerStreams as &$customerStream) {
+            $id = (int) $customerStream['id'];
+            if (\array_key_exists($id, $customerAndNewsletterCountByStream)) {
+                $customerStream = array_merge($customerStream, $customerAndNewsletterCountByStream[$id]);
             } else {
-                $row = array_merge($row, $counts[$id]);
+                $customerStream['customer_count'] = 0;
+                $customerStream['newsletter_count'] = 0;
             }
         }
 
-        return $data;
+        return $customerStreams;
     }
 }

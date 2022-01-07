@@ -29,14 +29,14 @@ interface ReaderInterface
     /**
      * @param int[]|string[] $identifiers
      *
-     * @return array[]
+     * @return array<array<string, mixed>>
      */
     public function getList($identifiers);
 
     /**
      * @param int|string $identifier
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function get($identifier);
 }

@@ -38,7 +38,7 @@ use Shopware\Models\Attribute\PropertyOption as PropertyOptionAttribute;
 class Option extends ModelEntity
 {
     /**
-     * @var ArrayCollection<Value>
+     * @var ArrayCollection<array-key, Value>
      *
      * @ORM\OneToMany(targetEntity="Value", mappedBy="option", cascade={"remove"}))
      */
@@ -155,7 +155,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<Value>
+     * @return ArrayCollection<array-key, Value>
      */
     public function getValues()
     {
@@ -163,7 +163,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Property\Group>
+     * @return ArrayCollection<Group>
      */
     public function getGroups()
     {
