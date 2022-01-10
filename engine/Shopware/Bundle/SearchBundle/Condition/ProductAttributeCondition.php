@@ -39,7 +39,7 @@ class ProductAttributeCondition implements ConditionInterface, JsonSerializable
     protected $field;
 
     /**
-     * @var array|int|string|null
+     * @var array|boolean|int|string|null
      */
     protected $value;
 
@@ -86,7 +86,7 @@ class ProductAttributeCondition implements ConditionInterface, JsonSerializable
     }
 
     /**
-     * @return array|int|string|null $value
+     * @return array|boolean|int|string|null
      */
     public function getValue()
     {
@@ -94,7 +94,7 @@ class ProductAttributeCondition implements ConditionInterface, JsonSerializable
     }
 
     /**
-     * @param array|int|string|null $value
+     * @param array|boolean|int|string|null $value
      */
     public function setValue($value)
     {
