@@ -45,7 +45,7 @@ use Shopware\Models\Shop\Currency;
 use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 
 /**
- * @phpstan-type CheckoutBasketArray array{content: non-empty-array, Amount: string, AmountNet: string, Quantity: int, AmountNumeric: float, AmountNetNumeric: float, AmountWithTax: string, AmountWithTaxNumeric: float, sCurrencyId: int, sShippingcostsTax?: float, sShippingcostsTaxProportional?: array<\Shopware\Components\Cart\Struct\Price>, sShippingcostsNet: float, sShippingcostsWithTax: float, sAmount: float, sAmountTax: float}
+ * @phpstan-type CheckoutBasketArray array{content: array<string, mixed>, Amount: string, AmountNet: string, Quantity: int, AmountNumeric: float, AmountNetNumeric: float, AmountWithTax: string, AmountWithTaxNumeric: float, sCurrencyId: int, sShippingcostsTax?: float, sShippingcostsTaxProportional?: array<\Shopware\Components\Cart\Struct\Price>, sShippingcostsNet: float, sShippingcostsWithTax: float, sAmount: float, sAmountTax: float}
  */
 class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action implements CSRFGetProtectionAware
 {

@@ -18631,16 +18631,6 @@ parameters:
 			path: engine/Shopware/Components/BasketSignature/BasketPersister.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\BasketSignature\\\\BasketSignatureGenerator\\:\\:generateSignature\\(\\) has parameter \\$basket with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/BasketSignature/BasketSignatureGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\BasketSignature\\\\BasketSignatureGeneratorInterface\\:\\:generateSignature\\(\\) has parameter \\$basket with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/BasketSignature/BasketSignatureGeneratorInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\BasketSignature\\\\CleanupSignatureSubscriber\\:\\:cleanup\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/BasketSignature/CleanupSignatureSubscriber.php
@@ -19216,11 +19206,6 @@ parameters:
 			path: engine/Shopware/Components/Cart/TaxAggregator.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Cart\\\\TaxAggregator\\:\\:taxSum\\(\\) has parameter \\$cart with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/TaxAggregator.php
-
-		-
 			message: "#^Parameter \\#2 \\$callback of function array_reduce expects callable\\(array\\<int\\|string, float\\>, int\\|string\\)\\: array\\<int\\|string, float\\>, callable\\(array\\<numeric\\-string, float\\>, numeric\\-string\\)\\: array\\<numeric\\-string, float\\> given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/TaxAggregator.php
@@ -19237,11 +19222,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\TaxAggregatorInterface\\:\\:positionsTaxSum\\(\\) has parameter \\$cart with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/TaxAggregatorInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Cart\\\\TaxAggregatorInterface\\:\\:taxSum\\(\\) has parameter \\$cart with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/TaxAggregatorInterface.php
 
@@ -33301,11 +33281,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getTaxRates\\(\\) has parameter \\$basket with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getUserData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
@@ -33392,11 +33367,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @var for variable \\$activeShippingAddressId has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$basket has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 

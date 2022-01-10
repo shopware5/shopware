@@ -47,7 +47,7 @@ interface TaxAggregatorInterface
     /**
      * Returns tax rates for all cart positions.
      *
-     * @param array{content?: non-empty-array, sShippingcostsTax?: float, sShippingcostsTaxProportional?: array<Price>, sShippingcostsNet: float, sShippingcostsWithTax: float} $cart
+     * @param array{content?: array<string, mixed>, sShippingcostsTax?: float, sShippingcostsTaxProportional?: array<Price>, sShippingcostsNet: float, sShippingcostsWithTax: float} $cart
      *
      * @return array<int|numeric-string, float> Sum of taxes for all positions contained in $basket
      */
