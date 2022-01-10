@@ -97,6 +97,10 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
             $attribute = $this->attributeService->get('s_articles_attributes', $criteriaPart->getField());
             if ($attribute instanceof ConfigurationStruct) {
                 $type = $attribute->getElasticSearchType()['type'];
+                
+                if ($type === 'boolean') {
+                    $criteriaPart->setValue((bool) $criteriaPart->getValue());
+                }
             }
         } catch (Exception $e) {
         }
