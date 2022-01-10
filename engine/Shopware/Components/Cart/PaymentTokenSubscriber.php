@@ -48,6 +48,9 @@ class PaymentTokenSubscriber implements SubscriberInterface
         $this->session = $session;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents(): array
     {
         return [
