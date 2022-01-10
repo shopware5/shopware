@@ -55,6 +55,9 @@ class SyncSubscriber implements SubscriberInterface
         $this->cacheManager = $cacheManager;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
         return [

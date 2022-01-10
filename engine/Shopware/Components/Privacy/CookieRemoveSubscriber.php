@@ -65,6 +65,9 @@ class CookieRemoveSubscriber implements SubscriberInterface
         $this->httpCacheEnabled = $httpCacheEnabled;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents(): array
     {
         return [

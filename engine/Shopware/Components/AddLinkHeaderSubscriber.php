@@ -59,6 +59,9 @@ class AddLinkHeaderSubscriber implements SubscriberInterface
         $this->webLinkManager = $webLinkManager;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents(): array
     {
         return [

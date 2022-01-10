@@ -52,6 +52,9 @@ class CookieSubscriber implements SubscriberInterface
         $this->container = $container;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
         return [

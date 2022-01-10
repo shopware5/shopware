@@ -53,7 +53,7 @@ interface SubscriberInterface
      *
      * </code>
      *
-     * @return array<string, string|array> The event names to listen to
+     * @return array<string, string|array{0:string, 1?: int}|list<array{0: string, 1?: int}>> The event names to listen to
      */
     public static function getSubscribedEvents();
 }

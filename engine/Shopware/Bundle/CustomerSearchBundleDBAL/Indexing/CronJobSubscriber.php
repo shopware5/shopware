@@ -63,7 +63,7 @@ class CronJobSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return array<string, string>
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {

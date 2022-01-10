@@ -46,6 +46,9 @@ class EmotionComponentViewSubscriber implements SubscriberInterface
         $this->path = $path;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
         return [
