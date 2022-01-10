@@ -87,7 +87,7 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
                 'lastLogin' => TypeMappingInterface::MAPPING_DATE_TIME_FIELD,
                 'firstLogin' => TypeMappingInterface::MAPPING_DATE_TIME_FIELD,
                 'newsletter' => TypeMappingInterface::MAPPING_BOOLEAN_FIELD,
-                'birthday' => TypeMappingInterface::MAPPING_DATE_FIELD,
+                'birthday' => TypeMappingInterface::MAPPING_DATE_TIME_FIELD,
                 'lockedUntil' => TypeMappingInterface::MAPPING_DATE_TIME_FIELD,
                 'accountMode' => TypeMappingInterface::MAPPING_LONG_FIELD,
                 'shopId' => TypeMappingInterface::MAPPING_LONG_FIELD,
